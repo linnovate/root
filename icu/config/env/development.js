@@ -43,5 +43,8 @@ module.exports = {
       user: 'EMAIL_ID',
       pass: 'PASSWORD'
     }
-  }
+  },
+	api: {
+		uri: 'http://localhost:3003'
+	}
 };
