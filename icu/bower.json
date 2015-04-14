@@ -10,7 +10,8 @@
     "bootstrap": "3.1.1",
     "angular-bootstrap": "0.11.0",
     "angular-ui-router": "#master",
-    "web-bootstrap": "./node_modules/meanio/resources/web-bootstrap.js"
+    "web-bootstrap": "./node_modules/meanio/resources/web-bootstrap.js",
+    "angular-new-router": "~0.5.3"
   },
   "resolutions": {
     "angular": "1.4.0-rc.0"
