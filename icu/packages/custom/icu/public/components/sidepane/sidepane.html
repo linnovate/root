@@ -1,0 +1,22 @@
+<header>
+    ICU
+</header>
+<nav>
+    <ul>
+        <li data-ng-repeat="item in items"
+          ng-class="{active: item.active}"
+            ng-click="selected(item)">
+            <div class="icon pull-left">
+              <i class="fa {{item.icon}}"></i>
+            </div>
+            <div class="menu-item">
+              <span>{{item.name}}</span>
+            </div>
+            <div class="arrow">
+              <i class="fa"
+                ng-class="{'fa-caret-down': item.active,
+                'fa-caret-right': !item.active}"></i>
+            </div>
+        </li>
+    </ul>
+</nav>

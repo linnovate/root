@@ -1,0 +1,75 @@
+$fa-font-path: '../lib/font-awesome/fonts';
+
+@import '../lib/font-awesome/scss/font-awesome';
+@import 'variables';
+
+.sidepane {
+    display: block;
+
+    position: fixed;
+    width: $sidepaneWidth;
+    left: 0;
+    top: 0;
+    height: 100vh;
+
+    background-color: lightgrey;
+
+    header {
+        display: table-cell;
+        vertical-align: middle;
+        height: 70px;
+        width: $sidepaneWidth;
+        background-color: grey;
+        color: white;
+        font-size: 2em;
+        text-align: center;
+    }
+
+    nav ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    li {
+        height: 70px;
+        cursor: pointer;
+
+        .icon {
+          padding: 14px;
+        }
+    }
+    
+    .icon {
+      width: 70px;
+      height: 70px;
+    }
+
+    .menu-item {
+      display: table-cell;
+      vertical-align: middle;
+      width: ($sidepaneWidth - 70px) * 0.9;
+      height: 70px;
+    }
+
+    .arrow {
+      display: table-cell;
+      vertical-align: middle;
+      width: ($sidepaneWidth - 70px) * 0.1;
+      height: 70px;
+    }
+}
+
+.panes-wrapper {
+  margin-left: $sidepaneWidth;
+  width: calc(100% - $sidepaneWidth);
+}
+.middlepane {
+  width: 50%;
+  height: 100vh;
+}
+
+.detailspane {
+  width: 50%;
+  border-left: 1px solid grey;
+  height: 100vh;
+}
