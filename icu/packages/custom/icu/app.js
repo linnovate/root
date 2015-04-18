@@ -23,7 +23,6 @@ ICU.register(function(app, auth, database) {
   ICU.menus.add({
     title: 'ICU example page',
     link: 'ICU example page',
-    roles: ['authenticated'],
     menu: 'main'
   });
   
