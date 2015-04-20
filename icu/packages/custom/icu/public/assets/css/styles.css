@@ -1816,11 +1816,37 @@
 
 .panes-wrapper {
   margin-left: 250px;
-  width: calc(100% - $sidepane-width); }
+  width: calc(100% - 250px); }
 
 .middlepane {
   width: 50%;
   height: 100vh; }
+  .middlepane header {
+    height: 70px;
+    border-bottom: 1px solid #5c6c72; }
+    .middlepane header .hide-menu {
+      float: left;
+      height: 70px;
+      width: 70px;
+      background-color: white;
+      border: 1px solid #5c6c72; }
+    .middlepane header .search {
+      position: relative;
+      float: left;
+      margin-top: 1px;
+      width: calc(100% - 70px); }
+      .middlepane header .search input {
+        border: none;
+        background-color: white;
+        padding-left: 70px;
+        width: 100%;
+        font-size: 26px;
+        height: 68px; }
+      .middlepane header .search i {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 20px 21px 35px 37px; }
 
 .detailspane {
   width: 50%;
