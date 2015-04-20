@@ -1750,12 +1750,69 @@
           display: table-cell;
           vertical-align: middle;
           width: 162px;
-          height: 70px; }
+          height: 70px;
+          font-weight: bold; }
         .sidepane nav ul li .arrow {
           display: table-cell;
           vertical-align: middle;
           width: 18px;
           height: 70px; }
+  .sidepane .display-by .intro {
+    color: #5c6c72;
+    padding-left: 20px; }
+  .sidepane .display-by .title {
+    padding: 10px 0;
+    margin: 0;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 26px; }
+  .sidepane .display-by .list {
+    padding-left: 20px;
+    color: white; }
+    .sidepane .display-by .list ul {
+      list-style: none;
+      padding-left: 0; }
+      .sidepane .display-by .list ul li {
+        width: 220px;
+        float: left; }
+        .sidepane .display-by .list ul li a {
+          text-decoration: none;
+          cursor: pointer;
+          color: white;
+          font-size: 13px;
+          line-height: 26px; }
+        .sidepane .display-by .list ul li.active a:before {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          margin-left: -15px;
+          content: " ";
+          border-left: 5px solid #fda102;
+          border-right: 5px solid transparent;
+          border-top: 5px solid transparent;
+          border-bottom: 5px solid transparent; }
+    .sidepane .display-by .list.projects ul li .tag-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      float: right;
+      margin: 7px 0; }
+    .sidepane .display-by .list.projects ul li .green {
+      background-color: #b8e77f; }
+    .sidepane .display-by .list.projects ul li .blue {
+      background-color: #00acee; }
+    .sidepane .display-by .list.projects ul li .pink {
+      background-color: #f06eaa; }
+    .sidepane .display-by .list.discussions ul li a {
+      font-weight: bold; }
+  .sidepane .display-by .more {
+    padding: 5px 0;
+    color: #fda102; }
+  .sidepane .display-by hr {
+    background-color: #5c6c72;
+    border-color: #5c6c72;
+    color: #5c6c72; }
 
 .panes-wrapper {
   margin-left: 250px;

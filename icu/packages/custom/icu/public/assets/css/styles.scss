@@ -38,45 +38,140 @@ $fa-font-path: '../lib/font-awesome/fonts';
                 cursor: pointer;
 
                 &.active {
-                  background-color: $light-grey0;
+                    background-color: $light-grey0;
                 }
 
                 .icon {
-                   padding: 14px;
-                   width: 70px;
-                   height: 70px;
+                    padding: 14px;
+                    width: 70px;
+                    height: 70px;
                 }
 
                 .menu-item {
-                  display: table-cell;
-                  vertical-align: middle;
-                  width: ($sidepane-width - 70px) * 0.9;
-                  height: 70px;
+                    display: table-cell;
+                    vertical-align: middle;
+                    width: ($sidepane-width - 70px) * 0.9;
+                    height: 70px;
+                    font-weight: bold;
                 }
 
                 .arrow {
-                  display: table-cell;
-                  vertical-align: middle;
-                  width: ($sidepane-width - 70px) * 0.1;
-                  height: 70px;
+                    display: table-cell;
+                    vertical-align: middle;
+                    width: ($sidepane-width - 70px) * 0.1;
+                    height: 70px;
                 }
             }
+        }
+    }
+
+    .display-by {
+        .intro {
+            color: $light-grey1;
+            padding-left: 20px;
+        }
+
+        .title {
+            padding: 10px 0;
+            margin: 0;
+            color: white;
+
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 26px;
+        }
+
+        .list {
+            padding-left: 20px;
+            color: white;
+
+            ul {
+                list-style: none;
+                padding-left: 0;
+
+                li {
+                    width: ($sidepane-width - 30px);
+                    float: left;
+
+                    a {
+                        text-decoration: none;
+                        cursor: pointer;
+                        color: white;
+                        font-size: 13px;
+                        line-height: 26px;
+                    }
+
+                    &.active a:before {
+                        display: inline-block;
+                        width: 10px;
+                        height: 10px;
+                        margin-left: -15px;
+                        content: " ";
+
+                        border-left: 5px solid $orange;
+                        border-right: 5px solid transparent;
+                        border-top: 5px solid transparent;
+                        border-bottom: 5px solid transparent;
+                    }
+                }
+            }
+
+            &.projects {
+                ul {
+                    li {
+                        .tag-color {
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 5px;
+                            float: right;
+                            margin: 7px 0;
+                        }
+
+                        .green {
+                            background-color: $green;
+                        }
+
+                        .blue {
+                            background-color: $blue;
+                        }
+
+                        .pink {
+                            background-color: $pink;
+                        }
+                    }
+                }
+            }
+
+            &.discussions ul li a {
+                font-weight: bold;
+            }
+        }
+
+        .more {
+            padding: 5px 0;
+            color: $orange;
+        }
+
+        hr {
+            background-color: $light-grey1;
+            border-color: $light-grey1;
+            color: $light-grey1;
         }
     }
 }
 
 .panes-wrapper {
-  margin-left: $sidepane-width;
-  width: calc(100% - $sidepane-width);
+    margin-left: $sidepane-width;
+    width: calc(100% - $sidepane-width);
 }
 
 .middlepane {
-  width: 50%;
-  height: 100vh;
+    width: 50%;
+    height: 100vh;
 }
 
 .detailspane {
-  width: 50%;
-  border-left: 1px solid grey;
-  height: 100vh;
+    width: 50%;
+    border-left: 1px solid grey;
+    height: 100vh;
 }
