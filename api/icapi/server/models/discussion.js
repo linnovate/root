@@ -27,6 +27,19 @@ var DiscussionSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
+
+  //should we maybe have finer grain control on this
+
+  /*
+  Should we do roles or have set structure - how do we grow this
+
+  Should eg membership/watchers be separate and and stored in user or in the model itself of the issue etc
+
+  */
+  members : [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }],
   //should we maybe have finer grain control on this
   watchers : [{
     type: Schema.ObjectId,
