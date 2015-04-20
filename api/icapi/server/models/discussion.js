@@ -26,7 +26,12 @@ var DiscussionSchema = new Schema({
   manager: {
     type: Schema.ObjectId,
     ref: 'User'
-  }
+  },
+  //should we maybe have finer grain control on this
+  watchers : [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }]
 });
 
 /**
