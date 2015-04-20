@@ -7,62 +7,69 @@ $fa-font-path: '../lib/font-awesome/fonts';
     display: block;
 
     position: fixed;
-    width: $sidepaneWidth;
+    width: $sidepane-width;
     left: 0;
     top: 0;
     height: 100vh;
 
-    background-color: lightgrey;
+    background-color: $grey;
 
     header {
         display: table-cell;
         vertical-align: middle;
         height: 70px;
-        width: $sidepaneWidth;
-        background-color: grey;
+        width: $sidepane-width;
+        background-color: $dark-grey;
         color: white;
         font-size: 2em;
         text-align: center;
     }
 
-    nav ul {
-        list-style: none;
-        padding-left: 0;
-    }
 
-    li {
-        height: 70px;
-        cursor: pointer;
+    nav {
+        color: white;
 
-        .icon {
-          padding: 14px;
+        ul {
+            list-style: none;
+            padding-left: 0;
+
+            li {
+                height: 70px;
+                cursor: pointer;
+
+                &.active {
+                  background-color: $light-grey0;
+                }
+
+                .icon {
+                   padding: 14px;
+                   width: 70px;
+                   height: 70px;
+                }
+
+                .menu-item {
+                  display: table-cell;
+                  vertical-align: middle;
+                  width: ($sidepane-width - 70px) * 0.9;
+                  height: 70px;
+                }
+
+                .arrow {
+                  display: table-cell;
+                  vertical-align: middle;
+                  width: ($sidepane-width - 70px) * 0.1;
+                  height: 70px;
+                }
+            }
         }
-    }
-    
-    .icon {
-      width: 70px;
-      height: 70px;
-    }
-
-    .menu-item {
-      display: table-cell;
-      vertical-align: middle;
-      width: ($sidepaneWidth - 70px) * 0.9;
-      height: 70px;
-    }
-
-    .arrow {
-      display: table-cell;
-      vertical-align: middle;
-      width: ($sidepaneWidth - 70px) * 0.1;
-      height: 70px;
     }
 }
 
 .panes-wrapper {
-  margin-left: $sidepaneWidth;
-  width: calc(100% - $sidepaneWidth);
+  margin-left: $sidepane-width;
+  width: calc(100% - $sidepane-width);
 }
+
 .middlepane {
   width: 50%;
   height: 100vh;
