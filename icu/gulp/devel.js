@@ -45,7 +45,8 @@ gulp.task('develop', ['env:develop'], function () {
     script: 'server.js',
     ext: 'html js',
     env: { 'NODE_ENV': 'development' } ,
-    ignore: ['./node_modules/**'],
+    ignore: ['node_modules/'],
+    execMap : { "js": "iojs --harmony "},
     nodeArgs: ['--debug']
   });
 
