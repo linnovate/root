@@ -26,8 +26,6 @@ General.register(function(app, auth, database) {
   
   General.aggregateAsset('css', 'general.css');
 
-  General.angularDependencies(['ngNewRouter']);
-
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above
     // Save settings with callback
