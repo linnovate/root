@@ -1817,32 +1817,69 @@
 .middlepane {
   width: 50%;
   height: 100vh; }
-  .middlepane header {
+  .middlepane .header {
     height: 70px;
     border-bottom: 1px solid #5c6c72; }
-    .middlepane header .hide-menu {
+    .middlepane .header .hide-menu {
       float: left;
       height: 70px;
       width: 70px;
       background-color: white;
       border: 1px solid #5c6c72; }
-    .middlepane header .search {
+    .middlepane .header .search {
       position: relative;
       float: left;
       margin-top: 1px;
       width: calc(100% - 70px); }
-      .middlepane header .search input {
+      .middlepane .header .search input {
         border: none;
         background-color: white;
         padding-left: 70px;
         width: 100%;
         font-size: 26px;
         height: 68px; }
-      .middlepane header .search i {
+      .middlepane .header .search i {
         position: absolute;
         left: 0;
         top: 0;
         margin: 20px 21px 35px 37px; }
+
+.user-list .project {
+  padding: 35px 0 20px 25px;
+  font-size: 24px;
+  border-bottom: 1px solid #5c6c72; }
+  .user-list .project span {
+    font-weight: bold; }
+.user-list .filters {
+  padding: 10px; }
+  .user-list .filters button {
+    margin: 0 5px;
+    appearance: none;
+    height: 26px;
+    border-radius: 13px;
+    background-color: white;
+    border: 1px solid #5c6c72; }
+    .user-list .filters button.favorites {
+      width: 26px;
+      color: #fda102;
+      font-size: 16px; }
+    .user-list .filters button.tasks {
+      width: 92px; }
+.user-list .user-table table {
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold; }
+  .user-list .user-table table thead {
+    height: 40px;
+    background-color: #e5ecee; }
+  .user-list .user-table table tbody tr {
+    height: 50px;
+    cursor: pointer; }
+    .user-list .user-table table tbody tr.active {
+      background-color: #313c40;
+      color: white; }
+    .user-list .user-table table tbody tr .id {
+      text-align: center; }
 
 .panes-wrapper {
   margin-left: 250px;
