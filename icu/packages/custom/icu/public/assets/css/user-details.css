@@ -1,0 +1,60 @@
+.user-details .header {
+  height: 70px;
+  border-bottom: 1px solid #5c6c72; }
+  .user-details .header .notifications {
+    float: left;
+    width: 70px;
+    height: 70px;
+    padding: 21px; }
+    .user-details .header .notifications .indicator {
+      position: relative; }
+      .user-details .header .notifications .indicator span {
+        position: absolute;
+        left: 15px;
+        top: -3px;
+        display: inline-block;
+        text-align: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 10px;
+        background-color: #fda102;
+        color: white; }
+  .user-details .header .last-notification {
+    float: left;
+    width: calc(100% - 4 * 70px);
+    height: 70px;
+    font-style: italic;
+    position: relative; }
+    .user-details .header .last-notification .text {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      display: inline-block;
+      transform: translate(0, -50%); }
+    .user-details .header .last-notification .entity-name, .user-details .header .last-notification .user {
+      font-weight: bold; }
+  .user-details .header .time {
+    float: left;
+    width: 140px;
+    height: 70px;
+    position: relative; }
+    .user-details .header .time span, .user-details .header .time i {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      display: inline-block;
+      transform: translate(0, -50%); }
+    .user-details .header .time span {
+      right: 30px; }
+  .user-details .header .add {
+    float: left;
+    display: inline-block;
+    width: 70px;
+    height: 69px; }
+    .user-details .header .add button {
+      appearance: none;
+      background-color: #fda102;
+      border: none;
+      color: white;
+      width: 100%;
+      height: 100%; }

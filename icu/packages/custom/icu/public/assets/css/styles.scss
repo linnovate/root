@@ -5,6 +5,7 @@ $fa-font-path: '../lib/font-awesome/fonts';
 @import 'sidepane';
 @import 'middlepane';
 @import 'user-list';
+@import 'user-details';
 
 .panes-wrapper {
     margin-left: $sidepane-width;
