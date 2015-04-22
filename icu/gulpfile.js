@@ -2,7 +2,7 @@
 
 var gulp = require('gulp');
 
-gulp.paths = {
+gulp.tasks = {
   devel: 'default',
   production : 'production',
   test: 'test',

@@ -1,0 +1,30 @@
+<div class="user-list" data-ng-controller="UserListController">
+    <header class="project">
+        People from <span>"Project Review 14.4"<span>
+    </header>
+    <div class="filters">
+        <button class="favorites"><i class="fa fa-star"></i></button>
+        <button class="tasks"><i class="fa fa-exchange fa-rotate-90"></i>Tasks</button>
+    </div>
+    <div class="user-table">
+        <table>
+            <thead>
+                <th></th>
+                <th>Name</th>
+                <th>Tasks</th>
+                <th>Projects</th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="user in people"
+                    data-ng-class="{ 'active': user.active }">
+                    <td class="id">{{user.id}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.tasks}}</td>
+                    <td>{{user.projects}}</td>
+                    <td><i class="fa fa-chevron-right"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
