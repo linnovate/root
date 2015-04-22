@@ -1,0 +1,41 @@
+.middlepane {
+    width: 50%;
+    height: 100vh;
+
+    header {
+        height: $header-height;
+        border-bottom: 1px solid $light-grey1;
+
+        .hide-menu {
+            float: left;
+            height: $header-height;
+            width: $header-height;
+            background-color: white;
+            border: 1px solid $light-grey1;
+        }
+
+        .search {
+            position: relative;
+            float: left;
+            margin-top: 1px;
+            width: calc(100% - #{$header-height});
+
+            input {
+                border: none;
+                background-color: white;
+                padding-left: 70px;
+                width: 100%;
+                font-size: 26px;
+                height: $header-height - 2;
+            }
+
+            i {
+                position: absolute;
+                left: 0;
+                top: 0;
+                margin: 20px 21px 35px 37px;
+            }
+        }
+    }
+}
+

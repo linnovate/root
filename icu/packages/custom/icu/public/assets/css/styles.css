@@ -1814,10 +1814,6 @@
     border-color: #5c6c72;
     color: #5c6c72; }
 
-.panes-wrapper {
-  margin-left: 250px;
-  width: calc(100% - 250px); }
-
 .middlepane {
   width: 50%;
   height: 100vh; }
@@ -1847,6 +1843,10 @@
         left: 0;
         top: 0;
         margin: 20px 21px 35px 37px; }
+
+.panes-wrapper {
+  margin-left: 250px;
+  width: calc(100% - 250px); }
 
 .detailspane {
   width: 50%;
