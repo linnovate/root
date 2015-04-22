@@ -4,8 +4,8 @@
 <nav>
     <ul>
         <li data-ng-repeat="item in items"
-            data-ng-class="{active: item.active}"
-            data-ng-click="selected(item)">
+            data-ng-class="{ 'active': isCurrentState(item) }"
+            data-ui-sref="{{item.state}}">
             <div class="icon pull-left">
                 <i class="fa {{item.icon}}"></i>
             </div>
@@ -14,8 +14,7 @@
             </div>
             <div class="arrow">
                 <i class="fa"
-                    data-ng-class="{'fa-caret-down': item.active,
-                    'fa-caret-right': !item.active}"></i>
+                    data-ng-class="{ 'fa-caret-right': !isCurrentState(item), 'fa-caret-down': isCurrentState(item) }"></i>
             </div>
         </li>
     </ul>
