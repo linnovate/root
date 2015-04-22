@@ -1,9 +1,8 @@
 'use strict';
 
-angular.module('mean.icu.ui.middlepane', []).
-directive('icuMiddlepane', function() {
+angular.module('mean.icu.ui.middlepane', [])
+.directive('icuMiddlepane', function() {
   function controller() {
-    
   }
 
   return {
@@ -12,3 +11,9 @@ directive('icuMiddlepane', function() {
     templateUrl: 'icu/components/middlepane/middlepane.html'
   };
 });
+
+function MiddlepaneController() {
+}
+
+angular.module('mean.icu.ui.middlepane')
+.controller('MiddlepaneController', MiddlepaneController);

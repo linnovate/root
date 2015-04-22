@@ -25,13 +25,15 @@ ICU.register(function(app, auth, database) {
     link: 'ICU example page',
     menu: 'main'
   });
-  
+
   ICU.aggregateAsset('css', 'styles.css');
-  ICU.angularDependencies(['ngNewRouter',
+  ICU.angularDependencies([
       'mean.system',
       'mean.icu.ui.sidepane',
       'mean.icu.ui.middlepane',
-      'mean.icu.ui.detailspane'
+      'mean.icu.ui.detailspane',
+      'mean.icu.ui.userlist',
+      'mean.icu.ui.userdetails',
   ]);
 
   /**

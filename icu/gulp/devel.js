@@ -29,7 +29,7 @@ gulp.task('jshint', function () {
 
 gulp.task('sass', function () {
   return gulp.src(paths.sass)
-    .pipe(plugins.sass())
+    .pipe(plugins.sass().on('error', console.log))
     .pipe(gulp.dest('.'));
 });
 
