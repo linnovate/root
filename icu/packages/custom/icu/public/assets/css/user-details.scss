@@ -1,9 +1,16 @@
 @import 'variables';
 
+$page-height: 100vh;
+$content-height: calc(#{ $page-height } - 2 * #{ $header-height });
+$description-height: 30%;
+$switcher-height: 40px;
+$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height});
+
 .user-details {
     .header {
         height: $header-height;
         border-bottom: 1px solid $light-grey1;
+        background-color: white;
 
         .notifications {
             float: left;
@@ -68,6 +75,7 @@
 
             span {
                 right: 30px;
+                font-style: italic;
             }
         }
 
@@ -85,6 +93,97 @@
                 width: 100%;
                 height: 100%;
             }
+        }
+    }
+
+    .page-content {
+        height: $content-height;
+
+        .description {
+            padding: 0 30px;
+            height: $description-height;
+            overflow: auto;
+
+            .user-name {
+                .favorite {
+                    float: left;
+                    width: 38px;
+                    height: 50px;
+                    padding: 12px 12px 12px 0;
+                }
+
+                .name {
+                    float: left;
+                    width: calc(100% - 38px);
+                    height: 50px;
+
+                    h3 {
+                        margin-top: 13px;
+                    }
+                }
+            }
+        }
+
+        .tabs {
+            height: $switcher-height;
+            margin: 0 30px;
+            border-top: 1px solid $light-grey1;
+            border-bottom: 1px solid $light-grey1;
+            height: 40px;
+
+            .tab {
+                width: calc((100% - 60px) / 4);
+                appearance: none;
+                padding: 0;
+                margin: 0;
+                border: none;
+                background-color: transparent;
+                height: 38px;
+                font-size: 16px;
+                font-weight: bold;
+
+                &.active {
+                    border-bottom: 5px solid $orange;
+                }
+            }
+        }
+
+        .tab-content {
+            padding: 0 30px;
+            height: $tab-content-height;
+        }
+    }
+
+    .footer {
+        height: $header-height;
+        border-top: 1px solid $light-grey1;
+
+        $avatar-margin: 10px;
+
+        .avatar, .add {
+            appearance: none;
+            padding: 0;
+            margin: 0;
+            border: none;
+            height: calc(#{$header-height} - 2 * #{$avatar-margin});
+            width: calc(#{$header-height} - 2 * #{$avatar-margin});
+
+            color: white;
+
+            margin: $avatar-margin - 1 $avatar-margin;
+            border-radius: calc((#{$header-height} - 2 * #{$avatar-margin}) / 2);
+
+            font-size: 20px;
+        }
+
+        .avatar {
+            background-color: $green;
+            float: left;
+        }
+
+        .add {
+            background-color: $orange;
+            float: right;
         }
     }
 }

@@ -1,28 +1,15 @@
 'use strict';
 
 angular.module('mean.icu.ui.userdetails', [])
-.controller('UserDetailsController', function($scope) {
-    var date = moment.duration(-5, 'minutes');
+.controller('UserDetailsController', function($scope, user, users, notifications, $state) {
+    $scope.user = user;
+    $scope.people = users;
 
-    $scope.notifications = [{
-        entity: 'Task',
-        entityName: 'Design homepage',
-        action: 'assigned to',
-        user: 'Idan Arbel',
-        date: date.humanize(true)
-    }, {
-        entity: 'Task',
-        entityName: 'Design homepage',
-        action: 'assigned to',
-        user: 'Idan Arbel',
-        date: date.humanize(true)
-    }, {
-        entity: 'Task',
-        entityName: 'Design homepage',
-        action: 'assigned to',
-        user: 'Idan Arbel',
-        date: date.humanize(true)
-    }];
+    $scope.notifications = notifications;
 
     $scope.lastNotification = _($scope.notifications).last();
+
+    if ($scope.user) {
+        $state.go('.projects');
+    }
 });

@@ -37,8 +37,12 @@ ICU.register(function(app, auth, database) {
       'mean.icu.ui.detailspane',
       'mean.icu.ui.userlist',
       'mean.icu.ui.userdetails',
+      'mean.icu.ui.usertabs',
       'mean.icu.ui.tasklist',
       'mean.icu.ui.taskdetails',
+      'mean.icu.data.activitiesservice',
+      'mean.icu.data.usersservice',
+      'mean.icu.data.notificationsservice',
   ]);
 
   /**

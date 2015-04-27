@@ -1,4 +1,4 @@
-<div class="user-list" data-ng-controller="UserListController">
+<div class="user-list">
     <header class="project">
         People from <span>"Project Review 14.4"<span>
     </header>
@@ -17,7 +17,8 @@
             </thead>
             <tbody>
                 <tr data-ng-repeat="user in people"
-                    data-ng-class="{ 'active': user.active }">
+                    data-ui-sref-active="active"
+                    data-ui-sref="main.people.details({id: user.id})">
                     <td class="id">{{user.id}}</td>
                     <td>{{user.name}}</td>
                     <td>{{user.tasks}}</td>

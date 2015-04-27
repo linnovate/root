@@ -4,16 +4,11 @@ $fa-font-path: '../lib/font-awesome/fonts';
 @import 'variables';
 @import 'sidepane';
 @import 'middlepane';
+@import 'detailspane';
 @import 'user-list';
 @import 'user-details';
 
 .panes-wrapper {
     margin-left: $sidepane-width;
     width: calc(100% - #{$sidepane-width});
-}
-
-.detailspane {
-    width: 50%;
-    border-left: 1px solid grey;
-    height: 100vh;
 }

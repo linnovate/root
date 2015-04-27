@@ -1816,7 +1816,8 @@
 
 .middlepane {
   width: 50%;
-  height: 100vh; }
+  height: 100vh;
+  background-color: #fcfbf6; }
   .middlepane .header {
     height: 70px;
     border-bottom: 1px solid #5c6c72; }
@@ -1844,14 +1845,22 @@
         top: 0;
         margin: 20px 21px 35px 37px; }
 
+.detailspane {
+  width: 50%;
+  border-left: 1px solid grey;
+  height: 100vh;
+  background-color: #fcfbf6; }
+
 .user-list .project {
   padding: 35px 0 20px 25px;
   font-size: 24px;
-  border-bottom: 1px solid #5c6c72; }
+  border-bottom: 1px solid #5c6c72;
+  background-color: white; }
   .user-list .project span {
     font-weight: bold; }
 .user-list .filters {
-  padding: 10px; }
+  padding: 10px;
+  background-color: white; }
   .user-list .filters button {
     margin: 0 5px;
     appearance: none;
@@ -1872,18 +1881,23 @@
   .user-list .user-table table thead {
     height: 40px;
     background-color: #e5ecee; }
-  .user-list .user-table table tbody tr {
-    height: 50px;
-    cursor: pointer; }
-    .user-list .user-table table tbody tr.active {
-      background-color: #313c40;
-      color: white; }
-    .user-list .user-table table tbody tr .id {
-      text-align: center; }
+  .user-list .user-table table tbody {
+    background-color: white; }
+    .user-list .user-table table tbody tr {
+      height: 50px;
+      cursor: pointer;
+      border-top: 1px solid #5c6c72;
+      border-bottom: 1px solid #5c6c72; }
+      .user-list .user-table table tbody tr.active {
+        background-color: #313c40;
+        color: white; }
+      .user-list .user-table table tbody tr .id {
+        text-align: center; }
 
 .user-details .header {
   height: 70px;
-  border-bottom: 1px solid #5c6c72; }
+  border-bottom: 1px solid #5c6c72;
+  background-color: white; }
   .user-details .header .notifications {
     float: left;
     width: 70px;
@@ -1928,7 +1942,8 @@
       display: inline-block;
       transform: translate(0, -50%); }
     .user-details .header .time span {
-      right: 30px; }
+      right: 30px;
+      font-style: italic; }
   .user-details .header .add {
     float: left;
     display: inline-block;
@@ -1941,12 +1956,65 @@
       color: white;
       width: 100%;
       height: 100%; }
+.user-details .page-content {
+  height: calc(100vh - 2 * 70px); }
+  .user-details .page-content .description {
+    padding: 0 30px;
+    height: 30%;
+    overflow: auto; }
+    .user-details .page-content .description .user-name .favorite {
+      float: left;
+      width: 38px;
+      height: 50px;
+      padding: 12px 12px 12px 0; }
+    .user-details .page-content .description .user-name .name {
+      float: left;
+      width: calc(100% - 38px);
+      height: 50px; }
+      .user-details .page-content .description .user-name .name h3 {
+        margin-top: 13px; }
+  .user-details .page-content .tabs {
+    height: 40px;
+    margin: 0 30px;
+    border-top: 1px solid #5c6c72;
+    border-bottom: 1px solid #5c6c72;
+    height: 40px; }
+    .user-details .page-content .tabs .tab {
+      width: calc((100% - 60px) / 4);
+      appearance: none;
+      padding: 0;
+      margin: 0;
+      border: none;
+      background-color: transparent;
+      height: 38px;
+      font-size: 16px;
+      font-weight: bold; }
+      .user-details .page-content .tabs .tab.active {
+        border-bottom: 5px solid #fda102; }
+  .user-details .page-content .tab-content {
+    padding: 0 30px;
+    height: calc(100% - 30% - 40px); }
+.user-details .footer {
+  height: 70px;
+  border-top: 1px solid #5c6c72; }
+  .user-details .footer .avatar, .user-details .footer .add {
+    appearance: none;
+    padding: 0;
+    margin: 0;
+    border: none;
+    height: calc(70px - 2 * 10px);
+    width: calc(70px - 2 * 10px);
+    color: white;
+    margin: 9px 10px;
+    border-radius: calc((70px - 2 * 10px) / 2);
+    font-size: 20px; }
+  .user-details .footer .avatar {
+    background-color: #b8e77f;
+    float: left; }
+  .user-details .footer .add {
+    background-color: #fda102;
+    float: right; }
 
 .panes-wrapper {
   margin-left: 250px;
   width: calc(100% - 250px); }
-
-.detailspane {
-  width: 50%;
-  border-left: 1px solid grey;
-  height: 100vh; }

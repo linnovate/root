@@ -1,4 +1,4 @@
-<div class="user-details" data-ng-controller="UserDetailsController">
+<div class="user-details">
     <header class="header">
         <div class="notifications">
             <div class="indicator">
@@ -21,4 +21,64 @@
             <button><i class="fa fa-3x fa-plus"></i></button>
         </div>
     </header>
+    <div class="page-content">
+        <section class="description">
+            <div class="user-name">
+                <div class="favorite">
+                    <i class="fa fa-2x fa-star"></i>
+                </div>
+                <div class="name">
+                    <h3>{{user.name}}</h3>
+                </div>
+            </div>
+            <div>
+                <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                    no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                </p>
+
+                <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                    no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                </p>
+
+                <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                    no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                </p>
+            </div>
+        </section>
+        <div class="tabs">
+            <div class="switcher">
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".projects">
+                    Projects
+                </button>
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".tasks">
+                    Tasks
+                </button>
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".activities">
+                    Updates
+                </button>
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".documents">
+                    Documents
+                </button>
+            </div>
+        </div>
+        <div class="tab-content" data-ui-view="tab"></div>
+    </div>
+    <div class="footer">
+        <div class="avatar" data-ng-repeat="user in people">{{ user.name[0] }}</div>
+        <button class="add"><i class="fa fa-plus"></i></button>
+    </div>
 </div>
