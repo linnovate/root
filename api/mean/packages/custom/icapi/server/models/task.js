@@ -15,9 +15,14 @@ var TaskSchema = new Schema({
     type: String,
     required: true    
   },
+  project : {
+    type: Schema.ObjectId,
+    ref: 'Project',
+    required: true
+  },
   parent : {
     type: Schema.ObjectId,
-    ref: 'Project'
+    ref: 'Task'
   },
   creator: {
     type: Schema.ObjectId,
