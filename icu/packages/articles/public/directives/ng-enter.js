@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('mean').directive('ngEnter', function() {
 	return function(scope, element, attrs) {
 		element.bind('keydown keypress', function(event) {

@@ -1,0 +1,61 @@
+.user-list {
+    .project {
+        padding: 35px 0 20px 25px;
+        font-size: 24px;
+        border-bottom: 1px solid $light-grey1;
+
+        span {
+            font-weight: bold;
+        }
+    }
+
+    .filters {
+        padding: 10px;
+        button {
+            margin: 0 5px;
+            appearance: none;
+            height: 26px;
+            border-radius: 13px;
+            background-color: white;
+            border: 1px solid $light-grey1;
+
+            &.favorites {
+                width: 26px;
+                color: $orange;
+                font-size: 16px;
+            }
+
+            &.tasks {
+                width: 92px;
+            }
+        }
+    }
+    .user-table {
+        table {
+            width: 100%;
+            font-size: 14px;
+            font-weight: bold;
+
+            thead {
+                height: 40px;
+                background-color: $light-grey2;
+            }
+
+            tbody {
+                tr {
+                    height: 50px;
+                    cursor: pointer;
+
+                    &.active {
+                        background-color: $grey;
+                        color: white;
+                    }
+
+                    .id {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}
