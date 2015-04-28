@@ -1,0 +1,19 @@
+@mixin tag($radius) {
+    width: $radius * 2;
+    height: $radius * 2;
+    border-radius: $radius;
+    margin: 7px 0;
+
+    &.green {
+        background-color: $green;
+    }
+
+    &.blue {
+        background-color: $blue;
+    }
+
+    &.pink {
+        background-color: $pink;
+    }
+}
+

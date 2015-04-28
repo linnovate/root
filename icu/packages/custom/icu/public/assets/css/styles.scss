@@ -2,11 +2,14 @@ $fa-font-path: '../lib/font-awesome/fonts';
 
 @import '../lib/font-awesome/scss/font-awesome';
 @import 'variables';
+@import 'mixins/table';
+@import 'mixins/tag';
 @import 'sidepane';
 @import 'middlepane';
 @import 'detailspane';
 @import 'user-list';
 @import 'user-details';
+@import 'user-details-tab-projects';
 
 .panes-wrapper {
     margin-left: $sidepane-width;

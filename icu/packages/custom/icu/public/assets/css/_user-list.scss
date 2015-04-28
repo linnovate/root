@@ -35,33 +35,19 @@
     }
 
     .user-table {
-        table {
-            width: 100%;
-            font-size: 14px;
-            font-weight: bold;
+        @include table;
 
-            thead {
-                height: 40px;
-                background-color: $light-grey2;
-            }
+        tbody {
+            tr {
+                cursor: pointer;
 
-            tbody {
-                background-color: white;
+                &.active {
+                    background-color: $grey;
+                    color: white;
+                }
 
-                tr {
-                    height: 50px;
-                    cursor: pointer;
-                    border-top: 1px solid $light-grey1;
-                    border-bottom: 1px solid $light-grey1;
-
-                    &.active {
-                        background-color: $grey;
-                        color: white;
-                    }
-
-                    .id {
-                        text-align: center;
-                    }
+                .id {
+                    text-align: center;
                 }
             }
         }

@@ -8,7 +8,7 @@ angular.module('mean.icu').config([
             abstract: true,
             url: '',
             templateUrl: 'icu/components/icu/icu.html',
-            controller: 'IcuController'
+            controller: 'IcuController',
         })
         .state('main.people', {
             url: '/people',
@@ -52,7 +52,13 @@ angular.module('mean.icu').config([
             url: '/projects',
             views: {
                 tab: {
-                    templateUrl: 'icu/components/user-tabs/user-projects.html',
+                    templateUrl: 'icu/components/user-details/tabs/projects/projects.html',
+                    controller: 'UserProjectsController',
+                    resolve: {
+                        projects: function(ProjectsService) {
+                            return ProjectsService.getAll();
+                        }
+                    }
                 }
             }
         })
@@ -60,7 +66,7 @@ angular.module('mean.icu').config([
             url: '/tasks',
             views: {
                 tab: {
-                    templateUrl: 'icu/components/user-tabs/user-tasks.html',
+                    templateUrl: 'icu/components/user-details/tabs/tasks/tasks.html',
                 }
             }
         })
@@ -68,7 +74,7 @@ angular.module('mean.icu').config([
             url: '/activities',
             views: {
                 tab: {
-                    templateUrl: 'icu/components/user-tabs/user-activities.html',
+                    templateUrl: 'icu/components/user-details/tabs/activities/activities.html',
                     controller: 'UserActivitiesController',
                     resolve: {
                         activities: function(ActivitiesService, $stateParams) {
@@ -82,7 +88,7 @@ angular.module('mean.icu').config([
             url: '/documents',
             views: {
                 tab: {
-                    templateUrl: 'icu/components/user-tabs/user-documents.html',
+                    templateUrl: 'icu/components/user-details/tabs/documents/documents.html',
                 }
             }
         })

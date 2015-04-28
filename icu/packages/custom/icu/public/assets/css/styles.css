@@ -1796,14 +1796,14 @@
       width: 10px;
       height: 10px;
       border-radius: 5px;
-      float: right;
-      margin: 7px 0; }
-    .sidepane .display-by .list.projects ul li .green {
-      background-color: #b8e77f; }
-    .sidepane .display-by .list.projects ul li .blue {
-      background-color: #00acee; }
-    .sidepane .display-by .list.projects ul li .pink {
-      background-color: #f06eaa; }
+      margin: 7px 0;
+      float: right; }
+      .sidepane .display-by .list.projects ul li .tag-color.green {
+        background-color: #b8e77f; }
+      .sidepane .display-by .list.projects ul li .tag-color.blue {
+        background-color: #00acee; }
+      .sidepane .display-by .list.projects ul li .tag-color.pink {
+        background-color: #f06eaa; }
     .sidepane .display-by .list.discussions ul li a {
       font-weight: bold; }
   .sidepane .display-by .more {
@@ -1874,25 +1874,26 @@
       font-size: 16px; }
     .user-list .filters button.tasks {
       width: 92px; }
-.user-list .user-table table {
+.user-list .user-table {
   width: 100%;
   font-size: 14px;
   font-weight: bold; }
-  .user-list .user-table table thead {
+  .user-list .user-table thead {
     height: 40px;
     background-color: #e5ecee; }
-  .user-list .user-table table tbody {
+  .user-list .user-table tbody {
     background-color: white; }
-    .user-list .user-table table tbody tr {
+    .user-list .user-table tbody tr {
       height: 50px;
-      cursor: pointer;
       border-top: 1px solid #5c6c72;
       border-bottom: 1px solid #5c6c72; }
-      .user-list .user-table table tbody tr.active {
-        background-color: #313c40;
-        color: white; }
-      .user-list .user-table table tbody tr .id {
-        text-align: center; }
+  .user-list .user-table tbody tr {
+    cursor: pointer; }
+    .user-list .user-table tbody tr.active {
+      background-color: #313c40;
+      color: white; }
+    .user-list .user-table tbody tr .id {
+      text-align: center; }
 
 .user-details .header {
   height: 70px;
@@ -1992,7 +1993,7 @@
       .user-details .page-content .tabs .tab.active {
         border-bottom: 5px solid #fda102; }
   .user-details .page-content .tab-content {
-    padding: 0 30px;
+    padding: 10px 30px;
     height: calc(100% - 30% - 40px); }
 .user-details .footer {
   height: 70px;
@@ -2014,6 +2015,39 @@
   .user-details .footer .add {
     background-color: #fda102;
     float: right; }
+
+table {
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold; }
+  table thead {
+    height: 40px;
+    background-color: #e5ecee; }
+  table tbody {
+    background-color: white; }
+    table tbody tr {
+      height: 50px;
+      border-top: 1px solid #5c6c72;
+      border-bottom: 1px solid #5c6c72; }
+  table tbody tr {
+    background-color: #fcfbf6;
+    border: none; }
+    table tbody tr .tag {
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      margin: 7px 0; }
+      table tbody tr .tag.green {
+        background-color: #b8e77f; }
+      table tbody tr .tag.blue {
+        background-color: #00acee; }
+      table tbody tr .tag.pink {
+        background-color: #f06eaa; }
+    table tbody tr .tag-column {
+      width: 40px;
+      padding: 0 10px; }
+    table tbody tr .name-column {
+      width: 200px; }
 
 .panes-wrapper {
   margin-left: 250px;
