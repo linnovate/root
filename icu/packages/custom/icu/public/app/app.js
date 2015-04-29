@@ -39,11 +39,7 @@ angular.module('mean.icu').config([
                         },
                         users: function(UsersService, $stateParams) {
                             return UsersService.getAll();
-                        },
-                        notifications: function(NotificationsService) {
-                            return NotificationsService.getAll();
                         }
-
                     }
                 }
             }
@@ -96,10 +92,42 @@ angular.module('mean.icu').config([
             url: '/tasks',
             views: {
                 middlepane: {
-                    templateUrl: 'icu/components/task-list/task-list.html'
+                    templateUrl: 'icu/components/task-list/task-list.html',
+                    controller: 'TaskListController',
+                    resolve: {
+                        tasks: function(TasksService) {
+                            return TasksService.getAll();
+                        },
+                        projects: function(ProjectsService) {
+                            return ProjectsService.getAll();
+                        }
+                    }
                 },
                 detailspane: {
-                    templateUrl: 'icu/components/task-details/task-details.html'
+                    templateUrl: 'icu/components/task-details/no-tasks.html'
+                }
+            }
+        })
+        .state('main.tasks.details', {
+            url: '/:id',
+            views: {
+                'detailspane@main': {
+                    templateUrl: 'icu/components/task-details/task-details.html',
+                    controller: 'TaskDetailsController',
+                    resolve: {
+                        task: function(TasksService) {
+                            return TasksService.getAll();
+                        }
+                    }
+                }
+            }
+        })
+        .state('main.tasks.create', {
+            url: '/create',
+            views: {
+                'detailspane@main': {
+                    templateUrl: 'icu/components/task-create/task-create.html',
+                    controller: 'TaskCreateController',
                 }
             }
         });
