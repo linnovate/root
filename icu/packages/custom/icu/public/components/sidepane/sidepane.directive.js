@@ -2,7 +2,10 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state) {
+    function controller($scope, $state, ProjectsService, DiscussionsService) {
+        $scope.projects = ProjectsService.getAll();
+        $scope.discussions = DiscussionsService.getAll();
+
         $scope.items = [{
             name: 'Tasks',
             icon: 'fa-3x fa-check-square',
@@ -21,34 +24,6 @@ directive('icuSidepane', function() {
             state: 'main.people'
         }];
 
-        $scope.projects = [{
-            name: 'ICU',
-            id: 1,
-            color: 'green'
-        }, {
-            name: 'Linnovate',
-            id: 2,
-            color: 'blue'
-        }, {
-            name: 'Pixel',
-            id: 3,
-            color: 'pink'
-        }];
-
-        $scope.discussions = [{
-            name: 'Project review',
-            id: 1,
-            active: true
-        }, {
-            name: 'Weekly review',
-            id: 2,
-            active: false
-        }, {
-            name: 'QBR',
-            id: 3,
-            active: false
-        }];
-
         $scope.isCurrentState = function(item) {
             return $state.current.name.indexOf(item.state) === 0;
         };
@@ -57,6 +32,7 @@ directive('icuSidepane', function() {
     return {
         restrict: 'A',
         controller: controller,
-        templateUrl: '/icu/components/sidepane/sidepane.html'
+        templateUrl: '/icu/components/sidepane/sidepane.html',
+        scope: true
     };
 });

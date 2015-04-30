@@ -3,6 +3,7 @@
         padding: 35px 0 20px 25px;
         font-size: 24px;
         border-bottom: 1px solid $light-grey1;
+        background-color: white;
 
         span {
             font-weight: bold;
@@ -11,6 +12,8 @@
 
     .filters {
         padding: 10px;
+        background-color: white;
+
         button {
             margin: 0 5px;
             appearance: none;
@@ -30,30 +33,21 @@
             }
         }
     }
+
     .user-table {
-        table {
-            width: 100%;
-            font-size: 14px;
-            font-weight: bold;
+        @include table;
 
-            thead {
-                height: 40px;
-                background-color: $light-grey2;
-            }
+        tbody {
+            tr {
+                cursor: pointer;
 
-            tbody {
-                tr {
-                    height: 50px;
-                    cursor: pointer;
+                &.active {
+                    background-color: $grey;
+                    color: white;
+                }
 
-                    &.active {
-                        background-color: $grey;
-                        color: white;
-                    }
-
-                    .id {
-                        text-align: center;
-                    }
+                .id {
+                    text-align: center;
                 }
             }
         }

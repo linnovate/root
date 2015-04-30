@@ -115,23 +115,8 @@
                 ul {
                     li {
                         .tag-color {
-                            width: 10px;
-                            height: 10px;
-                            border-radius: 5px;
+                            @include tag(5px);
                             float: right;
-                            margin: 7px 0;
-                        }
-
-                        .green {
-                            background-color: $green;
-                        }
-
-                        .blue {
-                            background-color: $blue;
-                        }
-
-                        .pink {
-                            background-color: $pink;
                         }
                     }
                 }

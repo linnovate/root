@@ -27,6 +27,9 @@ ICU.register(function(app, auth, database) {
   });
 
   ICU.aggregateAsset('css', 'styles.css');
+  ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
+  ICU.aggregateAsset('js', '..//lib/moment/moment.js');
+
   ICU.angularDependencies([
       'mean.system',
       'mean.icu.ui.sidepane',
@@ -36,6 +39,11 @@ ICU.register(function(app, auth, database) {
       'mean.icu.ui.userdetails',
       'mean.icu.ui.tasklist',
       'mean.icu.ui.taskdetails',
+      'mean.icu.data.activitiesservice',
+      'mean.icu.data.usersservice',
+      'mean.icu.data.notificationsservice',
+      'mean.icu.data.projectsservice',
+      'mean.icu.data.discussionsservice',
   ]);
 
   /**
