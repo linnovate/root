@@ -1,0 +1,18 @@
+.task-list {
+    table {
+        tbody {
+            tr {
+                td {
+                    &.id {
+                        width: 40px;
+                    }
+
+                    .tag {
+                        padding: 5px;
+                        @include tag(10px);
+                    }
+                }
+            }
+        }
+    }
+}
