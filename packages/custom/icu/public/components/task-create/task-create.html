@@ -1,4 +1,9 @@
 <div class="task-create">
     <div icu-notifications-header create-state="main.tasks.create"></div>
     Task creation
+    <form name="taskcreate" ng-submit="create()">
+        <input type="text" ng-model="task.title" ng-required />
+        <select ng-model="task.project" ng-options="project._id as project.title for project in projects"></select>
+        <button type="submit">Create</button>
+    </form>
 </div>

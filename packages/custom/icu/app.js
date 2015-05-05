@@ -47,6 +47,7 @@ ICU.register(function(app, auth, database) {
       'mean.icu.data.projectsservice',
       'mean.icu.data.discussionsservice',
       'mean.icu.data.tasksservice',
+      'mean.icu.data.constants',
   ]);
 
   /**

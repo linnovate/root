@@ -39,7 +39,7 @@ exports.create = function(req, res, next) {
 		parent : req.body.parent || null,
 		discussion : req.body.discussion || null,
 		project : req.body.project,
-		creator : req.user._id
+		//creator : req.user._id
 	};
 
 	new Task(data).save(function(err, task ) {

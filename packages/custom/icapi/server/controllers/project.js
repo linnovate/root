@@ -38,7 +38,7 @@ exports.create = function(req, res, next) {
 		title: req.body.title,
 		parent : req.body.parent || null,
 		discussion : req.body.discussion || null,
-		creator : req.user._id
+		//creator : req.user._id
 	};
 
 	new Project(data).save(function(err, project ) {

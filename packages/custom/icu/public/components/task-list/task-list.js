@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function($scope, $state, tasks, projects) {
+.controller('TaskListController', function($scope, $state, tasks, projects, ProjectsService) {
     $scope.tasks = _(tasks).map(function(t) {
         t.project = _(projects).find(function(p) { return p.id === t.project; });
         return t;

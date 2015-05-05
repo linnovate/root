@@ -1,32 +1,37 @@
 'use strict';
 
 angular.module('mean.icu.data.tasksservice', [])
-.service('TasksService', function() {
-    var tasks = [{
-        id: 1,
-        name: 'Design of application UI',
-        project: 1,
-        status: 'Pending',
-        due: new Date(2015, 4, 15)
-    }, {
-        id: 2,
-        name: 'Design of application UI',
-        project: 2,
-        status: 'Completed',
-        due: new Date(2015, 4, 9)
-    }, {
-        id: 3,
-        name: 'Design of application UI',
-        project: 3,
-        status: 'Completed',
-        due: new Date(2015, 4, 1)
-    }];
+.service('TasksService', function(ApiUri, $http) {
+    var EnitityPrefix = '/tasks';
 
     function getAll() {
-        return tasks;
+        return $http.get(ApiUri + EnitityPrefix).then(function(result) {
+            return result.data;
+        });
+    }
+
+    function create(task) {
+        return $http.post(ApiUri + EnitityPrefix, task).then(function(result) {
+            return result.data;
+        });
+    }
+
+    function update(task) {
+        return $http.put(ApiUri + EnitityPrefix + '/' + task.id, task).then(function(result) {
+            return result.data;
+        });
+    }
+
+    function remove(id) {
+        return $http.delete(ApiUri + EnitityPrefix + '/' + id).then(function(result) {
+            return result.data;
+        });
     }
 
     return {
-        getAll: getAll
+        getAll: getAll,
+        create: create,
+        update: update,
+        remove: remove
     };
 });

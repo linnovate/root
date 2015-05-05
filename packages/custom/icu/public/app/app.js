@@ -128,6 +128,11 @@ angular.module('mean.icu').config([
                 'detailspane@main': {
                     templateUrl: 'icu/components/task-create/task-create.html',
                     controller: 'TaskCreateController',
+                    resolve: {
+                        projects: function(ProjectsService) {
+                            return ProjectsService.getAll();
+                        }
+                    }
                 }
             }
         });
