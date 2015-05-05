@@ -3,7 +3,7 @@ var utils = require('./utils');
 var mongoose = require('mongoose');
 
 require('../models/task');
-var Task = mongoose.model('Task');
+var Task = mongoose.model('Tasks');
 
 exports.read = function(req, res, next) {	
 

@@ -1,15 +1,11 @@
 'use strict';
 
-var cors = require('cors');
-
 var projectController = require('../controllers/project');
 var taskController = require('../controllers/task');
 
 var permissionController = require('../controllers/permission');
 
 module.exports = function(Icapi, app, auth, database) {
-
-  app.use(cors());
 
   app.route('/api/ic/projects/:id?')
     .all(permissionController.echo)
