@@ -7,7 +7,7 @@ angular.module('mean.icu.ui.tasklist', [])
         return t;
     });
 
-    if ($scope.tasks.length) {
-        $state.go('main.tasks.details', { id: $scope.tasks[0].id });
+    if ($scope.tasks.length && $state.current.name === 'main.tasks') {
+        $state.go('main.tasks.details', { id: $scope.tasks[0]._id });
     }
 });

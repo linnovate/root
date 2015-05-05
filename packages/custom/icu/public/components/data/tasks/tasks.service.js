@@ -17,7 +17,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function update(task) {
-        return $http.put(ApiUri + EnitityPrefix + '/' + task.id, task).then(function(result) {
+        return $http.put(ApiUri + EnitityPrefix + '/' + task._id, task).then(function(result) {
             return result.data;
         });
     }

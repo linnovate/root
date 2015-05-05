@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskcreate', [])
-.controller('TaskCreateController', function($scope, projects, TasksService) {
+.controller('TaskCreateController', function($scope, projects, TasksService, $state) {
     $scope.projects = projects;
     $scope.task = {};
 
@@ -10,6 +10,8 @@ angular.module('mean.icu.ui.taskcreate', [])
     }
 
     $scope.create = function() {
-        return TasksService.create($scope.task);
+        TasksService.create($scope.task).then(function(result) {
+            $state.go('main.tasks.details', { id: result._id }, { reload: true });
+        });
     };
 });

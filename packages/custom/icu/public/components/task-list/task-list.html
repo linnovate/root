@@ -11,8 +11,8 @@
             <tbody>
                 <tr data-ng-repeat="task in tasks"
                     data-ui-sref-active="active"
-                    data-ui-sref="main.tasks.details({id: task.id})">
-                    <td class="id">{{task.id}}</td>
+                    data-ui-sref="main.tasks.details({id: task._id})">
+                    <td class="id">{{$index + 1}}</td>
                     <td>{{task.title}}</td>
                     <td><span class="tag {{task.project.color}}">{{task.project.title}}</span></td>
                     <td>{{task.status}}</td>
