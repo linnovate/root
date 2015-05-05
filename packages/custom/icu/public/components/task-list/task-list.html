@@ -13,8 +13,8 @@
                     data-ui-sref-active="active"
                     data-ui-sref="main.tasks.details({id: task.id})">
                     <td class="id">{{task.id}}</td>
-                    <td>{{task.name}}</td>
-                    <td><span class="tag {{task.project.color}}">{{task.project.name}}</span></td>
+                    <td>{{task.title}}</td>
+                    <td><span class="tag {{task.project.color}}">{{task.project.title}}</span></td>
                     <td>{{task.status}}</td>
                     <td>{{task.due | date: 'dd.MM.yyyy'}}</td>
                     <td><i class="fa fa-chevron-right"></i></td>
