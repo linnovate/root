@@ -10,6 +10,12 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function getById(id) {
+        return $http.get(ApiUri + EnitityPrefix + '/' + id).then(function(result) {
+            return result.data[0];
+        });
+    }
+
     function create(task) {
         return $http.post(ApiUri + EnitityPrefix, task).then(function(result) {
             return result.data;
@@ -30,6 +36,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
     return {
         getAll: getAll,
+        getById: getById,
         create: create,
         update: update,
         remove: remove

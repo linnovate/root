@@ -22,6 +22,38 @@
                 <span>{{task.status}}</span>
             </div>
         </div>
+        <div class="description">
+            <div class="project">
+                <span class="tag {{task.project.color}}">{{task.project.title}}</span>
+            </div>
+            <h2 class="title">{{task.title}}</h2>
+
+            <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+            <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </p>
+        </div>
+        <div class="tabs">
+            <div class="switcher">
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".activities">
+                    Updates
+                </button>
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".documents">
+                    Documents
+                </button>
+            </div>
+        </div>
+        <div class="tab-content" data-ui-view="tab"></div>
     </div>
     <div icu-members-footer members="people"></div>
 </div>

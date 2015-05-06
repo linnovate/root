@@ -1,16 +1,8 @@
 @import 'variables';
 
-$description-height: 30%;
-$switcher-height: 40px;
-$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height});
-
 .user-details {
     .page-content {
         .description {
-            padding: 0 30px;
-            height: $description-height;
-            overflow: auto;
-
             .user-name {
                 .favorite {
                     float: left;
@@ -32,32 +24,9 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height});
         }
 
         .tabs {
-            height: $switcher-height;
-            margin: 0 30px;
-            border-top: 1px solid $light-grey1;
-            border-bottom: 1px solid $light-grey1;
-            height: 40px;
-
             .tab {
                 width: calc((100% - 60px) / 4);
-                appearance: none;
-                padding: 0;
-                margin: 0;
-                border: none;
-                background-color: transparent;
-                height: 38px;
-                font-size: 16px;
-                font-weight: bold;
-
-                &.active {
-                    border-bottom: 5px solid $orange;
-                }
             }
-        }
-
-        .tab-content {
-            padding: 10px 30px;
-            height: $tab-content-height;
         }
     }
 }

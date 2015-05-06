@@ -115,13 +115,38 @@ angular.module('mean.icu').config([
                     templateUrl: 'icu/components/task-details/task-details.html',
                     controller: 'TaskDetailsController',
                     resolve: {
-                        task: function(TasksService) {
-                            return TasksService.getAll();
+                        task: function(TasksService, $stateParams) {
+                            return TasksService.getById($stateParams.id);
+                        },
+                        project: function(task, ProjectsService) {
+                            return ProjectsService.getById(task.project);
                         },
                         users: function(UsersService) {
                             return UsersService.getAll();
                         }
                     }
+                }
+            }
+        })
+        .state('main.tasks.details.activities', {
+            url: '/activities',
+            views: {
+                tab: {
+                    templateUrl: 'icu/components/task-details/tabs/activities/activities.html',
+                    controller: 'TaskActivitiesController',
+                    resolve: {
+                        activities: function(ActivitiesService, $stateParams) {
+                            return ActivitiesService.getByUserId($stateParams.id);
+                        }
+                    }
+                }
+            }
+        })
+        .state('main.tasks.details.documents', {
+            url: '/documents',
+            views: {
+                tab: {
+                    templateUrl: 'icu/components/task-details/tabs/documents/documents.html',
                 }
             }
         })

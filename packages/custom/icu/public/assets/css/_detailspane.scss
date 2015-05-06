@@ -1,5 +1,8 @@
 $page-height: 100vh;
 $content-height: calc(#{ $page-height } - 2 * #{ $header-height });
+$description-height: 30%;
+$switcher-height: 40px;
+$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height});
 
 .detailspane {
     width: 50%;
@@ -98,6 +101,40 @@ $content-height: calc(#{ $page-height } - 2 * #{ $header-height });
 
     .page-content {
         height: $content-height;
+
+        .description {
+            padding: 0 30px;
+            height: $description-height;
+            overflow: auto;
+        }
+
+        .tabs {
+            height: $switcher-height;
+            margin: 0 30px;
+            border-top: 1px solid $light-grey1;
+            border-bottom: 1px solid $light-grey1;
+            height: 40px;
+
+            .tab {
+                appearance: none;
+                padding: 0;
+                margin: 0;
+                border: none;
+                background-color: transparent;
+                height: 38px;
+                font-size: 16px;
+                font-weight: bold;
+
+                &.active {
+                    border-bottom: 5px solid $orange;
+                }
+            }
+        }
+
+        .tab-content {
+            padding: 10px 30px;
+            height: $tab-content-height;
+        }
     }
 
     .footer {

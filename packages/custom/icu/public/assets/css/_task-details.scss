@@ -1,5 +1,13 @@
 .task-details {
     .page-content {
+        .project {
+            margin: 5px;
+
+            .tag {
+                @include tag(10px);
+            }
+        }
+
         .summary {
             height: $header-height;
             border-bottom: 2px solid $light-grey1;
@@ -50,7 +58,12 @@
                     left: $header-height;
                 }
             }
+        }
 
+        .tabs {
+            .tab {
+                width: calc((100% - 60px) / 2);
+            }
         }
     }
 }
