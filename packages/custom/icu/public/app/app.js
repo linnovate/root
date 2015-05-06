@@ -117,6 +117,9 @@ angular.module('mean.icu').config([
                     resolve: {
                         task: function(TasksService) {
                             return TasksService.getAll();
+                        },
+                        users: function(UsersService) {
+                            return UsersService.getAll();
                         }
                     }
                 }

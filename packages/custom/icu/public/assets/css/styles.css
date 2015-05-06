@@ -1955,65 +1955,65 @@
         color: white;
         width: 100%;
         height: 100%; }
-
-.user-details .page-content {
-  height: calc(100vh - 2 * 70px); }
-  .user-details .page-content .description {
-    padding: 0 30px;
-    height: 30%;
-    overflow: auto; }
-    .user-details .page-content .description .user-name .favorite {
-      float: left;
-      width: 38px;
-      height: 50px;
-      padding: 12px 12px 12px 0; }
-    .user-details .page-content .description .user-name .name {
-      float: left;
-      width: calc(100% - 38px);
-      height: 50px; }
-      .user-details .page-content .description .user-name .name h3 {
-        margin-top: 13px; }
-  .user-details .page-content .tabs {
-    height: 40px;
-    margin: 0 30px;
-    border-top: 1px solid #5c6c72;
-    border-bottom: 1px solid #5c6c72;
-    height: 40px; }
-    .user-details .page-content .tabs .tab {
-      width: calc((100% - 60px) / 4);
+  .detailspane .page-content {
+    height: calc(100vh - 2 * 70px); }
+  .detailspane .footer {
+    height: 70px;
+    border-top: 1px solid #5c6c72; }
+    .detailspane .footer .avatar, .detailspane .footer .add {
       appearance: none;
       padding: 0;
       margin: 0;
       border: none;
-      background-color: transparent;
-      height: 38px;
-      font-size: 16px;
-      font-weight: bold; }
-      .user-details .page-content .tabs .tab.active {
-        border-bottom: 5px solid #fda102; }
-  .user-details .page-content .tab-content {
-    padding: 10px 30px;
-    height: calc(100% - 30% - 40px); }
-.user-details .footer {
-  height: 70px;
-  border-top: 1px solid #5c6c72; }
-  .user-details .footer .avatar, .user-details .footer .add {
+      height: calc(70px - 2 * 10px);
+      width: calc(70px - 2 * 10px);
+      color: white;
+      margin: 9px 10px;
+      border-radius: calc((70px - 2 * 10px) / 2);
+      font-size: 20px; }
+    .detailspane .footer .avatar {
+      background-color: #b8e77f;
+      float: left; }
+    .detailspane .footer .add {
+      background-color: #fda102;
+      float: right; }
+
+.user-details .page-content .description {
+  padding: 0 30px;
+  height: 30%;
+  overflow: auto; }
+  .user-details .page-content .description .user-name .favorite {
+    float: left;
+    width: 38px;
+    height: 50px;
+    padding: 12px 12px 12px 0; }
+  .user-details .page-content .description .user-name .name {
+    float: left;
+    width: calc(100% - 38px);
+    height: 50px; }
+    .user-details .page-content .description .user-name .name h3 {
+      margin-top: 13px; }
+.user-details .page-content .tabs {
+  height: 40px;
+  margin: 0 30px;
+  border-top: 1px solid #5c6c72;
+  border-bottom: 1px solid #5c6c72;
+  height: 40px; }
+  .user-details .page-content .tabs .tab {
+    width: calc((100% - 60px) / 4);
     appearance: none;
     padding: 0;
     margin: 0;
     border: none;
-    height: calc(70px - 2 * 10px);
-    width: calc(70px - 2 * 10px);
-    color: white;
-    margin: 9px 10px;
-    border-radius: calc((70px - 2 * 10px) / 2);
-    font-size: 20px; }
-  .user-details .footer .avatar {
-    background-color: #b8e77f;
-    float: left; }
-  .user-details .footer .add {
-    background-color: #fda102;
-    float: right; }
+    background-color: transparent;
+    height: 38px;
+    font-size: 16px;
+    font-weight: bold; }
+    .user-details .page-content .tabs .tab.active {
+      border-bottom: 5px solid #fda102; }
+.user-details .page-content .tab-content {
+  padding: 10px 30px;
+  height: calc(100% - 30% - 40px); }
 
 .user-details .tab-content table {
   width: 100%;

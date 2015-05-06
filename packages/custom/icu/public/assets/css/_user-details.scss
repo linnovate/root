@@ -1,15 +1,11 @@
 @import 'variables';
 
-$page-height: 100vh;
-$content-height: calc(#{ $page-height } - 2 * #{ $header-height });
 $description-height: 30%;
 $switcher-height: 40px;
 $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height});
 
 .user-details {
     .page-content {
-        height: $content-height;
-
         .description {
             padding: 0 30px;
             height: $description-height;
@@ -62,39 +58,6 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height});
         .tab-content {
             padding: 10px 30px;
             height: $tab-content-height;
-        }
-    }
-
-    .footer {
-        height: $header-height;
-        border-top: 1px solid $light-grey1;
-
-        $avatar-margin: 10px;
-
-        .avatar, .add {
-            appearance: none;
-            padding: 0;
-            margin: 0;
-            border: none;
-            height: calc(#{$header-height} - 2 * #{$avatar-margin});
-            width: calc(#{$header-height} - 2 * #{$avatar-margin});
-
-            color: white;
-
-            margin: $avatar-margin - 1 $avatar-margin;
-            border-radius: calc((#{$header-height} - 2 * #{$avatar-margin}) / 2);
-
-            font-size: 20px;
-        }
-
-        .avatar {
-            background-color: $green;
-            float: left;
-        }
-
-        .add {
-            background-color: $orange;
-            float: right;
         }
     }
 }

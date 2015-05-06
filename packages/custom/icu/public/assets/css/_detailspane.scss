@@ -1,3 +1,6 @@
+$page-height: 100vh;
+$content-height: calc(#{ $page-height } - 2 * #{ $header-height });
+
 .detailspane {
     width: 50%;
     border-left: 1px solid grey;
@@ -93,4 +96,40 @@
         }
     }
 
+    .page-content {
+        height: $content-height;
+    }
+
+    .footer {
+        height: $header-height;
+        border-top: 1px solid $light-grey1;
+
+        $avatar-margin: 10px;
+
+        .avatar, .add {
+            appearance: none;
+            padding: 0;
+            margin: 0;
+            border: none;
+            height: calc(#{$header-height} - 2 * #{$avatar-margin});
+            width: calc(#{$header-height} - 2 * #{$avatar-margin});
+
+            color: white;
+
+            margin: $avatar-margin - 1 $avatar-margin;
+            border-radius: calc((#{$header-height} - 2 * #{$avatar-margin}) / 2);
+
+            font-size: 20px;
+        }
+
+        .avatar {
+            background-color: $green;
+            float: left;
+        }
+
+        .add {
+            background-color: $orange;
+            float: right;
+        }
+    }
 }
