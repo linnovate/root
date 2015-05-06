@@ -1,7 +1,27 @@
 <div class="task-details">
     <div icu-notifications-header create-state="main.tasks.create"></div>
     <div class="page-content">
-        Task details
+        <div class="summary">
+            <div class="favorite">
+                <button><i class="fa fa-2x fa-star"></i></button>
+            </div>
+            <div class="user">
+                <div class="avatar">{{people[0].name[0]}}</div>
+                <span>{{people[0].name}}</span>
+            </div>
+            <div class="due">
+                <i class="fa fa-2x fa-calendar"></i>
+                <span>{{task.due}}</span>
+            </div>
+            <div class="status">
+                <i class="fa fa-2x fa-flag"></i>
+                <span>{{task.status}}</span>
+            </div>
+            <div class="tags">
+                <i class="fa fa-2x fa-tag"></i>
+                <span>{{task.status}}</span>
+            </div>
+        </div>
     </div>
     <div icu-members-footer members="people"></div>
 </div>

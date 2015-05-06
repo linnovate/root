@@ -2063,6 +2063,39 @@
   .task-list table tbody tr td .tag.pink {
     background-color: #f06eaa; }
 
+.task-details .page-content .summary {
+  height: 70px;
+  border-bottom: 2px solid #5c6c72; }
+  .task-details .page-content .summary .favorite, .task-details .page-content .summary .user, .task-details .page-content .summary .due, .task-details .page-content .summary .status, .task-details .page-content .summary .tags {
+    height: 70px;
+    float: left;
+    position: relative; }
+  .task-details .page-content .summary .favorite, .task-details .page-content .summary .user, .task-details .page-content .summary .due, .task-details .page-content .summary .status {
+    border-right: 1px solid #5c6c72; }
+  .task-details .page-content .summary .user, .task-details .page-content .summary .due, .task-details .page-content .summary .status, .task-details .page-content .summary .tags {
+    width: calc((100% - 70px) * 0.25); }
+    .task-details .page-content .summary .user i, .task-details .page-content .summary .user span, .task-details .page-content .summary .due i, .task-details .page-content .summary .due span, .task-details .page-content .summary .status i, .task-details .page-content .summary .status span, .task-details .page-content .summary .tags i, .task-details .page-content .summary .tags span {
+      position: absolute;
+      top: 50%;
+      left: 5px;
+      transform: translate(0, -50%); }
+  .task-details .page-content .summary .favorite {
+    width: 70px; }
+    .task-details .page-content .summary .favorite button {
+      appearance: none;
+      background-color: transparent;
+      border: none;
+      width: 100%;
+      height: 100%; }
+  .task-details .page-content .summary .user div {
+    margin: calc((70px - 28px) / 2);
+    background-color: #b8e77f;
+    height: 28px;
+    width: 28px;
+    border-radius: 14px; }
+  .task-details .page-content .summary .user span {
+    left: 70px; }
+
 .panes-wrapper {
   margin-left: 250px;
   width: calc(100% - 250px); }
