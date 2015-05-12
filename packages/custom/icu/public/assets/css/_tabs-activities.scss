@@ -1,4 +1,4 @@
-$add-update-height: 300px;
+$add-update-height: 250px;
 $list-height: calc(100% - #{ $add-update-height });
 
 .tab-content {
@@ -16,7 +16,6 @@ $list-height: calc(100% - #{ $add-update-height });
         }
 
         .activities-list {
-            padding-bottom: 30px;
             border-bottom: 1px solid $light-grey1;
             height: $list-height;
             overflow: auto;
@@ -30,7 +29,7 @@ $list-height: calc(100% - #{ $add-update-height });
             }
 
             .description {
-                padding: 0 50px;
+                margin: 0 50px;
             }
 
             .attachment {
@@ -57,17 +56,17 @@ $list-height: calc(100% - #{ $add-update-height });
         }
 
         .add-update {
-            padding-top: 20px;
+            margin-top: 20px;
             height: $add-update-height;
 
             textarea {
                 width: calc(100% - 50px);
-                height: 200px;
+                height: 150px;
                 margin: 10px 0;
             }
 
             .action-buttons {
-                padding-left: 50px;
+                margin-left: 50px;
 
                 .attachment {
                     @include circle(20px);

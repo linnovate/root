@@ -102,7 +102,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
         height: $content-height;
 
         .description {
-            padding: 0 30px;
+            margin: 0 30px;
             height: $description-height;
             overflow: auto;
         }
@@ -131,7 +131,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
         }
 
         .tab-content {
-            padding: 10px 30px;
+            margin: 10px 30px;
             height: $tab-content-height;
         }
     }
