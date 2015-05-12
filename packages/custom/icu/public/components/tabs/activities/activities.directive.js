@@ -15,6 +15,7 @@ angular.module('mean.icu.ui.tabs')
         scope: {
             activities: '='
         },
+        replace: true,
         controller: controller,
         templateUrl: 'icu/components/tabs/activities/activities.html'
     };

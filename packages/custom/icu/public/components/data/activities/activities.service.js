@@ -17,6 +17,18 @@ angular.module('mean.icu.data.activitiesservice', [])
                 type: 'doc',
                 title: 'Meeting Summary',
             }
+        }, {
+            title: 'John Doe added document to task',
+            attachment: {
+                type: 'doc',
+                title: 'Meeting Summary',
+            }
+        }, {
+            title: 'John Doe added document to task',
+            attachment: {
+                type: 'doc',
+                title: 'Meeting Summary',
+            }
         }];
     }
 

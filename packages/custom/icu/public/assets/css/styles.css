@@ -1981,7 +1981,7 @@
           border-bottom: 5px solid #fda102; }
     .detailspane .page-content .tab-content {
       padding: 10px 30px;
-      height: calc(100% - 30% - 40px); }
+      height: calc(calc(100vh - 2 * 70px) - 30% - 40px); }
   .detailspane .footer {
     height: 70px;
     border-top: 1px solid #5c6c72; }
@@ -2002,48 +2002,6 @@
     .detailspane .footer .add {
       background-color: #fda102;
       float: right; }
-
-.tab-content .activities .title .avatar, .tab-content .activities .add-update .avatar {
-  height: calc(15px * 2);
-  border-radius: 15px;
-  width: calc(15px * 2);
-  float: left;
-  margin: 10px;
-  background-color: #b8e77f; }
-.tab-content .activities .activities-list {
-  padding-bottom: 30px;
-  border-bottom: 1px solid #5c6c72; }
-  .tab-content .activities .activities-list .title span {
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 50px; }
-  .tab-content .activities .activities-list .description {
-    padding: 0 50px; }
-.tab-content .activities .add-update {
-  padding-top: 20px; }
-  .tab-content .activities .add-update textarea {
-    width: calc(100% - 50px);
-    height: 200px;
-    margin: 10px 0; }
-  .tab-content .activities .add-update .action-buttons {
-    padding-left: 50px; }
-    .tab-content .activities .add-update .action-buttons .attachment {
-      height: calc(20px * 2);
-      border-radius: 20px;
-      width: calc(20px * 2);
-      appearance: none;
-      border: none;
-      background-color: #fcfbf6;
-      border: 1px solid #5c6c72;
-      float: left; }
-    .tab-content .activities .add-update .action-buttons .save {
-      height: calc(20px * 2);
-      border-radius: 20px;
-      appearance: none;
-      border: none;
-      background-color: #fda102;
-      float: right;
-      width: 80px; }
 
 .user-details .page-content .description .user-name .favorite {
   float: left;
@@ -2154,6 +2112,55 @@
     left: 70px; }
 .task-details .page-content .tabs .tab {
   width: calc((100% - 60px) / 2); }
+.task-details .page-content .tab-content {
+  height: calc(100% - 30% - 40px - 70px); }
+
+.tab-content .activities {
+  height: 100%; }
+  .tab-content .activities .title .avatar, .tab-content .activities .add-update .avatar {
+    height: calc(15px * 2);
+    border-radius: 15px;
+    width: calc(15px * 2);
+    float: left;
+    margin: 10px;
+    background-color: #b8e77f; }
+  .tab-content .activities .activities-list {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #5c6c72;
+    height: calc(100% - 300px);
+    overflow: auto; }
+    .tab-content .activities .activities-list .title span {
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 50px; }
+    .tab-content .activities .activities-list .description {
+      padding: 0 50px; }
+  .tab-content .activities .add-update {
+    padding-top: 20px;
+    height: 300px; }
+    .tab-content .activities .add-update textarea {
+      width: calc(100% - 50px);
+      height: 200px;
+      margin: 10px 0; }
+    .tab-content .activities .add-update .action-buttons {
+      padding-left: 50px; }
+      .tab-content .activities .add-update .action-buttons .attachment {
+        height: calc(20px * 2);
+        border-radius: 20px;
+        width: calc(20px * 2);
+        appearance: none;
+        border: none;
+        background-color: #fcfbf6;
+        border: 1px solid #5c6c72;
+        float: left; }
+      .tab-content .activities .add-update .action-buttons .save {
+        height: calc(20px * 2);
+        border-radius: 20px;
+        appearance: none;
+        border: none;
+        background-color: #fda102;
+        float: right;
+        width: 80px; }
 
 .panes-wrapper {
   margin-left: 250px;

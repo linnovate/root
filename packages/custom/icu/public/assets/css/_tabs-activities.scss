@@ -1,5 +1,10 @@
+$add-update-height: 300px;
+$list-height: calc(100% - #{ $add-update-height });
+
 .tab-content {
     .activities {
+        height: 100%;
+
         .title, .add-update {
             .avatar {
                 @include circle(15px);
@@ -13,6 +18,8 @@
         .activities-list {
             padding-bottom: 30px;
             border-bottom: 1px solid $light-grey1;
+            height: $list-height;
+            overflow: auto;
 
             .title {
                 span {
@@ -39,6 +46,7 @@
 
         .add-update {
             padding-top: 20px;
+            height: $add-update-height;
 
             textarea {
                 width: calc(100% - 50px);

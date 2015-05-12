@@ -2,7 +2,7 @@ $page-height: 100vh;
 $content-height: calc(#{ $page-height } - 2 * #{ $header-height });
 $description-height: 30%;
 $switcher-height: 40px;
-$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height});
+$tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $switcher-height });
 
 .detailspane {
     width: 50%;
