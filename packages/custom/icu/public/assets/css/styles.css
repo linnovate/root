@@ -2135,6 +2135,22 @@
       line-height: 50px; }
     .tab-content .activities .activities-list .description {
       padding: 0 50px; }
+    .tab-content .activities .activities-list .attachment {
+      display: inline-block;
+      position: relative;
+      height: 100px;
+      width: 200px; }
+      .tab-content .activities .activities-list .attachment .icon {
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        transform: translate(-50%, 0); }
+      .tab-content .activities .activities-list .attachment .name {
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-25%, 0); }
   .tab-content .activities .add-update {
     padding-top: 20px;
     height: 300px; }

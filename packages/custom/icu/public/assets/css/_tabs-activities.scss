@@ -34,12 +34,24 @@ $list-height: calc(100% - #{ $add-update-height });
             }
 
             .attachment {
-                .icon {
+                display: inline-block;
+                position: relative;
+                height: 100px;
+                width: 200px;
 
+                .icon {
+                    position: absolute;
+                    top: 15px;
+                    left: 50%;
+                    transform: translate(-50%, 0);
                 }
 
                 .name {
-
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    transform: translate(-25%, 0);
                 }
             }
         }
