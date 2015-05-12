@@ -1,7 +1,5 @@
 @mixin tag($radius) {
-    width: $radius * 2;
-    height: $radius * 2;
-    border-radius: $radius;
+    @include circle($radius);
     margin: 7px 0;
 
     &.green {

@@ -1,0 +1,91 @@
+$add-update-height: 250px;
+$list-height: calc(100% - #{ $add-update-height });
+
+.tab-content {
+    .activities {
+        height: 100%;
+
+        .title, .add-update {
+            .avatar {
+                @include circle(15px);
+
+                float: left;
+                margin: 10px;
+                background-color: $green;
+            }
+        }
+
+        .activities-list {
+            border-bottom: 1px solid $light-grey1;
+            height: $list-height;
+            overflow: auto;
+
+            .title {
+                span {
+                    font-size: 16px;
+                    font-weight: bold;
+                    line-height: 50px;
+                }
+            }
+
+            .description {
+                margin: 0 50px;
+            }
+
+            .attachment {
+                display: inline-block;
+                position: relative;
+                height: 100px;
+                width: 200px;
+
+                .icon {
+                    position: absolute;
+                    top: 15px;
+                    left: 50%;
+                    transform: translate(-50%, 0);
+                }
+
+                .name {
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    transform: translate(-25%, 0);
+                }
+            }
+        }
+
+        .add-update {
+            margin-top: 20px;
+            height: $add-update-height;
+
+            textarea {
+                width: calc(100% - 50px);
+                height: 150px;
+                margin: 10px 0;
+            }
+
+            .action-buttons {
+                margin-left: 50px;
+
+                .attachment {
+                    @include circle(20px);
+                    @include button;
+                    background-color: $cream;
+                    border: 1px solid $light-grey1;
+
+                    float: left;
+                }
+
+                .save {
+                    @include ellipse(20px);
+                    @include button;
+                    background-color: $orange;
+
+                    float: right;
+                    width: 80px;
+                }
+            }
+        }
+    }
+}

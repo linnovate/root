@@ -8,7 +8,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
     $scope.task.project = project;
 
-    if ($scope.task) {
+    if ($scope.task && $state.current.name === 'main.tasks.details') {
         $state.go('.activities');
     }
 });

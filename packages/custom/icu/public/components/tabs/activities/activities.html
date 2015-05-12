@@ -1,0 +1,33 @@
+<div class="activities">
+    <div class="activities-list">
+        <div data-ng-repeat="activity in activities" class="activity">
+            <div class="title">
+                <div class="avatar"></div>
+                <span>{{activity.title}}</span>
+            </div>
+            <div class="description">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            </div>
+            <div data-ng-repeat="attachment in activity.attachments" class="attachment">
+                <div class="icon">
+                    <i class="fa fa-4x"
+                        data-ng-class="{'fa-file-word-o': attachment.type === 'doc'}"></i>
+                </div>
+                <span class="name">{{attachment.title}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="add-update">
+        <div class="avatar"></div>
+        <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save(addupdateform)">
+            <textarea ng-model="activity.title" required placeholder="type update here"></textarea>
+            <div class="action-buttons">
+                <button class="attachment"><i class="fa fa-paperclip"></i></button>
+                <button type="submit" class="save">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
