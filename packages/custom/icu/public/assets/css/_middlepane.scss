@@ -55,10 +55,10 @@
         background-color: white;
 
         button {
+            @include ellipse(13px);
+            @include button;
+
             margin: 0 5px;
-            appearance: none;
-            height: 26px;
-            border-radius: 13px;
             background-color: white;
             border: 1px solid $light-grey1;
 

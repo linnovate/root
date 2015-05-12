@@ -47,11 +47,10 @@
 
             .user {
                 div {
+                    @include circle(14px);
+
                     margin: calc((#{ $header-height } - 28px) / 2);
                     background-color: $green;
-                    height: 28px;
-                    width: 28px;
-                    border-radius: 14px;
                 }
 
                 span {
@@ -63,6 +62,78 @@
         .tabs {
             .tab {
                 width: calc((100% - 60px) / 2);
+            }
+        }
+        .tab-content {
+            .activities {
+                .title, .add-update {
+                    .avatar {
+                        @include circle(15px);
+
+                        float: left;
+                        margin: 10px;
+                        background-color: $green;
+                    }
+                }
+
+                .activities-list {
+                    padding-bottom: 30px;
+                    border-bottom: 1px solid $light-grey1;
+
+                    .title {
+                        span {
+                            font-size: 16px;
+                            font-weight: bold;
+                            line-height: 50px;
+                        }
+                    }
+
+                    .description {
+                        padding: 0 50px;
+                    }
+
+                    .attachment {
+                        .icon {
+
+                        }
+
+                        .name {
+
+                        }
+                    }
+                }
+
+                .add-update {
+                    padding-top: 20px;
+
+                    textarea {
+                        width: calc(100% - 50px);
+                        height: 200px;
+                        margin: 10px 0;
+                    }
+
+                    .action-buttons {
+                        padding-left: 50px;
+
+                        .attachment {
+                            @include circle(20px);
+                            @include button;
+                            background-color: $cream;
+                            border: 1px solid $light-grey1;
+
+                            float: left;
+                        }
+
+                        .save {
+                            @include ellipse(20px);
+                            @include button;
+                            background-color: $orange;
+
+                            float: right;
+                            width: 80px;
+                        }
+                    }
+                }
             }
         }
     }

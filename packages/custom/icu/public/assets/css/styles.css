@@ -1793,9 +1793,9 @@
           border-top: 5px solid transparent;
           border-bottom: 5px solid transparent; }
     .sidepane .display-by .list.projects ul li .tag-color {
-      width: 10px;
-      height: 10px;
+      height: calc(5px * 2);
       border-radius: 5px;
+      width: calc(5px * 2);
       margin: 7px 0;
       float: right; }
       .sidepane .display-by .list.projects ul li .tag-color.green {
@@ -1855,10 +1855,11 @@
     padding: 10px;
     background-color: white; }
     .middlepane .filters button {
-      margin: 0 5px;
-      appearance: none;
-      height: 26px;
+      height: calc(13px * 2);
       border-radius: 13px;
+      appearance: none;
+      border: none;
+      margin: 0 5px;
       background-color: white;
       border: 1px solid #5c6c72; }
       .middlepane .filters button.favorites {
@@ -1905,14 +1906,14 @@
       .detailspane .header .notifications .indicator {
         position: relative; }
         .detailspane .header .notifications .indicator span {
+          height: calc(10px * 2);
+          border-radius: 10px;
+          width: calc(10px * 2);
           position: absolute;
           left: 15px;
           top: -3px;
           display: inline-block;
           text-align: center;
-          width: 20px;
-          height: 20px;
-          border-radius: 10px;
           background-color: #fda102;
           color: white; }
     .detailspane .header .last-notification {
@@ -1950,8 +1951,8 @@
       height: 69px; }
       .detailspane .header .add button {
         appearance: none;
-        background-color: #fda102;
         border: none;
+        background-color: #fda102;
         color: white;
         width: 100%;
         height: 100%; }
@@ -1969,9 +1970,9 @@
       height: 40px; }
       .detailspane .page-content .tabs .tab {
         appearance: none;
+        border: none;
         padding: 0;
         margin: 0;
-        border: none;
         background-color: transparent;
         height: 38px;
         font-size: 16px;
@@ -1985,15 +1986,15 @@
     height: 70px;
     border-top: 1px solid #5c6c72; }
     .detailspane .footer .avatar, .detailspane .footer .add {
+      height: calc(25px * 2);
+      border-radius: 25px;
+      width: calc(25px * 2);
       appearance: none;
+      border: none;
       padding: 0;
       margin: 0;
-      border: none;
-      height: calc(70px - 2 * 10px);
-      width: calc(70px - 2 * 10px);
       color: white;
       margin: 9px 10px;
-      border-radius: calc((70px - 2 * 10px) / 2);
       font-size: 20px; }
     .detailspane .footer .avatar {
       background-color: #b8e77f;
@@ -2033,9 +2034,9 @@
     background-color: #fcfbf6;
     border: none; }
     .user-details .tab-content table tbody tr .tag {
-      width: 20px;
-      height: 20px;
+      height: calc(10px * 2);
       border-radius: 10px;
+      width: calc(10px * 2);
       margin: 7px 0; }
       .user-details .tab-content table tbody tr .tag.green {
         background-color: #b8e77f; }
@@ -2053,9 +2054,9 @@
   width: 40px; }
 .task-list table tbody tr td .tag {
   padding: 5px;
-  width: 20px;
-  height: 20px;
+  height: calc(10px * 2);
   border-radius: 10px;
+  width: calc(10px * 2);
   margin: 7px 0; }
   .task-list table tbody tr td .tag.green {
     background-color: #b8e77f; }
@@ -2067,9 +2068,9 @@
 .task-details .page-content .project {
   margin: 5px; }
   .task-details .page-content .project .tag {
-    width: 20px;
-    height: 20px;
+    height: calc(10px * 2);
     border-radius: 10px;
+    width: calc(10px * 2);
     margin: 7px 0; }
     .task-details .page-content .project .tag.green {
       background-color: #b8e77f; }
@@ -2102,15 +2103,56 @@
       width: 100%;
       height: 100%; }
   .task-details .page-content .summary .user div {
+    height: calc(14px * 2);
+    border-radius: 14px;
+    width: calc(14px * 2);
     margin: calc((70px - 28px) / 2);
-    background-color: #b8e77f;
-    height: 28px;
-    width: 28px;
-    border-radius: 14px; }
+    background-color: #b8e77f; }
   .task-details .page-content .summary .user span {
     left: 70px; }
 .task-details .page-content .tabs .tab {
   width: calc((100% - 60px) / 2); }
+.task-details .page-content .tab-content .activities .title .avatar, .task-details .page-content .tab-content .activities .add-update .avatar {
+  height: calc(15px * 2);
+  border-radius: 15px;
+  width: calc(15px * 2);
+  float: left;
+  margin: 10px;
+  background-color: #b8e77f; }
+.task-details .page-content .tab-content .activities .activities-list {
+  padding-bottom: 30px;
+  border-bottom: 1px solid #5c6c72; }
+  .task-details .page-content .tab-content .activities .activities-list .title span {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 50px; }
+  .task-details .page-content .tab-content .activities .activities-list .description {
+    padding: 0 50px; }
+.task-details .page-content .tab-content .activities .add-update {
+  padding-top: 20px; }
+  .task-details .page-content .tab-content .activities .add-update textarea {
+    width: calc(100% - 50px);
+    height: 200px;
+    margin: 10px 0; }
+  .task-details .page-content .tab-content .activities .add-update .action-buttons {
+    padding-left: 50px; }
+    .task-details .page-content .tab-content .activities .add-update .action-buttons .attachment {
+      height: calc(20px * 2);
+      border-radius: 20px;
+      width: calc(20px * 2);
+      appearance: none;
+      border: none;
+      background-color: #fcfbf6;
+      border: 1px solid #5c6c72;
+      float: left; }
+    .task-details .page-content .tab-content .activities .add-update .action-buttons .save {
+      height: calc(20px * 2);
+      border-radius: 20px;
+      appearance: none;
+      border: none;
+      background-color: #fda102;
+      float: right;
+      width: 80px; }
 
 .panes-wrapper {
   margin-left: 250px;

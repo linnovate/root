@@ -42,6 +42,7 @@ ICU.register(function(app, auth, database) {
       'mean.icu.ui.taskcreate',
       'mean.icu.ui.notificationsheader',
       'mean.icu.ui.membersfooter',
+      'mean.icu.ui.tabs',
       'mean.icu.data.activitiesservice',
       'mean.icu.data.usersservice',
       'mean.icu.data.notificationsservice',

@@ -135,8 +135,11 @@ angular.module('mean.icu').config([
                     templateUrl: 'icu/components/task-details/tabs/activities/activities.html',
                     controller: 'TaskActivitiesController',
                     resolve: {
+                        task: function(TasksService, $stateParams) {
+                            return TasksService.getById($stateParams.id);
+                        },
                         activities: function(ActivitiesService, $stateParams) {
-                            return ActivitiesService.getByUserId($stateParams.id);
+                            return ActivitiesService.getByTaskId($stateParams.id);
                         }
                     }
                 }

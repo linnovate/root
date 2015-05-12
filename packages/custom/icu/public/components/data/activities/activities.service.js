@@ -6,7 +6,23 @@ angular.module('mean.icu.data.activitiesservice', [])
         return [];
     }
 
+    function getByProjectId(id) {
+        return [];
+    }
+
+    function getByTaskId(id) {
+        return [{
+            title: 'John Doe added document to task',
+            attachment: {
+                type: 'doc',
+                title: 'Meeting Summary',
+            }
+        }];
+    }
+
     return {
-        getByUserId: getByUserId
+        getByUserId: getByUserId,
+        getByTaskId: getByTaskId,
+        getByProjectId: getByProjectId
     };
 });
