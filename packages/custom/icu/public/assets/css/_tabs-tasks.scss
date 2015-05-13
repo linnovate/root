@@ -1,0 +1,15 @@
+.tab-content {
+    .tasks {
+        @include table;
+
+        tbody {
+            tr {
+                background-color: $cream;
+
+                .tag {
+                    @include tag(10px);
+                }
+            }
+        }
+    }
+}

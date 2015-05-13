@@ -1814,6 +1814,27 @@
     border-color: #5c6c72;
     color: #5c6c72; }
 
+.panes-wrapper .list-table table {
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold; }
+  .panes-wrapper .list-table table thead {
+    height: 40px;
+    background-color: #e5ecee; }
+  .panes-wrapper .list-table table tbody {
+    background-color: white; }
+    .panes-wrapper .list-table table tbody tr {
+      height: 50px;
+      border-top: 1px solid #5c6c72;
+      border-bottom: 1px solid #5c6c72; }
+  .panes-wrapper .list-table table tbody tr {
+    cursor: pointer; }
+    .panes-wrapper .list-table table tbody tr.active {
+      background-color: #313c40;
+      color: white; }
+    .panes-wrapper .list-table table tbody tr .id {
+      text-align: center; }
+
 .middlepane {
   width: 50%;
   height: 100vh;
@@ -1868,26 +1889,6 @@
         font-size: 16px; }
       .middlepane .filters button.tasks {
         width: 92px; }
-  .middlepane .list-table table {
-    width: 100%;
-    font-size: 14px;
-    font-weight: bold; }
-    .middlepane .list-table table thead {
-      height: 40px;
-      background-color: #e5ecee; }
-    .middlepane .list-table table tbody {
-      background-color: white; }
-      .middlepane .list-table table tbody tr {
-        height: 50px;
-        border-top: 1px solid #5c6c72;
-        border-bottom: 1px solid #5c6c72; }
-    .middlepane .list-table table tbody tr {
-      cursor: pointer; }
-      .middlepane .list-table table tbody tr.active {
-        background-color: #313c40;
-        color: white; }
-      .middlepane .list-table table tbody tr .id {
-        text-align: center; }
 
 .detailspane {
   width: 50%;
@@ -2017,39 +2018,6 @@
 .user-details .page-content .tabs .tab {
   width: calc((100% - 60px) / 4); }
 
-.user-details .tab-content table {
-  width: 100%;
-  font-size: 14px;
-  font-weight: bold; }
-  .user-details .tab-content table thead {
-    height: 40px;
-    background-color: #e5ecee; }
-  .user-details .tab-content table tbody {
-    background-color: white; }
-    .user-details .tab-content table tbody tr {
-      height: 50px;
-      border-top: 1px solid #5c6c72;
-      border-bottom: 1px solid #5c6c72; }
-  .user-details .tab-content table tbody tr {
-    background-color: #fcfbf6;
-    border: none; }
-    .user-details .tab-content table tbody tr .tag {
-      height: calc(10px * 2);
-      border-radius: 10px;
-      width: calc(10px * 2);
-      margin: 7px 0; }
-      .user-details .tab-content table tbody tr .tag.green {
-        background-color: #b8e77f; }
-      .user-details .tab-content table tbody tr .tag.blue {
-        background-color: #00acee; }
-      .user-details .tab-content table tbody tr .tag.pink {
-        background-color: #f06eaa; }
-    .user-details .tab-content table tbody tr .tag-column {
-      width: 40px;
-      padding: 0 10px; }
-    .user-details .tab-content table tbody tr .name-column {
-      width: 200px; }
-
 .task-list table tbody tr td.id {
   width: 40px; }
 .task-list table tbody tr td .tag {
@@ -2176,6 +2144,66 @@
         background-color: #fda102;
         float: right;
         width: 80px; }
+
+.tab-content .projects {
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold; }
+  .tab-content .projects thead {
+    height: 40px;
+    background-color: #e5ecee; }
+  .tab-content .projects tbody {
+    background-color: white; }
+    .tab-content .projects tbody tr {
+      height: 50px;
+      border-top: 1px solid #5c6c72;
+      border-bottom: 1px solid #5c6c72; }
+  .tab-content .projects tbody tr {
+    background-color: #fcfbf6;
+    border: none; }
+    .tab-content .projects tbody tr .tag {
+      height: calc(10px * 2);
+      border-radius: 10px;
+      width: calc(10px * 2);
+      margin: 7px 0; }
+      .tab-content .projects tbody tr .tag.green {
+        background-color: #b8e77f; }
+      .tab-content .projects tbody tr .tag.blue {
+        background-color: #00acee; }
+      .tab-content .projects tbody tr .tag.pink {
+        background-color: #f06eaa; }
+    .tab-content .projects tbody tr .tag-column {
+      width: 40px;
+      padding: 0 10px; }
+    .tab-content .projects tbody tr .name-column {
+      width: 200px; }
+
+.tab-content .tasks {
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold; }
+  .tab-content .tasks thead {
+    height: 40px;
+    background-color: #e5ecee; }
+  .tab-content .tasks tbody {
+    background-color: white; }
+    .tab-content .tasks tbody tr {
+      height: 50px;
+      border-top: 1px solid #5c6c72;
+      border-bottom: 1px solid #5c6c72; }
+  .tab-content .tasks tbody tr {
+    background-color: #fcfbf6; }
+    .tab-content .tasks tbody tr .tag {
+      height: calc(10px * 2);
+      border-radius: 10px;
+      width: calc(10px * 2);
+      margin: 7px 0; }
+      .tab-content .tasks tbody tr .tag.green {
+        background-color: #b8e77f; }
+      .tab-content .tasks tbody tr .tag.blue {
+        background-color: #00acee; }
+      .tab-content .tasks tbody tr .tag.pink {
+        background-color: #f06eaa; }
 
 .panes-wrapper {
   margin-left: 250px;

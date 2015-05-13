@@ -63,6 +63,17 @@ angular.module('mean.icu').config([
             views: {
                 tab: {
                     templateUrl: 'icu/components/user-details/tabs/tasks/tasks.html',
+                    controller: 'UserTasksController',
+                    resolve: {
+                        tasks: function(TasksService, $stateParams) {
+                            //hack: temporary getAll
+                            return TasksService.getAll($stateParams.id);
+                        },
+                        projects: function(ProjectsService, $stateParams) {
+                            //hack: temporary getAll
+                            return ProjectsService.getAll($stateParams.id);
+                        }
+                    }
                 }
             }
         })
