@@ -1,0 +1,22 @@
+.panes-wrapper {
+    .list-table {
+        table {
+            @include table;
+
+            tbody {
+                tr {
+                    cursor: pointer;
+
+                    &.active {
+                        background-color: $grey;
+                        color: white;
+                    }
+
+                    .id {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}

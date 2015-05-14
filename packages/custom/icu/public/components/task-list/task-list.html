@@ -6,20 +6,5 @@
         <button class="favorites"><i class="fa fa-star"></i></button>
         <button class="tasks"><i class="fa fa-exchange fa-rotate-90"></i>Status</button>
     </div>
-    <div class="list-table">
-        <table>
-            <tbody>
-                <tr data-ng-repeat="task in tasks"
-                    data-ui-sref-active="active"
-                    data-ui-sref="main.tasks.details({id: task._id})">
-                    <td class="id">{{$index + 1}}</td>
-                    <td>{{task.title}}</td>
-                    <td><span class="tag {{task.project.color}}">{{task.project.title}}</span></td>
-                    <td>{{task.status}}</td>
-                    <td>{{task.due | date: 'dd.MM.yyyy'}}</td>
-                    <td><i class="fa fa-chevron-right"></i></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <div icu-task-list tasks="tasks" draw-arrow="true"></div>
 </div>

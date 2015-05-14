@@ -1,0 +1,16 @@
+<div class="list-table">
+    <table class="tasks">
+        <tbody>
+            <tr data-ng-repeat="task in tasks"
+                data-ui-sref-active="active"
+                data-ui-sref="main.tasks.details({id: task._id})">
+                <td class="id">{{$index + 1}}</td>
+                <td>{{task.title}}</td>
+                <td><span class="tag {{task.project.color}}">{{task.project.title}}</span></td>
+                <td>{{task.status}}</td>
+                <td>{{task.due | date: 'dd.MM.yyyy'}}</td>
+                <td><i ng-if="drawArrow" class="fa fa-chevron-right"></i></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -7,14 +7,16 @@ $fa-font-path: '../lib/font-awesome/fonts';
 @import 'mixins/circle';
 @import 'mixins/button';
 @import 'sidepane';
+@import 'panes';
 @import 'middlepane';
 @import 'detailspane';
 @import 'user-list';
 @import 'user-details';
-@import 'user-details-tab-projects';
 @import 'task-list';
 @import 'task-details';
 @import 'tabs-activities';
+@import 'tabs-projects';
+@import 'tabs-tasks';
 
 .panes-wrapper {
     margin-left: $sidepane-width;
