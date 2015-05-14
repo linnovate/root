@@ -1,0 +1,6 @@
+<td class="id">{{data.index + 1}}</td>
+<td>{{data.task.title}}</td>
+<td><span class="tag {{data.task.project.color}}">{{data.task.project.title}}</span></td>
+<td>{{data.task.status}}</td>
+<td>{{data.task.due | date: 'dd.MM.yyyy'}}</td>
+<td><i ng-if="data.drawArrow" class="fa fa-chevron-right"></i></td>
