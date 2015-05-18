@@ -1,13 +1,30 @@
 <div class="list-table">
-    <table class="tasks">
+    <table class="tasks" ng-if="!groupTasks">
         <tbody>
             <tr data-ng-repeat="task in tasks"
                 data-ui-sref-active="active"
                 data-ui-sref="main.tasks.details({id: task._id})"
                 icu-list-row
-                data="{ task: task, index: $index, drawArrow: drawArrow }"
+                data="{ task: task, index: $index, drawArrow: drawArrow, groupTasks: groupTasks }"
                 type="task">
             </tr>
         </tbody>
     </table>
+
+    <div class="task-group" data-ng-repeat="week in groupedTasks" data-ng-if="groupTasks">
+        <div class="title" ng-click="week.hidden = !week.hidden">
+            {{week.startDate | date:'MM-dd-yyyy'}} - {{week.endDate | date:'MM-dd-yyyy'}}
+        </div>
+        <table class="tasks" ng-if="!week.hidden">
+            <tbody>
+                <tr data-ng-repeat="task in week.tasks"
+                    data-ui-sref-active="active"
+                    data-ui-sref="main.tasks.details({id: task._id})"
+                    icu-list-row
+                    data="{ task: task, index: $index, drawArrow: drawArrow, groupTasks: groupTasks }"
+                    type="task">
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
