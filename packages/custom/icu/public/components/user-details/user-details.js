@@ -5,7 +5,7 @@ angular.module('mean.icu.ui.userdetails', [])
     $scope.user = user;
     $scope.people = users;
 
-    if ($scope.user) {
+    if ($scope.user && $state.current.name === 'main.people.details') {
         $state.go('.projects');
     }
 });

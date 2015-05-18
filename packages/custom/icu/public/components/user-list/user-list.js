@@ -4,7 +4,7 @@ angular.module('mean.icu.ui.userlist', [])
 .controller('UserListController', function($scope, users, $state) {
     $scope.people = users;
 
-    if ($scope.people.length) {
+    if ($scope.people.length && $state.current.name === 'main.people') {
         $state.go('main.people.details', { id: $scope.people[0].id });
     }
 });

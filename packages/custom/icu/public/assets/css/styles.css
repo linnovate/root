@@ -1715,8 +1715,80 @@
 .fa-medium:before {
   content: "\f23a"; }
 
+.display-by .intro {
+  color: #5c6c72;
+  margin: 20px 5px 5px 20px;
+  font-size: 13px; }
+.display-by .title {
+  padding: 10px 0;
+  margin: 0;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 26px; }
+.display-by .list {
+  padding-left: 20px;
+  color: white; }
+  .display-by .list ul {
+    list-style: none;
+    padding-left: 0; }
+    .display-by .list ul li {
+      width: 220px;
+      float: left; }
+      .display-by .list ul li a {
+        text-decoration: none;
+        cursor: pointer;
+        color: white;
+        font-size: 13px;
+        line-height: 26px; }
+      .display-by .list ul li.selected a:before {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-left: -15px;
+        content: " ";
+        border-left: 5px solid #fda102;
+        border-right: 5px solid transparent;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent; }
+  .display-by .list.projects ul li .tag-color {
+    height: calc(5px * 2);
+    border-radius: 5px;
+    width: calc(5px * 2);
+    margin: 7px 0;
+    float: right; }
+    .display-by .list.projects ul li .tag-color.green {
+      background-color: #b8e77f; }
+    .display-by .list.projects ul li .tag-color.blue {
+      background-color: #00acee; }
+    .display-by .list.projects ul li .tag-color.pink {
+      background-color: #f06eaa; }
+  .display-by .list.discussions ul li a {
+    font-weight: bold; }
+  .display-by .list.people ul li {
+    margin: 5px 0; }
+  .display-by .list.people .avatar {
+    float: left;
+    height: calc(17px * 2);
+    border-radius: 17px;
+    width: calc(17px * 2);
+    border: 1px solid black;
+    background-color: #b8e77f; }
+  .display-by .list.people .name {
+    float: left;
+    line-height: 34px;
+    padding-left: 10px; }
+.display-by .more {
+  padding: 5px 0;
+  color: #fda102; }
+.display-by hr {
+  background-color: #424e52;
+  border-color: #424e52;
+  color: #424e52; }
+
 .sidepane {
   display: block;
+  box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
   position: fixed;
   width: 250px;
   left: 0;
@@ -1726,7 +1798,7 @@
   .sidepane header {
     display: table-cell;
     vertical-align: middle;
-    height: 70px;
+    height: 60px;
     width: 250px;
     background-color: #141e20;
     color: white;
@@ -1738,81 +1810,48 @@
       list-style: none;
       padding-left: 0; }
       .sidepane nav ul li {
-        height: 70px;
         cursor: pointer; }
-        .sidepane nav ul li.active {
-          background-color: #3e474c; }
-        .sidepane nav ul li .icon {
-          padding: 14px;
-          width: 70px;
-          height: 70px; }
         .sidepane nav ul li .menu-item {
-          display: table-cell;
-          vertical-align: middle;
-          width: 162px;
-          height: 70px;
-          font-weight: bold; }
-        .sidepane nav ul li .arrow {
-          display: table-cell;
-          vertical-align: middle;
-          width: 18px;
-          height: 70px; }
-  .sidepane .display-by .intro {
-    color: #5c6c72;
-    padding-left: 20px; }
-  .sidepane .display-by .title {
-    padding: 10px 0;
-    margin: 0;
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    line-height: 26px; }
-  .sidepane .display-by .list {
-    padding-left: 20px;
-    color: white; }
-    .sidepane .display-by .list ul {
-      list-style: none;
-      padding-left: 0; }
-      .sidepane .display-by .list ul li {
-        width: 220px;
-        float: left; }
-        .sidepane .display-by .list ul li a {
-          text-decoration: none;
-          cursor: pointer;
-          color: white;
-          font-size: 13px;
-          line-height: 26px; }
-        .sidepane .display-by .list ul li.active a:before {
-          display: inline-block;
-          width: 10px;
-          height: 10px;
-          margin-left: -15px;
-          content: " ";
-          border-left: 5px solid #fda102;
-          border-right: 5px solid transparent;
-          border-top: 5px solid transparent;
-          border-bottom: 5px solid transparent; }
-    .sidepane .display-by .list.projects ul li .tag-color {
-      height: calc(5px * 2);
-      border-radius: 5px;
-      width: calc(5px * 2);
-      margin: 7px 0;
-      float: right; }
-      .sidepane .display-by .list.projects ul li .tag-color.green {
-        background-color: #b8e77f; }
-      .sidepane .display-by .list.projects ul li .tag-color.blue {
-        background-color: #00acee; }
-      .sidepane .display-by .list.projects ul li .tag-color.pink {
-        background-color: #f06eaa; }
-    .sidepane .display-by .list.discussions ul li a {
-      font-weight: bold; }
-  .sidepane .display-by .more {
-    padding: 5px 0;
-    color: #fda102; }
-  .sidepane .display-by hr {
-    background-color: #5c6c72;
-    border-color: #5c6c72;
-    color: #5c6c72; }
+          height: 60px; }
+          .sidepane nav ul li .menu-item.active {
+            background-color: #3e474c; }
+            .sidepane nav ul li .menu-item.active .arrow {
+              box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75); }
+          .sidepane nav ul li .menu-item .icon {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            display: inline-block; }
+            .sidepane nav ul li .menu-item .icon i {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%); }
+          .sidepane nav ul li .menu-item .item-name {
+            position: relative;
+            width: 163px;
+            height: 60px;
+            display: inline-block;
+            font-weight: bold; }
+            .sidepane nav ul li .menu-item .item-name span {
+              position: absolute;
+              left: 0;
+              top: 50%;
+              transform: translate(0, -50%); }
+          .sidepane nav ul li .menu-item .arrow {
+            display: inline-block;
+            position: relative;
+            width: 19px;
+            height: 60px; }
+            .sidepane nav ul li .menu-item .arrow i {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%); }
+        .sidepane nav ul li .display-by {
+          height: calc(100vh - 5 * 60px);
+          overflow-x: hidden;
+          overflow-y: auto; }
 
 .panes-wrapper .list-table table {
   width: 100%;
@@ -1825,8 +1864,8 @@
     background-color: white; }
     .panes-wrapper .list-table table tbody tr {
       height: 50px;
-      border-top: 1px solid #5c6c72;
-      border-bottom: 1px solid #5c6c72; }
+      border-top: 1px solid #e1e1e1;
+      border-bottom: 1px solid #e1e1e1; }
   .panes-wrapper .list-table table tbody tr {
     cursor: pointer; }
     .panes-wrapper .list-table table tbody tr.active {
@@ -1840,35 +1879,35 @@
   height: 100vh;
   background-color: #fcfbf6; }
   .middlepane .header {
-    height: 70px;
-    border-bottom: 1px solid #5c6c72; }
+    height: 60px;
+    border-bottom: 1px solid #e1e1e1; }
     .middlepane .header .hide-menu {
       float: left;
-      height: 70px;
-      width: 70px;
+      height: 60px;
+      width: 60px;
       background-color: white;
-      border: 1px solid #5c6c72; }
+      border: 1px solid #e1e1e1; }
     .middlepane .header .search {
       position: relative;
       float: left;
       margin-top: 1px;
-      width: calc(100% - 70px); }
+      width: calc(100% - 60px); }
       .middlepane .header .search input {
         border: none;
         background-color: white;
-        padding-left: 70px;
+        padding-left: 60px;
         width: 100%;
-        font-size: 26px;
-        height: 68px; }
+        font-size: 15px;
+        height: 58px; }
       .middlepane .header .search i {
         position: absolute;
-        left: 0;
-        top: 0;
-        margin: 20px 21px 35px 37px; }
+        left: 40px;
+        top: 50%;
+        transform: translate(0, -50%); }
   .middlepane .title {
     padding: 35px 0 20px 25px;
     font-size: 24px;
-    border-bottom: 1px solid #5c6c72;
+    border-bottom: 1px solid #e1e1e1;
     background-color: white; }
     .middlepane .title span {
       font-weight: bold; }
@@ -1882,7 +1921,7 @@
       border: none;
       margin: 0 5px;
       background-color: white;
-      border: 1px solid #5c6c72; }
+      border: 1px solid #e1e1e1; }
       .middlepane .filters button.favorites {
         width: 26px;
         color: #fda102;
@@ -1896,16 +1935,20 @@
   height: 100vh;
   background-color: #fcfbf6; }
   .detailspane .header {
-    height: 70px;
-    border-bottom: 1px solid #5c6c72;
+    height: 60px;
+    border-bottom: 1px solid #e1e1e1;
     background-color: white; }
     .detailspane .header .notifications {
       float: left;
-      width: 70px;
-      height: 70px;
-      padding: 21px; }
+      width: 60px;
+      height: 60px;
+      position: relative; }
       .detailspane .header .notifications .indicator {
-        position: relative; }
+        display: inline-block;
+        position: relative;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%); }
         .detailspane .header .notifications .indicator span {
           height: calc(10px * 2);
           border-radius: 10px;
@@ -1919,8 +1962,8 @@
           color: white; }
     .detailspane .header .last-notification {
       float: left;
-      width: calc(100% - 4 * 70px);
-      height: 70px;
+      width: calc(100% - 4 * 60px);
+      height: 60px;
       font-style: italic;
       position: relative; }
       .detailspane .header .last-notification .text {
@@ -1933,8 +1976,8 @@
         font-weight: bold; }
     .detailspane .header .time {
       float: left;
-      width: 140px;
-      height: 70px;
+      width: 120px;
+      height: 60px;
       position: relative; }
       .detailspane .header .time span, .detailspane .header .time i {
         position: absolute;
@@ -1948,8 +1991,8 @@
     .detailspane .header .add {
       float: left;
       display: inline-block;
-      width: 70px;
-      height: 69px; }
+      width: 60px;
+      height: 59px; }
       .detailspane .header .add button {
         appearance: none;
         border: none;
@@ -1958,7 +2001,7 @@
         width: 100%;
         height: 100%; }
   .detailspane .page-content {
-    height: calc(100vh - 2 * 70px); }
+    height: calc(100vh - 2 * 60px); }
     .detailspane .page-content .description {
       margin: 0 30px;
       height: 30%;
@@ -1966,8 +2009,8 @@
     .detailspane .page-content .tabs {
       height: 40px;
       margin: 0 30px;
-      border-top: 1px solid #5c6c72;
-      border-bottom: 1px solid #5c6c72;
+      border-top: 1px solid #e1e1e1;
+      border-bottom: 1px solid #e1e1e1;
       height: 40px; }
       .detailspane .page-content .tabs .tab {
         appearance: none;
@@ -1982,20 +2025,20 @@
           border-bottom: 5px solid #fda102; }
     .detailspane .page-content .tab-content {
       margin: 10px 30px;
-      height: calc(calc(100vh - 2 * 70px) - 30% - 40px); }
+      height: calc(calc(100vh - 2 * 60px) - 30% - 40px); }
   .detailspane .footer {
-    height: 70px;
-    border-top: 1px solid #5c6c72; }
+    height: 60px;
+    border-top: 1px solid #e1e1e1; }
     .detailspane .footer .avatar, .detailspane .footer .add {
-      height: calc(25px * 2);
-      border-radius: 25px;
-      width: calc(25px * 2);
+      height: calc(17px * 2);
+      border-radius: 17px;
+      width: calc(17px * 2);
       appearance: none;
       border: none;
       padding: 0;
       margin: 0;
       color: white;
-      margin: 9px 10px;
+      margin: 11px 12px;
       font-size: 20px; }
     .detailspane .footer .avatar {
       background-color: #b8e77f;
@@ -2047,23 +2090,23 @@
     .task-details .page-content .project .tag.pink {
       background-color: #f06eaa; }
 .task-details .page-content .summary {
-  height: 70px;
-  border-bottom: 2px solid #5c6c72; }
+  height: 60px;
+  border-bottom: 2px solid #e1e1e1; }
   .task-details .page-content .summary .favorite, .task-details .page-content .summary .user, .task-details .page-content .summary .due, .task-details .page-content .summary .status, .task-details .page-content .summary .tags {
-    height: 70px;
+    height: 60px;
     float: left;
     position: relative; }
   .task-details .page-content .summary .favorite, .task-details .page-content .summary .user, .task-details .page-content .summary .due, .task-details .page-content .summary .status {
-    border-right: 1px solid #5c6c72; }
+    border-right: 1px solid #e1e1e1; }
   .task-details .page-content .summary .user, .task-details .page-content .summary .due, .task-details .page-content .summary .status, .task-details .page-content .summary .tags {
-    width: calc((100% - 70px) * 0.25); }
+    width: calc((100% - 60px) * 0.25); }
     .task-details .page-content .summary .user i, .task-details .page-content .summary .user span, .task-details .page-content .summary .due i, .task-details .page-content .summary .due span, .task-details .page-content .summary .status i, .task-details .page-content .summary .status span, .task-details .page-content .summary .tags i, .task-details .page-content .summary .tags span {
       position: absolute;
       top: 50%;
       left: 5px;
       transform: translate(0, -50%); }
   .task-details .page-content .summary .favorite {
-    width: 70px; }
+    width: 60px; }
     .task-details .page-content .summary .favorite button {
       appearance: none;
       background-color: transparent;
@@ -2074,14 +2117,14 @@
     height: calc(14px * 2);
     border-radius: 14px;
     width: calc(14px * 2);
-    margin: calc((70px - 28px) / 2);
+    margin: calc((60px - 28px) / 2);
     background-color: #b8e77f; }
   .task-details .page-content .summary .user span {
-    left: 70px; }
+    left: 60px; }
 .task-details .page-content .tabs .tab {
   width: calc((100% - 60px) / 2); }
 .task-details .page-content .tab-content {
-  height: calc(100% - 30% - 40px - 70px); }
+  height: calc(100% - 30% - 40px - 60px); }
 
 .tab-content .activities {
   height: 100%; }
@@ -2093,7 +2136,7 @@
     margin: 10px;
     background-color: #b8e77f; }
   .tab-content .activities .activities-list {
-    border-bottom: 1px solid #5c6c72;
+    border-bottom: 1px solid #e1e1e1;
     height: calc(100% - 250px);
     overflow: auto; }
     .tab-content .activities .activities-list .title span {
@@ -2134,7 +2177,7 @@
         appearance: none;
         border: none;
         background-color: #fcfbf6;
-        border: 1px solid #5c6c72;
+        border: 1px solid #e1e1e1;
         float: left; }
       .tab-content .activities .add-update .action-buttons .save {
         height: calc(20px * 2);
@@ -2156,8 +2199,8 @@
     background-color: white; }
     .tab-content .projects tbody tr {
       height: 50px;
-      border-top: 1px solid #5c6c72;
-      border-bottom: 1px solid #5c6c72; }
+      border-top: 1px solid #e1e1e1;
+      border-bottom: 1px solid #e1e1e1; }
   .tab-content .projects tbody tr {
     background-color: #fcfbf6;
     border: none; }
@@ -2189,8 +2232,8 @@
     background-color: white; }
     .tab-content .tasks tbody tr {
       height: 50px;
-      border-top: 1px solid #5c6c72;
-      border-bottom: 1px solid #5c6c72; }
+      border-top: 1px solid #e1e1e1;
+      border-bottom: 1px solid #e1e1e1; }
   .tab-content .tasks tbody tr {
     background-color: #fcfbf6; }
     .tab-content .tasks tbody tr .tag {

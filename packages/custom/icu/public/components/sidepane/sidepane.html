@@ -4,49 +4,21 @@
 <nav>
     <ul>
         <li data-ng-repeat="item in items"
-            data-ng-class="{ 'active': isCurrentState(item) }"
             data-ui-sref="{{item.state}}">
-            <div class="icon pull-left">
-                <i class="fa {{item.icon}}"></i>
+            <div class="menu-item"
+                data-ng-class="{ 'active': isCurrentState(item) }">
+                <div class="icon">
+                    <i class="fa {{item.icon}}"></i>
+                </div>
+                <div class="item-name">
+                    <span>{{item.name | uppercase}}</span>
+                </div>
+                <div class="arrow">
+                    <i class="fa"
+                        data-ng-class="{ 'fa-caret-right': !isCurrentState(item), 'fa-caret-down': isCurrentState(item) }"></i>
+                </div>
             </div>
-            <div class="menu-item">
-                <span>{{item.name | uppercase}}</span>
-            </div>
-            <div class="arrow">
-                <i class="fa"
-                    data-ng-class="{ 'fa-caret-right': !isCurrentState(item), 'fa-caret-down': isCurrentState(item) }"></i>
-            </div>
+            <div class="display-by" ng-if="isCurrentState(item)" icu-display-by people="people" projects="projects" discussions="discussions"></div>
         </li>
     </ul>
 </nav>
-
-<section class="display-by">
-    <p class="intro">Display task by:</p>
-    <div class="list projects">
-        <p class="title">Projects</p>
-        <ul>
-            <li data-ng-repeat="project in projects">
-                <a href data-ng-link="project({id: project.id})">
-                    {{project.name}}
-                </a>
-                <div class="tag-color {{project.color}}"></div>
-            </li>
-        </ul>
-        <p class="more">more..</p>
-    </div>
-
-    <hr />
-
-    <div class="list discussions">
-        <p class="title">Discussions</p>
-        <ul>
-            <li data-ng-repeat="discussion in discussions"
-                data-ng-class="{'active': discussion.active}">
-                <a href data-ng-link="discussion({id: discussion.id})">
-                    {{discussion.name}}
-                </a>
-            </li>
-        </ul>
-        <p class="more">more..</p>
-    </div>
-</section>
