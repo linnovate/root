@@ -32,6 +32,7 @@ ICU.register(function(app, auth, database) {
 
   ICU.angularDependencies([
       'mean.system',
+      'mean.icu.ui.displayby',
       'mean.icu.ui.sidepane',
       'mean.icu.ui.middlepane',
       'mean.icu.ui.detailspane',

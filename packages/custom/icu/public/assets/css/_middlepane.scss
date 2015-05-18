@@ -24,17 +24,17 @@
             input {
                 border: none;
                 background-color: white;
-                padding-left: 70px;
+                padding-left: $header-height;
                 width: 100%;
-                font-size: 26px;
+                font-size: 15px;
                 height: $header-height - 2;
             }
 
             i {
                 position: absolute;
-                left: 0;
-                top: 0;
-                margin: 20px 21px 35px 37px;
+                left: 40px;
+                top: 50%;
+                transform: translate(0, -50%);
             }
         }
     }

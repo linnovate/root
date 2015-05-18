@@ -19,10 +19,14 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             float: left;
             width: $header-height;
             height: $header-height;
-            padding: 21px;
+            position: relative;
 
             .indicator {
+                display: inline-block;
                 position: relative;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
 
                 span {
                     @include circle(10px);
@@ -140,10 +144,10 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
         height: $header-height;
         border-top: 1px solid $light-grey1;
 
-        $avatar-margin: 10px;
+        $avatar-margin: 12px;
 
         .avatar, .add {
-            @include circle(25px);
+            @include circle(17px);
             @include button;
 
             padding: 0;

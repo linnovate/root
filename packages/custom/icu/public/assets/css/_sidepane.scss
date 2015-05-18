@@ -1,5 +1,6 @@
 .sidepane {
     display: block;
+    box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
 
     position: fixed;
     width: $sidepane-width;
@@ -20,7 +21,6 @@
         text-align: center;
     }
 
-
     nav {
         color: white;
 
@@ -29,114 +29,68 @@
             padding-left: 0;
 
             li {
-                height: 70px;
                 cursor: pointer;
 
-                &.active {
-                    background-color: $light-grey0;
-                }
-
-                .icon {
-                    padding: 14px;
-                    width: 70px;
-                    height: 70px;
-                }
-
                 .menu-item {
-                    display: table-cell;
-                    vertical-align: middle;
-                    width: ($sidepane-width - 70px) * 0.9;
-                    height: 70px;
-                    font-weight: bold;
-                }
+                    height: $header-height;
 
-                .arrow {
-                    display: table-cell;
-                    vertical-align: middle;
-                    width: ($sidepane-width - 70px) * 0.1;
-                    height: 70px;
-                }
-            }
-        }
-    }
-
-    .display-by {
-        .intro {
-            color: $light-grey1;
-            padding-left: 20px;
-        }
-
-        .title {
-            padding: 10px 0;
-            margin: 0;
-            color: white;
-
-            font-size: 18px;
-            font-weight: bold;
-            line-height: 26px;
-        }
-
-        .list {
-            padding-left: 20px;
-            color: white;
-
-            ul {
-                list-style: none;
-                padding-left: 0;
-
-                li {
-                    width: ($sidepane-width - 30px);
-                    float: left;
-
-                    a {
-                        text-decoration: none;
-                        cursor: pointer;
-                        color: white;
-                        font-size: 13px;
-                        line-height: 26px;
+                    &.active {
+                        background-color: $light-grey0;
+                        .arrow {
+                            box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
+                        }
                     }
 
-                    &.active a:before {
+                    .icon {
+                        position: relative;
+                        width: $header-height;
+                        height: $header-height;
                         display: inline-block;
-                        width: 10px;
-                        height: 10px;
-                        margin-left: -15px;
-                        content: " ";
 
-                        border-left: 5px solid $orange;
-                        border-right: 5px solid transparent;
-                        border-top: 5px solid transparent;
-                        border-bottom: 5px solid transparent;
+                        i {
+                            position: absolute;
+                            left: 50%;
+                            top: 50%;
+                            transform: translate(-50%, -50%);
+                        }
                     }
-                }
-            }
 
-            &.projects {
-                ul {
-                    li {
-                        .tag-color {
-                            @include tag(5px);
-                            float: right;
+                    .item-name {
+                        position: relative;
+                        width: ($sidepane-width - $header-height) * 0.9 - 8px;
+                        height: $header-height;
+                        display: inline-block;
+                        font-weight: bold;
+
+                        span {
+                            position: absolute;
+                            left: 0;
+                            top: 50%;
+                            transform: translate(0, -50%);
+                        }
+                    }
+
+                    .arrow {
+                        display: inline-block;
+                        position: relative;
+                        width: ($sidepane-width - $header-height) * 0.1;
+                        height: $header-height;
+
+                        i {
+                            position: absolute;
+                            left: 50%;
+                            top: 50%;
+                            transform: translate(-50%, -50%);
                         }
                     }
                 }
+
+                .display-by {
+                    height: calc(100vh - 5 * #{ $header-height });
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                }
             }
-
-            &.discussions ul li a {
-                font-weight: bold;
-            }
-        }
-
-        .more {
-            padding: 5px 0;
-            color: $orange;
-        }
-
-        hr {
-            background-color: $light-grey1;
-            border-color: $light-grey1;
-            color: $light-grey1;
         }
     }
 }
-
