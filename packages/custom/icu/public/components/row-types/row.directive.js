@@ -3,8 +3,8 @@
 angular.module('mean.icu.ui.rows', [])
 .directive('icuListRow', function($compile, $http, $templateCache) {
     var templates = {
-        people: 'icu/components/row-types/people-row.html',
-        task: 'icu/components/row-types/task-row.html'
+        people: '/icu/components/row-types/people-row.html',
+        task: '/icu/components/row-types/task-row.html'
     };
 
     function compileTemplate($scope, $element, template) {
