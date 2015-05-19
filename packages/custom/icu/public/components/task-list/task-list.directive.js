@@ -21,7 +21,7 @@ angular.module('mean.icu.ui.tasklist', [])
 
     return {
         restrict: 'A',
-        templateUrl: 'icu/components/task-list/task-list.directive.template.html',
+        templateUrl: '/icu/components/task-list/task-list.directive.template.html',
         scope: {
             tasks: '=',
             drawArrow: '=',

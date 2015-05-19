@@ -12,7 +12,7 @@ angular.module('mean.icu.ui.displayby', [])
             discussions: '=',
             people: '='
         },
-        templateUrl: 'icu/components/display-by/display-by.html',
+        templateUrl: '/icu/components/display-by/display-by.html',
         controller: controller
     };
 });

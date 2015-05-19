@@ -8,7 +8,7 @@ angular.module('mean.icu.ui.middlepane', [])
   return {
     restrict: 'A',
     controller: controller,
-    templateUrl: 'icu/components/middlepane/middlepane.html'
+    templateUrl: '/icu/components/middlepane/middlepane.html'
   };
 });
 

@@ -17,6 +17,6 @@ angular.module('mean.icu.ui.tabs')
         },
         replace: true,
         controller: controller,
-        templateUrl: 'icu/components/tabs/activities/activities.html'
+        templateUrl: '/icu/components/tabs/activities/activities.html'
     };
 });
