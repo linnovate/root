@@ -22,4 +22,9 @@ $fa-font-path: '../lib/font-awesome/fonts';
 .panes-wrapper {
     margin-left: $sidepane-width;
     width: calc(100% - #{$sidepane-width});
+
+    &.wide {
+        margin-left: 0;
+        width: 100%;
+    }
 }

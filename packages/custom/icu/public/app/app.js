@@ -181,7 +181,11 @@ angular.module('mean.icu').config([
     }
 ]);
 
-angular.module('mean.icu').controller('IcuController', function($rootScope) {
+angular.module('mean.icu').controller('IcuController', function($rootScope, $scope) {
+    $scope.menu = {
+        isHidden: false
+    };
+
     $rootScope.$on('$stateChangeError', function() {
         console.log(arguments);
     });

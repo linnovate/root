@@ -2251,3 +2251,6 @@
 .panes-wrapper {
   margin-left: 250px;
   width: calc(100% - 250px); }
+  .panes-wrapper.wide {
+    margin-left: 0;
+    width: 100%; }

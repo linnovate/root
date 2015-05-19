@@ -1,5 +1,5 @@
-<div icu-sidepane class="sidepane"></div>
-<div class="panes-wrapper">
-  <div icu-middlepane class="middlepane pull-left"></div>
-  <div icu-detailspane class="detailspane pull-left"></div>
+<div icu-sidepane ng-if="!menu.isHidden" class="sidepane"></div>
+<div class="panes-wrapper" ng-class="{ wide: menu.isHidden }">
+    <div icu-middlepane class="middlepane pull-left"></div>
+    <div icu-detailspane class="detailspane pull-left"></div>
 </div>

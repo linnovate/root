@@ -17,8 +17,6 @@ angular.module('mean.icu.ui.tasklist', [])
             }).values()
             .value().reverse();
         }
-
-        console.log($scope.groupedTasks);
     }
 
     return {
