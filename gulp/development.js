@@ -14,7 +14,7 @@ var gulp = require('gulp'),
   };
 
 /*var defaultTasks = ['clean', 'jshint', 'less', 'csslint', 'devServe', 'watch'];*/
-var defaultTasks = ['clean',  'less', 'csslint', 'devServe', 'watch'];
+var defaultTasks = ['clean',  'less', 'sass', 'csslint', 'devServe', 'watch'];
 
 gulp.task('env:development', function () {
   process.env.NODE_ENV = 'development';
@@ -33,6 +33,14 @@ gulp.task('csslint', function () {
     .pipe(plugins.csslint('.csslintrc'))
     .pipe(plugins.csslint.reporter())
     .pipe(count('csslint', 'files lint free'));
+});
+
+gulp.task('sass', function() {
+  return gulp.src(paths.sass)
+    .pipe(plugins.sass())
+    .pipe(gulp.dest(function (vinylFile) {
+      return vinylFile.cwd;
+    }));
 });
 
 gulp.task('less', function() {
@@ -58,6 +66,7 @@ gulp.task('watch', function () {
   gulp.watch(paths.html).on('change', plugins.livereload.changed);
   gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
   gulp.watch(paths.less, ['less']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.sass, ['sass']).on('change', plugins.livereload.changed);
   plugins.livereload.listen({interval: 500});
 });
 
