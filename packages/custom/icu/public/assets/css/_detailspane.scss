@@ -9,6 +9,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
     border-left: 1px solid grey;
     height: 100vh;
     background-color: $cream;
+    float: left;
 
     .header {
         height: $header-height;

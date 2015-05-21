@@ -54,6 +54,12 @@ ICU.register(function(app, auth, database) {
       'mean.icu.data.constants',
   ]);
 
+    ICU.settings({
+        'language': 'en-US'
+    }, function(err, settings) {
+        //you now have the settings object
+    });
+
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above
     // Save settings with callback

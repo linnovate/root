@@ -1,5 +1,13 @@
 'use strict';
 
+var _ = require('lodash');
+var config = require('../config/env/all.js');
+var languages = config.languages;
+
+var currentLanguage = _(languages).find(function(language) {
+  return language.name === 'en-US';
+});
+
 var gulp = require('gulp'),
   gulpLoadPlugins = require('gulp-load-plugins'),
   through = require('through'),
@@ -38,6 +46,7 @@ gulp.task('csslint', function () {
 gulp.task('sass', function() {
   return gulp.src(paths.sass)
     .pipe(plugins.sass())
+    .pipe(currentLanguage.direction === 'rtl' ? plugins.rtlcss() : gutil.noop())
     .pipe(gulp.dest(function (vinylFile) {
       return vinylFile.cwd;
     }));
