@@ -3,9 +3,10 @@
 var _ = require('lodash');
 var config = require('../config/env/all.js');
 var languages = config.languages;
+var languageCode = config.currentLanguage;
 
 var currentLanguage = _(languages).find(function(language) {
-  return language.name === 'en-US';
+  return language.name === languageCode;
 });
 
 var gulp = require('gulp'),
