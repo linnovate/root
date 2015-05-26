@@ -7,7 +7,7 @@
                 <a href data-ng-link="project({id: project._id})">
                     {{project.title}}
                 </a>
-                <div class="tag-color {{project.color}}"></div>
+                <div class="tag-color" ng-style="color={'background-color': '#' + '{{project.color}}'}"></div>
             </li>
         </ul>
         <p class="more">more..</p>

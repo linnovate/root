@@ -1,3 +1,5 @@
+'use strict';
+
 var utils = require('./utils');
 
 var mongoose = require('mongoose');
@@ -36,9 +38,10 @@ exports.create = function(req, res, next) {
 		created: new Date(),
 		updated: new Date(),
 		title: req.body.title,
-		parent : req.body.parent || null,
-		discussion : req.body.discussion || null,
-		//creator : req.user._id
+		parent: req.body.parent || null,
+		color: req.body.color || null,
+    discussion: req.body.discussion || null,
+    creator : req.user._id
 	};
 
 	new Project(data).save(function(err, project ) {
@@ -60,9 +63,11 @@ exports.update = function(req, res, next) {
 		updated: new Date()		
 	};
 
-	(req.body.title) ? data.title = req.body.title:null;	
+	(req.body.title) ? data.title = req.body.title : null;	
 
-	(req.body.parent) ? data.parent = req.body.parent:null;	
+	(req.body.parent) ? data.parent = req.body.parent : null;	
+
+	(req.body.color) ? data.color = req.body.color : null;	
 
 	Project.findOneAndUpdate({_id:req.params.id}, {$set:data}, function (err, project) {
 

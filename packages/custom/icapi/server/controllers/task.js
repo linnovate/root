@@ -1,3 +1,5 @@
+'use strict';
+
 var utils = require('./utils');
 
 var mongoose = require('mongoose');
@@ -39,7 +41,10 @@ exports.create = function(req, res, next) {
 		parent : req.body.parent || null,
 		discussion : req.body.discussion || null,
 		project : req.body.project,
-		//creator : req.user._id
+    creator : req.user._id,
+    tags: req.body.tags || [],
+    due: req.body.due || null,
+    status: 'Received'
 	};
 
 	new Task(data).save(function(err, task ) {
@@ -61,9 +66,14 @@ exports.update = function(req, res, next) {
 		updated: new Date()		
 	};
 
-	(req.body.title) ? data.title = req.body.title:null;	
+	(req.body.title) ? data.title = req.body.title : null;	
 
-	(req.body.parent) ? data.parent = req.body.parent:null;	
+	(req.body.parent) ? data.parent = req.body.parent : null;	
+
+	(req.body.tags) ? data.tags = req.body.tags : null;	
+
+	(req.body.due) ? data.due = req.body.due : null;	
+
 
 	Task.findOneAndUpdate({_id:req.params.id}, {$set:data}, function (err, task) {
 

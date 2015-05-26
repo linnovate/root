@@ -32,6 +32,16 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
+  tags: [{
+    type: String
+  }],
+  status: {
+    type: String,
+    enum: ['Received', 'Completed']
+  },
+  due: {
+    type: Date,
+  },
   //should we maybe have finer grain control on this
   watchers : [{
     type: Schema.ObjectId,
