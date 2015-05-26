@@ -4,6 +4,11 @@ angular.module('mean.icu').config([
     '$meanStateProvider',
     function($meanStateProvider) {
         $meanStateProvider
+        .state('login', {
+            url: '/login',
+            templateUrl: '/icu/components/login/login.html',
+            controller: 'LoginController'
+        })
         .state('main', {
             abstract: true,
             url: '',
@@ -186,10 +191,14 @@ angular.module('mean.icu').config([
     }
 ]);
 
-angular.module('mean.icu').controller('IcuController', function($rootScope, $scope) {
+angular.module('mean.icu').controller('IcuController', function($rootScope, $scope, me, $state) {
     $scope.menu = {
         isHidden: false
     };
+
+    if (!me) {
+        $state.go('login');
+    }
 
     $rootScope.$on('$stateChangeError', function() {
         console.log(arguments);
