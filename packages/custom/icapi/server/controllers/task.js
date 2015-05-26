@@ -16,6 +16,7 @@ exports.read = function(req, res, next) {
 	}	
 
 	var Query = Task.find(query);
+	Query.populate('creator');
 	Query.limit(200 || req.query.limit);
 	Query.exec(function(err, tasks) {
 		
