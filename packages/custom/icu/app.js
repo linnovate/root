@@ -29,8 +29,11 @@ ICU.register(function(app, auth, database) {
   ICU.aggregateAsset('css', 'styles.css');
   ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
   ICU.aggregateAsset('js', '../lib/moment/moment.js');
+  ICU.aggregateAsset('js', '../lib/i18next/i18next.js', { weight: 0 });
+  ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', { weight: 1 });
 
   ICU.angularDependencies([
+      'jm.i18next',
       'mean.system',
       'mean.icu.ui.displayby',
       'mean.icu.ui.sidepane',
@@ -51,8 +54,15 @@ ICU.register(function(app, auth, database) {
       'mean.icu.data.projectsservice',
       'mean.icu.data.discussionsservice',
       'mean.icu.data.tasksservice',
+      'mean.icu.data.settingsservice',
       'mean.icu.data.constants',
   ]);
+
+    ICU.settings({
+        'language': 'en-US'
+    }, function(err, settings) {
+        //you now have the settings object
+    });
 
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above

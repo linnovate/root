@@ -2,6 +2,7 @@
     width: 50%;
     height: 100vh;
     background-color: $cream;
+    float: left;
 
     .header {
         height: $header-height;
@@ -65,7 +66,7 @@
             &.favorites {
                 width: 26px;
                 color: $orange;
-                font-size: 16px;
+                font-size: 13px;
             }
 
             &.tasks {

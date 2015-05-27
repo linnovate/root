@@ -1,5 +1,9 @@
 $fa-font-path: '../lib/font-awesome/fonts';
 
+body {
+    direction: ltr;
+}
+
 @import '../lib/font-awesome/scss/font-awesome';
 @import 'variables';
 @import 'mixins/table';
