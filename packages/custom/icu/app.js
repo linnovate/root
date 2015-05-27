@@ -36,6 +36,7 @@ ICU.register(function(app, auth, database) {
       'jm.i18next',
       'mean.system',
       'mean.users',
+      'mean.icu.ui.login',
       'mean.icu.ui.displayby',
       'mean.icu.ui.sidepane',
       'mean.icu.ui.middlepane',

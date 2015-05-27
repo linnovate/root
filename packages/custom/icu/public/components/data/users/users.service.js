@@ -35,6 +35,8 @@ angular.module('mean.icu.data.usersservice', [])
             $http.get('/api/users/me').then(function(result) {
                 me = result.data;
                 deferred.resolve(result.data);
+            }, function() {
+                deferred.resolve(null);
             });
         }
 
@@ -47,9 +49,17 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
+    function login(credentials) {
+        return $http.post('/api/login', credentials).then(function(result) {
+            localStorage.setItem('JWT', result.data.token);
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getMe: getMe,
-        getById: getById
+        getById: getById,
+        login: login
     };
 });
