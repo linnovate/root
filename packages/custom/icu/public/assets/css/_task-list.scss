@@ -7,6 +7,16 @@
                         width: 40px;
                     }
 
+                    &.status {
+                        &.received {
+                            color: $blue;
+                        }
+
+                        &.completed {
+                            color: $green;
+                        }
+                    }
+
                     .tag {
                         padding: 5px;
                         @include tag(10px);

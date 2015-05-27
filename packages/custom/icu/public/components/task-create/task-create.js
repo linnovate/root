@@ -10,7 +10,11 @@ angular.module('mean.icu.ui.taskcreate', [])
     }
 
     $scope.create = function() {
-        TasksService.create($scope.task).then(function(result) {
+        var task = angular.copy($scope.task);
+        task.tags = task.tags.split(' ');
+        task.due = moment(task.due).toDate();
+
+        TasksService.create(task).then(function(result) {
             $state.go('main.tasks.details', { id: result._id }, { reload: true });
         });
     };

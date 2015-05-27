@@ -31,6 +31,10 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
+  color: {
+    type: String,
+    required: true
+  },
   //should we maybe have finer grain control on this
   watchers : [{
     type: Schema.ObjectId,

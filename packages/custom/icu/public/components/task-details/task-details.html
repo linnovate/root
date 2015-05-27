@@ -6,20 +6,22 @@
                 <button><i class="fa fa-2x fa-star"></i></button>
             </div>
             <div class="user">
-                <div class="avatar">{{people[0].name[0]}}</div>
-                <span>{{people[0].name}}</span>
+                <div class="avatar">{{task.creator[0]}}</div>
+                <span class="summary-content">{{task.creator.name}}</span>
             </div>
             <div class="due">
                 <i class="fa fa-2x fa-calendar"></i>
-                <span>{{task.due}}</span>
+                <span class="summary-content">{{task.due | date:'dd.MM.yyyy' }}</span>
             </div>
-            <div class="status">
+            <div class="status {{task.status | lowercase}}">
                 <i class="fa fa-2x fa-flag"></i>
-                <span>{{task.status}}</span>
+                <span class="summary-content">{{task.status}}</span>
             </div>
             <div class="tags">
                 <i class="fa fa-2x fa-tag"></i>
-                <span>{{task.status}}</span>
+                <span class="summary-content">
+                    <span class="tag" ng-repeat="tag in task.tags">#{{tag}}</span>
+                </span>
             </div>
         </div>
         <div class="description">

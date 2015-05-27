@@ -9,6 +9,11 @@ angular.module('mean.icu').config([
             url: '',
             templateUrl: '/icu/components/icu/icu.html',
             controller: 'IcuController',
+            resolve: {
+                me: function(UsersService) {
+                    return UsersService.getMe();
+                }
+            }
         })
         .state('main.people', {
             url: '/people',
@@ -17,7 +22,7 @@ angular.module('mean.icu').config([
                     templateUrl: '/icu/components/user-list/user-list.html',
                     controller: 'UserListController',
                     resolve: {
-                        users: function(UsersService, $stateParams) {
+                        users: function(UsersService) {
                             return UsersService.getAll();
                         }
                     }
@@ -189,6 +194,7 @@ angular.module('mean.icu').controller('IcuController', function($rootScope, $sco
     $rootScope.$on('$stateChangeError', function() {
         console.log(arguments);
     });
+
     $rootScope.$on('$stateChangeSuccess', function() {
         console.log(arguments);
     });
@@ -196,7 +202,7 @@ angular.module('mean.icu').controller('IcuController', function($rootScope, $sco
 
 angular.module('mean.icu').config(function($i18nextProvider) {
     $i18nextProvider.options = {
-        lng: 'he',
+        lng: 'en-US',
         useCookie: false,
         useLocalStorage: false,
         fallbackLng: 'en-US',
