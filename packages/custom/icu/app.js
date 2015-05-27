@@ -29,8 +29,9 @@ ICU.register(function(app, auth, database) {
   ICU.aggregateAsset('css', 'styles.css');
   ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
   ICU.aggregateAsset('js', '../lib/moment/moment.js');
-  ICU.aggregateAsset('js', '../lib/i18next/i18next.js', { weight: 0 });
-  ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', { weight: 1 });
+  ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', { weight: 0 });
+  ICU.aggregateAsset('js', '../lib/i18next/i18next.js', { weight: 1 });
+  ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', { weight: 2 });
 
   ICU.angularDependencies([
       'jm.i18next',
