@@ -38,6 +38,7 @@ ICU.register(function(app, auth, database) {
       'mean.system',
       'mean.users',
       'mean.icu.ui.login',
+      'mean.icu.ui.register',
       'mean.icu.ui.displayby',
       'mean.icu.ui.sidepane',
       'mean.icu.ui.middlepane',
