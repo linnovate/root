@@ -9,6 +9,11 @@ angular.module('mean.icu').config([
             templateUrl: '/icu/components/login/login.html',
             controller: 'LoginController'
         })
+        .state('register', {
+            url: '/register',
+            templateUrl: '/icu/components/register/register.html',
+            controller: 'RegisterController'
+        })
         .state('main', {
             abstract: true,
             url: '',

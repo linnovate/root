@@ -56,10 +56,18 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
+    function register(credentials) {
+        return $http.post('/api/register', credentials).then(function(result) {
+            localStorage.setItem('JWT', result.data.token);
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getMe: getMe,
         getById: getById,
-        login: login
+        login: login,
+        register: register
     };
 });
