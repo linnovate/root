@@ -135,6 +135,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                     border-radius: 0;
                     left: -105px;
                     box-shadow: none;
+                    text-align: left;
                 }
             }
         }
