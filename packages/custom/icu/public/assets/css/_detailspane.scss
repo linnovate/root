@@ -86,12 +86,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             }
         }
 
-        .add {
-            float: left;
-            display: inline-block;
-            width: $header-height;
-            height: $header-height - 1;
-
+        .add-menu {
             button {
                 @include button;
 
@@ -100,14 +95,24 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                 width: 100%;
                 height: 100%;
             }
+
+            .menu-items {
+                li {
+                    position: relative;
+
+                    a {
+                        span {
+                            position: absolute;
+                            left: 60px;
+                            top: 50%;
+                            transform: translate(0, -50%);
+                        }
+                    }
+                }
+            }
         }
 
         .user-menu {
-            float: left;
-            display: inline-block;
-            width: $header-height ;
-            height: $header-height - 1;
-
             button {
                 @include button;
                 @include circle($header-height / 2);
@@ -117,8 +122,15 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                 height: ($header-height * 0.75) - 1;
                 margin: $header-height * 0.125;
             }
+        }
 
-            .menu-item {
+        .add-menu, .user-menu {
+            float: left;
+            display: inline-block;
+            width: $header-height ;
+            height: $header-height - 1;
+
+            .menu-items {
                 &.dropdown-menu {
                     border-radius: 0;
                     left: -105px;
@@ -126,6 +138,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                 }
             }
         }
+
     }
 
     .page-content {
