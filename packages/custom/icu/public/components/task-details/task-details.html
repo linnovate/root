@@ -28,7 +28,11 @@
                     {{task.project.title}}
                 </span>
             </div>
-            <h2 class="title">{{task.title}}</h2>
+            <div icu-change-content
+                templates="['/icu/components/task-details/task-title-read.html',
+                '/icu/components/task-details/task-title-write.html']"
+                data="{ task: task, updateFn: update }">
+            </div>
 
             <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
                 tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
