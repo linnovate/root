@@ -21,12 +21,12 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             width: $header-height;
             height: $header-height;
             position: relative;
+            background: url('/icu/assets/img/notifications.png') no-repeat center center;
 
             .indicator {
-                display: inline-block;
                 position: relative;
-                left: 50%;
-                top: 50%;
+                left: 75%;
+                top: 20%;
                 transform: translate(-50%, -50%);
 
                 span {
@@ -69,8 +69,8 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             float: left;
             width: 2 * $header-height;
             height: $header-height;
-
             position: relative;
+
             span, i {
                 position: absolute;
                 right: 10px;
@@ -110,6 +110,10 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             margin: 0 30px;
             height: $description-height;
             overflow: auto;
+
+            .tag {
+                @include tag(10px);
+            }
         }
 
         .tabs {
