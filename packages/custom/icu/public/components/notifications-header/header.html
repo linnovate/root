@@ -16,14 +16,34 @@
         <span>{{lastNotification.date}}</span>
         <i class="fa fa-chevron-down"></i>
     </div>
-    <div class="add">
-        <button data-ui-sref="{{createState}}">
+    <div class="add-menu dropdown" dropdown>
+        <button dropdown-toggle>
             <i class="fa fa-3x fa-plus"></i>
         </button>
+        <ul class="dropdown-menu menu-items" role="menu">
+            <li>
+                <a href ng-click="createTask()">
+                    <i class="fa fa-2x fa-check"></i>
+                    <span>Task</span>
+                </a>
+            </li>
+            <li>
+                <a href ng-click="createProject()">
+                    <i class="fa fa-2x fa-briefcase"></i>
+                    <span>Project</span>
+                </a>
+            </li>
+            <li>
+                <a href ng-click="createDiscussion()">
+                    <i class="fa fa-2x fa-comments-o"></i>
+                    <span>Discussion</span>
+                </a>
+            </li>
+        </ul>
     </div>
     <div class="user-menu dropdown" dropdown>
         <button dropdown-toggle></button>
-        <ul class="dropdown-menu menu-item" role="menu">
+        <ul class="dropdown-menu menu-items" role="menu">
             <li><a href ng-click="logout()">Logout</a></li>
         </ul>
     </div>
