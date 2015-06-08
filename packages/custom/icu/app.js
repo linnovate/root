@@ -51,6 +51,7 @@ ICU.register(function(app, auth, database) {
       'mean.icu.ui.membersfooter',
       'mean.icu.ui.tabs',
       'mean.icu.ui.rows',
+      'mean.icu.ui.changecontent',
       'mean.icu.data.activitiesservice',
       'mean.icu.data.usersservice',
       'mean.icu.data.notificationsservice',

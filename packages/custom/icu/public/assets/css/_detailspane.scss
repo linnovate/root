@@ -111,6 +111,13 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             height: $description-height;
             overflow: auto;
 
+            input.title {
+                font-size: 30px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                width: 100%;
+            }
+
             .tag {
                 @include tag(10px);
             }
