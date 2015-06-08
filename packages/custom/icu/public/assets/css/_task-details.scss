@@ -3,10 +3,14 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
 .task-details {
     .page-content {
         .project {
-            margin: 5px;
+            margin-top: 25px;
+
+            span {
+                padding: 5px;
+            }
 
             .tag {
-                @include tag(10px);
+                @include tag(20px);
             }
         }
 
@@ -37,20 +41,28 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
             .user, .due, .status, .tags {
                 width: calc((100% - #{ $header-height }) * 0.25);
 
-                i, .summary-content {
+                .summary-content {
                     position: absolute;
-                    left: 5px;
                     top: 50%;
                     transform: translate(0, -50%);
-                }
-
-                .summary-content {
                     left: 40px;
 
                     .tag {
                         padding-right: 7px;
                     }
                 }
+            }
+
+            .due {
+                background: 7% center url('/icu/assets/img/calendar.png') no-repeat;
+            }
+
+            .status {
+                background: 7% center url('/icu/assets/img/task-status.png') no-repeat;
+            }
+
+            .tags {
+                background: 7% center url('/icu/assets/img/tags.png') no-repeat;
             }
 
             .favorite {

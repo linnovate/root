@@ -12,10 +12,7 @@
                 no sea takimata sanctus est Lorem ipsum dolor sit amet.
             </div>
             <div data-ng-repeat="attachment in activity.attachments" class="attachment">
-                <div class="icon">
-                    <i class="fa fa-4x"
-                        data-ng-class="{'fa-file-word-o': attachment.type === 'doc'}"></i>
-                </div>
+                <div class="icon {{attachment.type}}"></div>
                 <span class="name">{{attachment.title}}</span>
             </div>
         </div>
@@ -25,7 +22,7 @@
         <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save(addupdateform)">
             <textarea ng-model="activity.title" required placeholder="type update here"></textarea>
             <div class="action-buttons">
-                <button class="attachment"><i class="fa fa-paperclip"></i></button>
+                <button class="attachment"></button>
                 <button type="submit" class="save">Add</button>
             </div>
         </form>

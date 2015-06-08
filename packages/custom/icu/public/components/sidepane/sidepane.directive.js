@@ -12,19 +12,19 @@ directive('icuSidepane', function() {
 
         $scope.items = [{
             name: 'Tasks',
-            icon: 'fa-2x fa-check-square',
+            icon: '/icu/assets/img/task.png',
             state: 'main.tasks'
         }, {
             name: 'Projects',
-            icon: 'fa-2x fa-briefcase',
+            icon: '/icu/assets/img/project.png',
             state: 'main.projects'
         }, {
             name: 'Meetings',
-            icon: 'fa-2x fa-comments-o',
+            icon: '/icu/assets/img/meeting.png',
             state: 'main.meetings'
         }, {
             name: 'People',
-            icon: 'fa-2x fa-user',
+            icon: '/icu/assets/img/people.png',
             state: 'main.people'
         }];
 
