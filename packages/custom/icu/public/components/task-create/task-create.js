@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.taskcreate', [])
         task.due = moment(task.due).toDate();
 
         TasksService.create(task).then(function(result) {
-            $state.go('main.tasks.details', { id: result._id }, { reload: true });
+            $state.go('main.tasks.byentity.details', { id: result._id, entity: $scope.currentContext.entityName, entityId: $scope.currentContext.entityId }, { reload: true });
         });
     };
 });

@@ -9,11 +9,12 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.task.project = project;
 
     $scope.update = function(task) {
-        //console.log(task);
-        TasksService.update(task);
+        TasksService.update(task).then(function() {
+            $state.reload();
+        });
     }
 
-    if ($scope.task && $state.current.name === 'main.tasks.details') {
+    if ($scope.task && $state.current.name === 'main.tasks.byentity.details') {
         $state.go('.activities');
     }
 });

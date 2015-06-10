@@ -3,8 +3,10 @@
     <div class="list projects" ng-if="projects">
         <p class="title">Projects</p>
         <ul>
-            <li data-ng-repeat="project in projects">
-                <a href data-ng-link="project({id: project._id})">
+            <li data-ng-repeat="project in projects"
+                data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
+                data-ng-click="switchTo('project', project._id)">
+                <a href>
                     {{project.title}}
                 </a>
                 <div class="tag-color" ng-style="color={'background-color': '#' + '{{project.color}}'}"></div>
@@ -19,7 +21,7 @@
         <p class="title">Discussions</p>
         <ul>
             <li data-ng-repeat="discussion in discussions"
-                data-ng-class="{'selected': discussion.active}">
+                data-ng-class="{'selected': context.entityName === 'discussion' && discussion === context.entity }">
                 <a href data-ng-link="discussion({id: discussion._id})">
                     {{discussion.name}}
                 </a>

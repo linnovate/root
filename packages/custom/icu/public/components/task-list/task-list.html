@@ -13,5 +13,16 @@
             <button class="calendar"></button>
         </div>
     </div>
+    <div class="list-table">
+        <table class="tasks">
+            <tbody>
+                <tr data-ng-click="create()"
+                    icu-list-row
+                    data="{ task: { title: 'Create new task' } }"
+                    type="task">
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div icu-task-list tasks="tasks" draw-arrow="true" group-tasks="true"></div>
 </div>

@@ -15,6 +15,10 @@ module.exports = function(Icapi, app, auth, database) {
     .put(projectController.update)      									//Update
     .delete(projectController.destroy); 									//Delete
 
+  app.route('/api/ic/tasks/project/:id')
+    .all(permissionController.echo)
+    .get(taskController.readByProjectId);
+
   app.route('/api/ic/tasks/:id?')
     .all(permissionController.echo)
     //.post(permissionController.forceLogIn, taskController.create)

@@ -36,7 +36,6 @@ angular.module('mean.icu.ui.changecontent', [])
     }
 
     function link($scope, $element) {
-        console.log($scope.templates);
         loadTemplate($scope, $element);
     }
 

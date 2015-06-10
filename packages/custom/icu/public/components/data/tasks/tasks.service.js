@@ -18,7 +18,13 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function getByUserId(id) {
         return $http.get(ApiUri + EnitityPrefix + '/user/' + id).then(function(result) {
-            return result.data[0];
+            return result.data;
+        });
+    }
+
+    function getByProjectId(id) {
+        return $http.get(ApiUri + EnitityPrefix + '/project/' + id).then(function(result) {
+            return result.data;
         });
     }
 
@@ -44,6 +50,7 @@ angular.module('mean.icu.data.tasksservice', [])
         getAll: getAll,
         getById: getById,
         getByUserId: getByUserId,
+        getByProjectId: getByProjectId,
         create: create,
         update: update,
         remove: remove

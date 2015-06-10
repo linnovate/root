@@ -17,6 +17,28 @@ exports.read = function(req, res, next) {
 
 	var Query = Task.find(query);
 	Query.populate('creator');
+	Query.sort('-created');
+	Query.limit(200 || req.query.limit);
+	Query.exec(function(err, tasks) {
+		
+		utils.checkAndHandleError(err, res, 'Failed to read task');
+
+		res.status(200);
+		return res.json(tasks);
+	});
+}
+
+exports.readByProjectId = function(req, res, next) {	
+
+	var query = {};
+
+	if (req.params.id) {
+		query.project = req.params.id;
+	}	
+
+	var Query = Task.find(query);
+	Query.populate('creator');
+	Query.sort('-created');
 	Query.limit(200 || req.query.limit);
 	Query.exec(function(err, tasks) {
 		

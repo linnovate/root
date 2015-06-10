@@ -22,6 +22,9 @@ angular.module('mean.icu').config([
             resolve: {
                 me: function(UsersService) {
                     return UsersService.getMe();
+                },
+                projects: function(ProjectsService) {
+                    return ProjectsService.getAll();
                 }
             }
         })
@@ -116,25 +119,31 @@ angular.module('mean.icu').config([
         })
         .state('main.tasks', {
             url: '/tasks',
+            abstract: true
+        })
+        .state('main.tasks.byentity', {
+            url: '/by-:entity/:entityId',
             views: {
-                middlepane: {
+                'middlepane@main': {
                     templateUrl: '/icu/components/task-list/task-list.html',
                     controller: 'TaskListController',
                     resolve: {
-                        tasks: function(TasksService) {
-                            return TasksService.getAll();
-                        },
-                        projects: function(ProjectsService) {
-                            return ProjectsService.getAll();
+                        tasks: function(TasksService, $stateParams, context) {
+                            return context.switchTo($stateParams.entity, $stateParams.entityId).then(function(newContext) {
+                                var entity = newContext.entityName;
+                                var getFn = 'getBy' + entity.charAt(0).toUpperCase() + entity.slice(1) + 'Id';
+
+                                return TasksService[getFn](newContext.entityId);
+                            })
                         }
                     }
                 },
-                detailspane: {
+                'detailspane@main': {
                     templateUrl: '/icu/components/task-details/no-tasks.html'
                 }
             }
         })
-        .state('main.tasks.details', {
+        .state('main.tasks.byentity.details', {
             url: '/:id',
             views: {
                 'detailspane@main': {
@@ -154,7 +163,7 @@ angular.module('mean.icu').config([
                 }
             }
         })
-        .state('main.tasks.details.activities', {
+        .state('main.tasks.byentity.details.activities', {
             url: '/activities',
             views: {
                 tab: {
@@ -171,48 +180,16 @@ angular.module('mean.icu').config([
                 }
             }
         })
-        .state('main.tasks.details.documents', {
+        .state('main.task.byentity.details.documents', {
             url: '/documents',
             views: {
                 tab: {
                     templateUrl: '/icu/components/task-details/tabs/documents/documents.html',
                 }
             }
-        })
-        .state('main.tasks.create', {
-            url: '/create',
-            views: {
-                'detailspane@main': {
-                    templateUrl: '/icu/components/task-create/task-create.html',
-                    controller: 'TaskCreateController',
-                    resolve: {
-                        projects: function(ProjectsService) {
-                            return ProjectsService.getAll();
-                        }
-                    }
-                }
-            }
         });
     }
 ]);
-
-angular.module('mean.icu').controller('IcuController', function($rootScope, $scope, me, $state) {
-    $scope.menu = {
-        isHidden: false
-    };
-
-    if (!me) {
-        $state.go('login');
-    }
-
-    $rootScope.$on('$stateChangeError', function() {
-        console.log(arguments);
-    });
-
-    $rootScope.$on('$stateChangeSuccess', function() {
-        console.log(arguments);
-    });
-});
 
 angular.module('mean.icu').config(function($i18nextProvider) {
     $i18nextProvider.options = {
