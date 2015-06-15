@@ -28,13 +28,18 @@ exports.read = function(req, res, next) {
 	});
 }
 
-exports.readByProjectId = function(req, res, next) {	
+var entities = {
+  'user': 'creator',
+  'project': 'project'
+};
 
+exports.readByEntityId = function(req, res, next) {	
 	var query = {};
 
+  var entity = entities[req.params.entity];
 	if (req.params.id) {
-		query.project = req.params.id;
-	}	
+		query[entity] = req.params.id;
+	}
 
 	var Query = Task.find(query);
 	Query.populate('creator');

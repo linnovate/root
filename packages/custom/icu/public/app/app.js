@@ -1,5 +1,39 @@
 'use strict';
 
+var generateStateByEntity= function(main) {
+  var capitalize = function(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  var capitalizedMain = capitalize(main);
+
+  var resolve = {};
+  resolve[main + 's'] = [capitalizedMain + 'sService', '$stateParams', 'context', function(service, $stateParams, context) {
+    return context.switchTo($stateParams.entity, $stateParams.entityId).then(function(newContext) {
+      var entityName = newContext.entityName;
+      var getFn = 'getBy' + capitalize(entityName) + 'Id';
+
+      return service[getFn](newContext.entityId);
+    });
+  }];
+
+  var state = {
+    url: '/by-:entity/:entityId',
+    views: {
+      'middlepane@main': {
+        templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
+        controller: capitalizedMain + 'ListController',
+        resolve: resolve
+      },
+      'detailspane@main': {
+        templateUrl: '/icu/components/' + main + '-details/no-' + main + 's.html'
+      }
+    }
+  };
+
+  return state;
+}
+
 angular.module('mean.icu').config([
     '$meanStateProvider',
     function($meanStateProvider) {
@@ -32,20 +66,25 @@ angular.module('mean.icu').config([
             url: '/people',
             views: {
                 middlepane: {
-                    templateUrl: '/icu/components/user-list/user-list.html',
-                    controller: 'UserListController',
-                    resolve: {
-                        users: function(UsersService) {
-                            return UsersService.getAll();
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function($state, projects, context) {
+                        context.setMain('user');
+
+                        if (projects.length && $state.current.name === 'main.people') {
+                            return context.switchTo('project', projects[0]._id).then(function(newContext) {
+                                $state.go('main.people.byentity', {
+                                    entity: newContext.entityName,
+                                    entityId: newContext.entityId
+                                });
+                            });
                         }
                     }
-                },
-                detailspane: {
-                    templateUrl: '/icu/components/user-details/no-user-selected.html'
                 }
             }
         })
-        .state('main.people.details', {
+        .state('main.people.byentity', generateStateByEntity('user'))
+        .state('main.people.byentity.details', {
             url: '/:id',
             views: {
                 'detailspane@main': {
@@ -53,7 +92,7 @@ angular.module('mean.icu').config([
                     controller: 'UserDetailsController',
                     resolve: {
                         user: function(UsersService, $stateParams) {
-                            return UsersService.getById(+$stateParams.id);
+                            return UsersService.getById($stateParams.id);
                         },
                         users: function(UsersService, $stateParams) {
                             return UsersService.getAll();
@@ -62,7 +101,7 @@ angular.module('mean.icu').config([
                 }
             }
         })
-        .state('main.people.details.projects', {
+        .state('main.people.byentity.details.projects', {
             url: '/projects',
             views: {
                 tab: {
@@ -76,7 +115,7 @@ angular.module('mean.icu').config([
                 }
             }
         })
-        .state('main.people.details.tasks', {
+        .state('main.people.byentity.details.tasks', {
             url: '/tasks',
             views: {
                 tab: {
@@ -95,11 +134,11 @@ angular.module('mean.icu').config([
                 }
             }
         })
-        .state('main.people.details.activities', {
+        .state('main.people.byentity.details.activities', {
             url: '/activities',
             views: {
                 tab: {
-                    templateUrl: '/icu/components/user-details/tabs/activities/activities.html',
+                  stateateUrl: '/icu/components/user-details/tabs/activities/activities.html',
                     controller: 'UserActivitiesController',
                     resolve: {
                         activities: function(ActivitiesService, $stateParams) {
@@ -109,7 +148,7 @@ angular.module('mean.icu').config([
                 }
             }
         })
-        .state('main.people.details.documents', {
+        .state('main.people.byentity.details.documents', {
             url: '/documents',
             views: {
                 tab: {
@@ -119,30 +158,26 @@ angular.module('mean.icu').config([
         })
         .state('main.tasks', {
             url: '/tasks',
-            abstract: true
-        })
-        .state('main.tasks.byentity', {
-            url: '/by-:entity/:entityId',
             views: {
-                'middlepane@main': {
-                    templateUrl: '/icu/components/task-list/task-list.html',
-                    controller: 'TaskListController',
-                    resolve: {
-                        tasks: function(TasksService, $stateParams, context) {
-                            return context.switchTo($stateParams.entity, $stateParams.entityId).then(function(newContext) {
-                                var entity = newContext.entityName;
-                                var getFn = 'getBy' + entity.charAt(0).toUpperCase() + entity.slice(1) + 'Id';
+                middlepane: {
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function($state, projects, context) {
+                        context.setMain('task');
 
-                                return TasksService[getFn](newContext.entityId);
-                            })
+                        if (projects.length && $state.current.name === 'main.tasks') {
+                            return context.switchTo('project', projects[0]._id).then(function(newContext) {
+                                $state.go('main.tasks.byentity', {
+                                    entity: newContext.entityName,
+                                    entityId: newContext.entityId
+                                });
+                            });
                         }
                     }
-                },
-                'detailspane@main': {
-                    templateUrl: '/icu/components/task-details/no-tasks.html'
                 }
             }
         })
+        .state('main.tasks.byentity', generateStateByEntity('task'))
         .state('main.tasks.byentity.details', {
             url: '/:id',
             views: {

@@ -1,29 +1,14 @@
 'use strict';
 
 angular.module('mean.icu.data.usersservice', [])
-.service('UsersService', function($http, $q) {
+.service('UsersService', function($http, $q, ApiUri) {
+    var EnitityPrefix = '/users';
     var me = null;
 
-    var people = [{
-        name: 'John Doe',
-        tasks: 11,
-        projects: 2,
-        id: 1,
-        active: true
-    }, {
-        name: 'Idan Arbel',
-        tasks: 21,
-        projects: 4,
-        id: 2
-    }, {
-        name: 'Lior Kessos',
-        tasks: 12,
-        projects: 3,
-        id: 3
-    }];
-
     function getAll() {
-        return people;
+        return $http.get(ApiUri + EnitityPrefix).then(function(result) {
+            return result.data;
+        });
     }
 
     function getMe() {
@@ -43,9 +28,15 @@ angular.module('mean.icu.data.usersservice', [])
         return deferred.promise;
     }
 
+    function getByProjectId(id) {
+        return $http.get(ApiUri + EnitityPrefix + '/project/' + id).then(function(result) {
+            return result.data;
+        });
+    }
+
     function getById(id) {
-        return _(people).find(function(user) {
-            return user.id === id;
+        return $http.get(ApiUri + EnitityPrefix + '/' + id).then(function(result) {
+            return result.data;
         });
     }
 
@@ -73,6 +64,7 @@ angular.module('mean.icu.data.usersservice', [])
         getAll: getAll,
         getMe: getMe,
         getById: getById,
+        getByProjectId: getByProjectId,
         login: login,
         logout: logout,
         register: register

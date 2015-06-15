@@ -4,7 +4,9 @@ angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, ProjectsService, DiscussionsService, UsersService, context) {
         $scope.discussions = DiscussionsService.getAll();
-        $scope.people = UsersService.getAll();
+        UsersService.getAll().then(function(result) {
+            $scope.people = result;
+        });
         $scope.context = context;
 
         $scope.items = [{

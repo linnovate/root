@@ -10,6 +10,8 @@
     "node": "0.10.x",
     "npm": "1.4.x"
   },
-  "dependencies": {},
+  "dependencies": {
+    "mongoose-schema-extend": "^0.1.7"
+  },
   "license": "MIT"
 }
