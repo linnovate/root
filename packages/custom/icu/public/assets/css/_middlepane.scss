@@ -74,7 +74,7 @@
         background-color: white;
 
         span {
-            font-weight: bold;
+            font-weight: 700;
         }
     }
 
@@ -82,25 +82,57 @@
         padding: 10px;
         background-color: white;
 
-        button {
+        .left-wrapper {
+            float: left;
+        }
+
+        .right-wrapper {
+            float: right;
+        }
+
+        .favorites, .tasks {
             @include ellipse(13px);
             @include button;
 
             margin: 0 5px;
             background-color: white;
             border: 1px solid $light-grey1;
+        }
 
-            &.favorites {
-                width: 26px;
-                color: $orange;
-                font-size: 13px;
-            }
+        .favorites {
+            width: 26px;
+            color: $orange;
+            font-size: 13px;
+        }
 
-            &.tasks {
-                width: 92px;
-                padding-left: 15px;
-                background: url('/icu/assets/img/status.png') no-repeat 15% center;
-            }
+        .tasks {
+            width: 92px;
+            padding-left: 15px;
+            background: url('/icu/assets/img/status.png') no-repeat 15% center;
+        }
+
+        .list, .calendar {
+            @include button;
+            margin: -3px;
+            padding: 0;
+            height: 26px;
+            width: 37px;
+            border: 1px solid $light-grey1;
+        }
+
+        .list {
+            border-top-left-radius: 13px;
+            border-bottom-left-radius: 13px;
+
+            background: url('/icu/assets/img/list.png') no-repeat center center;
+            background-color: $dark-grey;
+        }
+
+        .calendar {
+            border-top-right-radius: 13px;
+            border-bottom-right-radius: 13px;
+
+            background: url('/icu/assets/img/calendar-view.png') no-repeat center center;
         }
     }
 }
