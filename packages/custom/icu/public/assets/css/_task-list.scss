@@ -1,10 +1,30 @@
 .task-list {
     table {
+        table-layout: fixed;
+
         tbody {
             tr {
                 td {
+                    overflow: hidden;
+
                     &.id {
                         width: 40px;
+                    }
+
+                    &.arrow {
+                        width: 40px;
+                    }
+
+                    &.name {
+                        width: calc(50% - 80px);
+                    }
+
+                    &.project {
+                        width: calc(25% - 80px);
+                    }
+
+                    &.status, &.due {
+                        width: calc(12.5% - 80px);
                     }
 
                     &.status {
