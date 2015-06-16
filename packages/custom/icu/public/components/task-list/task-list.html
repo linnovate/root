@@ -3,8 +3,15 @@
         Tasks from <span>"Project Review 14.4"<span>
     </header>
     <div class="filters">
-        <button class="favorites"><i class="fa fa-star"></i></button>
-        <button class="tasks">Status</button>
+        <div class="left-wrapper">
+            <button class="favorites"><i class="fa fa-star"></i></button>
+            <button class="tasks">Status</button>
+        </div>
+
+        <div class="right-wrapper">
+            <button class="list"></button>
+            <button class="calendar"></button>
+        </div>
     </div>
     <div icu-task-list tasks="tasks" draw-arrow="true" group-tasks="true"></div>
 </div>

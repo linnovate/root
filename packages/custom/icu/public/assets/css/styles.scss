@@ -1,10 +1,13 @@
 $fa-font-path: '../lib/font-awesome/fonts';
+$open-sans-path: '../lib/open-sans/fonts';
 
 body {
     direction: ltr;
+    font-family: 'Open Sans'
 }
 
 @import '../lib/font-awesome/scss/font-awesome';
+@import '../lib/open-sans/scss/open-sans.scss';
 @import 'variables';
 @import 'mixins/table';
 @import 'mixins/tag';

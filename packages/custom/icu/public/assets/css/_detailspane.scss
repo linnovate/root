@@ -55,13 +55,14 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                 position: absolute;
                 left: 0;
                 top: 50%;
+                color: $light-grey4;
 
                 display: inline-block;
                 transform: translate(0, -50%);
             }
 
             .entity-name, .user {
-                font-weight: bold;
+                font-weight: 700;
             }
         }
 
@@ -70,6 +71,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             width: 2 * $header-height;
             height: $header-height;
             position: relative;
+            color: $light-grey4;
 
             span, i {
                 position: absolute;
@@ -150,6 +152,14 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             height: $description-height;
             overflow: auto;
 
+            .title {
+                font-weight: 700;
+            }
+
+            .text {
+                color: $light-grey4;
+            }
+
             input.title {
                 font-size: 30px;
                 margin-top: 10px;
@@ -177,7 +187,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                 background-color: transparent;
                 height: 38px;
                 font-size: 16px;
-                font-weight: bold;
+                font-weight: 700;
 
                 &.active {
                     border-bottom: 5px solid $orange;
