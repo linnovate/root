@@ -216,7 +216,7 @@ angular.module('mean.icu').controller('IcuController', function($rootScope, $sco
 
 angular.module('mean.icu').config(function($i18nextProvider) {
     $i18nextProvider.options = {
-        lng: 'en-US',
+        lng: 'he',
         useCookie: false,
         useLocalStorage: false,
         fallbackLng: 'en-US',
