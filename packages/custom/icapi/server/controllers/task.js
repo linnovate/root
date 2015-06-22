@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 
 require('../models/task');
 var Task = mongoose.model('Tasks');
+var request = require('request');
 
 exports.read = function(req, res, next) {	
 
@@ -28,9 +29,9 @@ exports.read = function(req, res, next) {
 }
 
 exports.create = function(req, res, next) {
-
+console.log('create in icu')
 	//this is just sample - validation coming soon
-	//We deal with each field indavidually unless it is in a schemaless object
+	//We deal with each field individually unless it is in a schemaless object
 	if (req.params.id) {
 		return res.send(401, 'Cannot create task with predefined id');
 	}
@@ -42,20 +43,20 @@ exports.create = function(req, res, next) {
 		parent : req.body.parent || null,
 		discussion : req.body.discussion || null,
 		project : req.body.project,
-    creator : req.user._id,
-    tags: req.body.tags || [],
-    due: req.body.due || null,
-    status: 'Received'
+		creator : req.user._id,
+		tags: req.body.tags || [],
+		due: req.body.due || null,
+		status: 'Received'
 	};
 
-	new Task(data).save(function(err, task ) {
-		
-		utils.checkAndHandleError(err,res);
-
-		res.status(200);
-		return res.json(task);
-	});	
-}
+	request.post({url: 'http://localhost:3002/api/icapi/tasks/',json: true, body:data}, function(error, response, body){
+		console.dir(error);
+		if (error) {
+			res.status(500).send(error);
+		}
+		res.status(200).json(body);
+	});
+};
 
 exports.update = function(req, res, next) {
 
@@ -84,7 +85,7 @@ exports.update = function(req, res, next) {
 		return res.json(task);
 	});
 	
-}
+};
 
 exports.destroy = function(req, res, next) {
 

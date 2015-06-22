@@ -1,5 +1,5 @@
 'use strict';
-
+console.log('mean.icu.ui.userdetails')
 angular.module('mean.icu.ui.userdetails', [])
 .controller('UserDetailsController', function($scope, user, users, $state) {
     $scope.user = user;

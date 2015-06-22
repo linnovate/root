@@ -5,7 +5,9 @@ angular.module('mean.icu.data.projectsservice', [])
     var EnitityPrefix = '/projects';
 
     function getAll() {
+        console.log(ApiUri , EnitityPrefix)
         return $http.get(ApiUri + EnitityPrefix).then(function(result) {
+            console.log(result);
             return result.data;
         });
     }

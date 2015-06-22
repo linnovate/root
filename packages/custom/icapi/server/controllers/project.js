@@ -2,11 +2,8 @@
 
 var utils = require('./utils');
 
-var mongoose = require('mongoose');
-
-require('../models/project');
-var Project = mongoose.model('Project');
-
+var ProjectCrud = require('../../../general/server/providers/crud').Project;
+var Project = new ProjectCrud('projects');
 exports.read = function(req, res, next) {	
 
 	var query = {};
@@ -15,7 +12,7 @@ exports.read = function(req, res, next) {
 		query._id = req.params.id;
 	}	
 
-	var Query = Project.find(query);
+	var Query = Project.get(query);
 	Query.limit(200 || req.query.limit);
 	Query.exec(function(err, projects) {
 		
@@ -27,30 +24,25 @@ exports.read = function(req, res, next) {
 }
 
 exports.create = function(req, res, next) {
-
+console.log('-----icu create --packages icapi---')
 	//this is just sample - validation coming soon
-	//We deal with each field indavidually unless it is in a schemaless object
+	//We deal with each field individually unless it is in a schemaless object
 	if (req.params.id) {
 		return res.send(401, 'Cannot create project with predefined id');
 	}
+	req.body.creator = "55755f55e7e0f6d3717444f3";
+	//var data = {
+	//	title: req.body.title,
+	//	parent: req.body.parent || null,
+	//	color: req.body.color || null,
+	//	discussion: req.body.discussion || null,
+	//	creator : req.user._id
+	//};
 
-	var data = {
-		created: new Date(),
-		updated: new Date(),
-		title: req.body.title,
-		parent: req.body.parent || null,
-		color: req.body.color || null,
-    discussion: req.body.discussion || null,
-    creator : req.user._id
-	};
+	//Project.create(req.body, function(x, y) {
+	//	console.log(x,y);
+	//})
 
-	new Project(data).save(function(err, project ) {
-		
-		utils.checkAndHandleError(err,res);
-
-		res.status(200);
-		return res.json(project);
-	});	
 }
 
 exports.update = function(req, res, next) {
