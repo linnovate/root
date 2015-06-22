@@ -42,25 +42,17 @@
                     }
 
                     .icon {
-                        position: relative;
                         width: $header-height;
                         height: $header-height;
-                        display: inline-block;
-
-                        i {
-                            position: absolute;
-                            left: 50%;
-                            top: 50%;
-                            transform: translate(-50%, -50%);
-                        }
+                        float: left;
+                        padding: 18px;
                     }
 
                     .item-name {
                         position: relative;
-                        width: ($sidepane-width - $header-height) * 0.9 - 8px;
+                        width: ($sidepane-width - $header-height) * 0.8 - 5px;
                         height: $header-height;
                         display: inline-block;
-                        font-weight: bold;
 
                         span {
                             position: absolute;
@@ -73,7 +65,7 @@
                     .arrow {
                         display: inline-block;
                         position: relative;
-                        width: ($sidepane-width - $header-height) * 0.1;
+                        width: ($sidepane-width - $header-height) * 0.2;
                         height: $header-height;
 
                         i {
@@ -81,6 +73,7 @@
                             left: 50%;
                             top: 50%;
                             transform: translate(-50%, -50%);
+                            font-size: 1.5em;
                         }
                     }
                 }

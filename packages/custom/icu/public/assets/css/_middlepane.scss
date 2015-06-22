@@ -14,6 +14,33 @@
             width: $header-height;
             background-color: white;
             border: 1px solid $light-grey1;
+            background: url('/icu/assets/img/menu.png') no-repeat center center;
+
+            .menu-icon {
+                padding-left:5px;
+                position: relative;
+            }
+
+            &:before {
+                content: '';
+                display: inline-block;
+                width: 0;
+                height: 0;
+                margin-top: 5px;
+                margin-left: -40px;
+            }
+
+            &.open:before {
+                border-top: 5px solid transparent;
+                border-bottom: 5px solid transparent;
+                border-right: 5px solid $orange;
+            }
+
+            &.collapsed:before {
+                border-top: 5px solid transparent;
+                border-bottom: 5px solid transparent;
+                border-left: 5px solid $orange;
+            }
         }
 
         .search {
@@ -31,9 +58,9 @@
                 height: $header-height - 2;
             }
 
-            i {
+            img {
                 position: absolute;
-                left: 40px;
+                left: 30px;
                 top: 50%;
                 transform: translate(0, -50%);
             }
@@ -47,7 +74,7 @@
         background-color: white;
 
         span {
-            font-weight: bold;
+            font-weight: 700;
         }
     }
 
@@ -55,23 +82,57 @@
         padding: 10px;
         background-color: white;
 
-        button {
+        .left-wrapper {
+            float: left;
+        }
+
+        .right-wrapper {
+            float: right;
+        }
+
+        .favorites, .tasks {
             @include ellipse(13px);
             @include button;
 
             margin: 0 5px;
             background-color: white;
             border: 1px solid $light-grey1;
+        }
 
-            &.favorites {
-                width: 26px;
-                color: $orange;
-                font-size: 13px;
-            }
+        .favorites {
+            width: 26px;
+            color: $orange;
+            font-size: 13px;
+        }
 
-            &.tasks {
-                width: 92px;
-            }
+        .tasks {
+            width: 92px;
+            padding-left: 15px;
+            background: url('/icu/assets/img/status.png') no-repeat 15% center;
+        }
+
+        .list, .calendar {
+            @include button;
+            margin: -3px;
+            padding: 0;
+            height: 26px;
+            width: 37px;
+            border: 1px solid $light-grey1;
+        }
+
+        .list {
+            border-top-left-radius: 13px;
+            border-bottom-left-radius: 13px;
+
+            background: url('/icu/assets/img/list.png') no-repeat center center;
+            background-color: $dark-grey;
+        }
+
+        .calendar {
+            border-top-right-radius: 13px;
+            border-bottom-right-radius: 13px;
+
+            background: url('/icu/assets/img/calendar-view.png') no-repeat center center;
         }
     }
 }

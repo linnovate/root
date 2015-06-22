@@ -10,15 +10,12 @@
                 <span class="summary-content">{{task.creator.name}}</span>
             </div>
             <div class="due">
-                <i class="fa fa-2x fa-calendar"></i>
                 <span class="summary-content">{{task.due | date:'dd.MM.yyyy' }}</span>
             </div>
             <div class="status {{task.status | lowercase}}">
-                <i class="fa fa-2x fa-flag"></i>
                 <span class="summary-content">{{task.status}}</span>
             </div>
             <div class="tags">
-                <i class="fa fa-2x fa-tag"></i>
                 <span class="summary-content">
                     <span class="tag" ng-repeat="tag in task.tags">#{{tag}}</span>
                 </span>
@@ -26,20 +23,29 @@
         </div>
         <div class="description">
             <div class="project">
-                <span class="tag {{task.project.color}}">{{task.project.title}}</span>
+                <span class="tag"
+                      ng-style="color={'background-color': '#' + '{{task.project.color}}'}">
+                    {{task.project.title}}
+                </span>
             </div>
-            <h2 class="title">{{task.title}}</h2>
+            <div icu-change-content
+                templates="['/icu/components/task-details/task-title-read.html',
+                '/icu/components/task-details/task-title-write.html']"
+                data="{ task: task, updateFn: update }">
+            </div>
 
-            <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-                no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            </p>
-            <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-                no sea takimata sanctus est Lorem ipsum dolor sit amet.
-            </p>
+            <div class="text">
+                <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                    no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                </p>
+                <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+                    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+                    no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                </p>
+            </div>
         </div>
         <div class="tabs">
             <div class="switcher">

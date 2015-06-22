@@ -1,0 +1,6 @@
+<form novalidate ng-submit="changeContent(); data.updateFn(data.task)">
+    <input ng-blur="changeContent(); data.updateFn(data.task)"
+           type="text"
+           class="title"
+           ng-model="data.task.title">
+</form>

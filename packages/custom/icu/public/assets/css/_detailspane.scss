@@ -21,12 +21,12 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             width: $header-height;
             height: $header-height;
             position: relative;
+            background: url('/icu/assets/img/notifications.png') no-repeat center center;
 
             .indicator {
-                display: inline-block;
                 position: relative;
-                left: 50%;
-                top: 50%;
+                left: 75%;
+                top: 20%;
                 transform: translate(-50%, -50%);
 
                 span {
@@ -46,7 +46,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
 
         .last-notification {
             float: left;
-            width: calc(100% - 4 * #{ $header-height });
+            width: calc(100% - 5 * #{ $header-height });
             height: $header-height;
             font-style: italic;
             position: relative;
@@ -55,13 +55,14 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                 position: absolute;
                 left: 0;
                 top: 50%;
+                color: $light-grey4;
 
                 display: inline-block;
                 transform: translate(0, -50%);
             }
 
             .entity-name, .user {
-                font-weight: bold;
+                font-weight: 700;
             }
         }
 
@@ -69,8 +70,9 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             float: left;
             width: 2 * $header-height;
             height: $header-height;
-
             position: relative;
+            color: $light-grey4;
+
             span, i {
                 position: absolute;
                 right: 10px;
@@ -86,12 +88,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             }
         }
 
-        .add {
-            float: left;
-            display: inline-block;
-            width: $header-height;
-            height: $header-height - 1;
-
+        .add-menu {
             button {
                 @include button;
 
@@ -100,7 +97,51 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                 width: 100%;
                 height: 100%;
             }
+
+            .menu-items {
+                li {
+                    position: relative;
+
+                    a {
+                        span {
+                            position: absolute;
+                            left: 60px;
+                            top: 50%;
+                            transform: translate(0, -50%);
+                        }
+                    }
+                }
+            }
         }
+
+        .user-menu {
+            button {
+                @include button;
+                @include circle($header-height / 2);
+
+                background-color: $green;
+                width: $header-height * 0.75;
+                height: ($header-height * 0.75) - 1;
+                margin: $header-height * 0.125;
+            }
+        }
+
+        .add-menu, .user-menu {
+            float: left;
+            display: inline-block;
+            width: $header-height ;
+            height: $header-height - 1;
+
+            .menu-items {
+                &.dropdown-menu {
+                    border-radius: 0;
+                    left: -105px;
+                    box-shadow: none;
+                    text-align: left;
+                }
+            }
+        }
+
     }
 
     .page-content {
@@ -110,6 +151,25 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             margin: 0 30px;
             height: $description-height;
             overflow: auto;
+
+            .title {
+                font-weight: 700;
+            }
+
+            .text {
+                color: $light-grey4;
+            }
+
+            input.title {
+                font-size: 30px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                width: 100%;
+            }
+
+            .tag {
+                @include tag(10px);
+            }
         }
 
         .tabs {
@@ -127,7 +187,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                 background-color: transparent;
                 height: 38px;
                 font-size: 16px;
-                font-weight: bold;
+                font-weight: 700;
 
                 &.active {
                     border-bottom: 5px solid $orange;

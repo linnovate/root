@@ -1,8 +1,11 @@
 <header class="header">
-    <button class="hide-menu fa fa-2x fa-list" ng-click="menu.isHidden = !menu.isHidden"></button>
+    <button class="hide-menu"
+            ng-class="{'open': !menu.isHidden, 'collapsed': menu.isHidden}"
+            ng-click="menu.isHidden = !menu.isHidden">
+    </button>
     <div class="search">
         <input type="text" placeholder="Search"></input>
-        <i class="fa fa-rotate-90 fa-search"></i>
+        <img src="/icu/assets/img/search.png"></img>
     </div>
 </header>
 <div data-ng-controller="MiddlepaneController">
