@@ -7,6 +7,8 @@ angular.module('mean.icu').controller('IcuController', function($rootScope, $sco
 
     $scope.currentContext = context;
 
+    context.setMain('task');
+
     $scope.projects = projects;
     if ($scope.projects.length && $state.current.name === 'main.tasks.byentity') {
 
@@ -25,7 +27,15 @@ angular.module('mean.icu').controller('IcuController', function($rootScope, $sco
         console.log(arguments);
     });
 
-    $rootScope.$on('$stateChangeSuccess', function() {
+    $rootScope.$on('$stateChangeSuccess', function(event, toState) {
+        if (toState.name.indexOf('main.tasks') === 0) {
+            context.setMain('task');
+        } else if (toState.name.indexOf('main.discussions') === 0) {
+            context.setMain('discussion');
+        } else if (toState.name.indexOf('main.people') === 0) {
+            context.setMain('user');
+        }
+
         console.log(arguments);
     });
 });

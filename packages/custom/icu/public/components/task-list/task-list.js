@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist')
-.controller('TaskListController', function($scope, $state, tasks, projects, me, ProjectsService, TasksService) {
+.controller('TaskListController', function($scope, $state, tasks, TasksService) {
     $scope.tasks = tasks;
 
     $scope.create = function() {

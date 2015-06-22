@@ -27,6 +27,7 @@ angular.module('mean.icu').service('context', function($injector, $q) {
                 self.entityName = 'project';
                 self.entityId = id;
 
+                console.log(self);
                 defer.resolve(self);
             });
 

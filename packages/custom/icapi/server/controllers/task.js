@@ -43,6 +43,7 @@ exports.readByEntityId = function(req, res, next) {
 
 	var Query = Task.find(query);
 	Query.populate('creator');
+	Query.populate('project');
 	Query.sort('-created');
 	Query.limit(200 || req.query.limit);
 	Query.exec(function(err, tasks) {

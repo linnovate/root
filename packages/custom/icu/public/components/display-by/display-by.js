@@ -13,6 +13,14 @@ angular.module('mean.icu.ui.displayby', [])
                 });
             });
         }
+
+        $scope.visible = {
+            project: false,
+            discussion: false,
+            user: false
+        }
+
+        $scope.visible[$scope.context.entityName] = true;
     }
 
     return {
@@ -20,7 +28,7 @@ angular.module('mean.icu.ui.displayby', [])
         scope: {
             projects: '=',
             discussions: '=',
-            people: '=',
+            people: '='
         },
         templateUrl: '/icu/components/display-by/display-by.html',
         controller: controller

@@ -69,8 +69,6 @@ angular.module('mean.icu').config([
                     //hack around the fact that state current name is initialized in controller only
                     template: '',
                     controller: function($state, projects, context) {
-                        context.setMain('user');
-
                         if (projects.length && $state.current.name === 'main.people') {
                             return context.switchTo('project', projects[0]._id).then(function(newContext) {
                                 $state.go('main.people.byentity', {
@@ -163,8 +161,6 @@ angular.module('mean.icu').config([
                     //hack around the fact that state current name is initialized in controller only
                     template: '',
                     controller: function($state, projects, context) {
-                        context.setMain('task');
-
                         if (projects.length && $state.current.name === 'main.tasks') {
                             return context.switchTo('project', projects[0]._id).then(function(newContext) {
                                 $state.go('main.tasks.byentity', {

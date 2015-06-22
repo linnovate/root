@@ -13,6 +13,8 @@
         font-size: 18px;
         font-weight: 700;
         line-height: 26px;
+
+        cursor: pointer;
     }
 
     .list {
@@ -22,10 +24,10 @@
         ul {
             list-style: none;
             padding-left: 0;
+            padding-bottom: 20px;
 
             li {
                 width: ($sidepane-width - 30px);
-                float: left;
 
                 a {
                     text-decoration: none;
@@ -69,6 +71,7 @@
             ul {
                 li {
                     margin: 5px 0;
+                    float: left;
                 }
             }
 
@@ -85,17 +88,15 @@
                 padding-left: 10px;
             }
         }
+
+        &.projects, &.discussions {
+            border-bottom: 1px solid #424e52;
+        }
     }
 
     .more {
         padding: 5px 0;
         color: $orange;
-    }
-
-    hr {
-        background-color: #424e52;
-        border-color: #424e52;
-        color: #424e52;
     }
 }
 
