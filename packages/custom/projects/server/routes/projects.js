@@ -5,8 +5,8 @@
 module.exports = function(Projects, app, auth, database) {
 
 	var ProjectC = require('../../../general/server/providers/crud.js').Project,
-		Project = new ProjectC('/projects');
-console.dir(Project)
+		Project = new ProjectC('/api/projects');
+
 	app.route('/api/projects')
 
 		.post(function(req, res) {
@@ -19,7 +19,6 @@ console.dir(Project)
 			});
 		})
 		.get(function(req, res) {
-			console.log('get all');
 			req.body.user = {_id: '55755f55e7e0f6d3717444f3'}
 			Project.all({
 				data: req.body
@@ -30,6 +29,13 @@ console.dir(Project)
 
 
 	app.route('/api/projects/:projectId')
+		.get(function(req, res) {
+			Project.get({
+				param: req.params.projectId
+			}, function(data) {
+				res.send(data);
+			});
+		})
 
 		.put(function(req, res) {
 			Project.update({
