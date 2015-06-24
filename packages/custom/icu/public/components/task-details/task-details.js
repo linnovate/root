@@ -9,7 +9,6 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.task.project = project;
 
     $scope.update = function(task) {
-        //console.log(task);
         TasksService.update(task);
     }
 

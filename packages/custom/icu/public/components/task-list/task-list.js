@@ -1,5 +1,5 @@
 'use strict';
-console.log('hhj')
+
 angular.module('mean.icu.ui.tasklist')
 .controller('TaskListController', function($scope, $state, tasks, projects, ProjectsService) {
     $scope.tasks = _(tasks).map(function(t) {
