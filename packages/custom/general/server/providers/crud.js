@@ -17,11 +17,9 @@ class Crud {
 		var objReq = {
 			uri: apiUri  + cmd_api,
 			method: options.method,
-			 headers: {
-			 }
+			headers: {},
+			data: options.data
 		};
-		console.log('options')
-		console.dir(options);
 
 		if (options.form) {
 			objReq.form = options.form;
@@ -40,8 +38,6 @@ class Crud {
 	}
 
 	create(data, callback) {
-console.log('crud create');
-		console.dir(data);
 		var options = {
 			method: 'POST',
 			form: data.data
@@ -51,16 +47,15 @@ console.log('crud create');
 
 	}
 
-	all(callback) {
+	all(data, callback) {
 		var options = {
-			method: 'GET'
+			method: 'GET',
+			query: data.data
 		};
 		this.talkToApi(options, callback);
 	}
 
 	get(data, callback) {
-		console.log('crud get');
-		console.dir(data);
 		var options = {
 			method: 'GET',
 			param: data.param
