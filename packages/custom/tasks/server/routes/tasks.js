@@ -10,7 +10,6 @@ module.exports = function(tasks, app, auth, database) {
   app.route('/api/tasks')
 
       .post(function(req, res) {
-        req.body.user = {_id: '55755f55e7e0f6d3717444f3'}
           Task.create({
           data: req.body
         }, function(data) {
@@ -18,7 +17,6 @@ module.exports = function(tasks, app, auth, database) {
         });
       })
       .get(function(req, res) {
-          req.body.user = {_id: '55755f55e7e0f6d3717444f3'}
           Task.all({
               data: req.body
           }, function(data) {

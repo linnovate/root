@@ -10,8 +10,6 @@ module.exports = function(Projects, app, auth, database) {
 	app.route('/api/projects')
 
 		.post(function(req, res) {
-			console.log('here package projects ');
-			req.body.user = {_id: '55755f55e7e0f6d3717444f3'}
 			Project.create({
 				data: req.body
 			}, function(data) {
@@ -19,10 +17,11 @@ module.exports = function(Projects, app, auth, database) {
 			});
 		})
 		.get(function(req, res) {
-			req.body.user = {_id: '55755f55e7e0f6d3717444f3'}
+
 			Project.all({
 				data: req.body
 			}, function(data) {
+				console.log(data)
 				res.send(data);
 			});
 		});
