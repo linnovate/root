@@ -35,6 +35,7 @@ ICU.register(function(app, auth, database) {
 
   ICU.angularDependencies([
       'jm.i18next',
+      'mean.medium-editor',
       'mean.system',
       'mean.users',
       'mean.icu.ui.login',
