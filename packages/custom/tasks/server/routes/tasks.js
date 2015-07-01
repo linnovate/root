@@ -2,26 +2,53 @@
 
 /* jshint -W098 */
 // The Package is past automatically as first parameter
-module.exports = function(Tasks, app, auth, database) {
+module.exports = function(tasks, app, auth, database) {
 
-  app.get('/tasks/example/anyone', function(req, res, next) {
-    res.send('Anyone can access this');
-  });
+  var TaskC = require('../../../general/server/providers/crud.js').Task,
+      Task = new TaskC('/api/tasks');
 
-  app.get('/tasks/example/auth', auth.requiresLogin, function(req, res, next) {
-    res.send('Only authenticated users can access this');
-  });
+  app.route('/api/tasks')
 
-  app.get('/tasks/example/admin', auth.requiresAdmin, function(req, res, next) {
-    res.send('Only users with Admin role can access this');
-  });
+      .post(function(req, res) {
+        req.body.user = {_id: '55755f55e7e0f6d3717444f3'}
+          Task.create({
+          data: req.body
+        }, function(data) {
+          res.send(data);
+        });
+      })
+      .get(function(req, res) {
+          req.body.user = {_id: '55755f55e7e0f6d3717444f3'}
+          Task.all({
+              data: req.body
+          }, function(data) {
+              res.send(data);
+          });
+      });
 
-  app.get('/tasks/example/render', function(req, res, next) {
-    Tasks.render('index', {
-      package: 'tasks'
-    }, function(err, html) {
-      //Rendering a view from the Package server/views
-      res.send(html);
-    });
-  });
+
+  app.route('/api/tasks/:taskId')
+      .get(function(req, res) {
+          Task.get({
+              param: req.params.projectId
+          }, function(data) {
+              res.send(data);
+          });
+      })
+      .put(function(req, res) {
+          Task.update({
+              data: req.body,
+              param: req.params.taskId
+            }, function(data) {
+          res.send(data);
+        });
+      })
+
+      .delete(function(req, res) {
+        Task.delete({
+          param: req.params.taskId
+        }, function(data) {
+          res.send(data);
+        });
+      });
 };

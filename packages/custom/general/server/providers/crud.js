@@ -17,8 +17,8 @@ class Crud {
 		var objReq = {
 			uri: apiUri  + cmd_api,
 			method: options.method,
-			 headers: {
-			 }
+			headers: {},
+			data: options.data
 		};
 
 		if (options.form) {
@@ -26,6 +26,8 @@ class Crud {
 			objReq.headers['Content-Type'] = 'multipart/form-data';
 			objReq.headers['Content-Length'] = querystring.stringify(options.form).length;
 		}
+
+		console.dir(objReq);
 
 		request(objReq, function(error, response, body) {
 			if (!error && response.statusCode === 200 && response.body.length) {
@@ -36,10 +38,27 @@ class Crud {
 	}
 
 	create(data, callback) {
-
 		var options = {
 			method: 'POST',
 			form: data.data
+		};
+
+		this.talkToApi(options, callback);
+
+	}
+
+	all(data, callback) {
+		var options = {
+			method: 'GET',
+			query: data.data
+		};
+		this.talkToApi(options, callback);
+	}
+
+	get(data, callback) {
+		var options = {
+			method: 'GET',
+			param: data.param
 		};
 
 		this.talkToApi(options, callback);
@@ -76,6 +95,14 @@ class Project extends Crud {
 	}
 }
 
+class Task extends Crud {
+	constructor(cmd) {
+		super(cmd);
+	}
+}
+
+
 
 exports.Crud = Crud;
 exports.Project = Project;
+exports.Task = Task;

@@ -1,7 +1,7 @@
 <section class="display-by">
     <p class="intro">Display task by:</p>
     <div class="list projects" ng-if="projects">
-        <p class="title">Projects</p>
+        <p ng-click="visible.project = !visible.project" class="title">Projects</p>
         <ul ng-if="visible.project">
             <li data-ng-repeat="project in projects"
                 data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
