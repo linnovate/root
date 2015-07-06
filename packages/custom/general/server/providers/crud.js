@@ -12,22 +12,30 @@ class Crud {
 		this.cmd = cmd;
 	}
 
-	talkToApi(options , callback) {
-		var cmd_api = (options.param)? this.cmd + '/' + options.param : this.cmd;
+	talkToApi(options, callback) {
+		var cmd_api = (options.param) ? this.cmd + '/' + options.param : this.cmd;
 		var objReq = {
-			uri: apiUri  + cmd_api,
+			uri: apiUri + cmd_api,
 			method: options.method,
 			headers: {},
 			data: options.data
 		};
+
+		if (options.headers) {
+			objReq.headers = {
+				host: options.headers.host,
+				connection: options.headers.connection,
+				authorization: options.headers.authorization,
+				cookie: options.headers.cookie,
+				'if-none-match': options.headers['if-none-match']
+			}
+		}
 
 		if (options.form) {
 			objReq.form = options.form;
 			objReq.headers['Content-Type'] = 'multipart/form-data';
 			objReq.headers['Content-Length'] = querystring.stringify(options.form).length;
 		}
-
-		console.dir(objReq);
 
 		request(objReq, function(error, response, body) {
 			if (!error && response.statusCode === 200 && response.body.length) {
@@ -40,7 +48,8 @@ class Crud {
 	create(data, callback) {
 		var options = {
 			method: 'POST',
-			form: data.data
+			form: data.data,
+			headers: data.headers
 		};
 
 		this.talkToApi(options, callback);
@@ -50,7 +59,8 @@ class Crud {
 	all(data, callback) {
 		var options = {
 			method: 'GET',
-			query: data.data
+			query: data.data,
+			headers: data.headers
 		};
 		this.talkToApi(options, callback);
 	}
@@ -58,7 +68,8 @@ class Crud {
 	get(data, callback) {
 		var options = {
 			method: 'GET',
-			param: data.param
+			param: data.param,
+			headers: data.headers
 		};
 
 		this.talkToApi(options, callback);
@@ -70,7 +81,8 @@ class Crud {
 		var options = {
 			method: 'PUT',
 			form: data.data,
-			param: data.param
+			param: data.param,
+			headers: data.headers
 		};
 
 		this.talkToApi(options, callback);
@@ -81,7 +93,8 @@ class Crud {
 
 		var options = {
 			method: 'DELETE',
-			param: data.param
+			param: data.param,
+			headers: data.headers
 		};
 
 		this.talkToApi(options, callback);
