@@ -23,12 +23,15 @@ class Crud {
 
 		if (options.headers) {
 			objReq.headers = {
-				host: options.headers.host,
 				connection: options.headers.connection,
+				accept: options.headers.accept,
+				'user-agent': options.headers['user-agent'],
 				authorization: options.headers.authorization,
+				'accept-language': options.headers['accept-language'],
 				cookie: options.headers.cookie,
 				'if-none-match': options.headers['if-none-match']
 			}
+
 		}
 
 		if (options.form) {
