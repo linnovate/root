@@ -18,7 +18,7 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
             height: $header-height;
             border-bottom: 2px solid $light-grey1;
 
-            .favorite, .user, .due, .status, .tags {
+            .favorite, .due, .status, .tags {
                 height: $header-height;
                 float: left;
                 position: relative;
@@ -26,6 +26,25 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
 
             .favorite, .user, .due, .status {
                 border-right: 1px solid $light-grey1;
+            }
+
+            .user {
+                width: calc((100% - #{ $header-height }) * 0.25);
+                height: $header-height;
+                position: relative;
+                float: left;
+
+                .avatar {
+                    height: 30px;
+                    width: 30px;
+                    background-color: $green;
+                    border-radius: 15px;
+                    display: inline-block;
+                }
+                .summary-content {
+                    display: inline-block;
+                    line-height: 30px;
+                }
             }
 
             .status {
@@ -38,7 +57,7 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
                 }
             }
 
-            .user, .due, .status, .tags {
+            .due, .status, .tags {
                 width: calc((100% - #{ $header-height }) * 0.25);
 
                 .summary-content {
@@ -55,14 +74,52 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
 
             .due {
                 background: 7% center url('/icu/assets/img/calendar.png') no-repeat;
+                padding: 19px 0;
+
+                input {
+                    appearance: none;
+                    background-color: $cream;
+                    border: none;
+                    float: right;
+                    width: calc(100% - 40px);
+                }
             }
 
             .status {
                 background: 7% center url('/icu/assets/img/task-status.png') no-repeat;
+                padding: 15px 0;
+
+                select {
+                    appearance: none;
+                    background-color: $cream;
+                    border: none;
+                    float: right;
+                    width: calc(100% - 40px);
+                    height: 30px;
+                }
             }
 
             .tags {
                 background: 7% center url('/icu/assets/img/tags.png') no-repeat;
+
+                .ui-select-container {
+                    appearance: none;
+                    background-color: $cream;
+                    border: none;
+                    float: right;
+                    width: calc(100% - 40px);
+                    height: 30px;
+                    max-height: 30px;
+                    margin-top: 18px;
+
+                    .ui-select-match {
+                        display: inline-block;
+                    }
+
+                    & > div {
+                        max-height: 30px;
+                    }
+                }
             }
 
             .favorite {
@@ -77,16 +134,56 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
                 }
             }
 
-            .user {
-                div {
-                    @include circle(14px);
+            @mixin ui-select {
+                .ui-select-container {
+                    padding-top: 13px;
+                    background-color: $cream;
 
-                    margin: calc((#{ $header-height } - 28px) / 2);
-                    background-color: $green;
+                    .ui-select-match {
+                        box-shadow: none;
+
+                        .ui-select-match-text {
+                            float: left !important;
+                        }
+
+                        .ui-select-toggle {
+                            background-color: $cream;
+                            border: none;
+                            box-shadow: none;
+                            padding: 0;
+
+                            i {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .ui-select-search {
+                        box-shadow: none;
+                        border-color: $light-grey1;
+                    }
+
+                    .ui-select-choices-row.active {
+                        .ui-select-choices-row-inner {
+                            background-color: #f5f5f5;
+                            color: $dark-grey;
+                        }
+                    }
                 }
+            }
 
-                .summary-content {
-                    left: $header-height;
+            .user, .tags {
+                @include ui-select;
+            }
+
+            .tags {
+                .ui-select-container {
+                    padding: 0px;
+
+                    .ui-select-match {
+                        overflow: hidden;
+                        white-space: nowrap;
+                    }
                 }
             }
         }

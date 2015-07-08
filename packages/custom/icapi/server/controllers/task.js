@@ -103,6 +103,9 @@ exports.update = function(req, res, next) {
 
 	(req.body.due) ? data.due = req.body.due : null;	
 
+	(req.body.creator) ? data.creator = req.body.creator : null;	
+
+	(req.body.status) ? data.status = req.body.status : null;	
 
 	Task.findOneAndUpdate({_id:req.params.id}, {$set:data}, function (err, task) {
 

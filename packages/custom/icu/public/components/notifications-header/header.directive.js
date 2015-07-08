@@ -4,7 +4,8 @@ angular.module('mean.icu.ui.notificationsheader', [])
 .directive('icuNotificationsHeader', function(NotificationsService, TasksService, UsersService, $state, context) {
     function controller($scope) {
         $scope.notifications = NotificationsService.getAll();
-        $scope.lastNotification = _($scope.notifications).last();
+        $scope.popupNotifications = $scope.notifications.slice(0, -1);
+        $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
         $scope.context = context;
 
         $scope.logout = function() {

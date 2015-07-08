@@ -12,13 +12,13 @@ angular.module('mean.icu.data.notificationsservice', [])
         date: date.humanize(true)
     }, {
         entity: 'Task',
-        entityName: 'Design homepage',
+        entityName: 'Design task details',
         action: 'assigned to',
         user: 'Idan Arbel',
         date: date.humanize(true)
     }, {
         entity: 'Task',
-        entityName: 'Design homepage',
+        entityName: 'Design task list',
         action: 'assigned to',
         user: 'Idan Arbel',
         date: date.humanize(true)

@@ -27,7 +27,13 @@ ICU.register(function(app, auth, database) {
   });
 
   ICU.aggregateAsset('css', 'styles.css');
+  ICU.aggregateAsset('css', '../lib/angular-ui-select/dist/select.css');
+  ICU.aggregateAsset('css', '../lib/jquery-ui/themes/pepper-grinder/jquery-ui.min.css');
+
   ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
+  ICU.aggregateAsset('js', '../lib/angular-ui-select/dist/select.js');
+  ICU.aggregateAsset('js', '../lib/jquery-ui/jquery-ui.js');
+  ICU.aggregateAsset('js', '../lib/angular-ui-date/src/date.js');
   ICU.aggregateAsset('js', '../lib/moment/moment.js');
   ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', { weight: 0 });
   ICU.aggregateAsset('js', '../lib/i18next/i18next.js', { weight: 1 });
@@ -35,6 +41,8 @@ ICU.register(function(app, auth, database) {
 
   ICU.angularDependencies([
       'jm.i18next',
+      'ui.select',
+      'ui.date',
       'mean.system',
       'mean.users',
       'mean.icu.ui.login',
