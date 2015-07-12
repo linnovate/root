@@ -11,14 +11,16 @@ module.exports = function(tasks, app, auth, database) {
 
       .post(function(req, res) {
           Task.create({
-          data: req.body
+          data: req.body,
+          headers: req.headers
         }, function(data) {
           res.send(data);
         });
       })
       .get(function(req, res) {
           Task.all({
-              data: req.body
+              data: req.body,
+              headers: req.headers
           }, function(data) {
               res.send(data);
           });
@@ -28,7 +30,8 @@ module.exports = function(tasks, app, auth, database) {
   app.route('/api/tasks/:taskId')
       .get(function(req, res) {
           Task.get({
-              param: req.params.projectId
+              param: req.params.projectId,
+              headers: req.headers
           }, function(data) {
               res.send(data);
           });
@@ -36,7 +39,8 @@ module.exports = function(tasks, app, auth, database) {
       .put(function(req, res) {
           Task.update({
               data: req.body,
-              param: req.params.taskId
+              param: req.params.taskId,
+              headers: req.headers
             }, function(data) {
           res.send(data);
         });
@@ -44,7 +48,8 @@ module.exports = function(tasks, app, auth, database) {
 
       .delete(function(req, res) {
         Task.delete({
-          param: req.params.taskId
+          param: req.params.taskId,
+          headers: req.headers
         }, function(data) {
           res.send(data);
         });
