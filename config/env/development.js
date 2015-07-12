@@ -48,7 +48,7 @@ module.exports = {
     }
   }, 
   secret: 'SOME_TOKEN_SECRET',
-	api: {
-		uri: 'http://localhost:3003'
-	}
+    api: {
+      uri: 'http://localhost:3003'
+    }
 };

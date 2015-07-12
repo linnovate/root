@@ -10,18 +10,17 @@ module.exports = function(Projects, app, auth, database) {
 	app.route('/api/projects')
 
 		.post(function(req, res) {
-			console.log('here package projects ');
-			req.body.user = {_id: '55755f55e7e0f6d3717444f3'}
 			Project.create({
-				data: req.body
+				data: req.body,
+				headers: req.headers
 			}, function(data) {
 				res.send(data);
 			});
 		})
 		.get(function(req, res) {
-			req.body.user = {_id: '55755f55e7e0f6d3717444f3'}
 			Project.all({
-				data: req.body
+				data: req.body,
+				headers: req.headers
 			}, function(data) {
 				res.send(data);
 			});
@@ -31,7 +30,8 @@ module.exports = function(Projects, app, auth, database) {
 	app.route('/api/projects/:projectId')
 		.get(function(req, res) {
 			Project.get({
-				param: req.params.projectId
+				param: req.params.projectId,
+				headers: req.headers
 			}, function(data) {
 				res.send(data);
 			});
@@ -40,7 +40,8 @@ module.exports = function(Projects, app, auth, database) {
 		.put(function(req, res) {
 			Project.update({
 				data: req.body,
-				param: req.params.projectId
+				param: req.params.projectId,
+				headers: req.headers
 			}, function(data) {
 				res.send(data);
 			});
@@ -48,7 +49,8 @@ module.exports = function(Projects, app, auth, database) {
 
 		.delete(function(req, res) {
 			Project.delete({
-				param: req.params.projectId
+				param: req.params.projectId,
+				headers: req.headers
 			}, function(data) {
 				res.send(data);
 			});

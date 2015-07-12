@@ -7,7 +7,8 @@ angular.module('mean.icu.ui.tasklist')
     $scope.create = function() {
         var task = {
             title: 'New task',
-            project: $scope.currentContext.entityId
+            project: $scope.currentContext.entityId,
+            status: 'Received'
         }
 
         TasksService.create(task).then(function(result) {

@@ -41,20 +41,20 @@ angular.module('mean.icu.data.usersservice', [])
     }
 
     function login(credentials) {
-        return $http.post('/api/login', credentials).then(function(result) {
+        return $http.post('/api/signin', credentials).then(function(result) {
             localStorage.setItem('JWT', result.data.token);
             return result.data;
         });
     }
 
     function logout(credentials) {
-        return $http.get('/api/logout').then(function() {
-            localStorage.setItem('JWT', '');
+        return $http.get('/api/signout').then(function() {
+            localStorage.removeItem('JWT');
         });
     }
 
     function register(credentials) {
-        return $http.post('/api/register', credentials).then(function(result) {
+        return $http.post('/api/signup', credentials).then(function(result) {
             localStorage.setItem('JWT', result.data.token);
             return result.data;
         });
