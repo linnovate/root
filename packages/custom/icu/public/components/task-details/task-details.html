@@ -34,7 +34,11 @@
                 data="{ task: task, updateFn: update }">
             </div>
 
-            <div class="text">
+            <div class="text"
+                contenteditable="true"
+                medium-editor
+                ng-model="task.description"
+                options='{"placeholder": "Enter a description", "theme": "bootstrap", "buttons": ["bold", "italic", "underline", "anchor", "quote", "orderedlist", "unorderedlist"]}'>
                 <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
                     tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
                     vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,

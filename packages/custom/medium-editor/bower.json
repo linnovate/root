@@ -1,0 +1,8 @@
+{
+  "name": "medium-editor",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular-medium-editor": "~0.1.0",
+    "angular-contenteditable": "~0.3.7"
+  }
+}
