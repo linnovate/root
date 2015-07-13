@@ -12,6 +12,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
     float: left;
 
     .header {
+        position: relative;
         height: $header-height;
         border-bottom: 1px solid $light-grey1;
         background-color: white;
@@ -44,10 +45,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             }
         }
 
-        .last-notification {
-            float: left;
-            width: calc(100% - 5 * #{ $header-height });
-            height: $header-height;
+        @mixin notification() {
             font-style: italic;
             position: relative;
 
@@ -63,6 +61,34 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
 
             .entity-name, .user {
                 font-weight: 700;
+            }
+        }
+
+        .last-notification {
+            float: left;
+            width: calc(100% - 5 * #{ $header-height });
+            height: $header-height;
+
+            @include notification;
+        }
+
+        .all-notifications {
+            border: 1px solid $light-grey1;
+            position: absolute;
+            width: calc(100% - 3 * #{ $header-height });
+            left: $header-height;
+            margin-top: $header-height;
+            z-index: 1001;
+            background-color: $cream;
+
+            .notification {
+                height: $header-height;
+                @include notification;
+                padding: 10px;
+
+                span {
+                    line-height: $header-height;
+                }
             }
         }
 

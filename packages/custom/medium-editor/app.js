@@ -26,7 +26,7 @@ MediumEditor.register(function(app, auth, database) {
 
   MediumEditor.aggregateAsset('js', '../lib/angular-contenteditable/angular-contenteditable.js');
   MediumEditor.aggregateAsset('js', '../lib/medium-editor/dist/js/medium-editor.min.js');
-  MediumEditor.aggregateAsset('js', '../lib/angular-medium-editor/dist/angular-medium-editor.min.js');
+  MediumEditor.aggregateAsset('js', '../lib/angular-medium-editor/dist/angular-medium-editor.js');
   MediumEditor.aggregateAsset('css', '../lib/medium-editor/dist/css/medium-editor.css');
   MediumEditor.aggregateAsset('css', '../lib/medium-editor/dist/css/themes/bootstrap.css');
 

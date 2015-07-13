@@ -48,6 +48,16 @@ angular.module('mean.icu').config([
             templateUrl: '/icu/components/register/register.html',
             controller: 'RegisterController'
         })
+        .state('profile', {
+            url: '/profile',
+            templateUrl: '/icu/components/profile-page/profile-page.html',
+            controller: 'ProfileController',
+            resolve: {
+                me: function(UsersService) {
+                    return UsersService.getMe();
+                }
+            }
+        })
         .state('main', {
             abstract: true,
             url: '',
@@ -183,6 +193,9 @@ angular.module('mean.icu').config([
                     resolve: {
                         task: function(TasksService, $stateParams) {
                             return TasksService.getById($stateParams.id);
+                        },
+                        tags: function(TasksService) {
+                            return TasksService.getTags();
                         },
                         project: function(task, ProjectsService) {
                             return ProjectsService.getById(task.project);

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.usersservice', [])
-.service('UsersService', function($http, $q, ApiUri) {
+.service('UsersService', function($http, $q, ApiUri, Upload) {
     var EnitityPrefix = '/users';
     var me = null;
 
@@ -60,6 +60,18 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
+    function update(user) {
+        return $http.put('/api/users/' + user._id, user).then(function(result) {
+            return result.data;
+        });
+    }
+
+    function updateAvatar(user) {
+        return $http.put('/api/users/' + user._id, user).then(function(result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getMe: getMe,
@@ -67,6 +79,8 @@ angular.module('mean.icu.data.usersservice', [])
         getByProjectId: getByProjectId,
         login: login,
         logout: logout,
-        register: register
+        register: register,
+        update: update,
+        updateAvatar: updateAvatar
     };
 });

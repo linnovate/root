@@ -10,6 +10,10 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function getTags() {
+        return ['asdasdas', 'zxczxczxczxc', 'qweqweqweqwe'];
+    }
+
     function getById(id) {
         return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
             return result.data;
@@ -52,6 +56,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
     return {
         getAll: getAll,
+        getTags: getTags,
         getById: getById,
         getByUserId: getByUserId,
         getByProjectId: getByProjectId,
