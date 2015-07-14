@@ -64,4 +64,18 @@ module.exports = function(MeanUser, app, auth, database) {
       });
     });
 
+  app.route('/api/users')
+    .get(function(req, res) {
+
+      var objReq = {
+        uri: apiUri + '/api/users',
+        method: 'get'
+      };
+
+      request(objReq, function(error, response, body) {
+        if (!error && response.statusCode === 200 && response.body.length) {
+          return res.json(JSON.parse(response.body));
+        }
+      });
+    });
 };

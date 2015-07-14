@@ -2,13 +2,12 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, ProjectsService, DiscussionsService, UsersService) {
+    function controller($scope, $state, ProjectsService, DiscussionsService, UsersService, context) {
         $scope.discussions = DiscussionsService.getAll();
-        $scope.people = UsersService.getAll();
-
-        ProjectsService.getAll().then(function(projects) {
-            $scope.projects = projects;
+        UsersService.getAll().then(function(result) {
+            $scope.people = result;
         });
+        $scope.context = context;
 
         $scope.items = [{
             name: 'Tasks',
@@ -37,6 +36,8 @@ directive('icuSidepane', function() {
         restrict: 'A',
         controller: controller,
         templateUrl: '/icu/components/sidepane/sidepane.html',
-        scope: true
+        scope: {
+            projects: '=',
+        }
     };
 });

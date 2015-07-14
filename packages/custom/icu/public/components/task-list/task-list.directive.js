@@ -2,7 +2,9 @@
 
 angular.module('mean.icu.ui.tasklist', [])
 .directive('icuTaskList', function() {
-    function controller($scope) {
+    function controller($scope, context) {
+        $scope.context = context;
+
         if ($scope.groupTasks) {
             $scope.groupedTasks = _.chain($scope.tasks).groupBy(function(task) {
                 var week = moment(task.created).isoWeek();

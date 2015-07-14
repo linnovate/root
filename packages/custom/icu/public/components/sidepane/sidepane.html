@@ -3,9 +3,9 @@
 </header>
 <nav>
     <ul>
-        <li data-ng-repeat="item in items"
-            data-ui-sref="{{item.state}}">
+        <li data-ng-repeat="item in items">
             <div class="menu-item"
+                data-ui-sref="{{item.state}}"
                 data-ng-class="{ 'active': isCurrentState(item) }">
                 <div class="icon">
                     <img ng-src="{{item.icon}}"></img>
@@ -18,7 +18,12 @@
                         data-ng-class="{ 'fa-caret-right': !isCurrentState(item), 'fa-caret-down': isCurrentState(item) }"></i>
                 </div>
             </div>
-            <div class="display-by" ng-if="isCurrentState(item)" icu-display-by people="people" projects="projects" discussions="discussions"></div>
+            <div class="display-by"
+                 ng-if="isCurrentState(item)"
+                 icu-display-by
+                 people="people"
+                 projects="projects"
+                 discussions="discussions"></div>
         </li>
     </ul>
 </nav>

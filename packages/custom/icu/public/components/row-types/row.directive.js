@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.rows', [])
-.directive('icuListRow', function($compile, $http, $templateCache) {
+.directive('icuListRow', function($compile, $http, $templateRequest) {
     var templates = {
         people: '/icu/components/row-types/people-row.html',
         task: '/icu/components/row-types/task-row.html'
@@ -17,16 +17,9 @@ angular.module('mean.icu.ui.rows', [])
 
     function link($scope, $element) {
         var templateUrl = templates[$scope.type];
-
-        var template = $templateCache.get(templateUrl);
-        if (template) {
-            compileTemplate($scope, $element, template);
-        } else {
-            $http.get(templateUrl).then(function(result) {
-                compileTemplate($scope, $element, result.data);
-                $templateCache.put(templateUrl, result.data);
-            });
-        }
+        $templateRequest(templateUrl).then(function(result) {
+            compileTemplate($scope, $element, result);
+        });
     }
 
     return {
