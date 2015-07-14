@@ -6,19 +6,32 @@
                 <button><i class="fa fa-2x fa-star"></i></button>
             </div>
             <div class="user">
-                <div class="avatar">{{task.creator[0]}}</div>
-                <span class="summary-content">{{task.creator.name}}</span>
+                <ui-select ng-model="task.creator" on-select="update(task)">
+                    <ui-select-match placeholder="Select a person">
+                        <div class="avatar">{{$select.selected.name[0]}}</div>
+                        <span class="summary-content">{{$select.selected.name}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
+                        <div class="avatar">{{user.profile.avatar}}</div>
+                        <span class="summary-content">{{user.name}}</span>
+                    </ui-select-choices>
+                </ui-select>
             </div>
             <div class="due">
-                <span class="summary-content">{{task.due | date:'dd.MM.yyyy' }}</span>
+                <input ui-date="dueOptions" ng-model="task.due">
+                <!--<span class="summary-content">{{task.due | date:'dd.MM.yyyy' }}</span>-->
             </div>
             <div class="status {{task.status | lowercase}}">
-                <span class="summary-content">{{task.status}}</span>
+              <select ng-options="status for status in statuses" ng-model="task.status" ng-change="update(task)"></select>
+                <!--<span class="summary-content">{{task.status}}</span>-->
             </div>
             <div class="tags">
-                <span class="summary-content">
-                    <span class="tag" ng-repeat="tag in task.tags">#{{tag}}</span>
-                </span>
+                <ui-select ng-model="task.tags" multiple tagging on-select="update(task)" on-remove="update(task)">
+                    <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
+                    <ui-select-choices repeat="tag in tags">
+                        {{tag}}
+                    </ui-select-choices>
+                </ui-select>
             </div>
         </div>
         <div class="description">
@@ -34,17 +47,11 @@
                 data="{ task: task, updateFn: update }">
             </div>
 
-            <div class="text">
-                <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-                    no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                </p>
-                <p> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                    tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                    vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-                    no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                </p>
+            <div class="text"
+                contenteditable="true"
+                medium-editor
+                ng-model="task.description"
+                options='{"placeholder": "Enter a description", "theme": "bootstrap", "buttons": ["bold", "italic", "underline", "anchor", "quote", "orderedlist", "unorderedlist"]}'>
             </div>
         </div>
         <div class="tabs">

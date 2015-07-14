@@ -2,7 +2,25 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope) {
+    function controller($scope, $state, context) {
+        $scope.context = context;
+
+        $scope.switchTo = function(entityName, id) {
+            $scope.context.switchTo(entityName, id).then(function(newContext) {
+                $state.go('main.' + newContext.main  +  '.byentity', {
+                    entity: $scope.context.entityName,
+                    entityId: $scope.context.entityId
+                });
+            });
+        }
+
+        $scope.visible = {
+            project: false,
+            discussion: false,
+            user: false
+        }
+
+        $scope.visible[$scope.context.entityName] = true;
     }
 
     return {

@@ -3,7 +3,7 @@
         <tbody>
             <tr data-ng-repeat="task in tasks"
                 data-ui-sref-active="active"
-                data-ui-sref="main.tasks.details({id: task._id})"
+                data-ui-sref="main.tasks.byentity.details({id: task._id, entity: context.entityName, entityId: context.entityId})"
                 icu-list-row
                 data="{ task: task, index: $index, drawArrow: drawArrow, groupTasks: groupTasks }"
                 type="task">
@@ -19,7 +19,7 @@
             <tbody>
                 <tr data-ng-repeat="task in week.tasks"
                     data-ui-sref-active="active"
-                    data-ui-sref="main.tasks.details({id: task._id})"
+                    data-ui-sref="main.tasks.byentity.details({id: task._id, entity: context.entityName, entityId: context.entityId})"
                     icu-list-row
                     data="{ task: task, index: $index, drawArrow: drawArrow, groupTasks: groupTasks }"
                     type="task">

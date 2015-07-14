@@ -30,7 +30,7 @@ module.exports = function(tasks, app, auth, database) {
   app.route('/api/tasks/:taskId')
       .get(function(req, res) {
           Task.get({
-              param: req.params.projectId,
+              param: req.params.taskId,
               headers: req.headers
           }, function(data) {
               res.send(data);
