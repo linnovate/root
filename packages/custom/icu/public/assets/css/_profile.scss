@@ -13,4 +13,23 @@
     button {
         float: right;
     }
+
+    .upload {
+        height: 50px;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        color: white;
+        background-color: $blue;
+        cursor: pointer;
+    }
+
+    .avatar {
+        max-height: 350px;
+        max-width: 350px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }

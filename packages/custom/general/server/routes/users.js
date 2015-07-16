@@ -104,4 +104,53 @@ module.exports = function(MeanUser, app, auth, database) {
         res.send(data);
       });
     });
+
+  app.route('/api/avatar')
+    .post(function(req, res) {
+
+      var objReq = {
+        uri: apiUri + '/api/avatar',
+        method: 'post',
+        headers: req.headers,
+      };
+
+      req.pipe(
+        request(objReq, function(error, response, body) {
+          if (!error && response.statusCode === 200 && response.body.length) {
+            return res.json(JSON.parse(response.body));
+          }
+        })
+      );
+    });
+
+  app.route('/api/profile')
+    .get(function(req, res) {
+      var objReq = {
+        uri: apiUri + '/api/profile',
+        method: 'get',
+        headers: req.headers,
+      };
+
+      request(objReq, function(error, response, body) {
+        if (!error && response.statusCode === 200 && response.body.length) {
+          return res.json(JSON.parse(response.body));
+        }
+      });
+    });
+
+  app.route('/api/profile')
+    .put(function(req, res) {
+      var objReq = {
+        uri: apiUri + '/api/profile',
+        method: 'put',
+        headers: req.headers,
+        json: req.body
+      };
+
+      request(objReq, function(error, response, body) {
+        if (!error && response.statusCode === 200) {
+          return res.json(body);
+        }
+      });
+    });
 };

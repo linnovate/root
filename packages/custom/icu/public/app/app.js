@@ -172,6 +172,9 @@ angular.module('mean.icu').config([
             resolve: {
                 me: function (UsersService) {
                     return UsersService.getMe();
+                },
+                profile: function(UsersService) {
+                    return UsersService.getProfile();
                 }
             }
         })
