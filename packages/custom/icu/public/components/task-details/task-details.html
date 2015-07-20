@@ -60,7 +60,7 @@
                 <div class="new-tag-input" ng-show="tagInputVisible">
                     <ui-select ng-model="newTag" tagging tagging-label="false" on-select="addTag(newTag)">
                         <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
-                        <ui-select-choices repeat="tag in tags">
+                        <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
                             {{tag}}
                         </ui-select-choices>
                     </ui-select>

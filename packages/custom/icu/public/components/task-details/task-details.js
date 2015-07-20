@@ -12,6 +12,12 @@ angular.module('mean.icu.ui.taskdetails', [])
 
     $scope.statuses = ['Received', 'Completed'];
 
+    $scope.getUnusedTags = function() {
+        return _($scope.tags).reject(function(t) {
+            return $scope.task.tags.indexOf(t) >= 0;
+        });
+    }
+
     $scope.$watch('task.description', function(nVal, oVal) {
         if (nVal !== oVal && oVal) {
             $scope.delayedUpdate($scope.task);
