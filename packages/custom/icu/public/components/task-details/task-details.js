@@ -8,6 +8,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.project = project;
 
     $scope.task.project = project;
+    $scope.tagInputVisible = false;
 
     $scope.statuses = ['Received', 'Completed'];
 
@@ -15,7 +16,18 @@ angular.module('mean.icu.ui.taskdetails', [])
         if (nVal !== oVal && oVal) {
             $scope.delayedUpdate($scope.task);
         }
-    })
+    });
+
+    $scope.addTag = function(tag) {
+        $scope.task.tags.push(tag);
+        $scope.update(task);
+        $scope.tagInputVisible = false;
+    }
+
+    $scope.removeTag = function(tag) {
+        $scope.task.tags = _($scope.task.tags).without(tag);
+        $scope.update(task);
+    }
 
     $scope.dueOptions = {
         onSelect: function() {
