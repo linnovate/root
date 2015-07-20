@@ -13,9 +13,11 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.statuses = ['Received', 'Completed'];
 
     $scope.getUnusedTags = function() {
-        return _($scope.tags).reject(function(t) {
-            return $scope.task.tags.indexOf(t) >= 0;
-        });
+        return _.chain($scope.tags).reject(function(t) {
+            return $scope.task.tags.indexOf(t.term) >= 0;
+        }).sortBy(function(a, b) {
+            return b.count - a.count;
+        }).pluck('term').value();
     }
 
     $scope.$watch('task.description', function(nVal, oVal) {
@@ -32,7 +34,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
     $scope.removeTag = function(tag) {
         $scope.task.tags = _($scope.task.tags).without(tag);
-        $scope.update(task);
+        $scope.update($scope.task);
     }
 
     $scope.dueOptions = {
