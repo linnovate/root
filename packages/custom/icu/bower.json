@@ -5,7 +5,7 @@
     "font-awesome": "~4.3.0",
     "underscore": "~1.8.3",
     "moment": "~2.10.2",
-    "ng-i18next": "~0.4.1",
+    "ng-i18next": "~0.5.x",
     "open-sans": "~1.1.0",
     "angular-ui-select": "~0.12.0",
     "angular-ui-date": "~0.0.8",
