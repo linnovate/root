@@ -167,7 +167,6 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
             }
 
             .tags {
-                border-top: 1px solid $light-grey1;
                 border-bottom: 1px solid $light-grey1;
                 background: 0 center url('/icu/assets/img/tags.png') no-repeat;
                 position: relative;
@@ -175,9 +174,9 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
                 height: 50px;
 
                 .list {
-                    height: 49px;
+                    height: 21px;
                     float: left;
-                    margin: 15px 10px 15px 20px;
+                    margin: 13px 10px 13px 20px;
 
                     .tag-item {
                         display: inline-block;
@@ -215,10 +214,10 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
                 }
 
                 .new-tag-input {
-                    line-height: 48px;
-                    height: 49px;
+                    line-height: 28px;
+                    height: 28px;
                     float: left;
-                    margin-left: 10px;
+                    margin: 8px 10px;
                 }
 
                 .new-tag-icon {
@@ -266,7 +265,7 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
                         width: 150px;
                         min-width: 150px;
                         border-radius: 0;
-                        margin-top: -13px;
+                        margin-top: -2px;
                     }
 
                     input {
