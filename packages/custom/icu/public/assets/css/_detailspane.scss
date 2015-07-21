@@ -201,7 +201,6 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
         .tabs {
             height: $switcher-height;
             margin: 0 30px;
-            border-top: 1px solid $light-grey1;
             border-bottom: 1px solid $light-grey1;
             height: 40px;
 
