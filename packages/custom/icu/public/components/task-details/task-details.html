@@ -6,7 +6,7 @@
                 <button><i class="fa fa-2x fa-star"></i></button>
             </div>
             <div class="user">
-                <ui-select ng-model="task.creator" on-select="update(task)">
+                <ui-select ng-model="task.assign" on-select="update(task)">
                     <ui-select-match placeholder="Select a person">
                         <div class="avatar">{{$select.selected.name[0]}}</div>
                         <span class="summary-content">{{$select.selected.name}}</span>
@@ -26,12 +26,6 @@
                 <!--<span class="summary-content">{{task.status}}</span>-->
             </div>
             <div class="tags">
-                <ui-select ng-model="task.tags" multiple tagging on-select="update(task)" on-remove="update(task)">
-                    <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
-                    <ui-select-choices repeat="tag in tags">
-                        {{tag}}
-                    </ui-select-choices>
-                </ui-select>
             </div>
         </div>
         <div class="description">
@@ -52,6 +46,28 @@
                 medium-editor
                 ng-model="task.description"
                 options='{"placeholder": "Enter a description", "theme": "bootstrap", "buttons": ["bold", "italic", "underline", "anchor", "quote", "orderedlist", "unorderedlist"]}'>
+            </div>
+
+            <div class="tags">
+                <div class="list">
+                    <div class="tag-item" ng-repeat="tag in task.tags">
+                        <span>{{tag}}</span>
+                        <button ng-click="removeTag(tag)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="new-tag-input" ng-show="tagInputVisible">
+                    <ui-select ng-model="newTag" tagging tagging-label="false" on-select="addTag(newTag)">
+                        <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
+                        <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
+                            {{tag}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible">
+                    <i class="fa fa-plus"></i>
+                </button>
             </div>
         </div>
         <div class="tabs">
