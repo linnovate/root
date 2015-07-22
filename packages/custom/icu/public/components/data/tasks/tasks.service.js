@@ -48,6 +48,18 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function star(task) {
+        return $http.patch(EntityPrefix + '/' + task._id, {star: !task.star}).then(function(result) {
+            return result.data;
+        });
+    }
+
+    function getStarred() {
+        return $http.get(EntityPrefix + '/starred').then(function(result) {
+            return result.data;
+        });
+    }
+
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function(result) {
             return result.data;
@@ -62,6 +74,8 @@ angular.module('mean.icu.data.tasksservice', [])
         getByProjectId: getByProjectId,
         create: create,
         update: update,
-        remove: remove
+        remove: remove,
+        getStarred: getStarred,
+        star: star
     };
 });
