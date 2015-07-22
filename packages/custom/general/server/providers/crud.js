@@ -39,8 +39,8 @@ class Crud {
 			objReq.headers['Content-Type'] = 'multipart/form-data';
 			// objReq.headers['Content-Length'] = querystring.stringify(options.form).length;
 		}
-
 		request(objReq, function(error, response, body) {
+			console.log('cb')
 			if (!error && response.statusCode === 200 && response.body.length) {
 				return callback(JSON.parse(body));
 			}
@@ -103,6 +103,18 @@ class Crud {
 		this.talkToApi(options, callback);
 	}
 
+	patch(data, callback) {
+		console.log('patch')
+		var options = {
+			method: 'PATCH',
+			form: data.data,
+			param: data.param,
+			headers: data.headers
+		};
+
+		this.talkToApi(options, callback);
+	}
+
 }
 
 class Project extends Crud {
@@ -116,8 +128,6 @@ class Task extends Crud {
 		super(cmd);
 	}
 }
-
-
 
 exports.Crud = Crud;
 exports.Project = Project;
