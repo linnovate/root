@@ -1,11 +1,11 @@
-<div class="task-list">
+<div class="discussion-list">
     <header class="title">
-        Tasks from {{currentContext.entityName}} <span>"Project Review 14.4"<span>
+        Discussions from <span>"Project Review 14.4"<span>
     </header>
     <div class="filters">
         <div class="left-wrapper">
             <button class="favorites"><i class="fa fa-star"></i></button>
-            <button class="tasks">Status</button>
+            <button class="discussions">Status</button>
         </div>
 
         <div class="right-wrapper">
@@ -14,15 +14,15 @@
         </div>
     </div>
     <div class="list-table">
-        <table class="tasks">
+        <table class="discussions">
             <tbody>
                 <tr data-ng-click="create()"
                     icu-list-row
-                    data="{ task: { title: 'Create new task' } }"
-                    type="task">
+                    data="{ discussion: { title: 'Create new discussion' } }"
+                    type="discussion">
                 </tr>
             </tbody>
         </table>
     </div>
-    <div icu-task-list tasks="tasks" draw-arrow="true" group-tasks="true"></div>
+    <div icu-discussion-list discussions="discussions" draw-arrow="true" group-discussions="true"></div>
 </div>

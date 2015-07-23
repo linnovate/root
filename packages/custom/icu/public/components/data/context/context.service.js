@@ -8,7 +8,8 @@ angular.module('mean.icu').service('context', function($injector, $q) {
 
     var mainMap = {
         task: 'tasks',
-        user: 'people'
+        user: 'people',
+        discussion: 'discussions'
     };
 
     return {
@@ -24,7 +25,7 @@ angular.module('mean.icu').service('context', function($injector, $q) {
             var self = this;
             service.getById(id).then(function(result) {
                 self.entity = result;
-                self.entityName = 'project';
+                self.entityName = entityName;
                 self.entityId = id;
 
                 console.log(self);
