@@ -24,10 +24,16 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
+    function create(discussions) {
+        return $http.post(ApiUri + EntityPrefix, discussions).then(function(result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getById: getById,
         getByProjectId: getByProjectId,
-
+        create: create
     };
 });
