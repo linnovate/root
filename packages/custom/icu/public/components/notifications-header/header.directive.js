@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.notificationsheader', [])
-.directive('icuNotificationsHeader', function(NotificationsService, TasksService, UsersService, $state, context, ProjectsService) {
+.directive('icuNotificationsHeader', function(NotificationsService, TasksService, UsersService, $state, context, ProjectsService, DiscussionsService) {
     function controller($scope) {
         $scope.notifications = NotificationsService.getAll();
         $scope.popupNotifications = $scope.notifications.slice(0, -1);
@@ -12,7 +12,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
             UsersService.logout().then(function() {
                 $state.go('login');
             });
-        }
+        };
 
         $scope.createTask = function() {
             var task = {
@@ -29,7 +29,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     entityId: $scope.context.entityId
                 }, { reload: true });
             });
-        }
+        };
 
         $scope.createProject = function() {
             var project = {
@@ -46,7 +46,23 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     }, {reload: true});
                 });
             });
-        }
+        };
+
+        $scope.createDiscussion = function() {
+            var discussion = {
+                name: 'New discussion'
+            };
+
+            DiscussionsService.create(discussion).then(function(result) {
+                context.switchTo('discussion', result._id).then(function(newContext) {
+                    $state.go('main.tasks.byentity', {
+                        id: result._id,
+                        entity: newContext.entityName,
+                        entityId: newContext.entityId
+                    }, {reload: true});
+                });
+            });
+        };
     }
 
     return {
