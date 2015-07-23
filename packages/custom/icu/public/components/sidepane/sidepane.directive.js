@@ -3,7 +3,9 @@
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, ProjectsService, DiscussionsService, UsersService, context) {
-        $scope.discussions = DiscussionsService.getAll();
+        DiscussionsService.getAll().then(function(result) {
+            $scope.discussions = result;
+        });
         UsersService.getAll().then(function(result) {
             $scope.people = result;
         });
@@ -20,7 +22,7 @@ directive('icuSidepane', function() {
         }, {
             name: 'Meetings',
             icon: '/icu/assets/img/meeting.png',
-            state: 'main.meetings'
+            state: 'main.discussions'
         }, {
             name: 'People',
             icon: '/icu/assets/img/people.png',

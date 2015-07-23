@@ -40,7 +40,6 @@ class Crud {
 			// objReq.headers['Content-Length'] = querystring.stringify(options.form).length;
 		}
 		request(objReq, function(error, response, body) {
-			console.log('cb')
 			if (!error && response.statusCode === 200 && response.body.length) {
 				return callback(JSON.parse(body));
 			}
@@ -104,7 +103,6 @@ class Crud {
 	}
 
 	patch(data, callback) {
-		console.log('patch')
 		var options = {
 			method: 'PATCH',
 			form: data.data,
@@ -129,6 +127,13 @@ class Task extends Crud {
 	}
 }
 
+class Discussion extends Crud {
+	constructor(cmd) {
+		super(cmd);
+	}
+}
+
 exports.Crud = Crud;
 exports.Project = Project;
 exports.Task = Task;
+exports.Discussion = Discussion;

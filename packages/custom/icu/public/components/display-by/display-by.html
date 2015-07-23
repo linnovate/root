@@ -1,5 +1,5 @@
 <section class="display-by">
-    <p class="intro">{{'Display task by' | i18next }}:</p>
+    <p class="intro">Display {{context.main}} by:</p>
     <div class="list projects" ng-if="projects">
         <p ng-click="visible.project = !visible.project" class="title">Projects</p>
         <ul ng-if="visible.project">
@@ -18,8 +18,9 @@
         <p ng-click="visible.disscusion = !visible.disscusion" class="title">Discussions</p>
         <ul ng-if="visible.disscusion">
             <li data-ng-repeat="discussion in discussions"
-                data-ng-class="{'selected': context.entityName === 'discussion' && discussion === context.entity }">
-                <a href data-ng-link="discussion({id: discussion._id})">
+                data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
+                data-ng-click="switchTo('discussion', discussion._id)">
+                <a href>
                     {{discussion.name}}
                 </a>
             </li>

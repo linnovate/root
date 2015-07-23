@@ -7,9 +7,10 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.switchTo = function(entityName, id) {
             $scope.context.switchTo(entityName, id).then(function(newContext) {
+
                 $state.go('main.' + newContext.main  +  '.byentity', {
-                    entity: $scope.context.entityName,
-                    entityId: $scope.context.entityId
+                    entity: newContext.entityName,
+                    entityId: newContext.entityId
                 });
             });
         }
