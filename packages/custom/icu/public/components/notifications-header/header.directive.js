@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.notificationsheader', [])
-.directive('icuNotificationsHeader', function(NotificationsService, TasksService, UsersService, $state, context, ProjectsService, DiscussionsService) {
+.directive('icuNotificationsHeader', function(NotificationsService, TasksService, UsersService, $state, context, ProjectsService, DiscussionsService, ngDialog) {
     function controller($scope) {
         $scope.notifications = NotificationsService.getAll();
         $scope.popupNotifications = $scope.notifications.slice(0, -1);
@@ -32,19 +32,9 @@ angular.module('mean.icu.ui.notificationsheader', [])
         };
 
         $scope.createProject = function() {
-            var project = {
-                title: 'New project',
-                color: 'f4be29'
-            };
-
-            ProjectsService.create(project).then(function(result) {
-                context.switchTo('project', result._id).then(function(newContext) {
-                    $state.go('main.tasks.byentity', {
-                        id: result._id,
-                        entity: newContext.entityName,
-                        entityId: newContext.entityId
-                    }, {reload: true});
-                });
+            ngDialog.open({
+                template: '/icu/components/project-create/project-create.html',
+                controller: 'ProjectCreateController'
             });
         };
 

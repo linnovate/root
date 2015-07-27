@@ -47,7 +47,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         if (context.entityName === 'discussion')
             task.discussion = context.entityId;
         TasksService.update(task).then(function() {
-            $state.reload();
+            $state.reload('main.tasks.byentity');
         });
     }
 
