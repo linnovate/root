@@ -29,6 +29,9 @@ ICU.register(function(app, auth, database) {
   ICU.aggregateAsset('css', 'styles.css');
   ICU.aggregateAsset('css', '../lib/angular-ui-select/dist/select.css');
   ICU.aggregateAsset('css', '../lib/jquery-ui/themes/pepper-grinder/jquery-ui.min.css');
+  ICU.aggregateAsset('css', '../lib/angularjs-color-picker/angularjs-color-picker.css');
+  ICU.aggregateAsset('css', '../lib/ngDialog/css/ngDialog.css');
+  ICU.aggregateAsset('css', '../lib/ngDialog/css/ngDialog-theme-default.css');
 
   ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
   ICU.aggregateAsset('js', '../lib/angular-ui-select/dist/select.js');
@@ -36,6 +39,12 @@ ICU.register(function(app, auth, database) {
   ICU.aggregateAsset('js', '../lib/angular-ui-date/src/date.js');
   ICU.aggregateAsset('js', '../lib/moment/moment.js');
   ICU.aggregateAsset('js', '../lib/ng-file-upload/ng-file-upload.min.js');
+
+  ICU.aggregateAsset('js', '../lib/ngDialog/js/ngDialog.js');
+
+  ICU.aggregateAsset('js', '../lib/tinycolor/tinycolor.js', { weight: 0 });
+  ICU.aggregateAsset('js', '../lib/angularjs-color-picker/angularjs-color-picker.js', { weight: 1 });
+
   ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', { weight: 0 });
   ICU.aggregateAsset('js', '../lib/i18next/i18next.js', { weight: 1 });
   ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', { weight: 2 });
@@ -46,6 +55,8 @@ ICU.register(function(app, auth, database) {
       'ui.select',
       'ui.date',
       'ngFileUpload',
+      'ngDialog',
+      'color.picker',
       'mean.system',
       'mean.users',
       'mean.icu.ui.login',
@@ -60,6 +71,7 @@ ICU.register(function(app, auth, database) {
       'mean.icu.ui.tasklist',
       'mean.icu.ui.taskdetails',
       'mean.icu.ui.taskcreate',
+      'mean.icu.ui.projectcreate',
       'mean.icu.ui.notificationsheader',
       'mean.icu.ui.membersfooter',
       'mean.icu.ui.tabs',

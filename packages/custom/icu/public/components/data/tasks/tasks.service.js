@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.tasksservice', [])
-.service('TasksService', function(ApiUri, $http) {
+.service('TasksService', function(ApiUri, $http, ProjectsService) {
     var EntityPrefix = '/tasks';
 
     function getAll() {
@@ -31,10 +31,15 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getByProjectId(id) {
-        return getAll().then(function(result) {
-            return _(result).filter(function(task) {
-                return task.project === id;
-            })
+        return ProjectsService.getById(id).then(function(project) {
+            return $http.get(ApiUri + '/projects/' + id + '/tasks').then(function(tasksResult) {
+                var tasks = tasksResult.data;
+
+                return tasks.map(function(task) {
+                    task.project = project;
+                    return task;
+                });
+            });
         });
     }
 
