@@ -14,19 +14,23 @@ directive('icuSidepane', function() {
         $scope.items = [{
             name: 'Tasks',
             icon: '/icu/assets/img/task.png',
-            state: 'main.tasks'
+            state: 'main.tasks',
+            display: ['projects', 'discussions', 'people']
         }, {
             name: 'Projects',
             icon: '/icu/assets/img/project.png',
-            state: 'main.projects'
+            state: 'main.projects',
+            display: ['discussions', 'people']
         }, {
             name: 'Meetings',
             icon: '/icu/assets/img/meeting.png',
-            state: 'main.discussions'
+            state: 'main.discussions',
+            display: ['projects', 'people']
         }, {
             name: 'People',
             icon: '/icu/assets/img/people.png',
-            state: 'main.people'
+            state: 'main.people',
+            display: ['projects', 'discussions']
         }];
 
         $scope.isCurrentState = function(item) {
