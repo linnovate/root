@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.usersservice', [])
-.service('UsersService', function($http, $q, ApiUri, Upload) {
+.service('UsersService', function($http, $q, ApiUri) {
     var EnitityPrefix = '/users';
     var me = null;
 
@@ -47,7 +47,7 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
-    function logout(credentials) {
+    function logout() {
         return $http.get('/api/signout').then(function() {
             localStorage.removeItem('JWT');
         });

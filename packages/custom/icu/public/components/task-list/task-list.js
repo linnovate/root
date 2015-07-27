@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist')
-.controller('TaskListController', function($scope, $state, tasks, TasksService) {
+.controller('TaskListController', function ($scope, $state, tasks, TasksService) {
     $scope.tasks = tasks;
 
     $scope.create = function() {
@@ -12,13 +12,13 @@ angular.module('mean.icu.ui.tasklist')
             status: 'Received'
         };
 
-        TasksService.create(task).then(function(result) {
+        TasksService.create(task).then(function () {
             $state.go('main.tasks.byentity.details', {
                 entity: $scope.currentContext.entityName,
                 entityId: $scope.currentContext.entityId
-            }, { reload: true });
+            }, {reload: true});
         });
-    }
+    };
 
     if ($scope.tasks.length && $state.current.name === 'main.tasks.byentity') {
         $state.go('main.tasks.byentity.details', {

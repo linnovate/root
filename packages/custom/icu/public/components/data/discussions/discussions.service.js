@@ -20,7 +20,7 @@ angular.module('mean.icu.data.discussionsservice', [])
         return getAll().then(function(result) {
             return _(result).filter(function(task) {
                 return task.project === id;
-            })
+            });
         });
     }
 

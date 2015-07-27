@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.userlist', [])
-.controller('UserListController', function($scope, users, $state, context) {
+.controller('UserListController', function ($scope, users, $state, context) {
     $scope.people = users;
 
     if ($scope.people.length && $state.current.name === 'main.people') {

@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, ProjectsService, DiscussionsService, UsersService, context) {
+    function controller($scope, $state, DiscussionsService, UsersService, context) {
         DiscussionsService.getAll().then(function(result) {
             $scope.discussions = result;
         });
@@ -39,7 +39,7 @@ directive('icuSidepane', function() {
         controller: controller,
         templateUrl: '/icu/components/sidepane/sidepane.html',
         scope: {
-            projects: '=',
+            projects: '='
         }
     };
 });
