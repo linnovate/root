@@ -29,7 +29,8 @@ angular.module('mean.icu.ui.displayby', [])
         scope: {
             projects: '=',
             discussions: '=',
-            people: '='
+            people: '=',
+            icuDisplayBy: '='
         },
         templateUrl: '/icu/components/display-by/display-by.html',
         controller: controller

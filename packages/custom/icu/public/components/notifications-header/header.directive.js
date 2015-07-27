@@ -45,19 +45,10 @@ angular.module('mean.icu.ui.notificationsheader', [])
             });
         };
 
-        $scope.createDiscussion = function () {
-            var discussion = {
-                name: 'New discussion'
-            };
-
-            DiscussionsService.create(discussion).then(function (result) {
-                context.switchTo('discussion', result._id).then(function (newContext) {
-                    $state.go('main.tasks.byentity', {
-                        id: result._id,
-                        entity: newContext.entityName,
-                        entityId: newContext.entityId
-                    }, {reload: true});
-                });
+        $scope.createDiscussion = function() {
+            ngDialog.open({
+                template: '/icu/components/discussion-create/discussion-create.html',
+                controller: 'DiscussionCreateController'
             });
         };
     }

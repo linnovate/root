@@ -3,7 +3,8 @@
 angular.module('mean.icu').service('context', function($injector, $q) {
     var serviceMap = {
         project: 'ProjectsService',
-        discussion: 'DiscussionsService'
+        discussion: 'DiscussionsService',
+        user: 'UsersService'
     };
 
     var mainMap = {

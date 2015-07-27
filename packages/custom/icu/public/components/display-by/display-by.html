@@ -1,6 +1,7 @@
 <section class="display-by">
+
     <p class="intro">Display {{context.main}} by:</p>
-    <div class="list projects" ng-if="projects">
+    <div class="list projects" ng-if="projects && (icuDisplayBy.indexOf('projects'))>-1">
         <p ng-click="visible.project = !visible.project" class="title">Projects</p>
         <ul ng-if="visible.project">
             <li data-ng-repeat="project in projects"
@@ -14,7 +15,7 @@
         </ul>
     </div>
 
-    <div class="list discussions" ng-if="discussions">
+    <div class="list discussions" ng-if="discussions && (icuDisplayBy.indexOf('discussions'))>-1">
         <p ng-click="visible.disscusion = !visible.disscusion" class="title">Discussions</p>
         <ul ng-if="visible.disscusion">
             <li data-ng-repeat="discussion in discussions"
@@ -27,10 +28,11 @@
         </ul>
     </div>
 
-    <div class="list people" ng-if="people">
+    <div class="list people" ng-if="people && (icuDisplayBy.indexOf('people'))>-1">
         <p ng-click="visible.user = !visible.user" class="title">People</p>
         <ul ng-if="visible.user">
-            <li data-ng-repeat="user in people">
+            <li data-ng-repeat="user in people"
+                data-ng-click="switchTo('user', user._id)">
                 <a href data-ng-link="main.users.details({id: user._id})">
                     <div class="avatar"></div>
                     <span class="name">{{user.name}}</span>

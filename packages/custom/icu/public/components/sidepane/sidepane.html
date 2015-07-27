@@ -8,7 +8,7 @@
                 data-ui-sref="{{item.state}}"
                 data-ng-class="{ 'active': isCurrentState(item) }">
                 <div class="icon">
-                    <img ng-src="{{item.icon}}"></img>
+                    <img ng-src="{{item.icon}}"/>
                 </div>
                 <div class="item-name">
                     <span>{{item.name | uppercase}}</span>
@@ -20,10 +20,11 @@
             </div>
             <div class="display-by"
                  ng-if="isCurrentState(item)"
-                 icu-display-by
+                 icu-display-by="item.display"
                  people="people"
                  projects="projects"
-                 discussions="discussions"></div>
+                 discussions="discussions">
+            </div>
         </li>
     </ul>
 </nav>
