@@ -1,5 +1,5 @@
 $add-update-height: 250px;
-$list-height: calc(100% - #{ $add-update-height });
+$list-height: calc(100% - #{$add-update-height});
 
 .tab-content {
     .activities {
@@ -90,7 +90,7 @@ $list-height: calc(100% - #{ $add-update-height });
                     @include ellipse(12px);
                     @include button;
                     background-color: $orange;
-                    box-shadow: 0px 3px 0px 0px $dark-orange;
+                    box-shadow: 0 3px 0 0 $dark-orange;
                     color: white;
 
                     float: right;

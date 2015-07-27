@@ -5,7 +5,7 @@ angular.module('mean.icu.ui.profile', [])
     $scope.me = me;
 
     $scope.uploadAvatar = function(files) {
-        if (files) {
+        if (files.length) {
             var file = files[0];
             UsersService.updateAvatar(file);
         }

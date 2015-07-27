@@ -78,6 +78,7 @@ ICU.register(function (app, auth, database) {
         'mean.icu.ui.tabs',
         'mean.icu.ui.rows',
         'mean.icu.ui.changecontent',
+        'mean.icu.ui.avatar',
         'mean.icu.data.activitiesservice',
         'mean.icu.data.usersservice',
         'mean.icu.data.notificationsservice',
@@ -85,7 +86,7 @@ ICU.register(function (app, auth, database) {
         'mean.icu.data.discussionsservice',
         'mean.icu.data.tasksservice',
         'mean.icu.data.settingsservice',
-        'mean.icu.data.constants',
+        'mean.icu.data.constants'
     ]);
 
     ICU.settings({

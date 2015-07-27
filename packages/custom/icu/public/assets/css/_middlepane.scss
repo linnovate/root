@@ -114,7 +114,7 @@
 
         .list, .calendar {
             @include button;
-            margin: -3px;
+            margin: -2px;
             padding: 0;
             height: 26px;
             width: 37px;
@@ -124,7 +124,7 @@
         .list {
             border-top-left-radius: 13px;
             border-bottom-left-radius: 13px;
-
+            border-color: $dark-grey;
             background: url('/icu/assets/img/list.png') no-repeat center center;
             background-color: $dark-grey;
         }
