@@ -1,6 +1,6 @@
 <div class="task-list">
     <header class="title">
-        Tasks from {{currentContext.entityName}} <span>"Project Review 14.4"<span>
+        Tasks from {{currentContext.entityName}} <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
     </header>
     <div class="filters">
         <div class="left-wrapper">
