@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskcreate', [])
-.controller('TaskCreateController', function($scope, projects, TasksService, $state) {
+.controller('TaskCreateController', function ($scope, projects, TasksService, $state) {
     $scope.projects = projects;
     $scope.task = {};
 
@@ -9,13 +9,17 @@ angular.module('mean.icu.ui.taskcreate', [])
         $scope.task.project = _($scope.projects).first()._id;
     }
 
-    $scope.create = function() {
+    $scope.create = function () {
         var task = angular.copy($scope.task);
         task.tags = task.tags.split(' ');
         task.due = moment(task.due).toDate();
 
-        TasksService.create(task).then(function(result) {
-            $state.go('main.tasks.byentity.details', { id: result._id, entity: $scope.currentContext.entityName, entityId: $scope.currentContext.entityId }, { reload: true });
+        TasksService.create(task).then(function (result) {
+            $state.go('main.tasks.byentity.details', {
+                id: result._id,
+                entity: $scope.currentContext.entityName,
+                entityId: $scope.currentContext.entityId
+            }, {reload: true});
         });
     };
 });

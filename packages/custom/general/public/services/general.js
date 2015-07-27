@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.general').factory('General', [
-  function() {
+  function () {
     return {
       name: 'general'
     };
