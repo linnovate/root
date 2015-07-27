@@ -44,8 +44,19 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getByDiscussionId(id) {
-        return $http.get(ApiUri + '/discussions/' + id + EntityPrefix).then(function(result) {
-            return result.data;
+        return ProjectsService.getAll().then(function(projects) {
+            var projectsObj = {};
+            for (var i = 0; i < projects.length; i++) {
+                projectsObj[projects[i]._id] = projects[i];
+            }
+            return $http.get(ApiUri + '/discussions/' + id + '/tasks').then(function(tasksResult) {
+                var tasks = tasksResult.data;
+
+                return tasks.map(function(task) {
+                    task.project = projectsObj[task.project];
+                    return task;
+                });
+            });
         });
     }
 
