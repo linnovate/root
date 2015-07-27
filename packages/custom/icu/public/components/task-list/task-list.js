@@ -1,14 +1,8 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist')
-.controller('TaskListController', function($scope, $state, tasks, TasksService, ProjectsService) {
+.controller('TaskListController', function($scope, $state, tasks, TasksService) {
     $scope.tasks = tasks;
-
-    _($scope.tasks).each(function(task) {
-        ProjectsService.getById(task.project).then(function(result) {
-            task.project = result;
-        });
-    });
 
     $scope.create = function() {
         var task = {
@@ -16,11 +10,10 @@ angular.module('mean.icu.ui.tasklist')
             description: 'Task description',
             project: $scope.currentContext.entityId,
             status: 'Received'
-        }
+        };
 
         TasksService.create(task).then(function(result) {
             $state.go('main.tasks.byentity.details', {
-                id: result._id,
                 entity: $scope.currentContext.entityName,
                 entityId: $scope.currentContext.entityId
             }, { reload: true });

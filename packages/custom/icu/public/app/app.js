@@ -1,8 +1,6 @@
 'use strict';
 
 var generateStateByEntity= function(main) {
-
-
   var capitalize = function(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -14,6 +12,7 @@ var generateStateByEntity= function(main) {
     return context.switchTo($stateParams.entity, $stateParams.entityId).then(function(newContext) {
       var entityName = newContext.entityName;
       var getFn = 'getBy' + capitalize(entityName) + 'Id';
+
       return service[getFn](newContext.entityId);
     });
   }];
@@ -273,6 +272,23 @@ angular.module('mean.icu').config([
                             return UsersService.getAll();
                         }
                     }
+                }
+            }
+        })
+        .state('main.search', {
+            url: '/search/:query',
+            views: {
+                'middlepane@main': {
+                    templateUrl: '/icu/components/search-list/search-list.html',
+                    controller: 'SearchListController',
+                    resolve: {
+                        results: function($stateParams) {
+                            return SearchService.find($stateParams.query);
+                        }
+                    }
+                },
+                'detailspane@main': {
+                    templateUrl: '/icu/components/search-details/no-results.html'
                 }
             }
         });
