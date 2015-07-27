@@ -9,7 +9,7 @@ angular.module('mean.icu.ui.profile', [])
             var file = files[0];
             UsersService.updateAvatar(file);
         }
-    }
+    };
 
     $scope.editProfile = function(form) {
         UsersService.update($scope.me);

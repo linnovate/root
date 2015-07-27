@@ -29,6 +29,6 @@ angular.module('mean.icu.data.notificationsservice', [])
     }
 
     return {
-        getAll: getAll,
+        getAll: getAll
     };
 });

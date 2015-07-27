@@ -13,13 +13,13 @@ angular.module('mean.icu.ui.displayby', [])
                     entityId: newContext.entityId
                 });
             });
-        }
+        };
 
         $scope.visible = {
             project: false,
             discussion: false,
             user: false
-        }
+        };
 
         $scope.visible[$scope.context.entityName] = true;
     }

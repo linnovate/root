@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.changecontent', [])
-.directive('icuChangeContent', function($compile, $http, $templateCache) {
+.directive('icuChangeContent', function ($compile, $http, $templateCache) {
     var currentTemplateIndex = 0;
 
     function compileTemplate($scope, $element, template) {
@@ -21,7 +21,7 @@ angular.module('mean.icu.ui.changecontent', [])
         if (template) {
             compileTemplate($scope, $element, template);
         } else {
-            $http.get(templateUrl).then(function(result) {
+            $http.get(templateUrl).then(function (result) {
                 compileTemplate($scope, $element, result.data);
                 $templateCache.put(templateUrl, result.data);
             });
@@ -29,10 +29,10 @@ angular.module('mean.icu.ui.changecontent', [])
     }
 
     function controller($scope, $element) {
-        $scope.changeContent = function() {
+        $scope.changeContent = function () {
             currentTemplateIndex = (currentTemplateIndex + 1) % $scope.templates.length;
             loadTemplate($scope, $element);
-        }
+        };
     }
 
     function link($scope, $element) {

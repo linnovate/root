@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.discussions').factory('Discussions', [
-  function() {
+  function () {
     return {
       name: 'discussions'
     };

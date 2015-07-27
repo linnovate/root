@@ -6,5 +6,5 @@ angular.module('mean.icu.ui.register', [])
         UsersService.register(credentials).then(function() {
             $state.go('main.tasks');
         });
-    }
+    };
 });
