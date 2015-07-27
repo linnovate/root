@@ -12,6 +12,6 @@ angular.module('mean.icu.ui.membersfooter', [])
             members: '='
         },
         controller: controller,
-        templateUrl: '/icu/components/members-footer/members-footer.html',
+        templateUrl: '/icu/components/members-footer/members-footer.html'
     };
 });

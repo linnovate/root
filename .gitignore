@@ -65,7 +65,7 @@ modules/public/
 modules/views/
 /public/build/
 /packages/contrib/
-packages/core/**/public/assets/lib/
+packages/**/public/assets/lib/
 
 # --------------------
 # vim Files

@@ -26,7 +26,7 @@ angular.module('mean.icu.data.tasksservice', [])
         return getAll().then(function(result) {
             return _(result).filter(function(task) {
                 return task.creator._id === id;
-            })
+            });
         });
     }
 
@@ -85,7 +85,7 @@ angular.module('mean.icu.data.tasksservice', [])
         getById: getById,
         getByUserId: getByUserId,
         getByProjectId: getByProjectId,
-        getByDiscussionId: getByDiscussionId, 
+        getByDiscussionId: getByDiscussionId,
         create: create,
         update: update,
         remove: remove,
