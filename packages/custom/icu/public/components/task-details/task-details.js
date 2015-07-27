@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskdetails', [])
-.controller('TaskDetailsController', function($scope, users, task, tags, project, $state, TasksService) {
+.controller('TaskDetailsController', function($scope, users, task, tags, project, $state, TasksService, context) {
     $scope.people = users;
     $scope.task = task;
     $scope.tags = tags;
@@ -44,6 +44,8 @@ angular.module('mean.icu.ui.taskdetails', [])
     }
 
     $scope.update = function(task) {
+        if (context.entityName === 'discussion')
+            task.discussion = context.entityId;
         TasksService.update(task).then(function() {
             $state.reload();
         });
