@@ -1,4 +1,4 @@
-$tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height } - #{ $header-height });
+$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$header-height});
 
 .task-details {
     .page-content {
@@ -25,7 +25,7 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
             }
 
             .user {
-                width: calc((100% - #{ $header-height }) * 0.25);
+                width: calc((100% - #{$header-height}) * 0.25);
                 height: $header-height;
                 position: relative;
                 float: left;
@@ -36,6 +36,11 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
                     background-color: $green;
                     border-radius: 15px;
                     display: inline-block;
+                    margin: 0 7px;
+                    float: left;
+                    img.image {
+                        margin-top: -8px;
+                    }
                 }
                 .summary-content {
                     display: inline-block;
@@ -54,7 +59,7 @@ $tab-content-height: calc(100% - #{ $description-height } - #{ $switcher-height 
             }
 
             .due, .status, .tags {
-                width: calc((100% - #{ $header-height }) * 0.25);
+                width: calc((100% - #{$header-height}) * 0.25);
 
                 .summary-content {
                     position: absolute;
