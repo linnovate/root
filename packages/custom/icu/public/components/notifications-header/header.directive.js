@@ -22,19 +22,9 @@ angular.module('mean.icu.ui.notificationsheader', [])
         };
 
         $scope.createTask = function () {
-            var task = {
-                title: 'New task',
-                description: 'Task description',
-                project: $scope.context.entityId,
-                status: 'Received'
-            };
-
-            TasksService.create(task).then(function (result) {
-                $state.go('main.tasks.byentity.details', {
-                    id: result._id,
-                    entity: $scope.context.entityName,
-                    entityId: $scope.context.entityId
-                }, {reload: true});
+            ngDialog.open({
+                template: '/icu/components/task-create/task-create.html',
+                controller: 'TaskCreateController'
             });
         };
 
