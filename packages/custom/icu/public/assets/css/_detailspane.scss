@@ -1,8 +1,8 @@
 $page-height: 100vh;
-$content-height: calc(#{ $page-height } - 2 * #{ $header-height });
+$content-height: calc(#{$page-height} - 2 * #{$header-height});
 $description-height: 30%;
 $switcher-height: 40px;
-$tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $switcher-height });
+$tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switcher-height});
 
 .detailspane {
     width: 50%;
@@ -66,7 +66,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
 
         .last-notification {
             float: left;
-            width: calc(100% - 5 * #{ $header-height });
+            width: calc(100% - 5 * #{$header-height});
             height: $header-height;
 
             @include notification;
@@ -75,7 +75,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
         .all-notifications {
             border: 1px solid $light-grey1;
             position: absolute;
-            width: calc(100% - 3 * #{ $header-height });
+            width: calc(100% - 3 * #{$header-height});
             left: $header-height;
             margin-top: $header-height;
             z-index: 1001;
@@ -141,7 +141,7 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
         }
 
         .user-menu {
-            button {
+            .avatar {
                 @include button;
                 @include circle($header-height / 2);
 
@@ -149,13 +149,15 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
                 width: $header-height * 0.75;
                 height: ($header-height * 0.75) - 1;
                 margin: $header-height * 0.125;
+                font-size: 30px;
+                cursor: pointer;
             }
         }
 
         .add-menu, .user-menu {
             float: left;
             display: inline-block;
-            width: $header-height ;
+            width: $header-height;
             height: $header-height - 1;
 
             .menu-items {
@@ -202,7 +204,6 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
             height: $switcher-height;
             margin: 0 30px;
             border-bottom: 1px solid $light-grey1;
-            height: 40px;
 
             .tab {
                 @include button;
@@ -229,20 +230,18 @@ $tab-content-height: calc(#{ $content-height } - #{ $description-height } - #{ $
     .footer {
         height: $header-height;
         border-top: 1px solid $light-grey1;
+        padding: 0 10px;
 
         $avatar-margin: 12px;
 
-        .avatar, .add {
+        .add {
             @include circle(17px);
             @include button;
 
             padding: 0;
-            margin: 0;
-
-            color: white;
-
             margin: $avatar-margin - 1 $avatar-margin;
 
+            color: white;
             font-size: 20px;
         }
 

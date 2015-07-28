@@ -15,6 +15,10 @@ angular.module('mean.icu.ui.notificationsheader', [])
         $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
         $scope.context = context;
 
+        UsersService.getMe().then(function (me) {
+            $scope.me = me;
+        });
+
         $scope.logout = function () {
             UsersService.logout().then(function () {
                 $state.go('login');

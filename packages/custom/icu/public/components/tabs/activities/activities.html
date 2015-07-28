@@ -2,7 +2,7 @@
     <div class="activities-list">
         <div data-ng-repeat="activity in activities" class="activity">
             <div class="title">
-                <div class="avatar"></div>
+                <div icu-avatar user=""></div>
                 <span>{{activity.title}}</span>
             </div>
             <div class="description">
@@ -18,9 +18,9 @@
         </div>
     </div>
     <div class="add-update">
-        <div class="avatar"></div>
+        <div icu-avatar user=""></div>
         <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save(addupdateform)">
-            <textarea ng-model="activity.title" required placeholder="type update here"></textarea>
+            <textarea ng-model="activity.title" required placeholder="Type update here"></textarea>
             <div class="action-buttons">
                 <button class="attachment"></button>
                 <button type="submit" class="save">Add</button>
