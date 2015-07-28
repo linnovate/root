@@ -245,9 +245,43 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
             font-size: 20px;
         }
 
-        .avatar {
-            background-color: $green;
-            float: left;
+        .delete-wrapper {
+            position: relative;
+
+            &:hover {
+
+                .delete {
+                    display: block;
+                    position: absolute;
+                    width: 19px;
+                    height: 19px;
+                    background-color: grey;
+                    border-radius: 10px;
+                    border: 2px solid white;
+                    top: 3px;
+                    color: white;
+                    text-align: center;
+                    cursor: pointer;
+                    i {
+                        position: absolute;
+                        left: 2px;
+                    }
+                }
+
+                .avatar {
+                    border: 2px solid white;
+                }
+            }
+
+            .delete {
+                display: none;
+            }
+
+            .avatar {
+                background-color: $green;
+                float: left;
+            }
+
         }
 
         .add {

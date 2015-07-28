@@ -1,4 +1,7 @@
 <div class="footer">
-    <div icu-avatar data-ng-repeat="member in members" user="member"></div>
+    <div class="delete-wrapper" data-ng-repeat="member in members">
+        <div class="delete" ng-click="deleteMember(member)"><i class="fa fa-close"></i></div>
+        <div icu-avatar user="member"></div>
+    </div>
     <button class="add"><i class="fa fa-plus"></i></button>
 </div>
