@@ -1,25 +1,40 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskcreate', [])
-.controller('TaskCreateController', function ($scope, projects, TasksService, $state) {
-    $scope.projects = projects;
-    $scope.task = {};
+    .controller('TaskCreateController', function($scope, ProjectsService, TasksService, $state, context) {
 
-    if ($scope.projects.length) {
-        $scope.task.project = _($scope.projects).first()._id;
-    }
+        $scope.task = {};
+        if (context.entityName === 'project') $scope.task.project = context.entityId;
+        else if (context.entityName === 'discussion') $scope.task.discussion = context.entityId;
 
-    $scope.create = function () {
-        var task = angular.copy($scope.task);
-        task.tags = task.tags.split(' ');
-        task.due = moment(task.due).toDate();
-
-        TasksService.create(task).then(function (result) {
-            $state.go('main.tasks.byentity.details', {
-                id: result._id,
-                entity: $scope.currentContext.entityName,
-                entityId: $scope.currentContext.entityId
-            }, {reload: true});
+        ProjectsService.getAll().then(function(result) {
+            $scope.projects = result;
         });
-    };
-});
+
+        var goToDetails = function(id, newContext) {
+            $state.go('main.tasks.byentity.details', {
+                id: id,
+                entity: newContext.entityName,
+                entityId: newContext.entityId
+            }, {
+                reload: true
+            });
+        };
+
+        $scope.create = function() {
+            TasksService.create($scope.task).then(function(result) {
+                if (result._id) {
+                    $scope.closeThisDialog();
+
+                    if (context.entityName === 'project' && context.entityId !== $scope.task.project)
+
+                        context.switchTo('project', $scope.task.project).then(function(newContext) {
+                            goToDetails(result._id, newContext);
+                        });
+                    else
+                        goToDetails(result._id, context);
+                }
+
+            });
+        };
+    });
