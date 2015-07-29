@@ -53,15 +53,4 @@ module.exports = function(discussions, app, auth, database) {
           res.send(data);
         });
       });
-
-  app.route('/api/discussions/:discussionId/tasks')
-      .get(function(req, res) {
-          Discussion.get({
-              param: req.params.discussionId + '/tasks',
-              data: req.body,
-              headers: req.headers
-          }, function(data) {
-              res.send(data);
-          });
-      });
 };

@@ -60,6 +60,12 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function search(term) {
+        return $http.get(ApiUri + '/search?term='+ term +'&index=task').then(function(result) {
+            return result.data;
+        });
+    }
+
     function create(task) {
         return $http.post(ApiUri + EntityPrefix, task).then(function(result) {
             return result.data;
@@ -97,6 +103,7 @@ angular.module('mean.icu.data.tasksservice', [])
         getByUserId: getByUserId,
         getByProjectId: getByProjectId,
         getByDiscussionId: getByDiscussionId,
+        search: search,
         create: create,
         update: update,
         remove: remove,
