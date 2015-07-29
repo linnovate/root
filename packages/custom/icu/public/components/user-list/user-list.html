@@ -1,6 +1,6 @@
 <div class="user-list">
     <header class="title">
-        People from <span>"Project Review 14.4"<span>
+        People from {{currentContext.entityName}} <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
     </header>
     <div class="filters">
         <button class="favorites"><i class="fa fa-star"></i></button>

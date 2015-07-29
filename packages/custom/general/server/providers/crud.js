@@ -133,7 +133,14 @@ class Discussion extends Crud {
 	}
 }
 
+class User extends Crud {
+	constructor(cmd) {
+		super(cmd);
+	}
+}
+
 exports.Crud = Crud;
 exports.Project = Project;
 exports.Task = Task;
 exports.Discussion = Discussion;
+exports.User = User;
