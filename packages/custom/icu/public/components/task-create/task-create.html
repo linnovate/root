@@ -1,5 +1,5 @@
 <div class="task-create">
-    Task creation
+    Create new task
     <form name="taskcreate" ng-submit="create()">
         <div class="form-group">
             <label>Title</label>
@@ -22,4 +22,28 @@
             <button class="btn" ng-click="closeThisDialog()">Cancel</button>
         </div>
     </form>
+
+    <div ng-show="task.discussion">
+        Or search for an existing task
+        <form name="tasksearch" ng-submit="search()">
+            <div class="form-group">
+                <input class="form-control" type="text" ng-model="term" >
+            </div>
+            <div class="buttons">
+                <button type="submit" class="btn">Search</button>
+            </div>
+            <div class="list-table">
+                <table class="tasks">
+                    <tbody>
+                        <tr data-ng-repeat="task in searchResults"
+                            icu-list-row
+                            data="{ task: task, index: $index }"
+                            type="task"
+                            ng-click="select(task)">
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
 </div>
