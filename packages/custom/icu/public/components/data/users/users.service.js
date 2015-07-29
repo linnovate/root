@@ -29,8 +29,14 @@ angular.module('mean.icu.data.usersservice', [])
     }
 
     function getByProjectId(id) {
-        return $http.get(ApiUri + EnitityPrefix + '/project/' + id).then(function(result) {
-            return result.data;
+        return $http.get(ApiUri + '/projects/' + id + '/users').then(function(usersResult) {
+            return usersResult.data;
+        });
+    }
+
+    function getByDiscussionId(id) {
+        return $http.get(ApiUri + '/discussions/' + id + '/users').then(function(usersResult) {
+            return usersResult.data;
         });
     }
 
@@ -77,6 +83,7 @@ angular.module('mean.icu.data.usersservice', [])
         getMe: getMe,
         getById: getById,
         getByProjectId: getByProjectId,
+        getByDiscussionId: getByDiscussionId,
         login: login,
         logout: logout,
         register: register,

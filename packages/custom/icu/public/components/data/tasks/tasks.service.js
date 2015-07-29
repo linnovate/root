@@ -23,10 +23,8 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getByUserId(id) {
-        return getAll().then(function(result) {
-            return _(result).filter(function(task) {
-                return task.creator._id === id;
-            });
+        return $http.get(ApiUri + '/users/' + id + '/tasks').then(function(tasksResult) {
+            return tasksResult.data;
         });
     }
 

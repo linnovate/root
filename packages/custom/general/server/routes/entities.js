@@ -5,9 +5,9 @@ var config = require('meanio').loadConfig(),
   request = require('request');
 
 module.exports = function(General, app, auth, database) {
-  app.get('/api/:entity/:id/tasks', function(req, res) {
+  app.get('/api/:entity/:id/:issue', function(req, res) {
     var objReq = {
-      uri: apiUri + '/api/' + req.params.entity + '/' + req.params.id + '/tasks',
+      uri: apiUri + '/api/' + req.params.entity + '/' + req.params.id + '/' +  req.params.issue,
       method: 'GET',
       headers: res.headers
     };

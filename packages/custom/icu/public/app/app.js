@@ -131,7 +131,7 @@ angular.module('mean.icu').config([
                     resolve: {
                         tasks: function (TasksService, $stateParams) {
                             //hack: temporary getAll
-                            return TasksService.getAll($stateParams.id);
+                            return TasksService.getByUserId($stateParams.id);
                         },
                         projects: function (ProjectsService, $stateParams) {
                             //hack: temporary getAll

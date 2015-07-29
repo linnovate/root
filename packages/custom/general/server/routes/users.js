@@ -7,6 +7,9 @@ var config = require('meanio').loadConfig(),
 
 module.exports = function(MeanUser, app, auth, database) {
 
+  var UserC = require('../providers/crud.js').User,
+    User = new UserC('/api/users');
+
   app.route('/api/signout')
     .get(function(req, res) {
       var objReq = {
@@ -66,16 +69,39 @@ module.exports = function(MeanUser, app, auth, database) {
 
   app.route('/api/users')
     .get(function(req, res) {
+      User.all({
+        data: req.body,
+        headers: req.headers
+      }, function(data) {
+        res.send(data);
+      });
+    });
 
-      var objReq = {
-        uri: apiUri + '/api/users',
-        method: 'get'
-      };
 
-      request(objReq, function(error, response, body) {
-        if (!error && response.statusCode === 200 && response.body.length) {
-          return res.json(JSON.parse(response.body));
-        }
+  app.route('/api/users/:id')
+    .get(function(req, res) {
+      User.get({
+        param: req.params.id,
+        headers: req.headers
+      }, function(data) {
+        res.send(data);
+      });
+    })
+    .put(function(req, res) {
+      User.update({
+        data: req.body,
+        param: req.params.id,
+        headers: req.headers
+      }, function(data) {
+        res.send(data);
+      });
+    })
+    .delete(function(req, res) {
+      User.delete({
+        param: req.params.id,
+        headers: req.headers
+      }, function(data) {
+        res.send(data);
       });
     });
 };
