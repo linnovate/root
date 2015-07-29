@@ -33,6 +33,68 @@ var generateStateByEntity = function (main) {
     };
 };
 
+function getTaskDetailsState(urlPrefix) {
+    if (!urlPrefix) {
+        urlPrefix = '';
+    }
+
+    return {
+        url: urlPrefix + '/:id',
+        views: {
+            'detailspane@main': {
+                templateUrl: '/icu/components/task-details/task-details.html',
+                controller: 'TaskDetailsController',
+                resolve: {
+                    task: function (TasksService, $stateParams) {
+                        return TasksService.getById($stateParams.id);
+                    },
+                    tags: function (TasksService) {
+                        return TasksService.getTags();
+                    },
+                    project: function (task, ProjectsService) {
+                        return ProjectsService.getById(task.project);
+                    },
+                    users: function (UsersService) {
+                        return UsersService.getAll();
+                    }
+                }
+            }
+        }
+    };
+}
+
+function getTaskDetailsActivitiesState() {
+    return {
+        url: '/activities',
+        views: {
+            tab: {
+                templateUrl: '/icu/components/task-details/tabs/activities/activities.html',
+                controller: 'TaskActivitiesController',
+                resolve: {
+                    task: function (TasksService, $stateParams) {
+                        return TasksService.getById($stateParams.id);
+                    },
+                    activities: function (ActivitiesService, $stateParams) {
+                        return ActivitiesService.getByTaskId($stateParams.id);
+                    }
+                }
+            }
+        }
+    };
+}
+
+function getTaskDetailsDocumentsState() {
+    return  {
+        url: '/documents',
+        views: {
+            tab: {
+                templateUrl: '/icu/components/task-details/tabs/documents/documents.html'
+            }
+        }
+    };
+}
+
+
 angular.module('mean.icu').config([
     '$meanStateProvider',
     function ($meanStateProvider) {
@@ -183,54 +245,9 @@ angular.module('mean.icu').config([
             }
         })
         .state('main.tasks.byentity', generateStateByEntity('task'))
-        .state('main.tasks.byentity.details', {
-            url: '/:id',
-            views: {
-                'detailspane@main': {
-                    templateUrl: '/icu/components/task-details/task-details.html',
-                    controller: 'TaskDetailsController',
-                    resolve: {
-                        task: function (TasksService, $stateParams) {
-                            return TasksService.getById($stateParams.id);
-                        },
-                        tags: function (TasksService) {
-                            return TasksService.getTags();
-                        },
-                        project: function (task, ProjectsService) {
-                            return ProjectsService.getById(task.project);
-                        },
-                        users: function (UsersService) {
-                            return UsersService.getAll();
-                        }
-                    }
-                }
-            }
-        })
-        .state('main.tasks.byentity.details.activities', {
-            url: '/activities',
-            views: {
-                tab: {
-                    templateUrl: '/icu/components/task-details/tabs/activities/activities.html',
-                    controller: 'TaskActivitiesController',
-                    resolve: {
-                        task: function (TasksService, $stateParams) {
-                            return TasksService.getById($stateParams.id);
-                        },
-                        activities: function (ActivitiesService, $stateParams) {
-                            return ActivitiesService.getByTaskId($stateParams.id);
-                        }
-                    }
-                }
-            }
-        })
-        .state('main.task.byentity.details.documents', {
-            url: '/documents',
-            views: {
-                tab: {
-                    templateUrl: '/icu/components/task-details/tabs/documents/documents.html'
-                }
-            }
-        })
+        .state('main.tasks.byentity.details', getTaskDetailsState())
+        .state('main.tasks.byentity.details.activities', getTaskDetailsActivitiesState())
+        .state('main.task.byentity.details.documents', getTaskDetailsDocumentsState())
         .state('main.discussions', {
             url: '/discussions',
             views: {
@@ -251,29 +268,7 @@ angular.module('mean.icu').config([
             }
         })
         .state('main.discussions.byentity', generateStateByEntity('discussion'))
-        .state('main.discussions.byentity.details', {
-            url: '/:id',
-            views: {
-                'detailspane@main': {
-                    templateUrl: '/icu/components/task-details/task-details.html',
-                    controller: 'TaskDetailsController',
-                    resolve: {
-                        task: function (TasksService, $stateParams) {
-                            return TasksService.getById($stateParams.id);
-                        },
-                        tags: function (TasksService) {
-                            return TasksService.getTags();
-                        },
-                        project: function (task, ProjectsService) {
-                            return ProjectsService.getById(task.project);
-                        },
-                        users: function (UsersService) {
-                            return UsersService.getAll();
-                        }
-                    }
-                }
-            }
-        })
+        .state('main.discussions.byentity.details', getTaskDetailsState())
         .state('main.search', {
             url: '/search/:query',
             views: {
@@ -281,16 +276,22 @@ angular.module('mean.icu').config([
                     templateUrl: '/icu/components/search-list/search-list.html',
                     controller: 'SearchListController',
                     resolve: {
-                        results: function ($stateParams) {
+                        results: function (SearchService, $stateParams) {
                             return SearchService.find($stateParams.query);
+                        },
+                        term: function($stateParams) {
+                            return $stateParams.query;
                         }
                     }
                 },
                 'detailspane@main': {
-                    templateUrl: '/icu/components/search-details/no-results.html'
+                    templateUrl: '/icu/components/search-list/no-results.html'
                 }
             }
-        });
+        })
+        .state('main.search.task', getTaskDetailsState('/task'))
+        .state('main.search.task.activities', getTaskDetailsActivitiesState())
+        .state('main.search.task.documents', getTaskDetailsDocumentsState());
     }
 ]);
 

@@ -3,8 +3,8 @@
             ng-class="{'open': !menu.isHidden, 'collapsed': menu.isHidden}"
             ng-click="menu.isHidden = !menu.isHidden">
     </button>
-    <div class="search">
-        <input type="text" placeholder="Search"></input>
+    <div class="search" data-ng-controller="SearchController">
+        <input type="text" placeholder="Search" ng-model="term" ng-change="search(term)"></input>
         <img src="/icu/assets/img/search.png"></img>
     </div>
 </header>

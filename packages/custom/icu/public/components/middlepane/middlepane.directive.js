@@ -12,6 +12,23 @@ angular.module('mean.icu.ui.middlepane', [])
   };
 });
 
+function SearchController($scope, $state, $stateParams) {
+    if ($stateParams.query) {
+        $scope.term = $stateParams.query;
+    }
+
+    function search(term) {
+        if (term) {
+            $state.go('main.search', { query: term });
+        }
+    }
+
+    $scope.search = _.debounce(search, 300);
+}
+
+angular.module('mean.icu.ui.search', [])
+.controller('SearchController', SearchController);
+
 function MiddlepaneController() {
 }
 
