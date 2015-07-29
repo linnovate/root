@@ -1,13 +1,17 @@
 'use strict';
 
 angular.module('mean.icu.ui.tabs')
-.directive('icuTabsActivities', function() {
+.directive('icuTabsActivities', function(UsersService) {
     function controller($scope) {
         $scope.activity = {};
 
         $scope.save = function(form) {
             console.log(form);
         };
+
+        UsersService.getMe().then(function (me) {
+            $scope.me = me;
+        });
     }
 
     return {
