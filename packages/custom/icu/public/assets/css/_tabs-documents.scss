@@ -1,0 +1,58 @@
+.tab-content {
+    .documents {
+        height: calc(100% - 10px);;
+        overflow: auto;
+
+        .document, .document-shifted {
+            border-bottom: 1px solid $light-grey1;
+            height: 65px;
+            overflow: auto;
+            padding: 12px 10px 0 0;
+            position: relative;
+
+            .icon {
+                height: 40px;
+                width: 30px;
+                float: left;
+                margin: 0 10px;
+                cursor: pointer;
+
+                &.doc {
+                    background: url('/icu/assets/img/attachment-type-doc.png') no-repeat center center;
+                    background-size: contain;
+                }
+            }
+
+            .text {
+                float: left;
+
+                .title {
+                    .user-name {
+                        font-size: 16px;
+                        font-weight: 700;
+                        line-height: 50px;
+                    }
+                }
+                .time {
+                    color: $light-grey4;
+                }
+            }
+
+            .more {
+                float: right;
+                color: $light-grey4;
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                transform: translate(0, -50%);
+                cursor: pointer;
+            }
+
+        }
+
+        .document-shifted {
+            padding-left: 40px;
+        }
+
+    }
+}

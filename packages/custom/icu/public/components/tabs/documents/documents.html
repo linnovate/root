@@ -1,0 +1,24 @@
+<div class="documents">
+    <div class="document" ng-repeat-start="document in documents">
+        <a href="{{document.path}}" target="window">
+            <div class="icon doc"></div>
+        </a>
+
+        <div class="text">
+            <div class="title"><b>{{document.name}}</b>, <span>1.3MB</span></div>
+            <div class="time">{{document.created | date:'medium'}}</div>
+        </div>
+        <div class="more" ng-click="trigger(document)" ng-if="document.versions.length">
+            Versions
+            <i class="fa"
+               ng-class="{'fa-chevron-right': !isOpen[document._id], 'fa-chevron-down': isOpen[document._id]}"></i>
+        </div>
+    </div>
+    <div class="document-shifted" ng-repeat-end ng-repeat="version in document.versions" ng-if="isOpen[document._id]">
+        <div class="icon doc" ng-click="download(version)"></div>
+        <div class="text">
+            <div class="title"><b>{{version.name}}</b>, <span>1.3MB</span></div>
+            <div class="time">{{version.created | date:'medium'}}</div>
+        </div>
+    </div>
+</div>

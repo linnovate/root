@@ -84,6 +84,7 @@ ICU.register(function (app, auth, database) {
         'mean.icu.ui.search',
         'mean.icu.ui.searchlist',
         'mean.icu.data.activitiesservice',
+        'mean.icu.data.documentsservice',
         'mean.icu.data.usersservice',
         'mean.icu.data.notificationsservice',
         'mean.icu.data.projectsservice',
