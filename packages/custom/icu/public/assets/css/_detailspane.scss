@@ -234,25 +234,95 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
 
         $avatar-margin: 12px;
 
-        .add {
-            @include circle(17px);
-            @include button;
+        .delete-wrapper {
+            position: relative;
+            width: 45px;
+            height: $header-height - 10px;
+            float: left;
 
-            padding: 0;
-            margin: $avatar-margin - 1 $avatar-margin;
+            &:hover {
 
-            color: white;
-            font-size: 20px;
+                .delete {
+                    display: block;
+                    position: absolute;
+                    width: 19px;
+                    height: 19px;
+                    background-color: grey;
+                    border-radius: 10px;
+                    border: 2px solid white;
+                    top: 3px;
+                    color: white;
+                    text-align: center;
+                    cursor: pointer;
+                    i {
+                        position: absolute;
+                        left: 2px;
+                    }
+                }
+
+                .avatar {
+                    border: 2px solid white;
+                }
+            }
+
+            .delete {
+                display: none;
+            }
+
+            .avatar {
+                background-color: $green;
+                float: left;
+            }
+
         }
 
-        .avatar {
-            background-color: $green;
+        .left-notification {
             float: left;
         }
 
-        .add {
-            background-color: $orange;
+        .right-notification {
             float: right;
         }
+
+        .left-notification, .right-notification {
+            color: $light-grey4;
+            margin-top: $header-height/3;
+        }
+
+        .add-member-container {
+            width: 30%;
+            float: right;
+            max-height: $header-height - 10px;
+
+            .new-member-input {
+                width: calc(100% - 60px);
+                float: left;
+                margin-top: $avatar-margin;
+
+                .ui-select-bootstrap .ui-select-choices-row > a {
+                    line-height: 35px;
+                    padding: 2px 7px;
+                }
+
+                .avatar {
+                    float: left;
+                    margin: 0;
+                    margin-right: 7px;
+                }
+            }
+
+            .add {
+                @include circle(17px);
+                @include button;
+
+                padding: 0;
+                margin: $avatar-margin - 1 $avatar-margin;
+                color: white;
+                font-size: 20px;
+                background-color: $orange;
+                float: right;
+            }
+        }
+
     }
 }
