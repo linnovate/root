@@ -1,7 +1,28 @@
 <div class="footer">
-    <div class="delete-wrapper" data-ng-repeat="member in members">
+    <div class="delete-wrapper" data-ng-repeat="member in entity.watchers" ng-if="entity.watchers.length">
         <div class="delete" ng-click="deleteMember(member)"><i class="fa fa-close"></i></div>
         <div icu-avatar user="member"></div>
     </div>
-    <button class="add"><i class="fa fa-plus"></i></button>
+
+    <div ng-if="!entity.watchers.length" class="left-notification">
+        No watchers
+    </div>
+
+    <div class="add-member-container">
+        <div class="new-member-input" ng-if="showSelect">
+            <ui-select ng-model="member" on-select="addMember(member)" autofocus>
+                <ui-select-match placeholder="{{notAssigned.length ? 'Select members' : 'All users are watching'}}">
+                    {{$item}}
+                </ui-select-match>
+                <ui-select-choices repeat="user in notAssigned | filter: {name: $select.search}">
+                    <div icu-avatar user="user"></div>
+                    <span>{{user.name}}</span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+
+        <button class="add" ng-click="triggerSelect()">
+            <i class="fa fa-plus"></i>
+        </button>
+    </div>
 </div>
