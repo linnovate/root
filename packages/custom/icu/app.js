@@ -71,6 +71,8 @@ ICU.register(function (app, auth, database) {
         'mean.icu.ui.tasklist',
         'mean.icu.ui.taskdetails',
         'mean.icu.ui.taskcreate',
+        'mean.icu.ui.projectlist',
+        'mean.icu.ui.projectdetails',
         'mean.icu.ui.projectcreate',
         'mean.icu.ui.discussioncreate',
         'mean.icu.ui.notificationsheader',

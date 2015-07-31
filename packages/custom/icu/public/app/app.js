@@ -63,6 +63,48 @@ function getTaskDetailsState(urlPrefix) {
     };
 }
 
+function getProjectDetailsState(urlPrefix) {
+    if (!urlPrefix) {
+        urlPrefix = '';
+    }
+
+    return {
+        url: urlPrefix + '/:id',
+        views: {
+            'detailspane@main': {
+                templateUrl: '/icu/components/project-details/project-details.html',
+                controller: 'ProjectDetailsController',
+                resolve: {
+                    project: function ($stateParams, ProjectsService) {
+                        return ProjectsService.getById($stateParams.id);
+                    }
+                }
+            }
+        }
+    };
+}
+
+function getDiscussionDetailsState(urlPrefix) {
+    if (!urlPrefix) {
+        urlPrefix = '';
+    }
+
+    return {
+        url: urlPrefix + '/:id',
+        views: {
+            'detailspane@main': {
+                templateUrl: '/icu/components/discussion-details/discussion-details.html',
+                //controller: 'ProjectDetailsController',
+                resolve: {
+                    discussion: function ($stateParams, DiscussionsService) {
+                        return DiscussionsService.getById($stateParams.id);
+                    }
+                }
+            }
+        }
+    };
+}
+
 function getTaskDetailsActivitiesState() {
     return {
         url: '/activities',
@@ -130,6 +172,12 @@ angular.module('mean.icu').config([
                 },
                 projects: function (ProjectsService) {
                     return ProjectsService.getAll();
+                },
+                discussions: function (DiscussionsService) {
+                    return DiscussionsService.getAll();
+                },
+                people: function (UsersService) {
+                    return UsersService.getAll();
                 }
             }
         })
@@ -193,7 +241,7 @@ angular.module('mean.icu').config([
                     resolve: {
                         tasks: function (TasksService, $stateParams) {
                             //hack: temporary getAll
-                            return TasksService.getByUserId($stateParams.id);
+                            return TasksService.getAll($stateParams.id);
                         },
                         projects: function (ProjectsService, $stateParams) {
                             //hack: temporary getAll
@@ -234,7 +282,7 @@ angular.module('mean.icu').config([
                     controller: function ($state, projects, context) {
                         if (projects.length && $state.current.name === 'main.tasks') {
                             return context.switchTo('project', projects[0]._id).then(function (newContext) {
-                                $state.go('main.tasks.byentity', {
+                                $state.go('.byentity', {
                                     entity: newContext.entityName,
                                     entityId: newContext.entityId
                                 });
@@ -247,7 +295,46 @@ angular.module('mean.icu').config([
         .state('main.tasks.byentity', generateStateByEntity('task'))
         .state('main.tasks.byentity.details', getTaskDetailsState())
         .state('main.tasks.byentity.details.activities', getTaskDetailsActivitiesState())
-        .state('main.task.byentity.details.documents', getTaskDetailsDocumentsState())
+        .state('main.tasks.byentity.details.documents', getTaskDetailsDocumentsState())
+        .state('main.projects', {
+            url: '/projects',
+            views: {
+                middlepane: {
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function ($state, discussions, context) {
+                        if (discussions.length && $state.current.name === 'main.projects') {
+                            return context.switchTo('discussion', discussions[0]._id).then(function (newContext) {
+                                $state.go('.byentity', {
+                                    entity: newContext.entityName,
+                                    entityId: newContext.entityId
+                                });
+                            });
+                        }
+                    }
+                }
+            },
+            resolve: {
+                discussions: function (DiscussionsService) {
+                    return DiscussionsService.getAll();
+                }
+            }
+        })
+        .state('main.projects.byentity', generateStateByEntity('project'))
+        .state('main.projects.byentity.details', {
+            url: '/:id',
+            views: {
+                'detailspane@main': {
+                    templateUrl: '/icu/components/project-details/project-details.html',
+                    controller: 'ProjectDetailsController',
+                    resolve: {
+                        project: function ($stateParams, ProjectsService) {
+                            return ProjectsService.getById($stateParams.id);
+                        }
+                    }
+                }
+            }
+        })
         .state('main.discussions', {
             url: '/discussions',
             views: {
@@ -257,7 +344,7 @@ angular.module('mean.icu').config([
                     controller: function ($state, projects, context) {
                         if (projects.length && $state.current.name === 'main.discussions') {
                             return context.switchTo('project', projects[0]._id).then(function (newContext) {
-                                $state.go('main.discussions.byentity', {
+                                $state.go('.byentity', {
                                     entity: newContext.entityName,
                                     entityId: newContext.entityId
                                 });
@@ -279,7 +366,7 @@ angular.module('mean.icu').config([
                         results: function (SearchService, $stateParams) {
                             return SearchService.find($stateParams.query);
                         },
-                        term: function($stateParams) {
+                        term: function ($stateParams) {
                             return $stateParams.query;
                         }
                     }
@@ -291,7 +378,9 @@ angular.module('mean.icu').config([
         })
         .state('main.search.task', getTaskDetailsState('/task'))
         .state('main.search.task.activities', getTaskDetailsActivitiesState())
-        .state('main.search.task.documents', getTaskDetailsDocumentsState());
+        .state('main.search.task.documents', getTaskDetailsDocumentsState())
+        .state('main.search.project', getProjectDetailsState('/project'))
+        .state('main.search.discussion', getDiscussionDetailsState('/discussion'));
     }
 ]);
 

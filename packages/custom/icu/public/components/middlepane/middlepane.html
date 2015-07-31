@@ -4,7 +4,12 @@
             ng-click="menu.isHidden = !menu.isHidden">
     </button>
     <div class="search" data-ng-controller="SearchController">
-        <input type="text" placeholder="Search" ng-model="term" ng-change="search(term)"></input>
+        <input type="text"
+            placeholder="Search"
+            ng-model="term"
+            ng-change="search(term)"
+            ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}">
+        </input>
         <img src="/icu/assets/img/search.png"></img>
     </div>
 </header>

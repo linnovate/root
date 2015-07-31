@@ -5,7 +5,7 @@
     <ul>
         <li data-ng-repeat="item in items">
             <div class="menu-item"
-                data-ui-sref="{{item.state}}"
+                data-ui-sref="{{'main.' + item.state}}"
                 data-ng-class="{ 'active': isCurrentState(item) }">
                 <div class="icon">
                     <img ng-src="{{item.icon}}"/>

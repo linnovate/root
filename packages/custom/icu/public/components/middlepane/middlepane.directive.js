@@ -12,18 +12,27 @@ angular.module('mean.icu.ui.middlepane', [])
   };
 });
 
-function SearchController($scope, $state, $stateParams) {
-    if ($stateParams.query) {
-        $scope.term = $stateParams.query;
-    }
+function SearchController($scope, $state, $stateParams, context) {
+    $scope.$on('$stateChangeSuccess', function($event, toState) {
+        if (toState.name.indexOf('main.search') !== 0) {
+            if ($stateParams.query) {
+                $scope.term = $stateParams.query;
+            } else {
+                $scope.term = '';
+            }
+        }
+    });
 
-    function search(term) {
+    $scope.search = function (term) {
         if (term) {
             $state.go('main.search', { query: term });
+        } else {
+            $state.go('main.' + context.main + '.byentity', {
+                entity: context.entityName,
+                entityId: context.entityId
+            });
         }
-    }
-
-    $scope.search = _.debounce(search, 300);
+    };
 }
 
 angular.module('mean.icu.ui.search', [])

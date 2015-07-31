@@ -10,6 +10,7 @@ angular.module('mean.icu').service('context', function($injector, $q) {
     var mainMap = {
         task: 'tasks',
         user: 'people',
+        project: 'projects',
         discussion: 'discussions'
     };
 
@@ -37,7 +38,26 @@ angular.module('mean.icu').service('context', function($injector, $q) {
         },
         setMain: function(main) {
             this.main = mainMap[main];
+        },
+        getContextFromState: function(state) {
+            var parts = state.name.split('.');
+
+            if (parts[0] === 'main') {
+                var reverseMainMap = _(mainMap).invert();
+                var main = 'task';
+
+                if (parts[1] !== 'search') {
+                    main = reverseMainMap[parts[1]];
+                }
+
+                var params = state.params;
+
+                return {
+                    main: main,
+                    entityName: params.entity,
+                    entityId: params.entityId
+                };
+            }
         }
     };
 });
-
