@@ -1,0 +1,15 @@
+<div class="project-list">
+    <div class="list-table">
+        <table class="projects">
+            <tbody>
+                <tr data-ng-repeat="project in projects"
+                    data-ui-sref-active="active"
+                    data-ui-sref="main.projects.details({id: project._id})"
+                    icu-list-row
+                    data="{ project: project, index: $index, drawArrow: drawArrow }"
+                    type="project">
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

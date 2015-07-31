@@ -4,7 +4,7 @@
     <div class="list projects" ng-if="projects && (icuDisplayBy.indexOf('projects'))>-1">
         <p ng-click="visible.project = !visible.project" class="title">Projects</p>
         <ul ng-if="visible.project">
-            <li data-ng-repeat="project in projects"
+            <li data-ng-repeat="project in projects | limitTo:3"
                 data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
                 data-ng-click="switchTo('project', project._id)">
                 <a href>
@@ -12,26 +12,28 @@
                 </a>
                 <div class="tag-color" ng-style="color={'background-color': '#' + '{{project.color}}'}"></div>
             </li>
+            <li ng-if="projects.length > 3" class="more">more...</li>
         </ul>
     </div>
 
     <div class="list discussions" ng-if="discussions && (icuDisplayBy.indexOf('discussions'))>-1">
-        <p ng-click="visible.disscusion = !visible.disscusion" class="title">Discussions</p>
-        <ul ng-if="visible.disscusion">
-            <li data-ng-repeat="discussion in discussions"
+        <p ng-click="visible.discussion = !visible.discussion" class="title">Discussions</p>
+        <ul ng-if="visible.discussion">
+            <li data-ng-repeat="discussion in discussions | limitTo:3"
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
                 <a href>
                     {{discussion.name}}
                 </a>
             </li>
+            <li ng-if="discussions.length > 3" class="more">more...</li>
         </ul>
     </div>
 
     <div class="list people" ng-if="people && (icuDisplayBy.indexOf('people'))>-1">
         <p ng-click="visible.user = !visible.user" class="title">People</p>
         <ul ng-if="visible.user">
-            <li data-ng-repeat="user in people"
+            <li data-ng-repeat="user in people | limitTo:3"
                 data-ng-click="switchTo('user', user._id)">
                 <a href data-ng-link="main.users.details({id: user._id})">
                     <div icu-avatar user="user"></div>
