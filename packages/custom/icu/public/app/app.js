@@ -130,7 +130,16 @@ function getTaskDetailsDocumentsState() {
         url: '/documents',
         views: {
             tab: {
-                templateUrl: '/icu/components/task-details/tabs/documents/documents.html'
+                templateUrl: '/icu/components/task-details/tabs/documents/documents.html',
+                controller: 'TaskDocumentsController',
+                resolve: {
+                    task: function (TasksService, $stateParams) {
+                        return TasksService.getById($stateParams.id);
+                    },
+                    documents: function (DocumentsService, $stateParams) {
+                        return DocumentsService.getAttachments($stateParams.id);
+                    }
+                }
             }
         }
     };

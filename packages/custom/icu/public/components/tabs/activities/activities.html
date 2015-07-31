@@ -2,27 +2,33 @@
     <div class="activities-list">
         <div data-ng-repeat="activity in activities" class="activity">
             <div class="title">
-                <div icu-avatar user=""></div>
-                <span>{{activity.title}}</span>
+                <div icu-avatar user="activity.user"></div>
+                <span class="user-name">{{activity.user.name}} added document to task</span>
             </div>
             <div class="description">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-                tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At
-                vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-                no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                {{activity.description}}
             </div>
             <div data-ng-repeat="attachment in activity.attachments" class="attachment">
                 <div class="icon {{attachment.type}}"></div>
-                <span class="name">{{attachment.title}}</span>
+                <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
             </div>
         </div>
     </div>
     <div class="add-update">
         <div icu-avatar user="me"></div>
-        <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save(addupdateform)">
-            <textarea ng-model="activity.title" required placeholder="Type update here"></textarea>
+        <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save()">
+            <textarea ng-model="activity.desciption" required placeholder="Type update here"></textarea>
+
+            <div data-ng-repeat="attachment in activity.attachments" class="attached-icons">
+                <div class="icon doc"></div>
+                <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
+            </div>
+
             <div class="action-buttons">
-                <button class="attachment"></button>
+                <button type="button" class="attachment"
+                        ngf-select
+                        ngf-change="upload($files)"
+                        ngf-multiple="false"></button>
                 <button type="submit" class="save">Add</button>
             </div>
         </form>
