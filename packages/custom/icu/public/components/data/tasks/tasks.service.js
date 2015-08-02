@@ -23,14 +23,14 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getByUserId(id) {
-        return $http.get(ApiUri + '/users/' + id + '/tasks').then(function (tasksResult) {
-            return tasksResult.data;
+        return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function(result) {
+            return result.data;
         });
     }
 
     function getByProjectId(id) {
-        return ProjectsService.getById(id).then(function (project) {
-            return $http.get(ApiUri + '/projects/' + id + '/tasks').then(function (tasksResult) {
+        return ProjectsService.getById(id).then(function(project) {
+            return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function(tasksResult) {
                 var tasks = tasksResult.data;
 
                 return tasks.map(function (task) {
@@ -42,17 +42,14 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getByDiscussionId(id) {
-        return ProjectsService.getAll().then(function (projects) {
-            var projectsObj = {};
-            for (var i = 0; i < projects.length; i += 1) {
-                projectsObj[projects[i]._id] = projects[i];
-            }
-            return $http.get(ApiUri + '/discussions/' + id + '/tasks').then(function (tasksResult) {
+        return ProjectsService.getAll().then(function(projects) {
+            return $http.get(ApiUri + '/discussions/' + id + EntityPrefix).then(function(tasksResult) {
                 var tasks = tasksResult.data;
-
-                return tasks.map(function (task) {
-                    task.project = projectsObj[task.project];
-                    return task;
+                return tasks.map(function (t) {
+                    t.project = _(projects).find(function (p) {
+                        return p._id === t.project;
+                    });
+                    return t;
                 });
             });
         });

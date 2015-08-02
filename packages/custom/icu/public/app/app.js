@@ -234,8 +234,8 @@ angular.module('mean.icu').config([
                     templateUrl: '/icu/components/user-details/tabs/projects/projects.html',
                     controller: 'UserProjectsController',
                     resolve: {
-                        projects: function (ProjectsService) {
-                            return ProjectsService.getAll();
+                        userProjects: function (ProjectsService, $stateParams) {
+                            return ProjectsService.getByUserId($stateParams.id);
                         }
                     }
                 }
@@ -249,12 +249,7 @@ angular.module('mean.icu').config([
                     controller: 'UserTasksController',
                     resolve: {
                         tasks: function (TasksService, $stateParams) {
-                            //hack: temporary getAll
-                            return TasksService.getAll($stateParams.id);
-                        },
-                        projects: function (ProjectsService, $stateParams) {
-                            //hack: temporary getAll
-                            return ProjectsService.getAll($stateParams.id);
+                            return TasksService.getByUserId($stateParams.id);
                         }
                     }
                 }
