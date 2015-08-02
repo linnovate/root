@@ -16,6 +16,12 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
+    function getByUserId(id) {
+        return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function(result) {
+            return result.data;
+        });
+    }
+
     function create(project) {
         return $http.post(ApiUri + EntityPrefix, project).then(function(result) {
             return result.data;
@@ -37,6 +43,7 @@ angular.module('mean.icu.data.projectsservice', [])
     return {
         getAll: getAll,
         getById: getById,
+        getByUserId: getByUserId,
         create: create,
         update: update,
         remove: remove

@@ -6,8 +6,8 @@
     </thead>
     <tbody>
         <tr data-ng-repeat="project in projects">
-            <td class="tag-column"><div class="tag {{project.color}}"></div></td>
-            <td class="name-column">{{project.name}}</td>
+            <td class="tag-column"><div class="tag {{project.color}}" ng-style="color={'background-color': '#' + '{{project.color}}'}"></div></td>
+            <td class="name-column">{{project.title}}</td>
             <td class="tasks-column">{{project.tasks}}</td>
         </tr>
     </tbody>
