@@ -71,6 +71,8 @@ ICU.register(function (app, auth, database) {
         'mean.icu.ui.tasklist',
         'mean.icu.ui.taskdetails',
         'mean.icu.ui.taskcreate',
+        'mean.icu.ui.projectlist',
+        'mean.icu.ui.projectdetails',
         'mean.icu.ui.projectcreate',
         'mean.icu.ui.discussioncreate',
         'mean.icu.ui.notificationsheader',
@@ -79,13 +81,17 @@ ICU.register(function (app, auth, database) {
         'mean.icu.ui.rows',
         'mean.icu.ui.changecontent',
         'mean.icu.ui.avatar',
+        'mean.icu.ui.search',
+        'mean.icu.ui.searchlist',
         'mean.icu.data.activitiesservice',
+        'mean.icu.data.documentsservice',
         'mean.icu.data.usersservice',
         'mean.icu.data.notificationsservice',
         'mean.icu.data.projectsservice',
         'mean.icu.data.discussionsservice',
         'mean.icu.data.tasksservice',
         'mean.icu.data.settingsservice',
+        'mean.icu.data.searchservice',
         'mean.icu.data.constants'
     ]);
 

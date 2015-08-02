@@ -79,7 +79,7 @@
                 }
 
                 .display-by {
-                    height: calc(100vh - 5 * #{ $header-height });
+                    height: calc(100vh - 5 * #{$header-height});
                     overflow-x: hidden;
                     overflow-y: auto;
                 }

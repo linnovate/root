@@ -1,23 +1,23 @@
 'use strict';
 
 angular.module('mean.icu.data.tasksservice', [])
-.service('TasksService', function(ApiUri, $http, ProjectsService) {
+.service('TasksService', function (ApiUri, $http, ProjectsService) {
     var EntityPrefix = '/tasks';
 
     function getAll() {
-        return $http.get(ApiUri + EntityPrefix).then(function(result) {
+        return $http.get(ApiUri + EntityPrefix).then(function (result) {
             return result.data;
         });
     }
 
     function getTags() {
-        return $http.get(ApiUri + EntityPrefix + '/tags').then(function(result) {
+        return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
             return result.data;
         });
     }
 
     function getById(id) {
-        return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+        return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
             return result.data;
         });
     }
@@ -33,7 +33,7 @@ angular.module('mean.icu.data.tasksservice', [])
             return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function(tasksResult) {
                 var tasks = tasksResult.data;
 
-                return tasks.map(function(task) {
+                return tasks.map(function (task) {
                     task.project = project;
                     return task;
                 });
@@ -56,37 +56,37 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function search(term) {
-        return $http.get(ApiUri + '/search?term='+ term +'&index=task').then(function(result) {
+        return $http.get(ApiUri + '/search?term=' + term + '&index=task').then(function (result) {
             return result.data;
         });
     }
 
     function create(task) {
-        return $http.post(ApiUri + EntityPrefix, task).then(function(result) {
+        return $http.post(ApiUri + EntityPrefix, task).then(function (result) {
             return result.data;
         });
     }
 
     function update(task) {
-        return $http.put(ApiUri + EntityPrefix + '/' + task._id, task).then(function(result) {
+        return $http.put(ApiUri + EntityPrefix + '/' + task._id, task).then(function (result) {
             return result.data;
         });
     }
 
     function star(task) {
-        return $http.patch(EntityPrefix + '/' + task._id, {star: !task.star}).then(function(result) {
+        return $http.patch(EntityPrefix + '/' + task._id, {star: !task.star}).then(function (result) {
             return result.data;
         });
     }
 
     function getStarred() {
-        return $http.get(EntityPrefix + '/starred').then(function(result) {
+        return $http.get(EntityPrefix + '/starred').then(function (result) {
             return result.data;
         });
     }
 
     function remove(id) {
-        return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+        return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
             return result.data;
         });
     }

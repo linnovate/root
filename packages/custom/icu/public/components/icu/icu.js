@@ -1,25 +1,36 @@
 'use strict';
 
-angular.module('mean.icu').controller('IcuController', function ($rootScope, $scope, me, $state, projects, context) {
+angular.module('mean.icu').controller('IcuController',
+    function ($rootScope,
+        $scope,
+        me,
+        $state,
+        projects,
+        discussions,
+        people,
+        context) {
     $scope.menu = {
         isHidden: false
     };
+
+    $scope.projects = projects;
+    $scope.discussions = discussions;
+    $scope.people = people;
 
     $scope.currentContext = context;
 
     context.setMain('task');
 
-    $scope.projects = projects;
-    if ($scope.projects.length && $state.current.name === 'main.tasks.byentity') {
+    var state = $state.current;
+    state.params = $state.params;
 
-        $scope.currentContext.entity = $scope.projects[0];
-        $scope.currentContext.entityName = 'project';
-        $scope.currentContext.entityId = $scope.projects[0]._id;
+    var restoredContext = context.getContextFromState(state);
 
-        $state.go('main.tasks.byentity', {
-            entity: $scope.currentContext.entityName,
-            entityId: $scope.currentContext.entityId
-        });
+    context.setMain(restoredContext.main);
+    if (restoredContext.entityName) {
+        context.switchTo(restoredContext.entityName, restoredContext.entityId);
+    } else {
+        context.switchTo('project', $scope.projects[0]._id);
     }
 
     if (!me) {
@@ -33,6 +44,8 @@ angular.module('mean.icu').controller('IcuController', function ($rootScope, $sc
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
         if (toState.name.indexOf('main.tasks') === 0) {
             context.setMain('task');
+        } else if (toState.name.indexOf('main.projects') === 0) {
+            context.setMain('project');
         } else if (toState.name.indexOf('main.discussions') === 0) {
             context.setMain('discussion');
         } else if (toState.name.indexOf('main.people') === 0) {

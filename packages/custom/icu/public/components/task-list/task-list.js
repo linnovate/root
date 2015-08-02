@@ -21,7 +21,7 @@ angular.module('mean.icu.ui.tasklist')
     };
 
     if ($scope.tasks.length && $state.current.name === 'main.tasks.byentity') {
-        $state.go('main.tasks.byentity.details', {
+        $state.go('.details', {
             id: $scope.tasks[0]._id,
             entity: $scope.currentContext.entityName,
             entityId: $scope.currentContext.entityId
