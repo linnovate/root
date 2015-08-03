@@ -18,7 +18,15 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function getById(id) {
         return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
-            return result.data;
+            var task = result.data;
+
+            return getStarred().then(function(starred) {
+                task.star = _(starred).any(function(s) {
+                    return s._id === task._id;
+                });
+
+                return task;
+            });
         });
     }
 
@@ -74,13 +82,13 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function star(task) {
-        return $http.patch(EntityPrefix + '/' + task._id, {star: !task.star}).then(function (result) {
+        return $http.patch(ApiUri + EntityPrefix + '/' + task._id + '/star', { star: !task.star }).then(function(result) {
             return result.data;
         });
     }
 
     function getStarred() {
-        return $http.get(EntityPrefix + '/starred').then(function (result) {
+        return $http.get(ApiUri + EntityPrefix + '/starred').then(function (result) {
             return result.data;
         });
     }
