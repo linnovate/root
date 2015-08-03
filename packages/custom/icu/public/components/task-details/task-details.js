@@ -43,9 +43,17 @@ angular.module('mean.icu.ui.taskdetails', [])
         }
     };
 
+    $scope.star = function (task) {
+        TasksService.star(task).then(function() {
+            $state.reload('main.tasks.byentity.details');
+        });
+    };
+
     $scope.update = function (task) {
-        if (context.entityName === 'discussion')
+        if (context.entityName === 'discussion') {
             task.discussion = context.entityId;
+        }
+
         TasksService.update(task).then(function() {
             $state.reload('main.tasks.byentity');
         });

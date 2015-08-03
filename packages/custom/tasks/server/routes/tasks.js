@@ -5,7 +5,10 @@
 module.exports = function(tasks, app, auth, database) {
 
     var TaskC = require('../../../general/server/providers/crud.js').Task,
-        Task = new TaskC('/api/tasks');
+        Task = new TaskC('/api/tasks'),
+        config = require('meanio').loadConfig(),
+        apiUri = config.api.uri,
+        request = require('request');
 
     app.route('/api/tasks')
 
@@ -64,5 +67,33 @@ module.exports = function(tasks, app, auth, database) {
                 res.send(data);
             })
         });
+
+    app.get('/api/tasks/starred', function (req, res) {
+        var objReq = {
+          uri: apiUri + '/api/tasks/starred',
+          method: 'GET',
+          headers: req.headers
+        };
+
+        request(objReq, function(error, response, body) {
+          if (!error && response.statusCode === 200 && response.body.length) {
+            return res.json(JSON.parse(response.body));
+          }
+        });
+    });
+
+    app.patch('/api/tasks/:id/star', function (req, res) {
+        var objReq = {
+          uri: apiUri + '/api/tasks/' + req.params.id + '/star',
+          method: 'PATCH',
+          headers: req.headers
+        };
+
+        request(objReq, function(error, response, body) {
+          if (!error && response.statusCode === 200 && response.body.length) {
+            return res.json(JSON.parse(response.body));
+          }
+        });
+    });
 }
 
