@@ -3,7 +3,7 @@
     <div class="page-content">
         <div class="summary">
             <div class="favorite">
-                <button><i class="fa fa-2x fa-star"></i></button>
+                <button ng-class="{ 'orange': task.star }" ng-click="star(task)"><i class="fa fa-2x fa-star"></i></button>
             </div>
             <div class="user">
                 <ui-select ng-model="task.assign" on-select="update(task)">

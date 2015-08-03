@@ -102,8 +102,11 @@
 
         .favorites {
             width: 26px;
-            color: $orange;
             font-size: 13px;
+
+            &.orange {
+                color: $orange;
+            }
         }
 
         .tasks {
