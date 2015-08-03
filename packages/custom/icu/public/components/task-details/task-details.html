@@ -6,7 +6,7 @@
                 <button ng-class="{ 'orange': task.star }" ng-click="star(task)"><i class="fa fa-2x fa-star"></i></button>
             </div>
             <div class="user">
-                <ui-select ng-model="task.assign" on-select="update(task)">
+                <ui-select ng-model="task.assign[0]" on-select="update(task)">
                     <ui-select-match placeholder="Select a person">
                         <div icu-avatar user="$select.selected"></div>
                         <span class="summary-content">{{$select.selected.name}}</span>
