@@ -26,6 +26,9 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
                     font-weight: 700;
                     line-height: 50px;
                 }
+                .activity-details {
+                    font-weight: 100;
+                }
             }
 
             .description {

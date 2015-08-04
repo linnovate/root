@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('mean.icu.data.activitiesservice', [])
-.service('ActivitiesService', function ($http) {
+.service('ActivitiesService', function (ApiUri, $http, UsersService) {
+    var EntityPrefix = '/updates';
+
     function getByUserId(id) {
         return [];
     }
@@ -11,47 +13,29 @@ angular.module('mean.icu.data.activitiesservice', [])
     }
 
     function getByTaskId(id) {
-        return [
-            {
-                description: 'My small description fo attached docs',
-                user: {
-                    name: 'Dan Doe'
-                },
-                attachments: [{
-                    type: 'doc',
-                    name: 'Meeting Summary'
-                }, {
-                    type: 'doc',
-                    name: 'Meeting Summary 2'
-                }]
-            }, {
-                description: 'John Smith say hello',
-                user: {
-                    name: 'John Doe'
-                },
-                attachments: [{
-                    type: 'doc',
-                    name: 'Meeting Summary'
-                }]
-            }, {
-                description: 'John Fox document\'s',
-                user: {
-                    name: 'Anna Smith'
-                },
-                attachments: [{
-                    type: 'doc',
-                    name: 'Meeting Summary'
-                }, {
-                    type: 'doc',
-                    name: 'Meeting Summary 2'
-                }]
-            }
-        ];
+        return UsersService.getAll().then(function(users) {
+            return $http.get(ApiUri + '/tasks/' + id + EntityPrefix).then(function(updatessResult) {
+                var updates = updatessResult.data;
+                return updates.map(function (u) {
+                    u.user = _(users).find(function (c) {
+                        return c._id === u.creator;
+                    });
+                    return u;
+                });
+            });
+        });
+    }
+
+    function create(update) {
+        return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
+            return result.data;
+        });
     }
 
     return {
         getByUserId: getByUserId,
         getByTaskId: getByTaskId,
-        getByProjectId: getByProjectId
+        getByProjectId: getByProjectId,
+        create: create
     };
 });

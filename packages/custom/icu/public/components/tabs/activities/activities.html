@@ -1,15 +1,16 @@
 <div class="activities">
     <div class="activities-list">
-        <div data-ng-repeat="activity in activities" class="activity">
+        <div data-ng-repeat="activity in activities | orderBy:'created'" class="activity">
             <div class="title">
                 <div icu-avatar user="activity.user"></div>
-                <span class="user-name">{{activity.user.name}} added document to task</span>
+                <span class="user-name">{{activity.user.name}}<span class="activity-details"> {{details[activity.type]}}</span></span>
+                <span class="activity-date">{{activity.created | date:"MM/dd/yyyy 'at' h:mma"}}</span>
             </div>
             <div class="description">
                 {{activity.description}}
             </div>
             <div data-ng-repeat="attachment in activity.attachments" class="attachment">
-                <div class="icon {{attachment.type}}"></div>
+                <div class="icon doc {{attachment.type}}"></div>
                 <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
             </div>
         </div>
@@ -17,9 +18,9 @@
     <div class="add-update">
         <div icu-avatar user="me"></div>
         <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save()">
-            <textarea ng-model="activity.desciption" required placeholder="Type update here"></textarea>
+            <textarea ng-model="activity.description" required placeholder="Type update here"></textarea>
 
-            <div data-ng-repeat="attachment in activity.attachments" class="attached-icons">
+            <div data-ng-repeat="attachment in attachments" class="attached-icons">
                 <div class="icon doc"></div>
                 <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
             </div>
