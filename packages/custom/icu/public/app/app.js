@@ -51,9 +51,6 @@ function getTaskDetailsState(urlPrefix) {
                     tags: function (TasksService) {
                         return TasksService.getTags();
                     },
-                    project: function (task, ProjectsService) {
-                        return ProjectsService.getById(task.project);
-                    },
                     users: function (UsersService) {
                         return UsersService.getAll();
                     }

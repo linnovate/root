@@ -3,11 +3,14 @@
     <div class="page-content">
         <div class="summary">
             <div class="favorite">
-                <button ng-class="{ 'orange': task.star }" ng-click="star(task)"><i class="fa fa-2x fa-star"></i></button>
+                <button ng-class="{ 'orange': task.star }" ng-click="star(task)"><i class="fa fa-star"></i></button>
             </div>
             <div class="user">
-                <ui-select ng-model="task.assign[0]" on-select="update(task)">
-                    <ui-select-match placeholder="Select a person">
+                <div class="no-assignee" ng-if="!task.assign">
+                    <div class="avatar-placeholder">Select assignee</div>
+                </div>
+                <ui-select ng-model="task.assign" on-select="update(task)">
+                    <ui-select-match>
                         <div icu-avatar user="$select.selected"></div>
                         <span class="summary-content">{{$select.selected.name}}</span>
                     </ui-select-match>
@@ -18,38 +21,59 @@
                 </ui-select>
             </div>
             <div class="due">
+                <div class="placeholder" ng-if="!task.due">Deadline</div>
                 <input ui-date="dueOptions" ng-model="task.due">
-                <!--<span class="summary-content">{{task.due | date:'dd.MM.yyyy' }}</span>-->
             </div>
             <div class="status {{task.status | lowercase}}">
-              <select ng-options="status for status in statuses" ng-model="task.status" ng-change="update(task)"></select>
-                <!--<span class="summary-content">{{task.status}}</span>-->
+                <ui-select ng-model="task.status" on-select="update(task)">
+                    <ui-select-match>
+                        <span>{{$select.selected}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="status as status in statuses| filter: $select.search">
+                        <span>{{status}}</span>
+                    </ui-select-choices>
+                </ui-select>
             </div>
             <div class="tags">
+                <div class="tag-wrap">
+                    <ui-select ng-model="task.project" on-select="update(task)">
+                        <ui-select-match placeholder="{{$select.selected.title}}">
+                            <div class="tag"
+                                 ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
+                                {{$select.selected.title}}
+                                <div class="delete" ng-click="deleteProject($event, task)">
+                                    <i class="fa fa-times"></i>
+                                </div>
+                            </div>
+
+                        </ui-select-match>
+                        <ui-select-choices repeat="project._id as project in projects| filter: $select.search">
+                            <div class="line">
+                                <span class="title">{{project.title}}</span>
+                                <!--<span class="add-btn-wrap"><span class="add-btn">Add</span></span>-->
+                            </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
         </div>
         <div class="description">
-            <div class="project">
-                <span class="tag"
-                      ng-style="color={'background-color': '#' + '{{task.project.color}}'}">
-                    {{task.project.title}}
-                </span>
-            </div>
             <div icu-change-content
-                templates="['/icu/components/task-details/task-title-read.html',
+                 templates="['/icu/components/task-details/task-title-read.html',
                 '/icu/components/task-details/task-title-write.html']"
-                data="{ task: task, updateFn: update }">
+                 data="{ task: task, updateFn: update }">
             </div>
 
             <div class="text"
-                contenteditable="true"
-                medium-editor
-                ng-model="task.description"
-                options='{"placeholder": "Enter a description", "theme": "bootstrap", "buttons": ["bold", "italic", "underline", "anchor", "quote", "orderedlist", "unorderedlist"]}'>
+                 contenteditable="true"
+                 medium-editor
+                 ng-model="task.description"
+                 options="{{options}}">
             </div>
 
             <div class="tags">
                 <div class="list">
+                    <div ng-if="!task.tags.length" class="placeholder">No lables</div>
                     <div class="tag-item" ng-repeat="tag in task.tags">
                         <span>{{tag}}</span>
                         <button ng-click="removeTag(tag)">
@@ -58,7 +82,7 @@
                     </div>
                 </div>
                 <div class="new-tag-input" ng-show="tagInputVisible">
-                    <ui-select ng-model="newTag" tagging tagging-label="false" on-select="addTag(newTag)">
+                    <ui-select ng-model="newTag" tagging tagging-label="false" autofocus on-select="addTag(newTag)">
                         <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
                         <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
                             {{tag}}
@@ -73,13 +97,13 @@
         <div class="tabs">
             <div class="switcher">
                 <button class="tab"
-                    data-ui-sref-active="active"
-                    data-ui-sref=".activities">
+                        data-ui-sref-active="active"
+                        data-ui-sref=".activities">
                     Updates
                 </button>
                 <button class="tab"
-                    data-ui-sref-active="active"
-                    data-ui-sref=".documents">
+                        data-ui-sref-active="active"
+                        data-ui-sref=".documents">
                     Documents
                 </button>
             </div>

@@ -1,4 +1,5 @@
-$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$header-height});
+$panel-height: $header-height - 5px;
+$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height});
 
 .task-details {
     .page-content {
@@ -11,11 +12,11 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
 
         .summary {
-            height: $header-height;
-            border-bottom: 2px solid $light-grey1;
+            height: $panel-height;
+            border-bottom: 3px solid $light-grey1;
 
             .favorite, .due, .status, .tags {
-                height: $header-height;
+                height: $panel-height;
                 float: left;
                 position: relative;
             }
@@ -25,19 +26,44 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             }
 
             .user {
-                width: calc((100% - #{$header-height}) * 0.25);
-                height: $header-height;
+                width: calc((100% - #{$panel-height}) * 0.25);
+                height: $panel-height;
                 position: relative;
                 float: left;
 
+                .no-assignee {
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-65%);
+                    top: 60%;
+                    width: calc(100% - 20px);
+
+                    .avatar-placeholder {
+                        background: url(/icu/assets/img/user.png) no-repeat scroll left center;
+                        width: 26px;
+                        height: 26px;
+                        padding: 5px 0 5px 35px;
+                        color: $light-grey-placeholder;
+                        display: inline;
+                    }
+
+                }
+                .ui-select-placeholder {
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-65%);
+                    top: 50%;
+                }
+
                 .avatar {
-                    height: 30px;
-                    width: 30px;
+                    height: 26px;
+                    width: 26px;
                     background-color: $green;
                     border-radius: 15px;
                     display: inline-block;
-                    margin: 0 7px;
+                    margin: 0 10px;
                     float: left;
+                    line-height: 24px;
                     img.image {
                         margin-top: -8px;
                     }
@@ -48,18 +74,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 }
             }
 
-            .status {
-                &.received {
-                    color: $blue;
-                }
-
-                &.completed {
-                    color: $green;
-                }
-            }
-
             .due, .status, .tags {
-                width: calc((100% - #{$header-height}) * 0.25);
+                width: calc((100% - #{$panel-height}) * 0.20);
 
                 .summary-content {
                     position: absolute;
@@ -74,34 +90,33 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             }
 
             .due {
-                background: 7% center url('/icu/assets/img/calendar.png') no-repeat;
-                padding: 19px 0;
+                .placeholder {
+                    position: absolute;
+                    top: 50%;
+                    right: 50%;
+                    transform: translateX(60%) translateY(-50%);
+                    color: $light-grey-placeholder;
+                }
 
                 input {
                     appearance: none;
-                    background-color: $cream;
                     border: none;
                     float: right;
-                    width: calc(100% - 40px);
-                }
-            }
-
-            .status {
-                background: 7% center url('/icu/assets/img/task-status.png') no-repeat;
-                padding: 15px 0;
-
-                select {
-                    appearance: none;
-                    background-color: $cream;
-                    border: none;
-                    float: right;
-                    width: calc(100% - 40px);
-                    height: 30px;
+                    width: calc(100% - 30px);
+                    padding: 17px 0;
+                    padding-left: 25px;
+                    background: url(/icu/assets/img/calendar.png) no-repeat scroll left center;
+                    cursor: pointer;
+                    outline: none;
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%);
                 }
             }
 
             .favorite {
-                width: $header-height;
+                width: $panel-height;
+                font-size: 1.4em;
 
                 button {
                     appearance: none;
@@ -119,22 +134,23 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             @mixin ui-select {
                 .ui-select-container {
                     padding-top: 13px;
-                    background-color: $cream;
+                    background-color: transparent;
 
                     .ui-select-match {
                         box-shadow: none;
+                        background-color: transparent;
 
                         .ui-select-match-text {
                             float: left !important;
                         }
 
                         .ui-select-toggle {
-                            background-color: $cream;
+                            background-color: transparent;
                             border: none;
                             box-shadow: none;
                             padding: 0;
 
-                            i {
+                            i.caret {
                                 display: none;
                             }
                         }
@@ -154,18 +170,103 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 }
             }
 
-            .user, .tags {
+            .user, .tags, .status {
                 @include ui-select;
             }
 
-            .tags {
-                .ui-select-container {
-                    padding: 0px;
-
-                    .ui-select-match {
-                        overflow: hidden;
-                        white-space: nowrap;
+            .status {
+                &.received {
+                    .ui-select-container .ui-select-match .ui-select-toggle {
+                        color: $blue;
                     }
+                }
+
+                &.completed {
+                    .ui-select-container .ui-select-match .ui-select-toggle {
+                        background: 7% center url('/icu/assets/img/task-status-green.png') no-repeat;
+                        color: $green;
+                    }
+                }
+
+                .ui-select-container .ui-select-match .ui-select-toggle {
+                    float: right;
+                    background: 7% center url('/icu/assets/img/task-status.png') no-repeat;
+                    width: calc(100% - 10px);
+                    height: 30px;
+                    padding: 5px 0 5px 30px;
+                    position: absolute;
+                    right: 50%;
+                    top: 50%;
+                    transform: translateX(50%) translateY(15%);
+
+                    i.caret {
+                        display: none;
+                    }
+                }
+            }
+
+            .tags {
+                width: calc((100% - 55px) * 0.25);
+
+                .tag-wrap {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    padding-left: 10px;
+
+                    .tag {
+                        @include tag(14px);
+                        width: inherit;
+                        margin: 0;
+                        padding: 4px 7px;
+                        color: white;
+                        position: relative;
+                        margin-top: -5px;
+
+                        .delete {
+                            display: none;
+                        }
+
+                        &:hover {
+                            padding-right: 25px;
+
+                            .delete {
+                                @include circle(6.5px);
+                                display: block;
+                                margin: 0;
+                                position: absolute;
+                                top: 8px;
+                                right: 8px;
+                                color: white;
+                                font-size: 12px;
+                                line-height: 12px;
+                                background-color: #313c40;
+                                text-align: center;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
+                    .line {
+                        height: 30px;
+                        padding-top: 5px;
+
+                        .title {
+                            float: left;
+                        }
+
+                        .add-btn-wrap {
+                            float: right;
+
+                            .add-btn {
+                                @include tag(9px);
+                                background-color: $orange;
+                                padding: 0 3px;
+                                color: white;
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -173,10 +274,26 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .description {
             .text {
                 min-height: 50px;
+
+                &.medium-editor-placeholder {
+                    &:before {
+                        content: 'Enter a description';
+                        position: inherit;
+                        color: $light-grey-placeholder;
+                    }
+
+                    position: inherit;
+
+                    &:after {
+                        content: none;
+                    }
+                }
+
             }
 
             .tags {
                 border-bottom: 1px solid $light-grey1;
+                border-top: 1px solid $light-grey1;
                 background: 0 center url('/icu/assets/img/tags.png') no-repeat;
                 position: relative;
 
@@ -186,6 +303,11 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     height: 21px;
                     float: left;
                     margin: 13px 10px 13px 20px;
+
+                    .placeholder {
+                        color: $light-grey-placeholder;
+                        padding-left: 10px;
+                    }
 
                     .tag-item {
                         display: inline-block;
@@ -201,13 +323,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                             background-color: $light-grey1;
 
                             button {
+                                display: inline-block;
                                 background-color: inherit;
                             }
                         }
 
                         button {
                             @include button;
-
+                            display: none;
                             color: $light-grey1;
                             line-height: 12px;
 
