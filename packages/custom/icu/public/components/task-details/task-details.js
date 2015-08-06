@@ -1,14 +1,22 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskdetails', [])
-.controller('TaskDetailsController', function ($scope, users, task, tags, project, $state, TasksService, context) {
+.controller('TaskDetailsController', function ($scope, users, task, tags, $state, TasksService, context) {
     $scope.people = users;
     $scope.task = task;
     $scope.tags = tags;
-    $scope.project = project;
+    $scope.project = $scope.task.project;
 
-    $scope.task.project = project;
     $scope.tagInputVisible = false;
+
+    debugger;
+
+    if (!$scope.task) {
+        $state.go('main.tasks.byentity', {
+            entity: context.entityName,
+            entityId: context.entityId
+        });
+    }
 
     $scope.statuses = ['Received', 'Completed'];
 

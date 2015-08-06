@@ -23,13 +23,13 @@ var generateStateByEntity = function (main) {
         views: {
             'middlepane@main': {
                 templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
-                controller: capitalizedMain + 'ListController',
-                resolve: resolve
+                controller: capitalizedMain + 'ListController'
             },
             'detailspane@main': {
                 templateUrl: '/icu/components/' + main + '-details/no-' + main + 's.html'
             }
-        }
+        },
+        resolve: resolve
     };
 };
 
@@ -45,14 +45,19 @@ function getTaskDetailsState(urlPrefix) {
                 templateUrl: '/icu/components/task-details/task-details.html',
                 controller: 'TaskDetailsController',
                 resolve: {
-                    task: function (TasksService, $stateParams) {
-                        return TasksService.getById($stateParams.id);
+                    task: function (tasks, $stateParams, TasksService) {
+                        var task =  _(tasks).find(function(t) {
+                            return t._id === $stateParams.id;
+                        });
+
+                        if (!task) {
+                            return TasksService.getById($stateParams.id);
+                        } else {
+                            return task;
+                        }
                     },
                     tags: function (TasksService) {
                         return TasksService.getTags();
-                    },
-                    project: function (task, ProjectsService) {
-                        return ProjectsService.getById(task.project);
                     },
                     users: function (UsersService) {
                         return UsersService.getAll();
@@ -339,6 +344,19 @@ angular.module('mean.icu').config([
                 }
             }
         })
+        .state('main.projects.create', {
+            url: '/create',
+            views: {
+                'middlepane@main': {
+                    templateUrl: '/icu/components/project-list/project-list.html',
+                    controller: 'ProjectListController',
+                },
+                'detailspane@main': {
+                    templateUrl: '/icu/components/project-details/project-details.html',
+                    controller: 'ProjectCreateController',
+                }
+            }
+        })
         .state('main.discussions', {
             url: '/discussions',
             views: {
@@ -365,18 +383,23 @@ angular.module('mean.icu').config([
             views: {
                 'middlepane@main': {
                     templateUrl: '/icu/components/search-list/search-list.html',
-                    controller: 'SearchListController',
-                    resolve: {
-                        results: function (SearchService, $stateParams) {
-                            return SearchService.find($stateParams.query);
-                        },
-                        term: function ($stateParams) {
-                            return $stateParams.query;
-                        }
-                    }
+                    controller: 'SearchListController'
                 },
                 'detailspane@main': {
                     templateUrl: '/icu/components/search-list/no-results.html'
+                }
+            },
+            resolve: {
+                results: function (SearchService, $stateParams) {
+                    return SearchService.find($stateParams.query);
+                },
+                tasks: function (results) {
+                    return _(results).filter(function(r) {
+                        return r._type === 'task';
+                    });
+                },
+                term: function ($stateParams) {
+                    return $stateParams.query;
                 }
             }
         })

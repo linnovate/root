@@ -1,5 +1,10 @@
 <td class="id">{{data.index + 1}}</td>
-<td class="name">{{data.task.title}}</td>
+<td class="name"
+    contenteditable strip-br="true"
+    ng-change="data.updateCb(data.task)"
+    ng-model="data.task.title">
+    {{data.task.title}}
+</td>
 <td class="project"><span class="tag project" ng-style="color={'background-color': '#' + '{{data.task.project.color}}'}">{{data.task.project.title}}</span></td>
 <td class="status {{data.task.status | lowercase}} col-sm-2">{{data.task.status}}</td>
 <td class="due">{{data.task.due | date: 'dd.MM.yyyy'}}</td>
