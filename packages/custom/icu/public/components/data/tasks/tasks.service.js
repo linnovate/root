@@ -1,8 +1,30 @@
 'use strict';
 
 angular.module('mean.icu.data.tasksservice', [])
-.service('TasksService', function (ApiUri, $http, ProjectsService) {
+.service('TasksService', function (ApiUri, $http, $q, ProjectsService) {
     var EntityPrefix = '/tasks';
+
+    var clientEntities = {};
+
+    function getNew(projectId) {
+        var clientId = Math.floor(Math.random() * 1000000000);
+        var entity = {
+            _id: clientId,
+            title: '',
+            description: '',
+            project: projectId,
+            tags: [],
+            watchers: []
+        };
+
+        ProjectsService.getById(projectId).then(function(project) {
+            entity.project = project;
+        });
+
+        clientEntities[clientId] = entity;
+
+        return entity;
+    }
 
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function (result) {
@@ -17,17 +39,25 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getById(id) {
-        return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
-            var task = result.data;
+        var deffered = $q.defer();
 
-            return getStarred().then(function(starred) {
-                task.star = _(starred).any(function(s) {
-                    return s._id === task._id;
+        if (clientEntities[id]) {
+            deffered.resolve(clientEntities[id]);
+
+            return deffered.promise;
+        } else {
+            return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+                var task = result.data;
+
+                return getStarred().then(function(starred) {
+                    task.star = _(starred).any(function(s) {
+                        return s._id === task._id;
+                    });
+
+                    return task;
                 });
-
-                return task;
             });
-        });
+        }
     }
 
     function getByUserId(id) {
@@ -70,6 +100,12 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function create(task) {
+        var entity = clientEntities[task._id];
+        if (entity) {
+            delete task._id;
+            delete clientEntities[task._id];
+        }
+
         return $http.post(ApiUri + EntityPrefix, task).then(function (result) {
             return result.data;
         });
@@ -100,6 +136,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     return {
+        getNew: getNew,
         getAll: getAll,
         getTags: getTags,
         getById: getById,
