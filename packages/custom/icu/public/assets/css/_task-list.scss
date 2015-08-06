@@ -4,6 +4,12 @@
 
         tbody {
             tr {
+                &.new-task {
+                    td {
+                        padding: 10px 15px;
+                    }
+                }
+
                 td {
                     overflow: hidden;
 
@@ -17,6 +23,7 @@
 
                     &.name {
                         width: calc(50% - 80px);
+                        cursor: text;
                     }
 
                     &.project {

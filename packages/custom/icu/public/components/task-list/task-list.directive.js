@@ -2,23 +2,36 @@
 
 angular.module('mean.icu.ui.tasklist', [])
 .directive('icuTaskList', function () {
-    function controller($scope, context) {
+    function controller($scope, context, TasksService, $state) {
         $scope.context = context;
 
-        if ($scope.groupTasks) {
-            $scope.groupedTasks = _.chain($scope.tasks).groupBy(function (task) {
-                return moment(task.created).isoWeek();
-            }).mapObject(function (value, key) {
-                return {
-                    startDate: moment().isoWeek(key).startOf('week').toDate(),
-                    endDate: moment().isoWeek(key).endOf('week').toDate(),
-                    tasks: value,
-                    hidden: false
-                };
-            })
-                .values()
-                .value().reverse();
-        }
+        $scope.newTask = TasksService.getNew(context.entityId);
+
+        $scope.update = _.debounce(function(task) {
+            TasksService.update(task);
+        }, 300);
+
+        var creatingStatuses = {
+            NotCreated: 0,
+            Creating: 1,
+            Created: 2
+        };
+
+        var created = creatingStatuses.NotCreated;
+
+        $scope.createOrUpdate = function(task) {
+            console.log(created);
+            if (created === creatingStatuses.NotCreated) {
+                created = creatingStatuses.Creating;
+                console.log('fired');
+                TasksService.create(task).then(function(result) {
+                    created = creatingStatuses.Created;
+                    task._id = result._id;
+                });
+            } else if (created === creatingStatuses.Created) {
+                TasksService.update(task);
+            }
+        };
     }
 
     return {

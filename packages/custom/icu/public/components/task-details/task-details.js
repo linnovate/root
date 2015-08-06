@@ -17,6 +17,13 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     }
 
+    if (!$scope.task) {
+        $state.go('main.tasks.byentity', {
+            entity: context.entityName,
+            entityId: context.entityId
+        });
+    }
+
     $scope.tagInputVisible = false;
 
     $scope.statuses = ['Received', 'Completed'];
@@ -83,8 +90,8 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.delayedUpdate = _.debounce($scope.update, 500);
 
     if ($scope.task &&
-        ($state.current.name === 'main.tasks.byentity.details' ||
-        $state.current.name === 'main.search.task')) {
+            ($state.current.name === 'main.tasks.byentity.details' ||
+             $state.current.name === 'main.search.task')) {
         $state.go('.activities');
     }
 });
