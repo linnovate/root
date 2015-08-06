@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tabs')
-    .directive('icuTabsActivities', function() {
+    .directive('icuTabsActivities', function () {
         function controller($scope, UsersService, context, DocumentsService, ActivitiesService) {
             $scope.activity = {
                 description: ''
@@ -9,25 +9,25 @@ angular.module('mean.icu.ui.tabs')
 
             $scope.details = {
                 createTask: 'create this task',
-                createProject: 'create this task',
+                createProject: 'create this project',
                 document: 'add document',
                 comment: 'add comment'
-            }
+            };
 
-            UsersService.getMe().then(function(user) {
+            UsersService.getMe().then(function (user) {
                 $scope.me = user;
                 $scope.activity.user = user;
             });
 
-            $scope.upload = function(files) {
+            $scope.upload = function (files) {
                 $scope.attachments = files;
             };
 
-            $scope.save = function() {
+            $scope.save = function () {
                 $scope.activity.issue = context.main.slice(0, -1);
                 $scope.activity.issueId = $scope.entity._id;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
-                ActivitiesService.create($scope.activity).then(function(result) {
+                ActivitiesService.create($scope.activity).then(function (result) {
                     if ($scope.attachments && $scope.attachments.length) {
                         var file = $scope.attachments;
                         var data = {

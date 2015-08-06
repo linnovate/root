@@ -7,7 +7,7 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
 
         .title, .add-update {
             .avatar {
-                @include circle(15px);
+                @include circle(17px);
 
                 float: left;
                 margin: 10px;
@@ -20,15 +20,31 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
             height: $list-height;
             overflow: auto;
 
+            .activity {
+                min-height: 60px;
+
+            }
+
             .title {
+                font-size: 14px;
+                margin-bottom: 10px;
+
                 .user-name {
-                    font-size: 16px;
                     font-weight: 700;
-                    line-height: 50px;
+                    line-height: 14px;
                 }
-                .activity-details {
-                    font-weight: 100;
+
+                .text {
+                    padding-top: 7px;
+
+                    .activity-details {
+                        font-weight: 100;
+                    }
+                    .activity-date {
+                        color: $light-grey-placeholder
+                    }
                 }
+
             }
 
             .description {
@@ -74,7 +90,7 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
             overflow: auto;
 
             textarea {
-                width: calc(100% - 50px);
+                width: calc(100% - 60px);
                 height: 150px;
                 margin: 10px 0;
             }

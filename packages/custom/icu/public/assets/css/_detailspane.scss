@@ -5,7 +5,7 @@ $switcher-height: 40px;
 $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switcher-height});
 
 .detailspane {
-    width: 50%;
+    width: 54%;
     border-left: 1px solid grey;
     height: 100vh;
     background-color: $cream;
@@ -21,6 +21,7 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
             float: left;
             width: $header-height;
             height: $header-height;
+            margin-left: 25px;
             position: relative;
             background: url('/icu/assets/img/notifications.png') no-repeat center center;
 
@@ -31,11 +32,11 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
                 transform: translate(-50%, -50%);
 
                 span {
-                    @include circle(10px);
+                    @include circle(9px);
 
                     position: absolute;
-                    left: 15px;
-                    top: -3px;
+                    left: -6px;
+                    top: -1px;
 
                     display: inline-block;
                     text-align: center;
@@ -66,7 +67,7 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
 
         .last-notification {
             float: left;
-            width: calc(100% - 5 * #{$header-height});
+            width: calc(100% - 265px);
             height: $header-height;
 
             @include notification;
@@ -94,7 +95,7 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
 
         .time {
             float: left;
-            width: 2 * $header-height;
+            width: $header-height;
             height: $header-height;
             position: relative;
             color: $light-grey4;
@@ -106,6 +107,7 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
 
                 display: inline-block;
                 transform: translate(0, -50%);
+                font-size: 12px;
             }
 
             span {
@@ -146,10 +148,11 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
                 @include circle($header-height / 2);
 
                 background-color: $green;
-                width: $header-height * 0.75;
-                height: ($header-height * 0.75) - 1;
-                margin: $header-height * 0.125;
+                width: 37px;
+                height: 37px;
+                margin: 13px;
                 font-size: 30px;
+                line-height: 35px;
                 cursor: pointer;
             }
         }
@@ -157,7 +160,7 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
         .add-menu, .user-menu {
             float: left;
             display: inline-block;
-            width: $header-height;
+            width: $header-height - 7;
             height: $header-height - 1;
 
             .menu-items {
@@ -285,7 +288,7 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
         }
 
         .left-notification, .right-notification {
-            color: $light-grey4;
+            color: $light-grey-placeholder;
             margin-top: $header-height/3;
         }
 
