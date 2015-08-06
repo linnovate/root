@@ -4,6 +4,7 @@
             ng-click="menu.isHidden = !menu.isHidden">
     </button>
     <div class="search" data-ng-controller="SearchController">
+        <div class="close-icon" ng-if="term" ng-click="clearSearch()"><i class="fa fa-times-circle"></i></div>
         <input type="text"
             placeholder="Search"
             ng-model="term"
@@ -13,6 +14,6 @@
         <img src="/icu/assets/img/search.png"></img>
     </div>
 </header>
-<div data-ng-controller="MiddlepaneController">
-    <div data-ui-view="middlepane"></div>
+<div data-ng-controller="MiddlepaneController" class="middlepane-container">
+    <div data-ui-view="middlepane" class="full-height"></div>
 </div>
