@@ -3,8 +3,15 @@
         <div data-ng-repeat="activity in activities | orderBy:'created'" class="activity">
             <div class="title">
                 <div icu-avatar user="activity.user"></div>
-                <span class="user-name">{{activity.user.name}}<span class="activity-details"> {{details[activity.type]}}</span></span>
-                <span class="activity-date">{{activity.created | date:"MM/dd/yyyy 'at' h:mma"}}</span>
+                <div class="text">
+                    <span class="user-name">{{activity.user.name}}
+                        <span class="activity-details">
+                            {{details[activity.type]}}
+                        </span>
+                    </span>
+                    <br/>
+                    <span class="activity-date">{{activity.created | date:"MM/dd/yyyy 'at' h:mma"}}</span>
+                </div>
             </div>
             <div class="description">
                 {{activity.description}}

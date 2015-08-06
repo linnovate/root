@@ -16,9 +16,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 service.update(entity);
             };
             $scope.showSelect = false;
-            $scope.entity.watchers = _.filter($scope.users, function (user) {
-                return $scope.entity.watchers.indexOf(user._id);
-            });
+
             $scope.notAssigned = _.difference($scope.users, $scope.entity.watchers);
 
             $scope.triggerSelect = function () {
