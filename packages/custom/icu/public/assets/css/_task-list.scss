@@ -14,6 +14,7 @@
 
         tbody {
             tr {
+
                 &.new-task {
                     td {
                         padding: 10px 15px;
@@ -22,6 +23,7 @@
 
                 td {
                     overflow: hidden;
+                    position: relative;
 
                     &.id {
                         width: 40px;
@@ -29,6 +31,22 @@
 
                     &.arrow {
                         width: 25px;
+                        overflow: visible;
+
+                        .delete-icon {
+                            display: none;
+                            position: absolute;
+                            top: -10px;
+                            right: -10px;
+                            font-size: 17px;
+                            line-height: 17px;
+                            border-radius: 16px;
+                            height: 18px;
+                            width: 18px;
+                            color: #807d7d;
+                            background-color: white;
+                            text-align: center;
+                        }
                     }
 
                     &.name {
@@ -59,6 +77,12 @@
                     .tag {
                         padding: 5px;
                         @include tag(14px);
+                    }
+                }
+
+                &.active {
+                    td.arrow .delete-icon {
+                        display: block;
                     }
                 }
             }
