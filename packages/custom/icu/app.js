@@ -81,6 +81,7 @@ ICU.register(function (app, auth, database) {
         'mean.icu.ui.rows',
         'mean.icu.ui.changecontent',
         'mean.icu.ui.avatar',
+        'mean.icu.ui.colorpicker',
         'mean.icu.ui.search',
         'mean.icu.ui.searchlist',
         'mean.icu.data.activitiesservice',
