@@ -7,10 +7,6 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.tags = tags;
     $scope.projects = projects;
 
-    $scope.task.project = _.find(projects, function (proj) {
-        return proj._id === task.project;
-    });
-
     if (typeof $scope.task.assign === 'string') {
         $scope.task.assign = _.find(users, function (user) {
             return user._id === task.assign;

@@ -1,19 +1,19 @@
 'use strict';
 
 angular.module('mean.icu.ui.middlepane', [])
-.directive('icuMiddlepane', function() {
-  function controller() {
-  }
+.directive('icuMiddlepane', function () {
+    function controller() {
+    }
 
-  return {
-    restrict: 'A',
-    controller: controller,
-    templateUrl: '/icu/components/middlepane/middlepane.html'
-  };
+    return {
+        restrict: 'A',
+        controller: controller,
+        templateUrl: '/icu/components/middlepane/middlepane.html'
+    };
 });
 
 function SearchController($scope, $state, $stateParams, context) {
-    $scope.$on('$stateChangeSuccess', function($event, toState) {
+    $scope.$on('$stateChangeSuccess', function ($event, toState) {
         if (toState.name.indexOf('main.search') !== 0) {
             if ($stateParams.query) {
                 $scope.term = $stateParams.query;
@@ -23,9 +23,14 @@ function SearchController($scope, $state, $stateParams, context) {
         }
     });
 
+    $scope.clearSearch = function () {
+        $scope.term = '';
+        $scope.search();
+    };
+
     $scope.search = function (term) {
         if (term) {
-            $state.go('main.search', { query: term });
+            $state.go('main.search', {query: term});
         } else {
             $state.go('main.' + context.main + '.byentity', {
                 entity: context.entityName,
@@ -36,10 +41,10 @@ function SearchController($scope, $state, $stateParams, context) {
 }
 
 angular.module('mean.icu.ui.search', [])
-.controller('SearchController', SearchController);
+    .controller('SearchController', SearchController);
 
 function MiddlepaneController() {
 }
 
 angular.module('mean.icu.ui.middlepane')
-.controller('MiddlepaneController', MiddlepaneController);
+    .controller('MiddlepaneController', MiddlepaneController);

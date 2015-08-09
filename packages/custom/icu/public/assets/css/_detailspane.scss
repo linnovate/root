@@ -80,12 +80,13 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
             left: $header-height;
             margin-top: $header-height;
             z-index: 1001;
-            background-color: $cream;
+            background-color: white;
 
             .notification {
                 height: $header-height;
                 @include notification;
                 padding: 10px;
+                border-bottom: 1px solid $light-grey1;
 
                 span {
                     line-height: $header-height;
