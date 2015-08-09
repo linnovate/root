@@ -6,7 +6,16 @@
     ng-model="data.task.title">
     {{data.task.title}}
 </td>
-<td class="project"><span class="tag project" ng-style="color={'background-color': '#' + '{{data.task.project.color}}'}">{{data.task.project.title}}</span></td>
+<td class="project">
+    <span class="tag project" ng-style="color={'background-color': '#' + '{{data.task.project.color}}'}">
+        {{data.task.project.title}}
+    </span>
+</td>
 <td class="status {{data.task.status | lowercase}} col-sm-2">{{data.task.status}}</td>
 <td class="due">{{data.task.due | date: 'dd.MM.yyyy'}}</td>
-<td class="arrow"><i ng-if="data.drawArrow" class="fa fa-chevron-right"></i></td>
+<td class="arrow">
+    <i ng-if="data.drawArrow" class="fa fa-chevron-right"></i>
+    <div class="delete-icon" ng-click="data.delete(data.task)">
+        <i class="fa fa-times-circle"></i>
+    </div>
+</td>
