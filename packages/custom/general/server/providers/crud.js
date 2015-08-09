@@ -30,7 +30,7 @@ class Crud {
 				'accept-language': options.headers['accept-language'],
 				cookie: options.headers.cookie,
 				'if-none-match': options.headers['if-none-match']
-			}
+			};
 
 		}
 
