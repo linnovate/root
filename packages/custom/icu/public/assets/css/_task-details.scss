@@ -1,5 +1,5 @@
 $panel-height: $header-height - 5px;
-$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height});
+$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 20px);
 
 .task-details {
     .page-content {

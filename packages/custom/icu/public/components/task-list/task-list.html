@@ -1,10 +1,23 @@
 <div class="task-list">
-    <header class="title">
-        Tasks from {{currentContext.entityName}} <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
-    </header>
+    <div class="header-wrap">
+        <div class="left-wrapper">
+            <header class="title">
+                Tasks from {{currentContext.entityName}}
+                <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+            </header>
+        </div>
+        <div class="right-wrapper">
+            <div class="dropdown">
+                <i class="fa fa-caret-down"></i>
+            </div>
+        </div>
+    </div>
+
     <div class="filters">
         <div class="left-wrapper">
-            <button ng-click="starredOnly()" ng-class="{ 'orange': showStarred }" class="favorites"><i class="fa fa-star"></i></button>
+            <button ng-click="starredOnly()" ng-class="{ 'orange': showStarred }" class="favorites">
+                <i class="fa fa-star"></i>
+            </button>
             <button class="tasks">Status</button>
         </div>
 

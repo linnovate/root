@@ -17,7 +17,7 @@
             background: url('/icu/assets/img/menu.png') no-repeat center center;
 
             .menu-icon {
-                padding-left:5px;
+                padding-left: 5px;
                 position: relative;
             }
 
@@ -49,6 +49,16 @@
             margin-top: 1px;
             width: calc(100% - #{$header-height});
 
+            .close-icon {
+                position: absolute;
+                right: 25px;
+                top: 50%;
+                transform: translate(0, -50%);
+                color: $grey1;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
             input {
                 border: none;
                 background-color: white;
@@ -67,14 +77,33 @@
         }
     }
 
-    .title {
-        padding: 35px 0 20px 25px;
-        font-size: 24px;
+    .middlepane-container {
+        height: calc(100% - 60px);
+    }
+
+    .header-wrap {
+        height: 100px;
         border-bottom: 1px solid $light-grey1;
         background-color: white;
+        padding: 35px 25px 30px 25px;
 
-        span {
-            font-weight: 700;
+        .left-wrapper {
+            float: left;
+
+            .dropdown {
+                font-size: 20px;
+            }
+        }
+
+        .right-wrapper {
+            float: right;
+
+            .title {
+                font-size: 24px;
+                span {
+                    font-weight: 700;
+                }
+            }
         }
     }
 
@@ -138,5 +167,13 @@
 
             background: url('/icu/assets/img/calendar-view.png') no-repeat center center;
         }
+    }
+
+    .task-list-container {
+        height: calc(100% - 146px);
+    }
+
+    .full-height {
+        height: 100%;
     }
 }

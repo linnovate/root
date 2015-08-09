@@ -4,6 +4,7 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
 .tab-content {
     .activities {
         height: 100%;
+        overflow: auto;
 
         .title, .add-update {
             .avatar {
@@ -19,6 +20,7 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
             border-bottom: 1px solid $light-grey1;
             height: $list-height;
             overflow: auto;
+            min-height: 70px;
 
             .activity {
                 min-height: 60px;

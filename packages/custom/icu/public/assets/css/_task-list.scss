@@ -1,4 +1,14 @@
 .task-list {
+    height: 100%;
+
+    .task-list-container {
+        height: calc(100% - 146px);
+        .list-table {
+            height: 100%;
+            overflow: auto;
+        }
+    }
+
     table {
         table-layout: fixed;
 
@@ -18,20 +28,22 @@
                     }
 
                     &.arrow {
-                        width: 40px;
+                        width: 25px;
                     }
 
                     &.name {
-                        width: calc(50% - 80px);
+                        width: calc(60% - 65px);
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
                         cursor: text;
                     }
 
                     &.project {
-                        width: calc(25% - 80px);
+                        width: calc(20% - 65px);
                     }
 
                     &.status, &.due {
-                        width: calc(12.5% - 80px);
+                        width: calc(10% - 65px);
                     }
 
                     &.status {
@@ -46,7 +58,7 @@
 
                     .tag {
                         padding: 5px;
-                        @include tag(10px);
+                        @include tag(14px);
                     }
                 }
             }
