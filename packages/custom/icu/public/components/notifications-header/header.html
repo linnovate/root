@@ -4,14 +4,14 @@
             <span class="count">{{notifications.length}}</span>
         </div>
     </div>
-    <div class="last-notification">
+    <div class="last-notification" ng-click="triggerDropdown()">
         <span class="text">{{lastNotification.entity}}
             <span class="entity-name">"{{lastNotification.entityName}}"</span>
             {{lastNotification.action}}
             <span class="user">{{lastNotification.user}}</span>
         </span>
     </div>
-    <div class="all-notifications" ng-if="allNotifications" ng-init="allNotifications = false">
+    <div class="all-notifications" ng-if="allNotifications">
         <div class="notification" ng-repeat="notification in popupNotifications">
             <span class="text">{{notification.entity}}
                 <span class="entity-name">"{{notification.entityName}}"</span>
@@ -20,9 +20,8 @@
             </span>
         </div>
     </div>
-    <div class="time">
-        <!--<span>{{lastNotification.date}}</span>-->
-        <i class="fa fa-chevron-down" ng-click="allNotifications = !allNotifications"></i>
+    <div class="time" ng-click="triggerDropdown()">
+        <i class="fa fa-chevron-down"></i>
     </div>
     <div class="add-menu dropdown" dropdown>
         <button dropdown-toggle>

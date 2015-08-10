@@ -97,37 +97,6 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
                 margin: 10px 0;
             }
 
-            .attached-icons {
-                display: inline-block;
-                position: relative;
-                height: 120px;
-                width: 200px;
-
-                .icon {
-                    position: absolute;
-                    top: 15px;
-                    left: 50%;
-                    transform: translate(-50%, 0);
-                    height: 80px;
-                    width: 60px;
-
-                    &.doc {
-                        background: url('/icu/assets/img/attachment-type-doc.png') no-repeat center center;
-                    }
-                }
-
-                .name {
-                    width: 100%;
-                    position: absolute;
-                    bottom: 0;
-                    text-align: center;
-                    color: $light-grey4;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    overflow: hidden;
-                }
-            }
-
             .action-buttons {
                 margin-left: 50px;
 
@@ -138,6 +107,11 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
                     background: url('/icu/assets/img/attachments.png') no-repeat center center;
                     border: 1px solid $light-grey1;
                     float: left;
+                }
+
+                .name {
+                    line-height: 35px;
+                    padding-left: 10px;
                 }
 
                 .save {
