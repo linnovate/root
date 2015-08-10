@@ -52,7 +52,8 @@ angular.module('mean.icu.ui.tasklist', [])
         scope: {
             tasks: '=',
             drawArrow: '=',
-            groupTasks: '='
+            groupTasks: '=',
+            order: '='
         },
         controller: controller
     };
