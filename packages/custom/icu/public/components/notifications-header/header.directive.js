@@ -14,6 +14,11 @@ angular.module('mean.icu.ui.notificationsheader', [])
         $scope.popupNotifications = $scope.notifications.slice(0, -1);
         $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
         $scope.context = context;
+        $scope.allNotifications = false;
+
+        $scope.triggerDropdown = function () {
+            $scope.allNotifications = !$scope.allNotifications;
+        };
 
         UsersService.getMe().then(function (me) {
             $scope.me = me;

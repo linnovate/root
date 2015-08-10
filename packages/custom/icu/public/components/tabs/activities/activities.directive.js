@@ -23,12 +23,17 @@ angular.module('mean.icu.ui.tabs')
                 $scope.attachments = files;
             };
 
+            var clearForm = function () {
+                $scope.attachments = [];
+                $scope.activity.description = '';
+            };
+
             $scope.save = function () {
                 $scope.activity.issue = context.main.slice(0, -1);
                 $scope.activity.issueId = $scope.entity._id;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
                 ActivitiesService.create($scope.activity).then(function (result) {
-                    if ($scope.attachments && $scope.attachments.length) {
+                    if (!_.isEmpty($scope.attachments)) {
                         var file = $scope.attachments;
                         var data = {
                             issueId: result._id,
@@ -36,6 +41,7 @@ angular.module('mean.icu.ui.tabs')
                         };
                         DocumentsService.saveAttachments(data, file);
                     }
+                    clearForm();
                 });
             };
         }

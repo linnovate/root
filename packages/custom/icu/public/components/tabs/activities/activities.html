@@ -27,16 +27,14 @@
         <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save()">
             <textarea ng-model="activity.description" required placeholder="Type update here"></textarea>
 
-            <div data-ng-repeat="attachment in attachments" class="attached-icons">
-                <div class="icon doc"></div>
-                <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
-            </div>
-
             <div class="action-buttons">
                 <button type="button" class="attachment"
                         ngf-select
                         ngf-change="upload($files)"
                         ngf-multiple="false"></button>
+
+                <span class="name" title="{{attachments[0].name}}">{{attachments[0].name}}</span>
+
                 <button type="submit" class="save">Add</button>
             </div>
         </form>
