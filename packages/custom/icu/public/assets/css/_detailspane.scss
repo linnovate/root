@@ -69,6 +69,7 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
             float: left;
             width: calc(100% - 265px);
             height: $header-height;
+            cursor: pointer;
 
             @include notification;
         }
@@ -100,6 +101,7 @@ $tab-content-height: calc(#{$content-height} - #{$description-height} - #{$switc
             height: $header-height;
             position: relative;
             color: $light-grey4;
+            cursor: pointer;
 
             span, i {
                 position: absolute;
