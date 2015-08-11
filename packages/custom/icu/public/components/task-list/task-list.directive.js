@@ -11,18 +11,6 @@ angular.module('mean.icu.ui.tasklist', [])
             TasksService.update(task);
         }, 300);
 
-        $scope.delete = function (task) {
-            TasksService.remove(task._id).then(function () {
-                $scope.tasks = _.reject($scope.tasks, function (t) {
-                    return t._id === task._id;
-                });
-                $state.go('main.tasks.byentity', {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {reload: true});
-            });
-        };
-
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -52,7 +40,8 @@ angular.module('mean.icu.ui.tasklist', [])
         scope: {
             tasks: '=',
             drawArrow: '=',
-            groupTasks: '='
+            groupTasks: '=',
+            order: '='
         },
         controller: controller
     };
