@@ -5,6 +5,31 @@ angular.module('mean.icu.ui.tasklist')
     $scope.tasks = tasks;
     $scope.showStarred = false;
 
+    $scope.changeOrder = function () {
+        $scope.sorting.isReverse = !$scope.sorting.isReverse;
+    };
+
+    $scope.sorting  = {
+        field: 'status',
+        isReverse: false
+    };
+
+    $scope.sortingList = [
+        {
+            title: 'Due',
+            value: 'due'
+        },{
+            title: 'Project',
+            value: 'project'
+        },{
+            title: 'Title',
+            value: 'title'
+        },{
+            title: 'Status',
+            value: 'status'
+        }
+    ];
+
     function navigateToDetails(task) {
         $state.go('main.tasks.byentity.details', {
             id: task._id,

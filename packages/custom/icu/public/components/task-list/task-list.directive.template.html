@@ -1,7 +1,7 @@
 <div class="list-table">
     <table class="tasks">
         <tbody>
-            <tr data-ng-repeat="task in tasks"
+            <tr data-ng-repeat="task in tasks | orderBy:order.field:order.isReverse"
                 data-ui-sref-active="active"
                 data-ui-sref="main.tasks.byentity.details({id: task._id, entity: context.entityName, entityId: context.entityId})"
                 icu-list-row

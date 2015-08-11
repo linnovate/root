@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskdetails', [])
-.controller('TaskDetailsController', function ($scope, users, task, tags, projects, $state, TasksService, context) {
+.controller('TaskDetailsController', function ($scope, users, task, tags, projects, $state, TasksService, context, $location) {
     $scope.people = users;
     $scope.task = task;
     $scope.tags = tags;
     $scope.projects = projects;
+    $scope.currentURL = $location.absUrl();
 
     if (typeof $scope.task.assign === 'string') {
         $scope.task.assign = _.find(users, function (user) {
@@ -73,6 +74,18 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.update(task);
     };
 
+    $scope.deleteTask = function (task) {
+        TasksService.remove(task._id).then(function () {
+            $state.go('main.tasks.byentity', {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {reload: true});
+        });
+    };
+
+    $scope.copy = function () {
+
+    };
     $scope.update = function (task) {
         if (context.entityName === 'discussion') {
             task.discussion = context.entityId;
@@ -86,8 +99,8 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.delayedUpdate = _.debounce($scope.update, 500);
 
     if ($scope.task &&
-            ($state.current.name === 'main.tasks.byentity.details' ||
-             $state.current.name === 'main.search.task')) {
+        ($state.current.name === 'main.tasks.byentity.details' ||
+        $state.current.name === 'main.search.task')) {
         $state.go('.activities');
     }
 });
