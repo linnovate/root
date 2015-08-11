@@ -1,12 +1,17 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskdetails', [])
-.controller('TaskDetailsController', function ($scope, users, task, tags, projects, $state, TasksService, context, $location) {
+.controller('TaskDetailsController', function ($scope, users, task, tags, projects, $state, TasksService, context) {
     $scope.people = users;
     $scope.task = task;
     $scope.tags = tags;
     $scope.projects = projects;
-    $scope.currentURL = $location.absUrl();
+
+    TasksService.getStarred().then(function(starred) {
+        $scope.task.star = _(starred).any(function(s) {
+            return s._id === $scope.task._id;
+        });
+    });
 
     if (typeof $scope.task.assign === 'string') {
         $scope.task.assign = _.find(users, function (user) {
@@ -83,24 +88,21 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     };
 
-    $scope.copy = function () {
-
-    };
     $scope.update = function (task) {
         if (context.entityName === 'discussion') {
             task.discussion = context.entityId;
         }
 
         TasksService.update(task).then(function () {
-            $state.reload('main.tasks.byentity');
+            //$state.reload('main.tasks.byentity');
         });
     };
 
     $scope.delayedUpdate = _.debounce($scope.update, 500);
 
     if ($scope.task &&
-        ($state.current.name === 'main.tasks.byentity.details' ||
-        $state.current.name === 'main.search.task')) {
+            ($state.current.name === 'main.tasks.byentity.details' ||
+             $state.current.name === 'main.search.task')) {
         $state.go('.activities');
     }
 });
