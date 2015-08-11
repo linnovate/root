@@ -85,26 +85,28 @@
             </div>
 
             <div class="tags">
-                <div class="list">
-                    <div ng-if="!task.tags.length" class="placeholder">No lables</div>
-                    <div class="tag-item" ng-repeat="tag in task.tags">
+                <ul class="list">
+                    <li ng-if="!task.tags.length" class="placeholder">No lables</li>
+                    <li class="tag-item" ng-repeat="tag in task.tags">
                         <span>{{tag}}</span>
                         <button ng-click="removeTag(tag)">
                             <i class="fa fa-times"></i>
                         </button>
-                    </div>
+                    </li>
+                    <li class="new-tag-input" ng-show="tagInputVisible">
+                        <ui-select ng-model="newTag" tagging tagging-label="false" autofocus on-select="addTag(newTag)">
+                            <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
+                            <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
+                                {{tag}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </li>
+                </ul>
+                <div class="button">
+                    <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible">
+                        <i class="fa fa-plus"></i>
+                    </button>
                 </div>
-                <div class="new-tag-input" ng-show="tagInputVisible">
-                    <ui-select ng-model="newTag" tagging tagging-label="false" autofocus on-select="addTag(newTag)">
-                        <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
-                        <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
-                            {{tag}}
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-                <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible">
-                    <i class="fa fa-plus"></i>
-                </button>
             </div>
         </div>
         <div class="tabs">
