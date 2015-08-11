@@ -328,17 +328,27 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 border-top: 1px solid $light-grey1;
                 background: 0 center url('/icu/assets/img/tags.png') no-repeat;
                 position: relative;
+                display: table;
 
-                height: 50px;
+                width: 100%;
+                min-height: 50px;
+
+                & > * {
+                    display: table-cell;
+                    vertical-align: middle;
+                }
 
                 .list {
-                    height: 21px;
-                    float: left;
-                    margin: 13px 10px 13px 20px;
-
+                    padding: 5px 25px;
+                    
                     .placeholder {
                         color: $light-grey-placeholder;
                         padding-left: 10px;
+                    }
+
+                    li {
+                        list-style: none;
+                        display: inline-block;
                     }
 
                     .tag-item {
@@ -346,6 +356,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                         cursor: pointer;
 
                         margin-left: 10px;
+                        margin-top: 3px;
                         font-size: 12px;
                         padding: 0 5px;
                         background-color: white;
@@ -381,14 +392,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     line-height: 28px;
                     height: 28px;
                     float: left;
-                    margin: 8px 10px;
+                    margin: 0 10px;
                 }
 
                 .new-tag-icon {
                     @include tag(15px);
                     @include button;
 
-                    margin: 10px 0;
+                    margin: 0;
                     float: right;
                     background-color: $orange;
                     color: white;
