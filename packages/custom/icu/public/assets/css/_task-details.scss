@@ -1,7 +1,7 @@
 $panel-height: $header-height - 5px;
 $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 20px);
 
-.task-details {
+.task-details, .discussion-details {
     .page-content {
         .project {
             margin-top: 25px;
@@ -287,15 +287,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
                         a {
                             height: 30px;
+                            line-height: 28px;
+                            padding: 0 20px 0 10px;
+
                             i {
                                 float: left;
                             }
                             span {
-                                position: absolute;
-                                left: 60px;
-                                top: 50%;
-                                transform: translate(0, -50%);
-                                padding-left: 20px;
+                                padding: 0 10px;
                             }
                         }
                     }
@@ -304,6 +303,11 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
 
         .description {
+            .title {
+                font-size: 30px;
+                padding: 10px 0;
+            }
+
             .text {
                 min-height: 50px;
 
@@ -340,7 +344,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
                 .list {
                     padding: 5px 25px;
-                    
+
                     .placeholder {
                         color: $light-grey-placeholder;
                         padding-left: 10px;

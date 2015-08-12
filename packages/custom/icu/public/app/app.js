@@ -4,7 +4,6 @@ var generateStateByEntity = function (main) {
     var capitalize = function (str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     };
-
     var capitalizedMain = capitalize(main);
 
     var resolve = {};
@@ -26,7 +25,13 @@ var generateStateByEntity = function (main) {
                 controller: capitalizedMain + 'ListController'
             },
             'detailspane@main': {
-                templateUrl: '/icu/components/' + main + '-details/no-' + main + 's.html'
+                templateUrl: function ($stateParams) {
+                    return '/icu/components/' + $stateParams.entity + '-details/' +
+                        $stateParams.entity + '-details.html';
+                },
+                controllerProvider: function ($stateParams) {
+                    return capitalize($stateParams.entity) + 'DetailsController';
+                }
             }
         },
         resolve: resolve
@@ -46,7 +51,7 @@ function getTaskDetailsState(urlPrefix) {
                 controller: 'TaskDetailsController',
                 resolve: {
                     task: function (tasks, $stateParams, TasksService) {
-                        var task =  _(tasks).find(function(t) {
+                        var task = _(tasks).find(function (t) {
                             return t._id === $stateParams.id;
                         });
 
@@ -110,6 +115,40 @@ function getDiscussionDetailsState(urlPrefix) {
     };
 }
 
+function getDiscussionDetailsActivitiesState() {
+    return {
+        url: '/activities',
+        views: {
+            tab: {
+                templateUrl: '/icu/components/discussion-details/tabs/activities/activities.html',
+                controller: 'DiscussionActivitiesController',
+                resolve: {
+                    activities: function (ActivitiesService, $stateParams) {
+                        return ActivitiesService.getByDiscussionId($stateParams.id);
+                    }
+                }
+            }
+        }
+    };
+}
+
+function getDiscussionDetailsDocumentsState() {
+    return {
+        url: '/documents',
+        views: {
+            tab: {
+                templateUrl: '/icu/components/discussion-details/tabs/documents/documents.html',
+                controller: 'DiscussionDocumentsController',
+                resolve: {
+                    documents: function (DocumentsService, $stateParams) {
+                        return DocumentsService.getAttachments($stateParams.id);
+                    }
+                }
+            }
+        }
+    };
+}
+
 function getTaskDetailsActivitiesState() {
     return {
         url: '/activities',
@@ -131,7 +170,7 @@ function getTaskDetailsActivitiesState() {
 }
 
 function getTaskDetailsDocumentsState() {
-    return  {
+    return {
         url: '/documents',
         views: {
             tab: {
@@ -149,7 +188,6 @@ function getTaskDetailsDocumentsState() {
         }
     };
 }
-
 
 angular.module('mean.icu').config([
     '$meanStateProvider',
@@ -305,6 +343,8 @@ angular.module('mean.icu').config([
             }
         })
         .state('main.tasks.byentity', generateStateByEntity('task'))
+        .state('main.tasks.byentity.activities', getDiscussionDetailsActivitiesState())
+        .state('main.tasks.byentity.documents', getDiscussionDetailsDocumentsState())
         .state('main.tasks.byentity.details', getTaskDetailsState())
         .state('main.tasks.byentity.details.activities', getTaskDetailsActivitiesState())
         .state('main.tasks.byentity.details.documents', getTaskDetailsDocumentsState())
@@ -397,7 +437,7 @@ angular.module('mean.icu').config([
                     return SearchService.find($stateParams.query);
                 },
                 tasks: function (results) {
-                    return _(results).filter(function(r) {
+                    return _(results).filter(function (r) {
                         return r._type === 'task';
                     });
                 },

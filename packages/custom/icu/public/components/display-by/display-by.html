@@ -23,7 +23,7 @@
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
                 <a href>
-                    {{discussion.name}}
+                    {{discussion.title || discussion.name}}
                 </a>
             </li>
             <li ng-if="discussions.length > 3" class="more">more...</li>

@@ -26,6 +26,20 @@ angular.module('mean.icu.data.activitiesservice', [])
         });
     }
 
+    function getByDiscussionId(id) {
+        return UsersService.getAll().then(function(users) {
+            return $http.get(ApiUri + '/discussions/' + id + EntityPrefix).then(function(updatessResult) {
+                var updates = updatessResult.data;
+                return updates.map(function (u) {
+                    u.user = _(users).find(function (c) {
+                        return c._id === u.creator;
+                    });
+                    return u;
+                });
+            });
+        });
+    }
+
     function create(update) {
         return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
             return result.data;
@@ -36,6 +50,7 @@ angular.module('mean.icu.data.activitiesservice', [])
         getByUserId: getByUserId,
         getByTaskId: getByTaskId,
         getByProjectId: getByProjectId,
+        getByDiscussionId: getByDiscussionId,
         create: create
     };
 });

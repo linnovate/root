@@ -1,11 +1,14 @@
 <div class="task-list">
-    <div class="header-wrap">
-        <div class="left-wrapper">
-            <header class="title">
-                Tasks from {{currentContext.entityName}}
-                <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
-            </header>
-        </div>
+    <div class="header-wrap"
+         ui-sref-active-eq="active"
+         ui-sref="main.{{currentContext.main}}.byentity({
+                    entity: currentContext.entityName,
+                    entityId: currentContext.entityId
+                    })">
+        <header class="title">
+            Tasks from {{currentContext.entityName}}
+            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+        </header>
     </div>
 
     <div class="filters">
