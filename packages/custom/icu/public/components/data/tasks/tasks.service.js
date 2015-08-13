@@ -119,6 +119,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function star(task) {
         return $http.patch(ApiUri + EntityPrefix + '/' + task._id + '/star', { star: !task.star }).then(function(result) {
+            task.star = !task.star;
             return result.data;
         });
     }
