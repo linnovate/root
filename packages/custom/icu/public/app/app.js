@@ -124,7 +124,7 @@ function getDiscussionDetailsActivitiesState() {
                 controller: 'DiscussionActivitiesController',
                 resolve: {
                     activities: function (ActivitiesService, $stateParams) {
-                        return ActivitiesService.getByDiscussionId($stateParams.id);
+                        return ActivitiesService.getByDiscussionId($stateParams.entityId);
                     }
                 }
             }
@@ -141,7 +141,7 @@ function getDiscussionDetailsDocumentsState() {
                 controller: 'DiscussionDocumentsController',
                 resolve: {
                     documents: function (DocumentsService, $stateParams) {
-                        return DocumentsService.getAttachments($stateParams.id);
+                        return DocumentsService.getAttachments($stateParams.entityId);
                     }
                 }
             }
