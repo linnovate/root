@@ -20,10 +20,8 @@ angular.module('mean.icu.ui.tasklist', [])
         var created = creatingStatuses.NotCreated;
 
         $scope.createOrUpdate = function(task) {
-            console.log(created);
             if (created === creatingStatuses.NotCreated) {
                 created = creatingStatuses.Creating;
-                console.log('fired');
                 TasksService.create(task).then(function(result) {
                     created = creatingStatuses.Created;
                     task._id = result._id;
