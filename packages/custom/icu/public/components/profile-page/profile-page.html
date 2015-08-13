@@ -10,7 +10,10 @@
         </div>
         <div class=form-group>
             <label>Avatar</label>
-            <input type="file" ngf-select ngf-change="uploadAvatar($files)" ng-model="me.profile.avatar">
+            <div class="upload" ngf-select ngf-change="uploadAvatar($files)" ng-model="me.profile.avatar">
+                Upload
+            </div>
+            <img class="avatar" ng-src="{{avatar}}?{{hash}}"></img>
         </div>
         <button>Save</button>
     </form>
