@@ -38,9 +38,16 @@ angular.module('mean.icu.ui.notificationsheader', [])
         };
 
         $scope.createProject = function () {
-            ngDialog.open({
-                template: '/icu/components/project-create/project-create.html',
-                controller: 'ProjectCreateController'
+            var project = {
+                color: '00acee'
+            };
+
+            ProjectsService.create(project).then(function(result) {
+                $state.go('main.projects.byentity.details', {
+                    id: result.id,
+                    entity: 'project',
+                    entityId: result.id
+                });
             });
         };
 

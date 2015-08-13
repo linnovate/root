@@ -1,7 +1,8 @@
 <div class="task-list">
     <div class="header-wrap"
-         ui-sref-active-eq="active"
-         ui-sref="main.{{currentContext.main}}.byentity({
+         ng-if="currentContext.entityName !== 'all'"
+         ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
+         ui-sref="main.{{currentContext.main}}.byentity.activities({
                     entity: currentContext.entityName,
                     entityId: currentContext.entityId
                     })">

@@ -1,20 +1,23 @@
 'use strict';
 
+var capitalize = function (str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 var generateStateByEntity = function (main) {
-    var capitalize = function (str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    };
     var capitalizedMain = capitalize(main);
 
     var resolve = {};
     resolve[main + 's'] = [capitalizedMain + 'sService', '$stateParams', 'context',
-        function (service, $stateParams, context) {
-            return context.switchTo($stateParams.entity, $stateParams.entityId).then(function (newContext) {
-                var entityName = newContext.entityName;
-                var getFn = 'getBy' + capitalize(entityName) + 'Id';
+        function (service, $stateParams) {
+            var entityName = $stateParams.entity;
+            var getFn = 'getBy' + capitalize(entityName) + 'Id';
 
-                return service[getFn](newContext.entityId);
-            });
+            if (!service[getFn]) {
+                getFn = 'getById';
+            }
+
+            return service[getFn]($stateParams.entityId);
         }];
 
     return {
@@ -36,6 +39,37 @@ var generateStateByEntity = function (main) {
         },
         resolve: resolve
     };
+};
+
+var getListView = function (entity, resolve) {
+    var view = {
+        'middlepane@main': {
+            templateUrl: '/icu/components/' + entity +  '-list/' + entity  + '-list.html',
+            controller: capitalize(entity) + 'ListController'
+        }
+    };
+
+
+    if (resolve) {
+        view['middlepane@main'].resolve = resolve;
+    }
+
+    return view;
+};
+
+var getDetailsView = function (entity, resolve) {
+    var view = {
+        'detailspane@main': {
+            templateUrl: '/icu/components/' + entity +  '-details/' + entity  + '-details.html',
+            controller: capitalize(entity) + 'DetailsController'
+        }
+    };
+
+    if (resolve) {
+        view['detailspane@main'].resolve = resolve;
+    }
+
+    return view;
 };
 
 function getTaskDetailsState(urlPrefix) {
@@ -329,19 +363,28 @@ angular.module('mean.icu').config([
                 middlepane: {
                     //hack around the fact that state current name is initialized in controller only
                     template: '',
-                    controller: function ($state, projects, context) {
-                        if (projects.length && $state.current.name === 'main.tasks') {
-                            return context.switchTo('project', projects[0]._id).then(function (newContext) {
-                                $state.go('.byentity', {
-                                    entity: newContext.entityName,
-                                    entityId: newContext.entityId
-                                });
-                            });
-                        }
+                    controller: function ($state, context) {
+                        $state.go('.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        });
                     }
                 }
             }
         })
+        .state('main.tasks.all', {
+            url: '/all',
+            views: getListView('task'),
+            resolve: {
+                tasks: function(TasksService) {
+                    return TasksService.getAll();
+                }
+            }
+        })
+        .state('main.tasks.all.details', getTaskDetailsState())
+        .state('main.tasks.all.details.activities', getTaskDetailsActivitiesState())
+        .state('main.tasks.all.details.documents', getTaskDetailsDocumentsState())
+
         .state('main.tasks.byentity', generateStateByEntity('task'))
         .state('main.tasks.byentity.activities', getDiscussionDetailsActivitiesState())
         .state('main.tasks.byentity.documents', getDiscussionDetailsDocumentsState())
@@ -372,6 +415,18 @@ angular.module('mean.icu').config([
                 }
             }
         })
+        .state('main.projects.all', {
+            url: '/all',
+            views: getListView('project'),
+            resolve: {
+                projects: function(ProjectsService, context) {
+                    return context.switchTo('all').then(function() {
+                        return ProjectsService.getAll();
+                    });
+                }
+            }
+        })
+        .state('main.projects.all.details', getProjectDetailsState())
         .state('main.projects.byentity', generateStateByEntity('project'))
         .state('main.projects.byentity.details', {
             url: '/:id',
@@ -384,19 +439,6 @@ angular.module('mean.icu').config([
                             return ProjectsService.getById($stateParams.id);
                         }
                     }
-                }
-            }
-        })
-        .state('main.projects.create', {
-            url: '/create',
-            views: {
-                'middlepane@main': {
-                    templateUrl: '/icu/components/project-list/project-list.html',
-                    controller: 'ProjectListController',
-                },
-                'detailspane@main': {
-                    templateUrl: '/icu/components/project-details/project-details.html',
-                    controller: 'ProjectCreateController',
                 }
             }
         })
@@ -419,6 +461,16 @@ angular.module('mean.icu').config([
                 }
             }
         })
+        .state('main.discussions.all', {
+            url: '/all',
+            views: getListView('discussion'),
+            resolve: {
+                projects: function(DiscussionsService) {
+                    return DiscussionsService.getAll();
+                }
+            }
+        })
+        .state('main.discussions.all.details', getDiscussionDetailsState())
         .state('main.discussions.byentity', generateStateByEntity('discussion'))
         .state('main.discussions.byentity.details', getTaskDetailsState())
         .state('main.search', {

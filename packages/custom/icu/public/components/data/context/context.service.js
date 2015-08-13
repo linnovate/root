@@ -22,17 +22,23 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
         switchTo: function (entityName, id) {
             var defer = $q.defer();
 
-            var serviceName = serviceMap[entityName];
-            var service = $injector.get(serviceName);
-            var self = this;
-            service.getById(id).then(function (result) {
-                self.entity = result;
-                self.entityName = entityName;
-                self.entityId = id;
+            if (entityName !== 'all') {
+                var serviceName = serviceMap[entityName];
+                var service = $injector.get(serviceName);
 
-                console.log(self);
-                defer.resolve(self);
-            });
+                var self = this;
+
+                service.getById(id).then(function (result) {
+                    self.entity = result;
+                    self.entityName = entityName;
+                    self.entityId = id;
+
+                    defer.resolve(self);
+                });
+            } else {
+                this.entityName = entityName;
+                defer.resolve(this);
+            }
 
             return defer.promise;
         },
@@ -51,10 +57,15 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
                 }
 
                 var params = state.params;
+                var entityName = params.entity;
+
+                if (!entityName && parts[2] === 'all') {
+                    entityName = 'all';
+                }
 
                 return {
                     main: main,
-                    entityName: params.entity,
+                    entityName: entityName,
                     entityId: params.entityId
                 };
             }

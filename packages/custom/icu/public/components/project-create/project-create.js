@@ -18,16 +18,11 @@ angular.module('mean.icu.ui.projectcreate', [])
 
     $scope.create = function () {
         ProjectsService.create($scope.project).then(function (result) {
-
-            $scope.closeThisDialog();
-
-            context.switchTo('project', result._id).then(function (newContext) {
-                $state.go('main.tasks.byentity', {
-                    id: result._id,
-                    entity: newContext.entityName,
-                    entityId: newContext.entityId
-                }, {reload: true});
-            });
+            $state.go('main.tasks.byentity', {
+                id: result._id,
+                entity: 'project',
+                entityId: result._id
+            }, { reload: true });
         });
     };
 });

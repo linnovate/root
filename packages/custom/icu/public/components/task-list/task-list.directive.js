@@ -5,6 +5,14 @@ angular.module('mean.icu.ui.tasklist', [])
     function controller($scope, context, TasksService, $state) {
         $scope.context = context;
 
+        $scope.isCurrentState = function(id) {
+            return ($state.current.name.indexOf('main.tasks.byentity.details') === 0 ||
+                    $state.current.name.indexOf('main.tasks.all.details') === 0
+                   ) && $state.params.id === id;
+        };
+
+        $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
+
         $scope.newTask = TasksService.getNew(context.entityId);
 
         $scope.update = _.debounce(function(task) {

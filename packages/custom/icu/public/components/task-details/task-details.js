@@ -99,8 +99,9 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.delayedUpdate = _.debounce($scope.update, 500);
 
     if ($scope.task &&
-        ($state.current.name === 'main.tasks.byentity.details' ||
-        $state.current.name === 'main.search.task')) {
+            ($state.current.name === 'main.tasks.byentity.details' ||
+            $state.current.name === 'main.search.task' ||
+            $state.current.name === 'main.tasks.all.details')) {
         $state.go('.activities');
     }
 });
