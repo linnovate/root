@@ -69,12 +69,15 @@ angular.module('mean.icu.ui.tasklist')
         }
     };
 
-    if ($scope.tasks.length &&
-            ($state.current.name === 'main.tasks.all' ||
-            $state.current.name === 'main.tasks.byentity')) {
-
-        navigateToDetails($scope.tasks[0]);
-    } else {
-        $state.go('.activities');
+    if ($scope.tasks.length) {
+        if ($state.current.name === 'main.tasks.all' ||
+            $state.current.name === 'main.tasks.byentity') {
+                navigateToDetails($scope.tasks[0]);
+        }
+    }
+    else {
+        if ($state.current.name !== 'main.tasks.byentity.activities') {
+            $state.go('.activities');
+        }
     }
 });
