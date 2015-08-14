@@ -6,12 +6,9 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.context = context;
 
         $scope.switchTo = function(entityName, id) {
-            $scope.context.switchTo(entityName, id).then(function(newContext) {
-
-                $state.go('main.' + newContext.main  +  '.byentity', {
-                    entity: newContext.entityName,
-                    entityId: newContext.entityId
-                });
+            $state.go('main.' + context.main  +  '.byentity', {
+                entity: entityName,
+                entityId: id
             });
         };
 

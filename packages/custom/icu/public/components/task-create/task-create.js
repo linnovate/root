@@ -31,10 +31,6 @@ angular.module('mean.icu.ui.taskcreate', [])
                     $scope.closeThisDialog();
 
                     if (context.entityName === 'project' && context.entityId !== $scope.task.project) {
-                        context.switchTo('project', $scope.task.project).then(function (newContext) {
-                            goToDetails(result._id, newContext);
-                        });
-                    } else {
                         goToDetails(result._id, context);
                     }
                 }

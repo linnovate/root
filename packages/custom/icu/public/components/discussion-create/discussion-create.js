@@ -11,13 +11,11 @@ angular.module('mean.icu.ui.discussioncreate', [])
 
             $scope.closeThisDialog();
 
-            context.switchTo('discussion', result._id).then(function(newContext) {
-                $state.go('main.tasks.byentity', {
-                    id: result._id,
-                    entity: newContext.entityName,
-                    entityId: newContext.entityId
-                }, {reload: true});
-            });
+            $state.go('main.tasks.byentity', {
+                id: result._id,
+                entity: 'discussion',
+                entityId: result._id
+            }, {reload: true});
         });
     };
 });

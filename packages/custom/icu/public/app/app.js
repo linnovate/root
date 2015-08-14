@@ -276,13 +276,11 @@ angular.module('mean.icu').config([
                 middlepane: {
                     //hack around the fact that state current name is initialized in controller only
                     template: '',
-                    controller: function ($state, projects, context) {
-                        if (projects.length && $state.current.name === 'main.people') {
-                            return context.switchTo('project', projects[0]._id).then(function (newContext) {
-                                $state.go('main.people.byentity', {
-                                    entity: newContext.entityName,
-                                    entityId: newContext.entityId
-                                });
+                    controller: function ($state, $stateParams) {
+                        if ($state.current.name === 'main.people') {
+                            $state.go('main.people.byentity', {
+                                entity: $stateParams.entity,
+                                entityId: $stateParams.entityId
                             });
                         }
                     }
@@ -398,12 +396,10 @@ angular.module('mean.icu').config([
                     //hack around the fact that state current name is initialized in controller only
                     template: '',
                     controller: function ($state, discussions, context) {
-                        if (discussions.length && $state.current.name === 'main.projects') {
-                            return context.switchTo('discussion', discussions[0]._id).then(function (newContext) {
-                                $state.go('.byentity', {
-                                    entity: newContext.entityName,
-                                    entityId: newContext.entityId
-                                });
+                        if ($state.current.name === 'main.projects') {
+                            $state.go('.byentity', {
+                                entity: newContext.entityName,
+                                entityId: newContext.entityId
                             });
                         }
                     }
@@ -420,9 +416,7 @@ angular.module('mean.icu').config([
             views: getListView('project'),
             resolve: {
                 projects: function(ProjectsService, context) {
-                    return context.switchTo('all').then(function() {
-                        return ProjectsService.getAll();
-                    });
+                    return ProjectsService.getAll();
                 }
             }
         })
@@ -449,12 +443,10 @@ angular.module('mean.icu').config([
                     //hack around the fact that state current name is initialized in controller only
                     template: '',
                     controller: function ($state, projects, context) {
-                        if (projects.length && $state.current.name === 'main.discussions') {
-                            return context.switchTo('project', projects[0]._id).then(function (newContext) {
-                                $state.go('.byentity', {
-                                    entity: newContext.entityName,
-                                    entityId: newContext.entityId
-                                });
+                        if ($state.current.name === 'main.discussions') {
+                            $state.go('.byentity', {
+                                entity: newContext.entityName,
+                                entityId: newContext.entityId
                             });
                         }
                     }
