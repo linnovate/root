@@ -8,7 +8,7 @@ var generateStateByEntity = function (main) {
     var capitalizedMain = capitalize(main);
 
     var resolve = {};
-    resolve[main + 's'] = [capitalizedMain + 'sService', '$stateParams', 'context',
+    resolve[main + 's'] = [capitalizedMain + 'sService', '$stateParams',
         function (service, $stateParams) {
             var entityName = $stateParams.entity;
             var getFn = 'getBy' + capitalize(entityName) + 'Id';
@@ -19,6 +19,10 @@ var generateStateByEntity = function (main) {
 
             return service[getFn]($stateParams.entityId);
         }];
+
+    resolve.entity = ['context', function (context) {
+        return context.entity;
+    }];
 
     return {
         url: '/by-:entity/:entityId',
@@ -138,12 +142,15 @@ function getDiscussionDetailsState(urlPrefix) {
         views: {
             'detailspane@main': {
                 templateUrl: '/icu/components/discussion-details/discussion-details.html',
-                //controller: 'ProjectDetailsController',
-                resolve: {
-                    discussion: function ($stateParams, DiscussionsService) {
-                        return DiscussionsService.getById($stateParams.id);
-                    }
-                }
+                controller: 'DiscussionDetailsController',
+
+            }
+        },
+        resolve: {
+            entity: function ($stateParams, discussions) {
+                return _(discussions).find(function (d) {
+                    return d._id === $stateParams.id;
+                });
             }
         }
     };
@@ -457,14 +464,19 @@ angular.module('mean.icu').config([
             url: '/all',
             views: getListView('discussion'),
             resolve: {
-                projects: function(DiscussionsService) {
+                discussions: function(DiscussionsService) {
                     return DiscussionsService.getAll();
                 }
             }
         })
         .state('main.discussions.all.details', getDiscussionDetailsState())
+        .state('main.discussions.all.details.activities', getDiscussionDetailsActivitiesState())
+        .state('main.discussions.all.details.documents', getDiscussionDetailsDocumentsState())
         .state('main.discussions.byentity', generateStateByEntity('discussion'))
-        .state('main.discussions.byentity.details', getTaskDetailsState())
+        .state('main.discussions.byentity.details', getDiscussionDetailsState())
+        .state('main.discussions.byentity.details.activities', getDiscussionDetailsActivitiesState())
+        .state('main.discussions.byentity.details.documents', getDiscussionDetailsDocumentsState())
+
         .state('main.search', {
             url: '/search/:query',
             views: {

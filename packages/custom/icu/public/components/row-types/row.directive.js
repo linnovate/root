@@ -6,6 +6,7 @@ angular.module('mean.icu.ui.rows', [])
         people: '/icu/components/row-types/people-row.html',
         task: '/icu/components/row-types/task-row.html',
         project: '/icu/components/row-types/project-row.html',
+        discussion: '/icu/components/row-types/discussion-row.html',
         'search-task': '/icu/components/row-types/search-task-row.html',
         'search-project': '/icu/components/row-types/search-project-row.html',
         'search-discussion': '/icu/components/row-types/search-discussion-row.html'
