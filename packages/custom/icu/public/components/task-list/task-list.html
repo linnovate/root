@@ -34,5 +34,10 @@
             <button class="calendar"></button>
         </div>-->
     </div>
-    <div icu-task-list tasks="tasks" draw-arrow="true" order="sorting"></div>
+    <div icu-task-list
+         class="entity-list-container"
+         ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+         tasks="tasks"
+         draw-arrow="true"
+         order="sorting"></div>
 </div>
