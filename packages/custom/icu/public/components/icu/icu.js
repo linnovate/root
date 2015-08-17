@@ -17,21 +17,38 @@ angular.module('mean.icu').controller('IcuController',
     $scope.discussions = discussions;
     $scope.people = people;
 
-    $scope.currentContext = context;
+    var entityMap = {
+        'project': 'projects',
+        'discussion': 'discussions',
+        'user': 'people',
+    };
 
-    context.setMain('task');
+    function initializeContext(state) {
+        var restoredContext = context.getContextFromState(state);
+        if (restoredContext.entityName !== 'all') {
+            var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
+                return e._id === restoredContext.entityId;
+            });
+
+            restoredContext.entity = currentEntity;
+
+            context.setMain(restoredContext.main);
+            context.entityName = restoredContext.entityName || 'project';
+            context.entity = restoredContext.entity || $scope.projects[0];
+            context.entityId = restoredContext.entityId || $scope.projects[0]._id;
+        } else {
+            context.setMain(restoredContext.main);
+            context.entityName = restoredContext.entityName;
+            context.entity = undefined;
+            context.entityId = undefined;
+        }
+    }
 
     var state = $state.current;
     state.params = $state.params;
 
-    var restoredContext = context.getContextFromState(state);
-
-    context.setMain(restoredContext.main);
-    if (restoredContext.entityName) {
-        context.switchTo(restoredContext.entityName, restoredContext.entityId);
-    } else {
-        context.switchTo('project', $scope.projects[0]._id);
-    }
+    initializeContext(state);
+    $scope.currentContext = context;
 
     if (!me) {
         $state.go('login');
@@ -41,17 +58,14 @@ angular.module('mean.icu').controller('IcuController',
         console.log(arguments);
     });
 
-    $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-        if (toState.name.indexOf('main.tasks') === 0) {
-            context.setMain('task');
-        } else if (toState.name.indexOf('main.projects') === 0) {
-            context.setMain('project');
-        } else if (toState.name.indexOf('main.discussions') === 0) {
-            context.setMain('discussion');
-        } else if (toState.name.indexOf('main.people') === 0) {
-            context.setMain('user');
-        }
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+        var state = toState;
+        state.params = toParams;
 
+        initializeContext(state);
+    });
+
+    $rootScope.$on('$stateChangeSuccess', function (event, toState) {
         console.log(arguments);
     });
 });

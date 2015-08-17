@@ -2,15 +2,14 @@
     <table class="tasks">
         <tbody>
             <tr data-ng-repeat="task in tasks | orderBy:order.field:order.isReverse"
-                data-ui-sref-active="active"
-                data-ui-sref="main.tasks.byentity.details({id: task._id, entity: context.entityName, entityId: context.entityId})"
-                data-ui-sref="{reload: true}"
+                data-ng-class="{ 'active': isCurrentState(task._id) }"
+                data-ui-sref="{{detailsState}}({id: task._id, entity: context.entityName, entityId: context.entityId})"
+                data-ui-sref-opts="{reload: true}"
                 icu-list-row
                 data="{ task: task, index: $index, drawArrow: drawArrow, updateCb: update, delete: delete}"
                 type="task">
             </tr>
-            <tr
-                class="new-task"
+            <tr class="new-task"
                 data-ui-sref-active="active"
                 data-ui-sref="main.tasks.byentity.details({id: newTask._id, entity: context.entityName, entityId: context.entityId})">
                 <td colspan="6"

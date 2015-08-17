@@ -1,4 +1,120 @@
 <div class="discussion-details">
     <div icu-notifications-header create-state="main.tasks.create"></div>
-    <h1>Discussion placeholder</h1>
+    <div class="page-content">
+        <div class="summary">
+
+            <div class="favorite">
+                <button ng-class="{ 'orange': discussion.star }" ng-click="star(discussion)">
+                    <i class="fa fa-star"></i>
+                </button>
+            </div>
+
+            <div class="user">
+                <div class="no-assignee" ng-if="!discussion.assign">
+                    <div class="avatar-placeholder">Select assignee</div>
+                </div>
+                <ui-select ng-model="discussion.assign" on-select="update(discussion)">
+                    <ui-select-match>
+                        <div icu-avatar user="$select.selected"></div>
+                        <span class="summary-content">{{$select.selected.name}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
+                        <div icu-avatar user="user"></div>
+                        <span class="summary-content">{{user.name}}</span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div class="due">
+                <div class="placeholder" ng-if="!discussion.due">Deadline</div>
+                <input ui-date="dueOptions" ng-model="discussion.due">
+            </div>
+
+            <div class="status {{discussion.status | lowercase}}">
+                <ui-select ng-model="discussion.status" on-select="update(discussion)">
+                    <ui-select-match>
+                        <span>{{$select.selected}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="status as status in statuses| filter: $select.search">
+                        <span>{{status}}</span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <div class="dropdown dropdown-container" dropdown>
+                <div class="dropdown-trigger" dropdown-toggle>
+                    <i class="fa fa-chevron-down"></i>
+                </div>
+                <ul class="dropdown-menu menu-items" role="menu">
+                    <li>
+                        <a href="#" ng-click="deleteDiscussion(discussion)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span>Delete discussion</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="actions">
+                <button ng-click="sendSummary()">Send summary</button>
+            </div>
+
+        </div>
+
+        <div class="description">
+            <div class="title"
+                 contenteditable="true"
+                 ng-model="discussion.title">
+            </div>
+
+            <div class="text"
+                 contenteditable="true"
+                 medium-editor
+                 ng-model="discussion.description"
+                 options="{{options}}">
+            </div>
+
+            <div class="tags">
+                <ul class="list">
+                    <li ng-if="!discussion.tags.length" class="placeholder">No lables</li>
+                    <li class="tag-item" ng-repeat="tag in discussion.tags">
+                        <span>{{tag}}</span>
+                        <button ng-click="removeTag(tag)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </li>
+                    <li class="new-tag-input" ng-show="tagInputVisible">
+                        <ui-select ng-model="newTag" tagging tagging-label="false" autofocus on-select="addTag(newTag)">
+                            <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
+                            <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
+                                {{tag}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </li>
+                </ul>
+                <div class="button">
+                    <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible"
+                            ng-show="!tagInputVisible">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="tabs">
+            <div class="switcher">
+                <button class="tab"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".activities">
+                    Updates
+                </button>
+                <button class="tab"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".documents">
+                    Documents
+                </button>
+            </div>
+        </div>
+        <div class="tab-content" data-ui-view="tab"></div>
+    </div>
+    <div icu-members-footer entity="discussion" users="people"></div>
 </div>

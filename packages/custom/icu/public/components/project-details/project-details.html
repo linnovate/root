@@ -1,4 +1,53 @@
-<div class="task-details">
-    <div icu-notifications-header create-state="main.tasks.create"></div>
-    <h1>Project placeholder</h1>
+<div class="project-details">
+    <div icu-notifications-header></div>
+    <div class="page-content">
+        <div class="summary">
+            <div class="favorite">
+                <button ng-class="{ 'orange': project.star }" ng-click="star(project)"><i class="fa fa-star"></i></button>
+            </div>
+            <div class="status {{task.status | lowercase}}">
+                <ui-select ng-model="task.status" on-select="update(task)">
+                    <ui-select-match>
+                        <span>{{$select.selected}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="status as status in statuses| filter: $select.search">
+                        <span>{{status}}</span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="color">
+                <div icu-colorpicker ng-model="project.color"></div>
+            </div>
+        </div>
+        <div class="description">
+            <div icu-change-content
+                 templates="['/icu/components/task-details/task-title-read.html',
+                '/icu/components/task-details/task-title-write.html']"
+                 data="{ task: project, updateFn: update }">
+            </div>
+
+            <div class="text"
+                 contenteditable="true"
+                 medium-editor
+                 ng-model="project.description"
+                 options="{{options}}">
+            </div>
+        </div>
+        <div class="tabs">
+            <div class="switcher">
+                <button class="tab"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".activities">
+                    Updates
+                </button>
+                <button class="tab"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".documents">
+                    Documents
+                </button>
+            </div>
+        </div>
+        <div class="tab-content" data-ui-view="tab"></div>
+    </div>
+    <div icu-members-footer entity="project" users="people"></div>
 </div>

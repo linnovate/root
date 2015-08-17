@@ -88,22 +88,15 @@
         padding: 35px 25px 30px 25px;
         cursor: pointer;
 
-        .left-wrapper {
-            float: left;
-
-            .dropdown {
-                font-size: 20px;
-            }
+        &.active {
+            background-color: $grey;
+            color: white;
         }
 
-        .right-wrapper {
-            float: right;
-
-            .title {
-                font-size: 24px;
-                span {
-                    font-weight: 700;
-                }
+        .title {
+            font-size: 24px;
+            span {
+                font-weight: 700;
             }
         }
     }

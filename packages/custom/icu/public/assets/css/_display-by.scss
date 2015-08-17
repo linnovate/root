@@ -1,7 +1,7 @@
 .display-by {
     .intro {
         color: $light-grey3;
-        margin: 20px 5px 5px 20px;
+        margin: 0px 5px 5px 20px;
         font-size: 13px;
     }
 
@@ -15,6 +15,24 @@
         line-height: 26px;
 
         cursor: pointer;
+    }
+
+    .all {
+        padding-left: 20px;
+
+        &.selected:before {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-left: -15px;
+            margin-right: 1.5px;
+            content: " ";
+
+            border-left: 5px solid $orange;
+            border-right: 5px solid transparent;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
     }
 
     .list {

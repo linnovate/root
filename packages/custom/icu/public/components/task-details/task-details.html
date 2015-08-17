@@ -71,10 +71,9 @@
             </div>
         </div>
         <div class="description">
-            <div icu-change-content
-                 templates="['/icu/components/task-details/task-title-read.html',
-                '/icu/components/task-details/task-title-write.html']"
-                 data="{ task: task, updateFn: update }">
+            <div class="title"
+                 contenteditable="true"
+                 ng-model="task.title">
             </div>
 
             <div class="text"
@@ -86,7 +85,7 @@
 
             <div class="tags">
                 <ul class="list">
-                    <li ng-if="!task.tags.length" class="placeholder">No lables</li>
+                    <li ng-if="!task.tags.length && !tagInputVisible" class="placeholder">No labels</li>
                     <li class="tag-item" ng-repeat="tag in task.tags">
                         <span>{{tag}}</span>
                         <button ng-click="removeTag(tag)">

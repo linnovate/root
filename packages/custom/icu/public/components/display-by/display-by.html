@@ -1,6 +1,12 @@
 <section class="display-by">
+    <p class="title all"
+       ui-sref="main.{{context.main}}.all" ui-sref-active="active"
+       data-ng-class="{ 'selected': context.entityName === 'all' }">
+        All
+    </p>
 
     <p class="intro">Display {{context.main}} by:</p>
+
     <div class="list projects" ng-if="projects && (icuDisplayBy.indexOf('projects'))>-1">
         <p ng-click="visible.project = !visible.project" class="title">Projects</p>
         <ul ng-if="visible.project">
@@ -23,7 +29,7 @@
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
                 <a href>
-                    {{discussion.name}}
+                    {{discussion.title || discussion.name}}
                 </a>
             </li>
             <li ng-if="discussions.length > 3" class="more">more...</li>

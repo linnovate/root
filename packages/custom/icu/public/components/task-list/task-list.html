@@ -1,11 +1,15 @@
 <div class="task-list">
-    <div class="header-wrap">
-        <div class="left-wrapper">
-            <header class="title">
-                Tasks from {{currentContext.entityName}}
-                <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
-            </header>
-        </div>
+    <div class="header-wrap"
+         ng-if="currentContext.entityName !== 'all'"
+         ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
+         ui-sref="main.{{currentContext.main}}.byentity.activities({
+                    entity: currentContext.entityName,
+                    entityId: currentContext.entityId
+                    })">
+        <header class="title">
+            Tasks from {{currentContext.entityName}}
+            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+        </header>
     </div>
 
     <div class="filters">

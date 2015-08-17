@@ -7,11 +7,12 @@
         </div>
         <div class="form-group">
             <label>Project</label>
-            <select class="form-control" ng-model="task.project" ng-options="project._id as project.title for project in projects" required></select>
+            <select class="form-control" ng-model="task.project"
+                    ng-options="project._id as project.title for project in projects" required></select>
         </div>
         <div class="form-group">
             <label>Tags</label>
-            <input class="form-control" type="text" ng-model="task.tags" />
+            <input class="form-control" type="text" ng-model="task.tags"/>
         </div>
         <div class="form-group">
             <label>Due</label>
@@ -27,7 +28,7 @@
         Or search for an existing task
         <form name="tasksearch" ng-submit="search()">
             <div class="form-group">
-                <input class="form-control" type="text" ng-model="term" >
+                <input class="form-control" type="text" ng-model="term">
             </div>
             <div class="buttons">
                 <button type="submit" class="btn">Search</button>
