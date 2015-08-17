@@ -398,8 +398,8 @@ angular.module('mean.icu').config([
                     controller: function ($state, discussions, context) {
                         if ($state.current.name === 'main.projects') {
                             $state.go('.byentity', {
-                                entity: newContext.entityName,
-                                entityId: newContext.entityId
+                                entity: context.entityName,
+                                entityId: context.entityId
                             });
                         }
                     }
@@ -445,8 +445,8 @@ angular.module('mean.icu').config([
                     controller: function ($state, projects, context) {
                         if ($state.current.name === 'main.discussions') {
                             $state.go('.byentity', {
-                                entity: newContext.entityName,
-                                entityId: newContext.entityId
+                                entity: context.entityName,
+                                entityId: context.entityId
                             });
                         }
                     }
