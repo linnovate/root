@@ -1,12 +1,6 @@
 'use strict';
 
 angular.module('mean.icu').service('context', function ($injector, $q) {
-    var serviceMap = {
-        project: 'ProjectsService',
-        discussion: 'DiscussionsService',
-        user: 'UsersService'
-    };
-
     var mainMap = {
         task: 'tasks',
         user: 'people',
@@ -19,23 +13,6 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
         entityName: '',
         entityId: '',
         main: '',
-        switchTo: function (entityName, id) {
-            var defer = $q.defer();
-
-            var serviceName = serviceMap[entityName];
-            var service = $injector.get(serviceName);
-            var self = this;
-            service.getById(id).then(function (result) {
-                self.entity = result;
-                self.entityName = entityName;
-                self.entityId = id;
-
-                console.log(self);
-                defer.resolve(self);
-            });
-
-            return defer.promise;
-        },
         setMain: function (main) {
             this.main = mainMap[main];
         },
@@ -51,10 +28,15 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
                 }
 
                 var params = state.params;
+                var entityName = params.entity;
+
+                if (!entityName && parts[2] === 'all') {
+                    entityName = 'all';
+                }
 
                 return {
                     main: main,
-                    entityName: params.entity,
+                    entityName: entityName,
                     entityId: params.entityId
                 };
             }

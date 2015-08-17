@@ -16,7 +16,7 @@ directive('icuSidepane', function() {
             state: 'projects',
             display: ['discussions', 'people']
         }, {
-            name: 'Meetings',
+            name: 'Discussions',
             icon: '/icu/assets/img/meeting.png',
             state: 'discussions',
             display: ['projects', 'people']

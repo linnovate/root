@@ -1,0 +1,39 @@
+.discussion-details {
+    .page-content {
+        .summary {
+            .actions {
+                float: right;
+                height: 55px;
+                width: 110px;
+                position: relative;
+
+                button {
+                    @include ellipse(12px);
+                    @include button;
+                    @include center;
+                    background-color: $orange;
+                    box-shadow: 0 3px 0 0 $dark-orange;
+                    color: white;
+                    padding: 0 10px;
+                    white-space: nowrap;
+                }
+            }
+
+            .status {
+                border-right: none;
+            }
+        }
+
+        .tabs {
+            .tab {
+                width: calc((100% - 60px) / 2);
+            }
+        }
+
+
+        .dropdown-container {
+            float: right;
+        }
+    }
+
+}

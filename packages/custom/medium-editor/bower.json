@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "angular-medium-editor": "geekuillaume/angular-medium-editor#controllerBinding",
-    "angular-contenteditable": "~0.3.7"
+    "angular-contenteditable": "tirli/angular-contenteditable#master"
   },
   "resolutions": {
     "medium-editor": "1.8.*"
