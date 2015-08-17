@@ -142,8 +142,7 @@ function getDiscussionDetailsState(urlPrefix) {
         views: {
             'detailspane@main': {
                 templateUrl: '/icu/components/discussion-details/discussion-details.html',
-                controller: 'DiscussionDetailsController',
-
+                controller: 'DiscussionDetailsController'
             }
         },
         resolve: {
@@ -151,6 +150,9 @@ function getDiscussionDetailsState(urlPrefix) {
                 return _(discussions).find(function (d) {
                     return d._id === $stateParams.id;
                 });
+            },
+            tasks: function (TasksService, $stateParams) {
+                return TasksService.getByDiscussionId($stateParams.id);
             }
         }
     };
@@ -183,6 +185,23 @@ function getDiscussionDetailsDocumentsState() {
                 resolve: {
                     documents: function (DocumentsService, $stateParams) {
                         return DocumentsService.getAttachments($stateParams.entityId);
+                    }
+                }
+            }
+        }
+    };
+}
+
+function getDiscussionDetailsTasksState() {
+    return {
+        url: '/tasks',
+        views: {
+            tab: {
+                templateUrl: '/icu/components/discussion-details/tabs/tasks/tasks.html',
+                controller: 'DiscussionTasksController',
+                resolve: {
+                    tasks: function (TasksService, $stateParams) {
+                        return TasksService.getByDiscussionId($stateParams.entityId);
                     }
                 }
             }
@@ -393,6 +412,7 @@ angular.module('mean.icu').config([
         .state('main.tasks.byentity', generateStateByEntity('task'))
         .state('main.tasks.byentity.activities', getDiscussionDetailsActivitiesState())
         .state('main.tasks.byentity.documents', getDiscussionDetailsDocumentsState())
+        .state('main.tasks.byentity.tasks', getDiscussionDetailsTasksState())
         .state('main.tasks.byentity.details', getTaskDetailsState())
         .state('main.tasks.byentity.details.activities', getTaskDetailsActivitiesState())
         .state('main.tasks.byentity.details.documents', getTaskDetailsDocumentsState())
@@ -472,10 +492,12 @@ angular.module('mean.icu').config([
         .state('main.discussions.all.details', getDiscussionDetailsState())
         .state('main.discussions.all.details.activities', getDiscussionDetailsActivitiesState())
         .state('main.discussions.all.details.documents', getDiscussionDetailsDocumentsState())
+        .state('main.discussions.all.details.tasks', getDiscussionDetailsTasksState())
         .state('main.discussions.byentity', generateStateByEntity('discussion'))
         .state('main.discussions.byentity.details', getDiscussionDetailsState())
         .state('main.discussions.byentity.details.activities', getDiscussionDetailsActivitiesState())
         .state('main.discussions.byentity.details.documents', getDiscussionDetailsDocumentsState())
+        .state('main.discussions.byentity.details.tasks', getDiscussionDetailsTasksState())
 
         .state('main.search', {
             url: '/search/:query',
