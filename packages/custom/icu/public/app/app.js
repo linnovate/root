@@ -440,12 +440,7 @@ angular.module('mean.icu').config([
         })
         .state('main.projects.all', {
             url: '/all',
-            views: getListView('project'),
-            resolve: {
-                projects: function(ProjectsService, context) {
-                    return ProjectsService.getAll();
-                }
-            }
+            views: getListView('project')
         })
         .state('main.projects.all.details', getProjectDetailsState())
         .state('main.projects.byentity', generateStateByEntity('project'))
@@ -482,12 +477,7 @@ angular.module('mean.icu').config([
         })
         .state('main.discussions.all', {
             url: '/all',
-            views: getListView('discussion'),
-            resolve: {
-                discussions: function(DiscussionsService) {
-                    return DiscussionsService.getAll();
-                }
-            }
+            views: getListView('discussion')
         })
         .state('main.discussions.all.details', getDiscussionDetailsState())
         .state('main.discussions.all.details.activities', getDiscussionDetailsActivitiesState())
