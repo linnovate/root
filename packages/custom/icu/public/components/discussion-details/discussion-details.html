@@ -56,7 +56,7 @@
             </div>
 
             <div class="actions">
-                <button ng-click="sendSummary()">Send summary</button>
+                <button ng-click="sendSummary(discussions)">Send summary</button>
             </div>
 
         </div>
@@ -72,32 +72,6 @@
                  medium-editor
                  ng-model="discussion.description"
                  options="{{options}}">
-            </div>
-
-            <div class="tags">
-                <ul class="list">
-                    <li ng-if="!discussion.tags.length" class="placeholder">No lables</li>
-                    <li class="tag-item" ng-repeat="tag in discussion.tags">
-                        <span>{{tag}}</span>
-                        <button ng-click="removeTag(tag)">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </li>
-                    <li class="new-tag-input" ng-show="tagInputVisible">
-                        <ui-select ng-model="newTag" tagging tagging-label="false" autofocus on-select="addTag(newTag)">
-                            <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
-                            <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
-                                {{tag}}
-                            </ui-select-choices>
-                        </ui-select>
-                    </li>
-                </ul>
-                <div class="button">
-                    <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible"
-                            ng-show="!tagInputVisible">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                </div>
             </div>
         </div>
         <div class="tabs">
