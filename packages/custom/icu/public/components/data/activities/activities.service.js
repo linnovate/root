@@ -9,7 +9,17 @@ angular.module('mean.icu.data.activitiesservice', [])
     }
 
     function getByProjectId(id) {
-        return [];
+        return UsersService.getAll().then(function(users) {
+            return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function(updatesResult) {
+                var updates = updatesResult.data;
+                return updates.map(function (u) {
+                    u.user = _(users).find(function (c) {
+                        return c._id === u.creator;
+                    });
+                    return u;
+                });
+            });
+        });
     }
 
     function getByTaskId(id) {

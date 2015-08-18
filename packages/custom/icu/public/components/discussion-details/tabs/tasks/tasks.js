@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.discussiondetails')
     .controller('DiscussionTasksController', function ($scope, entity, context, tasks, $state) {
-        $scope.discussion = entity;
+        $scope.discussion = entity || context.entity;
         $scope.tasks = tasks;
 
         $scope.manageTasks = function () {

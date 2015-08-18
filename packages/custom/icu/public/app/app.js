@@ -86,26 +86,26 @@ function getTaskDetailsState(urlPrefix) {
         views: {
             'detailspane@main': {
                 templateUrl: '/icu/components/task-details/task-details.html',
-                controller: 'TaskDetailsController',
-                resolve: {
-                    task: function (tasks, $stateParams, TasksService) {
-                        var task = _(tasks).find(function (t) {
-                            return t._id === $stateParams.id;
-                        });
+                controller: 'TaskDetailsController'
+            }
+        },
+        resolve: {
+            entity: function (tasks, $stateParams, TasksService) {
+                var task = _(tasks).find(function (t) {
+                    return t._id === $stateParams.id;
+                });
 
-                        if (!task) {
-                            return TasksService.getById($stateParams.id);
-                        } else {
-                            return task;
-                        }
-                    },
-                    tags: function (TasksService) {
-                        return TasksService.getTags();
-                    },
-                    users: function (UsersService) {
-                        return UsersService.getAll();
-                    }
+                if (!task) {
+                    return TasksService.getById($stateParams.id);
+                } else {
+                    return task;
                 }
+            },
+            tags: function (TasksService) {
+                return TasksService.getTags();
+            },
+            users: function (UsersService) {
+                return UsersService.getAll();
             }
         }
     };
@@ -123,7 +123,7 @@ function getProjectDetailsState(urlPrefix) {
                 templateUrl: '/icu/components/project-details/project-details.html',
                 controller: 'ProjectDetailsController',
                 resolve: {
-                    project: function ($stateParams, ProjectsService) {
+                    entity: function ($stateParams, ProjectsService) {
                         return ProjectsService.getById($stateParams.id);
                     }
                 }
@@ -142,32 +142,10 @@ function getDiscussionDetailsState(urlPrefix) {
         views: {
             'detailspane@main': {
                 templateUrl: '/icu/components/discussion-details/discussion-details.html',
-                controller: 'DiscussionDetailsController'
-            }
-        },
-        resolve: {
-            entity: function ($stateParams, discussions) {
-                return _(discussions).find(function (d) {
-                    return d._id === $stateParams.id;
-                });
-            },
-            tasks: function (TasksService, $stateParams) {
-                return TasksService.getByDiscussionId($stateParams.id);
-            }
-        }
-    };
-}
-
-function getDiscussionDetailsActivitiesState() {
-    return {
-        url: '/activities',
-        views: {
-            tab: {
-                templateUrl: '/icu/components/discussion-details/tabs/activities/activities.html',
-                controller: 'DiscussionActivitiesController',
+                controller: 'DiscussionDetailsController',
                 resolve: {
-                    activities: function (ActivitiesService, $stateParams) {
-                        return ActivitiesService.getByDiscussionId($stateParams.entityId);
+                    entity: function ($stateParams, DiscussionsService) {
+                        return DiscussionsService.getById($stateParams.id);
                     }
                 }
             }
@@ -175,75 +153,39 @@ function getDiscussionDetailsActivitiesState() {
     };
 }
 
-function getDiscussionDetailsDocumentsState() {
-    return {
-        url: '/documents',
-        views: {
-            tab: {
-                templateUrl: '/icu/components/discussion-details/tabs/documents/documents.html',
-                controller: 'DiscussionDocumentsController',
-                resolve: {
-                    documents: function (DocumentsService, $stateParams) {
-                        return DocumentsService.getAttachments($stateParams.entityId);
-                    }
-                }
-            }
-        }
-    };
-}
+function getDetailsTabState(main, tab) {
+    var capitalizedMain = capitalize(main);
+    var capitalizedTab = capitalize(tab);
 
-function getDiscussionDetailsTasksState() {
-    return {
-        url: '/tasks',
-        views: {
-            tab: {
-                templateUrl: '/icu/components/discussion-details/tabs/tasks/tasks.html',
-                controller: 'DiscussionTasksController',
-                resolve: {
-                    tasks: function (TasksService, $stateParams) {
-                        return TasksService.getByDiscussionId($stateParams.entityId);
-                    }
-                }
-            }
-        }
-    };
-}
+    var resolve = {};
+    resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
+        function (service, $stateParams) {
+            var entityName = $stateParams.id ? main : $stateParams.entity;
+            var getFn = 'getBy' + capitalize(entityName) + 'Id';
 
-function getTaskDetailsActivitiesState() {
-    return {
-        url: '/activities',
-        views: {
-            tab: {
-                templateUrl: '/icu/components/task-details/tabs/activities/activities.html',
-                controller: 'TaskActivitiesController',
-                resolve: {
-                    task: function (TasksService, $stateParams) {
-                        return TasksService.getById($stateParams.id);
-                    },
-                    activities: function (ActivitiesService, $stateParams) {
-                        return ActivitiesService.getByTaskId($stateParams.id);
-                    }
-                }
+            if (!service[getFn]) {
+                getFn = 'getById';
             }
-        }
-    };
-}
+            return service[getFn]($stateParams.id || $stateParams.entityId);
+        }];
 
-function getTaskDetailsDocumentsState() {
+    resolve.entity = ['context', function (context) {
+        return context.entity;
+    }];
+
     return {
-        url: '/documents',
+        url: '/' + tab,
         views: {
             tab: {
-                templateUrl: '/icu/components/task-details/tabs/documents/documents.html',
-                controller: 'TaskDocumentsController',
-                resolve: {
-                    task: function (TasksService, $stateParams) {
-                        return TasksService.getById($stateParams.id);
-                    },
-                    documents: function (DocumentsService, $stateParams) {
-                        return DocumentsService.getAttachments($stateParams.id);
-                    }
-                }
+                templateUrl: function ($stateParams) {
+                    var entity = $stateParams.id ? main : $stateParams.entity;
+                    return '/icu/components/' + entity + '-details/tabs/' + tab + '/' + tab + '.html';
+                },
+                controllerProvider: function ($stateParams) {
+                    var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
+                    return  entity + capitalizedTab + 'Controller';
+                },
+                resolve: resolve
             }
         }
     };
@@ -406,16 +348,16 @@ angular.module('mean.icu').config([
             }
         })
         .state('main.tasks.all.details', getTaskDetailsState())
-        .state('main.tasks.all.details.activities', getTaskDetailsActivitiesState())
-        .state('main.tasks.all.details.documents', getTaskDetailsDocumentsState())
+        .state('main.tasks.all.details.activities', getDetailsTabState('task', 'activities'))
+        .state('main.tasks.all.details.documents', getDetailsTabState('task', 'documents'))
 
         .state('main.tasks.byentity', generateStateByEntity('task'))
-        .state('main.tasks.byentity.activities', getDiscussionDetailsActivitiesState())
-        .state('main.tasks.byentity.documents', getDiscussionDetailsDocumentsState())
-        .state('main.tasks.byentity.tasks', getDiscussionDetailsTasksState())
+        .state('main.tasks.byentity.activities', getDetailsTabState('task', 'activities'))
+        .state('main.tasks.byentity.documents', getDetailsTabState('task', 'documents'))
+        .state('main.tasks.byentity.tasks', getDetailsTabState('task', 'tasks'))
         .state('main.tasks.byentity.details', getTaskDetailsState())
-        .state('main.tasks.byentity.details.activities', getTaskDetailsActivitiesState())
-        .state('main.tasks.byentity.details.documents', getTaskDetailsDocumentsState())
+        .state('main.tasks.byentity.details.activities', getDetailsTabState('task', 'activities'))
+        .state('main.tasks.byentity.details.documents', getDetailsTabState('task', 'documents'))
         .state('main.projects', {
             url: '/projects',
             views: {
@@ -442,22 +384,17 @@ angular.module('mean.icu').config([
             url: '/all',
             views: getListView('project')
         })
+
         .state('main.projects.all.details', getProjectDetailsState())
+        .state('main.projects.all.details.activities', getDetailsTabState('project', 'activities'))
+        .state('main.projects.all.details.documents', getDetailsTabState('project', 'documents'))
+        .state('main.projects.all.details.tasks', getDetailsTabState('project', 'tasks'))
         .state('main.projects.byentity', generateStateByEntity('project'))
-        .state('main.projects.byentity.details', {
-            url: '/:id',
-            views: {
-                'detailspane@main': {
-                    templateUrl: '/icu/components/project-details/project-details.html',
-                    controller: 'ProjectDetailsController',
-                    resolve: {
-                        project: function ($stateParams, ProjectsService) {
-                            return ProjectsService.getById($stateParams.id);
-                        }
-                    }
-                }
-            }
-        })
+        .state('main.projects.byentity.details', getProjectDetailsState())
+        .state('main.projects.byentity.details.activities', getDetailsTabState('project', 'activities'))
+        .state('main.projects.byentity.details.documents', getDetailsTabState('project', 'documents'))
+        .state('main.projects.byentity.details.tasks', getDetailsTabState('project', 'tasks'))
+
         .state('main.discussions', {
             url: '/discussions',
             views: {
@@ -480,14 +417,14 @@ angular.module('mean.icu').config([
             views: getListView('discussion')
         })
         .state('main.discussions.all.details', getDiscussionDetailsState())
-        .state('main.discussions.all.details.activities', getDiscussionDetailsActivitiesState())
-        .state('main.discussions.all.details.documents', getDiscussionDetailsDocumentsState())
-        .state('main.discussions.all.details.tasks', getDiscussionDetailsTasksState())
+        .state('main.discussions.all.details.activities', getDetailsTabState('discussion', 'activities'))
+        .state('main.discussions.all.details.documents', getDetailsTabState('discussion', 'documents'))
+        .state('main.discussions.all.details.tasks', getDetailsTabState('discussion', 'tasks'))
         .state('main.discussions.byentity', generateStateByEntity('discussion'))
         .state('main.discussions.byentity.details', getDiscussionDetailsState())
-        .state('main.discussions.byentity.details.activities', getDiscussionDetailsActivitiesState())
-        .state('main.discussions.byentity.details.documents', getDiscussionDetailsDocumentsState())
-        .state('main.discussions.byentity.details.tasks', getDiscussionDetailsTasksState())
+        .state('main.discussions.byentity.details.activities', getDetailsTabState('discussion', 'activities'))
+        .state('main.discussions.byentity.details.documents', getDetailsTabState('discussion', 'documents'))
+        .state('main.discussions.byentity.details.tasks', getDetailsTabState('discussion', 'tasks'))
 
         .state('main.search', {
             url: '/search/:query',
@@ -515,8 +452,8 @@ angular.module('mean.icu').config([
             }
         })
         .state('main.search.task', getTaskDetailsState('/task'))
-        .state('main.search.task.activities', getTaskDetailsActivitiesState())
-        .state('main.search.task.documents', getTaskDetailsDocumentsState())
+        .state('main.search.task.activities', getDetailsTabState('task', 'activities'))
+        .state('main.search.task.documents', getDetailsTabState('task', 'documents'))
         .state('main.search.project', getProjectDetailsState('/project'))
         .state('main.search.discussion', getDiscussionDetailsState('/discussion'));
     }

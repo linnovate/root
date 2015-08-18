@@ -3,7 +3,7 @@
 angular.module('mean.icu.data.documentsservice', [])
     .service('DocumentsService', function ($http, ApiUri, Upload) {
 
-        function getAttachments(id) {
+        function getById(id) {
             return $http.get(ApiUri + '/attachments/'/* + id*/).then(function (result) {
                 return result.data;
             });
@@ -24,7 +24,7 @@ angular.module('mean.icu.data.documentsservice', [])
         }
 
         return {
-            getAttachments: getAttachments,
+            getById: getById,
             saveAttachments: saveAttachments,
             updateAttachment: updateAttachment
         };
