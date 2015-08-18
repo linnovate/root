@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.icu.ui.tasklist', [])
+angular.module('mean.icu.ui.tasklistdirective', [])
 .directive('icuTaskList', function () {
     function controller($scope, context, TasksService, $state) {
         $scope.context = context;
@@ -42,7 +42,7 @@ angular.module('mean.icu.ui.tasklist', [])
 
     return {
         restrict: 'A',
-        templateUrl: '/icu/components/task-list/task-list.directive.template.html',
+        templateUrl: '/icu/components/task-list-directive/task-list.directive.template.html',
         scope: {
             tasks: '=',
             drawArrow: '=',

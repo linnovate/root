@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.icu.ui.discussionlist')
+angular.module('mean.icu.ui.discussionlist', [])
     .controller('DiscussionListController', function ($scope, $state, discussions, DiscussionsService, context) {
         $scope.discussions = discussions;
         $scope.showStarred = false;
