@@ -1,7 +1,8 @@
 <td class="id">{{data.index + 1}}</td>
 <td class="name"
     title="{{data.task.title}}"
-    contenteditable strip-br="true"
+    ng-attr-contenteditable="{{!data.displayOnly}}"
+    strip-br="true"
     ng-change="data.updateCb(data.task)"
     ng-model="data.task.title">
     {{data.task.title}}
