@@ -42,7 +42,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 color: '00acee'
             };
 
-            ProjectsService.create(project).then(function(result) {
+            ProjectsService.create(project).then(function (result) {
                 $state.go('main.projects.byentity.details', {
                     id: result.id,
                     entity: 'project',
@@ -51,10 +51,19 @@ angular.module('mean.icu.ui.notificationsheader', [])
             });
         };
 
-        $scope.createDiscussion = function() {
-            ngDialog.open({
-                template: '/icu/components/discussion-create/discussion-create.html',
-                controller: 'DiscussionCreateController'
+        $scope.createDiscussion = function () {
+            var discussion = {
+                title: '',
+                watchers: []
+            };
+
+            DiscussionsService.create(discussion).then(function (result) {
+                $scope.discussions.push(result);
+                $state.go('main.discussions.all.details', {
+                    id: result._id,
+                    entity: 'discussion',
+                    entityId: result._id
+                });
             });
         };
     }
@@ -62,7 +71,9 @@ angular.module('mean.icu.ui.notificationsheader', [])
     return {
         restrict: 'A',
         scope: {
-            createState: '@'
+            createState: '@',
+            discussions: '=',
+            projects: '='
         },
         controller: controller,
         templateUrl: '/icu/components/notifications-header/header.html'
