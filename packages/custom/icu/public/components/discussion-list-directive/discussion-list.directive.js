@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.icu.ui.discussionlist', [])
+angular.module('mean.icu.ui.discussionlistdirective', [])
 .directive('icuDiscussionList', function () {
     function controller($scope, context, DiscussionsService, $state) {
         $scope.context = context;
@@ -55,7 +55,7 @@ angular.module('mean.icu.ui.discussionlist', [])
 
     return {
         restrict: 'A',
-        templateUrl: '/icu/components/discussion-list/discussion-list.directive.template.html',
+        templateUrl: '/icu/components/discussion-list-directive/discussion-list.directive.template.html',
         scope: {
             discussions: '=',
             drawArrow: '=',

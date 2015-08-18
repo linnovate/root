@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.icu.ui.tasklist')
+angular.module('mean.icu.ui.tasklist', [])
 .controller('TaskListController', function ($scope, $state, tasks, TasksService, context) {
     $scope.tasks = tasks;
     $scope.showStarred = false;
