@@ -77,14 +77,23 @@
         <div class="tabs">
             <div class="switcher">
                 <button class="tab"
+                        ng-class="{two: !tasks.length, three: tasks.length}"
                         data-ui-sref-active="active"
                         data-ui-sref=".activities">
                     Updates
                 </button>
                 <button class="tab"
+                        ng-class="{two: !tasks.length, three: tasks.length}"
                         data-ui-sref-active="active"
                         data-ui-sref=".documents">
                     Documents
+                </button>
+                <button ng-if="tasks.length"
+                        class="tab"
+                        ng-class="{two: !tasks.length, three: tasks.length}"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".tasks">
+                    Tasks
                 </button>
             </div>
         </div>

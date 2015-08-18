@@ -1,14 +1,15 @@
 'use strict';
 
 angular.module('mean.icu.ui.discussiondetails', [])
-    .controller('DiscussionDetailsController', function ($scope, entity, context, $state, DiscussionsService) {
-        $scope.discussion = entity;
+    .controller('DiscussionDetailsController', function ($scope, entity, tasks, context, $state, DiscussionsService) {
+        $scope.discussion = entity || context.entity;
+        $scope.tasks = tasks;
 
         $scope.sendSummary = function (discussion) {
             DiscussionsService.sendSummary(discussion);
         };
 
-        $scope.statuses = ['Received', 'Completed'];
+        $scope.statuses = ['Set', 'Done', 'Postpone', 'Canceled', 'Archived'];
 
         $scope.$watchGroup(['discussion.description', 'discussion.title'], function (nVal, oVal) {
             if (nVal !== oVal && oVal) {

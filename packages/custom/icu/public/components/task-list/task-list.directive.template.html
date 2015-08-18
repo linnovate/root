@@ -1,12 +1,12 @@
 <div class="list-table">
     <table class="tasks">
-        <tbody>
+        <tbody ng-if="!displayOnly">
             <tr data-ng-repeat="task in tasks | orderBy:order.field:order.isReverse"
                 data-ng-class="{ 'active': isCurrentState(task._id) }"
                 data-ui-sref="{{detailsState}}({id: task._id, entity: context.entityName, entityId: context.entityId})"
                 data-ui-sref-opts="{reload: true}"
                 icu-list-row
-                data="{ task: task, index: $index, drawArrow: drawArrow, updateCb: update, delete: delete}"
+                data="{ task: task, index: $index, drawArrow: drawArrow, updateCb: update}"
                 type="task">
             </tr>
             <tr class="new-task"
@@ -18,6 +18,13 @@
                     ng-change="createOrUpdate(newTask)"
                     strip-br="true">
                 </td>
+            </tr>
+        </tbody>
+        <tbody ng-if="displayOnly">
+            <tr data-ng-repeat="task in tasks | orderBy:order.field:order.isReverse"
+                icu-list-row
+                data="{ task: task, index: $index, drawArrow: drawArrow, updateCb: update, displayOnly: displayOnly}"
+                type="task">
             </tr>
         </tbody>
     </table>
