@@ -1,8 +1,15 @@
-.task-list {
+.task-list, .discussion-list {
     height: 100%;
 
-    .task-list-container {
-        height: calc(100% - 146px);
+    .entity-list-container {
+        &.big {
+            height: calc(100% - 50px);
+        }
+
+        &.small {
+            height: calc(100% - 146px);
+        }
+
         .list-table {
             height: 100%;
             overflow: auto;

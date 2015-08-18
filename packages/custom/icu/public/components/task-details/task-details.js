@@ -38,7 +38,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         }).pluck('term').value();
     };
 
-    $scope.$watch(['task.description', 'task.title'], function (nVal, oVal) {
+    $scope.$watchGroup(['task.description', 'task.title'], function (nVal, oVal) {
         if (nVal !== oVal && oVal) {
             $scope.delayedUpdate($scope.task);
         }
@@ -46,7 +46,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
     $scope.addTag = function (tag) {
         $scope.task.tags.push(tag);
-        $scope.update(task);
+        $scope.update($scope.task);
         $scope.tagInputVisible = false;
     };
 

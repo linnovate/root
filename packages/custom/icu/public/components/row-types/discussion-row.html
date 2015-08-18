@@ -1,0 +1,18 @@
+<td class="id">{{data.index + 1}}</td>
+<td class="name"
+    title="{{data.discussion.title}}"
+    contenteditable strip-br="true"
+    ng-change="data.updateCb(data.discussion)"
+    ng-model="data.discussion.title">
+    {{data.discussion.title}}
+</td>
+<td class="project">
+    <span class="tag project" ng-style="color={'background-color': '#' + '{{data.discussion.project.color}}'}">
+        {{data.discussion.project.title}}
+    </span>
+</td>
+<td class="status {{data.discussion.status | lowercase}} col-sm-2">{{data.discussion.status}}</td>
+<td class="due">{{data.discussion.due | date: 'dd.MM.yyyy'}}</td>
+<td class="arrow">
+    <i ng-if="data.drawArrow" class="fa fa-chevron-right"></i>
+</td>
