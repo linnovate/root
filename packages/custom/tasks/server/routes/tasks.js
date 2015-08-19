@@ -92,7 +92,7 @@ module.exports = function(tasks, app, auth, database) {
             if (!error && response.statusCode === 200 && response.body.length) {
                 return res.json(JSON.parse(response.body));
             }
-            if(response.statusCode != 200)
+            if(response && response.statusCode != 200)
                 res.status(response.statusCode);
             var data = error ? error : JSON.parse(response.body);
             return res.json(data);
@@ -110,7 +110,7 @@ module.exports = function(tasks, app, auth, database) {
           if (!error && response.statusCode === 200 && response.body.length) {
             return res.json(JSON.parse(response.body));
           }
-            if(response.statusCode != 200)
+            if(response && response.statusCode != 200)
                 res.status(response.statusCode);
             var data = error ? error : JSON.parse(response.body);
             return res.json(data);
