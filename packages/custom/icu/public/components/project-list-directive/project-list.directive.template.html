@@ -1,0 +1,14 @@
+<div class="list-table">
+    <table class="projects">
+        <tbody>
+            <tr data-ng-repeat="project in projects | orderBy:order.field:order.isReverse"
+                data-ng-class="{ 'active': isCurrentState(project._id) }"
+                data-ui-sref="{{detailsState}}({id: project._id, entity: context.entityName, entityId: context.entityId})"
+                data-ui-sref-opts="{reload: true}"
+                icu-list-row
+                data="{ project: project, index: $index, drawArrow: drawArrow, updateCb: update}"
+                type="project">
+            </tr>
+        </tbody>
+    </table>
+</div>

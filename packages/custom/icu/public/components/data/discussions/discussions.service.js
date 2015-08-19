@@ -35,7 +35,7 @@ angular.module('mean.icu.data.discussionsservice', [])
 
     function getByProjectId(id) {
         return getAll();
-        //return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function (discussionsResult) {
+        //return $http.get(ApiUri + '/project/' + id + EntityPrefix).then(function (discussionsResult) {
         //    return discussionsResult.data;
         //});
     }

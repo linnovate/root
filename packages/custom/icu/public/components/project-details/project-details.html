@@ -4,25 +4,40 @@
             <div class="favorite">
                 <button ng-class="{ 'orange': project.star }" ng-click="star(project)"><i class="fa fa-star"></i></button>
             </div>
-            <div class="status {{task.status | lowercase}}">
-                <ui-select ng-model="task.status" on-select="update(task)">
+
+            <div class="status {{project.status | lowercase}}">
+                <ui-select ng-model="project.status" on-select="update(project)">
                     <ui-select-match>
                         <span>{{$select.selected}}</span>
                     </ui-select-match>
-                    <ui-select-choices repeat="status as status in statuses| filter: $select.search">
+                    <ui-select-choices repeat="status as status in statuses | filter: $select.search">
                         <span>{{status}}</span>
                     </ui-select-choices>
                 </ui-select>
             </div>
+
             <div class="color">
                 <div icu-colorpicker ng-model="project.color"></div>
             </div>
+
+            <div class="dropdown dropdown-container" dropdown>
+                <div class="dropdown-trigger" dropdown-toggle>
+                    <i class="fa fa-chevron-down"></i>
+                </div>
+                <ul class="dropdown-menu menu-items" role="menu">
+                    <li>
+                        <a href="#" ng-click="deleteProject(project)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span>Delete project</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="description">
-            <div icu-change-content
-                 templates="['/icu/components/task-details/task-title-read.html',
-                '/icu/components/task-details/task-title-write.html']"
-                 data="{ task: project, updateFn: update }">
+            <div class="title"
+                 contenteditable="true"
+                 ng-model="project.title">
             </div>
 
             <div class="text"
@@ -35,14 +50,23 @@
         <div class="tabs">
             <div class="switcher">
                 <button class="tab"
+                        ng-class="{two: !tasks.length, three: tasks.length}"
                         data-ui-sref-active="active"
                         data-ui-sref=".activities">
                     Updates
                 </button>
                 <button class="tab"
+                        ng-class="{two: !tasks.length, three: tasks.length}"
                         data-ui-sref-active="active"
                         data-ui-sref=".documents">
                     Documents
+                </button>
+                <button ng-if="tasks.length"
+                        class="tab"
+                        ng-class="{two: !tasks.length, three: tasks.length}"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".tasks">
+                    Tasks
                 </button>
             </div>
         </div>
