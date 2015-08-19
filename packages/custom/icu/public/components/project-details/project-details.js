@@ -13,17 +13,11 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.tasks = tasks;
         $scope.projects = projects;
 
-        ProjectsService.getStarred().then(function (starred) {
-            $scope.project.star = _(starred).any(function (s) {
-                return s._id === $scope.project._id;
-            });
-        });
-
-        if (typeof $scope.project.assign === 'string') {
-            $scope.project.assign = _.find(people, function (user) {
-                return user._id === $scope.project.assign;
-            });
-        }
+        //ProjectsService.getStarred().then(function (starred) {
+        //    $scope.project.star = _(starred).any(function (s) {
+        //        return s._id === $scope.project._id;
+        //    });
+        //});
 
         if (!$scope.project) {
             $state.go('main.projects.byentity', {
