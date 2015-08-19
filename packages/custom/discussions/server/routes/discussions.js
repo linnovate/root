@@ -12,7 +12,9 @@ module.exports = function(discussions, app, auth, database) {
           Discussion.create({
           data: req.body,
           headers: req.headers
-        }, function(data) {
+        }, function(data, statusCode) {
+          if(statusCode && statusCode != 200)
+            res.status(statusCode);
           res.send(data);
         });
       })
@@ -20,7 +22,9 @@ module.exports = function(discussions, app, auth, database) {
           Discussion.all({
               data: req.body,
               headers: req.headers
-          }, function(data) {
+          }, function(data, statusCode) {
+              if(statusCode && statusCode != 200)
+                  res.status(statusCode);
               res.send(data);
           });
       });
@@ -31,7 +35,9 @@ module.exports = function(discussions, app, auth, database) {
           Discussion.get({
               param: req.params.discussionId,
               headers: req.headers
-          }, function(data) {
+          }, function(data, statusCode) {
+              if(statusCode && statusCode != 200)
+                  res.status(statusCode);
               res.send(data);
           });
       })
@@ -40,17 +46,21 @@ module.exports = function(discussions, app, auth, database) {
               data: req.body,
               param: req.params.discussionId,
               headers: req.headers
-            }, function(data) {
-          res.send(data);
-        });
+            }, function(data, statusCode) {
+              if(statusCode && statusCode != 200)
+                  res.status(statusCode);
+              res.send(data);
+            });
       })
 
       .delete(function(req, res) {
         Discussion.delete({
           param: req.params.discussionId,
           headers: req.headers
-        }, function(data) {
-          res.send(data);
+        }, function(data, statusCode) {
+            if(statusCode && statusCode != 200)
+                res.status(statusCode);
+            res.send(data);
         });
       });
 };

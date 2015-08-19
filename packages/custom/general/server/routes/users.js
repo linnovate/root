@@ -27,9 +27,11 @@ module.exports = function(MeanUser, app, auth, database) {
       };
 
       request(objReq, function(error, response, body) {
-        if (!error && response.statusCode === 200 && response.body.length) {
+        if (!error && response.statusCode === 200 && response.body.length)
           res.redirect('/');
-        }
+        if(response)
+          return res.status(response.statusCode).send(response.body);
+
       });
     });
 
@@ -44,9 +46,10 @@ module.exports = function(MeanUser, app, auth, database) {
       };
 
       request(objReq, function(error, response, body) {
-        if (!error && response.statusCode === 200 && response.body.length) {
+        if (!error && response.statusCode === 200 && response.body.length)
           return res.json(JSON.parse(response.body));
-        }
+        if(response)
+          return res.status(response.statusCode).send(response.body);
       });
     });
 
@@ -61,9 +64,11 @@ module.exports = function(MeanUser, app, auth, database) {
       };
 
       request(objReq, function(error, response, body) {
-        if (!error && response.statusCode === 200 && response.body.length) {
+        if (!error && response.statusCode === 200 && response.body.length)
           return res.json(JSON.parse(response.body));
-        }
+        if(response)
+          return res.status(response.statusCode).send(response.body);
+
       });
     });
 
@@ -72,8 +77,10 @@ module.exports = function(MeanUser, app, auth, database) {
       User.all({
         data: req.body,
         headers: req.headers
-      }, function(data) {
-        res.send(data);
+      }, function(data, statusCode) {
+          if(statusCode && statusCode != 200)
+              res.status(statusCode);
+          res.send(data);
       });
     });
 
@@ -83,8 +90,10 @@ module.exports = function(MeanUser, app, auth, database) {
       User.get({
         param: req.params.id,
         headers: req.headers
-      }, function(data) {
-        res.send(data);
+      }, function(data, statusCode) {
+          if(statusCode && statusCode != 200)
+              res.status(statusCode);
+          res.send(data);
       });
     })
     .put(function(req, res) {
@@ -92,16 +101,20 @@ module.exports = function(MeanUser, app, auth, database) {
         data: req.body,
         param: req.params.id,
         headers: req.headers
-      }, function(data) {
-        res.send(data);
+      }, function(data, statusCode) {
+          if(statusCode && statusCode != 200)
+              res.status(statusCode);
+          res.send(data);
       });
     })
     .delete(function(req, res) {
       User.delete({
         param: req.params.id,
         headers: req.headers
-      }, function(data) {
-        res.send(data);
+      }, function(data, statusCode) {
+          if(statusCode && statusCode != 200)
+              res.status(statusCode);
+          res.send(data);
       });
     });
 
@@ -111,14 +124,16 @@ module.exports = function(MeanUser, app, auth, database) {
       var objReq = {
         uri: apiUri + '/api/avatar',
         method: 'post',
-        headers: req.headers,
+        headers: req.headers
       };
 
       req.pipe(
         request(objReq, function(error, response, body) {
-          if (!error && response.statusCode === 200 && response.body.length) {
+          if (!error && response.statusCode === 200 && response.body.length)
             return res.json(JSON.parse(response.body));
-          }
+          if(response)
+            return res.status(response.statusCode).send(response.body);
+
         })
       );
     });
@@ -126,15 +141,16 @@ module.exports = function(MeanUser, app, auth, database) {
   app.route('/api/profile')
     .get(function(req, res) {
       var objReq = {
-        uri: apiUri + '/api/profile',
+        uri: apiUri + '/api/profi',
         method: 'get',
-        headers: req.headers,
+        headers: req.headers
       };
 
       request(objReq, function(error, response, body) {
-        if (!error && response.statusCode === 200 && response.body.length) {
+        if (!error && response.statusCode === 200 && response.body.length)
           return res.json(JSON.parse(response.body));
-        }
+        if(response)
+          return res.status(response.statusCode).send(response.body);
       });
     });
 
@@ -148,9 +164,10 @@ module.exports = function(MeanUser, app, auth, database) {
       };
 
       request(objReq, function(error, response, body) {
-        if (!error && response.statusCode === 200) {
+        if (!error && response.statusCode === 200)
           return res.json(body);
-        }
+        if(response)
+          return res.status(response.statusCode).send(response.body);
       });
     });
 };
