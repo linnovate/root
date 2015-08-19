@@ -12,15 +12,19 @@ module.exports = function(updates, app, auth, database) {
           Update.create({
           data: req.body,
           headers: req.headers
-        }, function(data) {
-          res.send(data);
+        }, function(data, statusCode) {
+              if(statusCode && statusCode != 200)
+                  res.status(statusCode);
+              res.send(data);
         });
       })
       .get(function(req, res) {
           Update.all({
               data: req.body,
               headers: req.headers
-          }, function(data) {
+          }, function(data, statusCode) {
+              if(statusCode && statusCode != 200)
+                  res.status(statusCode);
               res.send(data);
           });
       });
@@ -31,7 +35,9 @@ module.exports = function(updates, app, auth, database) {
           Update.get({
               param: req.params.updateId,
               headers: req.headers
-          }, function(data) {
+          }, function(data, statusCode) {
+              if(statusCode && statusCode != 200)
+                  res.status(statusCode);
               res.send(data);
           });
       })
@@ -40,8 +46,10 @@ module.exports = function(updates, app, auth, database) {
               data: req.body,
               param: req.params.updateId,
               headers: req.headers
-            }, function(data) {
-          res.send(data);
+          }, function(data, statusCode) {
+              if(statusCode && statusCode != 200)
+                  res.status(statusCode);
+              res.send(data);
         });
       })
 
@@ -49,8 +57,10 @@ module.exports = function(updates, app, auth, database) {
         Update.delete({
           param: req.params.updateId,
           headers: req.headers
-        }, function(data) {
-          res.send(data);
+        }, function(data, statusCode) {
+            if(statusCode && statusCode != 200)
+                res.status(statusCode);
+            res.send(data);
         });
       });
 };
