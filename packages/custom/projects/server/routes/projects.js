@@ -13,7 +13,9 @@ module.exports = function(Projects, app, auth, database) {
 			Project.create({
 				data: req.body,
 				headers: req.headers
-			}, function(data) {
+			}, function(data, statusCode) {
+                if(statusCode && statusCode != 200)
+                    res.status(statusCode);
 				res.send(data);
 			});
 		})
@@ -21,7 +23,9 @@ module.exports = function(Projects, app, auth, database) {
 			Project.all({
 				data: req.body,
 				headers: req.headers
-			}, function(data) {
+			}, function(data, statusCode) {
+                if(statusCode && statusCode != 200)
+                    res.status(statusCode);
 				res.send(data);
 			});
 		});
@@ -32,7 +36,9 @@ module.exports = function(Projects, app, auth, database) {
 			Project.get({
 				param: req.params.projectId,
 				headers: req.headers
-			}, function(data) {
+			}, function(data, statusCode) {
+                if(statusCode && statusCode != 200)
+                    res.status(statusCode);
 				res.send(data);
 			});
 		})
@@ -42,7 +48,9 @@ module.exports = function(Projects, app, auth, database) {
 				data: req.body,
 				param: req.params.projectId,
 				headers: req.headers
-			}, function(data) {
+			}, function(data, statusCode) {
+                if(statusCode && statusCode != 200)
+                    res.status(statusCode);
 				res.send(data);
 			});
 		})
@@ -51,7 +59,9 @@ module.exports = function(Projects, app, auth, database) {
 			Project.delete({
 				param: req.params.projectId,
 				headers: req.headers
-			}, function(data) {
+			}, function(data, statusCode) {
+                if(statusCode && statusCode != 200)
+                    res.status(statusCode);
 				res.send(data);
 			});
 		});
