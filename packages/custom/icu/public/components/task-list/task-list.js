@@ -3,6 +3,8 @@
 angular.module('mean.icu.ui.tasklist', [])
 .controller('TaskListController', function ($scope, $state, tasks, TasksService, context) {
     $scope.tasks = tasks;
+    $scope.autocomplete = context.entityName === 'discussion';
+
     $scope.showStarred = false;
 
     $scope.isCurrentState = function(id) {
@@ -74,13 +76,9 @@ angular.module('mean.icu.ui.tasklist', [])
             $state.current.name === 'main.tasks.byentity') {
                 navigateToDetails($scope.tasks[0]);
         }
-    }
-    else {
-        if (
-                $state.current.name !== 'main.tasks.byentity.activities' ||
-                $state.current.name !== 'main.tasks.byentity.documents' ||
-                $state.current.name !== 'main.tasks.byentity.tasks') {
-            $state.go('.activities');
-        }
+    } else if (
+            $state.current.name !== 'main.tasks.byentity.activities' ||
+            $state.current.name !== 'main.tasks.byentity.tasks') {
+        $state.go('.activities');
     }
 });
