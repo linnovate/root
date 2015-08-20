@@ -10,8 +10,7 @@ var generateStateByEntity = function (main) {
     var resolve = {};
     resolve[main + 's'] = [capitalizedMain + 'sService', '$stateParams',
         function (service, $stateParams) {
-            var entityName = $stateParams.entity;
-            var getFn = 'getBy' + capitalize(entityName) + 'Id';
+            var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
 
             if (!service[getFn]) {
                 getFn = 'getById';
@@ -26,7 +25,12 @@ var generateStateByEntity = function (main) {
 
     if (main !== 'task') {
         resolve.tasks = function (TasksService, $stateParams) {
-            return TasksService.getByProjectId($stateParams.id);
+            if ($stateParams.entityId && $stateParams.id) {
+                return;
+            }
+            var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
+
+            return TasksService[getFn]($stateParams.entityId);
         };
     }
 
@@ -132,17 +136,17 @@ function getDiscussionDetailsState(urlPrefix) {
         views: {
             'detailspane@main': {
                 templateUrl: '/icu/components/discussion-details/discussion-details.html',
-                controller: 'DiscussionDetailsController',
-                resolve: {
-                    entity: function ($stateParams, discussions) {
-                        return _(discussions).find(function (d) {
-                            return d._id === $stateParams.id;
-                        });
-                    },
-                    tasks: function (TasksService, $stateParams) {
-                        return TasksService.getByDiscussionId($stateParams.id);
-                    }
-                }
+                controller: 'DiscussionDetailsController'
+            }
+        },
+        resolve: {
+            entity: function ($stateParams, discussions) {
+                return _(discussions).find(function (d) {
+                    return d._id === $stateParams.id;
+                });
+            },
+            tasks: function (TasksService, $stateParams) {
+                return TasksService.getByDiscussionId($stateParams.id);
             }
         }
     };
