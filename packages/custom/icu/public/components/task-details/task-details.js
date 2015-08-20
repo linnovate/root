@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskdetails', [])
-.controller('TaskDetailsController', function ($scope, users, task, tags, projects, $state, TasksService, context) {
+.controller('TaskDetailsController', function ($scope, users, entity, tags, projects, $state, TasksService, context) {
     $scope.people = users;
-    $scope.task = task;
+    $scope.task = entity || context.entity;
     $scope.tags = tags;
     $scope.projects = projects;
 
@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
     if (typeof $scope.task.assign === 'string') {
         $scope.task.assign = _.find(users, function (user) {
-            return user._id === task.assign;
+            return user._id === entity.assign;
         });
     }
 
@@ -28,7 +28,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
     $scope.tagInputVisible = false;
 
-    $scope.statuses = ['Received', 'Completed'];
+    $scope.statuses = ['New', 'Agenda', 'Assigned', 'In progress', 'Review', 'Rejected', 'Done'];
 
     $scope.getUnusedTags = function () {
         return _.chain($scope.tags).reject(function (t) {

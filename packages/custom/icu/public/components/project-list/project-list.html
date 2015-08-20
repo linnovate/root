@@ -1,15 +1,43 @@
 <div class="project-list">
-    <div class="list-table">
-        <table class="projects">
-            <tbody>
-                <tr data-ng-repeat="project in projects"
-                    data-ui-sref-active="active"
-                    data-ui-sref="main.projects.details({id: project._id})"
-                    icu-list-row
-                    data="{ project: project, index: $index, drawArrow: drawArrow }"
-                    type="project">
-                </tr>
-            </tbody>
-        </table>
+    <div class="header-wrap"
+         ng-if="currentContext.entityName !== 'all'"
+         ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
+         ui-sref="main.{{currentContext.main}}.byentity.activities({
+                    entity: currentContext.entityName,
+                    entityId: currentContext.entityId
+                    })">
+        <header class="title">
+            Projects from {{currentContext.entityName}}
+            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+        </header>
     </div>
+
+    <div class="filters">
+        <div class="left-wrapper">
+            <button ng-click="starredOnly()" ng-class="{ 'orange': showStarred }" class="favorites">
+                <i class="fa fa-star"></i>
+            </button>
+            <div class="select-wrapper">
+                <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
+                    <ui-select-match>
+                        <button class="tasks">{{$select.selected.title}}</button>
+                    </ui-select-match>
+                    <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
+                        {{field.title}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+
+        <!--<div class="right-wrapper">
+            <button class="list"></button>
+            <button class="calendar"></button>
+        </div>-->
+    </div>
+    <div icu-project-list
+         class="entity-list-container"
+         ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+         projects="projects"
+         draw-arrow="true"
+         order="sorting"></div>
 </div>
