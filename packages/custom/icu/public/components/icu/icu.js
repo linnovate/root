@@ -20,7 +20,7 @@ angular.module('mean.icu').controller('IcuController',
     var entityMap = {
         'project': 'projects',
         'discussion': 'discussions',
-        'user': 'people',
+        'user': 'people'
     };
 
     function initializeContext(state) {
@@ -33,9 +33,24 @@ angular.module('mean.icu').controller('IcuController',
             restoredContext.entity = currentEntity;
 
             context.setMain(restoredContext.main);
-            context.entityName = restoredContext.entityName || 'project';
-            context.entity = restoredContext.entity || $scope.projects[0];
-            context.entityId = restoredContext.entityId || $scope.projects[0]._id;
+
+            if (restoredContext.entityName) {
+                context.entityName = restoredContext.entityName;
+                context.entity = restoredContext.entity;
+                context.entityId = restoredContext.entityId;
+            } else if ($scope.projects[0] && restoredContext.main !== 'project') {
+                context.entityName = 'project';
+                context.entity = $scope.projects[0];
+                context.entityId = $scope.projects[0]._id;
+            } else if ($scope.discussions[0] && restoredContext.main === 'project') {
+                context.entityName = 'discussion';
+                context.entity = $scope.discussions[0];
+                context.entityId = $scope.discussions[0]._id;
+            } else {
+                context.entityName = 'all';
+                context.entity = undefined;
+                context.entityId = undefined;
+            }
         } else {
             context.setMain(restoredContext.main);
             context.entityName = restoredContext.entityName;

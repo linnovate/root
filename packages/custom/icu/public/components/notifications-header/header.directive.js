@@ -39,14 +39,18 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
         $scope.createProject = function () {
             var project = {
-                color: '00acee'
+                color: 'b9e67d',
+                title: 'new proj',
+                watchers: [],
+                status: 'New'
             };
 
             ProjectsService.create(project).then(function (result) {
-                $state.go('main.projects.byentity.details', {
-                    id: result.id,
+                $scope.projects.push(result);
+                $state.go('main.projects.all.details', {
+                    id: result._id,
                     entity: 'project',
-                    entityId: result.id
+                    entityId: result._id
                 });
             });
         };
@@ -54,7 +58,8 @@ angular.module('mean.icu.ui.notificationsheader', [])
         $scope.createDiscussion = function () {
             var discussion = {
                 title: '',
-                watchers: []
+                watchers: [],
+                status: 'Set'
             };
 
             DiscussionsService.create(discussion).then(function (result) {

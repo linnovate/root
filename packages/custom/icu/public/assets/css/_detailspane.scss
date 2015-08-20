@@ -211,7 +211,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             height: $panel-height;
             border-bottom: 3px solid $light-grey1;
 
-            .favorite, .due, .status, .tags {
+            .favorite, .due, .status, .tags, .color {
                 height: $panel-height;
                 float: left;
                 position: relative;
@@ -219,6 +219,13 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
             .favorite, .user, .due, .status {
                 border-right: 1px solid $light-grey1;
+            }
+
+            .color {
+                width: 100px;
+                .colorpicker {
+                    @include center;
+                }
             }
 
             .user {
@@ -683,6 +690,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .tab-content {
             margin: 10px 30px;
             height: $tab-content-height;
+            overflow: auto;
         }
     }
 

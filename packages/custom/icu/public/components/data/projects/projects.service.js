@@ -4,6 +4,10 @@ angular.module('mean.icu.data.projectsservice', [])
 .service('ProjectsService', function(ApiUri, $http) {
     var EntityPrefix = '/projects';
 
+    function getNew () {
+        return [];
+    }
+
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function(result) {
             return result.data;
@@ -14,6 +18,13 @@ angular.module('mean.icu.data.projectsservice', [])
         return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
             return result.data;
         });
+    }
+
+    function getByDiscussionId(id) {
+        return getAll();
+        //return $http.get(ApiUri + '/discussion/' + id + EntityPrefix).then(function (discussionsResult) {
+        //    return discussionsResult.data;
+        //});
     }
 
     function getByUserId(id) {
@@ -40,12 +51,29 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
+    function star(discussion) {
+        return $http.patch(ApiUri + EntityPrefix + '/' + discussion._id + '/star', {star: !discussion.star})
+            .then(function (result) {
+                return result.data;
+            });
+    }
+
+    function getStarred() {
+        return $http.get(ApiUri + EntityPrefix + '/starred').then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
+        getNew: getNew,
         getAll: getAll,
         getById: getById,
+        getByDiscussionId: getByDiscussionId,
         getByUserId: getByUserId,
         create: create,
         update: update,
-        remove: remove
+        remove: remove,
+        star: star,
+        getStarred: getStarred
     };
 });
