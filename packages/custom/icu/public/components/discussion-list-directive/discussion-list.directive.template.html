@@ -5,7 +5,13 @@
                 data-ng-class="{ 'active': isCurrentState(discussion._id) }"
                 ng-click="initialize(discussion)"
                 icu-list-row
-                data="{ discussion: discussion, index: $index, drawArrow: drawArrow, updateCb: createOrUpdate, delete: delete}"
+                data="{
+                    discussion: discussion,
+                    index: $index,
+                    drawArrow: drawArrow,
+                    onEnterCb: onEnter,
+                    updateCb: createOrUpdate,
+                    delete: delete }"
                 type="discussion">
             </tr>
         </tbody>

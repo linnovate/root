@@ -1,9 +1,12 @@
-<td class="id">{{data.index + 1}}</td>
+<td class="id" ng-if="data.project._id">{{data.index + 1}}</td>
 <td class="name"
+    ng-attr-colspan="{{data.project._id ? undefined : 2}}"
     title="{{data.project.title}}"
     ng-attr-contenteditable="{{!data.displayOnly}}"
+    placeholder="{{'Create new project' | i18next}}"
     strip-br="true"
-    ng-change="data.updateCb(data.project)"
+    ng-change="data.searchCb(data.project.title) || data.updateCb(data.project)"
+    ng-keydown="data.onEnterCb($event, data.index)"
     ng-model="data.project.title">
 </td>
 <td class="status {{data.project.status | lowercase}} col-sm-2">{{data.project.status}}</td>

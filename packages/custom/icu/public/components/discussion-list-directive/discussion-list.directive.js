@@ -15,11 +15,15 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             d.__state = creatingStatuses.created;
         });
 
-        $scope.discussions.push({
+        var newDiscussion = {
             title: '',
             watchers: [],
-            __state: creatingStatuses.NotCreated
-        });
+            tags: [],
+            __state: creatingStatuses.NotCreated,
+            __autocomplete: false
+        };
+
+        $scope.discussions.push(_(newDiscussion).clone());
 
         $scope.isCurrentState = function (id) {
             return ($state.current.name.indexOf('main.discussions.byentity.details') === 0 ||
@@ -27,8 +31,14 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
                 ) && $state.params.id === id;
         };
 
+        $scope.detailsState = context.entityName === 'all' ? 'main.discussions.all.details' : 'main.discussions.byentity.details';
+
         $scope.initialize = function(discussion) {
-            if (discussion.__state !== creatingStatuses.NotCreated) {
+            if ($scope.displayOnly) {
+                return;
+            }
+
+            if (discussion.__state === creatingStatuses.NotCreated) {
                 $scope.createOrUpdate(discussion).then(function() {
                     $state.go($scope.detailsState, {
                         id: discussion._id,
@@ -60,15 +70,37 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             }
         };
 
-        $scope.createOrUpdate = function (discussion) {
+        $scope.createOrUpdate = function(discussion) {
             if (discussion.__state === creatingStatuses.NotCreated) {
                 discussion.__state = creatingStatuses.Creating;
-                return DiscussionsService.create(discussion).then(function (result) {
+
+                return DiscussionsService.create(discussion).then(function(result) {
                     discussion.__state = creatingStatuses.Created;
-                    discussion._id = result._id;
+
+                    if (context.entityName !== 'all') {
+                        discussion[context.entityName] = context.entity;
+                    }
+
+                    $scope.discussions.push(_(newDiscussion).clone());
+
+                    return discussion;
                 });
             } else if (discussion.__state === creatingStatuses.Created) {
                 return DiscussionsService.update(discussion);
+            }
+        };
+    }
+
+    function link($scope, $element) {
+        $scope.onEnter = function($event, index) {
+            if ($event.keyCode === 13) {
+                $event.preventDefault();
+
+                $scope.discussions[index].__autocomplete = false;
+
+                if ($scope.discussions.length - 2 === index) {
+                    $element.find('td.name:nth-child(1)')[0].focus();
+                }
             }
         };
     }
@@ -82,6 +114,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             groupDiscussions: '=',
             order: '='
         },
+        link: link,
         controller: controller
     };
 });

@@ -20,7 +20,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             watchers: [],
             tags: [],
             __state: creatingStatuses.NotCreated,
-            __autocomplete: true,
+            __autocomplete: true
         };
 
         $scope.tasks.push(_(newTask).clone());
