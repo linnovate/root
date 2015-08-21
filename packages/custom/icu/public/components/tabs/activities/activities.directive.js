@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function () {
-        function controller($scope, UsersService, context, DocumentsService, ActivitiesService) {
+        function controller($scope, UsersService, context, DocumentsService, ActivitiesService, $stateParams) {
             $scope.activity = {
                 description: ''
             };
@@ -29,8 +29,8 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.save = function () {
-                $scope.activity.issue = $scope.entityName;
-                $scope.activity.issueId = $scope.entity._id;
+                $scope.activity.issue = context.main.slice(0, -1);
+                $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
                 ActivitiesService.create($scope.activity).then(function (result) {
                     if (!_.isEmpty($scope.attachments)) {

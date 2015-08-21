@@ -29,10 +29,12 @@ module.exports = function (General, app, auth, database) {
 
     req.pipe(
       request(objReq, function (error, response, body) {
-        if (!error && response.statusCode === 200 && response.body.length)
+        if (!error && response.statusCode === 200 && response.body.length) {
           return res.json(JSON.parse(response.body));
-        if(response)
+        }
+        if (response) {
           return res.status(response.statusCode).send(response.body);
+        }
       })
     );
   });
