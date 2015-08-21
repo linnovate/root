@@ -18,8 +18,10 @@ angular.module('mean.icu.data.usersservice', [])
             deferred.resolve(me);
         } else {
             $http.get('/api/users/me').then(function(result) {
-                me = result.data;
-                deferred.resolve(result.data);
+                getById(result.data._id).then(function(user) {
+                    me = user;
+                    deferred.resolve(me);
+                });
             }, function() {
                 deferred.resolve(null);
             });
@@ -46,6 +48,13 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
+    function update(user) {
+        return $http.put('/api/users/' + user._id, user).then(function(result) {
+            return result.data;
+        });
+    }
+
+
     function login(credentials) {
         return $http.post('/api/signin', credentials).then(function(result) {
             localStorage.setItem('JWT', result.data.token);
@@ -66,18 +75,6 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
-    function getProfile(profile) {
-        return $http.get('/api/profile', profile).then(function(result) {
-            return result.data;
-        });
-    }
-
-    function update(profile) {
-        return $http.put('/api/profile', profile).then(function(result) {
-            return result.data;
-        });
-    }
-
     function updateAvatar(file) {
         return Upload.upload({
             url: '/api/avatar',
@@ -91,7 +88,6 @@ angular.module('mean.icu.data.usersservice', [])
         getById: getById,
         getByProjectId: getByProjectId,
         getByDiscussionId: getByDiscussionId,
-        getProfile: getProfile,
         login: login,
         logout: logout,
         register: register,

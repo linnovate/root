@@ -24,38 +24,40 @@ angular.module('mean.icu').controller('IcuController',
     };
 
     function initializeContext(state) {
-        var restoredContext = context.getContextFromState(state);
-        if (restoredContext.entityName !== 'all') {
-            var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
-                return e._id === restoredContext.entityId;
-            });
+        if (state.name.indexOf('main') === 0) {
+            var restoredContext = context.getContextFromState(state);
+            if (restoredContext.entityName !== 'all') {
+                var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
+                    return e._id === restoredContext.entityId;
+                });
 
-            restoredContext.entity = currentEntity;
+                restoredContext.entity = currentEntity;
 
-            context.setMain(restoredContext.main);
+                context.setMain(restoredContext.main);
 
-            if (restoredContext.entityName) {
-                context.entityName = restoredContext.entityName;
-                context.entity = restoredContext.entity;
-                context.entityId = restoredContext.entityId;
-            } else if ($scope.projects[0] && restoredContext.main !== 'project') {
-                context.entityName = 'project';
-                context.entity = $scope.projects[0];
-                context.entityId = $scope.projects[0]._id;
-            } else if ($scope.discussions[0] && restoredContext.main === 'project') {
-                context.entityName = 'discussion';
-                context.entity = $scope.discussions[0];
-                context.entityId = $scope.discussions[0]._id;
+                if (restoredContext.entityName) {
+                    context.entityName = restoredContext.entityName;
+                    context.entity = restoredContext.entity;
+                    context.entityId = restoredContext.entityId;
+                } else if ($scope.projects[0] && restoredContext.main !== 'project') {
+                    context.entityName = 'project';
+                    context.entity = $scope.projects[0];
+                    context.entityId = $scope.projects[0]._id;
+                } else if ($scope.discussions[0] && restoredContext.main === 'project') {
+                    context.entityName = 'discussion';
+                    context.entity = $scope.discussions[0];
+                    context.entityId = $scope.discussions[0]._id;
+                } else {
+                    context.entityName = 'all';
+                    context.entity = undefined;
+                    context.entityId = undefined;
+                }
             } else {
-                context.entityName = 'all';
+                context.setMain(restoredContext.main);
+                context.entityName = restoredContext.entityName;
                 context.entity = undefined;
                 context.entityId = undefined;
             }
-        } else {
-            context.setMain(restoredContext.main);
-            context.entityName = restoredContext.entityName;
-            context.entity = undefined;
-            context.entityId = undefined;
         }
     }
 
