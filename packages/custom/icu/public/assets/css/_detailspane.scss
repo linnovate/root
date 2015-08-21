@@ -412,19 +412,30 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 width: calc((100% - 55px) * 0.25);
 
                 .tag-wrap {
+                    width: 100%;
                     position: absolute;
                     top: 50%;
                     transform: translateY(-50%);
                     padding-left: 10px;
 
+                    .ui-select-match-text {
+                        width: 100%;
+                    }
+
                     .tag {
                         @include tag(14px);
-                        width: inherit;
+                        width: initial;
                         margin: 0;
                         padding: 4px 7px;
                         color: white;
                         position: relative;
                         margin-top: -5px;
+                        max-width: 100%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        display: inline-block;
+                        float: left;
 
                         .delete {
                             display: none;

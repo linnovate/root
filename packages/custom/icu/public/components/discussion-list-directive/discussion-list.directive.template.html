@@ -3,20 +3,16 @@
         <tbody>
             <tr data-ng-repeat="discussion in discussions | orderBy:order.field:order.isReverse"
                 data-ng-class="{ 'active': isCurrentState(discussion._id) }"
-                ng-click="showDetails(discussion)"
+                ng-click="initialize(discussion)"
                 icu-list-row
-                data="{ discussion: discussion, index: $index, drawArrow: drawArrow, updateCb: update, delete: delete}"
+                data="{
+                    discussion: discussion,
+                    index: $index,
+                    drawArrow: drawArrow,
+                    onEnterCb: onEnter,
+                    updateCb: createOrUpdate,
+                    delete: delete }"
                 type="discussion">
-            </tr>
-            <tr class="new-discussion"
-                data-ui-sref-active="active"
-                data-ui-sref="main.discussions.byentity.details({id: newDiscussion._id, entity: context.entityName, entityId: context.entityId})">
-                <td colspan="6"
-                    contenteditable
-                    ng-model="newDiscussion.title"
-                    ng-change="createOrUpdate(newDiscussion)"
-                    strip-br="true">
-                </td>
             </tr>
         </tbody>
     </table>

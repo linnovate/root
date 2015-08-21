@@ -72,11 +72,13 @@
         <div class="description">
             <div class="title"
                  contenteditable="true"
+                 strip-br="true"
                  ng-model="task.title">
             </div>
 
             <div class="text"
                  contenteditable="true"
+                 strip-br="true"
                  medium-editor
                  ng-model="task.description"
                  options="{{options}}">

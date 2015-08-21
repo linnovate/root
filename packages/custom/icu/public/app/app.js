@@ -211,10 +211,9 @@ angular.module('mean.icu').config([
             controller: 'ProfileController',
             resolve: {
                 me: function (UsersService) {
-                    return UsersService.getMe();
-                },
-                profile: function (UsersService) {
-                    return UsersService.getProfile();
+                    return UsersService.getMe().then(function(result) {
+                        return UsersService.getById(result._id);
+                    });
                 }
             }
         })
