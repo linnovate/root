@@ -23,7 +23,9 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             __autocomplete: true
         };
 
-        $scope.tasks.push(_(newTask).clone());
+        if (!$scope.displayOnly) {
+            $scope.tasks.push(_(newTask).clone());
+        }
 
         $scope.isCurrentState = function(id) {
             return ($state.current.name.indexOf('main.tasks.byentity.details') === 0 ||

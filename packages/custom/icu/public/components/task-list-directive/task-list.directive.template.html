@@ -1,6 +1,6 @@
 <div class="list-table">
     <table class="tasks">
-        <tbody ng-if="!displayOnly">
+        <tbody>
             <tr data-ng-repeat="task in tasks | orderBy:order.field:order.isReverse"
                 data-ng-class="{ 'active': isCurrentState(task._id) }"
                 ng-click="initialize(task)"
