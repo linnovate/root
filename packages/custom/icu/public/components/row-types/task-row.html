@@ -1,6 +1,6 @@
 <td class="id" ng-if="data.task._id">{{data.index + 1}}</td>
 <td class="name"
-    ng-attr-colspan="{{data.task._id ? undefined : 6}}"
+    ng-attr-colspan="{{data.task._id ? undefined : 5}}"
     title="{{data.task.title}}"
     ng-attr-contenteditable="{{!data.displayOnly}}"
     placeholder="{{'Create new task' | i18next}}"
@@ -17,8 +17,10 @@
         </p>
     </div>
 </td>
-<td ng-if="data.task._id" class="project">
-    <span class="tag project" ng-style="color={'background-color': '#' + '{{data.task.project.color}}'}">
+<td class="project">
+    <span class="tag project"
+          title="data.task.project.title"
+          ng-style="color={'background-color': '#' + '{{data.task.project.color}}'}">
         {{data.task.project.title}}
     </span>
 </td>

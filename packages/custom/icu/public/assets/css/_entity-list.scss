@@ -86,8 +86,14 @@
                     }
 
                     .tag {
-                        padding: 5px;
                         @include tag(14px);
+                        padding: 5px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        width: initial;
+                        max-width: 100%;
+                        display: inline-block;
                     }
                 }
 
