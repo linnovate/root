@@ -5,6 +5,26 @@ angular.module('mean.icu.ui.tasklistdirective', [])
     function controller($scope, context, TasksService, $state) {
         $scope.context = context;
 
+        var creatingStatuses = {
+            NotCreated: 0,
+            Creating: 1,
+            Created: 2
+        };
+
+        _($scope.tasks).each(function(t) {
+            t.__state = creatingStatuses.Created;
+        });
+
+        var newTask = {
+            title: '',
+            watchers: [],
+            tags: [],
+            __state: creatingStatuses.NotCreated,
+            __autocomplete: true
+        };
+
+        $scope.tasks.push(_(newTask).clone());
+
         $scope.isCurrentState = function(id) {
             return ($state.current.name.indexOf('main.tasks.byentity.details') === 0 ||
                     $state.current.name.indexOf('main.tasks.all.details') === 0
@@ -13,29 +33,88 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
         $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
 
-        $scope.newTask = TasksService.getNew(context.entityId);
+        $scope.createOrUpdate = function(task) {
+            if (task.__state === creatingStatuses.NotCreated) {
+                task.__state = creatingStatuses.Creating;
 
-        $scope.update = _.debounce(function(task) {
-            TasksService.update(task);
-        }, 300);
+                return TasksService.create(task).then(function(result) {
+                    task.__state = creatingStatuses.Created;
 
-        var creatingStatuses = {
-            NotCreated: 0,
-            Creating: 1,
-            Created: 2
+                    if (context.entityName !== 'all') {
+                        task[context.entityName] = context.entity;
+                    }
+
+                    $scope.tasks.push(_(newTask).clone());
+
+                    return task;
+                });
+            } else if (task.__state === creatingStatuses.Created) {
+                return TasksService.update(task);
+            }
         };
 
-        var created = creatingStatuses.NotCreated;
+        $scope.initialize = function(task) {
+            if ($scope.displayOnly) {
+                return;
+            }
 
-        $scope.createOrUpdate = function(task) {
-            if (created === creatingStatuses.NotCreated) {
-                created = creatingStatuses.Creating;
-                TasksService.create(task).then(function(result) {
-                    created = creatingStatuses.Created;
-                    task._id = result._id;
+            if (task.__state === creatingStatuses.NotCreated) {
+                $scope.createOrUpdate(task).then(function() {
+                    $state.go($scope.detailsState, {
+                        id: task._id,
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    });
                 });
-            } else if (created === creatingStatuses.Created) {
-                TasksService.update(task);
+            } else {
+                $state.go($scope.detailsState, {
+                    id: task._id,
+                    entity: context.entityName,
+                    entityId: context.entityId
+                });
+            }
+        };
+
+        $scope.searchResults = [];
+
+        $scope.search = function(term) {
+            $scope.searchResults.length = 0;
+
+            if (!term) {
+                return;
+            }
+
+            TasksService.search(term).then(function(searchResults) {
+                _(searchResults).each(function(sr) {
+                    var alreadyAdded = _($scope.tasks).any(function(t) {
+                        return t._id === sr._id;
+                    });
+
+                    if (!alreadyAdded) {
+                        $scope.searchResults.push(sr);
+                    }
+                });
+            });
+        };
+
+        $scope.select = function(currentTask, selectedTask) {
+            TasksService.remove(currentTask._id);
+
+            _(currentTask).assign(selectedTask);
+            currentTask.__autocomplete = false;
+        };
+    }
+
+    function link($scope, $element) {
+        $scope.onEnter = function($event, index) {
+            if ($event.keyCode === 13) {
+                $event.preventDefault();
+
+                $scope.tasks[index].__autocomplete = false;
+
+                if ($scope.tasks.length - 2 === index) {
+                    $element.find('td.name:nth-child(1)')[0].focus();
+                }
             }
         };
     }
@@ -48,8 +127,10 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             drawArrow: '=',
             groupTasks: '=',
             order: '=',
-            displayOnly: '='
+            displayOnly: '=',
+            autocomplete: '='
         },
+        link: link,
         controller: controller
     };
 });

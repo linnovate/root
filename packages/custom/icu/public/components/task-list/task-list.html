@@ -37,6 +37,7 @@
     <div icu-task-list
          class="entity-list-container"
          ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+         autocomplete="autocomplete",
          tasks="tasks"
          draw-arrow="true"
          order="sorting"></div>

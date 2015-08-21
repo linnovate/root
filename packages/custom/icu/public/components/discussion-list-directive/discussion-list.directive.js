@@ -5,10 +5,54 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
     function controller($scope, context, DiscussionsService, $state) {
         $scope.context = context;
 
+        var creatingStatuses = {
+            NotCreated: 0,
+            Creating: 1,
+            Created: 2
+        };
+
+        _($scope.discussions).each(function(d) {
+            d.__state = creatingStatuses.created;
+        });
+
+        var newDiscussion = {
+            title: '',
+            watchers: [],
+            tags: [],
+            __state: creatingStatuses.NotCreated,
+            __autocomplete: false
+        };
+
+        $scope.discussions.push(_(newDiscussion).clone());
+
         $scope.isCurrentState = function (id) {
             return ($state.current.name.indexOf('main.discussions.byentity.details') === 0 ||
                     $state.current.name.indexOf('main.discussions.all.details') === 0
                 ) && $state.params.id === id;
+        };
+
+        $scope.detailsState = context.entityName === 'all' ? 'main.discussions.all.details' : 'main.discussions.byentity.details';
+
+        $scope.initialize = function(discussion) {
+            if ($scope.displayOnly) {
+                return;
+            }
+
+            if (discussion.__state === creatingStatuses.NotCreated) {
+                $scope.createOrUpdate(discussion).then(function() {
+                    $state.go($scope.detailsState, {
+                        id: discussion._id,
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    });
+                });
+            } else {
+                $state.go($scope.detailsState, {
+                    id: discussion._id,
+                    entity: context.entityName,
+                    entityId: context.entityId
+                });
+            }
         };
 
 
@@ -26,29 +70,37 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             }
         };
 
-        $scope.newDiscussion = DiscussionsService.getNew(context.entityId);
+        $scope.createOrUpdate = function(discussion) {
+            if (discussion.__state === creatingStatuses.NotCreated) {
+                discussion.__state = creatingStatuses.Creating;
 
-        $scope.update = _.debounce(function (discussion) {
-            DiscussionsService.update(discussion);
-        }, 300);
+                return DiscussionsService.create(discussion).then(function(result) {
+                    discussion.__state = creatingStatuses.Created;
 
-        var creatingStatuses = {
-            NotCreated: 0,
-            Creating: 1,
-            Created: 2
-        };
+                    if (context.entityName !== 'all') {
+                        discussion[context.entityName] = context.entity;
+                    }
 
-        var created = creatingStatuses.NotCreated;
+                    $scope.discussions.push(_(newDiscussion).clone());
 
-        $scope.createOrUpdate = function (discussion) {
-            if (created === creatingStatuses.NotCreated) {
-                created = creatingStatuses.Creating;
-                DiscussionsService.create(discussion).then(function (result) {
-                    created = creatingStatuses.Created;
-                    discussion._id = result._id;
+                    return discussion;
                 });
-            } else if (created === creatingStatuses.Created) {
-                DiscussionsService.update(discussion);
+            } else if (discussion.__state === creatingStatuses.Created) {
+                return DiscussionsService.update(discussion);
+            }
+        };
+    }
+
+    function link($scope, $element) {
+        $scope.onEnter = function($event, index) {
+            if ($event.keyCode === 13) {
+                $event.preventDefault();
+
+                $scope.discussions[index].__autocomplete = false;
+
+                if ($scope.discussions.length - 2 === index) {
+                    $element.find('td.name:nth-child(1)')[0].focus();
+                }
             }
         };
     }
@@ -62,6 +114,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             groupDiscussions: '=',
             order: '='
         },
+        link: link,
         controller: controller
     };
 });

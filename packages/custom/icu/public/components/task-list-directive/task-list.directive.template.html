@@ -3,27 +3,19 @@
         <tbody ng-if="!displayOnly">
             <tr data-ng-repeat="task in tasks | orderBy:order.field:order.isReverse"
                 data-ng-class="{ 'active': isCurrentState(task._id) }"
-                data-ui-sref="{{detailsState}}({id: task._id, entity: context.entityName, entityId: context.entityId})"
-                data-ui-sref-opts="{reload: true}"
+                ng-click="initialize(task)"
                 icu-list-row
-                data="{ task: task, index: $index, drawArrow: drawArrow, updateCb: update}"
-                type="task">
-            </tr>
-            <tr class="new-task"
-                data-ui-sref-active="active"
-                data-ui-sref="main.tasks.byentity.details({id: newTask._id, entity: context.entityName, entityId: context.entityId})">
-                <td colspan="6"
-                    contenteditable
-                    ng-model="newTask.title"
-                    ng-change="createOrUpdate(newTask)"
-                    strip-br="true">
-                </td>
-            </tr>
-        </tbody>
-        <tbody ng-if="displayOnly">
-            <tr data-ng-repeat="task in tasks | orderBy:order.field:order.isReverse"
-                icu-list-row
-                data="{ task: task, index: $index, drawArrow: drawArrow, updateCb: update, displayOnly: displayOnly}"
+                data="{ task: task,
+                        index: $index,
+                        drawArrow: drawArrow,
+                        updateCb: createOrUpdate,
+                        selectCb: select,
+                        searchCb: search,
+                        onEnterCb: onEnter,
+                        displayOnly: displayOnly,
+                        searchResults: searchResults,
+                        autocomplete: autocomplete,
+                        delete: delete }"
                 type="task">
             </tr>
         </tbody>

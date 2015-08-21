@@ -3,23 +3,6 @@
 angular.module('mean.icu.data.discussionsservice', [])
 .service('DiscussionsService', function (ApiUri, $http) {
     var EntityPrefix = '/discussions';
-    var clientEntities = {};
-
-    function getNew() {
-        var clientId = Math.floor(Math.random() * 1000000000);
-        var entity = {
-            _id: clientId,
-            title: '',
-            description: '',
-            tags: [],
-            watchers: [],
-            members: []
-        };
-
-        clientEntities[clientId] = entity;
-
-        return entity;
-    }
 
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function (result) {
@@ -41,12 +24,22 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function create(discussion) {
-        return $http.post(ApiUri + EntityPrefix, discussion).then(function (result) {
-            return result.data;
+        var discussionData = _(discussion).omit(function(value, key) {
+            return key.indexOf('__') === 0;
+        });
+
+        return $http.post(ApiUri + EntityPrefix, discussionData).then(function (result) {
+            _(discussion).assign(result.data);
+
+            return discussion;
         });
     }
 
     function update(discussion) {
+        discussion = _(discussion).omit(function(value, key) {
+            return key.indexOf('__') === 0;
+        });
+
         return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion).then(function (result) {
             return result.data;
         });
@@ -76,7 +69,6 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     return {
-        getNew: getNew,
         getAll: getAll,
         getById: getById,
         getByProjectId: getByProjectId,
