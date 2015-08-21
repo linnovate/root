@@ -8,8 +8,8 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.details = {
-                createTask: 'create this task',
-                createProject: 'create this project',
+                create: 'created this ',
+                update: 'updated this ',
                 document: 'add document',
                 comment: 'add comment'
             };

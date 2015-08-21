@@ -124,7 +124,8 @@ module.exports = function(MeanUser, app, auth, database) {
       var objReq = {
         uri: apiUri + '/api/avatar',
         method: 'post',
-        headers: req.headers
+        headers: req.headers,
+        gzip: true
       };
 
       req.pipe(
