@@ -8,7 +8,9 @@
     {{data.task.title}}
 </td>
 <td class="project">
-    <span class="tag project" ng-style="color={'background-color': '#' + '{{data.task.project.color}}'}">
+    <span class="tag project"
+          title="data.task.project.title"
+          ng-style="color={'background-color': '#' + '{{data.task.project.color}}'}">
         {{data.task.project.title}}
     </span>
 </td>

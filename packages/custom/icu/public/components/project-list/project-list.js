@@ -6,7 +6,7 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.showStarred = false;
         console.log(projects);
 
-        $scope.isCurrentState = function(id) {
+        $scope.isCurrentState = function (id) {
             return $state.current.name.indexOf('main.projects.byentity') === 0 &&
                 $state.current.name.indexOf('details') === -1;
         };
@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.projectlist', [])
             $scope.sorting.isReverse = !$scope.sorting.isReverse;
         };
 
-        $scope.sorting  = {
+        $scope.sorting = {
             field: 'status',
             isReverse: false
         };
@@ -24,13 +24,13 @@ angular.module('mean.icu.ui.projectlist', [])
             {
                 title: 'Due',
                 value: 'due'
-            },{
+            }, {
                 title: 'Project',
                 value: 'project'
-            },{
+            }, {
                 title: 'Title',
                 value: 'title'
-            },{
+            }, {
                 title: 'Status',
                 value: 'status'
             }
@@ -50,9 +50,9 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.starredOnly = function () {
             $scope.showStarred = !$scope.showStarred;
             if ($scope.showStarred) {
-                ProjectsService.getStarred().then(function(starred) {
-                    $scope.projects = _(projects).reduce(function(list, item) {
-                        var contains = _(starred).any(function(s) {
+                ProjectsService.getStarred().then(function (starred) {
+                    $scope.projects = _(projects).reduce(function (list, item) {
+                        var contains = _(starred).any(function (s) {
                             return s._id === item._id;
                         });
 
