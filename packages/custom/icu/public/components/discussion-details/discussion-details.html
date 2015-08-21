@@ -29,7 +29,7 @@
                 <input ui-date="dueOptions" ng-model="discussion.due">
             </div>
 
-            <div class="status {{discussion.status | lowercase}}">
+            <div class="status">
                 <ui-select ng-model="discussion.status" on-select="update(discussion)">
                     <ui-select-match>
                         <span>{{$select.selected}}</span>

@@ -23,7 +23,7 @@
                 <div class="placeholder" ng-if="!task.due">Deadline</div>
                 <input ui-date="dueOptions" ng-model="task.due">
             </div>
-            <div class="status {{task.status | lowercase}}">
+            <div class="status">
                 <ui-select ng-model="task.status" on-select="update(task)">
                     <ui-select-match>
                         <span>{{$select.selected}}</span>
