@@ -24,7 +24,7 @@
         {{data.task.project.title}}
     </span>
 </td>
-<td ng-if="data.task._id" class="status {{data.task.status | lowercase}} col-sm-2">{{data.task.status}}</td>
+<td ng-if="data.task._id" class="status col-sm-2">{{data.task.status}}</td>
 <td ng-if="data.task._id" class="due">{{data.task.due | date: 'dd.MM.yyyy'}}</td>
 <td class="arrow" ng-if="data.task._id">
     <i ng-if="data.drawArrow" class="fa fa-chevron-right"></i>

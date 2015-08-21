@@ -5,7 +5,7 @@
                 <button ng-class="{ 'orange': project.star }" ng-click="star(project)"><i class="fa fa-star"></i></button>
             </div>
 
-            <div class="status {{project.status | lowercase}}">
+            <div class="status">
                 <ui-select ng-model="project.status" on-select="update(project)">
                     <ui-select-match>
                         <span>{{$select.selected}}</span>
