@@ -77,7 +77,7 @@ angular.module('mean.icu.ui.tasklist', [])
                 navigateToDetails($scope.tasks[0]);
         }
     } else if (
-            $state.current.name !== 'main.tasks.byentity.activities' ||
+            $state.current.name !== 'main.tasks.byentity.activities' &&
             $state.current.name !== 'main.tasks.byentity.tasks') {
         $state.go('.activities');
     }
