@@ -46,10 +46,9 @@
                             </div>
 
                         </ui-select-match>
-                        <ui-select-choices repeat="project._id as project in projects| filter: $select.search">
+                        <ui-select-choices repeat="project in projects| filter: $select.search">
                             <div class="line">
                                 <span class="title">{{project.title}}</span>
-                                <!--<span class="add-btn-wrap"><span class="add-btn">Add</span></span>-->
                             </div>
                         </ui-select-choices>
                     </ui-select>
