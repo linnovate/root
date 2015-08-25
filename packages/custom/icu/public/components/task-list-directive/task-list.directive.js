@@ -99,11 +99,25 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             });
         };
 
-        $scope.select = function(currentTask, selectedTask) {
+        $scope.select = function(selectedTask) {
+            var currentTask = _($scope.tasks).find(function(t) {
+                return t.__autocomplete;
+            });
+
             TasksService.remove(currentTask._id);
 
             _(currentTask).assign(selectedTask);
             currentTask.__autocomplete = false;
+
+            $scope.searchResults.length = 0;
+
+            $scope.createOrUpdate(currentTask).then(function(task) {
+                $state.go('main.tasks.byentity.details', {
+                    id: task._id,
+                    entity: context.entityName,
+                    entityId: context.entityId
+                });
+            });
         };
     }
 
