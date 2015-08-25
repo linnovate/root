@@ -1,4 +1,4 @@
-<div class="avatar" title="{{user.name}}">
+<div class="avatar" title="{{user.name}}" ng-style="{'background-color': user.profile.avatar ? 'transparent' : '#b8e77f' }">
     <span ng-if="!user.profile.avatar" class="name">{{user.name.charAt(0)}}</span>
     <img ng-if="user.profile.avatar" class="image" ng-src="{{user.profile.avatar}}" alt="{{user.name}}"/>
 </div>
