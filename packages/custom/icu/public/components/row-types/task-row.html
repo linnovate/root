@@ -10,14 +10,6 @@
     ng-keydown="data.onEnterCb($event, data.index)"
     ng-model="data.task.title">
 </td>
-<td>
-    <div ng-if="data.autocomplete && data.task.__autocomplete && data.task.title.length" class="suggestions">
-        <p class="suggestion" ng-repeat="result in data.searchResults"
-            ng-click="data.selectCb(data.task, result)">
-            {{result.title}}
-        </p>
-    </div>
-</td>
 <td class="project">
     <span class="tag project"
           title="data.task.project.title"

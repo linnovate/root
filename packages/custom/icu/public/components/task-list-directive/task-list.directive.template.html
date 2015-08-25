@@ -20,4 +20,12 @@
             </tr>
         </tbody>
     </table>
+    <div ng-if="autocomplete && searchResults" class="autocomplete">
+        <div class="suggestions">
+            <p class="suggestion" ng-repeat="result in searchResults"
+                ng-click="select(result)">
+                {{result.title}}
+            </p>
+        </div>
+    </div>
 </div>
