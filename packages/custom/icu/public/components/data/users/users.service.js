@@ -2,11 +2,11 @@
 
 angular.module('mean.icu.data.usersservice', [])
 .service('UsersService', function($http, $q, ApiUri, Upload) {
-    var EnitityPrefix = '/users';
+    var EntityPrefix = '/users';
     var me = null;
 
     function getAll() {
-        return $http.get(ApiUri + EnitityPrefix).then(function(result) {
+        return $http.get(ApiUri + EntityPrefix).then(function(result) {
             return result.data;
         });
     }
@@ -43,7 +43,7 @@ angular.module('mean.icu.data.usersservice', [])
     }
 
     function getById(id) {
-        return $http.get(ApiUri + EnitityPrefix + '/' + id).then(function(result) {
+        return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
             return result.data;
         });
     }

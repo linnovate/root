@@ -19,4 +19,20 @@ module.exports = function(General, app, auth, database) {
         return res.status(response.statusCode).send(response.body);
     });
   });
+
+  app.post('/api/:entity/:id/:issue', function (req, res) {
+    var objReq = {
+      uri: apiUri + '/api/' + req.params.entity + '/' + req.params.id + '/' + req.params.issue,
+      method: 'POST',
+      headers: res.headers
+    };
+
+    request(objReq, function (error, response, body) {
+      if (!error && response.statusCode === 200 && response.body.length)
+        return res.json(JSON.parse(response.body));
+      if (response)
+        return res.status(response.statusCode).send(response.body);
+    });
+  });
+
 };

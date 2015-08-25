@@ -64,8 +64,16 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
-    function sendSummary(discussion) {
+    function summary(discussion) {
+        return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/summary').then(function(result) {
+            return result.data;
+        });
+    }
 
+    function schedule(discussion) {
+        return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule').then(function(result) {
+            return result.data;
+        });
     }
 
     return {
@@ -77,6 +85,7 @@ angular.module('mean.icu.data.discussionsservice', [])
         remove: remove,
         star: star,
         getStarred: getStarred,
-        sendSummary: sendSummary
+        schedule: schedule,
+        summary: summary
     };
 });
