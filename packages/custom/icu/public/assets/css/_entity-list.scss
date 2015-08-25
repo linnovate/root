@@ -16,13 +16,33 @@
         }
     }
 
+    .autocomplete {
+        position: relative;
+
+        .suggestions {
+            position: absolute;
+            top: -50px;
+            left: 0;
+            border: 1px solid $light-grey1;
+
+            background-color: white;
+            color: black;
+            z-index: 1;
+
+            width: 400px;
+
+            .suggestion {
+                width: inherit;
+                height: 30px;
+            }
+        }
+    }
+
     table {
         table-layout: fixed;
 
         tbody {
             tr {
-                position: relative;
-
                 &.new-task {
                     td {
                         padding: 10px 15px;
@@ -31,24 +51,6 @@
 
                 td {
                     overflow: hidden;
-
-                    .suggestions {
-                        position: absolute;
-                        top: 50px;
-                        left: 40px;
-                        border: 1px solid $light-grey1;
-
-                        background-color: white;
-                        color: black;
-                        z-index: 1;
-
-                        width: 400px;
-
-                        .suggestion {
-                            width: inherit;
-                            height: 30px;
-                        }
-                    }
 
                     &.id {
                         width: 40px;

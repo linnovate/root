@@ -3,6 +3,11 @@
 angular.module('mean.icu.ui.profile', [])
 .controller('ProfileController', function($scope, $state, me, UsersService) {
     $scope.me = me;
+
+    if (!$scope.me.profile) {
+        $scope.me.profile = {};
+    }
+
     $scope.avatar = $scope.me.profile.avatar || 'http://placehold.it/250x250';
     $scope.hash = new Date().getTime();
 
