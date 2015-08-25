@@ -63,11 +63,13 @@
         <div class="description">
             <div class="title"
                  contenteditable="true"
+                 strip-br="true"
                  ng-model="discussion.title">
             </div>
 
             <div class="text"
                  contenteditable="true"
+                 strip-br="true"
                  medium-editor
                  ng-model="discussion.description"
                  options="{{options}}">

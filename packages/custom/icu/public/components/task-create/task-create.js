@@ -40,7 +40,7 @@ angular.module('mean.icu.ui.taskcreate', [])
 
         $scope.search = function () {
             TasksService.search($scope.term).then(function (result) {
-                $scope.searchResults = result.task;
+                $scope.searchResults = result;
             });
         };
 

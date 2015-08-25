@@ -1,19 +1,31 @@
-<td class="id">{{data.index + 1}}</td>
+<td class="id" ng-if="data.task._id">{{data.index + 1}}</td>
 <td class="name"
+    ng-attr-colspan="{{data.task._id ? undefined : 5}}"
     title="{{data.task.title}}"
     ng-attr-contenteditable="{{!data.displayOnly}}"
+    placeholder="{{'Create new task' | i18next}}"
     strip-br="true"
-    ng-change="data.updateCb(data.task)"
+    ng-change="data.searchCb(data.task.title) || data.updateCb(data.task)"
+    ng-keydown="data.onEnterCb($event, data.index)"
     ng-model="data.task.title">
-    {{data.task.title}}
+</td>
+<td>
+    <div ng-if="data.autocomplete && data.task.__autocomplete && data.task.title.length" class="suggestions">
+        <p class="suggestion" ng-repeat="result in data.searchResults"
+            ng-click="data.selectCb(data.task, result)">
+            {{result.title}}
+        </p>
+    </div>
 </td>
 <td class="project">
-    <span class="tag project" ng-style="color={'background-color': '#' + '{{data.task.project.color}}'}">
+    <span class="tag project"
+          title="data.task.project.title"
+          ng-style="color={'background-color': '#' + '{{data.task.project.color}}'}">
         {{data.task.project.title}}
     </span>
 </td>
-<td class="status {{data.task.status | lowercase}} col-sm-2">{{data.task.status}}</td>
-<td class="due">{{data.task.due | date: 'dd.MM.yyyy'}}</td>
-<td class="arrow">
+<td ng-if="data.task._id" class="status {{data.task.status | lowercase}} col-sm-2">{{data.task.status}}</td>
+<td ng-if="data.task._id" class="due">{{data.task.due | date: 'dd.MM.yyyy'}}</td>
+<td class="arrow" ng-if="data.task._id">
     <i ng-if="data.drawArrow" class="fa fa-chevron-right"></i>
 </td>

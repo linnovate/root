@@ -21,6 +21,7 @@
 
         tbody {
             tr {
+                position: relative;
 
                 &.new-task {
                     td {
@@ -30,7 +31,24 @@
 
                 td {
                     overflow: hidden;
-                    position: relative;
+
+                    .suggestions {
+                        position: absolute;
+                        top: 50px;
+                        left: 40px;
+                        border: 1px solid $light-grey1;
+
+                        background-color: white;
+                        color: black;
+                        z-index: 1;
+
+                        width: 400px;
+
+                        .suggestion {
+                            width: inherit;
+                            height: 30px;
+                        }
+                    }
 
                     &.id {
                         width: 40px;
@@ -68,8 +86,14 @@
                     }
 
                     .tag {
-                        padding: 5px;
                         @include tag(14px);
+                        padding: 5px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        width: initial;
+                        max-width: 100%;
+                        display: inline-block;
                     }
                 }
 

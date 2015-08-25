@@ -43,4 +43,10 @@ body {
         margin-left: 0;
         width: 100%;
     }
+
+    [contenteditable][colspan]:empty:not(:focus):before {
+        content:attr(placeholder);
+        color: $light-grey-placeholder;
+        padding-left: 20px;
+    }
 }
