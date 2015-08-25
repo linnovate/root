@@ -3,10 +3,23 @@
 angular.module('mean.icu.data.tasksservice', [])
 .service('TasksService', function (ApiUri, $http, ProjectsService) {
     var EntityPrefix = '/tasks';
+    var createdTasks = {};
 
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function (result) {
-            return result.data;
+            var tasks = result.data;
+
+            _.each(createdTasks, function (createdTask) {
+                var isFound = _.any(tasks, function (task) {
+                    return createdTask._id === task._id;
+                });
+
+                if (!isFound) {
+                    tasks.push(createdTask);
+                }
+            });
+
+            return tasks;
         });
     }
 
@@ -37,29 +50,41 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getByProjectId(id) {
-        return ProjectsService.getById(id).then(function(project) {
-            return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function(tasksResult) {
-                var tasks = tasksResult.data;
+        return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function (tasksResult) {
+            var tasks = tasksResult.data;
 
-                return tasks.map(function (task) {
-                    task.project = project;
-                    return task;
-                });
+            _.each(createdTasks, function (createdTask) {
+                // TODO: should be changed to createdTask.project._id === id when server will return object
+                var shouldPush = (createdTask.project && createdTask.project === id) &&
+                    !_.any(tasks, function (task) {
+                        return createdTask._id === task._id;
+                    });
+
+                if (shouldPush) {
+                    tasks.push(createdTask);
+                }
             });
+
+            return tasks;
         });
     }
 
     function getByDiscussionId(id) {
-        return ProjectsService.getAll().then(function(projects) {
-            return $http.get(ApiUri + '/discussions/' + id + EntityPrefix).then(function(tasksResult) {
-                var tasks = tasksResult.data;
-                return tasks.map(function (t) {
-                    t.project = _(projects).find(function (p) {
-                        return p._id === t.project;
+        return $http.get(ApiUri + '/discussions/' + id + EntityPrefix).then(function (tasksResult) {
+            var tasks = tasksResult.data;
+
+            _.each(createdTasks, function (createdTask) {
+                var shouldPush = (createdTask.discussion && createdTask.discussion === id) &&
+                    !_.any(tasks, function (task) {
+                        return createdTask._id === task._id;
                     });
-                    return t;
-                });
+
+                if (shouldPush) {
+                    tasks.push(createdTask);
+                }
             });
+
+            return tasks;
         });
     }
 
@@ -75,6 +100,9 @@ angular.module('mean.icu.data.tasksservice', [])
         });
 
         return $http.post(ApiUri + EntityPrefix, taskData).then(function (result) {
+            createdTasks[result.data._id] = result.data;
+            createdTasks[result.data._id].discussion = task.discussion;
+
             _(task).assign(result.data);
 
             return task;

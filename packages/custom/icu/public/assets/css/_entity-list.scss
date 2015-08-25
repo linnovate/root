@@ -75,16 +75,6 @@
                         width: calc(10% - 65px);
                     }
 
-                    &.status {
-                        &.received {
-                            color: $blue;
-                        }
-
-                        &.completed {
-                            color: $green;
-                        }
-                    }
-
                     .tag {
                         @include tag(14px);
                         padding: 5px;

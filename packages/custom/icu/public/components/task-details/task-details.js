@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskdetails', [])
-.controller('TaskDetailsController', function ($scope, users, entity, tags, projects, $state, TasksService, context) {
-    $scope.people = users;
+.controller('TaskDetailsController', function ($scope, entity, tags, projects, $state, TasksService, context) {
     $scope.task = entity || context.entity;
     $scope.tags = tags;
     $scope.projects = projects;
@@ -12,12 +11,6 @@ angular.module('mean.icu.ui.taskdetails', [])
             return s._id === $scope.task._id;
         });
     });
-
-    if (typeof $scope.task.assign === 'string') {
-        $scope.task.assign = _.find(users, function (user) {
-            return user._id === entity.assign;
-        });
-    }
 
     if (!$scope.task) {
         $state.go('main.tasks.byentity', {
@@ -82,7 +75,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.deleteTask = function (task) {
         TasksService.remove(task._id).then(function () {
             $state.go('main.tasks.byentity', {
-                entity: context.entityName,
+                entity: context.entityName === 'all' ? 'task' : context.entityName,
                 entityId: context.entityId
             }, {reload: true});
         });
@@ -93,7 +86,18 @@ angular.module('mean.icu.ui.taskdetails', [])
             task.discussion = context.entityId;
         }
 
-        TasksService.update(task);
+        TasksService.update(task).then(function (result) {
+            if (context.entityName === 'all') {
+                task.project = result.project;
+            } else if (context.entityName === 'project') {
+                if (result.project._id !== context.entityId) {
+                    $state.go('main.tasks.byentity', {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {reload: true});
+                }
+            }
+        });
     };
 
     $scope.delayedUpdate = _.debounce($scope.update, 500);
