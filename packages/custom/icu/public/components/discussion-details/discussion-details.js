@@ -5,11 +5,42 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.discussion = entity || context.entity;
         $scope.tasks = tasks;
 
-        $scope.sendSummary = function (discussion) {
-            DiscussionsService.sendSummary(discussion);
+        $scope.summary = function (discussion) {
+            DiscussionsService.summary(discussion);
         };
 
-        $scope.statuses = ['Set', 'Done', 'Postpone', 'Canceled', 'Archived'];
+        $scope.schedule = function (discussion) {
+            DiscussionsService.schedule(discussion);
+        };
+
+        $scope.archive = function (discussion) {
+            discussion.status = 'Archived';
+            DiscussionsService.update(discussion);
+        };
+
+        $scope.statuses = ['New', 'Scheduled', 'Done', 'Cancelled', 'Archived'];
+
+        var scheduleAction = {
+            label: 'Schedule discussion',
+            method: $scope.schedule
+        };
+
+        var summaryAction = {
+            label: 'Send summary',
+            method: $scope.summary
+        };
+
+        var archiveAction = {
+            label: 'Archive discussion',
+            method: $scope.archive
+        };
+
+        $scope.statusesActionsMap = {
+            New: scheduleAction,
+            Scheduled: summaryAction,
+            Done: archiveAction,
+            Cancelled: scheduleAction
+        };
 
         $scope.$watchGroup(['discussion.description', 'discussion.title'], function (nVal, oVal) {
             if (nVal !== oVal && oVal) {
