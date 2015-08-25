@@ -92,9 +92,6 @@ function getTaskDetailsState(urlPrefix) {
             },
             tags: function (TasksService) {
                 return TasksService.getTags();
-            },
-            users: function (UsersService) {
-                return UsersService.getAll();
             }
         }
     };
