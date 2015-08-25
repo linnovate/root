@@ -14,7 +14,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.archive = function (discussion) {
-            discussion.status = 'Archive';
+            discussion.status = 'Archived';
             DiscussionsService.update(discussion);
         };
 
@@ -22,24 +22,24 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
         var scheduleAction = {
             label: 'Schedule discussion',
-            method: 'schedule'
+            method: $scope.schedule
         };
 
         var summaryAction = {
             label: 'Send summary',
-            method: 'summary'
+            method: $scope.summary
         };
 
         var archiveAction = {
             label: 'Archive discussion',
-            method: 'archive'
+            method: $scope.archive
         };
 
         $scope.statusesActionsMap = {
-            'New': scheduleAction,
-            'Scheduled': summaryAction,
-            'Done': archiveAction,
-            'Cancelled': scheduleAction
+            New: scheduleAction,
+            Scheduled: summaryAction,
+            Done: archiveAction,
+            Cancelled: scheduleAction
         };
 
         $scope.$watchGroup(['discussion.description', 'discussion.title'], function (nVal, oVal) {
