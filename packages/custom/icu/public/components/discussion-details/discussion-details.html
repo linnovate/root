@@ -54,10 +54,11 @@
                 </ul>
             </div>
 
-            <div class="actions">
-                <button ng-click="sendSummary(discussions)">Send summary</button>
+            <div class="actions" ng-if="statusesActionsMap[discussion.status]">
+                <button ng-click="statusesActionsMap[discussion.status].method()">
+                    {{statusesActionsMap[discussion.status].label}}
+                </button>
             </div>
-
         </div>
 
         <div class="description">
