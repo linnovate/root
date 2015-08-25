@@ -5,6 +5,7 @@
     ng-attr-contenteditable="{{!data.displayOnly}}"
     placeholder="{{'Create new task' | i18next}}"
     strip-br="true"
+    ng-attr-tabindex="{{ data.task._id ? data.index + 4 : '3'}}"
     ng-change="data.searchCb(data.task.title) || data.updateCb(data.task)"
     ng-keydown="data.onEnterCb($event, data.index)"
     ng-model="data.task.title">

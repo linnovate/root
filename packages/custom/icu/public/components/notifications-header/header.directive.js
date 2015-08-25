@@ -85,7 +85,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
             ProjectsService.create(project).then(function (result) {
                 $scope.projects.push(result);
-                $state.go('main.projects.all.details', {
+                $state.go('main.tasks.byentity.activities', {
                     id: result._id,
                     entity: 'project',
                     entityId: result._id
@@ -102,7 +102,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
             DiscussionsService.create(discussion).then(function (result) {
                 $scope.discussions.push(result);
-                $state.go('main.discussions.all.details', {
+                $state.go('main.tasks.byentity.activities', {
                     id: result._id,
                     entity: 'discussion',
                     entityId: result._id
