@@ -8,7 +8,8 @@ angular.module('mean.icu.ui.notificationsheader', [])
                                                $stateParams,
                                                context,
                                                ProjectsService,
-                                               DiscussionsService) {
+                                               DiscussionsService,
+                                               $document) {
     function controller($scope) {
         $scope.notifications = NotificationsService.getAll();
         $scope.popupNotifications = $scope.notifications.slice(0, -1);
@@ -111,6 +112,18 @@ angular.module('mean.icu.ui.notificationsheader', [])
         };
     }
 
+    function link($scope, $element) {
+        var list = $element.find('.last-notification');
+        var chevron = $element.find('.time');
+
+        $document.on('click', function(e) {
+            if(!(list[0].contains(e.target) || chevron[0].contains(e.target))) {
+                $scope.allNotifications = false;
+                $scope.$apply();
+            }
+        });
+    }
+
     return {
         restrict: 'A',
         scope: {
@@ -118,6 +131,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
             discussions: '=',
             projects: '='
         },
+        link: link,
         controller: controller,
         templateUrl: '/icu/components/notifications-header/header.html'
     };
