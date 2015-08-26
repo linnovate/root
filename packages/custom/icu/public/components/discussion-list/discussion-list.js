@@ -23,15 +23,18 @@ angular.module('mean.icu.ui.discussionlist', [])
             {
                 title: 'Due',
                 value: 'due'
-            },{
+            }, {
                 title: 'Project',
                 value: 'project'
-            },{
+            }, {
                 title: 'Title',
                 value: 'title'
-            },{
+            }, {
                 title: 'Status',
                 value: 'status'
+            }, {
+                title: 'Created',
+                value: 'created'
             }
         ];
 
