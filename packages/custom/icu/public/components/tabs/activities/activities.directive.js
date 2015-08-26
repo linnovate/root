@@ -29,7 +29,7 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.save = function () {
-                $scope.activity.issue = context.main.slice(0, -1);
+                $scope.activity.issue = $stateParams.id ? context.main.slice(0, -1) : context.entityName;
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
                 ActivitiesService.create($scope.activity).then(function (result) {
