@@ -24,9 +24,6 @@ angular.module('mean.icu.ui.projectlist', [])
                 title: 'Due',
                 value: 'due'
             }, {
-                title: 'Project',
-                value: 'project'
-            }, {
                 title: 'Title',
                 value: 'title'
             }, {
