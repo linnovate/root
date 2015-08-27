@@ -16,6 +16,11 @@
                     color: white;
                     padding: 0 10px;
                     white-space: nowrap;
+
+                    &[disabled] {
+                        opacity: .5;
+                        cursor: default;
+                    }
                 }
             }
 
