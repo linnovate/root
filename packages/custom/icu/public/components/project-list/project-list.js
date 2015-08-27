@@ -21,12 +21,6 @@ angular.module('mean.icu.ui.projectlist', [])
 
         $scope.sortingList = [
             {
-                title: 'Due',
-                value: 'due'
-            }, {
-                title: 'Project',
-                value: 'project'
-            }, {
                 title: 'Title',
                 value: 'title'
             }, {

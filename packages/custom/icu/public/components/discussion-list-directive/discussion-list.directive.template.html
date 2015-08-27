@@ -1,7 +1,7 @@
 <div class="list-table">
     <table class="discussions">
         <tbody>
-            <tr data-ng-repeat="discussion in discussions | orderBy:order.field:order.isReverse"
+            <tr data-ng-repeat="discussion in discussions | orderBy:taskOrder"
                 data-ng-class="{ 'active': isCurrentState(discussion._id) }"
                 ng-click="initialize(discussion)"
                 icu-list-row
