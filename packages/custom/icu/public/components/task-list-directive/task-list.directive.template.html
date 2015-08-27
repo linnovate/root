@@ -1,7 +1,7 @@
 <div class="list-table">
     <table class="tasks">
         <tbody>
-            <tr data-ng-repeat="task in tasks | orderBy:order.field:order.isReverse"
+            <tr data-ng-repeat="task in tasks | orderBy:taskOrder"
                 data-ng-class="{ 'active': isCurrentState(task._id) }"
                 ng-click="initialize(task)"
                 icu-list-row
@@ -17,6 +17,8 @@
                         autocomplete: autocomplete,
                         delete: delete }"
                 type="task">
+                <td>{{ $index }}<td>
+                <div ng-transclude></div>
             </tr>
         </tbody>
     </table>
