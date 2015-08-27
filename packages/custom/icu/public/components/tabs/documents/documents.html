@@ -1,7 +1,7 @@
 <div class="documents">
     <div class="document" ng-repeat-start="document in documents">
         <a href="{{document.path}}" target="window">
-            <div class="icon doc"></div>
+            <div class="icon {{document.attachmentType}}"></div>
         </a>
 
         <div class="text">
@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="document-shifted" ng-repeat-end ng-repeat="version in document.versions" ng-if="isOpen[document._id]">
-        <div class="icon doc" ng-click="download(version)"></div>
+        <div class="icon {{version.attachmentType}}" ng-click="download(version)"></div>
         <div class="text">
             <div class="title"><b>{{version.name}}</b>, <span>1.3MB</span></div>
             <div class="time">{{version.created | date:'medium'}}</div>

@@ -17,7 +17,7 @@
                 {{activity.description}}
             </div>
             <div data-ng-repeat="attachment in activity.attachments" class="attachment">
-                <div class="icon doc {{attachment.type}}"></div>
+                <div class="icon {{attachment.attachmentType}}"></div>
                 <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
             </div>
         </div>
