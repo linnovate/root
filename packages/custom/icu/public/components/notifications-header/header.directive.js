@@ -41,7 +41,6 @@ angular.module('mean.icu.ui.notificationsheader', [])
             var task = {
                 title: '',
                 watchers: [],
-                status: 'New',
                 tags: []
             };
 
@@ -81,7 +80,6 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 color: 'b9e67d',
                 title: '',
                 watchers: [],
-                status: 'New'
             };
 
             ProjectsService.create(project).then(function (result) {
@@ -98,7 +96,6 @@ angular.module('mean.icu.ui.notificationsheader', [])
             var discussion = {
                 title: '',
                 watchers: [],
-                status: 'Set'
             };
 
             DiscussionsService.create(discussion).then(function (result) {
