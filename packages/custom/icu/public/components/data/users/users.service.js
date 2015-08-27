@@ -18,12 +18,17 @@ angular.module('mean.icu.data.usersservice', [])
             deferred.resolve(me);
         } else {
             $http.get('/api/users/me').then(function(result) {
-                getById(result.data._id).then(function(user) {
-                    me = user;
-                    deferred.resolve(me);
-                });
+                if (!result.data) {
+                    deferred.reject(null);
+                } else {
+                    getById(result.data._id).then(function(user) {
+                        me = user;
+                        deferred.resolve(me);
+                    });
+                }
+
             }, function() {
-                deferred.resolve(null);
+                deferred.reject(null);
             });
         }
 
