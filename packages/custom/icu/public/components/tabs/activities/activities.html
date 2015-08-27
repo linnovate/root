@@ -1,6 +1,6 @@
 <div class="activities">
     <div class="activities-list">
-        <div data-ng-repeat="activity in activities | orderBy:'created'" class="activity">
+        <div data-ng-repeat="activity in activities | orderBy:'created':true" class="activity">
             <div class="title">
                 <div icu-avatar user="activity.user"></div>
                 <div class="text">
