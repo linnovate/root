@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklistdirective', [])
-.directive('icuTaskList', function () {
-    function controller($scope, context, TasksService, $state) {
+.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams) {
+    function controller($scope, context, TasksService) {
         $scope.context = context;
 
         var creatingStatuses = {
@@ -24,20 +24,14 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.taskOrder = function(task) {
-            if (task._id) {
+            if (task._id && $scope.order) {
                 return task[$scope.order.field];
             }
-        }
+        };
 
         if (!$scope.displayOnly) {
             $scope.tasks.push(_(newTask).clone());
         }
-
-        $scope.isCurrentState = function(id) {
-            return ($state.current.name.indexOf('main.tasks.byentity.details') === 0 ||
-                    $state.current.name.indexOf('main.tasks.all.details') === 0
-                   ) && $state.params.id === id;
-        };
 
         $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
 
@@ -128,6 +122,21 @@ angular.module('mean.icu.ui.tasklistdirective', [])
     }
 
     function link($scope, $element) {
+        var isScrolled = false;
+
+        $scope.isCurrentState = function (id) {
+            var isActive = ($state.current.name.indexOf('main.tasks.byentity.details') === 0 ||
+                            $state.current.name.indexOf('main.tasks.all.details') === 0
+                       ) && $state.params.id === id;
+
+            if (isActive && !isScrolled) {
+                $uiViewScroll($element.find('[data-id="' + $stateParams.id + '"]'));
+                isScrolled = true;
+            }
+
+            return isActive;
+        };
+
         $scope.onEnter = function($event, index) {
             if ($event.keyCode === 13 || $event.keyCode === 9) {
                 $event.preventDefault();
