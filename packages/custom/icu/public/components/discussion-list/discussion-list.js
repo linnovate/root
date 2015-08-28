@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.discussionlist', [])
         };
 
         $scope.sorting  = {
-            field: 'status',
+            field: 'created',
             isReverse: false
         };
 

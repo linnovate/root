@@ -16,8 +16,8 @@ angular.module('mean.icu.ui.tasklist', [])
         $scope.sorting.isReverse = !$scope.sorting.isReverse;
     };
 
-    $scope.sorting  = {
-        field: 'status',
+    $scope.sorting = {
+        field: 'created',
         isReverse: false
     };
 

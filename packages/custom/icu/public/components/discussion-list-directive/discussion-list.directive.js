@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('mean.icu.ui.discussionlistdirective', [])
-.directive('icuDiscussionList', function () {
-    function controller($scope, context, DiscussionsService, $state) {
+.directive('icuDiscussionList', function ($state, $uiViewScroll, $stateParams) {
+    function controller($scope, context, DiscussionsService) {
         $scope.context = context;
 
         var creatingStatuses = {
@@ -16,10 +16,10 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
         });
 
         $scope.taskOrder = function(task) {
-            if (task._id) {
+            if (task._id && $scope.order) {
                 return task[$scope.order.field];
             }
-        }
+        };
 
         var newDiscussion = {
             title: '',
@@ -30,12 +30,6 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
         };
 
         $scope.discussions.push(_(newDiscussion).clone());
-
-        $scope.isCurrentState = function (id) {
-            return ($state.current.name.indexOf('main.discussions.byentity.details') === 0 ||
-                    $state.current.name.indexOf('main.discussions.all.details') === 0
-                ) && $state.params.id === id;
-        };
 
         $scope.detailsState = context.entityName === 'all' ? 'main.discussions.all.details' : 'main.discussions.byentity.details';
 
@@ -98,6 +92,21 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
     }
 
     function link($scope, $element) {
+        var isScrolled = false;
+
+        $scope.isCurrentState = function (id) {
+            var isActive = ($state.current.name.indexOf('main.discussions.byentity.details') === 0 ||
+                            $state.current.name.indexOf('main.discussions.all.details') === 0
+                       ) && $state.params.id === id;
+
+            if (isActive && !isScrolled) {
+                $uiViewScroll($element.find('[data-id="' + $stateParams.id + '"]'));
+                isScrolled = true;
+            }
+
+            return isActive;
+        };
+
         $scope.onEnter = function($event, index) {
             if ($event.keyCode === 13) {
                 $event.preventDefault();
