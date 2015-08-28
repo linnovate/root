@@ -28,8 +28,8 @@ module.exports = function(MeanUser, app, auth, database) {
 
       request(objReq, function(error, response, body) {
         if (!error && response.statusCode === 200 && response.body.length)
-          res.redirect('/');
-        if(response)
+          return res.redirect('/');
+        if (response)
           return res.status(response.statusCode).send(response.body);
 
       });
@@ -78,9 +78,8 @@ module.exports = function(MeanUser, app, auth, database) {
         data: req.body,
         headers: req.headers
       }, function(data, statusCode) {
-          if(statusCode && statusCode != 200)
-              res.status(statusCode);
-          res.send(data);
+          res.status(statusCode);
+          return res.send(data);
       });
     });
 
@@ -91,9 +90,8 @@ module.exports = function(MeanUser, app, auth, database) {
         param: req.params.id,
         headers: req.headers
       }, function(data, statusCode) {
-          if(statusCode && statusCode != 200)
-              res.status(statusCode);
-          res.send(data);
+          res.status(statusCode);
+          return res.send(data);
       });
     })
     .put(function(req, res) {
@@ -102,9 +100,8 @@ module.exports = function(MeanUser, app, auth, database) {
         param: req.params.id,
         headers: req.headers
       }, function(data, statusCode) {
-          if(statusCode && statusCode != 200)
-              res.status(statusCode);
-          res.send(data);
+          res.status(statusCode);
+          return res.send(data);
       });
     })
     .delete(function(req, res) {
@@ -112,9 +109,8 @@ module.exports = function(MeanUser, app, auth, database) {
         param: req.params.id,
         headers: req.headers
       }, function(data, statusCode) {
-          if(statusCode && statusCode != 200)
-              res.status(statusCode);
-          res.send(data);
+          res.status(statusCode);
+          return res.send(data);
       });
     });
 

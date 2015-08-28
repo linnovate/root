@@ -41,9 +41,9 @@ class Crud {
 		}
 		request(objReq, function(error, response, body) {
 			if (!error && response.statusCode === 200 && response.body.length) {
-				return callback(JSON.parse(body));
+				return callback(JSON.parse(body), response.statusCode);
 			}
-			callback(error ? error : body, response ? response.statusCode : null);
+			callback(error ? error : body, response.statusCode);
 		});
 	}
 
