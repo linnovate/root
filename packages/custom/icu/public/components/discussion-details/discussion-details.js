@@ -88,6 +88,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         if (
             $scope.discussion && (
             $state.current.name === 'main.tasks.byentity.details' ||
+            $state.current.name === 'main.search.discussion' ||
             $state.current.name === 'main.discussions.all.details' ||
             $state.current.name === 'main.discussions.byentity.details')) {
             $state.go('.activities');
