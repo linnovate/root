@@ -5,6 +5,7 @@
                 data-ng-class="{ 'active': isCurrentState(project._id) }"
                 ng-click="initialize(project)"
                 icu-list-row
+                data-id="{{project._id}}"
                 data="{
                     project: project,
                     index: $index,
