@@ -32,12 +32,15 @@ angular.module('mean.icu.ui.tabs')
                 $scope.activity.issue = $stateParams.id ? context.main.slice(0, -1) : context.entityName;
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
+
                 ActivitiesService.create($scope.activity).then(function (result) {
                     if (!_.isEmpty($scope.attachments)) {
                         var file = $scope.attachments;
                         var data = {
                             issueId: result._id,
-                            issue: 'update'
+                            issue: 'update',
+                            entity: $stateParams.id ? context.main.slice(0, -1) : context.entityName,
+                            entityId: $stateParams.id || $stateParams.entityId
                         };
                         DocumentsService.saveAttachments(data, file);
                     }
