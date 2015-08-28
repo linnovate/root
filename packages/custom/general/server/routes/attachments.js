@@ -14,8 +14,10 @@ module.exports = function (General, app, auth, database) {
     };
 
     request(objReq, function (error, response, body) {
-      if (!error && response.statusCode === 200 && response.body.length)
+      if (!error && response.statusCode === 200 && response.body.length) {
         return res.json(JSON.parse(response.body));
+      }
+
       return res.status(response.statusCode).send(response.body);
     });
   });
@@ -32,6 +34,7 @@ module.exports = function (General, app, auth, database) {
         if (!error && response.statusCode === 200 && response.body.length) {
           return res.json(JSON.parse(response.body));
         }
+
         if (response) {
           return res.status(response.statusCode).send(response.body);
         }
