@@ -157,6 +157,7 @@ function getDetailsTabState(main, tab) {
     resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
         function (service, $stateParams) {
             var entityName = $stateParams.id ? main : $stateParams.entity;
+            console.log($stateParams);
             var getFn = 'getBy' + capitalize(entityName) + 'Id';
 
             if (!service[getFn]) {
@@ -456,9 +457,17 @@ angular.module('mean.icu').config([
         .state('main.search.task', getTaskDetailsState('/task'))
         .state('main.search.task.activities', getDetailsTabState('task', 'activities'))
         .state('main.search.task.documents', getDetailsTabState('task', 'documents'))
+
         .state('main.search.project', getProjectDetailsState('/project'))
-        .state('main.search.discussion', getDiscussionDetailsState('/discussion'));
-    }
+        .state('main.search.project.activities', getDetailsTabState('project', 'activities'))
+        .state('main.search.project.documents', getDetailsTabState('project', 'documents'))
+        .state('main.search.project.tasks', getDetailsTabState('project', 'tasks'))
+
+        .state('main.search.discussion', getDiscussionDetailsState('/discussion'))
+        .state('main.search.discussion.activities', getDetailsTabState('discussion', 'activities'))
+        .state('main.search.discussion.documents', getDetailsTabState('discussion', 'documents'))
+        .state('main.search.discussion.tasks', getDetailsTabState('discussion', 'tasks'));
+}
 ]);
 
 angular.module('mean.icu').config(function ($i18nextProvider) {
