@@ -28,7 +28,7 @@
     $box-size: 35px;
 
     .dropdown {
-        width: $box-size * 4 + $color-box-margin * 8 + 2 * $dropdown-box-border;
+        width: $box-size * 4 + $color-box-margin * 8 + 2 * $dropdown-box-border + 2px;
         height: $box-size * 3 + $color-box-margin * 6 + 2 * $dropdown-box-border;
         background-color: white;
         border: $dropdown-box-border solid $light-grey-placeholder;

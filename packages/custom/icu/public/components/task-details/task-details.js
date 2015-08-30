@@ -87,10 +87,9 @@ angular.module('mean.icu.ui.taskdetails', [])
         }
 
         TasksService.update(task).then(function (result) {
-            if (context.entityName === 'all') {
-                task.project = result.project;
-            } else if (context.entityName === 'project') {
-                if (result.project._id !== context.entityId) {
+            if (context.entityName === 'project') {
+                var projId = result.project ? result.project._id : undefined;
+                if (projId !== context.entityId) {
                     $state.go('main.tasks.byentity', {
                         entity: context.entityName,
                         entityId: context.entityId

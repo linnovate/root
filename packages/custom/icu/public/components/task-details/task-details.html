@@ -36,7 +36,7 @@
             <div class="tags">
                 <div class="tag-wrap">
                     <ui-select ng-model="task.project" on-select="update(task)">
-                        <ui-select-match placeholder="{{$select.selected.title}}">
+                        <ui-select-match placeholder="{{$select.selected.title || 'Select a project'}}">
                             <div class="tag"
                                  ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
                                 {{$select.selected.title}}

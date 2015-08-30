@@ -1,15 +1,9 @@
 'use strict';
 
 angular.module('mean.icu.ui.projectlistdirective', [])
-    .directive('icuProjectList', function () {
-        function controller($scope, context, ProjectsService, $state) {
+    .directive('icuProjectList', function ($state, $uiViewScroll, $stateParams) {
+        function controller($scope, context, ProjectsService) {
             $scope.context = context;
-
-            $scope.isCurrentState = function (id) {
-                return ($state.current.name.indexOf('main.projects.byentity.details') === 0 ||
-                        $state.current.name.indexOf('main.projects.all.details') === 0
-                    ) && $state.params.id === id;
-            };
 
             var creatingStatuses = {
                 NotCreated: 0,
@@ -20,6 +14,12 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             _($scope.projects).each(function(p) {
                 p.__state = creatingStatuses.Created;
             });
+
+            $scope.taskOrder = function(task) {
+                if (task._id && $scope.order) {
+                    return task[$scope.order.field];
+                }
+            };
 
             var newProject = {
                 title: '',
@@ -77,6 +77,21 @@ angular.module('mean.icu.ui.projectlistdirective', [])
         }
 
         function link($scope, $element) {
+            var isScrolled = false;
+
+            $scope.isCurrentState = function (id) {
+                var isActive = ($state.current.name.indexOf('main.projects.byentity.details') === 0 ||
+                                $state.current.name.indexOf('main.projects.all.details') === 0
+                           ) && $state.params.id === id;
+
+                if (isActive && !isScrolled) {
+                    $uiViewScroll($element.find('[data-id="' + $stateParams.id + '"]'));
+                    isScrolled = true;
+                }
+
+                return isActive;
+            };
+
             $scope.onEnter = function($event, index) {
                 if ($event.keyCode === 13) {
                     $event.preventDefault();

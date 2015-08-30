@@ -6,11 +6,15 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.tasks = tasks;
 
         $scope.summary = function (discussion) {
-            DiscussionsService.summary(discussion);
+            DiscussionsService.summary(discussion).then(function (result) {
+                discussion.status = result.status;
+            });
         };
 
         $scope.schedule = function (discussion) {
-            DiscussionsService.schedule(discussion);
+            DiscussionsService.schedule(discussion).then(function (result) {
+                discussion.status = result.status;
+            });
         };
 
         $scope.archive = function (discussion) {
@@ -84,6 +88,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         if (
             $scope.discussion && (
             $state.current.name === 'main.tasks.byentity.details' ||
+            $state.current.name === 'main.search.discussion' ||
             $state.current.name === 'main.discussions.all.details' ||
             $state.current.name === 'main.discussions.byentity.details')) {
             $state.go('.activities');
