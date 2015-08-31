@@ -36,15 +36,15 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
 
         $scope.createOrUpdate = function(task) {
+            if (context.entityName !== 'all') {
+                task[context.entityName] = context.entity;
+            }
+
             if (task.__state === creatingStatuses.NotCreated) {
                 task.__state = creatingStatuses.Creating;
 
                 return TasksService.create(task).then(function(result) {
                     task.__state = creatingStatuses.Created;
-
-                    if (context.entityName !== 'all') {
-                        task[context.entityName] = context.entity;
-                    }
 
                     $scope.tasks.push(_(newTask).clone());
 
