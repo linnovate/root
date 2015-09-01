@@ -2,5 +2,69 @@
     "ICU": "אני רואה אותך",
     "Dispaly task by":" הצג לפי",
     "NOWATCHERS": "ללא עוקבים",
-    "Create new task": "ליצור משימה חדשה"
+    “New”: “חדש”
+    “In progress”: “בתהליך”
+    “Canceled”: “בוטל”
+    "Completed”: “הושלם”
+    “Archived”: “ארכיון”
+    “Updates”: “עדכונים”
+    “Documents”: “מסמכים”
+    “Tasks”: “משימות”
+    “updated this project”: “עדכונים בפרויקט זה”
+    “Type update here“: “כתוב עדכון כאן“
+    “Add”: “הוסף”
+    “TASKS”: “משימות”
+    “All”: “הכל”
+    “Display tasks by”: “הצג משימות לפי”
+    “Projects”: “פרויקטים”
+    “more…”: “עוד‫…‬”
+    “Discussions”: “דיונים”
+    “People”: “אנשים”
+    “PROJECTS”: “פרויקטים”
+    “Display projects by”: “הצג פרויקטים לפי”
+    “DISCUSSIONS”: “דיונים”
+    “Display discussions by”: “הצ” דיונים לפי“
+    “PEOPLE”: “אנשים”
+    “Display people by”: “הצג אנשים לפי“
+    “Search”: “חיפוש”
+    “Status”: “סטאטוס”
+    “Due”: “יעד”
+    “Project”: “פרויקט”
+    “Title”: “כותרת”
+    “Status”: “סטאטוס”
+    “Created”: “נוצר ב‫..‬”
+    “Delete project”: “מחק פרויקט“
+    “assigned to”: “אחראי”
+    “Select members”: “בחר חברים“
+    “Profile page”: “דף פרופיל“
+    “Logout”: “התנתק”
+    “No labels”: “אין תגיות”
+    “Select tags”: “בחר תגיות“
+    “created this task”: “יצר משימה זו“
+    “Enter a description”: “הכנס תיאור”
+    “Tasks from project”: “משימות מפרויקט”
+    “Select assignee”: “בחר אחראי”
+    “Deadline”: “תאריך יעד	”
+    “add document task”: “צרף מסמך למשימה"
+    “Agenda”: “אג׳נדה”
+    “Assigned”: “צורף אחראי”
+    “Review”: “בבדיקה”
+    “Rejected”: “נדחה”
+    “Done”: “הושלם”
+    “Select a project”: “בחר פרויקט”
+    “Tasks from discussion”: “משימות מדיון”
+    “Tasks from user”: “משימות של משתמש”
+    “add comment project”: “הוסיף תגובה לפרויקט”
+    “add comment task”: “הוסיף תגובה למשימה”
+    “add comment discussion”: “הוסיף תגובה לדיון”
+    “Username”: “שם משתמש”
+    “Name”: “שם”
+    “Email”: “אמייל”
+    “Password (optional)”: “סיסמא ‫(‬לא חובה‫)‬”
+    “Confirm password (optional)”: “אשרר סיסמא ‫(‬לא חובה‫)‬”
+    “Upload”: “העלה”
+    “Save”: “שמור”
+    “Password”: “סיסמא”
+
+    
 }

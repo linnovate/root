@@ -43,7 +43,7 @@ class Crud {
 			if (!error && response.statusCode === 200 && response.body.length) {
 				return callback(JSON.parse(body), response.statusCode);
 			}
-			callback(error ? error : body, response.statusCode);
+			callback(error ? error : body, response ? response.statusCode : 500);
 		});
 	}
 

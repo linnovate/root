@@ -2,16 +2,19 @@
 
 angular.module('mean.icu.ui.membersfooter', [])
     .directive('icuMembersFooter', function () {
-        function controller($scope, $injector, context) {
+        function controller($scope, $injector, context, $stateParams) {
             var serviceMap = {
                 projects: 'ProjectsService',
                 discussions: 'DiscussionsService',
-                tasks: 'TasksService'
+                tasks: 'TasksService',
+                project: 'ProjectsService',
+                discussion: 'DiscussionsService',
+                task: 'TasksService'
             };
 
             var update = function (entity) {
                 $scope.notAssigned = _.difference($scope.users, $scope.entity.watchers);
-                var serviceName = serviceMap[context.main];
+                var serviceName = serviceMap[$stateParams.id ? context.main : context.entityName];
                 var service = $injector.get(serviceName);
                 service.update(entity);
             };

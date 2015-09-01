@@ -40,6 +40,10 @@ angular.module('mean.icu.data.discussionsservice', [])
             return key.indexOf('__') === 0;
         });
 
+        if (discussion.assign && discussion.assign._id) {
+            discussion.assign = discussion.assign._id;
+        }
+
         return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion).then(function (result) {
             return result.data;
         });
