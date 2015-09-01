@@ -48,7 +48,7 @@ module.exports = {
     name: 'he',
     direction: 'rtl',
   }],
-  currentLanguage: 'he',
+  currentLanguage: 'en-US',
 
   // The session cookie name
   sessionName: 'connect.sid'
