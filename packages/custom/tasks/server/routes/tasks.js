@@ -6,6 +6,8 @@ module.exports = function(tasks, app, auth, database) {
 
     var TaskC = require('../../../general/server/providers/crud.js').Task,
         Task = new TaskC('/api/tasks'),
+        Notification = require('../../../general/server/providers/notify.js').Notification,
+        Notify = new Notification(),
         config = require('meanio').loadConfig(),
         apiUri = config.api.uri,
         request = require('request');
@@ -20,6 +22,15 @@ module.exports = function(tasks, app, auth, database) {
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
                 res.send(data);
+                if(data.project && data.project.room)
+                    Notify.send({
+                        headers: req.headers,
+                        project: data,
+                        room: data.project.room,
+                        title: data.title
+                    }, function(data) {
+                        console.log('success')
+                    });
             });
         })
         .get(function (req, res) {
