@@ -5,7 +5,9 @@
 module.exports = function(Projects, app, auth, database) {
 
 	var ProjectC = require('../../../general/server/providers/crud.js').Project,
-		Project = new ProjectC('/api/projects');
+		Project = new ProjectC('/api/projects'),
+        Notification = require('../../../general/server/providers/notify.js').Notification,
+        Notify = new Notification();
 
 	app.route('/api/projects')
 
@@ -49,9 +51,30 @@ module.exports = function(Projects, app, auth, database) {
 				param: req.params.projectId,
 				headers: req.headers
 			}, function(data, statusCode) {
+
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
-				res.send(data);
+                if(data.title && !data.room){
+
+                    Notify.createRoom({
+                        headers: req.headers,
+                        project: data
+                    }, function(data) {
+                        req.body.room = data.room;
+                        Project.update({
+                            data: req.body,
+                            param: req.params.projectId,
+                            headers: req.headers
+                        }, function(data, statusCode) {
+
+                            if (statusCode && statusCode != 200)
+                                res.status(statusCode);
+
+                            res.send(data);
+                        });
+                    });
+                } else
+                    res.send(data);
 			});
 		})
 
