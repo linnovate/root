@@ -4,10 +4,6 @@ angular.module('mean.icu.data.projectsservice', [])
 .service('ProjectsService', function(ApiUri, $http) {
     var EntityPrefix = '/projects';
 
-    function getNew () {
-        return [];
-    }
-
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function(result) {
             return result.data;
@@ -34,22 +30,12 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     function create(project) {
-        var projectData = _(project).omit(function(value, key) {
-            return key.indexOf('__') === 0;
-        });
-
-        return $http.post(ApiUri + EntityPrefix, projectData).then(function(result) {
-            _(project).assign(result.data);
-
+        return $http.post(ApiUri + EntityPrefix, project).then(function(result) {
             return result.data;
         });
     }
 
     function update(project) {
-        project = _(project).omit(function(value, key) {
-            return key.indexOf('__') === 0;
-        });
-
         return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
             return result.data;
         });
@@ -75,7 +61,6 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     return {
-        getNew: getNew,
         getAll: getAll,
         getById: getById,
         getByDiscussionId: getByDiscussionId,

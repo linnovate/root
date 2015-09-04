@@ -31,7 +31,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         }).pluck('term').value();
     };
 
-    $scope.$watchGroup(['task.description', 'task.title'], function (nVal, oVal) {
+    $scope.$watchGroup(['task.description'], function (nVal, oVal) {
         if (nVal !== oVal && oVal) {
             $scope.delayedUpdate($scope.task);
         }

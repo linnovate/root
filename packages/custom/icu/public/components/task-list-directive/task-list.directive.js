@@ -80,11 +80,15 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         $scope.searchResults = [];
 
         $scope.search = function(term) {
-            $scope.searchResults.length = 0;
+            if (context.entityName !== 'discussion') {
+                return;
+            }
 
             if (!term) {
                 return;
             }
+
+            $scope.searchResults.length = 0;
 
             TasksService.search(term).then(function(searchResults) {
                 _(searchResults).each(function(sr) {

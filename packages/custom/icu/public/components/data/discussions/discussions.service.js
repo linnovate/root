@@ -24,26 +24,12 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function create(discussion) {
-        var discussionData = _(discussion).omit(function(value, key) {
-            return key.indexOf('__') === 0;
-        });
-
-        return $http.post(ApiUri + EntityPrefix, discussionData).then(function (result) {
-            _(discussion).assign(result.data);
-
-            return discussion;
+        return $http.post(ApiUri + EntityPrefix, discussion).then(function (result) {
+            return result.data;
         });
     }
 
     function update(discussion) {
-        discussion = _(discussion).omit(function(value, key) {
-            return key.indexOf('__') === 0;
-        });
-
-        if (discussion.assign && discussion.assign._id) {
-            discussion.assign = discussion.assign._id;
-        }
-
         return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion).then(function (result) {
             return result.data;
         });
