@@ -1,196 +1,195 @@
 'use strict';
-
-var capitalize = function (str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-};
-
-var generateStateByEntity = function (main) {
-    var capitalizedMain = capitalize(main);
-
-    var resolve = {};
-    resolve[main + 's'] = [capitalizedMain + 'sService', '$stateParams',
-        function (service, $stateParams) {
-            var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
-
-            if (!service[getFn]) {
-                getFn = 'getById';
-            }
-
-            return service[getFn]($stateParams.entityId);
-        }];
-
-    resolve.entity = ['context', function (context) {
-        return context.entity;
-    }];
-
-    if (main !== 'task') {
-        resolve.tasks = function (TasksService, $stateParams) {
-            if ($stateParams.entityId && $stateParams.id) {
-                return;
-            }
-            var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
-
-            return TasksService[getFn]($stateParams.entityId);
-        };
-    }
-
-    return {
-        url: '/by-:entity/:entityId',
-        views: {
-            'middlepane@main': {
-                templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
-                controller: capitalizedMain + 'ListController'
-            },
-            'detailspane@main': {
-                templateUrl: function ($stateParams) {
-                    return '/icu/components/' + $stateParams.entity + '-details/' +
-                        $stateParams.entity + '-details.html';
-                },
-                controllerProvider: function ($stateParams) {
-                    return capitalize($stateParams.entity) + 'DetailsController';
-                }
-            }
-        },
-        resolve: resolve
-    };
-};
-
-var getListView = function (entity, resolve) {
-    var view = {
-        'middlepane@main': {
-            templateUrl: '/icu/components/' + entity + '-list/' + entity + '-list.html',
-            controller: capitalize(entity) + 'ListController'
-        }
-    };
-
-
-    if (resolve) {
-        view['middlepane@main'].resolve = resolve;
-    }
-
-    return view;
-};
-
-function getTaskDetailsState(urlPrefix) {
-    if (!urlPrefix) {
-        urlPrefix = '';
-    }
-
-    return {
-        url: urlPrefix + '/:id',
-        views: {
-            'detailspane@main': {
-                templateUrl: '/icu/components/task-details/task-details.html',
-                controller: 'TaskDetailsController'
-            }
-        },
-        resolve: {
-            entity: function (tasks, $stateParams) {
-                return _(tasks).find(function (t) {
-                    return t._id === $stateParams.id;
-                });
-            },
-            tags: function (TasksService) {
-                return TasksService.getTags();
-            }
-        }
-    };
-}
-
-function getProjectDetailsState(urlPrefix) {
-    if (!urlPrefix) {
-        urlPrefix = '';
-    }
-
-    return {
-        url: urlPrefix + '/:id',
-        views: {
-            'detailspane@main': {
-                templateUrl: '/icu/components/project-details/project-details.html',
-                controller: 'ProjectDetailsController'
-            }
-        },
-        resolve: {
-            entity: function ($stateParams, projects) {
-                return _(projects).find(function (p) {
-                    return p._id === $stateParams.id;
-                });
-            },
-            tasks: function (TasksService, $stateParams) {
-                return TasksService.getByProjectId($stateParams.id);
-            }
-        }
-    };
-}
-
-function getDiscussionDetailsState(urlPrefix) {
-    if (!urlPrefix) {
-        urlPrefix = '';
-    }
-
-    return {
-        url: urlPrefix + '/:id',
-        views: {
-            'detailspane@main': {
-                templateUrl: '/icu/components/discussion-details/discussion-details.html',
-                controller: 'DiscussionDetailsController'
-            }
-        },
-        resolve: {
-            entity: function ($stateParams, discussions) {
-                return _(discussions).find(function (d) {
-                    return d._id === $stateParams.id;
-                });
-            },
-            tasks: function (TasksService, $stateParams) {
-                return TasksService.getByDiscussionId($stateParams.id);
-            }
-        }
-    };
-}
-
-function getDetailsTabState(main, tab) {
-    var capitalizedMain = capitalize(main);
-    var capitalizedTab = capitalize(tab);
-
-    var resolve = {};
-    resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
-        function (service, $stateParams) {
-            var entityName = $stateParams.id ? main : $stateParams.entity;
-            var getFn = 'getBy' + capitalize(entityName) + 'Id';
-
-            if (!service[getFn]) {
-                getFn = 'getById';
-            }
-
-            return service[getFn]($stateParams.id || $stateParams.entityId);
-        }];
-
-    resolve.entity = ['context', function (context) {
-        return context.entity;
-    }];
-
-    return {
-        url: '/' + tab,
-        views: {
-            tab: {
-                templateUrl: function ($stateParams) {
-                    var entity = $stateParams.id ? main : $stateParams.entity;
-                    return '/icu/components/' + entity + '-details/tabs/' + tab + '/' + tab + '.html';
-                },
-                controllerProvider: function ($stateParams) {
-                    var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
-                    return entity + capitalizedTab + 'Controller';
-                }
-            }
-        },
-        resolve: resolve
-    };
-}
-
 angular.module('mean.icu').config([
     '$meanStateProvider',
     function ($meanStateProvider) {
+        var capitalize = function (str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        };
+
+        var generateStateByEntity = function (main) {
+            var capitalizedMain = capitalize(main);
+
+            var resolve = {};
+            resolve[main + 's'] = [capitalizedMain + 'sService', '$stateParams',
+            function (service, $stateParams) {
+                var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
+
+                if (!service[getFn]) {
+                    getFn = 'getById';
+                }
+
+                return service[getFn]($stateParams.entityId);
+            }];
+
+            resolve.entity = ['context', function (context) {
+                return context.entity;
+            }];
+
+            if (main !== 'task') {
+                resolve.tasks = function (TasksService, $stateParams) {
+                    if ($stateParams.entityId && $stateParams.id) {
+                        return;
+                    }
+                    var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
+
+                    return TasksService[getFn]($stateParams.entityId);
+                };
+            }
+
+            return {
+                url: '/by-:entity/:entityId',
+                views: {
+                    'middlepane@main': {
+                        templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
+                        controller: capitalizedMain + 'ListController'
+                    },
+                    'detailspane@main': {
+                        templateUrl: function ($stateParams) {
+                            return '/icu/components/' + $stateParams.entity + '-details/' +
+                                $stateParams.entity + '-details.html';
+                        },
+                        controllerProvider: function ($stateParams) {
+                            return capitalize($stateParams.entity) + 'DetailsController';
+                        }
+                    }
+                },
+                resolve: resolve
+            };
+        };
+
+        var getListView = function (entity, resolve) {
+            var view = {
+                'middlepane@main': {
+                    templateUrl: '/icu/components/' + entity + '-list/' + entity + '-list.html',
+                    controller: capitalize(entity) + 'ListController'
+                }
+            };
+
+
+            if (resolve) {
+                view['middlepane@main'].resolve = resolve;
+            }
+
+            return view;
+        };
+
+        function getTaskDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/task-details/task-details.html',
+                        controller: 'TaskDetailsController'
+                    }
+                },
+                resolve: {
+                    entity: function (tasks, $stateParams) {
+                        return _(tasks).find(function (t) {
+                            return t._id === $stateParams.id;
+                        });
+                    },
+                    tags: function (TasksService) {
+                        return TasksService.getTags();
+                    }
+                }
+            };
+        }
+
+        function getProjectDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/project-details/project-details.html',
+                        controller: 'ProjectDetailsController'
+                    }
+                },
+                resolve: {
+                    entity: function ($stateParams, projects) {
+                        return _(projects).find(function (p) {
+                            return p._id === $stateParams.id;
+                        });
+                    },
+                    tasks: function (TasksService, $stateParams) {
+                        return TasksService.getByProjectId($stateParams.id);
+                    }
+                }
+            };
+        }
+
+        function getDiscussionDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/discussion-details/discussion-details.html',
+                        controller: 'DiscussionDetailsController'
+                    }
+                },
+                resolve: {
+                    entity: function ($stateParams, discussions) {
+                        return _(discussions).find(function (d) {
+                            return d._id === $stateParams.id;
+                        });
+                    },
+                    tasks: function (TasksService, $stateParams) {
+                        return TasksService.getByDiscussionId($stateParams.id);
+                    }
+                }
+            };
+        }
+
+        function getDetailsTabState(main, tab) {
+            var capitalizedMain = capitalize(main);
+            var capitalizedTab = capitalize(tab);
+
+            var resolve = {};
+            resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
+            function (service, $stateParams) {
+                var entityName = $stateParams.id ? main : $stateParams.entity;
+                var getFn = 'getBy' + capitalize(entityName) + 'Id';
+
+                if (!service[getFn]) {
+                    getFn = 'getById';
+                }
+
+                return service[getFn]($stateParams.id || $stateParams.entityId);
+            }];
+
+            resolve.entity = ['context', function (context) {
+                return context.entity;
+            }];
+
+            return {
+                url: '/' + tab,
+                views: {
+                    tab: {
+                        templateUrl: function ($stateParams) {
+                            var entity = $stateParams.id ? main : $stateParams.entity;
+                            return '/icu/components/' + entity + '-details/tabs/' + tab + '/' + tab + '.html';
+                        },
+                        controllerProvider: function ($stateParams) {
+                            var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
+                            return entity + capitalizedTab + 'Controller';
+                        }
+                    }
+                },
+                resolve: resolve
+            };
+        }
+
         $meanStateProvider
         .state('login', {
             url: '/login',

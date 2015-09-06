@@ -3,23 +3,10 @@
 angular.module('mean.icu.data.tasksservice', [])
 .service('TasksService', function (ApiUri, $http, ProjectsService) {
     var EntityPrefix = '/tasks';
-    var createdTasks = {};
 
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function (result) {
-            var tasks = result.data;
-
-            _.each(createdTasks, function (createdTask) {
-                var isFound = _.any(tasks, function (task) {
-                    return createdTask._id === task._id;
-                });
-
-                if (!isFound) {
-                    tasks.push(createdTask);
-                }
-            });
-
-            return tasks;
+            return result.data;
         });
     }
 
@@ -51,40 +38,13 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function getByProjectId(id) {
         return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function (tasksResult) {
-            var tasks = tasksResult.data;
-
-            _.each(createdTasks, function (createdTask) {
-                // TODO: should be changed to createdTask.project._id === id when server will return object
-                var shouldPush = (createdTask.project && createdTask.project === id) &&
-                    !_.any(tasks, function (task) {
-                        return createdTask._id === task._id;
-                    });
-
-                if (shouldPush) {
-                    tasks.push(createdTask);
-                }
-            });
-
-            return tasks;
+            return tasksResult.data;
         });
     }
 
     function getByDiscussionId(id) {
         return $http.get(ApiUri + '/discussions/' + id + EntityPrefix).then(function (tasksResult) {
-            var tasks = tasksResult.data;
-
-            _.each(createdTasks, function (createdTask) {
-                var shouldPush = (createdTask.discussion && createdTask.discussion === id) &&
-                    !_.any(tasks, function (task) {
-                        return createdTask._id === task._id;
-                    });
-
-                if (shouldPush) {
-                    tasks.push(createdTask);
-                }
-            });
-
-            return tasks;
+            return tasksResult.data;
         });
     }
 
@@ -95,25 +55,12 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function create(task) {
-        var taskData = _(task).omit(function(value, key) {
-            return key.indexOf('__') === 0;
-        });
-
-        return $http.post(ApiUri + EntityPrefix, taskData).then(function (result) {
-            createdTasks[result.data._id] = result.data;
-            createdTasks[result.data._id].discussion = task.discussion;
-
-            _(task).assign(result.data);
-
-            return task;
+        return $http.post(ApiUri + EntityPrefix, task).then(function (result) {
+            return result.data;
         });
     }
 
     function update(task) {
-        task = _(task).omit(function(value, key) {
-            return key.indexOf('__') === 0;
-        });
-
         return $http.put(ApiUri + EntityPrefix + '/' + task._id, task).then(function (result) {
             return result.data;
         });
