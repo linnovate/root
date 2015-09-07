@@ -25,7 +25,17 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
         $scope.taskOrder = function(task) {
             if (task._id && $scope.order) {
-                return task[$scope.order.field];
+                var parts = $scope.order.field.split('.');
+                var result = task;
+                for (var i = 0; i < parts.length; i+=1) {
+                    if (result) {
+                        result = result[parts[i]];
+                    } else {
+                        result = undefined;
+                    }
+                }
+
+                return result;
             }
         };
 
