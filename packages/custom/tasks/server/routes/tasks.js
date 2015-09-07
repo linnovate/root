@@ -22,12 +22,13 @@ module.exports = function(tasks, app, auth, database) {
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
                 res.send(data);
+                console.log('ddddddddddddd')
                 if(data.project && data.project.room)
                     Notify.send({
                         headers: req.headers,
                         project: data,
                         room: data.project.room,
-                        title: data.title
+                        context: {action:'created',type:'task',name:data.title}
                     }, function(data) {
                         console.log('success')
                     });

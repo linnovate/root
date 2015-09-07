@@ -45,12 +45,17 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
-    function update(project) {
+    function update(project, context) {
         project = _(project).omit(function(value, key) {
             return key.indexOf('__') === 0;
-        });
 
-        return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
+        });
+        if(!context.action)
+            context.action = 'updated';
+        if(!context.type)
+            context.type =  'project'
+
+        return $http.put(ApiUri + EntityPrefix + '/' + project._id, {project:  project, context: context}).then(function(result) {
             return result.data;
         });
     }

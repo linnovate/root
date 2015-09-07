@@ -28,15 +28,46 @@ angular.module('mean.icu.ui.projectdetails', [])
 
         $scope.statuses = ['New', 'In progress', 'Canceled', 'Completed', 'Archived'];
 
-        $scope.$watchGroup(['project.description', 'project.title'], function (nVal, oVal) {
+
+        //var _title = 'aaaa';
+        //Object.defineProperty($scope.project, 'title', {
+        //    configurable: true,
+        //    get: function() {
+        //        return _title; },
+        //    set: function(newValue) {
+        //        _title = newValue;
+        //    }
+        //})
+
+        $scope.$watchGroup(['project.description', 'project.title'], function (nVal, oVal, scope) {
             if (nVal !== oVal && oVal) {
-                $scope.delayedUpdate($scope.project);
+                var context;
+                if(nVal[1] != oVal[1])
+                    context = {
+                        name: 'title',
+                        oldVal: oVal[1],
+                        newVal: nVal[1],
+                        action: 'renamed'
+                    }
+                else
+                    context = {
+                        name: 'description',
+                        oldVal: oVal[0],
+                        newVal: nVal[0]
+                    }
+
+                $scope.delayedUpdate($scope.project,context);
             }
         });
 
         $scope.$watch('project.color', function (nVal, oVal) {
             if (nVal !== oVal) {
-                $scope.update($scope.project);
+                var context = {
+                    name: 'color',
+                    oldVal: oVal,
+                    newVal: nVal
+                }
+                $scope.update($scope.project, context);
             }
         });
 
@@ -44,10 +75,11 @@ angular.module('mean.icu.ui.projectdetails', [])
             theme: 'bootstrap',
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
         };
-
         $scope.dueOptions = {
+
             onSelect: function () {
-                $scope.update($scope.project);
+                //context
+                $scope.update($scope.project, 'due');
             },
             dateFormat: 'd.m.yy'
         };
@@ -67,8 +99,8 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         };
 
-        $scope.update = function (project) {
-            ProjectsService.update(project);
+        $scope.update = function (project, context) {
+            ProjectsService.update(project, context);
         };
 
         $scope.delayedUpdate = _.debounce($scope.update, 500);
