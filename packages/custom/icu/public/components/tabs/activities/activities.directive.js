@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function () {
-        function controller($scope, UsersService, context, DocumentsService, ActivitiesService, $stateParams) {
+        function controller($scope, UsersService, context, DocumentsService, ActivitiesService, $stateParams, $state) {
             $scope.activity = {
                 description: ''
             };
@@ -42,10 +42,13 @@ angular.module('mean.icu.ui.tabs')
                             entity: $stateParams.id ? context.main.slice(0, -1) : context.entityName,
                             entityId: $stateParams.id || $stateParams.entityId
                         };
+
                         DocumentsService.saveAttachments(data, file);
                     }
                     clearForm();
                 });
+
+                $state.reload($state.current.name);
             };
         }
 
