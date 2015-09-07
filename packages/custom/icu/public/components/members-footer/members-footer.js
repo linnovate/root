@@ -12,11 +12,17 @@ angular.module('mean.icu.ui.membersfooter', [])
                 task: 'TasksService'
             };
 
-            var update = function (entity) {
+            var update = function (entity,  member, action) {
                 $scope.notAssigned = _.difference($scope.users, $scope.entity.watchers);
+
                 var serviceName = serviceMap[$stateParams.id ? context.main : context.entityName];
                 var service = $injector.get(serviceName);
-                service.update(entity);
+                var data = {
+                    name:  member.name,
+                    type: 'user',
+                    action: action
+                }
+                service.update(entity, data);
             };
             $scope.showSelect = false;
 
@@ -29,14 +35,14 @@ angular.module('mean.icu.ui.membersfooter', [])
             $scope.addMember = function (member) {
                 $scope.showSelect = false;
                 $scope.entity.watchers.push(member);
-                update($scope.entity);
+                update($scope.entity, member, 'added');
             };
 
             $scope.deleteMember = function (member) {
                 $scope.entity.watchers = _.reject($scope.entity.watchers, function (mem) {
                     return _.isEqual(member, mem);
                 });
-                update($scope.entity);
+                update($scope.entity, member, 'removed');
             };
         }
 

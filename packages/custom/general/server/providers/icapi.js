@@ -8,7 +8,7 @@ var mean = require('meanio'),
     request = require('request');
 
 exports.talkToApi = function(options, callback) {
-    console.log(options.param)
+
     var cmd_api = (options.param) ? options.cmd + '/' + options.param : options.cmd;
     var objReq = {
         uri: apiUri + cmd_api,
@@ -34,11 +34,9 @@ exports.talkToApi = function(options, callback) {
         objReq.form = options.form;
         objReq.headers['Content-Type'] = 'multipart/form-data';
     }
-
-    console.dir(objReq)
     request(objReq, function(error, response, body) {
-
         if (!error && response.statusCode === 200 && response.body.length) {
+            console.log(body)
             return callback(JSON.parse(body), response.statusCode);
         }
         callback(error ? error : body, response ? response.statusCode : 500);

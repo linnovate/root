@@ -47,7 +47,7 @@ module.exports = function(Projects, app, auth, database) {
 
 		.put(function(req, res) {
 			Project.update({
-				data: req.body,
+				data: req.body.project,
 				param: req.params.projectId,
 				headers: req.headers
 			}, function(data, statusCode) {
@@ -55,7 +55,6 @@ module.exports = function(Projects, app, auth, database) {
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
                 if(data.title && !data.room){
-
                     Notify.createRoom({
                         headers: req.headers,
                         project: data
@@ -73,7 +72,17 @@ module.exports = function(Projects, app, auth, database) {
                             res.send(data);
                         });
                     });
-                } else
+                } else if(data.room) {
+                    Notify.patch({
+                        headers: req.headers,
+                        project: data,
+                        context: req.body.context
+                    }, function(result) {
+                        res.send(data);
+
+                    });
+                }
+                else
                     res.send(data);
 			});
 		})
