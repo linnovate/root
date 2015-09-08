@@ -22,15 +22,16 @@ angular.module('mean.icu').config(function($provide) {
         };
 
         function action(cb) {
-            return function (entity) {
+            return function (entity,context) {
                 //var entityData = _.clone(entity);
                 var entityData = _(entity).omit(function(value, key) {
                     return key.indexOf('__') === 0;
                 });
 
+                console.log(context,'---------------')
                 normalize(entityData);
 
-                return cb(entityData).then(function(result) {
+                return cb(entityData,context).then(function(result) {
                     if (!entity._id && result._id) {
                         entity._id = result._id;
                     }

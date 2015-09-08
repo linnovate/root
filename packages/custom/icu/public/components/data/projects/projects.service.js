@@ -35,8 +35,8 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
-    function update(project, context) {
 
+    function update(project,context) {
         if(!context.action)
             context.action = 'updated';
         if(!context.type)
