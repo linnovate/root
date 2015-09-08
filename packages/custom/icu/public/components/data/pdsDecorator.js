@@ -13,6 +13,10 @@ angular.module('mean.icu').config(function($provide) {
             for (var i = 0; i < keys.length; i+=1) {
                 var property = data[keys[i]];
 
+                if (keys[i] === 'title') {
+                    data[keys[i]] = property.trim();
+                }
+
                 if (property && property._id) {
                     data[keys[i]] = property._id;
                 } else if (property instanceof Array) {
