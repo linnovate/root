@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http) {
+.factory('ProjectsService', function(ApiUri, $http) {
     var EntityPrefix = '/projects';
 
     function getAll() {
@@ -35,12 +35,12 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
-    function update(project, context) {
 
-        if(!context.action)
-            context.action = 'updated';
-        if(!context.type)
-            context.type =  'project'
+    function update(project,context) {
+        //if(!context.action)
+        //    context.action = 'updated';
+        //if(!context.type)
+        //    context.type =  'project'
 
         return $http.put(ApiUri + EntityPrefix + '/' + project._id, {project:  project, context: context}).then(function(result) {
             return result.data;

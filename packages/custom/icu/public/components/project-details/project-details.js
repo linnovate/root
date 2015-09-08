@@ -40,6 +40,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         //})
 
         $scope.$watchGroup(['project.description', 'project.title'], function (nVal, oVal, scope) {
+
             if (nVal !== oVal && oVal) {
                 var context;
                 if(nVal[1] != oVal[1])
@@ -55,7 +56,6 @@ angular.module('mean.icu.ui.projectdetails', [])
                         oldVal: oVal[0],
                         newVal: nVal[0]
                     }
-
                 $scope.delayedUpdate($scope.project,context);
             }
         });
@@ -100,6 +100,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.update = function (project, context) {
+            console.log("from details")
             ProjectsService.update(project, context);
         };
 
