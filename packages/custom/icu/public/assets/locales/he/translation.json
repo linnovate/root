@@ -1,70 +1,67 @@
 {
-    "ICU": "אני רואה אותך",
-    "Dispaly task by":" הצג לפי",
-    "NOWATCHERS": "ללא עוקבים",
-    “New”: “חדש”
-    “In progress”: “בתהליך”
-    “Canceled”: “בוטל”
-    "Completed”: “הושלם”
-    “Archived”: “ארכיון”
-    “Updates”: “עדכונים”
-    “Documents”: “מסמכים”
-    “Tasks”: “משימות”
-    “updated this project”: “עדכונים בפרויקט זה”
-    “Type update here“: “כתוב עדכון כאן“
-    “Add”: “הוסף”
-    “TASKS”: “משימות”
-    “All”: “הכל”
-    “Display tasks by”: “הצג משימות לפי”
-    “Projects”: “פרויקטים”
-    “more…”: “עוד‫…‬”
-    “Discussions”: “דיונים”
-    “People”: “אנשים”
-    “PROJECTS”: “פרויקטים”
-    “Display projects by”: “הצג פרויקטים לפי”
-    “DISCUSSIONS”: “דיונים”
-    “Display discussions by”: “הצ” דיונים לפי“
-    “PEOPLE”: “אנשים”
-    “Display people by”: “הצג אנשים לפי“
-    “Search”: “חיפוש”
-    “Status”: “סטאטוס”
-    “Due”: “יעד”
-    “Project”: “פרויקט”
-    “Title”: “כותרת”
-    “Status”: “סטאטוס”
-    “Created”: “נוצר ב‫..‬”
-    “Delete project”: “מחק פרויקט“
-    “assigned to”: “אחראי”
-    “Select members”: “בחר חברים“
-    “Profile page”: “דף פרופיל“
-    “Logout”: “התנתק”
-    “No labels”: “אין תגיות”
-    “Select tags”: “בחר תגיות“
-    “created this task”: “יצר משימה זו“
-    “Enter a description”: “הכנס תיאור”
-    “Tasks from project”: “משימות מפרויקט”
-    “Select assignee”: “בחר אחראי”
-    “Deadline”: “תאריך יעד	”
-    “add document task”: “צרף מסמך למשימה"
-    “Agenda”: “אג׳נדה”
-    “Assigned”: “צורף אחראי”
-    “Review”: “בבדיקה”
-    “Rejected”: “נדחה”
-    “Done”: “הושלם”
-    “Select a project”: “בחר פרויקט”
-    “Tasks from discussion”: “משימות מדיון”
-    “Tasks from user”: “משימות של משתמש”
-    “add comment project”: “הוסיף תגובה לפרויקט”
-    “add comment task”: “הוסיף תגובה למשימה”
-    “add comment discussion”: “הוסיף תגובה לדיון”
-    “Username”: “שם משתמש”
-    “Name”: “שם”
-    “Email”: “אמייל”
-    “Password (optional)”: “סיסמא ‫(‬לא חובה‫)‬”
-    “Confirm password (optional)”: “אשרר סיסמא ‫(‬לא חובה‫)‬”
-    “Upload”: “העלה”
-    “Save”: “שמור”
-    “Password”: “סיסמא”
-
-    
+    "completed":  "הושלם",
+    "displayTaskBy": " הצג לפי",
+    "icu":  "אני רואה אותך",
+    "noWatchers":  "ללא עוקבים",
+    "addCommentDiscussion":  "הוסיף תגובה לדיון",
+    "addCommentProject":  "הוסיף תגובה לפרויקט",
+    "addCommentTask":  "הוסיף תגובה למשימה",
+    "addDocumentTask":  "צרף מסמך למשימה",
+    "add":  "הוסף",
+    "agenda":  "אג׳נדה",
+    "all":  "הכל",
+    "archived":  "ארכיון",
+    "assignedTo":  "אחראי",
+    "assigned":  "צורף אחראי",
+    "canceled":  "בוטל",
+    "confirmPasswordOptional":  "אשרר סיסמא ‫(‬לא חובה‫)‬",
+    "createdThisTask":  "יצר משימה זו",
+    "created":  "נוצר ב‫..‬",
+    "deadline":  "תאריך יעד",
+    "deleteProject":  "מחק פרויקט",
+    "discussions":  "דיונים",
+    "DISCUSSIONS":  "דיונים",
+    "displayPeopleBy":  "הצג אנשים לפי",
+    "displayDiscussionsBy":  "הצג דיונים לפי",
+    "displayProjectsBy":  "הצג פרויקטים לפי",
+    "displayTasksBy":  "הצג משימות לפי",
+    "documents":  "מסמכים",
+    "done":  "הושלם",
+    "due":  "יעד",
+    "email":  "אמייל",
+    "enterDescription":  "הכנס תיאור",
+    "inProgress":  "בתהליך",
+    "logout":  "התנתק",
+    "more":  "עוד‫…‬",
+    "name":  "שם",
+    "new":  "חדש",
+    "noLabels":  "אין תגיות",
+    "passwordOptional":  "סיסמא ‫(‬לא חובה‫)‬",
+    "password":  "סיסמא",
+    "people":  "אנשים",
+    "PEOPLE":  "אנשים",
+    "profilePage":  "דף פרופיל",
+    "project":  "פרויקט",
+    "projects":  "פרויקטים",
+    "projects":  "פרויקטים",
+    "rejected":  "נדחה",
+    "review":  "בבדיקה",
+    "save":  "שמור",
+    "search":  "חיפוש",
+    "selectProject":  "בחר פרויקט",
+    "selectAssignee":  "בחר אחראי",
+    "selectMembers":  "בחר חברים",
+    "selectTags":  "בחר תגיות",
+    "status":  "סטאטוס",
+    "tasksFromDiscussion":  "משימות מדיון",
+    "tasksFromProject":  "משימות מפרויקט",
+    "tasksFromUser":  "משימות של משתמש",
+    "tasks":  "משימות",
+    "TASKS":  "משימות",
+    "title":  "כותרת",
+    "typeUpdateHere":  "כתוב עדכון כאן",
+    "updatedThisProject":  "עדכונים בפרויקט זה",
+    "updates":  "עדכונים",
+    "upload":  "העלה",
+    "username":  "שם משתמש"
 }
