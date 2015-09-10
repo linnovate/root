@@ -29,6 +29,8 @@
 "documents": "Documents",
 "done": "Done",
 "due": "Due",
+"display":  "Display",
+"by":  "by",
 "email": "Email",
 "enterDescription": "Enter a description",
 "inProgress": "In progress",

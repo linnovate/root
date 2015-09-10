@@ -23,7 +23,7 @@
         <div class=form-group>
             <label>{{ 'avatar' | i18next }}</label>
             <div class="upload" ngf-select ngf-change="uploadAvatar($files)" ng-model="me.profile.avatar">
-                Upload
+                {{ 'upload' | i18next }}
             </div>
             <img class="avatar" ng-src="{{avatar}}?{{hash}}"></img>
         </div>
