@@ -1,29 +1,29 @@
 <div class="profile-page">
     <form novalidate name="profileform" ng-submit="editProfile(profileform)">
         <div class=form-group>
-            <label>Username</label>
+            <label>{{ 'username' | i18next }}</label>
             <input class="form-control" type="text" ng-model="me.username">
         </div>
         <div class=form-group>
-            <label>Name</label>
+            <label>{{ 'name' | i18next }}</label>
             <input class="form-control" type="text" ng-model="me.name">
         </div>
         <div class=form-group>
-            <label>Email</label>
+            <label>{{ 'email' | i18next }}</label>
             <input class="form-control" type="text" ng-model="me.email">
         </div>
         <div class=form-group>
-            <label>Password (optional)</label>
+            <label>{{ 'passwordOptional' | i18next }}</label>
             <input class="form-control" type="password" ng-model="me.password">
         </div>
         <div class=form-group>
-            <label>Confirm password (optional)</label>
+            <label>{{ 'confirmPasswordOptional' | i18next }}</label>
             <input class="form-control" type="password" ng-model="confirm">
         </div>
         <div class=form-group>
-            <label>Avatar</label>
+            <label>{{ 'avatar' | i18next }}</label>
             <div class="upload" ngf-select ngf-change="uploadAvatar($files)" ng-model="me.profile.avatar">
-                Upload
+                {{ 'upload' | i18next }}
             </div>
             <img class="avatar" ng-src="{{avatar}}?{{hash}}"></img>
         </div>
