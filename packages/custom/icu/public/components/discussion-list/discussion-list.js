@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.discussionlist', [])
-    .controller('DiscussionListController', function ($scope, $state, discussions, DiscussionsService, context) {
+    .controller('DiscussionListController', function ($scope, $state, discussions, DiscussionsService, context, $filter) {
         $scope.discussions = discussions;
         $scope.showStarred = false;
 
@@ -18,6 +18,27 @@ angular.module('mean.icu.ui.discussionlist', [])
             field: 'created',
             isReverse: false
         };
+
+        $scope.discussionOrder = function(task) {
+            if (task._id && $scope.sorting) {
+                var parts = $scope.sorting.field.split('.');
+                var result = task;
+                for (var i = 0; i < parts.length; i+=1) {
+                    if (result) {
+                        result = result[parts[i]];
+                    } else {
+                        result = undefined;
+                    }
+                }
+
+                return result;
+            }
+        };
+
+        $scope.discussions = $filter('orderBy')($scope.discussions, $scope.taskOrder);
+        $scope.$watch('sorting.field', function() {
+            $scope.discussions = $filter('orderBy')($scope.discussions, $scope.taskOrder);
+        });
 
         $scope.sortingList = [
             {

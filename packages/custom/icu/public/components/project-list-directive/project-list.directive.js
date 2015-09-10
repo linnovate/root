@@ -15,12 +15,6 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                 p.__state = creatingStatuses.Created;
             });
 
-            $scope.taskOrder = function(task) {
-                if (task._id && $scope.order) {
-                    return task[$scope.order.field];
-                }
-            };
-
             var newProject = {
                 title: '',
                 color: 'b9e67d',
