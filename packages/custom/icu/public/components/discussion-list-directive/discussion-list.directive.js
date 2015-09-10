@@ -15,12 +15,6 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             d.__state = creatingStatuses.created;
         });
 
-        $scope.taskOrder = function(task) {
-            if (task._id && $scope.order) {
-                return task[$scope.order.field];
-            }
-        };
-
         var newDiscussion = {
             title: '',
             watchers: [],

@@ -1,7 +1,7 @@
 <div class="list-table">
     <table class="tasks">
         <tbody>
-            <tr data-ng-repeat="task in tasks | orderBy:taskOrder"
+            <tr data-ng-repeat="task in tasks"
                 data-ng-class="{ 'active': isCurrentState(task._id) }"
                 ng-click="initialize(task)"
                 icu-list-row

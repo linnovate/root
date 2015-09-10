@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.projectlist', [])
-    .controller('ProjectListController', function ($scope, $state, projects, ProjectsService, context) {
+    .controller('ProjectListController', function ($scope, $state, projects, ProjectsService, context, $filter) {
         $scope.projects = projects;
         $scope.showStarred = false;
 
@@ -18,6 +18,27 @@ angular.module('mean.icu.ui.projectlist', [])
             field: 'created',
             isReverse: false
         };
+
+        $scope.projectOrder = function(project) {
+            if (project._id && $scope.sorting) {
+                var parts = $scope.sorting.field.split('.');
+                var result = project;
+                for (var i = 0; i < parts.length; i+=1) {
+                    if (result) {
+                        result = result[parts[i]];
+                    } else {
+                        result = undefined;
+                    }
+                }
+
+                return result;
+            }
+        };
+
+        $scope.projects = $filter('orderBy')($scope.projects, $scope.projectOrder);
+        $scope.$watch('sorting.field', function() {
+            $scope.projects = $filter('orderBy')($scope.projects, $scope.projectOrder);
+        });
 
         $scope.sortingList = [
             {

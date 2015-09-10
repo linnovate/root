@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function ($scope, $state, tasks, TasksService, context) {
+.controller('TaskListController', function ($scope, $state, tasks, TasksService, context, $filter) {
     $scope.tasks = tasks;
     $scope.autocomplete = context.entityName === 'discussion';
 
@@ -20,6 +20,27 @@ angular.module('mean.icu.ui.tasklist', [])
         field: 'created',
         isReverse: false
     };
+
+    $scope.taskOrder = function(task) {
+        if (task._id && $scope.sorting) {
+            var parts = $scope.sorting.field.split('.');
+            var result = task;
+            for (var i = 0; i < parts.length; i+=1) {
+                if (result) {
+                    result = result[parts[i]];
+                } else {
+                    result = undefined;
+                }
+            }
+
+            return result;
+        }
+    };
+
+    $scope.tasks = $filter('orderBy')($scope.tasks, $scope.taskOrder);
+    $scope.$watch('sorting.field', function() {
+        $scope.tasks = $filter('orderBy')($scope.tasks, $scope.taskOrder);
+    });
 
     $scope.sortingList = [
         {
@@ -77,7 +98,7 @@ angular.module('mean.icu.ui.tasklist', [])
     if ($scope.tasks.length) {
         if ($state.current.name === 'main.tasks.all' ||
             $state.current.name === 'main.tasks.byentity') {
-                navigateToDetails($scope.tasks[0]);
+            navigateToDetails($scope.tasks[0]);
         }
     } else if (
             $state.current.name !== 'main.tasks.byentity.activities' &&

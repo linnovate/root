@@ -23,22 +23,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             __autocomplete: true
         };
 
-        $scope.taskOrder = function(task) {
-            if (task._id && $scope.order) {
-                var parts = $scope.order.field.split('.');
-                var result = task;
-                for (var i = 0; i < parts.length; i+=1) {
-                    if (result) {
-                        result = result[parts[i]];
-                    } else {
-                        result = undefined;
-                    }
-                }
-
-                return result;
-            }
-        };
-
         if (!$scope.displayOnly) {
             $scope.tasks.push(_(newTask).clone());
         }
