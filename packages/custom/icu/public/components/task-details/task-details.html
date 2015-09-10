@@ -6,7 +6,7 @@
             </div>
             <div class="user">
                 <div class="no-assignee" ng-if="!task.assign">
-                    <div class="avatar-placeholder">Select assignee</div>
+                    <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
                 </div>
                 <ui-select ng-model="task.assign" on-select="update(task)">
                     <ui-select-match>
@@ -20,7 +20,7 @@
                 </ui-select>
             </div>
             <div class="due">
-                <div class="placeholder" ng-if="!task.due">Deadline</div>
+                <div class="placeholder" ng-if="!task.due">{{ 'deadline' | i18next }}</div>
                 <input ui-date="dueOptions" ng-model="task.due">
             </div>
             <div class="status">
@@ -62,7 +62,7 @@
                     <li>
                         <a href="#" ng-click="deleteTask(task)">
                             <i class="fa fa-2x fa-times-circle"></i>
-                            <span>Delete task</span>
+                            <span>{{ 'deleteTask' | i18next }}</span>
                         </a>
                     </li>
                 </ul>
@@ -115,12 +115,12 @@
                 <button class="tab"
                         data-ui-sref-active="active"
                         data-ui-sref=".activities">
-                    Updates
+                    {{ 'updates' | i18next }}
                 </button>
                 <button class="tab"
                         data-ui-sref-active="active"
                         data-ui-sref=".documents">
-                    Documents
+                    {{ 'documents' | i18next }}
                 </button>
             </div>
         </div>
