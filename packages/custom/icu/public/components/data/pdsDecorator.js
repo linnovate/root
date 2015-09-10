@@ -32,13 +32,14 @@ angular.module('mean.icu').config(function($provide) {
                     return key.indexOf('__') === 0;
                 });
 
-                console.log(context,'---------------')
                 normalize(entityData);
 
                 return cb(entityData,context).then(function(result) {
                     if (!entity._id && result._id) {
                         entity._id = result._id;
                     }
+
+                    _(entity).assign(result);
 
                     return entity;
                 });
