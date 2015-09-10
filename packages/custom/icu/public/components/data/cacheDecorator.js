@@ -7,6 +7,7 @@ angular.module('mean.icu').config(function($provide) {
 
     var cacheDecorator = function($delegate) {
         var cachedEntities = {};
+        var deletedEntities = [];
 
         var generateGetter = function (type, originalFn) {
             return function(id) {
@@ -29,6 +30,10 @@ angular.module('mean.icu').config(function($provide) {
                         if (shouldPush) {
                             entities.push(cachedEntity);
                         }
+                    });
+
+                    entities = _(entities).reject(function(entity) {
+                        return deletedEntities.indexOf(entity._id) > 0;
                     });
 
                     return entities;
@@ -73,10 +78,25 @@ angular.module('mean.icu').config(function($provide) {
                     }
                 });
 
+                entities = _(entities).reject(function(entity) {
+                    return deletedEntities.indexOf(entity._id) > 0;
+                });
+
+
                 return entities;
             });
         };
         $delegate.getAll = getAll;
+
+        var originalRemove = $delegate.remove;
+        var remove = function(id) {
+            return originalRemove(id).then(function(result) {
+                deletedEntities.push(id);
+
+                return result;
+            });
+        };
+        $delegate.remove = remove;
 
         return $delegate;
     };
