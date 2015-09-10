@@ -10,7 +10,7 @@
 
             <div class="user">
                 <div class="no-assignee" ng-if="!discussion.assign">
-                    <div class="avatar-placeholder">Select assignee</div>
+                    <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
                 </div>
                 <ui-select ng-model="discussion.assign" on-select="update(discussion)">
                     <ui-select-match>

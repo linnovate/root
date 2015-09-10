@@ -28,7 +28,7 @@
                     <li>
                         <a href="#" ng-click="deleteProject(project)">
                             <i class="fa fa-2x fa-times-circle"></i>
-                            <span>Delete project</span>
+                            <span>{{ 'deleteProject' | i18next }}</span>
                         </a>
                     </li>
                 </ul>
@@ -59,20 +59,20 @@
                         ng-class="{two: !tasks.length, three: tasks.length}"
                         data-ui-sref-active="active"
                         data-ui-sref=".activities">
-                    Updates
+                    {{ 'updates' | i18next }}
                 </button>
                 <button class="tab"
                         ng-class="{two: !tasks.length, three: tasks.length}"
                         data-ui-sref-active="active"
                         data-ui-sref=".documents">
-                    Documents
+                    {{ 'documents' | i18next }}
                 </button>
                 <button ng-if="tasks.length"
                         class="tab"
                         ng-class="{two: !tasks.length, three: tasks.length}"
                         data-ui-sref-active="active"
                         data-ui-sref=".tasks">
-                    Tasks
+                    {{ 'tasks' | i18next }}
                 </button>
             </div>
         </div>
