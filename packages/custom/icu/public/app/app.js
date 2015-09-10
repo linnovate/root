@@ -470,10 +470,10 @@ angular.module('mean.icu').config([
 
 angular.module('mean.icu').config(function ($i18nextProvider) {
     $i18nextProvider.options = {
-        lng: 'en-US',
+        lng: 'he',
         useCookie: false,
         useLocalStorage: false,
-        fallbackLng: 'en-US',
+        fallbackLng: 'en_US',
         resGetPath: '/icu/assets/locales/__lng__/__ns__.json',
         defaultLoadingValue: ''
     };
