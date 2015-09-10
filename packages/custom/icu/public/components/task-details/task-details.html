@@ -87,7 +87,7 @@
 
             <div class="tags">
                 <ul class="list">
-                    <li ng-if="!task.tags.length && !tagInputVisible" class="placeholder">No labels</li>
+                    <li ng-if="!task.tags.length && !tagInputVisible" class="placeholder">{{ 'noLabels' | i18next }}</li>
                     <li class="tag-item" ng-repeat="tag in task.tags">
                         <span>{{tag}}</span>
                         <button ng-click="removeTag(tag)">

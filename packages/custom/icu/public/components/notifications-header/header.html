@@ -31,19 +31,19 @@
             <li>
                 <a href ng-click="createTask()">
                     <i class="fa fa-2x fa-check"></i>
-                    <span>Task</span>
+                    <span>{{ 'task' | i18next }}</span>
                 </a>
             </li>
             <li>
                 <a href ng-click="createProject()">
                     <i class="fa fa-2x fa-briefcase"></i>
-                    <span>Project</span>
+                    <span>{{ 'project' | i18next }}</span>
                 </a>
             </li>
             <li>
                 <a href ng-click="createDiscussion()">
                     <i class="fa fa-2x fa-comments-o"></i>
-                    <span>Discussion</span>
+                    <span>{{ 'discussion' | i18next }}</span>
                 </a>
             </li>
         </ul>
@@ -51,8 +51,8 @@
     <div class="user-menu dropdown" dropdown>
         <div dropdown-toggle icu-avatar user="me"></div>
         <ul class="dropdown-menu menu-items" role="menu">
-            <li><a href ui-sref="profile">Profile page</a></li>
-            <li><a href ng-click="logout()">Logout</a></li>
+            <li><a href ui-sref="profile">{{ 'profilePage' | i18next }}</a></li>
+            <li><a href ng-click="logout()">{{ 'logout' | i18next }}</a></li>
         </ul>
     </div>
 </header>
