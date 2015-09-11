@@ -6,7 +6,7 @@
                 <div class="text">
                     <span class="user-name">{{activity.user.name}}
                         <span class="activity-details">
-                            {{details[activity.type] + ' ' + activity.issue }}
+                            {{details[activity.type] | i18next }}{{ activity.issue }}
                         </span>
                     </span>
                     <br/>
@@ -35,7 +35,7 @@
 
                 <span class="name" title="{{attachments[0].name}}">{{attachments[0].name}}</span>
 
-                <button type="submit" class="save">Add</button>
+                <button type="submit" class="save">{{ 'add' | i18next }}</button>
             </div>
         </form>
     </div>
