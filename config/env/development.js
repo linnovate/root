@@ -49,6 +49,6 @@ module.exports = {
   }, 
   secret: 'SOME_TOKEN_SECRET',
     api: {
-      uri: 'http://api.icu.dev6.linnovate.net'
+      uri: 'http://localhost:3003'
     }
 };
