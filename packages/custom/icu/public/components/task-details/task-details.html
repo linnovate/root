@@ -29,7 +29,7 @@
                         <span>{{$select.selected}}</span>
                     </ui-select-match>
                     <ui-select-choices repeat="status as status in statuses| filter: $select.search">
-                        <span>{{status}}</span>
+                        <span>{{status | i18next }}</span>
                     </ui-select-choices>
                 </ui-select>
             </div>

@@ -25,7 +25,7 @@
             </div>
 
             <div class="due">
-                <div class="placeholder" ng-if="!discussion.due">Deadline</div>
+                <div class="placeholder" ng-if="!discussion.due">{{ 'deadline' | i18next }}</div>
                 <input ui-date="dueOptions" ng-model="discussion.due">
             </div>
 
@@ -35,7 +35,7 @@
                         <span>{{$select.selected}}</span>
                     </ui-select-match>
                     <ui-select-choices repeat="status as status in statuses| filter: $select.search">
-                        <span>{{status}}</span>
+                        <span>{{status | i18next }}</span>
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -90,7 +90,7 @@
                         ng-class="{two: !tasks.length - 1, three: tasks.length - 1}"
                         data-ui-sref-active="active"
                         data-ui-sref=".activities">
-                    Updates
+                    {{ 'updates' | i18next }}
                 </button>
                 <button class="tab"
                         ng-class="{two: !tasks.length - 1, three: tasks.length - 1}"
