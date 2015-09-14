@@ -25,21 +25,31 @@ angular.module('mean.icu').config(function($provide) {
             }
         };
 
+        var denormalize = function(data, newData) {
+            if (!data) {
+                return;
+            }
+
+            var keys = Object.keys(newData);
+            for (var i = 0; i < keys.length; i+=1) {
+                var property = newData[keys[i]];
+
+                if (typeof(property) === 'object' || !data[keys[i]]) {
+                    data[keys[i]] = newData[keys[i]];
+                }
+            }
+        };
+
         function action(cb) {
             return function (entity,context) {
-                //var entityData = _.clone(entity);
                 var entityData = _(entity).omit(function(value, key) {
                     return key.indexOf('__') === 0;
                 });
 
                 normalize(entityData);
 
-                return cb(entityData,context).then(function(result) {
-                    if (!entity._id && result._id) {
-                        entity._id = result._id;
-                    }
-
-                    _(entity).assign(result);
+                return cb(entityData, context).then(function(result) {
+                    denormalize(entity, result);
 
                     return entity;
                 });
