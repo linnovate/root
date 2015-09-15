@@ -96,7 +96,9 @@ ICU.register(function (app, auth, database) {
         'mean.icu.data.tasksservice',
         'mean.icu.data.settingsservice',
         'mean.icu.data.searchservice',
-        'mean.icu.data.constants'
+        'mean.icu.data.constants',
+        'mean.icu.decorators.pdsDecorator',
+        'mean.icu.decorators.cacheDecorator',
     ]);
 
     ICU.settings({

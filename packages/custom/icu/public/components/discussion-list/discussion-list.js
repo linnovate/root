@@ -35,9 +35,14 @@ angular.module('mean.icu.ui.discussionlist', [])
             }
         };
 
-        $scope.discussions = $filter('orderBy')($scope.discussions, $scope.taskOrder);
+        function sort() {
+            var result = $filter('orderBy')($scope.discussions, $scope.discussionOrder);
+            Array.prototype.splice.apply($scope.discussions, [0, $scope.discussions.length].concat(result));
+        }
+
+        sort();
         $scope.$watch('sorting.field', function() {
-            $scope.discussions = $filter('orderBy')($scope.discussions, $scope.taskOrder);
+            sort();
         });
 
         $scope.sortingList = [

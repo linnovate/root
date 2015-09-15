@@ -35,9 +35,14 @@ angular.module('mean.icu.ui.projectlist', [])
             }
         };
 
-        $scope.projects = $filter('orderBy')($scope.projects, $scope.projectOrder);
+        function sort() {
+            var result = $filter('orderBy')($scope.projects, $scope.projectOrder);
+            Array.prototype.splice.apply($scope.projects, [0, $scope.projects.length].concat(result));
+        }
+
+        sort();
         $scope.$watch('sorting.field', function() {
-            $scope.projects = $filter('orderBy')($scope.projects, $scope.projectOrder);
+            sort();
         });
 
         $scope.sortingList = [
