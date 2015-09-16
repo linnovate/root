@@ -470,7 +470,7 @@ angular.module('mean.icu').config([
 
 angular.module('mean.icu').config(function ($i18nextProvider) {
     $i18nextProvider.options = {
-        lng: 'he',
+        lng: 'en_US',
         useCookie: false,
         useLocalStorage: false,
         fallbackLng: 'en_US',
