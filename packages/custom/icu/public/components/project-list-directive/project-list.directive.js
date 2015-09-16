@@ -43,10 +43,10 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                         return project;
                     });
                 } else if (project.__state === creatingStatuses.Created) {
-                    var context = {
+                    var data = {
                         name: 'renamed'
                     }
-                    return ProjectsService.update(project, context);
+                    return ProjectsService.update(project, data);
                 }
             };
 
