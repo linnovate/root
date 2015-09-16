@@ -36,7 +36,6 @@ exports.talkToApi = function(options, callback) {
     }
     request(objReq, function(error, response, body) {
         if (!error && response.statusCode === 200 && response.body.length) {
-            console.log(body)
             return callback(JSON.parse(body), response.statusCode);
         }
         callback(error ? error : body, response ? response.statusCode : 500);
