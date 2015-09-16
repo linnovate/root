@@ -42,16 +42,16 @@ angular.module('mean.icu.ui.discussionlist', [])
 
         $scope.sortingList = [
             {
-                title: 'Due',
+                title: 'due',
                 value: 'due'
             }, {
-                title: 'Title',
+                title: 'title',
                 value: 'title'
             }, {
-                title: 'Status',
+                title: 'status',
                 value: 'status'
             }, {
-                title: 'Created',
+                title: 'created',
                 value: 'created'
             }
         ];

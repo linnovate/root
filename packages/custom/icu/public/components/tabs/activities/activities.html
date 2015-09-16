@@ -6,7 +6,7 @@
                 <div class="text">
                     <span class="user-name">{{activity.user.name}}
                         <span class="activity-details">
-                            {{details[activity.type] | i18next }}{{ activity.issue }}
+                            {{details[activity.type] | i18next }}{{ activity.issue | i18next }}
                         </span>
                     </span>
                     <br/>
@@ -25,7 +25,7 @@
     <div class="add-update">
         <div icu-avatar user="me"></div>
         <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save()">
-            <textarea ng-model="activity.description" required placeholder="Type update here"></textarea>
+            <textarea ng-model="activity.description" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
 
             <div class="action-buttons">
                 <button type="button" class="attachment"

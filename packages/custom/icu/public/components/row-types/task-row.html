@@ -3,7 +3,7 @@
     ng-attr-colspan="{{data.task._id ? undefined : 5}}"
     title="{{data.task.title}}"
     ng-attr-contenteditable="{{!data.displayOnly}}"
-    placeholder="{{'Create new task' | i18next}}"
+    placeholder="{{'createNewTask' | i18next}}"
     strip-br="true"
     ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
     ng-change="data.searchCb(data.task.title) || data.updateCb(data.task)"
@@ -17,7 +17,7 @@
         {{data.task.project.title}}
     </span>
 </td>
-<td ng-if="data.task._id" class="status col-sm-2">{{data.task.status}}</td>
+<td ng-if="data.task._id" class="status col-sm-2">{{data.task.status | i18next }}</td>
 <td ng-if="data.task._id" class="due">{{data.task.due | date: 'dd.MM.yyyy'}}</td>
 <td class="arrow" ng-if="data.task._id">
     <i ng-if="data.drawArrow" class="fa fa-chevron-right"></i>

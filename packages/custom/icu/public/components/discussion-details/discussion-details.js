@@ -22,20 +22,20 @@ angular.module('mean.icu.ui.discussiondetails', [])
             DiscussionsService.update(discussion);
         };
 
-        $scope.statuses = ['new', 'scheduled', 'done', 'cancelled', 'archived'];
+        $scope.statuses = ['new', 'scheduled', 'done', 'canceled', 'archived'];
 
         var scheduleAction = {
-            label: 'Schedule discussion',
+            label: 'scheduleDiscussion',
             method: $scope.schedule
         };
 
         var summaryAction = {
-            label: 'Send summary',
+            label: 'sendSummary',
             method: $scope.summary
         };
 
         var archiveAction = {
-            label: 'Archive discussion',
+            label: 'archiveDiscussion',
             method: $scope.archive
         };
 
