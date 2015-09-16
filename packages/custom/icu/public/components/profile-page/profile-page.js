@@ -15,8 +15,6 @@ angular.module('mean.icu.ui.profile', [])
         if (files.length) {
             var file = files[0];
             UsersService.updateAvatar(file).success(function(data) {
-                $scope.me.profile.avatar = data.avatar;
-
                 $state.reload();
             });
         }
@@ -28,7 +26,7 @@ angular.module('mean.icu.ui.profile', [])
         }
 
         UsersService.update($scope.me).then(function() {
-            $state.reload();
+            $state.go('main.tasks', null, { reload: true });
         });
     };
 });
