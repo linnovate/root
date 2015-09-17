@@ -33,7 +33,11 @@ angular.module('mean.icu.ui.tasklist', [])
                 }
             }
 
-            return result;
+            //HACK: instead of using array of 2 values, this code concatenates
+            //2 values
+            //Reason: inconsistency in sorting results between sorting by one param
+            //and array of params
+            return result + task.title;
         }
     };
 
