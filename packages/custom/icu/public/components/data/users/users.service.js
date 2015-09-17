@@ -84,6 +84,8 @@ angular.module('mean.icu.data.usersservice', [])
         return Upload.upload({
             url: '/api/avatar',
             file: file
+        }).success(function(data) {
+            me.profile.avatar = data.avatar;
         });
     }
 
