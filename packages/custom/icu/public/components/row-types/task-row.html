@@ -6,8 +6,9 @@
     placeholder="{{'createNewTask' | i18next}}"
     strip-br="true"
     ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
-    ng-change="data.searchCb(data.task.title) || data.updateCb(data.task)"
+    ng-change="data.searchCb(data.task) || data.updateCb(data.task)"
     ng-keydown="data.onEnterCb($event, data.index)"
+    ng-blur="data.hideAutoCompleteCb(data.task)"
     ng-model="data.task.title">
 </td>
 <td class="project">

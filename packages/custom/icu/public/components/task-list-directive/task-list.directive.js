@@ -40,10 +40,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 return TasksService.create(task).then(function(result) {
                     task.__state = creatingStatuses.Created;
 
-                    for (var i = 0; i < $scope.tasks.length - 2; i += 1) {
-                        $scope.tasks[i].__autocomplete = false;
-                    }
-
                     $scope.tasks.push(_(newTask).clone());
 
                     return task;
@@ -77,11 +73,16 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
         $scope.searchResults = [];
 
-        $scope.search = function(term) {
+        $scope.search = function(task) {
             if (context.entityName !== 'discussion') {
                 return;
             }
 
+            if (!task.__autocomplete) {
+                return;
+            }
+
+            var term = task.title;
             if (!term) {
                 return;
             }
@@ -120,6 +121,11 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                     entityId: context.entityId
                 });
             });
+        };
+
+        $scope.hideAutoComplete = function(task) {
+            task.__autocomplete = false;
+            $scope.searchResults.length = 0;
         };
     }
 
