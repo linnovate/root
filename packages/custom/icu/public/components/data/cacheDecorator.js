@@ -32,7 +32,7 @@ var cacheDecorator = function($delegate) {
                 });
 
                 entities = _(entities).reject(function(entity) {
-                    return deletedEntities.indexOf(entity._id) > 0;
+                    return deletedEntities.indexOf(entity._id) !== -1;
                 });
 
                 return entities;
@@ -78,7 +78,7 @@ var cacheDecorator = function($delegate) {
             });
 
             entities = _(entities).reject(function(entity) {
-                return deletedEntities.indexOf(entity._id) > 0;
+                return deletedEntities.indexOf(entity._id) !== -1;
             });
 
             return entities;
