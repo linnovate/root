@@ -25,7 +25,9 @@ angular.module('mean.icu.ui.tabs')
 
             var clearForm = function () {
                 $scope.attachments = [];
-                $scope.activity.description = '';
+                $scope.activity = {
+                    description: ''
+                };
             };
 
             $scope.save = function () {
@@ -43,12 +45,14 @@ angular.module('mean.icu.ui.tabs')
                             entityId: $stateParams.id || $stateParams.entityId
                         };
 
-                        DocumentsService.saveAttachments(data, file);
+                        DocumentsService.saveAttachments(data, file).success(function(attachment) {
+                            result.attachments.push(attachment[0]);
+                        });
                     }
                     clearForm();
-                });
 
-                $state.reload($state.current.name);
+                    $scope.activities.push(result);
+                });
             };
         }
 

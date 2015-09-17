@@ -19,6 +19,14 @@ angular.module('mean.icu.data.activitiesservice', [])
         });
     }
 
+    function getById(id) {
+        return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+            return getUser([result.data]).then(function(updates) {
+                return updates[0];
+            });
+        });
+    }
+
     function getByProjectId(id) {
         return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function(updatesResult) {
             return getUser(updatesResult.data);
@@ -39,13 +47,16 @@ angular.module('mean.icu.data.activitiesservice', [])
 
     function create(update) {
         return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
-            return getUser([result.data]).then(function(updates) {
-                return updates[0];
+            var id = result.data._id;
+
+            return getById(id).then(function(result) {
+                return result;
             });
         });
     }
 
     return {
+        getById: getById,
         getByUserId: getByUserId,
         getByTaskId: getByTaskId,
         getByProjectId: getByProjectId,

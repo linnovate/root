@@ -20,6 +20,8 @@ var cacheDecorator = function($delegate) {
                             (cachedEntity[type] && cachedEntity[type]._id === id) //object with id
                             ||
                             (cachedEntity.issue === type && cachedEntity.issueId === id) //update with "issue" and "issueId"
+                            ||
+                            (cachedEntity.issue === type && cachedEntity.issueId._id === id) //update with "issue" and "issueId"
                             ) && (
                                 !_.any(entities, function (entity) {
                                     return cachedEntity._id === entity._id;
