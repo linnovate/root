@@ -6,7 +6,7 @@
     <div class="search" data-ng-controller="SearchController">
         <div class="close-icon" ng-if="term" ng-click="clearSearch()"><i class="fa fa-times-circle"></i></div>
         <input type="text"
-            placeholder="Search"
+            placeholder="{{ 'search' | i18next }}"
             ng-model="term"
             ng-change="search(term)"
             ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}">

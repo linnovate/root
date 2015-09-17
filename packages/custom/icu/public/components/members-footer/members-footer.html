@@ -5,13 +5,13 @@
     </div>
 
     <div ng-if="!entity.watchers.length" class="left-notification">
-        {{'NOWATCHERS' | i18next}}
+        {{'noWatchers' | i18next}}
     </div>
 
     <div class="add-member-container">
         <div class="new-member-input" ng-if="showSelect">
             <ui-select ng-model="member" on-select="addMember(member)" autofocus>
-                <ui-select-match placeholder="{{notAssigned.length ? 'Select members' : 'All users are watching'}}">
+                <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}">
                     {{$item}}
                 </ui-select-match>
                 <ui-select-choices repeat="user in notAssigned | filter: {name: $select.search}">

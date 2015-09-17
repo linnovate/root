@@ -7,7 +7,7 @@
                     entityId: currentContext.entityId
                     })">
         <header class="title">
-            Projects from {{currentContext.entityName}}
+            {{'projectsFrom' | i18next}}{{currentContext.entityName}}
             <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
         </header>
     </div>
@@ -20,10 +20,10 @@
             <div class="select-wrapper">
                 <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
                     <ui-select-match>
-                        <button class="tasks">{{$select.selected.title}}</button>
+                        <button class="tasks">{{$select.selected.title | i18next}}</button>
                     </ui-select-match>
                     <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
-                        {{field.title}}
+                        {{field.title | i18next}}
                     </ui-select-choices>
                 </ui-select>
             </div>

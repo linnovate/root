@@ -8,10 +8,10 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.details = {
-                create: 'created this ',
-                update: 'updated this ',
-                document: 'add document',
-                comment: 'add comment'
+                create: 'createdThis',
+                update: 'updatedThis ',
+                document: 'addDocument',
+                comment: 'addComment'
             };
 
             UsersService.getMe().then(function (user) {

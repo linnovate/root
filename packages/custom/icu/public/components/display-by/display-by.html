@@ -5,7 +5,7 @@
         {{ 'all' | i18next }}
     </p>
 
-    <p class="intro">{{ 'display' | i18next }} {{context.main | i18next}} {{ 'by' | i18next }}:</p>
+    <p class="intro">{{'display'+context.main+'By' | i18next}}:</p>
 
     <div class="list projects" ng-if="projects && (icuDisplayBy.indexOf('projects'))>-1">
         <p ng-click="visible.project = !visible.project" class="title">{{ 'project' | i18next }}</p>
