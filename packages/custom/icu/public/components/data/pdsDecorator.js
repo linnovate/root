@@ -2,66 +2,75 @@
 
 //Pasive data structure decorator
 //Strips unrelevant data from entity before sending it to server
-angular.module('mean.icu').config(function($provide) {
-    var passiveDataSrtuctureDecorator = function($delegate) {
-        var normalize = function(data) {
-            if (!data) {
-                return;
+var passiveDataSrtuctureDecorator = function($delegate) {
+    var normalize = function(data) {
+        if (!data) {
+            return;
+        }
+
+        var keys = Object.keys(data);
+        for (var i = 0; i < keys.length; i+=1) {
+            var property = data[keys[i]];
+
+            if (keys[i] === 'title') {
+                data[keys[i]] = property.trim();
             }
 
-            var keys = Object.keys(data);
-            for (var i = 0; i < keys.length; i+=1) {
-                var property = data[keys[i]];
-
-                if (keys[i] === 'title') {
-                    data[keys[i]] = property.trim();
-                }
-
-                if (property && property._id) {
-                    data[keys[i]] = property._id;
-                } else if (property instanceof Array) {
-                    normalize(property);
-                }
+            if (property && property._id) {
+                data[keys[i]] = property._id;
+            } else if (property instanceof Array) {
+                normalize(property);
             }
-        };
-
-        function action(cb) {
-            return function (entity,context) {
-                //var entityData = _.clone(entity);
-                var entityData = _(entity).omit(function(value, key) {
-                    return key.indexOf('__') === 0;
-                });
-
-                normalize(entityData);
-
-                return cb(entityData,context).then(function(result) {
-                    if (!entity._id && result._id) {
-                        entity._id = result._id;
-                    }
-
-                    _(entity).assign(result);
-
-                    return entity;
-                });
-            };
         }
-
-        var originalCreate = $delegate.create;
-        if (originalCreate) {
-            $delegate.create = action(originalCreate);
-        }
-
-        var originalUpdate = $delegate.update;
-        if (originalUpdate) {
-            $delegate.update = action(originalUpdate);
-        }
-
-        return $delegate;
     };
 
-    $provide.decorator('ActivitiesService', passiveDataSrtuctureDecorator);
-    $provide.decorator('TasksService', passiveDataSrtuctureDecorator);
-    $provide.decorator('ProjectsService', passiveDataSrtuctureDecorator);
-    $provide.decorator('DiscussionsService', passiveDataSrtuctureDecorator);
-    $provide.decorator('UsersService', passiveDataSrtuctureDecorator);
-});
+    var denormalize = function(data, newData) {
+        if (!data) {
+            return;
+        }
+
+        var keys = Object.keys(newData);
+        for (var i = 0; i < keys.length; i+=1) {
+            var property = newData[keys[i]];
+
+            if (typeof(property) === 'object' || !data[keys[i]]) {
+                data[keys[i]] = newData[keys[i]];
+            }
+        }
+    };
+
+    function action(cb) {
+        return function (entity, context) {
+            var entityData = _(entity).omit(function(value, key) {
+                return key.indexOf('__') === 0;
+            });
+
+            normalize(entityData);
+
+            return cb(entityData, context).then(function(result) {
+                denormalize(entity, result);
+
+                return entity;
+            });
+        };
+    }
+
+    var originalCreate = $delegate.create;
+    if (originalCreate) {
+        $delegate.create = action(originalCreate);
+    }
+
+    var originalUpdate = $delegate.update;
+    if (originalUpdate) {
+        $delegate.update = action(originalUpdate);
+    }
+
+    return $delegate;
+};
+
+angular.module('mean.icu.decorators.pdsDecorator', []);
+angular.module('mean.icu.decorators.pdsDecorator').decorator('ActivitiesService', passiveDataSrtuctureDecorator);
+angular.module('mean.icu.decorators.pdsDecorator').decorator('TasksService', passiveDataSrtuctureDecorator);
+angular.module('mean.icu.decorators.pdsDecorator').decorator('ProjectsService', passiveDataSrtuctureDecorator);
+angular.module('mean.icu.decorators.pdsDecorator').decorator('DiscussionsService', passiveDataSrtuctureDecorator);
+angular.module('mean.icu.decorators.pdsDecorator').decorator('UsersService', passiveDataSrtuctureDecorator);

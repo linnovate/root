@@ -49,4 +49,8 @@ body {
         color: $light-grey-placeholder;
         padding-left: 20px;
     }
+
+    [contenteditable][colspan]:empty:focus {
+        padding-left: 40px;
+    }
 }

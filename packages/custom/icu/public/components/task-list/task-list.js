@@ -37,9 +37,15 @@ angular.module('mean.icu.ui.tasklist', [])
         }
     };
 
-    $scope.tasks = $filter('orderBy')($scope.tasks, $scope.taskOrder);
+    //HACK: impure function that sorts and modifies array itself
+    function sort() {
+        var result = $filter('orderBy')($scope.tasks, $scope.taskOrder);
+        Array.prototype.splice.apply($scope.tasks, [0, $scope.tasks.length].concat(result));
+    }
+
+    sort();
     $scope.$watch('sorting.field', function() {
-        $scope.tasks = $filter('orderBy')($scope.tasks, $scope.taskOrder);
+        sort();
     });
 
     $scope.sortingList = [

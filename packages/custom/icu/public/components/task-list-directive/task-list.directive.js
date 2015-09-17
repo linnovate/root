@@ -40,6 +40,10 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 return TasksService.create(task).then(function(result) {
                     task.__state = creatingStatuses.Created;
 
+                    for (var i = 0; i < $scope.tasks.length - 2; i += 1) {
+                        $scope.tasks[i].__autocomplete = false;
+                    }
+
                     $scope.tasks.push(_(newTask).clone());
 
                     return task;
