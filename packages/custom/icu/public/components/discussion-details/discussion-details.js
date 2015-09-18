@@ -1,9 +1,21 @@
 'use strict';
 
 angular.module('mean.icu.ui.discussiondetails', [])
-    .controller('DiscussionDetailsController', function ($scope, entity, tasks, context, $state, DiscussionsService) {
+    .controller('DiscussionDetailsController', function ($scope,
+                                                         entity,
+                                                         tasks,
+                                                         context,
+                                                         $state,
+                                                         DiscussionsService,
+                                                         $stateParams) {
         $scope.discussion = entity || context.entity;
         $scope.tasks = tasks;
+
+        DiscussionsService.getStarred().then(function(starred) {
+            $scope.discussion.star = _(starred).any(function(s) {
+                return s._id === $scope.discussion._id;
+            });
+        });
 
         $scope.summary = function (discussion) {
             DiscussionsService.summary(discussion).then(function (result) {
@@ -64,9 +76,21 @@ angular.module('mean.icu.ui.discussiondetails', [])
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
         };
 
+        function navigateToDetails(discussion) {
+            $scope.detailsState = context.entityName === 'all' ?
+                'main.discussions.all.details' : 'main.discussions.byentity.details';
+
+            $state.go($scope.detailsState, {
+                id: discussion._id,
+                entity: $scope.currentContext.entityName,
+                entityId: $scope.currentContext.entityId,
+                starred: $stateParams.starred
+            }, {reload: true});
+        }
+
         $scope.star = function (discussion) {
             DiscussionsService.star(discussion).then(function () {
-                $state.reload('main.tasks.byentity.details');
+                navigateToDetails(discussion);
             });
         };
 

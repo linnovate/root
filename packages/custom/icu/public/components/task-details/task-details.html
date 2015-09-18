@@ -1,9 +1,13 @@
 <div class="task-details">
     <div class="page-content">
         <div class="summary">
+
             <div class="favorite">
-                <button ng-class="{ 'orange': task.star }" ng-click="star(task)"><i class="fa fa-star"></i></button>
+                <button ng-class="{ 'orange': task.star }" ng-click="star(task)">
+                    <i class="fa fa-star"></i>
+                </button>
             </div>
+
             <div class="user">
                 <div class="no-assignee" ng-if="!task.assign">
                     <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
