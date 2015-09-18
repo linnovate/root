@@ -5,6 +5,9 @@
 module.exports = function(discussions, app, auth, database) {
 
   var DiscussionC = require('../../../general/server/providers/crud.js').Discussion,
+      config = require('meanio').loadConfig(),
+      apiUri = config.api.uri,
+      request = require('request'),
       Discussion = new DiscussionC('/api/discussions');
 
   app.route('/api/discussions')
@@ -63,4 +66,40 @@ module.exports = function(discussions, app, auth, database) {
             res.send(data);
         });
       });
+
+  app.get('/api/discussions/starred', function (req, res) {
+    var objReq = {
+      uri: apiUri + '/api/discussions/starred',
+      method: 'GET',
+      headers: req.headers
+    };
+
+    request(objReq, function (error, response, body) {
+      if (!error && response.statusCode === 200 && response.body.length) {
+        return res.json(JSON.parse(response.body));
+      }
+      if (response && response.statusCode !== 200)
+        res.status(response.statusCode);
+      var data = error ? error : JSON.parse(response.body);
+      return res.json(data);
+    });
+  });
+
+  app.patch('/api/discussions/:id/star', function (req, res) {
+    var objReq = {
+      uri: apiUri + '/api/discussions/' + req.params.id + '/star',
+      method: 'PATCH',
+      headers: req.headers
+    };
+
+    request(objReq, function (error, response, body) {
+      if (!error && response.statusCode === 200 && response.body.length) {
+        return res.json(JSON.parse(response.body));
+      }
+      if (response && response.statusCode !== 200)
+        res.status(response.statusCode);
+      var data = error ? error : JSON.parse(response.body);
+      return res.json(data);
+    });
+  });
 };

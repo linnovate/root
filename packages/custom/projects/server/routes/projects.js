@@ -4,10 +4,13 @@
 // The Package is past automatically as first parameter
 module.exports = function(Projects, app, auth, database) {
 
-	var ProjectC = require('../../../general/server/providers/crud.js').Project,
-		Project = new ProjectC('/api/projects'),
-        Notification = require('../../../general/server/providers/notify.js').Notification,
-        Notify = new Notification();
+  var ProjectC = require('../../../general/server/providers/crud.js').Project,
+      Project = new ProjectC('/api/projects'),
+      Notification = require('../../../general/server/providers/notify.js').Notification,
+      config = require('meanio').loadConfig(),
+      apiUri = config.api.uri,
+      request = require('request'),
+      Notify = new Notification();
 
 	app.route('/api/projects')
 
@@ -97,4 +100,40 @@ module.exports = function(Projects, app, auth, database) {
 				res.send(data);
 			});
 		});
+
+  app.get('/api/projects/starred', function (req, res) {
+    var objReq = {
+      uri: apiUri + '/api/projects/starred',
+      method: 'GET',
+      headers: req.headers
+    };
+
+    request(objReq, function (error, response, body) {
+      if (!error && response.statusCode === 200 && response.body.length) {
+        return res.json(JSON.parse(response.body));
+      }
+      if (response && response.statusCode !== 200)
+        res.status(response.statusCode);
+      var data = error ? error : JSON.parse(response.body);
+      return res.json(data);
+    });
+  });
+
+  app.patch('/api/projects/:id/star', function (req, res) {
+    var objReq = {
+      uri: apiUri + '/api/projects/' + req.params.id + '/star',
+      method: 'PATCH',
+      headers: req.headers
+    };
+
+    request(objReq, function (error, response, body) {
+      if (!error && response.statusCode === 200 && response.body.length) {
+        return res.json(JSON.parse(response.body));
+      }
+      if (response && response.statusCode !== 200)
+        res.status(response.statusCode);
+      var data = error ? error : JSON.parse(response.body);
+      return res.json(data);
+    });
+  });
 };

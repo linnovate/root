@@ -38,6 +38,9 @@ angular.module('mean.icu').config([
 
             return {
                 url: '/by-:entity/:entityId',
+                params: {
+                    starred: false
+                },
                 views: {
                     'middlepane@main': {
                         templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
@@ -336,6 +339,9 @@ angular.module('mean.icu').config([
         .state('main.tasks.all', {
             url: '/all',
             views: getListView('task'),
+            params: {
+                starred: false
+            },
             resolve: {
                 tasks: function (TasksService) {
                     return TasksService.getAll();
@@ -374,6 +380,9 @@ angular.module('mean.icu').config([
         })
         .state('main.projects.all', {
             url: '/all',
+            params: {
+                starred: false
+            },
             views: getListView('project')
         })
         .state('main.projects.all.details', getProjectDetailsState())
@@ -410,6 +419,9 @@ angular.module('mean.icu').config([
         })
         .state('main.discussions.all', {
             url: '/all',
+            params: {
+                starred: false
+            },
             views: getListView('discussion')
         })
         .state('main.discussions.all.details', getDiscussionDetailsState())

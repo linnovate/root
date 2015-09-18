@@ -44,6 +44,7 @@ angular.module('mean.icu.data.discussionsservice', [])
     function star(discussion) {
         return $http.patch(ApiUri + EntityPrefix + '/' + discussion._id + '/star', {star: !discussion.star})
             .then(function (result) {
+                discussion.star = !discussion.star;
                 return result.data;
             });
     }

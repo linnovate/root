@@ -1,7 +1,14 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskdetails', [])
-.controller('TaskDetailsController', function ($scope, entity, tags, projects, $state, TasksService, context) {
+.controller('TaskDetailsController', function ($scope,
+                                               entity,
+                                               tags,
+                                               projects,
+                                               $state,
+                                               TasksService,
+                                               context,
+                                               $stateParams) {
     $scope.task = entity || context.entity;
     $scope.tags = tags;
     $scope.projects = projects;
@@ -60,9 +67,20 @@ angular.module('mean.icu.ui.taskdetails', [])
         dateFormat: 'd.m.yy'
     };
 
+    function navigateToDetails(task) {
+        $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
+
+        $state.go($scope.detailsState, {
+            id: task._id,
+            entity: $scope.currentContext.entityName,
+            entityId: $scope.currentContext.entityId,
+            starred: $stateParams.starred
+        }, {reload: true});
+    }
+
     $scope.star = function (task) {
         TasksService.star(task).then(function () {
-            $state.reload('main.tasks.byentity.details');
+            navigateToDetails(task);
         });
     };
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function ($scope, $state, tasks, TasksService, context, $filter) {
+.controller('TaskListController', function ($scope, $state, tasks, TasksService, context, $filter, $stateParams) {
     $scope.tasks = tasks;
     $scope.autocomplete = context.entityName === 'discussion';
 
@@ -71,13 +71,14 @@ angular.module('mean.icu.ui.tasklist', [])
         }
     ];
 
-    function navigateToDetails(task) {
+    function navigateToDetails(task, isStarred) {
         $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
 
         $state.go($scope.detailsState, {
             id: task._id,
             entity: $scope.currentContext.entityName,
-            entityId: $scope.currentContext.entityId
+            entityId: $scope.currentContext.entityId,
+            starred: isStarred
         });
     }
 
@@ -96,14 +97,21 @@ angular.module('mean.icu.ui.tasklist', [])
 
                     return list;
                 }, []);
-
-                navigateToDetails($scope.tasks[0]);
+                if ($scope.tasks[0]) {
+                    navigateToDetails($scope.tasks[0], true);
+                }
             });
         } else {
             $scope.tasks = tasks;
-            navigateToDetails($scope.tasks[0]);
+            if ($scope.tasks[0]) {
+                navigateToDetails($scope.tasks[0], false);
+            }
         }
     };
+
+    if ($stateParams.starred) {
+        $scope.starredOnly();
+    }
 
     if ($scope.tasks.length) {
         if ($state.current.name === 'main.tasks.all' ||

@@ -8,16 +8,17 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       projects,
                                                       context,
                                                       $state,
-                                                      ProjectsService) {
+                                                      ProjectsService,
+                                                      $stateParams) {
         $scope.project = entity || context.entity;
         $scope.tasks = tasks;
         $scope.projects = projects;
 
-        //ProjectsService.getStarred().then(function (starred) {
-        //    $scope.project.star = _(starred).any(function (s) {
-        //        return s._id === $scope.project._id;
-        //    });
-        //});
+        ProjectsService.getStarred().then(function (starred) {
+            $scope.project.star = _(starred).any(function (s) {
+                return s._id === $scope.project._id;
+            });
+        });
 
         if (!$scope.project) {
             $state.go('main.projects.byentity', {
@@ -28,35 +29,24 @@ angular.module('mean.icu.ui.projectdetails', [])
 
         $scope.statuses = ['new', 'inProgress', 'canceled', 'completed', 'archived'];
 
-
-        //var _title = 'aaaa';
-        //Object.defineProperty($scope.project, 'title', {
-        //    configurable: true,
-        //    get: function() {
-        //        return _title; },
-        //    set: function(newValue) {
-        //        _title = newValue;
-        //    }
-        //})
-
         $scope.$watchGroup(['project.description', 'project.title'], function (nVal, oVal, scope) {
-
             if (nVal !== oVal && oVal) {
                 var context;
-                if(nVal[1] != oVal[1])
+                if (nVal[1] !== oVal[1]) {
                     context = {
                         name: 'title',
                         oldVal: oVal[1],
                         newVal: nVal[1],
                         action: 'renamed'
-                    }
-                else
+                    };
+                } else {
                     context = {
                         name: 'description',
                         oldVal: oVal[0],
                         newVal: nVal[0]
-                    }
-                $scope.delayedUpdate($scope.project,context);
+                    };
+                }
+                $scope.delayedUpdate($scope.project, context);
             }
         });
 
@@ -66,7 +56,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                     name: 'color',
                     oldVal: oVal,
                     newVal: nVal
-                }
+                };
                 $scope.update($scope.project, context);
             }
         });
@@ -75,18 +65,29 @@ angular.module('mean.icu.ui.projectdetails', [])
             theme: 'bootstrap',
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
         };
-        $scope.dueOptions = {
 
+        $scope.dueOptions = {
             onSelect: function () {
-                //context
                 $scope.update($scope.project, 'due');
             },
             dateFormat: 'd.m.yy'
         };
 
+        function navigateToDetails(project) {
+            $scope.detailsState = context.entityName === 'all' ?
+                'main.projects.all.details' : 'main.projects.byentity.details';
+
+            $state.go($scope.detailsState, {
+                id: project._id,
+                entity: $scope.currentContext.entityName,
+                entityId: $scope.currentContext.entityId,
+                starred: $stateParams.starred
+            }, {reload: true});
+        }
+
         $scope.star = function (project) {
             ProjectsService.star(project).then(function () {
-                $state.reload('main.projects.byentity.details');
+                navigateToDetails(project);
             });
         };
 

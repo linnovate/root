@@ -1,7 +1,13 @@
 'use strict';
 
 angular.module('mean.icu.ui.discussionlist', [])
-    .controller('DiscussionListController', function ($scope, $state, discussions, DiscussionsService, context, $filter) {
+    .controller('DiscussionListController', function ($scope,
+                                                      $state,
+                                                      discussions,
+                                                      DiscussionsService,
+                                                      context,
+                                                      $filter,
+                                                      $stateParams) {
         $scope.discussions = discussions;
         $scope.showStarred = false;
 
@@ -61,23 +67,24 @@ angular.module('mean.icu.ui.discussionlist', [])
             }
         ];
 
-        function navigateToDetails(discussion) {
+        function navigateToDetails(discussion, isStarred) {
             $scope.detailsState = context.entityName === 'all' ?
                 'main.discussions.all.details' : 'main.discussions.byentity.details';
 
             $state.go($scope.detailsState, {
                 id: discussion._id,
                 entity: $scope.currentContext.entityName,
-                entityId: $scope.currentContext.entityId
+                entityId: $scope.currentContext.entityId,
+                starred: isStarred
             });
         }
 
         $scope.starredOnly = function () {
             $scope.showStarred = !$scope.showStarred;
             if ($scope.showStarred) {
-                DiscussionsService.getStarred().then(function(starred) {
-                    $scope.discussions = _(discussions).reduce(function(list, item) {
-                        var contains = _(starred).any(function(s) {
+                DiscussionsService.getStarred().then(function (starred) {
+                    $scope.discussions = _(discussions).reduce(function (list, item) {
+                        var contains = _(starred).any(function (s) {
                             return s._id === item._id;
                         });
 
@@ -87,14 +94,21 @@ angular.module('mean.icu.ui.discussionlist', [])
 
                         return list;
                     }, []);
-
-                    navigateToDetails($scope.discussions[0]);
+                    if ($scope.discussions[0]) {
+                        navigateToDetails($scope.discussions[0], true);
+                    }
                 });
             } else {
                 $scope.discussions = discussions;
-                navigateToDetails($scope.discussions[0]);
+                if ($scope.discussions[0]) {
+                    navigateToDetails($scope.discussions[0], false);
+                }
             }
         };
+
+        if ($stateParams.starred) {
+            $scope.starredOnly();
+        }
 
         if ($scope.discussions.length) {
             if ($state.current.name === 'main.discussions.all' ||
