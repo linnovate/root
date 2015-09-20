@@ -14,6 +14,10 @@ $panel-height: $header-height - 5px;
         resize: none;
     }
 
+    .fa.fa-plus{
+        display: initial;
+    }
+
     .header {
         position: relative;
         height: $header-height;
@@ -618,9 +622,9 @@ $panel-height: $header-height - 5px;
                     cursor: pointer;
                     width: 30px;
                     height: 30px;
-                    .fa {
-                        display: initial;
-                    }
+//                    .fa {
+//                        display: initial;
+//                    }
                 }
 
                 .ui-select-container {
