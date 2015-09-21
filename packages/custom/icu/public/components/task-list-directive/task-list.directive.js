@@ -122,11 +122,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 });
             });
         };
-
-        $scope.hideAutoComplete = function(task) {
-            task.__autocomplete = false;
-            $scope.searchResults.length = 0;
-        };
     }
 
     function link($scope, $element) {
@@ -153,6 +148,11 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
                 $element.find('td.name')[index+1].focus();
             }
+        };
+
+        $scope.hideAutoComplete = function(task) {
+            task.__autocomplete = false;
+            $scope.searchResults.length = 0;
         };
     }
 

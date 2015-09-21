@@ -1,6 +1,6 @@
 $page-height: 100vh;
 $content-height: calc(#{$page-height} - 2 * #{$header-height});
-$description-height: 30%;
+$description-height: 65%;
 $switcher-height: 40px;
 $panel-height: $header-height - 5px;
 $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 20px);
