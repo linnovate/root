@@ -9,13 +9,14 @@ angular.module('mean.icu.ui.profile', [])
     }
 
     $scope.avatar = $scope.me.profile.avatar || 'http://placehold.it/250x250';
-    $scope.hash = new Date().getTime();
+    $scope.hash = Math.random();
 
     $scope.uploadAvatar = function(files) {
         if (files.length) {
             var file = files[0];
             UsersService.updateAvatar(file).success(function(data) {
-                $state.reload();
+                $scope.avatar = data.avatar;
+                $scope.hash = Math.random();
             });
         }
     };
