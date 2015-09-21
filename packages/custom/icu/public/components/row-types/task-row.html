@@ -7,7 +7,7 @@
     strip-br="true"
     ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
     ng-change="data.searchCb(data.task) || data.updateCb(data.task)"
-    ng-keydown="data.onEnterCb($event, data.index)"
+    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-blur="data.hideAutoCompleteCb(data.task)"
     ng-model="data.task.title">
 </td>
