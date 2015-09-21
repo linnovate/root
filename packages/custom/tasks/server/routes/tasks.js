@@ -8,6 +8,7 @@ module.exports = function(tasks, app, auth, database) {
         Task = new TaskC('/api/tasks'),
         Notification = require('../../../general/server/providers/notify.js').Notification,
         Notify = new Notification(),
+        icapi = require('../../../general/server/providers/icapi.js'),
         config = require('meanio').loadConfig(),
         apiUri = config.api.uri,
         request = require('request');
@@ -22,7 +23,6 @@ module.exports = function(tasks, app, auth, database) {
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
                 res.send(data);
-                console.log('ddddddddddddd')
                 if(data.project && data.project.room)
                     Notify.send({
                         headers: req.headers,
@@ -99,7 +99,7 @@ module.exports = function(tasks, app, auth, database) {
           method: 'GET',
           headers: req.headers
         };
-
+        console.dir(objReq)
         request(objReq, function(error, response, body) {
             if (!error && response.statusCode === 200 && response.body.length) {
                 return res.json(JSON.parse(response.body));
@@ -112,21 +112,34 @@ module.exports = function(tasks, app, auth, database) {
     });
 
     app.patch('/api/tasks/:id/star', function (req, res) {
-        var objReq = {
-          uri: apiUri + '/api/tasks/' + req.params.id + '/star',
-          method: 'PATCH',
-          headers: req.headers
+        var options = {
+            method: 'PATCH',
+            headers: req.headers,
+            cmd: '/api/tasks/' + req.params.id + '/star'
         };
 
-        request(objReq, function(error, response, body) {
-          if (!error && response.statusCode === 200 && response.body.length) {
-            return res.json(JSON.parse(response.body));
-          }
-            if(response && response.statusCode != 200)
-                res.status(response.statusCode);
-            var data = error ? error : JSON.parse(response.body);
-            return res.json(data);
+        icapi.talkToApi(options, function(data, statusCode){
+            if(statusCode && statusCode != 200)
+                res.status(statusCode);
+            res.send(data);
         });
+        
+        //var objReq = {
+        //  uri: apiUri + '/api/tasks/' + req.params.id + '/star',
+        //  method: 'PATCH',
+        //  headers: req.headers
+        //};
+        //
+        //console.dir(objReq)
+        //request(objReq, function(error, response, body) {
+        //  if (!error && response.statusCode === 200 && response.body.length) {
+        //    return res.json(JSON.parse(response.body));
+        //  }
+        //    if(response && response.statusCode != 200)
+        //        res.status(response.statusCode);
+        //    var data = error ? error : JSON.parse(response.body);
+        //    return res.json(data);
+        //});
     });
 }
 
