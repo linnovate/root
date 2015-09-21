@@ -88,7 +88,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             }
 
             $scope.searchResults.length = 0;
-
+            $scope.selectedSuggestion = 0;
             TasksService.search(term).then(function(searchResults) {
                 _(searchResults).each(function(sr) {
                     var alreadyAdded = _($scope.tasks).any(function(t) {
@@ -99,6 +99,8 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                         $scope.searchResults.push(sr);
                     }
                 });
+
+                $scope.selectedSuggestion = 0;
             });
         };
 
@@ -113,6 +115,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             currentTask.__autocomplete = false;
 
             $scope.searchResults.length = 0;
+            $scope.selectedSuggestion = 0;
 
             $scope.createOrUpdate(currentTask).then(function(task) {
                 $state.go('main.tasks.byentity.details', {
@@ -150,9 +153,29 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             }
         };
 
+        $scope.focusAutoComplete = function($event) {
+            if ($event.keyCode === 38) {
+                if ($scope.selectedSuggestion > 0) {
+                    $scope.selectedSuggestion -= 1;
+                }
+                $event.preventDefault();
+            } else if ($event.keyCode === 40) {
+                if ($scope.selectedSuggestion < $scope.searchResults.length - 1) {
+                    $scope.selectedSuggestion += 1;
+                }
+                $event.preventDefault();
+            } else if ($event.keyCode === 13) {
+                var sr = $scope.searchResults[$scope.selectedSuggestion];
+                $scope.select(sr);
+            }
+
+
+        };
+
         $scope.hideAutoComplete = function(task) {
             task.__autocomplete = false;
             $scope.searchResults.length = 0;
+            $scope.selectedSuggestion = 0;
         };
     }
 
