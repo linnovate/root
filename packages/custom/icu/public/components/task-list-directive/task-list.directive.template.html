@@ -10,7 +10,6 @@
                         index: $index,
                         drawArrow: drawArrow,
                         updateCb: createOrUpdate,
-                        selectCb: select,
                         searchCb: search,
                         onEnterCb: onEnter,
                         hideAutoCompleteCb: hideAutoComplete,
@@ -23,10 +22,10 @@
             </tr>
         </tbody>
     </table>
-    <div ng-if="autocomplete && searchResults" class="autocomplete">
+    <div ng-show="autocomplete && searchResults" class="autocomplete">
         <div class="suggestions">
             <p class="suggestion" ng-repeat="result in searchResults"
-                ng-click="select(result)">
+                ng-mousedown="select(result)">
                 {{result.title}}
             </p>
         </div>
