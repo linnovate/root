@@ -3,7 +3,7 @@
         <tbody>
             <tr data-ng-repeat="discussion in discussions"
                 data-ng-class="{ 'active': isCurrentState(discussion._id) }"
-                ng-click="initialize(discussion)"
+                ng-click="initialize($event, discussion)"
                 icu-list-row
                 data-id="{{discussion._id}}"
                 data="{

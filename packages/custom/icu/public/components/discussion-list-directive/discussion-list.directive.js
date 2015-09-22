@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('mean.icu.ui.discussionlistdirective', [])
-.directive('icuDiscussionList', function ($state, $uiViewScroll, $stateParams) {
-    function controller($scope, context, DiscussionsService) {
-        $scope.context = context;
+.directive('icuDiscussionList', function ($state, $uiViewScroll, $stateParams, context) {
+    var creatingStatuses = {
+        NotCreated: 0,
+        Creating: 1,
+        Created: 2
+    };
 
-        var creatingStatuses = {
-            NotCreated: 0,
-            Creating: 1,
-            Created: 2
-        };
+    function controller($scope, DiscussionsService) {
+        $scope.context = context;
 
         _($scope.discussions).each(function(d) {
             d.__state = creatingStatuses.created;
@@ -26,29 +26,6 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
         $scope.discussions.push(_(newDiscussion).clone());
 
         $scope.detailsState = context.entityName === 'all' ? 'main.discussions.all.details' : 'main.discussions.byentity.details';
-
-        $scope.initialize = function(discussion) {
-            if ($scope.displayOnly) {
-                return;
-            }
-
-            if (discussion.__state === creatingStatuses.NotCreated) {
-                $scope.createOrUpdate(discussion).then(function() {
-                    $state.go($scope.detailsState, {
-                        id: discussion._id,
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    });
-                });
-            } else {
-                $state.go($scope.detailsState, {
-                    id: discussion._id,
-                    entity: context.entityName,
-                    entityId: context.entityId
-                });
-            }
-        };
-
 
         $scope.showDetails = function (discussion) {
             if (context.entityName === 'all') {
@@ -87,6 +64,32 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
 
     function link($scope, $element) {
         var isScrolled = false;
+
+        $scope.initialize = function($event, discussion) {
+            if ($scope.displayOnly) {
+                return;
+            }
+
+            var nameFocused = angular.element($event.target).hasClass('name');
+
+            if (discussion.__state === creatingStatuses.NotCreated) {
+                $scope.createOrUpdate(discussion).then(function() {
+                    $state.go($scope.detailsState, {
+                        id: discussion._id,
+                        entity: context.entityName,
+                        entityId: context.entityId,
+                        nameFocused: nameFocused
+                    });
+                });
+            } else {
+                $state.go($scope.detailsState, {
+                    id: discussion._id,
+                    entity: context.entityName,
+                    entityId: context.entityId,
+                    nameFocused: nameFocused
+                });
+            }
+        };
 
         $scope.isCurrentState = function (id) {
             var isActive = ($state.current.name.indexOf('main.discussions.byentity.details') === 0 ||

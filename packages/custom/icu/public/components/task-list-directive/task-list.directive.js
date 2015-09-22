@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklistdirective', [])
-.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams) {
-    function controller($scope, context, TasksService) {
-        $scope.context = context;
-
+.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, context) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
             Created: 2
         };
+
+        function controller($scope, TasksService) {
+        $scope.context = context;
+
 
         _($scope.tasks).each(function(t) {
             t.__state = creatingStatuses.Created;
@@ -46,28 +47,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 });
             } else if (task.__state === creatingStatuses.Created) {
                 return TasksService.update(task);
-            }
-        };
-
-        $scope.initialize = function(task) {
-            if ($scope.displayOnly) {
-                return;
-            }
-
-            if (task.__state === creatingStatuses.NotCreated) {
-                $scope.createOrUpdate(task).then(function() {
-                    $state.go($scope.detailsState, {
-                        id: task._id,
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    });
-                });
-            } else {
-                $state.go($scope.detailsState, {
-                    id: task._id,
-                    entity: context.entityName,
-                    entityId: context.entityId
-                });
             }
         };
 
@@ -129,6 +108,32 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
     function link($scope, $element) {
         var isScrolled = false;
+
+        $scope.initialize = function($event, task) {
+            if ($scope.displayOnly) {
+                return;
+            }
+
+            var nameFocused = angular.element($event.target).hasClass('name');
+
+            if (task.__state === creatingStatuses.NotCreated) {
+                $scope.createOrUpdate(task).then(function() {
+                    $state.go($scope.detailsState, {
+                        id: task._id,
+                        entity: context.entityName,
+                        entityId: context.entityId,
+                        nameFocused: nameFocused
+                    });
+                });
+            } else {
+                $state.go($scope.detailsState, {
+                    id: task._id,
+                    entity: context.entityName,
+                    entityId: context.entityId,
+                    nameFocused: nameFocused
+                });
+            }
+        };
 
         $scope.isCurrentState = function (id) {
             var isActive = ($state.current.name.indexOf('main.tasks.byentity.details') === 0 ||

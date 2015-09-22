@@ -12,6 +12,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.task = entity || context.entity;
     $scope.tags = tags;
     $scope.projects = projects;
+    $scope.shouldAutofocus = !$stateParams.nameFocused;
 
     TasksService.getStarred().then(function(starred) {
         $scope.task.star = _(starred).any(function(s) {

@@ -72,9 +72,11 @@
                 </ul>
             </div>
         </div>
+
         <div class="description">
             <div class="title"
                  contenteditable="true"
+                 ng-attr-autofocus="{{shouldAutofocus || undefined}}"
                  tabindex="1"
                  strip-br="true"
                  ng-model="task.title">

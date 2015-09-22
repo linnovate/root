@@ -89,6 +89,9 @@ angular.module('mean.icu').config([
                         controller: 'TaskDetailsController'
                     }
                 },
+                params: {
+                    nameFocused: false
+                },
                 resolve: {
                     entity: function (tasks, $stateParams) {
                         return _(tasks).find(function (t) {
@@ -115,6 +118,9 @@ angular.module('mean.icu').config([
                         controller: 'ProjectDetailsController'
                     }
                 },
+                params: {
+                    nameFocused: false
+                },
                 resolve: {
                     entity: function ($stateParams, projects) {
                         return _(projects).find(function (p) {
@@ -140,6 +146,9 @@ angular.module('mean.icu').config([
                         templateUrl: '/icu/components/discussion-details/discussion-details.html',
                         controller: 'DiscussionDetailsController'
                     }
+                },
+                params: {
+                    nameFocused: false
                 },
                 resolve: {
                     entity: function ($stateParams, discussions) {

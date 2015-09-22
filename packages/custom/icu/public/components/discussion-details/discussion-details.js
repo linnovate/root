@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          $stateParams) {
         $scope.discussion = entity || context.entity;
         $scope.tasks = tasks;
+        $scope.shouldAutofocus = !$stateParams.nameFocused;
 
         DiscussionsService.getStarred().then(function(starred) {
             $scope.discussion.star = _(starred).any(function(s) {
