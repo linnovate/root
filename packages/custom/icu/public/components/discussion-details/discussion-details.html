@@ -69,7 +69,7 @@
             <div class="title"
                  contenteditable="true"
                  tabindex="1"
-                 autofocus
+                 ng-attr-autofocus="{{shouldAutofocus || undefined}}"
                  strip-br="true"
                  ng-keydown="onEnter($event)"
                  ng-model="discussion.title">

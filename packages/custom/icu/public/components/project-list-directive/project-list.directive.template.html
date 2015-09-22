@@ -3,7 +3,7 @@
         <tbody>
             <tr data-ng-repeat="project in projects"
                 data-ng-class="{ 'active': isCurrentState(project._id) }"
-                ng-click="initialize(project)"
+                ng-click="initialize($event, project)"
                 icu-list-row
                 data-id="{{project._id}}"
                 data="{
