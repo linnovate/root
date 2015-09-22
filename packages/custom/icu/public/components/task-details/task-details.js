@@ -29,7 +29,15 @@ angular.module('mean.icu.ui.taskdetails', [])
 
     $scope.tagInputVisible = false;
 
-    $scope.statuses = ['New', 'Assigned', 'In progress', 'Review', 'Rejected', 'Done'];
+
+    $scope.statuses = [
+        {translationKey: 'new', value: 'New'},
+        {translationKey: 'assigned', value: 'Assigned'},
+        {translationKey: 'inProgress', value: 'In Progress'},
+        {translationKey: 'review', value: 'Review'},
+        {translationKey: 'rejected', value: 'Rejected'},
+        {translationKey: 'done', value: 'Done'}
+    ];
 
     $scope.getUnusedTags = function () {
         return _.chain($scope.tags).reject(function (t) {

@@ -28,26 +28,32 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         }
 
-        $scope.statuses = ['new', 'inProgress', 'canceled', 'completed', 'archived'];
+        $scope.statuses = [
+            {translationKey: 'new', value: 'New'},
+            {translationKey: 'inProgress', value: 'In Progress'},
+            {translationKey: 'canceled', value: 'Cancelled'},
+            {translationKey: 'completed', value: 'Completed'},
+            {translationKey: 'archived', value: 'Archived'}
+        ];
 
         $scope.$watchGroup(['project.description', 'project.title'], function (nVal, oVal, scope) {
             if (nVal !== oVal && oVal) {
-                var context;
+                var newContext;
                 if (nVal[1] !== oVal[1]) {
-                    context = {
+                    newContext = {
                         name: 'title',
                         oldVal: oVal[1],
                         newVal: nVal[1],
                         action: 'renamed'
                     };
                 } else {
-                    context = {
+                    newContext = {
                         name: 'description',
                         oldVal: oVal[0],
                         newVal: nVal[0]
                     };
                 }
-                $scope.delayedUpdate($scope.project, context);
+                $scope.delayedUpdate($scope.project, newContext);
             }
         });
 
