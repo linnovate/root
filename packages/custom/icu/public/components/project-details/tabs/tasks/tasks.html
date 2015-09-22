@@ -1,15 +1,5 @@
-<div class="tasks">
-    <div class="action-bar">
-        <button class="orange-btn" ng-click="manageTasks()"> {{ 'manageTasks' | i18next}} </button>
-    </div>
-
-    <div icu-task-list
-         class="entity-list-container"
-         tasks="tasks"
-         draw-arrow="false"
-         display-only="true"></div>
-
-    <div class="action-bar">
-        <button class="orange-btn" ng-click="manageTasks()"> {{ 'manageTasks' | i18next}} </button>
-    </div>
+<div icu-tabs-tasks
+    tasks="tasks"
+    entity="project"
+    entity-name="'project'">
 </div>
