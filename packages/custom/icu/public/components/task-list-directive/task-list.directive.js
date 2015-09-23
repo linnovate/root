@@ -49,6 +49,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 return TasksService.update(task);
             }
         };
+        $scope.debouncedUpdate = _.debounce($scope.createOrUpdate, 300);
 
         $scope.searchResults = [];
 
