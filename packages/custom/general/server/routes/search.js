@@ -11,6 +11,7 @@ module.exports = function(General, app, auth, database) {
     var objReq = {
       uri: apiUri + '/api/search/?' + 'term=' + encodeURI(req.query.term) + index,
       method: 'GET',
+      gzip: true,
       headers: req.headers
     };
 

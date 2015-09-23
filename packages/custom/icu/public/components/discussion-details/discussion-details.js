@@ -21,6 +21,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.summary = function (discussion) {
             DiscussionsService.summary(discussion).then(function (result) {
                 discussion.status = result.status;
+                var index = $state.current.name.indexOf('main.search');
+                $state.reload(index === 0 ? 'main.search' : 'main.tasks.byentity');
             });
         };
 
