@@ -9,7 +9,7 @@
                 data="{ task: task,
                         index: $index,
                         drawArrow: drawArrow,
-                        updateCb: createOrUpdate,
+                        updateCb: debouncedUpdate,
                         searchCb: search,
                         onEnterCb: onEnter,
                         hideAutoCompleteCb: hideAutoComplete,
