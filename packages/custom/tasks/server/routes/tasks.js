@@ -123,23 +123,6 @@ module.exports = function(tasks, app, auth, database) {
                 res.status(statusCode);
             res.send(data);
         });
-        
-        //var objReq = {
-        //  uri: apiUri + '/api/tasks/' + req.params.id + '/star',
-        //  method: 'PATCH',
-        //  headers: req.headers
-        //};
-        //
-        //console.dir(objReq)
-        //request(objReq, function(error, response, body) {
-        //  if (!error && response.statusCode === 200 && response.body.length) {
-        //    return res.json(JSON.parse(response.body));
-        //  }
-        //    if(response && response.statusCode != 200)
-        //        res.status(response.statusCode);
-        //    var data = error ? error : JSON.parse(response.body);
-        //    return res.json(data);
-        //});
     });
 }
 
