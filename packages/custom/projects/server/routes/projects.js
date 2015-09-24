@@ -7,6 +7,7 @@ module.exports = function(Projects, app, auth, database) {
   var ProjectC = require('../../../general/server/providers/crud.js').Project,
       Project = new ProjectC('/api/projects'),
       Notification = require('../../../general/server/providers/notify.js').Notification,
+      icapi = require('../../../general/server/providers/icapi.js'),
       config = require('meanio').loadConfig(),
       apiUri = config.api.uri,
       request = require('request'),
@@ -120,20 +121,16 @@ module.exports = function(Projects, app, auth, database) {
   });
 
   app.patch('/api/projects/:id/star', function (req, res) {
-    var objReq = {
-      uri: apiUri + '/api/projects/' + req.params.id + '/star',
-      method: 'PATCH',
-      headers: req.headers
-    };
+      var options = {
+          method: 'PATCH',
+          headers: req.headers,
+          cmd: '/api/projects/' + req.params.id + '/star'
+      };
 
-    request(objReq, function (error, response, body) {
-      if (!error && response.statusCode === 200 && response.body.length) {
-        return res.json(JSON.parse(response.body));
-      }
-      if (response && response.statusCode !== 200)
-        res.status(response.statusCode);
-      var data = error ? error : JSON.parse(response.body);
-      return res.json(data);
-    });
+      icapi.talkToApi(options, function(data, statusCode){
+          if(statusCode && statusCode != 200)
+              res.status(statusCode);
+          res.send(data);
+      });
   });
 };
