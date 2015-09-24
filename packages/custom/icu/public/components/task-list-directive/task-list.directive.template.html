@@ -3,16 +3,17 @@
         <tbody>
             <tr data-ng-repeat="task in tasks"
                 data-ng-class="{ 'active': isCurrentState(task._id) }"
-                ng-click="initialize(task)"
+                ng-click="initialize($event, task)"
                 icu-list-row
                 data-id="{{task._id}}"
                 data="{ task: task,
                         index: $index,
                         drawArrow: drawArrow,
-                        updateCb: createOrUpdate,
+                        updateCb: debouncedUpdate,
                         searchCb: search,
                         onEnterCb: onEnter,
                         hideAutoCompleteCb: hideAutoComplete,
+                        focusAutoCompleteCb: focusAutoComplete,
                         displayOnly: displayOnly,
                         searchResults: searchResults,
                         autocomplete: autocomplete,
@@ -25,6 +26,7 @@
     <div ng-show="autocomplete && searchResults" class="autocomplete">
         <div class="suggestions">
             <p class="suggestion" ng-repeat="result in searchResults"
+                ng-class="{ 'active': $index === selectedSuggestion }"
                 ng-mousedown="select(result)">
                 {{result.title}}
             </p>

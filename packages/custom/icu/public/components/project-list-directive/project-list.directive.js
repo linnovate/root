@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('mean.icu.ui.projectlistdirective', [])
-    .directive('icuProjectList', function ($state, $uiViewScroll, $stateParams) {
-        function controller($scope, context, ProjectsService) {
-            $scope.context = context;
+    .directive('icuProjectList', function ($state, $uiViewScroll, $stateParams, context) {
+        var creatingStatuses = {
+            NotCreated: 0,
+            Creating: 1,
+            Created: 2
+        };
 
-            var creatingStatuses = {
-                NotCreated: 0,
-                Creating: 1,
-                Created: 2
-            };
+        function controller($scope, ProjectsService) {
+            $scope.context = context;
 
             _($scope.projects).each(function(p) {
                 p.__state = creatingStatuses.Created;
@@ -45,36 +45,40 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                 } else if (project.__state === creatingStatuses.Created) {
                     var data = {
                         name: 'renamed'
-                    }
+                    };
                     return ProjectsService.update(project, data);
-                }
-            };
-
-            $scope.initialize = function(project) {
-                if ($scope.displayOnly) {
-                    return;
-                }
-
-                if (project.__state === creatingStatuses.NotCreated) {
-                    $scope.createOrUpdate(project).then(function() {
-                        $state.go($scope.detailsState, {
-                            id: project._id,
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        });
-                    });
-                } else {
-                    $state.go($scope.detailsState, {
-                        id: project._id,
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    });
                 }
             };
         }
 
         function link($scope, $element) {
             var isScrolled = false;
+
+            $scope.initialize = function($event, project) {
+                if ($scope.displayOnly) {
+                    return;
+                }
+
+                var nameFocused = angular.element($event.target).hasClass('name');
+
+                if (project.__state === creatingStatuses.NotCreated) {
+                    $scope.createOrUpdate(project).then(function() {
+                        $state.go($scope.detailsState, {
+                            id: project._id,
+                            entity: context.entityName,
+                            entityId: context.entityId,
+                            nameFocused: nameFocused
+                        });
+                    });
+                } else {
+                    $state.go($scope.detailsState, {
+                        id: project._id,
+                        entity: context.entityName,
+                        entityId: context.entityId,
+                        nameFocused: nameFocused
+                    });
+                }
+            };
 
             $scope.isCurrentState = function (id) {
                 var isActive = ($state.current.name.indexOf('main.projects.byentity.details') === 0 ||

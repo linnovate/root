@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          $stateParams) {
         $scope.discussion = entity || context.entity;
         $scope.tasks = tasks;
+        $scope.shouldAutofocus = !$stateParams.nameFocused;
 
         DiscussionsService.getStarred().then(function(starred) {
             $scope.discussion.star = _(starred).any(function(s) {
@@ -20,6 +21,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.summary = function (discussion) {
             DiscussionsService.summary(discussion).then(function (result) {
                 discussion.status = result.status;
+                var index = $state.current.name.indexOf('main.search');
+                $state.reload(index === 0 ? 'main.search' : 'main.tasks.byentity');
             });
         };
 
@@ -34,7 +37,13 @@ angular.module('mean.icu.ui.discussiondetails', [])
             DiscussionsService.update(discussion);
         };
 
-        $scope.statuses = ['new', 'scheduled', 'done', 'canceled', 'archived'];
+        $scope.statuses = [
+            {translationKey: 'new', value: 'New'},
+            {translationKey: 'scheduled', value: 'Scheduled'},
+            {translationKey: 'canceled', value: 'Cancelled'},
+            {translationKey: 'done', value: 'Done'},
+            {translationKey: 'archived', value: 'Archived'}
+        ];
 
         var scheduleAction = {
             label: 'scheduleDiscussion',

@@ -9,9 +9,10 @@ module.exports = function(General, app, auth, database) {
     var index = req.query.index ? ('&index=' + req.query.index) : '';
 
     var objReq = {
-      uri: apiUri + '/api/search/?' + 'term=' + req.query.term + index,
+      uri: apiUri + '/api/search/?' + 'term=' + encodeURI(req.query.term) + index,
       method: 'GET',
-      headers: res.headers
+      gzip: true,
+      headers: req.headers
     };
 
     request(objReq, function(error, response, body) {

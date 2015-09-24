@@ -36,11 +36,14 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
 
-    function update(project,context) {
-        if(!context.action)
+    function update(project, context) {
+        context = context || {};
+        if (!context.action) {
             context.action = 'updated';
-        if(!context.type)
-            context.type =  'project'
+        }
+        if (!context.type) {
+            context.type = 'project';
+        }
 
         return $http.put(ApiUri + EntityPrefix + '/' + project._id, {project:  project, context: context}).then(function(result) {
             return result.data;

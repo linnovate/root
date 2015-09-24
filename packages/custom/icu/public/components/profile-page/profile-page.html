@@ -25,7 +25,7 @@
             <div class="upload" ngf-select ngf-change="uploadAvatar($files)" ng-model="me.profile.avatar">
                 {{ 'upload' | i18next }}
             </div>
-            <img class="avatar" ng-src="{{avatar}}?{{hash}}"></img>
+            <img class="avatar" ng-src="{{avatar}}?cb={{hash}}"></img>
         </div>
         <button>{{'save' | i18next }}</button>
     </form>
