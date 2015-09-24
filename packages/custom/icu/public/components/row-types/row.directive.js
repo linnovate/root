@@ -9,7 +9,8 @@ angular.module('mean.icu.ui.rows', [])
         discussion: '/icu/components/row-types/discussion-row.html',
         'search-task': '/icu/components/row-types/search-task-row.html',
         'search-project': '/icu/components/row-types/search-project-row.html',
-        'search-discussion': '/icu/components/row-types/search-discussion-row.html'
+        'search-discussion': '/icu/components/row-types/search-discussion-row.html',
+        'search-attachment': '/icu/components/row-types/search-attachment-row.html'
     };
 
     function compileTemplate($scope, $element, template) {

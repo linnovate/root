@@ -1,0 +1,61 @@
+<div class="attachment-details">
+    <div class="page-content">
+        <div class="summary">
+
+            <div class="favorite">
+                <button ng-class="{ 'orange': attachment.star }" ng-click="star(attachment)">
+                    <i class="fa fa-star"></i>
+                </button>
+            </div>
+
+            <div class="user">
+                <div icu-avatar user="attachment.creator"></div>
+            </div>
+
+            <div class="dropdown dropdown-container" dropdown>
+                <div class="dropdown-trigger" dropdown-toggle>
+                    <i class="fa fa-chevron-down"></i>
+                </div>
+                <ul class="dropdown-menu menu-items" role="menu">
+                    <li>
+                        <a href="#" ng-click="deleteAttachment(attachment)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span>{{ 'deleteAttachment' | i18next}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="description">
+            <div class="title"
+                 contenteditable="true"
+                 tabindex="1"
+                 ng-attr-autofocus="{{shouldAutofocus || undefined}}"
+                 strip-br="true"
+                 ng-keydown="onEnter($event)"
+                 ng-model="attachment.name">
+            </div>
+
+            <div class="text"
+                 contenteditable="true"
+                 tabindex="2"
+                 strip-br="true"
+                 medium-editor
+                 ng-model="attachment.description"
+                 options="{{options}}">
+            </div>
+        </div>
+        <div class="tabs">
+            <div class="switcher">
+                <button class="tab"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".versions">
+                    {{ 'versions' | i18next }}
+                </button>
+            </div>
+        </div>
+        <div class="tab-content" data-ui-view="tab"></div>
+    </div>
+    <div icu-members-footer entity="attachment" users="people"></div>
+</div>

@@ -163,6 +163,46 @@ angular.module('mean.icu').config([
             };
         }
 
+        function getAttachmentDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/attachment-details/attachment-details.html',
+                        controller: 'AttachmentDetailsController'
+                    }
+                },
+                resolve: {
+                    entity: function ($stateParams, results) {
+                        return _(results).find(function (r) {
+                            return r._id === $stateParams.id;
+                        });
+                    }
+                }
+            };
+        }
+
+        function getAttachmentDetailsTabState(main, tab) {
+            return {
+                url: '/versions',
+                views: {
+                    tab: {
+                        templateUrl: '/icu/components/attachment-details/tabs/versions/versions.html',
+                        controller: 'AttachmentVersionsController'
+                    }
+                },
+                resolve: {
+                    versions: function (entity) {
+                        return entity.versions || [];
+                    }
+                }
+            };
+        }
+
         function getDetailsTabState(main, tab) {
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
@@ -485,7 +525,10 @@ angular.module('mean.icu').config([
         .state('main.search.discussion', getDiscussionDetailsState('/discussion'))
         .state('main.search.discussion.activities', getDetailsTabState('discussion', 'activities'))
         .state('main.search.discussion.documents', getDetailsTabState('discussion', 'documents'))
-        .state('main.search.discussion.tasks', getDetailsTabState('discussion', 'tasks'));
+        .state('main.search.discussion.tasks', getDetailsTabState('discussion', 'tasks'))
+
+        .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
+        .state('main.search.attachment.versions', getAttachmentDetailsTabState());
 }
 ]);
 
