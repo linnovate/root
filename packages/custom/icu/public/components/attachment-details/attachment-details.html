@@ -25,16 +25,6 @@
                     </li>
                 </ul>
             </div>
-
-            <div class="actions"
-                 ng-if="statusesActionsMap[attachment.status]">
-                <button ng-disabled="['Cancelled', 'New'].indexOf(attachment.status) !== -1 && (
-                                        !attachment.due ||
-                                        !attachment.assign)"
-                        ng-click="statusesActionsMap[attachment.status].method(attachment)">
-                    {{statusesActionsMap[attachment.status].label | i18next}}
-                </button>
-            </div>
         </div>
 
         <div class="description">
