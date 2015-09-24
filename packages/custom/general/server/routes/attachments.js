@@ -23,10 +23,19 @@ module.exports = function (General, app, auth, database) {
   });
 
   app.post('/api/attachments', function (req, res) {
+
     var objReq = {
       uri: apiUri + '/api/attachments',
       method: 'POST',
-      headers: req.headers
+      headers: {
+          connection: req.headers.connection,
+          accept: req.headers.accept,
+          'user-agent': req.headers['user-agent'],
+          authorization: req.headers.authorization,
+          'accept-language': req.headers['accept-language'],
+          cookie: req.headers.cookie,
+          'if-none-match': req.headers['if-none-match']
+      }
     };
 
     req.pipe(
