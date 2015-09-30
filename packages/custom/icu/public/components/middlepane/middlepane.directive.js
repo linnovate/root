@@ -32,10 +32,12 @@ function SearchController($scope, $state, $stateParams, context) {
         if (term) {
             $state.go('main.search', {query: term});
         } else {
-            $state.go('main.' + context.main + '.byentity', {
-                entity: context.entityName,
-                entityId: context.entityId
-            });
+            $state.go('main.search', {query: ''});
+
+            //$state.go('main.' + context.main + '.byentity', {
+            //    entity: context.entityName,
+            //    entityId: context.entityId
+            //});
         }
     };
 }
