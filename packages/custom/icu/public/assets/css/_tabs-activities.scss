@@ -1,10 +1,11 @@
 $add-update-height: 210px;
 $list-height: calc(100% - #{$add-update-height} - 40px);
+$activityListDefaultMaxH: 70px;
 
 .tab-content {
     .activities {
         height: 100%;
-        overflow: auto;
+        overflow-y: hidden;
 
         .title, .add-update {
             .avatar {
@@ -16,14 +17,16 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
             }
         }
 
+
         .activities-list {
             border-bottom: 1px solid $light-grey1;
             overflow: auto;
             min-height: 70px;
+            max-height: 70px;
+            transition: max-height 0.5s;
 
             .activity {
                 min-height: 60px;
-
             }
 
             .title {

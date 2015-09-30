@@ -56,6 +56,21 @@ angular.module('mean.icu.ui.tabs')
             };
         }
 
+        function link($scope, $element) {
+            var listExpandContract = function () {
+                var activityList = $element.find('.activities-list');
+                if (activityList.children().length > 1) {
+                    if (activityList.height() <= 70) {
+                        activityList.css("max-height", "100%");
+                    }
+                    else {
+                        activityList.css("max-height", "70px");
+                    }
+                }
+            };
+            $element.on('click', listExpandContract);
+        }
+
         return {
             restrict: 'A',
             scope: {
@@ -65,6 +80,7 @@ angular.module('mean.icu.ui.tabs')
             },
             replace: true,
             controller: controller,
+            link: link,
             templateUrl: '/icu/components/tabs/activities/activities.html'
         };
     });
