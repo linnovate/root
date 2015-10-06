@@ -105,6 +105,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 });
             });
         };
+
     }
 
     function link($scope, $element) {
@@ -182,6 +183,12 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             task.__autocomplete = false;
             $scope.searchResults.length = 0;
             $scope.selectedSuggestion = 0;
+        };
+
+        // infinite scroll
+        $scope.displayLimit = Math.floor(innerHeight/ 50);
+        $scope.loadMore = function() {
+            $scope.displayLimit += 20;
         };
     }
 

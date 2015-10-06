@@ -115,6 +115,12 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
                 }
             }
         };
+
+        // infinite scroll
+        $scope.displayLimit = Math.floor(innerHeight/ 50);
+        $scope.loadMore = function() {
+            $scope.displayLimit += 20;
+        };
     }
 
     return {
