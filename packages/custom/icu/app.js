@@ -37,6 +37,7 @@ ICU.register(function (app, auth, database) {
     ICU.aggregateAsset('js', '../lib/angular-ui-date/src/date.js');
     ICU.aggregateAsset('js', '../lib/moment/moment.js');
     ICU.aggregateAsset('js', '../lib/ng-file-upload/ng-file-upload.min.js');
+    ICU.aggregateAsset('js', '../lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js');
 
     ICU.aggregateAsset('js', '../lib/tinycolor/tinycolor.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/angularjs-color-picker/angularjs-color-picker.js', {weight: 1});
@@ -95,6 +96,7 @@ ICU.register(function (app, auth, database) {
         'mean.icu.data.constants',
         'mean.icu.decorators.pdsDecorator',
         'mean.icu.decorators.cacheDecorator',
+        'infinite-scroll'
     ]);
 
     ICU.settings({

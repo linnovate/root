@@ -51,6 +51,8 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             };
         }
 
+
+
         function link($scope, $element) {
             var isScrolled = false;
 
@@ -103,6 +105,13 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                         $element.find('td.name:nth-child(1)')[0].focus();
                     }
                 }
+            };
+
+
+            // infinite scroll
+            $scope.displayLimit = Math.floor(innerHeight/ 50);
+            $scope.loadMore = function() {
+                $scope.displayLimit += 20;
             };
         }
 

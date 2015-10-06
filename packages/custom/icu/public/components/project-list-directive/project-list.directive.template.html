@@ -1,7 +1,7 @@
 <div class="list-table">
-    <table class="projects">
+    <table class="projects" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody>
-            <tr data-ng-repeat="project in projects"
+            <tr data-ng-repeat="project in projects | limitTo: displayLimit"
                 data-ng-class="{ 'active': isCurrentState(project._id) }"
                 ng-click="initialize($event, project)"
                 icu-list-row

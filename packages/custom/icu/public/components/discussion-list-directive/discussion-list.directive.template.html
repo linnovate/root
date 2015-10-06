@@ -1,7 +1,7 @@
 <div class="list-table">
-    <table class="discussions">
+    <table class="discussions" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody>
-            <tr data-ng-repeat="discussion in discussions"
+            <tr data-ng-repeat="discussion in discussions | limitTo: displayLimit"
                 data-ng-class="{ 'active': isCurrentState(discussion._id) }"
                 ng-click="initialize($event, discussion)"
                 icu-list-row

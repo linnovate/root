@@ -1,7 +1,7 @@
-<div class="list-table">
-    <table class="tasks">
+<div class="list-table" >
+    <table class="tasks" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody>
-            <tr data-ng-repeat="task in tasks"
+            <tr data-ng-repeat="task in tasks | limitTo: displayLimit"
                 data-ng-class="{ 'active': isCurrentState(task._id) }"
                 ng-click="initialize($event, task)"
                 icu-list-row
