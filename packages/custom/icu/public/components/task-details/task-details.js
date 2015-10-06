@@ -33,7 +33,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.statuses = [
         {translationKey: 'new', value: 'New'},
         {translationKey: 'assigned', value: 'Assigned'},
-        {translationKey: 'inProgress', value: 'In Progress'},
+        {translationKey: 'inProgress', value: 'In progress'},
         {translationKey: 'review', value: 'Review'},
         {translationKey: 'rejected', value: 'Rejected'},
         {translationKey: 'done', value: 'Done'}
