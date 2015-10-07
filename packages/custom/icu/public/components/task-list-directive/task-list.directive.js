@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklistdirective', [])
-.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, context) {
+.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, context, $timeout) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -105,6 +105,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 });
             });
         };
+
     }
 
     function link($scope, $element) {
@@ -182,6 +183,15 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             task.__autocomplete = false;
             $scope.searchResults.length = 0;
             $scope.selectedSuggestion = 0;
+        };
+
+        // infinite scroll
+        $timeout(function() {
+            $scope.displayLimit = Math.ceil($element.height() / 50);
+        }, 0);
+
+        $scope.loadMore = function() {
+            $scope.displayLimit += 20;
         };
     }
 
