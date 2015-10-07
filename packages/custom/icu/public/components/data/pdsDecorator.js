@@ -16,6 +16,11 @@ var passiveDataSrtuctureDecorator = function($delegate) {
                 data[keys[i]] = property.trim();
             }
 
+            if (property === null) {
+                delete data[keys[i]];
+                continue;
+            }
+
             if (property && property._id) {
                 data[keys[i]] = property._id;
             } else if (property instanceof Array) {
