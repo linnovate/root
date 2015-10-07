@@ -95,6 +95,7 @@ ICU.register(function (app, auth, database) {
         'mean.icu.data.constants',
         'mean.icu.decorators.pdsDecorator',
         'mean.icu.decorators.cacheDecorator',
+        'mean.icu.ui.modaldeletetasksbyentity',
     ]);
 
     ICU.settings({
