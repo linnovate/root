@@ -34,6 +34,9 @@ exports.talkToApi = function(options, callback) {
         objReq.form = options.form;
         objReq.headers['Content-Type'] = 'multipart/form-data';
     }
+    if(options.gzip)
+        objReq.gzip = true;
+
     request(objReq, function(error, response, body) {
         if (!error && response.statusCode === 200 && response.body.length) {
             return callback(JSON.parse(body), response.statusCode);
