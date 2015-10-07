@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.middlepane', [])
 function SearchController($scope, $state, $stateParams, context) {
     $scope.$on('$stateChangeSuccess', function ($event, toState) {
         if (toState.name.indexOf('main.search') !== 0) {
-            if ($stateParams.query) {
+            if ($stateParams.query && $stateParams.query.length) {
                 $scope.term = $stateParams.query;
             } else {
                 $scope.term = '';
@@ -29,15 +29,10 @@ function SearchController($scope, $state, $stateParams, context) {
     };
 
     $scope.search = function (term) {
-        if (term) {
+        if (term && term.length) {
             $state.go('main.search', {query: term});
         } else {
             $state.go('main.search', {query: ''});
-
-            //$state.go('main.' + context.main + '.byentity', {
-            //    entity: context.entityName,
-            //    entityId: context.entityId
-            //});
         }
     };
 }
