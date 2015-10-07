@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklistdirective', [])
-.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, context) {
+.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, context, $timeout) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -186,7 +186,10 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         // infinite scroll
-        $scope.displayLimit = Math.ceil($element.height()/ 50);
+        $timeout(function() {
+            $scope.displayLimit = Math.ceil($element.height() / 50);
+        }, 0);
+
         $scope.loadMore = function() {
             $scope.displayLimit += 20;
         };
