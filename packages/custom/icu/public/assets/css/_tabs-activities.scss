@@ -20,13 +20,41 @@ $activityListDefaultMaxH: 70px;
 
         .activities-list {
             border-bottom: 1px solid $light-grey1;
-            overflow: auto;
+            overflow: -webkit;
+            position: relative;
             min-height: 70px;
             max-height: 70px;
             transition: max-height 0.5s;
 
             .activity {
                 min-height: 60px;
+            }
+            .downwardArrow {
+                &:after {
+                    content: '⇓';
+                    position: absolute;
+                    font-size: 1.6em;
+                    width: 1.4em;
+                    background-color: rgba(184, 231, 127, 0.62);
+                    left: calc(90% + 17px);
+                    top: 0.5em;
+                    border-radius: 1em 1em;
+                    text-align: center;
+
+                }
+            }
+            .upwardArrow {
+                &:after {
+                    content: '⇑';
+                    position: absolute;
+                    font-size: 1.6em;
+                    width: 1.4em;
+                    background-color: rgba(184, 231, 127, 0.62);
+                    left:  90%;
+                    top: 0.5em;
+                    border-radius: 1em 1em;
+                    text-align: center;
+                }
             }
 
             .title {
@@ -45,10 +73,9 @@ $activityListDefaultMaxH: 70px;
                         font-weight: 100;
                     }
                     .activity-date {
-                        color: $light-grey-placeholder
+                        color: $light-grey-placeholder;
                     }
                 }
-
             }
 
             .description {
