@@ -1,11 +1,12 @@
 $add-update-height: 210px;
 $list-height: calc(100% - #{$add-update-height} - 40px);
-$activityListDefaultMaxH: 70px;
+$activityListDefaultMaxH: 80px;
 
 .tab-content {
     .activities {
         height: 100%;
         overflow-y: hidden;
+        position: relative;
 
         .title, .add-update {
             .avatar {
@@ -20,41 +21,13 @@ $activityListDefaultMaxH: 70px;
 
         .activities-list {
             border-bottom: 1px solid $light-grey1;
-            overflow: -webkit;
-            position: relative;
-            min-height: 70px;
-            max-height: 70px;
-            transition: max-height 0.5s;
+            min-height: 50px;
+            max-height: $activityListDefaultMaxH;
+            transition: max-height 0.4s;
+            overflow: auto;
 
             .activity {
                 min-height: 60px;
-            }
-            .downwardArrow {
-                &:after {
-                    content: '⇓';
-                    position: absolute;
-                    font-size: 1.6em;
-                    width: 1.4em;
-                    background-color: rgba(184, 231, 127, 0.62);
-                    left: calc(90% + 17px);
-                    top: 0.5em;
-                    border-radius: 1em 1em;
-                    text-align: center;
-
-                }
-            }
-            .upwardArrow {
-                &:after {
-                    content: '⇑';
-                    position: absolute;
-                    font-size: 1.6em;
-                    width: 1.4em;
-                    background-color: rgba(184, 231, 127, 0.62);
-                    left:  90%;
-                    top: 0.5em;
-                    border-radius: 1em 1em;
-                    text-align: center;
-                }
             }
 
             .title {
@@ -153,6 +126,27 @@ $activityListDefaultMaxH: 70px;
                     width: 80px;
                 }
             }
+        }
+    }
+    .expandList {
+        position: absolute;
+        display: inline-block;
+        font-size: 1.7em;
+        width: 1.5em;
+        height: 1.4em;
+        background-color: rgba(184, 231, 127, 0.62);
+
+        right: 5%;
+        top: 0.5em;
+        border-radius: 1em 1em;
+        text-align: center;
+        line-height: inherit;
+        vertical-align: bottom;
+        .show {
+            display:inline-block;
+        }
+        .hide {
+            display: none;
         }
     }
 }

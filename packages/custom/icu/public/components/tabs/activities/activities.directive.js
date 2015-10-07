@@ -58,24 +58,26 @@ angular.module('mean.icu.ui.tabs')
 
         function link($scope, $element) {
             var activityList = $element.find('.activities-list');
+            var expandButton =  $element.find('.expandList');
+
             var listExpandContract = function () {
                 if (activityList.children().length > 1) {
-                    if (activityList.height() <= 70) {
+                    if (activityList.height() <= 80) {
                         activityList.css("max-height", "100%");
 
-                        angular.element(activityList.children()[0]).removeClass('downwardArrow');
-                        angular.element(activityList.children()[0]).addClass('upwardArrow');
-
+                        expandButton.removeClass('fa-arrow-down');
+                        expandButton.addClass('fa-arrow-up');
                     }
                     else {
-                        activityList.css("max-height", "70px");
-                        angular.element(activityList.children()[0]).removeClass('upwardArrow');
-                        angular.element(activityList.children()[0]).addClass('downwardArrow');
+                        activityList.css("max-height", "80px");
+
+                        expandButton.removeClass('fa-arrow-up');
+                        expandButton.addClass('fa-arrow-down');
                     }
                 }
             };
 
-            activityList.on('click', listExpandContract);
+            expandButton.on('click', listExpandContract);
         }
 
         return {
