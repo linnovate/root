@@ -22,14 +22,13 @@
             <div class="color">
                 <div icu-colorpicker ng-model="project.color"></div>
             </div>
-
             <div class="dropdown dropdown-container" dropdown>
                 <div class="dropdown-trigger" dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
                     <li>
-                        <a href="#" ng-click="deleteProject(project)">
+                        <a href="#" icu-open-modal entity="project" delete-fn="deleteProject(project)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span>{{ 'deleteProject' | i18next }}</span>
                         </a>

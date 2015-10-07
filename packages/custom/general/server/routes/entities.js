@@ -9,7 +9,8 @@ module.exports = function(General, app, auth, database) {
     var objReq = {
       uri: apiUri + '/api/' + req.params.entity + '/' + req.params.id + '/' +  req.params.issue,
       method: 'GET',
-      headers: res.headers
+      headers: req.headers,
+      gzip: true
     };
 
     request(objReq, function(error, response, body) {
@@ -24,7 +25,8 @@ module.exports = function(General, app, auth, database) {
     var objReq = {
       uri: apiUri + '/api/' + req.params.entity + '/' + req.params.id + '/' + req.params.issue,
       method: 'POST',
-      headers: res.headers
+      headers: req.headers,
+      gzip: true
     };
 
     request(objReq, function (error, response, body) {
