@@ -1,10 +1,12 @@
 $add-update-height: 210px;
 $list-height: calc(100% - #{$add-update-height} - 40px);
+$activityListDefaultMaxH: 80px;
 
 .tab-content {
     .activities {
         height: 100%;
-        overflow: auto;
+        overflow-y: hidden;
+        position: relative;
 
         .title, .add-update {
             .avatar {
@@ -16,14 +18,16 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
             }
         }
 
+
         .activities-list {
             border-bottom: 1px solid $light-grey1;
+            min-height: 50px;
+            max-height: $activityListDefaultMaxH;
+            transition: max-height 0.4s;
             overflow: auto;
-            min-height: 70px;
 
             .activity {
                 min-height: 60px;
-
             }
 
             .title {
@@ -42,10 +46,9 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
                         font-weight: 100;
                     }
                     .activity-date {
-                        color: $light-grey-placeholder
+                        color: $light-grey-placeholder;
                     }
                 }
-
             }
 
             .description {
@@ -123,6 +126,27 @@ $list-height: calc(100% - #{$add-update-height} - 40px);
                     width: 80px;
                 }
             }
+        }
+    }
+    .expandList {
+        position: absolute;
+        display: inline-block;
+        font-size: 1.7em;
+        width: 1.5em;
+        height: 1.4em;
+        background-color: rgba(184, 231, 127, 0.62);
+
+        right: 5%;
+        top: 0.5em;
+        border-radius: 1em 1em;
+        text-align: center;
+        line-height: inherit;
+        vertical-align: bottom;
+        .show {
+            display:inline-block;
+        }
+        .hide {
+            display: none;
         }
     }
 }
