@@ -83,6 +83,10 @@
                     overflow-x: hidden;
                     overflow-y: auto;
                 }
+
+                .collapsed {
+                    height: 0;
+                }
             }
         }
     }
