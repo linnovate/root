@@ -501,7 +501,11 @@ angular.module('mean.icu').config([
             },
             resolve: {
                 results: function (SearchService, $stateParams) {
-                    return SearchService.find($stateParams.query);
+                    if ($stateParams.query && $stateParams.query.length) {
+                        return SearchService.find($stateParams.query);
+                    } else {
+                        return {};
+                    }
                 },
                 tasks: function (results) {
                     return _(results).filter(function (r) {

@@ -36,6 +36,13 @@ body {
 @import 'tabs-tasks';
 @import 'project-details';
 
+table {
+    :focus {
+        outline: -webkit-focus-ring-color auto 0px;
+        box-shadow:inset 0px 0px 0px 2px gray;
+    }
+}
+
 .panes-wrapper {
     margin-left: $sidepane-width;
     width: calc(100% - #{$sidepane-width});

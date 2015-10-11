@@ -6,7 +6,7 @@ angular.module('mean.icu.ui.searchlist', [])
         if ($scope.results.length && $state.current.name === 'main.search') {
             var active  = $scope.results[0];
 
-            $state.go('.' + active._type, { id: active._id } );
+           // $state.go('.' + active._type, { id: active._id } );
         }
     }
 
