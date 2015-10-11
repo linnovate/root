@@ -6,7 +6,8 @@
         <li data-ng-repeat="item in items">
             <div class="menu-item"
                 data-ui-sref="{{'main.' + item.state}}"
-                data-ng-class="{ 'active': isCurrentState(item) }">
+                data-ng-class="{ 'active': isCurrentState(item) }"
+                 ng-click="show = !show">
                 <div class="icon">
                     <img ng-src="{{item.icon}}"/>
                 </div>
@@ -15,10 +16,11 @@
                 </div>
                 <div class="arrow">
                     <i class="fa"
-                        data-ng-class="{ 'fa-caret-right': !isCurrentState(item), 'fa-caret-down': isCurrentState(item) }"></i>
+                        data-ng-class="{ 'fa-caret-right': !show || !isCurrentState(item), 'fa-caret-down': show || isCurrentState(item)}"></i>
                 </div>
             </div>
             <div class="display-by"
+                 ng-class= "{'collapsed' : !show }""
                  ng-if="isCurrentState(item)"
                  icu-display-by="item.display"
                  people="people"
