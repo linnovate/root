@@ -14,10 +14,12 @@ angular.module('mean.icu.ui.profile', [])
     $scope.uploadAvatar = function(files) {
         if (files.length) {
             var file = files[0];
-            UsersService.updateAvatar(file).success(function(data) {
-                $scope.avatar = data.avatar;
-                $scope.hash = Math.random();
-            });
+            UsersService.updateAvatar(file)
+                .success(function(data) {
+                    $scope.avatar = data.avatar;
+                    $scope.hash = Math.random();
+                    $scope.me.profile.avatar = data.avatar;
+                });
         }
     };
 
@@ -25,7 +27,6 @@ angular.module('mean.icu.ui.profile', [])
         if ($scope.confirm !== $scope.me.password) {
             return;
         }
-
         UsersService.update($scope.me).then(function() {
             $state.go('main.tasks', null, { reload: true });
         });
