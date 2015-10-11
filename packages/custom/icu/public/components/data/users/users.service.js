@@ -55,6 +55,7 @@ angular.module('mean.icu.data.usersservice', [])
 
     function update(user) {
         return $http.put('/api/users/' + user._id, user).then(function(result) {
+            me = result.data;
             return result.data;
         });
     }
