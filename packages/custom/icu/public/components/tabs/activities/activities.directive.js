@@ -56,6 +56,30 @@ angular.module('mean.icu.ui.tabs')
             };
         }
 
+        function link($scope, $element) {
+            var activityList = $element.find('.activities-list');
+            var expandButton =  $element.find('.expandList');
+
+            var listExpandContract = function () {
+                if (activityList.children().length > 1) {
+                    if (activityList.height() <= 80) {
+                        activityList.css("max-height", "100%");
+
+                        expandButton.removeClass('fa-arrow-down');
+                        expandButton.addClass('fa-arrow-up');
+                    }
+                    else {
+                        activityList.css("max-height", "80px");
+
+                        expandButton.removeClass('fa-arrow-up');
+                        expandButton.addClass('fa-arrow-down');
+                    }
+                }
+            };
+
+            expandButton.on('click', listExpandContract);
+        }
+
         return {
             restrict: 'A',
             scope: {
@@ -65,6 +89,7 @@ angular.module('mean.icu.ui.tabs')
             },
             replace: true,
             controller: controller,
+            link: link,
             templateUrl: '/icu/components/tabs/activities/activities.html'
         };
     });
