@@ -1,6 +1,7 @@
 <div class="activities"  >
     <div class="expandList fa" ng-class="activities.length > 1 ? 'fa-arrow-down' : 'hide'"></div>
     <div class="activities-list">
+        <div ng-show="isLoading" class="loader"></div>
         <div data-ng-repeat="activity in activities | orderBy:'created':true"  class="activity">
             <div class="title">
                 <div icu-avatar user="activity.user"></div>

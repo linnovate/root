@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.projectlistdirective', [])
-    .directive('icuProjectList', function ($state, $uiViewScroll, $stateParams, context) {
+    .directive('icuProjectList', function ($state, $uiViewScroll, $timeout, $stateParams, context) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
         function controller($scope, ProjectsService) {
             $scope.context = context;
+            $scope.isLoading = true;
 
             _($scope.projects).each(function(p) {
                 p.__state = creatingStatuses.Created;
@@ -107,9 +108,12 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                 }
             };
 
-
             // infinite scroll
-            $scope.displayLimit = Math.ceil($element.height()/ 50);
+            $timeout(function() {
+                $scope.displayLimit = Math.ceil($element.height() / 50);
+                $scope.isLoading = false;
+            }, 0);
+
             $scope.loadMore = function() {
                 $scope.displayLimit += 20;
             };

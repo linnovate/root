@@ -6,8 +6,10 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          tasks,
                                                          context,
                                                          $state,
+                                                         $timeout,
                                                          DiscussionsService,
                                                          $stateParams) {
+        $scope.isLoading = true;
         $scope.discussion = entity || context.entity;
         $scope.tasks = tasks;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
@@ -119,6 +121,11 @@ angular.module('mean.icu.ui.discussiondetails', [])
             DiscussionsService.update(discussion);
         };
 
+
+        $timeout(function() {
+            $scope.isLoading = false;
+        }, 0);
+
         $scope.delayedUpdate = _.debounce($scope.update, 500);
 
         if (
@@ -129,4 +136,5 @@ angular.module('mean.icu.ui.discussiondetails', [])
             $state.current.name === 'main.discussions.byentity.details')) {
             $state.go('.activities');
         }
+
     });

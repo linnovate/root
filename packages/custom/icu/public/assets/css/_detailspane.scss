@@ -194,6 +194,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             margin: 0 30px;
             height: $description-height;
             overflow: auto;
+            position: relative;
 
             .title {
                 font-weight: 700;

@@ -1,7 +1,6 @@
 <div class="discussion-details">
     <div class="page-content">
         <div class="summary">
-
             <div class="favorite">
                 <button ng-class="{ 'orange': discussion.star }" ng-click="star(discussion)">
                     <i class="fa fa-star"></i>
@@ -66,6 +65,7 @@
         </div>
 
         <div class="description">
+            <div ng-show="isLoading" class="loader"></div>
             <div class="title"
                  contenteditable="true"
                  tabindex="1"
