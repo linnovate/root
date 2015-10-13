@@ -1,12 +1,13 @@
 'use strict';
 angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
-    .directive('icuOpenModal', function ($modal) {
+    .directive('icuOpenModal', function ($modal, $state) {
 
         function link(scope, elem, attrs) {
-            console.log(scope,attrs)
-
 
             elem.bind('click', function() {
+
+                if($state.current.name.indexOf('main.tasks.byentity') != -1)
+                    scope.isTasks --;
 
                 if(scope.isTasks) {
                     buildModal();
