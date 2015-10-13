@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.discussionlistdirective', [])
-.directive('icuDiscussionList', function ($state, $uiViewScroll, $stateParams, context) {
+.directive('icuDiscussionList', function ($state, $uiViewScroll, $stateParams, $timeout, context ) {
     var creatingStatuses = {
         NotCreated: 0,
         Creating: 1,
@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
 
     function controller($scope, DiscussionsService) {
         $scope.context = context;
+        $scope.loading = true;
 
         _($scope.discussions).each(function(d) {
             d.__state = creatingStatuses.created;
@@ -117,7 +118,11 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
         };
 
         // infinite scroll
-        $scope.displayLimit = Math.ceil($element.height()/ 50);
+        $timeout(function() {
+            $scope.displayLimit = Math.ceil($element.height() / 50);
+            $scope.isLoading = false;
+        }, 0);
+
         $scope.loadMore = function() {
             $scope.displayLimit += 20;
         };

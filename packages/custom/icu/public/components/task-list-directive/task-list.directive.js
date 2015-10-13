@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklistdirective', [])
-.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, context, $timeout) {
+.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context ) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -10,13 +10,13 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
         function controller($scope, TasksService) {
         $scope.context = context;
-
+        $scope.isLoading = true;
 
         _($scope.tasks).each(function(t) {
             t.__state = creatingStatuses.Created;
         });
 
-        var newTask = {
+            var newTask = {
             title: '',
             watchers: [],
             tags: [],
@@ -79,7 +79,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                         $scope.searchResults.push(sr);
                     }
                 });
-
                 $scope.selectedSuggestion = 0;
             });
         };
@@ -188,6 +187,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         // infinite scroll
         $timeout(function() {
             $scope.displayLimit = Math.ceil($element.height() / 50);
+            $scope.isLoading = false;
         }, 0);
 
         $scope.loadMore = function() {

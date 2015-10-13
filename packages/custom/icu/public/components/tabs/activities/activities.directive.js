@@ -2,7 +2,8 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function () {
-        function controller($scope, UsersService, context, DocumentsService, ActivitiesService, $stateParams, $state) {
+        function controller($scope, UsersService, context, DocumentsService, ActivitiesService, $stateParams, $state, $timeout) {
+            $scope.isLoading = true;
             $scope.activity = {
                 description: ''
             };
@@ -50,10 +51,13 @@ angular.module('mean.icu.ui.tabs')
                         });
                     }
                     clearForm();
-
                     $scope.activities.push(result);
                 });
             };
+
+            $timeout(function() {
+                $scope.isLoading = false;
+            }, 0);
         }
 
         function link($scope, $element) {
@@ -76,7 +80,6 @@ angular.module('mean.icu.ui.tabs')
                     }
                 }
             };
-
             expandButton.on('click', listExpandContract);
         }
 
