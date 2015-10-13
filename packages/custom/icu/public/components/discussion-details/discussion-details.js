@@ -105,12 +105,9 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
         $scope.deleteDiscussion = function (discussion) {
             DiscussionsService.remove(discussion._id).then(function () {
-                var state = context.entityName === 'all' ?
-                    'main.discussions.all' : 'main.discussions.byentity';
 
-                $state.go(state, {
-                    entity: context.entityName,
-                    entityId: context.entityId
+                $state.go('main.discussions.all', {
+                    entity: 'all'
                 }, {reload: true});
             });
         };

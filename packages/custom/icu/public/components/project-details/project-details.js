@@ -100,12 +100,9 @@ angular.module('mean.icu.ui.projectdetails', [])
 
         $scope.deleteProject = function (project) {
             ProjectsService.remove(project._id).then(function () {
-                var state = context.entityName === 'all' ?
-                    'main.projects.all' : 'main.projects.byentity';
 
-                $state.go(state, {
-                    entity: context.entityName,
-                    entityId: context.entityId
+                $state.go('main.projects.all', {
+                    entity: 'all'
                 }, {reload: true});
             });
         };
