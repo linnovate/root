@@ -60,27 +60,22 @@ angular.module('mean.icu.ui.tabs')
             }, 0);
         }
 
+
         function link($scope, $element) {
             var activityList = $element.find('.activities-list');
-            var expandButton =  $element.find('.expandList');
+            var addUpdateField = $element.find('.add-update textarea');
 
-            var listExpandContract = function () {
-                if (activityList.children().length > 1) {
-                    if (activityList.height() <= 80) {
-                        activityList.css("max-height", "100%");
-
-                        expandButton.removeClass('fa-arrow-down');
-                        expandButton.addClass('fa-arrow-up');
-                    }
-                    else {
-                        activityList.css("max-height", "80px");
-
-                        expandButton.removeClass('fa-arrow-up');
-                        expandButton.addClass('fa-arrow-down');
-                    }
+            $scope.expandUpdate = function() {
+                if (addUpdateField.height() < 150) {
+                    addUpdateField.css("height", "130px");
+                    activityList.css("height", "calc(100% - 200px)");
                 }
             };
-            expandButton.on('click', listExpandContract);
+            $scope.minimizeUpdate = function() {
+                addUpdateField.css("height", "50px");
+                activityList.css("height", "calc(100% - 120px)");
+
+            };
         }
 
         return {
