@@ -1,4 +1,5 @@
 $add-update-height: 210px;
+$minimized-add-update-height: 40px;
 $list-height: calc(100% - #{$add-update-height} - 40px);
 $activityListDefaultMaxH: 80px;
 
@@ -21,9 +22,8 @@ $activityListDefaultMaxH: 80px;
 
         .activities-list {
             border-bottom: 1px solid $light-grey1;
-            min-height: 50px;
-            max-height: $activityListDefaultMaxH;
-            transition: max-height 0.4s;
+            height: calc(100% - 120px);
+            transition: height 0.4s;
             overflow: auto;
 
             .activity {
@@ -89,13 +89,17 @@ $activityListDefaultMaxH: 80px;
 
         .add-update {
             margin-top: 20px;
-            height: $add-update-height;
+            max-height: $add-update-height;
             overflow: auto;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
 
             textarea {
                 width: calc(100% - 60px);
-                height: 150px;
+                height: 50px;
                 margin: 10px 0;
+                transition: height 0.4s;
             }
 
             .action-buttons {
