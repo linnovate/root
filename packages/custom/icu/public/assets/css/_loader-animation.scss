@@ -11,6 +11,10 @@
     min-height: 48px;
 }
 
+.loaderContainer {
+    position: relative;
+}
+
 .loader:before {
     content: 'Loading…';
     position: absolute;
