@@ -5,7 +5,21 @@ angular.module('mean.icu.ui.displayby', [])
     function controller($scope, $state, context) {
         $scope.context = context;
 
+        $scope.displayLimit = {
+            projects : 3,
+            discussions : 3,
+            reset : function() {
+                this.projects = 3;
+                this.discussions = 3;
+            }
+        };
+
         $scope.switchTo = function(entityName, id) {
+
+            // If we are switching between entities, then shrink the display limit again
+            if (!$scope.visible[entityName]) {
+                displayLimit.reset();
+            }
             $state.go('main.' + context.main  +  '.byentity', {
                 entity: entityName,
                 entityId: id
@@ -19,7 +33,23 @@ angular.module('mean.icu.ui.displayby', [])
         };
 
         $scope.visible[$scope.context.entityName] = true;
+
     }
+
+        function link($scope, $element, context) {
+            $scope.showMore = function(limit, entityName) {
+                if (($scope.displayLimit[entityName] + 10) >= limit) {
+                    $scope.displayLimit[entityName] = limit;
+                } else {
+                    $scope.displayLimit[entityName]  += 10;
+
+                }
+            };
+
+            $scope.collapse = function(entityName) {
+                $scope.displayLimit[entityName] = 3;
+            };
+        }
 
     return {
         restrict: 'A',
@@ -30,6 +60,7 @@ angular.module('mean.icu.ui.displayby', [])
             icuDisplayBy: '='
         },
         templateUrl: '/icu/components/display-by/display-by.html',
-        controller: controller
+        controller: controller,
+        link: link
     };
 });
