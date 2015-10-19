@@ -10,7 +10,7 @@
     <div class="list projects" ng-if="projects && (icuDisplayBy.indexOf('projects'))>-1">
         <p ng-click="visible.project = !visible.project" class="title">{{ 'project' | i18next }}</p>
         <ul ng-if="visible.project">
-            <li data-ng-repeat="project in projects | limitTo:3"
+            <li data-ng-repeat="project in projects | limitTo: displayLimit['projects']"
                 data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
                 data-ng-click="switchTo('project', project._id)">
                 <a href>
@@ -18,21 +18,24 @@
                 </a>
                 <div class="tag-color" ng-style="color={'background-color': '#' + '{{project.color}}'}"></div>
             </li>
-            <li ng-if="projects.length > 3" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="projects.length >  displayLimit['projects']" ng-click="showMore(projects.length, 'projects')" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="projects.length ==  displayLimit['projects']" ng-click="collapse('projects')" class="more">{{ 'Collapse...' | i18next }}</li>
+
         </ul>
     </div>
 
     <div class="list discussions" ng-if="discussions && (icuDisplayBy.indexOf('discussions'))>-1">
         <p ng-click="visible.discussion = !visible.discussion" class="title">{{ 'discussions' | i18next }}</p>
         <ul ng-if="visible.discussion">
-            <li data-ng-repeat="discussion in discussions | limitTo:3"
+            <li data-ng-repeat="discussion in discussions | limitTo:displayLimit['discussions']"
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
                 <a href>
                     {{discussion.title || discussion.name}}
                 </a>
             </li>
-            <li ng-if="discussions.length > 3" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="discussions.length >  displayLimit['discussions']" ng-click="showMore(discussions.length, 'discussions')" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="discussions.length ==  displayLimit['discussions']" ng-click="collapse('discussions')" class="more">{{ 'Collapse...' | i18next }}</li>
         </ul>
     </div>
 
