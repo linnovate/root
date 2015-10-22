@@ -79,12 +79,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     function navigateToDetails(task) {
         $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
 
-        $state.go($scope.detailsState, {
-            id: task._id,
-            entity: $scope.currentContext.entityName,
-            entityId: $scope.currentContext.entityId,
-            starred: $stateParams.starred
-        }, {reload: true});
+        $state.reload('main.tasks');
     }
 
     $scope.star = function (task) {
