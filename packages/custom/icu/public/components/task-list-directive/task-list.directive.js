@@ -191,7 +191,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         }, 0);
 
         $scope.loadMore = function() {
-            if (!$scope.isLoading) {
+            if (!$scope.isLoading && $scope.loadNext) {
                 $scope.isLoading = true;
                 $scope.loadNext().then(function(tasks) {
                     var offset = $scope.displayOnly ? 0 : 1;
