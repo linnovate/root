@@ -2,7 +2,10 @@
 
 angular.module('mean.icu.ui.tasklist', [])
 .controller('TaskListController', function ($scope, $state, tasks, TasksService, context, $filter, $stateParams) {
-    $scope.tasks = tasks;
+    $scope.tasks = tasks.data || tasks;
+    $scope.loadNext = tasks.next;
+    $scope.loadPrev = tasks.prev;
+
     $scope.autocomplete = context.entityName === 'discussion';
 
     $scope.showStarred = false;

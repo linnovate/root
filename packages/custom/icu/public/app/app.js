@@ -94,7 +94,7 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function (tasks, $stateParams) {
-                        return _(tasks).find(function (t) {
+                        return _(tasks.data || tasks).find(function (t) {
                             return t._id === $stateParams.id;
                         });
                     },
@@ -389,11 +389,13 @@ angular.module('mean.icu').config([
             url: '/all',
             views: getListView('task'),
             params: {
-                starred: false
+                starred: false,
+                start: 0,
+                limit: 15
             },
             resolve: {
-                tasks: function (TasksService) {
-                    return TasksService.getAll();
+                tasks: function (TasksService, $stateParams) {
+                    return TasksService.getAll($stateParams.start, $stateParams.limit);
                 }
             }
         })
