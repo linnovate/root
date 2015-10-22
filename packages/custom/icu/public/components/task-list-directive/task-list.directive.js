@@ -197,10 +197,10 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                     var offset = $scope.displayOnly ? 0 : 1;
 
                     if (tasks.data.length) {
-                        var start = $scope.tasks.slice(0, $scope.tasks.length - offset);
-                        var end = $scope.tasks[$scope.tasks.length - offset];
+                        var index = $scope.tasks.length - offset;
+                        var args = [index].concat(tasks.data);
 
-                        $scope.tasks = [].concat(start, tasks.data, end);
+                        [].splice.apply($scope.tasks, args);
                     }
 
                     $scope.loadNext = tasks.next;
