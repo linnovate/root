@@ -4,7 +4,7 @@ angular.module('mean.icu.data.tasksservice', [])
 .service('TasksService', function (ApiUri, $http, PaginationService) {
     var EntityPrefix = '/tasks';
 
-    function getAll(start, limit) {
+    function getAll(start, limit, sort) {
         if (!start) {
             start = 0;
         }
@@ -12,6 +12,10 @@ angular.module('mean.icu.data.tasksservice', [])
         var qs = '';
         if (limit) {
             qs += '?start=' + start + '&limit=' + limit
+        }
+
+        if (sort) {
+            qs += '&sort=' + sort;
         }
 
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
