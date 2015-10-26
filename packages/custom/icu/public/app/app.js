@@ -93,10 +93,18 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function (tasks, $stateParams) {
-                        return _(tasks.data || tasks).find(function (t) {
+                    entity: function (tasks, $stateParams, TasksService) {
+                        var task = _(tasks.data || tasks).find(function (t) {
                             return t._id === $stateParams.id;
                         });
+
+                        if (!task) {
+                            return TasksService.getById($stateParams.id).then(function(task) {
+                                return task;
+                            });
+                        } else {
+                            return task;
+                        }
                     },
                     tags: function (TasksService) {
                         return TasksService.getTags();

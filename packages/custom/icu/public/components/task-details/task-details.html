@@ -46,7 +46,7 @@
                             <div class="tag"
                                  ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
                                 {{$select.selected.title}}
-                                <div class="delete" ng-click="deleteProject($event, task)">
+                                <div class="delete" ng-click="unsetProject($event, task)">
                                     <i class="fa fa-times"></i>
                                 </div>
                             </div>

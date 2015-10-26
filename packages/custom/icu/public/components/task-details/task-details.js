@@ -88,7 +88,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     };
 
-    $scope.deleteProject = function (event, task) {
+    $scope.unsetProject = function (event, task) {
         event.stopPropagation();
         delete task.project;
         $scope.update(task);
