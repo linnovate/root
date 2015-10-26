@@ -47,7 +47,7 @@ angular.module('mean.icu.ui.tabs')
                         };
 
                         DocumentsService.saveAttachments(data, file).success(function(attachment) {
-                            result.attachments.push(attachment[0]);
+                            result.attachments.push(attachment);
                         });
                     }
                     clearForm();

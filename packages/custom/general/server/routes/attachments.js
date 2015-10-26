@@ -27,6 +27,7 @@ module.exports = function (General, app, auth, database) {
     var objReq = {
       uri: apiUri + '/api/attachments',
       method: 'POST',
+      gzip: true,
       headers: {
           connection: req.headers.connection,
           accept: req.headers.accept,
