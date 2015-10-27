@@ -191,7 +191,23 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         }, 0);
 
         $scope.loadMore = function() {
-            $scope.displayLimit += 20;
+            if (!$scope.isLoading && $scope.loadNext) {
+                $scope.isLoading = true;
+                $scope.loadNext().then(function(tasks) {
+                    var offset = $scope.displayOnly ? 0 : 1;
+
+                    if (tasks.data.length) {
+                        var index = $scope.tasks.length - offset;
+                        var args = [index].concat(tasks.data);
+
+                        [].splice.apply($scope.tasks, args);
+                    }
+
+                    $scope.loadNext = tasks.next;
+                    $scope.loadPrev = tasks.prev;
+                    $scope.isLoading = false;
+                });
+            }
         };
     }
 
@@ -200,6 +216,8 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         templateUrl: '/icu/components/task-list-directive/task-list.directive.template.html',
         scope: {
             tasks: '=',
+            loadNext: '=',
+            loadPrev: '=',
             drawArrow: '=',
             groupTasks: '=',
             order: '=',

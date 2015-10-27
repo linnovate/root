@@ -2,7 +2,10 @@
 
 angular.module('mean.icu.ui.tasklist', [])
 .controller('TaskListController', function ($scope, $state, tasks, TasksService, context, $filter, $stateParams) {
-    $scope.tasks = tasks;
+    $scope.tasks = tasks.data || tasks;
+    $scope.loadNext = tasks.next;
+    $scope.loadPrev = tasks.prev;
+
     $scope.autocomplete = context.entityName === 'discussion';
 
     $scope.showStarred = false;
@@ -43,11 +46,16 @@ angular.module('mean.icu.ui.tasklist', [])
 
     //HACK: impure function that sorts and modifies array itself
     function sort() {
-        var result = $filter('orderBy')($scope.tasks, $scope.taskOrder);
-        Array.prototype.splice.apply($scope.tasks, [0, $scope.tasks.length].concat(result));
+        $scope.isLoading = true;
+        TasksService.getAll(0, $stateParams.limit, $scope.sorting.field).then(function(tasks) {
+            [].splice.apply($scope.tasks, [0, $scope.tasks.length - 1].concat(tasks.data));
+            $scope.loadNext = tasks.next;
+            $scope.loadPrev = tasks.prev;
+
+            $scope.isLoading = false;
+        });
     }
 
-    sort();
     $scope.$watch('sorting.field', function() {
         sort();
     });
@@ -58,7 +66,7 @@ angular.module('mean.icu.ui.tasklist', [])
             value: 'due'
         }, {
             title: 'project',
-            value: 'project.title'
+            value: 'project'
         }, {
             title: 'title',
             value: 'title'
