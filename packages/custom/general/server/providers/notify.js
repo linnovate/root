@@ -1,7 +1,9 @@
 'use strict';
 
 var icapi = require('./icapi.js'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    mean = require('meanio'),
+    owner = mean.loadConfig().letschat.owner;
 
 class Notification {
 
@@ -9,60 +11,70 @@ class Notification {
 
     }
 
-    createRoom(data, callback) {
+    room(type, data, callback) {
         var options = {
-            method: 'POST',
+            method: type,
             headers: data.headers,
             form: {
-                title: data.project.title,
-                watchers: data.project.watchers
+                owner: owner,
+                name: data.project.title,
+                participants: data.project.watchers.length ? _.pluck(data.project.watchers, '_id') : [''],
+                superusers: ['']
             },
-            cmd: '/api/rooms'
+            cmd: '/api/hi/rooms'
         };
+
+        if(type === 'PUT')
+            options.param = data.project.room;
 
         icapi.talkToApi(options, callback);
 
     }
 
-    send(data, callback) {
+
+    sendMessage(data, callback) {
 
         var options = {
             method: 'POST',
             form: {
-                message: bulidMassage(data.context)
+                text: bulidMassage(data.context),
+                owner: owner,
+                room: data.room
             },
+            headers: data.headers,
+            cmd: '/api/hi/messages'
+        };
+        icapi.talkToApi(options, callback);
+
+    }
+
+    sendFile(data, callback) {
+
+        var options = {
+            method: 'POST',
+            form: {
+                file: data.file,
+                owner: owner,
+                room: data.room,
+                post: true
+            },
+            headers: data.headers,
+            cmd: '/api/hi/files'
+        };
+        icapi.talkToApi(options, callback);
+
+    }
+
+    archiveRoom(data, callback) {
+
+        var options = {
+            method: 'DELETE',
             param: data.room,
             headers: data.headers,
-            cmd: '/api/notifications'
-        };
-        icapi.talkToApi(options, callback);
-
-    }
-
-    //delete(data, callback) {
-    //
-    //    var options = {
-    //        method: 'DELETE',
-    //        param: data.param,
-    //        headers: data.headers
-    //    };
-    //
-    //    this.talkToApi(options, callback);
-    //}
-    //
-    patch(data, callback) {
-
-        var options = {
-            method: 'PUT',
+            cmd: '/api/hi/rooms',
             form: {
-                watchers: data.project.watchers,
-
-                message: bulidMassage(data.context),
-                title: data.project.title
-            },
-            param: data.project.room,
-            headers: data.headers,
-            cmd: '/api/rooms'
+                owner: owner
+            }
         };
 
         icapi.talkToApi(options, callback);
@@ -74,9 +86,20 @@ class Notification {
 exports.Notification = Notification;
 
 var bulidMassage = function (context) {
-    var msg = [_.capitalize(context.type), _.capitalize(context.name),'was', context.action];
+    if(context.action == 'added')
+        context.type = 'new ' + context.type;
+    var msg = _.capitalize(context.type);
+    if(context.name)
+        msg += ' "' + context.name + '"';
+    msg += ' was ' + context.action;
     if(context.oldVal)
-        msg = msg.concat(['from', '"' +context.oldVal + '"', 'to', '"' + context.newVal + '"']);
+        msg += ' from "' + context.oldVal + '" to "' + context.newVal + ' "';
+    if(context.issue)
+        msg += ' to ' + context.issue + ' "' + context.issueName + '"';
+    if(context.user)
+        msg += ' by ' + _.capitalize(context.user);
+    if(context.description)
+        msg += ':\n"' + context.description + '"';
 
-    return msg.join(' ');
-}
+    return msg;
+};

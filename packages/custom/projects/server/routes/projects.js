@@ -59,11 +59,11 @@ module.exports = function(Projects, app, auth, database) {
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
                 if(data.title && !data.room){
-                    Notify.createRoom({
+                    Notify.room('POST', {
                         headers: req.headers,
                         project: data
                     }, function(data) {
-                        req.body.room = data.room;
+                        req.body.room = data.id;
                         Project.update({
                             data: req.body,
                             param: req.params.projectId,
@@ -77,7 +77,7 @@ module.exports = function(Projects, app, auth, database) {
                         });
                     });
                 } else if(data.room) {
-                    Notify.patch({
+                    Notify.room('PUT', {
                         headers: req.headers,
                         project: data,
                         context: req.body.context
@@ -96,6 +96,14 @@ module.exports = function(Projects, app, auth, database) {
 				param: req.params.projectId,
 				headers: req.headers
 			}, function(data, statusCode) {
+                if(data.room) {
+                    Notify.archiveRoom({
+                        headers: req.headers,
+                        room: data.room
+                    }, function (result) {
+
+                    });
+                }
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
 				res.send(data);

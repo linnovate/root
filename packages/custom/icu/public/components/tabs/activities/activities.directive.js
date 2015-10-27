@@ -2,7 +2,8 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function () {
-        function controller($scope, UsersService, context, DocumentsService, ActivitiesService, $stateParams, $state, $timeout) {
+        function controller($scope, UsersService, DocumentsService, ActivitiesService, $stateParams, $state, $timeout) {
+
             $scope.isLoading = true;
             $scope.activity = {
                 description: ''
@@ -32,9 +33,18 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.save = function () {
-                $scope.activity.issue = $stateParams.id ? context.main.slice(0, -1) : context.entityName;
+                console.log($scope.attachments,'ffd')
+                $scope.activity.issueName = $scope.entity.title;
+                $scope.activity.issue = $scope.entityName;
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
+                $scope.activity.userName = $scope.activity.user.name; //for notification in hi
+                $scope.activity.room = $scope.entityName === 'project' ? $scope.entity.room : ''; //for notification in hi
+
+                if($scope.entityName === 'task' && $scope.entity.project)
+                    $scope.activity.room =  $scope.entity.project.room;
+                if(!_.isEmpty($scope.attachments))
+                    $scope.activity.title = $scope.attachments[0].name
 
                 ActivitiesService.create($scope.activity).then(function (result) {
                     if (!_.isEmpty($scope.attachments)) {
@@ -42,12 +52,12 @@ angular.module('mean.icu.ui.tabs')
                         var data = {
                             issueId: result._id,
                             issue: 'update',
-                            entity: $stateParams.id ? context.main.slice(0, -1) : context.entityName,
+                            entity: $scope.entityName,
                             entityId: $stateParams.id || $stateParams.entityId
                         };
 
                         DocumentsService.saveAttachments(data, file).success(function(attachment) {
-                            result.attachments.push(attachment[0]);
+                            result.attachments.push(attachment);
                         });
                     }
                     clearForm();
