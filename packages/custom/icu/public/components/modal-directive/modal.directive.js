@@ -3,7 +3,6 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
     .directive('icuOpenModal', function ($modal, $state) {
 
         function link(scope, elem, attrs) {
-
             elem.bind('click', function() {
 
                 if($state.current.name.indexOf('main.tasks.byentity') != -1)
@@ -23,7 +22,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                     controller: controller,
                     resolve: {
                         entity: function () {
-                            return attrs.icuOpenModal;
+                            return scope.entityName;
                         }
                     }
 
@@ -43,16 +42,15 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
         return {
             restrict: 'A',
             scope: {
-                isTasks: "=",
-                deleteFn: '&'
+                isTasks: '=',
+                deleteFn: '&',
+                entityName: '@'
             },
             link: link
         };
     });
 
 function controller($scope, $modalInstance, entity) {
-    console.log(entity,'entity')
-
     $scope.entity = {type: entity};
 
     $scope.ok = function () {

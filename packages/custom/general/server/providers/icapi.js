@@ -27,7 +27,10 @@ exports.talkToApi = function(options, callback) {
             cookie: options.headers.cookie,
             'if-none-match': options.headers['if-none-match']
         };
-
+    }
+    if(options.cmd.slice(0,8) === '/api/hi/') {
+        objReq.headers['X-Csrf-Token'] = config.api.appToken;
+        objReq.headers['app-name'] = config.api.appName;
     }
 
     if (options.form) {
@@ -38,7 +41,7 @@ exports.talkToApi = function(options, callback) {
         objReq.gzip = true;
 
     request(objReq, function(error, response, body) {
-        if (!error && response.statusCode === 200 && response.body.length) {
+        if (!error && response.statusCode < 300 && response.body.length) {
             return callback(JSON.parse(body), response.statusCode);
         }
         callback(error ? error : body, response ? response.statusCode : 500);

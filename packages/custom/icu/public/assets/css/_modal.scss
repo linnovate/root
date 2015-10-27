@@ -1,0 +1,8 @@
+.modal-dialog {
+    .btn {
+        float: right;
+    }
+    .modal-footer .btn + .btn {
+        margin-right: 5px;
+    }
+}
