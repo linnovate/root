@@ -6,20 +6,8 @@ var config = require('meanio').loadConfig(),
     request = require('request');
 
 module.exports = function(General, app, auth, database) {
-
     app.get('/api/:entity/:id/:issue', function(req, res) {
-        var options = {
-            method: 'GET',
-            headers: req.headers,
-            cmd: '/api/' + req.params.entity + '/' + req.params.id + '/' +  req.params.issue,
-            gzip: true
-        };
-
-        icapi.talkToApi(options, function(data, statusCode){
-            if(statusCode && statusCode != 200)
-                res.status(statusCode);
-            res.send(data);
-        });
+      req.pipe(request(apiUri + req.originalUrl)).pipe(res);
     });
 
     app.post('/api/:entity/:id/:issue', function (req, res) {

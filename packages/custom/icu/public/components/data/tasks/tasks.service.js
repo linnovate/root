@@ -5,17 +5,14 @@ angular.module('mean.icu.data.tasksservice', [])
     var EntityPrefix = '/tasks';
 
     function getAll(start, limit, sort) {
-        if (!start) {
-            start = 0;
-        }
+        var qs = querystring.encode({
+            start: start,
+            limit: limit,
+            sort: sort
+        });
 
-        var qs = '';
-        if (limit) {
-            qs += '?start=' + start + '&limit=' + limit
-        }
-
-        if (sort) {
-            qs += '&sort=' + sort;
+        if (qs.length) {
+            qs = '?' + qs;
         }
 
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
@@ -35,22 +32,22 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    function getByUserId(id) {
-        return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function(result) {
-            return result.data;
-        });
-    }
+    function getByEntityId(entity) {
+        return function(id, start, limit, sort) {
+            var qs = querystring.encode({
+                start: start,
+                limit: limit,
+                sort: sort
+            });
 
-    function getByProjectId(id) {
-        return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function (tasksResult) {
-            return tasksResult.data;
-        });
-    }
+            if (qs.length) {
+                qs = '?' + qs;
+            }
 
-    function getByDiscussionId(id) {
-        return $http.get(ApiUri + '/discussions/' + id + EntityPrefix).then(function (tasksResult) {
-            return tasksResult.data;
-        });
+            return $http.get(ApiUri + '/' + entity + '/' + id + EntityPrefix + qs).then(function(result) {
+                return PaginationService.processResponse(result.data);
+            });
+        }
     }
 
     function search(term) {
@@ -95,9 +92,9 @@ angular.module('mean.icu.data.tasksservice', [])
         getAll: getAll,
         getTags: getTags,
         getById: getById,
-        getByUserId: getByUserId,
-        getByProjectId: getByProjectId,
-        getByDiscussionId: getByDiscussionId,
+        getByUserId: getByEntityId('users'),
+        getByProjectId: getByEntityId('projects'),
+        getByDiscussionId: getByEntityId('discussions'),
         search: search,
         create: create,
         update: update,
