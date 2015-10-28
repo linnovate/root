@@ -18,7 +18,10 @@ angular.module('mean.icu').config([
                     getFn = 'getById';
                 }
 
-                return service[getFn]($stateParams.entityId);
+                return service[getFn]($stateParams.entityId,
+                        $stateParams.start,
+                        $stateParams.limit,
+                        $stateParams.sort);
             }];
 
             resolve.entity = ['context', function (context) {
@@ -39,7 +42,10 @@ angular.module('mean.icu').config([
             return {
                 url: '/by-:entity/:entityId',
                 params: {
-                    starred: false
+                    starred: false,
+                    start: 0,
+                    limit: 15,
+                    sort: 'created'
                 },
                 views: {
                     'middlepane@main': {
@@ -399,11 +405,14 @@ angular.module('mean.icu').config([
             params: {
                 starred: false,
                 start: 0,
-                limit: 15
+                limit: 15,
+                sort: 'created'
             },
             resolve: {
                 tasks: function (TasksService, $stateParams) {
-                    return TasksService.getAll($stateParams.start, $stateParams.limit);
+                    return TasksService.getAll($stateParams.start,
+                            $stateParams.limit,
+                            $stateParams.sort);
                 }
             }
         })

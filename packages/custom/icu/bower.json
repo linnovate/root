@@ -11,7 +11,8 @@
     "angular-ui-date": "~0.0.8",
     "ng-file-upload": "~5.0.9",
     "angularjs-color-picker": "~0.6.2",
-    "ngInfiniteScroll": "1.2.0"
+    "ngInfiniteScroll": "1.2.0",
+    "querystring": "~3.46.1"
   },
   "resolutions": {
     "angular": ">=1.2.18"

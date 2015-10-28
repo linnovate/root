@@ -20,7 +20,7 @@ angular.module('mean.icu.ui.tasklist', [])
     };
 
     $scope.sorting = {
-        field: 'created',
+        field: $stateParams.sort || 'created',
         isReverse: false
     };
 
@@ -46,14 +46,7 @@ angular.module('mean.icu.ui.tasklist', [])
 
     //HACK: impure function that sorts and modifies array itself
     function sort() {
-        //$scope.isLoading = true;
-        //TasksService.getAll(0, $stateParams.limit, $scope.sorting.field).then(function(tasks) {
-            //[].splice.apply($scope.tasks, [0, $scope.tasks.length - 1].concat(tasks.data));
-            //$scope.loadNext = tasks.next;
-            //$scope.loadPrev = tasks.prev;
-
-            //$scope.isLoading = false;
-        //});
+        $state.go($state.current.name, { sort: $scope.sorting.field });
     }
 
     $scope.$watch('sorting.field', function() {

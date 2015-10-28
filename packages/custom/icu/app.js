@@ -38,6 +38,7 @@ ICU.register(function (app, auth, database) {
     ICU.aggregateAsset('js', '../lib/moment/moment.js');
     ICU.aggregateAsset('js', '../lib/ng-file-upload/ng-file-upload.min.js');
     ICU.aggregateAsset('js', '../lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js');
+    ICU.aggregateAsset('js', '../lib/querystring/querystring.min.js');
 
     ICU.aggregateAsset('js', '../lib/tinycolor/tinycolor.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/angularjs-color-picker/angularjs-color-picker.js', {weight: 1});
