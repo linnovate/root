@@ -18,6 +18,7 @@ class Notification {
             form: {
                 owner: owner,
                 name: data.project.title,
+                description: data.project.description,
                 participants: data.project.watchers.length ? _.pluck(data.project.watchers, '_id') : [''],
                 superusers: ['']
             },

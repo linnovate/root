@@ -27,7 +27,7 @@ module.exports = function(tasks, app, auth, database) {
                     Notify.sendMessage({
                         headers: req.headers,
                         room: data.project.room,
-                        context: {action:'created',type:'task',name: data.title}
+                        context: {action:'added',type:'task',name: data.title,user: req.user.username}
                     }, function(result) {
                     });
             });
@@ -62,7 +62,7 @@ module.exports = function(tasks, app, auth, database) {
                     Notify.sendMessage({
                         headers: req.headers,
                         room: data.project.room,
-                        context: {action:'update',type:'task',name: data.title,user: req.user.username}
+                        context: {action:'updated',type:'task',name: data.title,user: req.user.username}
                     }, function(result) {
                     });
             });
@@ -77,6 +77,14 @@ module.exports = function(tasks, app, auth, database) {
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
                 res.send(data);
+
+                if(data.project && data.project.room)
+                    Notify.sendMessage({
+                        headers: req.headers,
+                        room: data.project.room,
+                        context: {action:'remove',type:'task',name: data.title,user: req.user.username}
+                    }, function(result) {
+                    });
             })
         })
 
@@ -98,7 +106,6 @@ module.exports = function(tasks, app, auth, database) {
           method: 'GET',
           headers: req.headers
         };
-        console.dir(objReq)
         request(objReq, function(error, response, body) {
             if (!error && response.statusCode === 200 && response.body.length) {
                 return res.json(JSON.parse(response.body));
