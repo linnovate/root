@@ -22,7 +22,24 @@ module.exports = function(Projects, app, auth, database) {
 			}, function(data, statusCode) {
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
-				res.send(data);
+                data.title = 'NewTitle';
+                Notify.room('POST', {
+                    headers: req.headers,
+                    project: data
+                }, function(result) {
+                    req.body.room = result.id;
+                    Project.update({
+                        data: req.body,
+                        param: data._id,
+                        headers: req.headers
+                    }, function(data, statusCode) {
+
+                        if (statusCode && statusCode != 200)
+                            res.status(statusCode);
+
+                        res.send(data);
+                    });
+                });
 			});
 		})
 		.get(function(req, res) {
@@ -58,36 +75,24 @@ module.exports = function(Projects, app, auth, database) {
 
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
-                if(data.title && !data.room){
-                    Notify.room('POST', {
-                        headers: req.headers,
-                        project: data
-                    }, function(data) {
-                        req.body.room = data.id;
-                        Project.update({
-                            data: req.body,
-                            param: req.params.projectId,
-                            headers: req.headers
-                        }, function(data, statusCode) {
+                res.send(data);
+                if(data.room) {
+                    if('title description'.indexOf(req.body.context.name) != -1 || req.body.context.type === 'user')
+                        Notify.room('PUT', {
+                            headers: req.headers,
+                            project: data,
+                            context: req.body.context
+                        }, function(result) {
 
-                            if (statusCode && statusCode != 200)
-                                res.status(statusCode);
-
-                            res.send(data);
                         });
-                    });
-                } else if(data.room) {
-                    Notify.room('PUT', {
+                    req.body.context.user = req.user.username;
+                    Notify.sendMessage({
                         headers: req.headers,
-                        project: data,
+                        room: data.room,
                         context: req.body.context
                     }, function(result) {
-                        res.send(data);
-
                     });
                 }
-                else
-                    res.send(data);
 			});
 		})
 
