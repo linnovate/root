@@ -22,7 +22,7 @@ class Notification {
                 participants: data.project.watchers.length ? _.pluck(data.project.watchers, '_id') : [''],
                 superusers: ['']
             },
-            cmd: '/api/hi/rooms'
+            cmd: '/hi/rooms'
         };
 
         if(type === 'PUT')
@@ -43,7 +43,7 @@ class Notification {
                 room: data.room
             },
             headers: data.headers,
-            cmd: '/api/hi/messages'
+            cmd: '/hi/messages'
         };
         icapi.talkToApi(options, callback);
 
@@ -60,7 +60,7 @@ class Notification {
                 post: true
             },
             headers: data.headers,
-            cmd: '/api/hi/files'
+            cmd: '/hi/files'
         };
         icapi.talkToApi(options, callback);
 
@@ -72,7 +72,7 @@ class Notification {
             method: 'DELETE',
             param: data.room,
             headers: data.headers,
-            cmd: '/api/hi/rooms',
+            cmd: '/hi/rooms',
             form: {
                 owner: owner
             }
