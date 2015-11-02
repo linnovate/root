@@ -28,7 +28,7 @@ exports.talkToApi = function(options, callback) {
             'if-none-match': options.headers['if-none-match']
         };
     }
-    if(options.cmd.slice(0,4) === '/hi/') {
+    if(options.cmd.slice(0,8) === '/api/hi/') {
         objReq.headers['X-Csrf-Token'] = config.api.appToken;
         objReq.headers['app-name'] = config.api.appName;
     }

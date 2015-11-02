@@ -22,7 +22,6 @@ module.exports = function(Projects, app, auth, database) {
 			}, function(data, statusCode) {
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
-                data.title = 'NewTitle';
                 Notify.room('POST', {
                     headers: req.headers,
                     project: data
@@ -77,14 +76,19 @@ module.exports = function(Projects, app, auth, database) {
                     res.status(statusCode);
                 res.send(data);
                 if(data.room) {
-                    if('title description'.indexOf(req.body.context.name) != -1 || req.body.context.type === 'user')
+                    if('title description'.indexOf(req.body.context.name) != -1 || req.body.context.type === 'user') {
+                        //FIX - $watchGroup[title, description]
+                        delete req.body.context.name;
+                        req.body.context.action = 'updated';
+
                         Notify.room('PUT', {
                             headers: req.headers,
                             project: data,
                             context: req.body.context
-                        }, function(result) {
+                        }, function (result) {
 
                         });
+                    }
                     req.body.context.user = req.user.username;
                     Notify.sendMessage({
                         headers: req.headers,

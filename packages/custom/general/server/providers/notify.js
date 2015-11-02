@@ -22,7 +22,7 @@ class Notification {
                 participants: data.project.watchers.length ? _.pluck(data.project.watchers, '_id') : [''],
                 superusers: ['']
             },
-            cmd: '/hi/rooms'
+            cmd: '/api/hi/rooms'
         };
 
         if(type === 'PUT')
@@ -43,7 +43,7 @@ class Notification {
                 room: data.room
             },
             headers: data.headers,
-            cmd: '/hi/messages'
+            cmd: '/api/hi/messages'
         };
         icapi.talkToApi(options, callback);
 
@@ -60,7 +60,7 @@ class Notification {
                 post: true
             },
             headers: data.headers,
-            cmd: '/hi/files'
+            cmd: '/api/hi/files'
         };
         icapi.talkToApi(options, callback);
 
@@ -72,7 +72,7 @@ class Notification {
             method: 'DELETE',
             param: data.room,
             headers: data.headers,
-            cmd: '/hi/rooms',
+            cmd: '/api/hi/rooms',
             form: {
                 owner: owner
             }
@@ -93,8 +93,8 @@ var bulidMassage = function (context) {
     if(context.name)
         msg += ' "' + context.name + '"';
     msg += ' was ' + context.action;
-    if(context.oldVal)
-        msg += ' from "' + context.oldVal + '" to "' + context.newVal + ' "';
+    //if(context.oldVal)
+    //    msg += ' from "' + context.oldVal + '" to "' + context.newVal + ' "';
     if(context.issue)
         msg += ' to ' + context.issue + ' "' + context.issueName + '"';
     if(context.user)
