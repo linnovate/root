@@ -11,28 +11,19 @@ module.exports = function(updates, app, auth, database) {
 
     app.route('/api/updates')
         .post(function(req, res) {
-            console.dir(req.body)
             Update.create({
-                data: req.body,
+                data: req.body.data,
                 headers: req.headers
             }, function(data, statusCode) {
                 if(statusCode && statusCode != 200)
                     res.status(statusCode);
                 res.send(data);
-                if(req.body.room) {
-                    console.dir(data)
+                if(req.body.context.room) {
+                    req.body.context.user = req.user.name;
                     Notify.sendMessage({
                         headers: req.headers,
-                        room: req.body.room,
-                        context: {
-                            action:'added',
-                            type:data.type,
-                            description: data.description,
-                            user: req.body.userName ,
-                            issue: data.issue,
-                            issueName: req.body.issueName,
-                            name: req.body.title
-                        }
+                        room: req.body.context.room,
+                        context: req.body.context
                     }, function(result) {
                     });
                 }

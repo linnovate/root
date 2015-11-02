@@ -62,7 +62,8 @@ angular.module('mean.icu.ui.projectdetails', [])
                 var context = {
                     name: 'color',
                     oldVal: oVal,
-                    newVal: nVal
+                    newVal: nVal,
+                    action: 'changed'
                 };
                 $scope.update($scope.project, context);
             }

@@ -3,7 +3,6 @@
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function () {
         function controller($scope, UsersService, DocumentsService, ActivitiesService, $stateParams, $state, $timeout) {
-
             $scope.isLoading = true;
             $scope.activity = {
                 description: ''
@@ -11,7 +10,7 @@ angular.module('mean.icu.ui.tabs')
 
             $scope.details = {
                 create: 'createdThis',
-                update: 'updatedThis ',
+                update: 'updatedThis',
                 document: 'addDocument',
                 comment: 'addComment'
             };
@@ -33,20 +32,27 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.save = function () {
-                console.log($scope.attachments,'ffd')
-                $scope.activity.issueName = $scope.entity.title;
                 $scope.activity.issue = $scope.entityName;
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
-                $scope.activity.userName = $scope.activity.user.name; //for notification in hi
-                $scope.activity.room = $scope.entityName === 'project' ? $scope.entity.room : ''; //for notification in hi
 
-                if($scope.entityName === 'task' && $scope.entity.project)
-                    $scope.activity.room =  $scope.entity.project.room;
-                if(!_.isEmpty($scope.attachments))
-                    $scope.activity.title = $scope.attachments[0].name
+                var isRoomProject = $scope.entityName === 'project' && $scope.entity.room,
+                    isRoomFortask = $scope.entityName === 'task' && $scope.entity.project && $scope.entity.project.room,
+                    context = {};
 
-                ActivitiesService.create($scope.activity).then(function (result) {
+                if(isRoomProject || isRoomFortask) { //for notification in hi
+                    context = {
+                        room: isRoomProject ? $scope.entity.room : $scope.entity.project.room,
+                        action:'added',
+                        type: $scope.activity.type,
+                        description: $scope.activity.description,
+                        issue: $scope.activity.issue,
+                        issueName: $scope.entity.title,
+                        name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : ''
+                    }
+                }
+
+                ActivitiesService.create({data:$scope.activity, context:context}).then(function (result) {
                     if (!_.isEmpty($scope.attachments)) {
                         var file = $scope.attachments;
                         var data = {
