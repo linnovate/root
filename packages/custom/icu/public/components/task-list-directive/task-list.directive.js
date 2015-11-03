@@ -198,7 +198,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
                     if (tasks.data.length) {
                         var index = $scope.tasks.length - offset;
-                        var args = [index].concat(tasks.data);
+                        var args = [index, 0].concat(tasks.data);
 
                         [].splice.apply($scope.tasks, args);
                     }
