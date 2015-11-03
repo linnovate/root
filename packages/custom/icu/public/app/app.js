@@ -2,6 +2,9 @@
 angular.module('mean.icu').config([
     '$meanStateProvider',
     function ($meanStateProvider) {
+        var LIMIT = 15;
+        var SORT = 'created';
+
         var capitalize = function (str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         };
@@ -44,8 +47,8 @@ angular.module('mean.icu').config([
                 params: {
                     starred: false,
                     start: 0,
-                    limit: 15,
-                    sort: 'created'
+                    limit: LIMIT,
+                    sort: SORT
                 },
                 views: {
                     'middlepane@main': {
@@ -137,7 +140,7 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($stateParams, projects) {
-                        return _(projects).find(function (p) {
+                        return _(projects.data || projects).find(function (p) {
                             return p._id === $stateParams.id;
                         });
                     },
@@ -166,7 +169,7 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($stateParams, discussions) {
-                        return _(discussions).find(function (d) {
+                        return _(discussions.data || discussions).find(function (d) {
                             return d._id === $stateParams.id;
                         });
                     },
@@ -289,10 +292,10 @@ angular.module('mean.icu').config([
                     return UsersService.getMe();
                 },
                 projects: function (ProjectsService) {
-                    return ProjectsService.getAll();
+                    return ProjectsService.getAll(0, LIMIT, SORT);
                 },
                 discussions: function (DiscussionsService) {
-                    return DiscussionsService.getAll();
+                    return DiscussionsService.getAll(0, LIMIT, SORT);
                 },
                 people: function (UsersService) {
                     return UsersService.getAll();
@@ -405,8 +408,8 @@ angular.module('mean.icu').config([
             params: {
                 starred: false,
                 start: 0,
-                limit: 15,
-                sort: 'created'
+                limit: LIMIT,
+                sort: SORT
             },
             resolve: {
                 tasks: function (TasksService, $stateParams) {
@@ -449,9 +452,19 @@ angular.module('mean.icu').config([
         .state('main.projects.all', {
             url: '/all',
             params: {
-                starred: false
+                starred: false,
+                start: 0,
+                limit: LIMIT,
+                sort: SORT
             },
-            views: getListView('project')
+            views: getListView('project'),
+            resolve: {
+                projects: function (ProjectsService, $stateParams) {
+                    return ProjectsService.getAll($stateParams.start,
+                            $stateParams.limit,
+                            $stateParams.sort);
+                }
+            }
         })
         .state('main.projects.all.details', getProjectDetailsState())
         .state('main.projects.all.details.activities', getDetailsTabState('project', 'activities'))

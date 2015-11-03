@@ -116,7 +116,23 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             }, 0);
 
             $scope.loadMore = function() {
-                $scope.displayLimit += 20;
+                if (!$scope.isLoading && $scope.loadNext) {
+                    $scope.isLoading = true;
+                    $scope.loadNext().then(function(projects) {
+                        var offset = $scope.displayOnly ? 0 : 1;
+
+                        if (projects.data.length) {
+                            var index = $scope.projects.length - offset;
+                            var args = [index].concat(projects.data);
+
+                            [].splice.apply($scope.projects, args);
+                        }
+
+                        $scope.loadNext = projects.next;
+                        $scope.loadPrev = projects.prev;
+                        $scope.isLoading = false;
+                    });
+                }
             };
         }
 
@@ -124,6 +140,8 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             restrict: 'A',
             templateUrl: '/icu/components/project-list-directive/project-list.directive.template.html',
             scope: {
+                loadNext: '=',
+                loadPrev: '=',
                 projects: '=',
                 drawArrow: '=',
                 order: '=',

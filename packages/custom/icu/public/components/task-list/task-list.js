@@ -24,33 +24,10 @@ angular.module('mean.icu.ui.tasklist', [])
         isReverse: false
     };
 
-    $scope.taskOrder = function(task) {
-        if (task._id && $scope.sorting) {
-            var parts = $scope.sorting.field.split('.');
-            var result = task;
-            for (var i = 0; i < parts.length; i+=1) {
-                if (result) {
-                    result = result[parts[i]];
-                } else {
-                    result = undefined;
-                }
-            }
-
-            //HACK: instead of using array of 2 values, this code concatenates
-            //2 values
-            //Reason: inconsistency in sorting results between sorting by one param
-            //and array of params
-            return result + task.title;
+    $scope.$watch('sorting.field', function(newValue, oldValue) {
+        if (newValue && newValue !== oldValue) {
+            $state.go($state.current.name, { sort: $scope.sorting.field });
         }
-    };
-
-    //HACK: impure function that sorts and modifies array itself
-    function sort() {
-        $state.go($state.current.name, { sort: $scope.sorting.field });
-    }
-
-    $scope.$watch('sorting.field', function() {
-        sort();
     });
 
     $scope.sortingList = [
