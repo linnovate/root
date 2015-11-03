@@ -8,7 +8,10 @@ angular.module('mean.icu.ui.discussionlist', [])
                                                       context,
                                                       $filter,
                                                       $stateParams) {
-        $scope.discussions = discussions;
+        $scope.discussions = discussions.data || discussions;
+        $scope.loadNext = discussions.next;
+        $scope.loadPrev = discussions.prev;
+
         $scope.showStarred = false;
 
         $scope.isCurrentState = function() {
@@ -21,34 +24,14 @@ angular.module('mean.icu.ui.discussionlist', [])
         };
 
         $scope.sorting  = {
-            field: 'created',
+            field: $stateParams.sort || 'created',
             isReverse: false
         };
 
-        $scope.discussionOrder = function(task) {
-            if (task._id && $scope.sorting) {
-                var parts = $scope.sorting.field.split('.');
-                var result = task;
-                for (var i = 0; i < parts.length; i+=1) {
-                    if (result) {
-                        result = result[parts[i]];
-                    } else {
-                        result = undefined;
-                    }
-                }
-
-                return result;
+        $scope.$watch('sorting.field', function(newValue, oldValue) {
+            if (newValue && newValue !== oldValue) {
+                $state.go($state.current.name, { sort: $scope.sorting.field });
             }
-        };
-
-        function sort() {
-            var result = $filter('orderBy')($scope.discussions, $scope.discussionOrder);
-            Array.prototype.splice.apply($scope.discussions, [0, $scope.discussions.length].concat(result));
-        }
-
-        sort();
-        $scope.$watch('sorting.field', function() {
-            sort();
         });
 
         $scope.sortingList = [

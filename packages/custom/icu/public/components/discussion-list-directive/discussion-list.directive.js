@@ -124,7 +124,23 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
         }, 0);
 
         $scope.loadMore = function() {
-            $scope.displayLimit += 20;
+            if (!$scope.isLoading && $scope.loadNext) {
+                $scope.isLoading = true;
+                $scope.loadNext().then(function(discussions) {
+                    var offset = $scope.displayOnly ? 0 : 1;
+
+                    if (discussions.data.length) {
+                        var index = $scope.discussions.length - offset;
+                        var args = [index].concat(discussions.data);
+
+                        [].splice.apply($scope.discussions, args);
+                    }
+
+                    $scope.loadNext = discussions.next;
+                    $scope.loadPrev = discussions.prev;
+                    $scope.isLoading = false;
+                });
+            }
         };
     }
 
@@ -132,6 +148,8 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
         restrict: 'A',
         templateUrl: '/icu/components/discussion-list-directive/discussion-list.directive.template.html',
         scope: {
+            loadNext: '=',
+            loadPrev: '=',
             discussions: '=',
             drawArrow: '=',
             groupDiscussions: '=',

@@ -37,6 +37,8 @@
     <div icu-discussion-list
          class="entity-list-container"
          ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+         load-next="loadNext"
+         load-prev="loadPrev"
          discussions="discussions"
          draw-arrow="true"
          order="sorting"></div>

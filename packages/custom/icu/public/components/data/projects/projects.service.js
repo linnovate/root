@@ -1,12 +1,22 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http) {
+.service('ProjectsService', function(ApiUri, $http, PaginationService) {
     var EntityPrefix = '/projects';
 
-    function getAll() {
-        return $http.get(ApiUri + EntityPrefix).then(function(result) {
-            return result.data;
+    function getAll(start, limit, sort) {
+        var qs = querystring.encode({
+            start: start,
+            limit: limit,
+            sort: sort
+        });
+
+        if (qs.length) {
+            qs = '?' + qs;
+        }
+
+        return $http.get(ApiUri + EntityPrefix + qs).then(function(result) {
+            return PaginationService.processResponse(result.data);
         });
     }
 
@@ -16,17 +26,22 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
-    function getByDiscussionId(id) {
-        return getAll();
-        //return $http.get(ApiUri + '/discussion/' + id + EntityPrefix).then(function (discussionsResult) {
-        //    return discussionsResult.data;
-        //});
-    }
+    function getByEntityId(entity) {
+        return function(id, start, limit, sort) {
+            var qs = querystring.encode({
+                start: start,
+                limit: limit,
+                sort: sort
+            });
 
-    function getByUserId(id) {
-        return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function(result) {
-            return result.data;
-        });
+            if (qs.length) {
+                qs = '?' + qs;
+            }
+
+            return $http.get(ApiUri + '/' + entity + '/' + id + EntityPrefix + qs).then(function(result) {
+                return PaginationService.processResponse(result.data);
+            });
+        }
     }
 
     function create(project) {
@@ -73,8 +88,8 @@ angular.module('mean.icu.data.projectsservice', [])
     return {
         getAll: getAll,
         getById: getById,
-        getByDiscussionId: getByDiscussionId,
-        getByUserId: getByUserId,
+        getByDiscussionId: getByEntityId('discussions'),
+        getByUserId: getByEntityId('users'),
         create: create,
         update: update,
         remove: remove,
