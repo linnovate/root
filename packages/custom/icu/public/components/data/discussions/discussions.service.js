@@ -4,7 +4,7 @@ angular.module('mean.icu.data.discussionsservice', [])
 .service('DiscussionsService', function (ApiUri, $http, PaginationService) {
     var EntityPrefix = '/discussions';
 
-    function getAll() {
+    function getAll(start, limit, sort) {
         var qs = querystring.encode({
             start: start,
             limit: limit,
