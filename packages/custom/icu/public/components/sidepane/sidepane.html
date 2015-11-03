@@ -7,7 +7,7 @@
             <div class="menu-item"
                 data-ui-sref="{{'main.' + item.state}}"
                 data-ng-class="{ 'active': isCurrentState(item) }"
-                 ng-click="show = !show">
+                ng-click="toggleVisibility(item)">
                 <div class="icon">
                     <img ng-src="{{item.icon}}"/>
                 </div>
@@ -16,11 +16,11 @@
                 </div>
                 <div class="arrow">
                     <i class="fa"
-                        data-ng-class="{ 'fa-caret-right': !show || !isCurrentState(item), 'fa-caret-down': show || isCurrentState(item)}"></i>
+                        data-ng-class="{ 'fa-caret-right': !isCurrentState(item) || !item.open, 'fa-caret-down': isCurrentState(item) || item.open}"></i>
                 </div>
             </div>
             <div class="display-by"
-                 ng-class= "{'collapsed' : !show }""
+                 ng-class= "{'collapsed' : isCurrentState(item) && !item.open }"
                  ng-if="isCurrentState(item)"
                  icu-display-by="item.display"
                  people="people"
