@@ -131,7 +131,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
 
                     if (discussions.data.length) {
                         var index = $scope.discussions.length - offset;
-                        var args = [index].concat(discussions.data);
+                        var args = [index, 0].concat(discussions.data);
 
                         [].splice.apply($scope.discussions, args);
                     }
