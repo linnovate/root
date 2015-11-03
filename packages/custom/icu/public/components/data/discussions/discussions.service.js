@@ -1,12 +1,22 @@
 'use strict';
 
 angular.module('mean.icu.data.discussionsservice', [])
-.service('DiscussionsService', function (ApiUri, $http) {
+.service('DiscussionsService', function (ApiUri, $http, PaginationService) {
     var EntityPrefix = '/discussions';
 
     function getAll() {
-        return $http.get(ApiUri + EntityPrefix).then(function (result) {
-            return result.data;
+        var qs = querystring.encode({
+            start: start,
+            limit: limit,
+            sort: sort
+        });
+
+        if (qs.length) {
+            qs = '?' + qs;
+        }
+
+        return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
+            return PaginationService.processResponse(result.data);
         });
     }
 
@@ -16,11 +26,22 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
-    function getByProjectId(id) {
-        //return getAll();
-        return $http.get(ApiUri + '/project/' + id + EntityPrefix).then(function (discussionsResult) {
-            return discussionsResult.data;
-        });
+    function getByEntityId(entity) {
+        return function(id, start, limit, sort) {
+            var qs = querystring.encode({
+                start: start,
+                limit: limit,
+                sort: sort
+            });
+
+            if (qs.length) {
+                qs = '?' + qs;
+            }
+
+            return $http.get(ApiUri + '/' + entity + '/' + id + EntityPrefix + qs).then(function(result) {
+                return PaginationService.processResponse(result.data);
+            });
+        }
     }
 
     function create(discussion) {
@@ -70,7 +91,7 @@ angular.module('mean.icu.data.discussionsservice', [])
     return {
         getAll: getAll,
         getById: getById,
-        getByProjectId: getByProjectId,
+        getByProjectId: getByEntityId('project'),
         create: create,
         update: update,
         remove: remove,

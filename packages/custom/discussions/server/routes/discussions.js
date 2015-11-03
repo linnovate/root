@@ -23,14 +23,7 @@ module.exports = function(discussions, app, auth, database) {
         });
       })
       .get(function(req, res) {
-          Discussion.all({
-              data: req.body,
-              headers: req.headers
-          }, function(data, statusCode) {
-              if(statusCode && statusCode != 200)
-                  res.status(statusCode);
-              res.send(data);
-          });
+        req.pipe(request(apiUri + req.originalUrl)).pipe(res);
       });
 
 

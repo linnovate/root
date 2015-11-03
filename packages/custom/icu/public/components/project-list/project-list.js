@@ -8,7 +8,10 @@ angular.module('mean.icu.ui.projectlist', [])
                                                    context,
                                                    $filter,
                                                    $stateParams) {
-        $scope.projects = projects;
+        $scope.projects = projects.data || projects;
+        $scope.loadNext = projects.next;
+        $scope.loadPrev = projects.prev;
+
         $scope.showStarred = false;
 
         $scope.isCurrentState = function (id) {
@@ -21,34 +24,14 @@ angular.module('mean.icu.ui.projectlist', [])
         };
 
         $scope.sorting = {
-            field: 'created',
+            field: $stateParams.sort || 'created',
             isReverse: false
         };
 
-        $scope.projectOrder = function(project) {
-            if (project._id && $scope.sorting) {
-                var parts = $scope.sorting.field.split('.');
-                var result = project;
-                for (var i = 0; i < parts.length; i+=1) {
-                    if (result) {
-                        result = result[parts[i]];
-                    } else {
-                        result = undefined;
-                    }
-                }
-
-                return result;
+        $scope.$watch('sorting.field', function(newValue, oldValue) {
+            if (newValue && newValue !== oldValue) {
+                $state.go($state.current.name, { sort: $scope.sorting.field });
             }
-        };
-
-        function sort() {
-            var result = $filter('orderBy')($scope.projects, $scope.projectOrder);
-            Array.prototype.splice.apply($scope.projects, [0, $scope.projects.length].concat(result));
-        }
-
-        sort();
-        $scope.$watch('sorting.field', function() {
-            sort();
         });
 
         $scope.sortingList = [

@@ -12,7 +12,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       $stateParams) {
         $scope.project = entity || context.entity;
         $scope.tasks = tasks;
-        $scope.projects = projects;
+        $scope.projects = projects.data || projects;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
 
         ProjectsService.getStarred().then(function (starred) {

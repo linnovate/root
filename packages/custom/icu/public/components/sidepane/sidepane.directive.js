@@ -5,6 +5,10 @@ directive('icuSidepane', function() {
     function controller($scope, $state, context) {
         $scope.context = context;
 
+        $scope.projects = $scope.projects.data || $scope.projects;
+        $scope.discussions = $scope.discussions.data || $scope.discussions;
+        $scope.people = $scope.people.data || $scope.discussions;
+
         $scope.items = [{
             name: 'tasks',
             icon: '/icu/assets/img/task.png',
