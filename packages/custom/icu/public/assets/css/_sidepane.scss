@@ -23,7 +23,8 @@
 
     nav {
         color: white;
-
+        overflow-y: auto;
+        height: 100%;
         ul {
             list-style: none;
             padding-left: 0;
@@ -79,7 +80,6 @@
                 }
 
                 .display-by {
-                    height: calc(100vh - 5 * #{$header-height});
                     overflow-x: hidden;
                     overflow-y: auto;
                 }
