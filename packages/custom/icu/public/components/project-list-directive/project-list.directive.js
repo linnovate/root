@@ -123,7 +123,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
                         if (projects.data.length) {
                             var index = $scope.projects.length - offset;
-                            var args = [index].concat(projects.data);
+                            var args = [index, 0].concat(projects.data);
 
                             [].splice.apply($scope.projects, args);
                         }
