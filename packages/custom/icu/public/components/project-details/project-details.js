@@ -28,13 +28,7 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         }
 
-        $scope.statuses = [
-            {translationKey: 'new', value: 'New'},
-            {translationKey: 'inProgress', value: 'In progress'},
-            {translationKey: 'canceled', value: 'Cancelled'},
-            {translationKey: 'completed', value: 'Completed'},
-            {translationKey: 'archived', value: 'Archived'}
-        ];
+        $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
 
         $scope.$watchGroup(['project.description', 'project.title'], function (nVal, oVal, scope) {
             if (nVal !== oVal && oVal) {
