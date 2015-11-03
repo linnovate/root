@@ -39,13 +39,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
             DiscussionsService.update(discussion);
         };
 
-        $scope.statuses = [
-            {translationKey: 'new', value: 'New'},
-            {translationKey: 'scheduled', value: 'Scheduled'},
-            {translationKey: 'canceled', value: 'Cancelled'},
-            {translationKey: 'done', value: 'Done'},
-            {translationKey: 'archived', value: 'Archived'}
-        ];
+        $scope.statuses = ['new', 'scheduled', 'done', 'canceled', 'archived'];
 
         var scheduleAction = {
             label: 'scheduleDiscussion',
