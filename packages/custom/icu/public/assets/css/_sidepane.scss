@@ -51,7 +51,7 @@
 
                     .item-name {
                         position: relative;
-                        width: ($sidepane-width - $header-height) * 0.8 - 5px;
+                        width: calc(100% - (#{$header-height} + #{$sidepane-width - $header-height}* 0.2 + 5px));
                         height: $header-height;
                         display: inline-block;
 
