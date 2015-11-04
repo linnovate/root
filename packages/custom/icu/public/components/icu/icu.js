@@ -13,9 +13,9 @@ angular.module('mean.icu').controller('IcuController',
         isHidden: false
     };
 
-    $scope.projects = projects;
-    $scope.discussions = discussions;
-    $scope.people = people;
+    $scope.projects = projects.data || projects;
+    $scope.discussions = discussions.data || discussions;
+    $scope.people = people.data || people;
 
     var entityMap = {
         'project': 'projects',
