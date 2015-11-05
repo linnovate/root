@@ -11,7 +11,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          $stateParams) {
         $scope.isLoading = true;
         $scope.discussion = entity || context.entity;
-        $scope.tasks = tasks;
+        $scope.tasks = tasks.data || tasks;
+        console.log(tasks,'desci')
         $scope.shouldAutofocus = !$stateParams.nameFocused;
 
         DiscussionsService.getStarred().then(function(starred) {
