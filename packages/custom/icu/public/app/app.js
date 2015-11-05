@@ -21,6 +21,10 @@ angular.module('mean.icu').config([
                     getFn = 'getById';
                 }
 
+                if ($stateParams.starred) {
+                    getFn = 'getStarred';
+                }
+
                 return service[getFn]($stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
@@ -412,10 +416,14 @@ angular.module('mean.icu').config([
                 sort: SORT
             },
             resolve: {
-                tasks: function (TasksService, $stateParams) {
-                    return TasksService.getAll($stateParams.start,
-                            $stateParams.limit,
-                            $stateParams.sort);
+                tasks: function(TasksService, $stateParams) {
+                    if ($stateParams.starred) {
+                        return TasksService.getStarred();
+                    } else {
+                        return TasksService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                    }
                 }
             }
         })
@@ -459,10 +467,14 @@ angular.module('mean.icu').config([
             },
             views: getListView('project'),
             resolve: {
-                projects: function (ProjectsService, $stateParams) {
-                    return ProjectsService.getAll($stateParams.start,
-                            $stateParams.limit,
-                            $stateParams.sort);
+                projects: function(ProjectsService, $stateParams) {
+                    if ($stateParams.starred) {
+                        return ProjectsService.getStarred();
+                    } else {
+                        return ProjectsService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                    }
                 }
             }
         })
@@ -501,9 +513,23 @@ angular.module('mean.icu').config([
         .state('main.discussions.all', {
             url: '/all',
             params: {
-                starred: false
+                starred: false,
+                start: 0,
+                limit: LIMIT,
+                sort: SORT
             },
-            views: getListView('discussion')
+            views: getListView('discussion'),
+            resolve: {
+                discussions: function(DiscussionsService, $stateParams) {
+                    if ($stateParams.starred) {
+                        return DiscussionsService.getStarred();
+                    } else {
+                        return DiscussionsService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                    }
+                }
+            }
         })
         .state('main.discussions.all.details', getDiscussionDetailsState())
         .state('main.discussions.all.details.activities', getDetailsTabState('discussion', 'activities'))

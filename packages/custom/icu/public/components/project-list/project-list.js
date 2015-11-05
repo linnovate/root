@@ -12,7 +12,7 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.loadNext = projects.next;
         $scope.loadPrev = projects.prev;
 
-        $scope.showStarred = false;
+        $scope.starred = $stateParams.starred;
 
         $scope.isCurrentState = function (id) {
             return $state.current.name.indexOf('main.projects.byentity') === 0 &&
@@ -47,7 +47,7 @@ angular.module('mean.icu.ui.projectlist', [])
             }
         ];
 
-        function navigateToDetails(project, isStarred) {
+        function navigateToDetails(project) {
             $scope.detailsState = context.entityName === 'all' ?
                 'main.projects.all.details' : 'main.projects.byentity.details';
 
@@ -55,41 +55,12 @@ angular.module('mean.icu.ui.projectlist', [])
                 id: project._id,
                 entity: $scope.currentContext.entityName,
                 entityId: $scope.currentContext.entityId,
-                starred: isStarred
             });
         }
 
-        $scope.starredOnly = function () {
-            $scope.showStarred = !$scope.showStarred;
-            if ($scope.showStarred) {
-                ProjectsService.getStarred().then(function (starred) {
-                    $scope.projects = _(projects).reduce(function (list, item) {
-                        var contains = _(starred).any(function (s) {
-                            return s._id === item._id;
-                        });
-
-                        if (contains) {
-                            list.push(item);
-                        }
-
-                        return list;
-                    }, []);
-
-                    if ($scope.projects[0]) {
-                        navigateToDetails($scope.projects[0], true);
-                    }
-                });
-            } else {
-                $scope.projects = projects;
-                if ($scope.projects[0]) {
-                    navigateToDetails($scope.projects[0], false);
-                }
-            }
+        $scope.toggleStarred = function () {
+            $state.go($state.current.name, { starred: !$stateParams.starred });
         };
-
-        if ($stateParams.starred) {
-            $scope.starredOnly();
-        }
 
         if ($scope.projects.length) {
             if ($state.current.name === 'main.projects.all' ||
