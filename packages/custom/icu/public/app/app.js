@@ -139,10 +139,16 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function ($stateParams, projects) {
-                        return _(projects.data || projects).find(function (p) {
-                            return p._id === $stateParams.id;
+                    entity: function ($stateParams, projects, ProjectsService) {
+                        var project = _(projects.data || projects).find(function (t) {
+                            return t._id === $stateParams.id;
                         });
+
+                        if (!project) {
+                            return ProjectsService.getById($stateParams.id).then(function(project) { return project; });
+                        } else {
+                            return project;
+                        }
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByProjectId($stateParams.id);
@@ -168,10 +174,16 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function ($stateParams, discussions) {
-                        return _(discussions.data || discussions).find(function (d) {
-                            return d._id === $stateParams.id;
+                    entity: function ($stateParams, discussions, DiscussionsService) {
+                        var discussion = _(discussions.data || discussions).find(function (t) {
+                            return t._id === $stateParams.id;
                         });
+
+                        if (!discussion) {
+                            return DiscussionsService.getById($stateParams.id).then(function(discussion) { return discussion; });
+                        } else {
+                            return discussion;
+                        }
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByDiscussionId($stateParams.id);
