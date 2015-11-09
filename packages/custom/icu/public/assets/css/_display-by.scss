@@ -45,8 +45,6 @@
             padding-bottom: 20px;
 
             li {
-                width: ($sidepane-width - 30px);
-
                 a {
                     text-decoration: none;
                     cursor: pointer;
@@ -81,6 +79,7 @@
                     .tag-color {
                         @include tag(5px);
                         float: right;
+                        margin-right: 10px;
                     }
                 }
             }
