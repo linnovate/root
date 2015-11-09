@@ -10,6 +10,10 @@ module.exports = function(General, app, auth, database) {
       req.pipe(request(apiUri + req.originalUrl)).pipe(res);
     });
 
+    app.get('/api/:entity/:id/:issue/starred', function (req, res) {
+      req.pipe(request(apiUri + req.originalUrl)).pipe(res);
+    });
+
     app.post('/api/:entity/:id/:issue', function (req, res) {
         var options = {
             method: 'POST',
@@ -23,6 +27,6 @@ module.exports = function(General, app, auth, database) {
                 res.status(statusCode);
             res.send(data);
         });
-  });
+    });
 
 };
