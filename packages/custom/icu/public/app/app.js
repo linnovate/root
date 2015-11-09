@@ -21,14 +21,11 @@ angular.module('mean.icu').config([
                     getFn = 'getById';
                 }
 
-                if ($stateParams.starred) {
-                    getFn = 'getStarred';
-                }
-
                 return service[getFn]($stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
-                        $stateParams.sort);
+                        $stateParams.sort,
+                        $stateParams.starred);
             }];
 
             resolve.entity = ['context', function (context) {
