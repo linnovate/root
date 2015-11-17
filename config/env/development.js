@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
- db: (process.env.MONGODB_URI || 'mongodb://localhost/icu'),
+ db: (process.env.MONGODB_URI || 'mongodb://localhost/icu-dev'),
   debug: true,
   logging: {
     format: 'tiny'
@@ -49,6 +49,14 @@ module.exports = {
   }, 
   secret: 'SOME_TOKEN_SECRET',
     api: {
-      uri: 'http://api.icu.dev6.linnovate.net'
-    }
+      uri: 'http://localhost:3003'
+    },
+  elasticsearch: {
+    host: 'http://localhost',
+    port: 9200,
+    log: 'trace'
+  },
+  letschat: {
+    owner: '562334ccea168c4f323a1be8'
+  }
 };
