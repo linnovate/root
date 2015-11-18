@@ -86,7 +86,7 @@ exports.schedule = function (req, res, next) {
     return next();
   }
 
-  var allowedStatuses = ['New', 'Scheduled', 'Cancelled'];
+  var allowedStatuses = ['new', 'scheduled', 'cancelled'];
   if (allowedStatuses.indexOf(discussion.status) === -1) {
     req.locals.error = { message: 'Cannot be scheduled for this status' };
     return next();
@@ -103,7 +103,7 @@ exports.schedule = function (req, res, next) {
       additionalTasks: groupedTasks['false'] || []
     }).then(function() {
       req.locals.data.body = discussion;
-      req.locals.data.body.status = 'Scheduled';
+      req.locals.data.body.status = 'scheduled';
       next();
     });
   });
@@ -116,7 +116,7 @@ exports.summary = function (req, res, next) {
 
   var discussion = req.locals.result;
 
-  var allowedStatuses = ['Scheduled'];
+  var allowedStatuses = ['scheduled'];
   if (allowedStatuses.indexOf(discussion.status) === -1) {
     utils.checkAndHandleError(true, 'Cannot send summary for this status', next);
     req.locals.error = { message: 'Cannot send summary for this status' };
@@ -143,7 +143,7 @@ exports.summary = function (req, res, next) {
       }).then(function() {
         var taskIds = _.reduce(tasks, function (memo, task) {
           var containsAgenda = !_.any(task.discussions, function(d) {
-            return d.id !== discussion.id && (d.status === 'New' || d.status === 'Scheduled');
+            return d.id !== discussion.id && (d.status === 'new' || d.status === 'scheduled');
           });
 
           var shouldRemoveTag = task.tags.indexOf('Agenda') !== -1 && containsAgenda;
@@ -160,7 +160,7 @@ exports.summary = function (req, res, next) {
           { multi: true }).exec();
 
         req.locals.data.body = discussion;
-        req.locals.data.body.status = 'Done';
+        req.locals.data.body.status = 'done';
         next();
       });
     });
