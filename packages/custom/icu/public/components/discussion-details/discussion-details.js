@@ -57,10 +57,10 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.statusesActionsMap = {
-            New: scheduleAction,
-            Scheduled: summaryAction,
-            Done: archiveAction,
-            Cancelled: scheduleAction
+            new: scheduleAction,
+            scheduled: summaryAction,
+            done: archiveAction,
+            cancelled: scheduleAction
         };
 
         $scope.$watchGroup(['discussion.description', 'discussion.title'], function (nVal, oVal) {

@@ -42,7 +42,7 @@
             <div class="tags">
                 <div class="tag-wrap">
                     <ui-select ng-model="task.project" on-select="update(task)">
-                        <ui-select-match placeholder="{{$select.selected.title || 'Select a project'}}">
+                        <ui-select-match placeholder="{{$select.selected.title || 'selectProject' | i18next}}">
                             <div class="tag"
                                  ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
                                 {{$select.selected.title}}
@@ -104,7 +104,7 @@
                     </li>
                     <li class="new-tag-input" ng-show="tagInputVisible">
                         <ui-select ng-model="newTag" tagging tagging-label="false" autofocus on-select="addTag(newTag)">
-                            <ui-select-match placeholder="Select tags">{{$item}}</ui-select-match>
+                            <ui-select-match placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
                             <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
                                 {{tag}}
                             </ui-select-choices>
