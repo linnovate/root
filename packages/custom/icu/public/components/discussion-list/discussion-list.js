@@ -12,7 +12,7 @@ angular.module('mean.icu.ui.discussionlist', [])
         $scope.loadNext = discussions.next;
         $scope.loadPrev = discussions.prev;
 
-        $scope.showStarred = false;
+        $scope.starred = $stateParams.starred;
 
         $scope.isCurrentState = function() {
             return $state.current.name.indexOf('main.discussions.byentity') === 0 &&
@@ -50,48 +50,20 @@ angular.module('mean.icu.ui.discussionlist', [])
             }
         ];
 
-        function navigateToDetails(discussion, isStarred) {
+        function navigateToDetails(discussion) {
             $scope.detailsState = context.entityName === 'all' ?
                 'main.discussions.all.details' : 'main.discussions.byentity.details';
 
             $state.go($scope.detailsState, {
                 id: discussion._id,
                 entity: $scope.currentContext.entityName,
-                entityId: $scope.currentContext.entityId,
-                starred: isStarred
+                entityId: $scope.currentContext.entityId
             });
         }
 
-        $scope.starredOnly = function () {
-            $scope.showStarred = !$scope.showStarred;
-            if ($scope.showStarred) {
-                DiscussionsService.getStarred().then(function (starred) {
-                    $scope.discussions = _(discussions).reduce(function (list, item) {
-                        var contains = _(starred).any(function (s) {
-                            return s._id === item._id;
-                        });
-
-                        if (contains) {
-                            list.push(item);
-                        }
-
-                        return list;
-                    }, []);
-                    if ($scope.discussions[0]) {
-                        navigateToDetails($scope.discussions[0], true);
-                    }
-                });
-            } else {
-                $scope.discussions = discussions;
-                if ($scope.discussions[0]) {
-                    navigateToDetails($scope.discussions[0], false);
-                }
-            }
+        $scope.toggleStarred = function () {
+            $state.go($state.current.name, { starred: !$stateParams.starred });
         };
-
-        if ($stateParams.starred) {
-            $scope.starredOnly();
-        }
 
         if ($scope.discussions.length) {
             if ($state.current.name === 'main.discussions.all' ||

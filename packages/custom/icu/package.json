@@ -13,6 +13,8 @@
   "scripts": {
     "postinstall": "bower install"
   },
-  "dependencies": {},
+  "dependencies": {
+    "nodemailer-smtp-transport": "^1.0.4"
+  },
   "license": "MIT"
 }

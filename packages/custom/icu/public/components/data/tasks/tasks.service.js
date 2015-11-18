@@ -33,7 +33,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getByEntityId(entity) {
-        return function(id, start, limit, sort) {
+        return function(id, start, limit, sort, starred) {
             var qs = querystring.encode({
                 start: start,
                 limit: limit,
@@ -44,7 +44,12 @@ angular.module('mean.icu.data.tasksservice', [])
                 qs = '?' + qs;
             }
 
-            return $http.get(ApiUri + '/' + entity + '/' + id + EntityPrefix + qs).then(function(result) {
+            var url = ApiUri + '/' + entity + '/' + id + EntityPrefix;
+            if (starred) {
+                url += '/starred';
+            }
+
+            return $http.get(url + qs).then(function(result) {
                 return PaginationService.processResponse(result.data);
             });
         }
