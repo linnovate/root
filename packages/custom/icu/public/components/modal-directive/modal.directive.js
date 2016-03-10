@@ -1,6 +1,6 @@
 'use strict';
 angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
-    .directive('icuOpenModal', function ($modal, $state) {
+    .directive('icuOpenModal', function ($state, $uibModal) {
 
         function link(scope, elem, attrs) {
             elem.bind('click', function() {
@@ -10,13 +10,13 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
 
                 if(scope.isTasks) {
                     buildModal();
-                } else
-                    scope.deleteFn();
-
+                } else {
+                  scope.deleteFn();
+                }
             });
 
             function buildModal() {
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: '/icu/components/modal-directive/modal.html',
                     controller: controller,
@@ -34,10 +34,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                     console.log('Modal dismissed');
                 });
             }
-        }
-
-
-        ;
+        };
 
         return {
             restrict: 'A',
