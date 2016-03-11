@@ -27,6 +27,10 @@
                  projects="projects"
                  discussions="discussions">
             </div>
+            <div class="help-block"
+                ng-if="isCurrentState(item) && ((item.name === 'projects' && !projects.length) || (item.name === 'discussions' && !discussions.length))">
+                No {{ item.name }} - please create your first
+            </div>
         </li>
     </ul>
 </nav>

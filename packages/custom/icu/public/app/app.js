@@ -305,10 +305,18 @@ angular.module('mean.icu').config([
                     return UsersService.getMe();
                 },
                 projects: function (ProjectsService) {
-                    return ProjectsService.getAll(0, LIMIT, SORT);
+                    return ProjectsService.getAll(0, LIMIT, SORT).then(function (data) {
+                        return data;
+                    }, function (err) {
+                        return [];
+                    });
                 },
                 discussions: function (DiscussionsService) {
-                    return DiscussionsService.getAll(0, LIMIT, SORT);
+                    return DiscussionsService.getAll(0, LIMIT, SORT).then(function (data) {
+                        return data;
+                    }, function (err) {
+                        return [];
+                    });
                 },
                 people: function (UsersService) {
                     return UsersService.getAll();
