@@ -104,6 +104,7 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function (tasks, $stateParams, TasksService) {
+                        //entity: function ($stateParams, tasks, TasksService) {
                         var task = _(tasks.data || tasks).find(function (t) {
                             return t._id === $stateParams.id;
                         });
@@ -117,7 +118,9 @@ angular.module('mean.icu').config([
                         }
                     },
                     tags: function (TasksService) {
+                    //tags: function (TasksService, $stateParams) {
                         return TasksService.getTags();
+                        //return TasksService.getByProjectId($stateParams.id);
                     }
                 }
             };

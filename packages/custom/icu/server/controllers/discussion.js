@@ -71,28 +71,42 @@ exports.destroy = function(req, res, next) {
 
 exports.schedule = function (req, res, next) {
   if (req.locals.error) {
+    console.log("1");
     next();
   }
 
   var discussion = req.locals.result;
+  console.log("====================req.locals=====================");
+      console.log(JSON.stringify(req.locals));
 
   if (!discussion.due) {
+      console.log("2");
+      console.log(discussion);
+      console.log("====================discussion.due=====================");
+      console.log(discussion.due);
     req.locals.error = { message: 'Due field cannot be empty' };
     return next();
   }
 
   if (!discussion.assign) {
+      console.log("3");
     req.locals.error = { message: 'Assignee cannot be empty' };
     return next();
   }
 
   var allowedStatuses = ['new', 'scheduled', 'cancelled'];
   if (allowedStatuses.indexOf(discussion.status) === -1) {
+      console.log("4");
     req.locals.error = { message: 'Cannot be scheduled for this status' };
     return next();
   }
 
+      console.log("discussion");
+      console.log(discussion);
+
   Task.find({ discussions: discussion._id }).then(function(tasks) {
+      console.log("tasks");
+      console.log(tasks);
     var groupedTasks = _.groupBy(tasks, function (task) {
       return _.contains(task.tags, 'Agenda');
     });
@@ -102,6 +116,8 @@ exports.schedule = function (req, res, next) {
       agendaTasks: groupedTasks['true'] || [],
       additionalTasks: groupedTasks['false'] || []
     }).then(function() {
+        console.log("req.locals.data.body");
+        console.log(req.locals.data.body);
       req.locals.data.body = discussion;
       req.locals.data.body.status = 'scheduled';
       next();

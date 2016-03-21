@@ -4,13 +4,13 @@ var mean = require('meanio'),
   utils = require('./utils');
 
 exports.save = function (doc, docType, room, title) {
+    console.log("===================================icu==================");
   mean.elasticsearch.index({
     index: docType,
     type: docType,
     id: doc._id.toString(),
     body: doc
   }, function (error, response) {
-
     // utils.checkAndHandleError(error, res);
     if (error)
       return error;
@@ -18,7 +18,7 @@ exports.save = function (doc, docType, room, title) {
     //    if (docType === 'attachment')
     //        notifications.sendFile({entityType: docType, title: title, room:room, method: 'uploaded', path: doc.path, issue:doc.issue});
     //    else
-    //        notifications.sendFromApi({entityType: docType, title: doc.title, room:room, method: (response.created ? 'created' : 'updated')});
+           //notifications.sendFromApi({entityType: docType, title: doc.title, room:room, method: (response.created ? 'created' : 'updated')});
     return doc;
   });
 };
@@ -69,7 +69,7 @@ exports.search = function (req, res, next) {
       'multi_match': {
         'query': req.query.term.replace(',', ' '),
         'type': 'cross_fields',
-        'fields': ['title^3', 'color', 'name', 'tags'],
+        'fields': ['title^3', 'color', 'name', 'tags', 'description'],
         'operator': 'or'
       }
     },

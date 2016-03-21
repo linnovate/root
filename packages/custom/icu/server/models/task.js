@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  archive = require('./archive.js');
+  archive = require('./archive.js'),
+  request = require('request');
 
 var TaskSchema = new Schema({
   created: {
@@ -96,10 +97,48 @@ TaskSchema.post('save', function (req, next) {
       return err;
     }
 
+    console.log("task================================");    
+    console.log(task);
+
     elasticsearch.save(task, 'task', project.room);
   });
   next();
 });
+
+//  var elasticsearch = require('../controllers/elasticsearch');
+
+// TaskSchema.post('/api/save', function(req, res) {
+
+//       var objReq = {
+//         uri: apiUri + '/api/save',
+//         //uri: 'http://192.168.245.152/api/save',
+//         method: 'POST',
+//         form: req.body
+//       };
+      
+//       var task = this;
+      
+//       request(objReq, function(error, response, body) {
+//         if (error) {
+//             return error;
+//         }
+//         if(response){}
+
+//       });
+//     });     
+   
+//  TaskSchema.post('save', function (req, next) {
+    
+//   var task = this;
+//   TaskSchema.statics.project(this.project, function (err, project) {
+//     if (err) {
+//       return err;
+//     }
+
+//       elasticsearch.save(task, 'task', project.room);
+//   });
+//   next();
+// });
 
 TaskSchema.pre('remove', function (next) {
   var task = this;

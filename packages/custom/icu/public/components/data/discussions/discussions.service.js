@@ -88,6 +88,7 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function schedule(discussion) {
+        console.log(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule');
         return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule').then(function(result) {
             return result.data;
         });

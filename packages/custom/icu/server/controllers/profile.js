@@ -35,8 +35,10 @@ exports.update = function (req, res, next) {
 
   var user = req.user;
   user.profile = profile;
-
-  User.update({_id: user._id}, user, function (err) {
+  
+    var id = user._id;
+    delete user._id;
+  User.update({_id: id}, user, function (err) {
     utils.checkAndHandleError(err, 'Cannot update the profile', next);
     res.json(user.profile);
   });
@@ -54,7 +56,7 @@ exports.uploadAvatar = function (req, res, next) {
     var saveTo = config.root + '/packages/core/users/public/assets/img/avatar/' + req.user._id + '.' + path.basename(filename.split('.').slice(-1)[0]).toLowerCase();
 
     file.pipe(fs.createWriteStream(saveTo));
-    req.body.avatar = config.hostname + '/users/assets/img/avatar/' + req.user._id + '.' + path.basename(filename.split('.').slice(-1)[0]).toLowerCase();
+    req.body.avatar = config.host + '/users/assets/img/avatar/' + req.user._id + '.' + path.basename(filename.split('.').slice(-1)[0]).toLowerCase();
     req.file = true;
   });
 

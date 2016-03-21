@@ -23,8 +23,8 @@
     <div class="time" ng-click="triggerDropdown()">
         <i class="fa fa-chevron-down"></i>
     </div>
-    <div class="add-menu dropdown" dropdown>
-        <button dropdown-toggle>
+    <div class="add-menu dropdown" uib-dropdown>
+        <button uib-dropdown-toggle>
             <i class="fa fa-2x fa-plus"></i>
         </button>
         <ul class="dropdown-menu menu-items" role="menu">
@@ -48,8 +48,8 @@
             </li>
         </ul>
     </div>
-    <div class="user-menu dropdown" dropdown>
-        <div dropdown-toggle icu-avatar user="me"></div>
+    <div class="user-menu dropdown" uib-dropdown>
+        <div uib-dropdown-toggle icu-avatar user="me"></div>
         <ul class="dropdown-menu menu-items" role="menu">
             <li><a href ui-sref="profile">{{ 'profilePage' | i18next }}</a></li>
             <li><a href ng-click="logout()">{{ 'logout' | i18next }}</a></li>

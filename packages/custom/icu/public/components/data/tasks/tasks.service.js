@@ -21,7 +21,8 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getTags() {
-        return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
+        //return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
+            return $http.get('http://localhost:3000' + EntityPrefix + '/tags').then(function (result) {
             return result.data;
         });
     }

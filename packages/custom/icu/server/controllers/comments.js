@@ -36,6 +36,8 @@ exports.all = function (req, res) {
         return item._source
       }))
   });
+        res.status(500).send('Failed to found documents');
+
 };
 
 exports.create = function (req, res, next) {

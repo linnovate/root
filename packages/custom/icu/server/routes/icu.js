@@ -24,7 +24,7 @@ module.exports = function (Icu, app) {
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
-  app.route(/^((?!\/hi\/).)*$/).all(authorization);
+  //app.route(/^((?!\/hi\/).)*$/).all(authorization);
 
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/star')
@@ -130,6 +130,7 @@ module.exports = function (Icu, app) {
   app.route('/api/updates*').all(entity('updates'));
   app.route('/api/updates')
     .post(updates.create, notification.sendUpdate)
+    // .post(updates.create, notification.sendUpdate)
     .get(updates.all, updates.getAttachmentsForUpdate);
   app.route('/api/updates/:id([0-9a-fA-F]{24})')
     .get(updates.read, updates.getAttachmentsForUpdate)
