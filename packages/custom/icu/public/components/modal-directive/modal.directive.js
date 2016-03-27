@@ -19,7 +19,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: '/icu/components/modal-directive/modal.html',
-                    controller: controller,
+                    controller: modalController,
                     resolve: {
                         entity: function () {
                             return scope.entityName;
@@ -47,18 +47,18 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
         };
     });
 
-function controller($scope, $modalInstance, entity) {
+function modalController($scope, $uibModalInstance, entity) {
     $scope.entity = {type: entity};
 
     $scope.ok = function () {
         if($scope.entity.textDelete && $scope.entity.textDelete == 'DELETE')
-            $modalInstance.close();
+            $uibModalInstance.close();
         else
             $scope.cancel();
 
     };
 
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 }
