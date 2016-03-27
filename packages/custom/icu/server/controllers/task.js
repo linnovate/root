@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var q = require('q');
 
 var options = {
   includes: 'assign watchers project',
@@ -80,6 +81,7 @@ exports.tagsList = function (req, res, next) {
 
     next();
   });
+
 };
 
 exports.getByEntity = function (req, res, next) {
@@ -97,32 +99,39 @@ exports.getByEntity = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
-
   var Query = Task.find(entityQuery);
   Query.populate(options.includes);
 
-  var pagination = req.locals.data.pagination;
-  if (pagination && pagination.type && pagination.type === 'page') {
-    Query.sort(pagination.sort)
-      .skip(pagination.start)
-      .limit(pagination.limit);
-  }
 
-  Query.exec(function (err, tasks) {
-    if (err) {
-      req.locals.error = { message: 'Can\'t get tags' };
-    } else {
-      if (starredOnly) {
-        tasks.forEach(function(task) {
-          task.star = true;
-        });
-      }
-    }
+  Task.find(entityQuery).count({}, function(err, c) {
+    req.locals.data.pagination.count = c;
 
-    req.locals.result = tasks;
 
-    next();
+    var pagination = req.locals.data.pagination;
+	  if (pagination && pagination.type && pagination.type === 'page') {
+	    Query.sort(pagination.sort)
+	      .skip(pagination.start)
+	      .limit(pagination.limit);
+	  }
+
+	  Query.exec(function (err, tasks) {
+	    if (err) {
+	      req.locals.error = { message: 'Can\'t get tags' };
+	    } else {
+	      // req.locals.data.pagination.count = tasks.length;
+	      if (starredOnly) {
+	        tasks.forEach(function(task) {
+	          task.star = true;
+	        });
+	      }
+	    }
+	    req.locals.result = tasks;
+
+	    next();
+	  });
   });
+
+  
 };
 
 exports.getZombieTasks = function (req, res, next) {
