@@ -3,7 +3,7 @@
 require('../models/project');
 
 var options = {
-  includes: 'watchers',
+  includes: 'assign watchers',
   defaults: {
     watchers: []
   }

@@ -10,7 +10,7 @@ exports.save = function (doc, docType, room, title) {
     id: doc._id.toString(),
     body: doc
   }, function (error, response) {
-
+  	
     // utils.checkAndHandleError(error, res);
     if (error)
       return error;
@@ -69,7 +69,7 @@ exports.search = function (req, res, next) {
       'multi_match': {
         'query': req.query.term.replace(',', ' '),
         'type': 'cross_fields',
-        'fields': ['title^3', 'color', 'name', 'tags'],
+        'fields': ['title^3', 'color', 'name', 'tags', 'description'],
         'operator': 'or'
       }
     },
