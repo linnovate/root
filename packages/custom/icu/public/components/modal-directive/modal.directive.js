@@ -19,7 +19,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: '/icu/components/modal-directive/modal.html',
-                    controller: modalController,
+                    controller: controller,
                     resolve: {
                         entity: function () {
                             return scope.entityName;
@@ -47,7 +47,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
         };
     });
 
-function modalController($scope, $uibModalInstance, entity) {
+function controller($scope, $uibModalInstance, entity) {
     $scope.entity = {type: entity};
 
     $scope.ok = function () {

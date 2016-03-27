@@ -10,7 +10,6 @@ exports.save = function (doc, docType, room, title) {
     id: doc._id.toString(),
     body: doc
   }, function (error, response) {
-  	
     // utils.checkAndHandleError(error, res);
     if (error)
       return error;
@@ -18,7 +17,7 @@ exports.save = function (doc, docType, room, title) {
     //    if (docType === 'attachment')
     //        notifications.sendFile({entityType: docType, title: title, room:room, method: 'uploaded', path: doc.path, issue:doc.issue});
     //    else
-    //        notifications.sendFromApi({entityType: docType, title: doc.title, room:room, method: (response.created ? 'created' : 'updated')});
+           //notifications.sendFromApi({entityType: docType, title: doc.title, room:room, method: (response.created ? 'created' : 'updated')});
     return doc;
   });
 };

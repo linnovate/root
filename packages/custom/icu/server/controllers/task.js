@@ -71,17 +71,16 @@ exports.tagsList = function (req, res, next) {
       'tags': {'terms': {'field': 'tags'}}
     }
   };
-
+  
   mean.elasticsearch.search({index: 'task', 'body': query, size: 3000}, function (err, response) {
-    if (err) {
-      req.locals.error = { message: 'Can\'t get tags' };
+      if (err) {
+        req.locals.error = { message: 'Can\'t get tags' };
     } else {
       req.locals.result = response.facets ? response.facets.tags.terms : [];
     }
 
     next();
   });
-
 };
 
 exports.getByEntity = function (req, res, next) {

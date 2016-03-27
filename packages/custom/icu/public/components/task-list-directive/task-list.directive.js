@@ -119,6 +119,8 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             var nameFocused = angular.element($event.target).hasClass('name');
 
             if (task.__state === creatingStatuses.NotCreated) {
+                console.log("=====================task1=============");
+                console.log(task);
                 $scope.createOrUpdate(task).then(function() {
                     $state.go($scope.detailsState, {
                         id: task._id,
@@ -128,6 +130,8 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                     });
                 });
             } else {
+                //console.log("=====================task2=============");
+                //console.log($scope.detailsState);
                 $state.go($scope.detailsState, {
                     id: task._id,
                     entity: context.entityName,
