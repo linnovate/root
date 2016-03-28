@@ -35,9 +35,8 @@ exports.update = function (req, res, next) {
 
   var user = req.user;
   user.profile = profile;
-  
-    var id = user._id;
-    delete user._id;
+  var id = user._id;
+  delete user._id;
   User.update({_id: id}, user, function (err) {
     utils.checkAndHandleError(err, 'Cannot update the profile', next);
     res.json(user.profile);

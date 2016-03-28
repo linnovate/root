@@ -14,15 +14,13 @@ angular.module('mean.icu.data.tasksservice', [])
         if (qs.length) {
             qs = '?' + qs;
         }
-
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
             return PaginationService.processResponse(result.data);
         });
     }
 
     function getTags() {
-        //return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
-            return $http.get('http://localhost:3000' + EntityPrefix + '/tags').then(function (result) {
+        return $http.get(EntityPrefix + '/tags').then(function (result) {
             return result.data;
         });
     }
@@ -50,7 +48,6 @@ angular.module('mean.icu.data.tasksservice', [])
                 url += '/starred';
             }
 
-            console.log("getByEntityId");
             return $http.get(url + qs).then(function(result) {
                 return PaginationService.processResponse(result.data);
             });

@@ -6,6 +6,7 @@ var config = require('meanio').loadConfig(),
   request = require('request'),
   users = require('../../../../core/users/server/controllers/users.js'),
   jwt = require('jsonwebtoken'); 
+
 module.exports = function(MeanUser, app, auth, database,passport) {
 
   var UserC = require('../providers/crud.js').User,
@@ -62,6 +63,7 @@ module.exports = function(MeanUser, app, auth, database,passport) {
     
 
   // Setting the local strategy route
+
 //   app.route('/api/signin')
     // .post(function(req, res) {
 

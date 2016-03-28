@@ -11,10 +11,10 @@ var General = new Module('general');
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
-General.register(function(app, auth, database,passport) {
+General.register(function(app, auth, database, passport) {
 
   //We enable routing. By default the Package Object is passed to the routes
-  General.routes(app, auth, database,passport);
+  General.routes(app, auth, database, passport);
 
   //We are adding a link to the main menu for all authenticated users
   General.menus.add({

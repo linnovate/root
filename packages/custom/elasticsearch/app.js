@@ -28,10 +28,7 @@ Elasticsearch.register(function(app, auth, database) {
 
           Elasticsearch.client = new elasticsearch.Client({
               host: host + ':' + port,
-              log: log,
-                    keepAlive: false,
-                    sniffOnConnectionFault:true,
-                    maxRetries:50
+              log: log
           });
       });
   };
@@ -41,7 +38,7 @@ Elasticsearch.register(function(app, auth, database) {
 
   Elasticsearch.ping = function(callback) {
     Elasticsearch.client.ping({
-      requestTimeout: 1000000000,
+      requestTimeout: 100,
       hello: 'elasticsearch!'
     }, function(error) {
       if (error) {
@@ -85,10 +82,7 @@ Elasticsearch.register(function(app, auth, database) {
 
   Elasticsearch.search = function(options, callback) {
     Elasticsearch.client.search(options, function(error, response) {
-        console.log("error===========================");
-        console.log(error);
-        console.log("response===========================");
-        console.log(response);
+
       if (error) {
         callback(true, error);
       } else {

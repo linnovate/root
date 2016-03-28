@@ -4,7 +4,6 @@ var mean = require('meanio'),
   utils = require('./utils');
 
 exports.save = function (doc, docType, room, title) {
-    console.log("===================================icu==================");
   mean.elasticsearch.index({
     index: docType,
     type: docType,
