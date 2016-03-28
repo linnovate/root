@@ -332,14 +332,35 @@ angular.module('mean.icu').config([
                 middlepane: {
                     //hack around the fact that state current name is initialized in controller only
                     template: '',
-                    controller: function ($state, $stateParams) {
+                    controller: function ($state, context) {
                         if ($state.current.name === 'main.people') {
-                            $state.go('main.people.byentity', {
-                                entity: $stateParams.entity,
-                                entityId: $stateParams.entityId
+                            $state.go('.byentity', {
+                                entity: context.entityName,
+                            	entityId: context.entityId
                             });
                         }
                     }
+                }
+            }
+        })
+        .state('main.people.all', {
+            url: '/all',
+            views: getListView('user'),
+            params: {
+                starred: false,
+                start: 0,
+                limit: LIMIT,
+                sort: SORT
+            },
+            resolve: {
+                users: function(UsersService, $stateParams) {
+                    // if ($stateParams.starred) {
+                    //     return UsersService.getStarred();
+                    // } else {
+                        return UsersService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                    // }
                 }
             }
         })

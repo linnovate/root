@@ -117,7 +117,6 @@ exports.getByEntity = function (req, res, next) {
 	    if (err) {
 	      req.locals.error = { message: 'Can\'t get tags' };
 	    } else {
-	      // req.locals.data.pagination.count = tasks.length;
 	      if (starredOnly) {
 	        tasks.forEach(function(task) {
 	          task.star = true;
