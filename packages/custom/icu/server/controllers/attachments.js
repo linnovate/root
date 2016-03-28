@@ -23,18 +23,34 @@ exports.getByEntity = function (req, res) {
   var entities = {projects: 'project', tasks: 'task', discussions: 'discussion', updates: 'update'},
     entity = entities[req.params.entity];
 
-  var query = {
-    query: {
-      filtered: {
-        filter: {
-          term: {
-            entity: entity,
-            entityId: req.params.id
-          }
-        }
+var query = {
+    "query": {
+      "filtered" : { 
+         "filter" : {
+            "bool" : {
+              "must" : [
+                 { "term" : {"entity" : entity}}, 
+                 { "term" : {"entityId" : req.params.id}} 
+              ]
+        
+           }
+         }
       }
-    }
-  };
+  }
+   	};
+
+//   var query = {
+//     query: {
+//       filtered: {
+//         filter: {
+//           term: {
+//             entity: entity,
+//             entityId: req.params.id
+//           }
+//         }
+//       }
+//     }
+//   };
 
   mean.elasticsearch.search({index: 'attachment', 'body': query, size: 3000}, function (err, response) {
     if (err) {
@@ -46,7 +62,6 @@ exports.getByEntity = function (req, res) {
       }));
     }
   });
- res.status(200).send([]);
 };
 
 var formatDate = function(date) {
@@ -70,7 +85,7 @@ exports.upload = function (req, res, next) {
 
   busboy.on('file', function (fieldname, file, filename) {
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
-    var hostFileLocation = config.hostname + saveTo.substring(saveTo.indexOf('/files'));
+    var hostFileLocation = config.host + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
 
     mkdirp(path.join(config.attachmentDir, d), function () {

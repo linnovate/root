@@ -83,12 +83,16 @@ angular.module('mean.icu.ui.notificationsheader', [])
             };
 
             ProjectsService.create(project).then(function (result) {
+                
                 $scope.projects.push(result);
-                $state.go('main.tasks.byentity.activities', {
+                var entityId = $stateParams.id;
+                $state.go('main.projects.byentity.details', {
                     id: result._id,
-                    entity: 'project',
-                    entityId: result._id
+                    entity: 'discussion',
+                    entityId: entityId
                 });
+            }, function(error) {
+                console.log(error, 'create project error');
             });
         };
 
@@ -100,10 +104,11 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
             DiscussionsService.create(discussion).then(function (result) {
                 $scope.discussions.push(result);
-                $state.go('main.tasks.byentity.activities', {
+                var entityId = $stateParams.id;
+                $state.go('main.discussions.byentity.details', {
                     id: result._id,
-                    entity: 'discussion',
-                    entityId: result._id
+                    entity: 'project',
+                    entityId: entityId
                 });
             });
         };

@@ -2,7 +2,7 @@
 angular.module('mean.icu').config([
     '$meanStateProvider',
     function ($meanStateProvider) {
-        var LIMIT = 15;
+        var LIMIT = 25;
         var SORT = 'created';
 
         var capitalize = function (str) {
@@ -57,15 +57,15 @@ angular.module('mean.icu').config([
                         templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
                         controller: capitalizedMain + 'ListController'
                     },
-                    'detailspane@main': {
-                        templateUrl: function ($stateParams) {
-                            return '/icu/components/' + $stateParams.entity + '-details/' +
-                                $stateParams.entity + '-details.html';
-                        },
-                        controllerProvider: function ($stateParams) {
-                            return capitalize($stateParams.entity) + 'DetailsController';
-                        }
-                    }
+                    // 'detailspane@main': {
+                    //     templateUrl: function ($stateParams) {
+                    //         return '/icu/components/' + $stateParams.entity + '-details/' +
+                    //             $stateParams.entity + '-details.html';
+                    //     },
+                    //     controllerProvider: function ($stateParams) {
+                    //         return capitalize($stateParams.entity) + 'DetailsController';
+                    //     }
+                    // }
                 },
                 resolve: resolve
             };
@@ -238,8 +238,14 @@ angular.module('mean.icu').config([
         }
 
         function getDetailsTabState(main, tab) {
+            //task , activities
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
+
+            console.log("tab");
+            console.log(tab);
+            console.log("main");
+            console.log(main);
 
             var resolve = {};
             resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
@@ -257,7 +263,7 @@ angular.module('mean.icu').config([
             resolve.entity = ['context', function (context) {
                 return context.entity;
             }];
-
+            
             return {
                 url: '/' + tab,
                 views: {
@@ -268,6 +274,9 @@ angular.module('mean.icu').config([
                         },
                         controllerProvider: function ($stateParams) {
                             var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
+                            console.log('=================');
+                            console.log(main, tab, entity, capitalizedTab);
+                            console.log('=================');
                             return entity + capitalizedTab + 'Controller';
                         }
                     }
@@ -335,9 +344,9 @@ angular.module('mean.icu').config([
                     template: '',
                     controller: function ($state, context) {
                         if ($state.current.name === 'main.people') {
-                            $state.go('main.people.byentity', {
+                            $state.go('.byentity', {
                                 entity: context.entityName,
-                                entityId: context.entityId
+                            	entityId: context.entityId
                             });
                         }
                     }
