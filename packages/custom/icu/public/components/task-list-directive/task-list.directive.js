@@ -209,9 +209,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                         [].splice.apply($scope.tasks, args);
                     }
 
-console.log("tasks.next");
-console.log(tasks.next);
-
                     $scope.loadNext = tasks.next;
                     $scope.loadPrev = tasks.prev;
                     $scope.isLoading = false;

@@ -2,7 +2,7 @@
 angular.module('mean.icu').config([
     '$meanStateProvider',
     function ($meanStateProvider) {
-        var LIMIT = 15;
+        var LIMIT = 25;
         var SORT = 'created';
 
         var capitalize = function (str) {
@@ -10,7 +10,6 @@ angular.module('mean.icu').config([
         };
 
         var generateStateByEntity = function (main) {
-            console.log("generateStateByEntity");
             var capitalizedMain = capitalize(main);
 
             var resolve = {};
@@ -39,7 +38,6 @@ angular.module('mean.icu').config([
                         return;
                     }
                     var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
-
                     return TasksService[getFn]($stateParams.entityId);
                 };
             }
@@ -57,15 +55,15 @@ angular.module('mean.icu').config([
                         templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
                         controller: capitalizedMain + 'ListController'
                     },
-                    'detailspane@main': {
-                        templateUrl: function ($stateParams) {
-                            return '/icu/components/' + $stateParams.entity + '-details/' +
-                                $stateParams.entity + '-details.html';
-                        },
-                        controllerProvider: function ($stateParams) {
-                            return capitalize($stateParams.entity) + 'DetailsController';
-                        }
-                    }
+                    // 'detailspane@main': {
+                    //     templateUrl: function ($stateParams) {
+                    //         return '/icu/components/' + $stateParams.entity + '-details/' +
+                    //             $stateParams.entity + '-details.html';
+                    //     },
+                    //     controllerProvider: function ($stateParams) {
+                    //         return capitalize($stateParams.entity) + 'DetailsController';
+                    //     }
+                    // }
                 },
                 resolve: resolve
             };
