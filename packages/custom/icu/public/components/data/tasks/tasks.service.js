@@ -50,6 +50,7 @@ angular.module('mean.icu.data.tasksservice', [])
                 url += '/starred';
             }
 
+            console.log("getByEntityId");
             return $http.get(url + qs).then(function(result) {
                 return PaginationService.processResponse(result.data);
             });

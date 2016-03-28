@@ -2,7 +2,7 @@
 
 // User routes use users controller
 var config = require('meanio').loadConfig(),
-  apiUri = config.api.uri,
+  //apiUri = config.api.uri,
   request = require('request'),
   users = require('../../../../core/users/server/controllers/users.js'),
   jwt = require('jsonwebtoken'); 

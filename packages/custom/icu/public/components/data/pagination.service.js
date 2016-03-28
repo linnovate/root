@@ -3,6 +3,7 @@
 angular.module('mean.icu.data.paginationservice', [])
 .service('PaginationService', function ($http, $q) {
     function loadMore(url) {
+        console.log(url);
         if (!url) {
             return function() {
                 var promise = $q.when({
@@ -23,6 +24,9 @@ angular.module('mean.icu.data.paginationservice', [])
     }
 
     function processResponse(data) {
+        console.log("datatot:");
+        console.log("data", data);
+        console.log("data.next", data.next);
         return {
             data: data.content || data,
             next: loadMore(data.next),

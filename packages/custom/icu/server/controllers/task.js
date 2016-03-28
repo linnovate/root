@@ -85,6 +85,9 @@ exports.tagsList = function (req, res, next) {
 };
 
 exports.getByEntity = function (req, res, next) {
+          
+      console.log("CHECK================");    
+      
   if (req.locals.error) {
     return next();
   }
@@ -105,6 +108,10 @@ exports.getByEntity = function (req, res, next) {
 
   var pagination = req.locals.data.pagination;
   if (pagination && pagination.type && pagination.type === 'page') {
+      
+      console.log("pagination================");    
+      console.log(JSON.stringify(pagination));
+      
     Query.sort(pagination.sort)
       .skip(pagination.start)
       .limit(pagination.limit);

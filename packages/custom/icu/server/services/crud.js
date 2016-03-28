@@ -82,6 +82,7 @@ module.exports = function(entityName, options) {
         query.populate(options.includes);
         query.hint({ _id: 1 });
 
+            
         mergedPromise = q.all([query, countQuery]).then(function(results) {
           pagination.count = results[1];
           return results[0];
