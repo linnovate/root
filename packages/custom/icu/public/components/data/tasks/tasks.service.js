@@ -47,6 +47,7 @@ angular.module('mean.icu.data.tasksservice', [])
             if (starred) {
                 url += '/starred';
             }
+
             return $http.get(url + qs).then(function(result) {
                 return PaginationService.processResponse(result.data);
             });

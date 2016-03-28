@@ -10,6 +10,7 @@ angular.module('mean.icu').config([
         };
 
         var generateStateByEntity = function (main) {
+            console.log("generateStateByEntity");
             var capitalizedMain = capitalize(main);
 
             var resolve = {};

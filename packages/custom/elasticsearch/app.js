@@ -82,6 +82,7 @@ Elasticsearch.register(function(app, auth, database) {
 
   Elasticsearch.search = function(options, callback) {
     Elasticsearch.client.search(options, function(error, response) {
+
       if (error) {
         callback(true, error);
       } else {

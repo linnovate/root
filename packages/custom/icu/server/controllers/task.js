@@ -84,6 +84,9 @@ exports.tagsList = function (req, res, next) {
 };
 
 exports.getByEntity = function (req, res, next) {
+          
+      console.log("CHECK================");    
+      
   if (req.locals.error) {
     return next();
   }
@@ -100,7 +103,6 @@ exports.getByEntity = function (req, res, next) {
   }
   var Query = Task.find(entityQuery);
   Query.populate(options.includes);
-
 
   Task.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;

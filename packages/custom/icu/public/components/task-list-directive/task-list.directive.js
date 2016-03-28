@@ -111,7 +111,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         var isScrolled = false;
 
         $scope.initialize = function($event, task) {
-            
+
             if ($scope.displayOnly) {
                 return;
             }
@@ -119,8 +119,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             var nameFocused = angular.element($event.target).hasClass('name');
 
             if (task.__state === creatingStatuses.NotCreated) {
-                console.log("=====================task1=============");
-                console.log(task);
                 $scope.createOrUpdate(task).then(function() {
                     $state.go($scope.detailsState, {
                         id: task._id,
@@ -130,8 +128,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                     });
                 });
             } else {
-                //console.log("=====================task2=============");
-                //console.log($scope.detailsState);
                 $state.go($scope.detailsState, {
                     id: task._id,
                     entity: context.entityName,
@@ -205,12 +201,16 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 $scope.isLoading = true;
                 $scope.loadNext().then(function(tasks) {
                     var offset = $scope.displayOnly ? 0 : 1;
+                    
                     if (tasks.data.length) {                        
                         var index = $scope.tasks.length - offset;
                         var args = [index, 0].concat(tasks.data);
 
                         [].splice.apply($scope.tasks, args);
                     }
+
+console.log("tasks.next");
+console.log(tasks.next);
 
                     $scope.loadNext = tasks.next;
                     $scope.loadPrev = tasks.prev;
@@ -219,6 +219,8 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             }
         };
     }
+
+    
 
     return {
         restrict: 'A',
