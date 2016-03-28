@@ -39,7 +39,6 @@ angular.module('mean.icu').config([
                         return;
                     }
                     var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
-
                     return TasksService[getFn]($stateParams.entityId);
                 };
             }

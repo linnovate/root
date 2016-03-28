@@ -39,18 +39,6 @@ var query = {
   }
    	};
 
-//   var query = {
-//     query: {
-//       filtered: {
-//         filter: {
-//           term: {
-//             entity: entity,
-//             entityId: req.params.id
-//           }
-//         }
-//       }
-//     }
-//   };
 
   mean.elasticsearch.search({index: 'attachment', 'body': query, size: 3000}, function (err, response) {
     if (err) {

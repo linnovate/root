@@ -85,7 +85,6 @@ exports.tagsList = function (req, res, next) {
 
 exports.getByEntity = function (req, res, next) {
           
-      console.log("CHECK================");    
       
   if (req.locals.error) {
     return next();
