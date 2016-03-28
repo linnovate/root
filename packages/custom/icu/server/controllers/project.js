@@ -85,29 +85,36 @@ exports.getByEntity = function (req, res, next) {
   var Query = Project.find(entityQuery);
 
   Query.populate(options.includes);
+  
+  Project.find(entityQuery).count({}, function(err, c) {
+    req.locals.data.pagination.count = c;
+		
+		var pagination = req.locals.data.pagination;
+	  if (pagination && pagination.type && pagination.type === 'page') {
+	    Query.sort(pagination.sort)
+	      .skip(pagination.start)
+	      .limit(pagination.limit);
+	  }
 
-  var pagination = req.locals.data.pagination;
-  if (pagination && pagination.type && pagination.type === 'page') {
-    Query.sort(pagination.sort)
-      .skip(pagination.start)
-      .limit(pagination.limit);
-  }
+	  Query.exec(function (err, projects) {
+	    if (err) {
+	      req.locals.error = { message: 'Can\'t get projects' };
+	    } else {
+	      if (starredOnly) {
+	        projects.forEach(function(project) {
+	          project.star = true;
+	        });
+	      }
 
-  Query.exec(function (err, projects) {
-    if (err) {
-      req.locals.error = { message: 'Can\'t get projects' };
-    } else {
-      if (starredOnly) {
-        projects.forEach(function(project) {
-          project.star = true;
-        });
-      }
+	      req.locals.result = projects;
+	    }
 
-      req.locals.result = projects;
-    }
+	    next();
+	  });
 
-    next();
-  });
+	});
+
+  
 };
 
 exports.getByDiscussion = function (req, res, next) {
