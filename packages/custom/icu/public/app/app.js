@@ -20,7 +20,7 @@ angular.module('mean.icu').config([
                 if (!service[getFn]) {
                     getFn = 'getById';
                 }
-
+                console.log('getFn', getFn, main, $stateParams)
                 return service[getFn]($stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
@@ -55,15 +55,15 @@ angular.module('mean.icu').config([
                         templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
                         controller: capitalizedMain + 'ListController'
                     },
-                    // 'detailspane@main': {
-                    //     templateUrl: function ($stateParams) {
-                    //         return '/icu/components/' + $stateParams.entity + '-details/' +
-                    //             $stateParams.entity + '-details.html';
-                    //     },
-                    //     controllerProvider: function ($stateParams) {
-                    //         return capitalize($stateParams.entity) + 'DetailsController';
-                    //     }
-                    // }
+                    'detailspane@main': {
+                        templateUrl: function ($stateParams) {
+                            return '/icu/components/' + $stateParams.entity + '-details/' +
+                                $stateParams.entity + '-details.html';
+                        },
+                        controllerProvider: function ($stateParams) {
+                            return capitalize($stateParams.entity) + 'DetailsController';
+                        }
+                    }
                 },
                 resolve: resolve
             };
@@ -635,6 +635,7 @@ angular.module('mean.icu').config([
 ]);
 
 angular.module('mean.icu').config(function ($i18nextProvider) {
+    
     $i18nextProvider.options = {
         lng: 'en_US',
         useCookie: false,
