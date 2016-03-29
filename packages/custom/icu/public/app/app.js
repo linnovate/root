@@ -20,7 +20,6 @@ angular.module('mean.icu').config([
                 if (!service[getFn]) {
                     getFn = 'getById';
                 }
-                console.log('getFn', getFn, main, $stateParams)
                 return service[getFn]($stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
@@ -57,11 +56,13 @@ angular.module('mean.icu').config([
                     },
                     'detailspane@main': {
                         templateUrl: function ($stateParams) {
-                            return '/icu/components/' + $stateParams.entity + '-details/' +
+                            if (!$stateParams.entity) return '';
+                            else return '/icu/components/' + $stateParams.entity + '-details/' +
                                 $stateParams.entity + '-details.html';
                         },
                         controllerProvider: function ($stateParams) {
-                            return capitalize($stateParams.entity) + 'DetailsController';
+                        	if (!$stateParams.entity) return '';
+                            else return capitalize($stateParams.entity) + 'DetailsController';
                         }
                     }
                 },
