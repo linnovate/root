@@ -16,6 +16,7 @@ var discussionController = crud('discussions', options);
 var utils = require('./utils'),
   mongoose = require('mongoose'),
   Task = require('../models/task.js'),
+  Discussion = mongoose.model('Discussion'),
   TaskArchive = mongoose.model('task_archive'),
   User = require('../models/user.js'),
   _ = require('lodash'),
@@ -180,6 +181,55 @@ exports.summary = function (req, res, next) {
         next();
       });
     });
+};
+
+exports.getByEntity = function (req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
+
+  var entities = {users: 'creator', _id: '_id', projects: 'project'},
+    entityQuery = {};
+
+  entityQuery[entities[req.params.entity]] = req.params.id;
+  var starredOnly = false;
+  var ids = req.locals.data.ids;
+  if (ids && ids.length) {
+    entityQuery._id = { $in: ids };
+    starredOnly = true;
+  }
+  
+  var Query = Discussion.find(entityQuery);
+
+  Query.populate(options.includes);
+  
+  Discussion.find(entityQuery).count({}, function(err, c) {
+    req.locals.data.pagination.count = c;
+		
+		var pagination = req.locals.data.pagination;
+	  if (pagination && pagination.type && pagination.type === 'page') {
+	    Query.sort(pagination.sort)
+	      .skip(pagination.start)
+	      .limit(pagination.limit);
+	  }
+
+	  Query.exec(function (err, discussions) {
+	    if (err) {
+	      req.locals.error = { message: 'Can\'t get discussions' };
+	    } else {
+	      if (starredOnly) {
+	        discussions.forEach(function(discussion) {
+	          discussion.star = true;
+	        });
+	      }
+
+	      req.locals.result = discussions;
+	    }
+
+	    next();
+	  });
+
+	});
 };
 
 exports.getByProject = function (req, res, next) {

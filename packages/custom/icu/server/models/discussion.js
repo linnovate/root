@@ -57,7 +57,11 @@ var DiscussionSchema = new Schema({
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User'
-  }]
+  }],
+  project: {
+    type: Schema.ObjectId,
+    ref: 'Project'
+  },
 });
 
 var starVirtual = DiscussionSchema.virtual('star');
