@@ -71,7 +71,7 @@ exports.getByEntity = function (req, res, next) {
     return next();
   }
 
-  var entities = {users: 'creator', _id: '_id'},
+  var entities = {users: 'creator', _id: '_id', discussions: 'discussion'},
     entityQuery = {};
 
   entityQuery[entities[req.params.entity]] = req.params.id;
