@@ -82,7 +82,6 @@ angular.module('mean.icu').config([
             if (resolve) {
                 view['middlepane@main'].resolve = resolve;
             }
-
             return view;
         };
 
@@ -489,10 +488,14 @@ angular.module('mean.icu').config([
                     template: '',
                     controller: function ($state, discussions, context) {
                         if ($state.current.name === 'main.projects') {
-                            $state.go('.byentity', {
-                                entity: context.entityName,
-                                entityId: context.entityId
-                            });
+                            if (discussions.data.length) {
+                                $state.go('.byentity', {
+                                    entity: context.entityName,
+                                    entityId: context.entityId
+                                });
+                            } else {
+                                $state.go('.all');
+                            }
                         }
                     }
                 }
@@ -542,10 +545,14 @@ angular.module('mean.icu').config([
                     template: '',
                     controller: function ($state, projects, context) {
                         if ($state.current.name === 'main.discussions') {
-                            $state.go('.byentity', {
-                                entity: context.entityName,
-                                entityId: context.entityId
-                            });
+                            if (projects.data.length) {
+                                $state.go('.byentity', {
+                                    entity: context.entityName,
+                                    entityId: context.entityId
+                                });
+                            } else {
+                                $state.go('.all');
+                            }
                         }
                     }
                 }

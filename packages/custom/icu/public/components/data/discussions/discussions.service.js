@@ -16,7 +16,10 @@ angular.module('mean.icu.data.discussionsservice', [])
         }
 
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
-            return PaginationService.processResponse(result.data);
+            return result.data;
+        }, function(err) {return err}).then(function (some) {
+            var data = some.content ? some : [];
+            return PaginationService.processResponse(data);
         });
     }
 
