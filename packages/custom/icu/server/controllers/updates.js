@@ -32,6 +32,7 @@ exports.getAttachmentsForUpdate = function (req, res, next) {
   }
 
   var query = { issueId: req.locals.result._id };
+
   if (_.isArray(req.locals.result)) {
     var ids = _(req.locals.result).pluck('_id').value();
     query = { issueId: { $in: ids} };

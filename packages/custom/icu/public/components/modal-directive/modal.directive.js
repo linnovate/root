@@ -47,18 +47,18 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
         };
     });
 
-function controller($scope, $modalInstance, entity) {
+function controller($scope, $uibModalInstance, entity) {
     $scope.entity = {type: entity};
 
     $scope.ok = function () {
         if($scope.entity.textDelete && $scope.entity.textDelete == 'DELETE')
-            $modalInstance.close();
+            $uibModalInstance.close();
         else
             $scope.cancel();
 
     };
 
     $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 }

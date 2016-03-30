@@ -24,16 +24,18 @@ exports.getByEntity = function (req, res) {
     entity = entities[req.params.entity];
 
   var query = {
-    query: {
-      filtered: {
-        filter: {
-          term: {
-            entity: entity,
-            entityId: req.params.id
+    "query": {
+      "filtered" : { 
+        "filter" : {
+          "bool" : {
+            "must" : [
+              { "term" : {"entity" : entity}}, 
+              { "term" : {"entityId" : req.params.id}} 
+            ]
           }
         }
       }
-    }
+  	}
   };
 
   mean.elasticsearch.search({index: 'attachment', 'body': query, size: 3000}, function (err, response) {
@@ -69,7 +71,7 @@ exports.upload = function (req, res, next) {
 
   busboy.on('file', function (fieldname, file, filename) {
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
-    var hostFileLocation = config.hostname + saveTo.substring(saveTo.indexOf('/files'));
+    var hostFileLocation = config.host + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
 
     mkdirp(path.join(config.attachmentDir, d), function () {

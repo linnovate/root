@@ -82,6 +82,7 @@ module.exports = function(entityName, options) {
         query.populate(options.includes);
         query.hint({ _id: 1 });
 
+            
         mergedPromise = q.all([query, countQuery]).then(function(results) {
           pagination.count = results[1];
           return results[0];
@@ -118,22 +119,25 @@ module.exports = function(entityName, options) {
     entity.updated = new Date();
     entity.creator = user.user._id;
 
+      
     return new Model(entity).save(user).then(function(e) {
       return Model.populate(e, options.includes);
     });
   }
 
   function update(oldE, newE, user) {
+
     var entityWithDefaults = _.defaults(newE, options.defaults);
+
     oldE = _.extend(oldE, entityWithDefaults);
 
     oldE.updated = new Date();
     oldE.updater = user.user._id;
-
     return oldE.save(user).then(function(data) {
       return Model.populate(data, options.includes);
     });
   }
+
 
   function destroy(entity, user) {
     return entity.remove(user);

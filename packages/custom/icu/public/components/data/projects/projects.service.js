@@ -65,7 +65,7 @@ angular.module('mean.icu.data.projectsservice', [])
             context.type = 'project';
         }
 
-        return $http.put(ApiUri + EntityPrefix + '/' + project._id, {project:  project, context: context}).then(function(result) {
+        return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
             return result.data;
         });
     }

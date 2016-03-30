@@ -2,7 +2,7 @@
 angular.module('mean.icu').config([
     '$meanStateProvider',
     function ($meanStateProvider) {
-        var LIMIT = 15;
+        var LIMIT = 25;
         var SORT = 'created';
 
         var capitalize = function (str) {
@@ -20,7 +20,6 @@ angular.module('mean.icu').config([
                 if (!service[getFn]) {
                     getFn = 'getById';
                 }
-
                 return service[getFn]($stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
@@ -38,7 +37,6 @@ angular.module('mean.icu').config([
                         return;
                     }
                     var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
-
                     return TasksService[getFn]($stateParams.entityId);
                 };
             }
@@ -58,11 +56,13 @@ angular.module('mean.icu').config([
                     },
                     'detailspane@main': {
                         templateUrl: function ($stateParams) {
-                            return '/icu/components/' + $stateParams.entity + '-details/' +
+                            if (!$stateParams.entity) return '';
+                            else return '/icu/components/' + $stateParams.entity + '-details/' +
                                 $stateParams.entity + '-details.html';
                         },
                         controllerProvider: function ($stateParams) {
-                            return capitalize($stateParams.entity) + 'DetailsController';
+                        	if (!$stateParams.entity) return '';
+                            else return capitalize($stateParams.entity) + 'DetailsController';
                         }
                     }
                 },
@@ -104,6 +104,7 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function (tasks, $stateParams, TasksService) {
+                        //entity: function ($stateParams, tasks, TasksService) {
                         var task = _(tasks.data || tasks).find(function (t) {
                             return t._id === $stateParams.id;
                         });
@@ -117,7 +118,9 @@ angular.module('mean.icu').config([
                         }
                     },
                     tags: function (TasksService) {
+                    //tags: function (TasksService, $stateParams) {
                         return TasksService.getTags();
+                        //return TasksService.getByProjectId($stateParams.id);
                     }
                 }
             };
@@ -329,14 +332,35 @@ angular.module('mean.icu').config([
                 middlepane: {
                     //hack around the fact that state current name is initialized in controller only
                     template: '',
-                    controller: function ($state, $stateParams) {
+                    controller: function ($state, context) {
                         if ($state.current.name === 'main.people') {
-                            $state.go('main.people.byentity', {
-                                entity: $stateParams.entity,
-                                entityId: $stateParams.entityId
+                            $state.go('.byentity', {
+                                entity: context.entityName,
+                            	entityId: context.entityId
                             });
                         }
                     }
+                }
+            }
+        })
+        .state('main.people.all', {
+            url: '/all',
+            views: getListView('user'),
+            params: {
+                starred: false,
+                start: 0,
+                limit: LIMIT,
+                sort: SORT
+            },
+            resolve: {
+                users: function(UsersService, $stateParams) {
+                    // if ($stateParams.starred) {
+                    //     return UsersService.getStarred();
+                    // } else {
+                        return UsersService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                    // }
                 }
             }
         })
@@ -612,6 +636,7 @@ angular.module('mean.icu').config([
 ]);
 
 angular.module('mean.icu').config(function ($i18nextProvider) {
+    
     $i18nextProvider.options = {
         lng: 'en_US',
         useCookie: false,

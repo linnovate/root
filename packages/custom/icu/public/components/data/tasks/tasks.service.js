@@ -14,14 +14,13 @@ angular.module('mean.icu.data.tasksservice', [])
         if (qs.length) {
             qs = '?' + qs;
         }
-
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
             return PaginationService.processResponse(result.data);
         });
     }
 
     function getTags() {
-        return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
+        return $http.get(EntityPrefix + '/tags').then(function (result) {
             return result.data;
         });
     }

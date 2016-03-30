@@ -111,6 +111,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         var isScrolled = false;
 
         $scope.initialize = function($event, task) {
+
             if ($scope.displayOnly) {
                 return;
             }
@@ -154,8 +155,13 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 $event.preventDefault();
 
                 $scope.tasks[index].__autocomplete = false;
+                if ($element.find('td.name')[index+1]) $element.find('td.name')[index+1].focus();
+                else {
+                	$timeout(function() {
+			            $element.find('td.name')[index+1].focus();
+			        }, 500);
+                }
 
-                $element.find('td.name')[index+1].focus();
             }
         };
 
@@ -195,8 +201,8 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 $scope.isLoading = true;
                 $scope.loadNext().then(function(tasks) {
                     var offset = $scope.displayOnly ? 0 : 1;
-
-                    if (tasks.data.length) {
+                    
+                    if (tasks.data.length) {                        
                         var index = $scope.tasks.length - offset;
                         var args = [index, 0].concat(tasks.data);
 
@@ -210,6 +216,8 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             }
         };
     }
+
+    
 
     return {
         restrict: 'A',

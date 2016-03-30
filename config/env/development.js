@@ -14,6 +14,8 @@ module.exports = {
   app: {
     name: 'MEAN - FullStack JS - Development'
   },
+  //hostname: 'http://192.168.245.152:3000',
+  host: 'http://localhost:3000',
   facebook: {
     clientID: 'DEFAULT_APP_ID',
     clientSecret: 'APP_SECRET',
@@ -49,13 +51,31 @@ module.exports = {
   }, 
   secret: 'SOME_TOKEN_SECRET',
     api: {
-      uri: 'http://localhost:3003'
+      uri: 'http://192.168.245.152:3003'
     },
+//   elasticsearch: {
+//     host: 'http://192.168.245.152',
+//     port: 9200,
+//     log: 'trace'
+//     },
   elasticsearch: {
-    host: 'http://localhost',
+    host: 'http://192.168.245.152',
     port: 9200,
-    log: 'trace'
+    log: 'trace',
+    keepAlive: false,
+    sniffOnConnectionFault:true,
+    maxRetries:50
   },
+//   elasticsearch: {
+//     host: 'http://192.168.245.152',
+//     port: 3003,
+//     log: 'trace'
+//   },
+//   elasticsearch: {
+//     host: 'http://192.168.245.152',
+//     port: 9300,
+//     log: 'trace'
+//   },
   letschat: {
     owner: '562334ccea168c4f323a1be8'
   }

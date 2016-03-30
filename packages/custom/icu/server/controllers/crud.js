@@ -55,7 +55,7 @@ module.exports = function(entityName, options) {
       return next();
     }
 
-    var entity = req.locals.data.body || req.body;
+    var entity = req.locals.data.body || req.body.data || req.body;
     entityService
       .create(entity, { user: req.user })
       .then(success(req, next), error(req, next));

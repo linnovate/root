@@ -16,6 +16,7 @@ var discussionController = crud('discussions', options);
 var utils = require('./utils'),
   mongoose = require('mongoose'),
   Task = require('../models/task.js'),
+  Discussion = mongoose.model('Discussion'),
   TaskArchive = mongoose.model('task_archive'),
   User = require('../models/user.js'),
   _ = require('lodash'),
@@ -71,28 +72,42 @@ exports.destroy = function(req, res, next) {
 
 exports.schedule = function (req, res, next) {
   if (req.locals.error) {
+    console.log("1");
     next();
   }
 
   var discussion = req.locals.result;
+  console.log("====================req.locals=====================");
+      console.log(JSON.stringify(req.locals));
 
   if (!discussion.due) {
+      console.log("2");
+      console.log(discussion);
+      console.log("====================discussion.due=====================");
+      console.log(discussion.due);
     req.locals.error = { message: 'Due field cannot be empty' };
     return next();
   }
 
   if (!discussion.assign) {
+      console.log("3");
     req.locals.error = { message: 'Assignee cannot be empty' };
     return next();
   }
 
   var allowedStatuses = ['new', 'scheduled', 'cancelled'];
   if (allowedStatuses.indexOf(discussion.status) === -1) {
+      console.log("4");
     req.locals.error = { message: 'Cannot be scheduled for this status' };
     return next();
   }
 
+      console.log("discussion");
+      console.log(discussion);
+
   Task.find({ discussions: discussion._id }).then(function(tasks) {
+      console.log("tasks");
+      console.log(tasks);
     var groupedTasks = _.groupBy(tasks, function (task) {
       return _.contains(task.tags, 'Agenda');
     });
@@ -102,6 +117,8 @@ exports.schedule = function (req, res, next) {
       agendaTasks: groupedTasks['true'] || [],
       additionalTasks: groupedTasks['false'] || []
     }).then(function() {
+        console.log("req.locals.data.body");
+        console.log(req.locals.data.body);
       req.locals.data.body = discussion;
       req.locals.data.body.status = 'scheduled';
       next();
@@ -164,6 +181,55 @@ exports.summary = function (req, res, next) {
         next();
       });
     });
+};
+
+exports.getByEntity = function (req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
+
+  var entities = {users: 'creator', _id: '_id', projects: 'project'},
+    entityQuery = {};
+
+  entityQuery[entities[req.params.entity]] = req.params.id;
+  var starredOnly = false;
+  var ids = req.locals.data.ids;
+  if (ids && ids.length) {
+    entityQuery._id = { $in: ids };
+    starredOnly = true;
+  }
+  
+  var Query = Discussion.find(entityQuery);
+
+  Query.populate(options.includes);
+  
+  Discussion.find(entityQuery).count({}, function(err, c) {
+    req.locals.data.pagination.count = c;
+		
+		var pagination = req.locals.data.pagination;
+	  if (pagination && pagination.type && pagination.type === 'page') {
+	    Query.sort(pagination.sort)
+	      .skip(pagination.start)
+	      .limit(pagination.limit);
+	  }
+
+	  Query.exec(function (err, discussions) {
+	    if (err) {
+	      req.locals.error = { message: 'Can\'t get discussions' };
+	    } else {
+	      if (starredOnly) {
+	        discussions.forEach(function(discussion) {
+	          discussion.star = true;
+	        });
+	      }
+
+	      req.locals.result = discussions;
+	    }
+
+	    next();
+	  });
+
+	});
 };
 
 exports.getByProject = function (req, res, next) {

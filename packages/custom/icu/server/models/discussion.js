@@ -57,7 +57,11 @@ var DiscussionSchema = new Schema({
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User'
-  }]
+  }],
+  project: {
+    type: Schema.ObjectId,
+    ref: 'Project'
+  },
 });
 
 var starVirtual = DiscussionSchema.virtual('star');
@@ -87,7 +91,7 @@ DiscussionSchema.post('save', function () {
   elasticsearch.save(this, 'discussion');
 });
 DiscussionSchema.pre('remove', function (next) {
-  elasticsearch.delete(this, 'discussion', null, next);
+   elasticsearch.delete(this, 'discussion', null, next);
   next();
 });
 

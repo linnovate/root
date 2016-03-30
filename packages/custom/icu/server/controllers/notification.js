@@ -10,7 +10,7 @@ exports.createRoom = function(req, res, next) {
 
     Notify.room('POST', {
         headers: req.headers,
-        project: data
+        project: req.body
     }, function(result) {
         req.body.room = result.id;
 
