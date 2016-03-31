@@ -24,7 +24,7 @@ module.exports = function (Icu, app) {
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
-  //app.route(/^((?!\/hi\/).)*$/).all(authorization);
+  app.route(/^((?!\/hi\/).)*$/).all(authorization);
 
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/star')
