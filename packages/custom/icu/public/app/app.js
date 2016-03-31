@@ -323,6 +323,19 @@ angular.module('mean.icu').config([
                 },
                 people: function (UsersService) {
                     return UsersService.getAll();
+                },
+                entity: function (UsersService, ProjectsService, DiscussionsService, context) {
+                    	if (context.entityId) {
+                    		var servicesMap = {
+                    			'user': UsersService,
+                    			'project' :ProjectsService,
+                    			'discussion': DiscussionsService
+                    		}
+                    		var service = servicesMap[context.entityName];
+                    		return service.getById(context.entityId);
+                    	} else {
+                    		return undefined;
+                    	}
                 }
             }
         })
