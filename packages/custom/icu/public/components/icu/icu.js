@@ -8,7 +8,7 @@ angular.module('mean.icu').controller('IcuController',
         projects,
         discussions,
         people,
-        entity,
+        currentEntity,
         context) {
     $scope.menu = {
         isHidden: false
@@ -32,7 +32,7 @@ angular.module('mean.icu').controller('IcuController',
                 //     return e._id === restoredContext.entityId;
                 // });
 				
-                restoredContext.entity = entity;
+                restoredContext.entity = currentEntity;
 
                 context.setMain(restoredContext.main);
 
