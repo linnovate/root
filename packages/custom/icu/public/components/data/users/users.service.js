@@ -64,7 +64,9 @@ angular.module('mean.icu.data.usersservice', [])
     function login(credentials) {
         return $http.post('/api/login', credentials).then(function(result) {
             localStorage.setItem('JWT', result.data.token);
-            return result.data;
+            return result;
+        }, function(err) {
+        	return err;
         });
     }
 

@@ -8,7 +8,6 @@ angular.module('mean.icu').controller('IcuController',
         projects,
         discussions,
         people,
-        currentEntity,
         context) {
     $scope.menu = {
         isHidden: false
@@ -17,20 +16,20 @@ angular.module('mean.icu').controller('IcuController',
     $scope.projects = projects.data || projects;
     $scope.discussions = discussions.data || discussions;
     $scope.people = people.data || people;
-    // var entityMap = {
-    //     'project': 'projects',
-    //     'discussion': 'discussions',
-    //     'user': 'people'
-    // };
+    var entityMap = {
+        'project': 'projects',
+        'discussion': 'discussions',
+        'user': 'people'
+    };
 
 
     function initializeContext(state) {
         if (state.name.indexOf('main') === 0) {
             var restoredContext = context.getContextFromState(state);
             if (restoredContext.entityName !== 'all') {
-                // var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
-                //     return e._id === restoredContext.entityId;
-                // });
+                var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
+                    return e._id === restoredContext.entityId;
+                });
 				
                 restoredContext.entity = currentEntity;
 
