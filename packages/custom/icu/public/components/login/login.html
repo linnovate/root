@@ -1,6 +1,6 @@
 <div class="login-page">
     <form novalidate name="loginname" ng-submit="login(credentials)">
-        <div class="error-message">{{errorMessage}}</div>
+        <div class="error-message">{{errorMessage | i18next}}</div>
         <div class="form-group">
             <label>{{'email' | i18next}}</label>
             <input class="form-control" type="text" ng-model="credentials.email" />
