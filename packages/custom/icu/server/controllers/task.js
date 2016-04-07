@@ -100,6 +100,7 @@ exports.getByEntity = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
+  entityQuery.currentUser = req.user;
   var Query = Task.find(entityQuery);
   Query.populate(options.includes);
 
@@ -138,7 +139,7 @@ exports.getZombieTasks = function (req, res, next) {
     return next();
   }
 
-  var Query = Task.find({project: {$eq: null}, discussions: {$size: 0}});
+  var Query = Task.find({project: {$eq: null}, discussions: {$size: 0}, currentUser: req.user});
   Query.populate(options.includes);
 
   Query.exec(function (err, tasks) {

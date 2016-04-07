@@ -36,7 +36,7 @@ exports.destroy = function(req, res, next) {
 
   var discussion = req.locals.result;
 
-  Task.find({ discussions: req.params.id }).then(function(tasks) {
+  Task.find({ discussions: req.params.id, currentUser: req.user }).then(function(tasks) {
     //FIXME: do it with mongo aggregate
     var groupedTasks = _.groupBy(tasks, function(task) {
       return task.project || task.discussions.length > 1
@@ -105,7 +105,7 @@ exports.schedule = function (req, res, next) {
       console.log("discussion");
       console.log(discussion);
 
-  Task.find({ discussions: discussion._id }).then(function(tasks) {
+  Task.find({ discussions: discussion._id, currentUser: req.user }).then(function(tasks) {
       console.log("tasks");
       console.log(tasks);
     var groupedTasks = _.groupBy(tasks, function (task) {
@@ -140,7 +140,7 @@ exports.summary = function (req, res, next) {
     return next();
   }
 
-  Task.find({ discussions: discussion._id }).populate('discussions')
+  Task.find({ discussions: discussion._id, currentUser: req.user }).populate('discussions')
     .then(function(tasks) {
       var projects = _.chain(tasks).pluck('project').compact().value();
       _.each(projects, function (project) {
@@ -198,7 +198,7 @@ exports.getByEntity = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
-  
+  entityQuery.currentUser = req.user;
   var Query = Discussion.find(entityQuery);
 
   Query.populate(options.includes);
@@ -244,7 +244,7 @@ exports.getByProject = function (req, res, next) {
   }
 
   entityQuery[entities[req.params.entity]] = req.params.id;
-
+	entityQuery.currentUser = req.user;
   var Query = Task.find(entityQuery, {discussions: 1, _id: 0});
   Query.populate('discussions');
 
