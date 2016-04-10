@@ -30,7 +30,7 @@ exports.send = function (type, data) {
     return;
   }
 
-  data.uriRoot = config.icu.uri;
+  data.uriRoot = config.host;
   data.date = new Date();
 
   //HACK

@@ -96,7 +96,6 @@ DiscussionSchema.pre('remove', function (next) {
 });
 
 DiscussionSchema.pre('find', function (next) {
-	
 	if (this._conditions.currentUser) {
 		var ObjectId = mongoose.Types.ObjectId; 
 		var userId = new ObjectId(this._conditions.currentUser._id);
@@ -104,6 +103,18 @@ DiscussionSchema.pre('find', function (next) {
 		delete this._conditions.currentUser;
 	}
 	console.log('--------------------------------------------Discussion----------------------------------------------------------')
+	console.log(JSON.stringify(this._conditions))
+	next();
+})
+
+DiscussionSchema.pre('count', function (next) {
+	if (this._conditions.currentUser) {
+		var ObjectId = mongoose.Types.ObjectId; 
+		var userId = new ObjectId(this._conditions.currentUser._id);
+		this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
+		delete this._conditions.currentUser;
+	}
+	console.log('--------------------------------------------Count----------------------------------------------------------')
 	console.log(JSON.stringify(this._conditions))
 	next();
 })

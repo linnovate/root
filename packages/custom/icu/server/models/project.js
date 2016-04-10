@@ -111,6 +111,18 @@ ProjectSchema.pre('find', function (next) {
 	next();
 });
 
+ProjectSchema.pre('count', function (next) {
+	if (this._conditions.currentUser) {
+		var ObjectId = mongoose.Types.ObjectId; 
+		var userId = new ObjectId(this._conditions.currentUser._id);
+		this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
+		delete this._conditions.currentUser;
+	}
+	console.log('--------------------------------------------Count----------------------------------------------------------')
+	console.log(JSON.stringify(this._conditions))
+	next();
+});
+
 
 ProjectSchema.plugin(archive, 'project');
 
