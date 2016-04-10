@@ -11,6 +11,15 @@
     }
 
     button {
-        float: right;
+        float: left;
+    }
+
+    .or-login {
+    	float: right;
+    	cursor: pointer;
+    }
+
+    .error-message {
+    	color: red;
     }
 }

@@ -105,6 +105,18 @@ TaskSchema.post('save', function (req, next) {
   next();
 });
 
+	TaskSchema.pre('find', function (next) {
+		if (this._conditions.currentUser) {
+			var ObjectId = mongoose.Types.ObjectId; 
+			var userId = new ObjectId(this._conditions.currentUser._id);
+			this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
+			delete this._conditions.currentUser;
+		}
+		console.log('--------------------------------------------Task----------------------------------------------------------')
+		console.log(JSON.stringify(this._conditions))
+		next();
+	});
+
 //  var elasticsearch = require('../controllers/elasticsearch');
 
 // TaskSchema.post('/api/save', function(req, res) {

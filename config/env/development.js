@@ -59,7 +59,7 @@ module.exports = {
 //     log: 'trace'
 //     },
   elasticsearch: {
-    host: 'http://192.168.245.152',
+    host: 'http://localhost',
     port: 9200,
     log: 'trace',
     keepAlive: false,

@@ -24,7 +24,7 @@ module.exports = function (Icu, app) {
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
-  //app.route(/^((?!\/hi\/).)*$/).all(authorization);
+  app.route(/^((?!\/hi\/).)*$/).all(authorization);
 
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/star')
@@ -123,9 +123,9 @@ module.exports = function (Icu, app) {
   app.route('/api/discussions/:id([0-9a-fA-F]{24})/summary')
     .post(discussion.read, discussion.summary, discussion.update, updates.updated);
   app.route('/api/:entity(projects)/:id([0-9a-fA-F]{24})/discussions')
-    .get(pagination.parseParams, discussion.getByProject, star.isStarred, pagination.formResponse); //, discussion.getByEntity);
+    .get(pagination.parseParams, discussion.getByProject, discussion.getByEntity, star.isStarred, pagination.formResponse); //, discussion.getByEntity);
   app.route('/api/:entity(projects)/:id([0-9a-fA-F]{24})/discussions/starred')
-    .get(pagination.parseParams, star.getStarredIds('discussions'), discussion.getByProject, pagination.formResponse); //, discussion.getByEntity);
+    .get(pagination.parseParams, star.getStarredIds('discussions'), discussion.getByProject, discussion.getByEntity, pagination.formResponse); //, discussion.getByEntity);
 
   app.route('/api/updates*').all(entity('updates'));
   app.route('/api/updates')

@@ -21,7 +21,6 @@ angular.module('mean.icu').config([
                 if (!service[getFn]) {
                     getFn = 'getById';
                 }
-
                 return service[getFn]($stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
@@ -56,15 +55,17 @@ angular.module('mean.icu').config([
                         templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
                         controller: capitalizedMain + 'ListController'
                     },
-                    // 'detailspane@main': {
-                    //     templateUrl: function ($stateParams) {
-                    //         return '/icu/components/' + $stateParams.entity + '-details/' +
-                    //             $stateParams.entity + '-details.html';
-                    //     },
-                    //     controllerProvider: function ($stateParams) {
-                    //         return capitalize($stateParams.entity) + 'DetailsController';
-                    //     }
-                    // }
+                    'detailspane@main': {
+                        templateUrl: function ($stateParams) {
+                            if (!$stateParams.entity) return '';
+                            else return '/icu/components/' + $stateParams.entity + '-details/' +
+                                $stateParams.entity + '-details.html';
+                        },
+                        controllerProvider: function ($stateParams) {
+                        	if (!$stateParams.entity) return '';
+                            else return capitalize($stateParams.entity) + 'DetailsController';
+                        }
+                    }
                 },
                 resolve: resolve
             };
@@ -317,14 +318,14 @@ angular.module('mean.icu').config([
                     return UsersService.getMe();
                 },
                 projects: function (ProjectsService) {
-                    return ProjectsService.getAll(0, LIMIT, SORT).then(function (data) {
+                    return ProjectsService.getAll(0, 0, SORT).then(function (data) {
                         return data;
                     }, function (err) {
                         return [];
                     });
                 },
                 discussions: function (DiscussionsService) {
-                    return DiscussionsService.getAll(0, LIMIT, SORT).then(function (data) {
+                    return DiscussionsService.getAll(0, 0, SORT).then(function (data) {
                         return data;
                     }, function (err) {
                         return [];
@@ -645,6 +646,7 @@ angular.module('mean.icu').config([
 ]);
 
 angular.module('mean.icu').config(function ($i18nextProvider) {
+    
     $i18nextProvider.options = {
         lng: 'en_US',
         useCookie: false,

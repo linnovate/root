@@ -57,7 +57,11 @@ var DiscussionSchema = new Schema({
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User'
-  }]
+  }],
+  project: {
+    type: Schema.ObjectId,
+    ref: 'Project'
+  },
 });
 
 var starVirtual = DiscussionSchema.virtual('star');
@@ -79,7 +83,7 @@ DiscussionSchema.statics.load = function (id, cb) {
   }).populate('creator', 'name username').exec(cb);
 };
 /**
- * Post middleware
+ * middleware
  */
 var elasticsearch = require('../controllers/elasticsearch');
 
@@ -90,6 +94,19 @@ DiscussionSchema.pre('remove', function (next) {
    elasticsearch.delete(this, 'discussion', null, next);
   next();
 });
+
+DiscussionSchema.pre('find', function (next) {
+	
+	if (this._conditions.currentUser) {
+		var ObjectId = mongoose.Types.ObjectId; 
+		var userId = new ObjectId(this._conditions.currentUser._id);
+		this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
+		delete this._conditions.currentUser;
+	}
+	console.log('--------------------------------------------Discussion----------------------------------------------------------')
+	console.log(JSON.stringify(this._conditions))
+	next();
+})
 
 DiscussionSchema.plugin(archive, 'discussion');
 

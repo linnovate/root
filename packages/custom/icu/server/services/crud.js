@@ -56,6 +56,10 @@ var defaults = {
 };
 
 module.exports = function(entityName, options) {
+  var findByUser = ['tasks', 'projects', 'discussions'];
+  if (findByUser.indexOf(entityName) > -1) 
+  	var currentUser = true;
+
   var Model = entityNameMap[entityName].mainModel;
   var ArchiveModel = entityNameMap[entityName].archiveModel;
 
@@ -65,16 +69,16 @@ module.exports = function(entityName, options) {
 
   options = _.defaults(options, defaults);
 
-  function all(pagination) {
+  function all(pagination, user) {
     var deffered = q.defer();
 
     var query;
-    var countQuery = Model.find({}).count();
+    var countQuery = Model.find().count();
     var mergedPromise;
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
-        query = Model.find({})
+        query = Model.find(currentUser ? {currentUser: user} : {})
           .sort(pagination.sort)
           .skip(pagination.start)
           .limit(pagination.limit);
@@ -91,7 +95,7 @@ module.exports = function(entityName, options) {
         deffered.resolve(mergedPromise);
       }
     } else {
-      query = Model.find({});
+      query = Model.find(currentUser ? {currentUser: user} : {});
       query.populate(options.includes);
       query.hint({ _id: 1 });
 

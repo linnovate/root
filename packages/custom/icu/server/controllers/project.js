@@ -32,7 +32,7 @@ exports.destroy = function(req, res, next) {
     return next();
   }
 
-  Task.find({ project: req.params.id }).then(function(tasks) {
+  Task.find({ project: req.params.id, currentUser: req.user }).then(function(tasks) {
     //FIXME: do it with mongo aggregate
     var groupedTasks = _.groupBy(tasks, function(task) {
       return task.discussions.length > 0
@@ -71,7 +71,7 @@ exports.getByEntity = function (req, res, next) {
     return next();
   }
 
-  var entities = {users: 'creator', _id: '_id'},
+  var entities = {users: 'creator', _id: '_id', discussions: 'discussion'},
     entityQuery = {};
 
   entityQuery[entities[req.params.entity]] = req.params.id;
@@ -82,10 +82,11 @@ exports.getByEntity = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
+  entityQuery.currentUser = req.user;
   var Query = Project.find(entityQuery);
 
   Query.populate(options.includes);
-  
+
   Project.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;
 		
@@ -135,7 +136,7 @@ exports.getByDiscussion = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
-
+	entityQuery.currentUser = req.user;
   var Query = Task.find(entityQuery, {project: 1, _id: 0});
   Query.populate('project');
 

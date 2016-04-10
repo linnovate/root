@@ -81,18 +81,34 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 title: '',
                 watchers: [],
             };
+            var state;
+            var params = {};
+
+            if (context.entityName === 'all') {
+                if (context.main === 'projects') {
+                    // projects.all
+                    state = 'main.projects.all.details';
+                    params.entity = 'project';
+                } else {
+                    // discussions.all, tasks.all
+                    state = 'main.projects.byentity.details';
+                    params.entityId = $stateParams.id;
+                    params.entity = entities[context.main];
+                    project[params.entity] = $stateParams.id;
+                }
+            } else {
+                // tasks.projects, tasks.discussions, discussions.projects, projects.discussions
+                state = 'main.projects.byentity.details';
+                params.entity = $stateParams.entity;
+                params.entityId = $stateParams.entityId;
+                project[$stateParams.entity] = $stateParams.entityId;
+            }
 
             ProjectsService.create(project).then(function (result) {
                 
                 $scope.projects.push(result);
-                var entityId = $stateParams.id;
-                $state.go('main.projects.byentity.details', {
-                    id: result._id,
-                    entity: 'discussion',
-                    entityId: entityId
-                });
-            }, function(error) {
-                console.log(error, 'create project error');
+            	params.id = result._id;
+                $state.go(state, params, {reload: true});
             });
         };
 
@@ -101,15 +117,32 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 title: '',
                 watchers: [],
             };
+            var state;
+            var params = {};
 
+            if (context.entityName === 'all') {
+                if (context.main === 'discussions') {
+                    // discussions.all
+                    state = 'main.discussions.all.details';
+                    params.entity = 'discussion';
+                } else {
+                    // projects.all, tasks.all
+                    state = 'main.discussions.byentity.details';
+                    params.entityId = $stateParams.id;
+                    params.entity = entities[context.main];
+                    discussion[params.entity] = $stateParams.id;
+                }
+            } else {
+                // tasks.projects, tasks.discussions, discussions.projects, projects.discussions
+                state = 'main.discussions.byentity.details';
+                params.entity = $stateParams.entity;
+                params.entityId = $stateParams.entityId;
+                discussion[$stateParams.entity] = $stateParams.entityId;
+            }
             DiscussionsService.create(discussion).then(function (result) {
                 $scope.discussions.push(result);
-                var entityId = $stateParams.id;
-                $state.go('main.discussions.byentity.details', {
-                    id: result._id,
-                    entity: 'project',
-                    entityId: entityId
-                });
+                params.id = result._id;
+                $state.go(state, params, {reload: true});
             });
         };
     }
