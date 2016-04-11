@@ -20,7 +20,19 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         });
 
+        var errors = {
+    		'assign': 'please select assignee!',
+    		'due': 'please choose deadline!',
+    		'title': 'please fill title!'
+    	};
+
         $scope.summary = function (discussion) {
+        	for (var key in errors) {
+        		if (!discussion[key]) {
+        			alert(errors[key]);
+        			return
+        		}
+        	};
             DiscussionsService.summary(discussion).then(function (result) {
                 discussion.status = result.status;
                 var index = $state.current.name.indexOf('main.search');
