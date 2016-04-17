@@ -641,7 +641,11 @@ angular.module('mean.icu').config([
         .state('main.search.discussion.tasks', getDetailsTabState('discussion', 'tasks'))
 
         .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
-        .state('main.search.attachment.versions', getAttachmentDetailsTabState());
+        .state('main.search.attachment.versions', getAttachmentDetailsTabState())
+        
+        //Add by OHAD 17.4.16 
+        .state('main.search.update', getAttachmentDetailsState('/attachment'))
+        .state('main.search.update.versions', getAttachmentDetailsTabState());
 }
 ]);
 

@@ -43,12 +43,30 @@ module.exports = {
   },
   emailFrom: 'SENDER EMAIL ADDRESS', // sender address like ABC <abc@example.com>
   mailer: {
-    service: 'SERVICE_PROVIDER', // Gmail, SMTP
+    service: 'SMTP', // Gmail, SMTP
+    host: 'smtp.gmail.com', //in case of SMTP
+    port: 465, // in case of SMTP
+    secure: true, // in case of SMTP
     auth: {
       user: 'EMAIL_ID',
       pass: 'PASSWORD'
     }
   }, 
+//   mailer: {
+//     service: 'SMTP', // Gmail, SMTP
+//     host: 'localhost', //in case of SMTP
+//     port: 25, // in case of SMTP
+//     secure: false, // in case of SMTP
+//     tls: false, // in case of SMTP
+//     ignoreTLS: true
+//   },
+//   mailer: {
+//     service: 'SERVICE_PROVIDER', // Gmail, SMTP
+//     auth: {
+//       user: 'EMAIL_ID',
+//       pass: 'PASSWORD'
+//     }
+//   }, 
   secret: 'SOME_TOKEN_SECRET',
     api: {
       uri: 'http://192.168.245.152:3003'

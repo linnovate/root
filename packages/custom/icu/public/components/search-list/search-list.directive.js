@@ -3,6 +3,8 @@
 angular.module('mean.icu.ui.searchlist', [])
 .directive('icuSearchList', function () {
     function controller($scope, $state) {
+        
+        
         if ($scope.results.length && $state.current.name === 'main.search') {
             var active  = $scope.results[0];
 
