@@ -101,6 +101,24 @@ ICU.register(function (app, auth, database) {
         'mean.icu.ui.modaldeletetasksbyentity',
     ]);
 
+
+console.yon = function(data, inspect) {
+    
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    
+    if (typeof data === 'object') {
+        
+        if (inspect) {
+            return console.dir(data);
+        }
+        
+        return console.dir(data);
+    }
+    
+    console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+    
+    console.log(data);
+}
     ICU.settings({
         'language': 'en-US'
     }, function (err, settings) {

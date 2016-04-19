@@ -23,20 +23,22 @@ exports.getByEntity = function (req, res) {
   var entities = {projects: 'project', tasks: 'task', discussions: 'discussion', updates: 'update'},
     entity = entities[req.params.entity];
 
-  var query = {
+var query = {
     "query": {
       "filtered" : { 
-        "filter" : {
-          "bool" : {
-            "must" : [
-              { "term" : {"entity" : entity}}, 
-              { "term" : {"entityId" : req.params.id}} 
-            ]
-          }
-        }
+         "filter" : {
+            "bool" : {
+              "must" : [
+                 { "term" : {"entity" : entity}}, 
+                 { "term" : {"entityId" : req.params.id}} 
+              ]
+        
+           }
+         }
       }
-  	}
-  };
+  }
+   	};
+
 
   mean.elasticsearch.search({index: 'attachment', 'body': query, size: 3000}, function (err, response) {
     if (err) {

@@ -73,7 +73,7 @@ module.exports = function(entityName, options) {
     var deffered = q.defer();
 
     var query;
-    var countQuery = Model.find(currentUser ? {currentUser: user} : {}).count();
+    var countQuery = Model.find().count();
     var mergedPromise;
 
     if (pagination && pagination.type) {

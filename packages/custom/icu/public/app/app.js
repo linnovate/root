@@ -10,6 +10,7 @@ angular.module('mean.icu').config([
         };
 
         var generateStateByEntity = function (main) {
+
             var capitalizedMain = capitalize(main);
 
             var resolve = {};
@@ -237,8 +238,14 @@ angular.module('mean.icu').config([
         }
 
         function getDetailsTabState(main, tab) {
+            //task , activities
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
+
+            console.log("tab");
+            console.log(tab);
+            console.log("main");
+            console.log(main);
 
             var resolve = {};
             resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
@@ -256,7 +263,7 @@ angular.module('mean.icu').config([
             resolve.entity = ['context', function (context) {
                 return context.entity;
             }];
-
+            
             return {
                 url: '/' + tab,
                 views: {
@@ -267,6 +274,9 @@ angular.module('mean.icu').config([
                         },
                         controllerProvider: function ($stateParams) {
                             var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
+                            console.log('=================');
+                            console.log(main, tab, entity, capitalizedTab);
+                            console.log('=================');
                             return entity + capitalizedTab + 'Controller';
                         }
                     }
@@ -631,7 +641,11 @@ angular.module('mean.icu').config([
         .state('main.search.discussion.tasks', getDetailsTabState('discussion', 'tasks'))
 
         .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
-        .state('main.search.attachment.versions', getAttachmentDetailsTabState());
+        .state('main.search.attachment.versions', getAttachmentDetailsTabState())
+        
+        //Add by OHAD 17.4.16 
+        .state('main.search.update', getAttachmentDetailsState('/attachment'))
+        .state('main.search.update.versions', getAttachmentDetailsTabState());
 }
 ]);
 

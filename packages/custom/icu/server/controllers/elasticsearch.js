@@ -39,6 +39,8 @@ exports.delete = function (doc, docType, room, next) {
 };
 
 function buildSearchResponse(type, obj) {
+    
+    console.yon('inbuild response');
   var groups = {};
   if (type === 'aggs') {
     obj.forEach(function (i) {
@@ -55,6 +57,9 @@ function buildSearchResponse(type, obj) {
       groups[i._index].push(i._source);
     })
   }
+  
+  console.yon(groups);
+  
   return groups;
 }
 
@@ -68,7 +73,7 @@ exports.search = function (req, res, next) {
       'multi_match': {
         'query': req.query.term.replace(',', ' '),
         'type': 'cross_fields',
-        'fields': ['title^3', 'color', 'name', 'tags', 'description'],
+        'fields': ['title^3', 'color', 'name', 'tags', 'description', 'file.filename'],
         'operator': 'or'
       }
     },
@@ -86,20 +91,35 @@ exports.search = function (req, res, next) {
     }
   };
 
+
   var options = {
-    index: req.query.index ? req.query.index.split(',') : ['project', 'task', 'discussion', 'user', 'attachment'],
+    //index: req.query.index ? req.query.index.split(',') : ['project', 'task', 'discussion', 'user', 'attachment'],
     ignore_unavailable: true,
     from: 0,
     size: 3000,
     body: query
   };
+  
+    console.log("****************************************************");
+    console.log(JSON.stringify(options));
+    console.log("****************************************************");
 
   mean.elasticsearch.search(options, function (err, result) {
+    console.log("****************************************************result");
+    console.dir(result.hits.hits);
+    console.log("****************************************************");
     utils.checkAndHandleError(err, 'Failed to find entities', next);
-    if (req.query.term)
+    
+    
+    console.yon(req.query);
+   
+    if (req.query.term) {
+      console.log('yes term')
       res.send(buildSearchResponse('aggs', result.aggregations.group_by_index.buckets))
-    else
+    }
+    else {
       res.send(buildSearchResponse('simple', result.hits.hits))
+    }
   })
 };
 
