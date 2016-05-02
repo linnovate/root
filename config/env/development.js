@@ -12,7 +12,8 @@ module.exports = {
     debug: false
   },
   app: {
-    name: 'MEAN - FullStack JS - Development'
+    //Made By OHAD - name: 'MEAN - FullStack JS - Development'
+    name: 'ICU'
   },
   //hostname: 'http://192.168.245.152:3000',
   host: 'http://localhost:3000',
