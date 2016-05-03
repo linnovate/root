@@ -1,3 +1,5 @@
+config/env/*
+!config/env/example.js
 # --------------------
 # OSX Files
 # --------------------

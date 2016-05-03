@@ -85,7 +85,7 @@ ProjectSchema.statics.load = function (id, cb) {
 };
 
 /**
- * Post middleware
+ * middleware
  */
 var elasticsearch = require('../controllers/elasticsearch');
 
@@ -98,6 +98,31 @@ ProjectSchema.pre('remove', function (next) {
   elasticsearch.delete(this, 'project', this.room, next);
   next();
 });
+
+ProjectSchema.pre('find', function (next) {
+	if (this._conditions.currentUser) {
+		var ObjectId = mongoose.Types.ObjectId; 
+		var userId = new ObjectId(this._conditions.currentUser._id);
+		this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
+		delete this._conditions.currentUser;
+	}
+	console.log('--------------------------------------------Project----------------------------------------------------------')
+	console.log(JSON.stringify(this._conditions))
+	next();
+});
+
+ProjectSchema.pre('count', function (next) {
+	if (this._conditions.currentUser) {
+		var ObjectId = mongoose.Types.ObjectId; 
+		var userId = new ObjectId(this._conditions.currentUser._id);
+		this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
+		delete this._conditions.currentUser;
+	}
+	console.log('--------------------------------------------Count----------------------------------------------------------')
+	console.log(JSON.stringify(this._conditions))
+	next();
+});
+
 
 ProjectSchema.plugin(archive, 'project');
 

@@ -16,12 +16,12 @@ angular.module('mean.icu').controller('IcuController',
     $scope.projects = projects.data || projects;
     $scope.discussions = discussions.data || discussions;
     $scope.people = people.data || people;
-
     var entityMap = {
         'project': 'projects',
         'discussion': 'discussions',
         'user': 'people'
     };
+
 
     function initializeContext(state) {
         if (state.name.indexOf('main') === 0) {
@@ -30,7 +30,7 @@ angular.module('mean.icu').controller('IcuController',
                 var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
                     return e._id === restoredContext.entityId;
                 });
-
+				
                 restoredContext.entity = currentEntity;
 
                 context.setMain(restoredContext.main);

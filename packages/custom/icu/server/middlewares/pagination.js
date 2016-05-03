@@ -25,9 +25,6 @@ function parseParams(req, res, next) {
     start: req.query.start ? +req.query.start : undefined,
     limit: req.query.limit ? +req.query.limit : undefined
   };
-  
-console.log("parseParams=========================================req.query.start");
-console.log(req.query.start);
 
   next();
 }
@@ -67,12 +64,6 @@ function formResponse(req, res, next) {
 
         page.prev = prevUrl;
       }
-      console.log("pagination.start======================");
-      console.log(pagination.start);
-            console.log("pagination.limit======================");
-      console.log(pagination.limit);
-            console.log("pagination.count======================");
-      console.log(pagination.count);
 
       var hasNext = pagination.start + pagination.limit < pagination.count;
       if (hasNext) {
@@ -82,8 +73,6 @@ function formResponse(req, res, next) {
         nextParams.start = nextStart;
         nextUrl = baseUrl + '?' + querystring.stringify(nextParams);
 
-            console.log("nextUrl======================");
-      console.log(nextUrl);
         page.next = nextUrl;
       }
     }

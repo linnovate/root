@@ -26,8 +26,10 @@ SystemPackage.register(function(app, auth, database) {
   app.set('views', __dirname + '/server/views');
 
   // Setting the favicon and static folder
-  app.use(favicon(__dirname + '/public/assets/img/favicon.ico'));
-
+//   app.use(favicon(__dirname + '/public/assets/img/favicon.ico'));
+  
+  app.use(favicon('/home/as/Desktop/icu/favicon.png'));
+  
   // Adding robots and humans txt
   app.useStatic(__dirname + '/public/assets/static');
 

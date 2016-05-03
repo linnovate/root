@@ -27,7 +27,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
         $scope.logout = function () {
             UsersService.logout().then(function () {
-                $state.go('login');
+                $state.go('login', null, {'reload':true});
             });
         };
 
@@ -81,33 +81,15 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 title: '',
                 watchers: [],
             };
-            var state;
-            var params = {};
-
-            if (context.entityName === 'all') {
-                if (context.main === 'projects') {
-                    // projects.all
-                    state = 'main.projects.all.details';
-                    params.entity = 'project';
-                } else {
-                    // discussions.all, tasks.all
-                    state = 'main.projects.byentity.details';
-                    params.entityId = $stateParams.id;
-                    params.entity = entities[context.main];
-                    project[params.entity] = $stateParams.id;
-                }
-            } else {
-                // tasks.projects, tasks.discussions, discussions.projects, projects.discussions
-                state = 'main.projects.byentity.details';
-                params.entity = $stateParams.entity;
-                params.entityId = $stateParams.entityId;
-                project[$stateParams.entity] = $stateParams.entityId;
-            }
 
             ProjectsService.create(project).then(function (result) {
+                
                 $scope.projects.push(result);
-            	params.id = result._id;
-                $state.go(state, params, {reload: true});
+                $state.go('main.tasks.byentity.activities', {
+                	id: result._id,
+                    entity: 'project',
+                    entityId: result._id
+                });
             });
         };
 
@@ -116,32 +98,14 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 title: '',
                 watchers: [],
             };
-            var state;
-            var params = {};
-
-            if (context.entityName === 'all') {
-                if (context.main === 'discussions') {
-                    // discussions.all
-                    state = 'main.discussions.all.details';
-                    params.entity = 'discussion';
-                } else {
-                    // projects.all, tasks.all
-                    state = 'main.discussions.byentity.details';
-                    params.entityId = $stateParams.id;
-                    params.entity = entities[context.main];
-                    discussion[params.entity] = $stateParams.id;
-                }
-            } else {
-                // tasks.projects, tasks.discussions, discussions.projects, projects.discussions
-                state = 'main.discussions.byentity.details';
-                params.entity = $stateParams.entity;
-                params.entityId = $stateParams.entityId;
-                discussion[$stateParams.entity] = $stateParams.entityId;
-            }
+            
             DiscussionsService.create(discussion).then(function (result) {
                 $scope.discussions.push(result);
-                params.id = result._id;
-                $state.go(state, params, {reload: true});
+                $state.go('main.tasks.byentity.activities', {
+                    id: result._id,
+                    entity: 'discussion',
+                    entityId: result._id
+                });
             });
         };
     }
