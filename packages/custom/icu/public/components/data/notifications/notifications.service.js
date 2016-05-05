@@ -7,7 +7,6 @@ angular.module('mean.icu.data.notificationsservice', [])
     var notifications = [];
 
     function getAll() {
-    	console.log('n',notifications)
         return notifications;
     }
 
@@ -19,7 +18,6 @@ angular.module('mean.icu.data.notificationsservice', [])
 	        user: assign.name,
 	        date: date.humanize(true)
 	    });
-	    console.log('nn',notifications)
     }
 
     return {
