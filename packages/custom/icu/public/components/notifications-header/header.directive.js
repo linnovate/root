@@ -11,9 +11,22 @@ angular.module('mean.icu.ui.notificationsheader', [])
                                                DiscussionsService,
                                                $document) {
     function controller($scope) {
-        $scope.notifications = NotificationsService.getAll();
-        $scope.popupNotifications = $scope.notifications.slice(0, -1);
-        $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
+    	
+    	var updateNotification = function(taskId) {
+    		TasksService.getById(taskId).then(function(data){
+				if (data.assign && $scope.me._id == data.assign._id) {
+                	NotificationsService.addNotification(data.title, data.assign);
+                	$scope.notifications = NotificationsService.getAll();
+					$scope.popupNotifications = $scope.notifications.slice(0, -1);
+					$scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
+				}
+            })
+    	};
+
+    	$scope.$on('updateNotification', function(event, args) {
+    		updateNotification(args.taskId)
+		});
+        
         $scope.context = context;
         $scope.allNotifications = false;
 
@@ -23,6 +36,9 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
         UsersService.getMe().then(function (me) {
             $scope.me = me;
+            if (context.main === 'tasks') {
+	            updateNotification($stateParams.id)
+	        }
         });
 
         $scope.logout = function () {
