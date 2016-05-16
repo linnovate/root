@@ -18,6 +18,10 @@ angular.module('mean.icu.data.notificationsservice', [])
 	        user: assign.name,
 	        date: date.humanize(true)
 	    });
+	    if (notifications.length > 10) {
+	    	notifications.shift();
+	    }
+
     }
 
     return {
