@@ -4,31 +4,28 @@ angular.module('mean.icu.data.notificationsservice', [])
 .service('NotificationsService', function($http) {
     var date = moment.duration(-5, 'minutes');
 
-    var notifications = [{
-        entity: 'Task',
-        entityName: 'Design homepage',
-        action: 'assigned to',
-        user: 'Idan Arbel',
-        date: date.humanize(true)
-    }, {
-        entity: 'Task',
-        entityName: 'Design task details',
-        action: 'assigned to',
-        user: 'Idan Arbel',
-        date: date.humanize(true)
-    }, {
-        entity: 'Task',
-        entityName: 'Design task list',
-        action: 'assigned to',
-        user: 'Idan Arbel',
-        date: date.humanize(true)
-    }];
+    var notifications = [];
 
     function getAll() {
         return notifications;
     }
 
+    function addNotification(entityName, assign) {
+    	notifications.push({
+	        entity: 'Task',
+	        entityName: entityName,
+	        action: 'assigned to',
+	        user: assign.name,
+	        date: date.humanize(true)
+	    });
+	    if (notifications.length > 10) {
+	    	notifications.shift();
+	    }
+
+    }
+
     return {
-        getAll: getAll
+        getAll: getAll,
+        addNotification: addNotification
     };
 });
