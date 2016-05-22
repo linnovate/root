@@ -522,14 +522,14 @@ exports.load = function(swagger, parms) {
   var discussionShow = {
     'spec': {
       description: 'discussion operations',
-      path: '/discussions/:id',
+      path: '/discussions/{id}',
       method: 'GET',
       summary: 'Get one discussion by _id',
       notes: '',
       type: 'Discussion',
       nickname: 'discussionShow',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.path('id', 'Project Id', 'string')]
     }
   };
 
@@ -578,11 +578,12 @@ exports.load = function(swagger, parms) {
   var discussionDelete = {
     'spec': {
       description: 'Delete a discussion',
-      path: '/discussions/:id',
+      path: '/discussions/{id}',
       method: 'DELETE',
       summary: 'delete a discussion',
       type: 'Discussion',
       nickname: 'discussionDelete',
+      parameters: [swagger.paramTypes.path('id', 'Project Id', 'string')],
       produces: ['application/json'],
     }
   };
@@ -590,14 +591,14 @@ exports.load = function(swagger, parms) {
   var discussionHistory = {
     'spec': {
       description: 'get all updates history for a single discussion',
-      path: '/history/discussions/:id',
+      path: '/history/discussions/{id}',
       method: 'GET',
       summary: 'get all updates history for a single discussion',
       notes: '',
       type: 'Discussion',
       nickname: 'GetDiscussionHistory',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.path('id', 'Project Id', 'string')]
     }
   };
 
@@ -612,6 +613,7 @@ exports.load = function(swagger, parms) {
         nickname: 'discussionByEntity',
         produces: ['application/json'],
         params: searchParms
+        
     }
   };
 
