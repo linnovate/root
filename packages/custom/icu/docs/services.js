@@ -142,21 +142,26 @@ exports.load = function(swagger, parms) {
   var getTask = {
     'spec': {
       description: 'get a single task',
-      path: '/tasks/:id',
+      path: '/tasks/{id}',
       method: 'GET',
       summary: 'get a single task',
       notes: 'The really path is \'/tasks/:id\' ',
       type: 'Task',
       nickname: 'GetTask',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.path('id', 'Task Id', 'string')]
+    
     }
   };
+
+
+
+
 
   var updateTask = {
     'spec': {
       description: 'Update a task',
-      path: '/tasks/:id',
+      path: '/tasks/id',
       method: 'PUT',
       summary: 'Update a task',
       notes: 'The really path is \'/tasks/:id\'',
@@ -178,12 +183,13 @@ exports.load = function(swagger, parms) {
   var deleteTask = {
     'spec': {
       description: 'Delete a task',
-      path: '/tasks/:id',
+      path: '/tasks/{id}',
       method: 'DELETE',
       summary: 'delete a task',
       notes: 'The really path is \'/tasks/:id\'',
       type: 'Task',
       nickname: 'deleteTask',
+      parameters: [swagger.paramTypes.path('id', 'Task Id', 'string')],
       produces: ['application/json']
     }
   };
@@ -219,13 +225,14 @@ exports.load = function(swagger, parms) {
   var tasksHistory = {
     'spec': {
       description: 'get all updates history for a single task',
-      path: '/history/tasks/:id',
+      path: '/history/tasks/{id}',
       method: 'GET',
       summary: 'get all updates history for a single task',
       notes: '',
       type: 'Archive',
       nickname: 'GetTaskHistory',
       produces: ['application/json'],
+      parameters: [swagger.paramTypes.path('id', 'Task Id', 'string')],
       params: searchParms
     }
   };
@@ -268,14 +275,15 @@ exports.load = function(swagger, parms) {
   var projectsHistory = {
     'spec': {
       description: 'get all updates history for a single project',
-      path: '/history/projects/:id',
+      path: '/history/projects/{id}',
       method: 'GET',
       summary: 'get all updates history for a single project',
       notes: '',
       type: 'Project',
       nickname: 'GetProjectHistory',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.path('id', 'Project Id', 'string')]
+
     }
   };
 
@@ -323,12 +331,13 @@ exports.load = function(swagger, parms) {
   var updateAttachment = {
     'spec': {
       description: 'Update an attachment',
-      path: '/attachments/:id',
+      path: '/attachments/{id}',
       method: 'POST',
       summary: 'Update an attachment',
       type: 'Attachment',
       nickname: 'updateAttachment',
       produces: ['multipart/form-data'],
+      parameters: [swagger.paramTypes.path('id', 'Attachment Id', 'string')],
       notes: '<p>You can use it with html file upload, for example: https://github.com/danialfarid/ng-file-upload.</p><p> On fields you must send {issue: "string", issueId: "string"}.</p><p>------------------------there is a problem to create via swagger, because you can\'t upload file------------------</p>'
     }
   };
