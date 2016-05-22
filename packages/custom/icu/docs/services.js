@@ -161,15 +161,16 @@ exports.load = function(swagger, parms) {
   var updateTask = {
     'spec': {
       description: 'Update a task',
-      path: '/tasks/id',
+      path: '/tasks/{id}',
       method: 'PUT',
       summary: 'Update a task',
       notes: 'The really path is \'/tasks/:id\'',
       type: 'Task',
       nickname: 'updateTask',
       produces: ['application/json'],
-      params: searchParms,
-      parameters: [{
+      parameters: [
+ swagger.paramTypes.path('id', 'Task Id', 'string'),
+      {
         name: 'body',
         description: 'task to update',
         required: true,
@@ -194,19 +195,20 @@ exports.load = function(swagger, parms) {
     }
   };
 
-  var getTasksPerEntity = {
+  /*var getTasksPerEntity = {
     'spec': {
       description: 'get a list of tasks per user/project/discussion',
-      path: '/:entity/:id/tasks',
+      path: '/{entity}/{id}/tasks',
       method: 'GET',
       summary: 'get a list of tasks per user/project/...',
       notes: '',
       type: 'Task',
       nickname: 'GetTask',
       produces: ['application/json'],
-      params: searchParms
+       parameters: [swagger.paramTypes.path('entity', 'entity', 'string'),swagger.paramTypes.path('id', 'Task Id', 'string')]
+     
     }
-  };
+  };*/
 
   var zombieTasks = {
     'spec': {
@@ -232,8 +234,7 @@ exports.load = function(swagger, parms) {
       type: 'Archive',
       nickname: 'GetTaskHistory',
       produces: ['application/json'],
-      parameters: [swagger.paramTypes.path('id', 'Task Id', 'string')],
-      params: searchParms
+      parameters: [swagger.paramTypes.path('id', 'Task Id', 'string')]
     }
   };
 
@@ -301,19 +302,20 @@ exports.load = function(swagger, parms) {
     }
   };
 
-  var getAttachmentsPerEntity = {
+  /*var getAttachmentsPerEntity = {
     'spec': {
       description: 'get a list of attachments whose issue is a project/discussion/task/update',
-      path: '/:entity/:id/attachments',
+      path: '/{entity}/{id}/attachments',
       method: 'GET',
       summary: 'get a list of attachments per project/discussion/task/update',
       notes: '',
       type: 'Attachment',
       nickname: 'attachmentByEntity',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.path('entity', 'Entity Id', 'string'),swagger.paramTypes.path('id', 'Task Id', 'string')]
+ 
     }
-  };
+  };*/
 
   var createAttachment = {
     'spec': {
@@ -345,41 +347,42 @@ exports.load = function(swagger, parms) {
   var attachmentsHistory = {
     'spec': {
       description: 'get all updates history for a single attachment',
-      path: '/history/attachments/:id',
+      path: '/history/attachments/{id}',
       method: 'GET',
       summary: 'get all updates history for a single attachment',
       notes: '',
       type: 'Archive',
       nickname: 'GetAttachmentHistory',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.path('id', 'Attachment Id', 'string')]
     }
   };
 
-  var starredEntities = {
+  /*var starredEntities = {
     'spec': {
       description: 'get all starred entities of user',
-      path: '/:entity/starred',
+      path: '/{entity}/starred',
       method: 'GET',
       summary: 'get all starred entities of user',
       type: ['Task', 'Project', 'Discussion'],
       nickname: 'starredEntities',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.path('entity', 'Entity Id', 'string')]
     }
-  };
+  };*/
 
-  var starEntity = {
+ /* var starEntity = {
     'spec': {
       description: 'star or unstar a entity',
-      path: '/:entity/:id/star',
+      path: '/{entity}/{id}/star',
       method: 'PATCH',
       summary: 'star or unstar a entity',
       type: ['Task', 'Project', 'Discussion'],
       nickname: 'starEntity',
+      parameters: [swagger.paramTypes.path('entity', 'Entity Id', 'string'),swagger.paramTypes.path('id', 'Task Id', 'string')],
       produces: ['application/json']
     }
-  };
+  };*/
 
   var generalSearch = {
     'spec': {
@@ -426,14 +429,15 @@ exports.load = function(swagger, parms) {
   var commentShow = {
     'spec': {
       description: 'comment operations',
-      path: '/comments/:id',
+      path: '/comments/{id}',
       method: 'GET',
       summary: 'Get one comment by _id',
       notes: '',
       type: 'Comment',
       nickname: 'commentShow',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.path('id', 'Comment Id', 'string')]
+
     }
   };
 
@@ -461,14 +465,15 @@ exports.load = function(swagger, parms) {
   var commentUpdate = {
     'spec': {
       description: 'Update a comment',
-      path: '/comments/:id',
+      path: '/comments/{id}',
       method: 'PUT',
       summary: 'Update a comment',
       type: 'Comment',
       nickname: 'commentUpdate',
       produces: ['application/json'],
-      params: searchParms,
-      parameters: [{
+      parameters: [
+     swagger.paramTypes.path('id', 'Comment Id', 'string'),
+      {
         name: 'body',
         description: 'comment to update',
         required: true,
@@ -482,11 +487,12 @@ exports.load = function(swagger, parms) {
   var commentDelete = {
     'spec': {
       description: 'Delete a comment',
-      path: '/comments/:id',
+      path: '/comments/{id}',
       method: 'DELETE',
       summary: 'delete a comment',
       type: 'Comment',
       nickname: 'commentDelete',
+       parameters: [swagger.paramTypes.path('id', 'Comment Id', 'string')],
       produces: ['application/json'],
     }
   };
@@ -494,7 +500,7 @@ exports.load = function(swagger, parms) {
   var commentHistory = {
     'spec': {
       description: 'get all updates history for a single comment',
-      path: '/history/comments/:id',
+      path: '/history/comments/{id}',
       method: 'GET',
       summary: 'get all updates history for a single comment',
       notes: '',
@@ -557,14 +563,17 @@ exports.load = function(swagger, parms) {
   var discussionUpdate = {
     'spec': {
       description: 'Update a discussion',
-      path: '/discussions/:id',
+      path: '/discussions/{id}',
       method: 'PUT',
       summary: 'Update a discussion',
       type: 'Discussion',
       nickname: 'discussionUpdate',
       produces: ['application/json'],
       params: searchParms,
-      parameters: [{
+      parameters: [
+
+ swagger.paramTypes.path('id', 'Comment Id', 'string'),
+      {
         name: 'body',
         description: 'discussion to update',
         required: true,
@@ -602,21 +611,22 @@ exports.load = function(swagger, parms) {
     }
   };
 
-  var getDiscussionsPerEntity = {
+ /* var getDiscussionsPerEntity = {
     'spec': {
         description: 'get a list of attachments whose issue is a project/discussion/task/update',
-        path: '/:entity/:id/discussions',
+        path: '/{entity}/{id}/discussions',
         method: 'GET',
         summary: 'get a list of discussions per project',
         notes: '',
         type: 'Discussion',
         nickname: 'discussionByEntity',
         produces: ['application/json'],
-        params: searchParms
-        
+        parameters: [swagger.paramTypes.path('entity', 'Entity Id', 'string'),swagger.paramTypes.path('id', 'Task Id', 'string')]
+
+
     }
   };
-
+*/
   swagger
     .addGet(usersList)
     .addGet(showProfile)
@@ -631,16 +641,16 @@ exports.load = function(swagger, parms) {
     .addGet(getTask)
     .addPut(updateTask)
     .addDelete(deleteTask)
-    .addGet(getTasksPerEntity)
+   // .addGet(getTasksPerEntity)
     .addGet(zombieTasks)
     .addGet(tasksHistory)
     .addGet(attachmentsList)
-    .addGet(getAttachmentsPerEntity)
+  //  .addGet(getAttachmentsPerEntity)
     .addPost(createAttachment)
     .addPost(updateAttachment)
     .addGet(attachmentsHistory)
-    .addGet(starredEntities)
-    .addPatch(starEntity)
+   // .addGet(starredEntities)
+  //  .addPatch(starEntity)
     .addGet(commentsList)
     .addGet(commentShow)
     .addPost(commentCreate)
@@ -654,5 +664,5 @@ exports.load = function(swagger, parms) {
     .addPut(discussionUpdate)
     .addDelete(discussionDelete)
     .addGet(discussionHistory)
-    .addGet(getDiscussionsPerEntity)
+  //  .addGet(getDiscussionsPerEntity)
 };
