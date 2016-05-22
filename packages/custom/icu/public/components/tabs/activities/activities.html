@@ -17,8 +17,30 @@
             <div class="description">
                 {{activity.description}}
             </div>
-            <div data-ng-repeat="attachment in activity.attachments" class="attachment">
-                <div class="icon {{attachment.attachmentType}}"></div>
+
+            <div id="UpdatetLine" data-ng-repeat="attachment in activity.attachments" class="attachment">
+                <div  class="icon {{attachment.attachmentType}}">
+                
+                <div id ="colorTOtransperent"></div>
+                
+                    <div id="AllUpdateIcons">
+                        <button class="DocumentIconsLine" id="Update-icon-revert" title="Revert">
+                            <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/‏‏icon-revert2.png" src="/icu/assets/img/‏‏icon-revert2.png">
+                        </button>
+                        <button class="DocumentIconsLine" id="Update-icon-view" title="צפה">
+                            <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png">
+                        </button>
+                        <button class="DocumentIconsLine" id="Update-icon-edit" title="ערוך">
+                            <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-edit.png" src="/icu/assets/img/icon-edit.png">
+                        </button>
+                        <button class="DocumentIconsLine" id="Update-icon-download"title="הורד">
+                            <a href="{{attachment.path}}" target="window">
+                                <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-download.png" src="/icu/assets/img/icon-download.png">
+                            </a>
+                        </button>
+                    </div>
+                </div>
+                
                 <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
             </div>
         </div>

@@ -73,7 +73,7 @@ module.exports = {
       uri: 'http://192.168.245.152:3003'
     },
 //   elasticsearch: {
-//     host: 'http://192.168.245.152',
+//     host: 'http://192.168.245.255',
 //     port: 9200,
 //     log: 'trace'
 //     },
