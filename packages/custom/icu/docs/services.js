@@ -124,7 +124,7 @@ exports.load = function(swagger, parms) {
       path: '/tasks',
       method: 'POST',
       summary: 'create a task',
-      notes: ' ',
+      notes: 'When creating from discussion , remov the last s from discussions',
       type: 'Task',
       nickname: 'createTask',
       produces: ['application/json'],
