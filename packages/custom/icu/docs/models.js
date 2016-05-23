@@ -85,6 +85,10 @@ exports.models = {
         type: 'string',
         description: 'id of user who manages the task'
       },
+      description: {
+        type: 'string',
+        description: 'description of discussion'
+      },
       tags: {
         type: 'array',
         description: 'array of tags '
@@ -143,6 +147,10 @@ exports.models = {
       color: {
         type: 'string',
         description: 'color'
+      },
+      description: {
+        type: 'string',
+        description: 'description of discussion'
       },
       watchers: [{
         type: 'array',
@@ -224,9 +232,17 @@ exports.models = {
         type: 'string',
         description: 'last updated date of discussion'
       },
-      name: {
+      title: {
         type: 'string',
         description: 'name of discussion'
+      },
+      project: {
+        type: 'string',
+        description: 'id of project'
+      },
+      description: {
+        type: 'string',
+        description: 'description of discussion'
       },
       content: {
         type: 'string',
