@@ -124,7 +124,7 @@ exports.load = function(swagger, parms) {
       path: '/tasks',
       method: 'POST',
       summary: 'create a task',
-      notes: 'When creating from discussion , remov the last s from discussions',
+      notes: 'When creating from discussion , remove the last {s} from discussions',
       type: 'Task',
       nickname: 'createTask',
       produces: ['application/json'],
@@ -259,6 +259,44 @@ exports.load = function(swagger, parms) {
     }
   };
 
+
+
+var updateProject = {
+    'spec': {
+      description: 'Update a project',
+      path: '/projects/{id}',
+      method: 'PUT',
+      summary: 'Update a project',
+      notes: 'The really path is \'/projects/:id\'',
+      type: 'Project',
+      nickname: 'updateProject',
+      produces: ['application/json'],
+      parameters: [
+ swagger.paramTypes.path('id', 'Project Id', 'string'),
+      {
+        name: 'body',
+        description: 'project to update',
+        required: true,
+        type: 'Project',
+        paramType: 'body',
+        allowMultiple: false
+      }]
+    }
+  };
+
+var deleteProject = {
+    'spec': {
+      description: 'Delete a Project',
+      path: '/projects/{id}',
+      method: 'DELETE',
+      summary: 'delete a Pproject',
+      notes: 'The really path is \'/projects/:id\'',
+      type: 'Project',
+      nickname: 'deleteProject',
+      parameters: [swagger.paramTypes.path('id', 'Project Id', 'string')],
+      produces: ['application/json']
+    }
+  };
   var projectsList = {
     'spec': {
       description: 'project operations',
@@ -358,7 +396,7 @@ exports.load = function(swagger, parms) {
     }
   };
 
-  /*var starredEntities = {
+  var starredEntities = {
     'spec': {
       description: 'get all starred entities of user',
       path: '/{entity}/starred',
@@ -369,7 +407,7 @@ exports.load = function(swagger, parms) {
       produces: ['application/json'],
       parameters: [swagger.paramTypes.path('entity', 'Entity Id', 'string')]
     }
-  };*/
+  };
 
  /* var starEntity = {
     'spec': {
@@ -637,6 +675,8 @@ exports.load = function(swagger, parms) {
     .addGet(projectsList)
     .addGet(projectsHistory)
     .addPost(createProject)
+    .addPut(updateProject)
+    .addDelete(deleteProject)
     .addGet(tagsList)
     .addGet(getTask)
     .addPut(updateTask)
