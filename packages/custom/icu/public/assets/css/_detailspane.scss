@@ -715,6 +715,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 
     .footer {
+    	display: flex;
         height: $header-height;
         border-top: 1px solid $light-grey1;
         padding: 0 10px;
@@ -752,6 +753,23 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 }
             }
 
+            .numberOfPeople {
+	    		display: block;
+			    position: absolute;
+			    width: 28px;
+			    height: 28px;
+			    background-color: #303b3f;
+			    border-radius: 15px;
+			    border: 2px solid white;
+			    top: 0;
+			    color: white;
+			    text-align: center;
+			    right: -8px;
+				font-size: 10px;
+			    font-weight: bold;
+			    line-height: 20px;
+	    	}
+
             .delete {
                 display: none;
             }
@@ -759,6 +777,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             .avatar {
                 background-color: $green;
                 float: left;
+
+                &.avatar-group {
+                	background-color: #1e70b5;
+                }
             }
 
         }
@@ -776,28 +798,44 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             margin-top: $header-height/3;
         }
 
-        .add-member-container {
-            width: 30%;
-            float: right;
-            max-height: $header-height - 10px;
+        .new-member-input {
+            /*width: calc(100% - 60px);*/
+            float: left;
+            margin-top: $avatar-margin;
+            /*width: 193px;*/
+    		width: 23%;
+    		margin-left: 10px;
 
-            .new-member-input {
-                width: calc(100% - 60px);
-                float: left;
-                margin-top: $avatar-margin;
-
-                .ui-select-bootstrap .ui-select-choices-row > a {
-                    line-height: 35px;
-                    padding: 2px 7px;
-                }
-
-                .avatar {
-                    float: left;
-                    margin: 0;
-                    margin-right: 7px;
-                }
+            .ui-select-bootstrap .ui-select-choices-row > a {
+                line-height: 35px;
+                padding: 2px 7px;
             }
 
+            .avatar {
+                float: left;
+                margin: 0;
+                margin-right: 7px;
+            }
+
+            &.second, &.third {
+            	margin-left: 0;
+            	input:fisrt-child {
+            		display: none;
+            	}
+            }
+        }
+
+        .add-member-container {
+            /*width: 30%;
+            float: right;
+            text-align: right;*/
+            max-height: $header-height - 10px;	
+            flex-grow: 1;
+            -webkit-transition: 3s;
+		    -moz-transition: 3s;
+		    -ms-transition: 3s;
+		    -o-transition: 3s;
+		    transition: 3s;
             .add {
                 @include circle(17px);
                 @include button;
@@ -807,9 +845,22 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 color: white;
                 font-size: 20px;
                 background-color: $orange;
-                float: right;
-            }
-        }
+               	position: relative;
+			    left: 0;
+			    left: calc(100% - 58px);
 
+			   
+            }
+            .add.transition {
+                -webkit-transition: 3s;
+			    -moz-transition: 3s;
+			    -ms-transition: 3s;
+			    -o-transition: 3s;
+			    transition: 3s;
+			    left: 0;
+			}
+        }
+		
+		
     }
 }

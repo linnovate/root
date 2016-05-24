@@ -19,4 +19,8 @@ div[icu-avatar] .avatar {
         max-height: 100%;
     }
 
+    &.avatar-group {
+    	background: #1e70b5 url("/icu/assets/img/icon-group.svg") no-repeat center center;
+    }
+
 }
