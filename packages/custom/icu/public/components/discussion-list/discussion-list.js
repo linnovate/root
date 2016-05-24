@@ -70,8 +70,10 @@ angular.module('mean.icu.ui.discussionlist', [])
                 $state.current.name === 'main.discussions.byentity') {
                 navigateToDetails($scope.discussions[0]);
             }
-        }
-        else {
+        } else {
+            if ($state.current.name === 'main.discussions.all') {
+                return;
+            }
             if ($state.current.name !== 'main.discussions.byentity.activities' ||
                 $state.current.name !== 'main.discussions.byentity.details.activities') {
                 $state.go('.activities');

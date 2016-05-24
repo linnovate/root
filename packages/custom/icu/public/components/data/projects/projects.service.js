@@ -14,9 +14,11 @@ angular.module('mean.icu.data.projectsservice', [])
         if (qs.length) {
             qs = '?' + qs;
         }
-
-        return $http.get(ApiUri + EntityPrefix + qs).then(function(result) {
-            return PaginationService.processResponse(result.data);
+        return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
+            return result.data;
+        }, function(err) {return err}).then(function (some) {
+            var data = some.content ? some : [];
+            return PaginationService.processResponse(data);
         });
     }
 

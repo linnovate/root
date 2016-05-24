@@ -61,7 +61,7 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.toggleStarred = function () {
             $state.go($state.current.name, { starred: !$stateParams.starred });
         };
-
+        
         if ($scope.projects.length) {
             if ($state.current.name === 'main.projects.all' ||
                 $state.current.name === 'main.projects.byentity') {
@@ -69,6 +69,9 @@ angular.module('mean.icu.ui.projectlist', [])
             }
         }
         else {
+            if ($state.current.name === 'main.projects.all') {
+                return;
+            }
             if (
                 $state.current.name !== 'main.projects.byentity.activities' &&
                 $state.current.name !== 'main.projects.byentity.details.activities') {
