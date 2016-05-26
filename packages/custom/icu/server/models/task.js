@@ -46,6 +46,12 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  groups: {
+    type: Array
+  },
+  comp: {
+    type: Array
+  },
   assign: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -66,22 +72,26 @@ starVirtual.get(function() {
 starVirtual.set(function(value) {
   this._star = value;
 });
-TaskSchema.set('toJSON', { virtuals: true });
-TaskSchema.set('toObject', { virtuals: true });
+TaskSchema.set('toJSON', {
+  virtuals: true
+});
+TaskSchema.set('toObject', {
+  virtuals: true
+});
 
 /**
  * Statics
  */
-TaskSchema.statics.load = function (id, cb) {
+TaskSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
   }).populate('creator', 'name username')
     .populate('assign', 'name username').exec(cb);
 };
-TaskSchema.statics.project = function (id, cb) {
+TaskSchema.statics.project = function(id, cb) {
   require('./project');
   var Project = mongoose.model('Project');
-  Project.findById(id, function (err, project) {
+  Project.findById(id, function(err, project) {
     cb(err, project || {});
   });
 };
@@ -90,14 +100,14 @@ TaskSchema.statics.project = function (id, cb) {
  */
 var elasticsearch = require('../controllers/elasticsearch');
 
-TaskSchema.post('save', function (req, next) {
+TaskSchema.post('save', function(req, next) {
   var task = this;
-  TaskSchema.statics.project(this.project, function (err, project) {
+  TaskSchema.statics.project(this.project, function(err, project) {
     if (err) {
       return err;
     }
 
-    console.log("task================================");    
+    console.log("task================================");
     console.log(task);
 
     elasticsearch.save(task, 'task', project.room);
@@ -105,29 +115,47 @@ TaskSchema.post('save', function (req, next) {
   next();
 });
 
-	TaskSchema.pre('find', function (next) {
-		if (this._conditions.currentUser) {
-			var ObjectId = mongoose.Types.ObjectId; 
-			var userId = new ObjectId(this._conditions.currentUser._id);
-			this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
-			delete this._conditions.currentUser;
-		}
-		console.log('--------------------------------------------Task----------------------------------------------------------')
-		console.log(JSON.stringify(this._conditions))
-		next();
-	});
+var buildConditions = function(conditions) {
+  var ObjectId = mongoose.Types.ObjectId;
+  var userId = new ObjectId(conditions.currentUser._id);
+  var groups = conditions.currentUser.circles.groups ? conditions.currentUser.circles.groups : [];
+  var comp = conditions.currentUser.circles.comp ? conditions.currentUser.circles.comp : [];
+  conditions['$or'] = [ {'creator':userId},
+    {
+      'watchers': userId
+    }, {
+      $and: [{
+        'groups': {
+          $in: groups
+        }
+      }, {
+        'comp': {
+          $in: comp
+        }
+      }]
+    }
+  ];
+  delete conditions.currentUser;
+  return (conditions);
+};
 
-	TaskSchema.pre('count', function (next) {
-		if (this._conditions.currentUser) {
-			var ObjectId = mongoose.Types.ObjectId; 
-			var userId = new ObjectId(this._conditions.currentUser._id);
-			this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
-			delete this._conditions.currentUser;
-		}
-		console.log('--------------------------------------------Count----------------------------------------------------------')
-		console.log(JSON.stringify(this._conditions))
-		next();
-	});
+TaskSchema.pre('find', function(next) {
+  if (this._conditions.currentUser) {
+    this._conditions = buildConditions(this._conditions)
+  }
+  console.log('--------------------------------------------Task----------------------------------------------------------')
+  console.log(JSON.stringify(this._conditions))
+  next();
+});
+
+TaskSchema.pre('count', function(next) {
+  if (this._conditions.currentUser) {
+    this._conditions = buildConditions(this._conditions)
+  }
+  console.log('--------------------------------------------Count----------------------------------------------------------')
+  console.log(JSON.stringify(this._conditions))
+  next();
+});
 
 //  var elasticsearch = require('../controllers/elasticsearch');
 
@@ -139,9 +167,9 @@ TaskSchema.post('save', function (req, next) {
 //         method: 'POST',
 //         form: req.body
 //       };
-      
+
 //       var task = this;
-      
+
 //       request(objReq, function(error, response, body) {
 //         if (error) {
 //             return error;
@@ -150,9 +178,9 @@ TaskSchema.post('save', function (req, next) {
 
 //       });
 //     });     
-   
+
 //  TaskSchema.post('save', function (req, next) {
-    
+
 //   var task = this;
 //   TaskSchema.statics.project(this.project, function (err, project) {
 //     if (err) {
@@ -164,9 +192,9 @@ TaskSchema.post('save', function (req, next) {
 //   next();
 // });
 
-TaskSchema.pre('remove', function (next) {
+TaskSchema.pre('remove', function(next) {
   var task = this;
-  TaskSchema.statics.project(this.project, function (err, project) {
+  TaskSchema.statics.project(this.project, function(err, project) {
     if (err) {
       return err;
     }

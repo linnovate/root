@@ -105,6 +105,14 @@ exports.models = {
         type: 'array',
         description: 'array of ids of watchers users'
       },
+      groups: {
+        type: 'array',
+        description: 'array of Compartmentalization of watchers users'
+      },
+      comp: {
+        type: 'array',
+        description: 'array of copma of watchers users'
+      },
       assign: {
         type: 'string',
         description: 'id of user who assigned the task'
@@ -112,7 +120,7 @@ exports.models = {
       discussions: {
         type: 'array',
         description: 'array of ids of discussions'
-     }
+      }
 
     }
   },
