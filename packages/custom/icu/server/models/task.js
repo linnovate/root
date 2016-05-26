@@ -120,21 +120,25 @@ var buildConditions = function(conditions) {
   var userId = new ObjectId(conditions.currentUser._id);
   var groups = conditions.currentUser.circles.groups ? conditions.currentUser.circles.groups : [];
   var comp = conditions.currentUser.circles.comp ? conditions.currentUser.circles.comp : [];
-  conditions['$or'] = [ {'creator':userId},
-    {
-      'watchers': userId
+  conditions['$or'] = [{
+    'creator': userId
+  }, {
+    'manager': userId
+  }, {
+    'assign': userId
+  }, {
+    'watchers': userId
+  }, {
+    $and: [{
+      'groups': {
+        $in: groups
+      }
     }, {
-      $and: [{
-        'groups': {
-          $in: groups
-        }
-      }, {
-        'comp': {
-          $in: comp
-        }
-      }]
-    }
-  ];
+      'comp': {
+        $in: comp
+      }
+    }]
+  }];
   delete conditions.currentUser;
   return (conditions);
 };
@@ -152,7 +156,7 @@ TaskSchema.pre('count', function(next) {
   if (this._conditions.currentUser) {
     this._conditions = buildConditions(this._conditions)
   }
-  console.log('--------------------------------------------Count----------------------------------------------------------')
+  console.log('--------------------------------------------Count-Task---------------------------------------------------------')
   console.log(JSON.stringify(this._conditions))
   next();
 });

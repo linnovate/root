@@ -53,6 +53,12 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  groups: {
+    type: Array
+  },
+  comp: {
+    type: Array
+  },
   room: {
     type: String
   }
@@ -99,26 +105,47 @@ ProjectSchema.pre('remove', function (next) {
   next();
 });
 
-ProjectSchema.pre('find', function (next) {
-	if (this._conditions.currentUser) {
-		var ObjectId = mongoose.Types.ObjectId; 
-		var userId = new ObjectId(this._conditions.currentUser._id);
-		this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
-		delete this._conditions.currentUser;
-	}
-	console.log('--------------------------------------------Project----------------------------------------------------------')
-	console.log(JSON.stringify(this._conditions))
-	next();
-});
+var buildConditions = function(conditions) {
+  var ObjectId = mongoose.Types.ObjectId;
+  var userId = new ObjectId(conditions.currentUser._id);
+  var groups = conditions.currentUser.circles.groups ? conditions.currentUser.circles.groups : [];
+  var comp = conditions.currentUser.circles.comp ? conditions.currentUser.circles.comp : [];
+
+  conditions['$or'] = [{
+    'creator': userId
+  }, {
+    'manager': userId
+  }, {
+    'watchers': userId
+  }, {
+    $and: [{
+      'groups': {
+        $in: groups
+      }
+    }, {
+      'comp': {
+        $in: comp
+      }
+    }]
+  }];
+  delete conditions.currentUser;
+  return (conditions);
+};
+
+ProjectSchema.pre('find', function(next) {
+  if (this._conditions.currentUser) {
+    this._conditions = buildConditions(this._conditions)
+  }
+  console.log('--------------------------------------------Project----------------------------------------------------------')
+  console.log(JSON.stringify(this._conditions))
+  next();
+});	
 
 ProjectSchema.pre('count', function (next) {
 	if (this._conditions.currentUser) {
-		var ObjectId = mongoose.Types.ObjectId; 
-		var userId = new ObjectId(this._conditions.currentUser._id);
-		this._conditions['$or'] = [ {'creator':userId}, {'manager':userId}, {'assign':userId}, {'members':userId}, {'watchers':userId} ];
-		delete this._conditions.currentUser;
-	}
-	console.log('--------------------------------------------Count----------------------------------------------------------')
+    this._conditions = buildConditions(this._conditions)
+  }
+	console.log('--------------------------------------------Count-Project---------------------------------------------------------')
 	console.log(JSON.stringify(this._conditions))
 	next();
 });

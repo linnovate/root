@@ -105,8 +105,10 @@ module.exports = function(entityName, options) {
     return deffered.promise;
   }
 
-  function read(id) {
-    var query = Model.find({ _id: id });
+  function read(id, user) {
+    var conditions = { _id: id};
+    if (currentUser) conditions.currentUser = user;
+    var query = Model.find(conditions);
     query.populate(options.includes);
 
     return query.then(function(results) {
