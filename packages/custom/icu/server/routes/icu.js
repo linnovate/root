@@ -20,11 +20,28 @@ var response = require('../middlewares/response.js');
 var pagination = require('../middlewares/pagination.js');
 var error = require('../middlewares/error.js');
 
-module.exports = function (Icu, app) {
+//update mapping - OHAD
+var mean = require('meanio');
+var elasticActions = require('../controllers/elastic-actions.js');
+//END update mapping - OHAD
 
+module.exports = function (Icu, app) {
+    
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
   app.route(/^((?!\/hi\/).)*$/).all(authorization);
+  
+  // When need to update mapping, use this authorization, and not the abouve one
+  // app.route(/^((\/index-data\/).)*$/).all(authorization);
+
+
+//update mapping - OHAD
+  app.post('/api/index-data/:schema', function (req, res) {
+    elasticActions.indexData(req, res, mean.elasticsearch);
+    });
+//END update mapping - OHAD
+
+
 
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/star')
