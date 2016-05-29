@@ -118,8 +118,8 @@ TaskSchema.post('save', function(req, next) {
 var buildConditions = function(conditions) {
   var ObjectId = mongoose.Types.ObjectId;
   var userId = new ObjectId(conditions.currentUser._id);
-  var groups = conditions.currentUser.circles.groups ? conditions.currentUser.circles.groups : [];
-  var comp = conditions.currentUser.circles.comp ? conditions.currentUser.circles.comp : [];
+  var groups = conditions.currentUser.circles && conditions.currentUser.circles.groups ? conditions.currentUser.circles.groups : [];
+  var comp = conditions.currentUser.circles && conditions.currentUser.circles.comp ? conditions.currentUser.circles.comp : [];
   conditions['$or'] = [{
     'creator': userId
   }, {
@@ -128,7 +128,8 @@ var buildConditions = function(conditions) {
     'assign': userId
   }, {
     'watchers': userId
-  }, {
+  }
+  , {
     $and: [{
       'groups': {
         $in: groups
@@ -138,7 +139,8 @@ var buildConditions = function(conditions) {
         $in: comp
       }
     }]
-  }];
+  }
+  ];
   delete conditions.currentUser;
   return (conditions);
 };
