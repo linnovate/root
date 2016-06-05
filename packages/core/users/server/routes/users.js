@@ -42,7 +42,8 @@ module.exports = function(MeanUser, app, auth, database, passport) {
       var escaped = JSON.stringify(payload);      
       escaped = encodeURI(escaped);
       // We are sending the payload inside the token
-      var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
+      ///var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
+      var token = jwt.sign(escaped, config.secret, { });
       res.json({ token: token });
     });
 
