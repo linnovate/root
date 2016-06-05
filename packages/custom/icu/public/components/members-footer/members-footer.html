@@ -1,5 +1,5 @@
 <div class="footer">
-    <div class="delete-wrapper" data-ng-repeat="member in entity.watchers" ng-if="entity.watchers.length">
+    <div class="delete-wrapper" data-ng-repeat="member in entity.watchers.concat(watchersGroups)" ng-if="entity.watchers.length || watchersGroups.length">
         <div class="delete" ng-click="deleteMember(member)"><i class="fa fa-close"></i></div>
         <div icu-avatar user="member"></div>
         <div class="numberOfPeople" ng-if="member.numberOfPeople">{{member.numberOfPeople > 99 ? '+99' : member.numberOfPeople}}</div>
@@ -21,28 +21,6 @@
             </ui-select-choices>
         </ui-select>
 	</div>
-	<!-- <div class="new-member-input second" ng-if="showSelect && permissions.length">
-        <ui-select ng-model="member" on-select="addMember(member)" autofocus>
-            <ui-select-match>
-                {{$item}}
-            </ui-select-match>
-            <ui-select-choices repeat="p in permissions track by $index" ng-show="permissions.length">
-                <div icu-avatar user="p"></div>
-                <span>{{p}}</span>
-            </ui-select-choices>
-        </ui-select>
-    </div> -->
-    <!-- <div class="new-member-input third" ng-if="showSelect && acl.length">
-        <ui-select ng-model="member" on-select="addMember(member)" autofocus>
-            <ui-select-match>
-                {{$item}}
-            </ui-select-match>
-            <ui-select-choices repeat="p in permissions track by $index" ng-show="permissions.length">
-                <div icu-avatar user="p"></div>
-                <span>{{p}}</span>
-            </ui-select-choices>
-        </ui-select>
-    </div> -->
 
     <div class="add-member-container">
         <button class="add" id="addMember" ng-click="triggerSelect()" ng-class="{transition: animate}">
