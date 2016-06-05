@@ -9,13 +9,40 @@ exports.createRoom = function(req, res, next) {
     }
 
     Notify.room('POST', {
+        cmd: '/api/bulk/createRoom',
         headers: req.headers,
-        project: req.body
+        rooms: {
+        	rooms:[{
+	    		name: req.locals.result.title,
+	    		members: ['dvora@linnovate.net','dvora@linnovate.net']
+	    	}]
+	    }
     }, function(result) {
         req.body.room = result.id;
 
         projectController.update(req, res, next);
     });
+};
+
+exports.updateRoom = function(req, res, next) {
+    if (req.locals.error) {
+        return next();
+    }
+    if (!req.locals.result.room) {
+    	exports.createRoom(req, res ,next);
+    } else {
+
+	    Notify.room('PUT', {
+	        cmd: '/api/bulk/updateRoomName',
+	        headers: req.headers,
+	        rooms: {
+	        	rooms: [{
+		    		id: req.locals.result.room,
+		    		name: req.locals.result.title
+		    	}]
+		    }
+	    });
+	}
 };
 
 exports.sendNotification = function(req, res, next) {
