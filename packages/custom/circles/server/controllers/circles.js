@@ -121,7 +121,8 @@ module.exports = function(Circles, app) {
 
             var userRoles = {};
             var list = {};
-
+            
+            //
             for (var type in circleTypes) {
                 userRoles[type] = {};
                 list[type] = [];
