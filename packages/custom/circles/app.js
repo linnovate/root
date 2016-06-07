@@ -40,38 +40,6 @@ Circles.register(function(app, auth, database) {
   return Circles;
 });
 
-
-function ensureCirclesExist() {
-
-  var requiredCircles = ['annonymous', 'authenticated', 'can create content', 'can edit content', 'can delete content', 'admin'];
-  var Circle = require('mongoose').model('Circle');
-  requiredCircles.forEach(function(circle, index) {
-    var query = {
-      name: circle
-    };
-
-    var set = {};
-    if (requiredCircles[index + 1]) {
-      set.$push = {
-        circles: requiredCircles[index + 1]
-      };
-    }
-
-    Circle.findOne(query, function(err, data) {
-      if (!err && !data) {
-        Circle.findOneAndUpdate(query, set, {
-          upsert: true
-        }, function(err) {
-          if (err) console.log(err);
-        });
-      }
-    })
-
-  });
-}
-
-
-
 function registerCircles(circle, circleType, parents, sources) {
   var Circle = require('mongoose').model('Circle');
 
@@ -83,15 +51,15 @@ function registerCircles(circle, circleType, parents, sources) {
   var set = {};
   if (parents) {
     set.$addToSet = {
-      circles: parents
+      circles: {$each: parents}
     };
   }
 
   if (sources) {
     if (!set.$addToSet) set.$addToSet = {};
-    set.$addToSet.sources = sources;
+    set.$addToSet.sources = {$each: sources};
   }
-
+console.dir(set)
   Circle.findOneAndUpdate(query, set, {
     upsert: true
   }, function(err) {
@@ -139,75 +107,31 @@ function getC19n() {
   var nova = [{
     id: '123',
     cl: '0',
-    sources: [{
-      name: 'a1'
-    }, {
-      name: 'a2'
-    }, {
-      name: 'a3'
-    }]
+    sources: ['a1','a2','a3']
   }, {
     id: '123',
     cl: '1',
-    sources: [{
-      name: 'b1'
-    }, {
-      name: 'b2'
-    }, {
-      name: 'b3'
-    }]
+    sources: ['b1','b2','b3']
   }, {
     id: '123',
     cl: '2',
-    sources: [{
-      name: 'c1'
-    }, {
-      name: 'c2'
-    }, {
-      name: 'c3'
-    }]
+    sources: ['c1','c2','c3']
   }, {
     id: '456',
     cl: '0',
-    sources: [{
-      name: 'd1'
-    }, {
-      name: 'd2'
-    }, {
-      name: 'd3'
-    }]
+    sources: ['d1','d2','d3']
   }, {
     id: '456',
     cl: '1',
-    sources: [{
-      name: 'e1'
-    }, {
-      name: 'e2'
-    }, {
-      name: 'e3'
-    }]
+    sources: ['e1','e2','e3']
   }, {
     id: '456',
     cl: '2',
-    sources: [{
-      name: 'f1'
-    }, {
-      name: 'f2'
-    }, {
-      name: 'f3'
-    }, {
-      name: 'f4'
-    }]
+    sources: ['f1','f2','f3','f4']
   }, {
     id: '789',
     cl: '0',
-    sources: [{
-      name: 'g1'
-    }, {
-      name: 'g2'
-    }, {
-      name: 'g3'
-    }]
+    sources: ['g1','g2','g3']
   }]
 
   for (var i = 0; i < nova.length; i++) {

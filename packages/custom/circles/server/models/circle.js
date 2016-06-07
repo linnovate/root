@@ -2,8 +2,6 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
-  
-var sourceSchema = new Schema({ name: 'string' });
 
 var CircleSchema = new Schema({
   created: Date,
@@ -16,7 +14,7 @@ var CircleSchema = new Schema({
     unique: true
   },
   circles: [String],
-  sources: [sourceSchema],
+  sources: [String],
   circleType: String 
 });
 
