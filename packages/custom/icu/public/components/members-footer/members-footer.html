@@ -8,8 +8,8 @@
     <div ng-if="!entity.watchers.length" class="left-notification">
         {{'noWatchers' | i18next}}
     </div>
- 	
- 	<div class="new-member-input" ng-if="showSelect">
+    
+    <div class="new-member-input" ng-if="showSelect">
         <ui-select ng-model="member" on-select="addMember(member)" autofocus>
             <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}">
                 {{$item}}
@@ -20,7 +20,7 @@
                 <span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>
             </ui-select-choices>
         </ui-select>
-	</div>
+    </div>
 
     <div class="add-member-container">
         <button class="add" id="addMember" ng-click="triggerSelect()" ng-class="{transition: animate}">
