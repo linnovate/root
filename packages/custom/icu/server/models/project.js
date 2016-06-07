@@ -61,6 +61,10 @@ var ProjectSchema = new Schema({
   },
   room: {
     type: String
+  },
+  circles: {
+    c19n: Array,
+    sources: Array
   }
 });
 
@@ -132,23 +136,23 @@ var buildConditions = function(conditions) {
   return (conditions);
 };
 
-ProjectSchema.pre('find', function(next) {
-  if (this._conditions.currentUser) {
-    this._conditions = buildConditions(this._conditions)
-  }
-  console.log('--------------------------------------------Project----------------------------------------------------------')
-  console.log(JSON.stringify(this._conditions))
-  next();
-});	
+// ProjectSchema.pre('find', function(next) {
+//   if (this._conditions.currentUser) {
+//     this._conditions = buildConditions(this._conditions)
+//   }
+//   console.log('--------------------------------------------Project----------------------------------------------------------')
+//   console.log(JSON.stringify(this._conditions))
+//   next();
+// });	
 
-ProjectSchema.pre('count', function (next) {
-	if (this._conditions.currentUser) {
-    this._conditions = buildConditions(this._conditions)
-  }
-	console.log('--------------------------------------------Count-Project---------------------------------------------------------')
-	console.log(JSON.stringify(this._conditions))
-	next();
-});
+// ProjectSchema.pre('count', function (next) {
+// 	if (this._conditions.currentUser) {
+//     this._conditions = buildConditions(this._conditions)
+//   }
+// 	console.log('--------------------------------------------Count-Project---------------------------------------------------------')
+// 	console.log(JSON.stringify(this._conditions))
+// 	next();
+// });
 
 
 ProjectSchema.plugin(archive, 'project');

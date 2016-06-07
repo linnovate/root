@@ -22,7 +22,9 @@ var CircleSchema = new Schema({
 CircleSchema.statics.buildPermissions = function(callback) {
 
   var data = {
-
+    c19n: {},
+    groups: {},
+    permissions: {}
   };
 
   this.find({}).sort({
@@ -30,12 +32,12 @@ CircleSchema.statics.buildPermissions = function(callback) {
   }).exec(function(err, circles) {
 
     circles.forEach(function(circle) {
-
-      data[circle.name] = circle.toObject();
-      data[circle.name].containers = circle.circles;
-      data[circle.name].parents = [];
-      data[circle.name].decendants = [];
-      data[circle.name].children = [];
+      
+      data[circle.circleType][circle.name] = circle.toObject();
+      data[circle.circleType][circle.name].containers = circle.circles;
+      data[circle.circleType][circle.name].parents = [];
+      data[circle.circleType][circle.name].decendants = [];
+      data[circle.circleType][circle.name].children = [];
 
     });
 
@@ -47,22 +49,22 @@ CircleSchema.statics.buildPermissions = function(callback) {
 
       circles.forEach(function(circle) {
 
-        var containers = data[circle.name].containers;
+        var containers = data[circle.circleType][circle.name].containers;
 
         //going through each of the containers parents
         containers.forEach(function(container) {
 
-          if (data[container].decendants.indexOf(circle.name) == -1) {
-            data[container].decendants.push(circle.name.toString());
+          if (data[circle.circleType][container].decendants.indexOf(circle.name) == -1) {
+            data[circle.circleType][container].decendants.push(circle.name.toString());
             if (level === 0) {
-              data[circle.name].parents.push(container.toString());
-              data[container].children.push(circle.name.toString());
+              data[circle.circleType][circle.name].parents.push(container.toString());
+              data[circle.circleType][container].children.push(circle.name.toString());
             }
           }
 
-          data[container].circles.forEach(function(circ) {
+          data[circle.circleType][container].circles.forEach(function(circ) {
             if (containers.indexOf(circ) == -1 && circ != circle.name) {
-              data[circle.name].containers.push(circ.toString());
+              data[circle.circleType][circle.name].containers.push(circ.toString());
               found = true;
             }
           });
@@ -81,10 +83,13 @@ CircleSchema.statics.buildPermissions = function(callback) {
 
 
 var buildTrees = CircleSchema.statics.buildTrees = function(data) {
-  var tree = []
+  var tree = {}
 
-  for (var index in data) {
-    buildTree(data, index, tree);
+  for (var type in data) {
+    tree[type] = []
+    for (var index in data[type]) {
+      buildTree(data[type], index, tree[type]);
+    }
   }
 
   return tree;

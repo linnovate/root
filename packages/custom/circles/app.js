@@ -59,7 +59,6 @@ function registerCircles(circle, circleType, parents, sources) {
     if (!set.$addToSet) set.$addToSet = {};
     set.$addToSet.sources = {$each: sources};
   }
-console.dir(set)
   Circle.findOneAndUpdate(query, set, {
     upsert: true
   }, function(err) {
@@ -78,28 +77,46 @@ function getGoogleGroups() {
   var GoogleService = require('service-providers')('google');
   var service = new GoogleService(config.google.clientSecret, config.google.clientID, config.google.callbackURL);
 
-  service.sdkManager('groups', 'list', {
-    domain: 'linnovate.net'
-    // groupKey: 'group@example.com',
-    // memberKey: 'member@example.com',
-    // resource: {
-    //     "email": "rivkat@linnovate.net",
-    //     "role": "MEMBER"
-    // }
-  }, function(err, list) {
-    console.dir(list, err);
-    if (!err && list.groups) {
-      for (var i = 0; i < list.groups.length; i++) {
-        console.log(i)
-        service.sdkManager('members', 'list', {
-          groupKey: list.groups[i].email
-        }, function(err, list) {
-          console.dir(list, err);
+  var getMembers = function(group, rv, cb) {
+    service.sdkManager('members', 'list', {
+      groupKey: group.email
+    }, function(err, list) {
+      if (!list || !list.members) {
+        return (cb());
 
-        })
       }
-    }
+      var filter = list.members.filter(function(member) {
+        return member.type === 'GROUP'
+      });
+      for (var i = 0; i < filter.length; i++) {
+        registerCircles(group.name, 'groups', [rv[filter[i].id].name]);
+      }
+      cb();
+    })
+  };
 
+  service.sdkManager('groups', 'list', {
+    domain: 'linnovate.net',
+  }, function(err, list) {
+    console.log(err)
+    if(!err && list.groups){
+    var obj = list.groups.reduce(function(o, v) {
+      o[v.id] = v;
+      return o;
+    }, {});
+    var counter = list.groups.length;
+    for (var i = 0; i < list.groups.length; i++) {
+      getMembers(list.groups[i], obj, function() {
+        counter--;
+        if (counter === 0) {
+          for (var i = 0; i < list.groups.length; i++) {
+            registerCircles(list.groups[i].name, 'groups');
+          }
+        }
+      })
+
+    }
+    }
   })
 }
 
@@ -132,7 +149,7 @@ function getC19n() {
     id: '789',
     cl: '0',
     sources: ['g1','g2','g3']
-  }]
+  }];
 
   for (var i = 0; i < nova.length; i++) {
     var parents;

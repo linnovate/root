@@ -72,13 +72,18 @@ module.exports = function(entityName, options) {
   function all(pagination, user) {
     var deffered = q.defer();
 
-    var query;
     var countQuery = Model.find().count();
     var mergedPromise;
-
+    
+    // var query = req.acl.query(Model)
+    var query = Model.where({
+                    'circles.c19n': {
+                        $in: user.allowed.c19n
+                    }
+                });
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
-        query = Model.find(currentUser ? {currentUser: user} : {})
+        query.find({})
           .sort(pagination.sort)
           .skip(pagination.start)
           .limit(pagination.limit);
@@ -95,7 +100,8 @@ module.exports = function(entityName, options) {
         deffered.resolve(mergedPromise);
       }
     } else {
-      query = Model.find(currentUser ? {currentUser: user} : {});
+      console.log('***')
+      query.find({});
       query.populate(options.includes);
       query.hint({ _id: 1 });
 

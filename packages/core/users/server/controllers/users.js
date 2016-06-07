@@ -277,23 +277,23 @@ exports.getGoogleGroups = function(req, res, next) {
 };
 
 exports.setRandomPermissions = function(req, res, next) {
-  if (req.user.circles.permissions && req.user.circles.permissions.length) return next();
-  Circle.find({
-    type: 'permissions'
-  }).exec(function(err, circles) {
-    var rand = circles[Math.floor(Math.random() * circles.length)];
-    req.user.circles.permissions = [rand.name];
-    req.user.save(function(err) {
-      console.log(err)
+  // if (req.user.circles.permissions && req.user.circles.permissions.length) return next();
+  // Circle.find({
+  //   circleType: 'permissions'
+  // }).exec(function(err, circles) {
+  //   var rand = circles[Math.floor(Math.random() * circles.length)];
+  //   req.user.circles.permissions = [rand.name];
+  //   req.user.save(function(err) {
+  //     console.log(err)
       next();
-    });
-  })
+  //   });
+  // })
 };
 
 exports.setRandomC19n = function(req, res, next) {
   if (req.user.circles.c19n && req.user.circles.c19n.length) return next();
   Circle.find({
-    type: 'c19n'
+    circleType: 'c19n'
   }).exec(function(err, circles) {
     var rand = circles[Math.floor(Math.random() * circles.length)];
     req.user.circles.c19n = [rand.name];
