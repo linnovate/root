@@ -110,28 +110,44 @@ function getGoogleGroups() {
   var GoogleService = require('service-providers')('google');
   var service = new GoogleService(config.google.clientSecret, config.google.clientID, config.google.callbackURL);
 
-  service.sdkManager('groups', 'list', {
-    domain: 'linnovate.net'
-    // groupKey: 'group@example.com',
-    // memberKey: 'member@example.com',
-    // resource: {
-    //     "email": "rivkat@linnovate.net",
-    //     "role": "MEMBER"
-    // }
-  }, function(err, list) {
-    console.dir(list, err);
-    if (!err && list.groups) {
-      for (var i = 0; i < list.groups.length; i++) {
-        console.log(i)
-        service.sdkManager('members', 'list', {
-          groupKey: list.groups[i].email
-        }, function(err, list) {
-          console.dir(list, err);
+  var getMembers = function(group, rv, cb) {
+    service.sdkManager('members', 'list', {
+      groupKey: group.email
+    }, function(err, list) {
+      if (!list || !list.members) {
+        return (cb());
 
-        })
       }
-    }
+      var filter = list.members.filter(function(member) {
+        return member.type === 'GROUP'
+      });
+      for (var i = 0; i < filter.length; i++) {
+        registerCircles(rv[filter[i].id].name, 'groups', [group.name]);
+      }
+      cb();
+    })
+  };
 
+  service.sdkManager('groups', 'list', {
+    domain: 'linnovate.net',
+  }, function(err, list) {
+    var obj = list.groups.reduce(function(o, v) {
+      o[v.id] = v;
+      return o;
+    }, {});
+    var counter = list.groups.length;
+    for (var i = 0; i < list.groups.length; i++) {
+      getMembers(list.groups[i], obj, function() {
+        counter--;
+        if (counter === 0) {
+          for (var i = 0; i < list.groups.length; i++) {
+            registerCircles(list.groups[i].name, 'groups');
+          }
+        }
+      })
+
+
+    }
   })
 }
 
@@ -208,7 +224,7 @@ function getC19n() {
     }, {
       name: 'g3'
     }]
-  }]
+  }];
 
   for (var i = 0; i < nova.length; i++) {
     var parents;
