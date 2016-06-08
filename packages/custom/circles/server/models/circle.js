@@ -15,7 +15,7 @@ var CircleSchema = new Schema({
   },
   circles: [String],
   sources: [String],
-  circleType: String 
+  circleType: String
 });
 
 //add index
@@ -32,7 +32,7 @@ CircleSchema.statics.buildPermissions = function(callback) {
   }).exec(function(err, circles) {
 
     circles.forEach(function(circle) {
-      
+
       data[circle.circleType][circle.name] = circle.toObject();
       data[circle.circleType][circle.name].containers = circle.circles;
       data[circle.circleType][circle.name].parents = [];
@@ -83,12 +83,19 @@ CircleSchema.statics.buildPermissions = function(callback) {
 
 
 var buildTrees = CircleSchema.statics.buildTrees = function(data) {
-  var tree = {}
+  var tree = {
+    name: 'circles',
+    children: []
+  };
 
   for (var type in data) {
-    tree[type] = []
+    var length = tree.children.length;
+    tree.children.push({
+      name: type,
+      children: []
+    });
     for (var index in data[type]) {
-      buildTree(data[type], index, tree[type]);
+      buildTree(data[type], index, tree.children[length].children);
     }
   }
 

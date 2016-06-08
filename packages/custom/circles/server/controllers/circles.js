@@ -80,14 +80,20 @@ module.exports = function(Circles, app) {
         },
         mine: function(req, res) {
             var descendants = {};
-            for (var index in req.acl.user.circles) {
-                descendants[index] = req.acl.user.circles[index].decendants;
+            for (var type in req.acl.user.circles) {
+                descendants[type] = {};
+                for (var index in req.acl.user.circles[type]) {
+                    descendants[type][index] = req.acl.user.circles[type][index].decendants;
+                }
             }
-            return res.send({allowed: req.acl.user.allowed, descendants: descendants, tree: req.acl.user.tree });
+            return res.send({
+                allowed: req.acl.user.allowed,
+                descendants: descendants
+            });
         },
         all: function(req, res) {
             return res.send({
-                tree:req.acl.tree,
+                tree: req.acl.tree,
                 circles: req.acl.circles
             });
         },
@@ -115,43 +121,43 @@ module.exports = function(Circles, app) {
             }
         },
         userAcl: function(req, res, next) {
-            var circleTypes = {c19n: req.user && req.user.circles && req.user.circles.c19n ? req.user.circles.c19n : [],
-                         groups: req.user && req.user.circles && req.user.circles.groups ? req.user.circles.groups : [],
-                         permissions: req.user && req.user.circles && req.user.circles.permissions ? req.user.circles.permissions : []};
+            var circleTypes = {
+                c19n: req.user && req.user.circles && req.user.circles.c19n ? req.user.circles.c19n : [],
+                groups: req.user && req.user.circles && req.user.circles.groups ? req.user.circles.groups : [],
+                permissions: req.user && req.user.circles && req.user.circles.permissions ? req.user.circles.permissions : []
+            };
 
             var userRoles = {};
             var list = {};
-            
+
             //
             for (var type in circleTypes) {
                 userRoles[type] = {};
                 list[type] = [];
                 circleTypes[type].forEach(function(circle) {
                     if (req.acl.circles[type][circle]) {
-                        
+
                         if (list[type].indexOf(circle) === -1) list[type].push(circle);
                         req.acl.circles[type][circle].decendants.forEach(function(descendent) {
 
                             if (list[type].indexOf(descendent) === -1) {
                                 list[type].push(descendent);
                             }
-                            
+
                         });
                         userRoles[type][circle] = req.acl.circles[type][circle];
                     }
                 });
             };
-            
+
             var tree = Circle.buildTrees(userRoles);
 
-            for (var type in tree) {
-                for (var index in tree[type]) {
-                    tree[type][index].children = req.acl.tree[type][index].children;
-                }
+            for (var index in tree) {
+                tree[index].children = req.acl.tree[index].children;
             }
 
             req.acl.user = {
-                tree: tree, 
+                tree: tree,
                 circles: userRoles,
                 allowed: list,
             };
