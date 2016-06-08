@@ -85,7 +85,6 @@ exports.tagsList = function (req, res, next) {
 
 exports.getByEntity = function (req, res, next) {
           
-      
   if (req.locals.error) {
     return next();
   }
@@ -100,9 +99,9 @@ exports.getByEntity = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
-  entityQuery.currentUser = req.user;
-  var Query = Task.find(entityQuery);
-  Query.populate(options.includes);
+  var query = req.acl.query('Task');
+  query.find(entityQuery);
+  query.populate(options.includes);
 
   Task.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;
@@ -110,12 +109,12 @@ exports.getByEntity = function (req, res, next) {
 
     var pagination = req.locals.data.pagination;
 	  if (pagination && pagination.type && pagination.type === 'page') {
-	    Query.sort(pagination.sort)
+	    query.sort(pagination.sort)
 	      .skip(pagination.start)
 	      .limit(pagination.limit);
 	  }
 
-	  Query.exec(function (err, tasks) {
+	  query.exec(function (err, tasks) {
 	    if (err) {
 	      req.locals.error = { message: 'Can\'t get tags' };
 	    } else {

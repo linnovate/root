@@ -21,18 +21,14 @@ var CircleSchema = new Schema({
 //add index
 CircleSchema.statics.buildPermissions = function(callback) {
 
-  var data = {
-    c19n: {},
-    groups: {},
-    permissions: {}
-  };
+  var data = {};
 
   this.find({}).sort({
     circle: 1
   }).exec(function(err, circles) {
 
     circles.forEach(function(circle) {
-
+      if (!data[circle.circleType]) data[circle.circleType] = {};
       data[circle.circleType][circle.name] = circle.toObject();
       data[circle.circleType][circle.name].containers = circle.circles;
       data[circle.circleType][circle.name].parents = [];
@@ -94,6 +90,7 @@ var buildTrees = CircleSchema.statics.buildTrees = function(data) {
       name: type,
       children: []
     });
+
     for (var index in data[type]) {
       buildTree(data[type], index, tree.children[length].children);
     }

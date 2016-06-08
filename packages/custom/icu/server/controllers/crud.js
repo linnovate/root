@@ -36,7 +36,7 @@ module.exports = function(entityName, options) {
     }
 
     entityService
-      .all(req.locals.data.pagination, req.acl.user)
+      .all(req.locals.data.pagination, req.acl)
       .then(success(req, next), error(req, next));
   }
 
@@ -46,7 +46,7 @@ module.exports = function(entityName, options) {
     }
 
     entityService
-      .read(req.params.id, req.user)
+      .read(req.params.id, req.acl)
       .then(success(req, next), error(req, next));
   }
 

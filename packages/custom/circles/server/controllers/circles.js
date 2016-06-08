@@ -171,8 +171,8 @@ module.exports = function(Circles, app) {
                     Circles.models[model] = mongoose.model(model);
                 }
                 return Circles.models[model].where({
-                    permissions: {
-                        $in: req.acl.user.allowed
+                    'circles.c19n': {
+                        $in: req.acl.user.allowed.c19n
                     }
                 });
             };
