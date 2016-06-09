@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
-    Circle = mongoose.model('Circle');
+    Circle = mongoose.model('Circle'),
+    Source = mongoose.model('Source');
 
 module.exports = function(Circles, app) {
 
@@ -178,6 +179,11 @@ module.exports = function(Circles, app) {
             };
 
             next();
+        },
+        sources: function(req, res) {
+            Source.find({}).exec(function(err, sources){
+                res.send(sources);
+            })
         }
     }
 

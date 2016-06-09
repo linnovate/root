@@ -20,6 +20,8 @@ var UpdateArchiveModel = mongoose.model('update_archive');
 
 var UserModel = require('../models/user.js');
 
+var SourceModel = mongoose.model('Source');
+
 var AttachementModel = require('../models/attachment.js');
 var AttachementArchiveModel = mongoose.model('attachment_archive');
 
@@ -133,30 +135,45 @@ module.exports = function(entityName, options) {
       return results[0];
     });
   }
-
-  function create(entity, user) {
+    
+  function checkPermissions(entity, user, acl) {
+    var deffered = q.defer();
+    if (!entity.circles || !entity.circles.sources || entity.circles.sources.length !== 1) {
+      deffered.reject('invalid sources permissions');
+    } else {
+      SourceModel.findOne({_id: entity.circles.sources[0]}).exec(function(err, source) {
+        if (err || !source) deffered.reject('invalid sources permissions');
+        else {
+          if(acl.user.allowed.c19n.indexOf(source.circleName) < 0) {
+            deffered.reject('permissions denied');
+          } else {
+            entity.circles.c19n = [source.circleName];
+            deffered.resolve(entity.save(user).then(function(e) {
+              return Model.populate(e, options.includes);
+            }));
+          }
+        }
+      });
+    }
+    return deffered.promise;
+  }
+  
+  function create(entity, user, acl) {
     entity.created = new Date();
     entity.updated = new Date();
     entity.creator = user.user._id;
-    if (!entity.circles) entity.circles = {};
-    if (!entity.circles.c19n) entity.circles.c19n = user.user.circles.c19n;
-
-    return new Model(entity).save(user).then(function(e) {
-      return Model.populate(e, options.includes);
-    });
+    return checkPermissions(new Model(entity), user, acl);
   }
-
-  function update(oldE, newE, user) {
-
+        
+  function update(oldE, newE, user, acl) {
     var entityWithDefaults = _.defaults(newE, options.defaults);
 
     oldE = _.extend(oldE, entityWithDefaults);
 
     oldE.updated = new Date();
     oldE.updater = user.user._id;
-    return oldE.save(user).then(function(data) {
-      return Model.populate(data, options.includes);
-    });
+
+    return checkPermissions(oldE, user, acl);
   }
 
 

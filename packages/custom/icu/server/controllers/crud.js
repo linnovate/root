@@ -24,9 +24,10 @@ module.exports = function(entityName, options) {
 
   var error = function(req, next) {
     return function(err) {
+
       req.locals.error = { message: err.toString() };
 
-      next();
+      return next();
     };
   };
 
@@ -56,8 +57,9 @@ module.exports = function(entityName, options) {
     }
 
     var entity = req.locals.data.body || req.body.data || req.body;
+   
     entityService
-      .create(entity, { user: req.user })
+      .create(entity, { user: req.user }, req.acl)
       .then(success(req, next), error(req, next));
   }
 
@@ -72,7 +74,7 @@ module.exports = function(entityName, options) {
 
     var entity = req.locals.data.body || req.body;
     entityService
-      .update(req.locals.result, entity, { user: req.user })
+      .update(req.locals.result, entity, { user: req.user }, req.acl)
       .then(success(req, next), error(req, next));
   }
 

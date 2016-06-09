@@ -40,7 +40,7 @@ Circles.register(function(app, auth, database) {
   return Circles;
 });
 
-function registerCircles(circle, circleType, parents, sources) {
+function registerCircles(circle, circleType, parents) {
   var Circle = require('mongoose').model('Circle');
 
   var query = {
@@ -55,10 +55,6 @@ function registerCircles(circle, circleType, parents, sources) {
     };
   }
 
-  if (sources) {
-    if (!set.$addToSet) set.$addToSet = {};
-    set.$addToSet.sources = {$each: sources};
-  }
   Circle.findOneAndUpdate(query, set, {
     upsert: true
   }, function(err) {
@@ -121,41 +117,117 @@ function getGoogleGroups() {
 }
 
 function getC19n() {
-  var nova = [{
-    id: '123',
-    cl: '0',
-    sources: ['a1','a2','a3']
+  var sources = [{
+    id: '9123',
+    name: 'a1',
+    linkedTriangleId: '123',
+    clearance: '0'
   }, {
-    id: '123',
-    cl: '1',
-    sources: ['b1','b2','b3']
+    id: '9124',
+    name: 'a2',
+    linkedTriangleId: '123',
+    clearance: '0'
   }, {
-    id: '123',
-    cl: '2',
-    sources: ['c1','c2','c3']
+    id: '9125',
+    name: 'a3',
+    linkedTriangleId: '123',
+    clearance: '0'
   }, {
-    id: '456',
-    cl: '0',
-    sources: ['d1','d2','d3']
+    id: '9126',
+    name: 'b1',
+    linkedTriangleId: '123',
+    clearance: '1'
   }, {
-    id: '456',
-    cl: '1',
-    sources: ['e1','e2','e3']
+    id: '9127',
+    name: 'b2',
+    linkedTriangleId: '123',
+    clearance: '1'
   }, {
-    id: '456',
-    cl: '2',
-    sources: ['f1','f2','f3','f4']
+    id: '9128',
+    name: 'b3',
+    linkedTriangleId: '123',
+    clearance: '1'
   }, {
-    id: '789',
-    cl: '0',
-    sources: ['g1','g2','g3']
+    id: '9129',
+    name: 'c1',
+    linkedTriangleId: '123',
+    clearance: '2'
+  }, {
+    id: '9130',
+    name: 'c2',
+    linkedTriangleId: '123',
+    clearance: '2'
+  }, {
+    id: '9131',
+    name: 'c3',
+    linkedTriangleId: '123',
+    clearance: '2'
+  },{
+    id: '8123',
+    name: 'd1',
+    linkedTriangleId: '456',
+    clearance: '0'
+  }, {
+    id: '8124',
+    name: 'd2',
+    linkedTriangleId: '456',
+    clearance: '0'
+  }, {
+    id: '8125',
+    name: 'd3',
+    linkedTriangleId: '456',
+    clearance: '0'
+  }, {
+    id: '8126',
+    name: 'e1',
+    linkedTriangleId: '456',
+    clearance: '1'
+  }, {
+    id: '8127',
+    name: 'e2',
+    linkedTriangleId: '456',
+    clearance: '1'
+  }, {
+    id: '8128',
+    name: 'e3',
+    linkedTriangleId: '456',
+    clearance: '1'
+  }, {
+    id: '8129',
+    name: 'f1',
+    linkedTriangleId: '456',
+    clearance: '2'
+  }, {
+    id: '8130',
+    name: 'f2',
+    linkedTriangleId: '456',
+    clearance: '2'
+  }, {
+    id: '8131',
+    name: 'f3',
+    linkedTriangleId: '456',
+    clearance: '2'
+  }, {
+    id: '8132',
+    name: 'f4',
+    linkedTriangleId: '456',
+    clearance: '2'
   }];
+  
+  var Source = require('mongoose').model('Source');
 
-  for (var i = 0; i < nova.length; i++) {
+  for (var i = 0; i < sources.length; i++) {
+        Source.findOneAndUpdate({sourceId: sources[i].id},{
+      sourceId: sources[i].id,
+      name: sources[i].name,
+      circleName: sources[i].clearance + sources[i].linkedTriangleId
+    },{upsert:true}).exec(function(err, source){
+     
+    });
     var parents;
-    if (parseInt(nova[i].cl) > 0) {
-      parents = [(parseInt(nova[i].cl) - 1) + nova[i].id];
+    if (parseInt(sources[i].clearance) > 0) {
+      parents = [(parseInt(sources[i].clearance) - 1) + sources[i].linkedTriangleId];
     } else parents = null;
-    registerCircles(nova[i].cl + nova[i].id, 'c19n', parents, nova[i].sources);
+    registerCircles(sources[i].clearance + sources[i].linkedTriangleId, 'c19n', parents);
   }
 }

@@ -14,7 +14,6 @@ var CircleSchema = new Schema({
     unique: true
   },
   circles: [String],
-  sources: [String],
   circleType: String
 });
 

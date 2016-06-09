@@ -64,7 +64,10 @@ var ProjectSchema = new Schema({
   },
   circles: {
     c19n: Array,
-    sources: Array
+    sources: [{
+      type: Schema.ObjectId,
+      ref: 'Source'
+    }]
   }
 });
 
