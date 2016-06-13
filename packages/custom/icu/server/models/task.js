@@ -62,7 +62,14 @@ var TaskSchema = new Schema({
   discussions: [{
     type: Schema.ObjectId,
     ref: 'Discussion'
-  }]
+  }],
+  circles: {
+    c19n: Array,
+    sources: [{
+      type: Schema.ObjectId,
+      ref: 'Source'
+    }]
+  }
 });
 
 var starVirtual = TaskSchema.virtual('star');
@@ -112,54 +119,6 @@ TaskSchema.post('save', function(req, next) {
 
     elasticsearch.save(task, 'task', project.room);
   });
-  next();
-});
-
-var buildConditions = function(conditions) {
-  var ObjectId = mongoose.Types.ObjectId;
-  var userId = new ObjectId(conditions.currentUser._id);
-  var groups = conditions.currentUser.circles && conditions.currentUser.circles.groups ? conditions.currentUser.circles.groups : [];
-  var comp = conditions.currentUser.circles && conditions.currentUser.circles.comp ? conditions.currentUser.circles.comp : [];
-  conditions['$or'] = [{
-    'creator': userId
-  }, {
-    'manager': userId
-  }, {
-    'assign': userId
-  }, {
-    'watchers': userId
-  }
-  , {
-    $and: [{
-      'groups': {
-        $in: groups
-      }
-    }, {
-      'comp': {
-        $in: comp
-      }
-    }]
-  }
-  ];
-  delete conditions.currentUser;
-  return (conditions);
-};
-
-TaskSchema.pre('find', function(next) {
-  if (this._conditions.currentUser) {
-    this._conditions = buildConditions(this._conditions)
-  }
-  console.log('--------------------------------------------Task----------------------------------------------------------')
-  console.log(JSON.stringify(this._conditions))
-  next();
-});
-
-TaskSchema.pre('count', function(next) {
-  if (this._conditions.currentUser) {
-    this._conditions = buildConditions(this._conditions)
-  }
-  console.log('--------------------------------------------Count-Task---------------------------------------------------------')
-  console.log(JSON.stringify(this._conditions))
   next();
 });
 

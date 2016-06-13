@@ -70,7 +70,10 @@ var UserSchema = new Schema({
     groups: {
       type: Array
     },
-    comp: {
+    c19n: {
+      type: Array
+    },
+    permissions: {
       type: Array
     }
   },

@@ -244,7 +244,7 @@ exports.load = function(swagger, parms) {
       path: '/projects',
       method: 'POST',
       summary: 'create a project',
-      notes: '------------------------there is a problem to create via swagger, because you don\'t have req.user------------------',
+      notes: '',
       type: 'Project',
       nickname: 'createProject',
       produces: ['application/json'],

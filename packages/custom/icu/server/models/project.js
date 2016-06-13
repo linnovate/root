@@ -61,6 +61,13 @@ var ProjectSchema = new Schema({
   },
   room: {
     type: String
+  },
+  circles: {
+    c19n: Array,
+    sources: [{
+      type: Schema.ObjectId,
+      ref: 'Source'
+    }]
   }
 });
 
@@ -104,52 +111,6 @@ ProjectSchema.pre('remove', function (next) {
   elasticsearch.delete(this, 'project', this.room, next);
   next();
 });
-
-var buildConditions = function(conditions) {
-  var ObjectId = mongoose.Types.ObjectId;
-  var userId = new ObjectId(conditions.currentUser._id);
-  var groups = conditions.currentUser.circles.groups ? conditions.currentUser.circles.groups : [];
-  var comp = conditions.currentUser.circles.comp ? conditions.currentUser.circles.comp : [];
-
-  conditions['$or'] = [{
-    'creator': userId
-  }, {
-    'manager': userId
-  }, {
-    'watchers': userId
-  }, {
-    $and: [{
-      'groups': {
-        $in: groups
-      }
-    }, {
-      'comp': {
-        $in: comp
-      }
-    }]
-  }];
-  delete conditions.currentUser;
-  return (conditions);
-};
-
-ProjectSchema.pre('find', function(next) {
-  if (this._conditions.currentUser) {
-    this._conditions = buildConditions(this._conditions)
-  }
-  console.log('--------------------------------------------Project----------------------------------------------------------')
-  console.log(JSON.stringify(this._conditions))
-  next();
-});	
-
-ProjectSchema.pre('count', function (next) {
-	if (this._conditions.currentUser) {
-    this._conditions = buildConditions(this._conditions)
-  }
-	console.log('--------------------------------------------Count-Project---------------------------------------------------------')
-	console.log(JSON.stringify(this._conditions))
-	next();
-});
-
 
 ProjectSchema.plugin(archive, 'project');
 
