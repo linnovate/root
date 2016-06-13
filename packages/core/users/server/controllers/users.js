@@ -297,8 +297,6 @@ exports.setRandomC19n = function(req, res, next) {
   }).exec(function(err, circles) {
     var rand = circles[Math.floor(Math.random() * circles.length)];
     req.user.circles.c19n = [rand.name];
-    var randSource = rand.sources[Math.floor(Math.random() * rand.sources.length)];
-    req.user.circles.sources = [randSource];
     req.user.save(function(err) {
       console.log(err)
       next();
