@@ -1,0 +1,29 @@
+<div class="modal-header comp">
+    <button type="button" class="btn close" aria-hidden="true" ng-click="close()">&times;</button>
+    <h3 class="modal-title">{{'Restriced Access' | i18next}}</h3>
+</div>
+<div class="modal-body comp">
+   
+    <ul class="selectedComp">
+        <li ng-repeat="c in selectedComp">
+           <div>
+           	<span>{{c}}</span>
+           	<button type="button" class="btn close" aria-hidden="true" ng-click="removeComp(c)">&times;</button>
+           </div>
+        </li>
+    </ul>
+    <!-- Selected: <b>{{ selected.item }}</b> -->
+    <ui-select ng-model="c" on-select="addComp(c)" autofocus class="compList" ng-show="isShowSelect">
+        <ui-select-match>
+            {{$item}}
+        </ui-select-match>
+        <ui-select-choices repeat="c in compList">
+            <span>{{c}}</span>
+        </ui-select-choices>
+    </ui-select>
+    <button type="button" class="btn showSelect" aria-hidden="true" ng-click="showSelect()">+</button>
+</div>
+<!-- <div class="modal-footer"> -->
+    <!-- <button class="btn btn-primary" type="button" ng-click="ok()">OK</button> -->
+    <!-- <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button> -->
+<!-- </div> -->

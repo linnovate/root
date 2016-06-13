@@ -103,6 +103,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.decorators.pdsDecorator',
         'infinite-scroll',
         'mean.icu.ui.modaldeletetasksbyentity',
+        'mean.icu.ui.modalcompartmentalization',
     ]);
 
 

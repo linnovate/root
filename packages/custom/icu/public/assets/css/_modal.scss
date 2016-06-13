@@ -1,4 +1,7 @@
 .modal-dialog {
+	.modal-content {
+		border-radius: 0px;
+	}
     .btn {
         float: right;
     }
@@ -6,3 +9,62 @@
         margin-right: 5px;
     }
 }
+.comp {
+	button {
+		font-weight: initial;
+    	font-size: 32px;
+	}
+	h3 {
+		font-weight: 700;
+		font-size: 20px;
+	}
+	ul.selectedComp {
+	    list-style-type: none;
+	    padding-left: 20px;
+    	padding-right: 20px;
+	    li:first-child div{
+	    	border-top: 1px solid #aaaaaa;
+	    }
+		li div {
+			padding: 10px 0;
+			border-bottom: 1px solid #aaaaaa;
+			
+			button {
+			    color: #fff;
+			    background-color: #888;
+			    height: 13px;
+			    width: 13px;
+			    border-radius: 10px;
+			    padding: 0;
+			    font-size: 14px;
+			    opacity: 1;
+			}
+		}
+	}
+	.compList { 
+		padding-left: 20px;
+    	width: 37em;
+    	display: inline-block;
+	}
+	.showSelect {
+	    width: 26px;
+	    height: 26px;
+	    margin: 0;
+	    padding: 0;
+	    line-height: 24px;
+	    border-radius: 15px;
+	    font-size: 24px;
+	    color: white;
+	    background-color: #ffa004;
+	    display: inline-block;
+	    float: right;
+    	float: none;
+	}
+	&.modal-header {
+		border-bottom: none;
+	}
+	&.modal-body {
+		height: 350px;
+	}
+}
+   
