@@ -25,6 +25,10 @@ var SourceModel = require('../../../circles/server/models/source.js');
 var AttachementModel = require('../models/attachment.js');
 var AttachementArchiveModel = mongoose.model('attachment_archive');
 
+var configPath = process.cwd() + '/config/actionSettings';
+
+var actionSettings = require(configPath) || {};
+
 var entityNameMap = {
   'tasks': {
     mainModel: TaskModel,
@@ -121,16 +125,22 @@ module.exports = function(entityName, options) {
     var conditions = {
       _id: id
     };
-    if (currentUser) conditions['$or'] =
-      [{
-      'circles.c19n': {
-        $in: acl.user.allowed.c19n
-      }
-    }, {
-      'circles.c19n': {
-        $size: 0
-      }
-    }];
+    if (currentUser)
+      if (actionSettings.allowEmptySource)
+        conditions['$or'] =
+          [{
+          'circles.c19n': {
+            $in: acl.user.allowed.c19n
+          }
+        }, {
+          'circles.c19n': {
+            $size: 0
+          }
+        }];
+      else
+        conditions['circles.c19n'] = {
+          $in: acl.user.allowed.c19n
+        };
     var query = Model.find(conditions);
     query.populate(options.includes);
 
