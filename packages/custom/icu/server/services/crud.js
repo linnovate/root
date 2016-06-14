@@ -20,7 +20,7 @@ var UpdateArchiveModel = mongoose.model('update_archive');
 
 var UserModel = require('../models/user.js');
 
-var SourceModel = mongoose.model('Source');
+var SourceModel = require('../../../circles/server/models/source.js');
 
 var AttachementModel = require('../models/attachment.js');
 var AttachementArchiveModel = mongoose.model('attachment_archive');
@@ -121,9 +121,9 @@ module.exports = function(entityName, options) {
     var conditions = {
       _id: id
     };
-    if (currentUser) conditions['circles.c19n'] = {
-      $in: acl.user.allowed.c19n
-    }
+    // if (currentUser) conditions['circles.c19n'] = {
+    //   $in: acl.user.allowed.c19n
+    // }
     var query = Model.find(conditions);
     query.populate(options.includes);
 
@@ -138,23 +138,26 @@ module.exports = function(entityName, options) {
     
   function checkPermissions(entity, user, acl) {
     var deffered = q.defer();
-    if (!entity.circles || !entity.circles.sources || entity.circles.sources.length !== 1) {
-      deffered.reject('invalid sources permissions');
-    } else {
-      SourceModel.findOne({_id: entity.circles.sources[0]}).exec(function(err, source) {
-        if (err || !source) deffered.reject('invalid sources permissions');
-        else {
-          if(acl.user.allowed.c19n.indexOf(source.circleName) < 0) {
-            deffered.reject('permissions denied');
-          } else {
-            entity.circles.c19n = [source.circleName];
-            deffered.resolve(entity.save(user).then(function(e) {
+    if (!entity.circles || !entity.circles.sources || !entity.circles.sources.length) {
+      deffered.resolve(entity.save(user).then(function(e) {
               return Model.populate(e, options.includes);
             }));
-          }
-        }
-      });
-    }
+    } else {
+	    
+	      SourceModel.findOne({_id: entity.circles.sources[0]}).exec(function(err, source) {
+	        if (err || !source) deffered.reject('invalid sources permissions');
+	        else {
+	          if(acl.user.allowed.c19n.indexOf(source.circleName) < 0) {
+	            deffered.reject('permissions denied');
+	          } else {
+	            entity.circles.c19n = [source.circleName];
+	            deffered.resolve(entity.save(user).then(function(e) {
+	              return Model.populate(e, options.includes);
+	            }));
+	          }
+	        }
+	      });
+	}
     return deffered.promise;
   }
   

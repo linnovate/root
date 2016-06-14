@@ -63,18 +63,16 @@ function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector)
     $scope.comp = ['comp1', 'comp2', 'comp3', 'comp4']
     $scope.compList = $scope.comp;
 
-    $scope.selectedComp = entity.comp || [];
+    $scope.selectedComp = entity.circles ? entity.circles.sources : [];
 
     $scope.addComp = function(item) {
-    	console.log('item',item)
     	$scope.selectedComp.push(item)
     	$scope.compList = _.difference($scope.comp, $scope.selectedComp);
     	
     	var serviceName = serviceMap[entityName];
-    	console.log('serviceName', serviceName,entity,entityName)
         var service = $injector.get(serviceName);
         
-        entity.comp = $scope.selectedComp;
+        entity.circles.sources = $scope.selectedComp;
     	
     	// var data = {
      //        name:  item,
