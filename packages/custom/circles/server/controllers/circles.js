@@ -172,16 +172,22 @@ module.exports = function(Circles, app) {
                     Circles.models[model] = mongoose.model(model);
                 }
                 return Circles.models[model].where({
-                    'circles.c19n': {
-                        $in: req.acl.user.allowed.c19n
-                    }
+                    $or: [{
+                        'circles.c19n': {
+                            $in: req.acl.user.allowed.c19n
+                        }
+                    }, {
+                        'circles.c19n': {
+                            $size: 0
+                        }
+                    }]
                 });
             };
 
             next();
         },
         sources: function(req, res) {
-            Source.find({}).exec(function(err, sources){
+            Source.find({}).exec(function(err, sources) {
                 res.send(sources);
             })
         }

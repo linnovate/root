@@ -121,9 +121,16 @@ module.exports = function(entityName, options) {
     var conditions = {
       _id: id
     };
-    // if (currentUser) conditions['circles.c19n'] = {
-    //   $in: acl.user.allowed.c19n
-    // }
+    if (currentUser) conditions['$or'] =
+      [{
+      'circles.c19n': {
+        $in: acl.user.allowed.c19n
+      }
+    }, {
+      'circles.c19n': {
+        $size: 0
+      }
+    }];
     var query = Model.find(conditions);
     query.populate(options.includes);
 
@@ -135,39 +142,41 @@ module.exports = function(entityName, options) {
       return results[0];
     });
   }
-    
+
   function checkPermissions(entity, user, acl) {
     var deffered = q.defer();
     if (!entity.circles || !entity.circles.sources || !entity.circles.sources.length) {
       deffered.resolve(entity.save(user).then(function(e) {
+        return Model.populate(e, options.includes);
+      }));
+    } else {
+
+      SourceModel.findOne({
+        _id: entity.circles.sources[0]
+      }).exec(function(err, source) {
+        if (err || !source) deffered.reject('invalid sources permissions');
+        else {
+          if (acl.user.allowed.c19n.indexOf(source.circleName) < 0) {
+            deffered.reject('permissions denied');
+          } else {
+            entity.circles.c19n = [source.circleName];
+            deffered.resolve(entity.save(user).then(function(e) {
               return Model.populate(e, options.includes);
             }));
-    } else {
-	    
-	      SourceModel.findOne({_id: entity.circles.sources[0]}).exec(function(err, source) {
-	        if (err || !source) deffered.reject('invalid sources permissions');
-	        else {
-	          if(acl.user.allowed.c19n.indexOf(source.circleName) < 0) {
-	            deffered.reject('permissions denied');
-	          } else {
-	            entity.circles.c19n = [source.circleName];
-	            deffered.resolve(entity.save(user).then(function(e) {
-	              return Model.populate(e, options.includes);
-	            }));
-	          }
-	        }
-	      });
-	}
+          }
+        }
+      });
+    }
     return deffered.promise;
   }
-  
+
   function create(entity, user, acl) {
     entity.created = new Date();
     entity.updated = new Date();
     entity.creator = user.user._id;
     return checkPermissions(new Model(entity), user, acl);
   }
-        
+
   function update(oldE, newE, user, acl) {
     var entityWithDefaults = _.defaults(newE, options.defaults);
 
