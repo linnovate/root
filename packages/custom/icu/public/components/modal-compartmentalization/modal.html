@@ -1,27 +1,28 @@
 <div class="modal-header comp">
     <button type="button" class="btn close" aria-hidden="true" ng-click="close()">&times;</button>
+    <button icu-comp-modal entity="task" entity-name="task" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
     <h3 class="modal-title">{{'Restriced Access' | i18next}}</h3>
 </div>
 <div class="modal-body comp">
    
     <ul class="selectedComp">
-        <li ng-repeat="c in selectedComp">
+        <li ng-if="selectedSource">
            <div>
-           	<span>{{c}}</span>
-           	<button type="button" class="btn close" aria-hidden="true" ng-click="removeComp(c)">&times;</button>
+           	<span>{{selectedSource.name}} ({{selectedSource.circleName}})</span>
+           	<button type="button" class="btn close" aria-hidden="true" ng-click="removeSource(selectedSource, 'source')">&times;</button>
            </div>
         </li>
     </ul>
-    <!-- Selected: <b>{{ selected.item }}</b> -->
-    <ui-select ng-model="c" on-select="addComp(c)" autofocus class="compList" ng-show="isShowSelect">
+    <ui-select ng-model="c" on-select="addSource(c)" autofocus class="sourceList" ng-show="isShowSourcesSelect">
         <ui-select-match>
-            {{$item}}
+            {{$item.name}}
         </ui-select-match>
-        <ui-select-choices repeat="c in compList">
-            <span>{{c}}</span>
+        <ui-select-choices repeat="c in sourceList">
+            <span>{{c.name}}</span>
         </ui-select-choices>
     </ui-select>
     <button type="button" class="btn showSelect" aria-hidden="true" ng-click="showSelect()">+</button>
+    <div class="errorMessage" ng-show="errorMessage"><p class="errorMessage">{{errorMessage}}</p></div>
 </div>
 <!-- <div class="modal-footer"> -->
     <!-- <button class="btn btn-primary" type="button" ng-click="ok()">OK</button> -->
