@@ -96,6 +96,9 @@ module.exports = function(entityName, options) {
           .limit(pagination.limit);
 
         query.populate(options.includes);
+        if (currentUser) {
+      		query.deepPopulate('circles.sources');
+      	}
         query.hint({
           _id: 1
         });
@@ -111,6 +114,9 @@ module.exports = function(entityName, options) {
 
       query.find({});
       query.populate(options.includes);
+      if (currentUser) {
+      	query.deepPopulate('circles.sources');
+      }
       query.hint({
         _id: 1
       });

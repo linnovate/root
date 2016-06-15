@@ -86,6 +86,7 @@ exports.getByEntity = function (req, res, next) {
   query.find(entityQuery);
 
   query.populate(options.includes);
+  query.deepPopulate('circles.sources');
 
   Project.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;
