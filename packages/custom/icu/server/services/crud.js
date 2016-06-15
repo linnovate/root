@@ -29,6 +29,7 @@ var configPath = process.cwd() + '/config/actionSettings';
 
 var actionSettings = require(configPath) || {};
 
+
 var entityNameMap = {
   'tasks': {
     mainModel: TaskModel,
@@ -128,25 +129,23 @@ module.exports = function(entityName, options) {
   }
 
   function read(id, acl) {
+    var groups = ['c19nGroups1', 'c19nGroups2', 'c19n'];
+
     var conditions = {
-      _id: id
+      _id: id,
+      $and: []
     };
-    if (currentUser)
-      if (actionSettings.allowEmptySource)
-        conditions['$or'] =
-          [{
-          'circles.c19n': {
-            $in: acl.user.allowed.c19n
-          }
-        }, {
-          'circles.c19n': {
-            $size: 0
-          }
-        }];
-      else
-        conditions['circles.c19n'] = {
-          $in: acl.user.allowed.c19n
-        };
+    if (currentUser) {
+       for (var i in groups) {
+        var obj1 = {},
+            obj2 = {},
+            obj3 = {};
+        obj1['circles.'+groups[i]] = {$in: acl.user.allowed[groups[i]]}; 
+        obj2['circles.'+groups[i]] = {$size: 0};
+        obj3['circles.'+groups[i]] = {$exists: false};
+        conditions.$and.push({'$or': [obj1, obj2, obj3]});
+      }
+    }
     var query = Model.find(conditions);
     query.populate(options.includes);
     if (currentUser)
@@ -162,19 +161,21 @@ module.exports = function(entityName, options) {
   }
   
   function checkPermissions(entity, acl, callback) {
-    
+    var groups = ['c19nGroups1', 'c19nGroups2'];
+
     if (!entity.circles) return callback(null);
-    if (entity.circles.c19nGroups && entity.circles.c19nGroups.length) { //c19nGroups
-      if (entity.circles.c19nGroups.length > 1) return callback('invalid sources permissions');
-      if (acl.user.allowed.c19nGroups.indexOf(entity.circles.c19nGroups[0]) < 0) {
-          return callback('permissions denied');
-        } 
-        // groups
-    } else { //sources(c19n)
-      if (entity.circles.sources && entity.circles.sources.length) {
-        if (entity.circles.sources.length > 1) return callback('invalid sources permissions'); 
+    for (var i in groups) {
+      if (entity.circles[groups[i]] && entity.circles[groups[i]].length) {
+        if (entity.circles[groups[i]].length > 1) return callback('invalid sources permissions');
+        if (acl.user.allowed[groups[i]].indexOf(entity.circles[groups[i]][0]) < 0) {
+            return callback('permissions denied');
+          } 
       }
-    }  
+    }
+    if (entity.circles.sources && entity.circles.sources.length) {     //sources(c19n)
+      if (entity.circles.sources.length > 1) return callback('invalid sources permissions--'); 
+    }
+     
     return callback(null);
   };
   

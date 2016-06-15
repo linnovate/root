@@ -14,7 +14,11 @@ var CircleSchema = new Schema({
     unique: true
   },
   circles: [String],
-  circleType: String
+  circleType: String,
+  isActive: {
+    type: Boolean,
+    default: true
+  }
 });
 
 //add index

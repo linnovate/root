@@ -68,7 +68,10 @@ var ProjectSchema = new Schema({
       type: Schema.ObjectId,
       ref: 'Source'
     }],
-    c19nGroups: {
+    c19nGroups1: {
+      type: Array
+    },
+    c19nGroups2: {
       type: Array
     }
   }

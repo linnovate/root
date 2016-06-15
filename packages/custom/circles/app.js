@@ -42,12 +42,14 @@ Circles.register(function(app, auth, database) {
   return Circles;
 });
 
-function registerCircles(circle, circleType, parents) {
+function registerCircles(circle, circleType, parents, isActive) {
   var Circle = require('mongoose').model('Circle');
 
+  if (typeof(isActive) !== 'boolean') isActive = true;
   var query = {
     name: circle,
-    circleType: circleType
+    circleType: circleType,
+    isActive: isActive
   };
 
   var set = {};
@@ -124,42 +126,42 @@ function getC19nGroups() {
   var groups = [{
     id: '91234',
     name: 'g1',
-    type: 'a',
+    type: 'c19nGroups1',
     isActive: true
   }, {
     id: '91244',
     name: 'g2',
-    type: 'a',
+    type: 'c19nGroups1',
     isActive: true
   }, {
     id: '91254',
     name: 'g3',
-    type: 'a',
+    type: 'c19nGroups1',
     isActive: false
   }, {
     id: '91264',
     name: 'g4',
-    type: 'a',
+    type: 'c19nGroups1',
     isActive: true
   }, {
     id: '91274',
     name: 'g5',
-    type: 'b',
+    type: 'c19nGroups2',
     isActive: false
   }, {
     id: '91284',
     name: 'g6',
-    type: 'b',
+    type: 'c19nGroups2',
     isActive: false
   }, {
     id: '91294',
     name: 'g7',
-    type: 'b',
+    type: 'c19nGroups2',
     isActive: true
   }];
   
   for (var i = 0; i < groups.length; i++) {
-    registerCircles(groups[i].name, 'c19nGroups');
+    registerCircles(groups[i].name, groups[i].type, null, groups[i].isActive);
   }
 };
 
