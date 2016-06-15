@@ -195,9 +195,12 @@ module.exports = function(Circles, app) {
             next();
         },
         sources: function(req, res) {
-            Source.find({}).exec(function(err, sources) {
+            var conditions = {};
+            if(!actionSettings.displayAllSources)
+                conditions.circleName = {$in: req.acl.user.allowed.c19n};
+            Source.find(conditions).exec(function(err, sources) {
                 res.send(sources);
-            })
+            });
         }
     }
 
