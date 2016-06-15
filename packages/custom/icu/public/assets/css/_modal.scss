@@ -1,4 +1,7 @@
 .modal-dialog {
+	.modal-content {
+		border-radius: 0px;
+	}
     .btn {
         float: right;
     }
@@ -6,3 +9,88 @@
         margin-right: 5px;
     }
 }
+.comp {
+	button {
+		font-weight: initial;
+    	font-size: 32px;
+	}
+	h3 {
+		font-weight: 700;
+		font-size: 20px;
+		margin-top: 14px;
+	}
+	.compBtn {
+	    background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+	    width: 30px;
+	    height: 30px;
+	    border-radius: 15px;
+	    border: none;
+	    float: left;
+	    margin: 14px 7px 0 16px;
+    }
+	ul.selectedComp {
+	    list-style-type: none;
+	    padding-left: 20px;
+    	padding-right: 20px;
+	    li:first-child div{
+	    	border-top: 1px solid #aaaaaa;
+	    }
+		li div {
+			padding: 10px 0;
+			border-bottom: 1px solid #aaaaaa;
+			
+			button {
+			    color: #fff;
+			    background-color: #888;
+			    height: 14px;
+			    width: 14px;
+			    border-radius: 10px;
+			    padding: 0;
+			    font-size: 14px;
+			    opacity: 1;
+			    line-height: 12px;
+    			text-align: center;
+			}
+		}
+	}
+	.compList { 
+		padding-left: 20px;
+    	width: 37em;
+    	display: inline-block;
+	}
+	.showSelect {
+	    width: 26px;
+	    height: 26px;
+	    margin: 0;
+	    padding: 0;
+	    line-height: 24px;
+	    border-radius: 15px;
+	    font-size: 24px;
+	    color: white;
+	    background-color: #ffa004;
+	    display: inline-block;
+	    float: right;
+    	margin-right: 17px;
+	}
+	.sourceList {
+		float: left;
+		width: 86%;
+    	margin-left: 17px;
+	}
+	.errorMessage {
+		clear: both;
+	    text-align: center;
+	    color: red;
+	    width: 100%;
+	    font-weight: bold;
+	    margin-top: 15px;
+	    float: left;
+	}
+	&.modal-header {
+		border-bottom: none;
+	}
+	&.modal-body {
+		height: 350px;
+	}
+}
+   

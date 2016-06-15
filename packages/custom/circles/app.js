@@ -53,7 +53,9 @@ function registerCircles(circle, circleType, parents) {
   var set = {};
   if (parents) {
     set.$addToSet = {
-      circles: {$each: parents}
+      circles: {
+        $each: parents
+      }
     };
   }
 
@@ -72,7 +74,7 @@ O Page to create and manage circles + sow circles heirarchy
 */
 
 function getGoogleGroups() {
-  var GoogleService = require('service-providers')('google');
+  var GoogleService = require('serviceproviders')('google');
   var service = new GoogleService(config.google.clientSecret, config.google.clientID, config.google.callbackURL);
 
   var getMembers = function(group, rv, cb) {
@@ -97,23 +99,23 @@ function getGoogleGroups() {
     domain: 'linnovate.net',
   }, function(err, list) {
     console.log(err)
-    if(!err && list.groups){
-    var obj = list.groups.reduce(function(o, v) {
-      o[v.id] = v;
-      return o;
-    }, {});
-    var counter = list.groups.length;
-    for (var i = 0; i < list.groups.length; i++) {
-      getMembers(list.groups[i], obj, function() {
-        counter--;
-        if (counter === 0) {
-          for (var i = 0; i < list.groups.length; i++) {
-            registerCircles(list.groups[i].name, 'groups');
+    if (!err && list.groups) {
+      var obj = list.groups.reduce(function(o, v) {
+        o[v.id] = v;
+        return o;
+      }, {});
+      var counter = list.groups.length;
+      for (var i = 0; i < list.groups.length; i++) {
+        getMembers(list.groups[i], obj, function() {
+          counter--;
+          if (counter === 0) {
+            for (var i = 0; i < list.groups.length; i++) {
+              registerCircles(list.groups[i].name, 'groups');
+            }
           }
-        }
-      })
+        })
 
-    }
+      }
     }
   })
 };
@@ -207,7 +209,7 @@ function getC19n() {
     name: 'c3',
     linkedTriangleId: '123',
     clearance: '2'
-  },{
+  }, {
     id: '8123',
     name: 'd1',
     linkedTriangleId: '456',
@@ -258,21 +260,36 @@ function getC19n() {
     linkedTriangleId: '456',
     clearance: '2'
   }];
-  
+
   var Source = require('mongoose').model('Source');
 
+  var circles = {};
+
   for (var i = 0; i < sources.length; i++) {
-        Source.findOneAndUpdate({sourceId: sources[i].id},{
+    Source.findOneAndUpdate({
+      sourceId: sources[i].id
+    }, {
       sourceId: sources[i].id,
       name: sources[i].name,
       circleName: sources[i].clearance + sources[i].linkedTriangleId
-    },{upsert:true}).exec(function(err, source){
-     
+    }, {
+      upsert: true
+    }).exec(function(err, source) {
+
     });
-    var parents;
-    if (parseInt(sources[i].clearance) > 0) {
-      parents = [(parseInt(sources[i].clearance) - 1) + sources[i].linkedTriangleId];
-    } else parents = null;
-    registerCircles(sources[i].clearance + sources[i].linkedTriangleId, 'c19n', parents);
+
+    if (!circles[sources[i].linkedTriangleId]) circles[sources[i].linkedTriangleId] = [];
+    if (circles[sources[i].linkedTriangleId].indexOf(sources[i].clearance) < 0)
+      circles[sources[i].linkedTriangleId].push(sources[i].clearance)
+  }
+  for (var triangleId in circles) {
+    var clearances = circles[triangleId].sort();
+    for (var i = 0; i < clearances.length; i++) {
+      var parents;
+      if (clearances[i + 1]) {
+        parents = [clearances[i + 1] + triangleId];
+      } else parents = null;
+      registerCircles(clearances[i] + triangleId, 'c19n', parents);
+    }
   }
 }

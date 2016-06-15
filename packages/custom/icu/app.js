@@ -100,9 +100,11 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.searchservice',
         'mean.icu.data.paginationservice',
         'mean.icu.data.constants',
+        'mean.icu.data.circlesservice',
         'mean.icu.decorators.pdsDecorator',
         'infinite-scroll',
         'mean.icu.ui.modaldeletetasksbyentity',
+        'mean.icu.ui.modalcompartmentalization',
     ]);
 
 

@@ -20,10 +20,14 @@ var UpdateArchiveModel = mongoose.model('update_archive');
 
 var UserModel = require('../models/user.js');
 
-var SourceModel = mongoose.model('Source');
+var SourceModel = require('../../../circles/server/models/source.js');
 
 var AttachementModel = require('../models/attachment.js');
 var AttachementArchiveModel = mongoose.model('attachment_archive');
+
+var configPath = process.cwd() + '/config/actionSettings';
+
+var actionSettings = require(configPath) || {};
 
 var entityNameMap = {
   'tasks': {
@@ -121,11 +125,26 @@ module.exports = function(entityName, options) {
     var conditions = {
       _id: id
     };
-    if (currentUser) conditions['circles.c19n'] = {
-      $in: acl.user.allowed.c19n
-    }
+    if (currentUser)
+      if (actionSettings.allowEmptySource)
+        conditions['$or'] =
+          [{
+          'circles.c19n': {
+            $in: acl.user.allowed.c19n
+          }
+        }, {
+          'circles.c19n': {
+            $size: 0
+          }
+        }];
+      else
+        conditions['circles.c19n'] = {
+          $in: acl.user.allowed.c19n
+        };
     var query = Model.find(conditions);
     query.populate(options.includes);
+    if (currentUser)
+      query.deepPopulate('circles.sources');
 
     return query.then(function(results) {
       if (!results.length) {
@@ -169,35 +188,42 @@ module.exports = function(entityName, options) {
       else {
         checkSource(entity, acl, function(error, circleName){
           if (error) deffered.reject(error);
-          entity.created = new Date();
-          entity.updated = new Date();
-          entity.creator = user.user._id;
-          if (circleName) entity.circles.c19n = [circleName];
-          deffered.resolve(new Model(entity).save(user).then(function(e) {
-            return Model.populate(e, options.includes);
-          }));
-        })
+          else {
+            entity.created = new Date();
+            entity.updated = new Date();
+            entity.creator = user.user._id;
+            if (circleName) entity.circles.c19n = [circleName];
+            deffered.resolve(new Model(entity).save(user).then(function(e) {
+              return Model.populate(e, options.includes);
+            }));
+          }
+        });
       }
     });
     
     return deffered.promise;
   }
-        
+
   function update(oldE, newE, user, acl) {
     var entityWithDefaults = _.defaults(newE, options.defaults);
 
     oldE = _.extend(oldE, entityWithDefaults);
 
     var deffered = q.defer();
-    checkPermissions(oldE, acl, function(error, circleName){
+    checkPermissions(oldE, acl, function(error){
       if (error) deffered.reject(error);
       else {
-        oldE.updated = new Date();
-        oldE.updater = user.user._id;
-        if(circleName) entity.circles.c19n = [circleName];
-        deffered.resolve(oldE.save(user).then(function(e) {
-          return Model.populate(e, options.includes);
-        }));
+        checkSource(oldE, acl, function(error, circleName){
+          if (error) deffered.reject(error);
+          else {
+            oldE.updated = new Date();
+            oldE.updater = user.user._id;
+            if(circleName) oldE.circles.c19n = [circleName];
+            deffered.resolve(oldE.save(user).then(function(e) {
+              return Model.populate(e, options.includes);
+            }));
+          }
+        });
       }
     });
     

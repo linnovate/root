@@ -113,4 +113,7 @@ DiscussionSchema.pre('remove', function (next) {
 
 DiscussionSchema.plugin(archive, 'discussion');
 
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+DiscussionSchema.plugin(deepPopulate);
+
 module.exports = mongoose.model('Discussion', DiscussionSchema);

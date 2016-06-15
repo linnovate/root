@@ -173,4 +173,7 @@ TaskSchema.pre('remove', function(next) {
 
 TaskSchema.plugin(archive, 'task');
 
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+TaskSchema.plugin(deepPopulate);
+
 module.exports = mongoose.model('Task', TaskSchema);
