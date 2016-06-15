@@ -143,6 +143,8 @@ module.exports = function(entityName, options) {
         };
     var query = Model.find(conditions);
     query.populate(options.includes);
+    if (currentUser)
+      query.deepPopulate('circles.sources');
 
     return query.then(function(results) {
       if (!results.length) {

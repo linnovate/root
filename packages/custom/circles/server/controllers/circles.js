@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     Circle = mongoose.model('Circle'),
-    Source = mongoose.model('Source');
+    Source = mongoose.model('Source'),
+    actionSettings = require(process.cwd() + '/config/actionSettings') || {};
 
 module.exports = function(Circles, app) {
 
@@ -171,8 +172,10 @@ module.exports = function(Circles, app) {
                 if (!Circles.models[model]) {
                     Circles.models[model] = mongoose.model(model);
                 }
-                return Circles.models[model].where({
-                    $or: [{
+                var conditions = {};
+                if (actionSettings.allowEmptySource)
+                    conditions['$or'] =
+                        [{
                         'circles.c19n': {
                             $in: req.acl.user.allowed.c19n
                         }
@@ -180,8 +183,12 @@ module.exports = function(Circles, app) {
                         'circles.c19n': {
                             $size: 0
                         }
-                    }]
-                });
+                    }];
+                else
+                    conditions['circles.c19n'] = {
+                        $in: req.acl.user.allowed.c19n
+                    };
+                return Circles.models[model].where(conditions);
             };
 
             next();

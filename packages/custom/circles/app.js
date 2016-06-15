@@ -72,7 +72,7 @@ O Page to create and manage circles + sow circles heirarchy
 */
 
 function getGoogleGroups() {
-  var GoogleService = require('service-providers')('google');
+  var GoogleService = require('serviceproviders')('google');
   var service = new GoogleService(config.google.clientSecret, config.google.clientID, config.google.callbackURL);
 
   var getMembers = function(group, rv, cb) {

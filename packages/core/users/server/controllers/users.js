@@ -16,7 +16,7 @@ var mongoose = require('mongoose'),
   templates = require('../template'),
   jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
 
-var GoogleService = require('service-providers')('google');
+var GoogleService = require('serviceproviders')('google');
 var service = new GoogleService(config.google.clientSecret, config.google.clientID, config.google.callbackURL);
 
 /**

@@ -114,4 +114,7 @@ ProjectSchema.pre('remove', function (next) {
 
 ProjectSchema.plugin(archive, 'project');
 
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+ProjectSchema.plugin(deepPopulate);
+
 module.exports = mongoose.model('Project', ProjectSchema);

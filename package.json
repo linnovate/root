@@ -31,9 +31,11 @@
     "forever": "latest",
     "gridfs-stream": "latest",
     "jsonwebtoken": "^7.0.0",
+    "kue": "latest",
     "lodash": "latest",
     "meanio": "0.8.0",
     "mongoose": "latest",
+    "mongoose-deep-populate": "^3.0.0",
     "morgan": "latest",
     "ms": "latest",
     "nodemailer": "latest",
@@ -46,10 +48,10 @@
     "passport-twitter": "latest",
     "request": "latest",
     "serve-favicon": "latest",
+    "serviceproviders": "^1.0.1",
     "shelljs": "latest",
     "swig": "latest",
-    "view-helpers": "latest",
-    "kue": "latest"
+    "view-helpers": "latest"
   },
   "devDependencies": {
     "chalk": "latest",
