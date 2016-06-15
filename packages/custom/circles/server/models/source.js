@@ -17,4 +17,4 @@ var SourceSchema = new Schema({
   }
 });
 
-mongoose.model('Source', SourceSchema);
+module.exports = mongoose.model('Source', SourceSchema);

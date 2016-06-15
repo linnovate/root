@@ -5,13 +5,9 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
         function link(scope, elem, attrs) {
 
             elem.bind('click', function() {
-                // if($state.current.name.indexOf('main.tasks.byentity') != -1)
-                //     scope.isTasks --;
-
-               
                 buildModal();
             });
-            console.log('sssssssssssssssssss', scope.entity,  scope.entityName)
+
             function buildModal() {
                 var modalInstance = $uibModal.open({
                     animation: true,
@@ -22,7 +18,6 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
                             return scope.entity;
                         },
                         entityName: function () {
-                            console.log('scope.entityName',scope.entityName)
                             return scope.entityName;
                         },
                     }
@@ -30,7 +25,7 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
                 });
 
                 modalInstance.result.then(function () {
-                    // scope.deleteFn();
+
                 }, function () {
                     console.log('Modal dismissed');
                 });
@@ -40,9 +35,6 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
         return {
             restrict: 'A',
             scope: {
-
-                // isTasks: '=',
-                // deleteFn: '&',
                 entityName: '@',
                 entity: '='
             },
@@ -50,7 +42,7 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
         };
     });
 
-function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector) {
+function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector, circlesService) {
     var serviceMap = {
         projects: 'ProjectsService',
         discussions: 'DiscussionsService',
@@ -60,39 +52,44 @@ function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector)
         task: 'TasksService'
     };
 
-    $scope.comp = ['comp1', 'comp2', 'comp3', 'comp4']
-    $scope.compList = $scope.comp;
+    $scope.sourceList = [];
+    circlesService.getc19nList().then(function(data) {
+		$scope.sourceList = data;
+    });
 
-    $scope.selectedComp = entity.circles ? entity.circles.sources : [];
+    $scope.selectedSource = entity.circles.sources[0] ? entity.circles.sources[0] : null;
+    $scope.isShowSourcesSelect = $scope.selectedSource ? false : true;
+    $scope.errorMessage = ''
+    var serviceName = serviceMap[entityName];
+    var service = $injector.get(serviceName);
+    $scope.addSource = function(item) {
+    	$scope.errorMessage = ''
+        entity.circles.sources[0] = item;
+    	service.update(entity).then(function(data) {
+    		$scope.selectedSource = item;
+    	}, function(error){
+    		if (error.data && error.data.message) {
+    			$scope.errorMessage = error.data.message;
+    		} else {
+    			$scope.errorMessage = 'permissions denied'
+    		}
+    		// $scope.removeSource();
+    		$scope.isShowSourcesSelect = true; 
+    	})
 
-    $scope.addComp = function(item) {
-    	$scope.selectedComp.push(item)
-    	$scope.compList = _.difference($scope.comp, $scope.selectedComp);
-    	
-    	var serviceName = serviceMap[entityName];
-        var service = $injector.get(serviceName);
-        
-        entity.circles.sources = $scope.selectedComp;
-    	
-    	// var data = {
-     //        name:  item,
-     //        type: 'comp'
-     //    }
-    	service.update(entity);
-
-    	$scope.isShowSelect = false;
+    	$scope.isShowSourcesSelect = false;
     };
 
-    $scope.removeComp = function(item) {
-    	console.log('item',item,$scope.selectedComp)
-    	var index = $scope.selectedComp.indexOf(item);
-		$scope.selectedComp.splice(index, 1);
-		$scope.compList = _.difference($scope.comp, $scope.selectedComp);
+    $scope.removeSource = function() {
+		entity.circles.sources = [];
+		service.update(entity);
+		$scope.selectedSource = null;
+
+		$scope.isShowSourcesSelect = true; 
     };
 
-    $scope.isShowSelect = $scope.selectedComp.length ? false : true;
     $scope.showSelect = function() {
-		$scope.isShowSelect = true;   
+		
     }
 
     $scope.close = function () {
@@ -103,6 +100,3 @@ function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector)
         $uibModalInstance.dismiss('cancel');
     };
 }
-
-
-

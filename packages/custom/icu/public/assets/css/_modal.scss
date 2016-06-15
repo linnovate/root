@@ -17,7 +17,17 @@
 	h3 {
 		font-weight: 700;
 		font-size: 20px;
+		margin-top: 14px;
 	}
+	.compBtn {
+	    background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+	    width: 30px;
+	    height: 30px;
+	    border-radius: 15px;
+	    border: none;
+	    float: left;
+	    margin: 14px 7px 0 16px;
+    }
 	ul.selectedComp {
 	    list-style-type: none;
 	    padding-left: 20px;
@@ -32,12 +42,14 @@
 			button {
 			    color: #fff;
 			    background-color: #888;
-			    height: 13px;
-			    width: 13px;
+			    height: 14px;
+			    width: 14px;
 			    border-radius: 10px;
 			    padding: 0;
 			    font-size: 14px;
 			    opacity: 1;
+			    line-height: 12px;
+    			text-align: center;
 			}
 		}
 	}
@@ -58,7 +70,21 @@
 	    background-color: #ffa004;
 	    display: inline-block;
 	    float: right;
-    	float: none;
+    	margin-right: 17px;
+	}
+	.sourceList {
+		float: left;
+		width: 86%;
+    	margin-left: 17px;
+	}
+	.errorMessage {
+		clear: both;
+	    text-align: center;
+	    color: red;
+	    width: 100%;
+	    font-weight: bold;
+	    margin-top: 15px;
+	    float: left;
 	}
 	&.modal-header {
 		border-bottom: none;
