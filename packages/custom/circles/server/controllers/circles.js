@@ -124,6 +124,7 @@ module.exports = function(Circles, app) {
         userAcl: function(req, res, next) {
             var circleTypes = {
                 c19n: req.user && req.user.circles && req.user.circles.c19n ? req.user.circles.c19n : [],
+                c19nGroups: req.user && req.user.circles && req.user.circles.c19nGroups ? req.user.circles.c19nGroups : [],
                 groups: req.user && req.user.circles && req.user.circles.groups ? req.user.circles.groups : [],
                 permissions: req.user && req.user.circles && req.user.circles.permissions ? req.user.circles.permissions : []
             };

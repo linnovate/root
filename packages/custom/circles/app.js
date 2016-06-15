@@ -36,6 +36,8 @@ Circles.register(function(app, auth, database) {
   getGoogleGroups();
 
   getC19n();
+  
+  getC19nGroups();
 
   return Circles;
 });
@@ -114,7 +116,50 @@ function getGoogleGroups() {
     }
     }
   })
-}
+};
+
+function getC19nGroups() {
+  var groups = [{
+    id: '91234',
+    name: 'g1',
+    type: 'a',
+    isActive: true
+  }, {
+    id: '91244',
+    name: 'g2',
+    type: 'a',
+    isActive: true
+  }, {
+    id: '91254',
+    name: 'g3',
+    type: 'a',
+    isActive: false
+  }, {
+    id: '91264',
+    name: 'g4',
+    type: 'a',
+    isActive: true
+  }, {
+    id: '91274',
+    name: 'g5',
+    type: 'b',
+    isActive: false
+  }, {
+    id: '91284',
+    name: 'g6',
+    type: 'b',
+    isActive: false
+  }, {
+    id: '91294',
+    name: 'g7',
+    type: 'b',
+    isActive: true
+  }];
+  
+  for (var i = 0; i < groups.length; i++) {
+    registerCircles(groups[i].name, 'c19nGroups');
+  }
+};
 
 function getC19n() {
   var sources = [{

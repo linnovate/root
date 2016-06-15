@@ -15,7 +15,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
 
   // Setting up the users api
   app.route('/api/register')
-    .post(users.create, users.getGoogleGroups, users.setRandomPermissions, users.setRandomC19n, users.getJwt);
+    .post(users.create, users.getGoogleGroups, users.setRandomPermissions, users.setRandomC19n, users.setRandomC19nGroups, users.getJwt);
 
   app.route('/api/forgot-password')
     .post(users.forgotpassword);
@@ -36,7 +36,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
   app.route('/api/login')
     .post(passport.authenticate('local', {
       failureFlash: false
-    }), users.getGoogleGroups, users.setRandomPermissions, users.setRandomC19n, users.getJwt);
+    }), users.getGoogleGroups, users.setRandomPermissions, users.setRandomC19n, users.setRandomC19nGroups, users.getJwt);
 
   // AngularJS route to get config of social buttons
   app.route('/api/get-config')

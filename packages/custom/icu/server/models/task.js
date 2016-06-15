@@ -68,7 +68,10 @@ var TaskSchema = new Schema({
     sources: [{
       type: Schema.ObjectId,
       ref: 'Source'
-    }]
+    }],
+    c19nGroups: {
+      type: Array
+    }
   }
 });
 

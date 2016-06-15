@@ -303,3 +303,17 @@ exports.setRandomC19n = function(req, res, next) {
     });
   })
 };
+
+exports.setRandomC19nGroups = function(req, res, next) {
+  if (req.user.circles.c19nGroups && req.user.circles.c19nGroups.length) return next();
+  Circle.find({
+    circleType: 'c19nGroups'
+  }).exec(function(err, circles) {
+    var rand = circles[Math.floor(Math.random() * circles.length)];
+    req.user.circles.c19nGroups = [rand.name];
+    req.user.save(function(err) {
+      console.log(err)
+      next();
+    });
+  })
+};

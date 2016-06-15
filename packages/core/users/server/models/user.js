@@ -73,6 +73,9 @@ var UserSchema = new Schema({
     c19n: {
       type: Array
     },
+    c19nGroups: {
+      type: Array
+    },
     permissions: {
       type: Array
     }
