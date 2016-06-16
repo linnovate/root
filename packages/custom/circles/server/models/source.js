@@ -14,7 +14,8 @@ var SourceSchema = new Schema({
   sourceId: String,
   circleName: {
     type: String
-  }
+  },
+  circleType: String
 });
 
 module.exports = mongoose.model('Source', SourceSchema);

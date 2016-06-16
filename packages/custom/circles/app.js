@@ -36,7 +36,7 @@ Circles.register(function(app, auth, database) {
   getGoogleGroups();
 
   getC19n();
-  
+
   getC19nGroups();
 
   return Circles;
@@ -159,7 +159,7 @@ function getC19nGroups() {
     type: 'c19nGroups2',
     isActive: true
   }];
-  
+
   for (var i = 0; i < groups.length; i++) {
     registerCircles(groups[i].name, groups[i].type, null, groups[i].isActive);
   }
@@ -273,7 +273,8 @@ function getC19n() {
     }, {
       sourceId: sources[i].id,
       name: sources[i].name,
-      circleName: sources[i].clearance + sources[i].linkedTriangleId
+      circleName: sources[i].clearance + sources[i].linkedTriangleId,
+      circleType: 'c19n'
     }, {
       upsert: true
     }).exec(function(err, source) {

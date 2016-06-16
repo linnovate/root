@@ -123,7 +123,7 @@ exports.getJwt = function(req, res) {
   // We are sending the payload inside the token
   ///var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
   var token = jwt.sign(escaped, config.secret, {
-    expiresInMinutes: 60 * 5
+    // expiresInMinutes: 60 * 5
   });
   res.json({
     token: token
@@ -305,7 +305,7 @@ exports.setRandomC19n = function(req, res, next) {
 };
 
 exports.setRandomC19nGroups = function(req, res, next) {
-  if (req.user.circles.c19nGroups && req.user.circles.c19nGroups.length) return next();
+  if (req.user.circles.c19nGroups1 && req.user.circles.c19nGroups1.length && req.user.circles.c19nGroups2 && req.user.circles.c19nGroups2.length) return next();
   Circle.find({
     circleType: 'c19nGroups1'
   }).exec(function(err, circles) {

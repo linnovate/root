@@ -88,7 +88,7 @@ exports.load = function(swagger, parms) {
       params: searchParms
     }
   };
-  
+
   var tasksList = {
     'spec': {
       description: 'Tasks operations',
@@ -150,11 +150,9 @@ exports.load = function(swagger, parms) {
       nickname: 'GetTask',
       produces: ['application/json'],
       parameters: [swagger.paramTypes.path('id', 'Task Id', 'string')]
-    
+
     }
   };
-
-
 
 
 
@@ -169,15 +167,15 @@ exports.load = function(swagger, parms) {
       nickname: 'updateTask',
       produces: ['application/json'],
       parameters: [
- swagger.paramTypes.path('id', 'Task Id', 'string'),
-      {
-        name: 'body',
-        description: 'task to update',
-        required: true,
-        type: 'Task',
-        paramType: 'body',
-        allowMultiple: false
-      }]
+        swagger.paramTypes.path('id', 'Task Id', 'string'), {
+          name: 'body',
+          description: 'task to update',
+          required: true,
+          type: 'Task',
+          paramType: 'body',
+          allowMultiple: false
+        }
+      ]
     }
   };
 
@@ -221,8 +219,8 @@ exports.load = function(swagger, parms) {
       nickname: 'getZombieTasks',
       produces: ['application/json'],
       params: searchParms
-  }
-};
+    }
+  };
 
   var tasksHistory = {
     'spec': {
@@ -261,7 +259,7 @@ exports.load = function(swagger, parms) {
 
 
 
-var updateProject = {
+  var updateProject = {
     'spec': {
       description: 'Update a project',
       path: '/projects/{id}',
@@ -272,19 +270,19 @@ var updateProject = {
       nickname: 'updateProject',
       produces: ['application/json'],
       parameters: [
- swagger.paramTypes.path('id', 'Project Id', 'string'),
-      {
-        name: 'body',
-        description: 'project to update',
-        required: true,
-        type: 'Project',
-        paramType: 'body',
-        allowMultiple: false
-      }]
+        swagger.paramTypes.path('id', 'Project Id', 'string'), {
+          name: 'body',
+          description: 'project to update',
+          required: true,
+          type: 'Project',
+          paramType: 'body',
+          allowMultiple: false
+        }
+      ]
     }
   };
 
-var deleteProject = {
+  var deleteProject = {
     'spec': {
       description: 'Delete a Project',
       path: '/projects/{id}',
@@ -297,6 +295,7 @@ var deleteProject = {
       produces: ['application/json']
     }
   };
+
   var projectsList = {
     'spec': {
       description: 'project operations',
@@ -305,9 +304,24 @@ var deleteProject = {
       summary: 'Get projects list',
       notes: '',
       type: 'Project',
-      nickname: 'GetTasks',
+      nickname: 'getProjects',
       produces: ['application/json'],
       params: searchParms
+    }
+  };
+
+  var getProject = {
+    'spec': {
+      description: 'Get a project',
+      path: '/projects/{id}',
+      method: 'GET',
+      summary: 'Get project by Id',
+      notes: '',
+      type: 'Project',
+      nickname: 'getProject',
+      produces: ['application/json'],
+      params: searchParms,
+      parameters: [swagger.paramTypes.path('id', 'Project Id', 'string')],
     }
   };
 
@@ -409,7 +423,7 @@ var deleteProject = {
     }
   };
 
- /* var starEntity = {
+  /* var starEntity = {
     'spec': {
       description: 'star or unstar a entity',
       path: '/{entity}/{id}/star',
@@ -510,15 +524,15 @@ var deleteProject = {
       nickname: 'commentUpdate',
       produces: ['application/json'],
       parameters: [
-     swagger.paramTypes.path('id', 'Comment Id', 'string'),
-      {
-        name: 'body',
-        description: 'comment to update',
-        required: true,
-        type: 'Comment',
-        paramType: 'body',
-        allowMultiple: false
-      }]
+        swagger.paramTypes.path('id', 'Comment Id', 'string'), {
+          name: 'body',
+          description: 'comment to update',
+          required: true,
+          type: 'Comment',
+          paramType: 'body',
+          allowMultiple: false
+        }
+      ]
     }
   };
 
@@ -530,7 +544,7 @@ var deleteProject = {
       summary: 'delete a comment',
       type: 'Comment',
       nickname: 'commentDelete',
-       parameters: [swagger.paramTypes.path('id', 'Comment Id', 'string')],
+      parameters: [swagger.paramTypes.path('id', 'Comment Id', 'string')],
       produces: ['application/json'],
     }
   };
@@ -610,15 +624,15 @@ var deleteProject = {
       params: searchParms,
       parameters: [
 
- swagger.paramTypes.path('id', 'Comment Id', 'string'),
-      {
-        name: 'body',
-        description: 'discussion to update',
-        required: true,
-        type: 'Discussion',
-        paramType: 'body',
-        allowMultiple: false
-      }]
+        swagger.paramTypes.path('id', 'Comment Id', 'string'), {
+          name: 'body',
+          description: 'discussion to update',
+          required: true,
+          type: 'Discussion',
+          paramType: 'body',
+          allowMultiple: false
+        }
+      ]
     }
   };
 
@@ -649,7 +663,7 @@ var deleteProject = {
     }
   };
 
- /* var getDiscussionsPerEntity = {
+  /* var getDiscussionsPerEntity = {
     'spec': {
         description: 'get a list of attachments whose issue is a project/discussion/task/update',
         path: '/{entity}/{id}/discussions',
@@ -673,6 +687,7 @@ var deleteProject = {
     .addPut(updateProfile)
     .addPost(uploadAvatar)
     .addGet(projectsList)
+    .addGet(getProject)
     .addGet(projectsHistory)
     .addPost(createProject)
     .addPut(updateProject)
@@ -681,17 +696,17 @@ var deleteProject = {
     .addGet(getTask)
     .addPut(updateTask)
     .addDelete(deleteTask)
-   // .addGet(getTasksPerEntity)
-    .addGet(zombieTasks)
+  // .addGet(getTasksPerEntity)
+  .addGet(zombieTasks)
     .addGet(tasksHistory)
     .addGet(attachmentsList)
   //  .addGet(getAttachmentsPerEntity)
-    .addPost(createAttachment)
+  .addPost(createAttachment)
     .addPost(updateAttachment)
     .addGet(attachmentsHistory)
-   // .addGet(starredEntities)
+  // .addGet(starredEntities)
   //  .addPatch(starEntity)
-    .addGet(commentsList)
+  .addGet(commentsList)
     .addGet(commentShow)
     .addPost(commentCreate)
     .addPut(commentUpdate)

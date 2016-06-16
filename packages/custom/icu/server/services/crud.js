@@ -98,8 +98,8 @@ module.exports = function(entityName, options) {
 
         query.populate(options.includes);
         if (currentUser) {
-      		query.deepPopulate('circles.sources');
-      	}
+          query.deepPopulate('circles.sources');
+        }
         query.hint({
           _id: 1
         });
@@ -116,7 +116,7 @@ module.exports = function(entityName, options) {
       query.find({});
       query.populate(options.includes);
       if (currentUser) {
-      	query.deepPopulate('circles.sources');
+        query.deepPopulate('circles.sources');
       }
       query.hint({
         _id: 1
@@ -129,21 +129,28 @@ module.exports = function(entityName, options) {
   }
 
   function read(id, acl) {
-    var groups = ['c19nGroups1', 'c19nGroups2', 'c19n'];
 
     var conditions = {
-      _id: id,
-      $and: []
+      _id: id
     };
     if (currentUser) {
-       for (var i in groups) {
+      conditions.$and = [];
+      for (var type in actionSettings.circleTypes) {
         var obj1 = {},
-            obj2 = {},
-            obj3 = {};
-        obj1['circles.'+groups[i]] = {$in: acl.user.allowed[groups[i]]}; 
-        obj2['circles.'+groups[i]] = {$size: 0};
-        obj3['circles.'+groups[i]] = {$exists: false};
-        conditions.$and.push({'$or': [obj1, obj2, obj3]});
+          obj2 = {},
+          obj3 = {};
+        obj1['circles.' + type] = {
+          $in: acl.user.allowed[type]
+        };
+        obj2['circles.' + type] = {
+          $size: 0
+        };
+        obj3['circles.' + type] = {
+          $exists: false
+        };
+        conditions.$and.push({
+          '$or': [obj1, obj2, obj3]
+        });
       }
     }
     var query = Model.find(conditions);
@@ -159,47 +166,66 @@ module.exports = function(entityName, options) {
       return results[0];
     });
   }
-  
+
   function checkPermissions(entity, acl, callback) {
-    var groups = ['c19nGroups1', 'c19nGroups2'];
+    var circleTypes = actionSettings.circleTypes;
 
     if (!entity.circles) return callback(null);
-    for (var i in groups) {
-      if (entity.circles[groups[i]] && entity.circles[groups[i]].length) {
-        if (entity.circles[groups[i]].length > 1) return callback('invalid sources permissions');
-        if (acl.user.allowed[groups[i]].indexOf(entity.circles[groups[i]][0]) < 0) {
-            return callback('permissions denied');
-          } 
+    for (var type in circleTypes) {
+      if (entity.circles[type] && entity.circles[type].length) {
+        if (entity.circles[type].length > circleTypes[type].max) return callback('invalid sources permissions');
+        for (var i = 0; i < entity.circles[type].length; i++) {
+          if (acl.user.allowed[type].indexOf(entity.circles[type][i]) < 0) {
+            return callback('permissions denied--');
+          }
+        }
+        if (circleTypes[type].requires) {
+          for (var i = 0; i < circleTypes[type].requires.length; i++) {
+            if (!entity.circles[circleTypes[type].requires[i]] || !entity.circles[circleTypes[type].requires[i]].length)
+              return callback('missing requires permissions ' + circleTypes[type].requires[i]);
+          }
+        }
       }
     }
-    if (entity.circles.sources && entity.circles.sources.length) {     //sources(c19n)
-      if (entity.circles.sources.length > 1) return callback('invalid sources permissions--'); 
-    }
-     
+
     return callback(null);
   };
-  
+
   function checkSource(entity, acl, callback) {
     if (!entity.circles || !entity.circles.sources || !entity.circles.sources.length) return callback(null);
-    SourceModel.findOne({_id: entity.circles.sources[0]}).exec(function(err, source) {
-      if (err || !source) return callback('invalid sources permissions');
-      if (acl.user.allowed.c19n.indexOf(source.circleName) < 0) return callback('permissions denied');
-      return callback(null, source.circleName)
+    SourceModel.find({
+      _id: {
+        $in: entity.circles.sources
+      }
+    }).exec(function(err, sources) {
+      var sourcesCircles = {};
+      if (err || sources.length !== entity.circles.sources.length) return callback('invalid sources permissions');
+      for (var i = 0; i < sources.length; i++) {
+        if (acl.user.allowed[sources[i].circleType].indexOf(sources[i].circleName) < 0) return callback('permissions denied++');
+        if (!sourcesCircles[sources[i].circleType]) sourcesCircles[sources[i].circleType] = [];
+        sourcesCircles[sources[i].circleType].push(sources[i].circleName);
+      }
+      return callback(null, sourcesCircles);
     });
   };
-    
+
   function create(entity, user, acl) {
     var deffered = q.defer();
-    checkPermissions(entity, acl, function(error){
+
+    checkSource(entity, acl, function(error, sourcesCircles) {
       if (error) deffered.reject(error);
       else {
-        checkSource(entity, acl, function(error, circleName){
+        entity.created = new Date();
+        entity.updated = new Date();
+        entity.creator = user.user._id;
+        if (sourcesCircles) {
+          for (var type in sourcesCircles) {
+            oldE.circles[type] = sourcesCircles[type];
+          }
+        }
+        checkPermissions(entity, acl, function(error) {
           if (error) deffered.reject(error);
           else {
-            entity.created = new Date();
-            entity.updated = new Date();
-            entity.creator = user.user._id;
-            if (circleName) entity.circles.c19n = [circleName];
             deffered.resolve(new Model(entity).save(user).then(function(e) {
               return Model.populate(e, options.includes);
             }));
@@ -207,7 +233,7 @@ module.exports = function(entityName, options) {
         });
       }
     });
-    
+
     return deffered.promise;
   }
 
@@ -217,15 +243,20 @@ module.exports = function(entityName, options) {
     oldE = _.extend(oldE, entityWithDefaults);
 
     var deffered = q.defer();
-    checkPermissions(oldE, acl, function(error){
+
+    checkSource(oldE, acl, function(error, sourcesCircles) {
       if (error) deffered.reject(error);
       else {
-        checkSource(oldE, acl, function(error, circleName){
+        oldE.updated = new Date();
+        oldE.updater = user.user._id;
+        if (sourcesCircles) {
+          for (var type in sourcesCircles) {
+            oldE.circles[type] = sourcesCircles[type];
+          }
+        }
+        checkPermissions(oldE, acl, function(error) {
           if (error) deffered.reject(error);
           else {
-            oldE.updated = new Date();
-            oldE.updater = user.user._id;
-            if(circleName) oldE.circles.c19n = [circleName];
             deffered.resolve(oldE.save(user).then(function(e) {
               return Model.populate(e, options.includes);
             }));
@@ -233,7 +264,7 @@ module.exports = function(entityName, options) {
         });
       }
     });
-    
+
     return deffered.promise;
   }
 
