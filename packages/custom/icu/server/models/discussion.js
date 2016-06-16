@@ -68,12 +68,12 @@ var DiscussionSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Project'
   },
-  circles: {
-    c19n: Array,
-    sources: [{
+  sources: [{
       type: Schema.ObjectId,
       ref: 'Source'
-    }],
+  }],
+  circles: {
+    c19n: Array,
     c19nGroups1: {
       type: Array
     },
@@ -115,8 +115,5 @@ DiscussionSchema.pre('remove', function (next) {
 });
 
 DiscussionSchema.plugin(archive, 'discussion');
-
-var deepPopulate = require('mongoose-deep-populate')(mongoose);
-DiscussionSchema.plugin(deepPopulate);
 
 module.exports = mongoose.model('Discussion', DiscussionSchema);

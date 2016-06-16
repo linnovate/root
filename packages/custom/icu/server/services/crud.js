@@ -97,9 +97,6 @@ module.exports = function(entityName, options) {
           .limit(pagination.limit);
 
         query.populate(options.includes);
-        if (currentUser) {
-          query.deepPopulate('circles.sources');
-        }
         query.hint({
           _id: 1
         });
@@ -115,9 +112,6 @@ module.exports = function(entityName, options) {
 
       query.find({});
       query.populate(options.includes);
-      if (currentUser) {
-        query.deepPopulate('circles.sources');
-      }
       query.hint({
         _id: 1
       });
@@ -155,8 +149,6 @@ module.exports = function(entityName, options) {
     }
     var query = Model.find(conditions);
     query.populate(options.includes);
-    if (currentUser)
-      query.deepPopulate('circles.sources');
 
     return query.then(function(results) {
       if (!results.length) {
@@ -192,14 +184,14 @@ module.exports = function(entityName, options) {
   };
 
   function checkSource(entity, acl, callback) {
-    if (!entity.circles || !entity.circles.sources || !entity.circles.sources.length) return callback(null);
+    if (!entity.circles || !entity.sources || !entity.sources.length) return callback(null);
     SourceModel.find({
       _id: {
-        $in: entity.circles.sources
+        $in: entity.sources
       }
     }).exec(function(err, sources) {
       var sourcesCircles = {};
-      if (err || sources.length !== entity.circles.sources.length) return callback('invalid sources permissions');
+      if (err || sources.length !== entity.sources.length) return callback('invalid sources permissions');
       for (var i = 0; i < sources.length; i++) {
         if (acl.user.allowed[sources[i].circleType].indexOf(sources[i].circleName) < 0) return callback('permissions denied++');
         if (!sourcesCircles[sources[i].circleType]) sourcesCircles[sources[i].circleType] = [];
@@ -220,7 +212,7 @@ module.exports = function(entityName, options) {
         entity.creator = user.user._id;
         if (sourcesCircles) {
           for (var type in sourcesCircles) {
-            oldE.circles[type] = sourcesCircles[type];
+            entity.circles[type] = sourcesCircles[type];
           }
         }
         checkPermissions(entity, acl, function(error) {

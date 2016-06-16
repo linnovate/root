@@ -63,12 +63,12 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Discussion'
   }],
+  sources: [{
+    type: Schema.ObjectId,
+    ref: 'Source'
+  }],
   circles: {
     c19n: Array,
-    sources: [{
-      type: Schema.ObjectId,
-      ref: 'Source'
-    }],
     c19nGroups1: {
       type: Array
     },
@@ -175,8 +175,5 @@ TaskSchema.pre('remove', function(next) {
 });
 
 TaskSchema.plugin(archive, 'task');
-
-var deepPopulate = require('mongoose-deep-populate')(mongoose);
-TaskSchema.plugin(deepPopulate);
 
 module.exports = mongoose.model('Task', TaskSchema);

@@ -62,12 +62,12 @@ var ProjectSchema = new Schema({
   room: {
     type: String
   },
-  circles: {
-    c19n: Array,
-    sources: [{
+  sources: [{
       type: Schema.ObjectId,
       ref: 'Source'
-    }],
+  }],
+  circles: {
+    c19n: Array,
     c19nGroups1: {
       type: Array
     },
@@ -119,8 +119,5 @@ ProjectSchema.pre('remove', function (next) {
 });
 
 ProjectSchema.plugin(archive, 'project');
-
-var deepPopulate = require('mongoose-deep-populate')(mongoose);
-ProjectSchema.plugin(deepPopulate);
 
 module.exports = mongoose.model('Project', ProjectSchema);

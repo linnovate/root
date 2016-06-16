@@ -4,7 +4,7 @@ var _ = require('lodash');
 var q = require('q');
 
 var options = {
-  includes: 'assign watchers project',
+  includes: 'assign watchers project sources',
   defaults: {
     project: undefined,
     assign: undefined,
@@ -102,7 +102,6 @@ exports.getByEntity = function (req, res, next) {
   var query = req.acl.query('Task');
   query.find(entityQuery);
   query.populate(options.includes);
-  query.deepPopulate('circles.sources');
 
   Task.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;
