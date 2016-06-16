@@ -82,7 +82,15 @@ exports.getByEntity = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
-  var query = req.acl.query('Project')
+  var query = req.acl.query('Project');
+  query.find({
+        $or: [
+          {watchers:{$in:[req.user._id]}},
+            {watchers:{$size:0}},
+            {watchers: {
+                $exists: false}}
+        ]
+      });
   query.find(entityQuery);
 
   query.populate(options.includes);

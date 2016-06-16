@@ -199,6 +199,14 @@ exports.getByEntity = function (req, res, next) {
     starredOnly = true;
   }
   var query = req.acl.query('Discussion');
+  query.find({
+        $or: [
+          {watchers:{$in:[req.user._id]}},
+            {watchers:{$size:0}},
+            {watchers: {
+                $exists: false}}
+        ]
+      });
   query.find(entityQuery);
 
   query.populate(options.includes);

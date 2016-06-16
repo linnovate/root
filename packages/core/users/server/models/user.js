@@ -66,23 +66,7 @@ var UserSchema = new Schema({
     type: Array,
     default: ['authenticated']
   },
-  circles: {
-    groups: {
-      type: Array
-    },
-    c19n: {
-      type: Array
-    },
-    c19nGroups1: {
-      type: Array
-    },
-    c19nGroups2: {
-      type: Array
-    },
-    permissions: {
-      type: Array
-    }
-  },
+  circles: {},
   hashed_password: {
     type: String,
     validate: [validatePresenceOf, 'Password cannot be blank']

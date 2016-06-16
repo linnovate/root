@@ -82,16 +82,24 @@ module.exports = function(entityName, options) {
 
   options = _.defaults(options, defaults);
 
-  function all(pagination, acl) {
+  function all(pagination, user, acl) {
     var deffered = q.defer();
 
     var countQuery = Model.find().count();
     var mergedPromise;
     
     var query;
-    if (currentUser)
+    if (currentUser) {
       query = acl.query(entityNameMap[entityName].name);
-    else
+      query.find({
+        $or: [
+          {watchers:{$in:[user._id]}},
+            {watchers:{$size:0}},
+            {watchers: {
+                $exists: false}}
+        ]
+      });
+    } else
       query = Model.find();
 
     if (pagination && pagination.type) {
@@ -127,7 +135,7 @@ module.exports = function(entityName, options) {
     return deffered.promise;
   }
 
-  function read(id, acl) {
+  function read(id, user, acl) {
 
     var conditions = {
       _id: id
@@ -150,6 +158,16 @@ module.exports = function(entityName, options) {
         conditions.$and.push({
           '$or': [obj1, obj2, obj3]
         });
+        conditions.$and.push({
+          $or: [
+            {watchers:{$in:[user._id]}},
+            {watchers:{$size:0}},
+            {watchers: {
+                $exists: false
+              }
+            }
+          ]    
+        });
       }
     }
     var query = Model.find(conditions);
@@ -169,11 +187,16 @@ module.exports = function(entityName, options) {
 
     if (!entity.circles) return callback(null);
     for (var type in circleTypes) {
+      if (entity.circles[type] && !(entity.circles[type] instanceof Array)) return callback('invalid circles permissions');
       if (entity.circles[type] && entity.circles[type].length) {
-        if (entity.circles[type].length > circleTypes[type].max) return callback('invalid sources permissions');
-        for (var i = 0; i < entity.circles[type].length; i++) {
-          if (acl.user.allowed[type].indexOf(entity.circles[type][i]) < 0) {
-            return callback('permissions denied--');
+        console.log(circleTypes[type].max)
+        console.log(entity.circles[type])
+        if (circleTypes[type].max && (entity.circles[type].length > circleTypes[type].max)) return callback('invalid circles permissions');
+        if (circleTypes[type].requiredAllowed) {
+          for (var i = 0; i < entity.circles[type].length; i++) {
+            if (acl.user.allowed[type].indexOf(entity.circles[type][i]) < 0) {
+              return callback('permissions denied');
+            }
           }
         }
         if (circleTypes[type].requires) {
@@ -198,7 +221,7 @@ module.exports = function(entityName, options) {
       var sourcesCircles = {};
       if (err || sources.length !== entity.sources.length) return callback('invalid sources permissions');
       for (var i = 0; i < sources.length; i++) {
-        if (acl.user.allowed[sources[i].circleType].indexOf(sources[i].circleName) < 0) return callback('permissions denied++');
+        if (acl.user.allowed[sources[i].circleType].indexOf(sources[i].circleName) < 0) return callback('permissions denied');
         if (!sourcesCircles[sources[i].circleType]) sourcesCircles[sources[i].circleType] = [];
         sourcesCircles[sources[i].circleType].push(sources[i].circleName);
       }

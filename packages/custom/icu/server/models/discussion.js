@@ -58,12 +58,6 @@ var DiscussionSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
-  groups: {
-    type: Array
-  },
-  comp: {
-    type: Array
-  },
   project: {
     type: Schema.ObjectId,
     ref: 'Project'
@@ -72,15 +66,7 @@ var DiscussionSchema = new Schema({
       type: Schema.ObjectId,
       ref: 'Source'
   }],
-  circles: {
-    c19n: Array,
-    c19nGroups1: {
-      type: Array
-    },
-    c19nGroups2: {
-      type: Array
-    }
-  }
+  circles: {}
 });
 
 var starVirtual = DiscussionSchema.virtual('star');
