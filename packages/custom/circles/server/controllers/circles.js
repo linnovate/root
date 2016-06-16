@@ -123,23 +123,21 @@ module.exports = function(Circles, app) {
             }
         },
         userAcl: function(req, res, next) {
-            var circleTypes = {
-                c19n: req.user && req.user.circles && req.user.circles.c19n ? req.user.circles.c19n : [],
-                c19nGroups1: req.user && req.user.circles && req.user.circles.c19nGroups1 ? req.user.circles.c19nGroups1 : [],
-                c19nGroups2: req.user && req.user.circles && req.user.circles.c19nGroups2 ? req.user.circles.c19nGroups2 : [],
-                groups: req.user && req.user.circles && req.user.circles.groups ? req.user.circles.groups : [],
-                permissions: req.user && req.user.circles && req.user.circles.permissions ? req.user.circles.permissions : []
-            };
+            var circleTypes = {};
+            if(req.user && req.user.circles){
+                for (var type in actionSettings.circleTypes) {
+                    circleTypes[type] = req.user.circles[type] ? req.user.circles[type] : []
+                };
+            }
 
             var userRoles = {};
             var list = {};
 
-            //
             for (var type in circleTypes) {
                 userRoles[type] = {};
                 list[type] = [];
                 circleTypes[type].forEach(function(circle) {
-                    if (req.acl.circles[type][circle]) {
+                    if (req.acl.circles[type][circle] && req.acl.circles[type][circle].isActive) {
 
                         if (list[type].indexOf(circle) === -1) list[type].push(circle);
                         req.acl.circles[type][circle].decendants.forEach(function(descendent) {
@@ -177,27 +175,27 @@ module.exports = function(Circles, app) {
                 var conditions = {
                     $and: []
                 };
-                var groups = ['c19nGroups1', 'c19nGroups2', 'c19n'];
 
-                for (var i in groups) {
+                for (var type in actionSettings.circleTypes) {
                     var obj1 = {},
                         obj2 = {},
                         obj3 = {};
-                    obj1['circles.'+groups[i]] = {$in: req.acl.user.allowed[groups[i]]}; 
-                    obj2['circles.'+groups[i]] = {$size: 0};
-                    obj3['circles.'+groups[i]] = {$exists: false};
+                    obj1['circles.'+type] = {$in: req.acl.user.allowed[type]}; 
+                    obj2['circles.'+type] = {$size: 0};
+                    obj3['circles.'+type] = {$exists: false};
                     conditions.$and.push({'$or': [obj1, obj2, obj3]});
                 }
-                console.log(JSON.stringify(conditions))
                 return Circles.models[model].where(conditions);
             };
 
             next();
         },
         sources: function(req, res) {
-            var conditions = {};
+            var conditions = {
+                circleType: req.params.type
+            };
             if(!actionSettings.displayAllSources)
-                conditions.circleName = {$in: req.acl.user.allowed.c19n};
+                conditions.circleName = {$in: req.acl.user.allowed[req.params.type]};
             Source.find(conditions).exec(function(err, sources) {
                 res.send(sources);
             });

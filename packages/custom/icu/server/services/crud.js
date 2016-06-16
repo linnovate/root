@@ -87,7 +87,12 @@ module.exports = function(entityName, options) {
 
     var countQuery = Model.find().count();
     var mergedPromise;
-    var query = acl.query(entityNameMap[entityName].name);
+    
+    var query;
+    if (currentUser)
+      query = acl.query(entityNameMap[entityName].name);
+    else
+      query = Model.find();
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
