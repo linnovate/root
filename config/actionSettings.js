@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	displayAllSources: false,
+	displayAllSources: true,
 	displayAllC19nGroups: true,
 	displayAllGroups: true,
 	circleTypes: {

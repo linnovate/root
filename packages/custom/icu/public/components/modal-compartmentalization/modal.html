@@ -6,25 +6,49 @@
 <div class="modal-body comp">
    
     <ul class="selectedComp">
-        <li ng-if="selectedSource">
+        <li ng-if="entity.sources[0]">
            <div>
-           	<span>{{selectedSource.name}} ({{selectedSource.circleName}})</span>
-           	<button type="button" class="btn close" aria-hidden="true" ng-click="removeSource(selectedSource, 'source')">&times;</button>
+           	<span>{{entity.sources[0].name}} ({{entity.sources[0].circleName}})</span>
+           	<button type="button" class="btn close" aria-hidden="true" ng-click="removeC19n('sources')">&times;</button>
+           </div>
+        </li>
+        <li ng-if="entity.circles.c19nGroups1 && entity.circles.c19nGroups1[0]">
+           <div>
+           	<span>{{entity.circles.c19nGroups1[0]}}</span>
+           	<button type="button" class="btn close" aria-hidden="true" ng-click="removeC19n('c19nGroups1')">&times;</button>
+           </div>
+        </li>
+        <li ng-if="entity.circles.c19nGroups2 && entity.circles.c19nGroups2[0]">
+           <div>
+           	<span>{{entity.circles.c19nGroups2[0]}}</span>
+           	<button type="button" class="btn close" aria-hidden="true" ng-click="removeC19n('c19nGroups2')">&times;</button>
            </div>
         </li>
     </ul>
-    <ui-select ng-model="c" on-select="addSource(c)" autofocus class="sourceList" ng-show="isShowSourcesSelect">
+    <ui-select ng-model="c" on-select="addC19n('sources', c, 'sources')" autofocus class="c19nList" ng-show="c19n.isShown.sources">
         <ui-select-match>
             {{$item.name}}
         </ui-select-match>
-        <ui-select-choices repeat="c in sourceList">
+        <ui-select-choices repeat="c in c19n.lists.sources">
             <span>{{c.name}}</span>
         </ui-select-choices>
     </ui-select>
-    <button type="button" class="btn showSelect" aria-hidden="true" ng-click="showSelect()">+</button>
+    <ui-select ng-model="c" on-select="addC19n('circles.c19nGroups1', c, 'c19nGroups1')" autofocus class="c19nList" ng-show="c19n.isShown.c19nGroups1">
+        <ui-select-match>
+            {{$item}}
+        </ui-select-match>
+        <ui-select-choices repeat="c in c19n.lists.c19nGroups1">
+            <span>{{c}}</span>
+        </ui-select-choices>
+    </ui-select>
+    <ui-select ng-model="c" on-select="addC19n('circles.c19nGroups2', c, 'c19nGroups2')" autofocus class="c19nList" ng-show="c19n.isShown.c19nGroups2">
+        <ui-select-match>
+            {{$item}}
+        </ui-select-match>
+        <ui-select-choices repeat="c in c19n.lists.c19nGroups2">
+            <span>{{c}}</span>
+        </ui-select-choices>
+    </ui-select>
+    <button type="button" class="btn showSelect" aria-hidden="true" ng-click="showSelect()" ng-show="!c19n.isShown.c19nGroups1 && !c19n.isShown.c19nGroups2">+</button>
     <div class="errorMessage" ng-show="errorMessage"><p class="errorMessage">{{errorMessage}}</p></div>
 </div>
-<!-- <div class="modal-footer"> -->
-    <!-- <button class="btn btn-primary" type="button" ng-click="ok()">OK</button> -->
-    <!-- <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button> -->
-<!-- </div> -->

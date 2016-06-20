@@ -44,52 +44,92 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
 
 function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector, circlesService) {
     var serviceMap = {
-        projects: 'ProjectsService',
-        discussions: 'DiscussionsService',
-        tasks: 'TasksService',
         project: 'ProjectsService',
         discussion: 'DiscussionsService',
         task: 'TasksService'
     };
 
-    $scope.sourceList = [];
-    circlesService.getc19nList().then(function(data) {
-		$scope.sourceList = data;
-    });
-
-    $scope.selectedSource = entity.circles.sources[0] ? entity.circles.sources[0] : null;
-    $scope.isShowSourcesSelect = $scope.selectedSource ? false : true;
-    $scope.errorMessage = ''
     var serviceName = serviceMap[entityName];
     var service = $injector.get(serviceName);
-    $scope.addSource = function(item) {
-    	$scope.errorMessage = ''
-        entity.circles.sources[0] = item;
-    	service.update(entity).then(function(data) {
-    		$scope.selectedSource = item;
-    	}, function(error){
-    		if (error.data && error.data.message) {
-    			$scope.errorMessage = error.data.message;
-    		} else {
-    			$scope.errorMessage = 'permissions denied'
-    		}
-    		// $scope.removeSource();
-    		$scope.isShowSourcesSelect = true; 
-    	})
 
-    	$scope.isShowSourcesSelect = false;
+    $scope.c19n = {
+    	lists: {},
+    	isShown: {},
+    	selected: {}
     };
 
-    $scope.removeSource = function() {
-		entity.circles.sources = [];
-		service.update(entity);
-		$scope.selectedSource = null;
+    circlesService.getc19nSources().then(function(data) {  
+		$scope.c19n.lists.sources = data;
+    });
+    circlesService.getc19n().then(function(data) {
+		$scope.c19n.lists.c19nGroups1 = Object.keys(data.circles.c19nGroups1);
+		$scope.c19n.lists.c19nGroups2 = Object.keys(data.circles.c19nGroups2);
+    });
 
-		$scope.isShowSourcesSelect = true; 
+    $scope.entity = entity;
+    $scope.entity.sources = $scope.entity.sources || [];
+    $scope.entity.circles = $scope.entity.circles || {};
+
+    $scope.c19n.isShown.sources = !$scope.entity.sources[0];
+
+    var setDeepC19nValue = function(obj, path, item){
+	    var path = path.split('.');
+	    var i = 0;
+	    for (var len = path.length; i < len-1; i++){
+	        obj = obj[path[i]];
+	    };
+	    obj[path[i]] = obj[path[i]] || [];
+	    if (item) {
+	    	obj[path[i]][0] = item;
+	    } else {
+	    	obj[path[i]].shift();
+	    }
+	};
+
+    $scope.addC19n = function(path, item, type) {
+    	$scope.errorMessage = ''
+        setDeepC19nValue($scope.entity, path, item);
+        
+    	service.update($scope.entity).then(function(data) {
+    		$scope.c19n.isShown.sources = false;
+    		$scope.c19n.isShown[type] = false;
+    	}, function(error){
+	        setDeepC19nValue($scope.entity, path);
+    		
+    		$scope.errorMessage = error.data && error.data.message ? error.data.message : 'permissions denied';
+    		$scope.c19n.isShown[type] = true;
+    	})
+
+    	
+    };
+
+    $scope.removeC19n = function(type) {
+		if (type === 'sources') {
+			$scope.entity.sources = $scope.entity.circles.c19nGroups1 = $scope.entity.circles.c19nGroups2 = [];
+			$scope.c19n.isShown = {
+				sources: true,
+				c19nGroups1: false,
+				c19nGroups2: false,
+			}
+		} else {
+			$scope.entity.circles[type] = [];
+			$scope.c19n.isShown[type] = true;
+		}
+
+		service.update($scope.entity)
     };
 
     $scope.showSelect = function() {
-		
+		if (!$scope.entity.sources[0]) {
+			$scope.c19n.isShown.sources = true; 
+		} else {
+			if (!$scope.entity.circles.c19nGroups1 || !$scope.entity.circles.c19nGroups1[0]) {
+				$scope.c19n.isShown.c19nGroups1 = true;
+			}
+			if (!$scope.entity.circles.c19nGroups2 || !$scope.entity.circles.c19nGroups2[0]) {
+				$scope.c19n.isShown.c19nGroups2 = true;
+			}
+		}
     }
 
     $scope.close = function () {
@@ -97,6 +137,6 @@ function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector,
     };
 
     $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
+    	$uibModalInstance.dismiss('cancel');
+	};
 }

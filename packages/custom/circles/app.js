@@ -147,7 +147,7 @@ function getC19nGroups() {
     id: '91274',
     name: 'g5',
     type: 'c19nGroups2',
-    isActive: false
+    isActive: true
   }, {
     id: '91284',
     name: 'g6',

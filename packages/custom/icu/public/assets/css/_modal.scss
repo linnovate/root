@@ -50,6 +50,7 @@
 			    opacity: 1;
 			    line-height: 12px;
     			text-align: center;
+    			outline: none;
 			}
 		}
 	}
@@ -71,11 +72,13 @@
 	    display: inline-block;
 	    float: right;
     	margin-right: 17px;
+    	outline: none;
 	}
-	.sourceList {
+	.c19nList {
 		float: left;
 		width: 86%;
     	margin-left: 17px;
+    	margin-bottom: 10px;
 	}
 	.errorMessage {
 		clear: both;

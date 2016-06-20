@@ -16,7 +16,7 @@ module.exports = function(Circles, app, auth, database) {
     app.get('/api/circles/tree', circles.tree);
     app.get('/api/circles/mine', circles.mine);
     app.get('/api/circles/sources/:type', circles.sources);
-    app.get('/api/circles/all', auth.requiresAdmin, circles.all);
+    app.get('/api/circles/all', circles.all);
 
     app.route('/api/circles/:name')
         .post(auth.requiresAdmin, circles.create)
