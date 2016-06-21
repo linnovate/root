@@ -27,9 +27,12 @@
                         <button class="DocumentIconsLine" id="Update-icon-revert" title="Revert">
                             <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/‏‏icon-revert2.png" src="/icu/assets/img/‏‏icon-revert2.png">
                         </button>
-                        <button class="DocumentIconsLine" id="Update-icon-view" title="צפה">
+                        <!--<button class="DocumentIconsLine" id="Update-icon-view" title="צפה">
                             <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png">
-                        </button>
+                        </button>-->
+                        <button id="{{attachment.path}}" ng-click="view(attachment)" title="צפה" class="DocumentIconsLine-Update-icon-view">
+                            <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png">
+                        </button>   
                         <button class="DocumentIconsLine" id="Update-icon-edit" title="ערוך">
                             <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-edit.png" src="/icu/assets/img/icon-edit.png">
                         </button>

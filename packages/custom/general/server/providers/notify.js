@@ -24,21 +24,53 @@ class Notification {
     }
 
 
+
     sendMessage(data, callback) {
 
         var options = {
             method: 'POST',
             form: {
-                text: bulidMassage(data.context),
+                msg: bulidMassage(data.context),
                 owner: owner,
                 room: data.room
             },
             headers: data.headers,
-            cmd: '/api/hi/messages'
+            cmd: '/api/rooms/' + data.room + '/send'
         };
-        icapi.talkToApi(options, callback);
-
+        
+        
+        console.log("-----------------bulidMassage(data.context)-----------------");
+        console.log(bulidMassage(data.context));
+        console.log("-----------------owner-----------------");
+        console.log(owner);
+        console.log("-----------------data.room-----------------");
+        console.log(data.room);
+        console.log("-----------------data.headers-----------------");
+        console.log(JSON.stringify(data.headers));
+        console.log("-----------------data.cmd-----------------");
+        console.log(data.cmd);
+        console.log("-----------------cmd-----------------");
+        console.log(options.cmd);
+        
+        hi.talkToRocketChat(options, callback);
     }
+
+
+
+    // sendMessage(data, callback) {
+
+    //     var options = {
+    //         method: 'POST',
+    //         form: {
+    //             text: bulidMassage(data.context),
+    //             owner: owner,
+    //             room: data.room
+    //         },
+    //         headers: data.headers,
+    //         cmd: '/api/hi/messages'
+    //     };
+    //     icapi.talkToApi(options, callback);
+    // }
 
     sendFile(data, callback) {
 
