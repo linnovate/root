@@ -124,7 +124,7 @@ module.exports = function(Circles, app) {
         },
         userAcl: function(req, res, next) {
             var circleTypes = {};
-            if(req.user && req.user.circles){
+            if (req.user && req.user.circles) {
                 for (var type in actionSettings.circleTypes) {
                     circleTypes[type] = req.user.circles[type] ? req.user.circles[type] : []
                 };
@@ -180,10 +180,18 @@ module.exports = function(Circles, app) {
                     var obj1 = {},
                         obj2 = {},
                         obj3 = {};
-                    obj1['circles.'+type] = {$in: req.acl.user.allowed[type]}; 
-                    obj2['circles.'+type] = {$size: 0};
-                    obj3['circles.'+type] = {$exists: false};
-                    conditions.$and.push({'$or': [obj1, obj2, obj3]});
+                    obj1['circles.' + type] = {
+                        $in: req.acl.user.allowed[type]
+                    };
+                    obj2['circles.' + type] = {
+                        $size: 0
+                    };
+                    obj3['circles.' + type] = {
+                        $exists: false
+                    };
+                    conditions.$and.push({
+                        '$or': [obj1, obj2, obj3]
+                    });
                 }
                 return Circles.models[model].where(conditions);
             };
@@ -194,8 +202,10 @@ module.exports = function(Circles, app) {
             var conditions = {
                 circleType: req.params.type
             };
-            if(!actionSettings.displayAllSources)
-                conditions.circleName = {$in: req.acl.user.allowed[req.params.type]};
+            if (!actionSettings.displayAllSources)
+                conditions.circleName = {
+                    $in: req.acl.user.allowed[req.params.type]
+                };
             Source.find(conditions).exec(function(err, sources) {
                 res.send(sources);
             });
