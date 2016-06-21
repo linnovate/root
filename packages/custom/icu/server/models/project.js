@@ -53,6 +53,12 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  groups: {
+    type: Array
+  },
+  comp: {
+    type: Array
+  },
   room: {
     type: String
   }
@@ -85,7 +91,7 @@ ProjectSchema.statics.load = function (id, cb) {
 };
 
 /**
- * Post middleware
+ * middleware
  */
 var elasticsearch = require('../controllers/elasticsearch');
 
@@ -98,6 +104,52 @@ ProjectSchema.pre('remove', function (next) {
   elasticsearch.delete(this, 'project', this.room, next);
   next();
 });
+
+var buildConditions = function(conditions) {
+  var ObjectId = mongoose.Types.ObjectId;
+  var userId = new ObjectId(conditions.currentUser._id);
+  var groups = conditions.currentUser.circles.groups ? conditions.currentUser.circles.groups : [];
+  var comp = conditions.currentUser.circles.comp ? conditions.currentUser.circles.comp : [];
+
+  conditions['$or'] = [{
+    'creator': userId
+  }, {
+    'manager': userId
+  }, {
+    'watchers': userId
+  }, {
+    $and: [{
+      'groups': {
+        $in: groups
+      }
+    }, {
+      'comp': {
+        $in: comp
+      }
+    }]
+  }];
+  delete conditions.currentUser;
+  return (conditions);
+};
+
+ProjectSchema.pre('find', function(next) {
+  if (this._conditions.currentUser) {
+    this._conditions = buildConditions(this._conditions)
+  }
+  console.log('--------------------------------------------Project----------------------------------------------------------')
+  console.log(JSON.stringify(this._conditions))
+  next();
+});	
+
+ProjectSchema.pre('count', function (next) {
+	if (this._conditions.currentUser) {
+    this._conditions = buildConditions(this._conditions)
+  }
+	console.log('--------------------------------------------Count-Project---------------------------------------------------------')
+	console.log(JSON.stringify(this._conditions))
+	next();
+});
+
 
 ProjectSchema.plugin(archive, 'project');
 

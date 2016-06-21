@@ -58,6 +58,12 @@ var DiscussionSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  groups: {
+    type: Array
+  },
+  comp: {
+    type: Array
+  },
   project: {
     type: Schema.ObjectId,
     ref: 'Project'
@@ -83,7 +89,7 @@ DiscussionSchema.statics.load = function (id, cb) {
   }).populate('creator', 'name username').exec(cb);
 };
 /**
- * Post middleware
+ * middleware
  */
 var elasticsearch = require('../controllers/elasticsearch');
 
@@ -94,6 +100,52 @@ DiscussionSchema.pre('remove', function (next) {
    elasticsearch.delete(this, 'discussion', null, next);
   next();
 });
+
+var buildConditions = function(conditions) {
+  var ObjectId = mongoose.Types.ObjectId;
+  var userId = new ObjectId(conditions.currentUser._id);
+  var groups = conditions.currentUser.circles.groups ? conditions.currentUser.circles.groups : [];
+  var comp = conditions.currentUser.circles.comp ? conditions.currentUser.circles.comp : [];
+  conditions['$or'] = [{
+    'creator': userId
+  }, {
+    'assign': userId
+  }, {
+    'members': userId
+  }, {
+    'watchers': userId
+  }, {
+    $and: [{
+      'groups': {
+        $in: groups
+      }
+    }, {
+      'comp': {
+        $in: comp
+      }
+    }]
+  }];
+  delete conditions.currentUser;
+  return (conditions);
+};
+
+DiscussionSchema.pre('find', function (next) {
+	if (this._conditions.currentUser) {
+    this._conditions = buildConditions(this._conditions)
+  }
+	console.log('--------------------------------------------Discussion----------------------------------------------------------')
+	console.log(JSON.stringify(this._conditions))
+	next();
+})
+
+DiscussionSchema.pre('count', function (next) {
+	if (this._conditions.currentUser) {
+    this._conditions = buildConditions(this._conditions)
+  }
+	console.log('--------------------------------------------Count-Discussion---------------------------------------------------------')
+	console.log(JSON.stringify(this._conditions))
+	next();
+})
 
 DiscussionSchema.plugin(archive, 'discussion');
 

@@ -6,7 +6,7 @@
     </div>
     <div class="last-notification" ng-click="triggerDropdown()">
         <span class="text">{{lastNotification.entity}}
-            <span class="entity-name">"{{lastNotification.entityName}}"</span>
+            <span class="entity-name" ng-show="lastNotification.entityName">"{{lastNotification.entityName}}"</span>
             {{lastNotification.action}}
             <span class="user">{{lastNotification.user}}</span>
         </span>

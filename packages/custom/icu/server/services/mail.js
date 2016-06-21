@@ -30,20 +30,23 @@ exports.send = function (type, data) {
     return;
   }
 
-  data.uriRoot = config.icu.uri;
+  data.uriRoot = config.host;
   data.date = new Date();
 
   //HACK
-
-  data.discussion.watchers.push(data.discussion.assign);
-  data.attendees = data.discussion.watchers.map(function (w) {
+  var recipients =  data.discussion.watchers;
+  recipients.push(data.discussion.assign);
+  recipients.push(data.discussion.creator);
+  recipients.concat(data.discussion.members);
+  
+  data.attendees = recipients.map(function (w) {
     return w.name;
   }).join(', ');
 
   return render(type, data).then(function(results) {
-    var promises = data.discussion.watchers.map(function (watcher) {
+    var promises = recipients.map(function (recipient) {
       var mailOptions = {
-        to: watcher.email,
+        to: recipient.email,
         from: config.emailFrom,
         subject: data.discussion.title,
         html: results.html,

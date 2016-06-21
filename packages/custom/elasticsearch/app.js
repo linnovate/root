@@ -69,6 +69,16 @@ Elasticsearch.register(function(app, auth, database) {
       }
     });
   };
+  
+   Elasticsearch.bulk = function(options, callback) {
+    Elasticsearch.client.bulk(options, function(error, response) {
+      if (error) {
+        callback(true, error);
+      } else {
+        callback(null, response);
+      }
+    });
+  };
 
     Elasticsearch.delete = function(options, callback) {
         Elasticsearch.client.delete(options, function(error, response) {

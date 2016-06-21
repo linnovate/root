@@ -1,12 +1,28 @@
 <div class="documents">
-    <div class="document" ng-repeat-start="document in documents">
+    <div id="DocumentLine" class="document" ng-repeat-start="document in documents">
         <a href="{{document.path}}" target="window">
             <div class="icon {{document.attachmentType}}"></div>
         </a>
 
-        <div class="text">
+        <div class="text" id="DocumentTextLine">
             <div class="title"><b>{{document.name}}</b>, <span>1.3MB</span></div>
             <div class="time">{{document.created | date:'medium'}}</div>
+            <div id="AllDocumentIcons">
+                <button class="DocumentIconsLine" id="Document-icon-revert" title="Revert">
+                    <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/‏‏icon-revert2.png" src="/icu/assets/img/‏‏icon-revert2.png">
+                </button>
+                <button class="DocumentIconsLine" id="Document-icon-view" title="צפה">
+                    <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png">
+                </button>
+                <button class="DocumentIconsLine" id="Document-icon-edit" title="ערוך">
+                    <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-edit.png" src="/icu/assets/img/icon-edit.png">
+                </button>
+                <button class="DocumentIconsLine" id="Document-icon-download"title="הורד">
+                    <a href="{{document.path}}" target="window">
+                        <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-download.png" src="/icu/assets/img/icon-download.png">
+                    </a>
+                </button>
+            </div>
         </div>
         <div class="more" ng-click="trigger(document)" ng-if="document.versions.length">
             Versions

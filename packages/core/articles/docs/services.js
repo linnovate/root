@@ -38,8 +38,22 @@ exports.load = function(swagger, parms) {
       }]
     }
   };
+  var usersList = {
+    'spec': {
+      description: 'Users operations',
+      path: '/users',
+      method: 'GET',
+      summary: 'Get all Users',
+      notes: '',
+      type: 'User',
+      nickname: 'getUsers',
+      produces: ['application/json'],
+      params: searchParms
+    }
+  };
 
   swagger.addGet(list)
-    .addPost(create);
+    .addPost(create)
+    .addGet(usersList);
 
 };

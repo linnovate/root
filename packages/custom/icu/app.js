@@ -12,12 +12,16 @@ var ICU = new Module('icu');
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
-ICU.register(function (app, auth, database) {
+ICU.register(function (app, auth, database,swagger) {
 
+
+     swagger.add(__dirname);
     //We enable routing. By default the Package Object is passed to the routes
     ICU.routes(app, auth, database);
 
     app.set('views', __dirname + '/server/views');
+
+    
 
     //We are adding a link to the main menu for all authenticated users
     ICU.menus.add({
@@ -101,6 +105,25 @@ ICU.register(function (app, auth, database) {
         'mean.icu.ui.modaldeletetasksbyentity',
     ]);
 
+
+console.yon = function(data, inspect) {
+    
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+    
+    if (typeof data === 'object') {
+        
+        if (inspect) {
+            return console.dir(data);
+        }
+        
+        return console.dir(data);
+    }
+    
+    console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
+    
+    console.log(data);
+
+}
     ICU.settings({
         'language': 'en-US'
     }, function (err, settings) {
@@ -159,5 +182,6 @@ ICU.register(function (app, auth, database) {
     //var myChild = new Child('dwayne', 27);
     //myChild.sayName();
 
+   
     return ICU;
 });

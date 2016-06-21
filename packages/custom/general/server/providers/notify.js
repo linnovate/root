@@ -1,6 +1,7 @@
 'use strict';
 
-var icapi = require('./icapi.js'),
+// var icapi = require('./icapi.js'),
+var hi = require('../../../hi/server/controllers/hi.js'),
     _ = require('lodash'),
     mean = require('meanio'),
     owner = mean.loadConfig().letschat.owner;
@@ -15,21 +16,11 @@ class Notification {
         var options = {
             method: type,
             headers: data.headers,
-            form: {
-                owner: owner,
-                name: data.project.title,
-                description: data.project.description,
-                participants: data.project.watchers.length ? _.pluck(data.project.watchers, '_id') : [''],
-                superusers: ['']
-            },
-            cmd: '/api/hi/rooms'
+            form: data.rooms,
+            cmd: data.cmd
         };
 
-        if(type === 'PUT')
-            options.param = data.project.room;
-
-        icapi.talkToApi(options, callback);
-
+        hi.talkToRocketChat(options, callback);
     }
 
 

@@ -89,6 +89,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                                 $state.current.name.indexOf('main.projects.all.details') === 0
                            ) && $state.params.id === id;
 
+
                 if (isActive && !isScrolled) {
                     $uiViewScroll($element.find('[data-id="' + $stateParams.id + '"]'));
                     isScrolled = true;
