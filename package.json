@@ -48,7 +48,8 @@
     "serve-favicon": "latest",
     "shelljs": "latest",
     "swig": "latest",
-    "view-helpers": "latest"
+    "view-helpers": "latest",
+    "kue": "latest"
   },
   "devDependencies": {
     "chalk": "latest",

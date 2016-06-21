@@ -67,11 +67,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function update(task) {
-        var groupsWatchers = task.watchers.filter(function(w) {
-        	return w.type === 'group';
-        })
         return $http.put(ApiUri + EntityPrefix + '/' + task._id, task).then(function (result) {
-            result.data.watchers = result.data.watchers.concat(groupsWatchers)
             return result.data;
         });
     }
