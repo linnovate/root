@@ -54,3 +54,128 @@
 
     }
 }
+
+
+/*Ohada*/
+  #DocumentLine:hover {
+    background-color: #313C40; }
+  #DocumentLine:hover >  #DocumentTextLine{
+    color: white; }
+  #DocumentLine:hover  #AllDocumentIcons{
+    display: inline; }
+  #AllDocumentIcons{
+    display: none;
+  }
+  .DocumentIconsLine{
+    border: 1px solid #7F9098;
+    border-radius: 2px 2px 2px 2px;
+    width: 30px;
+    height: 30px;
+    background-color:#313C40;
+    padding: 0px 0px 0px 0px;
+    text-align: inherit;
+    }
+  #Document-icon-revert{
+    position: absolute;
+    left: 250px;
+    bottom: 20px;
+    }
+  #Document-icon-view{
+    position: absolute;
+    left: 290px;
+    bottom: 20px;
+    }
+  #Document-icon-edit{
+    position: absolute;
+    left: 330px;
+    bottom: 20px;
+    }
+  #Document-icon-download{
+    position: absolute;
+    left: 370px;
+    bottom: 20px;
+    }
+  .Icons-In-DocumentLine{
+    position: relative;
+    left: 6px;
+    bottom: 1px;
+    width: 15px;
+    height: 15px;
+  }
+  .DocumentIconsLine-Document-icon-view{
+    border: 1px solid #7F9098;
+    border-radius: 2px 2px 2px 2px;
+    width: 30px;
+    height: 30px;
+    background-color:#313C40;
+    padding: 0px 0px 0px 0px;
+    text-align: inherit;
+    position: absolute;
+    left: 290px;
+    bottom: 20px;
+   }
+  .DocumentIconsLine-Update-icon-view{
+    border: 1px solid #7F9098;
+    border-radius: 2px 2px 2px 2px;
+    width: 30px;
+    height: 30px;
+    background-color:#313C40;
+    padding: 0px 0px 0px 0px;
+    text-align: inherit;
+    position: absolute;
+    left: 50px;
+   }
+  
+  #UpdatetLine:hover >  #DocumentTextLine{
+    color: white; }
+  #UpdatetLine:hover #AllUpdateIcons{
+    display: block;
+
+    }
+  #UpdatetLine:hover #colorTOtransperent{
+    display: block;
+    }
+  #colorTOtransperent{
+    display: none;
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    height: 120px;
+    width: 120px;
+    background-color: #313C40;
+    opacity: 0.75;
+    }
+    
+  #AllUpdateIcons{
+    display: none;
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    left: 70%;
+    transform: translate(-50%, 0);
+  }
+  #Update-icon-revert{
+    position: absolute;
+    }
+  #Update-icon-view{
+    position: absolute;
+    left: 50px;
+    }
+  #Update-icon-edit{
+    position: absolute;
+    bottom: 20px;
+    }
+  #Update-icon-download{
+    position: absolute;
+    left: 50px;
+    bottom: 20px;
+    }
+  .Icons-In-DocumentLine{
+    position: relative;
+    left: 6px;
+    bottom: 1px;
+    width: 15px;
+    height: 15px;
+  }
+  /*END Ohad*/
