@@ -189,11 +189,21 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
     .page-content {
         height: $content-height;
-
+        .compBtn {
+	    	background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+	    	width: 22px;
+		    height: 22px;
+		    border-radius: 15px;
+		    border: none;
+		    float: right;
+		    margin: 15px 30px;
+		    outline: none;
+	    }
         .description {
             margin: 0 30px;
             height: $description-height;
             overflow: auto;
+            margin-top: 35px;
 
             .title {
                 font-weight: 700;

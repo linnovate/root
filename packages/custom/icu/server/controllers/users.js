@@ -4,8 +4,8 @@
  * Module dependencies.
  */
 var User = require('../models/user.js'),
-    mongoose = require('../models/user.js'),
-    utils = require('./utils.js'),
+  mongoose = require('../models/user.js'),
+  utils = require('./utils.js'),
   _ = require('lodash');
 
 var options = {
@@ -32,7 +32,7 @@ exports.filterProperties = function(req, res, next) {
   next();
 }
 
-exports.getByEntity = function (req, res, next) { //It is a temporary function. need to change this function to use elasticsearch!!!!
+exports.getByEntity = function(req, res, next) { //It is a temporary function. need to change this function to use elasticsearch!!!!
   res.status(200);
   return res.json([]);
   var query = {
@@ -40,7 +40,7 @@ exports.getByEntity = function (req, res, next) { //It is a temporary function. 
   };
   var model = (req.params.entity.charAt(0).toUpperCase() + req.params.entity.slice(1)).substring(0, req.params.entity.length - 1);
   var Query = mongoose.model(model).findOne(query);
-  Query.exec(function (err, project) {
+  Query.exec(function(err, project) {
     if (err || !project) utils.checkAndHandleError(err ? err : !project, 'Failed to load project with id: ' + req.params.id, next);
     else {
       var userIds = project.watchers;
@@ -49,7 +49,7 @@ exports.getByEntity = function (req, res, next) { //It is a temporary function. 
         _id: {
           $in: userIds
         }
-      }).exec(function (err, users) {
+      }).exec(function(err, users) {
         res.status(200);
         return res.json(users);
       });

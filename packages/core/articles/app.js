@@ -51,7 +51,7 @@ Articles.register(function(app, auth, database, swagger) {
   Articles.aggregateAsset('css', 'articles.css');
 
   // Only use swagger.add if /docs and the corresponding files exists
-  swagger.add(__dirname);
+  // swagger.add(__dirname);
 	
   return Articles;
 });
