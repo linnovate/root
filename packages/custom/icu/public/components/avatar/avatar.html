@@ -2,4 +2,4 @@
     <span ng-if="!user.profile.avatar" class="name">{{user.name.charAt(0)}}</span>
     <img ng-if="user.profile.avatar" class="image" ng-src="{{user.profile.avatar + imgUrl}}" alt="{{user.name}}"/>
 </div>
-<div ng-if="user.type === 'group'" class="avatar avatar-group"></div>
+<div ng-if="user.type === 'group'" class="avatar avatar-group" title="{{user.name}}"></div>
