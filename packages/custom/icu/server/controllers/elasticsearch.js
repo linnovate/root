@@ -106,7 +106,7 @@ exports.search = function (req, res, next) {
 
   mean.elasticsearch.search(options, function (err, result) {
     console.log("****************************************************result");
-    console.dir(result.hits.hits);
+    if(result && result.hits) console.dir(result.hits.hits);
     console.log("****************************************************");
     utils.checkAndHandleError(err, 'Failed to find entities', next);
     
