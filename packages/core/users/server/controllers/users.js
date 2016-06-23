@@ -3,14 +3,21 @@
 /**
  * Module dependencies.
  */
+
+require('../../../../custom/circles/server/models/circle');
+
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
+  Circle = mongoose.model('Circle'),
   async = require('async'),
   config = require('meanio').loadConfig(),
   crypto = require('crypto'),
   nodemailer = require('nodemailer'),
   templates = require('../template'),
   jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
+
+var GoogleService = require('serviceproviders')('google');
+var service = new GoogleService(config.google.clientSecret, config.google.clientID, config.google.callbackURL);
 
 /**
  * Auth callback
@@ -61,6 +68,7 @@ exports.create = function(req, res, next) {
 
   var errors = req.validationErrors();
   if (errors) {
+    console.log(JSON.stringify(errors))
     return res.status(400).send(errors);
   }
 
@@ -68,6 +76,7 @@ exports.create = function(req, res, next) {
   user.roles = ['authenticated'];
   user.save(function(err) {
     if (err) {
+      console.log(err)
       switch (err.code) {
         case 11000:
         case 11001:
@@ -95,20 +104,33 @@ exports.create = function(req, res, next) {
 
       return res.status(400);
     }
-    var payload = user;
-    payload.redirect = req.body.redirect;
-    var escaped = JSON.stringify(payload);
-    escaped = encodeURI(escaped);
     req.logIn(user, function(err) {
-      if (err) { return next(err); }
-
-      // We are sending the payload inside the token
-      var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
-      res.json({ token: token });
+      if (err) {
+        return next(err);
+      }
+      req.user = user;
+      next();
     });
-    res.status(200);
   });
 };
+
+exports.getJwt = function(req, res) {
+  console.log(req.user)
+  var payload = req.user;
+  payload.redirect = req.body.redirect;
+  var escaped = JSON.stringify(payload);
+  escaped = encodeURI(escaped);
+  // We are sending the payload inside the token
+  ///var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
+  var token = jwt.sign(escaped, config.secret, {
+    // expiresInMinutes: 60 * 5
+  });
+  res.json({
+    token: token
+  });
+  res.status(200);
+};
+
 /**
  * Send User
  */
@@ -237,4 +259,69 @@ exports.forgotpassword = function(req, res, next) {
       res.json(response);
     }
   );
+};
+
+exports.getGoogleGroups = function(req, res, next) {
+  service.sdkManager('groups', 'list', {
+    userKey: req.user.email,
+  }, function(err, list) {
+    if (!list || !list.groups) return next();
+    var groups = list.groups.map(function(group) {
+      return group.name;
+    });
+    req.user.circles.groups = groups;
+    req.user.save(function(err) {
+      next();
+    });
+  })
+};
+
+exports.setRandomPermissions = function(req, res, next) {
+  // if (req.user.circles.permissions && req.user.circles.permissions.length) return next();
+  // Circle.find({
+  //   circleType: 'permissions'
+  // }).exec(function(err, circles) {
+  //   var rand = circles[Math.floor(Math.random() * circles.length)];
+  //   req.user.circles.permissions = [rand.name];
+  //   req.user.save(function(err) {
+  //     console.log(err)
+  next();
+  //   });
+  // })
+};
+
+exports.setRandomC19n = function(req, res, next) {
+  req.user.circles = req.user.circles || {};
+  if (req.user.circles && req.user.circles.c19n && req.user.circles.c19n.length) return next();
+  Circle.find({
+    circleType: 'c19n'
+  }).exec(function(err, circles) {
+    var rand = circles[Math.floor(Math.random() * circles.length)];
+    req.user.circles.c19n = [rand.name];
+    req.user.save(function(err) {
+      console.log(err)
+      next();
+    });
+  })
+};
+
+exports.setRandomC19nGroups = function(req, res, next) {
+  req.user.circles = req.user.circles || {};
+  if (req.user.circles.c19nGroups1 && req.user.circles.c19nGroups1.length && req.user.circles.c19nGroups2 && req.user.circles.c19nGroups2.length) return next();
+  Circle.find({
+    circleType: 'c19nGroups1'
+  }).exec(function(err, circles) {
+    var rand = circles[Math.floor(Math.random() * circles.length)];
+    req.user.circles.c19nGroups1 = [rand.name];
+    Circle.find({
+    circleType: 'c19nGroups2'
+  }).exec(function(err, circles) {
+    var rand = circles[Math.floor(Math.random() * circles.length)];
+    req.user.circles.c19nGroups2 = [rand.name];
+    req.user.save(function(err) {
+      console.log(err)
+      next();
+    });
+  })
+  })
 };

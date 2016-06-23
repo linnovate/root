@@ -3,7 +3,7 @@
 require('../models/project');
 
 var options = {
-  includes: 'assign watchers',
+  includes: 'assign watchers sources',
   defaults: {
     watchers: []
   }
@@ -82,22 +82,30 @@ exports.getByEntity = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
-  entityQuery.currentUser = req.user;
-  var Query = Project.find(entityQuery);
+  var query = req.acl.query('Project');
+  query.find({
+        $or: [
+          {watchers:{$in:[req.user._id]}},
+            {watchers:{$size:0}},
+            {watchers: {
+                $exists: false}}
+        ]
+      });
+  query.find(entityQuery);
 
-  Query.populate(options.includes);
+  query.populate(options.includes);
 
   Project.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;
 		
 		var pagination = req.locals.data.pagination;
 	  if (pagination && pagination.type && pagination.type === 'page') {
-	    Query.sort(pagination.sort)
+	    query.sort(pagination.sort)
 	      .skip(pagination.start)
 	      .limit(pagination.limit);
 	  }
 
-	  Query.exec(function (err, projects) {
+	  query.exec(function (err, projects) {
 	    if (err) {
 	      req.locals.error = { message: 'Can\'t get projects' };
 	    } else {
@@ -136,7 +144,6 @@ exports.getByDiscussion = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
-	entityQuery.currentUser = req.user;
   var Query = Task.find(entityQuery, {project: 1, _id: 0});
   Query.populate('project');
 

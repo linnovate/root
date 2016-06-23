@@ -23,7 +23,7 @@ var passiveDataSrtuctureDecorator = function($delegate) {
 
             if (property && property._id) {
                 data[keys[i]] = property._id;
-            } else if (property instanceof Array) {
+            } else if (property instanceof Array && keys[i] !== 'sources') {
                 normalize(property);
             }
         }
