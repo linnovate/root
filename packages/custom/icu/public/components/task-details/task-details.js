@@ -9,7 +9,9 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                TasksService,
                                                context,
                                                $stateParams,
-                                               $rootScope) {
+                                               $rootScope,
+                                               MeanSocket,
+                                               UsersService) {
     $scope.task = entity || context.entity;
     $scope.tags = tags;
     $scope.projects = projects.data || projects;
@@ -99,6 +101,39 @@ angular.module('mean.icu.ui.taskdetails', [])
             }, {reload: true});
         });
     };
+    
+    //Made By OHAD
+    $scope.updateAndNotiy = function (task) {
+        if (context.entityName === 'discussion') {
+            task.discussion = context.entityId;
+        }
+        
+        UsersService.getMe().then(function (me) {
+            
+            var message = {};
+            message.content = task.title;
+            //"message":{"content":"tyui"}
+            MeanSocket.emit('message:send', {
+                message: message,
+                user: me.name,
+                channel: task.assign
+            });
+
+            TasksService.update(task).then(function (result) {
+                if (context.entityName === 'project') {
+                    var projId = result.project ? result.project._id : undefined;
+                    if (projId !== context.entityId) {
+                        $state.go('main.tasks.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {reload: true});
+                    }
+                }
+            });
+        
+        });
+    };
+    //END Made By OHAD
 
     $scope.update = function (task) {
         if (context.entityName === 'discussion') {

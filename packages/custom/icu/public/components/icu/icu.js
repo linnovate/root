@@ -21,7 +21,10 @@ angular.module('mean.icu').controller('IcuController',
         'discussion': 'discussions',
         'user': 'people'
     };
-
+    
+    //Made By OHAD
+    $state.go('socket');
+    //END Made By OHAD
 
     function initializeContext(state) {
         if (state.name.indexOf('main') === 0) {

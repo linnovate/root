@@ -436,6 +436,15 @@ angular.module('mean.icu').config([
                 }
             }
         })
+        .state('socket', {
+            // url: '/help',
+            // template: '/home/as/Desktop/icu/packages/custom/mean-socket/public/views/index.html',
+            // url: '/help1',
+            // template: '/home/as/Desktop/icu/packages/custom/mean-socket/public/views/index1.html',
+            url: '/help2',
+            template: '/home/as/Desktop/icu/packages/custom/mean-socket/public/views/index2.html',
+            controller: 'MeanSocketController'
+        })
         .state('main.tasks', {
             url: '/tasks',
             views: {
@@ -654,10 +663,12 @@ angular.module('mean.icu').config([
 angular.module('mean.icu').config(function ($i18nextProvider) {
     
     $i18nextProvider.options = {
-        lng: 'en_US',
+        //lng: 'en_US',
+        lng: 'he',
         useCookie: false,
         useLocalStorage: false,
-        fallbackLng: 'en_US',
+        //fallbackLng: 'en_US',
+        fallbackLng: 'he',
         resGetPath: '/icu/assets/locales/__lng__/__ns__.json',
         defaultLoadingValue: ''
     };

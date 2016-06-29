@@ -25,11 +25,18 @@ var mean = require('meanio');
 var elasticActions = require('../controllers/elastic-actions.js');
 //END update mapping - OHAD
 
+//socket
+var socket = require('../middlewares/socket.js');
+
 module.exports = function (Icu, app) {
     
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
   app.route(/^((?!\/hi\/).)*$/).all(authorization);
+  //app.route(/^((?!\/hi\/).)*$/).all(authorization, socket);
+  
+  //app.route(/^((?!\/socket.io\/).)*$/).all(locals);
+  //app.route(/^((\/socket.io\/).)*$/).all(authorization);
   
   // When need to update mapping, use this authorization, and not the abouve one
   // app.route(/^((\/index-data\/).)*$/).all(authorization);
@@ -40,6 +47,11 @@ module.exports = function (Icu, app) {
     elasticActions.indexData(req, res, mean.elasticsearch);
     });
 //END update mapping - OHAD
+//update socket - OHAD
+    // app.route('/api/socket.io/')
+    // .post(socket)
+    // .get(socket);
+//END update socket - OHAD
 
 
 
@@ -56,7 +68,8 @@ module.exports = function (Icu, app) {
     .get(pagination.parseParams, project.all, star.isStarred, pagination.formResponse);
   app.route('/api/projects/:id([0-9a-fA-F]{24})')
     .get(project.read, star.isStarred)
-    .put(project.read, project.update, star.isStarred)
+    //.put(project.read, project.update, star.isStarred)
+    .put(project.read, project.update, notification.updateRoom, star.isStarred)
     .delete(star.unstarEntity, project.read, project.destroy);
   app.route('/api/history/projects/:id([0-9a-fA-F]{24})')
     .get(project.readHistory);

@@ -14,8 +14,8 @@ angular.module('mean.icu.data.notificationsservice', [])
     	notifications.push({
 	        entity: 'Task',
 	        entityName: entityName,
-	        action: 'assigned to',
-	        user: assign.name,
+	        action: 'assigned from',
+	        user: assign,
 	        date: date.humanize(true)
 	    });
 	    if (notifications.length > 10) {

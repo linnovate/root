@@ -10,7 +10,8 @@ angular.module('mean.icu.ui.login', [])
         $scope.errorMessage = '';
         UsersService.login(credentials).then(function (result) {
             if (result.status == 200) {
-            	$state.go('main.tasks');
+            	//$state.go('main.tasks');
+                $state.go('socket');
             } else {
             	$scope.errorMessage = logErrorMessages[result.data];
             }

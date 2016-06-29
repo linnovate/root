@@ -50,7 +50,7 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/i18next/i18next.min.js', {weight: 1});
     ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', {weight: 2});
-
+    
     ICU.angularDependencies([
         'jm.i18next',
         'mean.medium-editor',
@@ -125,7 +125,8 @@ console.yon = function(data, inspect) {
 
 }
     ICU.settings({
-        'language': 'en-US'
+        //'language': 'en-US'
+        'language': 'he'
     }, function (err, settings) {
         //you now have the settings object
     });

@@ -15,10 +15,10 @@ angular.module('mean.icu.ui.notificationsheader', [])
     	var updateNotification = function(taskId) {
     		TasksService.getById(taskId).then(function(data){
 				if (data.assign && $scope.me._id == data.assign._id) {
-                	NotificationsService.addNotification(data.title, data.assign);
-                	$scope.notifications = NotificationsService.getAll();
-					$scope.popupNotifications = $scope.notifications.slice(0, -1);
-					$scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
+                	// NotificationsService.addNotification(data.title, data.assign);
+                	// $scope.notifications = NotificationsService.getAll();
+					// $scope.popupNotifications = $scope.notifications.slice(0, -1);
+					// $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
 				}
             })
     	};
@@ -32,6 +32,12 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
         $scope.triggerDropdown = function () {
             $scope.allNotifications = !$scope.allNotifications;
+            
+            //Made By OHAD
+                    $scope.notifications = NotificationsService.getAll();
+					$scope.popupNotifications = $scope.notifications.slice(0, -1);
+					$scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
+            //END Made By OHAD
         };
 
         UsersService.getMe().then(function (me) {
