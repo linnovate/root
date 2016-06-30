@@ -116,7 +116,8 @@ angular.module('mean.icu.ui.taskdetails', [])
             MeanSocket.emit('message:send', {
                 message: message,
                 user: me.name,
-                channel: task.assign
+                channel: task.assign,
+                id: task.id
             });
 
             TasksService.update(task).then(function (result) {

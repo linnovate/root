@@ -1,23 +1,36 @@
 <header class="header">
     <div class="notifications">
         <div class="indicator">
-            <span class="count">{{notifications.length}}</span>
+            <!--<span class="count">{{notifications.length}}</span>-->
+            <span class="count">{{notificationsToWatch.length}}</span>
         </div>
     </div>
     <div class="last-notification" ng-click="triggerDropdown()">
-        <span class="text">{{lastNotification.entity}}
-            <span class="entity-name" ng-show="lastNotification.entityName">"{{lastNotification.entityName}}"</span>
-            {{lastNotification.action}}
-            <span class="user">{{lastNotification.user}}</span>
+        <!--<span class="text">{{lastNotification.entity}}-->
+        <span class="text">{{lastNotification1.entity}}
+            <span class="entity-name" ng-show="lastNotification1.entityName">"{{lastNotification1.entityName}}"</span>
+            {{lastNotification1.action}}
+            <span class="user">{{lastNotification1.user}}</span>
         </span>
     </div>
     <div class="all-notifications" ng-if="allNotifications">
-        <div class="notification" ng-repeat="notification in popupNotifications">
-            <span class="text">{{notification.entity}}
-                <span class="entity-name">"{{notification.entityName}}"</span>
-                {{notification.action}}
-                <span class="user">{{notification.user}}</span>
-            </span>
+        <div ng-repeat="notification in popupNotifications" ng-click="GoToNotification(notification)">
+            <!--If the notification watched allready-->
+            <div ng-if="notification.IsWatched">
+                <span class="text">{{notification.entity}}
+                    <span class="entity-name">"{{notification.entityName}}"</span>
+                    {{notification.action}}
+                    <span class="user">{{notification.user}}</span>
+                </span>
+            </div>
+            <!--If the notification NOT watched allready-->
+            <div class="notification-NotWatched" ng-if="!notification.IsWatched">
+                <span class="text">{{notification.entity}}
+                    <span class="entity-name">"{{notification.entityName}}"</span>
+                    {{notification.action}}
+                    <span class="user">{{notification.user}}</span>
+                </span>
+            </div>
         </div>
     </div>
     <div class="time" ng-click="triggerDropdown()">

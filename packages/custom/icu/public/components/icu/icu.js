@@ -23,7 +23,7 @@ angular.module('mean.icu').controller('IcuController',
     };
     
     //Made By OHAD
-    $state.go('socket');
+    //$state.go('socket');
     //END Made By OHAD
 
     function initializeContext(state) {

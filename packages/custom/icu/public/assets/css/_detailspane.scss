@@ -102,6 +102,17 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     line-height: $header-height;
                 }
             }
+            .notification-NotWatched {
+                background-color: #FDA102;
+                height: $header-height;
+                @include notification;
+                padding: 10px;
+                border-bottom: 1px solid $light-grey1;
+
+                span {
+                    line-height: $header-height;
+                }
+            }
         }
 
         .time {

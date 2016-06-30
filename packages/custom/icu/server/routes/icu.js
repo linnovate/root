@@ -53,7 +53,10 @@ module.exports = function (Icu, app) {
     // .get(socket);
 //END update socket - OHAD
 
-
+//Notification READ - OHAD
+app.route('/api/notification/:id([0-9a-fA-F]{24})')
+    .get(notification.read);
+//END Notification READ - OHAD
 
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/star')
