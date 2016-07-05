@@ -1,31 +1,138 @@
 'use strict';
 
 angular.module('mean.icu.data.notificationsservice', [])
-.service('NotificationsService', function($http) {
+.service('NotificationsService', function($http, ApiUri) {
     var date = moment.duration(-5, 'minutes');
+    
+    var EntityPrefix = '/notification';
 
     var notifications = [];
+    var notificationsToWatch = [];
+    
+    var lastNotification1 = [];
+    //var lastNotification1 = {};
 
     function getAll() {
         return notifications;
     }
 
-    function addNotification(entityName, assign) {
+    function addNotification(entityName, assign, id, IsWatched) {
     	notifications.push({
 	        entity: 'Task',
 	        entityName: entityName,
-	        action: 'assigned to',
-	        user: assign.name,
-	        date: date.humanize(true)
+	        action: 'assigned from',
+	        user: assign,
+	        date: date.humanize(true),
+            id: id,
+            IsWatched: IsWatched
 	    });
 	    if (notifications.length > 10) {
 	    	notifications.shift();
 	    }
+        
+        //     
+        if (lastNotification1.length != 0)
+        {
+            lastNotification1.pop();    
+        }
+        
+        if(notifications.length != 0)
+        {
+            lastNotification1.push({
+                entity: 'Task',
+                entityName: notifications[notifications.length - 1].entityName,
+                action: 'assigned from',
+                user: notifications[notifications.length - 1].assign,
+                date: notifications[notifications.length - 1].date,
+                id: notifications[notifications.length - 1].id
+             });
+        }
+        //lastNotification1.push(notifications[notifications.length - 1]);
 
     }
+    
+    //Made By OHAD
+    
+    function Clean_notifications() {
+        
+        // Need to pop everthing out because it is a poiter so we cant reinnlaize it
+        while(notifications.length > 0)
+        {
+            notifications.pop();    
+        }
+    }
+    
+    function addLastnotifications() {
+        
+        if (lastNotification1.length != 0)
+        {
+            lastNotification1.pop();    
+        }
+        
+        if(notifications.length != 0)
+        {
+            lastNotification1.push({
+                entity: 'Task',
+                entityName: notifications[notifications.length - 1].entityName,
+                action: 'assigned from',
+                user: notifications[notifications.length - 1].assign,
+                date: notifications[notifications.length - 1].date,
+                id: notifications[notifications.length - 1].id
+            });
+            
+            //lastNotification1.push(notifications[notifications.length - 1]);
+        }
+    }
+    
+    function getByUserId(id) {
+        return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+            
+            return result.data;
+        });
+    }
+    
+    function updateByUserId(id) {
+        
+        console.log("=========================id============");
+        console.log(id);
+        //return $http.put(ApiUri + EntityPrefix + '/' + id, id).then(function (result) {
+            return $http.put(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+            
+            return result.data;
+        });
+    }
+    
+    function addnotificationsToWatch() {
+        
+        // Need to pop everthing out because it is a poiter so we cant reinnlaize it
+        while(notificationsToWatch.length > 0)
+        {
+            notificationsToWatch.pop();    
+        }
+        
+        //Check if the notification watched before
+        for (var notiy in notifications)
+        {                    
+            if (!notifications[notiy].IsWatched)
+            {
+                notificationsToWatch.push({num: notiy});
+            }
+        }       
+    }
+    
+    function getAllnotificationsToWatch() {
+        return notificationsToWatch;
+    }
 
+    //END Made By OHAD
     return {
         getAll: getAll,
-        addNotification: addNotification
+        addNotification: addNotification,
+        getByUserId: getByUserId,
+        addnotificationsToWatch: addnotificationsToWatch,
+        getAllnotificationsToWatch: getAllnotificationsToWatch,
+        addLastnotifications: addLastnotifications,
+        updateByUserId: updateByUserId,
+        Clean_notifications: Clean_notifications
     };
 });
