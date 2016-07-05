@@ -14,51 +14,65 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
         $scope.notificationsToWatch = 0;
         NotificationsService.addnotificationsToWatch(); 
-        $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();   
+        $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();
         
-        // Get the saved Notifications of the user, and show it to him         
-        UsersService.getMe().then(function (me) {
-            NotificationsService.getByUserId(me._id).then(function (result) {
-                
-                for (var notiy in result) {
-                    NotificationsService.addNotification(result[notiy].content, result[notiy].name, result[notiy].id);
+        NotificationsService.addLastnotifications();   
+        
+        // Get the saved Notifications of the user, and show it to him 
+    	var updateNotification = function() {
+            
+            // Get the saved Notifications of the user, and show it to him         
+            UsersService.getMe().then(function (me) {
+                NotificationsService.getByUserId(me._id).then(function (result) {
                     
-                    $scope.notifications = NotificationsService.getAll();
-                    $scope.popupNotifications = $scope.notifications.slice(0, -1);
-                    $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
-                    $scope.lastNotification1 = $scope.notifications[$scope.notifications.length - 1];
-                }
-                // For the notifications that didn't been Watched
-                NotificationsService.addnotificationsToWatch(); 
-                $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();
+                    for (var notiy in result) {
+                        NotificationsService.addNotification(result[notiy].content, result[notiy].name, result[notiy].id, result[notiy].IsWatched);
+                        
+                        NotificationsService.addLastnotifications();
+                        
+                        $scope.notifications = NotificationsService.getAll();
+                        
+                        NotificationsService.addLastnotifications();
+                        
+                        $scope.popupNotifications = $scope.notifications.slice(0, -1);
+                        $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
+                        $scope.lastNotification1 = $scope.notifications[$scope.notifications.length - 1];
+                    }
+                    // For the notifications that didn't been Watched
+                    NotificationsService.addnotificationsToWatch(); 
+                    $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();
+                });
             });
-        });
-    	
-    	var updateNotification = function(taskId) {
-    		// TasksService.getById(taskId).then(function(data){
-			// 	if (data.assign && $scope.me._id == data.assign._id) {
-            //     	// NotificationsService.addNotification(data.title, data.assign);
-            //     	// $scope.notifications = NotificationsService.getAll();
-			// 		// $scope.popupNotifications = $scope.notifications.slice(0, -1);
-			// 		// $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
-			// 	}
-            // })
     	};
 
     	$scope.$on('updateNotification', function(event, args) {
-    		updateNotification(args.taskId)
+    		//updateNotification(args.taskId)
+            //updateNotification()
 		});
         
         $scope.context = context;
         $scope.allNotifications = false;
         
         $scope.GoToNotification = function (this_notification) {
-                $state.go('main.tasks.all.details', {
-                    id: this_notification.id,
-                    entity: context.entityName,
-                    //entityId: context.entityId
-                });
-        }
+            
+            NotificationsService.updateByUserId(this_notification.id).then(function (result) {
+                
+                NotificationsService.Clean_notifications();
+                updateNotification();
+                
+                // For the notifications that didn't been Watched                   
+                NotificationsService.addnotificationsToWatch(); 
+                $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();  
+            });
+            
+            
+           
+            $state.go('main.tasks.all.details', {
+                id: this_notification.id,
+                entity: context.entityName,
+                //entityId: context.entityId
+            });
+        };
 
         $scope.triggerDropdown = function () {
             $scope.allNotifications = !$scope.allNotifications;
@@ -67,6 +81,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
             $scope.notifications = NotificationsService.getAll();
             $scope.popupNotifications = $scope.notifications.slice(0, -1);
             $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
+            $scope.lastNotification1 = $scope.notifications[$scope.notifications.length - 1];
 
             // For the notifications that didn't been Watched                   
             NotificationsService.addnotificationsToWatch(); 
@@ -78,7 +93,8 @@ angular.module('mean.icu.ui.notificationsheader', [])
         UsersService.getMe().then(function (me) {
             $scope.me = me;
             if (context.main === 'tasks') {
-	            updateNotification($stateParams.id)
+	            //updateNotification($stateParams.id)
+                updateNotification()
 	        }
         });
 

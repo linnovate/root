@@ -6,7 +6,7 @@
 var mongoose = require('mongoose'),
   Message = mongoose.model('Message'),
   _ = require('lodash');
-
+  
 exports.createFromSocket = function(data, cb) {
   
   console.log("data");
@@ -21,14 +21,57 @@ exports.createFromSocket = function(data, cb) {
   message.name = data.user;
   message.id = data.id;
   message.IsWatched = false;
-  message.save(function(err) {
-    if (err) console.log(err);
-    Message.findOne({
-      _id: message._id
-    }).populate('user', 'name username').exec(function(err, message) {
-      return cb(message);
+  
+  
+  //OHAD
+  
+    //Check if there is allready message on this id
+    Message.find({id: data.id}, function(err,obj) { 
+
+        // There isn't message, so it create one
+        if(!Object.keys(obj).length)
+        {
+            console.log("message.save");
+            message.save(function(err) {
+                if (err) console.log(err);
+                Message.findOne({
+                _id: message._id
+                }).populate('user', 'name username').exec(function(err, message) {
+                    return cb(message);
+                });
+            });
+        }
+        //There is this message, so it update it
+        else
+        {
+            console.log("message.update");
+            console.log(data.message.content);
+
+            Message.findOneAndUpdate({ id: data.id }, { 
+                "IsWatched" : false,
+                "id" : data.id,
+                "name" : data.user,
+                "title" : data.channel,
+                "time" : new Date(),
+                "content" : data.message.content,
+            }, function(err, user) {
+                if (err) throw err;
+                   
+                   return cb(user);
+            });
+        }
     });
-  });
+
+//END OHAD  
+  
+//   message.save(function(err) {
+//     if (err) console.log(err);
+//     Message.findOne({
+//       _id: message._id
+//     }).populate('user', 'name username').exec(function(err, message) {
+//       return cb(message);
+//     });
+//   });
 };
 
 exports.getAllForSocket = function(channel, cb) {

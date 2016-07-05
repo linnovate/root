@@ -23,6 +23,21 @@ exports.read = function(req, res, next) {
     res.json(messages);
   });
 };
+
+exports.update = function(req, res, next) { 
+
+  Message.update(
+  { id: req.params.id},
+  { $set: { IsWatched : true}}
+  ).exec(function(err, messages) {
+    console.log("--------------------------------------------------messages.update--------------------------------------");
+    console.log(messages);
+    
+    req.body = messages;
+    
+    res.json(messages);
+  });
+};
 //END Made By OHAD
 
 

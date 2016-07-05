@@ -30,10 +30,15 @@ angular.module('mean.mean-socket').controller('MeanSocketController', ['$scope',
             
             //OHAD
             
+            NotificationsService.addLastnotifications();  
+            
             //NotificationsService.addNotification("Eran Zehavi", assin);
-            NotificationsService.addNotification(message.content, message.name, message.id);
+            NotificationsService.addNotification(message.content, message.name, message.id, message.IsWatched);
             $scope.notifications = NotificationsService.getAll();
             $scope.popupNotifications = $scope.notifications.slice(0, -1);
+            
+            NotificationsService.addLastnotifications();
+            
             $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
             $scope.lastNotification1 = $scope.notifications[$scope.notifications.length - 1];    
             
