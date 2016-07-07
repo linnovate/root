@@ -31,6 +31,7 @@
     "forever": "latest",
     "gridfs-stream": "latest",
     "jsonwebtoken": "^7.0.0",
+    "kue": "latest",
     "lodash": "latest",
     "meanio": "0.8.0",
     "mongoose": "latest",
@@ -46,11 +47,11 @@
     "passport-twitter": "latest",
     "request": "latest",
     "serve-favicon": "latest",
+    "serviceproviders": "^1.0.1",
     "shelljs": "latest",
     "socket.io": "^1.4.6",
     "swig": "latest",
-    "view-helpers": "latest",
-    "kue": "latest"
+    "view-helpers": "latest"
   },
   "devDependencies": {
     "chalk": "latest",

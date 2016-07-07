@@ -73,3 +73,7 @@ packages/**/public/assets/lib/
 # vim Files
 # --------------------
 *.swp
+
+files/
+packages/core/users/public/assets/img/avatar/*
+dump.rdb
