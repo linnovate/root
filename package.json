@@ -47,7 +47,6 @@
     "passport-twitter": "latest",
     "request": "latest",
     "serve-favicon": "latest",
-    "serviceproviders": "^1.0.1",
     "shelljs": "latest",
     "swig": "latest",
     "view-helpers": "latest"

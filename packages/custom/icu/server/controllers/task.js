@@ -4,12 +4,13 @@ var _ = require('lodash');
 var q = require('q');
 
 var options = {
-  includes: 'assign watchers project sources',
+  includes: 'assign watchers project',
   defaults: {
     project: undefined,
     assign: undefined,
     discussions: [],
-    watchers: []
+    watchers: [],
+    circles: {}
   }
 };
 
@@ -60,21 +61,35 @@ exports.update = function(req, res, next) {
   task.update(req, res, next);
 };
 
-exports.tagsList = function (req, res, next) {
+exports.tagsList = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
 
   var query = {
-    'query': {'query_string': {'query': '*'}},
+    'query': {
+      'query_string': {
+        'query': '*'
+      }
+    },
     'facets': {
-      'tags': {'terms': {'field': 'tags'}}
+      'tags': {
+        'terms': {
+          'field': 'tags'
+        }
+      }
     }
   };
-  
-  mean.elasticsearch.search({index: 'task', 'body': query, size: 3000}, function (err, response) {
-      if (err) {
-        req.locals.error = { message: 'Can\'t get tags' };
+
+  mean.elasticsearch.search({
+    index: 'task',
+    'body': query,
+    size: 3000
+  }, function(err, response) {
+    if (err) {
+      req.locals.error = {
+        message: 'Can\'t get tags'
+      };
     } else {
       req.locals.result = response.facets ? response.facets.tags.terms : [];
     }
@@ -83,31 +98,33 @@ exports.tagsList = function (req, res, next) {
   });
 };
 
-exports.getByEntity = function (req, res, next) {
-          
+exports.getByEntity = function(req, res, next) {
+
   if (req.locals.error) {
     return next();
   }
 
-  var entities = {projects: 'project', users: 'assign', discussions: 'discussions', tags: 'tags'},
+  var entities = {
+    projects: 'project',
+    users: 'assign',
+    discussions: 'discussions',
+    tags: 'tags'
+  },
     entityQuery = {};
-  entityQuery[entities[req.params.entity]] = (req.params.id instanceof Array) ? {$in: req.params.id} : req.params.id;
+  entityQuery[entities[req.params.entity]] = (req.params.id instanceof Array) ? {
+    $in: req.params.id
+  } : req.params.id;
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
   if (ids && ids.length) {
-    entityQuery._id = { $in: ids };
+    entityQuery._id = {
+      $in: ids
+    };
     starredOnly = true;
   }
   var query = req.acl.query('Task');
-  query.find({
-        $or: [
-          {watchers:{$in:[req.user._id]}},
-            {watchers:{$size:0}},
-            {watchers: {
-                $exists: false}}
-        ]
-      });
+
   query.find(entityQuery);
   query.populate(options.includes);
 
@@ -116,42 +133,54 @@ exports.getByEntity = function (req, res, next) {
 
 
     var pagination = req.locals.data.pagination;
-	  if (pagination && pagination.type && pagination.type === 'page') {
-	    query.sort(pagination.sort)
-	      .skip(pagination.start)
-	      .limit(pagination.limit);
-	  }
+    if (pagination && pagination.type && pagination.type === 'page') {
+      query.sort(pagination.sort)
+        .skip(pagination.start)
+        .limit(pagination.limit);
+    }
 
-	  query.exec(function (err, tasks) {
-	    if (err) {
-	      req.locals.error = { message: 'Can\'t get tags' };
-	    } else {
-	      if (starredOnly) {
-	        tasks.forEach(function(task) {
-	          task.star = true;
-	        });
-	      }
-	    }
-	    req.locals.result = tasks;
+    query.exec(function(err, tasks) {
+      if (err) {
+        req.locals.error = {
+          message: 'Can\'t get tags'
+        };
+      } else {
+        if (starredOnly) {
+          tasks.forEach(function(task) {
+            task.star = true;
+          });
+        }
+      }
+      req.locals.result = tasks;
 
-	    next();
-	  });
+      next();
+    });
   });
 
-  
+
 };
 
-exports.getZombieTasks = function (req, res, next) {
+exports.getZombieTasks = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
 
-  var Query = Task.find({project: {$eq: null}, discussions: {$size: 0}, currentUser: req.user});
+  var Query = Task.find({
+    project: {
+      $eq: null
+    },
+    discussions: {
+      $size: 0
+    },
+    currentUser: req.user
+  });
   Query.populate(options.includes);
 
-  Query.exec(function (err, tasks) {
+  Query.exec(function(err, tasks) {
     if (err) {
-      req.locals.error = { message: 'Can\'t get zombie tasks' };
+      req.locals.error = {
+        message: 'Can\'t get zombie tasks'
+      };
     } else {
       req.locals.result = tasks;
     }
