@@ -291,6 +291,9 @@ exports.setRandomPermissions = function(req, res, next) {
 };
 
 exports.setRandomC19n = function(req, res, next) {
+  if(!req.user.circles) {
+    req.user.circles = {}
+  }
   if (req.user.circles.c19n && req.user.circles.c19n.length) return next();
   Circle.find({
     circleType: 'c19n'

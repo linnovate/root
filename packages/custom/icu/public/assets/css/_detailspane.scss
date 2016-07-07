@@ -7,7 +7,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
 .detailspane {
     width: 54%;
-    border-left: 1px solid grey;
+    border-left: 1px solid #C8C8C6;
     height: 100vh;
     background-color: $cream;
     float: left;
@@ -17,7 +17,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 
     .fa.fa-plus{
-        display: initial;
+        display: none;
     }
 
     .header {
@@ -44,7 +44,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     @include circle(9px);
 
                     position: absolute;
-                    left: -6px;
+                    left: 20px;
                     top: -1px;
 
                     display: inline-block;
@@ -142,11 +142,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .add-menu {
             button {
                 @include button;
-
-                background-color: $orange;
                 color: white;
                 width: 100%;
                 height: 100%;
+                background: url("/icu/assets/img/new_task.png") $orange no-repeat center;
             }
 
             .menu-items {
@@ -211,14 +210,12 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 		    outline: none;
 	    }
         .description {
-            margin: 0 30px;
+            margin: 0 28px;
             height: $description-height;
             overflow: auto;
             margin-top: 35px;
 
-            .title {
-                font-weight: 700;
-            }
+        
 
             .text {
                 color: $light-grey4;
@@ -239,6 +236,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .summary {
             height: $panel-height;
             border-bottom: 3px solid $light-grey1;
+            background-color: #F6F6F6;
 
             .favorite, .due, .status, .tags, .color {
                 height: $panel-height;
@@ -325,7 +323,6 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 .placeholder {
                     position: absolute;
                     top: 50%;
-                    right: 50%;
                     transform: translateX(60%) translateY(-50%);
                     color: $light-grey-placeholder;
                 }
@@ -345,7 +342,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             }
 
             .favorite {
-                width: $panel-height;
+                width: 47px;
                 font-size: 1.4em;
 
                 button {
@@ -372,6 +369,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
                         .ui-select-match-text {
                             float: left !important;
+                            color: #00AEEF;
                         }
 
                         .ui-select-toggle {
@@ -423,7 +421,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             }
 
             .tags {
-                width: calc((100% - 55px) * 0.25);
+                width: calc((100% - 47px) * 0.25);
 
                 .tag-wrap {
                     width: 100%;
@@ -542,12 +540,16 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
         .description {
             .title {
-                font-size: 30px;
-                padding: 10px 0;
+                font-size: 23px;
+                padding: 20px 0px 8px 0px;
+                font-weight: 700;
+                outline: none;
             }
 
             .text {
                 min-height: 50px;
+                padding-left: 3px;
+                outline: none;
 
                 &.medium-editor-placeholder {
                     &:not(:focus):before {
@@ -641,15 +643,15 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
                     margin: 0;
                     float: right;
-                    background-color: $orange;
                     color: white;
                     cursor: pointer;
                     width: 30px;
                     height: 30px;
-//                    .fa {
-//                        display: initial;
-//                    }
-                }
+                    background: url("/icu/assets/img/new_lable.png") $orange no-repeat center;
+                    .fa {
+                       display: none;
+                    }
+                 }
 
                 .ui-select-container {
                     appearance: none;
@@ -719,10 +721,11 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 background-color: transparent;
                 height: 38px;
                 font-size: 16px;
-                font-weight: 700;
+                font-weight: 400;
 
                 &.active {
                     border-bottom: 5px solid $orange;
+                    color: $orange;
                 }
             }
         }
@@ -730,7 +733,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .tab-content {
             margin: 0 30px;
             padding: 10px 0;
-            height: $tab-content-height;
+            height: calc(100% - 40% - 55px - 40px - 35px);
             overflow: auto;
         }
     }
@@ -868,10 +871,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 margin: $avatar-margin - 1 $avatar-margin;
                 color: white;
                 font-size: 20px;
-                background-color: $orange;
                	position: relative;
 			    left: 0;
 			    left: calc(100% - 58px);
+                background: url('/icu/assets/img/new_lable.png') no-repeat center $orange;
 
 			   
             }

@@ -83,10 +83,10 @@
     }
 
     .header-wrap {
-        height: 100px;
-        border-bottom: 1px solid $light-grey1;
+        height: 97px;
+        border-bottom: 1px solid #e1e1e1;
         background-color: white;
-        padding: 35px 25px 30px 25px;
+        padding: 38px 23px 27px 14px;
         cursor: pointer;
 
         &.active {
@@ -103,9 +103,9 @@
     }
 
     .filters {
-        padding: 10px;
+        padding: 7px 5px;
         background-color: white;
-        height: 46px;
+        height: 43px;
 
         .left-wrapper {
             float: left;
@@ -154,8 +154,9 @@
         }
 
         .tasks {
-            width: 92px;
-            padding-left: 15px;
+            width: 100px;
+            height: 27px;
+            padding-left: 19px;
             background: url('/icu/assets/img/status.png') no-repeat 15% center;
         }
 
