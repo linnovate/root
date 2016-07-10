@@ -21,7 +21,7 @@ module.exports = {
 			requires: ['c19n']
 		},
 		personal: {
-			requiredAllowed: true,
+			requiredAllowed: false,
 			max: 50,
 			watchers: true
 		}
