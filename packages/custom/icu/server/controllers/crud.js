@@ -71,8 +71,17 @@ module.exports = function(entityName, options) {
     if (req.locals.result.description !== req.body.desciption) {
       req.locals.data.shouldCreateUpdate = true;
     }
+    
+    // Made By OHAD
+    if (req.body.room !== undefined) {
+      req.locals.data.shouldCreateUpdate = true;
+      
+      req.locals.result.room = req.body.room;
+    }
+    // END Made By OHAD
 
     var entity = req.locals.data.body || req.body;
+    
     entityService
       .update(req.locals.result, entity, { user: req.user }, req.acl)
       .then(success(req, next), error(req, next));

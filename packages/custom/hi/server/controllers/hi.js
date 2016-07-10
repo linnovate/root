@@ -54,7 +54,6 @@ exports.talkToHi = function(options, callback) {
 
 exports.talkToRocketChat = function(options, callback) {
 	console.log('================================================talkToRocketChat======================================')
-	
 	// Logon with REST API
 	// var objReq = {
  //        uri: 'https://hirc.herokuapp.com/api/login',
@@ -141,7 +140,9 @@ exports.talkToRocketChat = function(options, callback) {
         objReq.form = options.form;
         objReq.headers['X-Auth-Token'] = rocketChat.authToken;
         objReq.headers['X-User-Id'] = rocketChat.userId;
-        objReq.headers['Content-Type'] = 'multipart/form-data';
+        //objReq.headers['Content-Type'] = 'multipart/form-data';
+        // Made By OHAD
+        objReq.headers['Content-Type'] = 'application/json';
     }
 
     request(objReq, function(error, response, body) {

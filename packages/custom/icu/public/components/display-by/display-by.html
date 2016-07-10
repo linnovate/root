@@ -8,7 +8,7 @@
     <p class="intro">{{'display'+context.main+'By' | i18next}}:</p>
 
     <div class="list projects" ng-if="projects && (icuDisplayBy.indexOf('projects'))>-1">
-        <p ng-click="visible.project = !visible.project" class="title">{{ 'project' | i18next }}</p>
+        <p ng-click="visible.project = !visible.project" class="title">{{ 'Projects' | i18next }}</p>
         <ul ng-if="visible.project">
             <li data-ng-repeat="project in projects | limitTo: displayLimit['projects']"
                 data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"

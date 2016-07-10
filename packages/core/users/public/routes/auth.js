@@ -5,6 +5,9 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
   function($meanStateProvider, $httpProvider, jwtInterceptorProvider) {    
         
     jwtInterceptorProvider.tokenGetter = function() {
+        
+        //console.log("JWT");
+        //console.log(localStorage.getItem('JWT'));
       return localStorage.getItem('JWT');
     };
 
