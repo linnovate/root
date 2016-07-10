@@ -19,7 +19,7 @@
                 <div class="tag-color" ng-style="color={'background-color': '#' + '{{project.color}}'}"></div>
             </li>
             <li ng-if="projects.length >  displayLimit['projects']" ng-click="showMore(projects.length, 'projects')" class="more">{{ 'more' | i18next }}</li>
-            <li ng-if="projects.length ==  displayLimit['projects']" ng-click="collapse('projects')" class="more">{{ 'Collapse...' | i18next }}</li>
+            <li ng-if="projects.length ==  displayLimit['projects']" ng-click="collapse('projects')" class="more">{{ 'Less...' | i18next }}</li>
 
         </ul>
     </div>
@@ -35,7 +35,7 @@
                 </a>
             </li>
             <li ng-if="discussions.length >  displayLimit['discussions']" ng-click="showMore(discussions.length, 'discussions')" class="more">{{ 'more' | i18next }}</li>
-            <li ng-if="discussions.length ==  displayLimit['discussions']" ng-click="collapse('discussions')" class="more">{{ 'Collapse...' | i18next }}</li>
+            <li ng-if="discussions.length ==  displayLimit['discussions']" ng-click="collapse('discussions')" class="more">{{ 'Less...' | i18next }}</li>
         </ul>
     </div>
 

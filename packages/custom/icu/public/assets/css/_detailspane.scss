@@ -46,6 +46,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     position: absolute;
                     left: 20px;
                     top: -1px;
+                    font-size: small;
+                    font-weight: 700;
 
                     display: inline-block;
                     text-align: center;
@@ -174,7 +176,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 height: 37px;
                 margin: 13px;
                 font-size: 30px;
-                line-height: 35px;
+                line-height: 29px;
                 cursor: pointer;
             }
         }
@@ -201,11 +203,12 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         height: $content-height;
         .compBtn {
 	    	background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
-	    	width: 22px;
-		    height: 22px;
-		    border-radius: 15px;
+	    	width: 30px;
+		    height: 30px;
+		    border-radius: 20px;
 		    border: none;
-		    float: right;
+	        position: absolute;
+            right: 0;
 		    margin: 15px 30px;
 		    outline: none;
 	    }
@@ -213,7 +216,21 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             margin: 0 28px;
             height: $description-height;
             overflow: auto;
-            margin-top: 35px;
+            margin-top: 60px;
+            &::-webkit-scrollbar {
+                width: 5px;
+            }
+             
+            &::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                border-radius: 10px;
+            }
+             
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                background-color: white;
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+            }
 
         
 
@@ -264,7 +281,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 .no-assignee {
                     position: absolute;
                     transform: translateY(-65%);
-                    top: 60%;
+                    top: 31px;
                     width: calc(100% - 10px);
                     margin-left: 10px;
 
@@ -443,7 +460,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                         @include tag(14px);
                         width: initial;
                         margin: 0;
-                        padding: 4px 7px;
+                        padding: 3px 13px;
                         color: white;
                         position: relative;
                         margin-top: -5px;
@@ -733,7 +750,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .tab-content {
             margin: 0 30px;
             padding: 10px 0;
-            height: calc(100% - 40% - 55px - 40px - 35px);
+            height: calc(100% - 40% - 55px - 40px - 60px);
             overflow: auto;
         }
     }

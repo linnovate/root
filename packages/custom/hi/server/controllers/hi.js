@@ -54,6 +54,7 @@ exports.talkToHi = function(options, callback) {
 
 exports.talkToRocketChat = function(options, callback) {
 	console.log('================================================talkToRocketChat======================================')
+	
 	// Logon with REST API
 	// var objReq = {
  //        uri: 'https://hirc.herokuapp.com/api/login',
