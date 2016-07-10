@@ -1,13 +1,14 @@
 'use strict';
 
 module.exports = {
-	displayAllSources: true,
-	displayAllC19nGroups: true,
-	displayAllGroups: true,
+	displayAllSources: false,
+	displayAllC19nGroups: false,
+	displayAllGroups: false,
 	circleTypes: {
 		c19n: {
 			requiredAllowed: true,
-			max: 1
+			max: 1,
+			sources: true
 		},
 		c19nGroups1: {
 			requiredAllowed: true,
@@ -19,8 +20,11 @@ module.exports = {
 			max: 1,
 			requires: ['c19n']
 		},
-		// groups: {
-			
-		// }
-	}
+		personal: {
+			requiredAllowed: false,
+			max: 50,
+			watchers: true
+		}
+	},
+	cacheTime: 60 * 5
 };
