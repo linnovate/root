@@ -3,7 +3,10 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
     .directive('icuCompModal', function ($state, $uibModal) {
 
         function link(scope, elem, attrs) {
+            if(scope.entity.circles && scope.entity.circles.c19n)
+                elem[0].classList.add('c19n');
 
+            
             elem.bind('click', function() {
                 buildModal();
             });
@@ -38,9 +41,14 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
                 entityName: '@',
                 entity: '='
             },
+            template : '<div ng-if="entity.circles && entity.circles.c19n" tooltips tooltip-template-url="/icu/components/modal-compartmentalization/tooltip.html" tooltip-side="left"></div>',
             link: link
         };
     });
+
+
+
+
 
 function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector, circlesService) {
     var serviceMap = {
