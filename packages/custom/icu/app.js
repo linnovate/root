@@ -126,12 +126,6 @@ console.yon = function(data, inspect) {
     console.log(data);
 
 }
-    ICU.settings({
-        'language': 'en-US'
-        //'language': 'he'
-    }, function (err, settings) {
-        //you now have the settings object
-    });
 
     /**
      //Uncomment to use. Requires meanio@0.3.7 or above
