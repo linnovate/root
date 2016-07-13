@@ -2,7 +2,7 @@
 
 // User routes use users controller
 var users = require('../controllers/users'),
-    config = require('meanio').loadConfig();
+  config = require('meanio').loadConfig();
 
 var jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
 
@@ -15,7 +15,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
 
   // Setting up the users api
   app.route('/api/register')
-    .post(users.create);
+    .post(users.create, users.getGoogleGroups, users.setRandomPermissions, users.setRandomC19n, users.setRandomC19nGroups, users.getJwt);
 
   app.route('/api/forgot-password')
     .post(users.forgotpassword);
@@ -36,31 +36,22 @@ module.exports = function(MeanUser, app, auth, database, passport) {
   app.route('/api/login')
     .post(passport.authenticate('local', {
       failureFlash: false
-    }), function(req, res) {      
-      var payload = req.user;
-      payload.redirect = req.body.redirect;
-      var escaped = JSON.stringify(payload);      
-      escaped = encodeURI(escaped);
-      // We are sending the payload inside the token
-      ///var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
-      var token = jwt.sign(escaped, config.secret, { });
-      res.json({ token: token });
-    });
+    }), users.getGoogleGroups, users.setRandomPermissions, users.setRandomC19n, users.setRandomC19nGroups, users.getJwt);
 
   // AngularJS route to get config of social buttons
   app.route('/api/get-config')
-    .get(function (req, res) {
+    .get(function(req, res) {
       // To avoid displaying unneccesary social logins
       var clientIdProperty = 'clientID';
       var defaultPrefix = 'DEFAULT_';
-      var socialNetworks = ['facebook','linkedin','twitter','github','google']; //ugly hardcoding :(
+      var socialNetworks = ['facebook', 'linkedin', 'twitter', 'github', 'google']; //ugly hardcoding :(
       var configuredApps = {};
-      for (var network in socialNetworks){
+      for (var network in socialNetworks) {
         var netObject = config[socialNetworks[network]];
-        if ( netObject.hasOwnProperty(clientIdProperty) ) {
-              if (netObject[clientIdProperty].indexOf(defaultPrefix) === -1 ){
-                configuredApps[socialNetworks[network]] = true ;
-              }
+        if (netObject.hasOwnProperty(clientIdProperty)) {
+          if (netObject[clientIdProperty].indexOf(defaultPrefix) === -1) {
+            configuredApps[socialNetworks[network]] = true;
+          }
         }
       }
       res.send(configuredApps);

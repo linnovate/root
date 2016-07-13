@@ -26,7 +26,7 @@ var elasticActions = require('../controllers/elastic-actions.js');
 //END update mapping - OHAD
 
 //socket
-var socket = require('../middlewares/socket.js');
+// var socket = require('../middlewares/socket.js');
 
 module.exports = function (Icu, app) {
     

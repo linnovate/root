@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(req, res, next) {
-  if (req.locals.result) {
+  if (req.locals.result && !req.locals.error) {
     //console.log("END");
     //console.log(JSON.stringify(req.locals.result));
     res.status(200);

@@ -7,7 +7,8 @@
                     entityId: currentContext.entityId
                     })">
         <header class="title">
-            {{ 'tasksFrom'+currentContext.entityName | i18next }}
+            {{ 'Tasks from' | i18next }}
+            <span>{{ currentContext.entityName | i18next }}</span>
             <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
         </header>
     </div>

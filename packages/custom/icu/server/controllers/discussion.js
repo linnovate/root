@@ -1,7 +1,7 @@
 'use strict';
 
 var options = {
-  includes: 'watchers assign creator',
+  includes: 'watchers assign creator sources',
   defaults: {
     watchers: [],
     assign: undefined
@@ -198,22 +198,30 @@ exports.getByEntity = function (req, res, next) {
     entityQuery._id = { $in: ids };
     starredOnly = true;
   }
-  entityQuery.currentUser = req.user;
-  var Query = Discussion.find(entityQuery);
+  var query = req.acl.query('Discussion');
+  query.find({
+        $or: [
+          {watchers:{$in:[req.user._id]}},
+            {watchers:{$size:0}},
+            {watchers: {
+                $exists: false}}
+        ]
+      });
+  query.find(entityQuery);
 
-  Query.populate(options.includes);
+  query.populate(options.includes);
   
   Discussion.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;
 		
 		var pagination = req.locals.data.pagination;
 	  if (pagination && pagination.type && pagination.type === 'page') {
-	    Query.sort(pagination.sort)
+	    query.sort(pagination.sort)
 	      .skip(pagination.start)
 	      .limit(pagination.limit);
 	  }
 
-	  Query.exec(function (err, discussions) {
+	  query.exec(function (err, discussions) {
 	    if (err) {
 	      req.locals.error = { message: 'Can\'t get discussions' };
 	    } else {
@@ -244,7 +252,6 @@ exports.getByProject = function (req, res, next) {
   }
 
   entityQuery[entities[req.params.entity]] = req.params.id;
-	entityQuery.currentUser = req.user;
   var Query = Task.find(entityQuery, {discussions: 1, _id: 0});
   Query.populate('discussions');
 
