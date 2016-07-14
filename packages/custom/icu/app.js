@@ -50,6 +50,8 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/i18next/i18next.min.js', {weight: 1});
     ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', {weight: 2});
+
+    ICU.aggregateAsset('js', '../lib/angular-tooltips/dist/angular-tooltips.min.js');
     
     ICU.angularDependencies([
         'jm.i18next',
@@ -104,6 +106,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.decorators.pdsDecorator',
         'infinite-scroll',
         'mean.icu.ui.modaldeletetasksbyentity',
+        '720kb.tooltips',
         'mean.icu.ui.modalcompartmentalization',
     ]);
 
