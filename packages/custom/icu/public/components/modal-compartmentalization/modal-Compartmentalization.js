@@ -3,10 +3,42 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
     .directive('icuCompModal', function($state, $uibModal, circlesService) {
 
         function link(scope, elem, attrs) {
-
             circlesService.getmine().then(function(data) {
                 scope.mine = data;
+                c19n();
             });
+
+            function c19n() {
+                if (scope.entity && scope.entity.circles && scope.entity.circles.c19n && scope.entity.circles.c19n.length) {
+                    elem[0].classList.add('c19n');
+                    scope.c19n = [];
+
+                    var source = scope.mine.sources.find(function(s) {
+                        return s._id === scope.entity.sources[0];
+                    });
+
+                    var c19n = scope.mine.allowed.c19n.find(function(c) {
+                        return c._id === scope.entity.circles.c19n[0];
+                    });
+
+                    scope.c19n.push(source.name + '(' + c19n.name + ')');
+
+                    if (scope.entity.circles.c19nGroups1[0])
+                        scope.c19n.push(scope.mine.allowed.c19nGroups1.find(function(c) {
+                            return c._id === scope.entity.circles.c19nGroups1[0];
+                        }).name);
+
+                    if (scope.entity.circles.c19nGroups2[0])
+                        scope.c19n.push(scope.mine.allowed.c19nGroups2.find(function(c) {
+                            return c._id === scope.entity.circles.c19nGroups2[0];
+                        }).name);
+
+                    scope.c19n = scope.c19n.join(', ');
+                } else {
+                    elem[0].classList.remove('c19n');
+
+                }
+            }
 
             elem.bind('click', function() {
                 buildModal();
@@ -34,6 +66,7 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
                 modalInstance.result.then(function() {
 
                 }, function() {
+                    c19n();
                     console.log('Modal dismissed');
                 });
             }
@@ -45,11 +78,13 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
                 entityName: '@',
                 entity: '='
             },
+            template: '<div ng-if="entity && entity.circles && entity.circles.c19n && entity.circles.c19n.length" tooltips tooltip-template-url="/icu/components/modal-compartmentalization/tooltip.html" tooltip-side="left"></div>',
             link: link
         };
     });
 
 function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector, data) {
+
     var serviceMap = {
         project: 'ProjectsService',
         discussion: 'DiscussionsService',

@@ -17,7 +17,7 @@
         width: $sidepane-width;
         background-color: $dark-grey;
         color: white;
-        font-size: 2em;
+        font-size: 26px;
         text-align: center;
     }
 
@@ -28,19 +28,41 @@
         ul {
             list-style: none;
             padding-left: 0;
-
+            display: flex;
+            flex-wrap: wrap;
+            height: 93%;
+            flex-direction: column;
+            position: relative;
+            &:before {
+                box-shadow: -2px 0px 14px 1px rgba(0, 0, 0, 0.73);
+                pointer-events: none;
+                position: absolute;
+                top: 0px;
+                bottom: 0;
+                right: -3px;
+                content: "";
+                display: block;
+                width: 3px;
+            }
             li {
                 cursor: pointer;
+                width: 100%;
+                transition: all .5s;
+                &.active {
+                        background-color: #313C40;
+                        .arrow {
+                            box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
+                        }
+                        flex-grow: 1;
+                        .menu-item {
+                            background-color: #37464B;
+                        }
+                    }
 
                 .menu-item {
                     height: $header-height;
 
-                    &.active {
-                        background-color: $light-grey0;
-                        .arrow {
-                            box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
-                        }
-                    }
+                    
 
                     .icon {
                         width: $header-height;
@@ -71,10 +93,10 @@
 
                         i {
                             position: absolute;
-                            left: 50%;
                             top: 50%;
                             transform: translate(-50%, -50%);
                             font-size: 1.5em;
+                            right: 18px;
                         }
                     }
                 }

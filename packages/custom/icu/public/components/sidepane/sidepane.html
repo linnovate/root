@@ -3,10 +3,9 @@
 </header>
 <nav>
     <ul>
-        <li data-ng-repeat="item in items">
+        <li data-ng-repeat="item in items" data-ng-class="{ 'active': isCurrentState(item) && item.open }">
             <div class="menu-item"
-                data-ui-sref="{{'main.' + item.state}}"
-                data-ng-class="{ 'active': isCurrentState(item) }"
+                data-ui-sref="{{'main.' + item.state}}"          
                 ng-click="toggleVisibility(item)">
                 <div class="icon">
                     <img ng-src="{{item.icon}}"/>

@@ -103,5 +103,6 @@
     "usernameCannotBeMoreThan20Characters": "Username cannot be more than 20 characters",
     "versions": "Versions",
     "youMustEnterAName": "You must enter a name",
-    "youMustEnterAValidEmailAddress": "You must enter a valid email address"
+    "youMustEnterAValidEmailAddress": "You must enter a valid email address",
+    "restrictedAccess": "Restricted Access"
 }
