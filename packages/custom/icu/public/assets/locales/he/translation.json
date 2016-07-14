@@ -56,6 +56,7 @@
     "modalDeleteText": "כל המשימות שמקושרות ל",
     "modalDeleteTextContinue": "ימחקו",
     "modalDeleteDesc": "הקלד 'DELETE' בתיבת טקסט ולחץ YES למחיקה",
+	"myTasks": "המשימות שלי",
 	"name":  "שם",
 	"new":  "חדש",
     "noDiscussions": "אין דיונים",

@@ -105,6 +105,7 @@ ICU.register(function (app, auth, database,swagger) {
         'infinite-scroll',
         'mean.icu.ui.modaldeletetasksbyentity',
         'mean.icu.ui.modalcompartmentalization',
+        'mean.icu.ui.taskoptions',
     ]);
 
 

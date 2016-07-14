@@ -100,6 +100,8 @@ app.route('/api/notification/:id([0-9a-fA-F]{24})')
     .get(task.read, star.isStarred)
     .put(task.read, task.update, star.isStarred, updates.updated)
     .delete(star.unstarEntity, task.read, task.destroy);
+  app.route('/api/tasks/byAssign')
+    .get(task.byAssign);
 
   app.route('/api/:entity(discussions|projects|users)/:id([0-9a-fA-F]{24})/tasks')
     .get(pagination.parseParams, task.getByEntity, pagination.formResponse);
@@ -192,6 +194,9 @@ app.route('/api/notification/:id([0-9a-fA-F]{24})')
     .put(task.update)
     .delete(task.destroy);
 
+  app.route('/api/tasksDueToday')
+  	.get(task.getTasksDueToday);
+  	
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
 

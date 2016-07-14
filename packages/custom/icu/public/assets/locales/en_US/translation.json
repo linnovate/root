@@ -56,6 +56,7 @@
     "modalDeleteText": "All tasks related to this ",
     "modalDeleteTextContinue": "will be deleted",
     "modalDeleteDesc": "type 'DELETE' in the text box and press YES to delete",
+    "myTasks": "My Tasks",
     "name": "Name",
     "new": "New",
     "noDiscussions": "No discussions",

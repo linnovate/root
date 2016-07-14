@@ -1,4 +1,9 @@
 <section class="display-by">
+    <p class="title my"
+       ui-sref="main.{{context.main}}.byassign" ui-sref-active="active"
+       data-ng-class="{ 'selected': context.entityName === 'all' }">
+        {{ 'myTasks' | i18next }}
+    </p>
     <p class="title all"
        ui-sref="main.{{context.main}}.all" ui-sref-active="active"
        data-ng-class="{ 'selected': context.entityName === 'all' }">

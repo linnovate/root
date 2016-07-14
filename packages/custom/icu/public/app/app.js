@@ -71,6 +71,8 @@ angular.module('mean.icu').config([
             };
         };
 
+
+
         var getListView = function (entity, resolve) {
             var view = {
                 'middlepane@main': {
@@ -493,6 +495,35 @@ angular.module('mean.icu').config([
         .state('main.tasks.byentity.details', getTaskDetailsState())
         .state('main.tasks.byentity.details.activities', getDetailsTabState('task', 'activities'))
         .state('main.tasks.byentity.details.documents', getDetailsTabState('task', 'documents'))
+
+        .state('main.tasks.byassign', {     
+            url: '/my',
+            params: {
+                starred: false,
+                start: 0,
+                limit: LIMIT,
+                sort: SORT
+            },
+            views: {
+                    'middlepane@main': {
+                        templateUrl: '/icu/components/task-list/task-list.html',
+                        controller: 'TaskListController'
+                    },
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/task-options/task-options.html',
+                        controller: 'TaskOptionsController'
+                    }
+                },
+            resolve: {
+                tasks: function(TasksService, $stateParams) {
+                    return TasksService.getMyTasks($stateParams.start,
+                        $stateParams.limit,
+                        $stateParams.sort);
+                }
+            }
+        })
+        .state('main.tasks.byassign.activities', getDetailsTabState('task', 'activities'))
+        .state('main.tasks.byassign.documents', getDetailsTabState('task', 'documents'))
 
         .state('main.projects', {
             url: '/projects',
