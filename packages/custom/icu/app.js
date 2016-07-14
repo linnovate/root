@@ -130,8 +130,8 @@ console.yon = function(data, inspect) {
 
 }
     ICU.settings({
-        //'language': 'en-US'
-        'language': 'he'
+        'language': 'en-US'
+        //'language': 'he'
     }, function (err, settings) {
         //you now have the settings object
     });

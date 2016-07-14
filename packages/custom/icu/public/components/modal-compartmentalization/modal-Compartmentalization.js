@@ -5,7 +5,7 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
         function link(scope, elem, attrs) {
             if(scope.entity.circles && scope.entity.circles.c19n)
                 elem[0].classList.add('c19n');
-
+            else elem[0].classList.remove('c19n');
             
             elem.bind('click', function() {
                 buildModal();

@@ -26,7 +26,7 @@ var elasticActions = require('../controllers/elastic-actions.js');
 //END update mapping - OHAD
 
 //socket
-var socket = require('../middlewares/socket.js');
+// var socket = require('../middlewares/socket.js');
 
 module.exports = function (Icu, app) {
     
@@ -55,7 +55,8 @@ module.exports = function (Icu, app) {
 
 //Notification READ - OHAD
 app.route('/api/notification/:id([0-9a-fA-F]{24})')
-    .get(notification.read);
+    .get(notification.read)
+    .put(notification.update);
 //END Notification READ - OHAD
 
   //star & get starred list
