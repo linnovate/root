@@ -188,3 +188,62 @@ exports.getZombieTasks = function(req, res, next) {
     next();
   });
 };
+
+var byAssign = function(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+  	}
+
+  	Task.find({
+  		assign: req.user._id
+  	}, function(err, tasks) {
+  		if (err) {
+	      req.locals.error = {
+	        message: 'Can\'t get my tasks'
+	      };
+	    } else {
+	      req.locals.result = tasks;
+	    }
+
+	    next();
+  	})
+}
+
+exports.byAssign = byAssign;
+
+exports.getTasksDueToday = function(req, res, next) {
+	console.log('getTasksDueToday')
+	if (req.locals.error) {
+    	return next();
+	}
+	var start = new Date();
+	start.setHours(0,0,0,0);
+
+	var end = new Date();
+	end.setHours(23,59,59,999);
+	
+	var query = {
+        "range" : {
+            "due" : {
+                "from" : Date.parse(start),
+                "to" : Date.parse(end)
+            }
+        }
+	}
+
+  	mean.elasticsearch.search({
+    	index: 'task',
+    	'body': query,
+  }, function(err, response) {
+    if (err) {
+      console.log('err=============================================')
+      console.log(err)
+    } else {
+    	console.log('response=============================================')
+      	console.log(response)
+      // req.locals.result = response;
+    }
+
+    next();
+  });
+};

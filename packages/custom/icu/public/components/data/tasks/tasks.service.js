@@ -92,6 +92,12 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function getMyTasks() {
+    	return $http.get(ApiUri + EntityPrefix + '/byAssign').then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -104,6 +110,7 @@ angular.module('mean.icu.data.tasksservice', [])
         update: update,
         remove: remove,
         getStarred: getStarred,
-        star: star
+        star: star,
+        getMyTasks: getMyTasks
     };
 });
