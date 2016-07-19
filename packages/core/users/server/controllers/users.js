@@ -11,10 +11,8 @@ var mongoose = require('mongoose'),
   crypto = require('crypto'),
   nodemailer = require('nodemailer'),
   templates = require('../template'),
-  jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
-
-var GoogleService = require('serviceproviders')('google');
-var service = new GoogleService(config.google.clientSecret, config.google.clientID, config.google.callbackURL);
+  jwt = require('jsonwebtoken'), //https://npmjs.org/package/node-jsonwebtoken
+  circles = require('../../../../custom/icu/server/controllers/circles');
 
 /**
  * Auth callback
@@ -257,4 +255,10 @@ exports.forgotpassword = function(req, res, next) {
       res.json(response);
     }
   );
+};
+
+exports.updateCircles = function(req, res, next) {
+  circles.upsertUser(req.user.id, function() {
+    next();
+  });
 };

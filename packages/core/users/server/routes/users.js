@@ -15,7 +15,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
 
   // Setting up the users api
   app.route('/api/register')
-    .post(users.create, users.getJwt);
+    .post(users.create, users.updateCircles, users.getJwt);
 
   app.route('/api/forgot-password')
     .post(users.forgotpassword);
@@ -36,7 +36,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
   app.route('/api/login')
     .post(passport.authenticate('local', {
       failureFlash: false
-    }), users.getJwt);
+    }), users.updateCircles, users.getJwt);
 
   // AngularJS route to get config of social buttons
   app.route('/api/get-config')
