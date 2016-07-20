@@ -22,8 +22,8 @@ var error = require('../middlewares/error.js');
 var acl = require('../middlewares/acl.js');
 
 //update mapping - OHAD
-var mean = require('meanio');
-var elasticActions = require('../controllers/elastic-actions.js');
+//var mean = require('meanio');
+//var elasticActions = require('../controllers/elastic-actions.js');
 //END update mapping - OHAD
 
 //socket
@@ -63,7 +63,9 @@ module.exports = function (Icu, app) {
 //Notification READ - OHAD
 app.route('/api/notification/:id([0-9a-fA-F]{24})')
     .get(notification.read)
-    .put(notification.update);
+    .put(notification.updateIsWatched);
+app.route('/api/notification1/:id([0-9a-fA-F]{24})')
+    .put(notification.updateDropDown);
 //END Notification READ - OHAD
 
   //star & get starred list

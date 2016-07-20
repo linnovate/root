@@ -24,7 +24,7 @@ exports.read = function(req, res, next) {
   });
 };
 
-exports.update = function(req, res, next) { 
+exports.updateIsWatched = function(req, res, next) { 
 
   Message.update(
   { id: req.params.id},
@@ -33,6 +33,19 @@ exports.update = function(req, res, next) {
     console.log("--------------------------------------------------messages.update--------------------------------------");
     console.log(messages);
     
+    req.body = messages;
+    
+    res.json(messages);
+  });
+};
+exports.updateDropDown = function(req, res, next) {
+
+  Message.update(
+  { title: req.params.id},
+  { $set: { DropDownIsWatched : true}},
+  { multi: true }
+  ).exec(function(err, messages) {
+
     req.body = messages;
     
     res.json(messages);
