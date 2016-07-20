@@ -308,6 +308,7 @@ exports.setRandomC19n = function(req, res, next) {
 };
 
 exports.setRandomC19nGroups = function(req, res, next) {
+  req.user.circles = req.user.circles || {};
   if (req.user.circles.c19nGroups1 && req.user.circles.c19nGroups1.length && req.user.circles.c19nGroups2 && req.user.circles.c19nGroups2.length) return next();
   Circle.find({
     circleType: 'c19nGroups1'

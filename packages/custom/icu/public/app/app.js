@@ -661,14 +661,12 @@ angular.module('mean.icu').config([
 ]);
 
 angular.module('mean.icu').config(function ($i18nextProvider) {
-     
+
     $i18nextProvider.options = {
-        //lng: 'en_US',
         lng: window.config.lng,
         useCookie: false,
         useLocalStorage: false,
         fallbackLng: 'he',
-       // fallbackLng: 'he',
         resGetPath: '/icu/assets/locales/__lng__/__ns__.json',
         defaultLoadingValue: ''
     };

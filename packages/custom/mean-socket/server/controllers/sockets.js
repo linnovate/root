@@ -21,6 +21,7 @@ exports.createFromSocket = function(data, cb) {
   message.name = data.user;
   message.id = data.id;
   message.IsWatched = false;
+  message.DropDownIsWatched = false;
   
   
   //OHAD
@@ -54,6 +55,7 @@ exports.createFromSocket = function(data, cb) {
                 "title" : data.channel,
                 "time" : new Date(),
                 "content" : data.message.content,
+                "DropDownIsWatched" : false
             }, function(err, user) {
                 if (err) throw err;
                    

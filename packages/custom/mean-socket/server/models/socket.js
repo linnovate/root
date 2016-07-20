@@ -50,6 +50,9 @@ var MessageSchema = new Schema({
   },
   IsWatched: {
       type: Boolean
+  },
+  DropDownIsWatched: {
+      type: Boolean
   }
 });
 
