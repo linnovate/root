@@ -21,8 +21,8 @@ var pagination = require('../middlewares/pagination.js');
 var error = require('../middlewares/error.js');
 
 //update mapping - OHAD
-var mean = require('meanio');
-var elasticActions = require('../controllers/elastic-actions.js');
+//var mean = require('meanio');
+//var elasticActions = require('../controllers/elastic-actions.js');
 //END update mapping - OHAD
 
 module.exports = function (Icu, app) {
