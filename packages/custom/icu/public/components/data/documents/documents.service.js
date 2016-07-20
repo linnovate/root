@@ -54,6 +54,12 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
+        function getByTasks() {
+	        return $http.get(ApiUri + '/tasks/myTasks'  + EntityPrefix).then(function(result) {
+	            return result.data;
+	        });
+	    }
+
         return {
             getAll: getAll,
             getById: getById,
@@ -62,6 +68,7 @@ angular.module('mean.icu.data.documentsservice', [])
             getByDiscussionId: getByDiscussionId,
             getByUserId: getByUserId,
             saveAttachments: saveAttachments,
-            updateAttachment: updateAttachment
+            updateAttachment: updateAttachment,
+            getByTasks: getByTasks
         };
     });

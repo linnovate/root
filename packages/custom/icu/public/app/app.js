@@ -270,10 +270,36 @@ angular.module('mean.icu').config([
                         },
                         controllerProvider: function ($stateParams) {
                             var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
-                            console.log('=================');
-                            console.log(main, tab, entity, capitalizedTab);
-                            console.log('=================');
                             return entity + capitalizedTab + 'Controller';
+                        }
+                    }
+                },
+                resolve: resolve
+            };
+        }
+
+        function getDetailsByAssignTabState(tab) {
+			var capitalizedTab = capitalize(tab);
+
+            var resolve = {};
+            resolve[tab] = [capitalizedTab + 'Service',
+            function (service) {
+                return service['getByTasks']();
+            }];
+
+            resolve.entity = ['context', function (context) {
+                return context.entity;
+            }];
+
+        	return {
+                url: '/' + tab,
+                views: {
+                    tab: {
+                        templateUrl: function ($stateParams) {
+                            return '/icu/components/task-details/tabs/' + tab + '/' + tab + '.html';
+                        },
+                        controllerProvider: function ($stateParams) {
+                            return 'Task' + capitalizedTab + 'Controller';
                         }
                     }
                 },
@@ -522,8 +548,11 @@ angular.module('mean.icu').config([
                 }
             }
         })
-        .state('main.tasks.byassign.activities', getDetailsTabState('task', 'activities'))
-        .state('main.tasks.byassign.documents', getDetailsTabState('task', 'documents'))
+        .state('main.tasks.byassign.activities', getDetailsByAssignTabState('activities'))
+        .state('main.tasks.byassign.documents',  getDetailsByAssignTabState('documents'))
+        .state('main.tasks.byassign.details', getTaskDetailsState())
+        .state('main.tasks.byassign.details.activities', getDetailsTabState('task', 'activities'))
+        .state('main.tasks.byassign.details.documents', getDetailsTabState('task', 'documents'))
 
         .state('main.projects', {
             url: '/projects',

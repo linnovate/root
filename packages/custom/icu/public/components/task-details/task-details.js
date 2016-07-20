@@ -159,7 +159,8 @@ angular.module('mean.icu.ui.taskdetails', [])
     if ($scope.task &&
             ($state.current.name === 'main.tasks.byentity.details' ||
             $state.current.name === 'main.search.task' ||
-            $state.current.name === 'main.tasks.all.details')) {
+            $state.current.name === 'main.tasks.all.details' ||
+            $state.current.name === 'main.tasks.byassign.details')) {
         $state.go('.activities');
     }
 });

@@ -2,17 +2,26 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function () {
-        function controller($scope, UsersService, DocumentsService, ActivitiesService, $stateParams, $state, $timeout) {
+        function controller($scope, UsersService, DocumentsService, ActivitiesService, $stateParams, $state, $timeout, context) {
             $scope.isLoading = true;
             $scope.activity = {
                 description: ''
             };
+
+            $scope.context = context;
 
             $scope.details = {
                 create: 'createdThis',
                 update: 'updatedThis',
                 document: 'addDocument',
                 comment: 'addComment'
+            };
+
+            $scope.tasksDetails = {
+                create: 'createdTask',
+                update: 'updatedTask',
+                document: 'addDocumentToTask',
+                comment: 'addCommentToTask'
             };
 
             UsersService.getMe().then(function (user) {

@@ -10,11 +10,13 @@ var crud = require('../controllers/crud.js');
 var update = crud('updates');
 
 var Update = require('../models/update'),
-  Attachement = require('../models/attachment'),
-  UpdateArchive = mongoose.model('update_archive'),
-  elasticsearch = require('./elasticsearch'),
-  mean = require('meanio'),
-  _ = require('lodash');
+	Task = require('../models/task'),
+	Attachement = require('../models/attachment'),
+	UpdateArchive = mongoose.model('update_archive'),
+	elasticsearch = require('./elasticsearch'),
+	mean = require('meanio'),
+	_ = require('lodash'),
+	q = require('q');
 
 var entityIssueMap = {
   tasks: 'task',
@@ -91,3 +93,41 @@ exports.updated = function(req, res, next) {
     next();
   });
 };
+
+function MyTasks(req){
+	 var deffered = q.defer();
+
+  	Task.find({
+  		assign: req.user._id
+  	}, function(err, tasks) {
+  		if (err) {
+	      deffered.reject(err);
+	    } else {
+	      deffered.resolve(tasks.map(function(t){return t._id}));
+	    }
+  	})
+  	return deffered.promise
+
+}
+
+exports.getMyTasks  = function(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+  	}
+	 MyTasks(req).then(function(data) {
+
+		Update.find({issue: 'task', issueId: {$in: data} },function(err, data) {
+			if (err) {
+		    	req.locals.error = err;
+		    }
+		    else {
+		      	req.locals.result = data
+		    }
+		    next();
+		})
+	 }, function(err){
+	 	req.locals.error = err;
+	 	next();
+	 })
+
+}

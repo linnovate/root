@@ -29,7 +29,7 @@ angular.module('mean.icu').controller('IcuController',
     function initializeContext(state) {
         if (state.name.indexOf('main') === 0) {
             var restoredContext = context.getContextFromState(state);
-            if (restoredContext.entityName !== 'all') {
+            if (restoredContext.entityName !== 'all' && restoredContext.entityName !== 'my') {
                 var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
                     return e._id === restoredContext.entityId;
                 });

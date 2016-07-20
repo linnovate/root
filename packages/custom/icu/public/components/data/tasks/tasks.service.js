@@ -3,6 +3,7 @@
 angular.module('mean.icu.data.tasksservice', [])
 .service('TasksService', function (ApiUri, $http, PaginationService) {
     var EntityPrefix = '/tasks';
+    var filterValue = false;
 
     function getAll(start, limit, sort) {
         var qs = querystring.encode({
@@ -98,6 +99,12 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+	function getMyTasksStatistics() {
+		return $http.get(ApiUri + '/myTasksStatistics').then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -111,6 +118,8 @@ angular.module('mean.icu.data.tasksservice', [])
         remove: remove,
         getStarred: getStarred,
         star: star,
-        getMyTasks: getMyTasks
+        getMyTasks: getMyTasks,
+        getMyTasksStatistics: getMyTasksStatistics,
+        filterValue: filterValue
     };
 });

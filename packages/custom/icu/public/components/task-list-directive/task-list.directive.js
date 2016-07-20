@@ -28,7 +28,14 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             $scope.tasks.push(_(newTask).clone());
         }
 
-        $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
+
+        if (context.entityName === 'all') {
+        	$scope.detailsState = 'main.tasks.all.details';
+        } else if (context.entityName === 'my') {
+        	$scope.detailsState = 'main.tasks.byassign.details';
+        } else {
+        	$scope.detailsState = 'main.tasks.byentity.details';
+        }
 
         $scope.createOrUpdate = function(task) {
             if (context.entityName !== 'all') {
@@ -111,7 +118,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         var isScrolled = false;
 
         $scope.initialize = function($event, task) {
-
             if ($scope.displayOnly) {
                 return;
             }
