@@ -1,7 +1,8 @@
 'use strict';
 
 var _ = require('lodash');
-var q = require('q');
+// var q = require('q');
+var async = require('async');
 
 var options = {
   includes: 'assign watchers project',
@@ -27,6 +28,22 @@ Object.keys(task).forEach(function(methodName) {
     exports[methodName] = task[methodName];
   }
 });
+
+Date.prototype.getThisDay = function()
+{
+    var date = new Date();
+    return [date.setHours(0,0,0,0), date.setHours(23,59,59,999)];
+}
+
+Date.prototype.getWeek = function()
+{
+    var today = new Date(this.setHours(0, 0, 0, 0));
+    var date = today.getDate() - today.getDay();
+
+    var StartDate = new Date(today.setDate(date));
+    var EndDate = new Date(today.setDate(date + 6));
+    return [StartDate, EndDate];
+}
 
 exports.create = function(req, res, next) {
   if (req.locals.error) {
@@ -209,41 +226,154 @@ var byAssign = function(req, res, next) {
   	})
 }
 
-exports.byAssign = byAssign;
 
-exports.getTasksDueToday = function(req, res, next) {
-	console.log('getTasksDueToday')
-	if (req.locals.error) {
-    	return next();
-	}
-	var start = new Date();
-	start.setHours(0,0,0,0);
 
-	var end = new Date();
-	end.setHours(23,59,59,999);
-	
+function getTasksDueToday(req, callback) {
+	var Dates = new Date().getThisDay();
 	var query = {
-        "range" : {
-            "due" : {
-                "from" : Date.parse(start),
-                "to" : Date.parse(end)
-            }
+        "query": {
+	        "bool" : {
+	        	"must" : [
+	        		{
+		        		"range" : {
+				            "due" : {
+				                "gte" : Dates[0],//Date.parse(start),
+				                "lte" : Dates[1]//Date.parse(end)
+				            }
+				        }
+	        		},
+	        		{
+	        			"term": {
+	        				"assign": req.user._id
+	        			}
+	        		}
+	        	]
+	        }
         }
 	}
+	tasksFromElastic(query, 'TasksDueToday', callback);
+};
 
+
+
+function getTasksDueWeek(req, callback){
+	var Dates = new Date().getWeek();
+	var query = {
+		"query": {
+	        "bool" : {
+	        	"must" : [
+	        		{
+		        		"range" : {
+				            "due" : {
+				                "gte" : Dates[0],
+				                "lte" : Dates[1]
+				            }
+				        }
+	        		},
+	        		{
+	        			"term": {
+	        				"assign": req.user._id
+	        			}
+	        		}
+	        	]
+	        }
+        }
+	}
+	tasksFromElastic(query, 'TasksDueWeek', callback);
+}
+
+
+function getOverDueTasks(req, callback){
+	var Dates = new Date().getThisDay();
+	var query = {
+		"query": {
+	        "bool" : {
+	        	"must" : [
+	        		{
+		        		"range" : {
+				            "due" : {
+				                "lte" : Dates[0]
+				            }
+				        }
+	        		},
+	        		{
+	        			"term": {
+	        				"assign": req.user._id
+	        			}
+	        		}
+	        	]
+	        }
+        }
+	}
+	tasksFromElastic(query, 'OverDueTasks', callback);
+}
+
+function getWatchedTasks(req, callback) {
+	var query = {
+		"query": {
+	        "bool" : {
+	        	"must" : {
+        			"term": {
+        				"watchers": req.user._id
+        			}
+	        	},
+	        	"must_not": {
+	        		"term": {
+        				"assign": req.user._id
+        			}
+	        	}
+	        }
+        }
+	}
+	tasksFromElastic(query, 'WatchedTasks', callback);
+}
+
+function tasksFromElastic(query, name, callback) {
   	mean.elasticsearch.search({
     	index: 'task',
     	'body': query,
-  }, function(err, response) {
-    if (err) {
-      console.log('err=============================================')
-      console.log(err)
-    } else {
-    	console.log('response=============================================')
-      	console.log(response)
-      // req.locals.result = response;
-    }
+  	}, function(err, response) {
+	    if (err) {
+	      callback(err)
+	    } else {
+	     //  	req.locals.result = response.hits.hits.map(function (item) {
+		    //     return item._source;
+		    // })
+	  		callback(null, {key: name, value: response.hits.total});
+	    }
+  	});
+}
 
-    next();
-  });
-};
+
+function myTasksStatistics(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+	}
+
+	async.parallel([
+	    function(callback) {
+	    	getTasksDueToday(req, callback);
+	    },
+	    function(callback) {
+	        getTasksDueWeek(req, callback);
+	    },
+	    function(callback) {
+	    	getOverDueTasks(req, callback);
+	    },
+	    function(callback) {
+	        getWatchedTasks(req, callback);
+	    }
+	], function(err, result) {
+	    req.locals.result = result;
+	    req.locals.error = err
+	    next();
+	});
+}
+
+
+exports.getWatchedTasks = getWatchedTasks; 
+exports.byAssign = byAssign;
+exports.getOverDueTasks = getOverDueTasks;
+exports.getTasksDueToday = getTasksDueToday;
+exports.getTasksDueWeek = getTasksDueWeek;
+exports.myTasksStatistics = myTasksStatistics;

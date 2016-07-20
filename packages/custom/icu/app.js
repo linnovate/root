@@ -72,6 +72,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.userdetails',
         'mean.icu.ui.tasklist',
         'mean.icu.ui.tasklistdirective',
+        'mean.icu.ui.tasklistFilter',
         'mean.icu.ui.taskdetails',
         'mean.icu.ui.projectlist',
         'mean.icu.ui.projectlistdirective',

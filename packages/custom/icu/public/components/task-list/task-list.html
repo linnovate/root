@@ -6,10 +6,13 @@
                     entity: currentContext.entityName,
                     entityId: currentContext.entityId
                     })">
-        <header class="title">
+        <header class="title" ng-if="currentContext.entityName !== 'my'">
             {{ 'Tasks from' | i18next }}
             <span>{{ currentContext.entityName | i18next }}</span>
             <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+        </header>
+        <header class="title" ng-if="currentContext.entityName === 'my'">
+            {{ 'myTasks' | i18next }}
         </header>
     </div>
 

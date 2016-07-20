@@ -5,7 +5,8 @@ var mean = require('meanio'),
   fs = require('fs'),
   mkdirp = require('mkdirp'),
   config = require('meanio').loadConfig(),
-  Busboy = require('busboy');
+  Busboy = require('busboy'),
+  q = require('q');
 
 var options = {
   includes: 'creator updater'
@@ -13,6 +14,9 @@ var options = {
 
 var crud = require('../controllers/crud.js');
 var attachment = crud('attachments', options);
+var Task = require('../models/task'),
+Attachment = require('../models/attachment');
+
 
 Object.keys(attachment).forEach(function(methodName) {
   exports[methodName] = attachment[methodName];
@@ -101,3 +105,69 @@ exports.upload = function (req, res, next) {
 
   return req.pipe(busboy);
 };
+
+function MyTasks(req){
+	 	var deffered = q.defer();
+
+  	Task.find({
+  		assign: req.user._id
+  	}, function(err, tasks) {
+  		if (err) {
+	      deffered.reject(err);
+	    } else {
+	      deffered.resolve(tasks.map(function(t){return t._id}));
+	    }
+  	})
+  	return deffered.promise
+
+}
+
+exports.getMyTasks  = function(req, res, next) {
+	// if (req.locals.error) {
+ //    	return next();
+ //  	}
+
+	 MyTasks(req).then(function(data) {
+	 	/*var query = {
+		    "query": {
+		      "filtered" : { 
+		         "filter" : {
+		            "bool" : {
+		              "must" : [
+		                 { "term" : {"entity" : 'task'}}, 
+		                 { "terms" : {"entityId" : data}} 
+		              ]
+		        
+		           }
+		         }
+		      }
+		  	}
+	   	};
+
+		  mean.elasticsearch.search({index: 'attachment', 'body': query, size: 3000}, function (err, response) {
+		    if (err) {
+		      req.locals.error = err;
+		    }
+		    else {
+		      req.locals.result = response.hits.hits.map(function (item) {
+		        return item._source;
+		      });
+		    }
+		  });*/
+
+		Attachment.find({entity: 'task', entityId: {$in: data} }, function(err, data) {
+			if (err) {
+		    	req.locals.error = err;
+		    }
+		    else {
+		      	req.locals.result = data
+		    }
+		    next();
+		})
+	 }, function(err){
+	 	req.locals.error = err;
+	 	next();
+	 })
+
+}
+

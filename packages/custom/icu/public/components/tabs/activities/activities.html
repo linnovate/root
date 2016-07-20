@@ -6,8 +6,11 @@
                 <div icu-avatar user="activity.user"></div>
                 <div class="text">
                     <span class="user-name">{{activity.user.name}}
-                        <span class="activity-details">
+                        <span ng-if="context.entityName !== 'my'" class="activity-details">
                             {{details[activity.type] | i18next }}{{ activity.issue | i18next }}
+                        </span>
+                        <span ng-if="context.entityName === 'my'" class="activity-details">
+                            {{tasksDetails[activity.type] | i18next }}{{activity.taskName}}
                         </span>
                     </span>
                     <br/>

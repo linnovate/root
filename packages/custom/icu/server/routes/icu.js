@@ -146,6 +146,8 @@ app.route('/api/notification/:id([0-9a-fA-F]{24})')
     .get(attachments.readHistory);
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/attachments')
     .get(attachments.getByEntity);
+  app.route('/api/tasks/myTasks/attachments')
+  	.get(attachments.getMyTasks)
 
   app.route('/api/search')
     .get(elasticsearch.search);
@@ -177,6 +179,8 @@ app.route('/api/notification/:id([0-9a-fA-F]{24})')
   app.route('/api/updates/:id([0-9a-fA-F]{24})')
     .get(updates.read, updates.getAttachmentsForUpdate)
     .put(updates.update);
+  app.route('/api/tasks/myTasks/updates')
+  	.get(updates.getMyTasks)
   //     // .delete(updates.destroy);
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/updates')
     .get(updates.getByEntity, updates.getAttachmentsForUpdate);
@@ -194,8 +198,8 @@ app.route('/api/notification/:id([0-9a-fA-F]{24})')
     .put(task.update)
     .delete(task.destroy);
 
-  app.route('/api/tasksDueToday')
-  	.get(task.getTasksDueToday);
+  app.route('/api/myTasksStatistics')
+  	.get(task.myTasksStatistics);
   	
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
