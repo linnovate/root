@@ -12,7 +12,8 @@
                 <div class="no-assignee" ng-if="!task.assign">
                     <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
                 </div>
-                <ui-select ng-model="task.assign" on-select="update(task)">
+                <!--<ui-select ng-model="task.assign" on-select="update(task)">-->
+                <ui-select ng-model="task.assign" on-select="updateAndNotiy(task)">
                     <ui-select-match>
                         <div icu-avatar user="$select.selected"></div>
                         <span class="summary-content">{{$select.selected.name}}</span>

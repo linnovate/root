@@ -3,11 +3,11 @@ $content-height: calc(#{$page-height} - 2 * #{$header-height});
 $description-height: 40%;
 $switcher-height: 40px;
 $panel-height: $header-height - 5px;
-$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height});
+$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 37px);
 
 .detailspane {
     width: 54%;
-    border-left: 1px solid grey;
+    border-left: 1px solid #C8C8C6;
     height: 100vh;
     background-color: $cream;
     float: left;
@@ -17,7 +17,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 
     .fa.fa-plus{
-        display: initial;
+        display: none;
     }
 
     .header {
@@ -44,8 +44,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     @include circle(9px);
 
                     position: absolute;
-                    left: -6px;
+                    left: 20px;
                     top: -1px;
+                    font-size: small;
+                    font-weight: 700;
 
                     display: inline-block;
                     text-align: center;
@@ -102,6 +104,17 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     line-height: $header-height;
                 }
             }
+            .notification-NotWatched {
+                background-color: #FDA102;
+                height: $header-height;
+                @include notification;
+                padding: 10px;
+                border-bottom: 1px solid $light-grey1;
+
+                span {
+                    line-height: $header-height;
+                }
+            }
         }
 
         .time {
@@ -131,11 +144,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .add-menu {
             button {
                 @include button;
-
-                background-color: $orange;
                 color: white;
                 width: 100%;
                 height: 100%;
+                background: url("/icu/assets/img/new_task.png") $orange no-repeat center;
             }
 
             .menu-items {
@@ -164,7 +176,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 height: 37px;
                 margin: 13px;
                 font-size: 30px;
-                line-height: 35px;
+                line-height: 29px;
                 cursor: pointer;
             }
         }
@@ -190,24 +202,47 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     .page-content {
         height: $content-height;
         .compBtn {
-	    	background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
-	    	width: 22px;
+            &.c19n{
+              background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+            }
+            background: #E1E1E1 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+            width: 22px;
 		    height: 22px;
 		    border-radius: 15px;
 		    border: none;
-		    float: right;
+	        position: absolute;
+            right: 0;
 		    margin: 15px 30px;
 		    outline: none;
+            tooltip{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+            }
 	    }
         .description {
-            margin: 0 30px;
+            margin: 0 28px;
             height: $description-height;
             overflow: auto;
-            margin-top: 35px;
-
-            .title {
-                font-weight: 700;
+            margin-top: 60px;
+            &::-webkit-scrollbar {
+                width: 5px;
             }
+             
+            &::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                border-radius: 10px;
+            }
+             
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                background-color: white;
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+            }
+
+        
 
             .text {
                 color: $light-grey4;
@@ -228,6 +263,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .summary {
             height: $panel-height;
             border-bottom: 3px solid $light-grey1;
+            background-color: #F6F6F6;
 
             .favorite, .due, .status, .tags, .color {
                 height: $panel-height;
@@ -255,7 +291,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 .no-assignee {
                     position: absolute;
                     transform: translateY(-65%);
-                    top: 60%;
+                    top: 31px;
                     width: calc(100% - 10px);
                     margin-left: 10px;
 
@@ -314,7 +350,6 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 .placeholder {
                     position: absolute;
                     top: 50%;
-                    right: 50%;
                     transform: translateX(60%) translateY(-50%);
                     color: $light-grey-placeholder;
                 }
@@ -334,7 +369,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             }
 
             .favorite {
-                width: $panel-height;
+                width: 47px;
                 font-size: 1.4em;
 
                 button {
@@ -361,6 +396,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
                         .ui-select-match-text {
                             float: left !important;
+                            color: #00AEEF;
                         }
 
                         .ui-select-toggle {
@@ -412,7 +448,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             }
 
             .tags {
-                width: calc((100% - 55px) * 0.25);
+                width: calc((100% - 47px) * 0.25);
 
                 .tag-wrap {
                     width: 100%;
@@ -434,7 +470,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                         @include tag(14px);
                         width: initial;
                         margin: 0;
-                        padding: 4px 7px;
+                        padding: 3px 13px;
                         color: white;
                         position: relative;
                         margin-top: -5px;
@@ -531,12 +567,16 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
         .description {
             .title {
-                font-size: 30px;
-                padding: 10px 0;
+                font-size: 23px;
+                padding: 20px 0px 8px 0px;
+                font-weight: 700;
+                outline: none;
             }
 
             .text {
                 min-height: 50px;
+                padding-left: 3px;
+                outline: none;
 
                 &.medium-editor-placeholder {
                     &:not(:focus):before {
@@ -630,15 +670,15 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
                     margin: 0;
                     float: right;
-                    background-color: $orange;
                     color: white;
                     cursor: pointer;
                     width: 30px;
                     height: 30px;
-//                    .fa {
-//                        display: initial;
-//                    }
-                }
+                    background: url("/icu/assets/img/new_lable.png") $orange no-repeat center;
+                    .fa {
+                       display: none;
+                    }
+                 }
 
                 .ui-select-container {
                     appearance: none;
@@ -708,10 +748,11 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 background-color: transparent;
                 height: 38px;
                 font-size: 16px;
-                font-weight: 700;
+                font-weight: 400;
 
                 &.active {
                     border-bottom: 5px solid $orange;
+                    color: $orange;
                 }
             }
         }
@@ -719,7 +760,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .tab-content {
             margin: 0 30px;
             padding: 10px 0;
-            height: $tab-content-height;
+            height: calc(100% - 40% - 55px - 40px - 60px);
             overflow: auto;
         }
     }
@@ -857,10 +898,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 margin: $avatar-margin - 1 $avatar-margin;
                 color: white;
                 font-size: 20px;
-                background-color: $orange;
                	position: relative;
 			    left: 0;
 			    left: calc(100% - 58px);
+                background: url('/icu/assets/img/new_lable.png') no-repeat center $orange;
 
 			   
             }

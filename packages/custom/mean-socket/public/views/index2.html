@@ -1,0 +1,47 @@
+<div data-ng-controller="MeanSocketController">
+	<!--<tabset>-->
+		<!--<tab heading="Overview">
+			<h1>Mean socket package guidelines</h1>
+			<h2>Overview</h2>
+			Docs coming soon (PRS welcome)
+		</tab>-->
+
+		<!--<tab heading="Example">-->
+			<!--<div class="col-md-4 col-lg-8 example-block alt">-->
+
+				<use-mean-socket after-join="socketAfterJoin(channel, messages)" mean-socket-after-get="socketAfterGet(message)" mean-socket-after-get-all-channels="socketAfterGetChannels(channels)" join-to-channel="activeChannel"/>
+
+				<!--<input type="text" data-ng-model="$parent.newChannel" placeholder="type here new channel"/> 
+				<div class="btn btn-info" data-ng-click="createNewChannel(newChannel)">save</div>-->
+
+				 <!--<div class="btn" data-ng-repeat="channel in channels" data-ng-click="createNewChannel(channel)"><a>{{channel}}</a></div> -->
+
+				<!--<div class="span3 bs-docs-sidebar">
+					<ul class="nav nav-list bs-docs-sidenav affix">
+						<li class="" data-ng-repeat="channel in channels" data-ng-click="createNewChannel(channel)"><a>{{channel}}</a>
+						<i class="icon-chevron-right"></i></li>
+					</ul>
+				</div>-->
+
+			<!--</div>-->
+
+  			<!--<div class="greyside col-md-8 col-lg-4 example-block">
+				<a ui-sref="Mean socket help page" target="_blank">Open a new window</a>
+
+				<h2>{{activeChannel}}</h2>
+				<div data-ng-repeat="message in messages track by $index">
+					<strong>{{message.user.name}}</strong> ({{message.created | date:'medium'}})
+					{{message.content}}
+				</div>-->
+
+				<!--<input type="text" data-ng-model="$parent.message.title"/>-->
+
+				<!--<div mean-socket message="{'content':$parent.message.title}" after-send="socketAfterSend(message)"></div>-->
+                <div mean-socket after-send="socketAfterSend(message)"></div>
+			<!--</div>-->
+
+
+		<!--</tab>-->
+
+	<!--</tabset>-->
+</div>
