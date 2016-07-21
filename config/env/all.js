@@ -42,13 +42,14 @@ module.exports = {
     maxAge: null
   },
   languages: [{
-    name: 'en-US',
+    name: 'en',
     direction: 'ltr',
   }, {
     name: 'he',
     direction: 'rtl',
   }],
-  currentLanguage: 'en-US',
+  currentLanguage: 'en',
+//  currentLanguage: 'he',
   // The session cookie name
   sessionName: 'connect.sid',
   attachmentDir: rootPath + '/files',

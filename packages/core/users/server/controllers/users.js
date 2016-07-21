@@ -4,20 +4,15 @@
  * Module dependencies.
  */
 
-require('../../../../custom/circles/server/models/circle');
-
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  Circle = mongoose.model('Circle'),
   async = require('async'),
   config = require('meanio').loadConfig(),
   crypto = require('crypto'),
   nodemailer = require('nodemailer'),
   templates = require('../template'),
-  jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
-
-var GoogleService = require('serviceproviders')('google');
-var service = new GoogleService(config.google.clientSecret, config.google.clientID, config.google.callbackURL);
+  jwt = require('jsonwebtoken'), //https://npmjs.org/package/node-jsonwebtoken
+  circles = require('../../../../custom/icu/server/controllers/circles');
 
 /**
  * Auth callback
@@ -74,6 +69,7 @@ exports.create = function(req, res, next) {
 
   // Hard coded for now. Will address this with the user permissions system in v0.3.5
   user.roles = ['authenticated'];
+  user.id = user.email;
   user.save(function(err) {
     if (err) {
       console.log(err)
@@ -261,65 +257,8 @@ exports.forgotpassword = function(req, res, next) {
   );
 };
 
-exports.getGoogleGroups = function(req, res, next) {
-  service.sdkManager('groups', 'list', {
-    userKey: req.user.email,
-  }, function(err, list) {
-    if (!list || !list.groups) return next();
-    var groups = list.groups.map(function(group) {
-      return group.name;
-    });
-    req.user.circles.groups = groups;
-    req.user.save(function(err) {
-      next();
-    });
-  })
-};
-
-exports.setRandomPermissions = function(req, res, next) {
-  // if (req.user.circles.permissions && req.user.circles.permissions.length) return next();
-  // Circle.find({
-  //   circleType: 'permissions'
-  // }).exec(function(err, circles) {
-  //   var rand = circles[Math.floor(Math.random() * circles.length)];
-  //   req.user.circles.permissions = [rand.name];
-  //   req.user.save(function(err) {
-  //     console.log(err)
-  next();
-  //   });
-  // })
-};
-
-exports.setRandomC19n = function(req, res, next) {
-  if (req.user.circles.c19n && req.user.circles.c19n.length) return next();
-  Circle.find({
-    circleType: 'c19n'
-  }).exec(function(err, circles) {
-    var rand = circles[Math.floor(Math.random() * circles.length)];
-    req.user.circles.c19n = [rand.name];
-    req.user.save(function(err) {
-      console.log(err)
-      next();
-    });
-  })
-};
-
-exports.setRandomC19nGroups = function(req, res, next) {
-  if (req.user.circles.c19nGroups1 && req.user.circles.c19nGroups1.length && req.user.circles.c19nGroups2 && req.user.circles.c19nGroups2.length) return next();
-  Circle.find({
-    circleType: 'c19nGroups1'
-  }).exec(function(err, circles) {
-    var rand = circles[Math.floor(Math.random() * circles.length)];
-    req.user.circles.c19nGroups1 = [rand.name];
-    Circle.find({
-    circleType: 'c19nGroups2'
-  }).exec(function(err, circles) {
-    var rand = circles[Math.floor(Math.random() * circles.length)];
-    req.user.circles.c19nGroups2 = [rand.name];
-    req.user.save(function(err) {
-      console.log(err)
-      next();
-    });
-  })
-  })
+exports.updateCircles = function(req, res, next) {
+  circles.upsertUser(req.user.id, function() {
+    next();
+  });
 };

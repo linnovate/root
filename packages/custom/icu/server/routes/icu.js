@@ -8,7 +8,7 @@ var profile = require('../controllers/profile');
 var users = require('../controllers/users');
 var updates = require('../controllers/updates');
 var notification = require('../controllers/notification');
-
+var circles = require('../controllers/circles.js');
 var attachments = require('../controllers/attachments');
 var star = require('../controllers/star');
 var elasticsearch = require('../controllers/elasticsearch');
@@ -19,17 +19,25 @@ var entity = require('../middlewares/entity.js');
 var response = require('../middlewares/response.js');
 var pagination = require('../middlewares/pagination.js');
 var error = require('../middlewares/error.js');
+var acl = require('../middlewares/acl.js');
 
 //update mapping - OHAD
 //var mean = require('meanio');
 //var elasticActions = require('../controllers/elastic-actions.js');
 //END update mapping - OHAD
 
+//socket
+// var socket = require('../middlewares/socket.js');
+
 module.exports = function (Icu, app) {
     
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
   app.route(/^((?!\/hi\/).)*$/).all(authorization);
+  //app.route(/^((?!\/hi\/).)*$/).all(authorization, socket);
+  
+  //app.route(/^((?!\/socket.io\/).)*$/).all(locals);
+  //app.route(/^((\/socket.io\/).)*$/).all(authorization);
   
   // When need to update mapping, use this authorization, and not the abouve one
   // app.route(/^((\/index-data\/).)*$/).all(authorization);
@@ -42,6 +50,23 @@ module.exports = function (Icu, app) {
 //END update mapping - OHAD
 
 
+  app.route('/api/:entity(tasks|discussions|projects|users|circles)*').all(acl());
+  app.route('/api/circles/mine').get(circles.mine);
+  app.route('/api/circles/all').get(circles.all);
+  app.route('/api/circles/sources').get(circles.sources);
+//update socket - OHAD
+    // app.route('/api/socket.io/')
+    // .post(socket)
+    // .get(socket);
+//END update socket - OHAD
+
+//Notification READ - OHAD
+app.route('/api/notification/:id([0-9a-fA-F]{24})')
+    .get(notification.read)
+    .put(notification.updateIsWatched);
+app.route('/api/notification1/:id([0-9a-fA-F]{24})')
+    .put(notification.updateDropDown);
+//END Notification READ - OHAD
 
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/star')
@@ -56,7 +81,8 @@ module.exports = function (Icu, app) {
     .get(pagination.parseParams, project.all, star.isStarred, pagination.formResponse);
   app.route('/api/projects/:id([0-9a-fA-F]{24})')
     .get(project.read, star.isStarred)
-    .put(project.read, project.update, star.isStarred)
+    //.put(project.read, project.update, star.isStarred)
+    .put(project.read, project.update, notification.updateRoom, star.isStarred)
     .delete(star.unstarEntity, project.read, project.destroy);
   app.route('/api/history/projects/:id([0-9a-fA-F]{24})')
     .get(project.readHistory);

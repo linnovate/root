@@ -4,8 +4,54 @@ var Notify = new Notification();
 var projectController = require('../controllers/project.js');
 
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+  Schema = mongoose.Schema,
+  Message = mongoose.model('Message'),
+  _ = require('lodash');
 var UserCreator = mongoose.model('User');
+
+//Made By OHAD
+exports.read = function(req, res, next) {
+
+  Message.find({
+    title: req.user._id
+  }).sort('time').populate('user', 'name username').exec(function(err, messages) {
+    //console.log("--------------------------------------------------messages.find--------------------------------------");
+    //console.log(messages);
+    
+    req.body = messages;
+    
+    res.json(messages);
+  });
+};
+
+exports.updateIsWatched = function(req, res, next) { 
+
+  Message.update(
+  { id: req.params.id},
+  { $set: { IsWatched : true}}
+  ).exec(function(err, messages) {
+    console.log("--------------------------------------------------messages.update--------------------------------------");
+    console.log(messages);
+    
+    req.body = messages;
+    
+    res.json(messages);
+  });
+};
+exports.updateDropDown = function(req, res, next) {
+
+  Message.update(
+  { title: req.params.id},
+  { $set: { DropDownIsWatched : true}},
+  { multi: true }
+  ).exec(function(err, messages) {
+
+    req.body = messages;
+    
+    res.json(messages);
+  });
+};
+//END Made By OHAD
 
 
 exports.createRoom = function(req, res, next) {
