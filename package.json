@@ -28,7 +28,7 @@
     "express": "latest",
     "forever": "latest",
     "gridfs-stream": "latest",
-    "jsonwebtoken": "^7.0.0",
+    "jsonwebtoken": "^5.0.0",
     "lodash": "latest",
     "meanio": "0.8.0",
     "mongoose": "latest",
