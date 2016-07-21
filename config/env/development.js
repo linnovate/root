@@ -100,5 +100,8 @@ module.exports = {
   },
   circles: {
     uri: 'http://localhost:3005'
+  },
+  rocketChat: {
+    uri: 'http://localhost:3005'
   }
 };
