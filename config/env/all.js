@@ -42,7 +42,7 @@ module.exports = {
     maxAge: null
   },
   languages: [{
-    name: 'en',
+    name: 'en-US',
     direction: 'ltr',
   }, {
     name: 'he',
