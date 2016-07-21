@@ -6,10 +6,10 @@ var Q = require('q');
 var config = require('meanio').loadConfig();
 var mongoose = require('mongoose'),
     db = mongoose.connections[0].db;
-var kue = require('kue');
+//var kue = require('kue');
 var changeCase = require('change-case');
 //kue.app.listen(3005);
-var queue = kue.createQueue();
+//var queue = kue.createQueue();
 
 
 var mean = require('meanio');

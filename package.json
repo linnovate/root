@@ -31,7 +31,6 @@
     "forever": "latest",
     "gridfs-stream": "latest",
     "jsonwebtoken": "^7.0.0",
-    "kue": "latest",
     "lodash": "latest",
     "meanio": "0.8.0",
     "mongoose": "latest",
