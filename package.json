@@ -42,7 +42,6 @@
     "passport-linkedin": "latest",
     "passport-local": "latest",
     "passport-twitter": "latest",
-    "redis": "latest",
     "request": "latest",
     "serve-favicon": "latest",
     "shelljs": "latest",
