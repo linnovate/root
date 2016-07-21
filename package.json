@@ -46,7 +46,6 @@
     "request": "latest",
     "serve-favicon": "latest",
     "shelljs": "latest",
-    "socket.io": "^1.4.6",
     "swig": "latest",
     "view-helpers": "latest"
   },
