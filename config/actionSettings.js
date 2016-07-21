@@ -26,5 +26,5 @@ module.exports = {
 			watchers: true
 		}
 	},
-	cacheTime: 60 * 5
+	cacheTime: 5
 };
