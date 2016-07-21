@@ -44,6 +44,7 @@
     "passport-google-oauth": "latest",
     "passport-linkedin": "latest",
     "passport-local": "latest",
+    "passport-saml": "latest",
     "passport-twitter": "latest",
     "request": "latest",
     "serve-favicon": "latest",
