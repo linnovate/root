@@ -63,7 +63,9 @@ module.exports = function (Icu, app) {
 //Notification READ - OHAD
 app.route('/api/notification/:id([0-9a-fA-F]{24})')
     .get(notification.read)
-    .put(notification.update);
+    .put(notification.updateIsWatched);
+app.route('/api/notification1/:id([0-9a-fA-F]{24})')
+    .put(notification.updateDropDown);
 //END Notification READ - OHAD
 
   //star & get starred list

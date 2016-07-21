@@ -15,6 +15,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
         $scope.notificationsToWatch = 0;
         NotificationsService.addnotificationsToWatch(); 
         $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();
+        //$scope.NumOfnotificationsToWatch = 0;
         
         NotificationsService.addLastnotifications();   
         
@@ -26,7 +27,8 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 NotificationsService.getByUserId(me._id).then(function (result) {
                     
                     for (var notiy in result) {
-                        NotificationsService.addNotification(result[notiy].content, result[notiy].name, result[notiy].id, result[notiy].IsWatched);
+                        NotificationsService.addNotification(result[notiy].content, result[notiy].name, result[notiy].id,
+                                                             result[notiy].IsWatched, result[notiy].DropDownIsWatched);
                         
                         NotificationsService.addLastnotifications();
                         
@@ -64,9 +66,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 NotificationsService.addnotificationsToWatch(); 
                 $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();  
             });
-            
-            
-           
+                    
             $state.go('main.tasks.all.details', {
                 id: this_notification.id,
                 entity: context.entityName,
@@ -75,18 +75,29 @@ angular.module('mean.icu.ui.notificationsheader', [])
         };
 
         $scope.triggerDropdown = function () {
-            $scope.allNotifications = !$scope.allNotifications;
             
-            //Made By OHAD
-            $scope.notifications = NotificationsService.getAll();
-            $scope.popupNotifications = $scope.notifications.slice(0, -1);
-            $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
-            $scope.lastNotification1 = $scope.notifications[$scope.notifications.length - 1];
+            UsersService.getMe().then(function (me) {
+                NotificationsService.updateByUserId_DropDown(me._id).then(function (result) {
+                
+                    $scope.allNotifications = !$scope.allNotifications;
 
-            // For the notifications that didn't been Watched                   
-            NotificationsService.addnotificationsToWatch(); 
-            $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();          
+                    //$scope.notificationsToWatch = 0;
+                    //$scope.NumOfnotificationsToWatch = 0; 
                     
+                    //Made By OHAD
+                    $scope.notifications = NotificationsService.getAll();
+                    $scope.popupNotifications = $scope.notifications.slice(0, -1);
+                    $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
+                    $scope.lastNotification1 = $scope.notifications[$scope.notifications.length - 1];
+
+                    // For the notifications that didn't been Watched                   
+                    //NotificationsService.addnotificationsToWatch(); 
+                    //$scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();
+                    NotificationsService.Clean_notificationsToWatch();
+                    //$scope.notificationsToWatch = 0;
+                            
+                });
+            });        
             //END Made By OHAD
         };
 
