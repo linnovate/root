@@ -46,12 +46,6 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
-  groups: {
-    type: Array
-  },
-  comp: {
-    type: Array
-  },
   assign: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -63,11 +57,10 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Discussion'
   }],
-  sources: [{
-    type: Schema.ObjectId,
-    ref: 'Source'
-  }],
-  circles: {}
+  sources: [String],
+  circles: {
+    type: Schema.Types.Mixed
+  }
 });
 
 var starVirtual = TaskSchema.virtual('star');

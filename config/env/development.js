@@ -97,5 +97,8 @@ module.exports = {
 //   },
   letschat: {
     owner: '562334ccea168c4f323a1be8'
+  },
+  circles: {
+    uri: 'http://localhost:3005'
   }
 };
