@@ -210,9 +210,10 @@ var byAssign = function(req, res, next) {
 	if (req.locals.error) {
     	return next();
   	}
-
+  	
   	Task.find({
-  		assign: req.user._id
+  		assign: req.user._id,
+  		status: {$nin: ['rejected', 'done']}
   	}, function(err, tasks) {
   		if (err) {
 	      req.locals.error = {
@@ -228,8 +229,8 @@ var byAssign = function(req, res, next) {
 
 
 
-function getTasksDueToday(req, callback) {
-	var Dates = new Date().getThisDay();
+function getTasksDueTodayQuery(req, callback) {
+	var dates = new Date().getThisDay();
 	var query = {
         "query": {
 	        "bool" : {
@@ -237,8 +238,8 @@ function getTasksDueToday(req, callback) {
 	        		{
 		        		"range" : {
 				            "due" : {
-				                "gte" : Dates[0],//Date.parse(start),
-				                "lte" : Dates[1]//Date.parse(end)
+				                "gte" : dates[0],//Date.parse(start),
+				                "lte" : dates[1]//Date.parse(end)
 				            }
 				        }
 	        		},
@@ -247,7 +248,15 @@ function getTasksDueToday(req, callback) {
 	        				"assign": req.user._id
 	        			}
 	        		}
-	        	]
+	        	],
+	        	"must_not" : [
+                  	{
+                      	"terms": {
+                         	"status": ['rejected', 'done'],
+                        	"execution" : "and"
+                      	}
+                  	}
+               	]
 	        }
         }
 	}
@@ -256,8 +265,8 @@ function getTasksDueToday(req, callback) {
 
 
 
-function getTasksDueWeek(req, callback){
-	var Dates = new Date().getWeek();
+function getTasksDueWeekQuery(req, callback){
+	var dates = new Date().getWeek();
 	var query = {
 		"query": {
 	        "bool" : {
@@ -265,8 +274,8 @@ function getTasksDueWeek(req, callback){
 	        		{
 		        		"range" : {
 				            "due" : {
-				                "gte" : Dates[0],
-				                "lte" : Dates[1]
+				                "gte" : dates[0],
+				                "lte" : dates[1]
 				            }
 				        }
 	        		},
@@ -275,7 +284,15 @@ function getTasksDueWeek(req, callback){
 	        				"assign": req.user._id
 	        			}
 	        		}
-	        	]
+	        	],
+	        	"must_not" : [
+                  	{
+                      	"terms": {
+                         	"status": ['rejected', 'done'],
+                        	"execution" : "and"
+                      	}
+                  	}
+               	]	
 	        }
         }
 	}
@@ -283,8 +300,8 @@ function getTasksDueWeek(req, callback){
 }
 
 
-function getOverDueTasks(req, callback){
-	var Dates = new Date().getThisDay();
+function getOverDueTasksQuery(req, callback){
+	var dates = new Date().getThisDay();
 	var query = {
 		"query": {
 	        "bool" : {
@@ -292,23 +309,31 @@ function getOverDueTasks(req, callback){
 	        		{
 		        		"range" : {
 				            "due" : {
-				                "lte" : Dates[0]
+				                "lte" : dates[0]
 				            }
-				        }
+				        },
 	        		},
 	        		{
 	        			"term": {
 	        				"assign": req.user._id
 	        			}
 	        		}
-	        	]
+	        	],
+	        	"must_not" : [
+                  	{
+                      	"terms": {
+                         	"status": ['rejected', 'done'],
+                        	"execution" : "and"
+                      	}
+                  	}
+               	]	
 	        }
         }
 	}
 	tasksFromElastic(query, 'OverDueTasks', callback);
 }
 
-function getWatchedTasks(req, callback) {
+function getWatchedTasksQuery(req, callback) {
 	var query = {
 		"query": {
 	        "bool" : {
@@ -317,11 +342,17 @@ function getWatchedTasks(req, callback) {
         				"watchers": req.user._id
         			}
 	        	},
-	        	"must_not": {
+	        	"must_not": [{
 	        		"term": {
         				"assign": req.user._id
         			}
-	        	}
+        		},
+        		{
+        			"terms": {
+                     	"status": ['rejected', 'done'],
+                    	"execution" : "and"
+                  	}
+	        	}]
 	        }
         }
 	}
@@ -352,16 +383,16 @@ function myTasksStatistics(req, res, next) {
 
 	async.parallel([
 	    function(callback) {
-	    	getTasksDueToday(req, callback);
+	    	getTasksDueTodayQuery(req, callback);
 	    },
 	    function(callback) {
-	        getTasksDueWeek(req, callback);
+	        getTasksDueWeekQuery(req, callback);
 	    },
 	    function(callback) {
-	    	getOverDueTasks(req, callback);
+	    	getOverDueTasksQuery(req, callback);
 	    },
 	    function(callback) {
-	        getWatchedTasks(req, callback);
+	        getWatchedTasksQuery(req, callback);
 	    }
 	], function(err, result) {
 	    req.locals.result = result;
@@ -370,10 +401,45 @@ function myTasksStatistics(req, res, next) {
 	});
 }
 
+exports.getWatchedTasks = function(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+	}
 
-exports.getWatchedTasks = getWatchedTasks; 
+	Task.find({
+		"watchers": req.user._id,
+		"assign": {$ne: req.user._id},
+		"status": {$nin: ['rejected', 'done']},
+	}, function(err, response) {
+		if (err) {
+			req.locals.error = err;
+		} else {
+			req.locals.result = response;
+		}
+		next();
+	})
+}
+
+exports.getOverdueWatchedTasks = function(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+	}
+
+	var dates = new Date().getThisDay();
+	Task.find({
+		"watchers": req.user._id,
+		"assign": {$ne: req.user._id},
+		"status": {$nin: ['rejected', 'done']},
+		"due": {$lt: dates[0]}
+	}, function(err, response) {
+		if (err) {
+			req.locals.error = err;
+		} else {
+			req.locals.result = response;
+		}
+		next();
+	})
+}
+
 exports.byAssign = byAssign;
-exports.getOverDueTasks = getOverDueTasks;
-exports.getTasksDueToday = getTasksDueToday;
-exports.getTasksDueWeek = getTasksDueWeek;
 exports.myTasksStatistics = myTasksStatistics;
