@@ -684,7 +684,15 @@ angular.module('mean.icu').config([
                     if ($stateParams.query && $stateParams.query.length) {
                         return SearchService.find($stateParams.query);
                     } else {
-                        return {};
+                		if (SearchService.builtInSearchArray){
+                        	var data = SearchService.builtInSearchArray.map(function(d){
+                        		d._type = 'task';
+                        		return d;
+                        	});
+                        	return data;
+                		} else {
+                        	return {};
+                        }
                     }
                 },
                 tasks: function (results) {

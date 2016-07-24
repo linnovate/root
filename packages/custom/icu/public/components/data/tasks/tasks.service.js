@@ -105,6 +105,18 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function getOverdueWatchedTasks() {
+    	return $http.get(ApiUri + '/overdueWatchedTasks').then(function (result) {
+            return result.data;
+        });
+    }
+
+    function getWatchedTasks() {
+    	return $http.get(ApiUri + '/watchedTasks').then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -120,6 +132,8 @@ angular.module('mean.icu.data.tasksservice', [])
         star: star,
         getMyTasks: getMyTasks,
         getMyTasksStatistics: getMyTasksStatistics,
+        getOverdueWatchedTasks: getOverdueWatchedTasks,
+        getWatchedTasks: getWatchedTasks,
         filterValue: filterValue
     };
 });

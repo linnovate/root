@@ -200,6 +200,10 @@ app.route('/api/notification/:id([0-9a-fA-F]{24})')
 
   app.route('/api/myTasksStatistics')
   	.get(task.myTasksStatistics);
+  app.route('/api/overdueWatchedTasks')
+  	.get(task.getOverdueWatchedTasks);
+  app.route('/api/watchedTasks')
+  	.get(task.getWatchedTasks);
   	
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
