@@ -75,16 +75,21 @@
                 top: 28px;
                 transform: translate(0, -50%);
             }
+			.build-in-search {
+				position: absolute;
+    			width: 100%;
 
-            .build-in-search-item {
-            	line-height: 4;
-			    width: 100%;
-			    border: 1px solid #e1e1e1;
-			    border-top: 0;
-			    background-color: white;
-			    padding: 0 20px;
-			    cursor: pointer;
-            }
+    			.build-in-search-item {
+	            	line-height: 4;
+				    width: 100%;
+				    border: 1px solid #e1e1e1;
+				    border-top: 0;
+				    background-color: white;
+				    padding: 0 20px;
+				    cursor: pointer;
+	            }
+			}
+            
         }
     }
 
