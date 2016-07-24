@@ -10,9 +10,10 @@ module.exports = function(MeanSocket) {
     var server = require('http').createServer(app);
     var io = require('socket.io').listen(server);
     var moment = require('moment');
+    var config = require('meanio').loadConfig();
 
     //var PORT = 8282;
-    var PORT = 3003;
+    var PORT = config.socketPort;
 
     var channelWatchList = [];
 
