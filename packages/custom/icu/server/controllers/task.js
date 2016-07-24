@@ -309,7 +309,7 @@ function getOverDueTasksQuery(req, callback){
 	        		{
 		        		"range" : {
 				            "due" : {
-				                "lte" : dates[0]
+				                "lt" : dates[0]
 				            }
 				        },
 	        		},

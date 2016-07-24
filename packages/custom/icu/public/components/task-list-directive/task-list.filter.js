@@ -45,7 +45,7 @@ angular.module('mean.icu.ui.tasklistFilter', [])
 				var date = new Date().getThisDay();
 				tasks.forEach(function(task) {
 					var due = new Date(task.due);
-					if (due <= date[0]) {
+					if (due < date[0]) {
 						out.push(task)
 					};
 				});
