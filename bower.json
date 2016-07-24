@@ -2,7 +2,7 @@
   "name": "mean",
   "dependencies": {
     "jquery": "latest",
-    "angular": "1.4.8",
+    "angular": "latest",
     "angular-resource": "latest",
     "angular-cookies": "latest",
     "angular-mocks": "latest",
