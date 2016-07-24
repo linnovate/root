@@ -15,7 +15,8 @@ angular.module('mean.icu.ui.tabs')
                 create: 'createdThis',
                 update: 'updatedThis',
                 document: 'addDocument',
-                comment: 'addComment'
+                comment: 'addComment',
+                assign: 'assignedThis'
             };
 
             $scope.tasksDetails = {
@@ -61,6 +62,7 @@ angular.module('mean.icu.ui.tabs')
                         name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : ''
                     }
                 }
+                console.log('activity', $scope.activity, 'context', context);
 
                 ActivitiesService.create({data:$scope.activity, context:context}).then(function (result) {
                     if (!_.isEmpty($scope.attachments)) {
@@ -71,12 +73,14 @@ angular.module('mean.icu.ui.tabs')
                             entity: $scope.entityName,
                             entityId: $stateParams.id || $stateParams.entityId
                         };
+                        console.log('if data', data);
 
                         DocumentsService.saveAttachments(data, file).success(function(attachment) {
                             result.attachments.push(attachment);
                         });
                     }
                     clearForm();
+                    console.log('result', result);
                     $scope.activities.push(result);
                 });
             };

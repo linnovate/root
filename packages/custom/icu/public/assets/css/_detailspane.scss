@@ -476,6 +476,9 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     .ui-select-match-text {
                         width: 100%;
                     }
+                    .ui-select-container.open {
+                       padding-top: 0 !important;
+                    }
 
                     .text-muted {
                         color: $light-grey-placeholder;
@@ -933,14 +936,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
 			   
             }
-            .add.transition {
-                -webkit-transition: 3s;
-			    -moz-transition: 3s;
-			    -ms-transition: 3s;
-			    -o-transition: 3s;
-			    transition: 3s;
-			    left: 0;
-			}
+        
         }
 		
 		

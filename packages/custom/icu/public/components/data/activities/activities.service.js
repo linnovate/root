@@ -52,6 +52,7 @@ angular.module('mean.icu.data.activitiesservice', [])
     }
 
     function create(update) {
+        console.log('update data', update);
         return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
             var id = result.data._id;
 

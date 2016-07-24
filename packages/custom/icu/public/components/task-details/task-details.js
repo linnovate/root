@@ -7,6 +7,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                projects,
                                                $state,
                                                TasksService,
+                                               ActivitiesService,
                                                context,
                                                $stateParams,
                                                $rootScope,
@@ -133,6 +134,10 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         
         });
+        console.log('task me', task);
+         ActivitiesService.create({data:{issue: "task",issueId: task.id, type: "assign", user: task.assign}, context:{}}).then(function (result) {                   
+                });
+
     };
     //END Made By OHAD
 

@@ -5,7 +5,7 @@
         <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
     </div>
 
-    <div ng-if="!entity.watchers.length && !watchersGroups.length" class="left-notification">
+    <div ng-if="!entity.watchers.length && !watchersGroups.length" class="left-notification" ng-click="triggerSelect()">
         {{'noWatchers' | i18next}}
     </div>
     
