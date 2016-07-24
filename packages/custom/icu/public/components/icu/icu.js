@@ -8,7 +8,8 @@ angular.module('mean.icu').controller('IcuController',
         projects,
         discussions,
         people,
-        context) {
+        context,
+        TasksService) {
     $scope.menu = {
         isHidden: false
     };
@@ -83,6 +84,7 @@ angular.module('mean.icu').controller('IcuController',
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
         console.log(arguments);
+        TasksService.filterValue = false;
     });
 });
 
