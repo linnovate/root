@@ -146,6 +146,11 @@
             &.orange {
                 color: $orange;
             }
+            
+            &:hover{
+                border-color: #FFB435;
+                border-width: 2px;
+            } 
         }
 
         .select-wrapper {
@@ -173,6 +178,11 @@
             height: 27px;
             padding-left: 19px;
             background: url('/icu/assets/img/status.png') no-repeat 15% center;
+            
+            &:hover{
+                border-color: #FFB435;
+                border-width: 2px;
+            } 
         }
 
         .list, .calendar {

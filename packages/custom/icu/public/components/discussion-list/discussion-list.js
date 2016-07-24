@@ -77,7 +77,7 @@ angular.module('mean.icu.ui.discussionlist', [])
             if ($state.current.name === 'main.discussions.all') {
                 return;
             }
-            if ($state.current.name !== 'main.discussions.byentity.activities' ||
+            if ($state.current.name !== 'main.discussions.byentity.activities' &&
                 $state.current.name !== 'main.discussions.byentity.details.activities') {
                 $state.go('.activities');
             }

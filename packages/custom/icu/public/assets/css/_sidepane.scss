@@ -58,6 +58,9 @@
                             background-color: #37464B;
                         }
                     }
+                &:hover{
+                    background-color: #37464B;
+                }
 
                 .menu-item {
                     height: $header-height;
@@ -116,4 +119,15 @@
             }
         }
     }
+}
+
+.animate-hide {
+    transition: all cubic-bezier(0.950, 0.960, 0.950, 0.940) 2s;
+}
+
+.animate-hide.ng-hide {
+    right: -100%;
+    opacity: 0;
+    padding: 0 10px;
+    display: block !important;
 }
