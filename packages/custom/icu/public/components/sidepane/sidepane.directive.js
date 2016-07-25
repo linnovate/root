@@ -7,7 +7,7 @@ directive('icuSidepane', function() {
 
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
-        $scope.people = $scope.people.data || $scope.discussions;
+        $scope.people = $scope.people.data || $scope.people;
 
         $scope.toggleVisibility = function(toggledItem) {
             var prev = toggledItem.open;
