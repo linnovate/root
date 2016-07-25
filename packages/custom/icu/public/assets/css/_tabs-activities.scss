@@ -137,6 +137,11 @@ $activityListDefaultMaxH: 80px;
                     background: url('/icu/assets/img/attachments.png') no-repeat center center;
                     border: 1px solid $light-grey1;
                     float: left;
+                    
+                    &:hover{
+                        border-color: #FFB435;
+                        border-width: 2px;
+                    }  
                 }
 
                 .name {
@@ -155,6 +160,10 @@ $activityListDefaultMaxH: 80px;
 
                     float: right;
                     width: 80px;
+                    
+                    &:hover{
+                        background-color: #FFB435;
+                    }  
                 }
             }
         }

@@ -118,6 +118,14 @@
     .more {
         padding: 5px 0;
         color: $orange;
+        &:hover{
+           text-decoration: underline;
+        }
     }
 }
 
+a.Names-In-List-On-Side{
+    &:hover{
+        color: #FFB435 !important;
+    }
+}

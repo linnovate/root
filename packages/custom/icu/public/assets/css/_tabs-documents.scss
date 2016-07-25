@@ -65,6 +65,9 @@
     display: inline; }
   #AllDocumentIcons{
     display: none;
+    position: absolute;
+    right: 65%;
+    top: 100%
   }
   .DocumentIconsLine{
     border: 1px solid #7F9098;
@@ -74,6 +77,10 @@
     background-color:#313C40;
     padding: 0px 0px 0px 0px;
     text-align: inherit;
+    
+        &:hover{
+            background-color:white;
+        }
     }
   #Document-icon-revert{
     position: absolute;
@@ -113,6 +120,10 @@
     position: absolute;
     left: 290px;
     bottom: 20px;
+    
+        &:hover{
+            background-color:white;
+        }
    }
   .DocumentIconsLine-Update-icon-view{
     border: 1px solid #7F9098;
@@ -124,6 +135,10 @@
     text-align: inherit;
     position: absolute;
     left: 50px;
+    
+        &:hover{
+            background-color:white;
+        }
    }
   
   #UpdatetLine:hover >  #DocumentTextLine{
