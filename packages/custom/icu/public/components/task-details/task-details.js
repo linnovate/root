@@ -134,7 +134,6 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         
         });
-        console.log('task me', task);
          ActivitiesService.create({data:{issue: "task",issueId: task.id, type: "assign", user: task.assign}, context:{}}).then(function (result) {                   
                 });
 
