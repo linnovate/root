@@ -22,7 +22,7 @@
                 <a href class="Names-In-List-On-Side">
                     {{project.title}}
                 </a>
-                <div class="tag-color" ng-style="color={'background-color': '#' + '{{project.color}}'}"></div>
+                <div class="tag-color" ng-style="{'background-color': '#' + project.color}"></div>
             </li>
             <li ng-if="projects.length >  displayLimit['projects']" ng-click="showMore(projects.length, 'projects')" class="more">{{ 'more' | i18next }}</li>
             <li ng-if="projects.length ==  displayLimit['projects']" ng-click="collapse('projects')" class="more">{{ 'Less...' | i18next }}</li>
