@@ -84,7 +84,6 @@ angular.module('mean.icu').controller('IcuController',
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
         console.log(arguments);
-        TasksService.filterValue = false;
     });
 });
 

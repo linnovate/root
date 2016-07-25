@@ -3,7 +3,7 @@
 </header>
 <nav>
     <ul>
-        <li data-ng-repeat="item in items" data-ng-class="{ 'active': isCurrentState(item) && item.open }">
+        <li data-ng-repeat="item in items" data-ng-class="{ 'active': isCurrentState(item) && item.open }" ng-click="removeFilterValue()">
             <div class="menu-item"
                 data-ui-sref="{{'main.' + item.state}}"          
                 ng-click="toggleVisibility(item)">

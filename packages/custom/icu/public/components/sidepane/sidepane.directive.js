@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context) {
+    function controller($scope, $state, context, TasksService) {
         $scope.context = context;
 
         $scope.projects = $scope.projects.data || $scope.projects;
@@ -17,6 +17,10 @@ directive('icuSidepane', function() {
             });
 
             toggledItem.open = !prev;
+        }
+
+        $scope.removeFilterValue = function() {
+        	TasksService.filterValue = false;
         }
 
         $scope.items = [{
