@@ -65,7 +65,8 @@ angular.module('mean.icu.ui.taskdetails', [])
         buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
     };
 
-    $scope.task.due = new Date($scope.task.due);
+    if ($scope.task.due) $scope.task.due = new Date($scope.task.due);
+    
     $scope.dueOptions = {
         onSelect: function () {
             $scope.update($scope.task);
