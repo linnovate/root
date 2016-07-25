@@ -1,5 +1,6 @@
 <section class="display-by">
     <p class="title my"
+       ng-if="context.main === 'tasks'" 
        ui-sref="main.{{context.main}}.byassign" ui-sref-active="active"
        data-ng-class="{ 'selected': context.entityName === 'my' }">
         {{ 'myTasks' | i18next }}
