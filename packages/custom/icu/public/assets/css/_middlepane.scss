@@ -78,7 +78,8 @@
 			.build-in-search {
 				position: absolute;
     			width: 100%;
-
+    			z-index: 9;
+    			
     			.build-in-search-item {
 	            	line-height: 4;
 				    width: 100%;
