@@ -41,6 +41,7 @@ angular.module('mean.icu.ui.tabs')
                     description: ''
                 };
             };
+           
 
             $scope.save = function () {
                 $scope.activity.issue = $scope.entityName;

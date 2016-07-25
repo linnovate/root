@@ -54,7 +54,7 @@
     <div class="add-update" ng-if="stateParams.id">
         <div icu-avatar user="me"></div>
         <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save()">
-            <textarea ng-model="activity.description" ng-focus="expandUpdate()" ng-blur="minimizeUpdate()" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
+            <textarea ctrlenter="save()" ng-model="activity.description" ng-focus="expandUpdate()" ng-blur="minimizeUpdate()" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
 
             <div class="action-buttons">
                 <button type="button" class="attachment"
@@ -64,7 +64,7 @@
 
                 <span class="name" title="{{attachments[0].name}}">{{attachments[0].name}}</span>
 
-                <button type="submit" class="save">{{ 'add' | i18next }}</button>
+                <button type="submit" class="save" >{{ 'add' | i18next }}</button>
             </div>
         </form>
     </div>
