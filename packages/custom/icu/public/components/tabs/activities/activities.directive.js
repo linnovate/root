@@ -9,6 +9,7 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.context = context;
+            $scope.stateParams = $stateParams
 
             $scope.details = {
                 create: 'createdThis',
