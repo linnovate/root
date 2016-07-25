@@ -33,7 +33,7 @@ function SearchController($scope, $state, $stateParams, context, TasksService, $
         if (term && term.length) {
             $state.go('main.search', {query: term});
         } else {
-            $state.go('main.search', {query: ''});
+            $state.go('main.tasks.all');
         }
     };
 
