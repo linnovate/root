@@ -25,6 +25,10 @@ $activityListDefaultMaxH: 80px;
             height: calc(100% - 120px);
             transition: height 0.4s;
             overflow: auto;
+            &.my {
+				height: 100%;
+            }
+
             &::-webkit-scrollbar {
                 width: 5px;
             }
