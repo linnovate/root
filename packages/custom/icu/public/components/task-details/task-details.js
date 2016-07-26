@@ -136,8 +136,10 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         
         });
-         ActivitiesService.create({data:{issue: "task",issueId: task.id, type: "assign", user: task.assign}, context:{}}).then(function (result) {                   
-                });
+        ActivitiesService.create({data:{issue: "task",issueId: task.id, type: "assign", user: task.assign}, context:{}}).then(function (result) {  
+            ActivitiesService.data.push(result);
+            console.log(ActivitiesService.data)
+        });
 
     };
     //END Made By OHAD

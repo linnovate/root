@@ -3,6 +3,7 @@
 angular.module('mean.icu.data.activitiesservice', [])
 .service('ActivitiesService', function (ApiUri, $http, UsersService) {
     var EntityPrefix = '/updates';
+    var data;
 
     function getByUserId(id) {
         return [];
@@ -68,6 +69,7 @@ angular.module('mean.icu.data.activitiesservice', [])
         getByProjectId: getByProjectId,
         getByDiscussionId: getByDiscussionId,
         getByTasks: getByTasks,
-        create: create
+        create: create,
+        data: data
     };
 });
