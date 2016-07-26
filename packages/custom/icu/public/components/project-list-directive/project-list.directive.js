@@ -18,7 +18,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
             var newProject = {
                 title: '',
-                color: 'b9e67d',
+                color: '0097A7',
                 watchers: [],
                 __state: creatingStatuses.NotCreated,
                 __autocomplete: true

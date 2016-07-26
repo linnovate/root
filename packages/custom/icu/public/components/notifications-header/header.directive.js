@@ -161,7 +161,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
         $scope.createProject = function () {
             var project = {
-                color: 'b9e67d',
+                color: '0097A7',
                 title: '',
                 watchers: [],
             };
