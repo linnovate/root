@@ -108,9 +108,9 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.decorators.pdsDecorator',
         'infinite-scroll',
         'mean.icu.ui.modaldeletetasksbyentity',
-        '720kb.tooltips',
         'mean.icu.ui.modalcompartmentalization',
         'mean.icu.ui.taskoptions',
+        '720kb.tooltips',
     ]);
 
 
