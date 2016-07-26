@@ -279,7 +279,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 position: relative;
                 
                 &:hover{
-                    border: 1px solid #FFB435;
+                    box-shadow: 0px 0px 0px 2px #FFB435;
+                    transition: 0.8s;
                 } 
             }
 
@@ -301,7 +302,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 float: left;
                 
                 &:hover{
-                    border: 1px solid #FFB435;
+                    box-shadow: 0px 0px 0px 2px #FFB435;
+                    transition: 0.8s;
                 } 
 
                 .no-assignee {
@@ -781,6 +783,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 
                 &:hover {
                     color: $orange;
+                    transition: 0.8s;
                 }
             }
         }
