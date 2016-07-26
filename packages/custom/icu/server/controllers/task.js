@@ -377,20 +377,12 @@ function tasksFromElastic(query, name, callback) {
 
 
 function myTasksStatistics(req, res, next) {
-    // return next();
-    console.log('*******************myTasksStatistics*************************')
 	if (req.locals.error) {
     	return next();
 	}
-
 	async.parallel([
 	    function(callback) {
 	    	getTasksDueTodayQuery(req, callback);
-      //   (req, function(err, result){
-      //     req.locals.result = result;
-      // req.locals.error = err
-      //     next();
-      //   });
 	    },
 	    function(callback) {
 	        getTasksDueWeekQuery(req, callback);
