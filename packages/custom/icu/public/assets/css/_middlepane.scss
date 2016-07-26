@@ -181,8 +181,8 @@
             background: url('/icu/assets/img/status.png') no-repeat 15% center;
             
             &:hover{
-                border-color: #FFB435;
-                border-width: 2px;
+                 box-shadow: 0px 0px 0px 2px #FFB435;
+                 transition: 0.8s;
             } 
         }
 
