@@ -66,7 +66,7 @@ exports.createRoom = function(req, res, next) {
     // There is callback so everything is in the callback
     UserCreator.findOne({ _id: req.locals.result.creator}, function(err, user) {
         
-        ArrayOfusernames.push(user.username);
+        if(user && user.username) ArrayOfusernames.push(user.username);
 
         // Check if there is watchers
         if (req.locals.result.watchers.length != 0)
@@ -109,7 +109,7 @@ exports.updateRoom = function(req, res, next) {
     // There is callback so everything is in the callback
     UserCreator.findOne({ _id: req.locals.result.creator}, function(err, user) {
         
-        ArrayOfusernames.push(user.username);
+       if(user && user.username) ArrayOfusernames.push(user.username);
         
         // Check if there is watchers
         if (req.locals.result.watchers.length != 0)
