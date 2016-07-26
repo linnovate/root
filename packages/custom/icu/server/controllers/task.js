@@ -252,8 +252,8 @@ function getTasksDueTodayQuery(req, callback) {
 	        	"must_not" : [
                   	{
                       	"terms": {
-                         	"status": ['rejected', 'done'],
-                        	"execution" : "and"
+                         	"status": ['rejected', 'done']//,
+                        	//"execution" : "and"
                       	}
                   	}
                	]
@@ -288,8 +288,8 @@ function getTasksDueWeekQuery(req, callback){
 	        	"must_not" : [
                   	{
                       	"terms": {
-                         	"status": ['rejected', 'done'],
-                        	"execution" : "and"
+                         	"status": ['rejected', 'done']//,
+                        	// "execution" : "and"
                       	}
                   	}
                	]	
@@ -322,8 +322,8 @@ function getOverDueTasksQuery(req, callback){
 	        	"must_not" : [
                   	{
                       	"terms": {
-                         	"status": ['rejected', 'done'],
-                        	"execution" : "and"
+                         	"status": ['rejected', 'done']//,
+                        	//"execution" : "and"
                       	}
                   	}
                	]	
@@ -349,8 +349,8 @@ function getWatchedTasksQuery(req, callback) {
         		},
         		{
         			"terms": {
-                     	"status": ['rejected', 'done'],
-                    	"execution" : "and"
+                     	"status": ['rejected', 'done']//,
+                    	//"execution" : "and"
                   	}
 	        	}]
 	        }
@@ -377,6 +377,8 @@ function tasksFromElastic(query, name, callback) {
 
 
 function myTasksStatistics(req, res, next) {
+    // return next();
+    console.log('*******************myTasksStatistics*************************')
 	if (req.locals.error) {
     	return next();
 	}
@@ -384,6 +386,11 @@ function myTasksStatistics(req, res, next) {
 	async.parallel([
 	    function(callback) {
 	    	getTasksDueTodayQuery(req, callback);
+      //   (req, function(err, result){
+      //     req.locals.result = result;
+      // req.locals.error = err
+      //     next();
+      //   });
 	    },
 	    function(callback) {
 	        getTasksDueWeekQuery(req, callback);
@@ -397,7 +404,7 @@ function myTasksStatistics(req, res, next) {
 	], function(err, result) {
 	    req.locals.result = result;
 	    req.locals.error = err
-	    next();
+	     next();
 	});
 }
 
