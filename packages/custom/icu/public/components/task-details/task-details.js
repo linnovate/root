@@ -151,9 +151,10 @@ angular.module('mean.icu.ui.taskdetails', [])
             if (context.entityName === 'project') {
                 var projId = result.project ? result.project._id : undefined;
                 if (projId !== context.entityId) {
-                    $state.go('main.tasks.byentity', {
+                    $state.go('main.tasks.byentity.details', {
                         entity: context.entityName,
-                        entityId: context.entityId
+                        entityId: context.entityId,
+                        id: task._id
                     }, {reload: true});
                 }
             }
