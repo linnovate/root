@@ -85,7 +85,7 @@
 
             <div class="tags">
                 <ul class="list">
-                    <li ng-show="!task.tags.length && !tagInputVisible" class="placeholder" ng-click="tagInputVisible = !tagInputVisible">{{ 'noLabels' | i18next }}</li>
+                    <li ng-show="!task.tags.length && !tagInputVisible" class="placeholder" ng-click="tagInputVisible = !tagInputVisible;setFocusToTagSelect()">{{ 'noLabels' | i18next }}</li>
                     <li class="tag-item" ng-repeat="tag in task.tags">
                         <span>{{tag}}</span>
                         <button ng-click="removeTag(tag)">
@@ -93,7 +93,7 @@
                         </button>
                     </li>
                     <li class="new-tag-input" ng-show="tagInputVisible" >
-                        <ui-select ng-model="newTag" tagging tagging-label="false" autofocus on-select="addTag(newTag)">
+                        <ui-select id="addTag" ng-model="newTag" select-on-blur tagging tagging-label="false" autofocus on-select="addTag(newTag)">
                             <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
                             <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
                                 {{tag}}

@@ -12,7 +12,8 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                $stateParams,
                                                $rootScope,
                                                MeanSocket,
-                                               UsersService) {
+                                               UsersService,
+                                               $timeout) {
     $scope.task = entity || context.entity;
     $scope.tags = tags;
     $scope.projects = projects.data || projects;
@@ -169,6 +170,13 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     };
 
+    $scope.setFocusToTagSelect = function() {
+    	var element = angular.element('#addTag > input.ui-select-focusser')[0];
+    	$timeout(function () {
+    		element.focus();
+    	}, 0);
+    }
+
     $scope.delayedUpdate = _.debounce($scope.update, 500);
 
     if ($scope.task &&
@@ -178,4 +186,23 @@ angular.module('mean.icu.ui.taskdetails', [])
             $state.current.name === 'main.tasks.byassign.details')) {
         $state.go('.activities');
     }
+})
+.directive('selectOnBlur', function($timeout) {
+    return {
+        require: 'uiSelect',
+        link: function(scope, elm, attrs, ctrl) {
+            elm.on('blur', 'input.ui-select-search', function(e) {
+                scope.$parent.tagInputVisible = false;
+            });
+
+            elm.on('blur', 'input.ui-select-focusser', function(e, g) {
+            	$timeout(function () {
+		    		if(!e.target.hasAttribute('disabled')) {
+						scope.$parent.tagInputVisible = false;
+		    		}
+		    	}, 5);
+            });
+
+        }
+    };
 });
