@@ -455,19 +455,33 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             }
 
             .status {
-                .ui-select-container .ui-select-match .ui-select-toggle {
-                    float: right;
-                    background: 7% center url('/icu/assets/img/task-status.png') no-repeat;
-                    width: calc(100% - 10px);
-                    height: 30px;
-                    padding: 5px 0 5px 30px;
-                    position: absolute;
-                    right: 50%;
-                    top: 50%;
-                    transform: translateX(50%) translateY(15%);
+                .ui-select-container.ui-select-bootstrap {
+                    .ui-select-match .ui-select-toggle {
+                        float: right;
+                        background: 7% center url('/icu/assets/img/task-status.png') no-repeat;
+                        width: calc(100% - 10px);
+                        height: 30px;
+                        padding: 5px 0 5px 30px;
+                        position: absolute;
+                        right: 50%;
+                        top: 50%;
+                        transform: translateX(50%) translateY(15%);
 
-                    i.caret {
-                        display: none;
+                        i.caret {
+                            display: none;
+                        }
+                    }
+                    .ui-select-choices-group .ui-select-choices-row>a {
+                            .new{color: #ff4081;}
+                            .assigned{color: #2979ff;}
+                            .in-progress{color: #f69679;}
+                            .review{color: #8dc63f;}
+                            .rejected{color: #ef5350;}
+                            .done{color: #598527;}
+                            .canceled{color: #ef5350;}
+                            .completed{color: #598527;}
+                            .archived{color: #ab47bc;}
+                            .scheduled{color: #0054a6;}
                     }
                 }
             }
