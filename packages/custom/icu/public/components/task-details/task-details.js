@@ -157,6 +157,12 @@ angular.module('mean.icu.ui.taskdetails', [])
                         id: task._id
                     }, {reload: true});
                 }
+                else {
+                     $state.go('main.tasks.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {reload: true});
+                }
             }
         });
     };
