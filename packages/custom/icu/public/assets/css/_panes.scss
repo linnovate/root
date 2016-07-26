@@ -1,4 +1,6 @@
 .panes-wrapper {
+        transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 1s;
+    
     .list-table {
         table {
             @include table;

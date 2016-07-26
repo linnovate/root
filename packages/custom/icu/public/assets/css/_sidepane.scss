@@ -122,12 +122,14 @@
 }
 
 .animate-hide {
-    transition: all cubic-bezier(0.950, 0.960, 0.950, 0.940) 2s;
+    // left: -100%;
+    opacity: 1;
+    display: block !important;
 }
 
 .animate-hide.ng-hide {
-    right: -100%;
     opacity: 0;
     padding: 0 10px;
     display: block !important;
+    transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 7s;
 }
