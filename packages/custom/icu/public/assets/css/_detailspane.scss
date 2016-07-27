@@ -146,11 +146,27 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 @include button;
                 color: white;
                 width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 height: 100%;
-                background: url("/icu/assets/img/new_task.png") $orange no-repeat center;
+                background-color: $orange;
+                i:before {
+                    display: none;
+                }
+                i {
+                   width: 21px;
+                    display: block;
+                    height: 21px;
+                    background: url("/icu/assets/img/new_task.png") no-repeat center;
+                    transition: 0.9s;                    
+                }
                 
                 &:hover{
                     background-color: #FFB435;
+                    i {
+                        transform: rotate(90deg);
+                    }
                 }
             }
 
@@ -168,6 +184,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                         
                         &:hover{
                             background-color: #FFB435;
+                            color: white;
                         }       
                     }
                 }
@@ -399,6 +416,12 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     &:focus {
                         outline: none;
                     }
+                   &:hover {
+                       i {
+                           transform: rotate(90deg);
+                           transition: 0.8s;
+                       }
+                   }    
                 }
 
                 .orange {
@@ -541,6 +564,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
                         &:hover {
                             padding-right: 25px;
+                            transition: 0.5s;
 
                             .delete {
                                 @include circle(6.5px);
@@ -687,6 +711,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
                         &:hover {
                             background-color: $light-grey1;
+                            border: 1px solid;
 
                             button {
                                 display: inline-block;
@@ -963,13 +988,28 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 color: white;
                 font-size: 20px;
                	position: relative;
+                   display: flex;
+                align-items: center;
+                justify-content: center;
 			    left: 0;
 			    left: calc(100% - 58px);
-                background: url('/icu/assets/img/new_lable.png') no-repeat center $orange;
+                background-color: $orange;
+                i:before {
+                    display: none;
+                }
+                i {
+                   width: 21px;
+                    display: block;
+                    height: 21px;
+                    background: url("/icu/assets/img/new_lable.png") no-repeat center;
+                    transition: 0.9s;                    
+                }
                 
                 &:hover{
                     background-color: #FFB435;
-                    transition: 0.8s;
+                    i {
+                        transform: rotate(90deg);
+                    }
                 }
 
 			   
