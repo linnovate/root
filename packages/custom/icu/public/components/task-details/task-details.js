@@ -153,7 +153,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     };
     //END Made By OHAD
 
-    $scope.update = function (task) {
+    $scope.update = function (task, type) {
         if (context.entityName === 'discussion') {
             task.discussion = context.entityId;
         }
@@ -161,18 +161,12 @@ angular.module('mean.icu.ui.taskdetails', [])
         TasksService.update(task).then(function (result) {
             if (context.entityName === 'project') {
                 var projId = result.project ? result.project._id : undefined;
-                if (projId !== context.entityId) {
+                if (projId !== context.entityId || type === 'project') {
                     $state.go('main.tasks.byentity.details', {
                         entity: context.entityName,
                         entityId: context.entityId,
                         id: task._id
                     }, {reload: true});
-                }
-                else {
-                     $state.go('main.tasks.byentity', {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {reload: true});
                 }
             }
         });
