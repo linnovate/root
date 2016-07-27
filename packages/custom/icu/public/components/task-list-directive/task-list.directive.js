@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklistdirective', [])
-.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context ) {
+.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context, UsersService) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -25,7 +25,14 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         if (!$scope.displayOnly) {
-            $scope.tasks.push(_(newTask).clone());
+            if (context.entityName === 'my'){
+                UsersService.getMe().then(function (me) {
+                    newTask.assign = me._id;    
+                    $scope.tasks.push(_(newTask).clone());
+                });
+            }
+            else
+                $scope.tasks.push(_(newTask).clone());
         }
 
 

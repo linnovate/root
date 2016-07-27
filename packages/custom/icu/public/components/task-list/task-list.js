@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function ($scope, $state, tasks, TasksService, context, $filter, $stateParams) {
+.controller('TaskListController', function ($scope, $state, tasks, TasksService, context, $filter, $stateParams, me) {
     $scope.tasks = tasks.data || tasks;
     TasksService.data = $scope.tasks;
     $scope.loadNext = tasks.next;
