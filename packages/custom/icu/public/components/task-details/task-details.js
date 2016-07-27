@@ -97,7 +97,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.deleteTask = function (task) {
         TasksService.remove(task._id).then(function () {
             var state = context.entityName === 'all' ?
-                'main.tasks.all' : 'main.tasks.byentity';
+                'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
 
             $state.go(state, {
                 entity: context.entityName,
