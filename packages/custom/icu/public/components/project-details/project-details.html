@@ -11,9 +11,11 @@
             <div class="status">
                 <ui-select ng-model="project.status" on-select="update(project)">
                     <ui-select-match>
-                        <span>{{$select.selected | i18next }}</span>
+                        <i class='{{$select.selected}}'></i>
+                        <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
                     </ui-select-match>
                     <ui-select-choices repeat="status as status in statuses | filter: $select.search">
+                        <i class='{{status}}'></i>
                         <span class='{{status}}'>{{status | i18next}}</span>
                     </ui-select-choices>
                 </ui-select>
