@@ -23,28 +23,43 @@
 
     nav {
         color: white;
-        overflow-y: auto;
-        height: 100%;
-        ul {
+        overflow: auto;
+        height: calc(100% - 60px);
+         &::-webkit-scrollbar {
+                width: 5px;
+            }
+             
+            &::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                border-radius: 10px;
+            }
+             
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                background-color: white;
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+            }
+        & > ul {
             list-style: none;
             padding-left: 0;
             display: flex;
             flex-wrap: wrap;
-            height: 93%;
+            min-height: 100%;
             flex-direction: column;
             position: relative;
+            margin-bottom: 0;
             &:before {
                 box-shadow: -2px 0px 14px 1px rgba(0, 0, 0, 0.73);
                 pointer-events: none;
                 position: absolute;
                 top: 0px;
                 bottom: 0;
-                right: -3px;
+                right: 0;
                 content: "";
                 display: block;
                 width: 3px;
             }
-            li {
+            & > li {
                 cursor: pointer;
                 width: 100%;
                 transition: all .5s;

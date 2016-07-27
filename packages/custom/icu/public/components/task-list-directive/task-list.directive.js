@@ -164,18 +164,20 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.onEnter = function($event, index) {
-            // if ($event.keyCode === 13 || $event.keyCode === 9) {
-            //     $event.preventDefault();
+            if ($event.keyCode === 13 || $event.keyCode === 9) {
+                $event.preventDefault();
 
-            //     $scope.tasks[index].__autocomplete = false;
-            //     if ($element.find('td.name')[index+1]) $element.find('td.name')[index+1].focus();
-            //     else {
-            //     	$timeout(function() {
-			//             $element.find('td.name')[index+1].focus();
-			//         }, 500);
-            //     }
+                $scope.tasks[index].__autocomplete = false;
+                if ($element.find('td.name')[index+1]) {
+                    // $element.find('td.name')[index+1].focus();
+                }
+                else {
+                	$timeout(function() {
+			            $element.find('td.name')[index+1].focus();
+			        }, 500);
+                }
 
-            // }
+            }
         };
 
         $scope.focusAutoComplete = function($event) {
