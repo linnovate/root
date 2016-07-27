@@ -179,6 +179,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.focusAutoComplete = function($event) {
+            angular.element($event.target).css('box-shadow', 'none')
             if ($event.keyCode === 38) {
                 if ($scope.selectedSuggestion > 0) {
                     $scope.selectedSuggestion -= 1;
