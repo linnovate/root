@@ -2,6 +2,7 @@
 	.page-content {
 		.options {
 			height: 180px;
+			padding: 0 14px;
 			> div {
 				display: inline-block;
 			    width: 20%;
@@ -9,9 +10,10 @@
 			    text-align: center;
 			    padding: 15px 0;
 			    border-bottom: 5px solid #e1e1e1;
-			    margin: 36px 20px;
+			    margin: 36px 2%;
 			    font-weight: bold;
 			    cursor: pointer;
+			    max-height: 126px;
 			    > span {
 			        display: block;
     				font-size: 3.5em;
