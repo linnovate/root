@@ -3,15 +3,18 @@
         <div ng-show="isLoading" class="loader"></div>
         <div data-ng-repeat="activity in activities | orderBy:'created':true"  class="activity">
             <div class="title">
-                <div icu-avatar user="activity.user"></div>
+                <div icu-avatar user="activity.creator"></div>
                 <div class="text">
-                    <span class="user-name">{{activity.user.name}}
-                        <span ng-if="context.entityName !== 'my'" class="activity-details">
-                            {{details[activity.type] | i18next }}{{ activity.issue | i18next }}
+                    <span class="user-name">{{activity.creator.name}}</span>
+                    <span ng-if="context.entityName !== 'my'" class="activity-details" ng-repeat="val in details[activity.type]">
+                        <span ng-switch="val.type">
+                            <span ng-switch-when="object">{{activity[val.value] | i18next}}</span>
+                            <span ng-switch-when="deepObject" class="{{val.klass}}">{{activity[val.value[0]][val.value[1]] | i18next}}</span>
+                            <span ng-switch-default>{{val.value | i18next}}</span>
                         </span>
-                        <span ng-if="context.entityName === 'my'" class="activity-details">
-                            {{tasksDetails[activity.type] | i18next }}{{activity.taskName}}
-                        </span>
+                    </span>
+                    <span ng-if="context.entityName === 'my'" class="activity-details">
+                        {{tasksDetails[activity.type] | i18next }}{{activity.taskName}}
                     </span>
                     <br/>
                     <span class="activity-date">{{activity.created | date:"MM/dd/yyyy 'at' h:mma"}}</span>
@@ -69,4 +72,3 @@
         </form>
     </div>
 </div>
-

@@ -12,11 +12,11 @@ angular.module('mean.icu.ui.tabs')
             $scope.stateParams = $stateParams
 
             $scope.details = {
-                create: 'createdThis',
-                update: 'updatedThis',
-                document: 'addDocument',
-                comment: 'addComment',
-                assign: 'assignedThis'
+                create: [{type: 'text', value: 'createdThis'}, {type: 'object', value: 'issue'}],
+                update: [{type: 'text', value: 'updatedThis'}, {type: 'object', value: 'issue'}],
+                document: [{type: 'text', value: 'addDocument'}, {type: 'object', value: 'issue'}],
+                comment: [{type: 'text', value: 'addComment'}, {type: 'object', value: 'issue'}],
+                assign: [{type: 'text', value: 'assignedUser'}, {type: 'deepObject', value:['userObj','name'], klass:"user-name"}, {type: 'text', value: 'toThis'}, {type: 'object', value: 'issue'}]
             };
 
             $scope.tasksDetails = {

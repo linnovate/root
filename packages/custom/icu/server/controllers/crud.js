@@ -80,6 +80,10 @@ module.exports = function(entityName, options) {
     }
     // END Made By OHAD
 
+    if (req.locals.result.assign !== req.body.assign) {
+      req.locals.data.shouldCreateUpdate = false;
+    }
+
     var entity = req.locals.data.body || req.body;
     
     entityService
