@@ -19,6 +19,7 @@ angular.module('mean.icu.ui.rows', [])
         'search-project': '/icu/components/row-types/search-project-row.html',
         'search-discussion': '/icu/components/row-types/search-discussion-row.html',
         'search-attachment': '/icu/components/row-types/search-attachment-row.html',
+        'search-vg-files': '/icu/components/row-types/search-attachment-row.html',
         'search-update': '/icu/components/row-types/search-update-row.html'
 
     };

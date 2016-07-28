@@ -6,7 +6,8 @@
                 data-ui-sref="main.search.{{result._type}}({id: result._id})"
                 icu-list-row
                 data="{ index: $index, result: result }"
-                type="search-{{result._type}}">
+                type="search-{{result._type}}"
+                ng-show="result._type != 'vg-files'">
             </tr>
         </tbody>
     </table>
