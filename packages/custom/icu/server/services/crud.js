@@ -133,14 +133,16 @@ module.exports = function(entityName, options) {
     var query;
     if (currentUser) {
       query = acl.query(entityNameMap[entityName].name);
-    } else
+    } else {
       query = Model.find();
+
+    }
 
     query.where({
       _id: id
     });
 
-    query.populate(options.includes);
+    // query.populate(options.includes);
 
     return query.then(function(results) {
       if (!results.length) {

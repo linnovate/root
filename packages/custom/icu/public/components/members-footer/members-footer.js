@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.membersfooter', [])
     .directive('icuMembersFooter', function() {
-        function controller($scope, $injector, context, $stateParams, $timeout, circlesService) {
+        function controller($scope, $injector, context, $stateParams, $timeout, circlesService, UsersService) {
             var serviceMap = {
                 projects: 'ProjectsService',
                 discussions: 'DiscussionsService',
@@ -11,6 +11,9 @@ angular.module('mean.icu.ui.membersfooter', [])
                 discussion: 'DiscussionsService',
                 task: 'TasksService'
             };
+             UsersService.getMe().then(function (me) {
+                $scope.me = me;
+            });
 
             var getWatchersGroups = function() {
                 $scope.watchersGroups = [];
