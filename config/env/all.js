@@ -19,7 +19,7 @@ module.exports = {
   },
   hostname: process.env.HOST || process.env.HOSTNAME,
   db: process.env.MONGOHQ_URL,
-  socketPort: 3003,
+  socketPort: process.env.SOCKETPORT || 3003,
   templateEngine: 'swig',
 
   // The secret should be set to a non-guessable string that
