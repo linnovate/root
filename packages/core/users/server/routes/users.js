@@ -174,8 +174,8 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     }), users.signin);
 
   app.route('/api/auth/google/callback')
-    .get(function(req, res,next){console.log('*****************************************');console.dir(passport);next()},passport.authenticate('google', {
-      failureRedirect: '/login'
+    .get(passport.authenticate('google', {
+      failureRedirect: '/auth'
     }), users.authCallback);
 
   // Setting the linkedin oauth routes
