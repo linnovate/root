@@ -174,7 +174,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     }), users.signin);
 
   app.route('/api/auth/google/callback')
-    .get(passport.authenticate('google', {
+    .get(function(req, res,next){console.log('*****************************************');console.dir(passport);next()},passport.authenticate('google', {
       failureRedirect: '/login'
     }), users.authCallback);
 
