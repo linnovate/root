@@ -150,8 +150,8 @@ angular.module('mean.icu.ui.tabs')
 
             $scope.expandUpdate = function() {
                 if (addUpdateField.height() < 150) {
-                    addUpdateField.css("height", "130px");
-                    activityList.css("height", "calc(100% - 200px)");
+                    addUpdateField.css("height", "100px");
+                    activityList.css("height", "calc(100% - 170px)");
                 }
             };
             $scope.minimizeUpdate = function() {
