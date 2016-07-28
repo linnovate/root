@@ -55,12 +55,11 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
     // states for my app
     $meanStateProvider
       .state('home', {
-        /*Made By OHAD - route to login insteed of the MEAN.io template*/
+        /*Made By OHAD - route to auth insteed of the MEAN.io template*/
         //url: '/',
         //templateUrl: 'system/views/index.html'
         url: '/',
-        templateUrl: '/icu/components/login/login.html',
-        controller: 'LoginController'
+        templateUrl: '/icu/components/auth/auth.html'
       });
 
     $meanStateProvider
