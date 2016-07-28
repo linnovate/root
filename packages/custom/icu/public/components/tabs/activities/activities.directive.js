@@ -47,6 +47,8 @@ angular.module('mean.icu.ui.tabs')
                 $scope.activity.issue = $scope.entityName;
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
+                
+                $scope.activity.size = $scope.attachments[0].size;
 
                 var isRoomProject = $scope.entityName === 'project' && $scope.entity.room,
                     isRoomFortask = $scope.entityName === 'task' && $scope.entity.project && $scope.entity.project.room,
@@ -75,14 +77,16 @@ angular.module('mean.icu.ui.tabs')
                             entityId: $stateParams.id || $stateParams.entityId
                         };
                         console.log('if data', data);
+                        console.log('if file', file);
 
                         DocumentsService.saveAttachments(data, file).success(function(attachment) {
                             result.attachments.push(attachment);
                         });
                     }
-                    clearForm();
+                    //clearForm();
                     console.log('result', result);
                     $scope.activities.push(result);
+                    clearForm();
                 });
             };
 
