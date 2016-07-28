@@ -110,6 +110,29 @@
                         height: $header-height;
 
                         i {
+                            &.caret-right:before{
+                                content: '';
+                                display: inline-block;
+                                width: 0;
+                                height: 0;
+                                margin-top: 5px;
+                                border-top: 6px solid transparent;
+                                border-bottom: 6px solid transparent;
+                                border-left: 6px solid #ffffff;
+                            }
+
+                            &.caret-down:before{
+                                content: '';
+                                display: inline-block;
+                                width: 0;
+                                height: 0;
+                                margin-top: 5px;
+                                border-right: 6px solid transparent;
+                                border-left: 6px solid transparent;
+                                border-top: 6px solid #ffffff;
+                            }
+
+
                             position: absolute;
                             top: 50%;
                             transform: translate(-50%, -50%);
