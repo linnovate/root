@@ -110,13 +110,13 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             $scope.searchResults.length = 0;
             $scope.selectedSuggestion = 0;
 
-            $scope.createOrUpdate(currentTask).then(function(task) {
-                $state.go('main.tasks.byentity.details', {
-                    id: task._id,
-                    entity: context.entityName,
-                    entityId: context.entityId
-                });
-            });
+            // $scope.createOrUpdate(currentTask).then(function(task) {
+            //     $state.go('main.tasks.byentity.details', {
+            //         id: task._id,
+            //         entity: context.entityName,
+            //         entityId: context.entityId
+            //     });
+            // });
         };
 
     }
@@ -164,20 +164,21 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.onEnter = function($event, index) {
-            if ($event.keyCode === 13 || $event.keyCode === 9) {
-                $event.preventDefault();
+            console.log('enter');
+            // if ($event.keyCode === 13 || $event.keyCode === 9) {
+            //     $event.preventDefault();
 
-                $scope.tasks[index].__autocomplete = false;
-                if ($element.find('td.name')[index+1]) {
-                    // $element.find('td.name')[index+1].focus();
-                }
-                else {
-                	$timeout(function() {
-			            $element.find('td.name')[index+1].focus();
-			        }, 500);
-                }
+            //     $scope.tasks[index].__autocomplete = false;
+            //     if ($element.find('td.name')[index+1]) {
+            //         // $element.find('td.name')[index+1].focus();
+            //     }
+            //     else {
+            //     	$timeout(function() {
+			//             $element.find('td.name')[index+1].focus();
+			//         }, 500);
+            //     }
 
-            }
+            // }
         };
 
         $scope.focusAutoComplete = function($event) {

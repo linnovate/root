@@ -99,15 +99,15 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             };
 
             $scope.onEnter = function($event, index) {
-                if ($event.keyCode === 13) {
-                    $event.preventDefault();
+                // if ($event.keyCode === 13) {
+                //     $event.preventDefault();
 
-                    $scope.projects[index].__autocomplete = false;
+                //     $scope.projects[index].__autocomplete = false;
 
-                    if ($scope.projects.length - 2 === index) {
-                        $element.find('td.name:nth-child(1)')[0].focus();
-                    }
-                }
+                //     if ($scope.projects.length - 2 === index) {
+                //         $element.find('td.name:nth-child(1)')[0].focus();
+                //     }
+                // }
             };
 
             // infinite scroll
