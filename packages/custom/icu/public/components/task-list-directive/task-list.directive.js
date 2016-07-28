@@ -98,25 +98,25 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.select = function(selectedTask) {
-            var currentTask = _($scope.tasks).find(function(t) {
-                return t.__autocomplete;
+            var currentTask = _($scope.tasks).findIndex(function(t) {
+                return t.id === $state.params.id;
             });
 
-            TasksService.remove(currentTask._id);
+            // TasksService.remove(currentTask._id);
 
-            _(currentTask).assign(selectedTask);
-            currentTask.__autocomplete = false;
+            // _(currentTask).assign(selectedTask);
+            // currentTask.__autocomplete = false;
 
-            $scope.searchResults.length = 0;
-            $scope.selectedSuggestion = 0;
+            // $scope.searchResults.length = 0;
+            // $scope.selectedSuggestion = 0;
 
-            // $scope.createOrUpdate(currentTask).then(function(task) {
-            //     $state.go('main.tasks.byentity.details', {
-            //         id: task._id,
-            //         entity: context.entityName,
-            //         entityId: context.entityId
-            //     });
-            // });
+            $scope.createOrUpdate($scope.tasks[currentTask + 1]).then(function(task) {
+                $state.go('main.tasks.byentity.details', {
+                    id: task._id,
+                    entity: context.entityName,
+                    entityId: context.entityId
+                });
+            });
         };
 
     }
@@ -164,21 +164,21 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.onEnter = function($event, index) {
-            console.log('enter');
-            // if ($event.keyCode === 13 || $event.keyCode === 9) {
-            //     $event.preventDefault();
+            if ($event.keyCode === 13 || $event.keyCode === 9) {
+                $event.preventDefault();
 
-            //     $scope.tasks[index].__autocomplete = false;
-            //     if ($element.find('td.name')[index+1]) {
-            //         // $element.find('td.name')[index+1].focus();
-            //     }
-            //     else {
-            //     	$timeout(function() {
-			//             $element.find('td.name')[index+1].focus();
-			//         }, 500);
-            //     }
+                $scope.tasks[index].__autocomplete = false;
+                if ($element.find('td.name')[index+1]) {
+                    console.log('find');
+                    $element.find('td.name')[index+1].focus();
+                }
+                else {
+                	$timeout(function() {
+			            $element.find('td.name')[index+1].focus();
+			        }, 500);
+                }
 
-            // }
+            }
         };
 
         $scope.focusAutoComplete = function($event) {
