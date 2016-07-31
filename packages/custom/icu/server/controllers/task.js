@@ -215,7 +215,9 @@ var byAssign = function(req, res, next) {
   	Task.find({
   		assign: req.user._id,
   		status: {$nin: ['rejected', 'done']}
-  	}, function(err, tasks) {
+		})
+		.populate('project')
+		.exec(function(err, tasks) {
   		if (err) {
 	      req.locals.error = {
 	        message: 'Can\'t get my tasks'
@@ -225,7 +227,7 @@ var byAssign = function(req, res, next) {
 	    }
 
 	    next();
-  	})
+		});
 }
 
 
