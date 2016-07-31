@@ -59,7 +59,7 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
         //url: '/',
         //templateUrl: 'system/views/index.html'
         url: '/',
-        templateUrl: '/icu/components/auth/auth.html'
+        templateUrl: (config.activeProvider == 'local' ? '/icu/components/login/login.html' : '/icu/components/auth/auth.html')
       });
 
     $meanStateProvider

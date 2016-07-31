@@ -5,6 +5,7 @@ var config = mean.loadConfig();
 
 exports.render = function(req, res) {
     res.render('index', {
-         config: {'lng' : config.currentLanguage}
+         config: {'lng' : config.currentLanguage,
+                  'activeProvider': config.activeProvider}
      });
 };
