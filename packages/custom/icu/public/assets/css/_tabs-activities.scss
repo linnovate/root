@@ -45,12 +45,12 @@ $activityListDefaultMaxH: 80px;
             }
 
             .activity {
+                margin-bottom: 5px;
                 min-height: 60px;
             }
 
             .title {
                 font-size: 14px;
-                margin-bottom: 10px;
 
                 .user-name {
                     font-weight: 700;
@@ -77,7 +77,7 @@ $activityListDefaultMaxH: 80px;
             }
 
             .description {
-                margin: 0 50px;
+                margin: 0 53px;
                 color: $light-grey4;
             }
 

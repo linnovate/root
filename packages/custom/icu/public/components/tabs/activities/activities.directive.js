@@ -48,7 +48,7 @@ angular.module('mean.icu.ui.tabs')
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
                 
-                $scope.activity.size = $scope.attachments[0].size;
+                // $scope.activity.size = $scope.attachments[0].size;
 
                 var isRoomProject = $scope.entityName === 'project' && $scope.entity.room,
                     isRoomFortask = $scope.entityName === 'task' && $scope.entity.project && $scope.entity.project.room,
