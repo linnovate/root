@@ -71,7 +71,7 @@
   }
   .DocumentIconsLine{
     border: 1px solid #7F9098;
-    border-radius: 2px 2px 2px 2px;
+    border-radius: 4px;
     width: 30px;
     height: 30px;
     background-color:#313C40;
@@ -111,7 +111,7 @@
   }
   .DocumentIconsLine-Document-icon-view{
     border: 1px solid #7F9098;
-    border-radius: 2px 2px 2px 2px;
+    border-radius: 4px;
     width: 30px;
     height: 30px;
     background-color:#313C40;
@@ -127,14 +127,14 @@
    }
   .DocumentIconsLine-Update-icon-view{
     border: 1px solid #7F9098;
-    border-radius: 2px 2px 2px 2px;
+    border-radius: 4px;
     width: 30px;
     height: 30px;
     background-color:#313C40;
     padding: 0px 0px 0px 0px;
     text-align: inherit;
     position: absolute;
-    left: 50px;
+    left: 38px;
     
         &:hover{
             background-color:white;
@@ -165,9 +165,10 @@
   #AllUpdateIcons{
     display: none;
     position: absolute;
-    height: 100px;
-    width: 100px;
-    left: 70%;
+    height: 85px;
+    width: 71px;
+    left: 55%;
+    top: 5px;
     transform: translate(-50%, 0);
   }
   #Update-icon-revert{
@@ -183,7 +184,7 @@
     }
   #Update-icon-download{
     position: absolute;
-    left: 50px;
+    left: 38px;
     bottom: 20px;
     }
   .Icons-In-DocumentLine{
