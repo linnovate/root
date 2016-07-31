@@ -417,8 +417,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     }
                    &:hover {
                        i {
-                           transform: rotate(90deg);
-                           transition: 0.8s;
+                           transform: rotate(360deg);
+                           transition: 1.5s;
                        }
                    }    
                 }
