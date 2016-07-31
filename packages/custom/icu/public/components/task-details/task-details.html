@@ -16,7 +16,7 @@
                 <ui-select ng-model="task.assign" on-select="updateAndNotiy(task)">
                     <ui-select-match>
                         <div icu-avatar user="$select.selected"></div>
-                        <span class="summary-content">{{$select.selected.name}}</span>
+                        <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
                     </ui-select-match>
                     <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
                         <div icu-avatar user="user"></div>

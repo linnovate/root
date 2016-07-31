@@ -13,17 +13,26 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                $rootScope,
                                                MeanSocket,
                                                UsersService,
+                                               people,
                                                $timeout) {
     $scope.task = entity || context.entity;
     $scope.tags = tags;
     $scope.projects = projects.data || projects;
     $scope.shouldAutofocus = !$stateParams.nameFocused;
-
+    
     TasksService.getStarred().then(function(starred) {
         $scope.task.star = _(starred).any(function(s) {
             return s._id === $scope.task._id;
         });
     });
+
+    $scope.people = people.data || people;
+    var newPeople = {
+        name: 'no select'
+    };
+
+    $scope.people.push(_(newPeople).clone());
+
 
     if (!$scope.task) {
         $state.go('main.tasks.byentity', {
@@ -112,6 +121,9 @@ angular.module('mean.icu.ui.taskdetails', [])
             task.discussion = context.entityId;
         }
         
+        if (task.assign === undefined  || task.assign === null) {
+            delete task['assign'];
+        }
         UsersService.getMe().then(function (me) {
             
             var message = {};
