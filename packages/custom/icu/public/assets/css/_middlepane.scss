@@ -167,6 +167,11 @@
 
         .left-wrapper {
             float: left;
+
+            .ui-select-container .ui-select-choices-row.active .ui-select-choices-row-inner {
+			    background-color: #f5f5f5;
+			    color: #141e20;
+			}
         }
 
         .right-wrapper {
