@@ -23,12 +23,12 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
 
                     scope.c19n.push(source.name + '(' + c19n.circleId + ')');
 
-                    if (scope.entity.circles.c19nGroups1.length)
+                    if (scope.entity.circles.c19nGroups1 && scope.entity.circles.c19nGroups1.length)
                         scope.c19n.push(scope.mine.allowed.c19nGroups1.find(function(c) {
                             return c._id === scope.entity.circles.c19nGroups1[0];
                         }).name);
 
-                    if (scope.entity.circles.c19nGroups2.length)
+                    if (scope.entity.circles.c19nGroups2 && scope.entity.circles.c19nGroups2.length)
                         scope.c19n.push(scope.mine.allowed.c19nGroups2.find(function(c) {
                             return c._id === scope.entity.circles.c19nGroups2[0];
                         }).name);

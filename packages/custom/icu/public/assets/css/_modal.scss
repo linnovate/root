@@ -4,6 +4,7 @@
 	}
     .btn {
         float: right;
+		outline: none !important;
 	    &.close{
 	    	 &:hover{
 	    	 	 transition-duration: 0.8s;
@@ -80,9 +81,8 @@
 	    color: white;
 	    background-color: #ffa004;
 	    display: inline-block;
-	    float: right;
     	margin-right: 17px;
-    	outline: none;
+		outline: none !important;
 	}
 	.c19nList {
 		float: left;
