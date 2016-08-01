@@ -2,11 +2,8 @@
 
 angular.module('mean.icu.ui.tasklist', [])
 .controller('TaskListController', function ($scope, $state, tasks, TasksService, context, $filter, $stateParams) {
-    console.log("tasks==================");
-    console.log(tasks);
-    console.log("tasks.next==================");
-    console.log(tasks.next);
     $scope.tasks = tasks.data || tasks;
+    TasksService.data = $scope.tasks;
     $scope.loadNext = tasks.next;
     $scope.loadPrev = tasks.prev;
 
@@ -76,7 +73,8 @@ angular.module('mean.icu.ui.tasklist', [])
         }
     } else if (
             $state.current.name !== 'main.tasks.byentity.activities' &&
-            $state.current.name !== 'main.tasks.byentity.tasks') {
+            //$state.current.name !== 'main.tasks.byentity.tasks') {
+            $state.current.name !== 'main.tasks.byentity.details.activities') {
         $state.go('.activities');
     }
 });

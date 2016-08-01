@@ -5,14 +5,18 @@ var mean = require('meanio'),
   fs = require('fs'),
   mkdirp = require('mkdirp'),
   config = require('meanio').loadConfig(),
-  Busboy = require('busboy');
-
+  Busboy = require('busboy'),
+  q = require('q');
+  
 var options = {
   includes: 'creator updater'
 };
 
 var crud = require('../controllers/crud.js');
 var attachment = crud('attachments', options);
+var Task = require('../models/task'),
+Attachment = require('../models/attachment');
+
 
 Object.keys(attachment).forEach(function(methodName) {
   exports[methodName] = attachment[methodName];
@@ -22,7 +26,7 @@ exports.getByEntity = function (req, res) {
 
   var entities = {projects: 'project', tasks: 'task', discussions: 'discussion', updates: 'update'},
     entity = entities[req.params.entity];
-
+    
 var query = {
     "query": {
       "filtered" : { 
@@ -75,16 +79,49 @@ exports.upload = function (req, res, next) {
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
     var hostFileLocation = config.host + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
-
+    
     mkdirp(path.join(config.attachmentDir, d), function () {
-      file.pipe(fs.createWriteStream(saveTo));
-    });
+      file.pipe(fs.createWriteStream(saveTo)).on('close', function(err) {
+      
+        var arr = hostFileLocation.split("/files");
+        var pathFor = "./files" + arr[1];
+              
+        var stats = fs.statSync(pathFor);
+        //var stats = fs.statSync("." + saveTo.substring(saveTo.indexOf('/files')));
+        
+        var fileSizeInBytes = stats["size"];
+        //Convert the file size to megabytes (optional)
+        var fileSizeInMegabytes = fileSizeInBytes / 1000000.0;
+        
+        req.locals.data.body.size = fileSizeInMegabytes;
+
+        });
+      
+    // });
 
     req.locals.data.body.name = filename;
     req.locals.data.body.path = hostFileLocation;
     req.locals.data.body.attachmentType = fileType;
+    
+    
+    // var arr = hostFileLocation.split("/files");
+    // var pathFor = "./files" + arr[1];
+    
+    // var stats = fs.statSync(pathFor);
+    // var fileSizeInBytes = stats["size"];
+    // //Convert the file size to megabytes (optional)
+    // var fileSizeInMegabytes = fileSizeInBytes / 1000000.0;
+    
+    // req.locals.data.body.size = fileSizeInMegabytes;
+       
+    req.locals.data.body.size = file._readableState.length / 1000000;
+    
 
     hasFile = true;
+    
+    //});    
+    });
+      
   });
 
   busboy.on('field', function (fieldname, val) {
@@ -101,3 +138,69 @@ exports.upload = function (req, res, next) {
 
   return req.pipe(busboy);
 };
+
+function MyTasks(req){
+	 	var deffered = q.defer();
+
+  	Task.find({
+  		assign: req.user._id
+  	}, function(err, tasks) {
+  		if (err) {
+	      deffered.reject(err);
+	    } else {
+	      deffered.resolve(tasks.map(function(t){return t._id}));
+	    }
+  	})
+  	return deffered.promise
+
+}
+
+exports.getMyTasks  = function(req, res, next) {
+	// if (req.locals.error) {
+ //    	return next();
+ //  	}
+
+	 MyTasks(req).then(function(data) {
+	 	/*var query = {
+		    "query": {
+		      "filtered" : { 
+		         "filter" : {
+		            "bool" : {
+		              "must" : [
+		                 { "term" : {"entity" : 'task'}}, 
+		                 { "terms" : {"entityId" : data}} 
+		              ]
+		        
+		           }
+		         }
+		      }
+		  	}
+	   	};
+
+		  mean.elasticsearch.search({index: 'attachment', 'body': query, size: 3000}, function (err, response) {
+		    if (err) {
+		      req.locals.error = err;
+		    }
+		    else {
+		      req.locals.result = response.hits.hits.map(function (item) {
+		        return item._source;
+		      });
+		    }
+		  });*/
+
+		Attachment.find({entity: 'task', entityId: {$in: data} }, function(err, data) {
+			if (err) {
+		    	req.locals.error = err;
+		    }
+		    else {
+		      	req.locals.result = data
+		    }
+		    next();
+		})
+	 }, function(err){
+	 	req.locals.error = err;
+	 	next();
+	 })
+
+}
+

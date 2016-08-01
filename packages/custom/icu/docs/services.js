@@ -81,25 +81,16 @@ exports.load = function(swagger, parms) {
       path: '/tasks',
       method: 'GET',
       summary: 'Get tasks list',
-      notes: 'The really path is \'/tasks\' ',
       type: '',
       nickname: 'GetTasks',
       produces: ['application/json'],
-      params: searchParms
-    }
-  };
-
-  var tasksList = {
-    'spec': {
-      description: 'Tasks operations',
-      path: '/tasks',
-      method: 'GET',
-      summary: 'Get tasks list',
-      notes: 'The really path is \'/tasks\'. \n you can add query as: /tasks?status=completed&tags=1,2,3',
-      type: '',
-      nickname: 'GetTasks',
-      produces: ['application/json'],
-      params: ['status']
+      params: searchParms,
+      parameters: [swagger.paramTypes.query('start', 'start', 'string'),
+        swagger.paramTypes.query('limit', 'limit', 'string'),
+        swagger.paramTypes.query('sort', 'sort', 'string'),
+        swagger.paramTypes.query('status', 'status', 'string'),
+        swagger.paramTypes.query('tags', 'tags', 'string')
+      ],
     }
   };
 
@@ -306,7 +297,10 @@ exports.load = function(swagger, parms) {
       type: 'Project',
       nickname: 'getProjects',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.query('start', 'start', 'string'),
+        swagger.paramTypes.query('limit', 'limit', 'string'),
+        swagger.paramTypes.query('sort', 'sort', 'string'),
+      ],
     }
   };
 
@@ -573,7 +567,10 @@ exports.load = function(swagger, parms) {
       type: 'Discussion',
       nickname: 'GetDiscussions',
       produces: ['application/json'],
-      params: searchParms
+      parameters: [swagger.paramTypes.query('start', 'start', 'string'),
+        swagger.paramTypes.query('limit', 'limit', 'string'),
+        swagger.paramTypes.query('sort', 'sort', 'string'),
+      ],
     }
   };
 

@@ -1,5 +1,17 @@
-<div icu-sidepane projects="projects" discussions="discussions" people="people" ng-if="!menu.isHidden" class="sidepane"></div>
+<!--<div icu-sidepane projects="projects" discussions="discussions" people="people" ng-if="!menu.isHidden" class="sidepane"></div>-->
+<div icu-sidepane projects="projects" discussions="discussions" people="people" class="sidepane animate-hide" ng-hide="menu.isHidden"></div>
 <div class="panes-wrapper" ng-class="{ wide: menu.isHidden }">
     <div icu-middlepane class="middlepane"></div>
     <div icu-detailspane class="detailspane"></div>
 </div>
+
+
+
+<!--OHAD-->
+<div data-ng-controller="MeanSocketController">
+    <use-mean-socket after-join="socketAfterJoin(channel, messages)" mean-socket-after-get="socketAfterGet(message)" mean-socket-after-get-all-channels="socketAfterGetChannels(channels)" join-to-channel="activeChannel"/>
+
+    <div mean-socket after-send="socketAfterSend(message)"></div>
+</div>
+
+<!--END OHAD-->

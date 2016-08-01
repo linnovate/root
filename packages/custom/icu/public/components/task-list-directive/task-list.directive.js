@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklistdirective', [])
-.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context ) {
+.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context, UsersService) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -25,10 +25,24 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         if (!$scope.displayOnly) {
-            $scope.tasks.push(_(newTask).clone());
+            if (context.entityName === 'my'){
+                UsersService.getMe().then(function (me) {
+                    newTask.assign = me._id;    
+                    $scope.tasks.push(_(newTask).clone());
+                });
+            }
+            else
+                $scope.tasks.push(_(newTask).clone());
         }
 
-        $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
+
+        if (context.entityName === 'all') {
+        	$scope.detailsState = 'main.tasks.all.details';
+        } else if (context.entityName === 'my') {
+        	$scope.detailsState = 'main.tasks.byassign.details';
+        } else {
+        	$scope.detailsState = 'main.tasks.byentity.details';
+        }
 
         $scope.createOrUpdate = function(task) {
             if (context.entityName !== 'all') {
@@ -84,19 +98,19 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.select = function(selectedTask) {
-            var currentTask = _($scope.tasks).find(function(t) {
-                return t.__autocomplete;
+            var currentTask = _($scope.tasks).findIndex(function(t) {
+                return t.id === $state.params.id;
             });
 
-            TasksService.remove(currentTask._id);
+            // TasksService.remove(currentTask._id);
 
-            _(currentTask).assign(selectedTask);
-            currentTask.__autocomplete = false;
+            // _(currentTask).assign(selectedTask);
+            // currentTask.__autocomplete = false;
 
-            $scope.searchResults.length = 0;
-            $scope.selectedSuggestion = 0;
+            // $scope.searchResults.length = 0;
+            // $scope.selectedSuggestion = 0;
 
-            $scope.createOrUpdate(currentTask).then(function(task) {
+            $scope.createOrUpdate($scope.tasks[currentTask + 1]).then(function(task) {
                 $state.go('main.tasks.byentity.details', {
                     id: task._id,
                     entity: context.entityName,
@@ -111,7 +125,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         var isScrolled = false;
 
         $scope.initialize = function($event, task) {
-
             if ($scope.displayOnly) {
                 return;
             }
@@ -155,7 +168,10 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 $event.preventDefault();
 
                 $scope.tasks[index].__autocomplete = false;
-                if ($element.find('td.name')[index+1]) $element.find('td.name')[index+1].focus();
+                if ($element.find('td.name')[index+1]) {
+                    console.log('find');
+                    $element.find('td.name')[index+1].focus();
+                }
                 else {
                 	$timeout(function() {
 			            $element.find('td.name')[index+1].focus();
@@ -166,6 +182,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.focusAutoComplete = function($event) {
+            angular.element($event.target).css('box-shadow', 'none')
             if ($event.keyCode === 38) {
                 if ($scope.selectedSuggestion > 0) {
                     $scope.selectedSuggestion -= 1;

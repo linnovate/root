@@ -31,10 +31,12 @@
             <div class="status">
                 <ui-select ng-model="discussion.status" on-select="update(discussion)">
                     <ui-select-match>
-                        <span>{{$select.selected | i18next }}</span>
+                        <i class='{{$select.selected}}'></i>
+                        <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
                     </ui-select-match>
                     <ui-select-choices repeat="status as status in statuses | filter: $select.search">
-                        <span>{{status | i18next}}</span>
+                        <i class='{{status}}'></i>
+                        <span class='{{status}}'>{{status | i18next}}</span>
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -65,7 +67,7 @@
             </div>
         </div>
 
-        <button icu-comp-modal entity="discussion" entity-name="discussion" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
+        <button icu-comp-modal entity="discussion" entity-name="discussion" type="button" class="compBtn"></button>
         <div class="description">
             <div class="title"
                  contenteditable="true"

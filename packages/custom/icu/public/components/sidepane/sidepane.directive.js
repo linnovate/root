@@ -2,12 +2,12 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context) {
+    function controller($scope, $state, context, TasksService) {
         $scope.context = context;
 
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
-        $scope.people = $scope.people.data || $scope.discussions;
+        $scope.people = $scope.people.data || $scope.people;
 
         $scope.toggleVisibility = function(toggledItem) {
             var prev = toggledItem.open;
@@ -17,6 +17,10 @@ directive('icuSidepane', function() {
             });
 
             toggledItem.open = !prev;
+        }
+
+        $scope.removeFilterValue = function() {
+        	TasksService.filterValue = false;
         }
 
         $scope.items = [{

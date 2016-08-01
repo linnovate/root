@@ -4,6 +4,7 @@ module.exports = function(req, res, next) {
     console.log('current user');
     console.log(JSON.stringify(req.user));
   if (!req.user) {
+      console.log('userNOT');
     req.locals.error = {
       status: 403,
       message: 'User is not authorized'

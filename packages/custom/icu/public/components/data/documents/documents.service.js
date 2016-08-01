@@ -41,6 +41,15 @@ angular.module('mean.icu.data.documentsservice', [])
         }
 
         function saveAttachments(data, file) {
+
+            // For SIze of the file - Angular sacks!
+            //file = file[0];
+            file[1] = file[0];
+            file[2] = file[0];
+            file[3] = file[0];
+            file[4] = file[0];
+            file[5] = file[0];
+            
             return Upload.upload({
                 url: '/api/attachments',
                 fields: data,
@@ -54,6 +63,12 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
+        function getByTasks() {
+	        return $http.get(ApiUri + '/tasks/myTasks'  + EntityPrefix).then(function(result) {
+	            return result.data;
+	        });
+	    }
+
         return {
             getAll: getAll,
             getById: getById,
@@ -62,6 +77,7 @@ angular.module('mean.icu.data.documentsservice', [])
             getByDiscussionId: getByDiscussionId,
             getByUserId: getByUserId,
             saveAttachments: saveAttachments,
-            updateAttachment: updateAttachment
+            updateAttachment: updateAttachment,
+            getByTasks: getByTasks
         };
     });

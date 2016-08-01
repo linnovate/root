@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, PaginationService) {
+.service('ProjectsService', function(ApiUri, $http, PaginationService, TasksService) {
     var EntityPrefix = '/projects';
 
     function getAll(start, limit, sort) {
@@ -68,6 +68,11 @@ angular.module('mean.icu.data.projectsservice', [])
         }
 
         return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
+            TasksService.data.forEach(function(task) {
+                if (task.project && task.project._id === project._id) {
+                    task.project = result.data;
+                }
+            });
             return result.data;
         });
     }

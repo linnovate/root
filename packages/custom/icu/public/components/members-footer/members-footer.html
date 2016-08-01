@@ -1,11 +1,11 @@
 <div class="footer">
-    <div class="delete-wrapper" data-ng-repeat="member in entity.watchers.concat(watchersGroups)" ng-if="entity.watchers.length || watchersGroups.length">
-        <div class="delete" ng-click="deleteMember(member)"><i class="fa fa-close"></i></div>
+    <div class="delete-wrapper" data-ng-repeat="member in entity.watchers.concat(watchersGroups) track by $index" ng-if="entity.watchers.length || watchersGroups.length">
+        <div ng-show="member._id !== me._id" class="delete" ng-click="deleteMember(member)"><i class="fa fa-close"></i></div>
         <div icu-avatar user="member"></div>
-        <div class="numberOfPeople" ng-if="member.numberOfPeople">{{member.numberOfPeople > 99 ? '+99' : member.numberOfPeople}}</div>
+        <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
     </div>
 
-    <div ng-if="!entity.watchers.length && !watchersGroups.length" class="left-notification">
+    <div ng-if="!entity.watchers.length && !watchersGroups.length" class="left-notification" ng-click="triggerSelect()">
         {{'noWatchers' | i18next}}
     </div>
     

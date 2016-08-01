@@ -42,10 +42,11 @@ module.exports = function(entityName, options) {
   }
 
   function read(req, res, next) {
+    console.log('orit 1' + JSON.stringify(req.locals.error));
     if (req.locals.error) {
       return next();
     }
-
+ console.log('orit 2'+JSON.stringify(req.params) + '3   ' +JSON.stringify(req.user));
     entityService
       .read(req.params.id, req.user, req.acl)
       .then(success(req, next), error(req, next));
@@ -64,6 +65,7 @@ module.exports = function(entityName, options) {
   }
 
   function update(req, res, next) {
+    console.yon('sara2', req.locals.error);
     if (req.locals.error) {
       return next();
     }
@@ -79,6 +81,10 @@ module.exports = function(entityName, options) {
       req.locals.result.room = req.body.room;
     }
     // END Made By OHAD
+
+    if (req.locals.result.assign !== req.body.assign) {
+      req.locals.data.shouldCreateUpdate = false;
+    }
 
     var entity = req.locals.data.body || req.body;
     

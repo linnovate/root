@@ -3,6 +3,8 @@
 angular.module('mean.icu.data.tasksservice', [])
 .service('TasksService', function (ApiUri, $http, PaginationService) {
     var EntityPrefix = '/tasks';
+    var filterValue = false;
+    var data;
 
     function getAll(start, limit, sort) {
         var qs = querystring.encode({
@@ -92,6 +94,30 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function getMyTasks() {
+    	return $http.get(ApiUri + EntityPrefix + '/byAssign').then(function (result) {
+            return result.data;
+        });
+    }
+
+	function getMyTasksStatistics() {
+		return $http.get(ApiUri + '/myTasksStatistics').then(function (result) {
+            return result.data;
+        });
+    }
+
+    function getOverdueWatchedTasks() {
+    	return $http.get(ApiUri + '/overdueWatchedTasks').then(function (result) {
+            return result.data;
+        });
+    }
+
+    function getWatchedTasks() {
+    	return $http.get(ApiUri + '/watchedTasks').then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -104,6 +130,12 @@ angular.module('mean.icu.data.tasksservice', [])
         update: update,
         remove: remove,
         getStarred: getStarred,
-        star: star
+        star: star,
+        getMyTasks: getMyTasks,
+        getMyTasksStatistics: getMyTasksStatistics,
+        getOverdueWatchedTasks: getOverdueWatchedTasks,
+        getWatchedTasks: getWatchedTasks,
+        filterValue: filterValue,
+        data: data
     };
 });

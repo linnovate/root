@@ -7,19 +7,32 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                projects,
                                                $state,
                                                TasksService,
+                                               ActivitiesService,
                                                context,
                                                $stateParams,
-                                               $rootScope) {
+                                               $rootScope,
+                                               MeanSocket,
+                                               UsersService,
+                                               people,
+                                               $timeout) {
     $scope.task = entity || context.entity;
     $scope.tags = tags;
     $scope.projects = projects.data || projects;
     $scope.shouldAutofocus = !$stateParams.nameFocused;
-
+    
     TasksService.getStarred().then(function(starred) {
         $scope.task.star = _(starred).any(function(s) {
             return s._id === $scope.task._id;
         });
     });
+
+    $scope.people = people.data || people;
+    var newPeople = {
+        name: 'no select'
+    };
+
+    $scope.people.push(_(newPeople).clone());
+
 
     if (!$scope.task) {
         $state.go('main.tasks.byentity', {
@@ -41,7 +54,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         }).pluck('term').value();
     };
 
-    $scope.$watchGroup(['task.description'], function (nVal, oVal) {
+    $scope.$watchGroup(['task.description', 'task.title'], function (nVal, oVal) {
         if (nVal !== oVal && oVal) {
             $scope.delayedUpdate($scope.task);
         }
@@ -63,6 +76,8 @@ angular.module('mean.icu.ui.taskdetails', [])
         buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
     };
 
+    if ($scope.task.due) $scope.task.due = new Date($scope.task.due);
+    
     $scope.dueOptions = {
         onSelect: function () {
             $scope.update($scope.task);
@@ -91,7 +106,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.deleteTask = function (task) {
         TasksService.remove(task._id).then(function () {
             var state = context.entityName === 'all' ?
-                'main.tasks.all' : 'main.tasks.byentity';
+                'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
 
             $state.go(state, {
                 entity: context.entityName,
@@ -99,8 +114,58 @@ angular.module('mean.icu.ui.taskdetails', [])
             }, {reload: true});
         });
     };
+    
+    //Made By OHAD
+    $scope.updateAndNotiy = function (task) {
+        if (context.entityName === 'discussion') {
+            task.discussion = context.entityId;
+        }
+        
+        if (task.assign === undefined  || task.assign === null) {
+            delete task['assign'];
+        }
+        UsersService.getMe().then(function (me) {
+            
+            var message = {};
+            message.content = task.title;
+            //"message":{"content":"tyui"}
+            MeanSocket.emit('message:send', {
+                message: message,
+                user: me.name,
+                channel: task.assign,
+                id: task.id
+            });
 
-    $scope.update = function (task) {
+            TasksService.update(task).then(function (result) {
+                if (context.entityName === 'project') {
+                    var projId = result.project ? result.project._id : undefined;
+                    if (projId !== context.entityId) {
+                        $state.go('main.tasks.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {reload: true});
+                    }
+                }
+            });
+        
+        });
+        ActivitiesService.create({
+            data: {
+                issue: 'task',
+                issueId: task.id,
+                type: 'assign',
+                userObj: task.assign
+            },
+            context: {}
+        }).then(function(result) {
+            ActivitiesService.data.push(result);
+            console.log(ActivitiesService.data)
+        });
+
+    };
+    //END Made By OHAD
+
+    $scope.update = function (task, type) {
         if (context.entityName === 'discussion') {
             task.discussion = context.entityId;
         }
@@ -108,22 +173,50 @@ angular.module('mean.icu.ui.taskdetails', [])
         TasksService.update(task).then(function (result) {
             if (context.entityName === 'project') {
                 var projId = result.project ? result.project._id : undefined;
-                if (projId !== context.entityId) {
-                    $state.go('main.tasks.byentity', {
+                if (projId !== context.entityId || type === 'project') {
+                    $state.go('main.tasks.byentity.details', {
                         entity: context.entityName,
-                        entityId: context.entityId
+                        entityId: context.entityId,
+                        id: task._id
                     }, {reload: true});
                 }
             }
         });
     };
 
+    $scope.setFocusToTagSelect = function() {
+    	var element = angular.element('#addTag > input.ui-select-focusser')[0];
+    	$timeout(function () {
+    		element.focus();
+    	}, 0);
+    }
+
     $scope.delayedUpdate = _.debounce($scope.update, 500);
 
     if ($scope.task &&
             ($state.current.name === 'main.tasks.byentity.details' ||
             $state.current.name === 'main.search.task' ||
-            $state.current.name === 'main.tasks.all.details')) {
+            $state.current.name === 'main.tasks.all.details' ||
+            $state.current.name === 'main.tasks.byassign.details')) {
         $state.go('.activities');
     }
+})
+.directive('selectOnBlur', function($timeout) {
+    return {
+        require: 'uiSelect',
+        link: function(scope, elm, attrs, ctrl) {
+            elm.on('blur', 'input.ui-select-search', function(e) {
+                scope.$parent.tagInputVisible = false;
+            });
+
+            elm.on('blur', 'input.ui-select-focusser', function(e, g) {
+            	$timeout(function () {
+		    		if(!e.target.hasAttribute('disabled')) {
+						scope.$parent.tagInputVisible = false;
+		    		}
+		    	}, 5);
+            });
+
+        }
+    };
 });

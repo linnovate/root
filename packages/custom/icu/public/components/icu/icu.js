@@ -8,7 +8,8 @@ angular.module('mean.icu').controller('IcuController',
         projects,
         discussions,
         people,
-        context) {
+        context,
+        TasksService) {
     $scope.menu = {
         isHidden: false
     };
@@ -21,12 +22,15 @@ angular.module('mean.icu').controller('IcuController',
         'discussion': 'discussions',
         'user': 'people'
     };
-
+    
+    //Made By OHAD
+    //$state.go('socket');
+    //END Made By OHAD
 
     function initializeContext(state) {
         if (state.name.indexOf('main') === 0) {
             var restoredContext = context.getContextFromState(state);
-            if (restoredContext.entityName !== 'all') {
+            if (restoredContext.entityName !== 'all' && restoredContext.entityName !== 'my') {
                 var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
                     return e._id === restoredContext.entityId;
                 });

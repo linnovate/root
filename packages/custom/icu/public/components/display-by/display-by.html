@@ -1,4 +1,10 @@
 <section class="display-by">
+    <p class="title my"
+       ng-if="context.main === 'tasks'" 
+       ui-sref="main.{{context.main}}.byassign" ui-sref-active="active"
+       data-ng-class="{ 'selected': context.entityName === 'my' }">
+        {{ 'myTasks' | i18next }}
+    </p>
     <p class="title all"
        ui-sref="main.{{context.main}}.all" ui-sref-active="active"
        data-ng-class="{ 'selected': context.entityName === 'all' }">
@@ -8,18 +14,18 @@
     <p class="intro">{{'display'+context.main+'By' | i18next}}:</p>
 
     <div class="list projects" ng-if="projects && (icuDisplayBy.indexOf('projects'))>-1">
-        <p ng-click="visible.project = !visible.project" class="title">{{ 'project' | i18next }}</p>
+        <p ng-click="visible.project = !visible.project" class="title">{{ 'projects' | i18next }}</p>
         <ul ng-if="visible.project">
             <li data-ng-repeat="project in projects | limitTo: displayLimit['projects']"
                 data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
                 data-ng-click="switchTo('project', project._id)">
-                <a href>
+                <a href class="Names-In-List-On-Side">
                     {{project.title}}
                 </a>
-                <div class="tag-color" ng-style="color={'background-color': '#' + '{{project.color}}'}"></div>
+                <div class="tag-color" ng-style="{'background-color': '#' + project.color}"></div>
             </li>
             <li ng-if="projects.length >  displayLimit['projects']" ng-click="showMore(projects.length, 'projects')" class="more">{{ 'more' | i18next }}</li>
-            <li ng-if="projects.length ==  displayLimit['projects']" ng-click="collapse('projects')" class="more">{{ 'Collapse...' | i18next }}</li>
+            <li ng-if="projects.length ==  displayLimit['projects']" ng-click="collapse('projects')" class="more">{{ 'less' | i18next }}</li>
 
         </ul>
     </div>
@@ -30,12 +36,12 @@
             <li data-ng-repeat="discussion in discussions | limitTo:displayLimit['discussions']"
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
-                <a href>
+                <a href class="Names-In-List-On-Side">
                     {{discussion.title || discussion.name}}
                 </a>
             </li>
             <li ng-if="discussions.length >  displayLimit['discussions']" ng-click="showMore(discussions.length, 'discussions')" class="more">{{ 'more' | i18next }}</li>
-            <li ng-if="discussions.length ==  displayLimit['discussions']" ng-click="collapse('discussions')" class="more">{{ 'Collapse...' | i18next }}</li>
+            <li ng-if="discussions.length ==  displayLimit['discussions']" ng-click="collapse('discussions')" class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
 

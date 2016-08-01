@@ -2,17 +2,28 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function () {
-        function controller($scope, UsersService, DocumentsService, ActivitiesService, $stateParams, $state, $timeout) {
+        function controller($scope, UsersService, DocumentsService, ActivitiesService, $stateParams, $state, $timeout, context) {
             $scope.isLoading = true;
             $scope.activity = {
                 description: ''
             };
 
+            $scope.context = context;
+            $scope.stateParams = $stateParams
+
             $scope.details = {
-                create: 'createdThis',
-                update: 'updatedThis',
-                document: 'addDocument',
-                comment: 'addComment'
+                create: [{type: 'text', value: 'createdThis'}, {type: 'object', value: 'issue'}],
+                update: [{type: 'text', value: 'updatedThis'}, {type: 'object', value: 'issue'}],
+                document: [{type: 'text', value: 'addDocument'}, {type: 'object', value: 'issue'}],
+                comment: [{type: 'text', value: 'addComment'}, {type: 'object', value: 'issue'}],
+                assign: [{type: 'text', value: 'assignedUser'}, {type: 'deepObject', value:['userObj','name'], klass:"user-name"}, {type: 'text', value: 'toThis'}, {type: 'object', value: 'issue'}]
+            };
+
+            $scope.tasksDetails = {
+                create: 'createdTask',
+                update: 'updatedTask',
+                document: 'addDocumentToTask',
+                comment: 'addCommentToTask'
             };
 
             UsersService.getMe().then(function (user) {
@@ -30,11 +41,14 @@ angular.module('mean.icu.ui.tabs')
                     description: ''
                 };
             };
+           
 
             $scope.save = function () {
                 $scope.activity.issue = $scope.entityName;
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
                 $scope.activity.type = $scope.attachments ? 'document' : 'comment';
+                
+                // $scope.activity.size = $scope.attachments[0].size;
 
                 var isRoomProject = $scope.entityName === 'project' && $scope.entity.room,
                     isRoomFortask = $scope.entityName === 'task' && $scope.entity.project && $scope.entity.project.room,
@@ -51,6 +65,7 @@ angular.module('mean.icu.ui.tabs')
                         name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : ''
                     }
                 }
+                console.log('activity', $scope.activity, 'context', context);
 
                 ActivitiesService.create({data:$scope.activity, context:context}).then(function (result) {
                     if (!_.isEmpty($scope.attachments)) {
@@ -61,13 +76,17 @@ angular.module('mean.icu.ui.tabs')
                             entity: $scope.entityName,
                             entityId: $stateParams.id || $stateParams.entityId
                         };
+                        console.log('if data', data);
+                        console.log('if file', file);
 
                         DocumentsService.saveAttachments(data, file).success(function(attachment) {
                             result.attachments.push(attachment);
                         });
                     }
-                    clearForm();
+                    //clearForm();
+                    console.log('result', result);
                     $scope.activities.push(result);
+                    clearForm();
                 });
             };
 
@@ -135,8 +154,8 @@ angular.module('mean.icu.ui.tabs')
 
             $scope.expandUpdate = function() {
                 if (addUpdateField.height() < 150) {
-                    addUpdateField.css("height", "130px");
-                    activityList.css("height", "calc(100% - 200px)");
+                    addUpdateField.css("height", "100px");
+                    activityList.css("height", "calc(100% - 170px)");
                 }
             };
             $scope.minimizeUpdate = function() {
