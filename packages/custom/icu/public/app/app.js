@@ -500,6 +500,7 @@ angular.module('mean.icu').config([
             resolve: {
                 tasks: function(TasksService, $stateParams) {
                     if ($stateParams.starred) {
+                        console.log(TasksService.getStarred())
                         return TasksService.getStarred();
                     } else {
                         return TasksService.getAll($stateParams.start,
@@ -542,9 +543,14 @@ angular.module('mean.icu').config([
                 },
             resolve: {
                 tasks: function(TasksService, $stateParams) {
-                    return TasksService.getMyTasks($stateParams.start,
-                        $stateParams.limit,
-                        $stateParams.sort);
+
+                    if ($stateParams.starred) {
+                        return TasksService.getStarredByassign();
+                    } else {
+                        return TasksService.getMyTasks($stateParams.start,
+                            $stateParams.limit,
+                            $stateParams.sort);
+                    }
                 }
             }
         })

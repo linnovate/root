@@ -74,10 +74,8 @@ module.exports = function(entityName, options) {
     var query = UserModel.findOne({
       _id: options.user._id
     });
-
     return query.then(function(user) {
       var starredEntities = 'starred' + _.capitalize(entityName);
-
       if (!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
         return [];
       } else {
@@ -88,24 +86,42 @@ module.exports = function(entityName, options) {
 
 
   function getStarred() {
+    if(entityName.assing){
+      var assign = entityName.assing;
+      entityName = entityName.name;
+    }
     var Model = entityNameMap[entityName].model;
     var modelOptions = entityNameMap[entityName].options;
 
     var query = UserModel.findOne({
       _id: options.user._id
     });
-
     return query.then(function(user) {
       var starredEntities = 'starred' + _.capitalize(entityName);
+
+      var tmp = {
+        '_id': {
+          $in: user.profile[starredEntities]
+        },
+      }
+
+      if (assign) {
+        tmp['assign'] = user._id
+        tmp['status'] = {$nin: ['rejected', 'done']}
+      }
 
       if (!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
         return [];
       } else {
-        return Model.find({
-          '_id': {
-            $in: user.profile[starredEntities]
-          }
-        }).populate(modelOptions.includes);
+        return Model.find(
+          tmp
+        // {
+        //   '_id': {
+        //     $in: user.profile[starredEntities]
+        //   },
+        //   'assign':user._id
+        // }
+        ).populate(modelOptions.includes);
       }
     });
   }
