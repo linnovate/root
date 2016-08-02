@@ -99,20 +99,20 @@ module.exports = function(entityName, options) {
     return query.then(function(user) {
       var starredEntities = 'starred' + _.capitalize(entityName);
 
-      var tmp = {
-        '_id': {
-          $in: user.profile[starredEntities]
-        },
-      }
-
-      if (assign) {
-        tmp['assign'] = user._id
-        tmp['status'] = {$nin: ['rejected', 'done']}
-      }
 
       if (!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
         return [];
       } else {
+	      var tmp = {
+	        '_id': {
+	          $in: user.profile[starredEntities]
+	        },
+	      }
+
+	      if (assign) {
+	        tmp['assign'] = user._id
+	        tmp['status'] = {$nin: ['rejected', 'done']}
+	      }
         return Model.find(
           tmp
         // {
