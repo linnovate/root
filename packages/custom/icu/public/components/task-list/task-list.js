@@ -39,7 +39,7 @@ angular.module('mean.icu.ui.tasklist', [])
             value: 'due'
         }, {
             title: 'project',
-            value: 'project'
+            value: 'project.title'
         }, {
             title: 'title',
             value: 'title'
