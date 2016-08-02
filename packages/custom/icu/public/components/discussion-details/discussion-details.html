@@ -58,7 +58,7 @@
 
             <div class="actions"
                  ng-if="statusesActionsMap[discussion.status]">
-                <button ng-disabled="['Cancelled', 'New'].indexOf(discussion.status) !== -1 && (
+                <button ng-disabled="['cancelled', 'new'].indexOf(discussion.status) !== -1 && (
                                         !discussion.due ||
                                         !discussion.assign)"
                         ng-click="statusesActionsMap[discussion.status].method(discussion)">
