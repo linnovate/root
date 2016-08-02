@@ -44,9 +44,10 @@ angular.module('mean.icu.ui.tabs')
            
 
             $scope.save = function () {
+                if(_.isEmpty($scope.attachments) && _.isEmpty($scope.activity.description)) return;
                 $scope.activity.issue = $scope.entityName;
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
-                $scope.activity.type = $scope.attachments ? 'document' : 'comment';
+                $scope.activity.type = $scope.attachments && $scope.attachments.length ? 'document' : 'comment';
                 
                 // $scope.activity.size = $scope.attachments[0].size;
 
@@ -80,7 +81,7 @@ angular.module('mean.icu.ui.tabs')
                         console.log('if file', file);
 
                         DocumentsService.saveAttachments(data, file).success(function(attachment) {
-                            result.attachments.push(attachment);
+                            result.attachments = [attachment];
                         });
                     }
                     //clearForm();
