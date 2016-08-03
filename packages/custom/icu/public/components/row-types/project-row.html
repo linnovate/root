@@ -6,7 +6,7 @@
     placeholder="{{'createNewProject' | i18next}}"
     strip-br="true"
     ng-change="data.searchCb(data.project.title) || data.updateCb(data.project)"
-    ng-keydown="data.onEnterCb($event, data.index)"
+    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-model="data.project.title">
 </td>
 <td class="status col-sm-2" ng-class="data.project.status">{{data.project.status | i18next }}</td>

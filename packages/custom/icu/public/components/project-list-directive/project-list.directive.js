@@ -48,8 +48,57 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                     //var data = {
                     //    action: 'renamed'
                     //};
-                    //return ProjectsService.update(project, data);
+                    // return ProjectsService.update(project, data);
+                    return ProjectsService.update(project);
                 }
+            };
+
+            $scope.debouncedUpdate = _.debounce($scope.createOrUpdate, 300);
+
+            $scope.searchResults = [];
+
+            $scope.search = function(project) {
+                if (context.entityName !== 'discussion') {
+                    return;
+                }
+
+                if (!project.__autocomplete) {
+                    return;
+                }
+
+                var term = project.title;
+                if (!term) {
+                    return;
+                }
+
+                $scope.searchResults.length = 0;
+                $scope.selectedSuggestion = 0;
+                ProjectsService.search(term).then(function(searchResults) {
+                    _(searchResults).each(function(sr) {
+                        var alreadyAdded = _($scope.projects).any(function(p) {
+                            return p._id === sr._id;
+                        });
+
+                        if (!alreadyAdded) {
+                            $scope.searchResults.push(sr);
+                        }
+                    });
+                    $scope.selectedSuggestion = 0;
+                });
+            };
+
+            $scope.select = function(selectedTask) {
+                var currentProject = _($scope.projects).findIndex(function(p) {
+                    return p.id === $state.params.id;
+                });
+
+                $scope.createOrUpdate($scope.projects[currentProject + 1]).then(function(project) {
+                    $state.go($scope.detailsState, {
+                        id: project._id,
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    });
+                });
             };
         }
 
@@ -108,6 +157,47 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                 //         $element.find('td.name:nth-child(1)')[0].focus();
                 //     }
                 // }
+                if ($event.keyCode === 13 || $event.keyCode === 9) {
+                    $event.preventDefault();
+
+                    $scope.projects[index].__autocomplete = false;
+                    if ($element.find('td.name')[index+1]) {
+                        console.log('find');
+                        $element.find('td.name')[index+1].focus();
+                    }
+                    else {
+                        $timeout(function() {
+                            $element.find('td.name')[index+1].focus();
+                        }, 500);
+                    }
+
+                }
+            };
+
+            $scope.focusAutoComplete = function($event) {
+                angular.element($event.target).css('box-shadow', 'none')
+                if ($event.keyCode === 38) {
+                    if ($scope.selectedSuggestion > 0) {
+                        $scope.selectedSuggestion -= 1;
+                    }
+                    $event.preventDefault();
+                } else if ($event.keyCode === 40) {
+                    if ($scope.selectedSuggestion < $scope.searchResults.length - 1) {
+                        $scope.selectedSuggestion += 1;
+                    }
+                    $event.preventDefault();
+                } else if ($event.keyCode === 13) {
+                    var sr = $scope.searchResults[$scope.selectedSuggestion];
+                    $scope.select(sr);
+                }
+
+
+            };
+
+            $scope.hideAutoComplete = function(task) {
+                task.__autocomplete = false;
+                $scope.searchResults.length = 0;
+                $scope.selectedSuggestion = 0;
             };
 
             // infinite scroll
@@ -120,6 +210,11 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                 if (!$scope.isLoading && $scope.loadNext) {
                     $scope.isLoading = true;
                     $scope.loadNext().then(function(projects) {
+
+                        _(projects.data).each(function(p) {
+                            p.__state = creatingStatuses.Created;
+                        });
+
                         var offset = $scope.displayOnly ? 0 : 1;
 
                         if (projects.data.length) {
