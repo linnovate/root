@@ -41,7 +41,8 @@ Date.prototype.getWeek = function()
     var date = today.getDate() - today.getDay();
 
     var StartDate = new Date(today.setDate(date));
-    var EndDate = new Date(today.setDate(date + 6));
+    var EndDate = new Date(today.setDate(StartDate.getDate() + 6));
+    EndDate.setHours(23,59,59,999);
     return [StartDate, EndDate];
 }
 
