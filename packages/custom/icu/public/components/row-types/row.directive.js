@@ -37,6 +37,10 @@ angular.module('mean.icu.ui.rows', [])
         $templateRequest(templateUrl).then(function(result) {
             compileTemplate($scope, $element, result);
         });
+
+        if ($scope.data[$scope.type] && $scope.data[$scope.type].due) {
+        	$scope.data[$scope.type].due = new Date($scope.data[$scope.type].due)
+        }
     }
 
     return {
