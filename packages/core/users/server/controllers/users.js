@@ -18,12 +18,12 @@ var mongoose = require('mongoose'),
  * Auth callback
  */
 exports.authCallback = function(req, res) {
-  // var payload = req.user;
-  // var escaped = JSON.stringify(payload);      
-  // escaped = encodeURI(escaped);
-  // // We are sending the payload inside the token
-  // var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
-  // res.cookie('token', token);
+  var payload = req.user;
+  var escaped = JSON.stringify(payload);      
+  escaped = encodeURI(escaped);
+  // We are sending the payload inside the token
+  var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
+  res.cookie('token', token);
   res.redirect('/');
 };
 
@@ -34,7 +34,7 @@ exports.signin = function(req, res) {
   if (req.isAuthenticated()) {
     return res.redirect('/');
   }
-  res.redirect('/login');
+  res.redirect('/auth');
 };
 
 /**
