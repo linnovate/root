@@ -82,6 +82,9 @@ angular.module('mean.icu.ui.taskdetails', [])
     
     $scope.dueOptions = {
         onSelect: function () {
+            var now = $scope.task.due; 
+            var now_utc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  0, 0, 0));
+            $scope.task.due = now_utc;
             $scope.update($scope.task);
         },
         dateFormat: 'd.m.yy'
