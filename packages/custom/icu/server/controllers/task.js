@@ -41,7 +41,8 @@ Date.prototype.getWeek = function()
     var date = today.getDate() - today.getDay();
 
     var StartDate = new Date(today.setDate(date));
-    var EndDate = new Date(today.setDate(date + 6));
+    var EndDate = new Date(today.setDate(StartDate.getDate() + 6));
+    EndDate.setHours(23,59,59,999);
     return [StartDate, EndDate];
 }
 
@@ -60,6 +61,7 @@ exports.create = function(req, res, next) {
 };
 
 exports.update = function(req, res, next) {
+	console.log('sara1'+  JSON.stringify(req.locals.error));
   if (req.locals.error) {
     return next();
   }
@@ -214,7 +216,9 @@ var byAssign = function(req, res, next) {
   	Task.find({
   		assign: req.user._id,
   		status: {$nin: ['rejected', 'done']}
-  	}, function(err, tasks) {
+		})
+		.populate('project')
+		.exec(function(err, tasks) {
   		if (err) {
 	      req.locals.error = {
 	        message: 'Can\'t get my tasks'
@@ -224,7 +228,7 @@ var byAssign = function(req, res, next) {
 	    }
 
 	    next();
-  	})
+		});
 }
 
 

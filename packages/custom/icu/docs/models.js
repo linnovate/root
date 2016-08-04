@@ -225,6 +225,10 @@ exports.models = {
       room: {
         type: 'string',
         description: 'id of letschat room'
+      },
+      size: {
+          type: 'number',
+          description: 'Size of the file'
       }
     }
   },

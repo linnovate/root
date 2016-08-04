@@ -41,8 +41,9 @@ function getStarred(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-
   var entityName = req.params.entity || req.locals.data.entityName;
+  if(req.params.type === 'byAssign')
+    var entityName = {name : req.params.entity || req.locals.data.entityName, assing : true};
   var entityService = starService(entityName, { user: req.user });
 
   entityService.getStarred().then(function(starred) {
@@ -51,12 +52,12 @@ function getStarred(req, res, next) {
   });
 }
 
+
 function getStarredIds(entity) {
   return function(req, res, next){
     if (req.locals.error) {
       return next();
     }
-
     var entityService = starService(entity, { user: req.user });
 
     entityService.getStarredIds().then(function(starred) {

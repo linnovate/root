@@ -89,7 +89,7 @@
                     }
 
                     &.name {
-                        width: 31%;
+                        width: 22%;
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         cursor: text;
@@ -111,8 +111,22 @@
                         }
                     }
 
-                    &.status, &.due {
+                    &.status {
                         width: calc(10% - 65px);
+                            &.new{color: #ff4081;}
+                            &.assigned{color: #2979ff;}
+                            &.in-progress{color: #f69679;}
+                            &.review{color: #8dc63f;}
+                            &.rejected{color: #ef5350;}
+                            &.done{color: #598527;}
+                            &.canceled{color: #ef5350;}
+                            &.completed{color: #598527;}
+                            &.archived{color: #ab47bc;}
+                            &.scheduled{color: #0054a6;}
+                    }
+
+                   	&.due {
+                     	width: calc(19% - 65px);
                     }
 
                     .tag {

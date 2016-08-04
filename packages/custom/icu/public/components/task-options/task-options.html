@@ -3,19 +3,19 @@
     	<div class="options">
     		<div ng-click="filterTasks('today')">
     			<span>{{statistics.TasksDueToday}}</span>
-    			TASKS DUE TODAY
+    			{{'tasksDueToday' | i18next}}
     		</div>
 	    	<div ng-click="filterTasks('week')">
 	    		<span>{{statistics.TasksDueWeek}}</span>
-	    		TASKS DUE THIS WEEK
+	    		{{'tasksDueThisWeek' | i18next}}
 	    	</div>
 	    	<div>
 	    		<span>{{statistics.WatchedTasks}}</span>
-	    		WATCHED TASKS
+	    		{{'watchedTasks' | i18next}}
 	    	</div>
 	    	<div ng-click="filterTasks('overdue')">
 	    		<span>{{statistics.OverDueTasks}}</span>
-	    		OVERDUE TASKS
+	    		{{'overdueTasks' | i18next}}
 	    	</div>
     	</div>
 

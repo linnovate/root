@@ -14,7 +14,7 @@
                 <ui-select ng-model="discussion.assign" on-select="update(discussion)">
                     <ui-select-match>
                         <div icu-avatar user="$select.selected"></div>
-                        <span class="summary-content">{{$select.selected.name}}</span>
+                        <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
                     </ui-select-match>
                     <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
                         <div icu-avatar user="user"></div>
@@ -31,9 +31,11 @@
             <div class="status">
                 <ui-select ng-model="discussion.status" on-select="update(discussion)">
                     <ui-select-match>
-                        <span>{{$select.selected | i18next }}</span>
+                        <i class='{{$select.selected}}'></i>
+                        <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
                     </ui-select-match>
                     <ui-select-choices repeat="status as status in statuses | filter: $select.search">
+                        <i class='{{status}}'></i>
                         <span class='{{status}}'>{{status | i18next}}</span>
                     </ui-select-choices>
                 </ui-select>
@@ -56,7 +58,7 @@
 
             <div class="actions"
                  ng-if="statusesActionsMap[discussion.status]">
-                <button ng-disabled="['Cancelled', 'New'].indexOf(discussion.status) !== -1 && (
+                <button ng-disabled="['cancelled', 'new'].indexOf(discussion.status) !== -1 && (
                                         !discussion.due ||
                                         !discussion.assign)"
                         ng-click="statusesActionsMap[discussion.status].method(discussion)">

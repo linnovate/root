@@ -143,7 +143,7 @@ exports.getMyTasks = function(req, res, next) {
       issueId: {
         $in: data
       }
-    }, function(err, data) {
+    }).populate('userObj', 'name').populate('creator', 'name').exec(function(err, data) {
       if (err) {
         req.locals.error = err;
       } else {

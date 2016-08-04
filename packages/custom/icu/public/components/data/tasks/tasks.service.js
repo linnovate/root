@@ -118,6 +118,12 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function getStarredByassign() {
+        return $http.get(ApiUri + EntityPrefix + '/starred/byAssign').then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -135,6 +141,7 @@ angular.module('mean.icu.data.tasksservice', [])
         getMyTasksStatistics: getMyTasksStatistics,
         getOverdueWatchedTasks: getOverdueWatchedTasks,
         getWatchedTasks: getWatchedTasks,
+        getStarredByassign: getStarredByassign,
         filterValue: filterValue,
         data: data
     };

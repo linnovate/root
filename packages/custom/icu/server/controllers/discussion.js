@@ -144,17 +144,38 @@ exports.schedule = function(req, res, next) {
       return _.contains(task.tags, 'Agenda');
     });
 
-    mailService.send('discussionSchedule', {
-      discussion: discussion,
-      agendaTasks: groupedTasks['true'] || [],
-      additionalTasks: groupedTasks['false'] || []
-    }).then(function() {
-      console.log("req.locals.data.body");
-      console.log(req.locals.data.body);
-      req.locals.data.body = discussion;
-      req.locals.data.body.status = 'scheduled';
-      next();
-    });
+    var options = [{
+        path: 'watchers',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'assign',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'creator',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'members',
+        model: 'User',
+        select: 'name email'
+    }];
+
+	Discussion.populate(discussion, options, function(err, doc) {
+        if (err || !doc) return next();
+        mailService.send('discussionSchedule', {
+	      discussion: doc,
+	      agendaTasks: groupedTasks['true'] || [],
+	      additionalTasks: groupedTasks['false'] || []
+	    }).then(function() {
+	      console.log("req.locals.data.body");
+	      console.log(req.locals.data.body);
+	      req.locals.data.body = discussion;
+	      req.locals.data.body.status = 'scheduled';
+	      next();
+	    });
+    });	    
   });
 };
 

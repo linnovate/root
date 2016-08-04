@@ -46,6 +46,9 @@ var AttachmentSchema = new Schema({
   updater: {
     type: Schema.ObjectId,
     ref: 'User'
+  },
+  size: {
+    type: Number
   }
 });
 

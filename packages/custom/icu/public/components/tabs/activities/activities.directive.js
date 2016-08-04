@@ -44,9 +44,12 @@ angular.module('mean.icu.ui.tabs')
            
 
             $scope.save = function () {
+                if(_.isEmpty($scope.attachments) && _.isEmpty($scope.activity.description)) return;
                 $scope.activity.issue = $scope.entityName;
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
-                $scope.activity.type = $scope.attachments ? 'document' : 'comment';
+                $scope.activity.type = $scope.attachments && $scope.attachments.length ? 'document' : 'comment';
+                
+                // $scope.activity.size = $scope.attachments[0].size;
 
                 var isRoomProject = $scope.entityName === 'project' && $scope.entity.room,
                     isRoomFortask = $scope.entityName === 'task' && $scope.entity.project && $scope.entity.project.room,
@@ -75,14 +78,16 @@ angular.module('mean.icu.ui.tabs')
                             entityId: $stateParams.id || $stateParams.entityId
                         };
                         console.log('if data', data);
+                        console.log('if file', file);
 
                         DocumentsService.saveAttachments(data, file).success(function(attachment) {
-                            result.attachments.push(attachment);
+                            result.attachments = [attachment];
                         });
                     }
-                    clearForm();
+                    //clearForm();
                     console.log('result', result);
                     $scope.activities.push(result);
+                    clearForm();
                 });
             };
 
@@ -150,8 +155,8 @@ angular.module('mean.icu.ui.tabs')
 
             $scope.expandUpdate = function() {
                 if (addUpdateField.height() < 150) {
-                    addUpdateField.css("height", "130px");
-                    activityList.css("height", "calc(100% - 200px)");
+                    addUpdateField.css("height", "100px");
+                    activityList.css("height", "calc(100% - 170px)");
                 }
             };
             $scope.minimizeUpdate = function() {

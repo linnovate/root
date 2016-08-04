@@ -15,9 +15,9 @@
         </input>
         <img src="/icu/assets/img/search.png"></img>
     	<div class="build-in-search" ng-if="click">
-    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getMyTasks')">Tasks Assigned to Me</div>
-    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getOverdueWatchedTasks')">Overdue Watched Tasks</div>
-    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getWatchedTasks')">Tasks I'm Watching</div>
+    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getMyTasks')">{{'tasksAssignedToMe' | i18next}}</div>
+    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getOverdueWatchedTasks')">{{'overdueWatchedTasks' | i18next}} </div>
+    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getWatchedTasks')">{{'tasksImWatching' | i18next}}</div>
     	</div>
     </div>
 </header>

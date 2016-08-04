@@ -13,17 +13,28 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                $rootScope,
                                                MeanSocket,
                                                UsersService,
+                                               people,
                                                $timeout) {
     $scope.task = entity || context.entity;
     $scope.tags = tags;
     $scope.projects = projects.data || projects;
     $scope.shouldAutofocus = !$stateParams.nameFocused;
-
+    
     TasksService.getStarred().then(function(starred) {
         $scope.task.star = _(starred).any(function(s) {
             return s._id === $scope.task._id;
         });
     });
+
+    $scope.people = people.data || people;
+    if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
+        var newPeople = {
+            name: 'no select'
+        };
+
+        $scope.people.push(_(newPeople).clone());
+    }
+
 
     if (!$scope.task) {
         $state.go('main.tasks.byentity', {
@@ -45,7 +56,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         }).pluck('term').value();
     };
 
-    $scope.$watchGroup(['task.description'], function (nVal, oVal) {
+    $scope.$watchGroup(['task.description', 'task.title'], function (nVal, oVal) {
         if (nVal !== oVal && oVal) {
             $scope.delayedUpdate($scope.task);
         }
@@ -97,7 +108,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.deleteTask = function (task) {
         TasksService.remove(task._id).then(function () {
             var state = context.entityName === 'all' ?
-                'main.tasks.all' : 'main.tasks.byentity';
+                'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
 
             $state.go(state, {
                 entity: context.entityName,
@@ -112,6 +123,9 @@ angular.module('mean.icu.ui.taskdetails', [])
             task.discussion = context.entityId;
         }
         
+        if (task.assign === undefined  || task.assign === null) {
+            delete task['assign'];
+        }
         UsersService.getMe().then(function (me) {
             
             var message = {};
@@ -147,13 +161,12 @@ angular.module('mean.icu.ui.taskdetails', [])
             context: {}
         }).then(function(result) {
             ActivitiesService.data.push(result);
-            console.log(ActivitiesService.data)
         });
 
     };
     //END Made By OHAD
 
-    $scope.update = function (task) {
+    $scope.update = function (task, type) {
         if (context.entityName === 'discussion') {
             task.discussion = context.entityId;
         }
@@ -161,18 +174,12 @@ angular.module('mean.icu.ui.taskdetails', [])
         TasksService.update(task).then(function (result) {
             if (context.entityName === 'project') {
                 var projId = result.project ? result.project._id : undefined;
-                if (projId !== context.entityId) {
+                if (projId !== context.entityId || type === 'project') {
                     $state.go('main.tasks.byentity.details', {
                         entity: context.entityName,
                         entityId: context.entityId,
                         id: task._id
                     }, {reload: true});
-                }
-                else {
-                     $state.go('main.tasks.byentity', {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {reload: true});
                 }
             }
         });
