@@ -1,6 +1,6 @@
 $page-height: 100vh;
 $content-height: calc(#{$page-height} - 2 * #{$header-height});
-$description-height: 40%;
+$description-height: 30%;
 $switcher-height: 40px;
 $panel-height: $header-height - 5px;
 $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 37px);
@@ -251,7 +251,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             margin: 0 28px;
             height: $description-height;
             overflow: auto;
-            margin-top: 60px;
+            margin-top: 40px;
             &::-webkit-scrollbar {
                 width: 5px;
             }
@@ -658,7 +658,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .description {
             .title {
                 font-size: 23px;
-                padding: 20px 0px 8px 0px;
+                padding: 0px 0px 8px 0px;
                 font-weight: 700;
                 outline: none;
             }
@@ -861,7 +861,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .tab-content {
             margin: 0 30px;
             padding: 10px 0;
-            height: calc(100% - 40% - 55px - 40px - 60px);
+            height: calc(100% - 30% - 55px - 40px - 40px);
             overflow: auto;
         }
     }
