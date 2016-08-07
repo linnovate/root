@@ -8,21 +8,21 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             Created: 2
         };
 
-        function controller($scope, TasksService) {
-        $scope.context = context;
-        $scope.isLoading = true;
-
-        _($scope.tasks).each(function(t) {
-            t.__state = creatingStatuses.Created;
-        });
-
-            var newTask = {
+        var newTask = {
             title: '',
             watchers: [],
             tags: [],
             __state: creatingStatuses.NotCreated,
             __autocomplete: true
         };
+
+    function controller($scope, TasksService) {
+        $scope.context = context;
+        $scope.isLoading = true;
+
+        _($scope.tasks).each(function(t) {
+            t.__state = creatingStatuses.Created;
+        });
 
         if (!$scope.displayOnly) {
             if (context.entityName === 'my'){
@@ -95,6 +95,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 });
                 $scope.selectedSuggestion = 0;
             });
+
         };
 
         $scope.select = function(selectedTask) {
@@ -169,7 +170,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
                 $scope.tasks[index].__autocomplete = false;
                 if ($element.find('td.name')[index+1]) {
-                    console.log('find');
                     $element.find('td.name')[index+1].focus();
                 }
                 else {
@@ -226,9 +226,10 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                     
                     if (tasks.data.length) {                        
                         var index = $scope.tasks.length - offset;
+                        $scope.tasks.pop();
                         var args = [index, 0].concat(tasks.data);
-
                         [].splice.apply($scope.tasks, args);
+                        $scope.tasks.push(_(newTask).clone());
                     }
 
                     $scope.loadNext = tasks.next;

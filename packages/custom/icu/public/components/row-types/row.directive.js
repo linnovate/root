@@ -26,22 +26,22 @@ angular.module('mean.icu.ui.rows', [])
 
     function compileTemplate($scope, $element, template) {
         $element.html(template);
-
         var scope = $scope.$new(true);
         scope.data = $scope.data;
         $compile($element.contents())(scope);
     }
 
+    //This way has caused problems with $index
     function link($scope, $element) {
-        var templateUrl = templates[$scope.type];
-        $templateRequest(templateUrl).then(function(result) {
-            compileTemplate($scope, $element, result);
-        });
-
+        // var templateUrl = templates[$scope.type];
+        // $templateRequest(templateUrl).then(function(result) {
+        //     compileTemplate($scope, $element, result);
+        // });
         if ($scope.data[$scope.type] && $scope.data[$scope.type].due) {
-        	$scope.data[$scope.type].due = new Date($scope.data[$scope.type].due)
+            $scope.data[$scope.type].due = new Date($scope.data[$scope.type].due)
         }
     }
+
 
     return {
         restrict: 'A',
@@ -51,6 +51,8 @@ angular.module('mean.icu.ui.rows', [])
         },
         link: link,
         transclude: true,
-        template: ''
+        templateUrl: function (tElement, tAttrs) {
+            return templates[tAttrs.type];
+        }
     };
 });
