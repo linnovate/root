@@ -28,8 +28,9 @@
                 <input ui-date="dueOptions" ng-model="task.due" placeholder="{{ 'deadline' | i18next }}">
             </div>
 
-            <div class="status">
-                <ui-select ng-model="task.status" on-select="update(task)">
+            <div class="status" >
+                <div tooltips tooltip-template="status">
+                <ui-select ng-model="task.status" on-select="update(task)" >
                     <ui-select-match>
                         <i class='{{$select.selected}}'></i>
                         <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
@@ -39,6 +40,7 @@
                         <span class='{{status}}'>{{status | i18next}}</span>
                     </ui-select-choices>
                 </ui-select>
+            </div>
             </div>
 
             <div class="tags">
@@ -104,8 +106,10 @@
                     </li>
                 </ul>
                 <div class="button">
-                    <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible">
-                        <i class="fa fa-plus"></i>
+                    <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible" >
+                        <div tooltips tooltip-template="add tag" tooltip-side="left">
+                            <i class="fa fa-plus" ></i>
+                        </div>
                     </button>
                 </div>
             </div>

@@ -155,9 +155,9 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     display: none;
                 }
                 i {
-                   width: 21px;
+                   width: 53px;
                     display: block;
-                    height: 21px;
+                    height: 49px;
                     background: url("/icu/assets/img/new_task.png") no-repeat center;
                     transition: 0.9s;                    
                 }
@@ -768,11 +768,15 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     .fa {
                        display: none;
                     }
-                    
+                    div{
+                        width: 30px;
+                        height: 30px;
+                    }
                     &:hover{
                         background-color: #FFB435;
                         transition: 0.8s;
                     }
+
                  }
 
                 .ui-select-container {
@@ -997,7 +1001,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 padding: 0;
                 margin: $avatar-margin - 1 $avatar-margin;
                 color: white;
-                font-size: 20px;
+                /*font-size: 20px;*/
                	position: relative;
                    display: flex;
                 align-items: center;
@@ -1005,13 +1009,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 			    left: 0;
 			    left: calc(100% - 58px);
                 background-color: $orange;
+                
                 i:before {
                     display: none;
                 }
                 i {
-                   width: 21px;
+                   width: 34px;
                     display: block;
-                    height: 21px;
+                    height: 34px;
                     background: url("/icu/assets/img/new_lable.png") no-repeat center;
                     transition: 0.9s;                    
                 }

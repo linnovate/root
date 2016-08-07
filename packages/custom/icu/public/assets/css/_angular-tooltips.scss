@@ -167,9 +167,9 @@ tooltip {
       @include transform(-50%, -100%);
 
       tip-arrow {
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-top: 6px solid #e1e1e1; // $tooltip-background-color;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid #e1e1e1; // $tooltip-background-color;
         content: '';
         height: 0;
         left: 50%;
@@ -190,9 +190,9 @@ tooltip {
       @include transform(50%, $margin-tooltip-arrow + $tolerance);
 
       tip-arrow {
-        border-bottom: 6px solid #e1e1e1; // $tooltip-background-color;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
+        border-bottom: 4px solid #e1e1e1; // $tooltip-background-color;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
         bottom: 100%;
         content: '';
         height: 0;
@@ -213,9 +213,9 @@ tooltip {
       @include transform($margin-tooltip-arrow + $tolerance, -50%);
 
       tip-arrow {
-        border-bottom: 6px solid transparent;
-        border-right: 6px solid #e1e1e1; //$tooltip-background-color;
-        border-top: 6px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-right: 4px solid #e1e1e1; //$tooltip-background-color;
+        border-top: 4px solid transparent;
         content: '';
         height: 0;
         margin-top: -$margin-tooltip-arrow;
@@ -236,9 +236,9 @@ tooltip {
       @include transform(-100%, -50%);
 
       tip-arrow {
-        border-bottom: 6px solid transparent;
-        border-left: 6px solid #e1e1e1; //$tooltip-background-color;
-        border-top: 6px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 4px solid #e1e1e1; //$tooltip-background-color;
+        border-top: 4px solid transparent;
         content: '';
         height: 0;
         left: 100%;
