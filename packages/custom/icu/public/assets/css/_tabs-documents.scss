@@ -62,12 +62,12 @@
   #DocumentLine:hover >  #DocumentTextLine{
     color: white; }
   #DocumentLine:hover  #AllDocumentIcons{
-    display: inline; }
+    display: inline-block; }
   #AllDocumentIcons{
     display: none;
-    position: absolute;
-    right: 65%;
-    top: 100%
+    position: relative;
+    right: 0;
+    vertical-align: middle;
   }
   .DocumentIconsLine{
     border: 1px solid #7F9098;
