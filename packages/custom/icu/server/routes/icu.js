@@ -73,6 +73,8 @@ app.route('/api/notification1/:id([0-9a-fA-F]{24})')
     .patch(star.toggleStar);
   app.route('/api/:entity(tasks|discussions|projects)/starred')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
+  app.route('/api/:entity(tasks|discussions|projects)/starred/:type(byAssign)')
+    .get(pagination.parseParams, star.getStarred, pagination.formResponse);
 
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')

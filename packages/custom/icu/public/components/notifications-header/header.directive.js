@@ -111,7 +111,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
         $scope.logout = function () {
             UsersService.logout().then(function () {
-                $state.go('login', null, {'reload':true});
+                $state.go((config.activeProvider == 'local' ? 'login' : 'auth'), null, {'reload':true});
             });
         };
 

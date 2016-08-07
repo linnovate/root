@@ -27,11 +27,13 @@ angular.module('mean.icu.ui.taskdetails', [])
     });
 
     $scope.people = people.data || people;
-    var newPeople = {
-        name: 'no select'
-    };
+    if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
+        var newPeople = {
+            name: 'no select'
+        };
 
-    $scope.people.push(_(newPeople).clone());
+        $scope.people.push(_(newPeople).clone());
+    }
 
 
     if (!$scope.task) {
@@ -159,7 +161,6 @@ angular.module('mean.icu.ui.taskdetails', [])
             context: {}
         }).then(function(result) {
             ActivitiesService.data.push(result);
-            console.log(ActivitiesService.data)
         });
 
     };

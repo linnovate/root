@@ -173,6 +173,7 @@ module.exports = function(passport) {
         user = new User({
           name: profile.displayName,
           email: profile.emails[0].value,
+          id: profile.emails[0].value,
           username: profile.emails[0].value,
           provider: 'google',
           google: profile._json,

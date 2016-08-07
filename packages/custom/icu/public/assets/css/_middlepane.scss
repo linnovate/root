@@ -165,8 +165,13 @@
         background-color: white;
         height: 43px;
 
+        .ui-select-container .ui-select-choices-row .ui-select-choices-row-inner {
+		    display: flex;
+    		align-items: center;
+		}
+
         .left-wrapper {
-            float: left;
+            float: left; 
         }
 
         .right-wrapper {
