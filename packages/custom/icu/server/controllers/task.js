@@ -32,7 +32,9 @@ Object.keys(task).forEach(function(methodName) {
 Date.prototype.getThisDay = function()
 {
     var date = new Date();
-    return [date.setHours(0,0,0,0), date.setHours(23,59,59,999)];
+    // return [date.setHours(0,0,0,0), date.setHours(23,59,59,999)];
+    return [Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0,0,0,0),
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 23,59,59,999)]
 }
 
 Date.prototype.getWeek = function()
@@ -41,8 +43,12 @@ Date.prototype.getWeek = function()
     var date = today.getDate() - today.getDay();
 
     var StartDate = new Date(today.setDate(date));
-    var EndDate = new Date(today.setDate(date + 6));
-    return [StartDate, EndDate];
+    var EndDate = new Date(today.setDate(StartDate.getDate() + 6));
+    // EndDate.setHours(23,59,59,999);
+    // return [StartDate, EndDate];
+    return [Date.UTC(StartDate.getFullYear(), StartDate.getMonth(), StartDate.getDate(), 0,0,0,0),
+    Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate(), 23,59,59,999)]
+
 }
 
 exports.create = function(req, res, next) {
