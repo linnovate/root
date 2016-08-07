@@ -1,6 +1,9 @@
 <div class="documents">
-    <div id="DocumentLine" class="document" ng-repeat-start="document in documents">
-        <a href="{{document.path}}" target="window">
+<div class="document" ng-show="!documents.length" >
+{{ 'noDocuments' | i18next }}
+</div>
+    <div ng-show="documents.length" id="DocumentLine" class="document" ng-repeat-start="document in documents">
+            <a href="{{document.path}}" target="window">
             <div class="icon {{document.attachmentType}}"></div>
         </a>
 
