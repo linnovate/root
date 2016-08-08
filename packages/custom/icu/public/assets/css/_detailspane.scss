@@ -236,7 +236,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 		    border-radius: 15px;
 		    border: none;
 	        position: absolute;
-            right: 0;
+            right: 1%;
 		    margin: 15px 30px;
 		    outline: none;
             tooltip{
@@ -251,7 +251,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             margin: 0 28px;
             height: $description-height;
             overflow: auto;
-            margin-top: 40px;
+            margin-top: 10px;
             &::-webkit-scrollbar {
                 width: 5px;
             }
