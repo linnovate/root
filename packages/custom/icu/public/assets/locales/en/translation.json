@@ -22,6 +22,7 @@
     "avatar":  "Avatar",
     "badRequest": "Bad Request",
     "by":  "by",
+    "Cancel": "Cancel",
     "canceled": "Canceled",
     "Collapse": "Collapse",
     "completed": "Completed",
@@ -69,6 +70,7 @@
     "name": "Name",
     "new": "New",
     "noDiscussions": "No discussions",
+    "noDocuments":"All Uploaded documents will show up here",
     "noLabels": "No labels",
     "noSearchResults": "No search results",
     "noTasks": "No tasks",
@@ -126,6 +128,7 @@
     "versions": "Versions",
     "view": "View",
     "watchedTasks": "WATCHED TASKS",
+    "YES": "YES",
     "youMustEnterAName": "You must enter a name",
     "youMustEnterAValidEmailAddress": "You must enter a valid email address",
     "restrictedAccess": "Restricted Access"

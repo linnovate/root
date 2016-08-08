@@ -68,11 +68,13 @@ angular.module('mean.icu.data.projectsservice', [])
         }
 
         return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
-            TasksService.data.forEach(function(task) {
-                if (task.project && task.project._id === project._id) {
-                    task.project = result.data;
-                }
-            });
+            if(TasksService.data) {
+                TasksService.data.forEach(function(task) {
+                    if (task.project && task.project._id === project._id) {
+                        task.project = result.data;
+                    }
+                });
+            }
             return result.data;
         });
     }

@@ -48,7 +48,6 @@ Date.prototype.getWeek = function()
     // return [StartDate, EndDate];
     return [Date.UTC(StartDate.getFullYear(), StartDate.getMonth(), StartDate.getDate(), 0,0,0,0),
     Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate(), 23,59,59,999)]
-
 }
 
 exports.create = function(req, res, next) {

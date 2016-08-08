@@ -6,7 +6,7 @@
         .document, .document-shifted {
             border-bottom: 1px solid $light-grey1;
             height: 65px;
-            overflow: auto;
+            overflow: visible;
             padding: 12px 10px 0 0;
             position: relative;
 
@@ -62,12 +62,12 @@
   #DocumentLine:hover >  #DocumentTextLine{
     color: white; }
   #DocumentLine:hover  #AllDocumentIcons{
-    display: inline; }
+    display: inline-block; }
   #AllDocumentIcons{
     display: none;
-    position: absolute;
-    right: 65%;
-    top: 100%
+    position: relative;
+    right: 0;
+    vertical-align: middle;
   }
   .DocumentIconsLine{
     border: 1px solid #7F9098;

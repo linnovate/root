@@ -308,6 +308,10 @@ angular.module('mean.icu').config([
         }
 
         $meanStateProvider
+        .state('auth', {
+            url: '/auth',
+            templateUrl: '/icu/components/auth/auth.html'
+        })
         .state('login', {
             url: '/login',
             templateUrl: '/icu/components/login/login.html',

@@ -66,6 +66,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.ctrlenter',
         'mean.icu.ui.login',
         'mean.icu.ui.register',
+        'mean.icu.ui.auth',
         'mean.icu.ui.profile',
         'mean.icu.ui.displayby',
         'mean.icu.ui.sidepane',

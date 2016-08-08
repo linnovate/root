@@ -144,17 +144,38 @@ exports.schedule = function(req, res, next) {
       return _.contains(task.tags, 'Agenda');
     });
 
-    mailService.send('discussionSchedule', {
-      discussion: discussion,
-      agendaTasks: groupedTasks['true'] || [],
-      additionalTasks: groupedTasks['false'] || []
-    }).then(function() {
-      console.log("req.locals.data.body");
-      console.log(req.locals.data.body);
-      req.locals.data.body = discussion;
-      req.locals.data.body.status = 'scheduled';
-      next();
-    });
+    var options = [{
+        path: 'watchers',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'assign',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'creator',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'members',
+        model: 'User',
+        select: 'name email'
+    }];
+
+	Discussion.populate(discussion, options, function(err, doc) {
+        if (err || !doc) return next();
+        mailService.send('discussionSchedule', {
+	      discussion: doc,
+	      agendaTasks: groupedTasks['true'] || [],
+	      additionalTasks: groupedTasks['false'] || []
+	    }).then(function() {
+	      console.log("req.locals.data.body");
+	      console.log(req.locals.data.body);
+	      req.locals.data.body = discussion;
+	      req.locals.data.body.status = 'scheduled';
+	      next();
+	    });
+    });	    
   });
 };
 
@@ -190,41 +211,63 @@ exports.summary = function(req, res, next) {
         return !task.project;
       });
 
-      mailService.send('discussionSummary', {
-        discussion: discussion,
-        projects: projects,
-        additionalTasks: additionalTasks
-      }).then(function() {
-        var taskIds = _.reduce(tasks, function(memo, task) {
-          var containsAgenda = !_.any(task.discussions, function(d) {
-            return d.id !== discussion.id && (d.status === 'new' || d.status === 'scheduled');
-          });
+      var options = [{
+        path: 'watchers',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'assign',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'creator',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'members',
+        model: 'User',
+        select: 'name email'
+    }];
 
-          var shouldRemoveTag = task.tags.indexOf('Agenda') !== -1 && containsAgenda;
+	Discussion.populate(discussion, options, function(err, doc) {
+        if (err || !doc) return next();
+	      mailService.send('discussionSummary', {
+	        discussion: discussion,
+	        projects: projects,
+	        additionalTasks: additionalTasks
+	      }).then(function() {
+	        var taskIds = _.reduce(tasks, function(memo, task) {
+	          var containsAgenda = !_.any(task.discussions, function(d) {
+	            return d.id !== discussion.id && (d.status === 'new' || d.status === 'scheduled');
+	          });
 
-          if (shouldRemoveTag) {
-            memo.push(task._id);
-          }
+	          var shouldRemoveTag = task.tags.indexOf('Agenda') !== -1 && containsAgenda;
 
-          return memo;
-        }, []);
+	          if (shouldRemoveTag) {
+	            memo.push(task._id);
+	          }
 
-        Task.update({
-          _id: {
-            $in: taskIds
-          }
-        }, {
-          $pull: {
-            tags: 'Agenda'
-          }
-        }, {
-          multi: true
-        }).exec();
+	          return memo;
+	        }, []);
 
-        req.locals.data.body = discussion;
-        req.locals.data.body.status = 'done';
-        next();
-      });
+	        Task.update({
+	          _id: {
+	            $in: taskIds
+	          }
+	        }, {
+	          $pull: {
+	            tags: 'Agenda'
+	          }
+	        }, {
+	          multi: true
+	        }).exec();
+
+	        req.locals.data.body = discussion;
+	        req.locals.data.body.status = 'done';
+	        next();
+	      });
+
+	    });
     });
 };
 

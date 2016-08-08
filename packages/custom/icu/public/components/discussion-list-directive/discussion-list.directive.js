@@ -13,7 +13,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
         $scope.loading = true;
 
         _($scope.discussions).each(function(d) {
-            d.__state = creatingStatuses.created;
+            d.__state = creatingStatuses.Created;
         });
 
         var newDiscussion = {
@@ -30,11 +30,11 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
 
         $scope.showDetails = function (discussion) {
             if (context.entityName === 'all') {
-                $state.go('main.discussions.all.details', {
+                $state.go($scope.detailsState, {
                     id: discussion._id
                 });
             } else {
-                $state.go('main.discussions.byentity.details', {
+                $state.go($scope.detailsState, {
                     id: discussion._id,
                     entity: context.entityName,
                     entityId: context.entityId
@@ -60,6 +60,54 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             } else if (discussion.__state === creatingStatuses.Created) {
                 return DiscussionsService.update(discussion);
             }
+        };
+
+        $scope.debouncedUpdate = _.debounce($scope.createOrUpdate, 300);
+
+        $scope.searchResults = [];
+
+            $scope.search = function(discussion) {
+            if (context.entityName !== 'discussion') {
+                return;
+            }
+
+            if (!task.__autocomplete) {
+                return;
+            }
+
+            var term = discussion.title;
+            if (!term) {
+                return;
+            }
+
+            $scope.searchResults.length = 0;
+            $scope.selectedSuggestion = 0;
+            DiscussionsService.search(term).then(function(searchResults) {
+                _(searchResults).each(function(sr) {
+                    var alreadyAdded = _($scope.discussions).any(function(d) {
+                        return d._id === sr._id;
+                    });
+
+                    if (!alreadyAdded) {
+                        $scope.searchResults.push(sr);
+                    }
+                });
+                $scope.selectedSuggestion = 0;
+            });
+        };
+
+        $scope.select = function(selectedDiscussion) {
+            var currentDiscussion = _($scope.discussions).findIndex(function(d) {
+                return d.id === $state.params.id;
+            });
+
+            $scope.createOrUpdate($scope.discussions[currentDiscussion + 1]).then(function(discussion) {
+                $state.go($scope.detailsState, {
+                    id: discussion._id,
+                    entity: context.entityName,
+                    entityId: context.entityId
+                });
+            });
         };
     }
 
@@ -106,15 +154,45 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
         };
 
         $scope.onEnter = function($event, index) {
-            if ($event.keyCode === 13) {
+            if ($event.keyCode === 13 || $event.keyCode === 9) {
                 $event.preventDefault();
 
                 $scope.discussions[index].__autocomplete = false;
 
-                if ($scope.discussions.length - 2 === index) {
-                    $element.find('td.name:nth-child(1)')[0].focus();
+                if ($element.find('td.name')[index+1]) {
+                    $element.find('td.name')[index+1].focus();
+                }
+                else {
+                	$timeout(function() {
+			            $element.find('td.name')[index+1].focus();
+			        }, 500);
                 }
             }
+        };
+
+        $scope.focusAutoComplete = function($event) {
+            angular.element($event.target).css('box-shadow', 'none')
+            if ($event.keyCode === 38) {
+                if ($scope.selectedSuggestion > 0) {
+                    $scope.selectedSuggestion -= 1;
+                }
+                $event.preventDefault();
+            } else if ($event.keyCode === 40) {
+                if ($scope.selectedSuggestion < $scope.searchResults.length - 1) {
+                    $scope.selectedSuggestion += 1;
+                }
+                $event.preventDefault();
+            } else if ($event.keyCode === 13 || $event.keyCode === 9) {
+                var sr = $scope.searchResults[$scope.selectedSuggestion];
+                $scope.select(sr);
+            }
+        };
+
+
+        $scope.hideAutoComplete = function(task) {
+            task.__autocomplete = false;
+            $scope.searchResults.length = 0;
+            $scope.selectedSuggestion = 0;
         };
 
         // infinite scroll
@@ -127,6 +205,11 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             if (!$scope.isLoading && $scope.loadNext) {
                 $scope.isLoading = true;
                 $scope.loadNext().then(function(discussions) {
+
+                    _(discussions.data).each(function(d) {
+                        d.__state = creatingStatuses.Created;
+                    });
+
                     var offset = $scope.displayOnly ? 0 : 1;
 
                     if (discussions.data.length) {

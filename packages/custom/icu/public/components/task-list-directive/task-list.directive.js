@@ -8,21 +8,21 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             Created: 2
         };
 
-        function controller($scope, TasksService) {
-        $scope.context = context;
-        $scope.isLoading = true;
-
-        _($scope.tasks).each(function(t) {
-            t.__state = creatingStatuses.Created;
-        });
-
-            var newTask = {
+        var newTask = {
             title: '',
             watchers: [],
             tags: [],
             __state: creatingStatuses.NotCreated,
             __autocomplete: true
         };
+
+    function controller($scope, TasksService) {
+        $scope.context = context;
+        $scope.isLoading = true;
+
+        _($scope.tasks).each(function(t) {
+            t.__state = creatingStatuses.Created;
+        });
 
         if (!$scope.displayOnly) {
             if (context.entityName === 'my'){
@@ -95,6 +95,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 });
                 $scope.selectedSuggestion = 0;
             });
+
         };
 
         $scope.select = function(selectedTask) {
@@ -111,7 +112,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             // $scope.selectedSuggestion = 0;
 
             $scope.createOrUpdate($scope.tasks[currentTask + 1]).then(function(task) {
-                $state.go('main.tasks.byentity.details', {
+                $state.go($scope.detailsState, {
                     id: task._id,
                     entity: context.entityName,
                     entityId: context.entityId
@@ -169,7 +170,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
                 $scope.tasks[index].__autocomplete = false;
                 if ($element.find('td.name')[index+1]) {
-                    console.log('find');
                     $element.find('td.name')[index+1].focus();
                 }
                 else {
@@ -193,7 +193,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                     $scope.selectedSuggestion += 1;
                 }
                 $event.preventDefault();
-            } else if ($event.keyCode === 13) {
+            } else if ($event.keyCode === 13 || $event.keyCode === 9) {
                 var sr = $scope.searchResults[$scope.selectedSuggestion];
                 $scope.select(sr);
             }
@@ -217,13 +217,19 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             if (!$scope.isLoading && $scope.loadNext) {
                 $scope.isLoading = true;
                 $scope.loadNext().then(function(tasks) {
+
+                     _(tasks.data).each(function(t) {
+                        t.__state = creatingStatuses.Created;
+                    });
+
                     var offset = $scope.displayOnly ? 0 : 1;
                     
                     if (tasks.data.length) {                        
                         var index = $scope.tasks.length - offset;
+                        $scope.tasks.pop();
                         var args = [index, 0].concat(tasks.data);
-
                         [].splice.apply($scope.tasks, args);
+                        $scope.tasks.push(_(newTask).clone());
                     }
 
                     $scope.loadNext = tasks.next;
