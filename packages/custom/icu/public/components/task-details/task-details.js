@@ -222,4 +222,10 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         }
     };
+})
+.filter('searchfilter', function() {
+    return function (input, query) {
+        var r = RegExp('('+ query + ')', 'g');
+        return input.replace(r, '<span class="super-class">$1</span>');
+    }
 });

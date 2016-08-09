@@ -78,7 +78,7 @@
                     </ui-select-match>
                     <ui-select-choices repeat="project in projects| filter: $select.search">
                         <div class="line">
-                            <span class="title">{{project.title}}</span>
+                         <span ng-bind-html="project.title | searchfilter:$select.search"  class="title"></span>
                         </div>
                     </ui-select-choices>
                 </ui-select>
