@@ -30,37 +30,22 @@
 
             <div class="status" >
                 <div tooltips tooltip-template="status">
-                <ui-select ng-model="task.status" on-select="update(task)" >
-                    <ui-select-match>
-                        <i class='{{$select.selected}}'></i>
-                        <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="status as status in statuses | filter: $select.search">
-                        <i class='{{status}}'></i>
-                        <span class='{{status}}'>{{status | i18next}}</span>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
+                    <ui-select ng-model="task.status" on-select="update(task)" >
+                        <ui-select-match>
+                            <i class='{{$select.selected}}'></i>
+                            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
+                            <i class='{{status}}'></i>
+                            <span class='{{status}}'>{{status | i18next}}</span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
 
             <div class="tags">
                 <div class="tag-wrap">
-                    <ui-select ng-model="task.project" on-select="update(task, 'project')">
-                        <ui-select-match placeholder="{{$select.selected.title || 'selectProject' | i18next}}">
-                            <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
-                                {{$select.selected.title}}
-                                <div class="delete" ng-click="unsetProject($event, task)">
-                                    <i class="fa fa-times"></i>
-                                </div>
-                            </div>
-
-                        </ui-select-match>
-                        <ui-select-choices repeat="project in projects| filter: $select.search">
-                            <div class="line">
-                                <span class="title">{{project.title}}</span>
-                            </div>
-                        </ui-select-choices>
-                    </ui-select>
+                   
                 </div>
             </div>
             <div class="dropdown dropdown-container" uib-dropdown>
@@ -78,53 +63,75 @@
             </div>
         </div>
         <button icu-comp-modal entity="task" entity-name="task" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
-        <div class="description">
-            <!-- uib-popover-template="dynamicPopover.templateUrl" -->
-            <div class="title" contenteditable="true" ng-attr-autofocus="{{shouldAutofocus || undefined}}" tabindex="1" strip-br="true"
-                ng-model="task.title">
-            </div>
-
-            <div class="text" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="task.description" options="{{options}}">
-            </div>
-
+        <div class="summary wrap-pro">
             <div class="tags">
-                <ul class="list">
-                    <li ng-show="!task.tags.length && !tagInputVisible" class="placeholder" ng-click="tagInputVisible = !tagInputVisible;setFocusToTagSelect()">{{ 'noLabels' | i18next }}</li>
-                    <li class="tag-item" ng-repeat="tag in task.tags">
-                        <span>{{tag}}</span>
-                        <button ng-click="removeTag(tag)">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </li>
-                    <li class="new-tag-input" ng-show="tagInputVisible" >
-                        <ui-select id="addTag" ng-model="newTag" select-on-blur tagging tagging-label="false" autofocus on-select="addTag(newTag)">
-                            <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
-                            <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
-                                {{tag}}
-                            </ui-select-choices>
-                        </ui-select>
-                    </li>
-                </ul>
-                <div class="button">
-                    <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible" >
-                        <div tooltips tooltip-template="add tag" tooltip-side="left">
-                            <i class="fa fa-plus" ></i>
+              <div class="tag-wrap">
+                <ui-select ng-model="task.project" on-select="update(task, 'project')">
+                    <ui-select-match placeholder="{{$select.selected.title || 'selectProject' | i18next}}">
+                        <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
+                            {{$select.selected.title}}
+                            <div class="delete" ng-click="unsetProject($event, task)">
+                                <img src="/icu/assets/img/X.png"></img>
+                            </div>
                         </div>
-                    </button>
-                </div>
+
+                    </ui-select-match>
+                    <ui-select-choices repeat="project in projects| filter: $select.search">
+                        <div class="line">
+                            <span class="title">{{project.title}}</span>
+                        </div>
+                    </ui-select-choices>
+                </ui-select>
             </div>
         </div>
-        <div class="tabs">
-            <div class="switcher">
-                <button class="tab" data-ui-sref-active="active" data-ui-sref=".activities">
-                    {{ 'updates' | i18next }}
-                </button>
-                <button class="tab" data-ui-sref-active="active" data-ui-sref=".documents">
-                    {{ 'documents' | i18next }}
-                </button>
-            </div>
-        </div>
-        <div class="tab-content" data-ui-view="tab"></div>
     </div>
-    <div icu-members-footer entity="task" users="people"></div>
+    <div class="description">
+        <!-- uib-popover-template="dynamicPopover.templateUrl" -->
+        <div class="title" contenteditable="true" ng-attr-autofocus="{{shouldAutofocus || undefined}}" tabindex="1" strip-br="true"
+        ng-model="task.title">
+    </div>
+
+    <div class="text" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="task.description" options="{{options}}">
+    </div>
+
+    <div class="tags">
+        <ul class="list">
+            <li ng-show="!task.tags.length && !tagInputVisible" class="placeholder" ng-click="tagInputVisible = !tagInputVisible;setFocusToTagSelect()">{{ 'noLabels' | i18next }}</li>
+            <li class="tag-item" ng-repeat="tag in task.tags">
+                <span>{{tag}}</span>
+                <button ng-click="removeTag(tag)">
+                    <i class="fa fa-times"></i>
+                </button>
+            </li>
+            <li class="new-tag-input" ng-show="tagInputVisible" >
+                <ui-select id="addTag" ng-model="newTag" select-on-blur tagging tagging-label="false" autofocus on-select="addTag(newTag)">
+                    <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
+                    <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
+                        {{tag}}
+                    </ui-select-choices>
+                </ui-select>
+            </li>
+        </ul>
+        <div class="button">
+            <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible" >
+                <div tooltips tooltip-template="add tag" tooltip-side="left">
+                    <i class="fa fa-plus" ></i>
+                </div>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="tabs">
+    <div class="switcher">
+        <button class="tab" data-ui-sref-active="active" data-ui-sref=".activities">
+            {{ 'updates' | i18next }}
+        </button>
+        <button class="tab" data-ui-sref-active="active" data-ui-sref=".documents">
+            {{ 'documents' | i18next }}
+        </button>
+    </div>
+</div>
+<div class="tab-content" data-ui-view="tab"></div>
+</div>
+<div icu-members-footer entity="task" users="people"></div>
 </div>

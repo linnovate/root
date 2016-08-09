@@ -251,7 +251,6 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             margin: 0 28px;
             height: $description-height;
             overflow: auto;
-            margin-top: 10px;
             &::-webkit-scrollbar {
                 width: 5px;
             }
@@ -553,6 +552,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     }
 
                     .tag {
+                        transition: 0.3s;
                         @include tag(14px);
                         width: initial;
                         margin: 0;
@@ -573,7 +573,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
                         &:hover {
                             padding-right: 25px;
-                            transition: 0.5s;
+                            transition: 0.3s;
 
                             .delete {
                                 @include circle(6.5px);
@@ -585,7 +585,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                                 color: white;
                                 font-size: 12px;
                                 line-height: 12px;
-                                background-color: #313c40;
+                              /*  background-color: #313c40;*/
                                 text-align: center;
                                 cursor: pointer;
                             }
@@ -1038,4 +1038,16 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 		
 		
     }
+    .summary.wrap-pro {
+        border-bottom: none;
+        background: transparent;
+        margin: 10px 14px 0;
+        .tag-wrap {
+            transition: 0.3s;
+          }
+        }
+    .summary.wrap-pro :hover{
+                    box-shadow: 0px 0px 0px 0px transparent !important;
+                 
+                } 
 }
