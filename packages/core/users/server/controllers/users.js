@@ -12,7 +12,9 @@ var mongoose = require('mongoose'),
   nodemailer = require('nodemailer'),
   templates = require('../template'),
   jwt = require('jsonwebtoken'), //https://npmjs.org/package/node-jsonwebtoken
-  circles = require('../../../../custom/icu/server/controllers/circles');
+  config = require('meanio').loadConfig(),
+  circleSettings = require(process.cwd() + '/config/circleSettings') || {},
+  circles = require('circles')(null, config.circles.uri, circleSettings);
 
 /**
  * Auth callback

@@ -26,5 +26,6 @@ module.exports = {
 			watchers: true
 		}
 	},
-	cacheTime: 5
+	cacheTime: 5,
+	cacheDb: 'mongoose'
 };

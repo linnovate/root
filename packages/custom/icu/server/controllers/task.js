@@ -146,7 +146,7 @@ exports.getByEntity = function(req, res, next) {
     };
     starredOnly = true;
   }
-  var query = req.acl.query('Task');
+  var query = req.acl.mongoQuery('Task');
 
   query.find(entityQuery);
   query.populate(options.includes);
@@ -217,7 +217,8 @@ var byAssign = function(req, res, next) {
     	return next();
   	}
   	
-  	Task.find({
+    var query = req.acl.mongoQuery('Task');
+  	query.find({
   		assign: req.user._id,
   		status: {$nin: ['rejected', 'done']}
 		})

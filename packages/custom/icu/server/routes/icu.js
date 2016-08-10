@@ -8,7 +8,6 @@ var profile = require('../controllers/profile');
 var users = require('../controllers/users');
 var updates = require('../controllers/updates');
 var notification = require('../controllers/notification');
-var circles = require('../controllers/circles.js');
 var attachments = require('../controllers/attachments');
 var star = require('../controllers/star');
 var elasticsearch = require('../controllers/elasticsearch');
@@ -19,8 +18,8 @@ var entity = require('../middlewares/entity.js');
 var response = require('../middlewares/response.js');
 var pagination = require('../middlewares/pagination.js');
 var error = require('../middlewares/error.js');
-var acl = require('../middlewares/acl.js');
-
+var config = require('meanio').loadConfig(),
+  circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 //update mapping - OHAD
 //var mean = require('meanio');
 //var elasticActions = require('../controllers/elastic-actions.js');
@@ -30,7 +29,8 @@ var acl = require('../middlewares/acl.js');
 // var socket = require('../middlewares/socket.js');
 
 module.exports = function (Icu, app) {
-    
+  var circles = require('circles')(app, config.circles.uri, circleSettings);
+
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
   app.route(/^((?!\/hi\/).)*$/).all(authorization);
@@ -50,10 +50,8 @@ module.exports = function (Icu, app) {
 //END update mapping - OHAD
 
 
-  app.route('/api/:entity(tasks|discussions|projects|users|circles)*').all(acl());
-  app.route('/api/circles/mine').get(circles.mine);
-  app.route('/api/circles/all').get(circles.all);
-  app.route('/api/circles/sources').get(circles.sources);
+  app.route('/api/:entity(tasks|discussions|projects|users|circles)*').all(circles.acl());
+
 //update socket - OHAD
     // app.route('/api/socket.io/')
     // .post(socket)
