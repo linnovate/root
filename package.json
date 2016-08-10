@@ -20,6 +20,7 @@
     "assetmanager": "latest",
     "async": "latest",
     "body-parser": "latest",
+    "circles-npm": "^1.0.0",
     "compression": "latest",
     "connect-flash": "latest",
     "consolidate": "latest",
