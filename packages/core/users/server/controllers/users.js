@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
   jwt = require('jsonwebtoken'), //https://npmjs.org/package/node-jsonwebtoken
   config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {},
-  circles = require('circles')(null, config.circles.uri, circleSettings);
+  circles = require('circles-npm')(null, config.circles.uri, circleSettings);
 
 /**
  * Auth callback

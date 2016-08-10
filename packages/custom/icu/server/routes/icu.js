@@ -29,7 +29,7 @@ var config = require('meanio').loadConfig(),
 // var socket = require('../middlewares/socket.js');
 
 module.exports = function (Icu, app) {
-  var circles = require('circles')(app, config.circles.uri, circleSettings);
+  var circles = require('circles-npm')(app, config.circles.uri, circleSettings);
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);

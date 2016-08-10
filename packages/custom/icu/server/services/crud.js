@@ -24,7 +24,7 @@ var AttachementModel = require('../models/attachment.js');
 var AttachementArchiveModel = mongoose.model('attachment_archive');
 
 var circleSettings = require(process.cwd() + '/config/circleSettings') || {};
-var circlesAcl = require('circles')(null, null, circleSettings);
+var circlesAcl = require('circles-npm')(null, null, circleSettings);
 
 var entityNameMap = {
   'tasks': {
