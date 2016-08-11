@@ -217,7 +217,6 @@ $scope.deleteTask = function (task) {
         });
             });
         }
-        alert(context.entityName)
         if (context.entityName === 'discussion') {
             task.discussion = context.entityId;
         }
