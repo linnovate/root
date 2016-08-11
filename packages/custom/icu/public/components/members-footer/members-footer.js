@@ -50,6 +50,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 var eCorporate = $scope.entity.circles && $scope.entity.circles.corporate ? $scope.entity.circles.corporate : [];
 
                 diff = _.difference(arr1, ePersonal);
+                diff = _.difference(diff, eCorporate);
                 var groupsNotAssigned = _.filter(groups, function(obj) {
                     return diff.indexOf(obj._id) >= 0;
                 });
