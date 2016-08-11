@@ -51,14 +51,14 @@ $activityListDefaultMaxH: 80px;
 
             .title {
                 font-size: 14px;
-
+                margin-bottom: 10px;
                 .user-name {
                     font-weight: 700;
                     line-height: 14px;
                 }
 
                 .text {
-                    padding-top: 7px;
+                    padding-top: 16px;
 
                     .activity-details {
                         font-weight: 100;
@@ -72,6 +72,7 @@ $activityListDefaultMaxH: 80px;
                     .activity-date {
                         color: $light-grey-placeholder;
                         font-size: small;
+                        margin-left: 6px;
                     }
                 }
             }
