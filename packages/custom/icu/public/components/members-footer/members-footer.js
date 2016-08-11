@@ -106,7 +106,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 if (member.type) {
                     if (!$scope.entity.circles) $scope.entity.circles = {};
                     if (!$scope.entity.circles[member.type]) $scope.entity.circles[member.type] = [];
-                    $scope.entity.circles.personal.push(member._id);
+                    $scope.entity.circles[member.type].push(member._id);
                 } else {
                     $scope.entity.watchers.push(member);
                 }
