@@ -124,6 +124,12 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function getSubTasks() {
+    	return $http.get(ApiUri + EntityPrefix + '/subtasks').then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -142,6 +148,7 @@ angular.module('mean.icu.data.tasksservice', [])
         getOverdueWatchedTasks: getOverdueWatchedTasks,
         getWatchedTasks: getWatchedTasks,
         getStarredByassign: getStarredByassign,
+        getSubTasks: getSubTasks,
         filterValue: filterValue,
         data: data
     };
