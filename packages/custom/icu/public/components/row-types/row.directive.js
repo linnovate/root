@@ -33,10 +33,12 @@ angular.module('mean.icu.ui.rows', [])
 
     //This way has caused problems with $index
     function link($scope, $element) {
-        // var templateUrl = templates[$scope.type];
-        // $templateRequest(templateUrl).then(function(result) {
-        //     compileTemplate($scope, $element, result);
-        // });
+        if ($scope.type.indexOf('search') > -1) {
+	        var templateUrl = templates[$scope.type];
+	        $templateRequest(templateUrl).then(function(result) {
+	            compileTemplate($scope, $element, result);
+	        });
+		}
         if ($scope.data[$scope.type] && $scope.data[$scope.type].due) {
             $scope.data[$scope.type].due = new Date($scope.data[$scope.type].due)
         }
@@ -52,7 +54,11 @@ angular.module('mean.icu.ui.rows', [])
         link: link,
         transclude: true,
         templateUrl: function (tElement, tAttrs) {
-            return templates[tAttrs.type];
+            if (tAttrs.type.indexOf('search') === -1) {
+	            return templates[tAttrs.type];
+	        } else {
+	        	return '';
+	        }
         }
     };
 });
