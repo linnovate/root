@@ -77,7 +77,7 @@ exports.getByEntity = function(req, res, next) {
   Update.find({
     issue: type,
     issueId: req.params.id
-  }).populate('userObj', 'name').populate('creator', 'name').then(function(updates) {
+  }).populate('userObj', 'name').populate('creator', 'name profile').then(function(updates) {
     console.log(JSON.stringify(updates))
     req.locals.result = updates;
     next();
