@@ -49,7 +49,7 @@ module.exports = function(app, db) {
   // Dynamic helpers
   app.use(helpers(config.app.name));
 
-  app.use('/files', express.static(config.attachmentDir));
+  // app.use('/files', express.static(config.attachmentDir));
 
   // Connect flash for flash messages
   app.use(flash());

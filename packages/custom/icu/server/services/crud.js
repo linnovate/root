@@ -54,7 +54,7 @@ var entityNameMap = {
   'attachments': {
     mainModel: AttachementModel,
     archiveModel: AttachementArchiveModel,
-    name: 'Attachement'
+    name: 'Attachment'
   }
 
 };
@@ -65,7 +65,7 @@ var defaults = {
 };
 
 module.exports = function(entityName, options) {
-  var findByUser = ['tasks', 'projects', 'discussions'];
+  var findByUser = ['tasks', 'projects', 'discussions', 'attachments'];
   if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;
 
