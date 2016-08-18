@@ -171,7 +171,16 @@
 		}
 
         .left-wrapper {
-            float: left; 
+            float: left;
+            
+             tooltip{
+                 display: block;
+             }
+             tip{
+                position: relative;
+                top: -30px;
+                right: inherit;
+             }
         }
 
         .right-wrapper {
@@ -203,6 +212,18 @@
 
         .select-wrapper {
             float: right;
+            
+            tooltip{
+                display: block;
+                position: relative;
+            }
+            tip{
+                position: absolute;
+                top: -15px;
+                left: inherit;
+                right: -40%;
+            }
+            
 
             .ui-select-match {
                 background-color: transparent;
