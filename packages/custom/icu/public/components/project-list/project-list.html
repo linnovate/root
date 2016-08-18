@@ -18,14 +18,16 @@
                 <i class="fa fa-star" tooltips tooltip-template="sort by star"></i>
             </button>
             <div class="select-wrapper">
-                <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
-                    <ui-select-match>
-                        <button class="tasks">{{$select.selected.title | i18next}}</button>
-                    </ui-select-match>
-                    <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
-                        {{field.title | i18next}}
-                    </ui-select-choices>
-                </ui-select>
+                <div tooltips tooltip-template="sort by">
+                    <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
+                        <ui-select-match>
+                            <button class="tasks">{{$select.selected.title | i18next}}</button>
+                        </ui-select-match>
+                        <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
+                            {{field.title | i18next}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
         </div>
 

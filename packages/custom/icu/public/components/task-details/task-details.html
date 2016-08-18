@@ -4,7 +4,7 @@
 
             <div class="favorite">
                 <button ng-class="{ 'orange': task.star }" ng-click="star(task)">
-                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
                 </button>
             </div>
 
@@ -13,16 +13,18 @@
                     <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
                 </div>
                 <!--<ui-select ng-model="task.assign" on-select="update(task)">-->
-                <ui-select ng-model="task.assign" on-select="updateAndNotiy(task)">
-                    <ui-select-match>
-                        <div icu-avatar user="$select.selected"></div>
-                        <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
-                        <div icu-avatar user="user"></div>
-                        <span class="summary-content">{{user.name}}</span>
-                    </ui-select-choices>
-                </ui-select>
+                <div tooltips tooltip-template="assignee">
+                    <ui-select ng-model="task.assign" on-select="updateAndNotiy(task)">
+                        <ui-select-match>
+                            <div icu-avatar user="$select.selected"></div>
+                            <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
+                            <div icu-avatar user="user"></div>
+                            <span class="summary-content">{{user.name}}</span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
             <div class="due">
                 <input ui-date="dueOptions" ng-model="task.due" placeholder="{{ 'deadline' | i18next }}">

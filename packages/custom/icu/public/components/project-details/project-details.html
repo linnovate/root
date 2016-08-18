@@ -4,21 +4,23 @@
 
             <div class="favorite">
                 <button ng-class="{ 'orange': project.star }" ng-click="star(project)">
-                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
                 </button>
             </div>
 
             <div class="status">
-                <ui-select ng-model="project.status" on-select="update(project)">
-                    <ui-select-match>
-                        <i class='{{$select.selected}}'></i>
-                        <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="status as status in statuses | filter: $select.search">
-                        <i class='{{status}}'></i>
-                        <span class='{{status}}'>{{status | i18next}}</span>
-                    </ui-select-choices>
-                </ui-select>
+                <div tooltips tooltip-template="status">
+                    <ui-select ng-model="project.status" on-select="update(project)">
+                        <ui-select-match>
+                            <i class='{{$select.selected}}'></i>
+                            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
+                            <i class='{{status}}'></i>
+                            <span class='{{status}}'>{{status | i18next}}</span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
 
             <div class="color">
