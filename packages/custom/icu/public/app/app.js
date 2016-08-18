@@ -734,7 +734,14 @@ angular.module('mean.icu').config([
         
         //Add by OHAD 17.4.16 
         .state('main.search.update', getAttachmentDetailsState('/attachment'))
-        .state('main.search.update.versions', getAttachmentDetailsTabState());
+        .state('main.search.update.versions', getAttachmentDetailsTabState())
+
+        .state('files', {
+            url: "/files/:y/:m/:d/:n.:f?",
+            controller: function($stateParams, FilesService) {
+                FilesService.getById($stateParams.id)
+            }
+        });
 }
 ]);
 

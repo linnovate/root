@@ -157,3 +157,24 @@ exports.getMyTasks = function(req, res, next) {
   })
 
 }
+
+exports.signNew = function(req, res, next) {
+  var entities = {project: 'Project', task: 'Task', discussion: 'Discussion'};
+  var query = req.acl.mongoQuery(entities[req.body.data.issue]);
+  query.findOne({_id: req.body.data.issueId}).exec(function(err, entity){
+    if(err) {
+      req.locals.error = err;
+    }
+    if(!entity) {
+      req.locals.error = {
+        status: 404,
+        message: 'Entity not found'
+      };
+    }
+    if(entity) {
+      req.locals.data.watchers = entity.watchers;
+      req.locals.data.circles = entity.circles;
+    }
+    next();
+  })
+}
