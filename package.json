@@ -43,6 +43,7 @@
     "passport-linkedin": "latest",
     "passport-local": "latest",
     "passport-twitter": "latest",
+    "passport-saml": "latest",
     "request": "latest",
     "serve-favicon": "latest",
     "shelljs": "latest",

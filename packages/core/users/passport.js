@@ -53,6 +53,35 @@ module.exports = function(passport) {
     }
   ));
 
+  // Use SAML strategy
+  passport.use(new SamlStrategy(
+      config.saml.strategy.options,
+      function(profile, done){
+        User.findOne({
+          username: profile[config.saml.strategy.claims.username]
+        },
+        function(err,user){
+          if(err) {
+            return done(err);
+          }
+          if(user){
+            return done(null, user);
+          }
+
+          user = new User(config.saml.strategy.claims);
+
+          user.save(function(err){
+            if (err) {
+              console.log(err);
+              return done(null, false, {message: 'Saml login failed, email already used by other login strategy'});
+            } else {
+              return done(err,user);
+            }
+          });
+        });
+      }
+  ));
+
   // Use twitter strategy
   passport.use(new TwitterStrategy({
       consumerKey: config.twitter.clientID,

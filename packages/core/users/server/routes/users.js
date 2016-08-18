@@ -129,6 +129,14 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     });
     
 
+  // Setting the SAML auth routes
+  app.route('/api/auth/saml')
+    .get(passport.authenticate('saml', {
+      failureRedirect: '/login'
+    }));
+
+  // TO-DO saml callback
+
   // Setting the facebook oauth routes
   app.route('/api/auth/facebook')
     .get(passport.authenticate('facebook', {
