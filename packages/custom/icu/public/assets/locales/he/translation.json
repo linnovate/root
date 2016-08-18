@@ -130,5 +130,12 @@
 	"YES": "אישור",
 	"youMustEnterAName": "You must enter a name",
 	"youMustEnterAValidEmailAddress": "You must enter a valid email address",
-	"restrictedAccess": "הגבלת גישה"
+	"restrictedAccess": "הגבלת גישה",
+    "sort by star": "סינון מועדפים",
+    "sort by": "סינונים",
+    "assignee": "אחראי",
+    "create new": "צור חדש",
+    "project name": "שם הפרוייקט",
+    "add watcher": "הוסף שותף",
+    "assigned from": "שוייכה אלייך מ-"
 }

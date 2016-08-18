@@ -9,7 +9,7 @@
             </div>
 
             <div class="status">
-                <div tooltips tooltip-template="status">
+                <div tooltips tooltip-template="{{'status' | i18next}}">
                     <ui-select ng-model="project.status" on-select="update(project)">
                         <ui-select-match>
                             <i class='{{$select.selected}}'></i>

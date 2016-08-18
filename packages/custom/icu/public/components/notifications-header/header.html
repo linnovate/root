@@ -7,10 +7,10 @@
     </div>
     <div class="last-notification" ng-click="triggerDropdown()">
         <!--<span class="text">{{lastNotification.entity}}-->
-        <span class="text">{{lastNotification1.entity}}
+        <span class="text">{{lastNotification1.entity | i18next}}
             <!--<span class="entity-name" ng-show="lastNotification1.entityName">"{{lastNotification1.entityName}}"</span>-->
             <span class="entity-name">"{{lastNotification1.entityName}}"</span>
-            {{lastNotification1.action}}
+            {{lastNotification1.action | i18next}}
             <span class="user">{{lastNotification1.user}}</span>
         </span>
     </div>
@@ -18,17 +18,17 @@
         <div ng-repeat="notification in popupNotifications" ng-click="GoToNotification(notification)">
             <!--If the notification watched allready-->
             <div ng-if="notification.IsWatched">
-                <span class="text">{{notification.entity}}
+                <span class="text">{{notification.entity | i18next}}
                     <span class="entity-name">"{{notification.entityName}}"</span>
-                    {{notification.action}}
+                    {{notification.action | i18next}}
                     <span class="user">{{notification.user}}</span>
                 </span>
             </div>
             <!--If the notification NOT watched allready-->
             <div class="notification-NotWatched" ng-if="!notification.IsWatched">
-                <span class="text">{{notification.entity}}
+                <span class="text">{{notification.entity | i18next}}
                     <span class="entity-name">"{{notification.entityName}}"</span>
-                    {{notification.action}}
+                    {{notification.action | i18next}}
                     <span class="user">{{notification.user}}</span>
                 </span>
             </div>
@@ -39,7 +39,8 @@
     </div>
     <div class="add-menu dropdown" uib-dropdown>
         <button uib-dropdown-toggle  >
-            <i class="fa fa-2x fa-plus" tooltips tooltip-side="bottom" tooltip-template="create a new TASK | PROJECTS | DISCUSSIONS"></i>
+            <!--<i class="fa fa-2x fa-plus" tooltips tooltip-side="bottom" tooltip-template="create a new TASK | PROJECTS | DISCUSSIONS"></i>-->
+            <i class="fa fa-2x fa-plus" tooltips tooltip-side="bottom" tooltip-template="{{'create new' | i18next}}"></i>
         </button>
         <ul class="dropdown-menu menu-items" role="menu">
             <li>

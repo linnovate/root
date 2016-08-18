@@ -132,5 +132,12 @@
     "YES": "YES",
     "youMustEnterAName": "You must enter a name",
     "youMustEnterAValidEmailAddress": "You must enter a valid email address",
-    "restrictedAccess": "Restricted Access"
+    "restrictedAccess": "Restricted Access",
+    "project name": "Project name",
+    "assignee": "Assignee",
+    "create new": "Create new",
+    "sort by star": "Sort by Star",
+    "sort by": "Sort by ",
+    "add watcher": "Add watcher",
+    "assigned from":  "assigned from"
 }
