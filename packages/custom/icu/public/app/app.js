@@ -345,6 +345,7 @@ angular.module('mean.icu').config([
                 },
                 projects: function (ProjectsService) {
                     return ProjectsService.getAll(0, 0, SORT).then(function (data) {
+                        ProjectsService.data = data.data || data;
                         return data;
                     }, function (err) {
                         return [];
