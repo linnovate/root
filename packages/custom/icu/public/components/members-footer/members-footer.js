@@ -15,10 +15,11 @@ angular.module('mean.icu.ui.membersfooter', [])
                 $scope.me = me;
             });
 
+            var groupTypes = config.circles.footer;
+
             var getWatchersGroups = function() {
                 $scope.watchersGroups = [];
                 var obj;
-                var groupTypes = ['personal', 'corporate'];
                 for (var i = 0; i < groupTypes.length; i++) {
                     if ($scope.entity.circles && $scope.entity.circles[groupTypes[i]])
                         for (var j = 0; j < $scope.entity.circles[groupTypes[i]].length; j++) {
@@ -46,13 +47,14 @@ angular.module('mean.icu.ui.membersfooter', [])
                     return diff.indexOf(obj._id) >= 0;
                 });
                 arr1 = _.pluck(groups, '_id');
-                var ePersonal = $scope.entity.circles && $scope.entity.circles.personal ? $scope.entity.circles.personal : [];
-                var eCorporate = $scope.entity.circles && $scope.entity.circles.corporate ? $scope.entity.circles.corporate : [];
-
-                diff = _.difference(arr1, ePersonal);
-                diff = _.difference(diff, eCorporate);
+                var arr3;
+                for (var i = 0; i < groupTypes.length; i++){
+                    arr3 = $scope.entity.circles[groupTypes[i]];
+                    arr1 = _.difference(arr1, arr3);
+                }
+            
                 var groupsNotAssigned = _.filter(groups, function(obj) {
-                    return diff.indexOf(obj._id) >= 0;
+                    return arr1.indexOf(obj._id) >= 0;
                 });
                 return groupsNotAssigned.concat(notAssigned);
             }
@@ -74,23 +76,16 @@ angular.module('mean.icu.ui.membersfooter', [])
             };
 
             $scope.showSelect = false;
-            var groups, personal, corporate;
+            var groups = [], allowed;
 
             circlesService.getmine().then(function(data) {
-                personal = data.allowed.personal;
-
-                personal.forEach(function(g) {
-                    g.type = 'personal'
-                });
-
-                corporate = data.allowed.corporate;
-
-                corporate.forEach(function(g) {
-                    g.type = 'corporate'
-                });
-
-                groups = personal.concat(corporate);
-
+                for (var i = 0; i < groupTypes.length; i++){
+                    allowed = data.allowed[groupTypes[i]];
+                    allowed.forEach(function(g) {
+                        g.type = groupTypes[i]
+                    });
+                    groups = groups.concat(allowed);
+                }
                 $scope.notAssigned = getNotAssigned();
                 getWatchersGroups();
             });
