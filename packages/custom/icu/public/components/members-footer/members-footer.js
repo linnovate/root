@@ -48,8 +48,8 @@ angular.module('mean.icu.ui.membersfooter', [])
                 });
                 arr1 = _.pluck(groups, '_id');
                 var arr3;
-                for (var i = 0; i < groupTypes.length; i++){
-                    arr3 = $scope.entity.circles[groupTypes[i]];
+                for (var i = 0; i < groupTypes.length; i++) {
+                    arr3 = $scope.entity.circles && $scope.entity.circles[groupTypes[i]] ? $scope.entity.circles[groupTypes[i]] : [];
                     arr1 = _.difference(arr1, arr3);
                 }
             
