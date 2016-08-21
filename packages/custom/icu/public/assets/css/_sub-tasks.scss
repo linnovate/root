@@ -1,0 +1,149 @@
+.sub-tasks {
+    margin: 0 28px;
+    overflow: auto;
+    margin-top: 13px;
+    .add-sub-tasks{
+        color: #fda102;
+        font-size: 14px;
+        transition: 0.8s; 
+        cursor: pointer;
+        }
+        .sub-tasks-title {
+               font-weight: bold; 
+                   margin-bottom: 10px;
+        }
+    .summary {
+        border: 1px solid #e1e1e1;
+        border-bottom: 1px solid #e1e1e1 !important;
+        background-color: white !important;
+  
+    }
+    icu-sub-task-list {
+        margin-top: 7px;
+    }
+  table tbody td {
+    	border: 1px solid #e1e1e1;
+    }
+    .id {
+    	width: 8%;
+        border-right: none;
+    }
+    .name {
+        width:30%; 
+            border-left: none;   
+    }
+     .user {
+              position: relative;
+                  width: 19%;
+        .no-assignee {
+            position: absolute;
+            transform: translateY(-65%);
+            top: 31px;
+            width: calc(100% - 10px);
+            margin-left: 10px;
+
+            .avatar-placeholder {
+                background: url(/icu/assets/img/user.png) no-repeat scroll;
+                height: 26px;
+                padding: 5px 0 5px 35px;
+                color: $light-grey-placeholder;
+                display: table;
+                width: 100%;
+                background-position: left;
+            }
+
+        }
+        .ui-select-placeholder {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(-65%);
+            top: 50%;
+        }
+
+        .avatar {
+            height: 26px;
+            width: 26px;
+            background-color: $green;
+            border-radius: 15px;
+            display: inline-block;
+            margin: 0 10px;
+            float: left;
+            font-size: 20px;
+            line-height: 25px;
+        }
+        .summary-content {
+            display: inline-block;
+            line-height: 30px;
+        }
+    }
+    .status {
+          width: 19%;
+   padding-left: 7px;
+   .ui-select-container.ui-select-bootstrap {
+    .ui-select-match .ui-select-toggle {
+        float: right;
+        width: calc(100% - 10px);
+        /*height: 30px;
+        position: absolute;
+        right: 50%;*/
+        /*transform: translateX(50%) translateY(15%);*/
+        i.caret {
+            display: none;
+        }
+    }
+    i{
+        -webkit-mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
+        mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
+        width: 15px;
+        height: 17px;
+        display: inline-block;
+        margin-right: 3px;
+    }
+    i.new {background-color: #ff4081; }
+    i.assigned{background-color: #2979ff;}
+    i.in-progress{background-color: #f69679;}
+    i.review{background-color: #8dc63f;}
+    i.rejected{background-color: #ef5350;}
+    i.done{background-color: #598527;}
+    i.canceled{background-color: #ef5350;}
+    i.completed{background-color: #598527;}
+    i.archived{background-color: #ab47bc;}
+    i.scheduled{background-color: #0054a6;}
+    .new{color: #ff4081; }
+    .assigned{color: #2979ff;}
+    .in-progress{color: #f69679;}
+    .review{color: #8dc63f;}
+    .rejected{color: #ef5350;}
+    .done{color: #598527;}
+    .canceled{color: #ef5350;}
+    .completed{color: #598527;}
+    .archived{color: #ab47bc;}
+    .scheduled{color: #0054a6;}
+}
+}
+ .due {
+    width: 20%;
+        .placeholder {
+            position: absolute;
+            top: 50%;
+            transform: translateX(60%) translateY(-50%);
+            color: $light-grey-placeholder;
+        }
+
+        input {
+            appearance: none;
+            border: none;
+            float: right;
+            width: calc(100% - 10px);
+            margin-left: 10px;
+            padding: 17px 0;
+            padding-left: 25px;
+            background: url(/icu/assets/img/calendar.png) no-repeat scroll;
+            cursor: pointer;
+            outline: none;
+            background-position: left center;
+        }
+    }
+
+
+}
