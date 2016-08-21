@@ -280,7 +280,7 @@ angular.module('mean.icu').config([
 
         function getDetailsSubTasksState() {
         	return {
-                url: '/' + subtasks,
+                url: '/subtasks',
                 views: {
                     subtasks: {
                         templateUrl: '/icu/components/sub-tasks/sub-tasks.html',
@@ -540,10 +540,12 @@ angular.module('mean.icu').config([
         .state('main.tasks.byentity.activities', getDetailsTabState('task', 'activities'))
         .state('main.tasks.byentity.documents', getDetailsTabState('task', 'documents'))
         .state('main.tasks.byentity.tasks', getDetailsTabState('task', 'tasks'))
+        // .state('main.tasks.byentity.subtasks', getDetailsSubTasksState())
 
         .state('main.tasks.byentity.details', getTaskDetailsState())
         .state('main.tasks.byentity.details.activities', getDetailsTabState('task', 'activities'))
         .state('main.tasks.byentity.details.documents', getDetailsTabState('task', 'documents'))
+        // .state('main.tasks.byentity.details.subtasks', getDetailsSubTasksState())
 
         .state('main.tasks.byassign', {     
             url: '/my',

@@ -13,7 +13,7 @@ var ICU = new Module('icu');
  * Dependency injection is used to define required modules
  */
 ICU.register(function (app, auth, database,swagger) {
-
+	console.log('dfdsdfdsffddff')
 
      swagger.add(__dirname);
     //We enable routing. By default the Package Object is passed to the routes
@@ -94,7 +94,6 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.colorpicker',
         'mean.icu.ui.search',
         'mean.icu.ui.searchlist',
-        'mean.icu.ui.subtasks',
         'mean.icu.data.activitiesservice',
         'mean.icu.data.documentsservice',
         'mean.icu.data.usersservice',
@@ -112,6 +111,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.modaldeletetasksbyentity',
         'mean.icu.ui.modalcompartmentalization',
         'mean.icu.ui.taskoptions',
+        'mean.icu.ui.subtasks',
         '720kb.tooltips',
     ]);
 
