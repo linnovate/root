@@ -16,6 +16,12 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                people,
                                                $timeout) {
     $scope.task = entity || context.entity;
+     /*test for sub-task*/
+    $scope.addSubTasks = false;
+    $scope.test = [];
+    $scope.test.push($scope.task)
+/*     $scope.test.push($scope.task)
+*/    /*end test for sub-task*/
     $scope.tags = tags;
     $scope.projects = projects.data || projects;
     $scope.shouldAutofocus = !$stateParams.nameFocused;

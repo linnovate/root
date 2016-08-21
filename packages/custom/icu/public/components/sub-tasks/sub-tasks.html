@@ -1,0 +1,16 @@
+<div class="sub-tasks">
+<div ng-show="!addSubTasks" class="add-sub-tasks" ng-click="addSubTasks = !addSubTasks">Add sub-tasks</div>
+<div  class="sub-tasks-title">Sub Tasks</div>
+       <div  icu-sub-task-list
+         class="entity-list-container"
+         ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+         autocomplete="autocomplete",
+         tasks="test"
+         load-next="loadNext"
+         load-prev="loadPrev"
+         draw-arrow="true"
+         order="sorting"></div>
+
+
+
+</div>
