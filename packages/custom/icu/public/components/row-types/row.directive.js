@@ -20,8 +20,8 @@ angular.module('mean.icu.ui.rows', [])
         'search-discussion': '/icu/components/row-types/search-discussion-row.html',
         'search-attachment': '/icu/components/row-types/search-attachment-row.html',
         'search-vg-files': '/icu/components/row-types/search-attachment-row.html',
-        'search-update': '/icu/components/row-types/search-update-row.html'
-
+        'search-update': '/icu/components/row-types/search-update-row.html',
+        subtasks:'/icu/components/row-types/task-row.html'
     };
 
     function compileTemplate($scope, $element, template) {

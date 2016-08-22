@@ -448,5 +448,18 @@ exports.getOverdueWatchedTasks = function(req, res, next) {
 	})
 }
 
+exports.getSubTasks = function(req, res, next) {
+	Task.find({'_id': req.params.id},{ subTasks: 1})
+		.populate('subTasks')
+		.exec(function(err, task) {
+			if (err) {
+				req.locals.error = err;
+			} else {
+				req.locals.subTasks = task.subTasks;
+			}
+			next();
+		});
+}
+
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;

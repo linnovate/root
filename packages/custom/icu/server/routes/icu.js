@@ -107,6 +107,8 @@ app.route('/api/notification1/:id([0-9a-fA-F]{24})')
     .delete(star.unstarEntity, task.read, task.destroy);
   app.route('/api/tasks/byAssign')
     .get(task.byAssign);
+  app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
+  	.get(task.getSubTasks)
 
   app.route('/api/:entity(discussions|projects|users)/:id([0-9a-fA-F]{24})/tasks')
     .get(pagination.parseParams, task.getByEntity, pagination.formResponse);

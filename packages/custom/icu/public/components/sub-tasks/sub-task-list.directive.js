@@ -1,8 +1,7 @@
 'use strict';
 
-angular.module('mean.icu.ui.subtasklistdirective', [])
+angular.module('mean.icu.ui.subtaskslistdirective', [])
 .directive('icuSubTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context, UsersService) {
-        console.log('uuuuuuuuuuuuuuuuuuu')
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,

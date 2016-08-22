@@ -14,8 +14,10 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                MeanSocket,
                                                UsersService,
                                                people,
-                                               $timeout) {
+                                               $timeout,
+                                               subtasks) {
     $scope.task = entity || context.entity;
+    $scope.task.subtasks = subtasks;
      /*test for sub-task*/
     $scope.addSubTasks = false;
     $scope.test = [];
@@ -201,6 +203,14 @@ angular.module('mean.icu.ui.taskdetails', [])
     }
 
     $scope.delayedUpdate = _.debounce($scope.update, 500);
+
+    // if ($scope.task &&
+    //         ($state.current.name === 'main.tasks.byentity.details' ||
+    //         $state.current.name === 'main.search.task' ||
+    //         $state.current.name === 'main.tasks.all.details' ||
+    //         $state.current.name === 'main.tasks.byassign.details')) {
+    //     $state.go('.subtasks');
+    // }
 
     if ($scope.task &&
             ($state.current.name === 'main.tasks.byentity.details' ||
