@@ -56,7 +56,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates)*').all(circles.acl());
 
-  app.use('/api/files', attachments.getByPath, function(req, res, next){console.log(req.user);next();},error, express.static(config.attachmentDir));
+  app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
 
   //update socket - OHAD
   // app.route('/api/socket.io/')
