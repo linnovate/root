@@ -112,6 +112,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.modalcompartmentalization',
         'mean.icu.ui.taskoptions',
         'mean.icu.ui.subtasks',
+        'mean.icu.ui.subtasklistdirective',
         '720kb.tooltips',
     ]);
 
