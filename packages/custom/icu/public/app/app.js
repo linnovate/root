@@ -353,6 +353,7 @@ angular.module('mean.icu').config([
                 },
                 discussions: function (DiscussionsService) {
                     return DiscussionsService.getAll(0, 0, SORT).then(function (data) {
+                        DiscussionsService.data = data.data || data;
                         return data;
                     }, function (err) {
                         return [];

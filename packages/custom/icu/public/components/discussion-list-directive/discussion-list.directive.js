@@ -55,6 +55,8 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
 
                     $scope.discussions.push(_(newDiscussion).clone());
 
+                    DiscussionsService.data.push(discussion);
+
                     return discussion;
                 });
             } else if (discussion.__state === creatingStatuses.Created) {

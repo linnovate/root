@@ -41,7 +41,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
                         $scope.projects.push(_(newProject).clone());
 
-                        ProjectsService.data.push(project)
+                        ProjectsService.data.push(project);
 
                         return project;
                     });
