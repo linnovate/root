@@ -64,7 +64,11 @@ var TaskSchema = new Schema({
   subTasks: [{
     type: Schema.ObjectId,
     ref: 'Task'
-  }]
+  }],
+  parent: {
+  	type: Schema.ObjectId,
+    ref: 'Task'
+  }
 });
 
 var starVirtual = TaskSchema.virtual('star');
