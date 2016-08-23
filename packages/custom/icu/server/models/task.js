@@ -68,6 +68,9 @@ var TaskSchema = new Schema({
   parent: {
   	type: Schema.ObjectId,
     ref: 'Task'
+  },
+  tType: {
+    type: String
   }
 });
 
