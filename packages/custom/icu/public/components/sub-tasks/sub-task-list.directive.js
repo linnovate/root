@@ -1,8 +1,7 @@
 'use strict';
 
-angular.module('mean.icu.ui.subtasklistdirective', [])
-.directive('icuSubTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context, UsersService) {
-        console.log('uuuuuuuuuuuuuuuuuuu')
+angular.module('mean.icu.ui.subtaskslistdirective', [])
+.directive('icuSubTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, UsersService) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -22,7 +21,6 @@ angular.module('mean.icu.ui.subtasklistdirective', [])
             $scope.people = people;
         })
       
-        $scope.context = context;
         $scope.isLoading = true;
 
         _($scope.tasks).each(function(t) {
@@ -30,33 +28,15 @@ angular.module('mean.icu.ui.subtasklistdirective', [])
         });
 
         if (!$scope.displayOnly) {
-            if (context.entityName === 'my'){
-                UsersService.getMe().then(function (me) {
-                    newTask.assign = me._id;    
-                    $scope.tasks.push(_(newTask).clone());
-                });
-            }
-            else
-                $scope.tasks.push(_(newTask).clone());
+            $scope.tasks.push(_(newTask).clone());
         }
 
-
-        if (context.entityName === 'all') {
-        	$scope.detailsState = 'main.tasks.all.details';
-        } else if (context.entityName === 'my') {
-        	$scope.detailsState = 'main.tasks.byassign.details';
-        } else {
-        	$scope.detailsState = 'main.tasks.byentity.details';
-        }
 
         $scope.createOrUpdate = function(task) {
-            if (context.entityName !== 'all') {
-                task[context.entityName] = context.entity;
-            }
-
             if (task.__state === creatingStatuses.NotCreated) {
                 task.__state = creatingStatuses.Creating;
 
+                task.parent = $scope.parent;
                 return TasksService.create(task).then(function(result) {
                     task.__state = creatingStatuses.Created;
 
@@ -73,9 +53,6 @@ angular.module('mean.icu.ui.subtasklistdirective', [])
         $scope.searchResults = [];
 
         $scope.search = function(task) {
-            if (context.entityName !== 'discussion') {
-                return;
-            }
 
             if (!task.__autocomplete) {
                 return;
@@ -108,19 +85,11 @@ angular.module('mean.icu.ui.subtasklistdirective', [])
                 return t.id === $state.params.id;
             });
 
-            // TasksService.remove(currentTask._id);
-
-            // _(currentTask).assign(selectedTask);
-            // currentTask.__autocomplete = false;
-
-            // $scope.searchResults.length = 0;
-            // $scope.selectedSuggestion = 0;
 
             $scope.createOrUpdate($scope.tasks[currentTask + 1]).then(function(task) {
-                $state.go($scope.detailsState, {
+                $state.go('main.tasks.byparent.details', {
                     id: task._id,
-                    entity: context.entityName,
-                    entityId: context.entityId
+                    parentId: task.parent._id || task.parent,
                 });
             });
         };
@@ -128,9 +97,8 @@ angular.module('mean.icu.ui.subtasklistdirective', [])
     }
 
     function link($scope, $element) {
-        console.log('uuuu',$scope.tasks)
         var isScrolled = false;
-
+        console.log('tasks', $scope.tasks)
         $scope.initialize = function($event, task) {
             if ($scope.displayOnly) {
                 return;
@@ -140,18 +108,16 @@ angular.module('mean.icu.ui.subtasklistdirective', [])
 
             if (task.__state === creatingStatuses.NotCreated) {
                 $scope.createOrUpdate(task).then(function() {
-                    $state.go($scope.detailsState, {
+                    $state.go('main.tasks.byparent.details', {
                         id: task._id,
-                        entity: context.entityName,
-                        entityId: context.entityId,
+                        parentId: task.parent._id || task.parent,
                         nameFocused: nameFocused
                     });
                 });
             } else {
-                $state.go($scope.detailsState, {
+                $state.go('main.tasks.byparent.details', {
                     id: task._id,
-                    entity: context.entityName,
-                    entityId: context.entityId,
+                    parentId: task.parent._id || task.parent,
                     nameFocused: nameFocused
                 });
             }
@@ -260,7 +226,8 @@ angular.module('mean.icu.ui.subtasklistdirective', [])
             order: '=',
             displayOnly: '=',
             autocomplete: '=',
-            people: '='
+            people: '=',
+            parent: '@'
         },      
         link: link,
         controller: controller

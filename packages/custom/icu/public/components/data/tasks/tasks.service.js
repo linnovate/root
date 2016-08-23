@@ -124,8 +124,8 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    function getSubTasks() {
-    	return $http.get(ApiUri + EntityPrefix + '/subtasks').then(function (result) {
+    function getSubTasks(taskId) {
+    	return $http.get(ApiUri + EntityPrefix + '/subtasks/' + taskId).then(function (result) {
             return result.data;
         });
     }

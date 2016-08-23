@@ -95,7 +95,7 @@ app.route('/api/notification1/:id([0-9a-fA-F]{24})')
 
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
-    .post(task.create, notification.sendNotification, updates.created)
+    .post(task.create, task.updateParent, notification.sendNotification, updates.created)
     .get(pagination.parseParams, task.all, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
@@ -107,6 +107,11 @@ app.route('/api/notification1/:id([0-9a-fA-F]{24})')
     .delete(star.unstarEntity, task.read, task.destroy);
   app.route('/api/tasks/byAssign')
     .get(task.byAssign);
+
+  // app.route('/api/tasks/subtasks')
+  // 	.post(task.addSubTasks)
+  app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
+  	.get(task.getSubTasks)
 
   app.route('/api/:entity(discussions|projects|users)/:id([0-9a-fA-F]{24})/tasks')
     .get(pagination.parseParams, task.getByEntity, pagination.formResponse);

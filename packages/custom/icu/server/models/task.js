@@ -60,6 +60,17 @@ var TaskSchema = new Schema({
   sources: [String],
   circles: {
     type: Schema.Types.Mixed
+  },
+  subTasks: [{
+    type: Schema.ObjectId,
+    ref: 'Task'
+  }],
+  parent: {
+  	type: Schema.ObjectId,
+    ref: 'Task'
+  },
+  tType: {
+    type: String
   }
 });
 
