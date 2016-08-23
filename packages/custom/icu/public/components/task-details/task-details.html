@@ -129,11 +129,12 @@
          class="entity-list-container"
          ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
          autocomplete="autocomplete",
-         tasks="test"
+         tasks="task.subTasks"
          load-next="loadNext"
          load-prev="loadPrev"
          draw-arrow="true"
-         order="sorting"></div>
+         order="sorting" 
+         parent="{{task._id}}"></div>
 </div>
 
 <div class="tabs">

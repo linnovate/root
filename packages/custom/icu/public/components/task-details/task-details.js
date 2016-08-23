@@ -19,9 +19,9 @@ angular.module('mean.icu.ui.taskdetails', [])
     $scope.task = entity || context.entity;
     $scope.task.subtasks = subtasks;
      /*test for sub-task*/
-    $scope.addSubTasks = false;
-    $scope.test = [];
-    $scope.test.push($scope.task)
+    // $scope.addSubTasks = false;
+    // $scope.test = [];
+    // $scope.test.push($scope.task)
 /*     $scope.test.push($scope.task)
 */    /*end test for sub-task*/
     $scope.tags = tags;

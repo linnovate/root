@@ -466,8 +466,17 @@ exports.getSubTasks = function(req, res, next) {
 		});
 }
 
-exports.addSubTasks = function(req, res, next) {
-	
+exports.updateParent = function(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+  	}
+  	Task.update({'_id': req.body.parent}, { $push: {subTasks: req.body._id}}, function(err, task) {
+  		if (err) {
+  			req.locals.error = err;
+  		}
+  		next();
+  	});
+		
 }
 
 exports.byAssign = byAssign;
