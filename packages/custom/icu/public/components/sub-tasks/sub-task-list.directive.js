@@ -22,7 +22,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
         })
       
         $scope.isLoading = true;
-
+        console.log('tasks', $scope.tasks)
         _($scope.tasks).each(function(t) {
             t.__state = creatingStatuses.Created;
         });
@@ -85,10 +85,10 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             });
 
             $scope.createOrUpdate($scope.tasks[currentTask + 1]).then(function(task) {
-                $state.go('main.tasks.byparent.details', {
-                    id: task._id,
-                    parentId: task.parent._id || task.parent
-                });
+                // $state.go('main.tasks.byparent.details', {
+                //     id: task._id,
+                //     parentId: task.parent._id || task.parent
+                // });
             });
         };
 
@@ -107,26 +107,25 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
 
             if (task.__state === creatingStatuses.NotCreated) {
                 $scope.createOrUpdate(task).then(function() {
-                    $state.go('main.tasks.byparent.details', {
-                        id: task._id,
-                        parentId: task.parent._id || task.parent,
-                        nameFocused: nameFocused
-                    });
-                });
-            } else {
-                $state.go('main.tasks.byparent.details', {
-                    id: task._id,
-                    parentId: task.parent._id || task.parent,
-                    nameFocused: nameFocused
-                });
+            //         $state.go('main.tasks.byparent.details', {
+            //             id: task._id,
+            //             parentId: task.parent._id || task.parent,
+            //             nameFocused: nameFocused
+            //         });
+            //     });
+            // } else {
+            //     $state.go('main.tasks.byparent.details', {
+            //         id: task._id,
+            //         parentId: task.parent._id || task.parent,
+            //         nameFocused: nameFocused
+            //     });
             }
         };
 
         $scope.changeState = function(subTask) {
-             $state.go($scope.detailsState, {
+             $state.go('main.tasks.byparent.details', {
                     id: subTask._id,
-                    entity: context.entityName,
-                    entityId: context.entityId,
+                    parentId: task.parent._id || task.parent,
                     nameFocused: nameFocused
                 });
         }

@@ -591,6 +591,42 @@ angular.module('mean.icu').config([
         .state('main.tasks.byassign.details.activities', getDetailsTabState('task', 'activities'))
         .state('main.tasks.byassign.details.documents', getDetailsTabState('task', 'documents'))
 
+
+        .state('main.tasks.byparent', , {     
+            url: '/subTasks/:parentId',
+            params: {
+                starred: false,
+                start: 0,
+                limit: LIMIT,
+                sort: SORT
+            },
+            views: {
+                    'middlepane@main': {
+                        templateUrl: '/icu/components/task-list/task-list.html',
+                        controller: 'TaskListController'
+                    },
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/task-options/task-details.html',
+                        controller: 'TaskDetailsController'
+                    }
+                },
+            resolve: {
+                entity: function(TasksService, $stateParams) {
+                	return TasksService.getById($stateParams.parentId)
+                },
+                tasks: function(TasksService, $stateParams) {
+					return TasksService.getSubTasks($stateParams.parentId)
+                    
+                }
+            }
+        })
+        .state('main.tasks.byparent.activities', getDetailsTabState('task', 'activities'))
+        .state('main.tasks.byparent.documents', getDetailsTabState('task', 'documents'))
+        .state('main.tasks.byparent.details', getTaskDetailsState())
+        .state('main.tasks.byparent.details.activities', getDetailsTabState('task', 'activities'))
+        .state('main.tasks.byparent.details.documents', getDetailsTabState('task', 'documents'))
+
+
         .state('main.projects', {
             url: '/projects',
             views: {
