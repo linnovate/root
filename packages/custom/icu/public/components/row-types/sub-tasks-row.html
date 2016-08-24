@@ -11,12 +11,12 @@
     ng-blur="data.hideAutoCompleteCb(data.task)"
     ng-model="data.task.title">
 </td>
-<td class="user" ng-if="data.task._id">
-    <div class="no-assignee" ng-if="!data.task.assign">
+<td class="user">
+<!--     <div class="no-assignee" ng-if="!data.task.assign">
         <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
-    </div>
+    </div> -->
     <!--<ui-select ng-model="task.assign" on-select="update(task)">-->
-    <ui-select ng-model="data.task.assign" on-select="updateAndNotiy(data.task)" ng-if="data.task.assign">
+    <ui-select ng-model="data.task.assign" on-select="updateAndNotiy(data.task)" >
         <ui-select-match>
             <div icu-avatar user="$select.selected"></div>
             <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
