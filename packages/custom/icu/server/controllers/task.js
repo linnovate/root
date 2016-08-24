@@ -467,10 +467,10 @@ exports.getSubTasks = function(req, res, next) {
 }
 
 exports.updateParent = function(req, res, next) {
-	if (req.locals.error) {
+	if (req.locals.error || !req.body.parent) {
     	return next();
   	}
-  	Task.update({'_id': req.body.parent}, { $push: {subTasks: req.body._id}}, function(err, task) {
+  	Task.update({'_id': req.body.parent}, { $push: {subTasks: req.locals.result._id}}, function(err, task) {
   		if (err) {
   			req.locals.error = err;
   		}
