@@ -209,7 +209,7 @@ exports.getByPath = function(req, res, next) {
   }
   var query = req.acl.mongoQuery('Attachment');
 
-  query.findOne({path: req.headers.referer}).exec(function(err, attachment){
+  query.findOne({path: decodeURI(req.headers.referer)}).exec(function(err, attachment){
     if(err) {
       req.locals.error = err;
     }
