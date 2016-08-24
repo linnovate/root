@@ -21,6 +21,9 @@
     icu-sub-task-list {
         margin-top: 7px;
     }
+    table tr {
+        position: relative;
+    }
   table tbody td {
     	border: 1px solid #e1e1e1;
     }
@@ -143,6 +146,11 @@
             outline: none;
             background-position: left center;
         }
+    }
+    .delete {
+        position: absolute;
+        right: 0;
+            border: none;
     }
 
 
