@@ -470,9 +470,12 @@ exports.updateParent = function(req, res, next) {
 	if (req.locals.error || !req.body.parent) {
     	return next();
   	}
-  	Task.update({'_id': req.body.parent}, { $push: {subTasks: req.locals.result._id}}, function(err, task) {
+  	var data = { $push: {subTasks: req.locals.result._id}};
+  	Task.findOneAndUpdate({'_id': req.body.parent}, data, function(err, task) {
   		if (err) {
   			req.locals.error = err;
+  		} else {
+  			req.locals.result.subTasks = task.subTasks;
   		}
   		next();
   	});

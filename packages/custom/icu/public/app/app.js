@@ -592,7 +592,7 @@ angular.module('mean.icu').config([
         .state('main.tasks.byassign.details.documents', getDetailsTabState('task', 'documents'))
 
 
-        .state('main.tasks.byparent', , {     
+        .state('main.tasks.byparent', {     
             url: '/subTasks/:parentId',
             params: {
                 starred: false,

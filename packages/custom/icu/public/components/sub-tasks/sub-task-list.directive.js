@@ -106,7 +106,8 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             var nameFocused = angular.element($event.target).hasClass('name');
 
             if (task.__state === creatingStatuses.NotCreated) {
-                $scope.createOrUpdate(task).then(function() {
+                $scope.createOrUpdate(task)
+                // .then(function() {
             //         $state.go('main.tasks.byparent.details', {
             //             id: task._id,
             //             parentId: task.parent._id || task.parent,
