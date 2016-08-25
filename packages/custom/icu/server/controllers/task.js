@@ -21,7 +21,7 @@ var crud = require('../controllers/crud.js');
 var task = crud('tasks', options);
 
 var Task = require('../models/task'),
-  mean = require('meanio');
+mean = require('meanio');
 
 Object.keys(task).forEach(function(methodName) {
   if (methodName !== 'create' || methodName !== 'update') {
@@ -31,14 +31,14 @@ Object.keys(task).forEach(function(methodName) {
 
 Date.prototype.getThisDay = function()
 {
-    var date = new Date();
+  var date = new Date();
     // return [date.setHours(0,0,0,0), date.setHours(23,59,59,999)];
     return [Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0,0,0,0),
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 23,59,59,999)]
-}
+  }
 
-Date.prototype.getWeek = function()
-{
+  Date.prototype.getWeek = function()
+  {
     var today = new Date(this.setHours(0, 0, 0, 0));
     var date = today.getDate() - today.getDay();
 
@@ -48,25 +48,25 @@ Date.prototype.getWeek = function()
     // return [StartDate, EndDate];
     return [Date.UTC(StartDate.getFullYear(), StartDate.getMonth(), StartDate.getDate(), 0,0,0,0),
     Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate(), 23,59,59,999)]
-}
-
-exports.create = function(req, res, next) {
-  if (req.locals.error) {
-    return next();
   }
 
-  req.body.discussions = [];
-  if (req.body.discussion) {
-    req.body.discussions = [req.body.discussion];
-    req.body.tags = ['Agenda'];
-  }
+  exports.create = function(req, res, next) {
+    if (req.locals.error) {
+      return next();
+    }
 
-  task.create(req, res, next);
-};
+    req.body.discussions = [];
+    if (req.body.discussion) {
+      req.body.discussions = [req.body.discussion];
+      req.body.tags = ['Agenda'];
+    }
 
-exports.update = function(req, res, next) {
-	console.log('sara1'+  JSON.stringify(req.locals.error));
-  if (req.locals.error) {
+    task.create(req, res, next);
+  };
+
+  exports.update = function(req, res, next) {
+   console.log('sara1'+  JSON.stringify(req.locals.error));
+   if (req.locals.error) {
     return next();
   }
 
@@ -133,7 +133,7 @@ exports.getByEntity = function(req, res, next) {
     discussions: 'discussions',
     tags: 'tags'
   },
-    entityQuery = {};
+  entityQuery = {};
   entityQuery[entities[req.params.entity]] = (req.params.id instanceof Array) ? {
     $in: req.params.id
   } : req.params.id;
@@ -158,8 +158,8 @@ exports.getByEntity = function(req, res, next) {
     var pagination = req.locals.data.pagination;
     if (pagination && pagination.type && pagination.type === 'page') {
       query.sort(pagination.sort)
-        .skip(pagination.start)
-        .limit(pagination.limit);
+      .skip(pagination.start)
+      .limit(pagination.limit);
     }
 
     query.exec(function(err, tasks) {
@@ -214,25 +214,25 @@ exports.getZombieTasks = function(req, res, next) {
 
 var byAssign = function(req, res, next) {
 	if (req.locals.error) {
-    	return next();
-  	}
-  	
-  	Task.find({
-  		assign: req.user._id,
-  		status: {$nin: ['rejected', 'done']}
-		})
-		.populate('project')
-		.exec(function(err, tasks) {
-  		if (err) {
-	      req.locals.error = {
-	        message: 'Can\'t get my tasks'
-	      };
-	    } else {
-	      req.locals.result = tasks;
-	    }
+   return next();
+ }
 
-	    next();
-		});
+ Task.find({
+  assign: req.user._id,
+  status: {$nin: ['rejected', 'done']}
+})
+ .populate('project')
+ .exec(function(err, tasks) {
+  if (err) {
+   req.locals.error = {
+     message: 'Can\'t get my tasks'
+   };
+ } else {
+   req.locals.result = tasks;
+ }
+
+ next();
+});
 }
 
 
@@ -240,141 +240,141 @@ var byAssign = function(req, res, next) {
 function getTasksDueTodayQuery(req, callback) {
 	var dates = new Date().getThisDay();
 	var query = {
-        "query": {
-	        "bool" : {
-	        	"must" : [
-	        		{
-		        		"range" : {
-				            "due" : {
+    "query": {
+     "bool" : {
+      "must" : [
+      {
+        "range" : {
+          "due" : {
 				                "gte" : dates[0],//Date.parse(start),
 				                "lte" : dates[1]//Date.parse(end)
-				            }
-				        }
-	        		},
-	        		{
-	        			"term": {
-	        				"assign": req.user._id
-	        			}
-	        		}
-	        	],
-	        	"must_not" : [
-                  	{
-                      	"terms": {
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                     "assign": req.user._id
+                   }
+                 }
+                 ],
+                 "must_not" : [
+                 {
+                   "terms": {
                          	"status": ['rejected', 'done']//,
                         	//"execution" : "and"
-                      	}
-                  	}
-               	]
-	        }
-        }
-	}
-	tasksFromElastic(query, 'TasksDueToday', callback);
-};
+                        }
+                      }
+                      ]
+                    }
+                  }
+                }
+                tasksFromElastic(query, 'TasksDueToday', callback);
+              };
 
 
 
-function getTasksDueWeekQuery(req, callback){
-	var dates = new Date().getWeek();
-	var query = {
-		"query": {
-	        "bool" : {
-	        	"must" : [
-	        		{
-		        		"range" : {
-				            "due" : {
-				                "gte" : dates[0],
-				                "lte" : dates[1]
-				            }
-				        }
-	        		},
-	        		{
-	        			"term": {
-	        				"assign": req.user._id
-	        			}
-	        		}
-	        	],
-	        	"must_not" : [
-                  	{
-                      	"terms": {
+              function getTasksDueWeekQuery(req, callback){
+               var dates = new Date().getWeek();
+               var query = {
+                "query": {
+                 "bool" : {
+                  "must" : [
+                  {
+                    "range" : {
+                      "due" : {
+                        "gte" : dates[0],
+                        "lte" : dates[1]
+                      }
+                    }
+                  },
+                  {
+                    "term": {
+                     "assign": req.user._id
+                   }
+                 }
+                 ],
+                 "must_not" : [
+                 {
+                   "terms": {
                          	"status": ['rejected', 'done']//,
                         	// "execution" : "and"
-                      	}
-                  	}
-               	]	
-	        }
-        }
-	}
-	tasksFromElastic(query, 'TasksDueWeek', callback);
-}
+                        }
+                      }
+                      ]	
+                    }
+                  }
+                }
+                tasksFromElastic(query, 'TasksDueWeek', callback);
+              }
 
 
-function getOverDueTasksQuery(req, callback){
-	var dates = new Date().getThisDay();
-	var query = {
-		"query": {
-	        "bool" : {
-	        	"must" : [
-	        		{
-		        		"range" : {
-				            "due" : {
-				                "lt" : dates[0]
-				            }
-				        },
-	        		},
-	        		{
-	        			"term": {
-	        				"assign": req.user._id
-	        			}
-	        		}
-	        	],
-	        	"must_not" : [
-                  	{
-                      	"terms": {
+              function getOverDueTasksQuery(req, callback){
+               var dates = new Date().getThisDay();
+               var query = {
+                "query": {
+                 "bool" : {
+                  "must" : [
+                  {
+                    "range" : {
+                      "due" : {
+                        "lt" : dates[0]
+                      }
+                    },
+                  },
+                  {
+                    "term": {
+                     "assign": req.user._id
+                   }
+                 }
+                 ],
+                 "must_not" : [
+                 {
+                   "terms": {
                          	"status": ['rejected', 'done']//,
                         	//"execution" : "and"
-                      	}
-                  	}
-               	]	
-	        }
-        }
-	}
-	tasksFromElastic(query, 'OverDueTasks', callback);
-}
+                        }
+                      }
+                      ]	
+                    }
+                  }
+                }
+                tasksFromElastic(query, 'OverDueTasks', callback);
+              }
 
-function getWatchedTasksQuery(req, callback) {
-	var query = {
-		"query": {
-	        "bool" : {
-	        	"must" : {
-        			"term": {
-        				"watchers": req.user._id
-        			}
-	        	},
-	        	"must_not": [{
-	        		"term": {
-        				"assign": req.user._id
-        			}
-        		},
-        		{
-        			"terms": {
+              function getWatchedTasksQuery(req, callback) {
+               var query = {
+                "query": {
+                 "bool" : {
+                  "must" : {
+                   "term": {
+                    "watchers": req.user._id
+                  }
+                },
+                "must_not": [{
+                 "term": {
+                  "assign": req.user._id
+                }
+              },
+              {
+               "terms": {
                      	"status": ['rejected', 'done']//,
                     	//"execution" : "and"
-                  	}
-	        	}]
-	        }
-        }
-	}
-	tasksFromElastic(query, 'WatchedTasks', callback);
-}
+                    }
+                  }]
+                }
+              }
+            }
+            tasksFromElastic(query, 'WatchedTasks', callback);
+          }
 
-function tasksFromElastic(query, name, callback) {
-  	mean.elasticsearch.search({
-    	index: 'task',
-    	'body': query,
-  	}, function(err, response) {
-	    if (err) {
-	      callback(err)
-	    } else {
+          function tasksFromElastic(query, name, callback) {
+           mean.elasticsearch.search({
+             index: 'task',
+             'body': query,
+           }, function(err, response) {
+             if (err) {
+               callback(err)
+             } else {
 	     //  	req.locals.result = response.hits.hits.map(function (item) {
 		    //     return item._source;
 		    // })
@@ -489,54 +489,74 @@ var addToTemplate = function(task, parentId, callback) {
     parent: parentId
     //TODO: add creator and other fields
   });
-  callback({s:task.subTasks.length, t:template})
-}
+        callback({s:task.subTasks.length, t:template})
+      }
 
-var addRecorsiveTemplates = function(taskId, parentId, templates, totals, callback) {
+      var addRecorsiveTemplates = function(taskId, parentId, templates, totals, callback) {
   // var query = req.acl.query('Task');
   Task.findOne({'_id': taskId})
-   .exec(function(err, task) {
-      totals.tasks += task.subTasks.length;
-      addToTemplate(task, parentId, function(template) {
-        templates[template.t._id] = template;
-        if (parentId) {
-          templates[parentId].t.subTasks.push(template.t._id);  
-        }      
-        totals.templates++;
-        if (totals.templates === totals.tasks) {
-          return callback(templates);
-        }
-        for (var i = 0; i < task.subTasks.length; i++) {
-          addRecorsiveTemplates(task.subTasks[i], template.t._id, templates, totals, callback);
-        }
-      })
-    });
+  .exec(function(err, task) {
+    totals.tasks += task.subTasks.length;
+    addToTemplate(task, parentId, function(template) {
+      templates[template.t._id] = template;
+      if (parentId) {
+        templates[parentId].t.subTasks.push(template.t._id);  
+      }      
+      totals.templates++;
+      if (totals.templates === totals.tasks) {
+        return callback(templates);
+      }
+      for (var i = 0; i < task.subTasks.length; i++) {
+        addRecorsiveTemplates(task.subTasks[i], template.t._id, templates, totals, callback);
+      }
+    })
+  });
 }
 
 exports.toTemplate = function(req, res, next) {
   //TODO: save documents
   var templates = {}, 
-      totals = {
-        templates: 0,
-        tasks: 0
-      };
+  totals = {
+    templates: 0,
+    tasks: 0
+  };
   var query = req.acl.query('Task');
   query.findOne({'_id': req.params.id})
-    .exec(function(err, task) {
-      if (err) {
-        req.locals.error = err;
-      } else {
-        totals.tasks = 1;
-        addRecorsiveTemplates(req.params.id, null, templates, totals, function(templates) {
-          for (var t in templates) {
-            templates[t].t.save();
-          }
-        });
-        req.locals.result = task.subTasks;
-      }
-      next();
-    });
+  .exec(function(err, task) {
+    if (err) {
+      req.locals.error = err;
+    } else {
+      totals.tasks = 1;
+      addRecorsiveTemplates(req.params.id, null, templates, totals, function(templates) {
+        for (var t in templates) {
+          templates[t].t.save();
+        }
+      });
+      req.locals.result = task.subTasks;
+    }
+    next();
+  });
 }
+
+exports.removeSubTask = function(req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
+  Task.findOne({
+    "_id": req.params.id
+  }, function(err, subTask) {
+    if (err) {
+      req.locals.error = err;
+    } else {
+      Task.update({'_id': subTask.parent}, { $pull: {'subTasks': subTask._id}}, function(err, task) {
+        if (err) {
+          req.locals.error = err;
+        }
+        next();
+      });
+    }
+  });
+};
 
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;

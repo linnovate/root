@@ -104,7 +104,7 @@ app.route('/api/notification1/:id([0-9a-fA-F]{24})')
   app.route('/api/tasks/:id([0-9a-fA-F]{24})')
     .get(task.read, star.isStarred)
     .put(task.read, task.update, star.isStarred, updates.updated)
-    .delete(star.unstarEntity, task.read, task.destroy);
+    .delete(star.unstarEntity, task.read, task.removeSubTask, task.destroy);
   app.route('/api/tasks/byAssign')
     .get(task.byAssign);
 

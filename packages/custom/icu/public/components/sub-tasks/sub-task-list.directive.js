@@ -79,6 +79,13 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
 
         };
 
+        $scope.delete = function(subTask) {
+          TasksService.remove(subTask._id).then(function (res) {
+           var taskindex =  _.findIndex($scope.tasks, function (t) { return t._id ===res._id; })
+           $scope.tasks.splice(taskindex,1);
+       });
+      }
+
         $scope.select = function(selectedTask) {
             var currentTask = _($scope.tasks).findIndex(function(t) {
                 return t.id === $state.params.id;
@@ -153,9 +160,9 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                     $element.find('td.name')[index+1].focus();
                 }
                 else {
-                	$timeout(function() {
-			            $element.find('td.name')[index+1].focus();
-			        }, 500);
+                    $timeout(function() {
+                        $element.find('td.name')[index+1].focus();
+                    }, 500);
                 }
 
             }
