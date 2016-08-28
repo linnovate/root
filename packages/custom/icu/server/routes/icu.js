@@ -12,6 +12,7 @@ var circles = require('../controllers/circles.js');
 var attachments = require('../controllers/attachments');
 var star = require('../controllers/star');
 var elasticsearch = require('../controllers/elasticsearch');
+var templates = require('../controllers/templates');
 
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
@@ -196,6 +197,9 @@ app.route('/api/notification1/:id([0-9a-fA-F]{24})')
     .get(updates.getByEntity, updates.getAttachmentsForUpdate);
   app.route('/api/history/updates/:id([0-9a-fA-F]{24})')
     .get(updates.readHistory);
+
+  app.route('/api/tasks/:id([0-9a-fA-F]{24})/toTemplate')
+    .post(templates.toTemplate);
 
   //temporary -because of swagger bug with 'tasks' word
 

@@ -20,10 +20,6 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Project'
   },
-  parent: {
-    type: Schema.ObjectId,
-    ref: 'Task'
-  },
   creator: {
     type: Schema.ObjectId,
     ref: 'User'
