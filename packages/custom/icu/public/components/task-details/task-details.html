@@ -45,7 +45,7 @@
 
             <div class="tags">
                 <div class="tag-wrap">
-                   
+
                 </div>
             </div>
             <div class="dropdown dropdown-container" uib-dropdown>
@@ -78,66 +78,94 @@
                     </ui-select-match>
                     <ui-select-choices repeat="project in projects| filter: $select.search">
                         <div class="line">
-                         <span ng-bind-html="project.title | searchfilter:$select.search"  class="title"></span>
-                        </div>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
-        </div>
-    </div>
-    <div class="description">
-        <!-- uib-popover-template="dynamicPopover.templateUrl" -->
-        <div class="title" contenteditable="true" ng-attr-autofocus="{{shouldAutofocus || undefined}}" tabindex="1" strip-br="true"
-        ng-model="task.title">
-    </div>
+                           <span ng-bind-html="project.title | searchfilter:$select.search"  class="title"></span>
+                       </div>
+                   </ui-select-choices>
+               </ui-select>
+           </div>
+       </div>
+   </div>
+   <div class="description">
+    <!-- uib-popover-template="dynamicPopover.templateUrl" -->
+    <div class="title" contenteditable="true" ng-attr-autofocus="{{shouldAutofocus || undefined}}" tabindex="1" strip-br="true"
+    ng-model="task.title">
+</div>
 
-    <div class="text" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="task.description" options="{{options}}">
-    </div>
+<div class="text" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="task.description" options="{{options}}">
+</div>
 
-    <div class="tags">
-        <ul class="list">
-            <li ng-show="!task.tags.length && !tagInputVisible" class="placeholder" ng-click="tagInputVisible = !tagInputVisible;setFocusToTagSelect()">{{ 'noLabels' | i18next }}</li>
-            <li class="tag-item" ng-repeat="tag in task.tags">
-                <span>{{tag}}</span>
-                <button ng-click="removeTag(tag)">
-                    <i class="fa fa-times"></i>
-                </button>
-            </li>
-            <li class="new-tag-input" ng-show="tagInputVisible" >
-                <ui-select id="addTag" ng-model="newTag" select-on-blur tagging tagging-label="false" autofocus on-select="addTag(newTag)">
-                    <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
-                    <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
-                        {{tag}}
-                    </ui-select-choices>
-                </ui-select>
-            </li>
-        </ul>
-        <div class="button">
-            <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible" >
-                <div tooltips tooltip-template="add tag" tooltip-side="left">
-                    <i class="fa fa-plus" ></i>
-                </div>
+<div class="tags">
+    <ul class="list">
+        <li ng-show="!task.tags.length && !tagInputVisible" class="placeholder" ng-click="tagInputVisible = !tagInputVisible;setFocusToTagSelect()">{{ 'noLabels' | i18next }}</li>
+        <li class="tag-item" ng-repeat="tag in task.tags">
+            <span>{{tag}}</span>
+            <button ng-click="removeTag(tag)">
+                <i class="fa fa-times"></i>
             </button>
-        </div>
+        </li>
+        <li class="new-tag-input" ng-show="tagInputVisible" >
+            <ui-select id="addTag" ng-model="newTag" select-on-blur tagging tagging-label="false" autofocus on-select="addTag(newTag)">
+                <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
+                <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
+                    {{tag}}
+                </ui-select-choices>
+            </ui-select>
+        </li>
+    </ul>
+    <div class="button">
+        <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible" >
+            <div tooltips tooltip-template="add tag" tooltip-side="left">
+                <i class="fa fa-plus" ></i>
+            </div>
+        </button>
     </div>
+</div>
 </div>
 
 
 <div class="sub-tasks" data-ui-view="subtasks"></div>
 <div class="sub-tasks">
-<div ng-show="!addSubTasks && !task.subTasks[0].id" class="add-sub-tasks" ng-click="addSubTasks = !addSubTasks">{{ 'addSubTask' | i18next }}</div>
-<div ng-show="addSubTasks || task.subTasks[0].id" class="sub-tasks-title">{{ 'subTasks' | i18next }}</div>
-       <div ng-show="addSubTasks || task.subTasks[0].id" icu-sub-task-list
-         class="entity-list-container"
-         ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
-         autocomplete="autocomplete",
+    <div ng-show="!addSubTasks && !task.subTasks[0].id" class="add-sub-tasks" ng-click="addSubTasks = !addSubTasks">{{ 'addSubTask' | i18next }}</div>
+    <div class="wrap-title" ng-show="addSubTasks || task.subTass[0].id" >
+        <div class="sub-tasks-title">{{ 'subTasks' | i18next }}</div>
+     
+         <div class="open-template-menu dropdown dropdown-container" uib-dropdown>
+                <div class="dropdown-trigger" uib-dropdown-toggle>
+                    <i class="fa fa-chevron-down"></i>
+                </div>
+                <ul class="dropdown-menu menu-items" role="menu">
+                    <li>
+                       
+                            <span><b>Load task template</b></span>
+                       
+                    </li>
+                    <li class="templates">
+                      
+                            <span>Load task template</span>
+                       
+                    </li>
+                     <li class="save-template">
+                     
+                            <span><b>Save as a new template</b></span>
+                             <input type="text" name="newTemplate" placeholder="Template Name">
+                       
+                     
+                    </li>
+                    
+                </ul>
+            </div>
+    </div>
+    <div ng-show="addSubTasks || task.subTasks[0].id" icu-sub-task-list
+    class="entity-list-container"
+    ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+    autocomplete="autocomplete",
 
-         tasks="task.subTasks"
-         load-next="loadNext"
-         load-prev="loadPrev"
-         draw-arrow="true"
-         order="sorting" 
-         parent="{{task._id}}"></div>
+    tasks="task.subTasks"
+    load-next="loadNext"
+    load-prev="loadPrev"
+    draw-arrow="true"
+    order="sorting" 
+    parent="{{task._id}}"></div>
 </div>
 
 
