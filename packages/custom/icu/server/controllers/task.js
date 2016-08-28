@@ -482,62 +482,6 @@ exports.updateParent = function(req, res, next) {
 		
 }
 
-var addToTemplate = function(task, parentId, callback) {
-  var template = new Task({
-    tType: 'template',
-    title: task.title,
-    parent: parentId
-    //TODO: add creator and other fields
-  });
-        callback({s:task.subTasks.length, t:template})
-      }
-
-      var addRecorsiveTemplates = function(taskId, parentId, templates, totals, callback) {
-  // var query = req.acl.query('Task');
-  Task.findOne({'_id': taskId})
-  .exec(function(err, task) {
-    totals.tasks += task.subTasks.length;
-    addToTemplate(task, parentId, function(template) {
-      templates[template.t._id] = template;
-      if (parentId) {
-        templates[parentId].t.subTasks.push(template.t._id);  
-      }      
-      totals.templates++;
-      if (totals.templates === totals.tasks) {
-        return callback(templates);
-      }
-      for (var i = 0; i < task.subTasks.length; i++) {
-        addRecorsiveTemplates(task.subTasks[i], template.t._id, templates, totals, callback);
-      }
-    })
-  });
-}
-
-exports.toTemplate = function(req, res, next) {
-  //TODO: save documents
-  var templates = {}, 
-  totals = {
-    templates: 0,
-    tasks: 0
-  };
-  var query = req.acl.query('Task');
-  query.findOne({'_id': req.params.id})
-  .exec(function(err, task) {
-    if (err) {
-      req.locals.error = err;
-    } else {
-      totals.tasks = 1;
-      addRecorsiveTemplates(req.params.id, null, templates, totals, function(templates) {
-        for (var t in templates) {
-          templates[t].t.save();
-        }
-      });
-      req.locals.result = task.subTasks;
-    }
-    next();
-  });
-}
-
 exports.removeSubTask = function(req, res, next) {
   if (req.locals.error) {
     return next();
