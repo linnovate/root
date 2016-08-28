@@ -26,6 +26,14 @@ angular.module('mean.icu.ui.taskdetails', [])
 */    /*end test for sub-task*/
     $scope.tags = tags;
     $scope.projects = projects.data || projects;
+    $scope.projName = '';
+    $scope.projects.push({
+        'status': 'default',
+        'title': $scope.projName,
+        'class': 'create-new',
+        'color': 'rgb(0, 151, 167)'
+    });
+    
     $scope.shouldAutofocus = !$stateParams.nameFocused;
     
     TasksService.getStarred().then(function(starred) {
