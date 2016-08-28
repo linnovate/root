@@ -378,112 +378,115 @@ function getTasksDueTodayQuery(req, callback) {
 	     //  	req.locals.result = response.hits.hits.map(function (item) {
 		    //     return item._source;
 		    // })
-       callback(null, {key: name, value: response.hits.total});
-     }
-   });
-         }
+	  		callback(null, {key: name, value: response.hits.total});
+	    }
+  	});
+}
 
 
-         function myTasksStatistics(req, res, next) {
-           if (req.locals.error) {
-             return next();
-           }
-           async.parallel([
-             function(callback) {
-              getTasksDueTodayQuery(req, callback);
-            },
-            function(callback) {
-             getTasksDueWeekQuery(req, callback);
-           },
-           function(callback) {
-            getOverDueTasksQuery(req, callback);
-          },
-          function(callback) {
-           getWatchedTasksQuery(req, callback);
-         }
-         ], function(err, result) {
-           req.locals.result = result;
-           req.locals.error = err
-           next();
-         });
-         }
+function myTasksStatistics(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+	}
+	async.parallel([
+	    function(callback) {
+	    	getTasksDueTodayQuery(req, callback);
+	    },
+	    function(callback) {
+	        getTasksDueWeekQuery(req, callback);
+	    },
+	    function(callback) {
+	    	getOverDueTasksQuery(req, callback);
+	    },
+	    function(callback) {
+	        getWatchedTasksQuery(req, callback);
+	    }
+	], function(err, result) {
+	    req.locals.result = result;
+	    req.locals.error = err
+	     next();
+	});
+}
 
-         exports.getWatchedTasks = function(req, res, next) {
-           if (req.locals.error) {
-             return next();
-           }
+exports.getWatchedTasks = function(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+	}
 
-           Task.find({
-            "watchers": req.user._id,
-            "assign": {$ne: req.user._id},
-            "status": {$nin: ['rejected', 'done']},
-          }, function(err, response) {
-            if (err) {
-             req.locals.error = err;
-           } else {
-             req.locals.result = response;
-           }
-           next();
-         })
-         }
+	Task.find({
+		"watchers": req.user._id,
+		"assign": {$ne: req.user._id},
+		"status": {$nin: ['rejected', 'done']},
+	}, function(err, response) {
+		if (err) {
+			req.locals.error = err;
+		} else {
+			req.locals.result = response;
+		}
+		next();
+	})
+}
 
-         exports.getOverdueWatchedTasks = function(req, res, next) {
-           if (req.locals.error) {
-             return next();
-           }
+exports.getOverdueWatchedTasks = function(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+	}
 
-           var dates = new Date().getThisDay();
-           Task.find({
-            "watchers": req.user._id,
-            "assign": {$ne: req.user._id},
-            "status": {$nin: ['rejected', 'done']},
-            "due": {$lt: dates[0]}
-          }, function(err, response) {
-            if (err) {
-             req.locals.error = err;
-           } else {
-             req.locals.result = response;
-           }
-           next();
-         })
-         }
+	var dates = new Date().getThisDay();
+	Task.find({
+		"watchers": req.user._id,
+		"assign": {$ne: req.user._id},
+		"status": {$nin: ['rejected', 'done']},
+		"due": {$lt: dates[0]}
+	}, function(err, response) {
+		if (err) {
+			req.locals.error = err;
+		} else {
+			req.locals.result = response;
+		}
+		next();
+	})
+}
 
-         exports.getSubTasks = function(req, res, next) {
-           if (req.locals.error) {
-             return next();
-           }
+exports.getSubTasks = function(req, res, next) {
+	if (req.locals.error) {
+    	return next();
+  	}
 
-           var query = req.acl.query('Task');
-           query.findOne({'_id': req.params.id},{ subTasks: 1})
-           .populate('subTasks')
-           .exec(function(err, task) {
-             if (err) {
-              req.locals.error = err;
-            } else {
-              req.locals.result = task.subTasks;
-            }
-            next();
-          });
-         }
+  	var query = req.acl.query('Task');
+	query.findOne({'_id': req.params.id},{ subTasks: 1})
+		.populate('subTasks')
+		.exec(function(err, task) {
+			if (err) {
+				req.locals.error = err;
+			} else {
+				req.locals.result = task.subTasks;
+			}
+			next();
+		});
+}
 
-         exports.updateParent = function(req, res, next) {
-          if (req.locals.error) {
-           return next();
-         }
-         Task.update({'_id': req.body.parent}, { $push: {'subTasks': req.locals.result._id}}, function(err, task) {
-          if (err) {
-           req.locals.error = err;
-         }
-         next();
-       });
+exports.updateParent = function(req, res, next) {
+	if (req.locals.error || !req.body.parent) {
+    	return next();
+  	}
+  	var data = { $push: {subTasks: req.locals.result._id}};
+  	Task.findOneAndUpdate({'_id': req.body.parent}, data, function(err, task) {
+  		if (err) {
+  			req.locals.error = err;
+  		} else {
+  			req.locals.result.subTasks = task.subTasks;
+  		}
+  		next();
+  	});
+		
+}
 
-       }
-
-       var addToTemplate = function(task, parentId, callback) {
-        var template = new Task({
-          tType: 'template',
-          title: task.title,
-          parent: parentId
+var addToTemplate = function(task, parentId, callback) {
+  var template = new Task({
+    tType: 'template',
+    title: task.title,
+    parent: parentId
     //TODO: add creator and other fields
   });
         callback({s:task.subTasks.length, t:template})
