@@ -12,6 +12,11 @@ var options = {
     discussions: [],
     watchers: [],
     circles: {}
+  },
+  conditions: {
+    tType: {
+      $ne: 'template'
+    }
   }
 };
 

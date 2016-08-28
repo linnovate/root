@@ -1,6 +1,25 @@
 'use strict';
 
+var options = {
+  includes: '',
+  defaults: {},
+  conditions: {
+    tType: 'template'
+  }
+};
+
+exports.defaultOptions = options;
+
+var crud = require('../controllers/crud.js');
+var template = crud('templates', options);
+
 var Task = require('../models/task');
+
+Object.keys(template).forEach(function(methodName) {
+  if (methodName === 'all') {
+    exports[methodName] = template[methodName];
+  }
+});
 
 var addToTemplate = function(task, parentId, name, creator, callback) {
   var template = new Task({

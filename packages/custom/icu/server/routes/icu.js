@@ -51,7 +51,7 @@ module.exports = function (Icu, app) {
 //END update mapping - OHAD
 
 
-  app.route('/api/:entity(tasks|discussions|projects|users|circles)*').all(acl());
+  app.route('/api/:entity(tasks|discussions|projects|users|circles|templates)*').all(acl());
   app.route('/api/circles/mine').get(circles.mine);
   app.route('/api/circles/all').get(circles.all);
   app.route('/api/circles/sources').get(circles.sources);
@@ -200,6 +200,8 @@ app.route('/api/notification1/:id([0-9a-fA-F]{24})')
 
   app.route('/api/tasks/:id([0-9a-fA-F]{24})/toTemplate')
     .post(templates.toTemplate);
+  app.route('/api/templates')
+    .get(pagination.parseParams, templates.all, pagination.formResponse);
 
   //temporary -because of swagger bug with 'tasks' word
 
