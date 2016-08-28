@@ -65,7 +65,6 @@ Date.prototype.getThisDay = function()
   };
 
   exports.update = function(req, res, next) {
-   console.log('sara1'+  JSON.stringify(req.locals.error));
    if (req.locals.error) {
     return next();
   }

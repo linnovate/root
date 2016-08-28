@@ -116,8 +116,6 @@ TaskSchema.post('save', function(req, next) {
       return err;
     }
 
-    console.log("task================================");
-    console.log(task);
 
     elasticsearch.save(task, 'task', project.room);
   });

@@ -100,7 +100,6 @@ exports.createRoom = function(req, res, next) {
 };
 
 exports.updateRoom = function(req, res, next) {
-    console.log('====================================1============================================');      
         
     // Made By OHAD
     var ArrayOfusernames = [];
