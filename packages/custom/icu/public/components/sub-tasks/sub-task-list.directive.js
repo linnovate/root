@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.subtaskslistdirective', [])
-.directive('icuSubTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context, UsersService) {
+.directive('icuSubTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, UsersService) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -21,40 +21,21 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             $scope.people = people;
         })
       
-        $scope.context = context;
         $scope.isLoading = true;
-
+        console.log('tasks', $scope.tasks)
         _($scope.tasks).each(function(t) {
             t.__state = creatingStatuses.Created;
         });
 
         if (!$scope.displayOnly) {
-            if (context.entityName === 'my'){
-                UsersService.getMe().then(function (me) {
-                    newTask.assign = me._id;    
-                    $scope.tasks.push(_(newTask).clone());
-                });
-            }
-            else
-                $scope.tasks.push(_(newTask).clone());
+            $scope.tasks.push(_(newTask).clone());
         }
 
-
-        if (context.entityName === 'all') {
-        	$scope.detailsState = 'main.tasks.all.details';
-        } else if (context.entityName === 'my') {
-        	$scope.detailsState = 'main.tasks.byassign.details';
-        } else {
-        	$scope.detailsState = 'main.tasks.byentity.details';
-        }
 
         $scope.createOrUpdate = function(task) {
-            if (context.entityName !== 'all') {
-                task[context.entityName] = context.entity;
-            }
-
             if (task.__state === creatingStatuses.NotCreated) {
                 task.__state = creatingStatuses.Creating;
+                task.parent = $scope.parent;
 
                 return TasksService.create(task).then(function(result) {
                     task.__state = creatingStatuses.Created;
@@ -72,10 +53,6 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
         $scope.searchResults = [];
 
         $scope.search = function(task) {
-            if (context.entityName !== 'discussion') {
-                return;
-            }
-
             if (!task.__autocomplete) {
                 return;
             }
@@ -102,33 +79,31 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
 
         };
 
+        $scope.delete = function(subTask) {
+          TasksService.remove(subTask._id).then(function (res) {
+           var taskindex =  _.findIndex($scope.tasks, function (t) { return t._id ===res._id; })
+           $scope.tasks.splice(taskindex,1);
+       });
+      }
+
         $scope.select = function(selectedTask) {
             var currentTask = _($scope.tasks).findIndex(function(t) {
                 return t.id === $state.params.id;
             });
 
-            // TasksService.remove(currentTask._id);
-
-            // _(currentTask).assign(selectedTask);
-            // currentTask.__autocomplete = false;
-
-            // $scope.searchResults.length = 0;
-            // $scope.selectedSuggestion = 0;
-
             $scope.createOrUpdate($scope.tasks[currentTask + 1]).then(function(task) {
-                $state.go($scope.detailsState, {
-                    id: task._id,
-                    entity: context.entityName,
-                    entityId: context.entityId
-                });
+                // $state.go('main.tasks.byparent.details', {
+                //     id: task._id,
+                //     parentId: task.parent._id || task.parent
+                // });
             });
         };
 
     }
 
     function link($scope, $element) {
-        console.log('uuuu',$scope.tasks)
         var isScrolled = false;
+        console.log('tasks', $scope.tasks)
 
         $scope.initialize = function($event, task) {
             if ($scope.displayOnly) {
@@ -138,23 +113,30 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             var nameFocused = angular.element($event.target).hasClass('name');
 
             if (task.__state === creatingStatuses.NotCreated) {
-                $scope.createOrUpdate(task).then(function() {
-                    $state.go($scope.detailsState, {
-                        id: task._id,
-                        entity: context.entityName,
-                        entityId: context.entityId,
-                        nameFocused: nameFocused
-                    });
-                });
-            } else {
-                $state.go($scope.detailsState, {
-                    id: task._id,
-                    entity: context.entityName,
-                    entityId: context.entityId,
-                    nameFocused: nameFocused
-                });
+                $scope.createOrUpdate(task)
+                // .then(function() {
+            //         $state.go('main.tasks.byparent.details', {
+            //             id: task._id,
+            //             parentId: task.parent._id || task.parent,
+            //             nameFocused: nameFocused
+            //         });
+            //     });
+            // } else {
+            //     $state.go('main.tasks.byparent.details', {
+            //         id: task._id,
+            //         parentId: task.parent._id || task.parent,
+            //         nameFocused: nameFocused
+            //     });
             }
         };
+
+        $scope.changeState = function(subTask) {
+             $state.go('main.tasks.byparent.details', {
+                    id: subTask._id,
+                    parentId: task.parent._id || task.parent,
+                    nameFocused: nameFocused
+                });
+        }
 
         $scope.isCurrentState = function (id) {
             var isActive = ($state.current.name.indexOf('main.tasks.byentity.details') === 0 ||
@@ -178,9 +160,9 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                     $element.find('td.name')[index+1].focus();
                 }
                 else {
-                	$timeout(function() {
-			            $element.find('td.name')[index+1].focus();
-			        }, 500);
+                    $timeout(function() {
+                        $element.find('td.name')[index+1].focus();
+                    }, 500);
                 }
 
             }
@@ -259,6 +241,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             order: '=',
             displayOnly: '=',
             autocomplete: '=',
+            parent: '@',
             people: '='
         },      
         link: link,

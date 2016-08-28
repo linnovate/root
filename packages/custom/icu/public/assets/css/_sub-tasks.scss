@@ -1,6 +1,5 @@
 .sub-tasks {
     margin: 0 28px;
-    overflow: auto;
     margin-top: 13px;
     .add-sub-tasks{
         color: #fda102;
@@ -8,10 +7,31 @@
         transition: 0.8s; 
         cursor: pointer;
         }
-        .sub-tasks-title {
+        .wrap-title  {
+            width: 100%;
+             .sub-tasks-title {
+                width: 21%;
+    display: inline-block;
                font-weight: bold; 
                    margin-bottom: 10px;
+        } 
+        .open-template-menu {
+                display: inline-block;
+    float: right;
         }
+        .dropdown-menu{
+                width: 270px;
+              right: 0;
+              left: auto;  
+              li span{
+        padding: 6px 0;
+    border-bottom: 1px solid #999;
+    margin: 5px 17px;
+              }
+
+        }
+        }
+      
     .summary {
         border: 1px solid #e1e1e1;
         border-bottom: 1px solid #e1e1e1 !important;
@@ -20,6 +40,9 @@
     }
     icu-sub-task-list {
         margin-top: 7px;
+    }
+    table tr {
+        position: relative;
     }
   table tbody td {
     	border: 1px solid #e1e1e1;
@@ -143,6 +166,11 @@
             outline: none;
             background-position: left center;
         }
+    }
+    .delete {
+        position: absolute;
+        right: 0;
+            border: none;
     }
 
 
