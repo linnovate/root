@@ -17,7 +17,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                $timeout,
                                                subtasks) {
     $scope.task = entity || context.entity;
-    $scope.task.subtasks = subtasks;
+    $scope.task.subTasks = subtasks;
     $scope.addSubTasks = false;
      /*test for sub-task*/
     // $scope.addSubTasks = false;
