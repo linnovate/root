@@ -139,9 +139,9 @@
                             <span><b>{{ 'LoadTaskTemplate' | i18next }}</b></span>
                        
                     </li>
-                    <li class="templates">
+                    <li class="templates" ng-repeat="temp in template">
                       
-                            <span>{{ 'LoadTaskTemplate' | i18next }}</span>
+                            <span ng-click="template2subTasks(temp._id)">{{temp.title}} ({{temp.subTasks.length + 1}})</span>
                        
                     </li>
                     <li class='new-template'>
