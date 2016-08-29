@@ -16,7 +16,11 @@ var options = {
   conditions: {
     tType: {
       $ne: 'template'
-    }
+    },
+    $or: [
+      {parent: null},
+      {parent: {$exists: false}}
+    ]
   }
 };
 

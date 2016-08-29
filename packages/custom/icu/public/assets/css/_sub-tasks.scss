@@ -6,14 +6,18 @@
         font-size: 14px;
         transition: 0.8s; 
         cursor: pointer;
+        font-weight: normal !important;
+        &:hover {
+            text-decoration: underline;
         }
-        .wrap-title  {
-            width: 100%;
-             .sub-tasks-title {
-                width: 21%;
+    }
+    .wrap-title {
+        width: 100%;
+        .sub-tasks-title {
+            width: 21%;
             display: inline-block;
-               font-weight: bold; 
-                   margin-bottom: 10px;
+            font-weight: bold; 
+            margin-bottom: 10px;
         } 
         .open-template-menu {
             display: inline-block;
@@ -62,81 +66,81 @@
             }
             /*li span:last-child{
                 border-bottom: none;
-            }*/
-        }
-        }
-      
-    .summary {
-        border: 1px solid #e1e1e1;
-        border-bottom: 1px solid #e1e1e1 !important;
-        background-color: white !important;
-  
-    }
-    icu-sub-task-list {
-        margin-top: 7px;
-    }
-    table tr {
-        position: relative;
-    }
-  table tbody td {
-    	border: 1px solid #e1e1e1;
-    }
-    .id {
-    	width: 8%;
-        border-right: none;
-    }
-    .name {
-        width:30%; 
-            border-left: none;   
-    }
-     .user {
-              position: relative;
-                  width: 19%;
-        .no-assignee {
-            position: absolute;
-            transform: translateY(-65%);
-            top: 31px;
-            width: calc(100% - 10px);
-            margin-left: 10px;
-
-            .avatar-placeholder {
-                background: url(/icu/assets/img/user.png) no-repeat scroll;
-                height: 26px;
-                padding: 5px 0 5px 35px;
-                color: $light-grey-placeholder;
-                display: table;
-                width: 100%;
-                background-position: left;
+                }*/
             }
-
         }
-        .ui-select-placeholder {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%) translateY(-65%);
-            top: 50%;
+        
+        .summary {
+            border: 1px solid #e1e1e1;
+            border-bottom: 1px solid #e1e1e1 !important;
+            background-color: white !important;
+            
         }
-
-        .avatar {
-            height: 26px;
-            width: 26px;
-            background-color: $green;
-            border-radius: 15px;
-            display: inline-block;
-            margin: 0 10px;
-            float: left;
-            font-size: 20px;
-            line-height: 25px;
+        icu-sub-task-list {
+            margin-top: 7px;
         }
-        .summary-content {
-            display: inline-block;
-            line-height: 30px;
+        table tr {
+            position: relative;
         }
+        table tbody td {
+           border: 1px solid #e1e1e1;
+       }
+       .id {
+           width: 8%;
+           border-right: none;
+       }
+       .name {
+        width:30%; 
+        border-left: none;   
     }
-    .status {
-          width: 19%;
-   padding-left: 7px;
-   .ui-select-container.ui-select-bootstrap {
+    .user {
+      position: relative;
+      width: 19%;
+      .no-assignee {
+        position: absolute;
+        transform: translateY(-65%);
+        top: 31px;
+        width: calc(100% - 10px);
+        margin-left: 10px;
+
+        .avatar-placeholder {
+            background: url(/icu/assets/img/user.png) no-repeat scroll;
+            height: 26px;
+            padding: 5px 0 5px 35px;
+            color: $light-grey-placeholder;
+            display: table;
+            width: 100%;
+            background-position: left;
+        }
+
+    }
+    .ui-select-placeholder {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%) translateY(-65%);
+        top: 50%;
+    }
+
+    .avatar {
+        height: 26px;
+        width: 26px;
+        background-color: $green;
+        border-radius: 15px;
+        display: inline-block;
+        margin: 0 10px;
+        float: left;
+        font-size: 20px;
+        line-height: 25px;
+    }
+    .summary-content {
+        display: inline-block;
+        line-height: 30px;
+    }
+}
+.status {
+  width: 19%;
+  padding-left: 7px;
+  .ui-select-container.ui-select-bootstrap {
     .ui-select-match .ui-select-toggle {
         float: right;
         width: calc(100% - 10px);
@@ -178,34 +182,34 @@
     .scheduled{color: #0054a6;}
 }
 }
- .due {
+.due {
     width: 20%;
-        .placeholder {
-            position: absolute;
-            top: 50%;
-            transform: translateX(60%) translateY(-50%);
-            color: $light-grey-placeholder;
-        }
-
-        input {
-            appearance: none;
-            border: none;
-            float: right;
-            width: calc(100% - 10px);
-            margin-left: 10px;
-            padding: 17px 0;
-            padding-left: 25px;
-            background: url(/icu/assets/img/calendar.png) no-repeat scroll;
-            cursor: pointer;
-            outline: none;
-            background-position: left center;
-        }
-    }
-    .delete {
+    .placeholder {
         position: absolute;
-        right: 0;
-            border: none;
+        top: 50%;
+        transform: translateX(60%) translateY(-50%);
+        color: $light-grey-placeholder;
     }
+
+    input {
+        appearance: none;
+        border: none;
+        float: right;
+        width: calc(100% - 10px);
+        margin-left: 10px;
+        padding: 17px 0;
+        padding-left: 25px;
+        background: url(/icu/assets/img/calendar.png) no-repeat scroll;
+        cursor: pointer;
+        outline: none;
+        background-position: left center;
+    }
+}
+.delete {
+    position: absolute;
+    right: 0;
+    border: none;
+}
 
 
 }

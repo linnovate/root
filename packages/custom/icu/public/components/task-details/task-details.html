@@ -127,9 +127,9 @@
 <div class="sub-tasks">
     
     <div class="wrap-title"  >
-        <div class="sub-tasks-title" ng-show="addSubTasks || task.subTass[0].id">{{ 'subTasks' | i18next }}</div>
-        <div ng-show="!addSubTasks && !task.subTasks[0].id" class="sub-tasks-title add-sub-tasks" ng-click="addSubTasks = !addSubTasks">{{ 'addSubTask' | i18next }}</div>
-         <div class="open-template-menu dropdown dropdown-container" uib-dropdown is-open="isopen" auto-close="disabled">
+        <div class="sub-tasks-title" ng-show="addSubTasks || task.subTasks[0]._id">{{ 'subTasks' | i18next }}</div>
+        <div ng-show="!addSubTasks && !task.subTasks[0]._id" class="add-sub-tasks sub-tasks-title" ng-click="addSubTasks = !addSubTasks">{{ 'addSubTask' | i18next }}</div>
+         <div class="open-template-menu dropdown dropdown-container" uib-dropdown is-open="isopen" auto-close="disabled" ng-show="addSubTasks || task.subTasks[0]._id">
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
                 </div>
