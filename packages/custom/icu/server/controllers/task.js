@@ -478,8 +478,6 @@ exports.updateParent = function(req, res, next) {
   	Task.findOneAndUpdate({'_id': req.body.parent}, data, function(err, task) {
   		if (err) {
   			req.locals.error = err;
-  		} else {
-  			req.locals.result.subTasks = task.subTasks;
   		}
   		next();
   	});
