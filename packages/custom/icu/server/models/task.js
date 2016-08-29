@@ -20,10 +20,6 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Project'
   },
-  parent: {
-    type: Schema.ObjectId,
-    ref: 'Task'
-  },
   creator: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -116,8 +112,6 @@ TaskSchema.post('save', function(req, next) {
       return err;
     }
 
-    console.log("task================================");
-    console.log(task);
 
     elasticsearch.save(task, 'task', project.room);
   });

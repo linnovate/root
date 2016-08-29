@@ -12,6 +12,7 @@ var circles = require('../controllers/circles.js');
 var attachments = require('../controllers/attachments');
 var star = require('../controllers/star');
 var elasticsearch = require('../controllers/elasticsearch');
+var templates = require('../controllers/templates');
 
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
@@ -50,7 +51,7 @@ module.exports = function (Icu, app) {
 //END update mapping - OHAD
 
 
-  app.route('/api/:entity(tasks|discussions|projects|users|circles)*').all(acl());
+  app.route('/api/:entity(tasks|discussions|projects|users|circles|templates)*').all(acl());
   app.route('/api/circles/mine').get(circles.mine);
   app.route('/api/circles/all').get(circles.all);
   app.route('/api/circles/sources').get(circles.sources);
@@ -196,6 +197,13 @@ app.route('/api/notification1/:id([0-9a-fA-F]{24})')
     .get(updates.getByEntity, updates.getAttachmentsForUpdate);
   app.route('/api/history/updates/:id([0-9a-fA-F]{24})')
     .get(updates.readHistory);
+
+  app.route('/api/tasks/:id([0-9a-fA-F]{24})/toTemplate')
+    .post(templates.toTemplate);
+  app.route('/api/templates/:id([0-9a-fA-F]{24})/toSubTasks')
+    .post(templates.toSubTasks);
+  app.route('/api/templates')
+    .get(pagination.parseParams, templates.all, pagination.formResponse);
 
   //temporary -because of swagger bug with 'tasks' word
 

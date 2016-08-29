@@ -57,6 +57,11 @@ var entityNameMap = {
     mainModel: AttachementModel,
     archiveModel: AttachementArchiveModel,
     name: 'Attachement'
+  },
+  'templates': {
+    mainModel: TaskModel,
+    archiveModel: TaskArchiveModel,
+    name: 'Task'
   }
 
 };
@@ -67,7 +72,7 @@ var defaults = {
 };
 
 module.exports = function(entityName, options) {
-  var findByUser = ['tasks', 'projects', 'discussions'];
+  var findByUser = ['tasks', 'projects', 'discussions', 'templates'];
   if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;
 
@@ -81,24 +86,25 @@ module.exports = function(entityName, options) {
   options = _.defaults(options, defaults);
 
   function all(pagination, user, acl) {
-
     var deffered = q.defer();
 
     var countQuery;
     var mergedPromise;
 
     var query;
+    var conditions = options.conditions || {};
+
     if (currentUser) {
       query = acl.query(entityNameMap[entityName].name);
-      countQuery = acl.query(entityNameMap[entityName].name).count();
+      countQuery = acl.query(entityNameMap[entityName].name).count(conditions);
     } else {
-      query = Model.find();
-      countQuery = Model.find().count();
+      query = Model.find(conditions);
+      countQuery = Model.find(conditions).count();
     }
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
-        query.find({})
+        query.find(conditions)
           .sort(pagination.sort)
           .skip(pagination.start)
           .limit(pagination.limit);
@@ -116,8 +122,7 @@ module.exports = function(entityName, options) {
         deffered.resolve(mergedPromise);
       }
     } else {
-
-      query.find({});
+      query.find(conditions);
       query.populate(options.includes);
       query.hint({
         _id: 1
