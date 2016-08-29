@@ -40,6 +40,9 @@ var addToTemplate = function(task, parentId, name, creator, exist, tType, callba
     Task.findOne({
       '_id': exist
     }).exec(function(err, existTask) {
+      if (err) {
+        req.locals.error = err;
+      }
       callback({
         s: task.subTasks.length,
         t: existTask
@@ -111,23 +114,36 @@ exports.toSubTasks = function(req, res, next) {
   query.findOne({
     _id: req.params.id,
     tType: 'template'
-  })
-    .exec(function(err, task) {
-      if (err) {
-        req.locals.error = err;
-        next();
-      } else {
-        totals.tasks = 1;
-        addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, req.body.taskId, null, tasks, totals, function(templates) {
-          req.locals.result = [];
-          for (var t in templates) {
-            templates[t].t.save();
-            if (t !== req.body.taskId) {
-              req.locals.result.push(templates[t].t);
-            }
-          }
+  }).exec(function(err, task) {
+    if (err) {
+      req.locals.error = err;
+      next();
+    } else {
+      var query = req.acl.query('Task');
+      query.findOne({
+        _id: req.body.taskId,
+        tType: {
+          $ne: 'template'
+        }
+      }).exec(function(err, task) {
+        if (err) {
+          req.locals.error = err;
           next();
-        });
-      }
-    });
+        } else {
+          totals.tasks = 1;
+          addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, req.body.taskId, null, tasks, totals, function(templates) {
+            req.locals.result = [];
+            for (var t in templates) {
+              templates[t].t.save();
+              if (templates[t].t.parent && templates[t].t.parent.toString() === req.body.taskId.toString()) {
+                req.locals.result.push(templates[t].t);
+              }
+            }
+            next();
+          });
+
+        }
+      });
+    }
+  });
 }
