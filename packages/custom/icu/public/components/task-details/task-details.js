@@ -196,6 +196,14 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     };
 
+    $scope.name = "";
+    $scope.saveTemplate = function(){
+        $scope.isopen = false;
+        TasksService.saveTemplate($stateParams.id,{name:$scope.name}).then(function (result) {
+            console.log(result)
+        });
+    };
+
     $scope.setFocusToTagSelect = function() {
     	var element = angular.element('#addTag > input.ui-select-focusser')[0];
     	$timeout(function () {

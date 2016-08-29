@@ -130,6 +130,12 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function saveTemplate(id, name){
+        return $http.post(ApiUri + EntityPrefix + id + '/toTemplate', name).then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -150,6 +156,7 @@ angular.module('mean.icu.data.tasksservice', [])
         getStarredByassign: getStarredByassign,
         getSubTasks: getSubTasks,
         filterValue: filterValue,
+        saveTemplate: saveTemplate,
         data: data
     };
 });
