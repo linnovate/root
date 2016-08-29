@@ -45,7 +45,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
     TasksService.getTemplate().then(function(template){
         $scope.template = template;
-        console.log(template, 'template');
+        console.log(template, 'template', $scope.me);
     });
 
     $scope.people = people.data || people;
@@ -209,10 +209,13 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     };
 
-    $scope.name = "";
+    $scope.template = {
+        name: '',
+        watcher: '' 
+    };
     $scope.saveTemplate = function(){
         $scope.isopen = false;
-        TasksService.saveTemplate($stateParams.id,{'name':$scope.name}).then(function (result) {
+        TasksService.saveTemplate($stateParams.id,{'name':$scope.template}).then(function (result) {
             console.log(result)
         });
     };
@@ -225,8 +228,11 @@ angular.module('mean.icu.ui.taskdetails', [])
     };
 
     $scope.template2subTasks = function(templateId) {
+        $scope.isopen = false;
         TasksService.template2subTasks(templateId ,{'taskId':$stateParams.id}).then(function (result) {
-            console.log('template2subTasks: ', result)
+           var tmp = $scope.task.subTasks.pop()
+            $scope.task.subTasks = $scope.task.subTasks.concat(result);
+            $scope.task.subTasks.push(tmp);
         });
     };
 

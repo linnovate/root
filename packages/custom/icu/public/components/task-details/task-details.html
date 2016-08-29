@@ -125,10 +125,10 @@
 
 <div class="sub-tasks" data-ui-view="subtasks"></div>
 <div class="sub-tasks">
-    <div ng-show="!addSubTasks && !task.subTasks[0].id" class="add-sub-tasks" ng-click="addSubTasks = !addSubTasks">{{ 'addSubTask' | i18next }}</div>
-    <div class="wrap-title" ng-show="addSubTasks || task.subTass[0].id" >
-        <div class="sub-tasks-title">{{ 'subTasks' | i18next }}</div>
-     
+    
+    <div class="wrap-title"  >
+        <div class="sub-tasks-title" ng-show="addSubTasks || task.subTass[0].id">{{ 'subTasks' | i18next }}</div>
+        <div ng-show="!addSubTasks && !task.subTasks[0].id" class="sub-tasks-title add-sub-tasks" ng-click="addSubTasks = !addSubTasks">{{ 'addSubTask' | i18next }}</div>
          <div class="open-template-menu dropdown dropdown-container" uib-dropdown is-open="isopen" auto-close="disabled">
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
@@ -141,17 +141,31 @@
                     </li>
                     <li class="templates" ng-repeat="temp in template">
                       
-                            <span ng-click="template2subTasks(temp._id)">{{temp.title}} ({{temp.subTasks.length + 1}})</span>
+                            <span ng-click="template2subTasks(temp._id)">{{temp.title}} ({{temp.subTasks.length }})</span>
                        
                     </li>
                     <li class='new-template'>
                         <div>
                      
                             <span><b>{{'saveTemplate' | i18next }}</b></span>
-                            <input type="text" name="newTemplate" placeholder="Template Name" ng-model="name">
+                            <input type="text" name="newTemplate" placeholder="Template Name" ng-model="template.name">
                             <div ng-click='saveTemplate()' class='save-template'>save</div>
                              
                         </div>
+                    </li>
+                    <li class="template-assign">
+                        <!-- on-select="updateAndNotiy(task)" -->
+
+                        <!-- <ui-select ng-model="template.assign" >
+                            <ui-select-match>
+                                <div icu-avatar user="$select.selected"></div>
+                                <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
+                                <div icu-avatar user="user"></div>
+                                <span class="summary-content">{{user.name}}</span>
+                            </ui-select-choices>
+                        </ui-select> -->
                     </li>
                 </ul>
                 

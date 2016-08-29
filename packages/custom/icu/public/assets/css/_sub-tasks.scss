@@ -11,7 +11,7 @@
             width: 100%;
              .sub-tasks-title {
                 width: 21%;
-    display: inline-block;
+            display: inline-block;
                font-weight: bold; 
                    margin-bottom: 10px;
         } 
@@ -52,6 +52,11 @@
                             background-color: #fff;
                             padding: 0px 6px;
                         }
+                    }
+                }
+                &.template-assign{
+                    span{
+                        margin: 0 !important;
                     }
                 }
             }
