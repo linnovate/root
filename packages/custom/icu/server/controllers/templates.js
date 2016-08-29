@@ -4,7 +4,8 @@ var options = {
   includes: '',
   defaults: {},
   conditions: {
-    tType: 'template'
+    tType: 'template',
+    parent: null
   }
 };
 
@@ -91,10 +92,10 @@ exports.toTemplate = function(req, res, next) {
         addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, false, 'template', templates, totals, function(templates) {
           for (var t in templates) {
             templates[t].t.save();
-            req.locals.result = task;
           }
         });
       }
+      req.locals.result = task;
       next();
     });
 }
@@ -119,10 +120,10 @@ exports.toSubTasks = function(req, res, next) {
         addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, req.body.taskId, null, tasks, totals, function(templates) {
           for (var t in templates) {
             templates[t].t.save();
-            req.locals.result = task;
           }
         });
       }
+      req.locals.result = task;
       next();
     });
 }
