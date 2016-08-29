@@ -115,15 +115,19 @@ exports.toSubTasks = function(req, res, next) {
     .exec(function(err, task) {
       if (err) {
         req.locals.error = err;
+        next();
       } else {
         totals.tasks = 1;
         addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, req.body.taskId, null, tasks, totals, function(templates) {
+          req.locals.result = [];
           for (var t in templates) {
             templates[t].t.save();
+            if (t !== req.body.taskId) {
+              req.locals.result.push(templates[t].t);
+            }
           }
+          next();
         });
       }
-      req.locals.result = task;
-      next();
     });
 }
