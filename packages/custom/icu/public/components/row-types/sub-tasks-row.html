@@ -1,6 +1,7 @@
-<td class="id" >{{data.index + 1}}</td>
+<td class="id" ng-if="data.task._id">{{data.index + 1}}</td>
 <td class="name"
     title="{{data.task.title}}"
+    ng-attr-colspan="{{data.task._id ? undefined : 6}}"
     ng-attr-contenteditable="{{!data.displayOnly}}"
     placeholder="{{'createNewTask' | i18next}}"
     strip-br="true"
@@ -10,7 +11,7 @@
     ng-blur="data.hideAutoCompleteCb(data.task)"
     ng-model="data.task.title">
 </td>
-<td class="user">
+<td class="user" ng-if="data.task._id">
 <!--     <div class="no-assignee" ng-if="!data.task.assign">
         <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
     </div> -->
@@ -27,7 +28,7 @@
     </ui-select>
 
 </td>
-<td class="status" >
+<td class="status" ng-if="data.task._id">
     <ui-select ng-model="data.task.status" on-select="update(data.task)" >
         <ui-select-match>
             <i class='{{$select.selected}}'></i>
@@ -40,7 +41,7 @@
     </ui-select>
 
 </td>
-<td class="due">
+<td class="due" ng-if="data.task._id">
     <input ui-date="dueOptions" ng-model="data.task.due" placeholder="{{ 'deadline' | i18next }}">
 
 </td>
