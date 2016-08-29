@@ -129,30 +129,34 @@
     <div class="wrap-title" ng-show="addSubTasks || task.subTass[0].id" >
         <div class="sub-tasks-title">{{ 'subTasks' | i18next }}</div>
      
-         <div class="open-template-menu dropdown dropdown-container" uib-dropdown>
+         <div class="open-template-menu dropdown dropdown-container" uib-dropdown is-open="isopen" auto-close="disabled">
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
                     <li>
                        
-                            <span><b>Load task template</b></span>
+                            <span><b>{{ 'LoadTaskTemplate' | i18next }}</b></span>
                        
                     </li>
-                    <li class="templates">
+                    <li class="templates" ng-repeat="temp in template">
                       
-                            <span>Load task template</span>
+                            <span ng-click="template2subTasks(temp._id)">{{temp.title}} ({{temp.subTasks.length + 1}})</span>
                        
                     </li>
-                     <li class="save-template">
+                    <li class='new-template'>
+                        <div>
                      
-                            <span><b>Save as a new template</b></span>
-                             <input type="text" name="newTemplate" placeholder="Template Name">
-                       
-                     
+                            <span><b>{{'saveTemplate' | i18next }}</b></span>
+                            <input type="text" name="newTemplate" placeholder="Template Name" ng-model="name">
+                            <div ng-click='saveTemplate()' class='save-template'>save</div>
+                             
+                        </div>
                     </li>
-                    
                 </ul>
+                
+                    
+               
             </div>
     </div>
     <div ng-show="addSubTasks || task.subTasks[0].id" icu-sub-task-list

@@ -134,6 +134,24 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function getTemplate(taskId) {
+       return $http.get(ApiUri + '/templates' ).then(function (result) {
+            return result.data;
+        });
+    }
+
+    function saveTemplate(id, name){
+        return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
+            return result.data;
+        });
+    }
+
+    function template2subTasks(templateId, data){
+        return $http.post(ApiUri  + '/templates/' + templateId + '/toSubTasks', data).then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -153,7 +171,10 @@ angular.module('mean.icu.data.tasksservice', [])
         getWatchedTasks: getWatchedTasks,
         getStarredByassign: getStarredByassign,
         getSubTasks: getSubTasks,
+        getTemplate: getTemplate,
         filterValue: filterValue,
+        saveTemplate: saveTemplate,
+        template2subTasks:template2subTasks,
         data: data
     };
 });

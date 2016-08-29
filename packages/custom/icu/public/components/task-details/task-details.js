@@ -43,6 +43,11 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     });
 
+    TasksService.getTemplate().then(function(template){
+        $scope.template = template;
+        console.log(template, 'template');
+    });
+
     $scope.people = people.data || people;
     if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
         var newPeople = {
@@ -204,12 +209,26 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     };
 
+    $scope.name = "";
+    $scope.saveTemplate = function(){
+        $scope.isopen = false;
+        TasksService.saveTemplate($stateParams.id,{'name':$scope.name}).then(function (result) {
+            console.log(result)
+        });
+    };
+
     $scope.setFocusToTagSelect = function() {
     	var element = angular.element('#addTag > input.ui-select-focusser')[0];
     	$timeout(function () {
     		element.focus();
     	}, 0);
-    }
+    };
+
+    $scope.template2subTasks = function(templateId) {
+        TasksService.template2subTasks(templateId ,{'taskId':$stateParams.id}).then(function (result) {
+            console.log('template2subTasks: ', result)
+        });
+    };
 
     $scope.delayedUpdate = _.debounce($scope.update, 500);
 
