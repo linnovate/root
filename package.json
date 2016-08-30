@@ -32,6 +32,7 @@
     "lodash": "latest",
     "meanio": "0.8.0",
     "mongoose": "latest",
+    "mongoose-deep-populate": "^3.0.0",
     "morgan": "latest",
     "ms": "latest",
     "nodemailer": "latest",

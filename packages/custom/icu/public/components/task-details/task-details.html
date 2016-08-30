@@ -173,17 +173,18 @@
                
             </div>
     </div>
-    <div ng-show="addSubTasks || task.subTasks[0].id" icu-sub-task-list
-    class="entity-list-container"
-    ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
-    autocomplete="autocomplete",
-
-    tasks="task.subTasks"
-    load-next="loadNext"
-    load-prev="loadPrev"
-    draw-arrow="true"
-    order="sorting" 
-    parent="{{task._id}}"></div>
+    <div ng-show="addSubTasks || task.subTasks[0].id"
+        icu-sub-task-list
+        class="entity-list-container"
+        ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+        autocomplete="autocomplete",
+        tasks="task.subTasks"
+        load-next="loadNext"
+        load-prev="loadPrev"
+        draw-arrow="true"
+        order="sorting"
+        parent="{{task._id}}">
+    </div>
 </div>
 
 

@@ -25,14 +25,18 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         });
 
         if (!$scope.displayOnly) {
-            if (context.entityName === 'my'){
+            if (context.entityName === 'my') {
                 UsersService.getMe().then(function (me) {
                     newTask.assign = me._id;    
                     $scope.tasks.push(_(newTask).clone());
                 });
-            }
-            else
+            } else {
+                if (context.entityName === 'task') {
+                    newTask.parent = context.entity._id;    
+                    $scope.tasks.push(_(newTask).clone());
+                } else
                 $scope.tasks.push(_(newTask).clone());
+            }
         }
 
 
@@ -40,6 +44,8 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         	$scope.detailsState = 'main.tasks.all.details';
         } else if (context.entityName === 'my') {
         	$scope.detailsState = 'main.tasks.byassign.details';
+        } else if (context.entityName === 'task') {
+            $scope.detailsState = 'main.tasks.byparent.details';   
         } else {
         	$scope.detailsState = 'main.tasks.byentity.details';
         }
