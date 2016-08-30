@@ -147,7 +147,7 @@ module.exports = function(entityName, options) {
       _id: id
     });
 
-    // query.populate(options.includes);
+    query.populate(options.includes);
 
     return query.then(function(results) {
       if (!results.length) {

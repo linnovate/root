@@ -18,7 +18,6 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                me,
                                                subtasks) {
     $scope.task = entity || context.entity;
-    $scope.task.subTasks = subtasks;
     $scope.addSubTasks = false;
     $scope.me = me;
     $scope.imgUrl = '?' + Date.now();
