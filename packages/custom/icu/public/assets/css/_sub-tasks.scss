@@ -27,13 +27,25 @@
             width: 270px;
             right: 0;
             left: auto;  
+            li.title, li.templates {
+                span{
+                    border-bottom: 1px solid #d9d9d9;
+                }
+            }
+            ul{
+                padding: 0 !important;
+            }
             li {
-                border-bottom: 1px solid rgb(217, 217, 217);
                 margin: 0 10px;
                 span{
+                    
+                    display: block;
+                    padding: 0px 5px;
                     line-height: 2.5;
-                    padding: 6px 0;
-                    margin: 5px 17px;
+                    margin: 5px 5px;
+                    &.last{
+                       border-bottom: none; 
+                    }
                 }
                 &.new-template{
                     margin: 0 !important;
@@ -48,6 +60,7 @@
                             margin: 5px 13px;
                             line-height: 2.5;
                             padding-left: 12px;
+                            width: 90%;
                         }
                         .save-template{
                             display: inline-block;
@@ -58,10 +71,39 @@
                         }
                     }
                 }
-                &.template-assign{
+                &.avatar{
+                    background-color: #f6f6f6;
+                    margin: -5px 0 0 0 !important;
+                    padding: 0 16px;
                     span{
-                        margin: 0 !important;
+                        margin-top: 0;
+                        display: block;
                     }
+                    [icu-avatar]{
+                        display: inline-block;
+                    }
+                    span:last-child{
+                        display: inline-block;
+                        /*border: none;*/
+                    }
+                }
+                .save-template{
+                    height: calc(12px * 2);
+                    border-radius: 12px;
+                    background-color: #fda102;
+                    box-shadow: 0 3px 0 0 #ff6400;
+                    color: white;
+                    font-size: 13px;
+                    font-weight: 700;
+                    width: 65px;
+                    text-align: center;
+                    margin: auto;
+                    line-height: 1.75;
+                }
+                &:last-child{
+                    margin: 0;
+                    background-color: #f6f6f6;
+                    padding: 10px
                 }
             }
             /*li span:last-child{
@@ -82,9 +124,15 @@
         table tr {
             position: relative;
         }
-        table tbody td {
-           border: 1px solid #e1e1e1;
-       }
+        table tbody {
+            border: 1px solid #e1e1e1;
+            td {
+                border-top: 1px solid #e1e1e1;
+                img{
+                    margin-top: 100%;
+                }
+            }
+        }
        .id {
            width: 8%;
            border-right: none;
