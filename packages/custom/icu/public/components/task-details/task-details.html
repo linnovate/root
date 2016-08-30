@@ -134,26 +134,29 @@
                     <i class="fa fa-chevron-down"></i>
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
-                    <li>
+                    <li class='title'>
                        
                             <span><b>{{ 'LoadTaskTemplate' | i18next }}</b></span>
                        
                     </li>
-                    <li class="templates" ng-repeat="temp in template">
-                      
-                            <span ng-click="template2subTasks(temp._id)">{{temp.title}} ({{temp.subTasks.length }})</span>
+                    <li class="templates" ng-repeat="temp in template"  >
+                      <!-- ng-if="temp.subTasks.length" -->
+                            <span ng-click="template2subTasks(temp._id)" ng-class="{'last': $last}">{{temp.title}} ({{temp.subTasks.length }})</span>
                        
                     </li>
                     <li class='new-template'>
                         <div>
                      
                             <span><b>{{'saveTemplate' | i18next }}</b></span>
-                            <input type="text" name="newTemplate" placeholder="Template Name" ng-model="template.name">
-                            <div ng-click='saveTemplate()' class='save-template'>save</div>
+                            <input type="text" name="newTemplate" placeholder="Template Name" ng-model="newTemplate.name">
+                            
                              
                         </div>
                     </li>
-                    <li class="template-assign">
+                    <li class="avatar">
+                        <span>visible to:</span>
+                        <div icu-avatar user="me"></div> 
+                        <span class="name">{{me.name}}</span>
                         <!-- on-select="updateAndNotiy(task)" -->
 
                         <!-- <ui-select ng-model="template.assign" >
@@ -166,6 +169,9 @@
                                 <span class="summary-content">{{user.name}}</span>
                             </ui-select-choices>
                         </ui-select> -->
+                    </li>
+                    <li class='save'>
+                        <div ng-click='saveTemplate()' class='save-template'>save</div>
                     </li>
                 </ul>
                 

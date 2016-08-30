@@ -48,6 +48,9 @@
 <td class="arrow" ng-if="data.task._id" ng-click="data.changeState(data.task)">
     <i  class="fa chevron-right"></i>
 </td> 
-<td class="delete" ng-click="data.delete(data.task)">
+<td class="delete" ng-if="data.task._id" ng-click="data.delete(data.task)">
  <img src="/icu/assets/img/X.png">
+</td>
+<td class="delete" ng-if="!data.task._id" ng-click="data.delete(data.task)">
+ <!-- <img src="/icu/assets/img/X.png"> -->
 </td>

@@ -15,10 +15,13 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                UsersService,
                                                people,
                                                $timeout,
+                                               me,
                                                subtasks) {
     $scope.task = entity || context.entity;
     $scope.task.subTasks = subtasks;
     $scope.addSubTasks = false;
+    $scope.me = me;
+    $scope.imgUrl = '?' + Date.now();
      /*test for sub-task*/
     // $scope.addSubTasks = false;
     // $scope.test = [];
@@ -45,7 +48,6 @@ angular.module('mean.icu.ui.taskdetails', [])
 
     TasksService.getTemplate().then(function(template){
         $scope.template = template;
-        console.log(template, 'template', $scope.me);
     });
 
     $scope.people = people.data || people;
@@ -56,7 +58,6 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         $scope.people.push(_(newPeople).clone());
     }
-
 
     if (!$scope.task) {
         $state.go('main.tasks.byentity', {
@@ -209,14 +210,14 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     };
 
-    $scope.template = {
-        name: '',
-        watcher: '' 
+    $scope.newTemplate = {
+        'name': '',
+        'watcher': me
     };
     $scope.saveTemplate = function(){
         $scope.isopen = false;
-        TasksService.saveTemplate($stateParams.id,{'name':$scope.template}).then(function (result) {
-            console.log(result)
+        TasksService.saveTemplate($stateParams.id,$scope.newTemplate).then(function (result) {
+            // console.log(result)
         });
     };
 
