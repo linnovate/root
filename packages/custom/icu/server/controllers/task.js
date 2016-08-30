@@ -5,7 +5,7 @@ var _ = require('lodash');
 var async = require('async');
 
 var options = {
-  includes: 'assign watchers project',
+  includes: 'assign watchers project subTasks',
   defaults: {
     project: undefined,
     assign: undefined,

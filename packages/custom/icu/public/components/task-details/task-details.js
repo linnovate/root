@@ -14,10 +14,8 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                MeanSocket,
                                                UsersService,
                                                people,
-                                               $timeout,
-                                               subtasks) {
+                                               $timeout) {
     $scope.task = entity || context.entity;
-    $scope.task.subTasks = subtasks;
     $scope.addSubTasks = false;
      /*test for sub-task*/
     // $scope.addSubTasks = false;

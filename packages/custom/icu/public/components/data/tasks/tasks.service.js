@@ -70,10 +70,10 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function update(task) {
         if (task.subTasks && task.subTasks.length && task.subTasks[task.subTasks.length-1] && !task.subTasks[task.subTasks.length-1]._id) {
-			var subTask = task.subTasks.pop();
+            var subTask = task.subTasks[task.subTasks.length-1];
         }
         return $http.put(ApiUri + EntityPrefix + '/' + task._id, task).then(function (result) {
-        	result.data.subTasks.push(subTask);
+            result.data.subTasks.push(subTask);
             return result.data;
         });
     }
