@@ -345,6 +345,7 @@ angular.module('mean.icu').config([
                 },
                 projects: function (ProjectsService) {
                     return ProjectsService.getAll(0, 0, SORT).then(function (data) {
+                        ProjectsService.data = data.data || data;
                         return data;
                     }, function (err) {
                         return [];
@@ -352,6 +353,7 @@ angular.module('mean.icu').config([
                 },
                 discussions: function (DiscussionsService) {
                     return DiscussionsService.getAll(0, 0, SORT).then(function (data) {
+                        DiscussionsService.data = data.data || data;
                         return data;
                     }, function (err) {
                         return [];
@@ -734,7 +736,14 @@ angular.module('mean.icu').config([
         
         //Add by OHAD 17.4.16 
         .state('main.search.update', getAttachmentDetailsState('/attachment'))
-        .state('main.search.update.versions', getAttachmentDetailsTabState());
+        .state('main.search.update.versions', getAttachmentDetailsTabState())
+
+        .state('files', {
+            url: "/files/:y/:m/:d/:n.:f?",
+            controller: function($stateParams, FilesService) {
+                FilesService.getById($stateParams.id)
+            }
+        });
 }
 ]);
 

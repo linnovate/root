@@ -28,6 +28,7 @@
     "completed": "Completed",
     "confirmPassword": "Confirm password",
     "confirmPasswordOptional": "Confirm password (optional)",
+    "createNew":"create new",
     "created": "Created",
     "createdTask": "created task ",
     "createdThis": "created this ",
@@ -70,6 +71,7 @@
     "name": "Name",
     "new": "New",
     "noDiscussions": "No discussions",
+    "noDocuments":"All Uploaded documents will show up here",
     "noLabels": "No labels",
     "noSearchResults": "No search results",
     "noTasks": "No tasks",
@@ -130,5 +132,12 @@
     "YES": "YES",
     "youMustEnterAName": "You must enter a name",
     "youMustEnterAValidEmailAddress": "You must enter a valid email address",
-    "restrictedAccess": "Restricted Access"
+    "restrictedAccess": "Restricted Access",
+    "project name": "Project name",
+    "assignee": "Assignee",
+    "create new": "Create new",
+    "sort by star": "Sort by Star",
+    "sort by": "Sort by ",
+    "add watcher": "Add watcher",
+    "assigned from":  "assigned from"
 }

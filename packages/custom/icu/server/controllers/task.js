@@ -32,7 +32,9 @@ Object.keys(task).forEach(function(methodName) {
 Date.prototype.getThisDay = function()
 {
     var date = new Date();
-    return [date.setHours(0,0,0,0), date.setHours(23,59,59,999)];
+    // return [date.setHours(0,0,0,0), date.setHours(23,59,59,999)];
+    return [Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0,0,0,0),
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 23,59,59,999)]
 }
 
 Date.prototype.getWeek = function()
@@ -42,8 +44,10 @@ Date.prototype.getWeek = function()
 
     var StartDate = new Date(today.setDate(date));
     var EndDate = new Date(today.setDate(StartDate.getDate() + 6));
-    EndDate.setHours(23,59,59,999);
-    return [StartDate, EndDate];
+    // EndDate.setHours(23,59,59,999);
+    // return [StartDate, EndDate];
+    return [Date.UTC(StartDate.getFullYear(), StartDate.getMonth(), StartDate.getDate(), 0,0,0,0),
+    Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate(), 23,59,59,999)]
 }
 
 exports.create = function(req, res, next) {
@@ -142,7 +146,7 @@ exports.getByEntity = function(req, res, next) {
     };
     starredOnly = true;
   }
-  var query = req.acl.query('Task');
+  var query = req.acl.mongoQuery('Task');
 
   query.find(entityQuery);
   query.populate(options.includes);
@@ -213,7 +217,8 @@ var byAssign = function(req, res, next) {
     	return next();
   	}
   	
-  	Task.find({
+    var query = req.acl.mongoQuery('Task');
+  	query.find({
   		assign: req.user._id,
   		status: {$nin: ['rejected', 'done']}
 		})

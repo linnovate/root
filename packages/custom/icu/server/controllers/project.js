@@ -109,7 +109,7 @@ exports.getByEntity = function(req, res, next) {
     };
     starredOnly = true;
   }
-  var query = req.acl.query('Project');
+  var query = req.acl.mongoQuery('Project');
   
   query.find(entityQuery);
 

@@ -23,10 +23,8 @@ var UserModel = require('../models/user.js');
 var AttachementModel = require('../models/attachment.js');
 var AttachementArchiveModel = mongoose.model('attachment_archive');
 
-var configPath = process.cwd() + '/config/actionSettings';
-
-var actionSettings = require(configPath) || {};
-
+var circleSettings = require(process.cwd() + '/config/circleSettings') || {};
+var circlesAcl = require('circles-npm')(null, null, circleSettings);
 
 var entityNameMap = {
   'tasks': {
@@ -56,7 +54,7 @@ var entityNameMap = {
   'attachments': {
     mainModel: AttachementModel,
     archiveModel: AttachementArchiveModel,
-    name: 'Attachement'
+    name: 'Attachment'
   }
 
 };
@@ -67,7 +65,7 @@ var defaults = {
 };
 
 module.exports = function(entityName, options) {
-  var findByUser = ['tasks', 'projects', 'discussions'];
+  var findByUser = ['tasks', 'projects', 'discussions', 'attachments'];
   if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;
 
@@ -89,8 +87,8 @@ module.exports = function(entityName, options) {
 
     var query;
     if (currentUser) {
-      query = acl.query(entityNameMap[entityName].name);
-      countQuery = acl.query(entityNameMap[entityName].name).count();
+      query = acl.mongoQuery(entityNameMap[entityName].name);
+      countQuery = acl.mongoQuery(entityNameMap[entityName].name).count();
     } else {
       query = Model.find();
       countQuery = Model.find().count();
@@ -132,7 +130,7 @@ module.exports = function(entityName, options) {
   function read(id, user, acl) {
     var query;
     if (currentUser) {
-      query = acl.query(entityNameMap[entityName].name);
+      query = acl.mongoQuery(entityNameMap[entityName].name);
     } else {
       query = Model.find();
 
@@ -153,83 +151,20 @@ module.exports = function(entityName, options) {
     });
   }
 
-  function checkPermissions(circles, acl, callback) {
-    var circleTypes = actionSettings.circleTypes;
-
-    if (!circles) return callback(null);
-    for (var type in circleTypes) {
-      if (circles[type] && !(circles[type] instanceof Array)) return callback('invalid circles permissions');
-      if (circles[type] && circles[type].length) {
-        if (circleTypes[type].max && (circles[type].length > circleTypes[type].max)) return callback('invalid circles permissions');
-        if (circleTypes[type].requiredAllowed) {
-          var allowed = acl.user.allowed[type].map(function(a) {
-            return a._id;
-          })
-          for (var i = 0; i < circles[type].length; i++) {
-            if (allowed.indexOf(circles[type][i]) < 0) {
-              return callback('permissions denied');
-            }
-          }
-        }
-        if (circleTypes[type].requires) {
-          for (var i = 0; i < circleTypes[type].requires.length; i++) {
-            if (!circles[circleTypes[type].requires[i]] || !circles[circleTypes[type].requires[i]].length)
-              return callback('missing requires permissions ' + circleTypes[type].requires[i]);
-          }
-        }
-      }
-    }
-
-    return callback(null);
-  };
-
-  function checkSource(sources, acl, callback) {
-    var sourcesCircles = {},
-      source,
-      circleTypes = actionSettings.circleTypes;
-
-    for (var type in circleTypes) {
-      if (circleTypes[type].sources) {
-        sourcesCircles[type] = [];
-      }
-    }
-    if (!sources || !sources.length) return callback(null, sourcesCircles);
-    var mySources = {};
-    for (var i = 0; i < acl.user.sources.length; i++) {
-      mySources[acl.user.sources[i]._id.toString()] = acl.user.sources[i];
-    }
-
-    for (var i = 0; i < sources.length; i++) {
-
-      source = mySources[sources[i].toString()]
-      if (!source) return callback('permissions denied');
-      if (!sourcesCircles[source.circleType]) sourcesCircles[source.circleType] = [];
-      sourcesCircles[source.circleType].push(source.circle);
-    }
-
-    return callback(null, sourcesCircles);
-  };
-
   function create(entity, user, acl) {
     var deffered = q.defer();
-
-    checkSource(entity.sources, acl, function(error, circles) {
+    if (!entity.circles) entity.circles = {};
+    circlesAcl.sign('mongoose', entity.sources, entity.circles, acl, function(error, circles) {
       if (error) deffered.reject(error);
       else {
+        entity.circles = circles;
+        if (entity.watchers instanceof Array && !entity.watchers.length) entity.watchers = [user.user._id];
         entity.created = new Date();
         entity.updated = new Date();
         entity.creator = user.user._id;
-        if (entity.watchers instanceof Array && !entity.watchers.length) entity.watchers = [user.user._id];
-        if (!entity.circles) entity.circles = {};
-        entity.circles = _.extend(entity.circles, circles);
-        checkPermissions(entity.circles, acl, function(error) {
-          if (error) deffered.reject(error);
-          else {
-            deffered.resolve(new Model(entity).save(user).then(function(e) {
-              return Model.populate(e, options.includes);
-            }));
-          }
-        });
+        deffered.resolve(new Model(entity).save(user).then(function(e) {
+          return Model.populate(e, options.includes);
+        }));
       }
     });
 
@@ -240,25 +175,19 @@ module.exports = function(entityName, options) {
     var entityWithDefaults = _.defaults(newE, options.defaults);
 
     oldE = _.extend(oldE, entityWithDefaults);
-
+    if (!oldE.circles) oldE.circles = {};
     var deffered = q.defer();
 
-    checkSource(oldE.sources, acl, function(error, circles) {
+    circlesAcl.sign('mongoose', oldE.sources, oldE.circles, acl, function(error, circles) {
       if (error) deffered.reject(error);
       else {
         oldE.updated = new Date();
         oldE.updater = user.user._id;
-        if (!oldE.circles) oldE.circles = {};
         oldE.circles = _.extend(oldE.circles, circles);
         oldE.markModified('circles');
-        checkPermissions(oldE.circles, acl, function(error) {
-          if (error) deffered.reject(error);
-          else {
-            deffered.resolve(oldE.save(user).then(function(e) {
-              return Model.populate(e, options.includes);
-            }));
-          }
-        });
+        deffered.resolve(oldE.save(user).then(function(e) {
+          return Model.populate(e, options.includes);
+        }));
       }
     });
 

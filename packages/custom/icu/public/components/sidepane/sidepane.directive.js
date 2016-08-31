@@ -7,7 +7,7 @@ directive('icuSidepane', function() {
 
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
-        $scope.people = $scope.people.data || $scope.people;
+        // $scope.people = $scope.people.data || $scope.people;
 
         $scope.toggleVisibility = function(toggledItem) {
             var prev = toggledItem.open;
@@ -41,13 +41,15 @@ directive('icuSidepane', function() {
             state: 'discussions',
             display: ['projects', 'people'],
             open: false
-        }, {
-            name: 'people',
-            icon: '/icu/assets/img/people.png',
-            state: 'people',
-            display: ['projects', 'discussions'],
-            open: false
-        }];
+        }
+        // , {
+        //     name: 'people',
+        //     icon: '/icu/assets/img/people.png',
+        //     state: 'people',
+        //     display: ['projects', 'discussions'],
+        //     open: false
+        // }
+        ];
 
         $scope.isCurrentState = function(item) {
             return item.state === context.main;
@@ -60,8 +62,8 @@ directive('icuSidepane', function() {
         templateUrl: '/icu/components/sidepane/sidepane.html',
         scope: {
             projects: '=',
-            discussions: '=',
-            people: '='
+            discussions: '='//,
+            //people: '='
         }
     };
 });

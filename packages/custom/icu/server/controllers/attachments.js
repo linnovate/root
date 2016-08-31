@@ -115,7 +115,6 @@ exports.upload = function (req, res, next) {
     // req.locals.data.body.size = fileSizeInMegabytes;
        
     req.locals.data.body.size = file._readableState.length / 1000000;
-    
 
     hasFile = true;
     
@@ -204,3 +203,58 @@ exports.getMyTasks  = function(req, res, next) {
 
 }
 
+exports.getByPath = function(req, res, next) {
+  if(req.locals.error) {
+    return next();
+  }
+  var query = req.acl.mongoQuery('Attachment');
+
+  query.findOne({path: decodeURI(req.headers.referer)}).exec(function(err, attachment){
+    if(err) {
+      req.locals.error = err;
+    }
+    if(!attachment) {
+      req.locals.error = {
+        status: 404,
+        message: 'Entity not found'
+      };
+    }
+    next();
+  })
+};
+
+exports.sign = function(req, res, next) {
+  var entities = {projects: 'project', tasks: 'task', discussions: 'discussion'};
+  Attachment.update({
+    entity: entities[req.locals.data.entityName],
+    entityId: req.params.id
+  }, {
+    circles: req.body.circles,
+    watchers: req.body.watchers
+  }, {
+    multi: true
+  }, function(err, numAffected) {
+    next();
+  });
+}
+
+exports.signNew = function(req, res, next) {
+  var entities = {project: 'Project', task: 'Task', discussion: 'Discussion'};
+  var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+  query.findOne({_id: req.locals.data.body.entityId}).exec(function(err, entity){
+    if(err) {
+      req.locals.error = err;
+    }
+    if(!entity) {
+      req.locals.error = {
+        status: 404,
+        message: 'Entity not found'
+      };
+    }
+    if(entity) {
+      req.locals.data.body.watchers = entity.watchers;
+      req.locals.data.body.circles = entity.circles;
+    }
+    next();
+  })
+}

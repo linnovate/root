@@ -8,23 +8,34 @@ module.exports = {
 		c19n: {
 			requiredAllowed: true,
 			max: 1,
-			sources: true
+			sources: true,
+			location: 'modal'
 		},
 		c19nGroups1: {
 			requiredAllowed: true,
 			max: 1,
-			requires: ['c19n']
+			requires: ['c19n'],
+			location: 'modal'
 		},
 		c19nGroups2: {
 			requiredAllowed: true,
 			max: 1,
-			requires: ['c19n']
+			requires: ['c19n'],
+			location: 'modal'
 		},
 		personal: {
 			requiredAllowed: false,
 			max: 50,
-			watchers: true
+			watchers: true,
+			location: 'footer'
+		},
+		corporate: {
+			requiredAllowed: false,
+			max: 50,
+			watchers: true,
+			location: 'footer'
 		}
 	},
-	cacheTime: 5
+	cacheTime: 5,
+	cacheDb: 'mongoose'
 };
