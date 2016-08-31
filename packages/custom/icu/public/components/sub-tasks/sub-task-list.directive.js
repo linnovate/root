@@ -22,7 +22,6 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             })
 
             $scope.isLoading = true;
-            console.log('tasks', $scope.tasks)
             _($scope.tasks).each(function(t) {
                 t.__state = creatingStatuses.Created;
             });
@@ -119,8 +118,6 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
 
         function link($scope, $element) {
             var isScrolled = false;
-            console.log('tasks', $scope.tasks)
-
             $scope.initialize = function($event, task) {
                 if ($scope.displayOnly) {
                     return;
