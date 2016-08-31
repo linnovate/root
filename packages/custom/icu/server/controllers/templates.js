@@ -17,7 +17,7 @@ var template = crud('templates', options);
 var Task = require('../models/task');
 
 Object.keys(template).forEach(function(methodName) {
-  if (methodName === 'all') {
+  if (methodName !== 'create') {
     exports[methodName] = template[methodName];
   }
 });
@@ -56,20 +56,27 @@ var addRecorsiveTemplates = function(taskId, name, parentId, creator, exist, tTy
     '_id': taskId
   })
     .exec(function(err, task) {
-      totals.tasks += task.subTasks.length;
-      addToTemplate(task, parentId, name, creator, exist, tType, function(template) {
-        templates[template.t._id] = template;
-        if (parentId) {
-          templates[parentId].t.subTasks.push(template.t._id);
-        }
+      if (task) {
+        totals.tasks += task.subTasks.length;
+        addToTemplate(task, parentId, name, creator, exist, tType, function(template) {
+          templates[template.t._id] = template;
+          if (parentId) {
+            templates[parentId].t.subTasks.push(template.t._id);
+          }
+          totals.templates++;
+          if (totals.templates === totals.tasks) {
+            return callback(templates);
+          }
+          for (var i = 0; i < task.subTasks.length; i++) {
+            addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, false, tType, templates, totals, callback);
+          }
+        })
+      } else {
         totals.templates++;
         if (totals.templates === totals.tasks) {
           return callback(templates);
         }
-        for (var i = 0; i < task.subTasks.length; i++) {
-          addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, false, tType, templates, totals, callback);
-        }
-      })
+      }
     });
 }
 
@@ -141,9 +148,31 @@ exports.toSubTasks = function(req, res, next) {
             }
             next();
           });
-
         }
       });
     }
   });
 }
+
+var deleteSubTask = function(req, subTasks) {
+  for (var i = 0; i < subTasks.length; i++) {
+    var query = req.acl.query('Task');
+    query.findOne({
+      _id: subTasks[i],
+      tType: 'template'
+    }, function(err, template) {
+      if (template) {
+        deleteSubTask(req, template.subTasks);
+        template.remove();
+      }
+    });
+  }
+}
+
+exports.removeSubTask = function(req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
+  deleteSubTask(req, req.locals.result.subTasks)
+  next();
+};

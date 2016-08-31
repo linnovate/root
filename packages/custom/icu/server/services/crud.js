@@ -68,7 +68,8 @@ var entityNameMap = {
 
 var defaults = {
   defaults: {},
-  includes: ''
+  includes: '',
+  conditions: {}
 };
 
 module.exports = function(entityName, options) {
@@ -92,19 +93,18 @@ module.exports = function(entityName, options) {
     var mergedPromise;
 
     var query;
-    var conditions = options.conditions || {};
 
     if (currentUser) {
       query = acl.query(entityNameMap[entityName].name);
-      countQuery = acl.query(entityNameMap[entityName].name).count(conditions);
+      countQuery = acl.query(entityNameMap[entityName].name).count(options.conditions);
     } else {
-      query = Model.find(conditions);
-      countQuery = Model.find(conditions).count();
+      query = Model.find(options.conditions);
+      countQuery = Model.find(options.conditions).count();
     }
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
-        query.find(conditions)
+        query.find(options.conditions)
           .sort(pagination.sort)
           .skip(pagination.start)
           .limit(pagination.limit);
@@ -122,7 +122,7 @@ module.exports = function(entityName, options) {
         deffered.resolve(mergedPromise);
       }
     } else {
-      query.find(conditions);
+      query.find(options.conditions);
       query.populate(options.includes);
       query.hint({
         _id: 1
@@ -146,6 +146,7 @@ module.exports = function(entityName, options) {
     query.where({
       _id: id
     });
+    // query.where(options.conditions);
 
     query.populate(options.includes);
 
