@@ -22,7 +22,7 @@ Object.keys(template).forEach(function(methodName) {
   }
 });
 
-var addToTemplate = function(task, parentId, name, creator, exist, tType, callback) {
+var addToTemplate = function(task, parentId, name, creator, watchers, exist, tType, callback) {
   if (!exist) {
     var template = new Task({
       tType: tType,
@@ -30,7 +30,8 @@ var addToTemplate = function(task, parentId, name, creator, exist, tType, callba
       parent: parentId,
       creator: creator,
       tags: task.tags,
-      description: task.description
+      description: task.description,
+      watchers: watchers
     });
     callback({
       s: task.subTasks.length,
@@ -41,7 +42,7 @@ var addToTemplate = function(task, parentId, name, creator, exist, tType, callba
       '_id': exist
     }).exec(function(err, existTask) {
       if (err) {
-        req.locals.error = err;
+        console.log(err);
       }
       callback({
         s: task.subTasks.length,
@@ -51,14 +52,14 @@ var addToTemplate = function(task, parentId, name, creator, exist, tType, callba
   }
 }
 
-var addRecorsiveTemplates = function(taskId, name, parentId, creator, exist, tType, templates, totals, callback) {
+var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, exist, tType, templates, totals, callback) {
   Task.findOne({
     '_id': taskId
   })
     .exec(function(err, task) {
       if (task) {
         totals.tasks += task.subTasks.length;
-        addToTemplate(task, parentId, name, creator, exist, tType, function(template) {
+        addToTemplate(task, parentId, name, creator, watchers, exist, tType, function(template) {
           templates[template.t._id] = template;
           if (parentId) {
             templates[parentId].t.subTasks.push(template.t._id);
@@ -67,8 +68,9 @@ var addRecorsiveTemplates = function(taskId, name, parentId, creator, exist, tTy
           if (totals.templates === totals.tasks) {
             return callback(templates);
           }
+          watchers = template.t.watchers;
           for (var i = 0; i < task.subTasks.length; i++) {
-            addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, false, tType, templates, totals, callback);
+            addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, watchers, false, tType, templates, totals, callback);
           }
         })
       } else {
@@ -99,7 +101,8 @@ exports.toTemplate = function(req, res, next) {
         req.locals.error = err;
       } else {
         totals.tasks = 1;
-        addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, false, 'template', templates, totals, function(templates) {
+        var watchers = req.body.watchers || [req.body.watcher];
+        addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, watchers, false, 'template', templates, totals, function(templates) {
           for (var t in templates) {
             templates[t].t.save();
           }
@@ -138,7 +141,7 @@ exports.toSubTasks = function(req, res, next) {
           next();
         } else {
           totals.tasks = 1;
-          addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, req.body.taskId, null, tasks, totals, function(templates) {
+          addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, [], req.body.taskId, null, tasks, totals, function(templates) {
             req.locals.result = [];
             for (var t in templates) {
               templates[t].t.save();

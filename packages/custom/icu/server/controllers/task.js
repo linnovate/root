@@ -469,12 +469,14 @@ exports.getSubTasks = function(req, res, next) {
     subTasks: 1
   })
     .populate('subTasks')
-    .deepPopulate('subTasks.subTasks')
+    .deepPopulate('subTasks.subTasks subTasks.watchers')
     .exec(function(err, task) {
       if (err) {
         req.locals.error = err;
       } else {
-        req.locals.result = task.subTasks;
+        if (task) {
+          req.locals.result = task.subTasks;
+        }
       }
       next();
     });
