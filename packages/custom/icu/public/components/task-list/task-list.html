@@ -1,18 +1,31 @@
 <div class="task-list">
     <div class="header-wrap"
-         ng-if="currentContext.entityName !== 'all'"
          ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
          ui-sref="main.{{currentContext.main}}.byentity.activities({
                     entity: currentContext.entityName,
                     entityId: currentContext.entityId
                     })">
-        <header class="title" ng-if="currentContext.entityName !== 'my'">
-            {{ 'tasksFrom' | i18next }}{{ currentContext.entityName | i18next }}
-            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
-        </header>
-        <header class="title" ng-if="currentContext.entityName === 'my'">
-            {{ 'myTasks' | i18next }}
-        </header>
+        <div ng-switch="currentContext.entityName">
+            <header class="title" ng-switch-when="my">
+                {{ 'myTasks' | i18next }}
+            </header>
+            <header class="title" ng-switch-when="all">
+                {{ 'allTasks' | i18next }}
+            </header>
+            <header class="title" ng-switch-when="task">
+                <span class="tag project"
+                      title="{{currentContext.entity.project.title}}"
+                      ng-style="{'background-color': '#' + currentContext.entity.project.color, 'color': 'white'}">
+                    {{currentContext.entity.project.title}}
+                </span>
+                {{ 'tasksFrom' | i18next }}
+                <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+            </header>
+            <header class="title" ng-switch-default>
+                {{ 'tasksFrom' | i18next }}{{ currentContext.entityName | i18next }}
+                <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+            </header>
+        </div>
     </div>
 
     <div class="filters">

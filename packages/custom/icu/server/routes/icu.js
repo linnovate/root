@@ -200,6 +200,8 @@ app.route('/api/notification1/:id([0-9a-fA-F]{24})')
 
   app.route('/api/tasks/:id([0-9a-fA-F]{24})/toTemplate')
     .post(templates.toTemplate);
+  app.route('/api/templates/:id([0-9a-fA-F]{24})')
+    .delete(templates.read, templates.removeSubTask, templates.destroy);
   app.route('/api/templates/:id([0-9a-fA-F]{24})/toSubTasks')
     .post(templates.toSubTasks);
   app.route('/api/templates')
