@@ -141,8 +141,12 @@
                     </li>
                     <li class="templates" ng-repeat="temp in template"  >
                       <!-- ng-if="temp.subTasks.length" -->
-                            <span ng-click="template2subTasks(temp._id)" ng-class="{'last': $last}">{{temp.title}} ({{temp.subTasks.length }})</span>
-                       
+                            <span ng-click="template2subTasks(temp._id)" ng-class="{'last': $last}">{{temp.title}} ({{temp.subTasks.length }})
+                                <span class="delete" ng-if="!data.task._id" ng-click="deleteTemplate(temp._id, $index)">
+                                    <!-- <img src="/icu/assets/img/X.png"> -->
+                                </span>
+                            </span>
+                            
                     </li>
                     <li class='new-template'>
                         <div>
@@ -156,7 +160,8 @@
                     <li class="avatar">
                         <span>visible to:</span>
                         <div icu-avatar user="me"></div> 
-                        <span class="name">{{me.name}}</span>
+                        <span class="name">Me</span>
+                        <!-- {{me.name}} -->
                         <!-- on-select="updateAndNotiy(task)" -->
 
                         <!-- <ui-select ng-model="template.assign" >
@@ -171,7 +176,7 @@
                         </ui-select> -->
                     </li>
                     <li class='save'>
-                        <div ng-click='saveTemplate()' class='save-template'>save</div>
+                        <div ng-click='saveTemplate()' class='save-template' ng-class="{'empty': !task.subTasks[0]._id }">save</div>
                     </li>
                 </ul>
                 

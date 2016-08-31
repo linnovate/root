@@ -13,7 +13,6 @@ var ICU = new Module('icu');
  * Dependency injection is used to define required modules
  */
 ICU.register(function (app, auth, database,swagger) {
-	console.log('dfdsdfdsffddff')
 
      swagger.add(__dirname);
     //We enable routing. By default the Package Object is passed to the routes

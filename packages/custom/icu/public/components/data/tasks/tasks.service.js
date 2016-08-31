@@ -152,6 +152,12 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function deleteTemplate(id){
+        return $http.delete(ApiUri + '/templates/' + id).then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -175,6 +181,7 @@ angular.module('mean.icu.data.tasksservice', [])
         filterValue: filterValue,
         saveTemplate: saveTemplate,
         template2subTasks:template2subTasks,
+        deleteTemplate: deleteTemplate,
         data: data
     };
 });

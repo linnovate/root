@@ -214,10 +214,15 @@ angular.module('mean.icu.ui.taskdetails', [])
         'watcher': me
     };
     $scope.saveTemplate = function(){
+        console.log($scope.task.subTasks, 'sub-task')
         $scope.isopen = false;
-        TasksService.saveTemplate($stateParams.id,$scope.newTemplate).then(function (result) {
-            // console.log(result)
-        });
+        if($scope.task.subTasks[0]._id){
+            TasksService.saveTemplate($stateParams.id,$scope.newTemplate).then(function (result) {
+                // console.log(result)
+            });
+        }
+        else
+            console.log('no subTasks')
     };
 
     $scope.setFocusToTagSelect = function() {
@@ -236,6 +241,11 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     };
 
+    $scope.deleteTemplate = function(id, index){
+        TasksService.deleteTemplate(id).then(function(result){
+            $scope.template.splice(index, 1);
+        })
+    }
     $scope.delayedUpdate = _.debounce($scope.update, 500);
 
     // if ($scope.task &&

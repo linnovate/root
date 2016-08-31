@@ -10,6 +10,14 @@
         &:hover {
             text-decoration: underline;
         }
+    }.open{
+        div.dropdown-trigger{
+           border-color: #fda102 ;
+           background-color: #fda102;
+           i{
+               color: #fff; 
+           }  
+        }
     }
     .wrap-title {
         width: 100%;
@@ -19,6 +27,16 @@
             font-weight: bold; 
             margin-bottom: 10px;
         } 
+        .dropdown-trigger{
+            border: 1.5px solid #d9d9d9;
+            border-radius: 50%;
+            width: 22px;
+            padding: 0 3px;              
+            background-color: #fff;
+            i{
+                color: #d9d9d9;
+            }
+        }
         .open-template-menu {
             display: inline-block;
             float: right;
@@ -27,13 +45,11 @@
             width: 270px;
             right: 0;
             left: auto;  
+            padding: 0;
             li.title, li.templates {
                 span{
                     border-bottom: 1px solid #d9d9d9;
                 }
-            }
-            ul{
-                padding: 0 !important;
             }
             li {
                 margin: 0 10px;
@@ -45,6 +61,24 @@
                     margin: 5px 5px;
                     &.last{
                        border-bottom: none; 
+                    }
+                }
+                &.templates {
+                    .delete{
+                        display: none;
+                        background-image: url(/icu/assets/img/X.png);
+                        width: 13px;
+                        height: 13px;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        padding: 15px 16px;
+                        border: none;
+                        margin: 0;
+                    }
+                }
+                &.templates:hover{
+                    .delete{
+                        display: inline-block;
                     }
                 }
                 &.new-template{
@@ -62,13 +96,13 @@
                             padding-left: 12px;
                             width: 90%;
                         }
-                        .save-template{
+                       /* .save-template{
                             display: inline-block;
                             line-height: 2.5;
                             border: none;
                             background-color: #fff;
                             padding: 0px 6px;
-                        }
+                        }*/
                     }
                 }
                 &.avatar{
@@ -84,6 +118,8 @@
                     }
                     span:last-child{
                         display: inline-block;
+                        width: 70%;
+                        line-height: 1;
                         /*border: none;*/
                     }
                 }
@@ -99,6 +135,12 @@
                     text-align: center;
                     margin: auto;
                     line-height: 1.75;
+                    cursor: pointer;
+                    &.empty{
+                        background-color: #929292;
+                        box-shadow:0 3px 0 0 #e1e1e1;
+                        cursor: auto;
+                    }
                 }
                 &:last-child{
                     margin: 0;
@@ -124,6 +166,11 @@
         table tr {
             position: relative;
         }
+        /*table tr:hover{
+                .delete{
+                    display: inline-block;
+                }
+            }*/
         table tbody {
             border: 1px solid #e1e1e1;
             td {
@@ -257,6 +304,7 @@
     position: absolute;
     right: 0;
     border: none;
+    /*display: none;*/
 }
 
 
