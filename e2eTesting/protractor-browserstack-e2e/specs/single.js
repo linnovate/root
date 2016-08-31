@@ -73,11 +73,10 @@ describe('Registration Functionality Testing', function () {
 
     //fixed registration
     it('Should fill the form registration', function () {
-        var userNameRnd = Math.floor(Math.random()*1000 + 1);
-        var num = Math.floor((Math.random() * 1000) + 1);
+        var num = new Date().getTime();
         name.sendKeys("Dvora");
         email.sendKeys("Dvora+" + num + "@linnovate.net");
-        userName.sendKeys("Dvora+" + userNameRnd);
+        userName.sendKeys("Dvora+" + num);
         pass.sendKeys("newstrat");
         confirmPass.sendKeys("newstrat");
         element(by.className('btn')).click();
