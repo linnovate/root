@@ -73,13 +73,15 @@ angular.module('mean.icu').config([
             };
         };
 
-
-
         var getListView = function(entity, resolve) {
             var view = {
                 'middlepane@main': {
                     templateUrl: '/icu/components/' + entity + '-list/' + entity + '-list.html',
                     controller: capitalize(entity) + 'ListController'
+                },
+                'detailspane@main': {
+                    templateUrl: '/icu/components/all/all.html',
+                    controller: 'AllController'
                 }
             };
 

@@ -146,11 +146,18 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     task[params.entity] = $stateParams.id;
                 }
             } else {
+                if (context.entityName === 'task') {
+                    state = 'main.tasks.byparent.details';
+                    params.entity = $stateParams.entity;
+                    params.entityId = $stateParams.entityId;
+                    task.parent = $stateParams.entityId;
+                } else {
                 // tasks.projects, tasks.discussions, discussions.projects, projects.discussions
-                state = 'main.tasks.byentity.details';
-                params.entity = $stateParams.entity;
-                params.entityId = $stateParams.entityId;
-                task[$stateParams.entity] = $stateParams.entityId;
+                    state = 'main.tasks.byentity.details';
+                    params.entity = $stateParams.entity;
+                    params.entityId = $stateParams.entityId;
+                    task[$stateParams.entity] = $stateParams.entityId;
+                }
             }
 
             TasksService.create(task).then(function (result) {

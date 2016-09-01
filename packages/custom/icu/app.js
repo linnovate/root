@@ -61,6 +61,7 @@ ICU.register(function (app, auth, database,swagger) {
         'color.picker',
         'mean.system',
         'mean.users',
+        'mean.icu.ui.all',
         'mean.icu.ui.autofocus',
         'mean.icu.ui.ctrlenter',
         'mean.icu.ui.login',
