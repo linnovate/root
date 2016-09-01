@@ -644,6 +644,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 i {
                     float: left;
                     font-size: 1.4em;
+                    &.flag {
+                        -webkit-mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
+                        mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
+                        width: 15px;
+                        height: 17px;
+                        margin-right: 3px;
+                        background-color: #333;
+                    }
                 }
                 span {
                     padding: 0 10px;

@@ -53,6 +53,12 @@
                             <span>{{ 'deleteTask' | i18next }}</span>
                         </a>
                     </li>
+                    <li ng-if="task.parent">
+                        <a href="#" ng-click="statusType()">
+                            <i class="flag"></i>
+                            <span>{{ 'statusType' | i18next }}</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

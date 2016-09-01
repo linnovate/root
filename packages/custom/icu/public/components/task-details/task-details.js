@@ -84,6 +84,10 @@ angular.module('mean.icu.ui.taskdetails', [])
         }
     });
 
+    $scope.statusType = function() {
+        alert('statusType');
+    };
+
     $scope.addTag = function (tag) {
         $scope.task.tags.push(tag);
         $scope.update($scope.task);
