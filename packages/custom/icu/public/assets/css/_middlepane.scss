@@ -140,16 +140,22 @@
         background-color: white;
         padding: 38px 23px 27px 14px;
         cursor: pointer;
-
         &.active {
             background-color: $grey;
             color: white;
         }
-
+        &.subtasks {
+            padding: 17px 23px 27px 14px;
+        }
         .title {
             font-size: 24px;
             span {
                 font-weight: 700;
+                &.project {
+                    border-radius: 14px;
+                    font-weight: normal;
+                    padding: 0px 10px;
+                }
             }
         }
     }

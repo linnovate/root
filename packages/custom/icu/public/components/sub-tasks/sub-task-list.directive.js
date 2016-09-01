@@ -23,7 +23,9 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
 
             $scope.isLoading = true;
             _($scope.tasks).each(function(t) {
-                t.__state = creatingStatuses.Created;
+                if(t._id) {
+                    t.__state = creatingStatuses.Created;
+                }
             });
 
             if (!$scope.displayOnly) {

@@ -42,12 +42,6 @@
                     </ui-select>
                 </div>
             </div>
-
-            <div class="tags">
-                <div class="tag-wrap">
-
-                </div>
-            </div>
             <div class="dropdown dropdown-container" uib-dropdown>
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
@@ -64,27 +58,30 @@
         </div>
         <button icu-comp-modal entity="task" entity-name="task" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
         <div class="summary wrap-pro">
-            <div class="tags">
-              <div class="tag-wrap">
-                <ui-select ng-model="task.project" on-select="update(task, 'project')">
-                    <ui-select-match placeholder="{{$select.selected.title || 'selectProject' | i18next}}">
-                        <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
-                            {{$select.selected.title}}
-                            <div class="delete" ng-click="unsetProject($event, task)">
-                                <img src="/icu/assets/img/X.png"></img>
+            <div class="tags" ng-if="!task.parent">
+                <div class="tag-wrap">
+                    <ui-select ng-model="task.project" on-select="update(task, 'project')">
+                        <ui-select-match placeholder="{{$select.selected.title || 'selectProject' | i18next}}">
+                            <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
+                                {{$select.selected.title}}
+                                <div class="delete" ng-click="unsetProject($event, task)">
+                                    <img src="/icu/assets/img/X.png"></img>
+                                </div>
                             </div>
-                        </div>
 
-                    </ui-select-match>
-                    <ui-select-choices repeat="project in projects| filter: $select.search">
-                        <div class="line">
-                           <span ng-bind-html="project.title | searchfilter:$select.search"  class="title"></span>
-                       </div>
-                   </ui-select-choices>
-               </ui-select>
-           </div>
-       </div>
-   </div>
+                        </ui-select-match>
+                        <ui-select-choices repeat="project in projects| filter: $select.search">
+                            <div class="line">
+                               <span ng-bind-html="project.title | searchfilter:$select.search"  class="title"></span>
+                           </div>
+                       </ui-select-choices>
+                   </ui-select>
+                </div>
+            </div>
+            <div class="parent" ng-if="task.parent">
+                {{currentContext.entity.title}}
+            </div>
+        </div>
    <div class="description">
     <!-- uib-popover-template="dynamicPopover.templateUrl" -->
     <div class="title" contenteditable="true" ng-attr-autofocus="{{shouldAutofocus || undefined}}" tabindex="1" strip-br="true"

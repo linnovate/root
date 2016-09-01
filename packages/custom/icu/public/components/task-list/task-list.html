@@ -14,18 +14,20 @@
                 {{ 'allTasks' | i18next }}
             </header>
         </div>
-        <div class="header-wrap" ng-switch-when="task"
+        <div class="header-wrap subtasks" ng-switch-when="task"
             ng-class="{ 'active': isCurrentState('main.{{currentContext.main}}.byparent.activities') }"
             ui-sref="main.{{currentContext.main}}.byparent.activities({
                     entity: currentContext.entityName,
                     entityId: currentContext.entityId
                     })">
             <header class="title">
-                <span class="tag project"
+                <div>
+                    <span class="project"
                       title="{{currentContext.entity.project.title}}"
                       ng-style="{'background-color': '#' + currentContext.entity.project.color, 'color': 'white'}">
                     {{currentContext.entity.project.title}}
-                </span>
+                    </span>
+                </div>
                 {{ 'tasksFrom' | i18next }}
                 <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</spa
             </header>
