@@ -158,7 +158,8 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.isCurrentState = function (id) {
-            var isActive = ($state.current.name.indexOf('main.tasks.byentity.details') === 0 ||
+            var isActive = ($state.current.name.indexOf('main.tasks.byparent.details') === 0 ||
+                            $state.current.name.indexOf('main.tasks.byentity.details') === 0 ||
                             $state.current.name.indexOf('main.tasks.all.details') === 0
                        ) && $state.params.id === id;
 
