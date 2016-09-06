@@ -739,9 +739,9 @@ angular.module('mean.icu').config([
         .state('main.search.update.versions', getAttachmentDetailsTabState())
 
         .state('files', {
-            url: "/files/:y/:m/:d/:n.:f?",
-            controller: function($stateParams, FilesService) {
-                FilesService.getById($stateParams.id)
+            url: "/files/:y/:m/:d/:n.:f?view",
+            controller: function(FilesService) {
+                FilesService.getByPath()
             }
         });
 }

@@ -4,16 +4,13 @@ angular.module('mean.icu.data.filesservice', [])
     .service('FilesService', function($http, ApiUri, $stateParams) {
         var EntityPrefix = '/files';
 
-        function getById(id) {
-            console.log(ApiUri, $stateParams)
-            // return $http.get(ApiUri + EntityPrefix + '/' + $stateParams.y + '/' + $stateParams.m + '/' + $stateParams.d + '/' + $stateParams.path).then(function(result) {
-            //     return result.data;
-            // });
+        function getByPath() {
+
             return $http({
                 method: 'GET',
                 cache: false,
                 url: ApiUri + EntityPrefix + '/' + $stateParams.y + '/' + $stateParams.m + '/' + $stateParams.d + '/' + $stateParams.n + '.' + $stateParams.f,
-                responseType:'arraybuffer',
+                responseType: 'arraybuffer',
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8'
                 }
@@ -23,15 +20,22 @@ angular.module('mean.icu.data.filesservice', [])
 
                 // Get the headers
                 headers = headers();
-console.log(headers)
                 // Get the filename from the x-filename header or default to "download.bin"
                 var filename = headers['x-filename'] || $stateParams.n + '.' + $stateParams.f;
 
                 // Determine the content type from the header or default to "application/octet-stream"
                 var contentType = headers['content-type'] || octetStreamMime;
+                if ($stateParams.view) {
+                    // Prepare a blob URL
+                    var blob = new Blob([data], {
+                        type: contentType
+                    });
+                    var objectUrl = URL.createObjectURL(blob);
+                    window.open(objectUrl);
+                    return;
+                }
 
                 try {
-
                     console.log(filename);
                     // Try using msSaveBlob if supported
                     console.log("Trying saveBlob method ...");
@@ -54,6 +58,7 @@ console.log(headers)
                 }
 
                 if (!success) {
+
                     // Get the blob url creator
                     var urlCreator = window.URL || window.webkitURL || window.mozURL || window.msURL;
                     if (urlCreator) {
@@ -126,6 +131,6 @@ console.log(headers)
         }
 
         return {
-            getById: getById
+            getByPath: getByPath
         };
     });
