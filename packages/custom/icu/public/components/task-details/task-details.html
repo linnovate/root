@@ -187,7 +187,7 @@
                
             </div>
     </div>
-    <div ng-show="addSubTasks || task.subTasks[0].id"
+    <div class="sub-task-dir" ng-show="addSubTasks || task.subTasks[0].id"
         icu-sub-task-list
         class="entity-list-container"
         ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"

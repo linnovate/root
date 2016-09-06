@@ -19,7 +19,11 @@
              }  
          }
      }
-     .wrap-title {
+     .sub-task-dir {
+        max-height: 164px;
+        overflow: auto;
+    }
+    .wrap-title {
         width: 100%;
         .sub-tasks-title {
             width: 21%;
@@ -27,6 +31,7 @@
             font-weight: bold; 
             margin-bottom: 10px;
         } 
+
         .dropdown-trigger{
             border: 1.5px solid #d9d9d9;
             border-radius: 50%;
@@ -278,7 +283,7 @@
 }
 }
 .due {
-    width: 20%;
+    width: 16%;
     .placeholder {
         position: absolute;
         top: 50%;
@@ -307,10 +312,11 @@
    width: 25px;
    height: 55px;
    position: absolute;
+   right: 2.5%;
    border: none;
    img {
-        margin: 70% 45%;
-   }
+    margin: 70% 45%;
+}
 }
 
 
