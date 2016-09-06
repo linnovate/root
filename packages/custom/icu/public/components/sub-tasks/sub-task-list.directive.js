@@ -42,10 +42,13 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                 return TasksService.create(task).then(function(result) {
                     task.__state = creatingStatuses.Created;
 
+            if (!$scope.displayOnly) {
+               	if (!$scope.tasks) { $scope.tasks = []; }
+                if (!$scope.tasks.length || $scope.tasks[$scope.tasks.length-1] && $scope.tasks[$scope.tasks.length-1]._id) {
                     $scope.tasks.push(_(newTask).clone());
 
                     return task;
-                });
+                }
             } else if (task.__state === creatingStatuses.Created) {
                 return TasksService.update(task);
             }
