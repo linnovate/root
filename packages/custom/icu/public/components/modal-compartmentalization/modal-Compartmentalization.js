@@ -78,7 +78,8 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
                 entityName: '@',
                 entity: '='
             },
-            template: '<div ng-if="entity && entity.circles && entity.circles.c19n && entity.circles.c19n.length" tooltips tooltip-template-url="/icu/components/modal-compartmentalization/tooltip.html" tooltip-side="left"></div>',
+            // template: '<div ng-if="entity && entity.circles && entity.circles.c19n && entity.circles.c19n.length" tooltips tooltip-template-url="/icu/components/modal-compartmentalization/tooltip.html" tooltip-side="left"></div>',
+            template: '<div tooltips tooltip-template-url="/icu/components/modal-compartmentalization/tooltip.html" tooltip-side="left"></div>',
             link: link
         };
     });

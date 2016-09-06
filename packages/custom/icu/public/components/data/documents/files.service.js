@@ -31,7 +31,7 @@ angular.module('mean.icu.data.filesservice', [])
                         type: contentType
                     });
                     var objectUrl = URL.createObjectURL(blob);
-                    window.open(objectUrl);
+                    window.open(objectUrl, "_self");
                     return;
                 }
 

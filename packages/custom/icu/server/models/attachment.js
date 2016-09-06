@@ -100,6 +100,17 @@ AttachmentSchema.statics.project = function (id, cb) {
     cb(err, {room: project.room, title: project.title});
   });
 };
+
+//OHAD
+AttachmentSchema.statics.discussion = function (id, cb) {
+  require('./discussion');
+  var Discussion = mongoose.model('Discussion');
+  Discussion.findById(id, function (err, discussion) {
+    cb(err, {room: discussion.room, title: discussion.title});
+  });
+};
+//END OHAD
+
 // AttachmentSchema.statics.update = function (id, cb) {
 //   cb(null, {});
 // };
