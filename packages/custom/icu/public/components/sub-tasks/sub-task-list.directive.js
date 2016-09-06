@@ -29,6 +29,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             });
 
             if (!$scope.displayOnly) {
+               if (!$scope.tasks) { $scope.tasks = []; }
                 if (!$scope.tasks.length || $scope.tasks[$scope.tasks.length-1] && $scope.tasks[$scope.tasks.length-1]._id) {
                     $scope.tasks.push(_(newTask).clone());
                 }
