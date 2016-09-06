@@ -5,7 +5,9 @@
             <tr data-ng-repeat="task in tasks track by $index | filterByOptions | orderBy:order.field:order.isReverse"
                 ng-click="initialize($event, task)"
              icu-list-row
-             data-id="{{task._id}}"
+             data-id="{{task._id}}",
+             ng-mouseover="task.showDelete = true",
+             ng-mouseleave="deleteShowDlt(task)",
              data="{ task: task,
                         index: $index,
                         drawArrow: drawArrow,
