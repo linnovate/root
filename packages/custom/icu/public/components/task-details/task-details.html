@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="due">
-                <input ui-date="dueOptions" ng-model="task.due" placeholder="{{ 'deadline' | i18next }}">
+                <input ui-date="dueOptions" ng-model="task.due" placeholder="{{ 'dueDate' | i18next }}">
             </div>
 
             <div class="status" >
@@ -145,6 +145,10 @@
                             <span><b>{{ 'LoadTaskTemplate' | i18next }}</b></span>
                        
                     </li>
+                     <li class="templates" ng-if="!template.length">
+                      <span>{{ ' noTemplates' | i18next }}</span>
+                    </li>
+                    
                     <li class="templates" ng-repeat="temp in template"  >
                       <!-- ng-if="temp.subTasks.length" -->
                             <span ng-click="template2subTasks(temp._id)" ng-class="{'last': $last}">{{temp.title}} ({{temp.subTasks.length }})
