@@ -54,5 +54,6 @@ module.exports = {
   // The session cookie name
   sessionName: 'connect.sid',
   attachmentDir: rootPath + '/files',
-  activeProvider: 'local'
+  activeProvider: 'local',
+  circleSettings: require('../circleSettings') || {}
 };

@@ -32,6 +32,7 @@
     "Collapse": "פחות",
     "confirmPassword": "אשרר סיסמא",
     "confirmPasswordOptional":  "אשרר סיסמא ‫(‬לא חובה‫)‬",
+    "createNew":"צור חדש",
     "created": "נוצר",
     "createdTask": "יצר(ה) את משימה ",
     "createdThis": "יצר(ה) את ה",
@@ -138,5 +139,12 @@
 	"YES": "אישור",
 	"youMustEnterAName": "You must enter a name",
 	"youMustEnterAValidEmailAddress": "You must enter a valid email address",
-	"restrictedAccess": "הגבלת גישה"
+	"restrictedAccess": "הגבלת גישה",
+    "sort by star": "סינון מועדפים",
+    "sort by": "סינונים",
+    "assignee": "אחראי",
+    "create new": "צור חדש",
+    "project name": "שם הפרוייקט",
+    "add watcher": "הוסף שותף",
+    "assigned from": "שוייכה אלייך מ-"
 }

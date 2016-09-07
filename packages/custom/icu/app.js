@@ -96,6 +96,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.searchlist',
         'mean.icu.data.activitiesservice',
         'mean.icu.data.documentsservice',
+        'mean.icu.data.filesservice',
         'mean.icu.data.usersservice',
         'mean.icu.data.notificationsservice',
         'mean.icu.data.projectsservice',

@@ -18,7 +18,8 @@
         <ul ng-if="visible.project">
             <li data-ng-repeat="project in projects | limitTo: displayLimit['projects']"
                 data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
-                data-ng-click="switchTo('project', project._id)">
+                data-ng-click="switchTo('project', project._id)"
+                ng-if="project._id">
                 <a href class="Names-In-List-On-Side">
                     {{project.title}}
                 </a>

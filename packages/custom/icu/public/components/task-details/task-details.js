@@ -15,6 +15,7 @@ angular.module('mean.icu.ui.taskdetails', [])
  UsersService,
  people,
  $timeout,
+ ProjectsService,
                                                me //,subtasks
                                                ) {
     $scope.task = entity || context.entity;
@@ -65,6 +66,45 @@ if (!$scope.task) {
     });
 }
 
+$scope.updateProjName = function(x,y){
+ $scope.projName = $('.ui-select-search.ng-valid-parse').val()
+}
+
+$scope.removeCreateNew = function() {
+ $scope.projName = '';
+}
+
+$scope.$watch('projName', function(newValue, oldValue) {
+ var index = _.findIndex($scope.projects, function(p) { return p.title == oldValue; });
+ $scope.projects[index].title = $scope.projName;
+});
+
+$scope.createProject = function (projName ,cb) {
+    var project = {
+        color: '0097A7',
+        title: projName,
+        watchers: [],
+    };
+
+    ProjectsService.create(project).then(function (result) {
+        $scope.projects.push(result);
+        cb(result);
+    /*        $scope.update(result,'project')
+*/    });
+
+};
+
+$scope.statusType = function() {
+    alert('statusType');
+};
+
+if (!$scope.task) {
+    $state.go('main.tasks.byentity', {
+        entity: context.entityName,
+        entityId: context.entityId
+    });
+}
+
 $scope.tagInputVisible = false;
 
 $scope.statuses = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'];
@@ -83,10 +123,6 @@ $scope.$watchGroup(['task.description', 'task.title'], function (nVal, oVal) {
         $scope.delayedUpdate($scope.task);
     }
 });
-
-$scope.statusType = function() {
-    alert('statusType');
-};
 
 $scope.addTag = function (tag) {
     $scope.task.tags.push(tag);
@@ -194,11 +230,27 @@ $scope.deleteTask = function (task) {
     };
     //END Made By OHAD
 
-    $scope.update = function (task, type) {
+    $scope.update = function (task, type ,proj) {
+        if(proj && proj!== ''){
+            $scope.createProject(proj,function(result){
+                task.project = result;
+                TasksService.update(task).then(function (result) {
+                    if (context.entityName === 'project') {
+                        var projId = result.project ? result.project._id : undefined;
+                        if (projId !== context.entityId || type === 'project') {
+                            $state.go('main.tasks.byentity.details', {
+                                entity: context.entityName,
+                                entityId: context.entityId,
+                                id: task._id
+                            }, {reload: true});
+                        }
+                    }
+                });
+            });
+        }
         if (context.entityName === 'discussion') {
             task.discussion = context.entityId;
         }
-
         TasksService.update(task).then(function (result) {
             if (context.entityName === 'project') {
                 var projId = result.project ? result.project._id : undefined;
@@ -230,11 +282,13 @@ $scope.deleteTask = function (task) {
     };
 
     $scope.setFocusToTagSelect = function() {
-    	var element = angular.element('#addTag > input.ui-select-focusser')[0];
-    	$timeout(function () {
-    		element.focus();
-    	}, 0);
+        var element = angular.element('#addTag > input.ui-select-focusser')[0];
+        $timeout(function () {
+            element.focus();
+        }, 0);
     };
+
+    
     function deleteClass(tasks){
         for (var i = tasks.length - 1; i >= 0; i--) {
             tasks[i].isNew = false;
@@ -288,7 +342,7 @@ $scope.deleteTask = function (task) {
             });
 
             elm.on('blur', 'input.ui-select-focusser', function(e, g) {
-            	$timeout(function () {
+                $timeout(function () {
                     if(!e.target.hasAttribute('disabled')) {
                       scope.$parent.tagInputVisible = false;
                   }
@@ -300,7 +354,8 @@ $scope.deleteTask = function (task) {
 })
 .filter('searchfilter', function() {
     return function (input, query) {
-        var r = RegExp('('+ query + ')', 'g');
-        return input.replace(r, '<span class="super-class">$1</span>');
+        var r = RegExp('('+ query + ')');
+        if(input !== undefined)
+            return input.replace(r, '<span class="super-class">$1</span>');
     }
 });

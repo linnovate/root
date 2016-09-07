@@ -1,7 +1,14 @@
 'use strict';
 
 angular.module('mean.icu.ui.login', [])
-.controller('LoginController', function ($scope, $state, UsersService) {
+.controller('LoginController', function ($scope, $state, UsersService, $cookies) {
+    
+    if ($cookies.get('token') && $cookies.get('token').length) {
+        localStorage.setItem('JWT', $cookies.get('token'));
+        $cookies.remove('token');
+        $state.go('main.tasks');
+    }
+    
     $scope.login = function (credentials) {
     	var logErrorMessages = {
 			'Unauthorized': 'unauthorized',

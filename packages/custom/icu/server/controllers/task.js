@@ -155,7 +155,7 @@ exports.getByEntity = function(req, res, next) {
     };
     starredOnly = true;
   }
-  var query = req.acl.query('Task');
+  var query = req.acl.mongoQuery('Task');
 
   query.find(entityQuery);
   query.populate(options.includes);
@@ -222,28 +222,27 @@ exports.getZombieTasks = function(req, res, next) {
 };
 
 var byAssign = function(req, res, next) {
-  if (req.locals.error) {
-    return next();
-  }
+	if (req.locals.error) {
+    	return next();
+  	}
+  	
+    var query = req.acl.mongoQuery('Task');
+  	query.find({
+  		assign: req.user._id,
+  		status: {$nin: ['rejected', 'done']}
+		})
+		.populate('project')
+		.exec(function(err, tasks) {
+  		if (err) {
+	      req.locals.error = {
+	        message: 'Can\'t get my tasks'
+	      };
+	    } else {
+	      req.locals.result = tasks;
+	    }
 
-  Task.find({
-    assign: req.user._id,
-    status: {
-      $nin: ['rejected', 'done']
-    }
-  })
-    .populate('project')
-    .exec(function(err, tasks) {
-      if (err) {
-        req.locals.error = {
-          message: 'Can\'t get my tasks'
-        };
-      } else {
-        req.locals.result = tasks;
-      }
-
-      next();
-    });
+	    next();
+	});
 }
 
 
@@ -462,7 +461,7 @@ exports.getSubTasks = function(req, res, next) {
     return next();
   }
 
-  var query = req.acl.query('Task');
+  var query = req.acl.mongoQuery('Task');
   query.findOne({
     '_id': req.params.id
   }, {

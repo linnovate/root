@@ -369,33 +369,35 @@ angular.module('mean.icu').config([
                     }
                 }
             })
-            .state('main', {
-                abstract: true,
-                url: '',
-                templateUrl: '/icu/components/icu/icu.html',
-                controller: 'IcuController',
-                resolve: {
-                    me: function(UsersService) {
-                        return UsersService.getMe();
-                    },
-                    projects: function(ProjectsService) {
-                        return ProjectsService.getAll(0, 0, SORT).then(function(data) {
-                            return data;
-                        }, function(err) {
-                            return [];
-                        });
-                    },
-                    discussions: function(DiscussionsService) {
-                        return DiscussionsService.getAll(0, 0, SORT).then(function(data) {
-                            return data;
-                        }, function(err) {
-                            return [];
-                        });
-                    },
-                    people: function(UsersService) {
-                        return UsersService.getAll();
-                    }
+        .state('main', {
+            abstract: true,
+            url: '',
+            templateUrl: '/icu/components/icu/icu.html',
+            controller: 'IcuController',
+            resolve: {
+                me: function (UsersService) {
+                    return UsersService.getMe();
+                },
+                projects: function (ProjectsService) {
+                    return ProjectsService.getAll(0, 0, SORT).then(function (data) {
+                        ProjectsService.data = data.data || data;
+                        return data;
+                    }, function (err) {
+                        return [];
+                    });
+                },
+                discussions: function (DiscussionsService) {
+                    return DiscussionsService.getAll(0, 0, SORT).then(function (data) {
+                        DiscussionsService.data = data.data || data;
+                        return data;
+                    }, function (err) {
+                        return [];
+                    });
+                },
+                people: function (UsersService) {
+                    return UsersService.getAll();
                 }
+            }
             })
             .state('main.people', {
                 url: '/people',
@@ -807,8 +809,16 @@ angular.module('mean.icu').config([
 
         //Add by OHAD 17.4.16 
         .state('main.search.update', getAttachmentDetailsState('/attachment'))
-            .state('main.search.update.versions', getAttachmentDetailsTabState());
-    }
+
+        .state('main.search.update.versions', getAttachmentDetailsTabState())
+
+        .state('files', {
+            url: "/files/:y/:m/:d/:n.:f?view",
+            controller: function(FilesService) {
+                FilesService.getByPath()
+            }
+        });
+	}
 ]);
 
 angular.module('mean.icu').config(function($i18nextProvider) {
