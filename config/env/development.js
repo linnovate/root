@@ -22,6 +22,16 @@ module.exports = {
     clientSecret: 'APP_SECRET',
     callbackURL: 'http://localhost:3000/api/auth/facebook/callback'
   },
+  saml: {
+    strategy : {
+      options :{
+        samlOptions: ''
+      }
+    },
+    clientID: 'DEFAULT_APP_ID',
+    clientSecret: 'APP_SECRET',
+    callbackURL: 'http://localhost/metadata.xml/callback'
+  },
   twitter: {
     clientID: 'DEFAULT_CONSUMER_KEY',
     clientSecret: 'CONSUMER_SECRET',
@@ -105,3 +115,4 @@ module.exports = {
     uri: 'http://localhost:3005'
   }
 };
+

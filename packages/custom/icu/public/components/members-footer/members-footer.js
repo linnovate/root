@@ -11,29 +11,35 @@ angular.module('mean.icu.ui.membersfooter', [])
                 discussion: 'DiscussionsService',
                 task: 'TasksService'
             };
-             UsersService.getMe().then(function (me) {
+            UsersService.getMe().then(function(me) {
                 $scope.me = me;
             });
+
+            var groupTypes = config.circles.footer;
 
             var getWatchersGroups = function() {
                 $scope.watchersGroups = [];
                 var obj;
-                if ($scope.entity.circles && $scope.entity.circles.personal)
-                    for (var i = 0; i < $scope.entity.circles.personal.length; i++) {
-                        obj = groups.filter(function(obj) {
-                            if (obj._id === $scope.entity.circles.personal[i]) {
-                                return obj;
+                for (var i = 0; i < groupTypes.length; i++) {
+                    if ($scope.entity.circles && $scope.entity.circles[groupTypes[i]])
+                        for (var j = 0; j < $scope.entity.circles[groupTypes[i]].length; j++) {
+                            obj = groups.filter(function(obj) {
+                                if (obj._id === $scope.entity.circles[groupTypes[i]][j]) {
+                                    return obj;
+                                }
+                            })[0];
+                            if (obj) {
+                                obj.type = groupTypes[i];
+                                $scope.watchersGroups.push(obj);
                             }
-                        })[0];
-                        if (obj) {
-                            obj.type = 'group'
-                            $scope.watchersGroups.push(obj);
-                        }
-                    };
+                        };
+                }
             }
 
             var getNotAssigned = function() {
-                var arr1 = _.filter($scope.users, function(u){ return u._id; });
+                var arr1 = _.filter($scope.users, function(u) {
+                    return u._id;
+                });
                 arr1 = _.pluck(arr1, '_id');
                 var arr2 = _.pluck($scope.entity.watchers, '_id');
                 var diff = _.difference(arr1, arr2);
@@ -41,10 +47,14 @@ angular.module('mean.icu.ui.membersfooter', [])
                     return diff.indexOf(obj._id) >= 0;
                 });
                 arr1 = _.pluck(groups, '_id');
-                var personal = $scope.entity.circles && $scope.entity.circles.personal ? $scope.entity.circles.personal : [];
-                diff = _.difference(arr1, personal);
+                var arr3;
+                for (var i = 0; i < groupTypes.length; i++) {
+                    arr3 = $scope.entity.circles && $scope.entity.circles[groupTypes[i]] ? $scope.entity.circles[groupTypes[i]] : [];
+                    arr1 = _.difference(arr1, arr3);
+                }
+            
                 var groupsNotAssigned = _.filter(groups, function(obj) {
-                    return diff.indexOf(obj._id) >= 0;
+                    return arr1.indexOf(obj._id) >= 0;
                 });
                 return groupsNotAssigned.concat(notAssigned);
             }
@@ -56,7 +66,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 var service = $injector.get(serviceName);
                 var data = {
                     name: member.name,
-                    type: member.type === 'group' ? 'group' : 'user',
+                    type: member.type ? member.type : 'user',
                     action: action
                 }
 
@@ -66,14 +76,16 @@ angular.module('mean.icu.ui.membersfooter', [])
             };
 
             $scope.showSelect = false;
-            var groups;
+            var groups = [], allowed;
 
             circlesService.getmine().then(function(data) {
-                groups = data.allowed.personal;
-
-                groups.forEach(function(g) {
-                    g.type = 'group'
-                })
+                for (var i = 0; i < groupTypes.length; i++){
+                    allowed = data.allowed[groupTypes[i]];
+                    allowed.forEach(function(g) {
+                        g.type = groupTypes[i]
+                    });
+                    groups = groups.concat(allowed);
+                }
                 $scope.notAssigned = getNotAssigned();
                 getWatchersGroups();
             });
@@ -87,10 +99,10 @@ angular.module('mean.icu.ui.membersfooter', [])
 
             $scope.addMember = function(member) {
                 $scope.showSelect = false;
-                if (member.type === 'group') {
+                if (member.type) {
                     if (!$scope.entity.circles) $scope.entity.circles = {};
-                    if (!$scope.entity.circles.personal) $scope.entity.circles.personal = [];
-                    $scope.entity.circles.personal.push(member._id);
+                    if (!$scope.entity.circles[member.type]) $scope.entity.circles[member.type] = [];
+                    $scope.entity.circles[member.type].push(member._id);
                 } else {
                     $scope.entity.watchers.push(member);
                 }
@@ -99,8 +111,8 @@ angular.module('mean.icu.ui.membersfooter', [])
             };
 
             $scope.deleteMember = function(member) {
-                if (member.type === 'group') {
-                    $scope.entity.circles.personal = _.reject($scope.entity.circles.personal, function(mem) {
+                if (member.type) {
+                    $scope.entity.circles[member.type] = _.reject($scope.entity.circles[member.type], function(mem) {
                         return _.isEqual(member._id, mem);
                     });
                 } else {

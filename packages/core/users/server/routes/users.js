@@ -63,7 +63,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     // This function responsible on the view to uploads as pdf 
     app.post('/append.js' , function(req, res){
         
-        var StartOFPath = '/home/as/Desktop/icu/';
+        var StartOFPath = config.root + '/';
         
         // Check the type of the file, and if needed to viewed as pdf
         if((req.body.attachmentType == "docx") ||
@@ -93,17 +93,17 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             }
             
             //###start_of_url 
-            var arr = str.split("http://localhost:3000");
-            var realpath = arr[1];
+            var arr = str.split(config.host);
+            var realpath = arr[1].replace('(', '\(').replace(')', '\)');
             var arr1 = str.split("/");
             var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
             var arr2 = arr1[7].split("." + req.body.attachmentType);
     
         console.log('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf');
-        console.log('lowriter --convert-to pdf /home/as/Desktop/icu' + realpath);
+        console.log('lowriter --headless --convert-to pdf ' + config.root + realpath);
         
             // Make the convert from it's origin type to pdf
-            exec('lowriter --convert-to pdf /home/as/Desktop/icu' + realpath, function (err, stout, sterr){
+            exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
             if (err) {
                 res.send(500, arguments);
             } else {
@@ -128,6 +128,17 @@ module.exports = function(MeanUser, app, auth, database, passport) {
         
     });
     
+
+  // Setting the SAML auth routes
+  app.route('/api/auth/saml')
+    .get(passport.authenticate('saml', {
+      failureRedirect: '/login'
+    }));
+
+  app.route('/metadata.xml/callback')
+    .post(passport.authenticate('saml', {
+      failureRedirect: '/login'
+    }), users.authCallback)
 
   // Setting the facebook oauth routes
   app.route('/api/auth/facebook')

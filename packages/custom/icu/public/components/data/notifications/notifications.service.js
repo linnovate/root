@@ -20,7 +20,8 @@ angular.module('mean.icu.data.notificationsservice', [])
 
     function addNotification(entityName, assign, id, IsWatched, DropDownIsWatched) {
     	notifications.push({
-	        entity: 'Task',
+	        //entity: 'Task',
+            entity: 'task',
 	        entityName: entityName,
 	        action: 'assigned from',
 	        user: assign,
@@ -42,7 +43,8 @@ angular.module('mean.icu.data.notificationsservice', [])
         if(notifications.length != 0)
         {
             lastNotification1.push({
-                entity: 'Task',
+                //entity: 'Task',
+                entity: 'task',
                 entityName: notifications[notifications.length - 1].entityName,
                 action: 'assigned from',
                 user: notifications[notifications.length - 1].assign,
@@ -75,7 +77,8 @@ angular.module('mean.icu.data.notificationsservice', [])
         if(notifications.length != 0)
         {
             lastNotification1.push({
-                entity: 'Task',
+                //entity: 'Task',
+                entity: 'task',
                 entityName: notifications[notifications.length - 1].entityName,
                 action: 'assigned from',
                 user: notifications[notifications.length - 1].assign,

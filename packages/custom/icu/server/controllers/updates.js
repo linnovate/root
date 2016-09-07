@@ -77,7 +77,7 @@ exports.getByEntity = function(req, res, next) {
   Update.find({
     issue: type,
     issueId: req.params.id
-  }).populate('userObj', 'name').populate('creator', 'name').then(function(updates) {
+  }).populate('userObj', 'name').populate('creator', 'name profile').then(function(updates) {
     console.log(JSON.stringify(updates))
     req.locals.result = updates;
     next();
@@ -156,4 +156,25 @@ exports.getMyTasks = function(req, res, next) {
     next();
   })
 
+}
+
+exports.signNew = function(req, res, next) {
+  var entities = {project: 'Project', task: 'Task', discussion: 'Discussion'};
+  var query = req.acl.mongoQuery(entities[req.body.data.issue]);
+  query.findOne({_id: req.body.data.issueId}).exec(function(err, entity){
+    if(err) {
+      req.locals.error = err;
+    }
+    if(!entity) {
+      req.locals.error = {
+        status: 404,
+        message: 'Entity not found'
+      };
+    }
+    if(entity) {
+      req.locals.data.watchers = entity.watchers;
+      req.locals.data.circles = entity.circles;
+    }
+    next();
+  })
 }

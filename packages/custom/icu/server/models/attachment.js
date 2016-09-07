@@ -49,7 +49,14 @@ var AttachmentSchema = new Schema({
   },
   size: {
     type: Number
-  }
+  },
+  circles: {
+    type: Schema.Types.Mixed
+  },
+  watchers: [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }]
 });
 
 /**
@@ -79,7 +86,11 @@ AttachmentSchema.statics.task = function (id, cb) {
   require('./task');
   var Task = mongoose.model('Task');
   Task.findById(id).populate('project').exec(function (err, task) {
-    cb(err, {room: task.project.room, title: task.title});
+    var result = {title: task.title};
+    if (task.project) {
+      result.room = task.project.room;
+    }
+    cb(err, result);
   });
 };
 AttachmentSchema.statics.project = function (id, cb) {
@@ -89,9 +100,20 @@ AttachmentSchema.statics.project = function (id, cb) {
     cb(err, {room: project.room, title: project.title});
   });
 };
-AttachmentSchema.statics.update = function (id, cb) {
-  cb(null, {});
+
+//OHAD
+AttachmentSchema.statics.discussion = function (id, cb) {
+  require('./discussion');
+  var Discussion = mongoose.model('Discussion');
+  Discussion.findById(id, function (err, discussion) {
+    cb(err, {room: discussion.room, title: discussion.title});
+  });
 };
+//END OHAD
+
+// AttachmentSchema.statics.update = function (id, cb) {
+//   cb(null, {});
+// };
 
 /**
  * Post middleware
@@ -100,7 +122,7 @@ var elasticsearch = require('../controllers/elasticsearch');
 
 AttachmentSchema.post('save', function (req, next) {
   var attachment = this;
-  AttachmentSchema.statics[attachment.issue](attachment.issueId, function (err, result) {
+  AttachmentSchema.statics[attachment.entity](attachment.entityId, function (err, result) {
     if (err) {
       return err;
     }

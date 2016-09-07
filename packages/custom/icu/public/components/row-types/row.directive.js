@@ -57,7 +57,7 @@ angular.module('mean.icu.ui.rows', [])
             if (tAttrs.type.indexOf('search') === -1) {
 	            return templates[tAttrs.type];
 	        } else {
-	        	return '';
+	        	return '/icu/components/row-types/empty-row.html';
 	        }
         }
     };
