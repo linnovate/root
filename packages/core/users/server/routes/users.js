@@ -100,10 +100,10 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             var arr2 = arr1[7].split("." + req.body.attachmentType);
     
         console.log('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf');
-        console.log('lowriter --convert-to pdf ' + config.root + realpath);
+        console.log('lowriter --headless --convert-to pdf ' + config.root + realpath);
         
             // Make the convert from it's origin type to pdf
-            exec('lowriter --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
+            exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
             if (err) {
                 res.send(500, arguments);
             } else {
