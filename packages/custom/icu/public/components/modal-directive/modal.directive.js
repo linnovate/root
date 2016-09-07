@@ -47,11 +47,11 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
         };
     });
 
-function controller($scope, $uibModalInstance, $filter, entity) {
+function controller($scope, $uibModalInstance, entity) {
     $scope.entity = {type: entity};
 
     $scope.ok = function () {
-        if($scope.entity.textDelete && $scope.entity.textDelete == $filter('i18next')('DELETE'))
+        if($scope.entity.textDelete && $scope.entity.textDelete == 'DELETE')
             $uibModalInstance.close();
         else
             $scope.cancel();

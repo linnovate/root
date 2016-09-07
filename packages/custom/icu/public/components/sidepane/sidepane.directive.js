@@ -2,13 +2,13 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context, TasksService) {
+    function controller($scope, $state, context) {
         $scope.context = context;
 
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
-        // $scope.people = $scope.people.data || $scope.people;
-        
+        $scope.people = $scope.people.data || $scope.discussions;
+
         $scope.toggleVisibility = function(toggledItem) {
             var prev = toggledItem.open;
 
@@ -19,43 +19,35 @@ directive('icuSidepane', function() {
             toggledItem.open = !prev;
         }
 
-        $scope.removeFilterValue = function() {
-        	TasksService.filterValue = false;
-        }
-
-        $scope.isCurrentState = function(item) {
-
-            return item.state === context.main;
-        };
-
         $scope.items = [{
             name: 'tasks',
             icon: '/icu/assets/img/task.png',
             state: 'tasks',
             display: ['projects', 'discussions', 'people'],
-            open: $scope.isCurrentState({state: 'tasks'})
+            open: false
         }, {
             name: 'projects',
             icon: '/icu/assets/img/project.png',
             state: 'projects',
             display: ['discussions', 'people'],
-            open: $scope.isCurrentState({state: 'projects'})
+            open: false
         }, {
             name: 'discussions',
             icon: '/icu/assets/img/meeting.png',
             state: 'discussions',
             display: ['projects', 'people'],
-            open: $scope.isCurrentState({state: 'discussions'})
-        }
-        // , {
-        //     name: 'people',
-        //     icon: '/icu/assets/img/people.png',
-        //     state: 'people',
-        //     display: ['projects', 'discussions'],
-        //     open: false
-        // }
-        ];
+            open: false
+        }, {
+            name: 'people',
+            icon: '/icu/assets/img/people.png',
+            state: 'people',
+            display: ['projects', 'discussions'],
+            open: false
+        }];
 
+        $scope.isCurrentState = function(item) {
+            return item.state === context.main;
+        };
     }
 
     return {
@@ -64,8 +56,8 @@ directive('icuSidepane', function() {
         templateUrl: '/icu/components/sidepane/sidepane.html',
         scope: {
             projects: '=',
-            discussions: '='//,
-            //people: '='
+            discussions: '=',
+            people: '='
         }
     };
 });

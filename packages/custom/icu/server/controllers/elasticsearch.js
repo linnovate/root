@@ -4,13 +4,11 @@ var mean = require('meanio'),
   utils = require('./utils');
 
 exports.save = function (doc, docType, room, title) {
-  var newDoc = JSON.parse(JSON.stringify(doc));
-  delete newDoc._id;
   mean.elasticsearch.index({
     index: docType,
     type: docType,
     id: doc._id.toString(),
-    body: newDoc
+    body: doc
   }, function (error, response) {
     // utils.checkAndHandleError(error, res);
     if (error)

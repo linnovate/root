@@ -62,10 +62,11 @@ var DiscussionSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Project'
   },
-  sources: [String],
-  circles: {
-    type: Schema.Types.Mixed
-  }
+  sources: [{
+      type: Schema.ObjectId,
+      ref: 'Source'
+  }],
+  circles: {}
 });
 
 var starVirtual = DiscussionSchema.virtual('star');

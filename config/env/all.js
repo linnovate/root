@@ -19,7 +19,6 @@ module.exports = {
   },
   hostname: process.env.HOST || process.env.HOSTNAME,
   db: process.env.MONGOHQ_URL,
-  socketPort: process.env.SOCKETPORT || 3003,
   templateEngine: 'swig',
 
   // The secret should be set to a non-guessable string that
@@ -43,17 +42,14 @@ module.exports = {
     maxAge: null
   },
   languages: [{
-    name: 'en',
+    name: 'en-US',
     direction: 'ltr',
   }, {
     name: 'he',
     direction: 'rtl',
   }],
-  currentLanguage: 'en',
-//  currentLanguage: 'he',
+  currentLanguage: 'en-US',
   // The session cookie name
   sessionName: 'connect.sid',
   attachmentDir: rootPath + '/files',
-  activeProvider: 'local',
-  circleSettings: require('../circleSettings') || {}
 };

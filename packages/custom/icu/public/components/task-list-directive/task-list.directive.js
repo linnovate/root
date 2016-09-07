@@ -1,22 +1,14 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklistdirective', [])
-.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context, UsersService) {
+.directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context ) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
             Created: 2
         };
 
-        var newTask = {
-            title: '',
-            watchers: [],
-            tags: [],
-            __state: creatingStatuses.NotCreated,
-            __autocomplete: true
-        };
-
-    function controller($scope, TasksService) {
+        function controller($scope, TasksService) {
         $scope.context = context;
         $scope.isLoading = true;
 
@@ -24,31 +16,19 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             t.__state = creatingStatuses.Created;
         });
 
+            var newTask = {
+            title: '',
+            watchers: [],
+            tags: [],
+            __state: creatingStatuses.NotCreated,
+            __autocomplete: true
+        };
+
         if (!$scope.displayOnly) {
-            if (context.entityName === 'my') {
-                UsersService.getMe().then(function (me) {
-                    newTask.assign = me._id;    
-                    $scope.tasks.push(_(newTask).clone());
-                });
-            } else {
-                if (context.entityName === 'task') {
-                    newTask.parent = context.entity._id;    
-                    $scope.tasks.push(_(newTask).clone());
-                } else
-                $scope.tasks.push(_(newTask).clone());
-            }
+            $scope.tasks.push(_(newTask).clone());
         }
 
-
-        if (context.entityName === 'all') {
-        	$scope.detailsState = 'main.tasks.all.details';
-        } else if (context.entityName === 'my') {
-        	$scope.detailsState = 'main.tasks.byassign.details';
-        } else if (context.entityName === 'task') {
-            $scope.detailsState = 'main.tasks.byparent.details';   
-        } else {
-        	$scope.detailsState = 'main.tasks.byentity.details';
-        }
+        $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
 
         $scope.createOrUpdate = function(task) {
             if (context.entityName !== 'all') {
@@ -101,24 +81,23 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 });
                 $scope.selectedSuggestion = 0;
             });
-
         };
 
         $scope.select = function(selectedTask) {
-            var currentTask = _($scope.tasks).findIndex(function(t) {
-                return t.id === $state.params.id;
+            var currentTask = _($scope.tasks).find(function(t) {
+                return t.__autocomplete;
             });
 
-            // TasksService.remove(currentTask._id);
+            TasksService.remove(currentTask._id);
 
-            // _(currentTask).assign(selectedTask);
-            // currentTask.__autocomplete = false;
+            _(currentTask).assign(selectedTask);
+            currentTask.__autocomplete = false;
 
-            // $scope.searchResults.length = 0;
-            // $scope.selectedSuggestion = 0;
+            $scope.searchResults.length = 0;
+            $scope.selectedSuggestion = 0;
 
-            $scope.createOrUpdate($scope.tasks[currentTask + 1]).then(function(task) {
-                $state.go($scope.detailsState, {
+            $scope.createOrUpdate(currentTask).then(function(task) {
+                $state.go('main.tasks.byentity.details', {
                     id: task._id,
                     entity: context.entityName,
                     entityId: context.entityId
@@ -132,6 +111,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         var isScrolled = false;
 
         $scope.initialize = function($event, task) {
+
             if ($scope.displayOnly) {
                 return;
             }
@@ -158,8 +138,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.isCurrentState = function (id) {
-            var isActive = ($state.current.name.indexOf('main.tasks.byparent.details') === 0 ||
-                            $state.current.name.indexOf('main.tasks.byentity.details') === 0 ||
+            var isActive = ($state.current.name.indexOf('main.tasks.byentity.details') === 0 ||
                             $state.current.name.indexOf('main.tasks.all.details') === 0
                        ) && $state.params.id === id;
 
@@ -176,9 +155,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 $event.preventDefault();
 
                 $scope.tasks[index].__autocomplete = false;
-                if ($element.find('td.name')[index+1]) {
-                    $element.find('td.name')[index+1].focus();
-                }
+                if ($element.find('td.name')[index+1]) $element.find('td.name')[index+1].focus();
                 else {
                 	$timeout(function() {
 			            $element.find('td.name')[index+1].focus();
@@ -189,7 +166,6 @@ angular.module('mean.icu.ui.tasklistdirective', [])
         };
 
         $scope.focusAutoComplete = function($event) {
-            angular.element($event.target).css('box-shadow', 'none')
             if ($event.keyCode === 38) {
                 if ($scope.selectedSuggestion > 0) {
                     $scope.selectedSuggestion -= 1;
@@ -200,7 +176,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                     $scope.selectedSuggestion += 1;
                 }
                 $event.preventDefault();
-            } else if ($event.keyCode === 13 || $event.keyCode === 9) {
+            } else if ($event.keyCode === 13) {
                 var sr = $scope.searchResults[$scope.selectedSuggestion];
                 $scope.select(sr);
             }
@@ -224,19 +200,13 @@ angular.module('mean.icu.ui.tasklistdirective', [])
             if (!$scope.isLoading && $scope.loadNext) {
                 $scope.isLoading = true;
                 $scope.loadNext().then(function(tasks) {
-
-                     _(tasks.data).each(function(t) {
-                        t.__state = creatingStatuses.Created;
-                    });
-
                     var offset = $scope.displayOnly ? 0 : 1;
                     
                     if (tasks.data.length) {                        
                         var index = $scope.tasks.length - offset;
-                        $scope.tasks.pop();
                         var args = [index, 0].concat(tasks.data);
+
                         [].splice.apply($scope.tasks, args);
-                        $scope.tasks.push(_(newTask).clone());
                     }
 
                     $scope.loadNext = tasks.next;

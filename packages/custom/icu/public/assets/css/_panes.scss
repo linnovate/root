@@ -1,6 +1,4 @@
 .panes-wrapper {
-        transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.5s;
-    
     .list-table {
         table {
             @include table;
@@ -18,13 +16,10 @@
                         }
 
                     }
-                    
-                    &:not(.active):hover {
-                        background-color: #E1F2F8;
-                        transition: 0.8s;
-                    }
 
-                
+                    .project {
+                        color: white;
+                    }
 
                     .id {
                         text-align: center;

@@ -7,22 +7,13 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          context,
                                                          $state,
                                                          $timeout,
-                                                         people,
                                                          DiscussionsService,
                                                          $stateParams) {
         $scope.isLoading = true;
         $scope.discussion = entity || context.entity;
         $scope.tasks = tasks.data || tasks;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
-        $scope.people = people.data || people;
-        
-        if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
-            var newPeople = {
-                name: 'no select'
-            };
 
-            $scope.people.push(_(newPeople).clone());
-        }
         DiscussionsService.getStarred().then(function(starred) {
             $scope.discussion.star = _(starred).any(function(s) {
                 return s._id === $scope.discussion._id;

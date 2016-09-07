@@ -49,15 +49,14 @@ module.exports = function(app, db) {
   // Dynamic helpers
   app.use(helpers(config.app.name));
 
-  // app.use('/files', express.static(config.attachmentDir));
+  app.use('/files', express.static(config.attachmentDir));
 
   // Connect flash for flash messages
   app.use(flash());
 
   app.use(modRewrite([
-
-    '!^/api/.*|\\_getModules|\\.html|\\.js|\\.css|\\.swf|\\.jp(e?)g|\\.png|\\.ico|^favicon\.ico|\\.gif|\\.svg|\\.eot|\\.ttf|\\.woff|\\.pdf$ / [L]',
-    '^/files/.* / [L]'
+    
+    '!^/api/.*|\\_getModules|\\.html|\\.js|\\.css|\\.swf|\\.jp(e?)g|\\.png|\\.ico|^favicon\.ico|\\.gif|\\.svg|\\.eot|\\.ttf|\\.woff|\\.pdf$ / [L]'    
 
   ]));
 

@@ -4,16 +4,6 @@
 	}
     .btn {
         float: right;
-		outline: none !important;
-	    &.close{
-	    	 &:hover{
-	    	 	 transition-duration: 0.8s;
-				-ms-transform: rotate(90deg); /* IE 9 */
-			    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
-			    transform: rotate(90deg);
-			}
-	    }
-    
     }
     .modal-footer .btn + .btn {
         margin-right: 5px;
@@ -55,13 +45,12 @@
 			    height: 14px;
 			    width: 14px;
 			    border-radius: 10px;
-			    padding: 0 0px 0px 0.4px;;
+			    padding: 0;
 			    font-size: 14px;
 			    opacity: 1;
-			    margin-top: 3px;
-			    /*line-height: 12px;
+			    line-height: 12px;
     			text-align: center;
-    			outline: none;*/
+    			outline: none;
 			}
 		}
 	}
@@ -81,8 +70,9 @@
 	    color: white;
 	    background-color: #ffa004;
 	    display: inline-block;
+	    float: right;
     	margin-right: 17px;
-		outline: none !important;
+    	outline: none;
 	}
 	.c19nList {
 		float: left;

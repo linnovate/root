@@ -22,16 +22,6 @@ module.exports = {
     clientSecret: 'APP_SECRET',
     callbackURL: 'http://localhost:3000/api/auth/facebook/callback'
   },
-  saml: {
-    strategy : {
-      options :{
-        samlOptions: ''
-      }
-    },
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
-    callbackURL: 'http://localhost/metadata.xml/callback'
-  },
   twitter: {
     clientID: 'DEFAULT_CONSUMER_KEY',
     clientSecret: 'CONSUMER_SECRET',
@@ -107,12 +97,5 @@ module.exports = {
 //   },
   letschat: {
     owner: '562334ccea168c4f323a1be8'
-  },
-  circles: {
-    uri: 'http://localhost:3005'
-  },
-  rocketChat: {
-    uri: 'http://localhost:3005'
   }
 };
-

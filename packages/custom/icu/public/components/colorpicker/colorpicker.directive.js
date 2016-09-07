@@ -12,18 +12,18 @@ angular.module('mean.icu.ui.colorpicker', [])
 
             $scope.isOpen = false;
             $scope.colors = [
-                '0097A7',
-                '00AEEF',
-                '2979FF',
-                '0054A6',
-                'F06EAA',
-                'AB47BC',
-                '6FBA09',
-                '598527',
-                'F7941D',
-                'F69679',
-                'EF5350',
-                'FF4081'
+                'ffffff',
+                '747474',
+                '0054a6',
+                '00aeef',
+                '197b30',
+                'b9e67d',
+                'fff200',
+                'ffa000',
+                '605ca8',
+                '92278f',
+                'f49ac1',
+                'ed1c24'
             ];
 
             $scope.triggerDropdown = function () {

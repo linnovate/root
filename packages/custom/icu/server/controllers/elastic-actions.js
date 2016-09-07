@@ -1,15 +1,15 @@
 'use strict';
 //var request = require('request');
 var async = require('async');
-//var dateFormat = require('dateformat');
+var dateFormat = require('dateformat');
 var Q = require('q');
 var config = require('meanio').loadConfig();
 var mongoose = require('mongoose'),
     db = mongoose.connections[0].db;
-//var kue = require('kue');
-//var changeCase = require('change-case');
+var kue = require('kue');
+var changeCase = require('change-case');
 //kue.app.listen(3005);
-//var queue = kue.createQueue();
+var queue = kue.createQueue();
 
 
 var mean = require('meanio');
@@ -289,7 +289,7 @@ exports.indexCategories  = function (data, type, elastic,fieldName) {
     obj.id = data.tid + '_' + data.lang;
     obj.lang = data.lang;
     obj.text = inputVal;
-    //obj.textString = (inputVal[0]) ? changeCase.lowerCase(inputVal[0]) : '';
+    obj.textString = (inputVal[0]) ? changeCase.lowerCase(inputVal[0]) : '';
     obj.parents = [];
     obj.counter = (data.counter === undefined) ? 0 : data.counter;
     obj.field_approved = data.field_approved;

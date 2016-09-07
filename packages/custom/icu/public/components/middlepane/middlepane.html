@@ -3,22 +3,15 @@
             ng-class="{'open': !menu.isHidden, 'collapsed': menu.isHidden}"
             ng-click="menu.isHidden = !menu.isHidden">
     </button>
-    <div class="search" data-ng-controller="SearchController" ng-init="click=false">
-        <div class="close-icon" ng-if="term" ng-click="clearSearch();"><i class="fa fa-times-circle"></i></div>
+    <div class="search" data-ng-controller="SearchController">
+        <div class="close-icon" ng-if="term" ng-click="clearSearch()"><i class="fa fa-times-circle"></i></div>
         <input type="text"
-            placeholder="{{ 'search' | i18next }}" 
-            ng-model="term" 
-            ng-change="search(term)" 
-            ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}" 
-            ng-keyup="click=false" 
-            ng-click="click=!click">
+            placeholder="{{ 'search' | i18next }}"
+            ng-model="term"
+            ng-change="search(term)"
+            ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}">
         </input>
         <img src="/icu/assets/img/search.png"></img>
-    	<div class="build-in-search" ng-if="click">
-    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getMyTasks')">{{'tasksAssignedToMe' | i18next}}</div>
-    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getOverdueWatchedTasks')">{{'overdueWatchedTasks' | i18next}} </div>
-    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getWatchedTasks')">{{'tasksImWatching' | i18next}}</div>
-    	</div>
     </div>
 </header>
 <div data-ng-controller="MiddlepaneController" class="middlepane-container">

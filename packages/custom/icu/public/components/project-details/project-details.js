@@ -109,17 +109,9 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.delayedUpdate = _.debounce($scope.update, 500);
 
         if ($scope.project &&
-            ($state.current.name === 'main.projects.all.details' ||
+            ($state.current.name === 'main.projects.byentity.details' ||
             $state.current.name === 'main.search.project' ||
-            $state.current.name === 'main.projects.byentity.details')) {
+            $state.current.name === 'main.projects.all.details')) {
             $state.go('.activities');
         }
-        
-        
-        // if ($scope.project &&
-        //     ($state.current.name === 'main.projects.byentity.details' ||
-        //     $state.current.name === 'main.search.project' ||
-        //     $state.current.name === 'main.projects.all.details')) {
-        //     $state.go('.activities');
-        // }
     });

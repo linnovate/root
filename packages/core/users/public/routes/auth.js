@@ -5,9 +5,6 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
   function($meanStateProvider, $httpProvider, jwtInterceptorProvider) {    
         
     jwtInterceptorProvider.tokenGetter = function() {
-        
-        //console.log("JWT");
-        //console.log(localStorage.getItem('JWT'));
       return localStorage.getItem('JWT');
     };
 
@@ -36,24 +33,24 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
 
     // states for my app
     $meanStateProvider
-      // .state('auth', {
-      //   url: '/auth',
-      //   templateUrl: 'users/views/index.html'
-      // })
-      // .state('auth.login', {
-      //   url: '/login',
-      //   templateUrl: 'users/views/login.html',
-      //   resolve: {
-      //     loggedin: checkLoggedOut
-      //   }
-      // })
-      // .state('auth.register', {
-      //   url: '/register',
-      //   templateUrl: 'users/views/register.html',
-      //   resolve: {
-      //     loggedin: checkLoggedOut
-      //   }
-      // })
+      .state('auth', {
+        url: '/auth',
+        templateUrl: 'users/views/index.html'
+      })
+      .state('auth.login', {
+        url: '/login',
+        templateUrl: 'users/views/login.html',
+        resolve: {
+          loggedin: checkLoggedOut
+        }
+      })
+      .state('auth.register', {
+        url: '/register',
+        templateUrl: 'users/views/register.html',
+        resolve: {
+          loggedin: checkLoggedOut
+        }
+      })
       .state('forgot-password', {
         url: '/forgot-password',
         templateUrl: 'users/views/forgot-password.html',

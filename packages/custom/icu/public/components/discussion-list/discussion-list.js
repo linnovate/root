@@ -21,9 +21,6 @@ angular.module('mean.icu.ui.discussionlist', [])
 
         $scope.changeOrder = function () {
             $scope.sorting.isReverse = !$scope.sorting.isReverse;
-            
-            /*Made By OHAD - Needed for reversing sort*/
-            $state.go($state.current.name, { sort: $scope.sorting.field });
         };
 
         $scope.sorting  = {
@@ -31,11 +28,11 @@ angular.module('mean.icu.ui.discussionlist', [])
             isReverse: false
         };
 
-        // $scope.$watch('sorting.field', function(newValue, oldValue) {
-        //     if (newValue && newValue !== oldValue) {
-        //         $state.go($state.current.name, { sort: $scope.sorting.field });
-        //     }
-        // });
+        $scope.$watch('sorting.field', function(newValue, oldValue) {
+            if (newValue && newValue !== oldValue) {
+                $state.go($state.current.name, { sort: $scope.sorting.field });
+            }
+        });
 
         $scope.sortingList = [
             {
@@ -77,7 +74,7 @@ angular.module('mean.icu.ui.discussionlist', [])
             if ($state.current.name === 'main.discussions.all') {
                 return;
             }
-            if ($state.current.name !== 'main.discussions.byentity.activities' &&
+            if ($state.current.name !== 'main.discussions.byentity.activities' ||
                 $state.current.name !== 'main.discussions.byentity.details.activities') {
                 $state.go('.activities');
             }

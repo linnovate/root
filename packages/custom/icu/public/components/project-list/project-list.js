@@ -21,9 +21,6 @@ angular.module('mean.icu.ui.projectlist', [])
 
         $scope.changeOrder = function () {
             $scope.sorting.isReverse = !$scope.sorting.isReverse;
-            
-            /*Made By OHAD - Needed for reversing sort*/
-            $state.go($state.current.name, { sort: $scope.sorting.field });
         };
 
         $scope.sorting = {
@@ -31,16 +28,11 @@ angular.module('mean.icu.ui.projectlist', [])
             isReverse: false
         };
 
-
-
-        // $scope.$watch('sorting.field', function(newValue, oldValue) {
-        //     if (newValue && newValue !== oldValue) {
-        //         $state.go($state.current.name, { sort: $scope.sorting.field });
-        //     }
-        // });
-        
-        
-        
+        $scope.$watch('sorting.field', function(newValue, oldValue) {
+            if (newValue && newValue !== oldValue) {
+                $state.go($state.current.name, { sort: $scope.sorting.field });
+            }
+        });
 
         $scope.sortingList = [
             {
