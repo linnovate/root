@@ -195,7 +195,7 @@
             }
             .user {
               position: relative;
-              width: 19%;
+              width: 18%;
               .no-assignee {
                 position: absolute;
                 transform: translateY(-65%);
@@ -238,7 +238,7 @@
             }
         }
         .status {
-          width: 19%;
+          width: 18%;
           padding-left: 7px;
           .ui-select-container.ui-select-bootstrap {
             .ui-select-match .ui-select-toggle {
@@ -283,7 +283,7 @@
 }
 }
 .due {
-    width: 16%;
+    width: 18%;
     .placeholder {
         position: absolute;
         top: 50%;
@@ -307,14 +307,14 @@
 }
 .arrow {
     width: 22%;
-        padding-left: 15px;
+        padding-left: 10px;
 
 }
 .delete {
    width: 25px;
    height: 55px;
    position: absolute;
-   right: 2.9%;
+   right: 3%;
    border: none;
    img {
     margin: 70% 45%;
