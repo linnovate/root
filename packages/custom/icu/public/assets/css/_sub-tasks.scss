@@ -307,12 +307,14 @@
 }
 .arrow {
     width: 22%;
+        padding-left: 15px;
+
 }
 .delete {
    width: 25px;
    height: 55px;
    position: absolute;
-   right: 2.5%;
+   right: 2.9%;
    border: none;
    img {
     margin: 70% 45%;
