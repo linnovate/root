@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
- db: (process.env.MONGODB_URI || 'mongodb://localhost/icu-dev'),
+ db: (process.env.MONGODB_URI || 'mongodb://localhost/icu-dev3'),
   debug: true,
   logging: {
     format: 'tiny'
@@ -109,10 +109,12 @@ module.exports = {
     owner: '562334ccea168c4f323a1be8'
   },
   circles: {
-    uri: 'http://localhost:3005'
+    uri: 'http://192.116.82.36:2230'
   },
+  // circles: {
+  //   uri: 'http://192.116.82.36:2230'
+  // },
   rocketChat: {
-    uri: 'http://localhost:3005'
+    uri: 'http://192.116.82.36:2230'
   }
 };
-
