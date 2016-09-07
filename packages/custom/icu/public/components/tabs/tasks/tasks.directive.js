@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tabs')
-    .directive('icuTabsTasks', function ($state, $filter) {
+    .directive('icuTabsTasks', function ($state, $filter, TasksService) {
         function controller($scope) {
             $scope.sorting = {
                 field: 'created',
@@ -11,7 +11,7 @@ angular.module('mean.icu.ui.tabs')
             $scope.loadNext = $scope.tasks.next;
             $scope.loadPrev = $scope.tasks.prev;
             $scope.tasks = $scope.tasks.data || $scope.tasks;
-
+            TasksService.data = $scope.tasks;
             $scope.taskOrder = function(task) {
                 if (task._id && $scope.sorting) {
                     var parts = $scope.sorting.field.split('.');

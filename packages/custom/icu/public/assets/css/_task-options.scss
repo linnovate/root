@@ -1,0 +1,53 @@
+.detailspane .task-options {
+	.page-content {
+		.options {
+			height: 180px;
+			padding: 0 14px;
+			> div {
+				display: inline-block;
+			    width: 20%;
+			    border: 1px solid #e1e1e1;
+			    text-align: center;
+			    padding: 15px 0;
+			    border-bottom: 5px solid #e1e1e1;
+			    margin: 36px 2%;
+			    font-weight: bold;
+			    cursor: pointer;
+			    max-height: 126px;
+			    vertical-align: middle;
+			    > span {
+			        display: block;
+    				font-size: 3.5em;
+    				font-weight: 300;
+			    }
+			    &:nth-child(1) {
+			    	border-bottom-color: #fa9020;
+			    	> span {
+						color: #fa9020;
+			    	}
+			    }
+			    &:nth-child(2) {
+			    	border-bottom-color: #65b3f1;
+			    	> span {
+						color: #65b3f1;
+			    	}
+			    }
+			    &:nth-child(3) {
+			    	border-bottom-color: #bce483;
+			    	> span {
+						color: #bce483;
+			    	}
+			    }
+			    &:nth-child(4) {
+			    	border-bottom-color: #cd3d35;
+			    	> span {
+						color: #cd3d35;
+			    	}
+			    }
+			}
+		}
+		.tab-content {
+            height: calc(100% - 180px - 35px);
+        }
+	}
+}

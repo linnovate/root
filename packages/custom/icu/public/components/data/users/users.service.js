@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.usersservice', [])
-.service('UsersService', function($http, $q, ApiUri, Upload) {
+.service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state) {
     var EntityPrefix = '/users';
     var me = null;
 
@@ -94,6 +94,13 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
+    function onIdentity(response) {
+        localStorage.setItem('JWT', response.token);
+        $rootScope.$emit('loggedin');
+        $state.go('main.tasks');
+
+    };
+
     return {
         getAll: getAll,
         getMe: getMe,
@@ -104,6 +111,7 @@ angular.module('mean.icu.data.usersservice', [])
         logout: logout,
         register: register,
         update: update,
-        updateAvatar: updateAvatar
+        updateAvatar: updateAvatar,
+        onIdentity: onIdentity
     };
 });

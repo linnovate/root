@@ -8,10 +8,10 @@ var profile = require('../controllers/profile');
 var users = require('../controllers/users');
 var updates = require('../controllers/updates');
 var notification = require('../controllers/notification');
-
 var attachments = require('../controllers/attachments');
 var star = require('../controllers/star');
 var elasticsearch = require('../controllers/elasticsearch');
+var templates = require('../controllers/templates');
 
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
@@ -19,44 +19,81 @@ var entity = require('../middlewares/entity.js');
 var response = require('../middlewares/response.js');
 var pagination = require('../middlewares/pagination.js');
 var error = require('../middlewares/error.js');
+var config = require('meanio').loadConfig(),
+  circleSettings = require(process.cwd() + '/config/circleSettings') || {};
+
+
+var express = require('express')
 
 //update mapping - OHAD
 //var mean = require('meanio');
 //var elasticActions = require('../controllers/elastic-actions.js');
 //END update mapping - OHAD
 
-module.exports = function (Icu, app) {
-    
+//socket
+// var socket = require('../middlewares/socket.js');
+
+module.exports = function(Icu, app) {
+  var circles = require('circles-npm')(app, config.circles.uri, circleSettings);
+
+
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
   app.route(/^((?!\/hi\/).)*$/).all(authorization);
+
+  //app.route(/^((?!\/hi\/).)*$/).all(authorization, socket);
   
+  //app.route(/^((?!\/socket.io\/).)*$/).all(locals);
+  //app.route(/^((\/socket.io\/).)*$/).all(authorization);
+
   // When need to update mapping, use this authorization, and not the abouve one
   // app.route(/^((\/index-data\/).)*$/).all(authorization);
 
-
-//update mapping - OHAD
-  app.post('/api/index-data/:schema', function (req, res) {
+  //update mapping - OHAD
+  app.post('/api/index-data/:schema', function(req, res) {
     elasticActions.indexData(req, res, mean.elasticsearch);
-    });
-//END update mapping - OHAD
+  });
+  //END update mapping - OHAD
 
+  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates)*').all(circles.acl(), function(req, res, next) {
+  	console.log('*****************8')
+  	console.log(JSON.stringify(req.acl))
+  	next()
+  });
 
+  app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
+
+  //update socket - OHAD
+  // app.route('/api/socket.io/')
+  // .post(socket)
+  // .get(socket);
+  //END update socket - OHAD
+
+  //Notification READ - OHAD
+  app.route('/api/notification/:id([0-9a-fA-F]{24})')
+    .get(notification.read)
+    .put(notification.updateIsWatched);
+  app.route('/api/notification1/:id([0-9a-fA-F]{24})')
+    .put(notification.updateDropDown);
+  //END Notification READ - OHAD
 
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/star')
     .patch(star.toggleStar);
   app.route('/api/:entity(tasks|discussions|projects)/starred')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
+  app.route('/api/:entity(tasks|discussions|projects)/starred/:type(byAssign)')
+    .get(pagination.parseParams, star.getStarred, pagination.formResponse);
 
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
-    //.all(auth.requiresLogin, permission.echo)
-    .post(project.create, notification.createRoom, updates.created)
+  //.all(auth.requiresLogin, permission.echo)
+  .post(project.create, notification.createRoom, updates.created)
     .get(pagination.parseParams, project.all, star.isStarred, pagination.formResponse);
   app.route('/api/projects/:id([0-9a-fA-F]{24})')
     .get(project.read, star.isStarred)
-    .put(project.read, project.update, star.isStarred)
+  //.put(project.read, project.update, star.isStarred)
+  .put(project.read, project.update, attachments.sign, notification.updateRoom, star.isStarred)
     .delete(star.unstarEntity, project.read, project.destroy);
   app.route('/api/history/projects/:id([0-9a-fA-F]{24})')
     .get(project.readHistory);
@@ -67,7 +104,7 @@ module.exports = function (Icu, app) {
 
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
-    .post(task.create, notification.sendNotification, updates.created)
+    .post(task.create, task.updateParent, notification.sendNotification, updates.created)
     .get(pagination.parseParams, task.all, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
@@ -75,8 +112,15 @@ module.exports = function (Icu, app) {
     .get(task.getZombieTasks, star.isStarred);
   app.route('/api/tasks/:id([0-9a-fA-F]{24})')
     .get(task.read, star.isStarred)
-    .put(task.read, task.update, star.isStarred, updates.updated)
-    .delete(star.unstarEntity, task.read, task.destroy);
+    .put(task.read, task.update, star.isStarred, attachments.sign, updates.updated)
+    .delete(star.unstarEntity, task.read, task.removeSubTask, task.destroy);
+  app.route('/api/tasks/byAssign')
+    .get(task.byAssign);
+
+  // app.route('/api/tasks/subtasks')
+  // 	.post(task.addSubTasks)
+  app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
+  	.get(task.getSubTasks)
 
   app.route('/api/:entity(discussions|projects|users)/:id([0-9a-fA-F]{24})/tasks')
     .get(pagination.parseParams, task.getByEntity, pagination.formResponse);
@@ -112,7 +156,7 @@ module.exports = function (Icu, app) {
 
   app.route('/api/attachments*').all(entity('attachments'));
   app.route('/api/attachments')
-    .post(attachments.upload, attachments.create)
+    .post(attachments.upload, attachments.signNew, attachments.create)
     .get(attachments.all);
   app.route('/api/attachments/:id([0-9a-fA-F]{24})')
     .get(attachments.read)
@@ -121,6 +165,8 @@ module.exports = function (Icu, app) {
     .get(attachments.readHistory);
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/attachments')
     .get(attachments.getByEntity);
+  app.route('/api/tasks/myTasks/attachments')
+    .get(attachments.getMyTasks)
 
   app.route('/api/search')
     .get(elasticsearch.search);
@@ -133,7 +179,7 @@ module.exports = function (Icu, app) {
     .get(discussion.readHistory);
   app.route('/api/discussions/:id([0-9a-fA-F]{24})')
     .get(discussion.read, star.isStarred)
-    .put(discussion.read, discussion.update, star.isStarred, updates.updated)
+    .put(discussion.read, discussion.update, star.isStarred, attachments.sign, updates.updated)
     .delete(star.unstarEntity, discussion.read, discussion.destroy);
   app.route('/api/discussions/:id([0-9a-fA-F]{24})/schedule')
     .post(discussion.read, discussion.schedule, discussion.update, updates.updated);
@@ -146,17 +192,28 @@ module.exports = function (Icu, app) {
 
   app.route('/api/updates*').all(entity('updates'));
   app.route('/api/updates')
-    .post(updates.create, notification.sendUpdate)
-    // .post(updates.create, notification.sendUpdate)
-    .get(updates.all, updates.getAttachmentsForUpdate);
+    .post(updates.signNew, updates.create, notification.sendUpdate)
+  // .post(updates.create, notification.sendUpdate)
+  .get(updates.all, updates.getAttachmentsForUpdate);
   app.route('/api/updates/:id([0-9a-fA-F]{24})')
     .get(updates.read, updates.getAttachmentsForUpdate)
     .put(updates.update);
+  app.route('/api/tasks/myTasks/updates')
+    .get(updates.getMyTasks)
   //     // .delete(updates.destroy);
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/updates')
     .get(updates.getByEntity, updates.getAttachmentsForUpdate);
   app.route('/api/history/updates/:id([0-9a-fA-F]{24})')
     .get(updates.readHistory);
+
+  app.route('/api/tasks/:id([0-9a-fA-F]{24})/toTemplate')
+    .post(templates.toTemplate);
+  app.route('/api/templates/:id([0-9a-fA-F]{24})')
+    .delete(templates.read, templates.removeSubTask, templates.destroy);
+  app.route('/api/templates/:id([0-9a-fA-F]{24})/toSubTasks')
+    .post(templates.toSubTasks);
+  app.route('/api/templates')
+    .get(pagination.parseParams, templates.all, pagination.formResponse);
 
   //temporary -because of swagger bug with 'tasks' word
 
@@ -168,6 +225,13 @@ module.exports = function (Icu, app) {
     .get(task.read)
     .put(task.update)
     .delete(task.destroy);
+
+  app.route('/api/myTasksStatistics')
+    .get(task.myTasksStatistics);
+  app.route('/api/overdueWatchedTasks')
+    .get(task.getOverdueWatchedTasks);
+  app.route('/api/watchedTasks')
+    .get(task.getWatchedTasks);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);

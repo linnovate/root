@@ -34,6 +34,14 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
                     entityName = 'all';
                 }
 
+                if (!entityName && parts[2] === 'byassign') {
+                    entityName = 'my';
+                }
+
+                if (!entityName && parts[2] === 'byparent') {
+                    entityName = 'task';
+                }
+
                 return {
                     main: main,
                     entityName: entityName,

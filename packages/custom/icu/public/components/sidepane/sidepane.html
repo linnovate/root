@@ -3,10 +3,9 @@
 </header>
 <nav>
     <ul>
-        <li data-ng-repeat="item in items">
+        <li data-ng-repeat="item in items" data-ng-class="{ 'active': isCurrentState(item) && item.open }" ng-click="removeFilterValue()">
             <div class="menu-item"
-                data-ui-sref="{{'main.' + item.state}}"
-                data-ng-class="{ 'active': isCurrentState(item) }"
+                data-ui-sref="{{'main.' + item.state}}"          
                 ng-click="toggleVisibility(item)">
                 <div class="icon">
                     <img ng-src="{{item.icon}}"/>
@@ -16,7 +15,7 @@
                 </div>
                 <div class="arrow">
                     <i class="fa"
-                        data-ng-class="{ 'fa-caret-right': !isCurrentState(item) || !item.open, 'fa-caret-down': isCurrentState(item) || item.open}"></i>
+                        data-ng-class="{ 'caret-right': !isCurrentState(item) || !item.open, 'fa-caret-down': isCurrentState(item) || item.open}"></i>
                 </div>
             </div>
             <div class="display-by"
@@ -27,10 +26,10 @@
                  projects="projects"
                  discussions="discussions">
             </div>
-            <div class="help-block"
+            <!-- <div class="help-block"
                 ng-if="isCurrentState(item) && ((item.name === 'projects' && !projects.length) || (item.name === 'discussions' && !discussions.length))">
                 No {{ item.name }} - please create your first
-            </div>
+            </div> -->
         </li>
     </ul>
 </nav>

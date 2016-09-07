@@ -20,15 +20,11 @@ var UpdateArchiveModel = mongoose.model('update_archive');
 
 var UserModel = require('../models/user.js');
 
-var SourceModel = require('../../../circles/server/models/source.js');
-
 var AttachementModel = require('../models/attachment.js');
 var AttachementArchiveModel = mongoose.model('attachment_archive');
 
-var configPath = process.cwd() + '/config/actionSettings';
-
-var actionSettings = require(configPath) || {};
-
+var circleSettings = require(process.cwd() + '/config/circleSettings') || {};
+var circlesAcl = require('circles-npm')(null, null, circleSettings);
 
 var entityNameMap = {
   'tasks': {
@@ -59,17 +55,23 @@ var entityNameMap = {
     mainModel: AttachementModel,
     archiveModel: AttachementArchiveModel,
     name: 'Attachement'
+  },
+  'templates': {
+    mainModel: TaskModel,
+    archiveModel: TaskArchiveModel,
+    name: 'Task'
   }
 
 };
 
 var defaults = {
   defaults: {},
-  includes: ''
+  includes: '',
+  conditions: {}
 };
 
 module.exports = function(entityName, options) {
-  var findByUser = ['tasks', 'projects', 'discussions'];
+  var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates'];
   if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;
 
@@ -85,26 +87,22 @@ module.exports = function(entityName, options) {
   function all(pagination, user, acl) {
     var deffered = q.defer();
 
-    var countQuery = Model.find().count();
+    var countQuery;
     var mergedPromise;
-    
+
     var query;
+
     if (currentUser) {
-      query = acl.query(entityNameMap[entityName].name);
-      query.find({
-        $or: [
-          {watchers:{$in:[user._id]}},
-            {watchers:{$size:0}},
-            {watchers: {
-                $exists: false}}
-        ]
-      });
-    } else
-      query = Model.find();
+      query = acl.mongoQuery(entityNameMap[entityName].name);
+      countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);
+    } else {
+      query = Model.find(options.conditions);
+      countQuery = Model.find(options.conditions).count();
+    }
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
-        query.find({})
+        query.find(options.conditions)
           .sort(pagination.sort)
           .skip(pagination.start)
           .limit(pagination.limit);
@@ -122,8 +120,7 @@ module.exports = function(entityName, options) {
         deffered.resolve(mergedPromise);
       }
     } else {
-
-      query.find({});
+      query.find(options.conditions);
       query.populate(options.includes);
       query.hint({
         _id: 1
@@ -136,41 +133,19 @@ module.exports = function(entityName, options) {
   }
 
   function read(id, user, acl) {
-
-    var conditions = {
-      _id: id
-    };
+    var query;
     if (currentUser) {
-      conditions.$and = [];
-      for (var type in actionSettings.circleTypes) {
-        var obj1 = {},
-          obj2 = {},
-          obj3 = {};
-        obj1['circles.' + type] = {
-          $in: acl.user.allowed[type]
-        };
-        obj2['circles.' + type] = {
-          $size: 0
-        };
-        obj3['circles.' + type] = {
-          $exists: false
-        };
-        conditions.$and.push({
-          '$or': [obj1, obj2, obj3]
-        });
-        conditions.$and.push({
-          $or: [
-            {watchers:{$in:[user._id]}},
-            {watchers:{$size:0}},
-            {watchers: {
-                $exists: false
-              }
-            }
-          ]    
-        });
-      }
+      query = acl.mongoQuery(entityNameMap[entityName].name);
+    } else {
+      query = Model.find();
+
     }
-    var query = Model.find(conditions);
+
+    query.where({
+      _id: id
+    });
+    // query.where(options.conditions);
+
     query.populate(options.includes);
 
     return query.then(function(results) {
@@ -182,75 +157,20 @@ module.exports = function(entityName, options) {
     });
   }
 
-  function checkPermissions(entity, acl, callback) {
-    var circleTypes = actionSettings.circleTypes;
-
-    if (!entity.circles) return callback(null);
-    for (var type in circleTypes) {
-      if (entity.circles[type] && !(entity.circles[type] instanceof Array)) return callback('invalid circles permissions');
-      if (entity.circles[type] && entity.circles[type].length) {
-        console.log(circleTypes[type].max)
-        console.log(entity.circles[type])
-        if (circleTypes[type].max && (entity.circles[type].length > circleTypes[type].max)) return callback('invalid circles permissions');
-        if (circleTypes[type].requiredAllowed) {
-          for (var i = 0; i < entity.circles[type].length; i++) {
-            if (acl.user.allowed[type].indexOf(entity.circles[type][i]) < 0) {
-              return callback('permissions denied');
-            }
-          }
-        }
-        if (circleTypes[type].requires) {
-          for (var i = 0; i < circleTypes[type].requires.length; i++) {
-            if (!entity.circles[circleTypes[type].requires[i]] || !entity.circles[circleTypes[type].requires[i]].length)
-              return callback('missing requires permissions ' + circleTypes[type].requires[i]);
-          }
-        }
-      }
-    }
-
-    return callback(null);
-  };
-
-  function checkSource(entity, acl, callback) {
-    if (!entity.circles || !entity.sources || !entity.sources.length) return callback(null);
-    SourceModel.find({
-      _id: {
-        $in: entity.sources
-      }
-    }).exec(function(err, sources) {
-      var sourcesCircles = {};
-      if (err || sources.length !== entity.sources.length) return callback('invalid sources permissions');
-      for (var i = 0; i < sources.length; i++) {
-        if (acl.user.allowed[sources[i].circleType].indexOf(sources[i].circleName) < 0) return callback('permissions denied');
-        if (!sourcesCircles[sources[i].circleType]) sourcesCircles[sources[i].circleType] = [];
-        sourcesCircles[sources[i].circleType].push(sources[i].circleName);
-      }
-      return callback(null, sourcesCircles);
-    });
-  };
-
   function create(entity, user, acl) {
     var deffered = q.defer();
-
-    checkSource(entity, acl, function(error, sourcesCircles) {
+    if (!entity.circles) entity.circles = {};
+    circlesAcl.sign('mongoose', entity.sources, entity.circles, acl, function(error, circles) {
       if (error) deffered.reject(error);
       else {
+        entity.circles = circles;
+        if (entity.watchers instanceof Array && !entity.watchers.length) entity.watchers = [user.user._id];
         entity.created = new Date();
         entity.updated = new Date();
         entity.creator = user.user._id;
-        if (sourcesCircles) {
-          for (var type in sourcesCircles) {
-            entity.circles[type] = sourcesCircles[type];
-          }
-        }
-        checkPermissions(entity, acl, function(error) {
-          if (error) deffered.reject(error);
-          else {
-            deffered.resolve(new Model(entity).save(user).then(function(e) {
-              return Model.populate(e, options.includes);
-            }));
-          }
-        });
+        deffered.resolve(new Model(entity).save(user).then(function(e) {
+          return Model.populate(e, options.includes);
+        }));
       }
     });
 
@@ -261,27 +181,19 @@ module.exports = function(entityName, options) {
     var entityWithDefaults = _.defaults(newE, options.defaults);
 
     oldE = _.extend(oldE, entityWithDefaults);
-
+    if (!oldE.circles) oldE.circles = {};
     var deffered = q.defer();
 
-    checkSource(oldE, acl, function(error, sourcesCircles) {
+    circlesAcl.sign('mongoose', oldE.sources, oldE.circles, acl, function(error, circles) {
       if (error) deffered.reject(error);
       else {
         oldE.updated = new Date();
         oldE.updater = user.user._id;
-        if (sourcesCircles) {
-          for (var type in sourcesCircles) {
-            oldE.circles[type] = sourcesCircles[type];
-          }
-        }
-        checkPermissions(oldE, acl, function(error) {
-          if (error) deffered.reject(error);
-          else {
-            deffered.resolve(oldE.save(user).then(function(e) {
-              return Model.populate(e, options.includes);
-            }));
-          }
-        });
+        oldE.circles = _.extend(oldE.circles, circles);
+        oldE.markModified('circles');
+        deffered.resolve(oldE.save(user).then(function(e) {
+          return Model.populate(e, options.includes);
+        }));
       }
     });
 

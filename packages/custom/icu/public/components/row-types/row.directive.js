@@ -19,24 +19,31 @@ angular.module('mean.icu.ui.rows', [])
         'search-project': '/icu/components/row-types/search-project-row.html',
         'search-discussion': '/icu/components/row-types/search-discussion-row.html',
         'search-attachment': '/icu/components/row-types/search-attachment-row.html',
-        'search-update': '/icu/components/row-types/search-update-row.html'
-
+        'search-vg-files': '/icu/components/row-types/search-attachment-row.html',
+        'search-update': '/icu/components/row-types/search-update-row.html',
+        'subtasks': '/icu/components/row-types/sub-tasks-row.html',
     };
 
     function compileTemplate($scope, $element, template) {
         $element.html(template);
-
         var scope = $scope.$new(true);
         scope.data = $scope.data;
         $compile($element.contents())(scope);
     }
 
+    //This way has caused problems with $index
     function link($scope, $element) {
-        var templateUrl = templates[$scope.type];
-        $templateRequest(templateUrl).then(function(result) {
-            compileTemplate($scope, $element, result);
-        });
+        if ($scope.type.indexOf('search') > -1) {
+	        var templateUrl = templates[$scope.type];
+	        $templateRequest(templateUrl).then(function(result) {
+	            compileTemplate($scope, $element, result);
+	        });
+		}
+        if ($scope.data[$scope.type] && $scope.data[$scope.type].due) {
+            $scope.data[$scope.type].due = new Date($scope.data[$scope.type].due)
+        }
     }
+
 
     return {
         restrict: 'A',
@@ -46,6 +53,12 @@ angular.module('mean.icu.ui.rows', [])
         },
         link: link,
         transclude: true,
-        template: ''
+        templateUrl: function (tElement, tAttrs) {
+            if (tAttrs.type.indexOf('search') === -1) {
+	            return templates[tAttrs.type];
+	        } else {
+	        	return '/icu/components/row-types/empty-row.html';
+	        }
+        }
     };
 });

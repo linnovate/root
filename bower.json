@@ -2,7 +2,7 @@
   "name": "mean",
   "dependencies": {
     "jquery": "latest",
-    "angular": "1.4.8",
+    "angular": "latest",
     "angular-resource": "latest",
     "angular-cookies": "latest",
     "angular-mocks": "latest",
@@ -11,8 +11,5 @@
     "angular-bootstrap": "latest",
     "angular-ui-router": "latest",
     "web-bootstrap": "./node_modules/meanio/resources/web-bootstrap.js"
-  },
-  "resolutions": {
-    "angular": "1.4.8"
   }
 }

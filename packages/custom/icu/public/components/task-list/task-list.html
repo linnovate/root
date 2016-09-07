@@ -1,31 +1,66 @@
 <div class="task-list">
-    <div class="header-wrap"
-         ng-if="currentContext.entityName !== 'all'"
-         ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
-         ui-sref="main.{{currentContext.main}}.byentity.activities({
+    <div ng-switch="currentContext.entityName">
+        <div class="header-wrap" ng-switch-when="my" 
+            ng-class="{ 'active': isCurrentState('main.{{currentContext.main}}.byassign.activities') }"
+            ui-sref="main.{{currentContext.main}}.byassign.activities">
+            <header class="title">
+                {{ 'myTasks' | i18next }}
+            </header>
+        </div>
+        <div class="header-wrap" ng-switch-when="all" 
+            ng-class="{ 'active': isCurrentState('main.{{currentContext.main}}.all') }"
+            ui-sref="main.{{currentContext.main}}.all">
+            <header class="title">
+                {{ 'allTasks' | i18next }}
+            </header>
+        </div>
+        <div class="header-wrap subtasks" ng-switch-when="task"
+            ng-class="{ 'active': isCurrentState('main.{{currentContext.main}}.byparent.activities') }"
+            ui-sref="main.{{currentContext.main}}.byparent.activities({
                     entity: currentContext.entityName,
                     entityId: currentContext.entityId
                     })">
-        <header class="title">
-            {{ 'tasksFrom'+currentContext.entityName | i18next }}
-            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
-        </header>
+            <header class="title">
+                <div>
+                    <span class="project"
+                      title="{{currentContext.entity.project.title}}"
+                      ng-style="{'background-color': '#' + currentContext.entity.project.color, 'color': 'white'}">
+                    {{currentContext.entity.project.title}}
+                    </span>
+                </div>
+                {{ 'tasksFrom' | i18next }}
+                <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</spa
+            </header>
+        </div>
+        <div class="header-wrap" ng-switch-default
+            ng-class="{ 'active': isCurrentState('main.{{currentContext.main}}.byentity.activities') }"
+            ui-sref="main.{{currentContext.main}}.byentity.activities({
+                    entity: currentContext.entityName,
+                    entityId: currentContext.entityId
+                    })">
+            <header class="title">
+                {{ 'tasksFrom' | i18next }}{{ currentContext.entityName | i18next }}
+                <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+            </header>
+        </div>
     </div>
 
     <div class="filters">
         <div class="left-wrapper">
             <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
-                <i class="fa fa-star"></i>
+                <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
             </button>
             <div class="select-wrapper">
-                <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
-                    <ui-select-match>
-                        <button class="tasks">{{$select.selected.title | i18next }}</button>
-                    </ui-select-match>
-                    <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
-                        {{field.title | i18next}}
-                    </ui-select-choices>
-                </ui-select>
+                <div tooltips tooltip-template="{{'sort by' | i18next}}">
+                    <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
+                        <ui-select-match>
+                            <button class="tasks">{{$select.selected.title | i18next }}</button>
+                        </ui-select-match>
+                        <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
+                            {{field.title | i18next}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
         </div>
 

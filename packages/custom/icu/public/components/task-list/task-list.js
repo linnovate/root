@@ -2,11 +2,8 @@
 
 angular.module('mean.icu.ui.tasklist', [])
 .controller('TaskListController', function ($scope, $state, tasks, TasksService, context, $filter, $stateParams) {
-    console.log("tasks==================");
-    console.log(tasks);
-    console.log("tasks.next==================");
-    console.log(tasks.next);
     $scope.tasks = tasks.data || tasks;
+    TasksService.data = $scope.tasks;
     $scope.loadNext = tasks.next;
     $scope.loadPrev = tasks.prev;
 
@@ -14,8 +11,7 @@ angular.module('mean.icu.ui.tasklist', [])
     $scope.starred = $stateParams.starred;
 
     $scope.isCurrentState = function(id) {
-        return $state.current.name.indexOf('main.tasks.byentity') === 0 &&
-            $state.current.name.indexOf('details') === -1;
+        return $state.current.name === id;
     };
 
     $scope.changeOrder = function () {
@@ -42,7 +38,7 @@ angular.module('mean.icu.ui.tasklist', [])
             value: 'due'
         }, {
             title: 'project',
-            value: 'project'
+            value: 'project.title'
         }, {
             title: 'title',
             value: 'title'
@@ -76,7 +72,8 @@ angular.module('mean.icu.ui.tasklist', [])
         }
     } else if (
             $state.current.name !== 'main.tasks.byentity.activities' &&
-            $state.current.name !== 'main.tasks.byentity.tasks') {
+            //$state.current.name !== 'main.tasks.byentity.tasks') {
+            $state.current.name !== 'main.tasks.byentity.details.activities') {
         $state.go('.activities');
     }
 });
