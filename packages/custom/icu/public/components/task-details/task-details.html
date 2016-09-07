@@ -168,7 +168,7 @@
                         </div>
                     </li>
                     <li class="avatar">
-                        <span>visible to:</span>
+                        <span>{{'visibleTo' | i18next }}</span>
                         <div icu-avatar user="me"></div> 
                         <span class="name">Me</span>
                         <!-- {{me.name}} -->
@@ -186,7 +186,7 @@
                         </ui-select> -->
                     </li>
                     <li class='save'>
-                        <div ng-click='saveTemplate()' class='save-template' ng-class="{'empty': !task.subTasks[0]._id }">save</div>
+                        <div ng-click='saveTemplate()' class='save-template' ng-class="{'empty': !task.subTasks[0]._id }">{{'save' | i18next }}</div>
                     </li>
                 </ul>
                 

@@ -6,7 +6,7 @@
                 ng-click="initialize($event, task)"
              icu-list-row
              data-id="{{task._id}}",
-             ng-class="{'isNew': task.isNew == true}",
+             ng-class="{'isNew': task.isNew == true,'notNew':task.isNew == false}",
              ng-mouseover="task.showDelete = true",
              ng-mouseleave="deleteShowDlt(task)",
              data="{ task: task,

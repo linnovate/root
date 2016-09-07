@@ -12,15 +12,15 @@
         }
         }.open{
             div.dropdown-trigger{
-             border-color: #fda102 ;
-             background-color: #fda102;
-             i{
-                 color: #fff; 
-             }  
-         }
-     }
-     .sub-task-dir {
-        max-height: 164px;
+               border-color: #fda102 ;
+               background-color: #fda102;
+               i{
+                   color: #fff; 
+               }  
+           }
+       }
+       .sub-task-dir {
+        max-height: 166px;
         overflow: auto;
     }
     .wrap-title {
@@ -65,10 +65,10 @@
                     line-height: 2.5;
                     margin: 5px 5px;
                     &.last{
-                     border-bottom: none; 
-                 }
-             }
-             &.templates {
+                       border-bottom: none; 
+                   }
+               }
+               &.templates {
                 .delete{
                     display: none;
                     background-image: url(/icu/assets/img/X.png);
@@ -186,10 +186,10 @@
                     }
                 }
                 .id {
-                 width: 8%;
-                 border-right: none;
-             }
-             .name {
+                   width: 8%;
+                   border-right: none;
+               }
+               .name {
                 width:30%; 
                 border-left: none;   
             }
@@ -307,22 +307,25 @@
 }
 .arrow {
     width: 22%;
-        padding-left: 10px;
+    padding-left: 10px;
 
 }
 .delete {
-   width: 25px;
-   height: 55px;
-   position: absolute;
-   right: 3%;
-   border: none;
-   img {
+ width: 25px;
+ height: 55px;
+ position: absolute;
+ right: 3%;
+ border: none;
+ img {
     margin: 70% 45%;
 }
 }
 .isNew {
-        background-color: #E1F2F8;
+    background-color: #E1F2F8;
     transition: 0.8s;
+}
+.notNew {
+  transition: 0.8s;
 }
 
 

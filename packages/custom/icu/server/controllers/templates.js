@@ -89,7 +89,7 @@ exports.toTemplate = function(req, res, next) {
       templates: 0,
       tasks: 0
     };
-  var query = req.acl.query('Task');
+  var query = req.acl.mongoQuery('Task');
   query.findOne({
     _id: req.params.id,
     tType: {
@@ -120,7 +120,7 @@ exports.toSubTasks = function(req, res, next) {
       templates: 0,
       tasks: 0
     };
-  var query = req.acl.query('Task');
+  var query = req.acl.mongoQuery('Task');
   query.findOne({
     _id: req.params.id,
     tType: 'template'
@@ -129,7 +129,7 @@ exports.toSubTasks = function(req, res, next) {
       req.locals.error = err;
       next();
     } else {
-      var query = req.acl.query('Task');
+      var query = req.acl.mongoQuery('Task');
       query.findOne({
         _id: req.body.taskId,
         tType: {
@@ -159,7 +159,7 @@ exports.toSubTasks = function(req, res, next) {
 
 var deleteSubTask = function(req, subTasks) {
   for (var i = 0; i < subTasks.length; i++) {
-    var query = req.acl.query('Task');
+    var query = req.acl.mongoQuery('Task');
     query.findOne({
       _id: subTasks[i],
       tType: 'template'

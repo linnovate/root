@@ -137,6 +137,7 @@
     "usernameCannotBeMoreThan20Characters": "Username cannot be more than 20 characters",
     "versions": "Versions",
     "view": "View",
+    "visibleTo":"visible to:",
     "watchedTasks": "WATCHED TASKS",
     "YES": "YES",
     "youMustEnterAName": "You must enter a name",
