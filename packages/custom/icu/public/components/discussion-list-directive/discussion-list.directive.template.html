@@ -2,7 +2,7 @@
     <div ng-show="isLoading" class="loader"></div>
     <table class="discussions" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody>
-            <tr data-ng-repeat="discussion in discussions | orderBy:order.field:order.isReverse"
+            <tr data-ng-repeat="discussion in discussions"
                 data-ng-class="{ 'active': isCurrentState(discussion._id) }"
                 ng-click="initialize($event, discussion)"
                 icu-list-row
@@ -13,8 +13,6 @@
                     drawArrow: drawArrow,
                     onEnterCb: onEnter,
                     updateCb: createOrUpdate,
-                    hideAutoCompleteCb: hideAutoComplete,
-                    focusAutoCompleteCb: focusAutoComplete,
                     delete: delete }"
                 type="discussion">
             </tr>

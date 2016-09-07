@@ -53,13 +53,20 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  groups: {
+    type: Array
+  },
+  comp: {
+    type: Array
+  },
   room: {
     type: String
   },
-  sources: [String],
-  circles: {
-    type: Schema.Types.Mixed
-  }
+  sources: [{
+      type: Schema.ObjectId,
+      ref: 'Source'
+  }],
+  circles: {}
 });
 
 var starVirtual = ProjectSchema.virtual('star');
@@ -69,24 +76,20 @@ starVirtual.get(function() {
 starVirtual.set(function(value) {
   this._star = value;
 });
-ProjectSchema.set('toJSON', {
-  virtuals: true
-});
-ProjectSchema.set('toObject', {
-  virtuals: true
-});
+ProjectSchema.set('toJSON', { virtuals: true });
+ProjectSchema.set('toObject', { virtuals: true });
 
 /**
  * Validations
  */
-ProjectSchema.path('color').validate(function(color) {
+ProjectSchema.path('color').validate(function (color) {
   return /^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/i.test(color);
 }, 'Invalid HEX color.');
 
 /**
  * Statics
  */
-ProjectSchema.statics.load = function(id, cb) {
+ProjectSchema.statics.load = function (id, cb) {
   this.findOne({
     _id: id
   }).populate('creator', 'name username').exec(cb);
@@ -97,12 +100,12 @@ ProjectSchema.statics.load = function(id, cb) {
  */
 var elasticsearch = require('../controllers/elasticsearch');
 
-ProjectSchema.post('save', function(req, next) {
+ProjectSchema.post('save', function (req, next) {
   elasticsearch.save(this, 'project', this.room);
   next();
 });
 
-ProjectSchema.pre('remove', function(next) {
+ProjectSchema.pre('remove', function (next) {
   elasticsearch.delete(this, 'project', this.room, next);
   next();
 });

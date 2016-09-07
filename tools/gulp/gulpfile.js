@@ -42,12 +42,12 @@ function tokenizeConfig(config) {
   };
 }
 
-// gulp.task('csslint', function () {
-//   return gulp.src(paths.css)
-//     .pipe(plugins.csslint('.csslintrc'))
-//     .pipe(plugins.csslint.reporter())
-//     .pipe(count('csslint', 'files lint free'));
-// });
+gulp.task('csslint', function () {
+  return gulp.src(paths.css)
+    .pipe(plugins.csslint('.csslintrc'))
+    .pipe(plugins.csslint.reporter())
+    .pipe(count('csslint', 'files lint free'));
+});
 
 gulp.task('cssmin', function () {
   var config = tokenizeConfig(assets.core.css);
@@ -121,7 +121,7 @@ gulp.task('mochaTest', ['loadTestSchema'], function () {
 gulp.task('watch', function () {
   gulp.watch(paths.js, ['jshint']).on('change', plugins.livereload.changed);
   gulp.watch(paths.html).on('change', plugins.livereload.changed);
-  // gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
   gulp.watch(paths.less, ['less']).on('change', plugins.livereload.changed);
 
   plugins.livereload.listen({interval: 500});
@@ -144,7 +144,7 @@ gulp.task('develop', ['env:develop'], function () {
 
 gulp.task('test', ['env:test', 'karma:unit', 'mochaTest']);
 
-var defaultTasks = ['clean', 'jshint', 'less', 'develop', 'watch'];
+var defaultTasks = ['clean', 'jshint', 'less', 'csslint', 'develop', 'watch'];
 
 if (process.env.NODE_ENV === 'production') {
   defaultTasks = ['clean', 'cssmin', 'uglify'];

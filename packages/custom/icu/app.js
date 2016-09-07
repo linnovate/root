@@ -14,6 +14,7 @@ var ICU = new Module('icu');
  */
 ICU.register(function (app, auth, database,swagger) {
 
+
      swagger.add(__dirname);
     //We enable routing. By default the Package Object is passed to the routes
     ICU.routes(app, auth, database);
@@ -50,8 +51,6 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('js', '../lib/i18next/i18next.min.js', {weight: 1});
     ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', {weight: 2});
 
-    ICU.aggregateAsset('js', '../lib/angular-tooltips/dist/angular-tooltips.min.js');
-    
     ICU.angularDependencies([
         'jm.i18next',
         'mean.medium-editor',
@@ -61,12 +60,9 @@ ICU.register(function (app, auth, database,swagger) {
         'color.picker',
         'mean.system',
         'mean.users',
-        'mean.icu.ui.all',
         'mean.icu.ui.autofocus',
-        'mean.icu.ui.ctrlenter',
         'mean.icu.ui.login',
         'mean.icu.ui.register',
-        'mean.icu.ui.auth',
         'mean.icu.ui.profile',
         'mean.icu.ui.displayby',
         'mean.icu.ui.sidepane',
@@ -76,7 +72,6 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.userdetails',
         'mean.icu.ui.tasklist',
         'mean.icu.ui.tasklistdirective',
-        'mean.icu.ui.tasklistFilter',
         'mean.icu.ui.taskdetails',
         'mean.icu.ui.projectlist',
         'mean.icu.ui.projectlistdirective',
@@ -96,7 +91,6 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.searchlist',
         'mean.icu.data.activitiesservice',
         'mean.icu.data.documentsservice',
-        'mean.icu.data.filesservice',
         'mean.icu.data.usersservice',
         'mean.icu.data.notificationsservice',
         'mean.icu.data.projectsservice',
@@ -111,10 +105,6 @@ ICU.register(function (app, auth, database,swagger) {
         'infinite-scroll',
         'mean.icu.ui.modaldeletetasksbyentity',
         'mean.icu.ui.modalcompartmentalization',
-        'mean.icu.ui.taskoptions',
-        'mean.icu.ui.subtasks',
-        'mean.icu.ui.subtaskslistdirective',
-        '720kb.tooltips',
     ]);
 
 
@@ -136,6 +126,11 @@ console.yon = function(data, inspect) {
     console.log(data);
 
 }
+    ICU.settings({
+        'language': 'en-US'
+    }, function (err, settings) {
+        //you now have the settings object
+    });
 
     /**
      //Uncomment to use. Requires meanio@0.3.7 or above

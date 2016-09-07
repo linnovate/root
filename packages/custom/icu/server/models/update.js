@@ -29,10 +29,6 @@ var UpdateSchema = new Schema({
   },
   type: {
     type: String
-  },
-  userObj: {
-    type: Schema.ObjectId,
-    ref: 'User'
   }
 });
 

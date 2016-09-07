@@ -3,7 +3,7 @@
         <div class="summary">
             <div class="favorite">
                 <button ng-class="{ 'orange': discussion.star }" ng-click="star(discussion)">
-                    <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
+                    <i class="fa fa-star"></i>
                 </button>
             </div>
 
@@ -11,18 +11,16 @@
                 <div class="no-assignee" ng-if="!discussion.assign">
                     <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
                 </div>
-                <div tooltips tooltip-template="{{'assignee' | i18next}}">
-                    <ui-select ng-model="discussion.assign" on-select="update(discussion)">
-                        <ui-select-match>
-                            <div icu-avatar user="$select.selected"></div>
-                            <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
-                            <div icu-avatar user="user"></div>
-                            <span class="summary-content">{{user.name}}</span>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
+                <ui-select ng-model="discussion.assign" on-select="update(discussion)">
+                    <ui-select-match>
+                        <div icu-avatar user="$select.selected"></div>
+                        <span class="summary-content">{{$select.selected.name}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
+                        <div icu-avatar user="user"></div>
+                        <span class="summary-content">{{user.name}}</span>
+                    </ui-select-choices>
+                </ui-select>
             </div>
 
             <div class="due">
@@ -31,18 +29,14 @@
             </div>
 
             <div class="status">
-                <div tooltips tooltip-template="{{'status' | i18next}}">
-                    <ui-select ng-model="discussion.status" on-select="update(discussion)">
-                        <ui-select-match>
-                            <i class='{{$select.selected}}'></i>
-                            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
-                            <i class='{{status}}'></i>
-                            <span class='{{status}}'>{{status | i18next}}</span>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
+                <ui-select ng-model="discussion.status" on-select="update(discussion)">
+                    <ui-select-match>
+                        <span>{{$select.selected | i18next }}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="status as status in statuses | filter: $select.search">
+                        <span>{{status | i18next}}</span>
+                    </ui-select-choices>
+                </ui-select>
             </div>
 
             <div class="dropdown dropdown-container" uib-dropdown>
@@ -62,7 +56,7 @@
 
             <div class="actions"
                  ng-if="statusesActionsMap[discussion.status]">
-                <button ng-disabled="['cancelled', 'new'].indexOf(discussion.status) !== -1 && (
+                <button ng-disabled="['Cancelled', 'New'].indexOf(discussion.status) !== -1 && (
                                         !discussion.due ||
                                         !discussion.assign)"
                         ng-click="statusesActionsMap[discussion.status].method(discussion)">
@@ -71,7 +65,7 @@
             </div>
         </div>
 
-        <button icu-comp-modal entity="discussion" entity-name="discussion" type="button" class="compBtn"></button>
+        <button icu-comp-modal entity="discussion" entity-name="discussion" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
         <div class="description">
             <div class="title"
                  contenteditable="true"

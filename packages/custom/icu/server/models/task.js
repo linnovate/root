@@ -20,6 +20,10 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Project'
   },
+  parent: {
+    type: Schema.ObjectId,
+    ref: 'Task'
+  },
   creator: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -42,6 +46,12 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  groups: {
+    type: Array
+  },
+  comp: {
+    type: Array
+  },
   assign: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -53,21 +63,11 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Discussion'
   }],
-  sources: [String],
-  circles: {
-    type: Schema.Types.Mixed
-  },
-  subTasks: [{
+  sources: [{
     type: Schema.ObjectId,
-    ref: 'Task'
+    ref: 'Source'
   }],
-  parent: {
-  	type: Schema.ObjectId,
-    ref: 'Task'
-  },
-  tType: {
-    type: String
-  }
+  circles: {}
 });
 
 var starVirtual = TaskSchema.virtual('star');
@@ -112,6 +112,8 @@ TaskSchema.post('save', function(req, next) {
       return err;
     }
 
+    console.log("task================================");
+    console.log(task);
 
     elasticsearch.save(task, 'task', project.room);
   });
@@ -165,8 +167,5 @@ TaskSchema.pre('remove', function(next) {
 });
 
 TaskSchema.plugin(archive, 'task');
-
-var deepPopulate = require('mongoose-deep-populate')(mongoose);
-TaskSchema.plugin(deepPopulate, {});
 
 module.exports = mongoose.model('Task', TaskSchema);

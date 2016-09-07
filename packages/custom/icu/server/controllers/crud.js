@@ -45,6 +45,7 @@ module.exports = function(entityName, options) {
     if (req.locals.error) {
       return next();
     }
+
     entityService
       .read(req.params.id, req.user, req.acl)
       .then(success(req, next), error(req, next));
@@ -78,10 +79,6 @@ module.exports = function(entityName, options) {
       req.locals.result.room = req.body.room;
     }
     // END Made By OHAD
-
-    if (req.locals.result.assign !== req.body.assign) {
-      req.locals.data.shouldCreateUpdate = false;
-    }
 
     var entity = req.locals.data.body || req.body;
     

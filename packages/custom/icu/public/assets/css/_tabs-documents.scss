@@ -6,7 +6,7 @@
         .document, .document-shifted {
             border-bottom: 1px solid $light-grey1;
             height: 65px;
-            overflow: visible;
+            overflow: auto;
             padding: 12px 10px 0 0;
             position: relative;
 
@@ -62,25 +62,18 @@
   #DocumentLine:hover >  #DocumentTextLine{
     color: white; }
   #DocumentLine:hover  #AllDocumentIcons{
-    display: inline-block; }
+    display: inline; }
   #AllDocumentIcons{
     display: none;
-    position: relative;
-    right: 0;
-    vertical-align: middle;
   }
   .DocumentIconsLine{
     border: 1px solid #7F9098;
-    border-radius: 4px;
+    border-radius: 2px 2px 2px 2px;
     width: 30px;
     height: 30px;
     background-color:#313C40;
     padding: 0px 0px 0px 0px;
     text-align: inherit;
-    
-        &:hover{
-            background-color:white;
-        }
     }
   #Document-icon-revert{
     position: absolute;
@@ -111,7 +104,7 @@
   }
   .DocumentIconsLine-Document-icon-view{
     border: 1px solid #7F9098;
-    border-radius: 4px;
+    border-radius: 2px 2px 2px 2px;
     width: 30px;
     height: 30px;
     background-color:#313C40;
@@ -120,25 +113,17 @@
     position: absolute;
     left: 290px;
     bottom: 20px;
-    
-        &:hover{
-            background-color:white;
-        }
    }
   .DocumentIconsLine-Update-icon-view{
     border: 1px solid #7F9098;
-    border-radius: 4px;
+    border-radius: 2px 2px 2px 2px;
     width: 30px;
     height: 30px;
     background-color:#313C40;
     padding: 0px 0px 0px 0px;
     text-align: inherit;
     position: absolute;
-    left: 38px;
-    
-        &:hover{
-            background-color:white;
-        }
+    left: 50px;
    }
   
   #UpdatetLine:hover >  #DocumentTextLine{
@@ -165,10 +150,9 @@
   #AllUpdateIcons{
     display: none;
     position: absolute;
-    height: 85px;
-    width: 71px;
-    left: 55%;
-    top: 5px;
+    height: 100px;
+    width: 100px;
+    left: 70%;
     transform: translate(-50%, 0);
   }
   #Update-icon-revert{
@@ -184,7 +168,7 @@
     }
   #Update-icon-download{
     position: absolute;
-    left: 38px;
+    left: 50px;
     bottom: 20px;
     }
   .Icons-In-DocumentLine{

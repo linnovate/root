@@ -47,50 +47,10 @@ if ((cluster.isMaster) &&
     {
         workerId = cluster.worker.id;
     }
-    
-    //OHAD 
-    var configlate;
-    var portlate;  
-    //END OHAD
 // Creates and serves mean application
     mean.serve({ workerid: workerId /* more options placeholder*/ }, function (app) {
       var config = app.config.clean;
         var port = config.https && config.https.port ? config.https.port : config.http.port;
         console.log('Mean app started on port ' + port + ' (' + process.env.NODE_ENV + ') cluster.worker.id:', workerId);
-        
-        //OHAD 
-        //configlate = app.config.clean; 
-        //portlate =  configlate.https && configlate.https.port ? configlate.https.port : configlate.http.port;
-        //require('./packages/custom/icu/server/middlewares/socket.js')(configlate);
-        
-        
-        
-        // var sockets = require('/home/as/Desktop/icu/packages/custom/icu/server/providers/socket.js');
-        // var app1 = require('express')();
-
-        // console.log("3003");
-        // var server = app1.listen(3003);
-
-        // var io = require('socket.io')(server);
-
-
-        // //console.log("io");
-        // //console.log(JSON.stringify(io));    
-        // console.log("sockets");
-        // console.log(JSON.stringify(sockets));
-        
-        // io.on('connection', function(socket) {
-        //     socket.emit('user joined', {success: true});
-        //     console.log("io success");
-        //     socket.on('user joined token', function(data) {
-        //         console.log("data");
-        //         console.log(JSON.stringify(data));
-        //         sockets._new(data, socket);
-        //     });
-        // });
-        
-        
-        
-        //END OHAD
     });
 }

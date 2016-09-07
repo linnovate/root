@@ -1,13 +1,13 @@
 $page-height: 100vh;
 $content-height: calc(#{$page-height} - 2 * #{$header-height});
-$description-height: 30%;
+$description-height: 40%;
 $switcher-height: 40px;
 $panel-height: $header-height - 5px;
-$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 37px);
+$tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height});
 
 .detailspane {
     width: 54%;
-    border-left: 1px solid #C8C8C6;
+    border-left: 1px solid grey;
     height: 100vh;
     background-color: $cream;
     float: left;
@@ -17,7 +17,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 
     .fa.fa-plus{
-        display: none;
+        display: initial;
     }
 
     .header {
@@ -44,10 +44,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     @include circle(9px);
 
                     position: absolute;
-                    left: 20px;
+                    left: -6px;
                     top: -1px;
-                    font-size: small;
-                    font-weight: 700;
 
                     display: inline-block;
                     text-align: center;
@@ -104,17 +102,6 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     line-height: $header-height;
                 }
             }
-            .notification-NotWatched {
-                background-color: #FDA102;
-                height: $header-height;
-                @include notification;
-                padding: 10px;
-                border-bottom: 1px solid $light-grey1;
-
-                span {
-                    line-height: $header-height;
-                }
-            }
         }
 
         .time {
@@ -144,877 +131,724 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         .add-menu {
             button {
                 @include button;
+
+                background-color: $orange;
                 color: white;
                 width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
                 height: 100%;
-                background-color: $orange;
-                i:before {
-                    display: none;
-                }
-                i {
-                 width: 53px;
-                 display: block;
-                 height: 49px;
-                 background: url("/icu/assets/img/new_task.png") no-repeat center;
-                 transition: 0.9s;                    
-             }
-
-             &:hover{
-                background-color: #FFB435;
-                i {
-                    transform: rotate(90deg);
-                }
             }
-        }
 
-        .menu-items {
-            li {
-                position: relative;
+            .menu-items {
+                li {
+                    position: relative;
 
-                a {
-                    span {
-                        position: absolute;
-                        left: 60px;
-                        top: 50%;
-                        transform: translate(0, -50%);
+                    a {
+                        span {
+                            position: absolute;
+                            left: 60px;
+                            top: 50%;
+                            transform: translate(0, -50%);
+                        }
                     }
-
-                    &:hover{
-                        background-color: #FFB435;
-                        color: white;
-                    }       
                 }
             }
         }
-    }
 
-    .user-menu {
-        .avatar {
-            @include button;
-            @include circle($header-height / 2);
+        .user-menu {
+            .avatar {
+                @include button;
+                @include circle($header-height / 2);
 
-            background-color: $green;
-            width: 37px;
-            height: 37px;
-            margin: 13px;
-            font-size: 30px;
-            line-height: 36px;
-            cursor: pointer;
-        }
-    }
-
-    .add-menu, .user-menu {
-        float: left;
-        display: inline-block;
-        width: $header-height - 7;
-        height: $header-height - 1;
-
-        .menu-items {
-            &.dropdown-menu {
-                border-radius: 0;
-                left: -105px;
-                box-shadow: none;
-                text-align: left;
+                background-color: $green;
+                width: 37px;
+                height: 37px;
+                margin: 13px;
+                font-size: 30px;
+                line-height: 35px;
+                cursor: pointer;
             }
         }
-    }
 
-}
-
-.page-content {
-    
-    .compBtn {
-        &.c19n{
-          background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
-      }
-      background: #E1E1E1 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
-      width: 22px;
-      height: 22px;
-      border-radius: 15px;
-      border: none;
-      position: absolute;
-      right: 1%;
-      margin: 15px 30px;
-      outline: none;
-      tooltip{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-    }
-}
-.description {
-    margin: 0 28px;
-    overflow: auto;
-    margin-top: 3px;
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    &::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-        border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background-color: white;
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-    }
-
-
-
-    .text {
-        color: $light-grey4;
-    }
-
-    input.title {
-        font-size: 30px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        width: 100%;
-    }
-
-    .tag {
-        @include tag(10px);
-    }
-}
-
-.summary {
-    height: $panel-height;
-    border-bottom: 3px solid $light-grey1;
-    background-color: #F6F6F6;
-
-    .favorite, .due, .status, .tags, .color {
-        height: $panel-height;
-        float: left;
-        position: relative;
-
-        &:hover{
-            box-shadow: 0px 0px 0px 2px #FFB435;
-            transition: 0.8s;
-        } 
-    }
-
-    .favorite, .user, .due {
-        border-right: 1px solid $light-grey1;
-    }
-
-    .color {
-        width: 100px;
-        .colorpicker {
-            @include center;
-        }
-    }
-
-    .user {
-        width: calc((100% - #{$panel-height}) * 0.25);
-        height: $panel-height;
-        position: relative;
-        float: left;
-
-        &:hover{
-            box-shadow: 0px 0px 0px 2px #FFB435;
-            transition: 0.8s;
-        } 
-
-        .no-assignee {
-            position: absolute;
-            transform: translateY(-65%);
-            top: 31px;
-            width: calc(100% - 10px);
-            margin-left: 10px;
-
-            .avatar-placeholder {
-                background: url(/icu/assets/img/user.png) no-repeat scroll;
-                height: 26px;
-                padding: 5px 0 5px 35px;
-                color: $light-grey-placeholder;
-                display: table;
-                width: 100%;
-                background-position: left;
-            }
-
-        }
-        .ui-select-placeholder {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%) translateY(-65%);
-            top: 50%;
-        }
-
-        .avatar {
-            height: 26px;
-            width: 26px;
-            background-color: $green;
-            border-radius: 15px;
-            display: inline-block;
-            margin: 0 10px;
+        .add-menu, .user-menu {
             float: left;
-            font-size: 20px;
-            line-height: 25px;
-        }
-        .summary-content {
             display: inline-block;
-            line-height: 30px;
+            width: $header-height - 7;
+            height: $header-height - 1;
+
+            .menu-items {
+                &.dropdown-menu {
+                    border-radius: 0;
+                    left: -105px;
+                    box-shadow: none;
+                    text-align: left;
+                }
+            }
         }
+
     }
 
-    .due, .status, .tags {
-        width: calc((100% - #{$panel-height}) * 0.19);
+    .page-content {
+        height: $content-height;
+        .compBtn {
+	    	background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+	    	width: 22px;
+		    height: 22px;
+		    border-radius: 15px;
+		    border: none;
+		    float: right;
+		    margin: 15px 30px;
+		    outline: none;
+	    }
+        .description {
+            margin: 0 30px;
+            height: $description-height;
+            overflow: auto;
+            margin-top: 35px;
 
-        .summary-content {
-            position: absolute;
-            top: 50%;
-            transform: translate(0, -50%);
-            left: 40px;
+            .title {
+                font-weight: 700;
+            }
+
+            .text {
+                color: $light-grey4;
+            }
+
+            input.title {
+                font-size: 30px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                width: 100%;
+            }
 
             .tag {
-                padding-right: 7px;
+                @include tag(10px);
             }
         }
-    }
 
-    .due {
-        .placeholder {
-            position: absolute;
-            top: 50%;
-            transform: translateX(60%) translateY(-50%);
-            color: $light-grey-placeholder;
-        }
+        .summary {
+            height: $panel-height;
+            border-bottom: 3px solid $light-grey1;
 
-        input {
-            appearance: none;
-            border: none;
-            float: right;
-            width: calc(100% - 10px);
-            margin-left: 10px;
-            padding: 17px 0;
-            padding-left: 25px;
-            background: url(/icu/assets/img/calendar.png) no-repeat scroll;
-            cursor: pointer;
-            outline: none;
-            background-position: left center;
-        }
-    }
-
-    .favorite {
-        width: 47px;
-        font-size: 1.4em;
-
-        button {
-            appearance: none;
-            background-color: transparent;
-            border: none;
-            width: 100%;
-            height: 100%;
-            &:focus {
-                outline: none;
-            }
-            &:hover {
-             i {
-                 transform: rotate(360deg);
-                 transition: 1.5s;
-             }
-         }
-         
-         tip{
-            width: 80%;
-            font-size: 14px;
-         }
-             
-     }
-
-    .orange {
-        color: $orange;
-    }
-    &:focus {
-        outline: none;
-    }
-
-}
-
-@mixin ui-select {
-    .ui-select-container {
-        padding-top: 13px;
-        background-color: transparent;
-
-        .ui-select-match {
-            box-shadow: none;
-            background-color: transparent;
-            outline: none;
-
-            .ui-select-match-text {
-                float: left !important;
-                color: #00AEEF;
-                display: flex;
-                align-items: center;
+            .favorite, .due, .status, .tags, .color {
+                height: $panel-height;
+                float: left;
+                position: relative;
             }
 
-            .ui-select-toggle {
-                background-color: transparent;
-                border: none;
-                box-shadow: none;
-                padding: 0;
+            .favorite, .user, .due, .status {
+                border-right: 1px solid $light-grey1;
+            }
 
-                i.caret {
-                    display: none;
+            .color {
+                width: 100px;
+                .colorpicker {
+                    @include center;
                 }
             }
-        }
 
-        .ui-select-search {
-            box-shadow: none;
-            border-color: $light-grey1;
-        }
+            .user {
+                width: calc((100% - #{$panel-height}) * 0.25);
+                height: $panel-height;
+                position: relative;
+                float: left;
 
-        .ui-select-choices-row.active {
-            .ui-select-choices-row-inner {
-                background-color: #f5f5f5;
-                color: $dark-grey;
-            }
-        }
-        .ui-select-choices-row {
-            .ui-select-choices-row-inner {
-               display: flex;
-               align-items: center;
-           }
-       }
-   }
-}
+                .no-assignee {
+                    position: absolute;
+                    transform: translateY(-65%);
+                    top: 60%;
+                    width: calc(100% - 10px);
+                    margin-left: 10px;
 
-.user, .tags, .status {
-    @include ui-select;
-}
+                    .avatar-placeholder {
+                        background: url(/icu/assets/img/user.png) no-repeat scroll left center;
+                        height: 26px;
+                        padding: 5px 0 5px 35px;
+                        color: $light-grey-placeholder;
+                        display: table;
+                        width: 100%;
+                    }
 
-.status {
-   padding-left: 7px;
-   .ui-select-container.ui-select-bootstrap {
-    .ui-select-match .ui-select-toggle {
-        float: right;
-        width: calc(100% - 10px);
-        height: 30px;
-        position: absolute;
-        right: 50%;
-        transform: translateX(50%) translateY(15%);
-        i.caret {
-            display: none;
-        }
-    }
-    i{
-        -webkit-mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
-        mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
-        width: 15px;
-        height: 17px;
-        display: inline-block;
-        margin-right: 3px;
-    }
-    i.new {background-color: #ff4081; }
-    i.assigned{background-color: #2979ff;}
-    i.in-progress{background-color: #f69679;}
-    i.review{background-color: #8dc63f;}
-    i.rejected{background-color: #ef5350;}
-    i.done{background-color: #598527;}
-    i.canceled{background-color: #ef5350;}
-    i.completed{background-color: #598527;}
-    i.archived{background-color: #ab47bc;}
-    i.scheduled{background-color: #0054a6;}
-    .new{color: #ff4081; }
-    .assigned{color: #2979ff;}
-    .in-progress{color: #f69679;}
-    .review{color: #8dc63f;}
-    .rejected{color: #ef5350;}
-    .done{color: #598527;}
-    .canceled{color: #ef5350;}
-    .completed{color: #598527;}
-    .archived{color: #ab47bc;}
-    .scheduled{color: #0054a6;}
-}
-}
+                }
+                .ui-select-placeholder {
+                    position: absolute;
+                    left: 50%;
+                    transform: translateX(-50%) translateY(-65%);
+                    top: 50%;
+                }
 
-.tags {
-    width: calc((100% - 47px) * 0.25);
-
-    .tag-wrap {
-        width: 100%;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        .ui-select-match-text {
-            width: 100%;
-        }
-        .ui-select-container.open {
-        padding-top: 0 !important;
-     }
-
-     .text-muted {
-        color: $light-grey-placeholder;
-        float: left;
-    }
-
-    .tag {
-        transition: 0.3s;
-        @include tag(14px);
-        width: initial;
-        margin: 0;
-        padding: 3px 13px;
-        color: white;
-        position: relative;
-        margin-top: -5px;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: inline-block;
-        float: left;
-
-        .delete {
-            display: none;
-        }
-
-        &:hover {
-            padding-right: 25px;
-            transition: 0.3s;
-
-            .delete {
-                @include circle(6.5px);
-                display: block;
-                margin: 0;
-                position: absolute;
-                top: 8px;
-                right: 8px;
-                color: white;
-                font-size: 12px;
-                line-height: 12px;
-                /*  background-color: #313c40;*/
-                text-align: center;
-                cursor: pointer;
-            }
-        }
-    }
-
-    .line {
-        height: 30px;
-        padding-top: 5px;
-
-        .title {
-            float: left;
-        }
-
-        .add-btn-wrap {
-            float: right;
-
-            .add-btn {
-                @include tag(9px);
-                background-color: $orange;
-                padding: 0 3px;
-                color: white;
-            }
-        }
-    }
-
-}
-}
-
-.dropdown-container {
-    height: $panel-height;
-    max-width: $panel-height;
-    float: right;
-
-    .dropdown-trigger {
-        padding: 15px 25px;
-        height: $panel-height;
-        cursor: pointer;
-    }
-
-    .dropdown-menu {
-        left: inherit;
-        right: 0;
-    }
-
-    .menu-items {
-        li {
-            position: relative;
-
-            a {
-                height: 30px;
-                line-height: 28px;
-                padding: 0 20px 0 10px;
-                display: flex;
-                align-items: center;
-
-                i {
+                .avatar {
+                    height: 26px;
+                    width: 26px;
+                    background-color: $green;
+                    border-radius: 15px;
+                    display: inline-block;
+                    margin: 0 10px;
                     float: left;
-                    font-size: 1.4em;
-                    &.flag {
-                        -webkit-mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
-                        mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
-                        width: 15px;
-                        height: 17px;
-                        margin-right: 3px;
-                        background-color: #333;
+                    line-height: 24px;
+                    img.image {
+                        margin-top: -8px;
                     }
                 }
-                span {
-                    padding: 0 10px;
+                .summary-content {
+                    display: inline-block;
+                    line-height: 30px;
                 }
             }
-        }
-    }
-}
-}
 
-.description {
-    .title {
-        font-size: 23px;
-        padding: 0px 0px 8px 0px;
-        font-weight: 700;
-        outline: none;
-    }
+            .due, .status, .tags {
+                width: calc((100% - #{$panel-height}) * 0.19);
 
-    .text {
-        min-height: 50px;
-        padding-left: 3px;
-        outline: none;
+                .summary-content {
+                    position: absolute;
+                    top: 50%;
+                    transform: translate(0, -50%);
+                    left: 40px;
 
-        &.medium-editor-placeholder {
-            &:not(:focus):before {
-                position: inherit;
-                color: $light-grey-placeholder;
-            }
-
-            position: inherit;
-
-            &:after {
-                content: none;
-            }
-        }
-
-    }
-
-    .tags {
-        border-bottom: 1px solid $light-grey1;
-        border-top: 1px solid $light-grey1;
-        background: 0 center url('/icu/assets/img/tags.png') no-repeat;
-        display: table;
-
-        width: 100%;
-        min-height: 50px;
-
-        & > * {
-            display: table-cell;
-            vertical-align: middle;
-        }
-
-        .list {
-            padding: 5px 25px;
-
-            .placeholder {
-                color: $light-grey-placeholder;
-                padding-left: 10px;
-            }
-
-            li {
-                list-style: none;
-                display: inline-block;
-            }
-
-            .tag-item {
-                display: inline-block;
-                cursor: pointer;
-
-                margin-left: 10px;
-                margin-top: 3px;
-                font-size: 12px;
-                padding: 0 5px;
-                background-color: white;
-                border: 1px solid $light-grey1;
-
-                &:hover {
-                    background-color: $light-grey1;
-                    border: 1px solid;
-
-                    button {
-                        display: inline-block;
-                        background-color: inherit;
+                    .tag {
+                        padding-right: 7px;
                     }
                 }
+            }
+
+            .due {
+                .placeholder {
+                    position: absolute;
+                    top: 50%;
+                    right: 50%;
+                    transform: translateX(60%) translateY(-50%);
+                    color: $light-grey-placeholder;
+                }
+
+                input {
+                    appearance: none;
+                    border: none;
+                    float: right;
+                    width: calc(100% - 10px);
+                    margin-left: 10px;
+                    padding: 17px 0;
+                    padding-left: 25px;
+                    background: url(/icu/assets/img/calendar.png) no-repeat scroll left center;
+                    cursor: pointer;
+                    outline: none;
+                }
+            }
+
+            .favorite {
+                width: $panel-height;
+                font-size: 1.4em;
 
                 button {
-                    @include button;
-                    display: none;
-                    color: $light-grey1;
-                    line-height: 12px;
+                    appearance: none;
+                    background-color: transparent;
+                    border: none;
+                    width: 100%;
+                    height: 100%;
+                }
 
-                    i {
-                        background-color: $dark-grey;
-                        line-height: 12px;
-                        border-radius: 6px;
-                        width: 13px;
-                        height: 12px;
+                .orange {
+                    color: $orange;
+                }
+            }
+
+            @mixin ui-select {
+                .ui-select-container {
+                    padding-top: 13px;
+                    background-color: transparent;
+
+                    .ui-select-match {
+                        box-shadow: none;
+                        background-color: transparent;
+
+                        .ui-select-match-text {
+                            float: left !important;
+                        }
+
+                        .ui-select-toggle {
+                            background-color: transparent;
+                            border: none;
+                            box-shadow: none;
+                            padding: 0;
+
+                            i.caret {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .ui-select-search {
+                        box-shadow: none;
+                        border-color: $light-grey1;
+                    }
+
+                    .ui-select-choices-row.active {
+                        .ui-select-choices-row-inner {
+                            background-color: #f5f5f5;
+                            color: $dark-grey;
+                        }
+                    }
+                }
+            }
+
+            .user, .tags, .status {
+                @include ui-select;
+            }
+
+            .status {
+                .ui-select-container .ui-select-match .ui-select-toggle {
+                    float: right;
+                    background: 7% center url('/icu/assets/img/task-status.png') no-repeat;
+                    width: calc(100% - 10px);
+                    height: 30px;
+                    padding: 5px 0 5px 30px;
+                    position: absolute;
+                    right: 50%;
+                    top: 50%;
+                    transform: translateX(50%) translateY(15%);
+
+                    i.caret {
+                        display: none;
+                    }
+                }
+            }
+
+            .tags {
+                width: calc((100% - 55px) * 0.25);
+
+                .tag-wrap {
+                    width: 100%;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    padding-left: 10px;
+
+                    .ui-select-match-text {
+                        width: 100%;
+                    }
+
+                    .text-muted {
+                        color: $light-grey-placeholder;
+                        float: left;
+                    }
+
+                    .tag {
+                        @include tag(14px);
+                        width: initial;
+                        margin: 0;
+                        padding: 4px 7px;
+                        color: white;
+                        position: relative;
+                        margin-top: -5px;
+                        max-width: 100%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        display: inline-block;
+                        float: left;
+
+                        .delete {
+                            display: none;
+                        }
+
+                        &:hover {
+                            padding-right: 25px;
+
+                            .delete {
+                                @include circle(6.5px);
+                                display: block;
+                                margin: 0;
+                                position: absolute;
+                                top: 8px;
+                                right: 8px;
+                                color: white;
+                                font-size: 12px;
+                                line-height: 12px;
+                                background-color: #313c40;
+                                text-align: center;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
+                    .line {
+                        height: 30px;
+                        padding-top: 5px;
+
+                        .title {
+                            float: left;
+                        }
+
+                        .add-btn-wrap {
+                            float: right;
+
+                            .add-btn {
+                                @include tag(9px);
+                                background-color: $orange;
+                                padding: 0 3px;
+                                color: white;
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            .dropdown-container {
+                height: $panel-height;
+                max-width: $panel-height;
+                float: right;
+
+                .dropdown-trigger {
+                    padding: 15px 25px;
+                    height: $panel-height;
+                    cursor: pointer;
+                }
+
+                .dropdown-menu {
+                    left: inherit;
+                    right: 0;
+                }
+
+                .menu-items {
+                    li {
+                        position: relative;
+
+                        a {
+                            height: 30px;
+                            line-height: 28px;
+                            padding: 0 20px 0 10px;
+
+                            i {
+                                float: left;
+                            }
+                            span {
+                                padding: 0 10px;
+                            }
+                        }
                     }
                 }
             }
         }
 
-        .new-tag-input {
-            line-height: 28px;
-            height: 28px;
-            float: left;
-            margin: 0 10px;
+        .description {
+            .title {
+                font-size: 30px;
+                padding: 10px 0;
+            }
+
+            .text {
+                min-height: 50px;
+
+                &.medium-editor-placeholder {
+                    &:not(:focus):before {
+                        position: inherit;
+                        color: $light-grey-placeholder;
+                    }
+
+                    position: inherit;
+
+                    &:after {
+                        content: none;
+                    }
+                }
+
+            }
+
+            .tags {
+                border-bottom: 1px solid $light-grey1;
+                border-top: 1px solid $light-grey1;
+                background: 0 center url('/icu/assets/img/tags.png') no-repeat;
+                display: table;
+
+                width: 100%;
+                min-height: 50px;
+
+                & > * {
+                    display: table-cell;
+                    vertical-align: middle;
+                }
+
+                .list {
+                    padding: 5px 25px;
+
+                    .placeholder {
+                        color: $light-grey-placeholder;
+                        padding-left: 10px;
+                    }
+
+                    li {
+                        list-style: none;
+                        display: inline-block;
+                    }
+
+                    .tag-item {
+                        display: inline-block;
+                        cursor: pointer;
+
+                        margin-left: 10px;
+                        margin-top: 3px;
+                        font-size: 12px;
+                        padding: 0 5px;
+                        background-color: white;
+                        border: 1px solid $light-grey1;
+
+                        &:hover {
+                            background-color: $light-grey1;
+
+                            button {
+                                display: inline-block;
+                                background-color: inherit;
+                            }
+                        }
+
+                        button {
+                            @include button;
+                            display: none;
+                            color: $light-grey1;
+                            line-height: 12px;
+
+                            i {
+                                background-color: $dark-grey;
+                                line-height: 12px;
+                                border-radius: 6px;
+                                width: 13px;
+                                height: 12px;
+                            }
+                        }
+                    }
+                }
+
+                .new-tag-input {
+                    line-height: 28px;
+                    height: 28px;
+                    float: left;
+                    margin: 0 10px;
+                }
+
+                .new-tag-icon {
+                    @include tag(15px);
+                    @include button;
+
+                    margin: 0;
+                    float: right;
+                    background-color: $orange;
+                    color: white;
+                    cursor: pointer;
+                    width: 30px;
+                    height: 30px;
+//                    .fa {
+//                        display: initial;
+//                    }
+                }
+
+                .ui-select-container {
+                    appearance: none;
+                    background-color: $cream;
+                    border: none;
+                    float: right;
+                    box-shadow: none;
+
+                    .ui-select-match {
+                        display: inline-block;
+                        width: 150px;
+                        height: 24px;
+
+                        .btn {
+                            border-radius: 0;
+                            font-size: 12px;
+                            line-height: 0.9;
+
+                            .ui-select-placeholder {
+                                float: left !important;
+                            }
+                        }
+
+                        &.btn-default-focus {
+                            background-color: transparent;
+                            box-shadow: none;
+                        }
+
+                        i.caret {
+                            display: none;
+                        }
+                    }
+
+                    .ui-select-choices {
+                        width: 150px;
+                        min-width: 150px;
+                        border-radius: 0;
+                        margin-top: -2px;
+                    }
+
+                    input {
+                        border-radius: 0;
+                        font-size: 12px;
+                        line-height: 0.9;
+                        width: 150px;
+                        box-shadow: none;
+                    }
+
+                    .form-control {
+                        height: 24px;
+                        display: inline-block;
+                    }
+                }
+            }
         }
 
-        .new-tag-icon {
-            @include tag(15px);
-            @include button;
+        .tabs {
+            height: $switcher-height;
+            margin: 0 30px;
+            border-bottom: 1px solid $light-grey1;
 
-            margin: 0;
-            float: right;
-            color: white;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            background: url("/icu/assets/img/new_lable.png") $orange no-repeat center;
-            .fa {
-             display: none;
-         }
-         div{
-            width: 30px;
-            height: 30px;
-        }
-        &:hover{
-            background-color: #FFB435;
-            transition: 0.8s;
+            .tab {
+                @include button;
+
+                padding: 0;
+                margin: 0;
+                background-color: transparent;
+                height: 38px;
+                font-size: 16px;
+                font-weight: 700;
+
+                &.active {
+                    border-bottom: 5px solid $orange;
+                }
+            }
         }
 
+        .tab-content {
+            margin: 0 30px;
+            padding: 10px 0;
+            height: $tab-content-height;
+            overflow: auto;
+        }
     }
 
-    .ui-select-container {
-        appearance: none;
-        background-color: $cream;
-        border: none;
-        float: right;
-        box-shadow: none;
+    .footer {
+    	display: -webkit-box;
+		display: -webkit-flex;
+		display: -ms-flexbox;
+		display: flex;
+        height: $header-height;
+        border-top: 1px solid $light-grey1;
+        padding: 0 10px;
 
-        .ui-select-match {
-            display: inline-block;
-            width: 150px;
-            height: 24px;
+        $avatar-margin: 12px;
 
-            .btn {
-                border-radius: 0;
-                font-size: 12px;
-                line-height: 0.9;
+        .delete-wrapper {
+            position: relative;
+            width: 45px;
+            height: $header-height - 10px;
+            float: left;
 
-                .ui-select-placeholder {
-                    float: left !important;
+            &:hover {
+
+                .delete {
+                    display: block;
+                    position: absolute;
+                    width: 19px;
+                    height: 19px;
+                    background-color: grey;
+                    border-radius: 10px;
+                    border: 2px solid white;
+                    top: 3px;
+                    color: white;
+                    text-align: center;
+                    cursor: pointer;
+                    i {
+                        position: absolute;
+                        left: 2px;
+                    }
+                }
+
+                .avatar {
+                    border: 2px solid white;
                 }
             }
 
-            &.btn-default-focus {
-                background-color: transparent;
-                box-shadow: none;
-            }
+            .numberOfPeople {
+	    		display: block;
+			    position: absolute;
+			    width: 28px;
+			    height: 28px;
+			    background-color: #303b3f;
+			    border-radius: 15px;
+			    border: 2px solid white;
+			    top: 0;
+			    color: white;
+			    text-align: center;
+			    right: -8px;
+				font-size: 10px;
+			    font-weight: bold;
+			    line-height: 20px;
+	    	}
 
-            i.caret {
+            .delete {
                 display: none;
             }
-        }
 
-        .ui-select-choices {
-            width: 150px;
-            min-width: 150px;
-            border-radius: 0;
-            margin-top: -2px;
-        }
+            .avatar {
+                background-color: $green;
+                float: left;
 
-        input {
-            border-radius: 0;
-            font-size: 12px;
-            line-height: 0.9;
-            width: 150px;
-            box-shadow: none;
-        }
-
-        .form-control {
-            height: 24px;
-            display: inline-block;
-        }
-    }
-}
-}
-
-.tabs {
-    height: $switcher-height;
-    margin: 0 30px;
-    border-bottom: 1px solid $light-grey1;
-
-    .tab {
-        @include button;
-
-        padding: 0;
-        margin: 0;
-        background-color: transparent;
-        height: 38px;
-        font-size: 16px;
-        font-weight: 400;
-
-        &.active {
-            border-bottom: 5px solid $orange;
-            color: $orange;
-            font-weight: bold;
-        }
-
-        &:hover {
-            color: $orange;
-            transition: 0.8s;
+                &.avatar-group {
+                	background-color: #1e70b5;
+                }
+            }
 
         }
-    }
-}
 
-.tab-content {
-    margin: 0 30px;
-    padding: 10px 0;
-    height: calc(100% - 30% - 55px - 40px - 40px);
-    overflow: auto;
-}
-}
+        .left-notification {
+            float: left;
+        }
 
-.footer {
-   display: -webkit-box;
-   display: -webkit-flex;
-   display: -ms-flexbox;
-   display: flex;
-   height: $header-height;
-   border-top: 1px solid $light-grey1;
-   padding: 0 10px;
+        .right-notification {
+            float: right;
+        }
 
-   $avatar-margin: 12px;
+        .left-notification, .right-notification {
+            color: $light-grey-placeholder;
+            margin-top: $header-height/3;
+        }
 
-   .delete-wrapper {
-    position: relative;
-    width: 45px;
-    height: $header-height - 10px;
-    float: left;
+        .new-member-input {
+            /*width: calc(100% - 60px);*/
+            float: left;
+            margin-top: $avatar-margin;
+            /*width: 193px;*/
+    		width: 23%;
+    		margin-left: 10px;
 
-    &:hover {
+            .ui-select-bootstrap .ui-select-choices-row > a {
+                line-height: 35px;
+                padding: 2px 7px;
+            }
 
-        .delete {
-            display: block;
-            position: absolute;
-            width: 19px;
-            height: 19px;
-            background-color: grey;
-            border-radius: 10px;
-            border: 2px solid white;
-            top: 3px;
-            color: white;
-            text-align: center;
-            cursor: pointer;
-            i {
-                position: absolute;
-                left: 2px;
+            .avatar {
+                float: left;
+                margin: 0;
+                margin-right: 7px;
+            }
+
+            &.second, &.third {
+            	margin-left: 0;
+            	input:fisrt-child {
+            		display: none;
+            	}
             }
         }
 
-        .avatar {
-            border: 2px solid white;
-        }
-    }
-
-    .numberOfPeople {
-     display: block;
-     position: absolute;
-     width: 28px;
-     height: 28px;
-     background-color: #303b3f;
-     border-radius: 15px;
-     border: 2px solid white;
-     top: 0;
-     color: white;
-     text-align: center;
-     right: -8px;
-     font-size: 10px;
-     font-weight: bold;
-     line-height: 20px;
- }
-
- .delete {
-    display: none;
-}
-
-.avatar {
-    background-color: $green;
-    float: left;
-
-    &.avatar-group {
-       background-color: #1e70b5;
-   }
-}
-
-}
-
-.left-notification {
-    float: left;
-}
-
-.right-notification {
-    float: right;
-}
-
-.left-notification, .right-notification {
-    color: $light-grey-placeholder;
-    margin-top: $header-height/3;
-}
-
-.new-member-input {
-    /*width: calc(100% - 60px);*/
-    float: left;
-    margin-top: $avatar-margin;
-    /*width: 193px;*/
-    width: 23%;
-    margin-left: 10px;
-
-    .ui-select-bootstrap .ui-select-choices-row > a {
-        line-height: 35px;
-        padding: 2px 7px;
-    }
-
-    .avatar {
-        float: left;
-        margin: 0;
-        margin-right: 7px;
-    }
-
-    &.second, &.third {
-       margin-left: 0;
-       input:fisrt-child {
-          display: none;
-      }
-  }
-}
-
-.add-member-container {
+        .add-member-container {
             /*width: 30%;
             float: right;
             text-align: right;*/
             max-height: $header-height - 10px;	
             flex-grow: 1;
             -webkit-transition: 3s;
-            -moz-transition: 3s;
-            -ms-transition: 3s;
-            -o-transition: 3s;
-            transition: 3s;
-            
-            tip{
-                font-size: 18px;
-            }
-            
+		    -moz-transition: 3s;
+		    -ms-transition: 3s;
+		    -o-transition: 3s;
+		    transition: 3s;
             .add {
                 @include circle(17px);
                 @include button;
@@ -1022,77 +856,24 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 padding: 0;
                 margin: $avatar-margin - 1 $avatar-margin;
                 color: white;
-                /*font-size: 20px;*/
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                left: 0;
-                left: calc(100% - 58px);
+                font-size: 20px;
                 background-color: $orange;
-                
-                i:before {
-                    display: none;
-                }
-                i {
-                 width: 34px;
-                 display: block;
-                 height: 34px;
-                 background: url("/icu/assets/img/new_lable.png") no-repeat center;
-                 transition: 0.9s;                    
-             }
+               	position: relative;
+			    left: 0;
+			    left: calc(100% - 58px);
 
-             &:hover{
-                background-color: #FFB435;
-                i {
-                    transform: rotate(90deg);
-                }
+			   
             }
-
-
+            .add.transition {
+                -webkit-transition: 3s;
+			    -moz-transition: 3s;
+			    -ms-transition: 3s;
+			    -o-transition: 3s;
+			    transition: 3s;
+			    left: 0;
+			}
         }
-        
+		
+		
     }
-
-
-}
-.summary.wrap-pro {
-    border-bottom: none;
-    background: transparent;
-    margin: 10px 28px 0;
-    position: relative;
-    /*height: 52px;*/
-    .tag-wrap {
-        transition: 0.3s;
-    }
-    .parent {
-        text-decoration: underline;
-        font-weight: bold;
-        position: absolute;
-        bottom: 25%;
-    }
-}
-.summary.wrap-pro :hover{
-    box-shadow: 0px 0px 0px 0px transparent !important;
-
-} 
-.super-class {
-   font-weight: bold;
-}
-.create-new {
-        background: #fda102;
-    position: absolute;
-    right: 8px;
-    height: 23px;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    font-size: 12px;
-    padding: 3px 13px;
-    color: white;
-        border-radius: 14px;
-}
-.ui-select-choices-row-inner {
-    position: relative;
-}
 }

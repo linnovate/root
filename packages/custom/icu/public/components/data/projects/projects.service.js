@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, PaginationService, TasksService) {
+.service('ProjectsService', function(ApiUri, $http, PaginationService) {
     var EntityPrefix = '/projects';
-    var data;
 
     function getAll(start, limit, sort) {
         var qs = querystring.encode({
@@ -69,13 +68,6 @@ angular.module('mean.icu.data.projectsservice', [])
         }
 
         return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
-            if(TasksService.data) {
-                TasksService.data.forEach(function(task) {
-                    if (task.project && task.project._id === project._id) {
-                        task.project = result.data;
-                    }
-                });
-            }
             return result.data;
         });
     }
@@ -109,7 +101,6 @@ angular.module('mean.icu.data.projectsservice', [])
         update: update,
         remove: remove,
         star: star,
-        getStarred: getStarred,
-        data: data
+        getStarred: getStarred
     };
 });
