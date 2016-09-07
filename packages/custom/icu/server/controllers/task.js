@@ -461,7 +461,7 @@ exports.getSubTasks = function(req, res, next) {
     return next();
   }
 
-  var query = req.acl.query('Task');
+  var query = req.acl.mongoQuery('Task');
   query.findOne({
     '_id': req.params.id
   }, {

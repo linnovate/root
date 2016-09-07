@@ -55,11 +55,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates)*').all(circles.acl(), function(req, res, next) {
-  	console.log('*****************8')
-  	console.log(JSON.stringify(req.acl))
-  	next()
-  });
+  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates|templates)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
 
