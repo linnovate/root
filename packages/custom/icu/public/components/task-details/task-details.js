@@ -2,25 +2,42 @@
 
 angular.module('mean.icu.ui.taskdetails', [])
 .controller('TaskDetailsController', function ($scope,
- entity,
- tags,
- projects,
- $state,
- TasksService,
- ActivitiesService,
- context,
- $stateParams,
- $rootScope,
- MeanSocket,
- UsersService,
- people,
- $timeout,
- ProjectsService) {
+                                               entity,
+                                               tags,
+                                               projects,
+                                               $state,
+                                               TasksService,
+                                               ActivitiesService,
+                                               context,
+                                               $stateParams,
+                                               $rootScope,
+                                               MeanSocket,
+                                               UsersService,
+                                               people,
+                                               $timeout,
+                                               ProjectsService,
+                                               me //,subtasks
+                                               ) {
     $scope.task = entity || context.entity;
+    $scope.addSubTasks = false;
+    $scope.me = me;
+    $scope.imgUrl = '?' + Date.now();
+     /*test for sub-task*/
+    // $scope.addSubTasks = false;
+    // $scope.test = [];
+    // $scope.test.push($scope.task)
+/*     $scope.test.push($scope.task)
+*/    /*end test for sub-task*/
     $scope.tags = tags;
     $scope.projects = projects.data || projects;
     $scope.projName = '';
-    $scope.projects.push({'status':'default','title':$scope.projName,'class':'create-new','color':'rgb(0, 151, 167)'});
+    $scope.projects.push({
+        'status': 'default',
+        'title': $scope.projName,
+        'class': 'create-new',
+        'color': 'rgb(0, 151, 167)'
+    });
+    
     $scope.shouldAutofocus = !$stateParams.nameFocused;
     
     TasksService.getStarred().then(function(starred) {
@@ -29,43 +46,57 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
     });
 
+    TasksService.getTemplate().then(function(template){
+        $scope.template = template;
+    });
+
+    $scope.people = people.data || people;
+	if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
+	    var newPeople = {
+	        name: 'no select'
+	    };
+
+	    $scope.people.push(_(newPeople).clone());
+	}
+
+	if (!$scope.task) {
+        $state.go('main.tasks.byentity', {
+            entity: context.entityName,
+            entityId: context.entityId
+        });
+    }
+
     $scope.updateProjName = function(x,y){
        $scope.projName = $('.ui-select-search.ng-valid-parse').val()
-   }
+   	}
 
    $scope.removeCreateNew = function() {
        $scope.projName = '';
    }
-
+    
    $scope.$watch('projName', function(newValue, oldValue) {
        var index = _.findIndex($scope.projects, function(p) { return p.title == oldValue; });
        $scope.projects[index].title = $scope.projName;
    });
 
    $scope.createProject = function (projName ,cb) {
-    var project = {
-        color: '0097A7',
-        title: projName,
-        watchers: [],
+	    var project = {
+	        color: '0097A7',
+	        title: projName,
+	        watchers: [],
+	    };
+
+	    ProjectsService.create(project).then(function (result) {
+	        $scope.projects.push(result);
+	        cb(result);
+	/*        $scope.update(result,'project')
+	*/    });
+
+	};
+
+    $scope.statusType = function() {
+        alert('statusType');
     };
-
-    ProjectsService.create(project).then(function (result) {
-        $scope.projects.push(result);
-        cb(result);
-/*        $scope.update(result,'project')
-*/    });
-
-};
-
-$scope.people = people.data || people;
-if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
-    var newPeople = {
-        name: 'no select'
-    };
-
-    $scope.people.push(_(newPeople).clone());
-}
-
 
 if (!$scope.task) {
     $state.go('main.tasks.byentity', {
@@ -234,14 +265,52 @@ $scope.deleteTask = function (task) {
         });
     };
 
+    $scope.newTemplate = {
+        'name': '',
+        'watcher': me
+    };
+    $scope.saveTemplate = function(){
+        console.log($scope.task.subTasks, 'sub-task')
+        $scope.isopen = false;
+        if($scope.task.subTasks[0]._id){
+            TasksService.saveTemplate($stateParams.id,$scope.newTemplate).then(function (result) {
+                // console.log(result)
+            });
+        }
+        else
+            console.log('no subTasks')
+    };
+
     $scope.setFocusToTagSelect = function() {
     	var element = angular.element('#addTag > input.ui-select-focusser')[0];
     	$timeout(function () {
     		element.focus();
     	}, 0);
-    }
+    };
 
+    $scope.template2subTasks = function(templateId) {
+        $scope.isopen = false;
+        TasksService.template2subTasks(templateId ,{'taskId':$stateParams.id}).then(function (result) {
+           var tmp = $scope.task.subTasks.pop()
+            $scope.task.subTasks = $scope.task.subTasks.concat(result);
+            $scope.task.subTasks.push(tmp);
+        });
+    };
+
+    $scope.deleteTemplate = function(id, index){
+        TasksService.deleteTemplate(id).then(function(result){
+            $scope.template.splice(index, 1);
+        })
+    }
     $scope.delayedUpdate = _.debounce($scope.update, 500);
+
+    // if ($scope.task &&
+    //         ($state.current.name === 'main.tasks.byentity.details' ||
+    //         $state.current.name === 'main.search.task' ||
+    //         $state.current.name === 'main.tasks.all.details' ||
+    //         $state.current.name === 'main.tasks.byassign.details')) {
+    //     $state.go('.subtasks');
+    // }
 
     if ($scope.task &&
         ($state.current.name === 'main.tasks.byentity.details' ||

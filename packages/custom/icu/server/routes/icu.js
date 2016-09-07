@@ -11,6 +11,7 @@ var notification = require('../controllers/notification');
 var attachments = require('../controllers/attachments');
 var star = require('../controllers/star');
 var elasticsearch = require('../controllers/elasticsearch');
+var templates = require('../controllers/templates');
 
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
@@ -54,7 +55,11 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates)*').all(circles.acl());
+  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates)*').all(circles.acl(), function(req, res, next) {
+  	console.log('*****************8')
+  	console.log(JSON.stringify(req.acl))
+  	next()
+  });
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
 
@@ -99,7 +104,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
-    .post(task.create, notification.sendNotification, updates.created)
+    .post(task.create, task.updateParent, notification.sendNotification, updates.created)
     .get(pagination.parseParams, task.all, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
@@ -108,9 +113,14 @@ module.exports = function(Icu, app) {
   app.route('/api/tasks/:id([0-9a-fA-F]{24})')
     .get(task.read, star.isStarred)
     .put(task.read, task.update, star.isStarred, attachments.sign, updates.updated)
-    .delete(star.unstarEntity, task.read, task.destroy);
+    .delete(star.unstarEntity, task.read, task.removeSubTask, task.destroy);
   app.route('/api/tasks/byAssign')
     .get(task.byAssign);
+
+  // app.route('/api/tasks/subtasks')
+  // 	.post(task.addSubTasks)
+  app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
+  	.get(task.getSubTasks)
 
   app.route('/api/:entity(discussions|projects|users)/:id([0-9a-fA-F]{24})/tasks')
     .get(pagination.parseParams, task.getByEntity, pagination.formResponse);
@@ -195,6 +205,15 @@ module.exports = function(Icu, app) {
     .get(updates.getByEntity, updates.getAttachmentsForUpdate);
   app.route('/api/history/updates/:id([0-9a-fA-F]{24})')
     .get(updates.readHistory);
+
+  app.route('/api/tasks/:id([0-9a-fA-F]{24})/toTemplate')
+    .post(templates.toTemplate);
+  app.route('/api/templates/:id([0-9a-fA-F]{24})')
+    .delete(templates.read, templates.removeSubTask, templates.destroy);
+  app.route('/api/templates/:id([0-9a-fA-F]{24})/toSubTasks')
+    .post(templates.toSubTasks);
+  app.route('/api/templates')
+    .get(pagination.parseParams, templates.all, pagination.formResponse);
 
   //temporary -because of swagger bug with 'tasks' word
 

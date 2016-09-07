@@ -69,7 +69,11 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function update(task) {
+        if (task.subTasks && task.subTasks.length && task.subTasks[task.subTasks.length-1] && !task.subTasks[task.subTasks.length-1]._id) {
+            var subTask = task.subTasks[task.subTasks.length-1];
+        }
         return $http.put(ApiUri + EntityPrefix + '/' + task._id, task).then(function (result) {
+            result.data.subTasks.push(subTask);
             return result.data;
         });
     }
@@ -124,6 +128,36 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function getSubTasks(taskId) {
+    	return $http.get(ApiUri + EntityPrefix + '/subtasks/' + taskId).then(function (result) {
+            return result.data;
+        });
+    }
+
+    function getTemplate(taskId) {
+       return $http.get(ApiUri + '/templates' ).then(function (result) {
+            return result.data;
+        });
+    }
+
+    function saveTemplate(id, name){
+        return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
+            return result.data;
+        });
+    }
+
+    function template2subTasks(templateId, data){
+        return $http.post(ApiUri  + '/templates/' + templateId + '/toSubTasks', data).then(function (result) {
+            return result.data;
+        });
+    }
+
+    function deleteTemplate(id){
+        return $http.delete(ApiUri + '/templates/' + id).then(function (result) {
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -142,7 +176,12 @@ angular.module('mean.icu.data.tasksservice', [])
         getOverdueWatchedTasks: getOverdueWatchedTasks,
         getWatchedTasks: getWatchedTasks,
         getStarredByassign: getStarredByassign,
+        getSubTasks: getSubTasks,
+        getTemplate: getTemplate,
         filterValue: filterValue,
+        saveTemplate: saveTemplate,
+        template2subTasks:template2subTasks,
+        deleteTemplate: deleteTemplate,
         data: data
     };
 });

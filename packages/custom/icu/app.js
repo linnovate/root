@@ -14,7 +14,6 @@ var ICU = new Module('icu');
  */
 ICU.register(function (app, auth, database,swagger) {
 
-
      swagger.add(__dirname);
     //We enable routing. By default the Package Object is passed to the routes
     ICU.routes(app, auth, database);
@@ -62,6 +61,7 @@ ICU.register(function (app, auth, database,swagger) {
         'color.picker',
         'mean.system',
         'mean.users',
+        'mean.icu.ui.all',
         'mean.icu.ui.autofocus',
         'mean.icu.ui.ctrlenter',
         'mean.icu.ui.login',
@@ -112,6 +112,8 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.modaldeletetasksbyentity',
         'mean.icu.ui.modalcompartmentalization',
         'mean.icu.ui.taskoptions',
+        'mean.icu.ui.subtasks',
+        'mean.icu.ui.subtaskslistdirective',
         '720kb.tooltips',
     ]);
 

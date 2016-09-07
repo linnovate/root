@@ -11,8 +11,7 @@ angular.module('mean.icu.ui.tasklist', [])
     $scope.starred = $stateParams.starred;
 
     $scope.isCurrentState = function(id) {
-        return $state.current.name.indexOf('main.tasks.byentity') === 0 &&
-            $state.current.name.indexOf('details') === -1;
+        return $state.current.name === id;
     };
 
     $scope.changeOrder = function () {
