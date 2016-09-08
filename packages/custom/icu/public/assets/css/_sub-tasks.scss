@@ -223,7 +223,11 @@
             .ui-select-bootstrap .ui-select-toggle {
                 padding-right: 0;
                 padding-left: 0;
+                    padding-top: 4px;
             }
+            .pull-left {
+    float: left !important;
+}
 
             .avatar {
                 height: 26px;
