@@ -5,6 +5,7 @@ angular.module('mean.icu').controller('IcuController',
         $scope,
         me,
         $state,
+        $stateParams,
         projects,
         discussions,
         people,
@@ -29,6 +30,7 @@ angular.module('mean.icu').controller('IcuController',
 
     function initializeContext(state) {
         if (state.name.indexOf('main') === 0) {
+            
             var restoredContext = context.getContextFromState(state);
             if (restoredContext.entityName !== 'all' && restoredContext.entityName !== 'my') {
                 context.setMain(restoredContext.main);
@@ -74,7 +76,6 @@ angular.module('mean.icu').controller('IcuController',
 
     var state = $state.current;
     state.params = $state.params;
-
     initializeContext(state);
     $scope.currentContext = context;
 
@@ -85,7 +86,7 @@ angular.module('mean.icu').controller('IcuController',
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
         var state = toState;
         state.params = toParams;
-
+    initializeContext(state);
         initializeContext(state);
     });
 
