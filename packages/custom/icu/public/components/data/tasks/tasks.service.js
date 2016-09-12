@@ -28,6 +28,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getById(id) {
+        console.log('getById fun',id)
         return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
             return result.data;
         });

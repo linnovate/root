@@ -5,6 +5,7 @@ angular.module('mean.icu').controller('IcuController',
         $scope,
         me,
         $state,
+        $stateParams,
         projects,
         discussions,
         people,
@@ -29,12 +30,16 @@ angular.module('mean.icu').controller('IcuController',
 
     function initializeContext(state) {
         if (state.name.indexOf('main') === 0) {
+            console.log(state)
+            
             var restoredContext = context.getContextFromState(state);
+            console.log(restoredContext)
             if (restoredContext.entityName !== 'all' && restoredContext.entityName !== 'my') {
                 context.setMain(restoredContext.main);
                 if (restoredContext.entityName === 'task') {
                     context.entityName = restoredContext.entityName;
                     context.entityId = restoredContext.entityId;
+console.log('getById',restoredContext)
                     TasksService.getById(restoredContext.entityId).then(function(data){
                         context.entity = data;
                     });
@@ -74,7 +79,7 @@ angular.module('mean.icu').controller('IcuController',
 
     var state = $state.current;
     state.params = $state.params;
-
+    console.log('1',$stateParams)
     initializeContext(state);
     $scope.currentContext = context;
 
@@ -85,7 +90,8 @@ angular.module('mean.icu').controller('IcuController',
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
         var state = toState;
         state.params = toParams;
-
+        console.log('2',toState,toParams)
+    initializeContext(state);
         initializeContext(state);
     });
 
