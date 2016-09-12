@@ -114,7 +114,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.taskoptions',
         'mean.icu.ui.subtasks',
         'mean.icu.ui.subtaskslistdirective',
-        '720kb.tooltips',
+        // '720kb.tooltips',
     ]);
 
 

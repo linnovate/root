@@ -169,12 +169,12 @@
                     </li>
                     <li class="avatar">
                         <span>{{'visibleTo' | i18next }}</span>
-                        <div icu-avatar user="me"></div> 
-                        <span class="name">Me</span>
+                        <!-- <div icu-avatar user="me"></div>  -->
+                        <!-- <span class="name">Me</span> -->
                         <!-- {{me.name}} -->
                         <!-- on-select="updateAndNotiy(task)" -->
 
-                        <!-- <ui-select ng-model="template.assign" >
+                        <ui-select ng-model="newTemplate.watcher">
                             <ui-select-match>
                                 <div icu-avatar user="$select.selected"></div>
                                 <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
@@ -183,7 +183,7 @@
                                 <div icu-avatar user="user"></div>
                                 <span class="summary-content">{{user.name}}</span>
                             </ui-select-choices>
-                        </ui-select> -->
+                        </ui-select>
                     </li>
                     <li class='save'>
                         <div ng-click='saveTemplate()' class='save-template' ng-class="{'empty': !task.subTasks[0]._id }">{{'save' | i18next }}</div>
