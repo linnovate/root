@@ -9,54 +9,52 @@ angular.module('mean.icu.ui.tasklist', [])
 
     $scope.autocomplete = context.entityName === 'discussion';
     $scope.starred = $stateParams.starred;
+    
     function init() {
+      	if(!context.entity.parent) {
+	        if(context.entity.project ){
+	            $scope.parentState = 'byentity';
+	            $scope.parentEntity ='project' ;
+	            $scope.parentEntityId = context.entity.project._id;
+	            $scope.parentId=context.entity.id ;
+	        }
+	        else if(context.entity.discussions ){
+	           $scope.parentState = 'byentity';
+	           $scope.parentEntity= 'discussion';
+	           $scope.parentEntityId = context.entity.discussions[0]._id ;
+	           $scope.parentId = context.entity.id;
+	       }
+	   	} 
+	   	else {
+		    $scope.parentState = 'byparent';
+		    $scope.parentEntity = 'task';
+		    $scope.parentEntityId = context.entity.parent;
+		    $scope.parentId = context.entity.id;
+	   	}
+	}
 
-      if(!context.entity.parent) {
-        if(context.entity.project ){
-            $scope.parentState = 'byentity';
-            $scope.parentEntity ='project' ;
-            $scope.parentEntityId = context.entity.project._id;
-            $scope.parentId=context.entity.id ;
-        }
-        else if(context.entity.discussions ){
-           $scope.parentState = 'byentity';
-           $scope.parentEntity= 'discussion';
-           $scope.parentEntityId = context.entity.discussions[0]._id ;
-           console.log('$scope.parentEntityId',$scope.parentEntityId,context.entity,context.entity.discussions.id)
-           $scope.parentId = context.entity.id;
-       }
-       
-   } 
-   else {
-    $scope.parentState = 'byparent';
-    $scope.parentEntity = 'task';
-    $scope.parentEntityId = context.entity.parent;
-    $scope.parentId = context.entity.id;
-   }
-}
+	$timeout(function() {
+ 		init();
+	}, 500);
 
-$timeout(function() {
- init();
-}, 500);
+	$scope.goToParent = function() {
+	    $state.go('main.tasks.'+$scope.parentState+'.details',{entity:$scope.parentEntity,entityId:$scope.parentEntityId,id:$scope.parentId})
+	}
 
-$scope.goToParent = function() {
-    $state.go('main.tasks.'+$scope.parentState+'.details',{entity:$scope.parentEntity,entityId:$scope.parentEntityId,id:$scope.parentId})
-}
+	$scope.isCurrentState = function(id) {
+	    return $state.current.name === id;
+	};
 
-$scope.isCurrentState = function(id) {
-    return $state.current.name === id;
-};
+	$scope.changeOrder = function () {
+	    $scope.sorting.isReverse = !$scope.sorting.isReverse;
+	    /*Made By OHAD - Needed for reversing sort*/
+	    $state.go($state.current.name, { sort: $scope.sorting.field });
+	};
 
-$scope.changeOrder = function () {
-    $scope.sorting.isReverse = !$scope.sorting.isReverse;
-    /*Made By OHAD - Needed for reversing sort*/
-    $state.go($state.current.name, { sort: $scope.sorting.field });
-};
-
-$scope.sorting = {
-    field: $stateParams.sort || 'created',
-    isReverse: false
-};
+	$scope.sorting = {
+	    field: $stateParams.sort || 'created',
+	    isReverse: false
+	};
 
 /*Made By OHAD - Needed for reversing sort*/
     // $scope.$watch('sorting.field', function(newValue, oldValue) {

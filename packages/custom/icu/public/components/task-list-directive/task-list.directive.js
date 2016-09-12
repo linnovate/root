@@ -32,7 +32,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                 });
             } else {
                 if (context.entityName === 'task') {
-                    newTask.parent = context.entity._id;    
+                    // newTask.parent = context.entity._id;    
                     $scope.tasks.push(_(newTask).clone());
                 } else
                 $scope.tasks.push(_(newTask).clone());
