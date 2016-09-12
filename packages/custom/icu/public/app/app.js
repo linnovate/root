@@ -10,19 +10,15 @@ angular.module('mean.icu').config([
         };
 
         var generateStateByEntity = function(main) {
-            console.log('main1',  main)
             var capitalizedMain = capitalize(main);
 
             var resolve = {};
             resolve[main + 's'] = [capitalizedMain + 'sService', '$stateParams',
                 function(service, $stateParams) {
-                    console.log('main2',  $stateParams.entity)
                     var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
-                    console.log('getFn', getFn, capitalizedMain)
                     if (!service[getFn]) {
                         getFn = 'getById';
                     }
-                    console.log('getFn', getFn)
                     return service[getFn]($stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
@@ -41,7 +37,6 @@ angular.module('mean.icu').config([
                     if ($stateParams.entityId && $stateParams.id) {
                         return;
                     }
-                    console.log('main3',  $stateParams.entity)
                     var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
                     return TasksService[getFn]($stateParams.entityId);
                 };
@@ -67,7 +62,6 @@ angular.module('mean.icu').config([
                                 $stateParams.entity + '-details.html';
                         },
                         controllerProvider: function($stateParams) {
-                            console.log('main4',  $stateParams.entity)
                             if (!$stateParams.entity) return '';
                             else return capitalize($stateParams.entity) + 'DetailsController';
                         }
@@ -78,7 +72,6 @@ angular.module('mean.icu').config([
         };
 
         var getListView = function(entity, resolve) {
-            console.log('main5',  entity)
             var view = {
                 'middlepane@main': {
                     templateUrl: '/icu/components/' + entity + '-list/' + entity + '-list.html',
@@ -123,7 +116,6 @@ angular.module('mean.icu').config([
                         var task = _(tasks.data || tasks).find(function(t) {
                             return t._id === $stateParams.id;
                         });
-                        console.log('task', task, $stateParams.id)
                         if (!task) {
                             return TasksService.getById($stateParams.id).then(function(task) {
                                 return task;
@@ -257,7 +249,6 @@ angular.module('mean.icu').config([
 
         function getDetailsTabState(main, tab) {
             //task , activities
-            console.log('main6',  main)
            
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
@@ -266,7 +257,6 @@ angular.module('mean.icu').config([
             resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
                 function(service, $stateParams) {
                     var entityName = $stateParams.id ? main : $stateParams.entity;
-                    console.log('main7',  entityName,$stateParams,main)
                     var getFn = 'getBy' + capitalize(entityName) + 'Id';
 
                     if (!service[getFn]) {
@@ -292,7 +282,6 @@ angular.module('mean.icu').config([
                             return '/icu/components/' + entity + '-details/tabs/' + tab + '/' + tab + '.html';
                         },
                         controllerProvider: function($stateParams) {
-                            console.log('main8',  $stateParams.entity)
                             var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
                             return entity + capitalizedTab + 'Controller';
                         }
@@ -550,7 +539,6 @@ angular.module('mean.icu').config([
                 resolve: {
                     tasks: function(TasksService, $stateParams) {
                         if ($stateParams.starred) {
-                            console.log(TasksService.getStarred())
                             return TasksService.getStarred();
                         } else {
                             return TasksService.getAll($stateParams.start,
@@ -633,11 +621,9 @@ angular.module('mean.icu').config([
             },
             resolve: {
                 entity: function(TasksService, $stateParams) {
-                    console.log('aaaaaaaaaaaaaaa')
                     return TasksService.getById($stateParams.entityId)
                 },
                 tasks: function(TasksService, $stateParams) {
-                    console.log('bbbbbbbbbbbbbb')
                     return TasksService.getSubTasks($stateParams.entityId)
 
                 }
