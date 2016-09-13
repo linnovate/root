@@ -90,6 +90,10 @@ exports.update = function(req, res, next) {
     }
   }
 
+  if (req.body.subTasks.length && !req.body.subTasks[req.body.subTasks.length - 1]._id) {
+  	req.body.subTasks.pop();
+  }
+
   task.update(req, res, next);
 };
 

@@ -73,7 +73,7 @@ angular.module('mean.icu.data.tasksservice', [])
             var subTask = task.subTasks[task.subTasks.length-1];
         }
         return $http.put(ApiUri + EntityPrefix + '/' + task._id, task).then(function (result) {
-            result.data.subTasks.push(subTask);
+            if (subTask) result.data.subTasks.push(subTask);
             return result.data;
         });
     }
