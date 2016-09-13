@@ -10,14 +10,12 @@ angular.module('mean.icu').config([
         };
 
         var generateStateByEntity = function(main) {
-
             var capitalizedMain = capitalize(main);
 
             var resolve = {};
             resolve[main + 's'] = [capitalizedMain + 'sService', '$stateParams',
                 function(service, $stateParams) {
                     var getFn = 'getBy' + capitalize($stateParams.entity) + 'Id';
-
                     if (!service[getFn]) {
                         getFn = 'getById';
                     }
@@ -118,7 +116,6 @@ angular.module('mean.icu').config([
                         var task = _(tasks.data || tasks).find(function(t) {
                             return t._id === $stateParams.id;
                         });
-
                         if (!task) {
                             return TasksService.getById($stateParams.id).then(function(task) {
                                 return task;
@@ -252,6 +249,7 @@ angular.module('mean.icu').config([
 
         function getDetailsTabState(main, tab) {
             //task , activities
+           
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
 
@@ -541,7 +539,6 @@ angular.module('mean.icu').config([
                 resolve: {
                     tasks: function(TasksService, $stateParams) {
                         if ($stateParams.starred) {
-                            console.log(TasksService.getStarred())
                             return TasksService.getStarred();
                         } else {
                             return TasksService.getAll($stateParams.start,
