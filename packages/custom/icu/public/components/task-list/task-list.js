@@ -11,6 +11,7 @@ angular.module('mean.icu.ui.tasklist', [])
     $scope.starred = $stateParams.starred;
     
     function init() {
+        if(context.entity)
       	if(!context.entity.parent) {
 	        if(context.entity.project ){
 	            $scope.parentState = 'byentity';

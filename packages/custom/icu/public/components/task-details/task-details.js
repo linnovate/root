@@ -88,6 +88,7 @@ $scope.createProject = function (projName ,cb) {
 
     ProjectsService.create(project).then(function (result) {
         $scope.projects.push(result);
+        $scope.projName = '';
         cb(result);
     /*        $scope.update(result,'project')
 */    });
