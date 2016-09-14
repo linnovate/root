@@ -123,10 +123,27 @@
                         }
                         span:last-child{
                             display: inline-block;
-                            width: 70%;
+                            /*width: 70%;*/
                             line-height: 1;
                             /*border: none;*/
+                            width: 100%;
+            				margin: 0;
                         }
+                        .avatar {
+                        	height: 26px;
+			                width: 26px;
+			                background-color: $green;
+			                border-radius: 15px;
+			                display: inline-block;
+			                margin: 0 10px;
+			                float: left;
+			                font-size: 20px;
+			                line-height: 25px;
+			                img.image {
+			                    margin-top: -4px;
+			                }
+                        }
+
                     }
                     .save-template{
                         height: calc(12px * 2);
@@ -157,6 +174,25 @@
                 border-bottom: none;
                 }*/
             }
+            .template-watcher {
+	            .ui-select-match {
+	            	span.ui-select-toggle {
+	            		padding-top: 3px;
+	            		.ui-select-match-text {
+	            			line-height: 1;
+	            		}
+	            		.summary-content {
+		        			vertical-align: super;
+		        		}
+	            	}
+	            }
+	            .ui-select-choices {
+	                width: 100%;
+	                .summary-content {
+	        			vertical-align: super;
+	        		}
+	            }
+	        }
         }
         
         .summary {
