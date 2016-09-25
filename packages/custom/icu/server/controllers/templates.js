@@ -25,28 +25,30 @@ Object.keys(template).forEach(function(methodName) {
 });
 
 var addAttachment = function(tAttachment, templateId, creator, watchers, circles) {
-  addUpdate(templateId, creator, 'copyAttachment', function(err, update) {
-    if(err) {
-      console.log(err)
-      return;
-    }
-    var attachment = new Attachment({
-      issueId: update._id,
-      issue: 'update',
-      entity: 'task',
-      entityId: templateId,
-      name: tAttachment.name,
-      path: tAttachment.path,
-      attachmentType: tAttachment.attachmentType,
-      size: tAttachment.size,
-      created: new Date(),
-      updated: new Date(),
-      creator: creator,
-      watchers: watchers,
-      circles: circles
-    });
-    attachment.save();
-  });
+	Update.findOne({_id: tAttachment.issueId}).exec(function(err, tUpdate) {
+	  addUpdate(templateId, creator, 'copyAttachment', tUpdate.description, function(err, update) {
+	    if(err) {
+	      console.log(err)
+	      return;
+	    }
+	    var attachment = new Attachment({
+	      issueId: update._id,
+	      issue: 'update',
+	      entity: 'task',
+	      entityId: templateId,
+	      name: tAttachment.name,
+	      path: tAttachment.path,
+	      attachmentType: tAttachment.attachmentType,
+	      size: tAttachment.size,
+	      created: new Date(),
+	      updated: new Date(),
+	      creator: creator,
+	      watchers: watchers,
+	      circles: circles
+	    });
+	    attachment.save();
+	  });
+  	});
 };
 
 var cloneAttachments = function(taskId, templateId, creator, watchers, circles) {
@@ -54,23 +56,22 @@ var cloneAttachments = function(taskId, templateId, creator, watchers, circles) 
     entity: 'task',
     entityId: taskId
   }).exec(function(err, attachments) {
-    console.log(JSON.stringify(attachments));
     for (var i = 0; i < attachments.length; i++) {
-      addAttachment(attachments[i], templateId, creator, watchers, circles)
+      addAttachment(attachments[i], templateId, creator, watchers, circles);
     }
   });
 };
 
-var addUpdate = function(taskId, creator, type, callback) {
+var addUpdate = function(taskId, creator, type, description, callback) {
   var update = new Update({
     issue: 'task',
     issueId: taskId,
     creator: creator,
     type: type,
+    description: description,
     created: new Date(),
     updated: new Date()
   });
-  console.dir(update)
   update.save(function(err, update) {
     if (callback) {
       callback(err, update);
@@ -92,6 +93,7 @@ var addToTemplate = function(task, parentId, name, creator, watchers, circles, p
       project: project,
       templateId: task._id
     });
+
     callback({
       s: task.subTasks.length,
       t: template
@@ -166,16 +168,11 @@ exports.toTemplate = function(req, res, next) {
         var circles = req.body.circles;
         addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, watchers, circles, null, false, 'template', templates, totals, function(templates) {
           var counter = Object.keys(templates).length;
-          console.log(counter)
           for (var t in templates) {
             templates[t].t.save(function(err, subtask) {
-              console.log('&&&&&&&&&')
-              console.log(JSON.stringify(subtask))
-              counter--;
-              console.log(counter)
               if (counter === 0) {
                 for (var t in templates) {
-                  cloneAttachments(t._id, template._id, req.user._id, watchers, circles);
+                  cloneAttachments(templates[t].t.templateId , t , req.user._id, watchers, circles);
                 }
               };
             });
@@ -220,6 +217,7 @@ exports.toSubTasks = function(req, res, next) {
             for (var t in templates) {
               templates[t].t.save(function(err, subtask) {
                 addUpdate(subtask._id, req.user, 'copy');
+                cloneAttachments(subtask.templateId, subtask._id , req.user._id, subtask.watchers, subtask.circles);
               });
               if (templates[t].t.parent && templates[t].t.parent.toString() === req.body.taskId.toString()) {
                 req.locals.result.push(templates[t].t);

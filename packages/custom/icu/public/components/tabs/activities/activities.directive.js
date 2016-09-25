@@ -66,6 +66,13 @@ angular.module('mean.icu.ui.tabs')
                 }, {
                     type: 'text',
                     value: 'template'
+                }],
+                copyAttachment: [{
+                    type: 'text',
+                    value: 'copyAttachment'
+                }, {
+                    type: 'object',
+                    value: 'issue'
                 }]
             };
 

@@ -83,12 +83,12 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
 
         };
         $scope.deleteShowDlt = function(subTask) {
-        /* angular.forEach($scope.tasks, function(st) {
+         angular.forEach($scope.tasks, function(st) {
             if(st._id !== subTask._id){
                 subTask.showDelete = false;
             }
                       
-    });*/
+    });
      }
 
      $scope.delete = function(subTask) {
