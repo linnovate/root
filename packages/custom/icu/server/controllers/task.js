@@ -5,7 +5,7 @@ var _ = require('lodash');
 var async = require('async');
 
 var options = {
-  includes: 'assign watchers project subTasks',
+  includes: 'assign watchers project subTasks discussions',
   defaults: {
     project: undefined,
     assign: undefined,
@@ -90,6 +90,10 @@ exports.update = function(req, res, next) {
     }
   }
 
+  if (req.body.subTasks.length && !req.body.subTasks[req.body.subTasks.length - 1]._id) {
+  	req.body.subTasks.pop();
+  }
+
   task.update(req, res, next);
 };
 
@@ -142,7 +146,7 @@ exports.getByEntity = function(req, res, next) {
     discussions: 'discussions',
     tags: 'tags'
   },
-    entityQuery = {};
+    entityQuery = { tType: {$ne: 'template'} };
   entityQuery[entities[req.params.entity]] = (req.params.id instanceof Array) ? {
     $in: req.params.id
   } : req.params.id;
@@ -204,7 +208,8 @@ exports.getZombieTasks = function(req, res, next) {
     discussions: {
       $size: 0
     },
-    currentUser: req.user
+    currentUser: req.user,
+    tType: {$ne: 'template'}
   });
   Query.populate(options.includes);
 
@@ -229,7 +234,8 @@ var byAssign = function(req, res, next) {
     var query = req.acl.mongoQuery('Task');
   	query.find({
   		assign: req.user._id,
-  		status: {$nin: ['rejected', 'done']}
+  		status: {$nin: ['rejected', 'done']},
+  		tType: {$ne: 'template'}
 		})
 		.populate('project')
 		.exec(function(err, tasks) {
@@ -264,11 +270,15 @@ var byAssign = function(req, res, next) {
               "assign": req.user._id
             }
           }],
-          "must_not": [{
+          "must_not": [
+          {
             "terms": {
-              "status": ['rejected', 'done'] //,
+              "status": ['rejected', 'done'],
               //"execution" : "and"
             }
+          },
+          {
+          	"term" :{"tType": 'template'}
           }]
         }
       }
@@ -295,11 +305,15 @@ function getTasksDueWeekQuery(req, callback) {
             "assign": req.user._id
           }
         }],
-        "must_not": [{
+        "must_not": [
+        {
           "terms": {
             "status": ['rejected', 'done'] //,
             // "execution" : "and"
           }
+        },
+        {
+        	"term" :{"tType": 'template'}
         }]
       }
     }
@@ -324,11 +338,15 @@ function getOverDueTasksQuery(req, callback) {
             "assign": req.user._id
           }
         }],
-        "must_not": [{
+        "must_not": [
+        {
           "terms": {
             "status": ['rejected', 'done'] //,
             //"execution" : "and"
           }
+        },
+        {
+        	"term" :{"tType": 'template'}
         }]
       }
     }
@@ -345,7 +363,8 @@ function getWatchedTasksQuery(req, callback) {
             "watchers": req.user._id
           }
         },
-        "must_not": [{
+        "must_not": [
+        {
           "term": {
             "assign": req.user._id
           }
@@ -354,6 +373,9 @@ function getWatchedTasksQuery(req, callback) {
             "status": ['rejected', 'done'] //,
             //"execution" : "and"
           }
+        },
+        {
+        	"term" :{"tType": 'template'}
         }]
       }
     }
@@ -419,6 +441,7 @@ exports.getWatchedTasks = function(req, res, next) {
     "status": {
       $nin: ['rejected', 'done']
     },
+    tType: {$ne: 'template'}
   }, function(err, response) {
     if (err) {
       req.locals.error = err;
@@ -445,7 +468,8 @@ exports.getOverdueWatchedTasks = function(req, res, next) {
     },
     "due": {
       $lt: dates[0]
-    }
+    },
+    tType: {$ne: 'template'}
   }, function(err, response) {
     if (err) {
       req.locals.error = err;
@@ -463,7 +487,8 @@ exports.getSubTasks = function(req, res, next) {
 
   var query = req.acl.mongoQuery('Task');
   query.findOne({
-    '_id': req.params.id
+    '_id': req.params.id,
+    tType: {$ne: 'template'}
   }, {
     subTasks: 1
   })
@@ -491,7 +516,8 @@ exports.updateParent = function(req, res, next) {
     }
   };
   Task.findOneAndUpdate({
-    '_id': req.body.parent
+    '_id': req.body.parent,
+    tType: {$ne: 'template'}
   }, data, function(err, task) {
     if (err) {
       req.locals.error = err;
@@ -506,13 +532,15 @@ exports.removeSubTask = function(req, res, next) {
     return next();
   }
   Task.findOne({
-    "_id": req.params.id
+    "_id": req.params.id,
+    tType: {$ne: 'template'}
   }, function(err, subTask) {
     if (err) {
       req.locals.error = err;
     } else {
       Task.update({
-        '_id': subTask.parent
+        '_id': subTask.parent,
+        tType: {$ne: 'template'}
       }, {
         $pull: {
           'subTasks': subTask._id

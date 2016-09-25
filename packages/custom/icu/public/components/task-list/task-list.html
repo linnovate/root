@@ -16,20 +16,17 @@
         </div>
         <div class="header-wrap subtasks" ng-switch-when="task"
             ng-class="{ 'active': isCurrentState('main.{{currentContext.main}}.byparent.activities') }"
-            ui-sref="main.{{currentContext.main}}.byparent.activities({
-                    entity: currentContext.entityName,
-                    entityId: currentContext.entityId
-                    })">
+            >
             <header class="title">
                 <div>
-                    <span class="project"
+                    <span class="project" 
                       title="{{currentContext.entity.project.title}}"
                       ng-style="{'background-color': '#' + currentContext.entity.project.color, 'color': 'white'}">
                     {{currentContext.entity.project.title}}
                     </span>
                 </div>
                 {{ 'tasksFrom' | i18next }}
-                <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</spa
+             <span ng-click="goToParent()">"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</spa
             </header>
         </div>
         <div class="header-wrap" ng-switch-default
