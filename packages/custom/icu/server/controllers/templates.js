@@ -15,6 +15,8 @@ var crud = require('../controllers/crud.js');
 var template = crud('templates', options);
 
 var Task = require('../models/task');
+var Attachment = require('../models/attachment');
+var Update = require('../models/update');
 
 Object.keys(template).forEach(function(methodName) {
   if (methodName !== 'create') {
@@ -22,7 +24,61 @@ Object.keys(template).forEach(function(methodName) {
   }
 });
 
-var addToTemplate = function(task, parentId, name, creator, watchers, exist, tType, callback) {
+var addAttachment = function(tAttachment, templateId, creator, watchers, circles) {
+  addUpdate(templateId, creator, 'copyAttachment', function(err, update) {
+    if(err) {
+      console.log(err)
+      return;
+    }
+    var attachment = new Attachment({
+      issueId: update._id,
+      issue: 'update',
+      entity: 'task',
+      entityId: templateId,
+      name: tAttachment.name,
+      path: tAttachment.path,
+      attachmentType: tAttachment.attachmentType,
+      size: tAttachment.size,
+      created: new Date(),
+      updated: new Date(),
+      creator: creator,
+      watchers: watchers,
+      circles: circles
+    });
+    attachment.save();
+  });
+};
+
+var cloneAttachments = function(taskId, templateId, creator, watchers, circles) {
+  Attachment.find({
+    entity: 'task',
+    entityId: taskId
+  }).exec(function(err, attachments) {
+    console.log(JSON.stringify(attachments));
+    for (var i = 0; i < attachments.length; i++) {
+      addAttachment(attachments[i], templateId, creator, watchers, circles)
+    }
+  });
+};
+
+var addUpdate = function(taskId, creator, type, callback) {
+  var update = new Update({
+    issue: 'task',
+    issueId: taskId,
+    creator: creator,
+    type: type,
+    created: new Date(),
+    updated: new Date()
+  });
+  console.dir(update)
+  update.save(function(err, update) {
+    if (callback) {
+      callback(err, update);
+    }
+  });
+};
+
+var addToTemplate = function(task, parentId, name, creator, watchers, circles, project, exist, tType, callback) {
   if (!exist) {
     var template = new Task({
       tType: tType,
@@ -31,7 +87,10 @@ var addToTemplate = function(task, parentId, name, creator, watchers, exist, tTy
       creator: creator,
       tags: task.tags,
       description: task.description,
-      watchers: watchers
+      watchers: watchers,
+      circles: circles,
+      project: project,
+      templateId: task._id
     });
     callback({
       s: task.subTasks.length,
@@ -52,14 +111,14 @@ var addToTemplate = function(task, parentId, name, creator, watchers, exist, tTy
   }
 }
 
-var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, exist, tType, templates, totals, callback) {
+var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, circles, project, exist, tType, templates, totals, callback) {
   Task.findOne({
     '_id': taskId
   })
     .exec(function(err, task) {
       if (task) {
         totals.tasks += task.subTasks.length;
-        addToTemplate(task, parentId, name, creator, watchers, exist, tType, function(template) {
+        addToTemplate(task, parentId, name, creator, watchers, circles, project, exist, tType, function(template) {
           templates[template.t._id] = template;
           if (parentId) {
             templates[parentId].t.subTasks.push(template.t._id);
@@ -69,8 +128,10 @@ var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, 
             return callback(templates);
           }
           watchers = template.t.watchers;
+          circles = template.t.circles;
+          project = template.t.project;
           for (var i = 0; i < task.subTasks.length; i++) {
-            addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, watchers, false, tType, templates, totals, callback);
+            addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, watchers, circles, project, false, tType, templates, totals, callback);
           }
         })
       } else {
@@ -102,9 +163,22 @@ exports.toTemplate = function(req, res, next) {
       } else {
         totals.tasks = 1;
         var watchers = req.body.watchers || [req.body.watcher];
-        addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, watchers, false, 'template', templates, totals, function(templates) {
+        var circles = req.body.circles;
+        addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, watchers, circles, null, false, 'template', templates, totals, function(templates) {
+          var counter = Object.keys(templates).length;
+          console.log(counter)
           for (var t in templates) {
-            templates[t].t.save();
+            templates[t].t.save(function(err, subtask) {
+              console.log('&&&&&&&&&')
+              console.log(JSON.stringify(subtask))
+              counter--;
+              console.log(counter)
+              if (counter === 0) {
+                for (var t in templates) {
+                  cloneAttachments(t._id, template._id, req.user._id, watchers, circles);
+                }
+              };
+            });
           }
         });
       }
@@ -141,10 +215,12 @@ exports.toSubTasks = function(req, res, next) {
           next();
         } else {
           totals.tasks = 1;
-          addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, [], req.body.taskId, null, tasks, totals, function(templates) {
+          addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, [], {}, null, req.body.taskId, null, tasks, totals, function(templates) {
             req.locals.result = [];
             for (var t in templates) {
-              templates[t].t.save();
+              templates[t].t.save(function(err, subtask) {
+                addUpdate(subtask._id, req.user, 'copy');
+              });
               if (templates[t].t.parent && templates[t].t.parent.toString() === req.body.taskId.toString()) {
                 req.locals.result.push(templates[t].t);
               }
