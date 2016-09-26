@@ -79,16 +79,16 @@
                         </ui-select-match>
                         <ui-select-choices repeat="project in projects | filter:$select.search">
                             <div class="line" ng-show="project.title" ng-class="{ 'create new': project.class}"> 
-                            	<div ng-show="project.class" ng-bind-html="project.title | searchfilter:$select.search"  class="title"></div>
-                            	<div ng-show="project.class && projName"  class="create-new">{{ 'createNew' | i18next }}</div>
-                            	<span ng-show="!project.class" ng-bind-html="project.title | searchfilter:$select.search"  class="title"></span>
+                                <div ng-show="project.class" ng-bind-html="project.title | searchfilter:$select.search"  class="title"></div>
+                                <div ng-show="project.class && projName"  class="create-new">{{ 'createNew' | i18next }}</div>
+                                <span ng-show="!project.class" ng-bind-html="project.title | searchfilter:$select.search"  class="title"></span>
                             </div>
                         </ui-select-choices>
                     </ui-select>
-                    <div class="parent" ng-if="task.parent">
-                		{{currentContext.entity.title}}
-                	</div>
                 </div>
+            </div>
+            <div class="parent" ng-if="task.parent">
+                {{currentContext.entity.title}}
             </div>
         </div>
    <div class="description">

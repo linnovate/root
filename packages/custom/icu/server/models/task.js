@@ -67,6 +67,10 @@ var TaskSchema = new Schema({
   },
   tType: {
     type: String
+  },
+  templateId: {
+  	type: Schema.ObjectId,
+    ref: 'Task'
   }
 });
 

@@ -20,10 +20,11 @@ angular.module('mean.icu.ui.tasklist', [])
 	            $scope.parentId=context.entity.id ;
 	        }
 	        else if(context.entity.discussions ){
-	           $scope.parentState = 'byentity';
-	           $scope.parentEntity= 'discussion';
-	           $scope.parentEntityId = context.entity.discussions[0]._id ;
-	           $scope.parentId = context.entity.id;
+		        $scope.parentState = 'byentity';
+		        $scope.parentEntity= 'discussion';
+		        if(context.entity.discussions[0])
+		           	$scope.parentEntityId = context.entity.discussions[0]._id ;
+		        $scope.parentId = context.entity.id;
 	       }
 	   	} 
 	   	else {
