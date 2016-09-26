@@ -377,3 +377,13 @@
 
 
 }
+
+
+@media (max-width: 890px) { 
+.sub-tasks .user .summary-content{
+        display:none
+    }
+   .sub-tasks .user a .summary-content{
+        display:block;
+    }
+ }
