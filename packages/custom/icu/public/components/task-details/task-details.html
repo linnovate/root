@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="due">
-                <input ui-date="dueOptions" ng-model="task.due" placeholder="{{ 'dueDate' | i18next }}">
+                <input ui-date="dueOptions" ng-model="task.due" placeholder="{{ 'dueDate' | i18next }}" ng-class='{"oldDate":checkDate()}'>
             </div>
 
             <div class="status" >

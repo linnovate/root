@@ -50,6 +50,15 @@ TasksService.getTemplate().then(function(template){
     $scope.template = template;
 });
 
+$scope.checkDate = function() {
+    var d = new Date()
+    if (d > $scope.task.due){
+     return true;
+    }
+ return false;
+}
+
+
 $scope.people = people.data || people;
 if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
     var newPeople = {

@@ -196,3 +196,9 @@ $activityListDefaultMaxH: 80px;
         }
     }
 }
+.upload-err {
+    transition: height 0.4s;
+    float: right;
+    color: #EF7875;
+    font-style: italic;
+}
