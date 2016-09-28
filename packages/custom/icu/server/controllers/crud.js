@@ -10,11 +10,9 @@ module.exports = function(entityName, options) {
     return function(data) {
       if (_.isEmpty(data)) {
         req.locals.error = {
-          status: 404,
-          message: 'Entity not found'
+          status: 204,
+          message: 'No Content'
         };
-
-        return next();
       }
 
       req.locals.result = data;

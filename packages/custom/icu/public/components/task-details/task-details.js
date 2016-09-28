@@ -2,23 +2,24 @@
 
 angular.module('mean.icu.ui.taskdetails', [])
 .controller('TaskDetailsController', function ($scope,
- entity,
- tags,
- projects,
- $state,
- TasksService,
- ActivitiesService,
- context,
- $stateParams,
- $rootScope,
- MeanSocket,
- UsersService,
- people,
- $timeout,
- ProjectsService,
+   entity,
+   tags,
+   projects,
+   $state,
+   TasksService,
+   ActivitiesService,
+   context,
+   $stateParams,
+   $rootScope,
+   MeanSocket,
+   UsersService,
+   people,
+   $timeout,
+   ProjectsService,
                                                me //,subtasks
                                                ) {
     $scope.task = entity || context.entity;
+    console.log('11111',$scope.task)
     $scope.addSubTasks = false;
     $scope.me = me;
     $scope.imgUrl = '?' + Date.now();
@@ -39,23 +40,25 @@ $scope.projects.push({
 });
 
 $scope.shouldAutofocus = !$stateParams.nameFocused;
-
-TasksService.getStarred().then(function(starred) {
-    $scope.task.star = _(starred).any(function(s) {
-        return s._id === $scope.task._id;
+if($scope.task._id){
+        TasksService.getStarred().then(function(starred) {
+        $scope.task.star = _(starred).any(function(s) {
+            return s._id === $scope.task._id;
+        });
     });
-});
 
 TasksService.getTemplate().then(function(template){
     $scope.template = template;
 });
+}
+
 
 $scope.checkDate = function() {
     var d = new Date()
     if (d > $scope.task.due){
-     return true;
-    }
- return false;
+       return true;
+   }
+   return false;
 }
 
 
@@ -76,16 +79,16 @@ if (!$scope.task) {
 }
 
 $scope.updateProjName = function(x,y){
- $scope.projName = $('.ui-select-search.ng-valid-parse').val()
+   $scope.projName = $('.ui-select-search.ng-valid-parse').val()
 }
 
 $scope.removeCreateNew = function() {
- $scope.projName = '';
+   $scope.projName = '';
 }
 
 $scope.$watch('projName', function(newValue, oldValue) {
- var index = _.findIndex($scope.projects, function(p) { return p.title == oldValue; });
- $scope.projects[index].title = $scope.projName;
+   var index = _.findIndex($scope.projects, function(p) { return p.title == oldValue; });
+   $scope.projects[index].title = $scope.projName;
 });
 
 $scope.createProject = function (projName ,cb) {

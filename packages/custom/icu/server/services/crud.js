@@ -150,7 +150,9 @@ module.exports = function(entityName, options) {
 
     return query.then(function(results) {
       if (!results.length) {
-        throw new Error('Entity not found');
+        // console.log('2222222')
+        // throw new Error('Entity not found');
+        return {};
       }
 
       return results[0];

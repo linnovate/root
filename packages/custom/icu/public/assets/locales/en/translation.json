@@ -92,6 +92,8 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "passwordMustBeBetween8-20CharactersLong": "Password must be between 8-20 characters long",
     "people": "People",
+    "perTitle":"Restricted accses",
+    "perMsg":"You dont have the right compartmentalization level to view this task.",
     "peopleFrom": "People from ",
     "profilePage": "Profile page",
     "project": "Project",

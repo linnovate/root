@@ -97,6 +97,8 @@
 	"projects":  "פרויקטים",
     "projectsFrom": "פרויקטים מ",
     "register": "הרשם",
+    "perTitle":"גישה מוגבלת",
+    "perMsg":"אין לך את רמת מידור הזכות להציג משימה זו.",
     "rejected":  "נדחה",
 	"restrictedAccessTo": "גישה מוגבלת:",
 	"review":  "בבדיקה",
