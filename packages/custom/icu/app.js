@@ -62,6 +62,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.system',
         'mean.users',
         'mean.icu.ui.all',
+        'mean.icu.ui.errors',
         'mean.icu.ui.autofocus',
         'mean.icu.ui.ctrlenter',
         'mean.icu.ui.login',
@@ -115,6 +116,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.subtasks',
         'mean.icu.ui.subtaskslistdirective',
         '720kb.tooltips',
+
     ]);
 
 
