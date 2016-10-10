@@ -282,14 +282,23 @@ $scope.deleteTask = function (task) {
         'name': '',
         'watcher': me
     };
+
     $scope.saveTemplate = function(){
-        console.log($scope.task.subTasks, 'sub-task')
         $scope.isopen = false;
         if($scope.task.subTasks[0]._id){
             TasksService.saveTemplate($stateParams.id,$scope.newTemplate).then(function (result) {
-                // console.log(result)
-            });
-        }
+                $scope.showMsgSavedTpl = true;
+                $scope.newTemplate.name = '';
+                var element = angular.element('.sub-tasks .fa-chevron-down')[0];
+                $timeout(function () {
+                    element.click();
+                }, 0);
+                 $timeout(function () {
+                          $scope.showMsgSavedTpl = false;
+                        }, 3000);
+                               $scope.template.push(result);
+                            });
+                        }
         else
             console.log('no subTasks')
     };

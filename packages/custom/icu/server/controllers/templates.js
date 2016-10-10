@@ -167,9 +167,15 @@ exports.toTemplate = function(req, res, next) {
         var watchers = req.body.watchers || [req.body.watcher];
         var circles = req.body.circles;
         addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, watchers, circles, null, false, 'template', templates, totals, function(templates) {
-          var counter = Object.keys(templates).length;
+         var counter = Object.keys(templates).length;
           for (var t in templates) {
             templates[t].t.save(function(err, subtask) {
+              console.log(JSON.stringify(subtask,1,1))
+              console.log(task._id)
+              if (subtask.templateId.toString() === task._id.toString()) {
+                req.locals.result = subtask;
+                next();
+              }
               if (counter === 0) {
                 for (var t in templates) {
                   cloneAttachments(templates[t].t.templateId , t , req.user._id, watchers, circles);
@@ -179,8 +185,6 @@ exports.toTemplate = function(req, res, next) {
           }
         });
       }
-      req.locals.result = task;
-      next();
     });
 }
 
