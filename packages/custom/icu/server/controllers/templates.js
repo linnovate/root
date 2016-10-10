@@ -170,6 +170,7 @@ exports.toTemplate = function(req, res, next) {
           var counter = Object.keys(templates).length;
           for (var t in templates) {
             templates[t].t.save(function(err, subtask) {
+	            counter--;
               if (counter === 0) {
                 for (var t in templates) {
                   cloneAttachments(templates[t].t.templateId , t , req.user._id, watchers, circles);
