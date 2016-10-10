@@ -26,13 +26,15 @@ module.exports = {
 		personal: {
 			requiredAllowed: false,
 			max: 50,
-			watchers: true,
+			// watchers: true,
+			stronger: ['watchers'],
 			location: 'footer'
 		},
 		corporate: {
 			requiredAllowed: false,
 			max: 50,
-			watchers: true,
+			// watchers: true,
+			stronger: ['watchers'],
 			location: 'footer'
 		}
 	},
