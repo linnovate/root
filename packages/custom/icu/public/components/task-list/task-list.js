@@ -11,27 +11,30 @@ angular.module('mean.icu.ui.tasklist', [])
     $scope.starred = $stateParams.starred;
     
     function init() {
-        if(context.entity)
-      	if(!context.entity.parent) {
-	        if(context.entity.project ){
-	            $scope.parentState = 'byentity';
-	            $scope.parentEntity ='project' ;
-	            $scope.parentEntityId = context.entity.project._id;
-	            $scope.parentId=context.entity.id ;
-	        }
-	        else if(context.entity.discussions ){
-		        $scope.parentState = 'byentity';
-		        $scope.parentEntity= 'discussion';
-		        if(context.entity.discussions[0])
-		           	$scope.parentEntityId = context.entity.discussions[0]._id ;
-		        $scope.parentId = context.entity.id;
-	       }
-	   	} 
+        if(context.entity){
+	      	if(!context.entity.parent) {
+		        if(context.entity.project ){
+		            $scope.parentState = 'byentity';
+		            $scope.parentEntity ='project' ;
+		            $scope.parentEntityId = context.entity.project._id;
+		            $scope.parentId=context.entity.id ;
+		        }
+		        else if(context.entity.discussions ){
+			        $scope.parentState = 'byentity';
+			        $scope.parentEntity= 'discussion';
+			        if(context.entity.discussions[0])
+			           	$scope.parentEntityId = context.entity.discussions[0]._id ;
+			        $scope.parentId = context.entity.id;
+		       }
+		   	} 
+		}
 	   	else {
 		    $scope.parentState = 'byparent';
 		    $scope.parentEntity = 'task';
-		    $scope.parentEntityId = context.entity.parent;
-		    $scope.parentId = context.entity.id;
+		    if(context.entity){
+		    	$scope.parentEntityId = context.entity.parent;
+		    	$scope.parentId = context.entity.id;
+		    }
 	   	}
 	}
 
@@ -97,16 +100,17 @@ angular.module('mean.icu.ui.tasklist', [])
     $scope.toggleStarred = function () {
         $state.go($state.current.name, { starred: !$stateParams.starred });
     };
-
     if ($scope.tasks.length) {
         if ($state.current.name === 'main.tasks.all' ||
             $state.current.name === 'main.tasks.byentity') {
             navigateToDetails($scope.tasks[0]);
     }
-} else if (
-    $state.current.name !== 'main.tasks.byentity.activities' &&
-            //$state.current.name !== 'main.tasks.byentity.tasks') {
-                $state.current.name !== 'main.tasks.byentity.details.activities') {
-    $state.go('.activities');
-}
+	} else if (
+	    $state.current.name !== 'main.tasks.byentity.activities'
+	            //$state.current.name !== 'main.tasks.byentity.tasks') {
+				&& $state.current.name !== 'main.tasks.all' 
+	            && $state.current.name !== 'main.tasks.byentity.details.activities'
+	            ) {
+	    $state.go('.activities');
+	}
 });
