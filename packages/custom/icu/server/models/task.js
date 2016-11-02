@@ -71,7 +71,8 @@ var TaskSchema = new Schema({
   templateId: {
   	type: Schema.ObjectId,
     ref: 'Task'
-  }
+  },
+  customData: {}
 });
 
 var starVirtual = TaskSchema.virtual('star');
