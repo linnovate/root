@@ -1,7 +1,7 @@
 var Notification = require('../../../general/server/providers/notify.js').Notification;
 var Notify = new Notification();
 
-var projectController = require('../controllers/project.js');
+var projectController = require('./project.js');
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
@@ -88,7 +88,7 @@ exports.createRoom = function(req, res, next) {
                 }]
             }
         }, function(result) {
-            req.body.room = result.id;
+            req.body.room = result[0].rid;
 
             projectController.update(req, res, next);
         });
@@ -100,7 +100,7 @@ exports.createRoom = function(req, res, next) {
 };
 
 exports.updateRoom = function(req, res, next) {
-        
+
     // Made By OHAD
     var ArrayOfusernames = [];
 
