@@ -127,8 +127,10 @@ exports.getJwt = function(req, res) {
   // We are sending the payload inside the token
   ///var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
   var token = jwt.sign(escaped, config.secret, {
+
     // expiresInMinutes: 60 * 5
   });
+  res.cookie('root-jwt', token);
   res.json({
     token: token
   });
