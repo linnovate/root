@@ -112,6 +112,8 @@ module.exports = {
     uri: 'http://localhost:3005'
   },
   rocketChat: {
-    uri: 'http://localhost:3005'
+    uri: 'http://localhost:3000',
+    authToken: 'authToken',
+    userId: 'userId'
   }
 };
