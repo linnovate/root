@@ -79,7 +79,7 @@ angular.module('mean.icu.ui.membersfooter', [])
             var groups = [], allowed;
 
             circlesService.getmine().then(function(data) {
-                for (var i = 0; i < groupTypes.length; i++){
+                for (var i = 0; data && i < groupTypes.length; i++){
                     allowed = data.allowed[groupTypes[i]];
                     allowed.forEach(function(g) {
                         g.type = groupTypes[i]
