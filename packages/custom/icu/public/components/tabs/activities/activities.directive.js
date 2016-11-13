@@ -108,8 +108,8 @@ angular.module('mean.icu.ui.tabs')
 
                 // $scope.activity.size = $scope.attachments[0].size;
 
-                var isRoomProject = $scope.entityName === 'project' && $scope.entity.room,
-                    isRoomFortask = $scope.entityName === 'task' && $scope.entity.project && $scope.entity.project.room,
+                var isRoomProject = $scope.entityName === 'project',
+                    isRoomFortask = $scope.entityName === 'task' && $scope.entity.project,
                     context = {};
 
                 if (isRoomProject || isRoomFortask) { //for notification in hi

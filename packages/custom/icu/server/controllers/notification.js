@@ -7,10 +7,12 @@ var projectController = require('./project.js');
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   Message = mongoose.model('Message'),
+  Project = mongoose.model('Project'),
+  Task = require('../models/task'),
   _ = require('lodash');
 var UserCreator = mongoose.model('User');
 
-//Made By OHAD
+//Made By OHAD194
 exports.read = function(req, res, next) {
 
   Message.find({
@@ -59,27 +61,8 @@ exports.createRoom = function(req, res, next) {
     if (req.locals.error) {
         return next();
     }
-    // Made By OHAD
-    var ArrayOfusernames = [];
- 
-    // Get the username by the _id from the mongo.
-    // There is callback so everything is in the callback
-    UserCreator.findOne({ _id: req.locals.result.creator}, function(err, user) {
-        
-        if(user && user.profile && user.profile.rcun) ArrayOfusernames.push(user.profile.rcun);
-
-        // Check if there is watchers
-        if (req.locals.result.watchers.length != 0)
-        {
-            req.locals.result.watchers.forEach(function (item) {
-                if(item.profile && item.profile.rcun && ArrayOfusernames.indexOf(item.profile.rcun) < 0) 
-                    ArrayOfusernames.push(item.profile.rcun);
-            });
-        }
-        console.log('ArrayOfusernames-----------')
-        console.log(ArrayOfusernames)
-        notifications.notify(['hi'], 'createRoom', {name: new Date().toISOString().replace(/\..+/, '').replace(/:/, '-').replace(/:/, '-')+'-'+req.locals.result._id, message:'message',members:ArrayOfusernames}, function(error, result){
-            if (error) {
+    createRoom(req.locals.result, function(error, result){
+        if (error) {
                 req.hi = {error: error};
                 next();
             } else {
@@ -87,12 +70,7 @@ exports.createRoom = function(req, res, next) {
 
                 projectController.update(req, res, next);
             }
-        })
-
-    //End Of callback    
-    });
-    // END Made By OHAD          
-               
+    });     
 };
 
 exports.updateRoom = function(req, res, next) {
@@ -184,19 +162,54 @@ exports.sendNotification = function(req, res, next) {
 };
 
 exports.sendUpdate = function(req, res, next) {
+        console.log('==================req==========================')
+        console.log(JSON.stringify(req.body))
     if (req.locals.error) {
         return next();
     }
 
-	if (req.body.context.room) {
-		req.body.context.user = req.user.name;
-		
+    if (req.body.context.room) {
+        req.body.context.user = req.user.name;        
     notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:req.body.context.room}, function(error, result){
                 if (error) {
                     req.hi = {error: error};
                 } 
         })
-	}
+    }
+
+    else if(!req.body.context.room) {
+        if (req.body.data.issue === 'project') {            
+            Project.findOne({_id: req.body.data.issueId}).exec(function(error, project) {
+                if (project.room) {
+                    req.body.context.room = project.room;
+                    req.body.context.user = req.user.name;        
+                    notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:req.body.context.room}, function(error, result){
+                                if (error) {
+                                    req.hi = {error: error};
+                                } 
+                        })
+                } else {
+                    createRoomAndSendMessage(project, req, next);     
+                }       
+            })
+            
+        }
+        else if (req.body.data.issue === 'task') {
+            Task.findOne({_id: req.body.data.issueId}).populate('project').exec(function(error, task) {
+                if (task.project.room) {
+                    req.body.context.room = project.room;
+                    req.body.context.user = req.user.name;        
+                    notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:req.body.context.room}, function(error, result){
+                                if (error) {
+                                    req.hi = {error: error};
+                                } 
+                        })
+                } else {
+                createRoomAndSendMessage(task.project, req, next);
+                }         
+            })
+        }
+    }
 
     next();
 };
@@ -226,3 +239,54 @@ var bulidMassage = function (context) {
 
     return msg;
 };
+
+
+function createRoom(project, callback) {
+    // Made By OHAD
+    var ArrayOfusernames = [];
+ 
+    // Get the username by the _id from the mongo.
+    // There is callback so everything is in the callback
+    UserCreator.findOne({ _id: project.creator}, function(err, user) {
+        
+        if(user && user.profile && user.profile.rcun) ArrayOfusernames.push(user.profile.rcun);
+
+        // Check if there is watchers
+        if (project.watchers && project.watchers.length != 0)
+        {
+            project.watchers.forEach(function (item) {
+                if(item.profile && item.profile.rcun && ArrayOfusernames.indexOf(item.profile.rcun) < 0) 
+                    ArrayOfusernames.push(item.profile.rcun);
+            });
+        }
+        console.log('ArrayOfusernames-----------')
+        console.log(ArrayOfusernames)
+        notifications.notify(['hi'], 'createRoom', {name: new Date().toISOString().replace(/\..+/, '').replace(/:/, '-').replace(/:/, '-')+'-'+project._id, message:'message',members:ArrayOfusernames}, function(error, result){
+            callback(error, result)
+            
+        })
+
+    //End Of callback    
+    });
+    // END Made By OHAD          
+       
+}
+
+function createRoomAndSendMessage(project, req, next) {
+    createRoom(project, function(error, result) {
+                    if (error) {
+                        req.hi = {error: error};
+                        next();
+                    } else {
+                        project.room = result[0].rid;
+                        project.save();
+                        req.body.context.room = result[0].rid;
+                        req.body.context.user = req.user.name;        
+                        notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:req.body.context.room}, function(error, result){
+                                    if (error) {
+                                        req.hi = {error: error};
+                                    } 
+                            })
+                    }
+                });
+}
