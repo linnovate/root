@@ -120,7 +120,8 @@ angular.module('mean.icu.ui.tabs')
                         description: $scope.activity.description,
                         issue: $scope.activity.issue,
                         issueName: $scope.entity.title,
-                        name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : ''
+                        name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : '',
+                        location: location.href
                     }
                 }
                 console.log('activity', $scope.activity, 'context', context);

@@ -10,6 +10,8 @@ var mongoose = require('mongoose'),
   _ = require('lodash');
 var UserCreator = mongoose.model('User');
 
+var config = require('meanio').loadConfig();
+
 //Made By OHAD
 exports.read = function(req, res, next) {
 
@@ -54,6 +56,12 @@ exports.updateDropDown = function(req, res, next) {
 };
 //END Made By OHAD
 
+var generateRoomName = function(name, id) {
+    if (!name || name === '') {
+        name = new Date().toISOString().replace(/\..+/, '').replace(/:/, '-').replace(/:/, '-');
+    }
+    return name + '-' + id;
+}
 
 exports.createRoom = function(req, res, next) {
     if (req.locals.error) {
@@ -61,26 +69,33 @@ exports.createRoom = function(req, res, next) {
     }
     // Made By OHAD
     var ArrayOfusernames = [];
- 
+
     // Get the username by the _id from the mongo.
     // There is callback so everything is in the callback
-    UserCreator.findOne({ _id: req.locals.result.creator}, function(err, user) {
-        
-        if(user && user.profile && user.profile.rcun) ArrayOfusernames.push(user.profile.rcun);
+    UserCreator.findOne({
+        _id: req.locals.result.creator
+    }, function(err, user) {
+
+        if (user && user.profile && user.profile.rcun) ArrayOfusernames.push(user.profile.rcun);
 
         // Check if there is watchers
-        if (req.locals.result.watchers.length != 0)
-        {
-            req.locals.result.watchers.forEach(function (item) {
-                if(item.profile && item.profile.rcun && ArrayOfusernames.indexOf(item.profile.rcun) < 0) 
+        if (req.locals.result.watchers.length != 0) {
+            req.locals.result.watchers.forEach(function(item) {
+                if (item.profile && item.profile.rcun && ArrayOfusernames.indexOf(item.profile.rcun) < 0)
                     ArrayOfusernames.push(item.profile.rcun);
             });
         }
         console.log('ArrayOfusernames-----------')
         console.log(ArrayOfusernames)
-        notifications.notify(['hi'], 'createRoom', {name: new Date().toISOString().replace(/\..+/, '').replace(/:/, '-').replace(/:/, '-')+'-'+req.locals.result._id, message:'message',members:ArrayOfusernames}, function(error, result){
+        notifications.notify(['hi'], 'createRoom', {
+            name: generateRoomName(req.locals.result.title, req.locals.result._id),
+            message: 'message',
+            members: ArrayOfusernames
+        }, function(error, result) {
             if (error) {
-                req.hi = {error: error};
+                req.hi = {
+                    error: error
+                };
                 next();
             } else {
                 req.body.room = result[0].rid;
@@ -89,73 +104,52 @@ exports.createRoom = function(req, res, next) {
             }
         })
 
-    //End Of callback    
+        //End Of callback    
     });
     // END Made By OHAD          
-               
+
 };
 
 exports.updateRoom = function(req, res, next) {
-
-    // Made By OHAD
-    var ArrayOfusernames = [];
-
-    // Get the username by the _id from the mongo.
-    // There is callback so everything is in the callback
-    UserCreator.findOne({ _id: req.locals.result.creator}, function(err, user) {
         
-       if(user && user.username) ArrayOfusernames.push(user.username);
-        
-        // Check if there is watchers
-        if (req.locals.result.watchers.length != 0)
-        {
-            req.locals.result.watchers.forEach(function (item) {
-                ArrayOfusernames.push(item.username);
+    if (req.locals.error) {
+        return next();
+    }
+    if (!req.locals.result.room) {
+        exports.createRoom(req, res ,next);
+    } else {
+        if (req.locals.result.title !== req.locals.old.title)
+            notifications.notify(['hi'], 'renameRoom', {name: generateRoomName(req.locals.result.title, req.locals.result._id), roomId:req.locals.result.room, message:'message'}, function(error, result){
+            if (error) {
+                req.hi = {error: error};
+            } 
+        })
+        var added = req.locals.result.watchers.filter(function(o1){
+            return !req.locals.old.watchers.some(function(o2){
+                return o1.id === o2.id;
             });
-        }
-        
-        if (req.locals.error) {
-            return next();
-        }
-        if (!req.locals.result.room) {
-            exports.createRoom(req, res ,next);
-        } else {
-            if (req.locals.result.title !== req.locals.old.title)
-                notifications.notify(['hi'], 'renameRoom', {name: req.locals.result.title+'-'+req.locals.result._id, roomId:req.locals.result.room, message:'message'}, function(error, result){
-                if (error) {
-                    req.hi = {error: error};
-                } 
+        });
+        for (var i in added) {
+            notifications.notify(['hi'], 'addMember', {member: added[i].profile.rcun, roomId:req.locals.result.room}, function(error, result){
             })
-            var added = req.locals.result.watchers.filter(function(o1){
-                return !req.locals.old.watchers.some(function(o2){
-                    return o1.id === o2.id;
-                });
-            });
-            for (var i in added) {
-                notifications.notify(['hi'], 'addMember', {member: added[i].profile.rcun, roomId:req.locals.result.room}, function(error, result){
-                })
-            }
-
-            var removed = req.locals.old.watchers.filter(function(o1){
-                return !req.locals.result.watchers.some(function(o2){
-                    return o1.id === o2.id;
-                });
-            });
-            for (var i in removed) {
-                notifications.notify(['hi'], 'removeMember', {member: removed[i].profile.rcun, roomId:req.locals.result.room}, function(error, result){
-                if (error) {
-                    req.hi = {error: error};
-                } 
-                })
-            }
-
-            next()
         }
-    
-    //End Of callback
-    });
-            
-    // END Made By OHAD         
+
+        var removed = req.locals.old.watchers.filter(function(o1){
+            return !req.locals.result.watchers.some(function(o2){
+                return o1.id === o2.id;
+            });
+        });
+        for (var i in removed) {
+            notifications.notify(['hi'], 'removeMember', {member: removed[i].profile.rcun, roomId:req.locals.result.room}, function(error, result){
+            if (error) {
+                req.hi = {error: error};
+            } 
+            })
+        }
+
+        next();
+    }
+
 };
 
 
@@ -187,7 +181,9 @@ exports.sendUpdate = function(req, res, next) {
     if (req.locals.error) {
         return next();
     }
+    console.log('JSON.stringify(req.body)================================================================')
 
+console.log(JSON.stringify(req.body))
 	if (req.body.context.room) {
 		req.body.context.user = req.user.name;
 		
@@ -218,7 +214,7 @@ var bulidMassage = function (context) {
     //if(context.oldVal)
     //    msg += ' from "' + context.oldVal + '" to "' + context.newVal + ' "';
     if(context.issue)
-        msg += ' to ' + context.issue + ' "' + msgWithUrl(context.issueName, context.location) + '"';
+        msg += ' to ' + msgWithUrl(context.issue + ' "' + context.issueName + '"', context.location);
     if(context.user)
         msg += ' by ' + _.capitalize(context.user);
     if(context.description)
