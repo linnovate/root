@@ -266,7 +266,7 @@ exports.forgotpassword = function(req, res, next) {
 };
 
 exports.updateCircles = function(req, res, next) {
-  circles.upsertUser(req.user.id, function() {
+  // circles.upsertUser(req.user.id, function() {
     next();
-  });
+  // });
 };

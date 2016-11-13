@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.discussionsservice', [])
-.service('DiscussionsService', function (ApiUri, $http, PaginationService) {
+.service('DiscussionsService', function (ApiUri, $http, PaginationService, WarningsService) {
     var EntityPrefix = '/discussions';
     var data;
 
@@ -17,6 +17,7 @@ angular.module('mean.icu.data.discussionsservice', [])
         }
 
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
@@ -26,6 +27,7 @@ angular.module('mean.icu.data.discussionsservice', [])
 
     function getById(id) {
         return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -48,6 +50,7 @@ angular.module('mean.icu.data.discussionsservice', [])
             }
 
             return $http.get(url + qs).then(function(result) {
+            	WarningsService.setWarning(result.headers().warning);
                 return PaginationService.processResponse(result.data);
             });
         }
@@ -55,18 +58,21 @@ angular.module('mean.icu.data.discussionsservice', [])
 
     function create(discussion) {
         return $http.post(ApiUri + EntityPrefix, discussion).then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function update(discussion) {
         return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion).then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -74,6 +80,7 @@ angular.module('mean.icu.data.discussionsservice', [])
     function star(discussion) {
         return $http.patch(ApiUri + EntityPrefix + '/' + discussion._id + '/star', {star: !discussion.star})
             .then(function (result) {
+            	WarningsService.setWarning(result.headers().warning);
                 discussion.star = !discussion.star;
                 return result.data;
             });
@@ -81,12 +88,14 @@ angular.module('mean.icu.data.discussionsservice', [])
 
     function getStarred() {
         return $http.get(ApiUri + EntityPrefix + '/starred').then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function summary(discussion) {
         return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/summary').then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -94,6 +103,7 @@ angular.module('mean.icu.data.discussionsservice', [])
     function schedule(discussion) {
         console.log(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule');
         return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule').then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }

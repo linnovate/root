@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.activitiesservice', [])
-.service('ActivitiesService', function (ApiUri, $http, UsersService) {
+.service('ActivitiesService', function (ApiUri, $http, UsersService, WarningsService) {
     var EntityPrefix = '/updates';
     var data;
 
@@ -22,6 +22,7 @@ angular.module('mean.icu.data.activitiesservice', [])
 
     function getById(id) {
         return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             return getUser([result.data]).then(function(updates) {
                 return updates[0];
             });
@@ -30,30 +31,35 @@ angular.module('mean.icu.data.activitiesservice', [])
 
     function getByProjectId(id) {
         return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function(updatesResult) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
             return getUser(updatesResult.data);
         });
     }
 
     function getByTaskId(id) {
         return $http.get(ApiUri + '/tasks/' + id + EntityPrefix).then(function(updatesResult) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
             return getUser(updatesResult.data);
         });
     }
 
     function getByTasks() {
         return $http.get(ApiUri + '/tasks/myTasks'  + EntityPrefix).then(function(updatesResult) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
             return getUser(updatesResult.data);
         });
     }
 
     function getByDiscussionId(id) {
         return $http.get(ApiUri + '/discussions/' + id + EntityPrefix).then(function(updatesResult) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
             return getUser(updatesResult.data);
         });
     }
 
     function create(update) {
         return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
             return result.data;
         });
     }

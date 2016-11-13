@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.notificationsservice', [])
-.service('NotificationsService', function($http, ApiUri) {
+.service('NotificationsService', function($http, ApiUri, WarningsService) {
     var date = moment.duration(-5, 'minutes');
     
     var EntityPrefix = '/notification';
@@ -103,14 +103,14 @@ angular.module('mean.icu.data.notificationsservice', [])
         // console.log(id);
         //return $http.put(ApiUri + EntityPrefix + '/' + id, id).then(function (result) {
             return $http.put(ApiUri + EntityPrefix + '/' + id).then(function (result) {
-            
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
     function updateByUserId_DropDown(id) {
         
             return $http.put(ApiUri + EntityPrefix1 + '/' + id).then(function (result) {
-            
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.usersservice', [])
-.service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state) {
+.service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state, WarningsService) {
     var EntityPrefix = '/users';
     var me = null;
 
@@ -18,6 +18,7 @@ angular.module('mean.icu.data.usersservice', [])
             deferred.resolve(me);
         } else {
             $http.get('/api/users/me').then(function(result) {
+            	WarningsService.setWarning(result.headers().warning);
                 if (!result.data) {
                     deferred.reject(null);
                 } else {
@@ -37,24 +38,28 @@ angular.module('mean.icu.data.usersservice', [])
 
     function getByProjectId(id) {
         return $http.get(ApiUri + '/projects/' + id + '/users').then(function(usersResult) {
+        	WarningsService.setWarning(usersResult.headers().warning);
             return usersResult.data;
         });
     }
 
     function getByDiscussionId(id) {
         return $http.get(ApiUri + '/discussions/' + id + '/users').then(function(usersResult) {
+        	WarningsService.setWarning(usersResult.headers().warning);
             return usersResult.data;
         });
     }
 
     function getById(id) {
         return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function update(user) {
         return $http.put('/api/users/' + user._id, user).then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             me = result.data;
             return result.data;
         });
@@ -63,6 +68,7 @@ angular.module('mean.icu.data.usersservice', [])
 
     function login(credentials) {
         return $http.post('/api/login', credentials).then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             localStorage.setItem('JWT', result.data.token);
             return result;
         }, function(err) {
@@ -78,6 +84,7 @@ angular.module('mean.icu.data.usersservice', [])
 
     function register(credentials) {
         return $http.post('/api/register', credentials).then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             localStorage.setItem('JWT', result.data.token);
             return result;
         }, function(err) {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.paginationservice', [])
-.service('PaginationService', function ($http, $q) {
+.service('PaginationService', function ($http, $q, WarningsService) {
     function loadMore(url) {
         if (!url) {
             return function() {
@@ -16,6 +16,7 @@ angular.module('mean.icu.data.paginationservice', [])
         } else {
             return function() {
                 return $http.get(url).then(function(result) {
+                	WarningsService.setWarning(result.headers().warning);
                     return processResponse(result.data);
                 });
             };
