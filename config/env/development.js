@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
- db: (process.env.MONGODB_URI || 'mongodb://localhost/icu-dev3'),
+ db: (process.env.MONGODB_URI || 'mongodb://localhost/icu-dev'),
   debug: true,
   logging: {
     format: 'tiny'
@@ -117,7 +117,7 @@ module.exports = {
   // },
   rocketChat: {
     uri: 'http://localhost:3000',
-    "authToken": "Op74zz0GMtvf36aD36rfJ3ZnC7VhPtiLvRGwePVQniV",
-    "userId": "EkiPDu2PuvNb5x9vt"
+    "authToken": "authToken",
+    "userId": "userId"
   }
 };
