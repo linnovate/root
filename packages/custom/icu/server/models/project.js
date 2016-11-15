@@ -56,6 +56,10 @@ var ProjectSchema = new Schema({
   room: {
     type: String
   },
+  hasRoom: {
+    type: Boolean,
+    default: false
+  },
   sources: [String],
   circles: {
     type: Schema.Types.Mixed

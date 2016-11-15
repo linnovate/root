@@ -42,6 +42,8 @@ exports.send = function (type, data) {
   data.attendees = recipients.map(function (w) {
     return w.name;
   }).join(', ');
+console.log(type)
+console.log(data)
 
   return render(type, data).then(function(results) {
     var promises = recipients.map(function (recipient) {

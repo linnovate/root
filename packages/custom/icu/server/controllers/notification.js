@@ -68,28 +68,66 @@ exports.createRoom = function(req, res, next) {
     if (req.locals.error) {
         return next();
     }
-
-    createRoom(req.locals.result, function(error, result){
-        if (error) {
+    Project.findOne({_id:req.locals.result._id}).exec(function(error, project) {
+        // if (!req.locals.result.hasRoom) {
+           createRoom(req.locals.result, function(error, result){
+            if (error) {
                 req.hi = {error: error};
+                req.locals.result.hasRoom = false;
+                req.locals.result.save();
                 next();
             } else {
-                req.body.room = result[0].rid;
-
+                req.body.room = result[0].rid;                
                 projectController.update(req, res, next);
             }
         })
+       // }
+
+   });
+   
     // END Made By OHAD          
 };
 
 exports.updateRoom = function(req, res, next) {
-        
     if (req.locals.error) {
         return next();
-    }
-    if (!req.locals.result.room) {
-        exports.createRoom(req, res ,next);
+    }    
+    if (!req.locals.result.room && !req.locals.result.hasRoom) {        
+        Project.findOne({_id:req.locals.result._id}).exec(function(error, project){
+            if (!project.hasRoom) {
+                Project.update({_id:req.locals.result._id},{$set:{hasRoom: true}}, function(){
+                exports.createRoom(req, res ,next);        
+            })
+            }
+        })
     } else {
+        var data = req.locals.result;
+        var oldData = req.locals.old;
+        var changedField;
+        if (data.color !== oldData.color)
+            changedField = 'color changed to ' + data.color;
+        else if (data.status !== oldData.status)
+            changedField = 'status changed to ' + data.status;
+        else if (data.description !== oldData.description)
+            changedField = 'description changed to ' + data.description;
+        console.log("update field in project")
+        console.log(changedField)
+
+        if (changedField !== '') {
+            req.body.context = {
+                    action: 'updated',
+                    type: 'project',
+                    name: data.title,
+                    user: req.user.username,
+                    description: changedField
+                }
+            notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:data.room}, function(error, result){
+                    if (error) {
+                        req.hi = {error: error};
+                    } 
+            })
+        }
+
         if (req.locals.result.title !== req.locals.old.title)
             notifications.notify(['hi'], 'renameRoom', {name: generateRoomName(req.locals.result.title, req.locals.result._id), roomId:req.locals.result.room, message:'message'}, function(error, result){
             if (error) {
@@ -125,37 +163,49 @@ exports.updateRoom = function(req, res, next) {
 };
 
 
-exports.sendNotification = function(req, res, next) {
+exports.sendNotification = function(req, res, next) {    
     if (req.locals.error) {
         return next();
-    }
-
+    }    
     var data = req.locals.result;
-	if (data.project && data.project.room) {
-        var context = {
-                action: 'added',
-                type: 'task',
-                name: data.title,
-                user: req.user.username,
-                url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities'
-            }
-        notifications.notify(['hi'], 'createMessage', {message:bulidMassage(context),roomId:data.project.room}, function(error, result){
-                if (error) {
-                    req.hi = {error: error};
-                } 
-        })
+    if (data.project) {
+        req.body.context = {
+                    action: 'added',
+                    type: 'task',
+                    name: data.title,
+                    user: req.user.username,
+                    url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities'
+                }
+    	if (data.project.room) {            
+            notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:data.project.room}, function(error, result){
+                    if (error) {
+                        req.hi = {error: error};
+                    } 
+            })
+        } else {
+            Project.findOne({_id:data.project.id}).exec(function(error, project) {
+                if (project.room) {
+                    notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:project.room}, function(error, result){
+                    if (error) {
+                        req.hi = {error: error};
+                    } 
+            })
+                } else {
+                    createRoomAndSendMessage(project, req, next);     
+                }       
+            })
+        }
     }
+   
 
     next();
 };
 
-exports.sendUpdate = function(req, res, next) {
-        console.log('==================req==========================')
-        console.log(JSON.stringify(req.body))
+exports.sendUpdate = function(req, res, next) {    
     if (req.locals.error) {
         return next();
     }
-
+    
     if (req.body.context.room) {
         req.body.context.user = req.user.name;        
     notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:req.body.context.room}, function(error, result){
@@ -198,6 +248,45 @@ exports.sendUpdate = function(req, res, next) {
             })
         }
     }
+
+    next();
+};
+
+exports.updateTaskNotification = function(req, res, next) {
+    console.log("came to send notify")
+    console.log(JSON.stringify(req.locals));
+    if (req.locals.error) {
+        return next();
+    }    
+    var data = req.locals.result;
+    var oldData = req.locals.old;
+    var changed = '';
+    for (var i in data) {        
+        if (i == 'title' || i == 'description' || i == 'status' || i == 'star') {
+            if (data[i] !== oldData[i]) {
+               changed = i + ' changed to ' + data[i];
+            } 
+        }
+    }
+    
+    if (data.project && changed !== '') {
+        req.body.context = {
+                    action: 'updated',
+                    type: 'task',
+                    name: data.title,
+                    user: req.user.username,
+                    url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities',
+                    description: changed
+                }
+        if (data.project.room) {            
+            notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:data.project.room}, function(error, result){
+                    if (error) {
+                        req.hi = {error: error};
+                    } 
+            })
+        } 
+    }
+   
 
     next();
 };
@@ -268,7 +357,7 @@ function createRoomAndSendMessage(project, req, next) {
                         project.save();
                         req.body.context.room = result[0].rid;
                         req.body.context.user = req.user.name;        
-                        notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:req.body.context.room}, function(error, result){
+                        notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:project.room}, function(error, result){
                                     if (error) {
                                         req.hi = {error: error};
                                     } 
