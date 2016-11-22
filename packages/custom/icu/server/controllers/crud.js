@@ -83,6 +83,8 @@ module.exports = function(entityName, options) {
 
     var entity = req.locals.data.body || req.body;
     
+    req.locals.old = JSON.parse(JSON.stringify(req.locals.result));
+
     entityService
       .update(req.locals.result, entity, { user: req.user }, req.acl)
       .then(success(req, next), error(req, next));

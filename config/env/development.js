@@ -16,7 +16,7 @@ module.exports = {
     name: 'ICU'
   },
   //hostname: 'http://192.168.245.152:3000',
-  host: 'http://localhost:3000',
+  host: 'http://localhost:3002',
   facebook: {
     clientID: 'DEFAULT_APP_ID',
     clientSecret: 'APP_SECRET',
@@ -109,9 +109,15 @@ module.exports = {
     owner: '562334ccea168c4f323a1be8'
   },
   circles: {
+    // uri: 'http://192.116.82.36:2230'
     uri: 'http://localhost:3005'
   },
+  // circles: {
+  //   uri: 'http://192.116.82.36:2230'
+  // },
   rocketChat: {
-    uri: 'http://localhost:3005'
+    uri: 'http://localhost:3000',
+    authToken: "authToken",
+    userId: "userId"
   }
 };

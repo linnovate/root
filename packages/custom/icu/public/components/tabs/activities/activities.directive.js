@@ -108,8 +108,8 @@ angular.module('mean.icu.ui.tabs')
 
                 // $scope.activity.size = $scope.attachments[0].size;
 
-                var isRoomProject = $scope.entityName === 'project' && $scope.entity.room,
-                    isRoomFortask = $scope.entityName === 'task' && $scope.entity.project && $scope.entity.project.room,
+                var isRoomProject = $scope.entityName === 'project',
+                    isRoomFortask = $scope.entityName === 'task' && $scope.entity.project,
                     context = {};
 
                 if (isRoomProject || isRoomFortask) { //for notification in hi
@@ -120,7 +120,8 @@ angular.module('mean.icu.ui.tabs')
                         description: $scope.activity.description,
                         issue: $scope.activity.issue,
                         issueName: $scope.entity.title,
-                        name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : ''
+                        name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : '',
+                        location: location.href
                     }
                 }
                 console.log('activity', $scope.activity, 'context', context);

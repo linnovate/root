@@ -78,7 +78,6 @@ exports.update = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-
   if (req.body.discussion) {
     var alreadyAdded = _(req.locals.result.discussions).any(function(d) {
       return d.toString() === req.body.discussion;
@@ -90,7 +89,7 @@ exports.update = function(req, res, next) {
     }
   }
 
-  if (req.body.subTasks.length && !req.body.subTasks[req.body.subTasks.length - 1]._id) {
+  if (req.body.subTasks && req.body.subTasks.length && !req.body.subTasks[req.body.subTasks.length - 1]._id) {
   	req.body.subTasks.pop();
   }
 

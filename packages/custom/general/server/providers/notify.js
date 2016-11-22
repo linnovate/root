@@ -16,7 +16,10 @@ class Notification {
         var options = {
             method: type,
             headers: data.headers,
-            form: data.rooms,
+            form: {
+                rooms: data.rooms/*,
+                msg: bulidMassage(data.context)*/
+            },
             cmd: data.cmd
         };
 
@@ -109,17 +112,23 @@ class Notification {
 
 exports.Notification = Notification;
 
+var msgWithUrl = function(msg, url) {
+    if (!url) return msg;
+    return '[' + msg + '](' + url + ')';
+};
+
 var bulidMassage = function (context) {
     if(context.action == 'added')
         context.type = 'new ' + context.type;
     var msg = _.capitalize(context.type);
     if(context.name)
         msg += ' "' + context.name + '"';
+    msg = msgWithUrl(msg, context.url);
     msg += ' was ' + context.action;
     //if(context.oldVal)
     //    msg += ' from "' + context.oldVal + '" to "' + context.newVal + ' "';
     if(context.issue)
-        msg += ' to ' + context.issue + ' "' + context.issueName + '"';
+        msg += ' to ' + context.issue + ' "' + msgWithUrl(context.issueName, context.location) + '"';
     if(context.user)
         msg += ' by ' + _.capitalize(context.user);
     if(context.description)

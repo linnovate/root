@@ -27,6 +27,10 @@
             </div>
             <img class="avatar" ng-src="{{avatar}}?cb={{hash}}"></img>
         </div>
+        <div class=form-group>
+            <label>{{ 'rcun' | i18next }}</label>
+            <input class="form-control" type="text" ng-model="me.profile.rcun">
+        </div>
         <button>{{'save' | i18next }}</button>
     </form>
 </div>
