@@ -141,6 +141,7 @@
     "versions": "Versions",
     "view": "View",
     "visibleTo":"visible to:",
+    "connectECONNREFUSED": "connect ECONNREFUSED",
     "watchedTasks": "WATCHED TASKS",
     "YES": "YES",
     "youMustEnterAName": "You must enter a name",

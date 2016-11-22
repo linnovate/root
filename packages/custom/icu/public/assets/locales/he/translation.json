@@ -139,6 +139,7 @@
     "usernameCannotBeMoreThan20Characters": "Username cannot be more than 20 characters",
 	"view": "צפה",
 	"visibleTo":"הצג ל:",
+	"connectECONNREFUSED": "שגיאת התחבורת",
 	"watchedTasks": "משימות שאני עוקב אחריהן",
 	"YES": "אישור",
 	"youMustEnterAName": "You must enter a name",

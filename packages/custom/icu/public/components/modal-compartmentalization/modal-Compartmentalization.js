@@ -39,10 +39,11 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
 
                 }
             }
-
-            elem.bind('click', function() {
-                buildModal();
-            });
+	            elem.bind('click', function() {
+            		if(scope.mine && scope.mine !== ""){
+	                	buildModal();
+	                }
+	            });
 
             function buildModal() {
                 var modalInstance = $uibModal.open({
@@ -85,7 +86,6 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
     });
 
 function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector, data) {
-
     var serviceMap = {
         project: 'ProjectsService',
         discussion: 'DiscussionsService',

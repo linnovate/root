@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context, TasksService) {
+    function controller($scope, $state, context, TasksService, $rootScope) {
         $scope.context = context;
 
         $scope.projects = $scope.projects.data || $scope.projects;

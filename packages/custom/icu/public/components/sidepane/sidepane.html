@@ -1,6 +1,9 @@
 <header>
     {{ 'icu' | i18next }}
 </header>
+<div ng-if="$root.warnings.circles !== 'undefined'" style="color:red;">
+	{{$root.warnings.circles | i18next}}
+</div>
 <nav>
     <ul>
         <li data-ng-repeat="item in items" data-ng-class="{ 'active': isCurrentState(item) && item.open }" ng-click="removeFilterValue()">
