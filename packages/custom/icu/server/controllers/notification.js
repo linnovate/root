@@ -3,6 +3,7 @@
 var config = require('meanio').loadConfig();
 var notifications = require('notifications')({rocketChat: config.rocketChat});
 var projectController = require('./project.js');
+var hiSettings = require(process.cwd() + '/config/hiSettings') || {};
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
@@ -103,23 +104,27 @@ exports.updateRoom = function(req, res, next) {
     } else {
         var data = req.locals.result;
         var oldData = req.locals.old;
-        var changedField;
-        if (data.color !== oldData.color)
-            changedField = 'color changed to ' + data.color;
-        else if (data.status !== oldData.status)
-            changedField = 'status changed to ' + data.status;
-        else if (data.description !== oldData.description)
-            changedField = 'description changed to ' + data.description;
-        console.log("update field in project")
-        console.log(changedField)
+        var changed = '';
+        var changedArray = [];
+        for (var i in data) {        
+            if ((i == 'color' && hiSettings.projectNotify.color.value) || 
+                (i == 'description' && hiSettings.projectNotify.description.value) || 
+                (i == 'status' && hiSettings.projectNotify.status.value)) {
+                if (data[i] !== oldData[i]) {
+                   changed = i + ' changed to ' + data[i];
+                   changedArray.push(changed);
+                } 
+            }
+        }
 
-        if (changedField !== '') {
+        if (changed !== '') {
             req.body.context = {
                     action: 'updated',
                     type: 'project',
                     name: data.title,
                     user: req.user.username,
-                    description: changedField
+                    description: changedArray,
+                    url: config.host + '/projects/all/' + data._id + '/activities'
                 }
             notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:data.room}, function(error, result){
                     if (error) {
@@ -173,6 +178,8 @@ exports.sendNotification = function(req, res, next) {
                     action: 'added',
                     type: 'task',
                     name: data.title,
+                    proj: data.project.title,
+                    proj_url: config.host + '/projects/all/' + data.project._id + '/activities',
                     user: req.user.username,
                     url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities'
                 }
@@ -235,7 +242,7 @@ exports.sendUpdate = function(req, res, next) {
         else if (req.body.data.issue === 'task') {
             Task.findOne({_id: req.body.data.issueId}).populate('project').exec(function(error, task) {
                 if (task.project.room) {
-                    req.body.context.room = project.room;
+                    req.body.context.room = task.room;
                     req.body.context.user = req.user.name;        
                     notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:req.body.context.room}, function(error, result){
                                 if (error) {
@@ -253,19 +260,41 @@ exports.sendUpdate = function(req, res, next) {
 };
 
 exports.updateTaskNotification = function(req, res, next) {
-    console.log("came to send notify")
-    console.log(JSON.stringify(req.locals));
     if (req.locals.error) {
         return next();
     }    
     var data = req.locals.result;
+    return;
     var oldData = req.locals.old;
     var changed = '';
-    for (var i in data) {        
-        if (i == 'title' || i == 'description' || i == 'status' || i == 'star') {
-            if (data[i] !== oldData[i]) {
+    var changedArray = [];
+    for (var i in data) {      
+        if ((i == 'title' && hiSettings.taskNotify.title.value) || (i == 'description' 
+            && hiSettings.taskNotify.description.value) || (i == 'status' 
+            && hiSettings.taskNotify.status.value) || (i == 'assign' && hiSettings.taskNotify.status.value)) {
+            if (i !== 'assign' && data[i] !== oldData[i]) {
                changed = i + ' changed to ' + data[i];
-            } 
+               changedArray.push(changed);
+            }
+            else if (i == 'assign') 
+                if (oldData[i] && data[i] && data[i].username !== oldData[i].username) {
+                    changed = i + ' changed to ' + data[i].username;
+                    changedArray.push(changed);
+                }
+                else if (!oldData[i] && data[i]) {
+                    changed = i + ' set to ' + data[i].username;
+                    changedArray.push(changed);
+                }
+                else if (oldData[i] && !data[i]) {
+                    changed = i + ' changed to no select';
+                    changedArray.push(changed);
+                }
+        }
+        else if (i == 'due' && hiSettings.taskNotify.due.value &&  (typeof(data[i]) !== 'undefined' || typeof(oldData[i]) !== 'undefined')) {
+            if (new Date(data[i]).getTime() !== new Date(oldData[i]).getTime()) {                
+                changed = i + ' changed to ' + data[i];
+                changedArray.push(changed);
+            }
         }
     }
     
@@ -273,10 +302,12 @@ exports.updateTaskNotification = function(req, res, next) {
         req.body.context = {
                     action: 'updated',
                     type: 'task',
+                    proj: data.project.title,
+                    proj_url: config.host + '/projects/all/' + data.project._id + '/activities',
                     name: data.title,
                     user: req.user.username,
                     url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities',
-                    description: changed
+                    description: changedArray
                 }
         if (data.project.room) {            
             notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:data.project.room}, function(error, result){
@@ -302,9 +333,20 @@ var bulidMassage = function (context) {
         context.type = 'new ' + context.type;
     var msg = _.capitalize(context.type);
     if(context.name)
-        msg += ' "' + context.name + '"';
+        msg += ' "' + context.name + '"';    
     msg = msgWithUrl(msg, context.url);
+    if(context.proj && context.proj_url) {
+        if(context.action == 'updated')
+            msg += ' from project ';
+        else if (context.action == 'added')
+            msg += ' to project ';
+        var proj = context.proj;
+        var proj_url = msgWithUrl(proj, context.proj_url);
+        msg += proj_url;
+    }
     msg += ' was ' + context.action;
+    
+    
     //if(context.oldVal)
     //    msg += ' from "' + context.oldVal + '" to "' + context.newVal + ' "';
     if(context.issue)
@@ -312,8 +354,7 @@ var bulidMassage = function (context) {
     if(context.user)
         msg += ' by ' + _.capitalize(context.user);
     if(context.description)
-        msg += ':\n"' + context.description + '"';
-
+        msg += ':\n' + context.description.join('\n');
     return msg;
 };
 

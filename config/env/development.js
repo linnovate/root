@@ -117,7 +117,7 @@ module.exports = {
   // },
   rocketChat: {
     uri: 'http://localhost:3000',
-    authToken: "nNfg40T005fz1n_6eet2BU27JVwT1enGcjXHd7a6D40",
-    userId: "RuzLRkNZTy4JvSr5H"
+    authToken: "authToken",
+    userId: "userId"
   }
 };

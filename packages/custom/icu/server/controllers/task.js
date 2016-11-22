@@ -78,7 +78,6 @@ exports.update = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-  console.log("task task task task")
   if (req.body.discussion) {
     var alreadyAdded = _(req.locals.result.discussions).any(function(d) {
       return d.toString() === req.body.discussion;
