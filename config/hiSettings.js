@@ -3,30 +3,34 @@
 module.exports = {
 	projectNotify: {
 		status: {
-			value: true
+			chat: true
 		},
 		color: {
-			value: true
+			chat: true
 		},
 		description: {
-			value: true
+			chat: true
+		},
+		project: {
+			chat: true
 		}
+
 	},
 	taskNotify: {
 		title: {
-			value: true
+			chat: true
 		},
 		assign: {
-			value: true
+			chat: true
 		},
 		due: {
-			value: true
+			chat: true
 		},
 		status: {
-			value: true
+			chat: true
 		},
 		description: {
-			value: true
+			chat: true
 		}
 	}
 	
