@@ -1,7 +1,7 @@
 // var Notification = require('../../../general/server/providers/notify.js').Notification;
 // var Notify = new Notification();
 var config = require('meanio').loadConfig();
-var notifications = require('notifications')({rocketChat: config.rocketChat});
+var notifications = require('root-notifications')({rocketChat: config.rocketChat});
 var projectController = require('./project.js');
 var hiSettings = require(process.cwd() + '/config/hiSettings') || {};
 
