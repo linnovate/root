@@ -31,6 +31,12 @@ module.exports = {
 		},
 		description: {
 			chat: true
+		},
+		watchers: {
+			chat: true
+		},
+		project: {
+			chat: true
 		}
 	}
 	

@@ -300,17 +300,50 @@ exports.updateTaskNotification = function(req, res, next) {
     var oldData = req.locals.old;
     var changed = '';
     var changedArray = [];
-    for (var i in data) {      
+    var projectChanged = false;
+
+    for (var i in data) {
         if (hiSettings.taskNotify[i] && hiSettings.taskNotify[i].chat) {
-            console.log("hiSettings notifications")
             if (i == 'due' &&  (typeof(data[i]) !== 'undefined' || typeof(oldData[i]) !== 'undefined')) {
                 if (new Date(data[i]).getTime() !== new Date(oldData[i]).getTime()) {                
                     changed = i + ' changed to ' + data[i];
                     changedArray.push(changed);
                 }
-            }   
+            }
+            else if (i == 'watchers') {
+                    var addedWatchers = [];
+                    var removedWatchers = [];
+                    var added = data.watchers.filter(function(o1){
+                        return !oldData.watchers.some(function(o2){
+                            return o1.id === o2.id;
+                        });
+                    });
+
+                    var removed = req.locals.old.watchers.filter(function(o1){
+                        return !req.locals.result.watchers.some(function(o2){
+                            return o1.id === o2.id;
+                        });
+                    });
+
+                    for (var i in added) {
+                        addedWatchers.push('user ' + added[i].name + ' was added' + '\n');
+                    }
+                    for (var i in removed) {
+                        removedWatchers.push('user ' + removed[i].name + ' was removed' + '\n');
+                    }
+                    if (addedWatchers.length > 0)
+                        changedArray.push(addedWatchers);
+                    if (removedWatchers.length > 0)
+                        changedArray.push(removedWatchers); 
+            }
+            else if (i == 'project') {
+                if (data[i].title !== oldData[i].title) {
+                    changed = i + ' changed to ' + data[i].title;
+                    changedArray.push(changed);
+                    projectChanged = true;
+                }
+            }
             else if (i !== 'assign' && data[i] !== oldData[i]) {
-               console.log("i not assign")
                changed = i + ' changed to ' + data[i];
                changedArray.push(changed);
             }
@@ -321,19 +354,6 @@ exports.updateTaskNotification = function(req, res, next) {
                 }
                 else if (!oldData[i] && data[i]) {
                     changed = i + ' set to ' + data[i].username;
-                    changedArray.push(changed);
-                }
-                else if (oldData[i] && !data[i]) {
-                    changed = i + ' changed to no select';
-                    changedArray.push(changed);
-                }
-            else if (i == 'project')
-                if (oldData[i] && data[i] && data[i].title !== oldData[i].title) {
-                    changed = i + ' changed to ' + data[i].title;
-                    changedArray.push(changed);
-                }
-                else if (!oldData[i] && data[i]) {
-                    changed = i + ' set to ' + data[i].title;
                     changedArray.push(changed);
                 }
                 else if (oldData[i] && !data[i]) {
@@ -355,12 +375,21 @@ exports.updateTaskNotification = function(req, res, next) {
                     url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities',
                     description: changedArray
                 }
-        if (data.project.room) {            
+        if (data.project.room) {
+            console.log("createMessage")
+            console.log(changedArray)        
             notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:data.project.room}, function(error, result){
                     if (error) {
                         req.hi = {error: error};
                     } 
             })
+            if (projectChanged == true) {
+                notifications.notify(['hi'], 'createMessage', {message:bulidMassage(req.body.context),roomId:oldData.project.room}, function(error, result){
+                    if (error) {
+                        req.hi = {error: error};
+                    } 
+            })
+            }
         } 
     }
 
@@ -402,7 +431,6 @@ exports.updateTaskNotification = function(req, res, next) {
 };
 
 var bulidMassage = function (context) {
-    console.log("bulidMassage context")
     console.log(JSON.stringify(context))
     if(context.action == 'added')
         context.type = 'new ' + context.type;
@@ -480,6 +508,8 @@ function createRoomAndSendMessage(project, req, next) {
                         req.hi = {error: error};
                         next();
                     } else {
+                        console.log('result from createRoomAndSendMessage')
+                        console.log(result)
                         project.room = result.id;
                         project.save();
                         req.body.context.room = result[0].rid;
