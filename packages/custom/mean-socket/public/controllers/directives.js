@@ -130,7 +130,7 @@ angular.module('mean.mean-socket').directive('useMeanSocket', function(Global, M
 				});
 
 				MeanSocket.on('message:channel:' + channel, function message(message) {
-					if (channel === MeanSocket.activeChannel) {
+					if (scope.listeningChannels.indexOf(channel) !== -1) {
 						scope.meanSocketAfterGet({
 							message: message
 						});
@@ -163,6 +163,7 @@ angular.module('mean.mean-socket').directive('useMeanSocket', function(Global, M
 					id: myname,
 					socket: "first"
 				});
+
 			};
 
 			//Auto join the defaultChannel

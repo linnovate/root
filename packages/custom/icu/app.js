@@ -45,13 +45,14 @@ ICU.register(function (app, auth, database,swagger) {
 
     ICU.aggregateAsset('js', '../lib/tinycolor/tinycolor.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/angularjs-color-picker/angularjs-color-picker.js', {weight: 1});
+    ICU.aggregateAsset('js', '../lib/angular-timeago/dist/angular-timeago.min.js');
 
     ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/i18next/i18next.min.js', {weight: 1});
     ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', {weight: 2});
 
     ICU.aggregateAsset('js', '../lib/angular-tooltips/dist/angular-tooltips.min.js');
-    
+
     ICU.angularDependencies([
         'jm.i18next',
         'mean.medium-editor',
@@ -59,6 +60,7 @@ ICU.register(function (app, auth, database,swagger) {
         'ui.date',
         'ngFileUpload',
         'color.picker',
+        'yaru22.angular-timeago',
         'mean.system',
         'mean.users',
         'mean.icu.ui.all',
@@ -191,7 +193,6 @@ console.yon = function(data, inspect) {
     //
     //var myChild = new Child('dwayne', 27);
     //myChild.sayName();
-
    
     return ICU;
 });

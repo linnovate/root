@@ -1,12 +1,12 @@
 <header class="header">
     <div class="notifications">
         <div class="indicator">
-            <!--<span class="count">{{notifications.length}}</span>-->
-            <span class="count">{{notificationsToWatch.length}}</span>
+            <span ng-show="notificationsToWatch.length" class="count">{{notificationsToWatch.length}}</span>
         </div>
     </div>
     <div class="last-notification" ng-click="triggerDropdown()">
         <!--<span class="text">{{lastNotification.entity}}-->
+        <span class="notification-time">{{lastNotification1.time | timeAgo}}</span>
         <span class="text">{{lastNotification1.entity | i18next}}
             <!--<span class="entity-name" ng-show="lastNotification1.entityName">"{{lastNotification1.entityName}}"</span>-->
             <span class="entity-name">"{{lastNotification1.entityName}}"</span>
@@ -18,6 +18,7 @@
         <div ng-repeat="notification in popupNotifications" ng-click="GoToNotification(notification)">
             <!--If the notification watched allready-->
             <div ng-if="notification.IsWatched">
+                <div class="notification-time">{{notification.time | timeAgo}}</div>
                 <span class="text">{{notification.entity | i18next}}
                     <span class="entity-name">"{{notification.entityName}}"</span>
                     {{notification.action | i18next}}
@@ -26,6 +27,7 @@
             </div>
             <!--If the notification NOT watched allready-->
             <div class="notification-NotWatched" ng-if="!notification.IsWatched">
+                <div class="notification-time">{{notification.time | timeAgo}}</div>
                 <span class="text">{{notification.entity | i18next}}
                     <span class="entity-name">"{{notification.entityName}}"</span>
                     {{notification.action | i18next}}

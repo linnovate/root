@@ -206,7 +206,7 @@ $scope.deleteTask = function (task) {
         UsersService.getMe().then(function (me) {
 
             var message = {};
-            message.content = task.title;
+            message.content = task.title || '-';
             //"message":{"content":"tyui"}
             MeanSocket.emit('message:send', {
                 message: message,

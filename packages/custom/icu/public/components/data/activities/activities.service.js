@@ -59,7 +59,7 @@ angular.module('mean.icu.data.activitiesservice', [])
 
     function create(update) {
         return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
-        	WarningsService.setWarning(updatesResult.headers().warning);
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
