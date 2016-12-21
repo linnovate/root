@@ -6,13 +6,16 @@
     </div>
     <div class="last-notification" ng-click="triggerDropdown()">
         <!--<span class="text">{{lastNotification.entity}}-->
-        <span class="notification-time">{{lastNotification1.time | timeAgo}}</span>
-        <span class="text">{{lastNotification1.entity | i18next}}
-            <!--<span class="entity-name" ng-show="lastNotification1.entityName">"{{lastNotification1.entityName}}"</span>-->
-            <span class="entity-name">"{{lastNotification1.entityName}}"</span>
-            {{lastNotification1.action | i18next}}
-            <span class="user">{{lastNotification1.user}}</span>
-        </span>
+        <div ng-show="lastNotification1">
+            <span class="notification-time">{{lastNotification1.time | timeAgo}}</span>
+            <span class="text">{{lastNotification1.entity | i18next}}
+                <!--<span class="entity-name" ng-show="lastNotification1.entityName">"{{lastNotification1.entityName}}"</span>-->
+                <span class="entity-name">"{{lastNotification1.entityName}}"</span>
+                {{lastNotification1.action | i18next}}
+                <span class="user">{{lastNotification1.user}}</span>
+            </span>
+        </div>
+
     </div>
     <div class="all-notifications" ng-if="allNotifications">
         <div ng-repeat="notification in popupNotifications" ng-click="GoToNotification(notification)">

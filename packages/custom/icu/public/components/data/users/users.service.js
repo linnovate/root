@@ -109,6 +109,17 @@ angular.module('mean.icu.data.usersservice', [])
 
     };
 
+    function loginToHi(username, password) {
+        return $http.post('/api/hi/login', {
+            user: username,
+            password: password
+        }).then(function(result) {
+            return (result.data);
+        }, function(err) {
+            return err;
+        });
+    };
+
     return {
         getAll: getAll,
         getMe: getMe,
@@ -120,6 +131,7 @@ angular.module('mean.icu.data.usersservice', [])
         register: register,
         update: update,
         updateAvatar: updateAvatar,
-        onIdentity: onIdentity
+        onIdentity: onIdentity,
+        loginToHi: loginToHi
     };
 });

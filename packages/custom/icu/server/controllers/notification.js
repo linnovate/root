@@ -180,7 +180,7 @@ exports.updateRoom = function(req, res, next) {
         for (var i in added) {
             console.log(JSON.stringify(added[i].profile))
             notifications.notify(['hi'], 'addMember', {
-                member: added[i].profile.rcun,
+                member: added[i].profile.hiUid,
                 roomId: req.locals.result.room
             }, function(error, result) {})
         }
@@ -192,7 +192,7 @@ exports.updateRoom = function(req, res, next) {
         });
         for (var i in removed) {
             notifications.notify(['hi'], 'removeMember', {
-                member: removed[i].profile.rcun,
+                member: removed[i].profile.hiUid,
                 roomId: req.locals.result.room
             }, function(error, result) {
                 if (error) {
@@ -539,13 +539,13 @@ function createRoom(project, callback) {
         _id: project.creator
     }, function(err, user) {
 
-        if (user && user.profile && user.profile.rcun) ArrayOfusernames.push(user.profile.rcun);
+        if (user && user.profile && user.profile.hiUid) ArrayOfusernames.push(user.profile.hiUid);
 
         // Check if there is watchers
         if (project.watchers && project.watchers.length != 0) {
             project.watchers.forEach(function(item) {
-                if (item.profile && item.profile.rcun && ArrayOfusernames.indexOf(item.profile.rcun) < 0)
-                    ArrayOfusernames.push(item.profile.rcun);
+                if (item.profile && item.profile.hiUid && ArrayOfusernames.indexOf(item.profile.hiUid) < 0)
+                    ArrayOfusernames.push(item.profile.hiUid);
             });
         }
         notifications.notify(['hi'], 'createRoom', {

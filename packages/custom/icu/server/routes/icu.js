@@ -22,7 +22,6 @@ var error = require('../middlewares/error.js');
 var config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 
-
 var express = require('express')
 
 //update mapping - OHAD
@@ -36,6 +35,9 @@ var express = require('express')
 module.exports = function(Icu, app) {
   var circles = require('circles-npm')(app, config.circles.uri, circleSettings);
 
+  var hi = require('root-notifications')({
+      rocketChat: config.rocketChat
+  }, app);
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
@@ -55,7 +57,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates|templates)*').all(circles.acl());
+  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
 
