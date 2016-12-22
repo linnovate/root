@@ -26,15 +26,25 @@ module.exports = {
 		personal: {
 			requiredAllowed: false,
 			max: 50,
-			// watchers: true,
-			stronger: ['watchers'],
+			stronger: [{
+				name: 'watchers',
+				type: 'Array'
+			}, {
+				name: 'assign',
+				type: 'String'
+			}],
 			location: 'footer'
 		},
 		corporate: {
 			requiredAllowed: false,
 			max: 50,
-			// watchers: true,
-			stronger: ['watchers'],
+			stronger: [{
+				name: 'watchers',
+				type: 'Array'
+			}, {
+				name: 'assign',
+				type: 'String'
+			}],
 			location: 'footer'
 		}
 	},
