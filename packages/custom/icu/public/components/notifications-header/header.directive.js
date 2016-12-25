@@ -3,7 +3,6 @@
 angular.module('mean.icu.ui.notificationsheader', [])
     .directive('icuNotificationsHeader', function(NotificationsService,
         TasksService,
-        UsersService,
         $state,
         $stateParams,
         context,
@@ -11,46 +10,18 @@ angular.module('mean.icu.ui.notificationsheader', [])
         DiscussionsService,
         $document) {
         function controller($scope) {
-
             $scope.notificationsToWatch = 0;
-            NotificationsService.addnotificationsToWatch();
-            $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();
-            //$scope.NumOfnotificationsToWatch = 0;
-
-            NotificationsService.addLastnotifications();
-
+            
             // Get the saved Notifications of the user, and show it to him 
-            var updateNotification = function() {
+            var getNotifications = function() {
 
                 // Get the saved Notifications of the user, and show it to him         
-                UsersService.getMe().then(function(me) {
-                    NotificationsService.getByUserId(me._id).then(function(result) {
-
-                        for (var notiy in result) {
-                            NotificationsService.addNotification(result[notiy].content, result[notiy].name, result[notiy].id,
-                                result[notiy].IsWatched, result[notiy].DropDownIsWatched, result[notiy].time);
-
-                            NotificationsService.addLastnotifications();
-
-                            $scope.notifications = NotificationsService.getAll();
-
-                            NotificationsService.addLastnotifications();
-
-                            $scope.popupNotifications = $scope.notifications.slice(0, -1);
-                            $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
-                            $scope.lastNotification1 = $scope.notifications[$scope.notifications.length - 1];
-                        }
-                        // For the notifications that didn't been Watched
-                        NotificationsService.addnotificationsToWatch();
-                        $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();
-                    });
+                NotificationsService.getByUserId($scope.me._id).then(function(response) {
+                    $scope.data = NotificationsService.data;
                 });
             };
 
-            $scope.$on('updateNotification', function(event, args) {
-                //updateNotification(args.taskId)
-                //updateNotification()
-            });
+            getNotifications();
 
             $scope.context = context;
             $scope.allNotifications = false;
@@ -58,16 +29,12 @@ angular.module('mean.icu.ui.notificationsheader', [])
             $scope.GoToNotification = function(this_notification) {
 
                 if (!this_notification.IsWatched) {
-                    NotificationsService.updateByUserId(this_notification.id).then(function(result) {
-
-                        NotificationsService.Clean_notifications();
-                        updateNotification();
-
-                        // For the notifications that didn't been Watched                   
-                        NotificationsService.addnotificationsToWatch();
-                        $scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();
+                    NotificationsService.updateByUserId(this_notification._id).then(function(result) {
+                        this_notification.IsWatched = true;
                     });
                 }
+
+                $scope.allNotifications = false;
 
                 $state.go('main.tasks.all.details', {
                     id: this_notification.id,
@@ -78,38 +45,18 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
             $scope.triggerDropdown = function() {
 
-                UsersService.getMe().then(function(me) {
-                    NotificationsService.updateByUserId_DropDown(me._id).then(function(result) {
+                NotificationsService.updateByUserId_DropDown($scope.me._id).then(function(result) {
 
-                        $scope.allNotifications = !$scope.allNotifications;
+                    $scope.allNotifications = !$scope.allNotifications;
 
-                        //$scope.notificationsToWatch = 0;
-                        //$scope.NumOfnotificationsToWatch = 0; 
+                    NotificationsService.data.notificationsToWatch = 0;
 
-                        //Made By OHAD
-                        $scope.notifications = NotificationsService.getAll();
-                        $scope.popupNotifications = $scope.notifications.slice(0, -1);
-                        $scope.lastNotification = $scope.notifications[$scope.notifications.length - 1];
-                        $scope.lastNotification1 = $scope.notifications[$scope.notifications.length - 1];
-
-                        // For the notifications that didn't been Watched                   
-                        //NotificationsService.addnotificationsToWatch(); 
-                        //$scope.notificationsToWatch = NotificationsService.getAllnotificationsToWatch();
-                        NotificationsService.Clean_notificationsToWatch();
-                        //$scope.notificationsToWatch = 0;
-
-                    });
                 });
-                //END Made By OHAD
             };
 
-            UsersService.getMe().then(function(me) {
-                $scope.me = me;
-                if (context.main === 'tasks') {
-                    //updateNotification($stateParams.id)
-                    updateNotification()
-                }
-            });
+            $scope.loadMore = function() {
+                NotificationsService.getByUserId($scope.me._id).then(function(response) {});
+            };
 
             $scope.logout = function() {
                 UsersService.logout().then(function() {
@@ -208,15 +155,15 @@ angular.module('mean.icu.ui.notificationsheader', [])
         }
 
         function link($scope, $element) {
-            var list = $element.find('.last-notification');
-            var chevron = $element.find('.time');
+            // var list = $element.find('.last-notification');
+            // var chevron = $element.find('.time');
 
-            $document.on('click', function(e) {
-                if (!(list[0].contains(e.target) || chevron[0].contains(e.target))) {
-                    $scope.allNotifications = false;
-                    $scope.$apply();
-                }
-            });
+            // $document.on('click', function(e) {
+            //     if (!(list[0].contains(e.target) || chevron[0].contains(e.target))) {
+            //         $scope.allNotifications = false;
+            //         $scope.$apply();
+            //     }
+            // });
         }
 
         return {
@@ -224,7 +171,8 @@ angular.module('mean.icu.ui.notificationsheader', [])
             scope: {
                 createState: '@',
                 discussions: '=',
-                projects: '='
+                projects: '=',
+                me: '='
             },
             link: link,
             controller: controller,

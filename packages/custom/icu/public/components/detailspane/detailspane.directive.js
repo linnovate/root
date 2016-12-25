@@ -30,6 +30,9 @@ angular.module('mean.icu.ui.detailspane', [])
 
     return {
         restrict: 'A',
+        scope: {
+            me: '='
+        },
         controller: controller,
         link: link,
         templateUrl: '/icu/components/detailspane/detailspane.html'

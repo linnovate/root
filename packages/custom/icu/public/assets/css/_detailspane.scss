@@ -64,16 +64,29 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
             .text {
                 position: absolute;
-                left: 0;
-                top: 50%;
+                top: 65%;
                 color: $light-grey4;
-
                 display: inline-block;
                 transform: translate(0, -50%);
             }
 
             .entity-name, .user {
                 font-weight: 700;
+            }
+
+            .notification-time {
+                color: $light-grey1;
+                top: 15%;
+                position: absolute;
+            }
+            .notification-NotWatched {
+                .text {
+                    font-weight: bold;
+                    color: #333;
+                }
+                .notification-time {
+                    color: $light-grey0;
+                }
             }
         }
 
@@ -82,15 +95,18 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             width: calc(100% - 265px);
             height: $header-height;
             cursor: pointer;
-
             @include notification;
+
+            .notification-time {
+                position: absolute;
+            }
         }
 
         .all-notifications {
-            border: 1px solid $light-grey1;
+            border-bottom: 1px solid $light-grey5;
+            border-right: 1px solid $light-grey5;
             position: absolute;
-            width: calc(100% - 3 * #{$header-height});
-            left: $header-height;
+            width: calc(100% - 2 * #{$header-height});
             margin-top: $header-height;
             z-index: 1001;
             background-color: white;
@@ -98,20 +114,9 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             .notification {
                 height: $header-height;
                 @include notification;
-                padding: 10px;
+                padding-left: 25px + $header-height;
                 border-bottom: 1px solid $light-grey1;
-
-                span {
-                    line-height: $header-height;
-                }
-            }
-            .notification-NotWatched {
-                background-color: #FDA102;
-                height: $header-height;
-                @include notification;
-                padding: 10px;
-                border-bottom: 1px solid $light-grey1;
-
+                cursor: pointer;
                 span {
                     line-height: $header-height;
                 }

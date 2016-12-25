@@ -19,29 +19,44 @@ var UserCreator = mongoose.model('User');
 
 exports.read = function(req, res, next) {
 
-    Message.find({
+    Message.count({
         title: req.user._id
-    }).sort('time').populate('user', 'name username').exec(function(err, messages) {
-        //console.log("--------------------------------------------------messages.find--------------------------------------");
-        //console.log(messages);
+    }).exec(function(err, countAll) {
+        Message.count({
+            title: req.user._id,
+            DropDownIsWatched: false
+        }).exec(function(err, newMessages) {
+            var limit = req.query.limit || 4;
+            var skip = req.query.skip || 0;
+            if (skip === 0 && newMessages > limit) {
+                limit = newMessages;
+            }
+            Message.find({
+                title: req.user._id
+            }).sort([
+                ['time', 'descending']
+            ]).limit(limit).skip(skip).populate('user', 'name username').exec(function(err, messages) {
 
-        req.body = messages;
+                req.body = messages;
 
-        res.json(messages);
+                res.json({
+                    list: messages,
+                    newMessages: newMessages,
+                    count: countAll
+                });
+            });
+        });
     });
 };
 
 exports.updateIsWatched = function(req, res, next) {
-
     Message.update({
-        id: req.params.id
+        _id: req.params.id
     }, {
         $set: {
             IsWatched: true
         }
     }).exec(function(err, messages) {
-        console.log("--------------------------------------------------messages.update--------------------------------------");
-        console.log(messages);
 
         req.body = messages;
 
@@ -106,7 +121,6 @@ exports.updateRoom = function(req, res, next) {
     if (req.locals.error) {
         return next();
     }
-    console.log(req.locals.result)
     if (!req.locals.result.room && !req.locals.result.hasRoom) {
         Project.findOne({
             _id: req.locals.result._id
@@ -342,7 +356,7 @@ exports.sendUpdate = function(req, res, next) {
                 _id: req.body.data.issueId
             }).populate('project').exec(function(error, task) {
                 if (task.project) {
-                    if(task.project.room) {
+                    if (task.project.room) {
                         req.body.context.room = task.room;
                         req.body.context.user = req.user.name;
                         notifications.notify(['hi'], 'createMessage', {

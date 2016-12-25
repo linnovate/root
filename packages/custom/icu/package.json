@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "busboy": "^0.2.12",
-    "circles-npm": "^1.0.4",
     "mkdirp": "^0.5.1",
     "nodemailer-smtp-transport": "^1.0.4",
     "q": "^1.4.1"

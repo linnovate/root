@@ -12,7 +12,7 @@ angular.module('mean.mean-socket').directive('meanSocket', function(Global, Mean
 			message: '=',
 			afterSend: '&'
 		},
-		templateUrl: 'mean-socket/views/directive.html',
+		// templateUrl: 'mean-socket/views/directive.html',
 		link: function(scope, elm, attr) {
             
             UsersServicefunc.getMe().then(function (me) {
@@ -67,9 +67,6 @@ angular.module('mean.mean-socket').directive('useMeanSocket', function(Global, M
 		link: function(scope, elm, attr) {
             
             UsersServicefunc.getMe().then(function (me) {
-                console.log("me");
-                console.log(me);
-                console.log(me.name);
                 //myname = me.name;
                 myname = me._id;
             //});
@@ -152,12 +149,7 @@ angular.module('mean.mean-socket').directive('useMeanSocket', function(Global, M
 				//Listen to channel if we dont have it already.
 				if (scope.listeningChannels.indexOf(channel) === -1) {
 					scope.listenChannel(channel);
-				}
-                
-                console.log("scope");
-                console.log(scope);
-                console.log("me");
-                console.log(myname);                                         
+				}                                        
 
 				MeanSocket.emit('user joined token', {
 					id: myname,
