@@ -127,6 +127,7 @@
     "tasksImWatching": "Tasks I'm Watching",
     "tasksFrom": "Tasks from ",
     "title": "Title",
+    "today": "Today",
     "toThis": "to this ",
     "typeUpdateHere": "Type update here",
     "unauthorized": "Unauthorized",
@@ -144,6 +145,7 @@
     "connectECONNREFUSED": "connect ECONNREFUSED",
     "watchedTasks": "WATCHED TASKS",
     "YES": "YES",
+    "yesterday": "Yesterday",
     "youMustEnterAName": "You must enter a name",
     "youMustEnterAValidEmailAddress": "You must enter a valid email address",
     "restrictedAccess": "Restricted Access",
@@ -153,5 +155,23 @@
     "sort by star": "Sort by Star",
     "sort by": "Sort by ",
     "add watcher": "Add watcher",
-    "assigned from":  "assigned from"
+    "assigned from":  "assigned from",
+
+    "st": "st",
+    "nd": "nd",
+    "rd": "rd",
+    "th": "th",
+
+    "January":"January",
+    "February":"February",
+    "March":"March",
+    "April":"April",
+    "May":"May",
+    "June":"June",
+    "July":"July",
+    "August":"August",
+    "September":"September",
+    "October":"October",
+    "November":"November",
+    "December": "December"
 }

@@ -7,12 +7,13 @@
     <div class="last-notification" ng-click="triggerDropdown()">
         <!--<span class="text">{{data.lastNotification.entity}}-->
         <div ng-show="data.lastNotification && !allNotifications" ng-class="{'notification-NotWatched': !notification.IsWatched}">
-            <span class="notification-time">{{data.lastNotification.time | timeAgo}}</span>
-            <span class="text">{{data.lastNotification.entity | i18next}}
-                <!--<span class="entity-name" ng-show="data.lastNotification.entityName">"{{data.lastNotification.entityName}}"</span>-->
-                <span class="entity-name">"{{data.lastNotification.content}}"</span>
-                {{data.lastNotification.action | i18next}}
-                <span class="user">{{data.lastNotification.name}}</span>
+            <span class="notification-time">{{data.lastNotification.time | when}}</span>
+            <span ng-repeat="val in details[data.lastNotification.type]">
+                <span class="text" ng-switch="val.type">
+                    <span ng-switch-when="object" class="{{val.klass}}">{{data.lastNotification[val.value] | i18next}}</span>
+                    <span ng-switch-when="deepObject" class="{{val.klass}}">{{data.lastNotification[val.value[0]][val.value[1]] | i18next}}</span>
+                    <span ng-switch-default class="{{val.klass}}">{{val.value | i18next}}</span>
+                </span>
             </span>
         </div>
 
@@ -20,11 +21,13 @@
     <div class="all-notifications" ng-if="allNotifications">
         <div class="notification" ng-repeat="notification in data.notifications" ng-click="GoToNotification(notification)">
             <div ng-class="{'notification-NotWatched': !notification.IsWatched}">
-                <div class="notification-time">{{notification.time | timeAgo}}</div>
-                <span class="text">{{notification.entity | i18next}}
-                    <span class="entity-name">"{{notification.content}}"</span>
-                    {{notification.action | i18next}}
-                    <span class="user">{{notification.name}}</span>
+                <div class="notification-time">{{notification.time | when}}</div>
+                <span ng-repeat="val in details[notification.type]">
+                    <span class="text" ng-switch="val.type">
+                        <span ng-switch-when="object" class="{{val.klass}}">{{notification[val.value] | i18next}}</span>
+                        <span ng-switch-when="deepObject" class="{{val.klass}}">{{notification[val.value[0]][val.value[1]] | i18next}}</span>
+                        <span ng-switch-default class="{{val.klass}}">{{val.value | i18next}}</span>
+                    </span>
                 </span>
             </div>
         </div>

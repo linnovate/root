@@ -209,9 +209,11 @@ $scope.deleteTask = function (task) {
             //"message":{"content":"tyui"}
             MeanSocket.emit('message:send', {
                 message: message,
-                user: me.name,
+                user: me,
                 channel: task.assign,
-                id: task.id
+                id: task.id,
+                entity: 'task',
+                type: 'assign'
             });
 
             TasksService.update(task).then(function (result) {

@@ -20,10 +20,10 @@ var UserCreator = mongoose.model('User');
 exports.read = function(req, res, next) {
 
     Message.count({
-        title: req.user._id
+        user: req.user._id
     }).exec(function(err, countAll) {
         Message.count({
-            title: req.user._id,
+            user: req.user._id,
             DropDownIsWatched: false
         }).exec(function(err, newMessages) {
             var limit = req.query.limit || 4;
@@ -32,10 +32,10 @@ exports.read = function(req, res, next) {
                 limit = newMessages;
             }
             Message.find({
-                title: req.user._id
+                user: req.user._id
             }).sort([
                 ['time', 'descending']
-            ]).limit(limit).skip(skip).populate('user', 'name username').exec(function(err, messages) {
+            ]).populate('user', 'name').limit(limit).skip(skip).populate('user', 'name username').exec(function(err, messages) {
 
                 req.body = messages;
 
@@ -66,7 +66,7 @@ exports.updateIsWatched = function(req, res, next) {
 exports.updateDropDown = function(req, res, next) {
 
     Message.update({
-        title: req.params.id
+        user: req.params.id
     }, {
         $set: {
             DropDownIsWatched: true

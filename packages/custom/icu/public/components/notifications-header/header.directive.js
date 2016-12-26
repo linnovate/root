@@ -11,7 +11,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
         $document) {
         function controller($scope) {
             $scope.notificationsToWatch = 0;
-            
+
             // Get the saved Notifications of the user, and show it to him 
             var getNotifications = function() {
 
@@ -56,6 +56,32 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
             $scope.loadMore = function() {
                 NotificationsService.getByUserId($scope.me._id).then(function(response) {});
+            };
+
+            $scope.details = {
+                assign: [{
+                    type: 'object',
+                    value: 'entity'
+                }, {
+                    type: 'text',
+                    value: '"',
+                    klass: 'entity-name'
+                }, {
+                    type: 'object',
+                    value: 'content',
+                    klass: 'entity-name'
+                }, {
+                    type: 'text',
+                    value: '"',
+                    klass: 'entity-name'
+                }, {
+                    type: 'text',
+                    value: 'assignedTo'
+                }, {
+                    type: 'deepObject',
+                    value: ['user', 'name'],
+                    klass: 'user'
+                }]
             };
 
             $scope.logout = function() {
@@ -178,4 +204,33 @@ angular.module('mean.icu.ui.notificationsheader', [])
             controller: controller,
             templateUrl: '/icu/components/notifications-header/header.html'
         };
+    }).filter('when', function($filter) {
+        return function(input) {
+            if (input === undefined) return '------';
+            var now = new Date();
+            var inputDate = new Date(input).setHours(0, 0, 0, 0);
+            if (inputDate == now.setHours(0, 0, 0, 0)) {
+                // return $filter('i18next')('today') + ', ' + $filter('date')(input, "hh:mm");
+            }
+            if (inputDate == now.setDate(now.getDate() - 1)) {
+                return $filter('i18next')('yesterday') + ', ' + $filter('date')(input, "hh:mm");
+            }
+            var d = $filter('date')(input, 'd');
+            var dd;
+            switch (d) {
+                case '1':
+                    dd = 'st';
+                    break;
+                case '2':
+                    dd = 'nd';
+                    break;
+                case '3':
+                    dd = 'rd';
+                    break;
+                default:
+                    dd = 'th';
+                    break;
+            }
+            return $filter('i18next')($filter('date')(input, "MMMM")) + ' ' + d + $filter('i18next')(dd) + $filter('date')(input, ", yyyy") + $filter('date')(input, ", hh:mm");
+        }
     });

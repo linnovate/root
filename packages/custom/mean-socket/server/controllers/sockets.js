@@ -10,13 +10,14 @@ var mongoose = require('mongoose'),
 exports.createFromSocket = function(data, cb) {
 
     var message = new Message(data.message);
-    message.user = data.user._id;
+    message.creator = data.user._id;
     message.time = new Date();
-    message.title = data.channel;
-    message.name = data.user;
+    message.user = data.channel;
     message.id = data.id;
     message.IsWatched = false;
     message.DropDownIsWatched = false;
+    message.entity = data.entity;
+    message.type = data.type;
 
     message.save(function(err) {
         if (err) console.log(err);
