@@ -27,7 +27,6 @@ angular.module('mean.icu.ui.notificationsheader', [])
             $scope.allNotifications = false;
 
             $scope.GoToNotification = function(this_notification) {
-
                 if (!this_notification.IsWatched) {
                     NotificationsService.updateByUserId(this_notification._id).then(function(result) {
                         this_notification.IsWatched = true;
@@ -211,6 +210,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
             var inputDate = new Date(input).setHours(0, 0, 0, 0);
             if (inputDate == now.setHours(0, 0, 0, 0)) {
                 // return $filter('i18next')('today') + ', ' + $filter('date')(input, "hh:mm");
+                return $filter('timeAgo')(input);
             }
             if (inputDate == now.setDate(now.getDate() - 1)) {
                 return $filter('i18next')('yesterday') + ', ' + $filter('date')(input, "hh:mm");
@@ -233,4 +233,14 @@ angular.module('mean.icu.ui.notificationsheader', [])
             }
             return $filter('i18next')($filter('date')(input, "MMMM")) + ' ' + d + $filter('i18next')(dd) + $filter('date')(input, ", yyyy") + $filter('date')(input, ", hh:mm");
         }
+    }).config(function(timeAgoSettings) {
+        var lng;
+        switch (config.lng) {
+            case 'he':
+                lng = 'he_IL';
+                break;
+            default:
+                lng = 'en_US';
+        }
+        timeAgoSettings.overrideLang = lng;
     });

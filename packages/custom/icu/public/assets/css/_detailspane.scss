@@ -63,9 +63,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             position: relative;
 
             .text {
-                padding-top: 12%;
                 color: $light-grey4;
-                display: inline-block;
                 transform: translate(0, -50%);
             }
 
@@ -95,9 +93,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             height: $header-height;
             cursor: pointer;
             @include notification;
+            position: relative;
 
             .notification-time {
                 position: absolute;
+            }
+            .notification-content {
+                position: absolute;
+                top: 50%;
             }
         }
 
@@ -117,7 +120,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 border-bottom: 1px solid $light-grey1;
                 cursor: pointer;
                 span {
-                    line-height: $header-height;
+                    line-height: 25px + $header-height;
+                }
+                .notification-content {
+                    height: 100%;
                 }
             }
         }
