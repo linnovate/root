@@ -4,7 +4,7 @@ angular.module('mean.icu.data.tasksservice', [])
 .service('TasksService', function (ApiUri, $http, PaginationService, WarningsService) {
     var EntityPrefix = '/tasks';
     var filterValue = false;
-    var data;
+    var data, tabData;
 
     function getAll(start, limit, sort) {
         var qs = querystring.encode({
@@ -202,6 +202,7 @@ angular.module('mean.icu.data.tasksservice', [])
         saveTemplate: saveTemplate,
         template2subTasks:template2subTasks,
         deleteTemplate: deleteTemplate,
-        data: data
+        data: data,
+        tabData: tabData
     };
 });

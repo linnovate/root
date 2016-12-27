@@ -16,12 +16,9 @@ angular.module('mean.mean-socket').directive('meanSocket', function(Global, Mean
 		link: function(scope, elm, attr) {
             
             UsersServicefunc.getMe().then(function (me) {
-            console.log(me.name);
             //myname = me.name;
             myname = me._id;
             
-			console.log(scope.message);
-
 			scope.global = Global;
             
             scope.global.user = myname;

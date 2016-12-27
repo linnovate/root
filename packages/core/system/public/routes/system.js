@@ -28,23 +28,25 @@ angular.module('mean.system').provider('$viewPath', function() {
 });
 
 // $meanStateProvider, provider to wire up $viewPathProvider to $stateProvider
-angular.module('mean.system').provider('$meanState', ['$stateProvider', '$viewPathProvider', function($stateProvider, $viewPathProvider) {
-  function MeanStateProvider() {
-    this.state = function(stateName, data) {
-      if (data.templateUrl) {
-        data.templateUrl = $viewPathProvider.path(data.templateUrl);
-      }
-      $stateProvider.state(stateName, data);
-      return this;
-    };
+angular.module('mean.system').provider('$meanState', ['$stateProvider', '$viewPathProvider',
+  function($stateProvider, $viewPathProvider) {
+    function MeanStateProvider() {
+      this.state = function(stateName, data) {
+        if (data.templateUrl) {
+          data.templateUrl = $viewPathProvider.path(data.templateUrl);
+        }
+        $stateProvider.state(stateName, data);
+        return this;
+      };
 
-    this.$get = function() {
-      return this;
-    };
+      this.$get = function() {
+        return this;
+      };
+    }
+
+    return new MeanStateProvider();
   }
-
-  return new MeanStateProvider();
-}]);
+]);
 
 //Setting up route
 angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider',
@@ -59,12 +61,34 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
         //url: '/',
         //templateUrl: 'system/views/index.html'
         url: '/',
-        templateUrl: (config.activeProvider == 'local' ? '/icu/components/login/login.html' : '/icu/components/auth/auth.html')
+        resolve: {
+          checkLogin: ['$state', '$timeout', 'UsersService',
+            function($state, $timeout, UsersService) {
+              return UsersService.getMe().then(function(result) {
+                if (result._id) {
+                  return $timeout(function() {
+                    $state.go('main.tasks')
+                  })
+                } else {
+                  if (config.activeProvider === 'local') {
+                    return $timeout(function() {
+                      $state.go('login')
+                    })
+                  } else {
+                    return $timeout(function() {
+                      $state.go('auth')
+                    })
+                  }
+                }
+              });
+            }
+          ]
+        }
       });
 
     $meanStateProvider
       .state('Log Out', {
-        controller: function () {
+        controller: function() {
           window.location = '/logout';
         }
       });
@@ -72,8 +96,8 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
 ]).config(['$locationProvider',
   function($locationProvider) {
     $locationProvider.html5Mode({
-      enabled:true,
-      requireBase:false
+      enabled: true,
+      requireBase: false
     });
   }
 ]);

@@ -20,6 +20,7 @@ angular.module('mean.icu.ui.login', [])
             	$state.go('main.tasks');
                 //$state.go('socket');
             } else {
+                $state.go('login');
             	$scope.errorMessage = logErrorMessages[result.data];
             }
         });

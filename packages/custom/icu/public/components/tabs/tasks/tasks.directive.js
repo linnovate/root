@@ -11,7 +11,7 @@ angular.module('mean.icu.ui.tabs')
             $scope.loadNext = $scope.tasks.next;
             $scope.loadPrev = $scope.tasks.prev;
             $scope.tasks = $scope.tasks.data || $scope.tasks;
-            TasksService.data = $scope.tasks;
+            TasksService.tabData = $scope.tasks;
             $scope.taskOrder = function(task) {
                 if (task._id && $scope.sorting) {
                     var parts = $scope.sorting.field.split('.');

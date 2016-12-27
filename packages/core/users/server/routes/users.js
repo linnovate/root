@@ -44,7 +44,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
       // To avoid displaying unneccesary social logins
       var clientIdProperty = 'clientID';
       var defaultPrefix = 'DEFAULT_';
-      var socialNetworks = ['facebook', 'linkedin', 'twitter', 'github', 'google']; //ugly hardcoding :(
+      var socialNetworks = ['facebook', 'linkedin', 'twitter', 'github', 'google', 'saml']; //ugly hardcoding :(
       var configuredApps = {};
       for (var network in socialNetworks) {
         var netObject = config[socialNetworks[network]];

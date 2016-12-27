@@ -81,7 +81,7 @@ angular.module('mean.icu').controller('IcuController',
     $scope.currentContext = context;
 
     $rootScope.$on('$stateChangeError', function () {
-        console.log(arguments);
+        // console.log(arguments);
     });
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
@@ -92,14 +92,22 @@ angular.module('mean.icu').controller('IcuController',
     });
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-        console.log(arguments);
+        // console.log(arguments);
     });
 });
 
 angular.module('mean.icu').run(function($rootScope, $location, $state) {
-    $rootScope.$on('$stateChangeError', function (a, b, c, d, f, error) {
+    $rootScope.$on('$stateChangeError', function(a, b, c, d, f, error) {
         if (error === null) {
-            $state.go('login', null, { reload: true });
+            if (config.activeProvider === 'local') {
+                $state.go('login', null, {
+                    reload: true
+                });
+            } else {
+                $state.go('auth', null, {
+                    reload: true
+                });
+            }
         }
     });
 });

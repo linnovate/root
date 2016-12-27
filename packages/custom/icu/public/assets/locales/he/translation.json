@@ -140,7 +140,7 @@
     "usernameCannotBeMoreThan20Characters": "Username cannot be more than 20 characters",
 	"view": "צפה",
 	"visibleTo":"הצג ל:",
-	"connectECONNREFUSED": "שגיאת התחבורת",
+	"connectECONNREFUSED": "שגיאת התחברות",
 	"watchedTasks": "משימות שאני עוקב אחריהן",
 	"YES": "אישור",
 	"yesteday": "אתמול",
@@ -154,7 +154,7 @@
     "project name": "שם הפרוייקט",
     "add watcher": "הוסף שותף",
     "assigned from": "שוייכה אלייך מ-",
-    
+
     "st": "",
     "nd": "",
     "rd": "",
