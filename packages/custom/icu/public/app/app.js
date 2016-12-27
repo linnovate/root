@@ -249,7 +249,7 @@ angular.module('mean.icu').config([
 
         function getDetailsTabState(main, tab) {
             //task , activities
-           
+
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
 
@@ -344,16 +344,38 @@ angular.module('mean.icu').config([
             .state('404', {
                 url: '/404',
                 templateUrl: '/icu/components/errors/404.html',
-                controller:'ErrorsController'
+                controller: 'ErrorsController'
             })
             .state('auth', {
                 url: '/auth',
-                templateUrl: '/icu/components/auth/auth.html'
+                templateUrl: '/icu/components/auth/auth.html',
+                resolve: {
+                    checkProvider: ['$state', '$timeout',
+                        function($state, $timeout) {
+                            if (config.activeProvider === 'local') {
+                                return $timeout(function() {
+                                    $state.go('login')
+                                })
+                            }
+                        }
+                    ]
+                }
             })
             .state('login', {
                 url: '/login',
                 templateUrl: '/icu/components/login/login.html',
-                controller: 'LoginController'
+                controller: 'LoginController',
+                resolve: {
+                    checkProvider: ['$state', '$timeout',
+                        function($state, $timeout) {
+                            if (config.activeProvider !== 'local') {
+                                return $timeout(function() {
+                                    $state.go('auth')
+                                })
+                            }
+                        }
+                    ]
+                }
             })
             .state('register', {
                 url: '/register',
@@ -372,35 +394,35 @@ angular.module('mean.icu').config([
                     }
                 }
             })
-        .state('main', {
-            abstract: true,
-            url: '',
-            templateUrl: '/icu/components/icu/icu.html',
-            controller: 'IcuController',
-            resolve: {
-                me: function (UsersService) {
-                    return UsersService.getMe();
-                },
-                projects: function (ProjectsService) {
-                    return ProjectsService.getAll(0, 0, SORT).then(function (data) {
-                        ProjectsService.data = data.data || data;
-                        return data;
-                    }, function (err) {
-                        return [];
-                    });
-                },
-                discussions: function (DiscussionsService) {
-                    return DiscussionsService.getAll(0, 0, SORT).then(function (data) {
-                        DiscussionsService.data = data.data || data;
-                        return data;
-                    }, function (err) {
-                        return [];
-                    });
-                },
-                people: function (UsersService) {
-                    return UsersService.getAll();
+            .state('main', {
+                abstract: true,
+                url: '',
+                templateUrl: '/icu/components/icu/icu.html',
+                controller: 'IcuController',
+                resolve: {
+                    me: function(UsersService) {
+                        return UsersService.getMe();
+                    },
+                    projects: function(ProjectsService) {
+                        return ProjectsService.getAll(0, 0, SORT).then(function(data) {
+                            ProjectsService.data = data.data || data;
+                            return data;
+                        }, function(err) {
+                            return [];
+                        });
+                    },
+                    discussions: function(DiscussionsService) {
+                        return DiscussionsService.getAll(0, 0, SORT).then(function(data) {
+                            DiscussionsService.data = data.data || data;
+                            return data;
+                        }, function(err) {
+                            return [];
+                        });
+                    },
+                    people: function(UsersService) {
+                        return UsersService.getAll();
+                    }
                 }
-            }
             })
             .state('main.people', {
                 url: '/people',
@@ -820,7 +842,7 @@ angular.module('mean.icu').config([
                 FilesService.getByPath()
             }
         });
-	}
+    }
 ]);
 
 angular.module('mean.icu').config(function($i18nextProvider) {

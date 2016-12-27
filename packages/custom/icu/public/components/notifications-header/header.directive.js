@@ -8,6 +8,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
         context,
         ProjectsService,
         DiscussionsService,
+        UsersService,
         $document) {
         function controller($scope) {
             $scope.notificationsToWatch = 0;
