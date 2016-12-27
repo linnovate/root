@@ -46,8 +46,8 @@ angular.module('mean.icu.ui.tasklist', [])
 	    $state.go('main.tasks.'+$scope.parentState+'.details',{entity:$scope.parentEntity,entityId:$scope.parentEntityId,id:$scope.parentId})
 	}
 
-	$scope.isCurrentState = function(id) {
-	    return $state.current.name === id;
+	$scope.isCurrentState = function(ids) {
+	    return ids.indexOf($state.current.name) !== -1;
 	};
 
 	$scope.changeOrder = function () {

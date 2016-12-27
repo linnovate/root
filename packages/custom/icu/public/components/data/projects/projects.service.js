@@ -83,6 +83,13 @@ angular.module('mean.icu.data.projectsservice', [])
                     }
                 });
             }
+            if(TasksService.tabData) {
+                TasksService.tabData.forEach(function(task) {
+                    if (task.project && task.project._id === project._id) {
+                        task.project = result.data;
+                    }
+                });
+            }
             return result.data;
         });
     }
