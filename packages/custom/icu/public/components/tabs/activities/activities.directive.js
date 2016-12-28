@@ -54,22 +54,36 @@ angular.module('mean.icu.ui.tabs')
                     type: 'object',
                     value: 'issue'
                 }],
+                unassign: [{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'unassign'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }],
                 copy: [{
                     type: 'text',
-                    value: 'copyThis'
+                    value: 'copiedThe'
+                }, {
+                    type: 'nbsp'
                 }, {
                     type: 'object',
                     value: 'issue'
                 }, {
-                    type: 'text',
-                    value: 'from'
+                    type: 'nbsp'
                 }, {
                     type: 'text',
-                    value: 'template'
+                    value: 'fromtemplate'
                 }],
                 copyAttachment: [{
                     type: 'text',
-                    value: 'copyAttachment'
+                    value: 'copiedAttachment'
                 }, {
                     type: 'object',
                     value: 'issue'

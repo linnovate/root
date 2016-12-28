@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.tasksservice', [])
-.service('TasksService', function (ApiUri, $http, PaginationService, WarningsService) {
+.service('TasksService', function (ApiUri, $http, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
     var EntityPrefix = '/tasks';
     var filterValue = false;
     var data, tabData;
@@ -178,6 +178,36 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function assign(task, me) {
+        if (task.assign) {
+            var message = {};
+            message.content = task.title || '-';
+            MeanSocket.emit('message:send', {
+                message: message,
+                user: me,
+                channel: task.assign,
+                id: task.id,
+                entity: 'task',
+                type: 'assign'
+            });
+
+            var activityType = 'assign';
+        } else {
+            var activityType = 'unassign';
+        }
+        return ActivitiesService.create({
+            data: {
+                issue: 'task',
+                issueId: task.id,
+                type: activityType,
+                userObj: task.assign
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -202,6 +232,7 @@ angular.module('mean.icu.data.tasksservice', [])
         saveTemplate: saveTemplate,
         template2subTasks:template2subTasks,
         deleteTemplate: deleteTemplate,
+        assign: assign,
         data: data,
         tabData: tabData
     };
