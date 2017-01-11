@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, PaginationService, TasksService) {
+.service('ProjectsService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService) {
     var EntityPrefix = '/projects';
     var data;
 
@@ -16,6 +16,8 @@ angular.module('mean.icu.data.projectsservice', [])
             qs = '?' + qs;
         }
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
+        	console.log($rootScope.warning, '$rootScope.warning')
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
@@ -25,6 +27,7 @@ angular.module('mean.icu.data.projectsservice', [])
 
     function getById(id) {
         return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -47,6 +50,7 @@ angular.module('mean.icu.data.projectsservice', [])
             }
 
             return $http.get(url + qs).then(function(result) {
+            	WarningsService.setWarning(result.headers().warning);
                 return PaginationService.processResponse(result.data);
             });
         }
@@ -54,6 +58,8 @@ angular.module('mean.icu.data.projectsservice', [])
 
     function create(project) {
         return $http.post(ApiUri + EntityPrefix, project).then(function(result) {
+
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -69,8 +75,16 @@ angular.module('mean.icu.data.projectsservice', [])
         }
 
         return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             if(TasksService.data) {
                 TasksService.data.forEach(function(task) {
+                    if (task.project && task.project._id === project._id) {
+                        task.project = result.data;
+                    }
+                });
+            }
+            if(TasksService.tabData) {
+                TasksService.tabData.forEach(function(task) {
                     if (task.project && task.project._id === project._id) {
                         task.project = result.data;
                     }
@@ -82,6 +96,7 @@ angular.module('mean.icu.data.projectsservice', [])
 
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -89,6 +104,7 @@ angular.module('mean.icu.data.projectsservice', [])
     function star(project) {
         return $http.patch(ApiUri + EntityPrefix + '/' + project._id + '/star', {star: !project.star})
             .then(function (result) {
+            	WarningsService.setWarning(result.headers().warning);
                 project.star = !project.star;
                 return result.data;
             });
@@ -96,6 +112,7 @@ angular.module('mean.icu.data.projectsservice', [])
 
     function getStarred() {
         return $http.get(ApiUri + EntityPrefix + '/starred').then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }

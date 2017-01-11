@@ -44,7 +44,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
       // To avoid displaying unneccesary social logins
       var clientIdProperty = 'clientID';
       var defaultPrefix = 'DEFAULT_';
-      var socialNetworks = ['facebook', 'linkedin', 'twitter', 'github', 'google']; //ugly hardcoding :(
+      var socialNetworks = ['facebook', 'linkedin', 'twitter', 'github', 'google', 'saml']; //ugly hardcoding :(
       var configuredApps = {};
       for (var network in socialNetworks) {
         var netObject = config[socialNetworks[network]];
@@ -63,7 +63,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     // This function responsible on the view to uploads as pdf 
     app.post('/append.js' , function(req, res){
         
-        var StartOFPath = '/home/as/Desktop/icu/';
+        var StartOFPath = config.root + '/';
         
         // Check the type of the file, and if needed to viewed as pdf
         if((req.body.attachmentType == "docx") ||
@@ -93,17 +93,17 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             }
             
             //###start_of_url 
-            var arr = str.split("http://localhost:3000");
-            var realpath = arr[1];
+            var arr = str.split(config.host);
+            var realpath = arr[1].replace('(', '\(').replace(')', '\)');
             var arr1 = str.split("/");
             var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
             var arr2 = arr1[7].split("." + req.body.attachmentType);
     
         console.log('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf');
-        console.log('lowriter --convert-to pdf /home/as/Desktop/icu' + realpath);
+        console.log('lowriter --headless --convert-to pdf ' + config.root + realpath);
         
             // Make the convert from it's origin type to pdf
-            exec('lowriter --convert-to pdf /home/as/Desktop/icu' + realpath, function (err, stout, sterr){
+            exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
             if (err) {
                 res.send(500, arguments);
             } else {
@@ -187,7 +187,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
   app.route('/api/auth/google/callback')
     .get(passport.authenticate('google', {
       failureRedirect: '/auth'
-    }), users.updateCircles, users.authCallback);
+    }), users.authCallback);
 
   // Setting the linkedin oauth routes
   app.route('/api/auth/linkedin')

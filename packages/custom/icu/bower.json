@@ -14,6 +14,7 @@
     "angularjs-color-picker": "~0.6.2",
     "ngInfiniteScroll": "1.2.0",
     "querystring": "~3.46.1",
-    "angular-tooltips": "^1.1.4"
+    "angular-tooltips": "^1.1.4",
+    "angular-timeago": "^0.4.4"
   }
 }

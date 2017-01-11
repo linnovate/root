@@ -5,8 +5,8 @@ angular.module('mean.icu.ui.login', [])
     
     if ($cookies.get('token') && $cookies.get('token').length) {
         localStorage.setItem('JWT', $cookies.get('token'));
-        $cookies.remove('token');
-        $state.go('main.tasks');
+/*        $cookies.remove('token');
+*/        $state.go('main.tasks');
     }
     
     $scope.login = function (credentials) {
@@ -20,6 +20,7 @@ angular.module('mean.icu.ui.login', [])
             	$state.go('main.tasks');
                 //$state.go('socket');
             } else {
+                $state.go('login');
             	$scope.errorMessage = logErrorMessages[result.data];
             }
         });

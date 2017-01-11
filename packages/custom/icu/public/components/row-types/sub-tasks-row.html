@@ -1,0 +1,53 @@
+<td class="id" ng-if="data.task._id">{{data.index + 1}}</td>
+<td class="name"
+    title="{{data.task.title}}"
+    ng-attr-colspan="{{data.task._id ? undefined : 6}}"
+    ng-attr-contenteditable="{{!data.displayOnly}}"
+    placeholder="{{'createNewTask' | i18next}}"
+    strip-br="true"
+    ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
+    ng-change="data.updateCb(data.task)"
+    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+    ng-blur="data.hideAutoCompleteCb(data.task)"
+    ng-model="data.task.title">
+</td>
+<td class="user" ng-if="data.task._id">
+<!--     <div class="no-assignee" ng-if="!data.task.assign">
+        <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
+    </div> -->
+    <!--<ui-select ng-model="task.assign" on-select="update(task)">-->
+    <ui-select ng-model="data.task.assign" on-select="data.updateCb(data.task, 'assign')" >
+        <ui-select-match>
+            <div icu-avatar user="$select.selected"></div>
+            <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
+        </ui-select-match>
+        <ui-select-choices repeat="user._id as user in data.people | filter: { name: $select.search }">
+            <div icu-avatar user="user"></div>
+            <span class="summary-content">{{user.name}}</span>
+        </ui-select-choices>
+    </ui-select>
+
+</td>
+<td class="status" ng-if="data.task._id">
+    <ui-select ng-model="data.task.status" on-select="data.updateCb(data.task)" >
+        <ui-select-match>
+            <i class='{{$select.selected}}'></i>
+            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+        </ui-select-match>
+        <ui-select-choices repeat="status as status in data.statuses | filter: $select.search">
+            <i class='{{status}}'></i>
+            <span class='{{status}}'>{{status | i18next}}</span>
+        </ui-select-choices>
+    </ui-select>
+
+</td>
+<td class="due" ng-if="data.task._id">
+    <input ui-date="data.dueOptions(data.task)" ng-model="data.task.due" placeholder="{{ 'deadline' | i18next }}">
+</td>
+
+<td class="arrow" ng-if="data.task._id" ng-click="data.changeState(data.task)">
+    <i  class="fa chevron-right"></i>
+</td> 
+<td class="delete">
+ <img src="/icu/assets/img/X.png"  ng-if="data.task._id && data.task.showDelete" ng-click="data.delete(data.task)">
+</td>

@@ -3,6 +3,12 @@
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
     function controller($scope, $state, context) {
+        $scope.projectsList = [];
+        $scope.projects.forEach(function(project) {
+                   if(project.title)
+                     $scope.projectsList.push(project);
+                });
+
         $scope.context = context;
 
         $scope.displayLimit = {

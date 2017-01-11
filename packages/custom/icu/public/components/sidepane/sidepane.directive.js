@@ -2,13 +2,13 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context, TasksService) {
+    function controller($scope, $state, context, TasksService, $rootScope) {
         $scope.context = context;
 
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
         // $scope.people = $scope.people.data || $scope.people;
-
+        
         $scope.toggleVisibility = function(toggledItem) {
             var prev = toggledItem.open;
 
@@ -23,24 +23,29 @@ directive('icuSidepane', function() {
         	TasksService.filterValue = false;
         }
 
+        $scope.isCurrentState = function(item) {
+
+            return item.state === context.main;
+        };
+
         $scope.items = [{
             name: 'tasks',
             icon: '/icu/assets/img/task.png',
             state: 'tasks',
             display: ['projects', 'discussions', 'people'],
-            open: false
+            open: $scope.isCurrentState({state: 'tasks'})
         }, {
             name: 'projects',
             icon: '/icu/assets/img/project.png',
             state: 'projects',
             display: ['discussions', 'people'],
-            open: false
+            open: $scope.isCurrentState({state: 'projects'})
         }, {
             name: 'discussions',
             icon: '/icu/assets/img/meeting.png',
             state: 'discussions',
             display: ['projects', 'people'],
-            open: false
+            open: $scope.isCurrentState({state: 'discussions'})
         }
         // , {
         //     name: 'people',
@@ -51,9 +56,6 @@ directive('icuSidepane', function() {
         // }
         ];
 
-        $scope.isCurrentState = function(item) {
-            return item.state === context.main;
-        };
     }
 
     return {

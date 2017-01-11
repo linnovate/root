@@ -39,10 +39,11 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
 
                 }
             }
-
-            elem.bind('click', function() {
-                buildModal();
-            });
+	            elem.bind('click', function() {
+            		if(scope.mine && scope.mine !== ""){
+	                	buildModal();
+	                }
+	            });
 
             function buildModal() {
                 var modalInstance = $uibModal.open({
@@ -78,13 +79,13 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
                 entityName: '@',
                 entity: '='
             },
-            template: '<div ng-if="entity && entity.circles && entity.circles.c19n && entity.circles.c19n.length" tooltips tooltip-template-url="/icu/components/modal-compartmentalization/tooltip.html" tooltip-side="left"></div>',
+            // template: '<div ng-if="entity && entity.circles && entity.circles.c19n && entity.circles.c19n.length" tooltips tooltip-template-url="/icu/components/modal-compartmentalization/tooltip.html" tooltip-side="left"></div>',
+            template: '<div tooltips tooltip-template-url="/icu/components/modal-compartmentalization/tooltip.html" tooltip-side="left"></div>',
             link: link
         };
     });
 
 function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector, data) {
-
     var serviceMap = {
         project: 'ProjectsService',
         discussion: 'DiscussionsService',

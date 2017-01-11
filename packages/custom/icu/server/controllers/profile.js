@@ -55,7 +55,7 @@ exports.uploadAvatar = function (req, res, next) {
     var saveTo = config.root + '/packages/core/users/public/assets/img/avatar/' + req.user._id + '.' + path.basename(filename.split('.').slice(-1)[0]).toLowerCase();
 
     file.pipe(fs.createWriteStream(saveTo));
-    req.body.avatar = config.host + '/users/assets/img/avatar/' + req.user._id + '.' + path.basename(filename.split('.').slice(-1)[0]).toLowerCase();
+    req.body.avatar = /*config.host + */'/users/assets/img/avatar/' + req.user._id + '.' + path.basename(filename.split('.').slice(-1)[0]).toLowerCase();
     req.file = true;
   });
 

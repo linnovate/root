@@ -14,7 +14,6 @@ var ICU = new Module('icu');
  */
 ICU.register(function (app, auth, database,swagger) {
 
-
      swagger.add(__dirname);
     //We enable routing. By default the Package Object is passed to the routes
     ICU.routes(app, auth, database);
@@ -46,13 +45,14 @@ ICU.register(function (app, auth, database,swagger) {
 
     ICU.aggregateAsset('js', '../lib/tinycolor/tinycolor.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/angularjs-color-picker/angularjs-color-picker.js', {weight: 1});
+    ICU.aggregateAsset('js', '../lib/angular-timeago/dist/angular-timeago.min.js');
 
     ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/i18next/i18next.min.js', {weight: 1});
     ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', {weight: 2});
 
     ICU.aggregateAsset('js', '../lib/angular-tooltips/dist/angular-tooltips.min.js');
-    
+
     ICU.angularDependencies([
         'jm.i18next',
         'mean.medium-editor',
@@ -60,8 +60,11 @@ ICU.register(function (app, auth, database,swagger) {
         'ui.date',
         'ngFileUpload',
         'color.picker',
+        'yaru22.angular-timeago',
         'mean.system',
         'mean.users',
+        'mean.icu.ui.all',
+        'mean.icu.ui.errors',
         'mean.icu.ui.autofocus',
         'mean.icu.ui.ctrlenter',
         'mean.icu.ui.login',
@@ -107,12 +110,16 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.paginationservice',
         'mean.icu.data.constants',
         'mean.icu.data.circlesservice',
+        'mean.icu.data.warningsservice',
         'mean.icu.decorators.pdsDecorator',
         'infinite-scroll',
         'mean.icu.ui.modaldeletetasksbyentity',
         'mean.icu.ui.modalcompartmentalization',
         'mean.icu.ui.taskoptions',
+        'mean.icu.ui.subtasks',
+        'mean.icu.ui.subtaskslistdirective',
         '720kb.tooltips',
+
     ]);
 
 
@@ -186,7 +193,6 @@ console.yon = function(data, inspect) {
     //
     //var myChild = new Child('dwayne', 27);
     //myChild.sayName();
-
    
     return ICU;
 });

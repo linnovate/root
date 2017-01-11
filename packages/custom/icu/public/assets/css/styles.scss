@@ -39,6 +39,8 @@ body {
 @import 'modal';
 @import 'angular-tooltips';
 @import 'task-options';
+@import 'sub-tasks';
+@import '404';
 
 table {
     :focus {
@@ -69,4 +71,8 @@ table {
 .icon-projects {
     width: 25px;
     height: 25px;
+}
+[icu-members-footer] {
+    position: static;
+    bottom: 0;
 }

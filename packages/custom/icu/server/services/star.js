@@ -97,8 +97,9 @@ module.exports = function(entityName, options) {
       _id: options.user._id
     });
     return query.then(function(user) {
-      var starredEntities = 'starred' + _.capitalize(entityName);
+      if (!user) return [];
 
+      var starredEntities = 'starred' + _.capitalize(entityName);
 
       if (!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
         return [];

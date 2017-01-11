@@ -13,7 +13,8 @@ var mongoose = require('mongoose'),
 var MessageSchema = new Schema({
   user: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   channel: {
     type: String,
@@ -29,17 +30,6 @@ var MessageSchema = new Schema({
   expires: {
     type: Number
   },
-  //OHAD
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  title: {
-    type: String,
-    required: true,
-    trim: true
-  },
   content: {
     type: String,
     required: true,
@@ -53,6 +43,12 @@ var MessageSchema = new Schema({
   },
   DropDownIsWatched: {
       type: Boolean
+  },
+  entity: {
+    type: String
+  },
+  type: {
+    type: String
   }
 });
 

@@ -51,6 +51,7 @@ background: url("/theme/assets/img/bg.png");
     box-shadow: 0 1px 3px 1px #003644;
     margin-top: 35px;
     left: 50%;
+    right: 50%;
     position: relative;
 }
 

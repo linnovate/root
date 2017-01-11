@@ -54,18 +54,24 @@ var entityNameMap = {
   'attachments': {
     mainModel: AttachementModel,
     archiveModel: AttachementArchiveModel,
-    name: 'Attachment'
+    name: 'Attachement'
+  },
+  'templates': {
+    mainModel: TaskModel,
+    archiveModel: TaskArchiveModel,
+    name: 'Task'
   }
 
 };
 
 var defaults = {
   defaults: {},
-  includes: ''
+  includes: '',
+  conditions: {}
 };
 
 module.exports = function(entityName, options) {
-  var findByUser = ['tasks', 'projects', 'discussions', 'attachments'];
+  var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates'];
   if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;
 
@@ -79,24 +85,24 @@ module.exports = function(entityName, options) {
   options = _.defaults(options, defaults);
 
   function all(pagination, user, acl) {
-
     var deffered = q.defer();
 
     var countQuery;
     var mergedPromise;
 
     var query;
+
     if (currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
-      countQuery = acl.mongoQuery(entityNameMap[entityName].name).count();
+      countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);
     } else {
-      query = Model.find();
-      countQuery = Model.find().count();
+      query = Model.find(options.conditions);
+      countQuery = Model.find(options.conditions).count();
     }
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
-        query.find({})
+        query.find(options.conditions)
           .sort(pagination.sort)
           .skip(pagination.start)
           .limit(pagination.limit);
@@ -114,8 +120,7 @@ module.exports = function(entityName, options) {
         deffered.resolve(mergedPromise);
       }
     } else {
-
-      query.find({});
+      query.find(options.conditions);
       query.populate(options.includes);
       query.hint({
         _id: 1
@@ -139,12 +144,15 @@ module.exports = function(entityName, options) {
     query.where({
       _id: id
     });
+    // query.where(options.conditions);
 
-    // query.populate(options.includes);
+    query.populate(options.includes);
 
     return query.then(function(results) {
       if (!results.length) {
-        throw new Error('Entity not found');
+        // console.log('2222222')
+        // throw new Error('Entity not found');
+        return {};
       }
 
       return results[0];

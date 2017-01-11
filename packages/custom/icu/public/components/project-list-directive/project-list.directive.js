@@ -29,15 +29,16 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             $scope.detailsState = context.entityName === 'all' ? 'main.projects.all.details' : 'main.projects.byentity.details';
 
             $scope.createOrUpdate = function(project) {
+
+                if (context.entityName !== 'all') {
+                    project[context.entityName] = context.entity;
+                }
+
                 if (project.__state === creatingStatuses.NotCreated) {
                     project.__state = creatingStatuses.Creating;
 
                     return ProjectsService.create(project).then(function(result) {
                         project.__state = creatingStatuses.Created;
-
-                        if (context.entityName !== 'all') {
-                            project[context.entityName] = context.entity;
-                        }
 
                         $scope.projects.push(_(newProject).clone());
 
@@ -46,11 +47,6 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                         return project;
                     });
                 } else if (project.__state === creatingStatuses.Created) {
-                    // update from the details pane
-                    //var data = {
-                    //    action: 'renamed'
-                    //};
-                    // return ProjectsService.update(project, data);
                     return ProjectsService.update(project);
                 }
             };

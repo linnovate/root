@@ -10,11 +10,9 @@ module.exports = function(entityName, options) {
     return function(data) {
       if (_.isEmpty(data)) {
         req.locals.error = {
-          status: 404,
-          message: 'Entity not found'
+          status: 204,
+          message: 'No Content'
         };
-
-        return next();
       }
 
       req.locals.result = data;
@@ -42,11 +40,9 @@ module.exports = function(entityName, options) {
   }
 
   function read(req, res, next) {
-    console.log('orit 1' + JSON.stringify(req.locals.error));
     if (req.locals.error) {
       return next();
     }
- console.log('orit 2'+JSON.stringify(req.params) + '3   ' +JSON.stringify(req.user));
     entityService
       .read(req.params.id, req.user, req.acl)
       .then(success(req, next), error(req, next));
@@ -65,7 +61,6 @@ module.exports = function(entityName, options) {
   }
 
   function update(req, res, next) {
-    console.yon('sara2', req.locals.error);
     if (req.locals.error) {
       return next();
     }
@@ -88,6 +83,8 @@ module.exports = function(entityName, options) {
 
     var entity = req.locals.data.body || req.body;
     
+    req.locals.old = JSON.parse(JSON.stringify(req.locals.result));
+
     entityService
       .update(req.locals.result, entity, { user: req.user }, req.acl)
       .then(success(req, next), error(req, next));

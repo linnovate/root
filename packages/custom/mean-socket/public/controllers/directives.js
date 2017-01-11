@@ -12,16 +12,13 @@ angular.module('mean.mean-socket').directive('meanSocket', function(Global, Mean
 			message: '=',
 			afterSend: '&'
 		},
-		templateUrl: 'mean-socket/views/directive.html',
+		// templateUrl: 'mean-socket/views/directive.html',
 		link: function(scope, elm, attr) {
             
             UsersServicefunc.getMe().then(function (me) {
-            console.log(me.name);
             //myname = me.name;
             myname = me._id;
             
-			console.log(scope.message);
-
 			scope.global = Global;
             
             scope.global.user = myname;
@@ -67,9 +64,6 @@ angular.module('mean.mean-socket').directive('useMeanSocket', function(Global, M
 		link: function(scope, elm, attr) {
             
             UsersServicefunc.getMe().then(function (me) {
-                console.log("me");
-                console.log(me);
-                console.log(me.name);
                 //myname = me.name;
                 myname = me._id;
             //});
@@ -130,7 +124,7 @@ angular.module('mean.mean-socket').directive('useMeanSocket', function(Global, M
 				});
 
 				MeanSocket.on('message:channel:' + channel, function message(message) {
-					if (channel === MeanSocket.activeChannel) {
+					if (scope.listeningChannels.indexOf(channel) !== -1) {
 						scope.meanSocketAfterGet({
 							message: message
 						});
@@ -152,17 +146,13 @@ angular.module('mean.mean-socket').directive('useMeanSocket', function(Global, M
 				//Listen to channel if we dont have it already.
 				if (scope.listeningChannels.indexOf(channel) === -1) {
 					scope.listenChannel(channel);
-				}
-                
-                console.log("scope");
-                console.log(scope);
-                console.log("me");
-                console.log(myname);                                         
+				}                                        
 
 				MeanSocket.emit('user joined token', {
 					id: myname,
 					socket: "first"
 				});
+
 			};
 
 			//Auto join the defaultChannel

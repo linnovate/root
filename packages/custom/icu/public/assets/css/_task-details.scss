@@ -1,9 +1,28 @@
 .task-details {
-    .page-content {
-        .tabs {
-            .tab {
-                width: calc((100% - 5px) / 2);
-            }
-        }
-    }
+	.page-content {
+		.tabs {
+			.tab {
+				width: calc((100% - 5px) / 2);
+			}
+		}
+	}
 }
+ul.dropdown-menu {
+	text-align: inherit;
+}
+.oldDate {
+	color:#EF7875;
+}
+.wrap-title {
+	position: relative;
+}
+.tplSaved {
+	transition: height 0.4s;
+    text-align: center;
+    color: #fda102;
+    margin-top: 10px;
+    font-style: italic;
+    width: 100%;
+    position: absolute;
+    top: -25%;
+}   

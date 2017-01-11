@@ -69,7 +69,16 @@ module.exports = function(passport) {
             return done(null, user);
           }
 
-          user = new User(config.saml.strategy.claims);
+          user = new User({
+			name 	 : profile[config.saml.strategy.claims.name],
+			username : profile[config.saml.strategy.claims.username],
+			email 	 : profile[config.saml.strategy.claims.email] + 
+				    config.saml.strategy.claims.emailSuffix,
+			id 	 : profile[config.saml.strategy.claims.email] +
+				    config.saml.strategy.claims.emailSuffix,
+			provider : config.saml.strategy.claims.provider,
+			roles 	 : config.saml.strategy.claims.roles
+	  });
 
           user.save(function(err){
             if (err) {

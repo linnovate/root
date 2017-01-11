@@ -6,9 +6,10 @@ $panel-height: $header-height - 5px;
 $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 37px);
 
 .detailspane {
+
     width: 54%;
     border-left: 1px solid #C8C8C6;
-    height: 100vh;
+    height: 100%;
     background-color: $cream;
     float: left;
 
@@ -62,17 +63,27 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             position: relative;
 
             .text {
-                position: absolute;
-                left: 0;
-                top: 50%;
                 color: $light-grey4;
-
-                display: inline-block;
                 transform: translate(0, -50%);
             }
 
             .entity-name, .user {
                 font-weight: 700;
+            }
+
+            .notification-time {
+                color: $light-grey1;
+                top: 15%;
+                position: absolute;
+            }
+            .notification-NotWatched {
+                .text {
+                    font-weight: bold;
+                    color: #333;
+                }
+                .notification-time {
+                    color: $light-grey5;
+                }
             }
         }
 
@@ -81,15 +92,23 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             width: calc(100% - 265px);
             height: $header-height;
             cursor: pointer;
-
             @include notification;
+            position: relative;
+
+            .notification-time {
+                position: absolute;
+            }
+            .notification-content {
+                position: absolute;
+                top: 50%;
+            }
         }
 
         .all-notifications {
-            border: 1px solid $light-grey1;
+            border-bottom: 1px solid $light-grey5;
+            border-right: 1px solid $light-grey5;
             position: absolute;
-            width: calc(100% - 3 * #{$header-height});
-            left: $header-height;
+            width: calc(100% - 2 * #{$header-height});
             margin-top: $header-height;
             z-index: 1001;
             background-color: white;
@@ -97,22 +116,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             .notification {
                 height: $header-height;
                 @include notification;
-                padding: 10px;
+                padding-left: 25px + $header-height;
                 border-bottom: 1px solid $light-grey1;
-
+                cursor: pointer;
                 span {
-                    line-height: $header-height;
+                    line-height: 25px + $header-height;
                 }
-            }
-            .notification-NotWatched {
-                background-color: #FDA102;
-                height: $header-height;
-                @include notification;
-                padding: 10px;
-                border-bottom: 1px solid $light-grey1;
-
-                span {
-                    line-height: $header-height;
+                .notification-content {
+                    height: 100%;
                 }
             }
         }
@@ -225,7 +236,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 }
 
 .page-content {
-    height: $content-height;
+
     .compBtn {
         &.c19n{
           background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
@@ -300,7 +311,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         } 
     }
 
-    .favorite, .user, .due, .status {
+    .favorite, .user, .due {
         border-right: 1px solid $light-grey1;
     }
 
@@ -346,6 +357,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             transform: translateX(-50%) translateY(-65%);
             top: 50%;
         }
+
 
         .avatar {
             height: 26px;
@@ -421,20 +433,21 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                  transition: 1.5s;
              }
          }
-         
+
          tip{
             width: 80%;
             font-size: 14px;
-         }
-             
-     }
+        }
 
-     .orange {
+    }
+
+    .orange {
         color: $orange;
     }
     &:focus {
         outline: none;
     }
+
 }
 
 @mixin ui-select {
@@ -543,82 +556,84 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        padding-left: 10px;
-
         .ui-select-match-text {
             width: 100%;
         }
         .ui-select-container.open {
-         padding-top: 0 !important;
-     }
-
-     .text-muted {
-        color: $light-grey-placeholder;
-        float: left;
-    }
-
-    .tag {
-        transition: 0.3s;
-        @include tag(14px);
-        width: initial;
-        margin: 0;
-        padding: 3px 13px;
-        color: white;
-        position: relative;
-        margin-top: -5px;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: inline-block;
-        float: left;
-
-        .delete {
-            display: none;
+            padding-top: 0 !important;
         }
 
-        &:hover {
-            padding-right: 25px;
-            transition: 0.3s;
-
-            .delete {
-                @include circle(6.5px);
-                display: block;
-                margin: 0;
-                position: absolute;
-                top: 8px;
-                right: 8px;
-                color: white;
-                font-size: 12px;
-                line-height: 12px;
-                /*  background-color: #313c40;*/
-                text-align: center;
-                cursor: pointer;
-            }
+        .ui-select-choices-row  {
+            a { padding: 0px 20px;}
         }
-    }
 
-    .line {
-        height: 30px;
-        padding-top: 5px;
-
-        .title {
+        .text-muted {
+            color: $light-grey-placeholder;
             float: left;
         }
 
-        .add-btn-wrap {
-            float: right;
+        .tag {
+            transition: 0.3s;
+            @include tag(14px);
+            width: initial;
+            margin: 0;
+            padding: 3px 13px;
+            color: white;
+            position: relative;
+            margin-top: -5px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-table;
+            float: left;
 
-            .add-btn {
-                @include tag(9px);
-                background-color: $orange;
-                padding: 0 3px;
-                color: white;
+            .delete {
+                display: none;
+            }
+
+            &:hover {
+                padding-right: 25px;
+                transition: 0.3s;
+
+                .delete {
+                    @include circle(6.5px);
+                    display: block;
+                    margin: 0;
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    color: white;
+                    font-size: 12px;
+                    line-height: 12px;
+                    /*  background-color: #313c40;*/
+                    text-align: center;
+                    cursor: pointer;
+                }
             }
         }
-    }
 
-}
+        .line {
+            height: 30px;
+            padding-top: 5px;
+
+            .title {
+                float: left;
+            }
+
+            .add-btn-wrap {
+                float: right;
+
+                .add-btn {
+                    @include tag(9px);
+                    background-color: $orange;
+                    padding: 0 3px;
+                    color: white;
+                }
+            }
+        }
+
+    }
 }
 
 .dropdown-container {
@@ -651,6 +666,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 i {
                     float: left;
                     font-size: 1.4em;
+                    &.flag {
+                        -webkit-mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
+                        mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
+                        width: 15px;
+                        height: 17px;
+                        margin-right: 3px;
+                        background-color: #333;
+                    }
                 }
                 span {
                     padding: 0 10px;
@@ -1052,10 +1075,18 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 .summary.wrap-pro {
     border-bottom: none;
     background: transparent;
-    margin: 0px 14px 0;
-        height: 52px;
+    margin: 10px 28px 0;
+    position: relative;
+    display: inline-block;
+    /*height: 52px;*/
     .tag-wrap {
         transition: 0.3s;
+    }
+    .parent {
+        text-decoration: underline;
+        font-weight: bold;
+        position: absolute;
+        bottom: 25%;
     }
 }
 .summary.wrap-pro :hover{
@@ -1066,7 +1097,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
    font-weight: bold;
 }
 .create-new {
-        background: #fda102;
+    background: #fda102;
     position: absolute;
     right: 8px;
     height: 23px;
@@ -1076,9 +1107,34 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     font-size: 12px;
     padding: 3px 13px;
     color: white;
-        border-radius: 14px;
+    border-radius: 14px;
 }
 .ui-select-choices-row-inner {
     position: relative;
 }
+}
+.permission {
+    text-align: center;
+    width: 90%;
+    background: white;
+    margin: 5%;
+    border: 1px solid #C8C8C6;
+    .perIcon {
+        margin: 5% 2% 2%;
+            margin: 5% 50% 2%;
+    background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    border: none;
+    }
+    .perTitle {
+        margin: 1% 0 2%;
+        font-size: 23px;
+        font-weight: bold;
+    }
+    .perMsg {
+        margin: 2%;
+        line-height: 26px;
+    }
 }

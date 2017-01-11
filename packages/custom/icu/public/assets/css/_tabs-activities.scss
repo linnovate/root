@@ -24,6 +24,7 @@ $activityListDefaultMaxH: 80px;
             border-bottom: 1px solid $light-grey1;
             height: calc(100% - 120px);
             transition: height 0.4s;
+            max-height: 200px;
             overflow: auto;
             &.my {
 				height: 100%;
@@ -114,12 +115,9 @@ $activityListDefaultMaxH: 80px;
         }
 
         .add-update {
-            margin-top: 20px;
-            max-height: $add-update-height;
-            overflow: auto;
-            width: 100%;
-            position: absolute;
-            bottom: 0;
+             max-height: 210px;
+    overflow: auto;
+    width: 100%;
 
             textarea {
                 padding: 5px 9px;
@@ -197,4 +195,10 @@ $activityListDefaultMaxH: 80px;
             display: none;
         }
     }
+}
+.upload-err {
+    transition: height 0.4s;
+    float: right;
+    color: #EF7875;
+    font-style: italic;
 }

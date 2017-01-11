@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.profile', [])
-.controller('ProfileController', function($scope, $state, me, UsersService) {
+.controller('ProfileController', function($scope, $state, me, UsersService, $http) {
     $scope.me = me;
 
     if (!$scope.me.profile) {
@@ -30,5 +30,13 @@ angular.module('mean.icu.ui.profile', [])
         UsersService.update($scope.me).then(function() {
             $state.go('main.tasks', null, { reload: true });
         });
+    };
+
+    $scope.loginToHi = function(username, password) {
+        UsersService.loginToHi(username, password).then(function(result) {
+            if (result.result.status === 'success') {
+                $scope.me.profile.hiUid = result.result.data.userId;
+            }
+        })
     };
 });

@@ -204,16 +204,19 @@ exports.getMyTasks  = function(req, res, next) {
 }
 
 exports.getByPath = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
   var query = req.acl.mongoQuery('Attachment');
-
-  query.findOne({path: decodeURI(req.headers.referer)}).exec(function(err, attachment){
-    if(err) {
+  var path = decodeURI(req.url).replace(/pdf$/, '');
+  var conditions = {
+    path: new RegExp(path)
+  };
+  query.findOne(conditions).exec(function(err, attachment) {
+    if (err) {
       req.locals.error = err;
     }
-    if(!attachment) {
+    if (!attachment) {
       req.locals.error = {
         status: 404,
         message: 'Entity not found'

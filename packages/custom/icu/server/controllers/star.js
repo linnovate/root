@@ -67,8 +67,9 @@ function getStarredIds(entity) {
   };
 }
 
-function isStarred(req, res, next) {
-  if (req.locals.error) {
+function isStarred(req, res, next)
+ {
+   if (req.locals.error) {
     return next();
   }
 
