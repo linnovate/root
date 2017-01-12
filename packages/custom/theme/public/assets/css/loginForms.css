@@ -48,7 +48,7 @@ background: url("/theme/assets/img/bg.png");
 }
 .form {
     background: #ffffff;
-    box-shadow: 0 1px 3px 1px #003644;
+    /*box-shadow: 0 1px 3px 1px #003644;*/
     margin-top: 35px;
     left: 50%;
     right: 50%;
@@ -56,9 +56,8 @@ background: url("/theme/assets/img/bg.png");
 }
 
 .main-form {
-    width: 748px;
-    height: 435px;
-    margin-left: -374px;
+    width: 56%;
+    position: inherit;
 }
 
 .main-form.register-form {
