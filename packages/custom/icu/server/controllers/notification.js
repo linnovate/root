@@ -102,8 +102,8 @@ exports.createRoom = function(req, res, next) {
                 req.hi = {
                     error: error
                 };
-                req.locals.result.hasRoom = false;
-                req.locals.result.save();
+                project.hasRoom = false;
+                project.save();
                 next();
             } else {
                 req.body.room = result.group._id;
@@ -126,6 +126,7 @@ exports.updateRoom = function(req, res, next) {
             _id: req.locals.result._id
         }).exec(function(error, project) {
             if (!project.hasRoom) {
+
                 Project.update({
                     _id: req.locals.result._id
                 }, {
