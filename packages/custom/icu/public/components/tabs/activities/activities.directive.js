@@ -11,7 +11,7 @@ angular.module('mean.icu.ui.tabs')
             $scope.context = context;
             $scope.stateParams = $stateParams
 
-            $scope.details = {
+            $scope.details = $scope.context.entityName !== 'my' ? {
                 create: [{
                     type: 'text',
                     value: 'createdThis'
@@ -88,13 +88,109 @@ angular.module('mean.icu.ui.tabs')
                     type: 'object',
                     value: 'issue'
                 }]
-            };
-
-            $scope.tasksDetails = {
-                create: 'createdTask',
-                update: 'updatedTask',
-                document: 'addDocumentToTask',
-                comment: 'addCommentToTask'
+            } : {
+                create: [{
+                    type: 'text',
+                    value: 'createdThe'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
+                }],
+                update: [{
+                    type: 'text',
+                    value: 'updatedThis'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }],
+                document: [{
+                    type: 'text',
+                    value: 'addDocument'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
+                }],
+                comment: [{
+                    type: 'text',
+                    value: 'addComment'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }],
+                assign: [{
+                    type: 'text',
+                    value: 'assignedUser'
+                }, {
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'toThis'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
+                }],
+                unassign: [{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'unassign'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }],
+                copy: [{
+                    type: 'text',
+                    value: 'copiedThe'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'fromtemplate'
+                }],
+                copyAttachment: [{
+                    type: 'text',
+                    value: 'copiedAttachment'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
+                }]
             };
 
             UsersService.getMe().then(function(user) {
