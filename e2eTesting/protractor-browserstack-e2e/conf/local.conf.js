@@ -1,8 +1,12 @@
 var browserstack = require('browserstack-local');
+// Running selenium-server.jar at port 4444
+// var driver = new webdriver.Builder().usingServer('http://localhost:3009/wd/hub').withCapabilities({
+//   'browserName' : 'firefox'
+// }).build()
 
 exports.config = {
   'specs': [ '../specs/local.js' ],
-  'seleniumAddress': 'http://hub-cloud.browserstack.com/wd/hub',
+  'seleniumAddress': 'http://localhost:3009',
 
   'capabilities': {
     'browserstack.user': process.env.dvoragadasi1 || 'dvoragadasi1',
@@ -13,6 +17,7 @@ exports.config = {
     'browserstack.local': true,
     'browserstack.debug': 'true'
   },
+    framework: 'jasmine2',
 
   // Code to start browserstack local before start of test
   beforeLaunch: function(){
