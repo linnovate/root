@@ -6,7 +6,7 @@ var path = require('path'),
 module.exports = {
   root: rootPath,
   http: {
-    port: process.env.PORT || 3002
+    port: process.env.PORT || 3009
   },
   https: {
     port: false,
@@ -54,6 +54,7 @@ module.exports = {
   // The session cookie name
   sessionName: 'connect.sid',
   attachmentDir: rootPath + '/files',
+//  activeProvider: 'google',
   activeProvider: 'local',
   circleSettings: require('../circleSettings') || {}
 };
