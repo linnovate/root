@@ -213,9 +213,9 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 // return $filter('i18next')('today') + ', ' + $filter('date')(input, "hh:mm");
                 return $filter('timeAgo')(input);
             }
-            if (inputDate == now.setDate(now.getDate() - 1)) {
-                return $filter('i18next')('yesterday') + ', ' + $filter('date')(input, "hh:mm");
-            }
+            // if (inputDate == now.setDate(now.getDate() - 1)) {
+            //     return $filter('i18next')('yesterday') + ', ' + $filter('date')(input, "hh:mm");
+            // }
             var d = $filter('date')(input, 'd');
             var dd;
             switch (d) {
