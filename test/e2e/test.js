@@ -19,7 +19,7 @@ describe('Registration Functionality Testing', function () {
     // iit() only this test will run.
     it('Should Navigate To Site on the server', function () {
         console.log('Navigate');
-        browser.driver.get('http://root.hrm.demo.linnovate.net/');
+        browser.driver.get('http://localhost:3002/');
         browser.manage().timeouts().pageLoadTimeout(12000);  // 12 seconds
         expect(browser.driver.getTitle()).toEqual('ICU');
         console.log('expect getTitle toEqual ICU');
@@ -57,7 +57,7 @@ describe('Registration Functionality Testing', function () {
 
     //fixed login
       it('Should login to the site', function () {
-        browser.driver.get('http://root.hrm.demo.linnovate.net/');
+        browser.driver.get('http://localhost:3002/');
         email.sendKeys("testsqaqa+" + num + "@gmail.com");
         pass.sendKeys("newstrat");
         element(by.className('btn')).click();
@@ -103,30 +103,30 @@ describe('Registration Functionality Testing', function () {
   
         //fixed
         it('add due-date', function () {
-        var picker = element(by.css('.hasDatepicker'));
-        picker.click();
+            var picker = element(by.css('.hasDatepicker'));
+            picker.click();
 
-        // get today's date
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth()+1; //January is 0!
-        var yyyy = today.getFullYear();
+            // get today's date
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
 
-        if(dd<10) {
-            dd='0'+dd
-        } 
+            if(dd<10) {
+                dd='0'+dd
+            } 
 
-        if(mm<10) {
-            mm='0'+mm
-        } 
+            if(mm<10) {
+                mm='0'+mm
+            } 
 
-        today = mm+'/'+dd+'/'+yyyy;
+            today = mm+'/'+dd+'/'+yyyy;
 
-        picker.clear();
-        picker.sendKeys(today);
+            picker.clear();
+            picker.sendKeys(today);
 
-        expect(picker.getAttribute('value')).toEqual(today);
-      
+            expect(picker.getAttribute('value')).toEqual(today);
+          
         });
 
         it('click on schedule discussion button', function () {
@@ -148,7 +148,7 @@ describe('Registration Functionality Testing', function () {
         // it('attach a file to discussion', function(){
         //        
         // });
-      });
+    });
 
 
     describe("Project", function(){
@@ -168,7 +168,7 @@ describe('Registration Functionality Testing', function () {
     //     beforeEach(function(){
     //     // ptor = protractor.getInstance();
     //     // driver = ptor.driver;
-    //     browser.get('http://root.hrm.demo.linnovate.net/');
+    //     browser.get('http://localhost:3002/');
     //     browser.sleep(30000);
     //     });
 
@@ -207,7 +207,7 @@ describe('Registration Functionality Testing', function () {
 //     describe('login with google', function () {
    
 //         beforeEach(function () {
-//             browser.driver.get('http://root.hrm.demo.linnovate.net/');
+//             browser.driver.get('http://localhost:3002/');
 //         },10000);
 
 //         it("should start the test", function () {   

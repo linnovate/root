@@ -12,9 +12,7 @@
   },
   "scripts": {
     "start": "node server",
-    "mocha": "node node_modules/.bin/mocha packages/**/server/tests/**/*.js -R spec -r tools/test/mocha-req.js",
-    "karma": "node node_modules/karma/bin/karma start karma.conf.js",
-    "test": "npm run mocha && NODE_ENV=test npm run start & sleep 20 && npm run karma",
+    "test": "export NODE_ENV=test && gulp test",
     "postinstall": "node tools/scripts/postinstall.js"
   },
   "dependencies": {
@@ -64,12 +62,13 @@
     "gulp-cssmin": "latest",
     "gulp-jshint": "latest",
     "gulp-less": "latest",
-    "gulp-sass": "latest",
-    "gulp-rtlcss": "latest",
     "gulp-livereload": "latest",
     "gulp-load-plugins": "latest",
     "gulp-mocha": "latest",
     "gulp-nodemon": "latest",
+    "gulp-protractor": "^3.0.0",
+    "gulp-rtlcss": "latest",
+    "gulp-sass": "latest",
     "gulp-uglify": "latest",
     "gulp-util": "latest",
     "jshint-stylish": "latest",
