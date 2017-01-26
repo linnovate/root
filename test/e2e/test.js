@@ -1,4 +1,5 @@
 // pay attention! logout from the site before you run the Testing
+// iit() in order to run just a specific test
 describe('e2e Testing for ICU with Protractor', function() {
     
     var path = require('path');
@@ -14,14 +15,11 @@ describe('e2e Testing for ICU with Protractor', function() {
     var num = new Date().getTime();
 
     describe('Registration Functionality Testing, login and logout Testing', function () {
-        //  beforeEach(function () {
-        //  });
 
-        // iit() only this test will run.
         it('Should Navigate To Site on the server', function () {
             console.log('Navigate');
             browser.driver.get('http://localhost:3002/');
-            browser.manage().timeouts().pageLoadTimeout(12000);  // 12 seconds
+            browser.manage().timeouts().pageLoadTimeout(12000);
             expect(browser.driver.getTitle()).toEqual('MEAN - A Modern Stack - Test');
             console.log('expect getTitle toEqual ICU');
         });
@@ -98,10 +96,9 @@ describe('e2e Testing for ICU with Protractor', function() {
             var picker = element(by.css('.hasDatepicker'));
             picker.click();
 
-            // get today's date
             var today = new Date();
             var dd = today.getDate();
-            var mm = today.getMonth()+1; //January is 0!
+            var mm = today.getMonth()+1;
             var yyyy = today.getFullYear();
 
             if(dd<10) {
@@ -117,7 +114,7 @@ describe('e2e Testing for ICU with Protractor', function() {
             picker.clear();
             picker.sendKeys(today);
 
-        // expect(element(by.css('[ng-click="statusesActionsMap[discussion.status].method(discussion)"]')).isEnabled()).toBe(true);
+        expect(element(by.css('[ng-click="statusesActionsMap[discussion.status].method(discussion)"]')).isEnabled()).toBe(true);
         });
 
         it('click on schedule discussion button', function () {
@@ -139,34 +136,34 @@ describe('e2e Testing for ICU with Protractor', function() {
 
 // ============================= run after fix the bug =================================
 
-        // it('create a task on a discussion', function () {
-        //     element(by.css('.switcher .active')).click();
-        //     element(by.css('[ng-click="manageTasks()"]')).click();
-        //     var ListTasks = element.all(by.repeater('task in tasks | filterByOptions | orderBy:order.field:order.isReverse'));
-        //     ListTasks.then(function(rows) {
-        //         for (var i = 0; i < rows.length; ++i) {
-        //             if(rows[i] == rows.length){
-        //                 ListTasks.get(rows[i]).click();
-        //                 ListTasks.get(rows[i]).sendKeys('task1');
-        //             }
-        //         } 
-        //     });
-        //     expect(ListTasks.get(rows[i]).getText()).toEqual('"task1"');
-        // });
+        it('create a task on a discussion', function () {
+            element(by.css('.switcher .active')).click();
+            element(by.css('[ng-click="manageTasks()"]')).click();
+            var ListTasks = element.all(by.repeater('task in tasks | filterByOptions | orderBy:order.field:order.isReverse'));
+            ListTasks.then(function(rows) {
+                for (var i = 0; i < rows.length; ++i) {
+                    if(rows[i] == rows.length){
+                        ListTasks.get(rows[i]).click();
+                        ListTasks.get(rows[i]).sendKeys('task1');
+                    }
+                } 
+            });
+            expect(ListTasks.get(rows[i]).getText()).toEqual('"task1"');
+        });
 
-        // it('attach a file to task on discussion', function() {
-        //     var ListDiscussions = element.all(by.repeater('discussion in discussions | orderBy:order.field:order.isReverse'));
-        //     ListDiscussions.get(0).click();
-        //     var actionButtons = element(by.css('.action-buttons .attachment'));
+        it('attach a file to task on discussion', function() {
+            var ListDiscussions = element.all(by.repeater('discussion in discussions | orderBy:order.field:order.isReverse'));
+            ListDiscussions.get(0).click();
+            var actionButtons = element(by.css('.action-buttons .attachment'));
             
-        //         var fileToUpload = 'documents/doc-sample1.doc',
-        //         absolutePath = path.resolve(__dirname, fileToUpload);
+                var fileToUpload = 'documents/doc-sample1.doc',
+                absolutePath = path.resolve(__dirname, fileToUpload);
 
-        //         actionButtons.sendKeys(absolutePath);
-        //         actionButtons.click();
-        //         var actbtn = element(by.css('.action-buttons .name'));
-        //         expect(actbtn.getText()).toBe('doc-sample1.doc');
-        // });
+                actionButtons.sendKeys(absolutePath);
+                actionButtons.click();
+                var actbtn = element(by.css('.action-buttons .name'));
+                expect(actbtn.getText()).toBe('doc-sample1.doc');
+        });
 //===========================================================================================================================
         it('delete a discussion', function () {
             element(by.css('.dropdown-container')).click();
@@ -197,7 +194,7 @@ describe('e2e Testing for ICU with Protractor', function() {
             expect(colorBox.getAttribute('style')).toEqual('background-color: rgb(240, 110, 170);');
         });
 
-        //fix - have a bug
+        //fixed - but have a bug
         it('add watcher to project',function () {
             var watcherelm = element(by.css('#addMember')).click();
             browser.driver.wait(function () {
