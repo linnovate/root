@@ -13,12 +13,14 @@ describe('End-to-End Testing for ICU with Protractor', function() {
     var dropdownToggle = element(by.className('dropdown-toggle'));
     var discussion = element(by.binding('Discussion'));
     var num = new Date().getTime();
+    var serverDomain = "http://root.hrm.demo.linnovate.net/";
+    var localDomain = "http://localhost:3002/";
 
     describe('Registration Functionality Testing, login and logout Testing', function () {
 
         it('Should Navigate To Site on the server', function () {
             console.log('Navigate');
-            browser.driver.get('http://localhost:3002/');
+            browser.driver.get(localDomain);
             browser.manage().timeouts().pageLoadTimeout(12000);
             expect(browser.driver.getTitle()).toEqual('MEAN - A Modern Stack - Test');
             console.log('expect getTitle toEqual ICU');
@@ -52,7 +54,7 @@ describe('End-to-End Testing for ICU with Protractor', function() {
         });
 
         it('Should login to the site', function () {
-            browser.driver.get('http://localhost:3002/');
+            browser.driver.get(localDomain);
             email.sendKeys("testsqaqa+" + num + "@gmail.com");
             pass.sendKeys("newstrat");
             element(by.className('btn')).click();
