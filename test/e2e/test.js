@@ -1,6 +1,6 @@
 // pay attention! logout from the site before you run the Testing
 // iit() in order to run just a specific test
-describe('e2e Testing for ICU with Protractor', function() {
+describe('End-to-End Testing for ICU with Protractor', function() {
     
     var path = require('path');
     var name = element(by.model('credentials.name'));
