@@ -27,8 +27,9 @@
 
             <div class="due">
                 <div class="placeholder" ng-if="!discussion.due">{{ 'deadline' | i18next }}</div>
-                <input ui-date="dueOptions" ng-model="discussion.due">
+                <input ng-click="open()" ui-date="dueOptions" ng-model="discussion.due" ng-class='{"oldDate":checkDate()}'>
             </div>
+            <div id="past">{{'This Deadline is in the past!' | i18next }}</div>
 
             <div class="status">
                 <div tooltips tooltip-template="{{'status' | i18next}}">

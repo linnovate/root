@@ -121,11 +121,36 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             $scope.dueOptions = function(task) {
                 return {
                     onSelect: function() {
-                        var now = task.due;
-                        task.due = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+
+                        console.log('=============================s', task.due)
+                        var now = task.due || new Date();
+                        task.due = new Date(now.getTime());
                         $scope.createOrUpdate(task);
                     },
+                    onClose: function() {
+                        console.log('=============================c', task.due)
+
+                        document.getElementById('ui-datepicker-div').style.display = 'none';
+                        $scope.open(task);
+                    },
                     dateFormat: 'd.m.yy'
+                }
+            };
+
+            $scope.checkDate = function(task) {
+                var d = new Date()
+                if (d > task.due) {
+                    return true;
+                }
+                return false;
+            };
+
+            $scope.open = function(task) {
+                if ($scope.checkDate(task)) {
+                    document.getElementById('past' + task._id).style.display = document.getElementById('ui-datepicker-div').style.display;
+                    document.getElementById('past' + task._id).style.left = document.getElementById('ui-datepicker-div').style.left;
+                } else {
+                    document.getElementById('past' + task._id).style.display = 'none';
                 }
             };
 
