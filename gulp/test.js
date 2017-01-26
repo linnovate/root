@@ -1,18 +1,14 @@
 var gulp = require('gulp'),
+  protractor = require('gulp-protractor'),
   gulpLoadPlugins = require('gulp-load-plugins'),
-  karma = require('karma').server;
+  Server = require('karma').Server;
 var plugins = gulpLoadPlugins();
-var defaultTasks = ['env:test', 'karma:unit', 'mochaTest'];
-
-gulp.task('env:test', function () {
-  process.env.NODE_ENV = 'test';
-});
+var defaultTasks = ['e2e'];
 
 gulp.task('karma:unit', function (done) {
-  karma.start({
-    configFile: __dirname + '/../karma.conf.js',
-    singleRun: true
-  }, done);
+  new Server({
+    configFile: __dirname + '/../karma.conf.js'
+  }, done).start();
 });
 
 gulp.task('loadTestSchema', function () {
@@ -26,5 +22,33 @@ gulp.task('mochaTest', ['loadTestSchema'], function () {
       reporter: 'spec'
     }));
 });
+
+
+
+
+
+
+
+
+
+gulp.task('e2e', ['webdriver_update', 'server'], function(done) {
+  gulp.src('test/test.js')
+    .pipe(protractor.protractor({
+      configFile: 'test/e2e/config.js'
+    })).on('error', function(err) {
+      console.log(err)
+      done()
+      process.exit()
+    }).on('end', function() {
+      done()
+      process.exit()
+    })
+})
+
+gulp.task('server', function() {
+  require('../server.js');
+})
+
+gulp.task('webdriver_update', protractor.webdriver_update);
 
 gulp.task('test', defaultTasks);

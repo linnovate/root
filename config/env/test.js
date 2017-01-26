@@ -1,15 +1,26 @@
 'use strict';
 
+// disable all logs
+process.stdout.write = function() {};
+process.stderr.write = function() {};
+
 module.exports = {
   db: 'mongodb://' + (process.env.DB_PORT_27017_TCP_ADDR || 'localhost') + '/mean-test',
-  http: {
-    port: 3001
-  },
   logging: {
-    format: 'common'
+    format: 'short'
   },
   app: {
     name: 'MEAN - A Modern Stack - Test'
+  },
+  saml: {
+    strategy : {
+      options :{
+        samlOptions: ''
+      }
+    },
+    clientID: 'DEFAULT_APP_ID',
+    clientSecret: 'APP_SECRET',
+    callbackURL: 'http://localhost/metadata.xml/callback'
   },
   facebook: {
     clientID: 'APP_ID',
@@ -43,6 +54,26 @@ module.exports = {
       user: 'EMAIL_ID',
       pass: 'PASSWORD'
     }
+  },
+  secret: 'SOME_TOKEN_SECRET',
+  api: {
+    uri: 'http://192.168.245.152:3003'
+  },
+  elasticsearch: {
+    host: 'http://localhost',
+    port: 9200,
+    log: 'error',
+    keepAlive: false,
+    sniffOnConnectionFault: true,
+    maxRetries: 50
+  },
+  circles: {
+    uri: 'http://localhost:3005'
+  },
+  rocketChat: {
+    uri: 'http://localhost:3000',
+    authToken: "authToken",
+    userId: "userId"
   }
 };
 

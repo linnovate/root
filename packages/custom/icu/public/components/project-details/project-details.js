@@ -63,6 +63,8 @@ angular.module('mean.icu.ui.projectdetails', [])
             }
         });
 
+        $scope.people = people.data || people;
+
         $scope.options = {
             theme: 'bootstrap',
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']

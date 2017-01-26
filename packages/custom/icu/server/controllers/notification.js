@@ -193,11 +193,12 @@ exports.updateRoom = function(req, res, next) {
             });
         });
         for (var i in added) {
-            console.log(JSON.stringify(added[i].profile))
-            notifications.notify(['hi'], 'addMember', {
-                member: added[i].profile.hiUid,
-                roomId: req.locals.result.room
-            }, function(error, result) {})
+            if (added[i].profile && added[i].profile.hiUid) {
+                notifications.notify(['hi'], 'addMember', {
+                    member: added[i].profile.hiUid,
+                    roomId: req.locals.result.room
+                }, function(error, result) {})
+            }
         }
 
         var removed = req.locals.old.watchers.filter(function(o1) {
@@ -206,16 +207,18 @@ exports.updateRoom = function(req, res, next) {
             });
         });
         for (var i in removed) {
-            notifications.notify(['hi'], 'removeMember', {
-                member: removed[i].profile.hiUid,
-                roomId: req.locals.result.room
-            }, function(error, result) {
-                if (error) {
-                    req.hi = {
-                        error: error
-                    };
-                }
-            })
+            if (removed[i].profile && added[i].profile.hiUid) {
+                notifications.notify(['hi'], 'removeMember', {
+                    member: removed[i].profile.hiUid,
+                    roomId: req.locals.result.room
+                }, function(error, result) {
+                    if (error) {
+                        req.hi = {
+                            error: error
+                        };
+                    }
+                })
+            }
         }
 
         next();
