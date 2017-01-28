@@ -9,7 +9,7 @@
     ng-change="data.updateCb(data.task)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-blur="data.hideAutoCompleteCb(data.task)"
-    ng-model="data.task.title">
+    ng-model="data.task.due">
 </td>
 <td class="user" ng-if="data.task._id">
 <!--     <div class="no-assignee" ng-if="!data.task.assign">
@@ -42,7 +42,8 @@
 
 </td>
 <td class="due" ng-if="data.task._id">
-    <input ui-date="data.dueOptions(data.task)" ng-model="data.task.due" placeholder="{{ 'deadline' | i18next }}">
+    <input ng-click="data.open(data.task)" ui-date="data.dueOptions(data.task)" ng-model="data.task.due" placeholder="{{ 'deadline' | i18next }}" ng-class='{"oldDate":checkDate(data.task)}'>
+    <div id="past{{data.task._id}}" class="past">{{'This Deadline is in the past!' | i18next }}</div>
 </td>
 
 <td class="arrow" ng-if="data.task._id" ng-click="data.changeState(data.task)">

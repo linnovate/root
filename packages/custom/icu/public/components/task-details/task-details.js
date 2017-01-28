@@ -52,16 +52,6 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         }
 
-
-        $scope.checkDate = function() {
-            var d = new Date()
-            if (d > $scope.task.due) {
-                return true;
-            }
-            return false;
-        }
-
-
         $scope.people = people.data || people;
         if ($scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
             var newPeople = {
@@ -166,7 +156,28 @@ angular.module('mean.icu.ui.taskdetails', [])
                 $scope.task.due = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
                 $scope.update($scope.task);
             },
+            onClose: function() {
+                document.getElementById('ui-datepicker-div').style.display = 'none';
+                $scope.open();
+            },
             dateFormat: 'd.m.yy'
+        };
+
+        $scope.checkDate = function() {
+            var d = new Date()
+            if (d > $scope.task.due) {
+                return true;
+            }
+            return false;
+        };
+
+        $scope.open = function() {
+            if ($scope.checkDate()) {
+                document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
+                document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
+            } else {
+                document.getElementById('past').style.display = 'none';
+            }
         };
 
         function navigateToDetails(task) {
