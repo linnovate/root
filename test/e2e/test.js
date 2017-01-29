@@ -32,7 +32,7 @@ describe('End-to-End Testing for ICU with Protractor', function() {
         });
 
         it('Should fill the form registration', function () { 
-            name.sendKeys("Test");
+            name.sendKeys("Test" + num);
             email.sendKeys("testsqaqa+" + num + "@gmail.com");
             userName.sendKeys("Test+" + num);
             pass.sendKeys("newstrat");
@@ -62,8 +62,8 @@ describe('End-to-End Testing for ICU with Protractor', function() {
             browser.driver.wait(function () {
                 return element(by.css('[ng-click="removeFilterValue()"]')).isPresent();
             }, 3000);
-            var foo = element(by.css('.avatar .name'));
-            expect(foo.getText()).toEqual('T');
+            var userIcon = element(by.css('.avatar .name'));
+            expect(userIcon.getText()).toEqual('T');
         });
     });
     
@@ -76,17 +76,21 @@ describe('End-to-End Testing for ICU with Protractor', function() {
 
         it('should add name to discussion', function () {
             element(by.css('.description .title')).sendKeys('TestDiscussion' + num);
-            var foo1 = element(by.css('.header-wrap .title .ng-binding'));
-            expect(foo1.getText()).toEqual(foo1.getText());
+            var nameD = element(by.css('.header-wrap .title .ng-binding'));
+            expect(nameD.getText()).toEqual(nameD.getText());
         });
 
         it('Should add assignee', function(){
             var assignName = element(by.css('.user .tooltips'));
             assignName.click();
-            var input = assignName.element(by.css('input'));
-            input.clear().sendKeys('Dvora Gadasi' + protractor.Key.ENTER);
-            console.log('assignee');
-            expect(input.getAttribute('title')).toEqual('Dvora Gadasi');
+            var input = assignName.element(by.tagName('input'));
+            input.clear().sendKeys("Test" + num).then(function(){
+                browser.actions().sendKeys(protractor.Key.ARROW_DOWN).perform().then(function(){
+                browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                });
+            }); 
+            var nameContent = element(by.css('.user .tooltips .summary-content'));
+            expect(nameContent.getText()).toEqual("Test" + num);
         });
 
         it('add status', function () {
@@ -98,6 +102,7 @@ describe('End-to-End Testing for ICU with Protractor', function() {
             var picker = element(by.css('.hasDatepicker'));
             picker.click();
 
+            browser.waitForAngular();
             var today = new Date();
             var dd = today.getDate();
             var mm = today.getMonth()+1;
@@ -132,8 +137,8 @@ describe('End-to-End Testing for ICU with Protractor', function() {
             var member = element(by.css('.new-member-input'));
             member.element(by.css('[ng-click="$select.toggle($event)"]')).click();
             var inputwatcher = member.element(by.css('input'));
-            inputwatcher.clear().sendKeys('rivka' + protractor.Key.ENTER);
-            expect(inputwatcher.getAttribute('value')).toEqual('rivka');
+            inputwatcher.clear().sendKeys("Test" + num + protractor.Key.ENTER);
+            expect(inputwatcher.getAttribute('value')).toEqual("Test" + num);
         });
 
 // ============================= run after fix the bug =================================
@@ -148,9 +153,9 @@ describe('End-to-End Testing for ICU with Protractor', function() {
                         ListTasks.get(rows[i]).click();
                         ListTasks.get(rows[i]).sendKeys('task1');
                     }
-                } 
+                }
+                expect(ListTasks.get(rows[i]).getText()).toEqual('"task1"');
             });
-            expect(ListTasks.get(rows[i]).getText()).toEqual('"task1"');
         });
 
         it('attach a file to task on discussion', function() {
@@ -191,7 +196,7 @@ describe('End-to-End Testing for ICU with Protractor', function() {
 
         it('should select a color to project', function () {
             element(by.css('.select-box .arrow')).click();
-            element.all(by.repeater('color in colors')).get(4).click();;
+            element.all(by.repeater('color in colors')).get(4).click();
             var colorBox = element(by.css('.color-box'));
             expect(colorBox.getAttribute('style')).toEqual('background-color: rgb(240, 110, 170);');
         });
@@ -205,9 +210,13 @@ describe('End-to-End Testing for ICU with Protractor', function() {
             var member = element(by.css('.new-member-input'));
             member.element(by.css('[ng-click="$select.activate()"]')).click();
             var inputwatcher = member.element(by.css('input'));
-            inputwatcher.clear().sendKeys('rivka' + protractor.Key.ENTER);
-            expect(inputwatcher.getAttribute('value')).toEqual('rivka');
 
+            inputwatcher.clear().sendKeys("Test" + num).then(function(){
+                browser.actions().sendKeys(protractor.Key.ARROW_DOWN).perform().then(function(){
+                browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                 });
+            });
+             expect(inputwatcher.getAttribute('value')).toEqual("Test" + num);
         });
 
         it('create a task on project', function () {
