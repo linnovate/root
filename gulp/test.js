@@ -31,7 +31,7 @@ gulp.task('mochaTest', ['loadTestSchema'], function () {
 
 var child_process = require('child_process');
 
-gulp.task('e2e', ['server', 'webdriver_update'], function(done) {
+gulp.task('e2e', ['server'], function(done) {
 
   var protractor = child_process.spawn('node_modules/.bin/protractor', ['test/e2e/config.js'], {
     stdio: [0,0,0]
@@ -44,7 +44,7 @@ gulp.task('e2e', ['server', 'webdriver_update'], function(done) {
 
 })
 
-gulp.task('server', function(done) {
+gulp.task('server', ['webdriver_update'], function(done) {
   // require('../server.js');
 
   var success = 'Mean app started on port 3002';
@@ -60,6 +60,10 @@ gulp.task('server', function(done) {
       console.log(success)
       done()
     }
+  })
+
+  server.on('exit', function(code) {
+    process.exit(code)
   })
 
   // kill the server on exit
