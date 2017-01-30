@@ -9,6 +9,7 @@ services:
   - mongodb
 
 before_script:
+  - which bower
   - echo '{"anonymizedData":true,"token":""}' > ~/.mean
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start

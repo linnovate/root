@@ -52,6 +52,7 @@
     "view-helpers": "0.1.5"
   },
   "devDependencies": {
+    "bower": "^1.8.0",
     "chalk": "latest",
     "connect-modrewrite": "latest",
     "del": "latest",
