@@ -40,7 +40,7 @@ angular.module('mean.icu.ui.tabs')
             sort();
 
             $scope.manageTasks = function () {
-                $state.go('main.tasks.byentity.tasks', {
+                $state.go('main.tasks.byentity.activities', {
                     entity: $scope.entityName,
                     id: $scope.entity._id,
                     entityId: $scope.entity._id

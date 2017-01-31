@@ -31,6 +31,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                     $scope.tasks.push(_(newTask).clone());
                 });
             } else {
+                delete newTask.assign;
                 if (context.entityName === 'task') {
                     // newTask.parent = context.entity._id;    
                     $scope.tasks.push(_(newTask).clone());

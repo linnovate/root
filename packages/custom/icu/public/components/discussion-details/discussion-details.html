@@ -92,23 +92,24 @@
                  options="{{options}}">
             </div>
         </div>
+
         <div class="tabs">
             <div class="switcher">
                 <button class="tab"
-                        ng-class="{two: !tasks.length, three: tasks.length}"
+                        ng-class="{two: main == 'tasks', three: main != 'tasks'}"
                         data-ui-sref-active="active"
                         data-ui-sref=".activities">
                     {{ 'updates' | i18next }}
                 </button>
                 <button class="tab"
-                        ng-class="{two: !tasks.length, three: tasks.length}"
+                        ng-class="{two: main == 'tasks', three: main != 'tasks'}"
                         data-ui-sref-active="active"
                         data-ui-sref=".documents">
                     {{ 'documents' | i18next}}
                 </button>
-                <button ng-if="tasks.length"
+                <button ng-if="main !== 'tasks'"
                         class="tab"
-                        ng-class="{two: !tasks.length, three: tasks.length}"
+                        ng-class="{two: main == 'tasks', three: main != 'tasks'}"
                         data-ui-sref-active="active"
                         data-ui-sref=".tasks">
                     {{ 'tasks' | i18next }}
