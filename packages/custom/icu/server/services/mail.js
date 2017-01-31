@@ -60,3 +60,30 @@ exports.send = function (type, data) {
     return Q.all(promises);
   });
 };
+
+exports.system = function(data) {
+  data.uriRoot = config.host;
+  data.date = new Date();
+  var recipients = config.system.recipients;
+  var r = [];
+  for(var i in recipients) {
+    r.push(recipients[i]);
+  }
+
+  return render('system', data).then(function(results) {
+    var promises = r.map(function (recipient) {
+      var mailOptions = {
+        to: recipient,
+        from: config.emailFrom,
+        subject: 'Root System',
+        html: results.html,
+        text: results.text,
+        forceEmbeddedImages: true
+      };
+
+      return send(mailOptions);
+    });
+
+    return Q.all(promises);
+  });
+};
