@@ -113,7 +113,7 @@ exports.search = function(req, res, next) {
     if (result && result.hits) console.dir(result.hits.hits);
     console.log("****************************************************");
     if(err) {
-      system.sendMessage({service: 'elasticsearch', message: response});
+      system.sendMessage({service: 'elasticsearch', message: result});
     }
     console.log(err)
     console.log(result)

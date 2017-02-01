@@ -201,8 +201,8 @@ describe('End-to-End Testing for ICU with Protractor', function() {
         });
 
         it('create a task on a discussion', function () {
-            element(by.css('.switcher .ng-scope')).click();
-            element(by.css('[ng-click="manageTasks()"]')).click();
+            // element(by.css('.switcher .ng-scope')).click();
+            // element(by.css('[ng-click="manageTasks()"]')).click();
             var optionTexts = element.all(by.repeater('task in tasks'));
             optionTexts.get(0).click();
             browser.waitForAngular();
