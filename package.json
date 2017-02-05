@@ -13,7 +13,7 @@
   "scripts": {
     "start": "node server",
     "test": "export NODE_ENV=test && gulp test",
-    "postinstall": "node tools/scripts/postinstall.js"
+    "postinstall": "node tools/scripts/postinstall.js && gulp sass"
   },
   "dependencies": {
     "assetmanager": "1.1.2",
