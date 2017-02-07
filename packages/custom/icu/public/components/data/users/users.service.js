@@ -80,6 +80,7 @@ angular.module('mean.icu.data.usersservice', [])
         return $http.get('/api/logout').then(function() {
             localStorage.removeItem('JWT');
             $cookies.remove('root-jwt');
+            me = null;
         });
     }
 

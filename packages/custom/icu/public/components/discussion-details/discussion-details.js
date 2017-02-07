@@ -15,6 +15,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.tasks = tasks.data || tasks;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.people = people.data || people;
+        $scope.main = context.main;
         
         if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
             var newPeople = {
@@ -56,7 +57,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.archive = function (discussion) {
-            discussion.status = 'Archived';
+            discussion.status = 'archived';
             DiscussionsService.update(discussion);
         };
 

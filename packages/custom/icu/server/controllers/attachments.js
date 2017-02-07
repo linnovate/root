@@ -7,7 +7,7 @@ var mean = require('meanio'),
   config = require('meanio').loadConfig(),
   Busboy = require('busboy'),
   q = require('q');
-  
+
 var options = {
   includes: 'creator updater'
 };
@@ -15,45 +15,63 @@ var options = {
 var crud = require('../controllers/crud.js');
 var attachment = crud('attachments', options);
 var Task = require('../models/task'),
-Attachment = require('../models/attachment');
+  Attachment = require('../models/attachment');
 
 
 Object.keys(attachment).forEach(function(methodName) {
   exports[methodName] = attachment[methodName];
 });
 
-exports.getByEntity = function (req, res) {
+exports.getByEntity = function(req, res, next) {
 
-  var entities = {projects: 'project', tasks: 'task', discussions: 'discussion', updates: 'update'},
+  var entities = {
+    projects: 'project',
+    tasks: 'task',
+    discussions: 'discussion',
+    updates: 'update'
+  },
     entity = entities[req.params.entity];
-    
-var query = {
-    "query": {
-      "filtered" : { 
-         "filter" : {
-            "bool" : {
-              "must" : [
-                 { "term" : {"entity" : entity}}, 
-                 { "term" : {"entityId" : req.params.id}} 
-              ]
-        
-           }
-         }
-      }
-  }
-   	};
 
-
-  mean.elasticsearch.search({index: 'attachment', 'body': query, size: 3000}, function (err, response) {
+  Attachment.find({
+    entity: entity,
+    entityId: req.params.id
+  }, function(err, data) {
     if (err) {
-      res.status(200).send([]);
+      req.locals.error = err;
+    } else {
+      req.locals.result = data
     }
-    else {
-      res.send(response.hits.hits.map(function (item) {
-        return item._source;
-      }));
-    }
+    next();
   });
+
+
+  // var query = {
+  //     "query": {
+  //       "filtered" : { 
+  //          "filter" : {
+  //             "bool" : {
+  //               "must" : [
+  //                  { "term" : {"entity" : entity}}, 
+  //                  { "term" : {"entityId" : req.params.id}} 
+  //               ]
+
+  //            }
+  //          }
+  //       }
+  //   }
+  //    	};
+
+
+  //   mean.elasticsearch.search({index: 'attachment', 'body': query, size: 3000}, function (err, response) {
+  //     if (err) {
+  //       res.status(200).send([]);
+  //     }
+  //     else {
+  //       res.send(response.hits.hits.map(function (item) {
+  //         return item._source;
+  //       }));
+  //     }
+  //   });
 };
 
 var formatDate = function(date) {
@@ -63,7 +81,7 @@ var formatDate = function(date) {
   return yyyy + '/' + (mm[1] ? mm : '0' + mm[0]) + '/' + (dd[1] ? dd : '0' + dd[0]);
 };
 
-exports.upload = function (req, res, next) {
+exports.upload = function(req, res, next) {
   var d = formatDate(new Date());
 
   req.locals.data.attachments = [];
@@ -75,61 +93,63 @@ exports.upload = function (req, res, next) {
 
   var hasFile = false;
 
-  busboy.on('file', function (fieldname, file, filename) {
+  busboy.on('file', function(fieldname, file, filename) {
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
     var hostFileLocation = config.host + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
-    
-    mkdirp(path.join(config.attachmentDir, d), function () {
+
+    mkdirp(path.join(config.attachmentDir, d), function() {
       file.pipe(fs.createWriteStream(saveTo)).on('close', function(err) {
-      
+
         var arr = hostFileLocation.split("/files");
         var pathFor = "./files" + arr[1];
-              
+
         var stats = fs.statSync(pathFor);
         //var stats = fs.statSync("." + saveTo.substring(saveTo.indexOf('/files')));
-        
+
         var fileSizeInBytes = stats["size"];
         //Convert the file size to megabytes (optional)
         var fileSizeInMegabytes = fileSizeInBytes / 1000000.0;
-        
+
         req.locals.data.body.size = fileSizeInMegabytes;
 
-        });
-      
-    // });
+      });
 
-    req.locals.data.body.name = filename;
-    req.locals.data.body.path = hostFileLocation;
-    req.locals.data.body.attachmentType = fileType;
-    
-    
-    // var arr = hostFileLocation.split("/files");
-    // var pathFor = "./files" + arr[1];
-    
-    // var stats = fs.statSync(pathFor);
-    // var fileSizeInBytes = stats["size"];
-    // //Convert the file size to megabytes (optional)
-    // var fileSizeInMegabytes = fileSizeInBytes / 1000000.0;
-    
-    // req.locals.data.body.size = fileSizeInMegabytes;
-       
-    req.locals.data.body.size = file._readableState.length / 1000000;
+      // });
 
-    hasFile = true;
-    
-    //});    
+      req.locals.data.body.name = filename;
+      req.locals.data.body.path = hostFileLocation;
+      req.locals.data.body.attachmentType = fileType;
+
+
+      // var arr = hostFileLocation.split("/files");
+      // var pathFor = "./files" + arr[1];
+
+      // var stats = fs.statSync(pathFor);
+      // var fileSizeInBytes = stats["size"];
+      // //Convert the file size to megabytes (optional)
+      // var fileSizeInMegabytes = fileSizeInBytes / 1000000.0;
+
+      // req.locals.data.body.size = fileSizeInMegabytes;
+
+      req.locals.data.body.size = file._readableState.length / 1000000;
+
+      hasFile = true;
+
+      //});    
     });
-      
+
   });
 
-  busboy.on('field', function (fieldname, val) {
+  busboy.on('field', function(fieldname, val) {
     req.locals.data.body[fieldname] = val;
   });
 
-  busboy.on('finish', function () {
+  busboy.on('finish', function() {
     if (!hasFile) {
-      req.locals.error = { message: 'No file was attached' };
+      req.locals.error = {
+        message: 'No file was attached'
+      };
     }
 
     next();
@@ -138,29 +158,31 @@ exports.upload = function (req, res, next) {
   return req.pipe(busboy);
 };
 
-function MyTasks(req){
-	 	var deffered = q.defer();
+function MyTasks(req) {
+  var deffered = q.defer();
 
-  	Task.find({
-  		assign: req.user._id
-  	}, function(err, tasks) {
-  		if (err) {
-	      deffered.reject(err);
-	    } else {
-	      deffered.resolve(tasks.map(function(t){return t._id}));
-	    }
-  	})
-  	return deffered.promise
+  Task.find({
+    assign: req.user._id
+  }, function(err, tasks) {
+    if (err) {
+      deffered.reject(err);
+    } else {
+      deffered.resolve(tasks.map(function(t) {
+        return t._id
+      }));
+    }
+  })
+  return deffered.promise
 
 }
 
-exports.getMyTasks  = function(req, res, next) {
-	// if (req.locals.error) {
- //    	return next();
- //  	}
+exports.getMyTasks = function(req, res, next) {
+  // if (req.locals.error) {
+  //    	return next();
+  //  	}
 
-	 MyTasks(req).then(function(data) {
-	 	/*var query = {
+  MyTasks(req).then(function(data) {
+    /*var query = {
 		    "query": {
 		      "filtered" : { 
 		         "filter" : {
@@ -187,19 +209,23 @@ exports.getMyTasks  = function(req, res, next) {
 		    }
 		  });*/
 
-		Attachment.find({entity: 'task', entityId: {$in: data} }, function(err, data) {
-			if (err) {
-		    	req.locals.error = err;
-		    }
-		    else {
-		      	req.locals.result = data
-		    }
-		    next();
-		})
-	 }, function(err){
-	 	req.locals.error = err;
-	 	next();
-	 })
+    Attachment.find({
+      entity: 'task',
+      entityId: {
+        $in: data
+      }
+    }, function(err, data) {
+      if (err) {
+        req.locals.error = err;
+      } else {
+        req.locals.result = data
+      }
+      next();
+    })
+  }, function(err) {
+    req.locals.error = err;
+    next();
+  })
 
 }
 
@@ -227,7 +253,11 @@ exports.getByPath = function(req, res, next) {
 };
 
 exports.sign = function(req, res, next) {
-  var entities = {projects: 'project', tasks: 'task', discussions: 'discussion'};
+  var entities = {
+    projects: 'project',
+    tasks: 'task',
+    discussions: 'discussion'
+  };
   Attachment.update({
     entity: entities[req.locals.data.entityName],
     entityId: req.params.id
@@ -242,19 +272,25 @@ exports.sign = function(req, res, next) {
 }
 
 exports.signNew = function(req, res, next) {
-  var entities = {project: 'Project', task: 'Task', discussion: 'Discussion'};
+  var entities = {
+    project: 'Project',
+    task: 'Task',
+    discussion: 'Discussion'
+  };
   var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
-  query.findOne({_id: req.locals.data.body.entityId}).exec(function(err, entity){
-    if(err) {
+  query.findOne({
+    _id: req.locals.data.body.entityId
+  }).exec(function(err, entity) {
+    if (err) {
       req.locals.error = err;
     }
-    if(!entity) {
+    if (!entity) {
       req.locals.error = {
         status: 404,
         message: 'Entity not found'
       };
     }
-    if(entity) {
+    if (entity) {
       req.locals.data.body.watchers = entity.watchers;
       req.locals.data.body.circles = entity.circles;
     }
