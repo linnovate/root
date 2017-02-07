@@ -1,9 +1,5 @@
 'use strict';
 
-// disable all logs
-process.stdout.write = function() {};
-process.stderr.write = function() {};
-
 module.exports = {
   db: 'mongodb://' + (process.env.DB_PORT_27017_TCP_ADDR || 'localhost') + '/mean-test',
   logging: {

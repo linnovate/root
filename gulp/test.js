@@ -29,24 +29,50 @@ gulp.task('mochaTest', ['loadTestSchema'], function () {
 
 
 
+var child_process = require('child_process');
 
+gulp.task('e2e', ['server'], function(done) {
 
-gulp.task('e2e', ['webdriver_update', 'server'], function(done) {
-  gulp.src('test/test.js')
-    .pipe(protractor.protractor({
-      configFile: 'test/e2e/config.js'
-    })).on('error', function(err) {
-      console.log(err)
-      done()
-      process.exit()
-    }).on('end', function() {
-      done()
-      process.exit()
-    })
+  var protractor = child_process.spawn('node_modules/.bin/protractor', ['test/e2e/config.js'], {
+    stdio: [0,0,0]
+  })
+
+  protractor.on('exit', function (code) {
+    done()
+    process.exit(code)
+  })
+
 })
 
-gulp.task('server', function() {
-  require('../server.js');
+gulp.task('server', ['webdriver_update'], function(done) {
+  // require('../server.js');
+
+  var success = 'Mean app started on port 3002';
+
+  var server = child_process.spawn('node', ['server'], {
+    stdio: [0,'pipe',0]
+  });
+
+  // indicate whether server is running
+  server.stdout.on('data', function(data) {
+    data = data.toString();
+    if(data.match(success)) {
+      console.log(success)
+      done()
+    }
+  })
+
+  server.on('exit', function(code) {
+    process.exit(code)
+  })
+
+  // kill the server on exit
+  function onExit() {
+    server.kill()
+  }
+  process.on('exit', onExit)
+  process.on('beforeExit', onExit)
+  process.on('uncaughtException', onExit)
 })
 
 gulp.task('webdriver_update', protractor.webdriver_update);
