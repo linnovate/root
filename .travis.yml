@@ -7,7 +7,7 @@ services:
   - mongodb
 
 before_script:
-  sudo: required  
+sudo: required  
 dist: trusty  
 
 
