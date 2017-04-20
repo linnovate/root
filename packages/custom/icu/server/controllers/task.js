@@ -145,7 +145,18 @@ exports.getByEntity = function(req, res, next) {
     discussions: 'discussions',
     tags: 'tags'
   },
-    entityQuery = { tType: {$ne: 'template'} };
+    entityQuery = {
+      tType: {
+        $ne: 'template'
+      },
+      $or: [{
+        parent: null
+      }, {
+        parent: {
+          $exists: false
+        }
+      }]
+    };
   entityQuery[entities[req.params.entity]] = (req.params.id instanceof Array) ? {
     $in: req.params.id
   } : req.params.id;

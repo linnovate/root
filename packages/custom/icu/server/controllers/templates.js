@@ -91,7 +91,9 @@ var addToTemplate = function(task, parentId, name, creator, watchers, circles, p
       watchers: watchers,
       circles: circles,
       project: project,
-      templateId: task._id
+      templateId: task._id,
+      assign: task.assign,
+      status: task.status
     });
 
     callback({
