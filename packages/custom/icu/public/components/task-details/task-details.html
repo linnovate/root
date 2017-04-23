@@ -32,9 +32,13 @@
                 </ui-select>
             </div>
         </div>
+
+
         <div class="due">
-            <input ui-date="dueOptions" ng-model="task.due" placeholder="{{ 'dueDate' | i18next }}" ng-class='{"oldDate":checkDate()}'>
+            <div class="placeholder" ng-if="!task.due">{{ 'dueDate' | i18next }}</div>
+            <input ng-click="open()" ui-date="dueOptions" ng-model="task.due" ng-class='{"oldDate":checkDate()}'>
         </div>
+        <div id="past">{{'This Deadline is in the past!' | i18next }}</div>
 
         <div class="status" >
             <div tooltips tooltip-template="{{'status' | i18next}}">
@@ -84,7 +88,7 @@
                         </div>
                     </ui-select-match>
                     <ui-select-choices repeat="project in projects | filter:$select.search">
-                        <div class="line" ng-show="project.title" ng-class="{ 'create new': project.class}"> 
+                        <div class="line" ng-show="project.title" ng-class="{ 'create new': project.class}">
                             <div ng-show="project.class" ng-bind-html="project.title | searchfilter:$select.search"  class="title"></div>
                             <div ng-show="project.class && projName"  class="create-new">{{ 'createNew' | i18next }}</div>
                             <span ng-show="!project.class" ng-bind-html="project.title | searchfilter:$select.search"  class="title"></span>
@@ -108,7 +112,7 @@
 
     <div class="tags">
         <ul class="list">
-            <li ng-show="!task.tags.length && !tagInputVisible" class="placeholder" ng-click="tagInputVisible = !tagInputVisible;setFocusToTagSelect()">{{ 'noLabels' | i18next }}</li>
+            <li ng-show="!task.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
             <li class="tag-item" ng-repeat="tag in task.tags">
                 <span>{{tag}}</span>
                 <button ng-click="removeTag(tag)">
@@ -116,7 +120,8 @@
                 </button>
             </li>
             <li class="new-tag-input" ng-show="tagInputVisible" >
-                <ui-select id="addTag" ng-model="newTag" select-on-blur tagging tagging-label="false" autofocus on-select="addTag(newTag)">
+                <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" autofocus=true on-select="addTag(newTag)"
+                select-on-blur test tag-on-blur="true">
                     <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
                     <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
                         {{tag}}
@@ -125,7 +130,7 @@
             </li>
         </ul>
         <div class="button">
-            <button class="new-tag-icon" ng-click="tagInputVisible = !tagInputVisible" ng-show="!tagInputVisible" >
+            <button class="new-tag-icon" ng-click="addTagClicked()" ng-show="!tagInputVisible" >
                 <div tooltips tooltip-template="add tag" tooltip-side="left">
                     <i class="fa fa-plus" ></i>
                 </div>

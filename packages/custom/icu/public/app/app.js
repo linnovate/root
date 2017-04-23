@@ -165,6 +165,9 @@ angular.module('mean.icu').config([
                     },
                     tasks: function(TasksService, $stateParams) {
                         return TasksService.getByProjectId($stateParams.id);
+                    },
+                    people: function(UsersService) {
+                        return UsersService.getAll();
                     }
                 }
             };

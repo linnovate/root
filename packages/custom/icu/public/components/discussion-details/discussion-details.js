@@ -15,6 +15,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.tasks = tasks.data || tasks;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.people = people.data || people;
+        $scope.main = context.main;
         
         if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
             var newPeople = {
@@ -56,7 +57,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.archive = function (discussion) {
-            discussion.status = 'Archived';
+            discussion.status = 'archived';
             DiscussionsService.update(discussion);
         };
 
@@ -93,8 +94,32 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.dueOptions = {
             onSelect: function () {
                 $scope.update($scope.discussion);
+                document.getElementById('ui-datepicker-div').style.display = 'none';
+                $scope.open();
+            },
+            onClose: function() {
+                document.getElementById('ui-datepicker-div').style.display = 'none';
+                $scope.open();
             },
             dateFormat: 'd.m.yy'
+        };
+
+        $scope.checkDate = function() {
+            var d = new Date()
+            if (d > $scope.discussion.due) {
+                return true;
+            }
+            return false;
+        };
+
+        $scope.open = function() {
+            console.log(')))))))))))))))))))')
+            if ($scope.checkDate()) {
+                document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
+                document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
+            } else {
+                document.getElementById('past').style.display = 'none';
+            }
         };
 
         $scope.options = {

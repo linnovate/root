@@ -1,5 +1,8 @@
 // pay attention! logout from the site before you run the Testing
-describe('Registration Functionality Testing', function () {
+// iit() in order to run just a specific test
+describe('End-to-End Testing for ICU with Protractor', function() {
+    
+    var path = require('path');
     var name = element(by.model('credentials.name'));
     var email = element(by.model('credentials.email'));
     var userName = element(by.model('credentials.username'));
@@ -10,111 +13,157 @@ describe('Registration Functionality Testing', function () {
     var dropdownToggle = element(by.className('dropdown-toggle'));
     var discussion = element(by.binding('Discussion'));
     var num = new Date().getTime();
-    
-    //  beforeEach(function () {
-        
-    //  });
+    var serverDomain = "http://root.hrm.demo.linnovate.net/";
+    var localDomain = "http://localhost:3002/";
 
-    // fixed
-    // iit() only this test will run.
-    it('Should Navigate To Site on the server', function () {
-        console.log('Navigate');
-        browser.driver.get('http://localhost:3002/');
-        browser.manage().timeouts().pageLoadTimeout(12000);  // 12 seconds
-        expect(browser.driver.getTitle()).toEqual('ICU');
-        console.log('expect getTitle toEqual ICU');
-    });
+    describe('Registration Functionality Testing, login and logout Testing', function () {
 
-    //fixed
-    it('Should Navigate To Registration', function () {
-        element(by.css('[class="or-register ng-binding"]')).click();
-        expect(browser.getLocationAbsUrl()).toMatch("/register");
+        it('Should Navigate To Site', function () {
+            console.log('Navigate');
+            browser.driver.get(localDomain);
+            browser.manage().timeouts().pageLoadTimeout(12000);
+            expect(browser.driver.getTitle()).toEqual('MEAN - A Modern Stack - Test');
+            console.log('expect getTitle toEqual ICU');
+        });
+
+        it('Should Navigate To Registration', function () {
+            element(by.css('[class="or-register ng-binding"]')).click();
+            expect(browser.getLocationAbsUrl()).toMatch("/register");
+        });
+
+        it('Should fill the form registration', function () { 
+            name.sendKeys("Test" + num);
+            email.sendKeys("testsqaqa+" + num + "@gmail.com");
+            userName.sendKeys("Test+" + num);
+            pass.sendKeys("newstrat");
+            confirmPass.sendKeys("newstrat");
+            element(by.className('btn')).click();
+            browser.driver.wait(function () {
+                return element(by.css('.add-menu')).isPresent();
+            }, 5000);
+            expect(browser.getLocationAbsUrl()).toMatch("/tasks");
+        });
+    describe("logout and login", function() {
+        it('Should Exit from the site', function () {
+            element(by.css('.avatar .name')).click();
+            element(by.css('[ng-click="logout()"]')).click();
+            browser.driver.wait(function () {
+                return element(by.className('login-page')).isPresent();
+            }, 3000);
+            expect(browser.getLocationAbsUrl()).toMatch("/login");
+        });
+
+        it('Should login to the site', function () {
+            browser.driver.get(localDomain);
+            email.sendKeys("testsqaqa+" + num + "@gmail.com");
+            pass.sendKeys("newstrat");
+            element(by.className('btn')).click();
+            browser.waitForAngular();
+            browser.driver.wait(function () {
+                return element(by.css('[ng-click="removeFilterValue()"]')).isPresent();
+            }, 3000);
+            var userIcon = element(by.css('.avatar .name'));
+            expect(userIcon.getText()).toEqual('T');
+          });
+       });
     });
     
-    //fixed registration
-    it('Should fill the form registration', function () { 
-        name.sendKeys("Test");
-        email.sendKeys("testsqaqa+" + num + "@gmail.com");
-        userName.sendKeys("Test+" + num);
-        pass.sendKeys("newstrat");
-        confirmPass.sendKeys("newstrat");
-        element(by.className('btn')).click();
-        browser.driver.wait(function () {
-            return element(by.css('.add-menu')).isPresent();
+    describe("Project", function() {
+        it('should add a project', function(){
+            element(by.css('.add-menu')).click();
+            browser.waitForAngular();
+            element(by.css('[ng-click="createProject()"]')).click();
+            browser.waitForAngular();
+        });
+
+        it('should add name to project', function () {
+            element(by.css('.description .title')).sendKeys('NewProjectTest');
+            var projectName = element(by.css('.header-wrap .title .ng-binding'));
+            expect(projectName.getText()).toEqual('"NewProjectTest"');
+
+        });
+
+        it('should select a color to project', function () {
+            element(by.css('.select-box .arrow')).click();
+            element.all(by.repeater('color in colors')).get(4).click();
+            var colorBox = element(by.css('.color-box'));
+            expect(colorBox.getAttribute('style')).toEqual('background-color: rgb(240, 110, 170);');
+        });
+
+        //fixed - but have a bug
+        it('add watcher to project',function () {
+            var watcherelm = element(by.css('#addMember')).click();
+            browser.driver.wait(function () {
+            return element(by.css('.new-member-input')).isPresent();
         }, 5000);
-        expect(browser.getLocationAbsUrl()).toMatch("/tasks");
+            var member = element(by.css('.new-member-input'));
+            member.element(by.css('[ng-click="$select.activate()"]')).click();
+            var inputwatcher = member.element(by.css('input'));
+
+            inputwatcher.clear().sendKeys("Test" + num).then(function(){
+                browser.actions().sendKeys(protractor.Key.ARROW_DOWN).perform().then(function(){
+                browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                 });
+            });
+             expect(inputwatcher.getAttribute('value')).toEqual("Test" + num);
+        });
+     
+
+        it('create a task on project', function () {
+            element(by.css('.switcher')).all(by.tagName('button')).get(2).click();
+            element(by.css('[ng-click="manageTasks()"]')).click();
+            var optionTexts = element.all(by.repeater('task in tasks'));
+            optionTexts.get(0).click();
+            browser.waitForAngular();
+            optionTexts.get(0).element(by.css('.name')).sendKeys('task1 on project');
+            expect(optionTexts.get(0).element(by.css('.name')).getText()).toEqual('task1 on project');
+        });
     });
 
-    //fixed
-    it('Should Exit from the site', function () {
-        element(by.css('.avatar .name')).click();
-        element(by.css('[ng-click="logout()"]')).click();
-        browser.driver.wait(function () {
-            return element(by.className('login-page')).isPresent();
-        }, 3000);
-        expect(browser.getLocationAbsUrl()).toMatch("/login");
-    });
+    describe("Discussion", function() {
 
-    //fixed login
-      it('Should login to the site', function () {
-        browser.driver.get('http://localhost:3002/');
-        email.sendKeys("testsqaqa+" + num + "@gmail.com");
-        pass.sendKeys("newstrat");
-        element(by.className('btn')).click();
-        browser.waitForAngular();
-        browser.driver.wait(function () {
-            return element(by.css('[ng-click="removeFilterValue()"]')).isPresent();
-        }, 3000);
-        var foo = element(by.css('.avatar .name'));
-        expect(foo.getText()).toEqual('T');
-      });
-
-    // fixed
-    describe("Discussion", function(){
-        //fixed
         it('should add a disscussion', function () {
             element(by.css('.add-menu')).click();
             element(by.css('[ng-click="createDiscussion()"]')).click();
         });
 
-        //fixed
         it('should add name to discussion', function () {
             element(by.css('.description .title')).sendKeys('TestDiscussion' + num);
-            var foo1 = element(by.css('.header-wrap .title .ng-binding'));
-            expect(foo1.getText()).toEqual(foo1.getText());
+            var nameD = element(by.css('.header-wrap .title .ng-binding'));
+            expect(nameD.getText()).toEqual(nameD.getText());
         });
 
-
-       //fixed
         it('Should add assignee', function(){
             var assignName = element(by.css('.user .tooltips'));
             assignName.click();
-            var input = assignName.element(by.css('input'));
-            input.clear().sendKeys('Dvora Gadasi' + protractor.Key.ENTER);
-            expect(input.getAttribute('value')).toEqual('Dvora Gadasi');
+            var input = assignName.element(by.tagName('input'));
+            input.clear().sendKeys("Test" + num).then(function(){
+                browser.actions().sendKeys(protractor.Key.ARROW_DOWN).perform().then(function(){
+                browser.actions().sendKeys(protractor.Key.ENTER).perform();
+                });
+            }); 
+            var nameContent = element(by.css('.user .tooltips .summary-content'));
+            expect(nameContent.getText()).toEqual("Test" + num);
         });
 
-        //fixed
         it('add status', function () {
             var status = element(by.css('.status .ui-select-container .ui-select-match .btn .ui-select-match-text'));
-            expect(status.getText()).toEqual('חדש');
+            expect(status.getText()).toEqual('New');
         });
 
-  
-        //fixed
         it('add due-date', function () {
-            var picker = element(by.css('.hasDatepicker'));
-            picker.click();
-
-            // get today's date
+            var due = element(by.css('.summary .due'));
+            var picker = due.element(by.tagName('input'));
+            browser.actions().mouseMove(picker).click();
+            browser.waitForAngular();
             var today = new Date();
             var dd = today.getDate();
-            var mm = today.getMonth()+1; //January is 0!
+            var mm = today.getMonth()+1;
             var yyyy = today.getFullYear();
 
             if(dd<10) {
                 dd='0'+dd
-            } 
+            }
 
             if(mm<10) {
                 mm='0'+mm
@@ -124,118 +173,84 @@ describe('Registration Functionality Testing', function () {
 
             picker.clear();
             picker.sendKeys(today);
+            browser.waitForAngular();
 
-            expect(picker.getAttribute('value')).toEqual(today);
-          
+            element(by.css('.actions button')).getAttribute('disabled').then(function (result) {
+                console.log('result is ' +result);
+            });
+
+            expect(element(by.css('.actions button')).getAttribute('disabled')).toBe('true')
         });
 
         it('click on schedule discussion button', function () {
             element(by.css('[ng-click="statusesActionsMap[discussion.status].method(discussion)"]')).click();
+            browser.waitForAngular();
         });
 
-        //fixed
-        it('add watcher',function () {
+        it('add watcher to discussion',function () {
             var watcherelm = element(by.css('#addMember')).click();
-            watcherelm.element(by.css('[ng-click="$select.toggle($event)"]')).click();
             browser.driver.wait(function () {
             return element(by.css('.new-member-input')).isPresent();
         }, 5000);
-            var inputwatcher = watcherelm.element(by.css('input'));
-            inputwatcher.clear().sendKeys('rivka' + protractor.Key.ENTER);
-            expect(inputwatcher.getAttribute('value')).toEqual('rivka');
+
+            var member = element(by.css('.new-member-input'));
+            member.element(by.css('[ng-click="$select.toggle($event)"]')).click();
+            var inputwatcher = member.element(by.css('input'));
+            inputwatcher.clear().sendKeys("Test" + num + protractor.Key.ENTER);
+            expect(inputwatcher.getAttribute('value')).toEqual("Test" + num);
         });
 
-        // it('attach a file to discussion', function(){
-        //        
-        // });
-    });
-
-
-    describe("Project", function(){
-        it('should add a project', function(){
-            element(by.css('.add-menu')).click();
-            element(by.css('[ng-click="createProject()"]')).click();
+        it('create a task on a discussion', function () {
+            // element(by.css('.switcher .ng-scope')).click();
+            // element(by.css('[ng-click="manageTasks()"]')).click();
+            var optionTexts = element.all(by.repeater('task in tasks'));
+            optionTexts.get(0).click();
+            browser.waitForAngular();
+            optionTexts.get(0).element(by.css('.name')).sendKeys('task1');
+            expect(optionTexts.get(0).element(by.css('.name')).getText()).toEqual('task1');
         });
-        //לתקן
-        // it('should add name to project', function () {
-        //     element(by.css('.description .title')).sendKeys('NewProjectTest');
-        //     var foo1 = element(by.css('.header-wrap .title .ng-binding'));
-        //     expect(foo1.getText()).toEqual('"NewProjectTest"');
+
+        // it('attach a file to task on discussion', function() {
+        //     // var ListDiscussions = element.all(by.repeater('discussion in discussions | orderBy:order.field:order.isReverse'));
+        //     // ListDiscussions.get(0).click();
+        //     var actionButtons = element(by.css('.action-buttons .attachment'));
+            
+        //         var fileToUpload = 'documents/doc-sample1.doc',
+        //         absolutePath = path.resolve(__dirname, fileToUpload);
+
+        //         actionButtons.sendKeys(absolutePath);
+        //         actionButtons.click();
+        //         var actbtn = element(by.css('.action-buttons .name'));
+        //         expect(actbtn.getText()).toBe('doc-sample1.doc');
         // });
-    });
-    //  it('Should login with google ', function () {
-         
-    //     beforeEach(function(){
-    //     // ptor = protractor.getInstance();
-    //     // driver = ptor.driver;
-    //     browser.get('http://localhost:3002/');
-    //     browser.sleep(30000);
-    //     });
+        
 
-    //      browser.driver.manage().window().maximize();
-         
-    //      if (element(by.css('.social_icon a')).isPresent()){
-    //          console.log('social_icon isPresent');
-    //          element(by.css('.social_icon_google a')).click().then(function (p) {
-               
-    //               browser.driver.wait(browser.driver.isElementPresent(by.id('Email')));
-    //            // browser.driver.wait(browser.driver.isElementPresent(by.id('Email')));
-    //         });;
-
-
-                
-                
-    //             // element(by.css('.social_icon a')).click();
-    //             browser.sleep(10000);
-    //             element(by.css('[id="Email"]')).sendKeys("testsqaqa@gmail.com");
-    //             element(by.css('.rc-button')).click();
-    //             element(by.css('[id="Passwd"]')).sendKeys("dvora123");
-    //             console.log('+++++++++++++++');
-    //             element(by.css('.rc-button')).click();
-    //             console.log('***********************');
-    //             browser.driver.wait(function () {
-    //                 console.log('-------------------------');
-    //                     return element(by.css('[ng-click="removeFilterValue()"]')).isPresent();
-    //                 }, 3000);
-    //                     var foo = element(by.css('.avatar .name'));
-    //                 expect(foo.getText()).toEqual('t');
-    //             console.log('///////////////////////');
-
-    //      }
-       
-    //  });
-//     describe('login with google', function () {
-   
-//         beforeEach(function () {
-//             browser.driver.get('http://localhost:3002/');
-//         },10000);
-
-//         it("should start the test", function () {   
-//             console.log('should start the test');
-//             describe("starting", function () {
-//                 it("should find the button and start the test", function(){
-//                     var elementToFind = by.css('.social_icon a'); //what element we are looking for
-//                     var elementToFind2 = by.css('#lala'); //what element we are looking for
-
-//                     console.log("elementToFind", elementToFind2);
-//                     browser.driver.isElementPresent(elementToFind2).then(function(isPresent){
-//                         expect(isPresent).toBe(true); //the test, kind of redundant but it helps pass or fail
-//                         // browser.driver.findElement(elementToFind).then(function(){
-//                         //     elementToFind.click().then(function(){ //once we've found the element and its on the page click it!! :) 
-//                         //         console.log("****************");    
-
-//                         //     });
-//                         // });
-
-//                         element(elementToFind2).click().then(function(){
-//                     console.log("typed in random message");
-//                     // continueOn();
-//                         });
-//                     });
-//                 });
-//             });
-//         },30000);
- 
-
-//  });
-});
+        // it('click on my tasks', function () {
+        //     element(by.css('.display-by .display-by .title')).click();
+        // });
+      //טסט זה נופל בגלל שהוא עדיין עומד על טאסק וצריך לעבור לכותרת של דיון ולחכות ואח"כ ללחוץ על מחק
+      //לאחר לחיצה על מחק צריך להפתח פופאפ ואז הוא מקליד מחק ואישור
+      //הבעיה כרגע שלא נפתח הפופ אפ כי הוא עדיין עומד על משימה והוא צריך לעבור לדיון בעצמו
+        // it('delete a discussion', function () {         
+        //     element(by.css('.header-wrap')).click();
+        //         console.log('8888888');
+        //       browser.driver.wait(function(){
+        //         element(by.css('.dropdown-container .dropdown-trigger')).click();
+        //         element(by.css('.dropdown-container ul a')).click();
+        //         // element(by.css('.dropdown-container .ng-isolate-scope')).click();
+        //         // var del = element(by.css('.dropdown-container .dropdown-menu'));
+        //         // del.element(by.tagName('a')).click();
+        //         // var EC = protractor.ExpectedConditions;
+        //         var dialog = element(by.css('.modal-dialog .modal-content .modal-body input'));
+        //         browser.wait(EC.visibilityOf(dialog), 5000);
+        //         dialog.element(by.model('entity.textDelete')).sendKeys('מחק');
+        //         element(by.css('[ng-click="ok()"]')).click();
+        //       },500000*1000);
+        
+        //     browser.wait(function(){
+        //     var listTable = element(by.css('.list-table'));
+        //     expect(listTable).not.toContain('TestDiscussion' + num);
+        //     },5*1000, "**********");
+        // });
+    }); 
+ });

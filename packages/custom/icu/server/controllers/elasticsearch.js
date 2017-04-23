@@ -1,7 +1,8 @@
 'use strict';
 
 var mean = require('meanio'),
-  utils = require('./utils');
+  utils = require('./utils'),
+  system = require('./system');
 
 exports.save = function(doc, docType, room, title) {
   var newDoc = JSON.parse(JSON.stringify(doc));
@@ -14,6 +15,7 @@ exports.save = function(doc, docType, room, title) {
   }, function(error, response) {
     // utils.checkAndHandleError(error, res);
     if (error)
+      system.sendMessage({service: 'elasticsearch', message: response});
       return error;
     //if (room)
     //    if (docType === 'attachment')
@@ -31,6 +33,7 @@ exports.delete = function(doc, docType, room, next) {
     id: doc._id.toString()
   }, function(error, response) {
     if (error)
+      system.sendMessage({service: 'elasticsearch', message: response});
       return error;
 
     // utils.checkAndHandleError(error, res);
@@ -109,6 +112,9 @@ exports.search = function(req, res, next) {
     console.log("****************************************************result");
     if (result && result.hits) console.dir(result.hits.hits);
     console.log("****************************************************");
+    if(err) {
+      system.sendMessage({service: 'elasticsearch', message: result});
+    }
     console.log(err)
     console.log(result)
     utils.checkAndHandleError(err, 'Failed to find entities', next);

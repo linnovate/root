@@ -27,6 +27,34 @@
             .status {
                 border-right: none;
             }
+            #past {position: absolute;
+                top: 341px;
+                background-color: #EBE9DE;
+                border-radius: 6px;
+                border: 1px solid #cbc7bd;
+                padding: 1px;
+                width: 262px;
+                z-index: 1;
+                display: none;
+                text-align: left;
+                padding: 4px 7px;
+                font-style: italic;
+                &:before {
+                    content: '!';
+                    background-color: #EA5858;
+                    border-radius: 15px;
+                    border: none;
+                    margin-right: 4px;
+                    float: left;
+                    color: #EBE9DE;
+                    width: 20px;
+                    height: 20px;
+                    text-align: center;
+                    line-height: 20px;
+                    font-weight: bold;
+                    font-style: normal;
+                }
+            }
         }
 
         .tabs {
