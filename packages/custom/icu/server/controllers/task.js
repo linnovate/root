@@ -68,7 +68,7 @@ exports.create = function(req, res, next) {
   req.body.discussions = [];
   if (req.body.discussion) {
     req.body.discussions = [req.body.discussion];
-    req.body.tags = ['Agenda'];
+    req.body.tags = [];
   }
 
   task.create(req, res, next);
@@ -240,7 +240,7 @@ var byAssign = function(req, res, next) {
 	if (req.locals.error) {
     	return next();
   	}
-  	
+
     var query = req.acl.mongoQuery('Task');
   	query.find({
   		assign: req.user._id,
@@ -442,7 +442,6 @@ exports.getWatchedTasks = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-
   Task.find({
     "watchers": req.user._id,
     "assign": {
@@ -453,14 +452,17 @@ exports.getWatchedTasks = function(req, res, next) {
     },
     tType: {$ne: 'template'}
   }, function(err, response) {
+  	var length = Object.keys(response).length;
     if (err) {
       req.locals.error = err;
     } else {
+    	res.send(length.toString());
       req.locals.result = response;
     }
-    next();
+  //  next();
   })
 }
+
 
 exports.getOverdueWatchedTasks = function(req, res, next) {
   if (req.locals.error) {

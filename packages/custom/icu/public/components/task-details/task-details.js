@@ -384,7 +384,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                 elm.on('blur', 'input.ui-select-focusser', function(e, g) {
                     $timeout(function() {
                         if (!e.target.hasAttribute('disabled')) {
-                            scope.$parent.tagInputVisible = false;
+                            scope.tagInputVisible = false;
                         }
                     }, 5);
                 });
