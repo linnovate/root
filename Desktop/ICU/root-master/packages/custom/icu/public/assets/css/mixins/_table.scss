@@ -1,0 +1,19 @@
+@mixin table {
+    width: 100%;
+    font-size: 14px;
+    font-weight: 700;
+
+    thead {
+        height: 40px;
+        background-color: $light-grey2;
+    }
+
+    tbody {
+        background-color: white;
+
+        tr {
+            height: 50px;
+            border-bottom: 1px solid $light-grey1;
+        }
+    }
+}

@@ -1,0 +1,16 @@
+<td class="id" ng-if="data.project._id">{{data.index + 1}}</td>
+<td class="name"
+    ng-attr-colspan="{{data.project._id ? undefined : 2}}"
+    title="{{data.project.title}}"
+    ng-attr-contenteditable="{{!data.displayOnly}}"
+    placeholder="{{'createNewProject' | i18next}}"
+    strip-br="true"
+    ng-change="data.searchCb(data.project.title) || data.updateCb(data.project)"
+    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+    ng-model="data.project.title"
+    ng-blur="data.hideAutoCompleteCb(data.project)">
+</td>
+<td class="status col-sm-2" ng-class="data.project.status">{{data.project.status | i18next }}</td>
+<td class="arrow">
+    <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+</td>

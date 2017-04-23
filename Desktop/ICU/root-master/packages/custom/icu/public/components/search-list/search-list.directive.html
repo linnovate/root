@@ -1,0 +1,13 @@
+<div class="list-table">
+    <table class="search">
+        <tbody>
+            <tr data-ng-repeat="result in results"
+                data-ui-sref-active="active"
+                data-ui-sref="main.search.{{result._type}}({id: result.id})"
+                icu-list-row
+                data="{ index: $index, result: result }"
+                type="search-{{result._type}}">
+            </tr>
+        </tbody>
+    </table>
+</div>

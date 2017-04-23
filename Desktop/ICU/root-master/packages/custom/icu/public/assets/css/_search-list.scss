@@ -1,0 +1,36 @@
+.icon {
+	width: 70px;
+}
+
+.icon-task {
+	background: url("/icu/assets/img/task-grey.svg") no-repeat center center;
+}
+
+.icon-project {
+	background: url("/icu/assets/img/icon-project.svg") no-repeat center center;
+	background-size: 26px;
+}
+
+.icon-discussion {
+	background: url("/icu/assets/img/icon-discussion-grey.svg") no-repeat center center;
+}
+
+.icon-document {
+	background: url("/icu/assets/img/document-grey.svg") no-repeat center center;
+}
+
+.active {
+	.icon-task {
+		background: url("/icu/assets/img/task-white.svg") no-repeat center center;
+	}
+	.icon-project {
+		background: url("/icu/assets/img/project.png") no-repeat center center;
+	}
+	.icon-discussion {
+		background: url("/icu/assets/img/icon-discussion-white.svg") no-repeat center center;
+	}
+	.icon-document {
+		background: url("/icu/assets/img/icon-document.svg") no-repeat center center;
+	}
+
+}

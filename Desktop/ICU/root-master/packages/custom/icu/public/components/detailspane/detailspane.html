@@ -1,0 +1,9 @@
+<div>
+    <style>
+        .detailspane .page-content .description .text.medium-editor-placeholder:not(:focus):before {
+            content: '{{ 'enterDescription' | i18next }}';
+        }
+    </style>
+    <div icu-notifications-header discussions="discussions" projects="projects" me="me"></div>
+    <div data-ui-view="detailspane"></div>
+</div>

@@ -1,0 +1,32 @@
+@import 'variables';
+
+.user-details {
+    .page-content {
+        .description {
+            .user-name {
+                .favorite {
+                    float: left;
+                    width: 38px;
+                    height: 50px;
+                    padding: 12px 12px 12px 0;
+                }
+
+                .name {
+                    float: left;
+                    width: calc(100% - 38px);
+                    height: 50px;
+
+                    h3 {
+                        margin-top: 13px;
+                    }
+                }
+            }
+        }
+
+        .tabs {
+            .tab {
+                width: calc((100% - 60px) / 4);
+            }
+        }
+    }
+}

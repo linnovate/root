@@ -1,0 +1,38 @@
+<div class="task-details task-options">
+    <div class="page-content">
+    	<div class="options">
+    		<div ng-click="filterTasks('today')">
+    			<span>{{statistics.TasksDueToday}}</span>
+    			{{'tasksDueToday' | i18next}}
+    		</div>
+	    	<div ng-click="filterTasks('week')">
+	    		<span>{{statistics.TasksDueWeek}}</span>
+	    		{{'tasksDueThisWeek' | i18next}}
+	    	</div>
+	    	<div>
+	    		<span>{{statistics.WatchedTasks}}</span>
+	    		{{'watchedTasks' | i18next}}
+	    	</div>
+	    	<div ng-click="filterTasks('overdue')">
+	    		<span>{{statistics.OverDueTasks}}</span>
+	    		{{'overdueTasks' | i18next}}
+	    	</div>
+    	</div>
+
+    	<div class="tabs">
+            <div class="switcher">
+                <button class="tab"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".activities">
+                    {{ 'updates' | i18next }}
+                </button>
+                <button class="tab"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".documents">
+                    {{ 'documents' | i18next }}
+                </button>
+            </div>
+        </div>
+        <div class="tab-content" data-ui-view="tab"></div>
+    </div>
+</div>

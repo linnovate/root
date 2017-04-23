@@ -1,0 +1,30 @@
+<div class="footer">
+    <div class="delete-wrapper" data-ng-repeat="member in entity.watchers.concat(watchersGroups) track by $index" ng-if="entity.watchers.length || watchersGroups.length">
+        <div ng-show="member._id !== me._id" class="delete" ng-click="deleteMember(member)"><i class="fa fa-close"></i></div>
+        <div icu-avatar user="member"></div>
+        <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
+    </div>
+
+    <div ng-if="!entity.watchers.length && !watchersGroups.length" class="left-notification" ng-click="triggerSelect()">
+        {{'noWatchers' | i18next}}
+    </div>
+    
+    <div class="new-member-input" ng-if="showSelect">
+        <ui-select ng-model="member" on-select="addMember(member)" autofocus>
+            <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}">
+                {{$item}}
+            </ui-select-match>
+            <ui-select-choices repeat="user in notAssigned | filter: {name: $select.search}">
+                <div icu-avatar user="user" ng-mouseover="getGroupDetails(user)"></div>
+                <span ng-mouseover="getGroupDetails(user)">{{user.name}}</span>
+                <span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div class="add-member-container">
+        <button class="add" id="addMember" ng-click="triggerSelect()" ng-class="{transition: animate}">
+            <i tooltips tooltip-template="{{'add watcher' | i18next }}" tooltip-side='left' class="fa fa-plus"></i>
+        </button>
+    </div>
+</div>

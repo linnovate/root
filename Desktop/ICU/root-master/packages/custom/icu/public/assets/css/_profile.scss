@@ -1,0 +1,35 @@
+.profile-page {
+    position: relative;
+    height: 100vh;
+
+    form {
+        position: absolute;
+
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    button {
+        float: right;
+    }
+
+    .upload {
+        height: 50px;
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        color: white;
+        background-color: $blue;
+        cursor: pointer;
+    }
+
+    .avatar {
+        max-height: 350px;
+        max-width: 350px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

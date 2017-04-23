@@ -1,0 +1,74 @@
+<header class="header">
+    <div class="notifications">
+        <div class="indicator">
+            <span ng-show="data.notificationsToWatch" class="count">{{data.notificationsToWatch}}</span>
+        </div>
+    </div>
+    <div class="last-notification" ng-click="triggerDropdown()">
+        <!--<span class="text">{{data.lastNotification.entity}}-->
+        <div ng-show="data.lastNotification && !allNotifications" ng-class="{'notification-NotWatched': !notification.IsWatched}">
+            <span class="notification-time">{{data.lastNotification.time | when}}</span>
+            <span class="notification-content">
+                <span ng-repeat="val in details[data.lastNotification.type]">
+                    <span class="text" ng-switch="val.type">
+                        <span ng-switch-when="object" class="{{val.klass}}">{{data.lastNotification[val.value] | i18next}}</span>
+                        <span ng-switch-when="deepObject" class="{{val.klass}}">{{data.lastNotification[val.value[0]][val.value[1]] | i18next}}</span>
+                        <span ng-switch-default class="{{val.klass}}">{{val.value | i18next}}</span>
+                    </span>
+                </span>
+            </span>
+        </div>
+
+    </div>
+    <div class="all-notifications" ng-if="allNotifications">
+        <div class="notification" ng-repeat="notification in data.notifications" ng-click="GoToNotification(notification)">
+            <div ng-class="{'notification-NotWatched': !notification.IsWatched}" class="notification-content">
+                <div class="notification-time">{{notification.time | when}}</div>
+                <span ng-repeat="val in details[notification.type]">
+                    <span class="text" ng-switch="val.type">
+                        <span ng-switch-when="object" class="{{val.klass}}">{{notification[val.value] | i18next}}</span>
+                        <span ng-switch-when="deepObject" class="{{val.klass}}">{{notification[val.value[0]][val.value[1]] | i18next}}</span>
+                        <span ng-switch-default class="{{val.klass}}">{{val.value | i18next}}</span>
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="notification" ng-show="data.hasMore" ng-click="loadMore()"><span>{{'loadMore' | i18next}}</span></div>
+    </div>
+    <div class="time" ng-click="triggerDropdown()">
+        <i class="fa fa-chevron-down"></i>
+    </div>
+    <div class="add-menu dropdown" uib-dropdown>
+        <button uib-dropdown-toggle  >
+            <!--<i class="fa fa-2x fa-plus" tooltips tooltip-side="bottom" tooltip-template="create a new TASK | PROJECTS | DISCUSSIONS"></i>-->
+            <i class="fa fa-2x fa-plus" tooltips tooltip-side="bottom" tooltip-template="{{'create new' | i18next}}"></i>
+        </button>
+        <ul class="dropdown-menu menu-items" role="menu">
+            <li>
+                <a href ng-click="createTask()">
+                <img ng-src="/icu/assets/img/icon-task.svg">
+                    <span>{{ 'task' | i18next }}</span>
+                </a>
+            </li>
+            <li>
+                <a href ng-click="createProject()">
+                 <img class="icon-projects" ng-src="/icu/assets/img/icon-project.svg">
+                 <span>{{ 'project' | i18next }}</span>
+                </a>
+            </li>
+            <li>
+                <a href ng-click="createDiscussion()">
+              <img ng-src="/icu/assets/img/icon-discussiont.svg">
+                     <span>{{ 'discussion' | i18next }}</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="user-menu dropdown" uib-dropdown>
+        <div uib-dropdown-toggle icu-avatar user="me"></div>
+        <ul class="dropdown-menu menu-items" role="menu">
+            <li><a href ui-sref="profile">{{ 'profilePage' | i18next }}</a></li>
+            <li><a href ng-click="logout()">{{ 'logout' | i18next }}</a></li>
+        </ul>
+    </div>
+</header>

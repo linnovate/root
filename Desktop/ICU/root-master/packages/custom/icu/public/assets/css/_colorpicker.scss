@@ -1,0 +1,53 @@
+.colorpicker {
+    position: relative;
+
+    .select-box {
+        cursor: pointer;
+        height: 20px;
+        width: 55px;
+
+        .arrow {
+            color: grey;
+            font-size: 12px;
+            line-height: 20px;
+            float: left;
+            margin: 0 10px;
+        }
+
+        .color-box {
+            background-color: #b9e67d;
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            float: left;
+        }
+    }
+
+    $color-box-margin: 3px;
+    $dropdown-box-border: 1px;
+    $box-size: 35px;
+
+    .dropdown {
+        width: $box-size * 4 + $color-box-margin * 8 + 2 * $dropdown-box-border + 3px;
+        background-color: white;
+        border: $dropdown-box-border solid $light-grey-placeholder;
+        border-radius: 5px;
+        position: absolute;
+        z-index: 10;
+        margin-top: 5px;
+
+        .big-color-box {
+            float: left;
+            width: $box-size;
+            margin: $color-box-margin;
+            height: $box-size;
+            border-radius: 5px;
+            border: 1px solid $light-grey-placeholder;
+            cursor: pointer;
+
+            &.active {
+                border: 1px solid $grey;
+            }
+        }
+    }
+}

@@ -1,0 +1,38 @@
+<header>
+    {{ 'icu' | i18next }}
+</header>
+<div ng-if="$root.warnings.circles !== 'undefined'" style="color:red;">
+	{{$root.warnings.circles | i18next}}
+</div>
+<nav>
+    <ul>
+        <li data-ng-repeat="item in items" data-ng-class="{ 'active': isCurrentState(item) && item.open }" ng-click="removeFilterValue()">
+            <div class="menu-item"
+                data-ui-sref="{{'main.' + item.state}}"          
+                ng-click="toggleVisibility(item)">
+                <div class="icon">
+                    <img ng-src="{{item.icon}}"/>
+                </div>
+                <div class="item-name">
+                    <span>{{item.name | i18next | uppercase}}</span>
+                </div>
+                <div class="arrow">
+                    <i class="fa"
+                        data-ng-class="{ 'caret-right': !isCurrentState(item) || !item.open, 'fa-caret-down': isCurrentState(item) || item.open}"></i>
+                </div>
+            </div>
+            <div class="display-by"
+                 ng-class= "{'collapsed' : isCurrentState(item) && !item.open }"
+                 ng-if="isCurrentState(item)"
+                 icu-display-by="item.display"
+                 people="people"
+                 projects="projects"
+                 discussions="discussions">
+            </div>
+            <!-- <div class="help-block"
+                ng-if="isCurrentState(item) && ((item.name === 'projects' && !projects.length) || (item.name === 'discussions' && !discussions.length))">
+                No {{ item.name }} - please create your first
+            </div> -->
+        </li>
+    </ul>
+</nav>

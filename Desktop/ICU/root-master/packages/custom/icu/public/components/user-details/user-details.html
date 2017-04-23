@@ -1,0 +1,36 @@
+<div class="user-details">
+    <div class="page-content">
+        <section class="description">
+            <div class="user-name">
+                <div class="name">
+                    <h3>{{user.name}}</h3>
+                </div>
+            </div>
+        </section>
+        <div class="tabs">
+            <div class="switcher">
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".projects">
+                    {{ 'projects' | i18next }}
+                </button>
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".tasks">
+                    Tasks
+                </button>
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".activities">
+                    {{ 'updates' | i18next }}
+                </button>
+                <button class="tab"
+                    data-ui-sref-active="active"
+                    data-ui-sref=".documents">
+                    {{ 'documents' | i18next }}
+                </button>
+            </div>
+        </div>
+        <div class="tab-content" data-ui-view="tab"></div>
+    </div>
+</div>

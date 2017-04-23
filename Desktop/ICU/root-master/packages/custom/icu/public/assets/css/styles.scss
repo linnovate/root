@@ -1,0 +1,79 @@
+$fa-font-path: '../lib/font-awesome/fonts';
+$open-sans-path: '../lib/open-sans/fonts';
+
+body {
+    direction: ltr;
+    font-family: 'Open Sans'
+}
+
+@import '../lib/font-awesome/scss/font-awesome';
+@import '../lib/open-sans/scss/open-sans.scss';
+@import 'variables';
+@import 'mixins/table';
+@import 'mixins/tag';
+@import 'mixins/circle';
+@import 'mixins/button';
+@import 'mixins/center';
+@import 'mixins/file-icon-sprites';
+@import 'avatar';
+@import 'colorpicker';
+@import 'login';
+@import 'register';
+@import 'profile';
+@import 'display-by';
+@import 'sidepane';
+@import 'panes';
+@import 'middlepane';
+@import 'detailspane';
+@import 'user-list';
+@import 'user-details';
+@import 'entity-list';
+@import 'task-details';
+@import 'discussion-details';
+@import 'tabs-activities';
+@import 'tabs-documents';
+@import 'tabs-projects';
+@import 'tabs-tasks';
+@import 'project-details';
+@import 'loader-animation';
+@import 'modal';
+@import 'angular-tooltips';
+@import 'task-options';
+@import 'sub-tasks';
+@import '404';
+@import 'search-list';
+
+table {
+    :focus {
+        outline: -webkit-focus-ring-color auto 0px;
+        box-shadow:inset 0px 0px 0px 2px gray;
+    }
+}
+
+.panes-wrapper {
+    margin-left: $sidepane-width;
+    width: calc(100% - #{$sidepane-width});
+
+    &.wide {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    [contenteditable][colspan]:empty:not(:focus):before {
+        content:attr(placeholder);
+        color: $light-grey-placeholder;
+        padding-left: 20px;
+    }
+
+    [contenteditable][colspan]:empty:focus {
+        padding-left: 40px;
+    }
+}
+.icon-projects {
+    width: 25px;
+    height: 25px;
+}
+[icu-members-footer] {
+    position: static;
+    bottom: 0;
+}

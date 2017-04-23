@@ -1,0 +1,73 @@
+<div class="activities">
+    <div class="activities-list">
+        <div ng-show="isLoading" class="loader"></div>
+        <div data-ng-repeat="activity in activities | orderBy:'created':true"  class="activity">
+            <div class="title">
+                <div icu-avatar user="activity.creator"></div>
+                <div class="text">
+                    <span class="user-name">{{activity.creator.name}}</span>
+                    <span class="activity-details" ng-repeat="val in details[activity.type]">
+                        <span ng-switch="val.type">
+                            <span ng-switch-when="object">{{activity[val.value] | i18next}}</span>
+                            <span ng-switch-when="deepObject" class="{{val.klass}}">{{activity[val.value[0]][val.value[1]] | i18next}}&nbsp</span>
+                            <span ng-switch-when="nbsp">{{' '}}&nbsp</span>
+                            <span ng-switch-default>{{val.value | i18next}}</span>
+                        </span>
+                    </span>
+                    <span class="activity-date">{{activity.created | date:"MM/dd/yyyy 'at' h:mma"}}</span>
+                </div>
+            </div>
+            <div class="description">
+                {{activity.description}}
+            </div>
+
+            <div id="UpdatetLine" data-ng-repeat="attachment in activity.attachments" class="attachment">
+                <div  class="icon {{attachment.attachmentType}}">
+                
+                <div id ="colorTOtransperent"></div>
+                
+                    <div id="AllUpdateIcons">
+                        <button class="DocumentIconsLine"  id="Update-icon-revert">
+                            <img tooltips tooltip-template="{{'revert' |  i18next}}" class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-revert1.png" src="/icu/assets/img/icon-revert1.png">
+                        </button>
+                        <!--<button class="DocumentIconsLine" id="Update-icon-view" title="צפה">
+                            <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png">
+                        </button>-->
+                        <button id="{{attachment.path}}" ng-click="view(attachment)" title="" class="DocumentIconsLine-Update-icon-view"  >
+                            <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png" tooltips tooltip-template="{{'view' |  i18next}}">
+                        </button>   
+                        <button class="DocumentIconsLine" id="Update-icon-edit" >
+                            <img tooltips tooltip-template="{{'edit' |  i18next}}" class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-edit.png" src="/icu/assets/img/icon-edit.png">
+                        </button>
+                        <button class="DocumentIconsLine" id="Update-icon-download" >
+                            <a href="{{attachment.path}}" target="window">
+                                <img tooltips tooltip-template="{{'download' |  i18next}}" class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-download.png" src="/icu/assets/img/icon-download.png">
+                            </a>
+                        </button>
+                    </div>
+                </div>
+                
+                <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="add-update" ng-show="stateParams.id">
+        <div icu-avatar user="me"></div>
+        <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save()">
+            <textarea ctrlenter="save()" ng-model="activity.description" ng-focus="expandUpdate()" ng-blur="minimizeUpdate()" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
+
+            <div class="action-buttons">
+                <button type="button" class="attachment"
+                        ngf-select
+                        ngf-change="upload($files)"
+                        ngf-multiple="false"></button>
+
+                <span class="name" title="{{attachments[0].name}}">{{attachments[0].name}}</span>
+
+                <button type="submit" class="save" >{{ 'add' | i18next }}</button>
+            </div>
+                            <div class="upload-err" ng-show="showMsgErr">failed to upload file </div>
+
+        </form>
+    </div>
+</div>

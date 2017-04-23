@@ -1,0 +1,14 @@
+<table class="projects">
+    <thead>
+        <th></th>
+        <th>{{ 'projects' | i18next }}</th>
+        <th>{{ 'tasks' | i18next }}</th>
+    </thead>
+    <tbody>
+        <tr data-ng-repeat="project in projects">
+            <td class="tag-column"><div class="tag {{project.color}}" ng-style="color={'background-color': '#' + '{{project.color}}'}"></div></td>
+            <td class="name-column">{{project.title}}</td>
+            <td class="tasks-column">{{project.tasks}}</td>
+        </tr>
+    </tbody>
+</table>

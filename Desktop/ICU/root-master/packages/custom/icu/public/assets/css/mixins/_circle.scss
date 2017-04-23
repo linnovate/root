@@ -1,0 +1,9 @@
+@mixin ellipse($radius) {
+    height: calc(#{$radius} * 2);
+    border-radius: $radius;
+}
+
+@mixin circle($radius) {
+    @include ellipse($radius);
+    width: calc(#{ $radius} * 2);
+}

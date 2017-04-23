@@ -1,0 +1,10 @@
+app:
+  build: .
+  ports:
+    - "3100:3100"
+  links:
+    - db
+db:
+  image: mongo
+  expose:
+    - "27017"

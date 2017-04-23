@@ -1,0 +1,11 @@
+<td class="id">{{data.index + 1}}</td>
+<td class="icon icon-task"></td>
+<td class="name" title="{{data.discussion.title}}">{{data.result.title}}</td>
+<td class="project">
+    <span class="tag project"
+          title="{{data.task.project.title}}"
+          ng-style="color={'background-color': '#' + data.task.project.color}">
+        {{data.task.project.title}}
+    </span>
+</td>
+<td class="arrow"><i class="fa chevron-right"></i></td>
