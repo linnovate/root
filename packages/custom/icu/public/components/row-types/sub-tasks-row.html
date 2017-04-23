@@ -41,8 +41,8 @@
     </ui-select>
 
 </td>
-<td class="due" ng-if="data.task._id">
-    <input ng-click="data.open(data.task)" ui-date="data.dueOptions(data.task)" ng-model="data.task.due" placeholder="{{ 'deadline' | i18next }}" ng-class='{"oldDate":checkDate(data.task)}'>
+<td class="due" ng-if="data.task._id" ng-init="data.initDue(data.task)">
+    <input ng-click="data.open(data.task)" ui-date="data.dueOptions(data.task)" ng-model="data.task.due" placeholder="{{ 'deadline' | i18next }}" ng-class='{"oldDate":data.checkDate(data.task)}'>
     <div id="past{{data.task._id}}" class="past">{{'This Deadline is in the past!' | i18next }}</div>
 </td>
 

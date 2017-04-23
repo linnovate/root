@@ -152,7 +152,6 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         $scope.dueOptions = {
             onSelect: function() {
-                var now = $scope.task.due;
                 $scope.update($scope.task);
             },
             onClose: function() {

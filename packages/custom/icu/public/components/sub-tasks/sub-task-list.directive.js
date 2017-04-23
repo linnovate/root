@@ -118,18 +118,16 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                 });
             };
 
+            $scope.initDue = function(task) {
+                if (task.due) task.due = new Date(task.due);
+            }
+
             $scope.dueOptions = function(task) {
                 return {
-                    onSelect: function() {
-
-                        console.log('=============================s', task.due)
-                        var now = task.due || new Date();
-                        task.due = new Date(now.getTime());
+                    onSelect: function() {;
                         $scope.createOrUpdate(task);
                     },
                     onClose: function() {
-                        console.log('=============================c', task.due)
-
                         document.getElementById('ui-datepicker-div').style.display = 'none';
                         $scope.open(task);
                     },
@@ -138,7 +136,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             };
 
             $scope.checkDate = function(task) {
-                var d = new Date()
+                var d = new Date().getThisDay()[0];
                 if (d > task.due) {
                     return true;
                 }
@@ -149,6 +147,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                 if ($scope.checkDate(task)) {
                     document.getElementById('past' + task._id).style.display = document.getElementById('ui-datepicker-div').style.display;
                     document.getElementById('past' + task._id).style.left = document.getElementById('ui-datepicker-div').style.left;
+                    document.getElementById('past' + task._id).style.top = (parseInt(document.getElementById('ui-datepicker-div').style.top) + 249) + 'px';
                 } else {
                     document.getElementById('past' + task._id).style.display = 'none';
                 }
