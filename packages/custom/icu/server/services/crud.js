@@ -180,6 +180,10 @@ module.exports = function(entityName, options) {
   }
 
   function update(oldE, newE, user, acl) {
+    if (newE.due) {
+      var d = new Date(newE.due);
+      newE.due = new Date(d.getTime() + d.getTimezoneOffset() * 60000);
+    }
     var entityWithDefaults = _.defaults(newE, options.defaults);
 
     oldE = _.extend(oldE, entityWithDefaults);

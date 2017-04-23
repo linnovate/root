@@ -153,7 +153,6 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.dueOptions = {
             onSelect: function() {
                 var now = $scope.task.due;
-                $scope.task.due = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
                 $scope.update($scope.task);
             },
             onClose: function() {
@@ -164,7 +163,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
 
         $scope.checkDate = function() {
-            var d = new Date()
+            var d = new Date().getThisDay()[0];
             if (d > $scope.task.due) {
                 return true;
             }
