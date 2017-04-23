@@ -1,5 +1,6 @@
+config/env/development.js
+config/env/production.js
 
-!config/env/example.js
 # --------------------
 # OSX Files
 # --------------------
