@@ -132,9 +132,17 @@ angular.module('mean.icu.ui.taskdetails', [])
             }
         });
 
+        $scope.addTagClicked=function(){
+        	$scope.setFocusToTagSelect();
+        	$scope.tagInputVisible=true;
+        }
+
         $scope.addTag = function(tag) {
-            $scope.task.tags.push(tag);
-            $scope.update($scope.task);
+        	if(tag!=undefined && $.inArray(tag,$scope.task.tags)==-1){
+        		$scope.task.tags.push(tag);
+            	$scope.update($scope.task);
+        	}
+
             $scope.tagInputVisible = false;
         };
 
@@ -153,6 +161,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.dueOptions = {
             onSelect: function() {
                 var now = $scope.task.due;
+                $scope.task.due = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
                 $scope.update($scope.task);
             },
             onClose: function() {
@@ -163,7 +172,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
 
         $scope.checkDate = function() {
-            var d = new Date().getThisDay()[0];
+            var d = new Date()
             if (d > $scope.task.due) {
                 return true;
             }
@@ -364,7 +373,12 @@ angular.module('mean.icu.ui.taskdetails', [])
             require: 'uiSelect',
             link: function(scope, elm, attrs, ctrl) {
                 elm.on('blur', 'input.ui-select-search', function(e) {
-                    scope.$parent.tagInputVisible = false;
+                	var ngModelName = attrs.id;
+                	if(ngModelName == "addTag"){
+                		ctrl.select();
+                		ctrl.ngModel.$setViewValue(undefined);
+                		scope.tagInputVisible=false;
+                	}
                 });
 
                 elm.on('blur', 'input.ui-select-focusser', function(e, g) {
@@ -377,8 +391,15 @@ angular.module('mean.icu.ui.taskdetails', [])
 
             }
         };
-    })
-    .filter('searchfilter', function() {
+    }).directive('test',function(){
+    	return{
+    		scope:true,
+    		require:'ngModel',
+    		link: function($scope,$elm,$attrs,ngModel){
+    			ngModel.$setViewValue('hi');
+    		}
+    	}
+    }).filter('searchfilter', function() {
         return function(input, query) {
             var r = RegExp('(' + query + ')');
             if (input !== undefined)
