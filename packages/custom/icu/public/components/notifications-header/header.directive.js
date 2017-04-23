@@ -169,6 +169,14 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     watchers: [],
                 };
 
+                if ($stateParams.entity === 'project' && $stateParams.entityId) {
+                        discussion['project'] = $stateParams.entityId;
+                } else {
+                    if (context.main === 'projects' && $stateParams.id) {
+                        discussion['project'] = $stateParams.id;
+                    }
+                }
+
                 DiscussionsService.create(discussion).then(function(result) {
                     $scope.discussions.push(result);
                     $state.go('main.tasks.byentity.activities', {
