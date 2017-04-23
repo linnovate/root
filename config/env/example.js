@@ -49,6 +49,10 @@ module.exports = {
     tls: false, // in case of SMTP
     ignoreTLS: true
   },
+  system: {
+    recipients: [], //recipients of system mail
+    seconds: 10 * 60 //ignore mails for 10 minutes
+  },
   secret: 'SOME_TOKEN_SECRET',
   api: {
     uri: 'localhost:3003'

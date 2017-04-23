@@ -4,7 +4,12 @@ app:
     - "3100:3100"
   links:
     - db
+    - elastic
 db:
   image: mongo
   expose:
     - "27017"
+elastic:
+  image: elasticsearch
+  expose:
+    - "9200"

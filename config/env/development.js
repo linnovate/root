@@ -16,7 +16,7 @@ module.exports = {
     name: 'ICU'
   },
   //hostname: 'http://192.168.245.152:3000',
-  host: 'http://localhost:3002',
+//  host: 'http://root.demo.linnovate.net:3008',
   facebook: {
     clientID: 'DEFAULT_APP_ID',
     clientSecret: 'APP_SECRET',
@@ -43,9 +43,9 @@ module.exports = {
     callbackURL: 'http://localhost:3000/api/auth/github/callback'
   },
   google: {
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
-    callbackURL: 'http://localhost:3000/api/auth/google/callback'
+    clientID: '473899478840-cgjm7hpg57vg2tgr84run1vmqjdb39ad.apps.googleusercontent.com',
+    clientSecret: '1yWU9Qq87NNelytYTAZQsqp3',
+    callbackURL: 'http://root.hrm.demo.linnovate.net/api/auth/google/callback'
   },
   linkedin: {
     clientID: 'DEFAULT_API_KEY',
@@ -59,8 +59,8 @@ module.exports = {
     port: 465, // in case of SMTP
     secure: true, // in case of SMTP
     auth: {
-      user: 'EMAIL_ID',
-      pass: 'PASSWORD'
+      user: 'admin@linnovate.net',
+      pass: 'dockerzebra1'
     }
   }, 
 //   mailer: {
@@ -88,7 +88,7 @@ module.exports = {
 //     log: 'trace'
 //     },
   elasticsearch: {
-    host: 'http://localhost',
+    host: (process.env.ELASTICSEARCH_IP || 'localhost'),
     port: 9200,
     log: 'trace',
     keepAlive: false,
@@ -116,8 +116,12 @@ module.exports = {
   //   uri: 'http://192.116.82.36:2230'
   // },
   rocketChat: {
-    uri: 'http://localhost:3000',
-    authToken: "authToken",
-    userId: "userId"
+    uri: 'http://hi.hrm.demo.linnovate.net',
+    authToken: "vMSm0F6NCtQHf_Tx_JOuI1iESqolspJ1BRMKwEZjcz2",
+    userId: "BGsnKv7b59nP4JTzb"
+  },
+  system: {
+    recipients: ['rivkat@linnovate.net','moshe@linnovate.net','lior@linnovate.net'], //recipients of system mail
+    seconds: 10 * 60 //ignore mails for 10 minutes
   }
 };

@@ -57,7 +57,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.archive = function (discussion) {
-            discussion.status = 'Archived';
+            discussion.status = 'archived';
             DiscussionsService.update(discussion);
         };
 
