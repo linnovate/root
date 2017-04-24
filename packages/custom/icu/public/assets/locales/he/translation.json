@@ -177,5 +177,8 @@
     "September":"ספטמבר",
     "October":"אוקטובר",
     "November":"נובמבר",
-    "December": "דצמבר"
+    "December": "דצמבר",
+
+    "loadMore":"הראה עוד",
+    "loadLess":"הראה פחות"
 }

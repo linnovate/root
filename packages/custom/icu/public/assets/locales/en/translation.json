@@ -179,5 +179,8 @@
     "September":"September",
     "October":"October",
     "November":"November",
-    "December": "December"
+    "December": "December",
+
+    "loadMore":"Load more",
+    "loadLess":"Load less"
 }

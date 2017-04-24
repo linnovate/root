@@ -33,7 +33,8 @@
                 </span>
             </div>
         </div>
-        <div class="notification" ng-show="data.hasMore" ng-click="loadMore()"><span>{{'loadMore' | i18next}}</span></div>
+         <div class="notification" ng-show="data.hasMore && (!data.isFull)" ng-click="loadMore()"><span>{{'loadMore' | i18next}}</span></div>
+         <div class="notification" ng-show="data.isFull" ng-click="loadLess()"><span>{{'loadLess' | i18next}}</span></div>
     </div>
     <div class="time" ng-click="triggerDropdown()">
         <i class="fa fa-chevron-down"></i>
