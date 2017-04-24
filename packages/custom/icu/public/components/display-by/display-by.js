@@ -44,10 +44,10 @@ angular.module('mean.icu.ui.displayby', [])
 
         function link($scope, $element, context) {
             $scope.showMore = function(limit, entityName) {
-                if (($scope.displayLimit[entityName] + 10) >= limit) {
+                if (($scope.displayLimit[entityName] + 3) >= limit) {
                     $scope.displayLimit[entityName] = limit;
                 } else {
-                    $scope.displayLimit[entityName]  += 10;
+                    $scope.displayLimit[entityName]  += 3;
 
                 }
             };
