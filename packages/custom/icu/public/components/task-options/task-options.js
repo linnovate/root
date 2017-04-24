@@ -42,7 +42,7 @@ angular.module('mean.icu.ui.taskoptions', [])
 	$scope.statistics.tasksDueWeek = $scope.countTasksForTodayOrWeek(false);
 	$scope.statistics.overDueTasks = $scope.countOverDueTasks();
 	TasksService.getWatchedTasks().then(function(data) {
-		$scope.statistics.WatchedTasks = parseInt(data);
+		$scope.statistics.WatchedTasks = data.length;
 	});
 
 
@@ -50,7 +50,13 @@ angular.module('mean.icu.ui.taskoptions', [])
 
 	$scope.filterTasks = function(filterValue) {
 		TasksService.filterValue = filterValue;
-	};
+
+		if(filterValue=='watched'){
+			TasksService.getWatchedTasks().then(function(result){
+				TasksService.watchedTasksArray = result;
+			});
+        };
+		};
 
 	if ($state.current.name === 'main.tasks.byassign') {
 		$state.go('.activities');

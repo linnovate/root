@@ -229,7 +229,7 @@ module.exports = function(Icu, app) {
   app.route('/api/overdueWatchedTasks')
     .get(task.getOverdueWatchedTasks);
   app.route('/api/watchedTasks')
-    .get(task.getWatchedTasks);
+    .get(task.getWatchedTasksList);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);

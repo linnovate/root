@@ -459,7 +459,32 @@ exports.getWatchedTasks = function(req, res, next) {
     	res.send(length.toString());
       req.locals.result = response;
     }
-  //  next();
+    next();
+  })
+}
+
+
+exports.getWatchedTasksList = function(req, res, next) {
+  //if (req.locals.error) {
+  //  return next();
+  //}
+  Task.find({
+    "watchers": req.user._id,
+    "assign": {
+      $ne: req.user._id
+    },
+    "status": {
+      $nin: ['rejected', 'done']
+    },
+    tType: {$ne: 'template'}
+  }, function(err, response) {
+    if (err) {
+      req.locals.error = err;
+    } else {
+    	res.send(response);
+      	req.locals.result = response;
+    }
+    //next();
   })
 }
 
