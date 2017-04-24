@@ -11,6 +11,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
         UsersService,
         $document) {
         function controller($scope) {
+
             $scope.notificationsToWatch = 0;
 
             // Get the saved Notifications of the user, and show it to him 
@@ -152,21 +153,28 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     watchers: [],
                 };
 
+                var params = {};
+                var state = 'main.projects.all.details.activities';
+
                 if ($stateParams.entity === 'discussion' && $stateParams.entityId) {
                     project['discussion'] = $stateParams.entityId;
+                    state = 'main.projects.byentity.details.activities';
+                    params.entity = 'discussion';
+                    params.entityId = $stateParams.entityId;
                 } else {
                     if (context.main === 'discussions' && $stateParams.id) {
                         project['discussion'] = $stateParams.id;
+                        state = 'main.projects.byentity.details.activities';
+                        params.entity = 'discussion';
+                        params.entityId = $stateParams.id;
                     }
                 }
 
                 ProjectsService.create(project).then(function(result) {
-
                     $scope.projects.push(result);
-                    $state.go('main.tasks.byentity.activities', {
-                        id: result._id,
-                        entity: 'project',
-                        entityId: result._id
+                    params.id = result._id;
+                    $state.go(state, params, {
+                        reload: true
                     });
                 });
             };
@@ -177,20 +185,28 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     watchers: [],
                 };
 
+                var params = {};
+                var state = 'main.discussions.all.details.activities';
+
                 if ($stateParams.entity === 'project' && $stateParams.entityId) {
-                        discussion['project'] = $stateParams.entityId;
+                    discussion['project'] = $stateParams.entityId;
+                    state = 'main.discussions.byentity.details.activities';
+                    params.entity = 'project';
+                    params.entityId = $stateParams.entityId;
                 } else {
                     if (context.main === 'projects' && $stateParams.id) {
                         discussion['project'] = $stateParams.id;
+                        state = 'main.discussions.byentity.details.activities';
+                        params.entity = 'project';
+                        params.entityId = $stateParams.id;
                     }
                 }
 
                 DiscussionsService.create(discussion).then(function(result) {
                     $scope.discussions.push(result);
-                    $state.go('main.tasks.byentity.activities', {
-                        id: result._id,
-                        entity: 'discussion',
-                        entityId: result._id
+                    params.id = result._id;
+                    $state.go(state, params, {
+                        reload: true
                     });
                 });
             };
