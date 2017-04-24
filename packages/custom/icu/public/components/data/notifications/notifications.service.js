@@ -6,11 +6,12 @@ angular.module('mean.icu.data.notificationsservice', [])
         var EntityPrefix = '/notification';
         var EntityPrefix1 = '/notification1';
 
-        var data = {
+         var data = {
             notifications: [],
             notificationsToWatch: 0,
             lastNotification: null,
-            hasMore: 0
+            hasMore: 0,
+            isFull:false
         };
 
         function addLastnotification(notification) {
@@ -19,11 +20,19 @@ angular.module('mean.icu.data.notificationsservice', [])
             data.lastNotification = notification;
         }
 
-        function getByUserId(id) {
+        function getByUserId(id , wantLess) {
             var limit = data.notifications.length ? 5 : 4;
             return $http.get(ApiUri + EntityPrefix + '/' + id + '?limit=' + limit + '&skip=' + data.notifications.length).then(function(result) {
                 data.notificationsToWatch = result.data.newMessages;
                 data.notifications.push.apply(data.notifications, result.data.list);
+                if(data.notifications.length >=10){
+                	data.isFull=true;
+                	data.notifications = data.notifications.slice(0,10);
+                }
+                if(wantLess){
+                	data.isFull=false;
+                	data.notifications = data.notifications.slice(0,5);
+                }
                 data.lastNotification = data.notifications[0];
                 data.hasMore = result.data.count - data.notifications.length
                 return;

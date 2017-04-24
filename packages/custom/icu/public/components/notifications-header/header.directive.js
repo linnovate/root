@@ -14,10 +14,10 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
             $scope.notificationsToWatch = 0;
 
-            // Get the saved Notifications of the user, and show it to him 
+            // Get the saved Notifications of the user, and show it to him
             var getNotifications = function() {
 
-                // Get the saved Notifications of the user, and show it to him         
+                // Get the saved Notifications of the user, and show it to him
                 NotificationsService.getByUserId($scope.me._id).then(function(response) {
                     $scope.data = NotificationsService.data;
                 });
@@ -56,7 +56,11 @@ angular.module('mean.icu.ui.notificationsheader', [])
             };
 
             $scope.loadMore = function() {
-                NotificationsService.getByUserId($scope.me._id).then(function(response) {});
+                NotificationsService.getByUserId($scope.me._id,false).then(function(response) {});
+            };
+
+            $scope.loadLess = function() {
+                NotificationsService.getByUserId($scope.me._id,true).then(function(response) {});
             };
 
             $scope.details = {
