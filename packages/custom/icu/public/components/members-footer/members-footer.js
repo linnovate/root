@@ -3,6 +3,7 @@
 angular.module('mean.icu.ui.membersfooter', [])
     .directive('icuMembersFooter', function() {
         function controller($scope, $injector, context, $stateParams, $timeout, circlesService, UsersService) {
+
             var serviceMap = {
                 projects: 'ProjectsService',
                 discussions: 'DiscussionsService',
@@ -52,7 +53,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     arr3 = $scope.entity.circles && $scope.entity.circles[groupTypes[i]] ? $scope.entity.circles[groupTypes[i]] : [];
                     arr1 = _.difference(arr1, arr3);
                 }
-            
+
                 var groupsNotAssigned = _.filter(groups, function(obj) {
                     return arr1.indexOf(obj._id) >= 0;
                 });

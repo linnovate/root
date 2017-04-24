@@ -8,7 +8,7 @@
     <div ng-if="!entity.watchers.length && !watchersGroups.length" class="left-notification" ng-click="triggerSelect()">
         {{'noWatchers' | i18next}}
     </div>
-    
+
     <div class="new-member-input" ng-if="showSelect">
         <ui-select ng-model="member" on-select="addMember(member)" autofocus>
             <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}">

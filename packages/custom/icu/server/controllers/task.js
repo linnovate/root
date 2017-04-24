@@ -490,9 +490,9 @@ exports.getWatchedTasksList = function(req, res, next) {
 
 
 exports.getOverdueWatchedTasks = function(req, res, next) {
-  if (req.locals.error) {
-    return next();
-  }
+ // if (req.locals.error) {
+ //   return next();
+ // }
 
   var dates = new Date().getThisDay();
   Task.find({
@@ -512,6 +512,7 @@ exports.getOverdueWatchedTasks = function(req, res, next) {
       req.locals.error = err;
     } else {
       req.locals.result = response;
+      res.send(response);
     }
     next();
   })
