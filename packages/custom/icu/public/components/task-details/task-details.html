@@ -10,7 +10,7 @@
 
         <div class="favorite">
             <button ng-class="{ 'orange': task.star }" ng-click="star(task)">
-                <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
+                <i class="fa fa-star" tooltips tooltip-template="{{'favorite' | i18next}}"></i>
             </button>
         </div>
 
