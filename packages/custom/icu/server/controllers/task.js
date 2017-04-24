@@ -514,7 +514,7 @@ exports.getOverdueWatchedTasks = function(req, res, next) {
       req.locals.result = response;
       res.send(response);
     }
-    next();
+  //  next();
   })
 }
 
