@@ -36,9 +36,9 @@ exports.destroy = function(req, res, next) {
 
   var discussion = req.locals.result;
 
-  Task.find({
+  var query = req.acl.mongoQuery('Task');
+  query.find({
     discussions: req.params.id,
-    currentUser: req.user
   }).then(function(tasks) {
     //FIXME: do it with mongo aggregate
     var groupedTasks = _.groupBy(tasks, function(task) {
@@ -122,10 +122,9 @@ exports.schedule = function(req, res, next) {
     return next();
   }
 
-
-  Task.find({
+  var query = req.acl.mongoQuery('Task');
+  query.find({
     discussions: discussion._id,
-    currentUser: req.user
   }).then(function(tasks) {
     var groupedTasks = _.groupBy(tasks, function(task) {
       return _.contains(task.tags, 'Agenda');
@@ -180,9 +179,9 @@ exports.summary = function(req, res, next) {
     return next();
   }
 
-  Task.find({
+  var query = req.acl.mongoQuery('Task');
+  query.find({
     discussions: discussion._id,
-    currentUser: req.user
   }).populate('discussions')
     .then(function(tasks) {
       var projects = _.chain(tasks).pluck('project').compact().value();
