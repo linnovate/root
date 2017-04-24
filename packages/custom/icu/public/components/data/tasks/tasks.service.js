@@ -80,6 +80,11 @@ angular.module('mean.icu.data.tasksservice', [])
         }
         return $http.put(ApiUri + EntityPrefix + '/' + task._id, task).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
+            for (var i = 0; i < result.data.subTasks.length; i++) {
+                if(result.data.subTasks[i].due) {
+                    result.data.subTasks[i].due = new Date(result.data.subTasks[i].due);
+                }
+            }
             if (subTask) result.data.subTasks.push(subTask);
             return result.data;
         });
