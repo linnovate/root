@@ -44,7 +44,7 @@ module.exports = function(Icu, app) {
   app.route(/^((?!\/hi\/).)*$/).all(authorization);
 
   //app.route(/^((?!\/hi\/).)*$/).all(authorization, socket);
-  
+
   //app.route(/^((?!\/socket.io\/).)*$/).all(locals);
   //app.route(/^((\/socket.io\/).)*$/).all(authorization);
 
