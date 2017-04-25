@@ -206,15 +206,19 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         $scope.deleteTask = function(task) {
             TasksService.remove(task._id).then(function() {
-                var state = context.entityName === 'all' ?
-                    'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-
-                $state.go(state, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
+                var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
+                TasksService.getWatchedTasks().then(function(result){
+                   TasksService.watchedTasksArray = result;
+                    $state.go(state, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
                     reload: true
                 });
+
+                });
+
+              
             });
         };
 
