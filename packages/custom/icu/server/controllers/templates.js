@@ -79,7 +79,7 @@ var addUpdate = function(taskId, creator, type, description, callback) {
   });
 };
 
-var addToTemplate = function(task, parentId, name, creator, watchers, circles, project, exist, tType, callback) {
+var addToTemplate = function(task, due, parentId, name, creator, watchers, circles, project, exist, tType, callback) {
   if (!exist) {
     var template = new Task({
       tType: tType,
@@ -93,7 +93,8 @@ var addToTemplate = function(task, parentId, name, creator, watchers, circles, p
       project: project,
       templateId: task._id,
       assign: task.assign,
-      status: task.status
+      status: task.status,
+      due: due
     });
 
     callback({
@@ -115,14 +116,22 @@ var addToTemplate = function(task, parentId, name, creator, watchers, circles, p
   }
 }
 
-var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, circles, project, exist, tType, templates, totals, callback) {
+var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, circles, project, exist, tType, templates, totals, created, callback) {
   Task.findOne({
     '_id': taskId
   })
     .exec(function(err, task) {
       if (task) {
         totals.tasks += task.subTasks.length;
-        addToTemplate(task, parentId, name, creator, watchers, circles, project, exist, tType, function(template) {
+        var due = task.due;
+        if(!tType && task.due) {
+          var timeDiff = Math.abs(task.due.getTime() - created.getTime());
+          var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+          var date = new Date();
+          date = new Date(date.setDate(new Date().getDate() + diffDays));
+          due = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+        }
+        addToTemplate(task, due, parentId, name, creator, watchers, circles, project, exist, tType, function(template) {
           templates[template.t._id] = template;
           if (parentId) {
             templates[parentId].t.subTasks.push(template.t._id);
@@ -135,7 +144,7 @@ var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, 
           circles = template.t.circles;
           project = template.t.project;
           for (var i = 0; i < task.subTasks.length; i++) {
-            addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, watchers, circles, project, false, tType, templates, totals, callback);
+            addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, watchers, circles, project, false, tType, templates, totals, created, callback);
           }
         })
       } else {
@@ -168,7 +177,7 @@ exports.toTemplate = function(req, res, next) {
         totals.tasks = 1;
         var watchers = req.body.watchers || [req.body.watcher];
         var circles = req.body.circles;
-        addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, watchers, circles, null, false, 'template', templates, totals, function(templates) {
+        addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, watchers, circles, null, false, 'template', templates, totals, null, function(templates) {
          var counter = Object.keys(templates).length;
           for (var t in templates) {
             templates[t].t.save(function(err, subtask) {
@@ -204,7 +213,11 @@ exports.toSubTasks = function(req, res, next) {
     if (err) {
       req.locals.error = err;
       next();
+    } if (!task) {
+      req.locals.error = new Error('No template.');
+      next();
     } else {
+      var created = task.created;
       var query = req.acl.mongoQuery('Task');
       query.findOne({
         _id: req.body.taskId,
@@ -217,7 +230,7 @@ exports.toSubTasks = function(req, res, next) {
           next();
         } else {
           totals.tasks = 1;
-          addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, [], {}, null, req.body.taskId, null, tasks, totals, function(templates) {
+          addRecorsiveTemplates(req.params.id, req.body.name, null, req.user._id, [], {}, null, req.body.taskId, null, tasks, totals, created, function(templates) {
             req.locals.result = [];
             for (var t in templates) {
               templates[t].t.save(function(err, subtask) {
