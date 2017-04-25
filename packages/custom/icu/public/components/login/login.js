@@ -17,7 +17,8 @@ angular.module('mean.icu.ui.login', [])
         $scope.errorMessage = '';
         UsersService.login(credentials).then(function (result) {
             if (result.status == 200) {
-            	$state.go('main.tasks');
+                window.history.back();
+            	//$state.go('main.tasks');
                 //$state.go('socket');
             } else {
                 $state.go('login');

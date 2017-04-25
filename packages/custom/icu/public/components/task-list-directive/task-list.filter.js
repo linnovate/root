@@ -50,8 +50,15 @@ angular.module('mean.icu.ui.tasklistFilter', [])
 					};
 				});
 				break;
+			case 'watched':
+			if(TasksService.watchedTasksArray!=undefined){
+				TasksService.watchedTasksArray.forEach(function(task){
+					out.push(task);
+				});
+			}
+			break;
 			default:
-				out = tasks;
+				out=tasks;
 		}
 		return out;
 	}

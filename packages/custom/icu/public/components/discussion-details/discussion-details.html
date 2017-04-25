@@ -1,5 +1,11 @@
 <div class="discussion-details">
-    <div class="page-content">
+    <div class="permission" ng-if="discussion && !discussion._id">
+       <div class="perIcon">
+    </div>
+    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
+    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+    </div>
+    <div class="page-content" ng-if="discussion._id">
         <div class="summary">
             <div class="favorite">
                 <button ng-class="{ 'orange': discussion.star }" ng-click="star(discussion)">
@@ -118,5 +124,5 @@
         </div>
         <div class="tab-content" data-ui-view="tab"></div>
     </div>
-    <div icu-members-footer entity="discussion" users="people"></div>
+    <div ng-if="discussion._id" icu-members-footer entity="discussion" users="people"></div>
 </div>

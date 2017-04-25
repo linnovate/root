@@ -349,6 +349,11 @@ angular.module('mean.icu').config([
                 templateUrl: '/icu/components/errors/404.html',
                 controller: 'ErrorsController'
             })
+            .state('401', {
+                url: '/401',
+                templateUrl: '/icu/components/errors/401.html',
+                controller: 'ErrorsController'
+            })
             .state('auth', {
                 url: '/auth',
                 templateUrl: '/icu/components/auth/auth.html',

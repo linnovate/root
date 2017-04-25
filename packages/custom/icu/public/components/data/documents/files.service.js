@@ -122,8 +122,12 @@ angular.module('mean.icu.data.filesservice', [])
 
 
             }).error(function(data, status) {
-
+                
                 console.log("Request failed with status: " + status);
+
+                // Unauthorized page
+                //window.open('/404', '_self', '');
+                window.open('/401', '_self', '');
 
                 // Optionally write the error out to scope
                 //$scope.errorDetails = "Request failed with status: " + status;

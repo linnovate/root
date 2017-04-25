@@ -1,5 +1,11 @@
 <div class="project-details">
-    <div class="page-content">
+    <div class="permission" ng-if="project && !project._id">
+       <div class="perIcon">
+    </div>
+    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
+    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+    </div>
+    <div class="page-content" ng-if="project._id">
         <div class="summary">
 
             <div class="favorite">
@@ -81,5 +87,5 @@
         </div>
         <div class="tab-content" data-ui-view="tab"></div>
     </div>
-    <div icu-members-footer entity="project" users="people"></div>
+    <div ng-if="project._id" icu-members-footer entity="project" users="people"></div>
 </div>
