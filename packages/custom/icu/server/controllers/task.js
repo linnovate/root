@@ -100,37 +100,49 @@ exports.tagsList = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-
-  var query = {
-    'query': {
-      'query_string': {
-        'query': '*'
-      }
-    },
-    'facets': {
-      'tags': {
-        'terms': {
-          'field': 'tags'
-        }
-      }
-    }
-  };
-
-  mean.elasticsearch.search({
-    index: 'task',
-    'body': query,
-    size: 3000
-  }, function(err, response) {
-    if (err) {
+  var query = req.acl.mongoQuery('Task');
+  query.distinct('tags', function(error, tags) {
+    if (error) {
       req.locals.error = {
         message: 'Can\'t get tags'
       };
     } else {
-      req.locals.result = response.facets ? response.facets.tags.terms : [];
+      req.locals.result = tags || [];
     }
 
     next();
   });
+
+  // var query = {
+  //   'query': {
+  //     'query_string': {
+  //       'query': '*'
+  //     }
+  //   },
+  //   'facets': {
+  //     'tags': {
+  //       'terms': {
+  //         'field': 'tags'
+  //       }
+  //     }
+  //   }
+  // };
+
+  // mean.elasticsearch.search({
+  //   index: 'task',
+  //   'body': query,
+  //   size: 3000
+  // }, function(err, response) {
+  //   if (err) {
+  //     req.locals.error = {
+  //       message: 'Can\'t get tags'
+  //     };
+  //   } else {
+  //     req.locals.result = response.facets ? response.facets.tags.terms : [];
+  //   }
+
+  //   next();
+  // });
 };
 
 exports.getByEntity = function(req, res, next) {
