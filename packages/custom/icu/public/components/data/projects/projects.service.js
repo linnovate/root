@@ -3,7 +3,7 @@
 angular.module('mean.icu.data.projectsservice', [])
 .service('ProjectsService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService) {
     var EntityPrefix = '/projects';
-    var data;
+    var data, selected;
 
     function getAll(start, limit, sort) {
         var qs = querystring.encode({
@@ -127,6 +127,7 @@ angular.module('mean.icu.data.projectsservice', [])
         remove: remove,
         star: star,
         getStarred: getStarred,
-        data: data
+        data: data,
+        selected: selected
     };
 });

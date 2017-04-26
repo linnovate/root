@@ -263,7 +263,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                             if (projId !== context.entityId || type === 'project') {
                                 $state.go('main.tasks.byentity.details', {
                                     entity: context.entityName,
-                                    entityId: context.entityId,
+                                    entityId: projId,
                                     id: task._id
                                 }, {
                                     reload: true
@@ -279,14 +279,23 @@ angular.module('mean.icu.ui.taskdetails', [])
             TasksService.update(task).then(function(result) {
                 if (context.entityName === 'project') {
                     var projId = result.project ? result.project._id : undefined;
-                    if (projId !== context.entityId || type === 'project') {
-                        $state.go('main.tasks.byentity.details', {
-                            entity: context.entityName,
-                            entityId: context.entityId,
+                    if (!projId) {
+                        $state.go('main.tasks.all.details', {
+                            entity: 'task',
                             id: task._id
                         }, {
                             reload: true
                         });
+                    } else {
+                        if (projId !== context.entityId || type === 'project') {
+                            $state.go('main.tasks.byentity.details', {
+                                entity: context.entityName,
+                                entityId: projId,
+                                id: task._id
+                            }, {
+                                reload: true
+                            });
+                        }
                     }
                 }
             });
