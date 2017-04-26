@@ -247,7 +247,7 @@ var byAssign = function(req, res, next) {
   		status: {$nin: ['rejected', 'done']},
   		tType: {$ne: 'template'}
 		})
-		.populate('project')
+		.populate(options.includes)
 		.exec(function(err, tasks) {
   		if (err) {
 	      req.locals.error = {
