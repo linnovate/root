@@ -27,6 +27,20 @@
             .status {
                 border-right: none;
             }
+
+            #close {
+                float: right !important;
+                margin: 0px;
+                display: inline-block;
+                padding: 2px 5px;
+                background: #ccc;
+            } 
+            #close:hover {
+                float: right !important;
+                display: inline-block;
+                padding: 2px 5px;
+                color: #fff;
+            }
             #past {position: absolute;
                 top: 341px;
                 background-color: #EBE9DE;

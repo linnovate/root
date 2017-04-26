@@ -163,8 +163,14 @@ angular.module('mean.icu.ui.taskdetails', [])
                 $scope.update($scope.task);
             },
             onClose: function() {
-                document.getElementById('ui-datepicker-div').style.display = 'none';
-                $scope.open();
+                var d = new Date()
+                if (d > $scope.task.due){
+                    document.getElementById('ui-datepicker-div').style.display = 'block';
+                    $scope.open();    
+                }else{
+                    document.getElementById('ui-datepicker-div').style.display = 'none';
+                    $scope.open();
+                }
             },
             dateFormat: 'd.m.yy'
         };
@@ -185,6 +191,10 @@ angular.module('mean.icu.ui.taskdetails', [])
                 document.getElementById('past').style.display = 'none';
             }
         };
+
+        $scope.closeOldDateNotification = function(){
+            document.getElementById('past').style.display = 'none';
+        }
 
         function navigateToDetails(task) {
             $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';

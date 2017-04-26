@@ -128,8 +128,14 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                         $scope.createOrUpdate(task);
                     },
                     onClose: function() {
-                        document.getElementById('ui-datepicker-div').style.display = 'none';
-                        $scope.open(task);
+                        var d = new Date();
+                        if(d > task.due){
+                            document.getElementById('ui-datepicker-div').style.display = 'block';
+                            $scope.open(task);
+                        }else{
+                            document.getElementById('ui-datepicker-div').style.display = 'none';
+                            $scope.open(task);
+                        }
                     },
                     dateFormat: 'd.m.yy'
                 }
@@ -151,6 +157,10 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                 } else {
                     document.getElementById('past' + task._id).style.display = 'none';
                 }
+            };
+
+            $scope.closeOldDateNotification = function(task){
+                document.getElementById('past' + task._id).style.display = 'none';
             };
 
             $scope.statuses = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'];
