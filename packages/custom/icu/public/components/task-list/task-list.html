@@ -26,7 +26,7 @@
                     </span>
                 </div>
                 {{ 'tasksFrom' | i18next }}
-             <span ng-click="goToParent()">"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</spa
+            <span ng-click="goToParent()">"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span> 
             </header>
         </div>
         <div class="header-wrap" ng-switch-default
@@ -36,8 +36,10 @@
                     entityId: currentContext.entityId
                     })">
             <header class="title">
-                {{ 'tasksFrom' | i18next }}{{ currentContext.entityName | i18next }}
-                <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+               <!-- {{ 'tasksFrom' | i18next }}{{ currentContext.entityName | i18next }} -->
+               {{ 'tasksFrom' | i18next }}{{ currentContext.entityName | i18next }}
+             <!--   <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span> -->
+             <span>"{{getProjName()}}"</span>
             </header>
         </div>
     </div>

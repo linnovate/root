@@ -53,6 +53,18 @@ angular.module('mean.icu.ui.tasklist', [])
 		return ids.indexOf($state.current.name) !== -1;
 	};
 
+	$scope.getProjName=function(){
+		if($scope.currentContext.entity.title!=undefined && $scope.currentContext.entity.title!=""){
+			return $scope.currentContext.entity.title;
+		}
+		else if ($scope.currentContext.entity.name!=undefined && $scope.currentContext.entity.name!=""){
+			return $scope.currentContext.entity.name;
+		}
+		else{
+			return ProjectsService.currentProjectName
+		}
+	}
+
 	$scope.changeOrder = function () {
 		$scope.sorting.isReverse = !$scope.sorting.isReverse;
 		/*Made By OHAD - Needed for reversing sort*/
