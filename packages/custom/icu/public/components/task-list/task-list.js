@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function ($scope, $state, tasks, TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
+.controller('TaskListController', function ($scope, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
 	$scope.tasks = tasks.data || tasks;
 	TasksService.data = $scope.tasks;
 	$scope.loadNext = tasks.next;
@@ -54,6 +54,8 @@ angular.module('mean.icu.ui.tasklist', [])
 	};
 
 	$scope.getProjName=function(){
+		
+		var entityType = $scope.currentContext.entityName;
 		if($scope.currentContext.entity.title!=undefined && $scope.currentContext.entity.title!=""){
 			return $scope.currentContext.entity.title;
 		}
@@ -61,7 +63,13 @@ angular.module('mean.icu.ui.tasklist', [])
 			return $scope.currentContext.entity.name;
 		}
 		else{
-			return ProjectsService.currentProjectName
+			if(entityType=="discussion"){
+				return DiscussionsService.currentDiscussionName;
+			}
+			else{
+				return ProjectsService.currentProjectName;
+			}
+			
 		}
 	}
 
