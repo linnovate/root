@@ -23,7 +23,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getTags() {
-        return $http.get(EntityPrefix + '/tags').then(function (result) {
+        return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });

@@ -167,6 +167,10 @@ angular.module('mean.icu.ui.discussiondetails', [])
             DiscussionsService.update(discussion);
         };
 
+        $scope.updateCurrentDiscussion= function(){
+            DiscussionsService.currentDiscussionName = $scope.discussion.title;
+        }
+
 
         $timeout(function() {
             $scope.isLoading = false;

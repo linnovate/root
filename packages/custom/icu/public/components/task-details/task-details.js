@@ -117,13 +117,14 @@ angular.module('mean.icu.ui.taskdetails', [])
         $rootScope.$broadcast('updateNotification', {
             taskId: $stateParams.id
         });
-
         $scope.getUnusedTags = function() {
-            return _.chain($scope.tags).reject(function(t) {
-                return $scope.task.tags.indexOf(t.term) >= 0;
-            }).sortBy(function(a, b) {
-                return b.count - a.count;
-            }).pluck('term').value();
+            // return _.chain($scope.tags).reject(function(t) {
+            //     return $scope.task.tags.indexOf(t.term) >= 0;
+            // }).sortBy(function(a, b) {
+            //     return b.count - a.count;
+            // }).pluck('term').value();
+
+            return $scope.tags.filter(function(x) { return $scope.task.tags.indexOf(x) < 0 })
         };
 
         $scope.$watchGroup(['task.description', 'task.title'], function(nVal, oVal) {
@@ -273,7 +274,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                             if (projId !== context.entityId || type === 'project') {
                                 $state.go('main.tasks.byentity.details', {
                                     entity: context.entityName,
-                                    entityId: context.entityId,
+                                    entityId: projId,
                                     id: task._id
                                 }, {
                                     reload: true
@@ -289,14 +290,23 @@ angular.module('mean.icu.ui.taskdetails', [])
             TasksService.update(task).then(function(result) {
                 if (context.entityName === 'project') {
                     var projId = result.project ? result.project._id : undefined;
-                    if (projId !== context.entityId || type === 'project') {
-                        $state.go('main.tasks.byentity.details', {
-                            entity: context.entityName,
-                            entityId: context.entityId,
+                    if (!projId) {
+                        $state.go('main.tasks.all.details', {
+                            entity: 'task',
                             id: task._id
                         }, {
                             reload: true
                         });
+                    } else {
+                        if (projId !== context.entityId || type === 'project') {
+                            $state.go('main.tasks.byentity.details', {
+                                entity: context.entityName,
+                                entityId: projId,
+                                id: task._id
+                            }, {
+                                reload: true
+                            });
+                        }
                     }
                 }
             });

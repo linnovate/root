@@ -125,9 +125,9 @@ angular.module('mean.icu').config([
                         }
                     },
                     tags: function(TasksService) {
-                        //tags: function (TasksService, $stateParams) {
-                        return TasksService.getTags();
-                        //return TasksService.getByProjectId($stateParams.id);
+                        return TasksService.getTags().then(function(tags) {
+                            return tags;
+                        });
                     }
                 }
             };
