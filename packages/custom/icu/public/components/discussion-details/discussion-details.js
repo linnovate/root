@@ -17,7 +17,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.people = people.data || people;
         $scope.main = context.main;
 
-        if($scope.discussion.due == null)
+        if($scope.discussion.due != null)
         {
             $scope.discussion.due = new Date($scope.discussion.due);
         }
