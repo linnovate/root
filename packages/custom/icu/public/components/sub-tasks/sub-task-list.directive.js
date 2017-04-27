@@ -128,8 +128,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                         $scope.createOrUpdate(task);
                     },
                     onClose: function() {
-                        var d = new Date();
-                        if(d > task.due){
+                        if($scope.checkDate(task)){
                             document.getElementById('ui-datepicker-div').style.display = 'block';
                             $scope.open(task);
                         }else{
@@ -142,7 +141,8 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             };
 
             $scope.checkDate = function(task) {
-                var d = new Date().getThisDay()[0];
+                var d = new Date()
+                d.setHours(0,0,0,0);
                 if (d > task.due) {
                     return true;
                 }

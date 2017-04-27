@@ -98,8 +98,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 $scope.open();
             },
             onClose: function() {
-               var d = new Date()
-                if (d > $scope.discussion.due){
+                if ($scope.checkDate()){
                     document.getElementById('ui-datepicker-div').style.display = 'block';
                     $scope.open();    
                 }else{
@@ -112,6 +111,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
         $scope.checkDate = function() {
             var d = new Date()
+            d.setHours(0,0,0,0);
             if (d > $scope.discussion.due) {
                 return true;
             }

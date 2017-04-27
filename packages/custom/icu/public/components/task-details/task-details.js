@@ -164,8 +164,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                 $scope.update($scope.task);
             },
             onClose: function() {
-                var d = new Date()
-                if (d > $scope.task.due){
+                if ($scope.checkDate()){
                     document.getElementById('ui-datepicker-div').style.display = 'block';
                     $scope.open();
                 }else{
@@ -178,6 +177,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         $scope.checkDate = function() {
             var d = new Date()
+            d.setHours(0,0,0,0);
             if (d > $scope.task.due) {
                 return true;
             }
