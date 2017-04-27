@@ -167,7 +167,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                 var d = new Date()
                 if (d > $scope.task.due){
                     document.getElementById('ui-datepicker-div').style.display = 'block';
-                    $scope.open();    
+                    $scope.open();
                 }else{
                     document.getElementById('ui-datepicker-div').style.display = 'none';
                     $scope.open();
@@ -229,7 +229,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
                 });
 
-              
+
             });
         };
 
