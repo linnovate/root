@@ -19,6 +19,7 @@ Date.prototype.getWeek = function()
 angular.module('mean.icu.ui.tasklistFilter', [])
 .filter('filterByOptions', function (TasksService) {
 	return function(tasks) {
+		if (!tasks || !(tasks instanceof Array)) return tasks;
 		var filterValue = TasksService.filterValue;
 		var out = []
 
@@ -58,7 +59,7 @@ angular.module('mean.icu.ui.tasklistFilter', [])
 			}
 			break;
 			default:
-				out=tasks;
+				out = tasks;
 		}
 		return out;
 	}
