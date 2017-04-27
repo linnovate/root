@@ -35,7 +35,10 @@
                 <div class="placeholder" ng-if="!discussion.due">{{ 'deadline' | i18next }}</div>
                 <input ng-click="open()" ui-date="dueOptions" ng-model="discussion.due" ng-class='{"oldDate":checkDate()}'>
             </div>
-            <div id="past">{{'This Deadline is in the past!' | i18next }}</div>
+            <div id="past">
+                {{'This Deadline is in the past!' | i18next }}
+                <div id="close" ng-click="closeOldDateNotification()">x</div>
+            </div>
 
             <div class="status">
                 <div tooltips tooltip-template="{{'status' | i18next}}">
@@ -86,7 +89,8 @@
                  ng-attr-autofocus="{{shouldAutofocus || undefined}}"
                  strip-br="true"
                  ng-keydown="onEnter($event)"
-                 ng-model="discussion.title">
+                 ng-model="discussion.title"
+                 ng-change="updateCurrentDiscussion()">
             </div>
 
             <div class="text"

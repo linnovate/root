@@ -94,12 +94,18 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.dueOptions = {
             onSelect: function () {
                 $scope.update($scope.discussion);
-                document.getElementById('ui-datepicker-div').style.display = 'none';
+                //document.getElementById('ui-datepicker-div').style.display = 'none';
                 $scope.open();
             },
             onClose: function() {
-                document.getElementById('ui-datepicker-div').style.display = 'none';
-                $scope.open();
+               var d = new Date()
+                if (d > $scope.discussion.due){
+                    document.getElementById('ui-datepicker-div').style.display = 'block';
+                    $scope.open();    
+                }else{
+                    document.getElementById('ui-datepicker-div').style.display = 'none';
+                    $scope.open();
+                }
             },
             dateFormat: 'd.m.yy'
         };
@@ -113,7 +119,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.open = function() {
-            console.log(')))))))))))))))))))')
             if ($scope.checkDate()) {
                 document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
                 document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
@@ -121,6 +126,10 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 document.getElementById('past').style.display = 'none';
             }
         };
+
+        $scope.closeOldDateNotification = function(){
+            document.getElementById('past').style.display = 'none';
+        }
 
         $scope.options = {
             theme: 'bootstrap',
@@ -157,6 +166,10 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.update = function (discussion) {
             DiscussionsService.update(discussion);
         };
+
+        $scope.updateCurrentDiscussion= function(){
+            DiscussionsService.currentDiscussionName = $scope.discussion.title;
+        }
 
 
         $timeout(function() {

@@ -43,7 +43,10 @@
 </td>
 <td class="due" ng-if="data.task._id" ng-init="data.initDue(data.task)">
     <input ng-click="data.open(data.task)" ui-date="data.dueOptions(data.task)" ng-model="data.task.due" placeholder="{{ 'deadline' | i18next }}" ng-class='{"oldDate":data.checkDate(data.task)}'>
-    <div id="past{{data.task._id}}" class="past">{{'This Deadline is in the past!' | i18next }}</div>
+    <div id="past{{data.task._id}}" class="past">
+        {{'This Deadline is in the past!' | i18next }}
+        <div id="close" ng-click="data.closeOldDateNotification(data.task)">x</div>    
+    </div>
 </td>
 
 <td class="arrow" ng-if="data.task._id" ng-click="data.changeState(data.task)">

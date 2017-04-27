@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function ($scope, $state, tasks, TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
+.controller('TaskListController', function ($scope, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
 	$scope.tasks = tasks.data || tasks;
 	TasksService.data = $scope.tasks;
 	$scope.loadNext = tasks.next;
@@ -52,6 +52,26 @@ angular.module('mean.icu.ui.tasklist', [])
 	$scope.isCurrentState = function(ids) {
 		return ids.indexOf($state.current.name) !== -1;
 	};
+
+	$scope.getProjName=function(){
+		
+		var entityType = $scope.currentContext.entityName;
+		if($scope.currentContext.entity.title!=undefined && $scope.currentContext.entity.title!=""){
+			return $scope.currentContext.entity.title;
+		}
+		else if ($scope.currentContext.entity.name!=undefined && $scope.currentContext.entity.name!=""){
+			return $scope.currentContext.entity.name;
+		}
+		else{
+			if(entityType=="discussion"){
+				return DiscussionsService.currentDiscussionName;
+			}
+			else{
+				return ProjectsService.currentProjectName;
+			}
+			
+		}
+	}
 
 	$scope.changeOrder = function () {
 		$scope.sorting.isReverse = !$scope.sorting.isReverse;

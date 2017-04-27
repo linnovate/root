@@ -311,6 +311,21 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         } 
     }
 
+    #close {
+        float: right !important;
+        margin: 0px;
+        display: inline-block;
+        padding: 2px 5px;
+        background: #ccc;
+    }
+
+    #close:hover {
+        float: right !important;
+        display: inline-block;
+        padding: 2px 5px;
+        color: #fff;
+    }
+
     #past {position: absolute;
         top: 361px;
         background-color: #EBE9DE;

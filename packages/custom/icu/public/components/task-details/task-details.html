@@ -38,7 +38,10 @@
             <div class="placeholder" ng-if="!task.due">{{ 'dueDate' | i18next }}</div>
             <input ng-click="open()" ui-date="dueOptions" ng-model="task.due" ng-class='{"oldDate":checkDate()}'>
         </div>
-        <div id="past">{{'This Deadline is in the past!' | i18next }}</div>
+        <div id="past">
+            {{'This Deadline is in the past!' | i18next }}
+            <div id="close" ng-click="closeOldDateNotification()">x</div>
+        </div>
 
         <div class="status" >
             <div tooltips tooltip-template="{{'status' | i18next}}">

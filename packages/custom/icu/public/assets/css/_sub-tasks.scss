@@ -21,7 +21,7 @@
        }
        .sub-task-dir {
         max-height: 247px;
-        overflow: visible;
+        overflow: auto;
     }
     .wrap-title {
         width: 100%;
@@ -331,6 +331,21 @@
 }
 .due {
     width: 18%;
+
+    #close {
+        float: right !important;
+        margin: 0px;
+        display: inline-block;
+        padding: 2px 5px;
+        background: #ccc;
+    }
+
+    #close:hover {
+        float: right !important;
+        display: inline-block;
+        padding: 2px 5px;
+        color: #fff;
+    }
     .placeholder {
         position: absolute;
         top: 50%;
@@ -406,6 +421,7 @@
 
 }
 
+.pull-left { float: left !important; }
 
 @media (max-width: 890px) { 
 .sub-tasks .user .summary-content{

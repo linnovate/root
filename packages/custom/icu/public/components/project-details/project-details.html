@@ -54,7 +54,9 @@
                  ng-attr-autofocus="{{shouldAutofocus || undefined}}"
                  strip-br="true"
                  ng-keydown="onEnter($event)"
-                 ng-model="project.title">
+                 ng-model="project.title"
+                 ng-change="updateCurrentProject()">
+
             </div>
 
             <div class="text"

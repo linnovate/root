@@ -117,6 +117,10 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         };
 
+        $scope.updateCurrentProject = function(){
+            ProjectsService.currentProjectName = $scope.project.title;
+        }
+
         $scope.delayedUpdate = _.debounce($scope.update, 500);
 
         if ($scope.project &&
