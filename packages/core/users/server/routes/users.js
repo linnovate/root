@@ -93,7 +93,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             }
             
             //###start_of_url 
-            var arr = str.split(config.host);
+            var arr = str.split(config.host + ':' + config.http.port);
             var realpath = arr[1].replace('(', '\(').replace(')', '\)');
             var arr1 = str.split("/");
             var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';

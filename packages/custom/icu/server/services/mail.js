@@ -77,7 +77,6 @@ exports.send = function(type, data) {
 
 exports.system = function(data) {
   var port = config.https && config.https.port ? config.https.port : config.http.port;
-  console.log(port + '%%%%%%%%%%%%%%%%')
   data.uriRoot = config.host + ':' + port;
   data.date = new Date();
   var recipients = config.system.recipients;
