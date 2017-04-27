@@ -16,7 +16,11 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.people = people.data || people;
         $scope.main = context.main;
-        $scope.discussion.due = new Date($scope.discussion.due);
+
+        if($scope.discussion.due == null)
+        {
+            $scope.discussion.due = new Date($scope.discussion.due);
+        }
         
         if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
             var newPeople = {
