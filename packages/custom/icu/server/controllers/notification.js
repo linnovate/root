@@ -15,6 +15,8 @@ var mongoose = require('mongoose'),
     _ = require('lodash');
 var UserCreator = mongoose.model('User');
 
+var port = config.https && config.https.port ? config.https.port : config.http.port;
+
 //Made By OHAD
 
 exports.read = function(req, res, next) {
@@ -159,7 +161,7 @@ exports.updateRoom = function(req, res, next) {
                 name: data.title,
                 user: req.user.username,
                 description: changedArray,
-                url: config.host + '/projects/all/' + data._id + '/activities'
+                url: config.host + ':' + port + '/projects/all/' + data._id + '/activities'
             }
             notifications.notify(['hi'], 'createMessage', {
                 message: bulidMassage(req.body.context),
@@ -240,9 +242,9 @@ exports.sendNotification = function(req, res, next) {
             type: 'task',
             name: data.title,
             proj: data.project.title,
-            proj_url: config.host + '/projects/all/' + data.project._id + '/activities',
+            proj_url: config.host + ':' + port + '/projects/all/' + data.project._id + '/activities',
             user: req.user.username,
-            url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities'
+            url: config.host + ':' + port + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities'
         }
         if (data.project.room) {
             notifications.notify(['hi'], 'createMessage', {
@@ -286,15 +288,15 @@ exports.sendNotification = function(req, res, next) {
             if (task.project && task.project.room) {
                 req.body.context = {
                     sub: 'sub-task',
-                    sub_url: config.host + '/tasks/subTasks/' + task._id + '/' + data._id,
+                    sub_url: config.host + ':' + port + '/tasks/subTasks/' + task._id + '/' + data._id,
                     parent: task.title,
                     action: 'added',
                     type: 'task',
                     proj: task.project.title,
-                    proj_url: config.host + '/projects/all/' + task.project._id + '/activities',
+                    proj_url: config.host + ':' + port + '/projects/all/' + task.project._id + '/activities',
                     name: data.title,
                     user: req.user.username,
-                    url: config.host + '/tasks/by-project/' + task.project._id + '/' + task._id + '/activities'
+                    url: config.host + ':' + port + '/tasks/by-project/' + task.project._id + '/' + task._id + '/activities'
                 }
                 req.body.context.room = task.project.room;
                 req.body.context.user = req.user.name;
@@ -439,10 +441,10 @@ exports.updateTaskNotification = function(req, res, next) {
             action: 'updated',
             type: 'task',
             proj: data.project.title,
-            proj_url: config.host + '/projects/all/' + data.project._id + '/activities',
+            proj_url: config.host + ':' + port + '/projects/all/' + data.project._id + '/activities',
             name: data.title,
             user: req.user.username,
-            url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities',
+            url: config.host + ':' + port + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities',
             description: changedArray
         }
         if (data.project.room) {
@@ -467,15 +469,15 @@ exports.updateTaskNotification = function(req, res, next) {
             if (task && task.project && task.project.room) {
                 req.body.context = {
                     sub: 'sub-task',
-                    sub_url: config.host + '/tasks/subTasks/' + task._id + '/' + data._id,
+                    sub_url: config.host + ':' + port + '/tasks/subTasks/' + task._id + '/' + data._id,
                     parent: task.title,
                     action: 'updated',
                     type: 'task',
                     proj: task.project.title,
-                    proj_url: config.host + '/projects/all/' + task.project._id + '/activities',
+                    proj_url: config.host + ':' + port + '/projects/all/' + task.project._id + '/activities',
                     name: data.title,
                     user: req.user.username,
-                    url: config.host + '/tasks/by-project/' + task.project._id + '/' + task._id + '/activities',
+                    url: config.host + ':' + port + '/tasks/by-project/' + task.project._id + '/' + task._id + '/activities',
                     description: changedArray
                 }
                 req.body.context.room = task.project.room;
