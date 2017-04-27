@@ -265,7 +265,6 @@ angular.module('mean.icu').config([
                     if (!service[getFn]) {
                         getFn = 'getById';
                     }
-
                     return service[getFn]($stateParams.id || $stateParams.entityId);
                 }
             ];
@@ -839,7 +838,7 @@ angular.module('mean.icu').config([
         .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
             .state('main.search.attachment.versions', getAttachmentDetailsTabState())
 
-        //Add by OHAD 17.4.16 
+        //Add by OHAD 17.4.16
         .state('main.search.update', getAttachmentDetailsState('/attachment'))
 
         .state('main.search.update.versions', getAttachmentDetailsTabState())

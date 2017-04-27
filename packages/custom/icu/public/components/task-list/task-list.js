@@ -54,7 +54,7 @@ angular.module('mean.icu.ui.tasklist', [])
 	};
 
 	$scope.getProjName=function(){
-		
+
 		var entityType = $scope.currentContext.entityName;
 		if($scope.currentContext.entity.title!=undefined && $scope.currentContext.entity.title!=""){
 			return $scope.currentContext.entity.title;
@@ -69,7 +69,7 @@ angular.module('mean.icu.ui.tasklist', [])
 			else{
 				return ProjectsService.currentProjectName;
 			}
-			
+
 		}
 	}
 
@@ -130,8 +130,8 @@ angular.module('mean.icu.ui.tasklist', [])
 	}
 	} else if (
 		$state.current.name !== 'main.tasks.byentity.activities'
-				//$state.current.name !== 'main.tasks.byentity.tasks') {
-				&& $state.current.name !== 'main.tasks.all' 
+				&& $state.current.name !== 'main.tasks.byentity.tasks'
+				&& $state.current.name !== 'main.tasks.all'
 				&& $state.current.name !== 'main.tasks.byentity.details.activities'
 				) {
 		$state.go('.activities');
