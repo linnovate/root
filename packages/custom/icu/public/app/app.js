@@ -252,7 +252,6 @@ angular.module('mean.icu').config([
 
         function getDetailsTabState(main, tab) {
             //task , activities
-
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
 
