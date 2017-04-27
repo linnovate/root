@@ -159,7 +159,7 @@ exports.schedule = function(req, res, next) {
 	      req.locals.data.body.status = 'scheduled';
 	      next();
 	    });
-    });	    
+    });
   });
 };
 
@@ -277,7 +277,7 @@ exports.getByEntity = function(req, res, next) {
     starredOnly = true;
   }
   var query = req.acl.mongoQuery('Discussion');
- 
+
   query.find(entityQuery);
 
   query.populate(options.includes);

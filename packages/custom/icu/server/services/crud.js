@@ -154,7 +154,6 @@ module.exports = function(entityName, options) {
         // throw new Error('Entity not found');
         return {};
       }
-
       return results[0];
     });
   }

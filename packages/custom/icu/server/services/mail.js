@@ -35,9 +35,12 @@ exports.send = function(type, data) {
 
   //HACK
   var recipients = data.discussion.watchers;
+
+ /**
   recipients.push(data.discussion.assign);
   recipients.push(data.discussion.creator);
   recipients.concat(data.discussion.members);
+  */
 
   data.attendees = [];
   var ids = [],
