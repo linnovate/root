@@ -16,6 +16,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.people = people.data || people;
         $scope.main = context.main;
+        $scope.discussion.due = new Date($scope.discussion.due);
         
         if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
             var newPeople = {
@@ -112,7 +113,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.checkDate = function() {
             var d = new Date()
             d.setHours(0,0,0,0);
-            if (d > $scope.discussion.due) {
+             if (d > $scope.discussion.due) {
                 return true;
             }
             return false;
