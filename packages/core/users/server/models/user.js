@@ -48,6 +48,18 @@ var UserSchema = new Schema({
     required: true,
     get: escapeProperty
   },
+  lastname: {
+    type: String,
+    unique: true,
+    required: false,
+    get: escapeProperty
+  },
+  job: {
+    type: String,
+    unique: true,
+    required: false,
+    get: escapeProperty
+  },
   email: {
     type: String,
     required: true,

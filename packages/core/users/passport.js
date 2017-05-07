@@ -71,6 +71,8 @@ module.exports = function(passport) {
 
           user = new User({
 			name 	 : profile[config.saml.strategy.claims.name],
+      lastname : profile[config.saml.strategy.claims.lastname],
+      job :      profile[config.saml.strategy.claims.job],
 			username : profile[config.saml.strategy.claims.username],
 			email 	 : profile[config.saml.strategy.claims.email] + 
 				    config.saml.strategy.claims.emailSuffix,

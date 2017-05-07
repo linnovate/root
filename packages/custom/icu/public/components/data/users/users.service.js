@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.usersservice', [])
-.service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state, $cookies, WarningsService) {
+.service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state, $cookies, $window, WarningsService) {
     var EntityPrefix = '/users';
     var me = null;
 
@@ -76,6 +76,15 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
+    function saml(){
+        if(!$cookies.get('token')) {
+            $window.open('/api/auth/saml', '_self');
+        }else{
+            localStorage.setItem('JWT', $cookies.get('token'));
+            $window.open('/tasks', '_self');
+        }
+    }
+
     function logout() {
         return $http.get('/api/logout').then(function() {
             localStorage.removeItem('JWT');
@@ -128,6 +137,7 @@ angular.module('mean.icu.data.usersservice', [])
         getByProjectId: getByProjectId,
         getByDiscussionId: getByDiscussionId,
         login: login,
+        saml: saml,
         logout: logout,
         register: register,
         update: update,

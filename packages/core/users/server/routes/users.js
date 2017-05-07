@@ -133,7 +133,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
   app.route('/api/auth/saml')
     .get(passport.authenticate('saml', {
       failureRedirect: '/login'
-    }));
+    }), users.authCallback);
 
   app.route('/metadata.xml/callback')
     .post(passport.authenticate('saml', {

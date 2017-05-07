@@ -74,6 +74,10 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
                     return $timeout(function() {
                       $state.go('login')
                     })
+                  } else if (config.activeProvider === 'saml') {
+                    return $timeout(function() {
+                      $state.go('saml')
+                    })
                   } else {
                     return $timeout(function() {
                       $state.go('auth')

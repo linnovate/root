@@ -383,6 +383,10 @@ angular.module('mean.icu').config([
                     ]
                 }
             })
+            .state('saml', {
+                url: '/login',
+                controller: 'LoginController'
+            })
             .state('register', {
                 url: '/register',
                 templateUrl: '/icu/components/register/register.html',

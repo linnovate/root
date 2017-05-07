@@ -68,6 +68,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.autofocus',
         'mean.icu.ui.ctrlenter',
         'mean.icu.ui.login',
+        'mean.icu.ui.saml',
         'mean.icu.ui.register',
         'mean.icu.ui.auth',
         'mean.icu.ui.profile',
