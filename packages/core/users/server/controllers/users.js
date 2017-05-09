@@ -3,6 +3,8 @@
 /**
  * Module dependencies.
  */
+var jsonfile = require('jsonfile');
+var file = 'data.json';
 
 var mongoose = require('mongoose'),
   User = mongoose.model('User'),
@@ -15,6 +17,27 @@ var mongoose = require('mongoose'),
   config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {},
   circles = require('circles-npm')(null, config.circles.uri, circleSettings);
+
+
+exports.authCallbackSaml = function(req, res) {
+  var ip = req.ip;
+  var payload = req.user;
+  var escaped = JSON.stringify(payload);      
+  escaped = encodeURI(escaped);
+  // We are sending the payload inside the token
+  var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
+  res.cookie('token', token);
+    jsonfile.readFile(file , function(err , obj){
+      if(obj != undefined && obj[ip]!=undefined && obj[ip]!='X'){
+        var url = obj[ip].url;
+        res.redirect(url);
+      }
+      else{
+        res.redirect('/');
+      }
+    });
+};
+
 
 /**
  * Auth callback

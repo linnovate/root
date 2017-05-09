@@ -81,7 +81,15 @@ angular.module('mean.icu.data.usersservice', [])
             $window.open('/api/auth/saml', '_self');
         }else{
             localStorage.setItem('JWT', $cookies.get('token'));
-            $window.open('/tasks', '_self');
+            $http.get('/api/index').then(
+                function(result){
+                    var url = result.data.toString();
+                    $window.open(url,"_self");
+                }
+                ,
+                function(err){
+                    window.alert("Error:"+err.status+"  "+err.statusText);
+                });
         }
     }
 

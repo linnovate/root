@@ -176,8 +176,12 @@ exports.updateRoom = function(req, res, next) {
         }
 
         if (req.locals.result.title !== req.locals.old.title) {
+            var str1 = req.locals.result.title.replace(/\s/g , '_');
+            var d = new Date(req.locals.result.created);
+            var sec = d.getSeconds().toString().length==1 ? '0'+d.getSeconds() : ''+d.getSeconds();
+            var str2 = d.getDate() + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + "_" + d.getHours() + "-" + d.getMinutes() + "-" + sec;
             notifications.notify(['hi'], 'renameRoom', {
-                name: generateRoomName(req.locals.result.title, req.locals.result._id),
+                name: generateRoomName(str1, str2),
                 roomId: req.locals.result.room,
                 message: 'message'
             }, function(error, result) {
@@ -195,9 +199,9 @@ exports.updateRoom = function(req, res, next) {
             });
         });
         for (var i in added) {
-            if (added[i].profile && added[i].profile.hiUid) {
+            if (added[i] && added[i].id) {
                 notifications.notify(['hi'], 'addMember', {
-                    member: added[i].profile.hiUid,
+                    member: added[i].id,
                     roomId: req.locals.result.room
                 }, function(error, result) {})
             }
@@ -209,9 +213,9 @@ exports.updateRoom = function(req, res, next) {
             });
         });
         for (var i in removed) {
-            if (removed[i].profile && added[i].profile.hiUid) {
+            if (removed[i] && removed[i].id) {
                 notifications.notify(['hi'], 'removeMember', {
-                    member: removed[i].profile.hiUid,
+                    member: removed[i].id,
                     roomId: req.locals.result.room
                 }, function(error, result) {
                     if (error) {
@@ -564,8 +568,8 @@ function createRoom(project, callback) {
         // Check if there is watchers
         if (project.watchers && project.watchers.length != 0) {
             project.watchers.forEach(function(item) {
-                if (item.profile && item.profile.hiUid && ArrayOfusernames.indexOf(item.profile.hiUid) < 0)
-                    ArrayOfusernames.push(item.profile.hiUid);
+                //if (item.profile && item.profile.hiUid && ArrayOfusernames.indexOf(item.profile.hiUid) < 0)
+                    ArrayOfusernames.push(item.id);
             });
         }
         notifications.notify(['hi'], 'createRoom', {

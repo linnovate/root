@@ -78,3 +78,4 @@ packages/**/public/assets/lib/
 files/
 packages/core/users/public/assets/img/avatar/*
 dump.rdb
+data.json
