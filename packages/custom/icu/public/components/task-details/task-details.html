@@ -151,7 +151,7 @@
         <div ng-show="!addSubTasks && !task.subTasks[0]._id" class="add-sub-tasks sub-tasks-title" ng-click="addSubTasks = !addSubTasks">{{ 'addSubTask' | i18next }}</div>
                         <div ng-show="showMsgSavedTpl" class="tplSaved">template saved</div>
 
-        <div class="open-template-menu dropdown dropdown-container" ng-click="isOpen = !isOpen; $event.stopPropagation();" uib-dropdown auto-close="outsideClick" is-open="isopen">
+            <div class="open-template-menu dropdown dropdown-container" ng-click="isOpen = !isOpen; $event.originalEvent.dropdown" uib-dropdown auto-close="disabled" is-open="isopen">
             <div class="dropdown-trigger" uib-dropdown-toggle>
                 <i class="fa fa-chevron-down"></i>
             </div>
