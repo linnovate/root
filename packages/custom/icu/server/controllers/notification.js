@@ -1,7 +1,7 @@
 // var Notification = require('../../../general/server/providers/notify.js').Notification;
 // var Notify = new Notification();
 var config = require('meanio').loadConfig();
-var notifications = require('root-notifications')({
+var notifications = require('../root-notifications')({ //CHANGE TO 'root-notifications' IN ORDER TO TAKE FROM node_modules
     rocketChat: config.rocketChat
 });
 var projectController = require('./project.js');
