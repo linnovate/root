@@ -254,6 +254,8 @@ exports.getByPath = function(req, res, next) {
 };
 
 exports.sign = function(req, res, next) {
+  var watchArray = req.body.watchers;
+  watchArray.push(req.body.assign);
   var entities = {
     projects: 'project',
     tasks: 'task',
@@ -264,7 +266,7 @@ exports.sign = function(req, res, next) {
     entityId: req.params.id
   }, {
     circles: req.body.circles,
-    watchers: req.body.watchers
+    watchers: watchArray
   }, {
     multi: true
   }, function(err, numAffected) {
@@ -293,6 +295,7 @@ exports.signNew = function(req, res, next) {
     }
     if (entity) {
       req.locals.data.body.watchers = entity.watchers;
+      req.locals.data.body.watchers.push(entity.assign);
       req.locals.data.body.circles = entity.circles;
     }
     next();
