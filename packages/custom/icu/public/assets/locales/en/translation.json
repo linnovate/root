@@ -182,5 +182,7 @@
     "December": "December",
 
     "loadMore":"Load more",
-    "loadLess":"Load less"
+    "loadLess":"Load less",
+    "results":"results",
+    "found":"found"
 }
