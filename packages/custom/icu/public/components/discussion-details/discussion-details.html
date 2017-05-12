@@ -69,12 +69,13 @@
                     </li>
                 </ul>
             </div>
-
+            
             <div class="actions"
                  ng-if="statusesActionsMap[discussion.status]">
-                <button ng-disabled="['cancelled', 'new'].indexOf(discussion.status) !== -1 && (
+                    <button ng-disabled="['new'].indexOf(discussion.status) !== -1 && (
                                         !discussion.due ||
-                                        !discussion.assign)"
+                                        !discussion.assign) ||
+                                        (CanceledMailSend)"
                         ng-click="statusesActionsMap[discussion.status].method(discussion)">
                     {{statusesActionsMap[discussion.status].label | i18next}}
                 </button>

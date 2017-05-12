@@ -70,5 +70,33 @@ module.exports = {
       '<h4>Additional tasks: </h4>',
       '<ol><% additionalTasks.forEach(function(task) { %><li><a href="<%= uriRoot %>/tasks/by-discussion/<%= discussion._id %>/<%= task._id %>"><%- task.title %></a></li><% }); %></ol>',
     ].join('\n\n')
+  },
+  discussionCancele: {
+    subject: 'Discussion Cancele',
+    body: [
+      '<div style="display:block;margin:0 auto;max-width:580px;padding:12px 16px;background-color:orange">',
+      '<div style="margin:0 auto;max-height:37px;max-width:122px;text-align: center;">ICU</div></div>',
+      '<h3>Canceled !</h3>',
+      '<div style="display:block;margin:0 auto;max-width:580px;padding:12px 16px;background-color:#FCFBF6">',
+      '<p>Today Date: <%= new Date().toLocaleString() %></p>',
+      '<h2><%= discussion.title %>, <%= discussion.due.toLocaleString() %></h2>',
+      '<img style="appearance: none;border: none;height: calc(30px * 2);border-radius: 30px;width: calc(30px * 2);background-color: #b8e77f;width: 45px;height: 44px;margin: 0 7.5px;"/>',
+
+      '<p>Attendees: <%= discussion.watchers.map(function(w) { return w.name; }).join(",") %></p>',
+
+      '<div style="background-color:#fff;border:1px solid #dbdbdb;border-radius:3px;display:block;margin:6px 60px;padding:10px 12px">',
+      '<% print(discussion.description) %>',
+      '</div>',
+
+      // '<h3>Task discussed: </h3>',
+      // '<% projects.forEach(function(project) { %>',
+      // '<ol>',
+      // '<li><%- project.title %>',
+      // '<ol type="a"><% project.tasks.forEach(function(task) { %><li><a href="<%= uriRoot %>/tasks/by-discussion/<%= discussion._id %>/<%= task._id %>"><%- task.title %></a></li><% }); %></ol>',
+      // '</li></ol>',
+      // '<% }); %>',
+      '<h4>Additional tasks: </h4>',
+      '<ol><% additionalTasks.forEach(function(task) { %><li><a href="<%= uriRoot %>/tasks/by-discussion/<%= discussion._id %>/<%= task._id %>"><%- task.title %></a></li><% }); %></ol>',
+    ].join('\n\n')
   }
 };

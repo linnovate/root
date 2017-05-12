@@ -16,6 +16,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.people = people.data || people;
         $scope.main = context.main;
+        $scope.CanceledMailSend = false;
 
         if($scope.discussion.due != null)
         {
@@ -61,6 +62,13 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         };
 
+        $scope.cancele = function (discussion) {
+            DiscussionsService.cancele(discussion).then(function (result) {
+                discussion.status = result.status;
+                $scope.CanceledMailSend = true;
+            });
+        };
+
         $scope.archive = function (discussion) {
             discussion.status = 'archived';
             DiscussionsService.update(discussion);
@@ -83,11 +91,16 @@ angular.module('mean.icu.ui.discussiondetails', [])
             method: $scope.archive
         };
 
+        var canceleAction = {
+            label: 'canceleDiscussion',
+            method: $scope.cancele
+        };
+
         $scope.statusesActionsMap = {
             new: scheduleAction,
             scheduled: summaryAction,
             done: archiveAction,
-            cancelled: scheduleAction
+            canceled: canceleAction
         };
 
         $scope.$watchGroup(['discussion.description', 'discussion.title'], function (nVal, oVal) {

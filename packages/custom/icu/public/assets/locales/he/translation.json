@@ -182,5 +182,6 @@
     "loadMore":"הראה עוד",
     "loadLess":"הראה פחות",
 	"results":"תוצאות",
-    "found":"נמצאו"
+    "found":"נמצאו",
+	"canceleDiscussion": "בטל דיון"
 }
