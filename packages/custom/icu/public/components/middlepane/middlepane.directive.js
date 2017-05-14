@@ -12,7 +12,7 @@ angular.module('mean.icu.ui.middlepane', [])
     };
 });
 
-function SearchController($scope, $state, $stateParams, context, TasksService, $timeout, SearchService) {
+function SearchController($scope, $state, $stateParams, context, TasksService, $timeout, SearchService, $document) {
     $scope.$on('$stateChangeSuccess', function ($event, toState) {
         if (toState.name.indexOf('main.search') !== 0) {
             if ($stateParams.query && $stateParams.query.length) {
@@ -22,6 +22,19 @@ function SearchController($scope, $state, $stateParams, context, TasksService, $
             }
         }
     });
+
+function onDocumentClick() {
+        // check for flag
+        if(angular.element('#build-in-search').css('display') == 'block')
+        {
+            angular.element('#build-in-search').css('display', 'none');
+        }
+        else{
+            angular.element('#build-in-search').css('display', 'block');
+        }
+    }
+
+    $document.on("click", onDocumentClick);
 
     $scope.clearSearch = function () {
         $scope.term = '';
@@ -33,11 +46,12 @@ function SearchController($scope, $state, $stateParams, context, TasksService, $
         if (term && term.length) {
             $state.go('main.search', {query: term});
         } else {
-            $state.go('main.tasks.all');
+            //$state.go('main.tasks.all');
         }
     };
 
     $scope.builtInSearch = function(funcName) {
+        $document.on("click", onDocumentClick);
     	TasksService[funcName]().then(function(res){
     		SearchService.builtInSearchArray = res;
     		$state.go('main.search', {query: ''}, {reload: true});

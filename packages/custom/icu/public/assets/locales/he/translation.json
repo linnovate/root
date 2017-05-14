@@ -180,5 +180,8 @@
     "December": "דצמבר",
 
     "loadMore":"הראה עוד",
-    "loadLess":"הראה פחות"
+    "loadLess":"הראה פחות",
+	"results":"תוצאות",
+    "found":"נמצאו",
+	"canceleDiscussion": "בטל דיון"
 }

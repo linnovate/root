@@ -1,9 +1,11 @@
 <div class="header">
-  <div class="logo">
-    ICU - Discussion was scheduled
+  <div class="logoCancele">
+    ICU - Discussion Cancele
   </div>
 </div>
-
+<div class="Canceled">
+  <h1>Canceled !</h1>
+</div>
 <div class="title">
   <p>Today Date: {{ date | date('F jS, Y') }}</p>
   <h2><a href="{{ uriRoot }}/tasks/by-discussion/{{ discussion._id.toString() }}"> {{ discussion.title }}</a>, {{ discussion.due | date('F jS, Y') }}</h2>
@@ -16,11 +18,17 @@
     {% autoescape false %}{{ discussion.description }}{% endautoescape %}
   </div>
 
-  <!--<h3>Agenda tasks: </h3>
+  <!--<h3>Task discussed: </h3>
   <ol>
-    {% for task in agendaTasks %}
-    <li>
-      <a href="{{ uriRoot }}/tasks/by-discussion/{{ discussion._id.toString() }}/{{ task._id.toString() }}">{{ task.title}}</a>
+    {% for project in projects %}
+    <li> {{ project.title }}
+      <ol type="a">
+        {% for task in project.tasks %}
+        <li>
+          <a href="{{ uriRoot }}/tasks/by-discussion/{{ discussion._id.toString() }}/{{ task._id.toString() }}">{{ task.title}}</a>
+        </li>
+        {% endfor %}
+      </ol>
     </li>
     {% endfor %}
   </ol>-->

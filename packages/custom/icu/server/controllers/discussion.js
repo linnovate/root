@@ -159,7 +159,7 @@ exports.schedule = function(req, res, next) {
 	      req.locals.data.body.status = 'scheduled';
 	      next();
 	    });
-    });	    
+    });
   });
 };
 
@@ -255,6 +255,98 @@ exports.summary = function(req, res, next) {
     });
 };
 
+exports.cancele = function(req, res, next) {
+  if (req.locals.error) {
+    next();
+  }
+
+  var discussion = req.locals.result;
+
+  var allowedStatuses = ['canceled'];
+  if (allowedStatuses.indexOf(discussion.status) === -1) {
+    utils.checkAndHandleError(true, 'Cannot send cancele for this status', next);
+    req.locals.error = {
+      message: 'Cannot send cancele for this status'
+    };
+    return next();
+  }
+
+  var query = req.acl.mongoQuery('Task');
+  query.find({
+    discussions: discussion._id,
+  }).populate('discussions')
+    .then(function(tasks) {
+      var projects = _.chain(tasks).pluck('project').compact().value();
+      _.each(projects, function(project) {
+        project.tasks = _.select(tasks, function(task) {
+          return task.project === project;
+        });
+      });
+
+      var additionalTasks = _.select(tasks, function(task) {
+        return !task.project;
+      });
+
+      var options = [{
+        path: 'watchers',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'assign',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'creator',
+        model: 'User',
+        select: 'name email'
+    }, {
+        path: 'members',
+        model: 'User',
+        select: 'name email'
+    }];
+
+	Discussion.populate(discussion, options, function(err, doc) {
+        if (err || !doc) return next();
+	      mailService.send('discussionCancele', {
+	        discussion: discussion,
+	        projects: projects,
+	        additionalTasks: additionalTasks
+	      }).then(function() {
+	        var taskIds = _.reduce(tasks, function(memo, task) {
+	          var containsAgenda = !_.any(task.discussions, function(d) {
+	            return d.id !== discussion.id && (d.status === 'new' || d.status === 'canceled');
+	          });
+
+	          var shouldRemoveTag = task.tags.indexOf('Agenda') !== -1 && containsAgenda;
+
+	          if (shouldRemoveTag) {
+	            memo.push(task._id);
+	          }
+
+	          return memo;
+	        }, []);
+
+	        Task.update({
+	          _id: {
+	            $in: taskIds
+	          }
+	        }, {
+	          $pull: {
+	            tags: 'Agenda'
+	          }
+	        }, {
+	          multi: true
+	        }).exec();
+
+	        req.locals.data.body = discussion;
+	        req.locals.data.body.status = 'canceled';
+	        next();
+	      });
+
+	    });
+    });
+};
+
 exports.getByEntity = function(req, res, next) {
   if (req.locals.error) {
     return next();
@@ -277,7 +369,7 @@ exports.getByEntity = function(req, res, next) {
     starredOnly = true;
   }
   var query = req.acl.mongoQuery('Discussion');
- 
+
   query.find(entityQuery);
 
   query.populate(options.includes);

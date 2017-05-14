@@ -30,14 +30,18 @@ exports.send = function(type, data) {
     return;
   }
 
-  data.uriRoot = config.host;
+  var port = config.https && config.https.port ? config.https.port : config.http.port;
+  data.uriRoot = config.host + ':' + port;
   data.date = new Date();
 
   //HACK
   var recipients = data.discussion.watchers;
+
+ /**
   recipients.push(data.discussion.assign);
   recipients.push(data.discussion.creator);
   recipients.concat(data.discussion.members);
+  */
 
   data.attendees = [];
   var ids = [],
@@ -72,7 +76,8 @@ exports.send = function(type, data) {
 };
 
 exports.system = function(data) {
-  data.uriRoot = config.host;
+  var port = config.https && config.https.port ? config.https.port : config.http.port;
+  data.uriRoot = config.host + ':' + port;
   data.date = new Date();
   var recipients = config.system.recipients;
   var r = [];

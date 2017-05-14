@@ -1,0 +1,105 @@
+{
+  "_args": [
+    [
+      "root-notifications",
+      "/home/chani/devel/root"
+    ]
+  ],
+  "_from": "root-notifications@>=1.0.2 <2.0.0",
+  "_id": "root-notifications@1.0.2",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/root-notifications",
+  "_nodeVersion": "6.0.0",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/root-notifications-1.0.2.tgz_1482310411930_0.08085328852757812"
+  },
+  "_npmUser": {
+    "name": "rivkat",
+    "email": "rivkat@linnovate.net"
+  },
+  "_npmVersion": "3.8.6",
+  "_phantomChildren": {
+    "asynckit": "0.4.0",
+    "aws4": "1.5.0",
+    "boom": "2.10.1",
+    "chalk": "1.1.3",
+    "commander": "2.9.0",
+    "cryptiles": "2.0.5",
+    "extend": "3.0.0",
+    "forever-agent": "0.6.1",
+    "hoek": "2.16.3",
+    "is-my-json-valid": "2.15.0",
+    "is-typedarray": "1.0.0",
+    "isstream": "0.1.2",
+    "json-stringify-safe": "5.0.1",
+    "jsprim": "1.3.1",
+    "mime-types": "2.1.13",
+    "pinkie-promise": "2.0.1",
+    "sntp": "1.0.9",
+    "sshpk": "1.10.1",
+    "stringstream": "0.0.5",
+    "tough-cookie": "2.3.2",
+    "tunnel-agent": "0.4.3"
+  },
+  "_requested": {
+    "name": "root-notifications",
+    "raw": "root-notifications",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/root-notifications/-/root-notifications-1.0.2.tgz",
+  "_shasum": "26ffb787d8ef430ce027e71dcad0e1ae24495ece",
+  "_shrinkwrap": null,
+  "_spec": "root-notifications",
+  "_where": "/home/chani/devel/root",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/linnovate/root-notifications/issues"
+  },
+  "dependencies": {
+    "request": "^2.78.0"
+  },
+  "description": "notification microservice for the HRM",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "26ffb787d8ef430ce027e71dcad0e1ae24495ece",
+    "tarball": "https://registry.npmjs.org/root-notifications/-/root-notifications-1.0.2.tgz"
+  },
+  "gitHead": "73731946a789695fb05c829e1202ed9438adda7b",
+  "homepage": "https://github.com/linnovate/root-notifications#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "linnovate",
+      "email": "lior@linnovate.net"
+    },
+    {
+      "name": "rivkat",
+      "email": "rivkat@linnovate.net"
+    },
+    {
+      "name": "yehuditgefen",
+      "email": "yehudit@linnovate.net"
+    }
+  ],
+  "name": "root-notifications",
+  "optionalDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linnovate/root-notifications.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.2",
+  "readme": "ERROR: No README data found!"
+}

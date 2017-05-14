@@ -17,7 +17,7 @@ module.exports = {
   },
   //hostname: 'http://192.168.245.152:3000',
 //  host: 'http://root.demo.linnovate.net:3008',
-  host: 'http://localhost:3002',
+  host: 'http://127.0.0.1',
   facebook: {
     clientID: 'DEFAULT_APP_ID',
     clientSecret: 'APP_SECRET',
@@ -118,8 +118,11 @@ module.exports = {
   // },
   rocketChat: {
     uri: 'http://hi.hrm.demo.linnovate.net',
+    username: "username",
+    password: "password",
     authToken: "vMSm0F6NCtQHf_Tx_JOuI1iESqolspJ1BRMKwEZjcz2",
-    userId: "BGsnKv7b59nP4JTzb"
+    userId: "BGsnKv7b59nP4JTzb",
+    active:false
   },
   system: {
     recipients: ['rivkat@linnovate.net','moshe@linnovate.net','lior@linnovate.net'], //recipients of system mail

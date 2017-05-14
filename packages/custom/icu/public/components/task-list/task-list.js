@@ -54,22 +54,44 @@ angular.module('mean.icu.ui.tasklist', [])
 	};
 
 	$scope.getProjName=function(){
-		
 		var entityType = $scope.currentContext.entityName;
-		if($scope.currentContext.entity.title!=undefined && $scope.currentContext.entity.title!=""){
+		if($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined&&
+		 $scope.currentContext.entity.title!=undefined && $scope.currentContext.entity.title!=""){
 			return $scope.currentContext.entity.title;
 		}
-		else if ($scope.currentContext.entity.name!=undefined && $scope.currentContext.entity.name!=""){
+		else if ($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined
+		 && $scope.currentContext.entity.name!=undefined && $scope.currentContext.entity.name!=""){
 			return $scope.currentContext.entity.name;
 		}
 		else{
-			if(entityType=="discussion"){
+			if(entityType=="discussion" && DiscussionsService.currentDiscussionName!=undefined){
 				return DiscussionsService.currentDiscussionName;
 			}
-			else{
+			else if(ProjectsService.currentProjectName!=undefined){
 				return ProjectsService.currentProjectName;
 			}
-			
+			else{
+				var tasks = $scope.tasks;
+				if(tasks.length==1){
+					$state.go('401');
+					return "you dont have permission";
+				}
+				else{
+					var task = tasks[0];
+					var result;
+					if(task.project!=undefined){
+						result = task.project.title
+					}
+					else if(task.discussions!=undefined && task.discussions.title!=undefined){
+						result=task.discussions[0].title;
+					}
+					else{
+						result = "you dont have permission";
+					}
+					return result;
+				}
+			}
+
 		}
 	}
 
@@ -130,8 +152,8 @@ angular.module('mean.icu.ui.tasklist', [])
 	}
 	} else if (
 		$state.current.name !== 'main.tasks.byentity.activities'
-				//$state.current.name !== 'main.tasks.byentity.tasks') {
-				&& $state.current.name !== 'main.tasks.all' 
+				&& $state.current.name !== 'main.tasks.byentity.tasks'
+				&& $state.current.name !== 'main.tasks.all'
 				&& $state.current.name !== 'main.tasks.byentity.details.activities'
 				) {
 		$state.go('.activities');

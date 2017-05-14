@@ -94,8 +94,9 @@ exports.upload = function(req, res, next) {
   var hasFile = false;
 
   busboy.on('file', function(fieldname, file, filename) {
+    var port = config.https && config.https.port ? config.https.port : config.http.port;
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
-    var hostFileLocation = config.host + saveTo.substring(saveTo.indexOf('/files'));
+    var hostFileLocation = config.host +':'+ port + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
 
     mkdirp(path.join(config.attachmentDir, d), function() {
@@ -253,6 +254,8 @@ exports.getByPath = function(req, res, next) {
 };
 
 exports.sign = function(req, res, next) {
+  var watchArray = req.body.watchers;
+  watchArray.push(req.body.assign);
   var entities = {
     projects: 'project',
     tasks: 'task',
@@ -263,7 +266,7 @@ exports.sign = function(req, res, next) {
     entityId: req.params.id
   }, {
     circles: req.body.circles,
-    watchers: req.body.watchers
+    watchers: watchArray
   }, {
     multi: true
   }, function(err, numAffected) {
@@ -292,6 +295,7 @@ exports.signNew = function(req, res, next) {
     }
     if (entity) {
       req.locals.data.body.watchers = entity.watchers;
+      req.locals.data.body.watchers.push(entity.assign);
       req.locals.data.body.circles = entity.circles;
     }
     next();

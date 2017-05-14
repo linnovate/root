@@ -252,7 +252,6 @@ angular.module('mean.icu').config([
 
         function getDetailsTabState(main, tab) {
             //task , activities
-
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
 
@@ -265,7 +264,6 @@ angular.module('mean.icu').config([
                     if (!service[getFn]) {
                         getFn = 'getById';
                     }
-
                     return service[getFn]($stateParams.id || $stateParams.entityId);
                 }
             ];
@@ -384,6 +382,10 @@ angular.module('mean.icu').config([
                         }
                     ]
                 }
+            })
+            .state('saml', {
+                url: '/login',
+                controller: 'LoginController'
             })
             .state('register', {
                 url: '/register',
@@ -793,7 +795,8 @@ angular.module('mean.icu').config([
                     controller: 'SearchListController'
                 },
                 'detailspane@main': {
-                    templateUrl: '/icu/components/search-list/no-results.html'
+                    templateUrl: '/icu/components/search-list/no-results.html',
+                    controller: 'SearchListController'
                 }
             },
             resolve: {
@@ -839,7 +842,7 @@ angular.module('mean.icu').config([
         .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
             .state('main.search.attachment.versions', getAttachmentDetailsTabState())
 
-        //Add by OHAD 17.4.16 
+        //Add by OHAD 17.4.16
         .state('main.search.update', getAttachmentDetailsState('/attachment'))
 
         .state('main.search.update.versions', getAttachmentDetailsTabState())

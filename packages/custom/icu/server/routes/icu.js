@@ -183,6 +183,8 @@ module.exports = function(Icu, app) {
     .post(discussion.read, discussion.schedule, discussion.update, updates.updated);
   app.route('/api/discussions/:id([0-9a-fA-F]{24})/summary')
     .post(discussion.read, discussion.summary, discussion.update, updates.updated);
+  app.route('/api/discussions/:id([0-9a-fA-F]{24})/cancele')
+    .post(discussion.read, discussion.cancele, discussion.update, updates.updated);
   app.route('/api/:entity(projects)/:id([0-9a-fA-F]{24})/discussions')
     .get(pagination.parseParams, discussion.getByProject, discussion.getByEntity, star.isStarred, pagination.formResponse); //, discussion.getByEntity);
   app.route('/api/:entity(projects)/:id([0-9a-fA-F]{24})/discussions/starred')

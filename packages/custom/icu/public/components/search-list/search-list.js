@@ -14,6 +14,7 @@ angular.module('mean.icu.ui.searchlist')
     	}
     	$scope.term = term;
     	$scope.results = finalResults;
+        $scope.length = $scope.results.length;
     	});
     });
    

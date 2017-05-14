@@ -108,6 +108,14 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
+    function cancele(discussion) {
+        console.log(ApiUri + EntityPrefix + '/' + discussion._id + '/cancele');
+        return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/cancele').then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getById: getById,
@@ -119,6 +127,7 @@ angular.module('mean.icu.data.discussionsservice', [])
         getStarred: getStarred,
         schedule: schedule,
         summary: summary,
-        data: data
+        data: data,
+        cancele: cancele
     };
 });

@@ -103,6 +103,10 @@ angular.module('mean.icu').run(function($rootScope, $location, $state) {
                 $state.go('login', null, {
                     reload: true
                 });
+            } else if (config.activeProvider === 'saml') {
+                $state.go('saml', null, {
+                    reload: true
+                });
             } else {
                 $state.go('auth', null, {
                     reload: true

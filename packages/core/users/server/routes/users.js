@@ -93,7 +93,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             }
             
             //###start_of_url 
-            var arr = str.split(config.host);
+            var arr = str.split(config.host + ':' + config.http.port);
             var realpath = arr[1].replace('(', '\(').replace(')', '\)');
             var arr1 = str.split("/");
             var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
@@ -128,17 +128,34 @@ module.exports = function(MeanUser, app, auth, database, passport) {
         
     });
     
+  app.all('/api/index',function(req,res){
+    var jsonfile = require('jsonfile');
+    var file = 'data.json';
+    var ip = req.ip;
+    jsonfile.readFile(file , function(err,obj){
+      if(obj!=undefined){
+        var url = obj[ip].url;
+        var json = obj;
+        json[ip] = 'X';
+        jsonfile.writeFile(file,json,function(err){ });
+        res.send(url);
+      }
+      else{
+        res.send("/");
+      }
+    });
+  });
 
   // Setting the SAML auth routes
   app.route('/api/auth/saml')
     .get(passport.authenticate('saml', {
       failureRedirect: '/login'
-    }));
+    }), users.authCallbackSaml);
 
   app.route('/metadata.xml/callback')
     .post(passport.authenticate('saml', {
       failureRedirect: '/login'
-    }), users.authCallback)
+    }), users.authCallbackSaml)
 
   // Setting the facebook oauth routes
   app.route('/api/auth/facebook')

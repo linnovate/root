@@ -3,7 +3,7 @@
 angular.module('mean.icu.ui.searchlist', [])
 .directive('icuSearchList', function () {
     function controller($scope, $state, SearchService) {
-        
+
         SearchService.builtInSearchArray = false;
 
         if ($scope.results.length && $state.current.name === 'main.search') {

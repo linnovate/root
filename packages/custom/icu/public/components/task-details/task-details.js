@@ -164,10 +164,9 @@ angular.module('mean.icu.ui.taskdetails', [])
                 $scope.update($scope.task);
             },
             onClose: function() {
-                var d = new Date()
-                if (d > $scope.task.due){
+                if ($scope.checkDate()){
                     document.getElementById('ui-datepicker-div').style.display = 'block';
-                    $scope.open();    
+                    $scope.open();
                 }else{
                     document.getElementById('ui-datepicker-div').style.display = 'none';
                     $scope.open();
@@ -178,6 +177,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         $scope.checkDate = function() {
             var d = new Date()
+            d.setHours(0,0,0,0);
             if (d > $scope.task.due) {
                 return true;
             }
@@ -229,7 +229,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
                 });
 
-              
+
             });
         };
 

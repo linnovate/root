@@ -1,7 +1,7 @@
 // var Notification = require('../../../general/server/providers/notify.js').Notification;
 // var Notify = new Notification();
 var config = require('meanio').loadConfig();
-var notifications = require('root-notifications')({
+var notifications = require('../root-notifications')({ //CHANGE TO 'root-notifications' IN ORDER TO TAKE FROM node_modules
     rocketChat: config.rocketChat
 });
 var projectController = require('./project.js');
@@ -14,6 +14,8 @@ var mongoose = require('mongoose'),
     Task = require('../models/task'),
     _ = require('lodash');
 var UserCreator = mongoose.model('User');
+
+var port = config.https && config.https.port ? config.https.port : config.http.port;
 
 //Made By OHAD
 
@@ -159,7 +161,7 @@ exports.updateRoom = function(req, res, next) {
                 name: data.title,
                 user: req.user.username,
                 description: changedArray,
-                url: config.host + '/projects/all/' + data._id + '/activities'
+                url: config.host + ':' + port + '/projects/all/' + data._id + '/activities'
             }
             notifications.notify(['hi'], 'createMessage', {
                 message: bulidMassage(req.body.context),
@@ -174,8 +176,12 @@ exports.updateRoom = function(req, res, next) {
         }
 
         if (req.locals.result.title !== req.locals.old.title) {
+            var str1 = req.locals.result.title.replace(/\s/g , '_');
+            var d = new Date(req.locals.result.created);
+            var sec = d.getSeconds().toString().length==1 ? '0'+d.getSeconds() : ''+d.getSeconds();
+            var str2 = d.getDate() + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + "_" + d.getHours() + "-" + d.getMinutes() + "-" + sec;
             notifications.notify(['hi'], 'renameRoom', {
-                name: generateRoomName(req.locals.result.title, req.locals.result._id),
+                name: generateRoomName(str1, str2),
                 roomId: req.locals.result.room,
                 message: 'message'
             }, function(error, result) {
@@ -193,9 +199,9 @@ exports.updateRoom = function(req, res, next) {
             });
         });
         for (var i in added) {
-            if (added[i].profile && added[i].profile.hiUid) {
+            if (added[i] && added[i].id) {
                 notifications.notify(['hi'], 'addMember', {
-                    member: added[i].profile.hiUid,
+                    member: added[i].id,
                     roomId: req.locals.result.room
                 }, function(error, result) {})
             }
@@ -207,9 +213,9 @@ exports.updateRoom = function(req, res, next) {
             });
         });
         for (var i in removed) {
-            if (removed[i].profile && added[i].profile.hiUid) {
+            if (removed[i] && removed[i].id) {
                 notifications.notify(['hi'], 'removeMember', {
-                    member: removed[i].profile.hiUid,
+                    member: removed[i].id,
                     roomId: req.locals.result.room
                 }, function(error, result) {
                     if (error) {
@@ -240,9 +246,9 @@ exports.sendNotification = function(req, res, next) {
             type: 'task',
             name: data.title,
             proj: data.project.title,
-            proj_url: config.host + '/projects/all/' + data.project._id + '/activities',
+            proj_url: config.host + ':' + port + '/projects/all/' + data.project._id + '/activities',
             user: req.user.username,
-            url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities'
+            url: config.host + ':' + port + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities'
         }
         if (data.project.room) {
             notifications.notify(['hi'], 'createMessage', {
@@ -286,15 +292,15 @@ exports.sendNotification = function(req, res, next) {
             if (task.project && task.project.room) {
                 req.body.context = {
                     sub: 'sub-task',
-                    sub_url: config.host + '/tasks/subTasks/' + task._id + '/' + data._id,
+                    sub_url: config.host + ':' + port + '/tasks/subTasks/' + task._id + '/' + data._id,
                     parent: task.title,
                     action: 'added',
                     type: 'task',
                     proj: task.project.title,
-                    proj_url: config.host + '/projects/all/' + task.project._id + '/activities',
+                    proj_url: config.host + ':' + port + '/projects/all/' + task.project._id + '/activities',
                     name: data.title,
                     user: req.user.username,
-                    url: config.host + '/tasks/by-project/' + task.project._id + '/' + task._id + '/activities'
+                    url: config.host + ':' + port + '/tasks/by-project/' + task.project._id + '/' + task._id + '/activities'
                 }
                 req.body.context.room = task.project.room;
                 req.body.context.user = req.user.name;
@@ -439,10 +445,10 @@ exports.updateTaskNotification = function(req, res, next) {
             action: 'updated',
             type: 'task',
             proj: data.project.title,
-            proj_url: config.host + '/projects/all/' + data.project._id + '/activities',
+            proj_url: config.host + ':' + port + '/projects/all/' + data.project._id + '/activities',
             name: data.title,
             user: req.user.username,
-            url: config.host + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities',
+            url: config.host + ':' + port + '/tasks/by-project/' + data.project._id + '/' + data._id + '/activities',
             description: changedArray
         }
         if (data.project.room) {
@@ -467,15 +473,15 @@ exports.updateTaskNotification = function(req, res, next) {
             if (task && task.project && task.project.room) {
                 req.body.context = {
                     sub: 'sub-task',
-                    sub_url: config.host + '/tasks/subTasks/' + task._id + '/' + data._id,
+                    sub_url: config.host + ':' + port + '/tasks/subTasks/' + task._id + '/' + data._id,
                     parent: task.title,
                     action: 'updated',
                     type: 'task',
                     proj: task.project.title,
-                    proj_url: config.host + '/projects/all/' + task.project._id + '/activities',
+                    proj_url: config.host + ':' + port + '/projects/all/' + task.project._id + '/activities',
                     name: data.title,
                     user: req.user.username,
-                    url: config.host + '/tasks/by-project/' + task.project._id + '/' + task._id + '/activities',
+                    url: config.host + ':' + port + '/tasks/by-project/' + task.project._id + '/' + task._id + '/activities',
                     description: changedArray
                 }
                 req.body.context.room = task.project.room;
@@ -562,8 +568,8 @@ function createRoom(project, callback) {
         // Check if there is watchers
         if (project.watchers && project.watchers.length != 0) {
             project.watchers.forEach(function(item) {
-                if (item.profile && item.profile.hiUid && ArrayOfusernames.indexOf(item.profile.hiUid) < 0)
-                    ArrayOfusernames.push(item.profile.hiUid);
+                //if (item.profile && item.profile.hiUid && ArrayOfusernames.indexOf(item.profile.hiUid) < 0)
+                    ArrayOfusernames.push(item.id);
             });
         }
         notifications.notify(['hi'], 'createRoom', {
