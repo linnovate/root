@@ -11,10 +11,12 @@ var MeanSocket = new Module('mean-socket');
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
-MeanSocket.register(function(app, auth, database) {
+MeanSocket.register(function(app, auth, database, http) {
+
+    var io = require('./server/config/socketio')(http);
 
     //We enable routing. By default the Package Object is passed to the routes
-    MeanSocket.routes(app, auth, database);
+    MeanSocket.routes(io);
 
     //We are adding a link to the main menu for all authenticated users
     MeanSocket.menus.add({
@@ -36,13 +38,13 @@ MeanSocket.register(function(app, auth, database) {
 
     // Another save settings example this time with no callback
     // This writes over the last settings.
-    MeanSocket.settings({
-        'funcPage': '../controllers/sockets',
-        'getMessageFunc': 'createFromSocket',
-        'getAllMessagesFunc': 'getAllForSocket',
-        'removeOldMessagesFunc': 'removeOldSocketMessages',
-        'getAllChannelsFunc': 'getListOfChannels'
-    });
+    // MeanSocket.settings({
+    //     'funcPage': '../controllers/sockets',
+    //     'getMessageFunc': 'createFromSocket',
+    //     'getAllMessagesFunc': 'getAllForSocket',
+    //     'removeOldMessagesFunc': 'removeOldSocketMessages',
+    //     'getAllChannelsFunc': 'getListOfChannels'
+    // });
 
     // // Get settings. Retrieves latest saved settigns
     // MeanSocket.settings(function(err, settings) {

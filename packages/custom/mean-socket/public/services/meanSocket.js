@@ -1,6 +1,6 @@
 'use strict';
-// var baseUrl = config.host + ':' + config.socketPort + '/' ;
-var baseUrl = 'http://localhost:3003/';
+
+var baseUrl = config.host + '/';
 angular.module('mean.mean-socket').factory('MeanSocket', function($rootScope) {
 	var socket = io.connect(baseUrl);
 	return {
@@ -14,7 +14,6 @@ angular.module('mean.mean-socket').factory('MeanSocket', function($rootScope) {
 		},
 		emit: function(eventName, data, callback) {
 			socket.emit(eventName, data, function() {
-				console.log('event:', eventName);
 				var args = arguments;
 				$rootScope.$apply(function() {
 					if (callback) {
