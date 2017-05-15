@@ -16,7 +16,7 @@
         <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
     </div> -->
     <!--<ui-select ng-model="task.assign" on-select="update(task)">-->
-    <ui-select ng-model="data.task.assign" on-select="data.updateCb(data.task, 'assign')" >
+    <ui-select append-to-body="true" ng-model="data.task.assign" on-select="data.updateCb(data.task, 'assign')" >
         <ui-select-match>
             <div icu-avatar user="$select.selected"></div>
             <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
