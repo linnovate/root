@@ -4,53 +4,87 @@
  * Defining the Package
  */
 var Module = require('meanio').Module;
-
+var config = require('meanio').loadConfig();
 var MeanSocket = new Module('mean-socket');
+
+if (config.https.port === null){
+    MeanSocket.register(function(app, auth, database, http) {
+        var io = require('./server/config/socketio')(http);        
+
+        MeanSocket.routes(io);
+
+        //We are adding a link to the main menu for all authenticated users
+        MeanSocket.menus.add({
+            title: 'Mean socket help page',
+            link: 'Mean socket help page',
+            roles: ['authenticated'],
+            menu: 'main'
+        });
+
+        return MeanSocket;
+    });
+}else{
+    MeanSocket.register(function(app, auth, database, https) {
+
+        var io = require('./server/config/socketio')(https);        
+
+        MeanSocket.routes(io);
+
+        //We are adding a link to the main menu for all authenticated users
+        MeanSocket.menus.add({
+            title: 'Mean socket help page',
+            link: 'Mean socket help page',
+            roles: ['authenticated'],
+            menu: 'main'
+        });
+
+        return MeanSocket;
+    });
+}
+
 
 /*
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
-MeanSocket.register(function(app, auth, database, http) {
+// MeanSocket.register(function(app, auth, database, http) {
 
-    var io = require('./server/config/socketio')(http);
+//     var io = require('./server/config/socketio')(http);
 
-    //We enable routing. By default the Package Object is passed to the routes
-    MeanSocket.routes(io);
+//     //We enable routing. By default the Package Object is passed to the routes
+//     MeanSocket.routes(io);
 
-    //We are adding a link to the main menu for all authenticated users
-    MeanSocket.menus.add({
-        title: 'Mean socket help page',
-        link: 'Mean socket help page',
-        roles: ['authenticated'],
-        menu: 'main'
-    });
+//     //We are adding a link to the main menu for all authenticated users
+//     MeanSocket.menus.add({
+//         title: 'Mean socket help page',
+//         link: 'Mean socket help page',
+//         roles: ['authenticated'],
+//         menu: 'main'
+//     });
 
+//     // //Uncomment to use. Requires meanio@0.3.7 or above
+//     // // Save settings with callback
+//     // // Use this for saving data from administration pages
+//     // MeanSocket.settings({
+//     //     'someSetting': 'some value'
+//     // }, function(err, settings) {
+//     //     //you now have the settings object
+//     // });
 
-    // //Uncomment to use. Requires meanio@0.3.7 or above
-    // // Save settings with callback
-    // // Use this for saving data from administration pages
-    // MeanSocket.settings({
-    //     'someSetting': 'some value'
-    // }, function(err, settings) {
-    //     //you now have the settings object
-    // });
+//     // Another save settings example this time with no callback
+//     // This writes over the last settings.
+//     // MeanSocket.settings({
+//     //     'funcPage': '../controllers/sockets',
+//     //     'getMessageFunc': 'createFromSocket',
+//     //     'getAllMessagesFunc': 'getAllForSocket',
+//     //     'removeOldMessagesFunc': 'removeOldSocketMessages',
+//     //     'getAllChannelsFunc': 'getListOfChannels'
+//     // });
 
-    // Another save settings example this time with no callback
-    // This writes over the last settings.
-    // MeanSocket.settings({
-    //     'funcPage': '../controllers/sockets',
-    //     'getMessageFunc': 'createFromSocket',
-    //     'getAllMessagesFunc': 'getAllForSocket',
-    //     'removeOldMessagesFunc': 'removeOldSocketMessages',
-    //     'getAllChannelsFunc': 'getListOfChannels'
-    // });
+//     // // Get settings. Retrieves latest saved settigns
+//     // MeanSocket.settings(function(err, settings) {
+//     //     //you now have the settings object
+//     // });
 
-    // // Get settings. Retrieves latest saved settigns
-    // MeanSocket.settings(function(err, settings) {
-    //     //you now have the settings object
-    // });
-
-
-    return MeanSocket;
-});
+//     return MeanSocket;
+// });
