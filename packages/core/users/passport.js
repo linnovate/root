@@ -54,6 +54,24 @@ module.exports = function(passport) {
     }
   ));
 
+  function updateUser(user, profile){
+    User.update({_id: user._id},
+                {$set: {
+                    lastname : profile[config.saml.strategy.claims.lastname],
+                    job :      profile[config.saml.strategy.claims.job],
+                    email    : profile[config.saml.strategy.claims.email]
+                  }
+                },
+                {upsert: true},
+                function(err){
+                  if(err){
+                    return done(err);
+                  }
+                  
+                  return done(null, user);
+                });
+  }
+
   // Use SAML strategy
   passport.use(new SamlStrategy(
       config.saml.strategy.options,
@@ -66,6 +84,14 @@ module.exports = function(passport) {
             return done(err);
           }
           if(user){
+
+            var ext = user.email.split('@');
+
+            if(!user.job || !user.lastName || ext[1] != 'services.idf'){
+
+              updateUser(user, profile);
+            }
+
             return done(null, user);
           }
 

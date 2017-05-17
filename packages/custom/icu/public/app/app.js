@@ -384,8 +384,8 @@ angular.module('mean.icu').config([
                 }
             })
             .state('saml', {
-                url: '/login',
-                controller: 'LoginController'
+                url: '/saml',
+                controller: 'LoginSamlController'
             })
             .state('register', {
                 url: '/register',
