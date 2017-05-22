@@ -60,8 +60,20 @@ angular.module('mean.icu.ui.membersfooter', [])
                 return groupsNotAssigned.concat(notAssigned);
             }
 
+            $scope.notAssigned = getNotAssigned();
+                for(var i =0 ; i<$scope.notAssigned.length;i++){
+                    if($scope.notAssigned[i] && ($scope.notAssigned[i].job == undefined || $scope.notAssigned[i].job==null)){
+                        $scope.notAssigned[i].job = $scope.notAssigned[i].name;
+                    }
+                }
+
             var update = function(entity, member, action) {
                 $scope.notAssigned = getNotAssigned();
+                for(var i =0 ; i<$scope.notAssigned.length;i++){
+                    if($scope.notAssigned[i] && ($scope.notAssigned[i].job == undefined || $scope.notAssigned[i].job==null)){
+                        $scope.notAssigned[i].job = $scope.notAssigned[i].name;
+                    }
+                }
 
                 var serviceName = serviceMap[$stateParams.id ? context.main : context.entityName];
                 var service = $injector.get(serviceName);

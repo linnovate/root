@@ -21,9 +21,9 @@
             <div icu-avatar user="$select.selected"></div>
             <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
         </ui-select-match>
-        <ui-select-choices repeat="user._id as user in data.people | filter: { name: $select.search }">
+        <ui-select-choices ng-init="str=user.job?'job':'name'" repeat="user._id as user in data.people | filter: { {{str}} : $select.search }">
             <div icu-avatar user="user"></div>
-            <span class="summary-content">{{user.name}}</span>
+            <span class="summary-content">{{user.job?user.job:user.name}}</span>
         </ui-select-choices>
     </ui-select>
 

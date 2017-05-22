@@ -30,6 +30,13 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
             $scope.people.push(_(newPeople).clone());
         }
+
+        for(var i =0 ; i<$scope.people.length;i++){
+            if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job==null)){
+                $scope.people[i].job = $scope.people[i].name;
+            }
+        }
+        
         DiscussionsService.getStarred().then(function(starred) {
             $scope.discussion.star = _(starred).any(function(s) {
                 return s._id === $scope.discussion._id;

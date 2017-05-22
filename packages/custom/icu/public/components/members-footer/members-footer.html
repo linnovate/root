@@ -14,9 +14,9 @@
             <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}">
                 {{$item}}
             </ui-select-match>
-            <ui-select-choices repeat="user in notAssigned | filter: {name: $select.search}">
+            <ui-select-choices repeat="user in notAssigned | filter: {job: $select.search}">
                 <div icu-avatar user="user" ng-mouseover="getGroupDetails(user)"></div>
-                <span ng-mouseover="getGroupDetails(user)">{{user.name}}</span>
+                <span ng-mouseover="getGroupDetails(user)">{{user.job}}</span>
                 <span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>
             </ui-select-choices>
         </ui-select>

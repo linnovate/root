@@ -21,9 +21,8 @@ exports.talkToRocketChat = function(rocketChat, options, callback) {
                 callback(error ? error : body , response ? response.statusCode : 500);
             }
             else{
-                var bodyJson = JSON.parse(body);
-                var authToken = bodyJson.data.authToken;
-                var userId = bodyJSon.data.userId;
+                var authToken = jsonBody.data.authToken;
+                var userId = jsonBody.data.userId;
                 var objReq = {
                     'uri' : rocketChat.uri + options.cmd ,
                     'method' : options.method , 

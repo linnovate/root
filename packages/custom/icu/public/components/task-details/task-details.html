@@ -23,11 +23,11 @@
                 <ui-select ng-model="task.assign" on-select="updateAndNotify(task)">
                     <ui-select-match>
                         <div icu-avatar user="$select.selected"></div>
-                        <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
+                        <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastName?$select.selected.lastName:""}}</span>
                     </ui-select-match>
-                    <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
+                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search }">
                         <div icu-avatar user="user"></div>
-                        <span class="summary-content">{{user.name}}</span>
+                        <span class="summary-content">{{user.job}}</span>
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -195,9 +195,9 @@
                         <div icu-avatar user="$select.selected"></div>
                         <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
                     </ui-select-match>
-                    <ui-select-choices repeat="user._id as user in people | filter: { name: $select.search }">
+                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search }">
                         <div icu-avatar user="user"></div>
-                        <span class="summary-content">{{user.name}}</span>
+                        <span class="summary-content">{{user.job}}</span>
                     </ui-select-choices>
                 </ui-select>
             </li>

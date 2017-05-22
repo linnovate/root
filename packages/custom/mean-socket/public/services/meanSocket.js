@@ -3,7 +3,8 @@
 var baseUrl = config.host + '/';
 
 angular.module('mean.mean-socket').factory('MeanSocket', function($rootScope) {
-	var socket = io.connect(baseUrl);
+	//var socket = io.connect(baseUrl);
+	var socket = io.connect(baseUrl, {transports:['websocket']});
 	return {
 		on: function(eventName, callback) {
 			socket.on(eventName, function() {
