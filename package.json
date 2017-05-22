@@ -50,7 +50,8 @@
     "shelljs": "0.4.0",
     "swig": "1.4.2",
     "view-helpers": "0.1.5",
-    "jsonfile": "latest"
+    "jsonfile": "latest",
+    "cookie": "latest"
   },
   "devDependencies": {
     "bower": "latest",

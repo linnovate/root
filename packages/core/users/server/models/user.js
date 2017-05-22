@@ -50,13 +50,13 @@ var UserSchema = new Schema({
   },
   lastname: {
     type: String,
-    unique: true,
+    unique: false,
     required: false,
     get: escapeProperty
   },
   job: {
     type: String,
-    unique: true,
+    unique: false,
     required: false,
     get: escapeProperty
   },
