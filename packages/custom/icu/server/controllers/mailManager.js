@@ -12,6 +12,7 @@ var mongoose = require('mongoose'),
   smtpTransport = require('nodemailer-smtp-transport'),
   EmailTemplate = require('../../../mail-templates/node_modules/email-templates').EmailTemplate,
   path = require('path');
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 function sendMail(mailOptions) {
   var options = config.mailer;
@@ -55,7 +56,6 @@ exports.sendEx = function (type, data) {
     } else {
       console.log(results.html);
     }
-
     //add discussion owner
     data.discussion.watchers.push(data.discussion.assign);
 
