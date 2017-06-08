@@ -60,9 +60,11 @@
                 <button type="button" class="attachment"
                         ngf-select
                         ngf-change="upload($files)"
-                        ngf-multiple="false"></button>
+                        ngf-multiple="true"></button>
 
-                <span class="name" title="{{attachments[0].name}}">{{attachments[0].name}}</span>
+                <span data-ng-repeat="attachment in attachments">
+                    <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
+                </span>
 
                 <button type="submit" class="save" >{{ 'add' | i18next }}</button>
             </div>

@@ -251,9 +251,16 @@ angular.module('mean.icu.ui.tabs')
                         console.log('if data', data);
                         console.log('if file', file);
 
-                        DocumentsService.saveAttachments(data, file).success(function(attachment) {
-                            result.attachments = [attachment];
-                        });
+                        result.attachments = [];
+
+                        for (var index = 0; index < file.length; index++) {
+
+                            DocumentsService.saveAttachments(data, file[index]).success(function(attachment) {
+                                console.log('[attachment]', [attachment]);
+
+                                result.attachments[result.attachments.length] = attachment;
+                            });
+                        }
                     }
                     //clearForm();
                     console.log('result', result);
