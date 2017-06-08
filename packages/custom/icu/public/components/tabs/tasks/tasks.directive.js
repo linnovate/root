@@ -44,6 +44,9 @@ angular.module('mean.icu.ui.tabs')
                     entity: $scope.entityName,
                     id: $scope.entity._id,
                     entityId: $scope.entity._id
+                },
+                {
+                    reload: true
                 });
             };
         }
