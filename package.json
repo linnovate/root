@@ -52,7 +52,9 @@
     "view-helpers": "0.1.5",
     "jsonfile": "latest",
     "cookie": "latest",
-    "icalevent": "latest"
+    "ical-toolkit": "latest",
+    "officegen": "latest",
+    "fs": "latest"
   },
   "devDependencies": {
     "bower": "latest",
