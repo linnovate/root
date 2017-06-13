@@ -300,7 +300,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     border-bottom: 3px solid $light-grey1;
     background-color: #F6F6F6;
 
-    .favorite, .due, .status, .tags, .color {
+    .favorite, .due, .status, .tags, .color, .location {
         height: $panel-height;
         float: left;
         position: relative;
@@ -355,8 +355,12 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
     }
 
-    .favorite, .user, .due {
+    .favorite, .user, .due, .location {
         border-right: 1px solid $light-grey1;
+    }
+
+    .location{
+        border-left: 1px solid $light-grey1;
     }
 
     .color {
@@ -421,7 +425,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
     }
 
-    .due, .status, .tags {
+    .due, .status, .tags, .location {
         width: calc((100% - #{$panel-height}) * 0.19);
 
         .summary-content {
@@ -436,7 +440,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
     }
 
-    .due {
+    .due,  {
         .placeholder {
             position: absolute;
             top: 50%;
@@ -453,6 +457,31 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             padding: 17px 0;
             padding-left: 25px;
             background: url(/icu/assets/img/calendar.png) no-repeat scroll;
+            cursor: pointer;
+            outline: none;
+            background-position: left center;
+        }
+    }
+
+
+    .location,  {
+        .placeholder {
+            position: absolute;
+            top: 50%;
+            transform: translateX(60%) translateY(-50%);
+            color: $light-grey-placeholder;
+            padding-left: 5px;
+        }
+
+        input {
+            appearance: none;
+            border: none;
+            float: right;
+            width: calc(100% - 10px);
+            margin-left: 11px;
+            padding: 17px 0;
+            padding-left: 25px;
+            background: url(/icu/assets/img/house.png) no-repeat scroll;
             cursor: pointer;
             outline: none;
             background-position: left center;

@@ -74,7 +74,7 @@ return new Promise(function (fulfill, reject){
 
 function addTasks(docx,tasks,discussionId,tasksNum){
   return new Promise(function (fulfill, reject){
-    if(!tasks || tasks.length==0){
+    if(!tasks || tasks==null || tasks.length==0){
       var assigns = [];
       addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum).then(
         function(result){
@@ -133,7 +133,14 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
     var prefix = URL+"/tasks/by-discussion/"+discussionId+"/";
     pObj.addText (':משימות מהדיון' , {bold:true,underline:true});
     if(tasks==null || tasks==undefined || tasks.length==0){
-      reject('error');
+      writeDocxToFile(docx,discussionId).then(function(result){
+      if(result=='success'){
+        fulfill('success');
+      }
+      else{
+        reject('error');
+      }
+      });
       return;
     }
     for(var i = 0 ; i < tasksNum ; i++){
@@ -290,13 +297,13 @@ function createPDF(discussion , tasks){
 
   //location
     var pObj = docx.createP ({ align: 'right' });
-    var flag = (discussion.assign.name.charAt(0)>'א' && discussion.assign.name.charAt(0)<'ת');
+    var flag = (discussion.location.charAt(0)>'א' && discussion.location.charAt(0)<'ת');
     if(flag){
       pObj.addText ("מיקום:" , {bold:true,underline:true});
-      pObj.addText(discussion.assign.name);
+      pObj.addText(discussion.location);
     }
     if(!flag){
-      pObj.addText(discussion.assign.name);
+      pObj.addText(discussion.location);
       pObj.addText (":מיקום" , {bold:true,underline:true});
     }
 
@@ -424,7 +431,7 @@ exports.send = function(type, data) {
      }
      if(status == "scheduled"){
         mailOptions['attachments'] =  [{
-          filename: data.discussion._idf+'.pdf',
+          filename: data.discussion._id+'.pdf',
             path: p,
             contentType: 'application/pdf'
           }];
@@ -455,7 +462,7 @@ exports.send = function(type, data) {
           content: buffer}];
 
         mailOptions['attachments'] =  [{
-          filename: data.discussion._idf+'.pdf',
+          filename: data.discussion._id+'.pdf',
             path: rootPath+ '/files/notes/'+data.discussion._id+".pdf",
             contentType: 'application/pdf'
           }];

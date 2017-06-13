@@ -33,11 +33,17 @@
 
             <div class="due">
                 <div class="placeholder" ng-if="!discussion.due">{{ 'deadline' | i18next }}</div>
-                <input ng-click="open()" ui-date="dueOptions" ng-model="discussion.due" ng-class='{"oldDate":checkDate()}'>
+               <input ng-click="open()" ui-date="dueOptions" ng-model="discussion.due" ng-class='{"oldDate":checkDate()}'>
             </div>
+
             <div id="past">
                 {{'This Deadline is in the past!' | i18next }}
                 <div id="close" ng-click="closeOldDateNotification()">x</div>
+            </div>
+
+            <div class="location">
+                <div class="placeholder" ng-if="!discussion.location">{{ 'location' | i18next }}</div>
+               <input type="text"  ng-model="discussion.location" ng-change="update(discussion)">
             </div>
 
             <div class="status">
@@ -54,6 +60,8 @@
                     </ui-select>
                 </div>
             </div>
+
+
 
             <div class="dropdown dropdown-container" uib-dropdown>
                 <div class="dropdown-trigger" uib-dropdown-toggle>

@@ -27,7 +27,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
             var newPeople = {
                 name: 'no select'
             };
-
             $scope.people.push(_(newPeople).clone());
         }
 
