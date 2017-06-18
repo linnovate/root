@@ -1,6 +1,6 @@
 <div class="discussion-details">
     <div class="permission" ng-if="discussion && !discussion._id">
-       <div class="perIcon">
+    <div class="perIcon">
     </div>
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
@@ -31,14 +31,38 @@
                 </div>
             </div>
 
-            <div class="due">
-                <div class="placeholder" ng-if="!discussion.due">{{ 'deadline' | i18next }}</div>
-               <input ng-click="open()" ui-date="dueOptions" ng-model="discussion.due" ng-class='{"oldDate":checkDate()}'>
+            <!--<div uib-timepicker ng-model="mytime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div> -->
+
+            
+            <div ng-click="dueClicked()" class="due">
+                <div class="placeholder" ng-if="!discussion.due">{{'deadline' | i18next}}</div>
+               <input> 
             </div>
+
+
+            <div id="dueDiv" style="display:none" class="dueDiv">
+                <div class="dateTitle" id="startDateTitle">{{'startDate' | i18next}}</div>
+                <input id="startDate" ng-click="open()" ui-date="dueOptions" ng-model="discussion.startDate" ng-class='{"oldDate":!checkDate()}'> 
+                <div ng-hide="discussion.allDay" class="dateTitle" id="startTimeTitle">{{'startTime' | i18next}}</div>
+                <div ng-hide="discussion.allDay" id="startTime" uib-timepicker="timeOptions" ng-model="discussion.startTime" show-meridian="false" ng-change="update(discussion)"></div>
+
+                <div ng-hide="discussion.allDay" class="dateTitle" id="endDateTitle">{{'endDate' | i18next}}</div>
+                <input ng-hide="discussion.allDay" id="endDate" ng-click="open()" ui-date="dueOptions" ng-model="discussion.endDate" ng-class='{"oldDate":!checkDate()}'>
+                <div ng-hide="discussion.allDay" class="dateTitle" id="endTimeTitle">{{'endTime' | i18next}}</div> 
+                <div ng-hide="discussion.allDay" id="endTime" ng-model="discussion.endTime" uib-timepicker="timeOptions" ng-model="discussion.endTime" show-meridian="false" ng-change="update(discussion)"></div>
+                <div id="allDayTitle">{{'allDay' | i18next}}</div>
+                <input id="allDay" type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="discussion.allDay" ng-change="checkboxClick(discussion)">
+
+            </div>
+        
 
             <div id="past">
                 {{'This Deadline is in the past!' | i18next }}
                 <div id="close" ng-click="closeOldDateNotification()">x</div>
+            </div>
+            <div id="before">
+                {{'Ending date is earlier than starting date' | i18next }}
+                <div id="close" ng-click="closeBeforeNotification()">x</div>
             </div>
 
             <div class="location">
@@ -80,10 +104,7 @@
             
             <div class="actions"
                  ng-if="statusesActionsMap[discussion.status]">
-                    <button ng-disabled="['new'].indexOf(discussion.status) !== -1 && (
-                                        !discussion.due ||
-                                        !discussion.assign) ||
-                                        (CanceledMailSend)"
+                    <button ng-disabled="disableButton()"
                         ng-click="statusesActionsMap[discussion.status].method(discussion)">
                     {{statusesActionsMap[discussion.status].label | i18next}}
                 </button>

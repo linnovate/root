@@ -27,8 +27,20 @@ var DiscussionSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
-  due: {
+  startDate: {
     type: Date
+  },
+  endDate: {
+    type: Date
+  },
+  startTime: {
+    type: Date
+  },
+  endTime: {
+    type: Date
+  },
+  allDay: {
+    type:Boolean
   },
   active: {
     type: Boolean

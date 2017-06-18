@@ -183,5 +183,15 @@
     "loadLess":"הראה פחות",
 	"results":"תוצאות",
     "found":"נמצאו",
-	"canceleDiscussion": "בטל דיון"
+	"canceleDiscussion": "בטל דיון",
+
+	"location":"מיקום",
+	"startDate":"מועד התחלה:",
+	"startTime":"בשעה:",
+	"endDate":"מועד סיום:",
+	"endTime": "בשעה:",
+	"allDay": "כל היום",
+	"Ending date is earlier than starting date":"מועד הסיום הוא לפני מועד ההתחלה"
+
+
 }

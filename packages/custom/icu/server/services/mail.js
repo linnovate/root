@@ -36,6 +36,7 @@ function render(type, data) {
 
 
 function writeDocxToFile(docx,discussionId){
+  console.log("\n\n\n\n\n=====writeDocxToFile======");
 return new Promise(function (fulfill, reject){
   var path = 'files/notes/'+discussionId+".docx";
   var out = fs.createWriteStream (path);
@@ -53,6 +54,7 @@ return new Promise(function (fulfill, reject){
             return;
           }
           else{
+            console.log("not error in lowriter");
             exec('mv ' + discussionId + '.pdf' + ' ' + 'files/notes/'+discussionId + '.pdf' , function (err, stout, sterr){
             if (err) {
               reject("error");
@@ -281,8 +283,8 @@ function createPDF(discussion , tasks){
       }
     }
 
-    //time
-    var date = new Date(discussion.due);
+    //starting time
+    var date = new Date(discussion.startTime);
     var hours = date.getHours().toString();
     var minutes = date.getMinutes().toString();
     hours = hours.length==1?"0"+hours:hours;
@@ -291,9 +293,25 @@ function createPDF(discussion , tasks){
     var timeString = hours+":"+minutes;
     var pObj = docx.createP ({ align: 'right' });
     pObj.addText(timeString);
-    pObj.addText ("מועד הדיון: " , {bold:true,underline:true});
+    pObj.addText ("זמן התחלה: " , {bold:true,underline:true});
     pObj.addText(dateString);
     pObj.addText (" בשעה ");
+
+    //ending time
+    var date = new Date(discussion.endTime);
+    var hours = date.getHours().toString();
+    var minutes = date.getMinutes().toString();
+    hours = hours.length==1?"0"+hours:hours;
+    minutes = minutes.length==1?"0"+minutes:minutes;
+    var dateString = date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
+    var timeString = hours+":"+minutes;
+    var pObj = docx.createP ({ align: 'right' });
+    pObj.addText(timeString);
+    pObj.addText ("זמן סיום: " , {bold:true,underline:true});
+    pObj.addText(dateString);
+    pObj.addText (" בשעה ");
+
+
 
   //location
     var pObj = docx.createP ({ align: 'right' });
@@ -371,6 +389,27 @@ exports.send = function(type, data) {
 
   var path = "files/notes/"+data.discussion._id+".pdf";
 
+  var allDay;
+  if(!data.discussion.allDay || data.discussion.allDay==false){
+    allDay = false;
+  }
+  else{
+    allDay=true;
+  }
+
+  var startTime = new Date(data.discussion.startDate);
+  startTime.setHours(data.discussion.startTime.getHours());
+  startTime.setMinutes(data.discussion.startTime.getMinutes());
+
+   var endTime = new Date(data.discussion.endDate);
+  endTime.setHours(data.discussion.endTime.getHours());
+  endTime.setMinutes(data.discussion.endTime.getMinutes());
+
+  data.discussion.startTime = startTime;
+  data.discussion.endTime = endTime;
+
+  
+
   var builder = icalToolkit.createIcsFileBuilder();
   builder.spaces = true;
   builder.NEWLINE_CHAR = '\r\n';
@@ -381,8 +420,8 @@ exports.send = function(type, data) {
   builder.tzid = 'asia/istanbul';
   builder.method = calMethod;
   builder.events.push({
-    start : data.discussion.due,
-    end : data.discussion.due,
+    start : startTime ,
+    end : endTime,
     transp : 'OPAQUE',
     summary : "ICU Event",
     additionalTags : {
@@ -390,10 +429,10 @@ exports.send = function(type, data) {
     },
     uid : null,
     sequence : null,
-    allDay : true,
+    allDay : allDay,
     stamp : new Date(),
     floating : false,
-    location : data.discussion.creator.name,
+    location : data.discussion.location,
     description : "ICU EVENT",
     organizer : {
       name : "ICU",
@@ -431,7 +470,7 @@ exports.send = function(type, data) {
      }
      if(status == "scheduled"){
         mailOptions['attachments'] =  [{
-          filename: data.discussion._id+'.pdf',
+          filename: data.discussion.title+'.pdf',
             path: p,
             contentType: 'application/pdf'
           }];

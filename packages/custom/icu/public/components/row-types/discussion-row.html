@@ -11,7 +11,7 @@
     ng-blur="data.hideAutoCompleteCb(data.discussion)">
 </td>
 <td class="status col-sm-2" ng-class="data.discussion.status">{{data.discussion.status | i18next}}</td>
-<td class="due">{{data.discussion.due | date: 'dd.MM.yyyy'}}</td>
+<td class="due">{{data.discussion.startDate | date: 'dd.MM.yyyy'}}</td>
 <td class="arrow">
     <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

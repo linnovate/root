@@ -100,9 +100,10 @@ exports.schedule = function(req, res, next) {
 
   var discussion = req.locals.result;
 
-  if (!discussion.due) {
+  if (!((discussion.startDate&&discussion.allDay)||(discussion.startDate && discussion.endDate
+    && discussion.startTime && discussion.endTime))) {
     req.locals.error = {
-      message: 'Due field cannot be empty'
+      message: 'problem with dates'
     };
     return next();
   }
@@ -110,6 +111,13 @@ exports.schedule = function(req, res, next) {
   if (!discussion.assign) {
     req.locals.error = {
       message: 'Assignee cannot be empty'
+    };
+    return next();
+  }
+
+  if (!discussion.location) {
+    req.locals.error = {
+      message: 'location cannot be empty'
     };
     return next();
   }
