@@ -34,10 +34,20 @@ function render(type, data) {
   return template.render(data);
 }
 
+function checkPath(dir,subDir){
+  if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir);
+  }
+  if(!fs.existsSync(dir+"/"+subDir)){
+      fs.mkdirSync(dir+"/"+subDir)
+  }
+}
+
 
 function writeDocxToFile(docx,discussionId){
   console.log("\n\n\n\n\n=====writeDocxToFile======");
 return new Promise(function (fulfill, reject){
+  checkPath('files','notes');
   var path = 'files/notes/'+discussionId+".docx";
   var out = fs.createWriteStream (path);
     out.on ('error', function (err) {
@@ -292,11 +302,22 @@ function createPDF(discussion , tasks){
     var dateString = date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
     var timeString = hours+":"+minutes;
     var pObj = docx.createP ({ align: 'right' });
-    pObj.addText(timeString);
-    pObj.addText ("זמן התחלה: " , {bold:true,underline:true});
-    pObj.addText(dateString);
-    pObj.addText (" בשעה ");
 
+
+    if (!discussion.allDay && discussion.hasStartTime){
+      pObj.addText(timeString);
+    }
+    pObj.addText ("מועד התחלה: " , {bold:true,underline:true});
+    pObj.addText(dateString);
+
+    if(!discussion.allDay && discussion.hasStartTime){
+    pObj.addText (" בשעה ");
+  }
+   if(discussion.allDay){
+      pObj.addText(' כל היום');
+    }
+
+    if(!discussion.allDay){
     //ending time
     var date = new Date(discussion.endTime);
     var hours = date.getHours().toString();
@@ -306,12 +327,15 @@ function createPDF(discussion , tasks){
     var dateString = date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
     var timeString = hours+":"+minutes;
     var pObj = docx.createP ({ align: 'right' });
-    pObj.addText(timeString);
-    pObj.addText ("זמן סיום: " , {bold:true,underline:true});
+    if(discussion.hasEndTime){
+      pObj.addText(timeString);
+    }
+    pObj.addText ("מועד סיום: " , {bold:true,underline:true});
     pObj.addText(dateString);
-    pObj.addText (" בשעה ");
-
-
+    if(discussion.hasEndTime){
+      pObj.addText (" בשעה ");
+  }
+  }
 
   //location
     var pObj = docx.createP ({ align: 'right' });
@@ -390,7 +414,7 @@ exports.send = function(type, data) {
   var path = "files/notes/"+data.discussion._id+".pdf";
 
   var allDay;
-  if(!data.discussion.allDay || data.discussion.allDay==false){
+  if(!data.discussion.allDay){
     allDay = false;
   }
   else{
@@ -398,15 +422,31 @@ exports.send = function(type, data) {
   }
 
   var startTime = new Date(data.discussion.startDate);
+  if(data.discussion.startTime){
   startTime.setHours(data.discussion.startTime.getHours());
   startTime.setMinutes(data.discussion.startTime.getMinutes());
+  data.discussion.hasStartTime = true;
+  data.discussion.startTime = startTime;
+}
+else{
+  data.discussion.hasStartTime = false;
+}
 
    var endTime = new Date(data.discussion.endDate);
+  if(data.discussion.endTime){
   endTime.setHours(data.discussion.endTime.getHours());
   endTime.setMinutes(data.discussion.endTime.getMinutes());
-
-  data.discussion.startTime = startTime;
+  data.discussion.hasEndTime = true;
   data.discussion.endTime = endTime;
+}
+else{
+  endTime = startTime;
+  data.discussion.hasEndTime = false;
+  data.discussion.endTime = startTime;
+}
+  
+  
+
 
   
 

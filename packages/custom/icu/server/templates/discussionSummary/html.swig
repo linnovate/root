@@ -6,7 +6,7 @@
 
 <div class="title">
   <p>Today Date: {{ date | date('F jS, Y') }}</p>
-  <h2><a href="{{ uriRoot }}/tasks/by-discussion/{{ discussion._id.toString() }}"> {{ discussion.title }}</a>, {{ discussion.due | date('F jS, Y') }}</h2>
+  <h2><a href="{{ uriRoot }}/tasks/by-discussion/{{ discussion._id.toString() }}"> {{ discussion.title }}</a>, {{ discussion.startDate | date('F jS, Y') }}</h2>
   <img class="image"/>
 
   <p>Owner: {{ discussion.assign.name }}</p>
