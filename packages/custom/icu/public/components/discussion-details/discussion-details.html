@@ -35,7 +35,13 @@
 
             
             <div ng-click="dueClicked()" class="due">
-                <div class="placeholder" ng-if="!discussion.due">{{'deadline' | i18next}}</div>
+                <div class="placeholder">
+                    <div id="firstStr">{{firstStr | i18next}}</div>
+                    <div id="secondStr">{{secondStr | i18next}}</div>
+
+
+                </div>
+               <!-- <div id="dueInfo" class="placeholder" ng-if="!discussion.due">{{'deadline' | i18next}}</div> -->
                <input> 
             </div>
 

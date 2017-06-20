@@ -33,6 +33,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         }       
 
         $(document).ready(function() {
+             $scope.updateDatesString();
             $('uib-timepicker').datepicker();
                     if($scope.discussion.allDay){
                 document.getElementById('dueDiv').style.height = '96px';
@@ -155,6 +156,58 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 $scope.delayedUpdate($scope.discussion);
             }
         });
+        /**
+  #firstStr{
+        margin-left:-20px;
+    }
+    #secondStr{
+        margin-left:-20px;
+    }
+    */
+        $scope.updateDatesString = function(){
+            $scope.firstStr = 'deadline';
+            $scope.secondStr = '';
+            if($scope.discussion.startDate){
+                var startStr = $scope.discussion.startDate.getDate()+"/"+($scope.discussion.startDate.getMonth()+1)+"/"+$scope.discussion.startDate.getFullYear();
+                $scope.firstStr = startStr;
+            }
+            if($scope.discussion.allDay){
+                $scope.secondStr = "All day long";
+            }
+            else{
+                if($scope.discussion.startTime){
+                    var ho = $scope.discussion.startTime.getHours().toString().length==1? "0"+$scope.discussion.startTime.getHours().toString():
+                        $scope.discussion.startTime.getHours().toString();
+                    var min = $scope.discussion.startTime.getMinutes().toString().length==1? "0"+$scope.discussion.startTime.getMinutes().toString():
+                        $scope.discussion.startTime.getMinutes().toString();
+                    startStr = ho+":"+min;
+                    $scope.firstStr = $scope.discussion.startDate ? $scope.firstStr + " "+startStr : '';
+                    if($scope.discussion.startDate){
+                        $("#firstStr").css("margin-left","-20px");
+                    }
+                }
+                if($scope.discussion.endDate){
+                    if($scope.firstStr!='deadline'){
+                        $scope.firstStr = $scope.firstStr+" - ";
+                    }
+                    else{
+                        $scope.firstStr = "";
+                    }
+                    var endStr = $scope.discussion.endDate.getDate()+"/"+($scope.discussion.endDate.getMonth()+1)+"/"+$scope.discussion.endDate.getFullYear();
+                    $scope.secondStr = endStr;
+                    if($scope.discussion.endTime){
+                        var ho = $scope.discussion.endTime.getHours().toString().length==1? "0"+$scope.discussion.endTime.getHours().toString():
+                        $scope.discussion.endTime.getHours().toString();
+                        var min = $scope.discussion.endTime.getMinutes().toString().length==1? "0"+$scope.discussion.endTime.getMinutes().toString():
+                        $scope.discussion.endTime.getMinutes().toString();
+                        endStr = ho+":"+min;
+                        $scope.secondStr = $scope.secondStr +" "+endStr;
+                        $("#secondStr").css("margin-left","-20px");
+                    }
+            }
+        }
+        };
+       
 
         $scope.dueOptions = {
             onSelect: function () {
@@ -288,6 +341,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.update = function (discussion) {
+            $scope.updateDatesString();
             console.log("dates:")
             console.log($scope.discussion.startDate);
             console.log($scope.discussion.endDate);
