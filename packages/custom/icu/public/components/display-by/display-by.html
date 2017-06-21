@@ -9,6 +9,19 @@
        ui-sref="main.{{context.main}}.all" ui-sref-active="active"
        data-ng-class="{ 'selected': context.entityName === 'all' }">
         {{ 'all' | i18next }}
+        <div class="list {{context.main}}">
+        <ul>
+            <li data-ng-repeat="item in allItems[context.main] | limitTo:displayLimit[context.main]"
+                data-ng-class="{'selected': context.entityName === CurrentItem[context.main] && item._id === context.entityId }"
+                data-ng-click="switchToAll(CurrentItem[context.main], item._id)">
+                <a href class="Names-In-List-On-Side">
+                    {{item.title || item.name}}
+                </a>
+            </li>
+            <li ng-if="allItems[context.main].length > displayLimit[context.main]" ng-click="showMore(allItems[context.main].length, context.main)" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="allItems[context.main].length == displayLimit[context.main] && displayLimit[context.main] > 3" ng-click="collapse(context.main)" class="more">{{ 'less' | i18next }}</li>
+        </ul>
+    </div>
     </p>
 
     <p class="intro">{{'display'+context.main+'By' | i18next}}:</p>
