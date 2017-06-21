@@ -52,6 +52,11 @@
                 .name-column {
                     width: 200px;
                 }
+                td {
+                    &.name {
+                        padding-left: 7px;
+                    }
+                }
             }
         }
     }
