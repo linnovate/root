@@ -14,6 +14,16 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
 
         _($scope.discussions).each(function(d) {
             d.__state = creatingStatuses.Created;
+
+            if (d.title.length > 20)
+            {
+                d.PartTitle = d.title.substring(0,20) + "...";
+            }
+            else
+            {
+                d.PartTitle = d.title;
+            }
+            d.IsTitle = false;
         });
 
         var newDiscussion = {
@@ -60,6 +70,14 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
                     return discussion;
                 });
             } else if (discussion.__state === creatingStatuses.Created) {
+                
+                if (!discussion.IsTitle)
+                {
+                    discussion.PartTitle = discussion.PartTitle.split("...")[0] + discussion.title.substring(discussion.PartTitle.split("...")[0].length,discussion.title.length);
+                    discussion.IsTitle = !discussion.IsTitle;
+                }
+                discussion.title = discussion.PartTitle;
+
                 return DiscussionsService.update(discussion);
             }
         };
@@ -122,6 +140,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             }
 
             var nameFocused = angular.element($event.target).hasClass('name');
+            discussion.PartTitle = discussion.title;
 
             if (discussion.__state === creatingStatuses.NotCreated) {
                 $scope.createOrUpdate(discussion).then(function() {
@@ -192,6 +211,13 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
 
 
         $scope.hideAutoComplete = function(task) {
+
+            if (task.title.length > 20)
+            {
+                task.PartTitle = task.title.substring(0,20) + "...";
+            }
+
+
             task.__autocomplete = false;
             $scope.searchResults.length = 0;
             $scope.selectedSuggestion = 0;

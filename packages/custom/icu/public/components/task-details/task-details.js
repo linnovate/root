@@ -293,6 +293,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                 task.discussion = context.entityId;
             }
             TasksService.update(task).then(function(result) {
+                task.PartTitle = task.title;
                 if (context.entityName === 'project') {
                     var projId = result.project ? result.project._id : undefined;
                     if (!projId) {
