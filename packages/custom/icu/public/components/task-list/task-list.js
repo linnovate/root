@@ -56,11 +56,11 @@ angular.module('mean.icu.ui.tasklist', [])
 	$scope.getProjName=function(){
 		var entityType = $scope.currentContext.entityName;
 		if($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined&&
-		 $scope.currentContext.entity.title!=undefined && $scope.currentContext.entity.title!=""){
+		 $scope.currentContext.entity.title!=undefined){
 			return $scope.currentContext.entity.title;
 		}
 		else if ($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined
-		 && $scope.currentContext.entity.name!=undefined && $scope.currentContext.entity.name!=""){
+		 && $scope.currentContext.entity.name!=undefined){
 			return $scope.currentContext.entity.name;
 		}
 		else{
