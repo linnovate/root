@@ -127,5 +127,8 @@ module.exports = {
   system: {
     recipients: ['rivkat@linnovate.net','moshe@linnovate.net','lior@linnovate.net'], //recipients of system mail
     seconds: 10 * 60 //ignore mails for 10 minutes
-  }
+  },
+  specialUrl:'' //fill with special url
+
+
 };

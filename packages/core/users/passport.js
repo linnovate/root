@@ -87,7 +87,7 @@ module.exports = function(passport) {
 
             var ext = user.email.split('@');
 
-            if(!user.job || !user.lastName || ext[1] != 'services.idf'){
+            if(!user.job || !user.lastName || ext[1] != config.specialUrl){
 
               updateUser(user, profile);
             }
