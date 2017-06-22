@@ -6,9 +6,9 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             elem.bind('click', function() {
 
                 if($state.current.name.indexOf('main.tasks.byentity') != -1)
-                    scope.isTasks --;
+                    scope.showModal --;
 
-                if(scope.isTasks) {
+                if(scope.showModal) {
                     buildModal();
                 } else {
                   scope.deleteFn();
@@ -39,7 +39,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
         return {
             restrict: 'A',
             scope: {
-                isTasks: '=',
+                showModal: '=',
                 deleteFn: '&',
                 entityName: '@'
             },

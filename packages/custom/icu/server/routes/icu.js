@@ -158,7 +158,11 @@ module.exports = function(Icu, app) {
     .get(attachments.all);
   app.route('/api/attachments/:id([0-9a-fA-F]{24})')
     .get(attachments.read)
-    .post(attachments.read, attachments.upload, attachments.update);
+    .post(attachments.read, attachments.upload, attachments.update)
+    //.delete(function(req, res){
+    //  console.log("test");
+    //});
+    .delete(attachments.deleteFile)
   app.route('/api/history/attachments/:id([0-9a-fA-F]{24})')
     .get(attachments.readHistory);
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/attachments')

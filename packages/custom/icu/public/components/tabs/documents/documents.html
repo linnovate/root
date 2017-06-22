@@ -1,9 +1,9 @@
 <div class="documents">
-<div class="document" ng-show="!documents.length" >
-{{ 'noDocuments' | i18next }}
-</div>
+    <div class="document" ng-show="!documents.length">
+        {{ 'noDocuments' | i18next }}
+    </div>
     <div ng-show="documents.length" id="DocumentLine" class="document" ng-repeat-start="document in documents">
-            <a href="{{document.path}}" target="window">
+        <a href="{{document.path}}" target="window">
             <div class="icon {{document.attachmentType}}"></div>
         </a>
 
@@ -19,7 +19,7 @@
                 </button>-->
                 <button id="{{document.path}}" ng-click="view(document)" class="DocumentIconsLine-Document-icon-view">
                     <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png" tooltips tooltip-side="left" tooltip-template="{{'view' | i18next}}">
-                </button>             
+                </button>
                 <button class="DocumentIconsLine" id="Document-icon-edit">
                     <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-edit.png" src="/icu/assets/img/icon-edit.png" tooltips tooltip-side="left" tooltip-template="{{'edit' | i18next}}">
                 </button>
@@ -28,12 +28,17 @@
                         <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-download.png" src="/icu/assets/img/icon-download.png">
                     </a>
                 </button>
+                <button class="DocumentIconsLine" id="Document-icon-remove">
+                     <a href="#" tooltips tooltip-side="left" tooltip-template="{{'Delete' | i18next}}" icu-open-modal entity-name="Document" show-modal=true delete-fn="remove(document, $index)">
+                            <i class="fa fa-lg fa-trash"></i>
+                    </a>
+                </button>
+
             </div>
         </div>
         <div class="more" ng-click="trigger(document)" ng-if="document.versions.length">
             Versions
-            <i class="fa"
-               ng-class="{'fa-chevron-right': !isOpen[document._id], 'fa-chevron-down': isOpen[document._id]}"></i>
+            <i class="fa" ng-class="{'fa-chevron-right': !isOpen[document._id], 'fa-chevron-down': isOpen[document._id]}"></i>
         </div>
     </div>
     <div class="document-shifted" ng-repeat-end ng-repeat="version in document.versions" ng-if="isOpen[document._id]">
