@@ -45,7 +45,6 @@ function checkPath(dir,subDir){
 
 
 function writeDocxToFile(docx,discussionId){
-  console.log("\n\n\n\n\n=====writeDocxToFile======");
 return new Promise(function (fulfill, reject){
   checkPath('files','notes');
   var path = 'files/notes/'+discussionId+".docx";
@@ -113,6 +112,9 @@ function addTasks(docx,tasks,discussionId,tasksNum){
         }
         else{
           var assign = (user&&user.name)?user.name:'';
+          if(user&&user.lastName){
+            assign = assign +" "+user.lastName;
+          }
           assigns[i] = assign;
           i++;
           if(i<tasks.length){
@@ -141,9 +143,9 @@ function addTasks(docx,tasks,discussionId,tasksNum){
 
 function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
   return new Promise(function (fulfill, reject){
-    var pObj = docx.createP ({ align: 'right' });
+    var pObj = docx.createP ({align: 'right' });
     var prefix = URL+"/tasks/by-discussion/"+discussionId+"/";
-    pObj.addText (':משימות מהדיון' , {bold:true,underline:true});
+    pObj.addText (':משימות מהדיון' , {font_size: 14, font_face:'David',bold:true,underline:true});
     if(tasks==null || tasks==undefined || tasks.length==0){
       writeDocxToFile(docx,discussionId).then(function(result){
       if(result=='success'){
@@ -156,36 +158,36 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
       return;
     }
     for(var i = 0 ; i < tasksNum ; i++){
-      var pObj = docx.createP ({ align: 'right' });
+      var pObj = docx.createP ({align: 'right' });
       var currentTask = tasks[i];
       var flag = (currentTask.title.charAt(0)>'א' && currentTask.title.charAt(0)<'ת');
       if(flag){
-        pObj.addText ((i+1)+". " , {bold:true});
-        pObj.addText(currentTask.title , {bold:true,underline:true});
+        pObj.addText ((i+1)+". " , {font_size: 14, font_face:'David',bold:true});
+        pObj.addText(currentTask.title , {font_size: 14, font_face:'David',bold:true,underline:true});
       }
       if(!flag){
-        pObj.addText(currentTask.title , {bold:true,underline:true});
-        pObj.addText (" ."+(i+1) , {bold:true});
+        pObj.addText(currentTask.title , {font_size: 14, font_face:'David',bold:true,underline:true});
+        pObj.addText (" ."+(i+1) , {font_size: 14, font_face:'David',bold:true});
       }
       //description
       var desc = currentTask.description?currentTask.description.substring(3,currentTask.description.length-4):'';
-      var pObj = docx.createP ({ align: 'right' });
+      var pObj = docx.createP ({align: 'right' });
       var flag = (desc.charAt(0)>'א' && desc.charAt(0)<'ת');
       if(flag){
-        pObj.addText ("פירוט:" , {bold:true,underline:true});
-        pObj.addText(desc);
+        pObj.addText ("פירוט:" , {font_size: 14, font_face:'David',bold:true,underline:true});
+        pObj.addText(desc,{font_size: 14, font_face:'David'});
       }
       if(!flag){
-        pObj.addText(desc);
-        pObj.addText (":פירוט", {bold:true,underline:true});
+        pObj.addText(desc,{font_size: 14, font_face:'David'});
+        pObj.addText (":פירוט", {font_size: 14, font_face:'David',bold:true,underline:true});
       }
       //participants
-      var pObj = docx.createP ({ align: 'right' });
+      var pObj = docx.createP ({align: 'right' });
       pObj.addText (':');
-      pObj.addText ( 'משתתפים', {bold:true,underline:true});
+      pObj.addText ( 'משתתפים', {font_size: 14, font_face:'David',bold:true,underline:true});
       pObj.addLineBreak();
       for(var j = 0 ; j < tasks[i].watchers.length ; j++){
-        var watcher = assigns[i+tasksNum+j]
+        var watcher = assigns[i+tasksNum+j];
         pObj.addText (watcher);
         if(j != tasks[i].watchers.length-1){
           pObj.addText (" , ");
@@ -193,11 +195,11 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
       }
 
       //URL
-      var pObj = docx.createP ({ align: 'right' });
+      var pObj = docx.createP ({align: 'right' });
       var address = prefix+tasks[i]._id+"/activities";
-      pObj.addText (":כתובת המשימה" , {bold:true,underline:true});
+      pObj.addText (":כתובת המשימה" , {font_size: 14, font_face:'David',bold:true,underline:true});
       pObj.addLineBreak();
-      pObj.addText(address , {font_size: 10, underline:true});
+      pObj.addText(address , {font_face:'David',font_size: 10, underline:true});
 
       //assign
       var id = currentTask.assign;
@@ -205,27 +207,25 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
       var assign = assigns[i];
       var flag = (assign.charAt(0)>'א' && assign.charAt(0)<'ת');
 
-      var pObj = docx.createP ({ align: 'left' });
+      var pObj = docx.createP ({align: 'left' });
       if(flag){
-        pObj.addText ("אחראי:" , {bold:true,underline:true});
-        pObj.addText(assign);
+        pObj.addText ("אחראי:" , {font_size: 14, font_face:'David',bold:true,underline:true});
+        pObj.addText(assign,{font_size: 14, font_face:'David'});
       }
       if(!flag){
-        pObj.addText(assign);
-        pObj.addText (":אחראי", {bold:true,underline:true});
+        pObj.addText(assign,{font_size: 14, font_face:'David'});
+        pObj.addText (":אחראי", {font_size: 14, font_face:'David',bold:true,underline:true});
       }
 
       //due
-      var pObj = docx.createP ({ align: 'left' });
+      var pObj = docx.createP ({align: 'left' });
       var due = currentTask.due?currentTask.due:null;
       var due = due!=null? new Date(due) : null;
       var dateString = due!=null? due.getDate()+"/"+(due.getMonth()+1)+"/"+due.getFullYear() :'';
       var timeString = due!=null? (due.getHours().toString().length==1?"0"+
       due.getMinutes().toString():due.getMinutes().toString())+":"+(due.getMinutes().toString().length==1?"0"+due.getMinutes().toString():due.getMinutes().toString()):''; 
-      pObj.addText(timeString);
-      pObj.addText ("תג״ב: " , {bold:true,underline:true});
-      pObj.addText(dateString);
-      pObj.addText (" בשעה ");
+      pObj.addText ("תג״ב: " , {font_size: 14, font_face:'David',bold:true,underline:true});
+      pObj.addText(dateString,{font_size: 14, font_face:'David'});
     }
     writeDocxToFile(docx,discussionId).then(function(result){
     if(result=='success'){
@@ -251,45 +251,48 @@ function createPDF(discussion , tasks){
     //Today's date
     var date = new Date();
     var dateString = date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
-    var header = docx.getHeader ().createP ({ align: 'left' });
-    header.addText (dateString+" ");
-    header.addText (':');
-    header.addText ('תאריך' , {bold:true,underline:true});
-    var header = docx.getHeader ().createP ({ align: 'center' });
+    var header = docx.getHeader ().createP ({align: 'left' });
+    header.addText (dateString+" ",{font_size: 14, font_face:'David'});
+    header.addText (':',{font_size: 14, font_face:'David'});
+    header.addText ('תאריך' , {font_size: 14, font_face:'David',bold:true,underline:true});
+    var header = docx.getHeader ().createP ({align: 'center' });
     //Discussion title
     var flag = (discussion.title.charAt(0)>'א' && discussion.title.charAt(0)<'ת');
     if(flag){
-      header.addText ("דיון:" , {bold:true,underline:true});
-      header.addText(discussion.title , {underline:true});
+      header.addText ("דיון:" , {font_size: 14, font_face:'David',bold:true,underline:true});
+      header.addText(discussion.title , {font_size: 14, font_face:'David',underline:true});
     }
     if(!flag){
-      header.addText(discussion.title , {underline:true});
-      header.addText (":דיון" , {bold:true,underline:true});
+      header.addText(discussion.title , {font_size: 14, font_face:'David',underline:true});
+      header.addText (":דיון" , {font_size: 14, font_face:'David',bold:true,underline:true});
     }
     //asign
-    var pObj = docx.createP ({ align: 'right' });
+    var pObj = docx.createP ({align: 'right' });
     var flag = (discussion.assign.name.charAt(0)>'א' && discussion.assign.name.charAt(0)<'ת');
 
     if(flag){
-      pObj.addText ("אחראי הדיון:" , {bold:true,underline:true});
-      pObj.addText(discussion.assign.name);
+      pObj.addText ("אחראי הדיון:" , {font_size: 14, font_face:'David',bold:true,underline:true});
+      pObj.addText(discussion.assign.name,{font_size: 14, font_face:'David'});
     }
     if(!flag){
-      pObj.addText(discussion.assign.name);
-      pObj.addText (":אחראי הדיון" , {bold:true,underline:true});
+      if(discussion.assign.lastName){
+        pObj.addText (discussion.assign.lastName+" ",{font_size: 14, font_face:'David'});
+      }
+      pObj.addText(discussion.assign.name,{font_size: 14, font_face:'David'});
+      pObj.addText (":אחראי הדיון" , {font_size: 14, font_face:'David',bold:true,underline:true});
     }
     //participants
-    var pObj = docx.createP ({ align: 'right' });
-    pObj.addText (':');
-    pObj.addText ( 'נוכחים', {bold:true,underline:true});
+    var pObj = docx.createP ({align: 'right' });
+    pObj.addText (':',{font_size: 14, font_face:'David'});
+    pObj.addText ( 'בדיון נכחו', {font_size: 14, font_face:'David',bold:true,underline:true});
     pObj.addLineBreak();
     for(var i = 0 ; i < discussion.watchers.length ; i++){
       if(discussion.watchers[i].lastName){
-        pObj.addText (discussion.watchers[i].lastName+" ");
+        pObj.addText (discussion.watchers[i].lastName+" ",{font_size: 14, font_face:'David'});
       }
-      pObj.addText (discussion.watchers[i].name);
+      pObj.addText (discussion.watchers[i].name,{font_size: 14, font_face:'David'});
       if(i != discussion.watchers.length-1){
-        pObj.addText (" , ");
+        pObj.addText (" , ",{font_size: 14, font_face:'David'});
       }
     }
 
@@ -301,20 +304,20 @@ function createPDF(discussion , tasks){
     minutes = minutes.length==1?"0"+minutes:minutes;
     var dateString = date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
     var timeString = hours+":"+minutes;
-    var pObj = docx.createP ({ align: 'right' });
+    var pObj = docx.createP ({align: 'right' });
 
 
     if (!discussion.allDay && discussion.hasStartTime){
-      pObj.addText(timeString);
+      pObj.addText(timeString,{font_size: 14, font_face:'David'});
     }
-    pObj.addText ("מועד התחלה: " , {bold:true,underline:true});
-    pObj.addText(dateString);
+    pObj.addText ("מועד התחלה: " , {font_size: 14, font_face:'David',bold:true,underline:true});
+    pObj.addText(dateString,{font_size: 14, font_face:'David'});
 
     if(!discussion.allDay && discussion.hasStartTime){
-    pObj.addText (" בשעה ");
+    pObj.addText (" בשעה ",{font_size: 14, font_face:'David'});
   }
    if(discussion.allDay){
-      pObj.addText(' כל היום');
+      pObj.addText(' כל היום',{font_size: 14, font_face:'David'});
     }
 
     if(!discussion.allDay){
@@ -326,34 +329,36 @@ function createPDF(discussion , tasks){
     minutes = minutes.length==1?"0"+minutes:minutes;
     var dateString = date.getDate()+"/"+(date.getMonth()+1)+"/"+date.getFullYear();
     var timeString = hours+":"+minutes;
-    var pObj = docx.createP ({ align: 'right' });
+    var pObj = docx.createP ({align: 'right' });
     if(discussion.hasEndTime){
-      pObj.addText(timeString);
+      pObj.addText(timeString,{font_size: 14, font_face:'David'});
     }
-    pObj.addText ("מועד סיום: " , {bold:true,underline:true});
-    pObj.addText(dateString);
+    pObj.addText ("מועד סיום: " , {font_size: 14, font_face:'David',bold:true,underline:true});
+    pObj.addText(dateString,{font_size: 14, font_face:'David'});
     if(discussion.hasEndTime){
-      pObj.addText (" בשעה ");
+      pObj.addText (" בשעה ",{font_size: 14, font_face:'David'});
   }
   }
 
   //location
-    var pObj = docx.createP ({ align: 'right' });
+    var pObj = docx.createP ({align: 'right' });
     var flag = (discussion.location.charAt(0)>'א' && discussion.location.charAt(0)<'ת');
     if(flag){
-      pObj.addText ("מיקום:" , {bold:true,underline:true});
-      pObj.addText(discussion.location);
+      pObj.addText ("מיקום:" , {font_size: 14, font_face:'David',bold:true,underline:true});
+      pObj.addText(discussion.location,{font_size: 14, font_face:'David'});
     }
     if(!flag){
-      pObj.addText(discussion.location);
-      pObj.addText (":מיקום" , {bold:true,underline:true});
+      pObj.addText(discussion.location,{font_size: 14, font_face:'David'});
+      pObj.addText (":מיקום" , {font_size: 14, font_face:'David',bold:true,underline:true});
     }
 
     //url
-    var pObj = docx.createP ({ align: 'right' });
+    var pObj = docx.createP ({align: 'right' });
+    
+    pObj.addText (":כתובת הדיון" , {font_size: 14, font_face:'David',bold:true,underline:true});
+    pObj.addLineBreak();
     var url = URL+"/discussions/all/"+discussion._id;
-    pObj.addText(url);
-    pObj.addText (":כתובת הדיון" , {bold:true,underline:true});
+    pObj.addText(url,{font_size: 10, font_face:'David',underline:true});
     var pObj = docx.createP ();
     pObj.addLineBreak();
     //tasks
@@ -389,7 +394,30 @@ exports.send = function(type, data) {
   data.uriRoot = config.host + ':' + port;
   data.date = new Date();
   var recipients = data.discussion.watchers;
-  recipients.push(data.discussion.assign);
+
+  var assignId = data.discussion.assign._id;
+  var flag = false;
+  for(var i=0;i<recipients.length;i++){
+    if(assignId == recipients[i]._id){
+      flag = true;
+    }
+  }
+  if(!flag){
+    recipients.push(data.discussion.assign);
+  }
+
+  var unique = [];
+  var json ={};
+  for(var i=0;i<recipients.length;i++){
+    json[recipients[i]._id]=recipients[i];
+  }
+  for(var key in json){
+    unique.push(json[key]);
+  }
+  recipients = unique;
+  data.discussion.watchers=recipients;
+
+
   var discussionStatus = data.discussion.status;
   var attendingPeople=[];
   data.attendees = [];
@@ -406,8 +434,6 @@ exports.send = function(type, data) {
       data.attendees.push(recipients[i].name);
     }
   }
-  console.log("===Emails:===");
-  console.log(emails);
   var status = data.discussion.status;
   var calMethod = status=="canceled"?"CANCEL":"REQUEST";
 
@@ -423,32 +449,33 @@ exports.send = function(type, data) {
 
   var startTime = new Date(data.discussion.startDate);
   if(data.discussion.startTime){
-  startTime.setHours(data.discussion.startTime.getHours());
-  startTime.setMinutes(data.discussion.startTime.getMinutes());
-  data.discussion.hasStartTime = true;
+    startTime.setHours(data.discussion.startTime.getHours());
+    startTime.setMinutes(data.discussion.startTime.getMinutes());
+    data.discussion.hasStartTime = true;
+  }
+  else{
+    data.discussion.hasStartTime = false;
+  }
   data.discussion.startTime = startTime;
-}
-else{
-  data.discussion.hasStartTime = false;
-}
 
-   var endTime = new Date(data.discussion.endDate);
-  if(data.discussion.endTime){
-  endTime.setHours(data.discussion.endTime.getHours());
-  endTime.setMinutes(data.discussion.endTime.getMinutes());
-  data.discussion.hasEndTime = true;
-  data.discussion.endTime = endTime;
-}
-else{
-  endTime = startTime;
-  data.discussion.hasEndTime = false;
-  data.discussion.endTime = startTime;
-}
-  
-  
-
-
-  
+  if(!data.discussion.allDay && data.discussion.endDate){
+    var endTime = new Date(data.discussion.endDate);
+    if(data.discussion.endTime){
+      endTime.setHours(data.discussion.endTime.getHours());
+      endTime.setMinutes(data.discussion.endTime.getMinutes());
+      data.discussion.hasEndTime = true;
+      data.discussion.endTime = endTime;
+    }
+    else{
+      endTime = startTime;
+      data.discussion.hasEndTime = false;
+      data.discussion.endTime = startTime;
+    }
+  }
+  else{
+    data.discussion.hasEndTime = false;
+    data.discussion.endTime = startTime;
+  }
 
   var builder = icalToolkit.createIcsFileBuilder();
   builder.spaces = true;
@@ -460,8 +487,8 @@ else{
   builder.tzid = 'asia/istanbul';
   builder.method = calMethod;
   builder.events.push({
-    start : startTime ,
-    end : endTime,
+    start : data.discussion.startTime ,
+    end : data.discussion.endTime,
     transp : 'OPAQUE',
     summary : "ICU Event",
     additionalTags : {
@@ -488,12 +515,9 @@ else{
   data.attendees.join(', ');
   exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
     rootPath = stdout;
-    console.log("PWD:");
-    console.log(rootPath);
     createPDF(data.discussion , data.additionalTasks).then(function(result){
       render(type, data).then(function(results) {
     var promises = emails.map(function(recipient) {
-      console.log("====PATH====");
       var p = rootPath+'/files/notes/'+data.discussion._id+".pdf";
       var mailOptions = {
         "to" : recipient,
