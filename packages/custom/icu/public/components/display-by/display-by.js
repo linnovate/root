@@ -9,7 +9,7 @@ angular.module('mean.icu.ui.displayby', [])
                      $scope.projectsList.push(project);
                 });
 
-        $scope.CurrentItem = {
+        $scope.singularItemName = {
             discussions: "discussion",
             projects: "project",
             tasks: "task"
@@ -43,11 +43,11 @@ angular.module('mean.icu.ui.displayby', [])
             });
         };
         $scope.switchToAll = function (entityName, id) {
-        $state.go('main.' + context.main + '.all.details.activities', {
-        id: id,
-        entity: entityName,
-     });
-    }
+            $state.go('main.' + context.main + '.all.details.activities', {
+                id: id,
+                entity: entityName
+            });
+        }
 
         $scope.visible = {
             project: false,

@@ -12,8 +12,8 @@
         <div class="list {{context.main}}">
         <ul>
             <li data-ng-repeat="item in allItems[context.main] | limitTo:displayLimit[context.main]"
-                data-ng-class="{'selected': context.entityName === CurrentItem[context.main] && item._id === context.entityId }"
-                data-ng-click="switchToAll(CurrentItem[context.main], item._id)">
+                data-ng-class="{'selected': context.entityName === singularItemName[context.main] && item._id === context.entityId }"
+                data-ng-click="switchToAll(singularItemName[context.main], item._id)">
                 <a href class="Names-In-List-On-Side">
                     {{item.title || item.name}}
                 </a>
