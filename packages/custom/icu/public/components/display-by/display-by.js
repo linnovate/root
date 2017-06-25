@@ -9,6 +9,17 @@ angular.module('mean.icu.ui.displayby', [])
                      $scope.projectsList.push(project);
                 });
 
+        $scope.singularItemName = {
+            discussions: "discussion",
+            projects: "project",
+            tasks: "task"
+        };
+
+        $scope.allItems = {
+            projects: $scope.projects,
+            discussions: $scope.discussions,
+            tasks: $scope.tasks
+        };
         $scope.context = context;
 
         $scope.displayLimit = {
@@ -31,6 +42,12 @@ angular.module('mean.icu.ui.displayby', [])
                 entityId: id
             });
         };
+        $scope.switchToAll = function (entityName, id) {
+            $state.go('main.' + context.main + '.all.details.activities', {
+                id: id,
+                entity: entityName
+            });
+        }
 
         $scope.visible = {
             project: false,
