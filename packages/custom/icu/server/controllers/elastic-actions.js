@@ -421,7 +421,7 @@ function indexJobUserPublishedFields(data, done) {
 
                 user.publishFields = {
                     'firstName' :               user.publishFields.firstName !== undefined               ? user.publishFields.firstName               : true,
-                    'lastName' :                user.publishFields.lastName !== undefined                ? user.publishFields.lastName                : true,
+                    'lastname' :                user.publishFields.lastname !== undefined                ? user.publishFields.lastname                : true,
                     'companyName' :             user.publishFields.companyName !== undefined             ? user.publishFields.companyName             : true,
                     'companyWebsite' :          user.publishFields.companyWebsite !== undefined          ? user.publishFields.companyWebsite          : true,
                     'companyLogo' :             user.publishFields.companyLogo !== undefined             ? user.publishFields.companyLogo             : true,

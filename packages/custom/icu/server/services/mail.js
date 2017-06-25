@@ -112,8 +112,8 @@ function addTasks(docx,tasks,discussionId,tasksNum){
         }
         else{
           var assign = (user&&user.name)?user.name:'';
-          if(user&&user.lastName){
-            assign = assign +" "+user.lastName;
+          if(user&&user.lastname){
+            assign = assign +" "+user.lastname;
           }
           assigns[i] = assign;
           i++;
@@ -275,8 +275,8 @@ function createPDF(discussion , tasks){
       pObj.addText(discussion.assign.name,{font_size: 14, font_face:'David'});
     }
     if(!flag){
-      if(discussion.assign.lastName){
-        pObj.addText (discussion.assign.lastName+" ",{font_size: 14, font_face:'David'});
+      if(discussion.assign.lastname){
+        pObj.addText (discussion.assign.lastname+" ",{font_size: 14, font_face:'David'});
       }
       pObj.addText(discussion.assign.name,{font_size: 14, font_face:'David'});
       pObj.addText (":אחראי הדיון" , {font_size: 14, font_face:'David',bold:true,underline:true});
@@ -287,8 +287,8 @@ function createPDF(discussion , tasks){
     pObj.addText ( 'בדיון נכחו', {font_size: 14, font_face:'David',bold:true,underline:true});
     pObj.addLineBreak();
     for(var i = 0 ; i < discussion.watchers.length ; i++){
-      if(discussion.watchers[i].lastName){
-        pObj.addText (discussion.watchers[i].lastName+" ",{font_size: 14, font_face:'David'});
+      if(discussion.watchers[i].lastname){
+        pObj.addText (discussion.watchers[i].lastname+" ",{font_size: 14, font_face:'David'});
       }
       pObj.addText (discussion.watchers[i].name,{font_size: 14, font_face:'David'});
       if(i != discussion.watchers.length-1){

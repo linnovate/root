@@ -59,7 +59,7 @@ angular.module('mean.admin').controller('UsersController', ['$scope', 'Global', 
                 $scope.users.push(response);
             });
 
-            this.firstName = this.lastName = this.email = this.password = this.role = '';
+            this.firstName = this.lastname = this.email = this.password = this.role = '';
         };
 
         $scope.remove = function(user) {
