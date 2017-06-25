@@ -5,7 +5,7 @@
             <div class="title">
                 <div icu-avatar user="activity.creator"></div>
                 <div class="text">
-                    <span class="user-name">{{activity.creator.name}}</span>
+                    <span class="user-name">{{activity.creator.name}} {{activity.creator.lastname}}</span>
                     <span class="activity-details" ng-repeat="val in details[activity.type]">
                         <span ng-switch="val.type">
                             <span ng-switch-when="object">{{activity[val.value] | i18next}}</span>

@@ -42,7 +42,7 @@ exports.getAttachmentsForUpdate = function(req, res, next) {
   var query = {
     issueId: req.locals.result._id
   };
-
+  
   if (_.isArray(req.locals.result)) {
     var ids = _(req.locals.result).pluck('_id').value();
     query = {
@@ -77,7 +77,7 @@ exports.getByEntity = function(req, res, next) {
   Update.find({
     issue: type,
     issueId: req.params.id
-  }).populate('userObj', 'name').populate('creator', 'name profile').then(function(updates) {
+  }).populate('userObj', 'name lastname profile').populate('creator', 'name lastname profile').then(function(updates) {
     console.log(JSON.stringify(updates))
     req.locals.result = updates;
     next();
