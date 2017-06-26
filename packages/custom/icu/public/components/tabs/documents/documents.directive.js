@@ -8,9 +8,9 @@ angular.module('mean.icu.ui.tabs')
                 $scope.isOpen[document._id] = !$scope.isOpen[document._id];
             };
             $scope.view = function (document1) {
-                
-             // Check if need to view as pdf   
-            if ((document1.attachmentType == "docx") ||
+
+                // Check if need to view as pdf   
+                if ((document1.attachmentType == "docx") ||
                     (document1.attachmentType == "doc") ||
                     (document1.attachmentType == "xlsx") ||
                     (document1.attachmentType == "xls") ||
@@ -22,15 +22,15 @@ angular.module('mean.icu.ui.tabs')
                     $http({
                         url: ToHref.replace('/files/', '/api/files/'),
                         method: 'HEAD'
-                    }).success(function() {
+                    }).success(function () {
                         // There is allready the convert file
                         window.open(ToHref + '?view=true')
-                    }).error(function() {
+                    }).error(function () {
                         // Send to server
-                        $.post('/append.js', document1).done(function(document2) {
+                        $.post('/append.js', document1).done(function (document2) {
                             // The convert is OK and now we open the pdf to the client in new window
                             window.open(ToHref + '?view=true');
-                        }).fail(function(xhr) {
+                        }).fail(function (xhr) {
                             console.error(xhr.responseText);
                         });
                     });
@@ -40,15 +40,32 @@ angular.module('mean.icu.ui.tabs')
                     window.open(document1.path + '?view=true');
                 }
             };
-            $scope.remove = function(file, index){
-                DocumentsService.delete(file._id).then(function(status){
-                    if(status == 200){
+            $scope.remove = function (file, index) {
+                DocumentsService.delete(file._id).then(function (status) {
+                    if (status == 200) {
                         console.log(status)
-                        $scope.documents.splice(index,1);
+                        $scope.documents.splice(index, 1);
                     }
                 });
-                
+
             };
+
+            $scope.autoFormatFilesize = function (fileSize) {
+                if (fileSize > 1000000000) {
+                    return (fileSize / 1000000000.0)
+                        .toPrecision(3) + " GB";
+                } else if (fileSize > 1000000) {
+                    return (fileSize / 1000000.0)
+                        .toPrecision(3) + " MB";
+                } else if (fileSize > 1000) {
+                    return (fileSize / 1000.0)
+                        .toPrecision(3) + " KB";
+                } else if (fileSize % 1 != 0) {
+                    return fileSize + " MB"
+                } else {
+                    return fileSize + " bytes"
+                }
+            }
         }
 
         return {

@@ -111,9 +111,9 @@ exports.upload = function (req, res, next) {
 
         var fileSizeInBytes = stats["size"];
         //Convert the file size to megabytes (optional)
-        var fileSizeInMegabytes = fileSizeInBytes / 1000000.0;
-
-        req.locals.data.body.size = fileSizeInMegabytes;
+        //var fileSizeInMegabytes = fileSizeInBytes;
+        
+        req.locals.data.body.size = fileSizeInBytes;
 
       });
 
@@ -133,9 +133,9 @@ exports.upload = function (req, res, next) {
       // var fileSizeInMegabytes = fileSizeInBytes / 1000000.0;
 
       // req.locals.data.body.size = fileSizeInMegabytes;
-
-      req.locals.data.body.size = file._readableState.length / 1000000;
-
+     
+      req.locals.data.body.size = file._readableState.length;
+      
       hasFile = true;
 
       //});    
