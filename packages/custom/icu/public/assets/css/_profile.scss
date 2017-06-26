@@ -1,12 +1,12 @@
 .profile-page {
+    overflow-y: scroll; 
     position: relative;
     height: 100vh;
 
     form {
         position: absolute;
-
-        top: 50%;
-        left: 50%;
+        top: 85%;
+        right: 30%;
         transform: translate(-50%, -50%);
     }
 
