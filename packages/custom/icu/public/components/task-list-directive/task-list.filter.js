@@ -52,12 +52,13 @@ angular.module('mean.icu.ui.tasklistFilter', [])
 				});
 				break;
 			case 'watched':
-			if(TasksService.watchedTasksArray!=undefined){
-				TasksService.watchedTasksArray.forEach(function(task){
-					out.push(task);
-				});
-			}
-			break;
+				if(TasksService.watchedTasksArray!=undefined){
+					TasksService.watchedTasksArray.forEach(function(task){
+						task.PartTitle = task.title.length<20?task.title: (task.title.substring(0,20)+"...");
+						out.push(task);
+					});
+				}
+				break;
 			default:
 				out = tasks;
 		}
