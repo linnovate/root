@@ -33,6 +33,7 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('css', '../lib/angular-ui-select/dist/select.css');
     ICU.aggregateAsset('css', '../lib/jquery-ui/themes/pepper-grinder/jquery-ui.min.css');
     ICU.aggregateAsset('css', '../lib/angularjs-color-picker/angularjs-color-picker.css');
+    ICU.aggregateAsset('css', 'eventDrops.css');
 
     ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
     ICU.aggregateAsset('js', '../lib/angular-ui-select/dist/select.js');
@@ -54,7 +55,7 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('js', '../lib/angular-tooltips/dist/angular-tooltips.min.js');
 
     ICU.aggregateAsset('js', '../lib/d3/d3.min.js', {weight: 0});
-    ICU.aggregateAsset('js', '../lib/eventDrops/src/index.js', {weight: 1});
+    ICU.aggregateAsset('js', './eventDrops.js', {weight: 1});
 
     ICU.angularDependencies([
         'jm.i18next',
