@@ -176,6 +176,9 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 english=true;
                 console.log("English");
             }
+            if(!english){
+                $("#startTime").css("orientation","auto left");
+            }
             $scope.allDayTitle = english?"All day long":"כל היום";
             console.log("ALL DAY TITLE");
             console.log($scope.allDayTitle);
