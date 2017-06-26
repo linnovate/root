@@ -43,7 +43,7 @@ exports.delete = function(doc, docType, room, next) {
   });
 };
 
-function buildSearchResponse(type, obj) {
+var buildSearchResponse = exports.buildSearchResponse = function(type, obj) {
 
   console.yon('inbuild response');
   var groups = {};

@@ -367,6 +367,11 @@ angular.module('mean.icu').config([
                     ]
                 }
             })
+            .state('event-drops', {
+                url: '/event-drops',
+                templateUrl: '/icu/components/event-drops/event-drops.html',
+                controller: 'EventDropsController',
+            })
             .state('login', {
                 url: '/login',
                 templateUrl: '/icu/components/login/login.html',
