@@ -167,7 +167,7 @@ angular.module('mean.icu.ui.tasklistdirective', [])
                     });
                 });
             } else {
-                $state.go($scope.detailsState, {
+                $state.go($scope.detailsState+'.activities', {
                     id: task._id,
                     entity: context.entityName,
                     entityId: context.entityId,

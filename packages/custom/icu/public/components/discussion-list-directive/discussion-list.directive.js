@@ -140,9 +140,11 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             }
 
             var nameFocused = angular.element($event.target).hasClass('name');
+
             discussion.PartTitle = discussion.title;
 
             if (discussion.__state === creatingStatuses.NotCreated) {
+
                 $scope.createOrUpdate(discussion).then(function() {
                     $state.go($scope.detailsState, {
                         id: discussion._id,
@@ -152,7 +154,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
                     });
                 });
             } else {
-                $state.go($scope.detailsState, {
+                $state.go($scope.detailsState+'.activities', {
                     id: discussion._id,
                     entity: context.entityName,
                     entityId: context.entityId,
