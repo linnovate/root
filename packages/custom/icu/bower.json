@@ -15,6 +15,8 @@
     "ngInfiniteScroll": "1.2.0",
     "querystring": "~3.46.1",
     "angular-tooltips": "^1.1.4",
-    "angular-timeago": "^0.4.4"
+    "angular-timeago": "^0.4.4",
+    "eventDrops": "marmelab/EventDrops#0.3.1-alpha3",
+    "d3": "^4.9.1"
   }
 }

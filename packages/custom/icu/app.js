@@ -53,6 +53,9 @@ ICU.register(function (app, auth, database,swagger) {
 
     ICU.aggregateAsset('js', '../lib/angular-tooltips/dist/angular-tooltips.min.js');
 
+    ICU.aggregateAsset('js', '../lib/d3/d3.min.js', {weight: 0});
+    ICU.aggregateAsset('js', '../lib/eventDrops/src/index.js', {weight: 1});
+
     ICU.angularDependencies([
         'jm.i18next',
         'mean.medium-editor',
