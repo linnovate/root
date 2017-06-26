@@ -56,7 +56,7 @@
                 <input ng-hide="discussion.allDay" id="endDate" ng-click="open()" ui-date="dueOptions" ng-model="discussion.endDate" ng-class='{"oldDate":!checkDate()}'>
                 <div ng-hide="discussion.allDay" class="dateTitle" id="endTimeTitle">{{'endTime' | i18next}}</div> 
                 <div ng-hide="discussion.allDay" id="endTime" ng-model="discussion.endTime" uib-timepicker="timeOptions" ng-model="discussion.endTime" show-meridian="false" ng-change="update(discussion)"></div>
-                <div id="allDayTitle">{{'allDay' | i18next}}</div>
+                <div id="allDayTitle">{{allDayTitle}}</div>
                 <input id="allDay" type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="discussion.allDay" ng-change="checkboxClick(discussion)">
 
             </div>
@@ -101,7 +101,7 @@
                     <li>
                         <a href="#" icu-open-modal entity-name="discussion" is-tasks="tasks.length" delete-fn="deleteDiscussion(discussion)">
                             <i class="fa fa-2x fa-times-circle"></i>
-                            <span>{{ 'deleteDiscussion' | i18next}}</span>
+                            <span id="deleteDiscussion" >{{ 'deleteDiscussion' | i18next}}</span>
                         </a>
 
                     </li>

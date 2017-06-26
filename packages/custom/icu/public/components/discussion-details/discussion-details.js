@@ -165,6 +165,23 @@ angular.module('mean.icu.ui.discussiondetails', [])
     }
     */
         $scope.updateDatesString = function(){
+            var val = $("#deleteDiscussion").html();
+            var english=false;
+            console.log(val);
+            if(val=="מחק דיון"){
+                english = false;
+                console.log("hebrew");
+            }
+            else{
+                english=true;
+                console.log("English");
+            }
+            $scope.allDayTitle = english?"All day long":"כל היום";
+            console.log("ALL DAY TITLE");
+            console.log($scope.allDayTitle);
+            var margin = english?"-15px":"-35px";
+            var marginAllDay = english?"-5px":"-15px";
+            var marginFirst = english?"-5px":"-35px";
             $scope.firstStr = 'deadline';
             $scope.secondStr = '';
             if($scope.discussion.startDate){
@@ -173,6 +190,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
             }
             if($scope.discussion.allDay){
                 $scope.secondStr = "All day long";
+                $("#secondStr").css("margin-left",marginAllDay);
+                $("#firstStr").css("margin-left",marginFirst);
             }
             else{
                 if($scope.discussion.startTime){
@@ -183,12 +202,12 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     startStr = ho+":"+min;
                     $scope.firstStr = $scope.discussion.startDate ? $scope.firstStr + " "+startStr : '';
                     if($scope.discussion.startDate){
-                        $("#firstStr").css("margin-left","-20px");
+                        $("#firstStr").css("margin-left",margin);
                     }
                 }
                 if($scope.discussion.endDate){
                     if($scope.firstStr!='deadline'){
-                        $scope.firstStr = $scope.firstStr+" - ";
+                        $scope.firstStr = $scope.firstStr;
                     }
                     else{
                         $scope.firstStr = "";
@@ -202,7 +221,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         $scope.discussion.endTime.getMinutes().toString();
                         endStr = ho+":"+min;
                         $scope.secondStr = $scope.secondStr +" "+endStr;
-                        $("#secondStr").css("margin-left","-20px");
+                        $("#secondStr").css("margin-left",margin);
                     }
             }
         }
@@ -349,6 +368,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.updateCurrentDiscussion= function(){
+            $scope.discussion.PartTitle = $scope.discussion.title;
             DiscussionsService.currentDiscussionName = $scope.discussion.title;
         }
 

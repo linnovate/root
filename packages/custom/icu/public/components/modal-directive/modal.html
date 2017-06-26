@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button type="button" class="btn close" aria-hidden="true" ng-click="cancel()">&times;</button>
-    <h3 class="modal-title">
+    <h3 class="modal-title" ng-if='entity.type != "Document"'>
         {{ 'modalDeleteText' | i18next }}{{ entity.type | i18next }} {{ 'modalDeleteTextContinue' | i18next }}
     </h3>
     <p>{{ 'modalDeleteDesc' | i18next }}</p>

@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsDocuments', function () {
-        function controller($scope, $http) {
+        function controller($scope, $http, DocumentsService) {
             $scope.isOpen = {};
             $scope.trigger = function (document) {
                 $scope.isOpen[document._id] = !$scope.isOpen[document._id];
@@ -39,6 +39,15 @@ angular.module('mean.icu.ui.tabs')
                 else {
                     window.open(document1.path + '?view=true');
                 }
+            };
+            $scope.remove = function(file, index){
+                DocumentsService.delete(file._id).then(function(status){
+                    if(status == 200){
+                        console.log(status)
+                        $scope.documents.splice(index,1);
+                    }
+                });
+                
             };
         }
 

@@ -11,6 +11,13 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
+         function delete1(id) {
+             return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+             	//WarningsService.setWarning(result.headers().warning);
+                 return result.status;
+             });
+         }
+
         function getById(id) {
             return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
             	WarningsService.setWarning(result.headers().warning);
@@ -78,6 +85,7 @@ angular.module('mean.icu.data.documentsservice', [])
 	    }
 
         return {
+            delete:delete1,
             getAll: getAll,
             getById: getById,
             getByTaskId: getByTaskId,
