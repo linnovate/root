@@ -122,7 +122,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                         });
                     });
                 } else {
-                    $state.go($scope.detailsState, {
+                    $state.go($scope.detailsState+'.activities', {
                         id: project._id,
                         entity: context.entityName,
                         entityId: context.entityId,

@@ -155,6 +155,7 @@ angular.module('mean.icu.ui.tasklist', [])
 				&& $state.current.name !== 'main.tasks.byentity.tasks'
 				&& $state.current.name !== 'main.tasks.all'
 				&& $state.current.name !== 'main.tasks.byentity.details.activities'
+				&& $state.current.name !== 'main.tasks.byassign.details.activities'
 				) {
 		$state.go('.activities');
 	}
