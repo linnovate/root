@@ -192,7 +192,7 @@
 	"endDate":"מועד סיום:",
 	"endTime": "בשעה:",
 	"allDay": "כל היום",
-	"Ending date is earlier than starting date":"מועד הסיום הוא לפני מועד ההתחלה"
-
-
+	"Ending date is earlier than starting date":"מועד הסיום הוא לפני מועד ההתחלה",
+	"Profile": "פרופיל",
+	"Events": "אירועים"
 }
