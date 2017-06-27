@@ -40,8 +40,6 @@ exports.getMyEvents = function (req, res, next) {
     };
 
     mean.elasticsearch.search(options, function (err, result) {
-      console.log('orit13');
-      console.log(JSON.stringify(result));
         if (err) {
             system.sendMessage({
                 service: 'event-drops',
