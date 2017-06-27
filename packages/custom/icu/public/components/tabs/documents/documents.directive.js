@@ -2,7 +2,8 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsDocuments', function () {
-        function controller($scope, $http, DocumentsService) {
+        function controller($scope, $http, DocumentsService, context, ActivitiesService) {
+            $scope.context = context;
             $scope.isOpen = {};
             $scope.trigger = function (document) {
                 $scope.isOpen[document._id] = !$scope.isOpen[document._id];
@@ -43,8 +44,16 @@ angular.module('mean.icu.ui.tabs')
             $scope.remove = function (file, index) {
                 DocumentsService.delete(file._id).then(function (status) {
                     if (status == 200) {
-                        console.log(status)
                         $scope.documents.splice(index, 1);
+                        ActivitiesService.create({
+                          data: {
+                              issue: ActivitiesService.issue,
+                              issueId: ActivitiesService.issueId,
+                              type: 'documentDelete',
+                              description: ''
+                          },
+                          context: {}
+                        })
                     }
                 });
 

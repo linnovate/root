@@ -8,6 +8,9 @@ angular.module('mean.icu.ui.tabs')
                 description: ''
             };
 
+            ActivitiesService.issue = $scope.entityName;
+            ActivitiesService.issueId=$stateParams.id || $stateParams.entityId;
+            
             $scope.context = context;
             $scope.stateParams = $stateParams
 
@@ -29,6 +32,13 @@ angular.module('mean.icu.ui.tabs')
                 document: [{
                     type: 'text',
                     value: 'addDocument'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }],
+                documentDelete: [{
+                    type: 'text',
+                    value: 'deleteDocument'
                 }, {
                     type: 'object',
                     value: 'issue'

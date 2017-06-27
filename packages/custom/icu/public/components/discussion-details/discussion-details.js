@@ -167,21 +167,16 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.updateDatesString = function(){
             var val = $("#deleteDiscussion").html();
             var english=false;
-            console.log(val);
             if(val=="מחק דיון"){
                 english = false;
-                console.log("hebrew");
             }
             else{
                 english=true;
-                console.log("English");
             }
             if(!english){
                 $("#startTime").css("orientation","auto left");
             }
             $scope.allDayTitle = english?"All day long":"כל היום";
-            console.log("ALL DAY TITLE");
-            console.log($scope.allDayTitle);
             var margin = english?"-15px":"-35px";
             var marginAllDay = english?"-5px":"-15px";
             var marginFirst = english?"-5px":"-35px";
@@ -286,11 +281,9 @@ angular.module('mean.icu.ui.discussiondetails', [])
             $scope.update(discussion);
             if($scope.discussion.allDay){
                 document.getElementById('dueDiv').style.height = '96px';
-                console.log("YES");
             }
             else{
                 document.getElementById('dueDiv').style.height = '370px';
-                console.log("NO");
             }
         }
 
@@ -313,7 +306,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.dueClicked= function() {
-            console.log("yes");
             if(!$scope.fade){
                 $('.dueDiv').fadeIn(1000);
             }
@@ -364,9 +356,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
         $scope.update = function (discussion) {
             $scope.updateDatesString();
-            console.log("dates:")
-            console.log($scope.discussion.startDate);
-            console.log($scope.discussion.endDate);
             DiscussionsService.update(discussion);
         };
 
