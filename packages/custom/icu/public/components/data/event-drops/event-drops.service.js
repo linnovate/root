@@ -16,13 +16,14 @@ angular.module('mean.icu.data.eventdropsservice', [])
             }).then(function (some) {
                 var dataArray = [];
                 for (var index in some) {
-                    console.log(index);
                     var obj = {};
                     obj.name = index;
-                    obj.data = some[index];
+                    obj.data = some[index].map(function (o) {
+                        o.date = o.created;
+                        return o;
+                    });
                     dataArray.push(obj);
                 }
-                console.log('oritsome', dataArray)
                 return dataArray;
             });
         }
