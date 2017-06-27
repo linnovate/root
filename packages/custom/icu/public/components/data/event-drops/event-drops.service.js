@@ -5,20 +5,18 @@ angular.module('mean.icu.data.eventdropsservice', [])
         var EntityPrefix = '/event-drops';
 
         function getAll() {
-            console.log(ApiUri + EntityPrefix, 'orit13');
 
             return $http.get(ApiUri + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
-                console.log($rootScope.warning, result, '$rootScope.warning')
                 return result.data;
             }, function (err) {
                 return err
-            }).then(function (some) {
+            }).then(function (response) {
                 var dataArray = [];
-                for (var index in some) {
+                for (var index in response) {
                     var obj = {};
                     obj.name = index;
-                    obj.data = some[index].map(function (o) {
+                    obj.data = response[index].map(function (o) {
                         o.date = o.created;
                         return o;
                     });
