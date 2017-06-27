@@ -1,5 +1,10 @@
-<div class="profile-page">
-    <form novalidate name="profileform" ng-submit="editProfile(profileform)">
+<div class="profile-page" ng-init="showProfile=true;">
+    <div class="profile-links">
+        <a href="" ng-click="showProfile=true;">{{ 'Profile' | i18next }}<a> 
+            &nbsp;
+        <a href="" ng-click="showProfile=false;">{{ 'Events' | i18next }}</a>
+    </div>
+    <form novalidate name="profileform" ng-submit="editProfile(profileform)" ng-if="showProfile">
         <div class=form-group>
             <label>{{ 'username' | i18next }}</label>
             <input class="form-control" type="text" ng-model="me.username">
@@ -47,4 +52,5 @@
         </div>
         <button>{{'save' | i18next }}</button>
     </form>
+    <div ng-if="!showProfile" icu-event-drops></div>
 </div>

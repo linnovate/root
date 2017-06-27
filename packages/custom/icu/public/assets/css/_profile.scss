@@ -1,13 +1,9 @@
 .profile-page {
-    overflow-y: scroll; 
     position: relative;
-    height: 100vh;
-
     form {
-        position: absolute;
-        top: 85%;
-        right: 30%;
-        transform: translate(-50%, -50%);
+        width: 50%;
+        margin: 0 auto;
+        max-width: 360px;
     }
 
     button {
@@ -31,5 +27,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .profile-links {
+        margin: 20px;
     }
 }
