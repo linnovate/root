@@ -18,6 +18,7 @@ angular.module('mean.icu.data.eventdropsservice', [])
                     obj.name = index;
                     obj.data = response[index].map(function (o) {
                         o.date = o.created;
+                        o.type = index;
                         return o;
                     });
                     dataArray.push(obj);

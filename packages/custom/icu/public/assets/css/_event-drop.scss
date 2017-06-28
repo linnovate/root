@@ -25,6 +25,7 @@
     padding: .5rem 1rem;
     width: 30rem;
     line-height: 1.4rem;
+    text-align: center;
     &:before {
         content: '';
         display: block;
@@ -51,18 +52,19 @@
         flex-direction: row;
         align-items: center;
     }
-    content {
+    .tooltip-content {
         flex: 1 0 0;
+        margin: 0 auto !important;
         .message {
-            font-size: 5rem;
             color: lightslategray
         }
     }
     h3 {
-        font-size: 1rem;
+        font-size: small;
+        font-weight: bold;
     }
     p {
-        font-size: .9rem;
+        font-size: .1.5rem;
         color: #777;
     }
 }
