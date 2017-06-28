@@ -15,8 +15,8 @@ angular.module('mean.icu')
                     .end(new Date())
                     .eventLineColor((d, i) => colors[i])
                     .date(d => new Date(d.created))
-                    .mouseover(showTooltip);
-                    //.mouseout(hideTooltip);
+                    .mouseover(showTooltip)
+                    .mouseout(hideTooltip);
                 d3.select('#chart_placeholder')
                     .datum(data)
                     .call(eventDropsChart)
@@ -33,6 +33,7 @@ angular.module('mean.icu')
                     action.text = action.text || $scope.me.name + ' updated ' + action.issue;
                 else
                     action.text = action.text || $scope.me.name + ' created ' + action.title + ' ' + action.type;
+
                 action.viewDate = action.viewDate || $filter('date')(action.date, 'medium');
 
                 d3.select('body').selectAll('.tooltip').remove();
