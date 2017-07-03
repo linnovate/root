@@ -67,7 +67,7 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
               return UsersService.getMe().then(function(result) {
                 if (result._id) {
                   return $timeout(function() {
-                    $state.go('main.tasks')
+                    $state.go('main.tasks.byassign')
                   })
                 } else {
                   if (config.activeProvider === 'local') {

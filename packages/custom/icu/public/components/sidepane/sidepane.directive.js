@@ -25,25 +25,34 @@ directive('icuSidepane', function() {
 
         $scope.isCurrentState = function(item) {
 
-            return item.state === context.main;
+            if (item.state.includes("."))
+            {
+                return item.state.split(".")[0] === context.main;
+            }
+            else
+            {
+                return item.state === context.main;
+            }
+            
+            //return item.state === context.main;
         };
 
         $scope.items = [{
             name: 'tasks',
             icon: '/icu/assets/img/task.png',
-            state: 'tasks',
+            state: 'tasks.all',
             display: ['projects', 'discussions', 'people'],
             open: $scope.isCurrentState({state: 'tasks'})
         }, {
             name: 'projects',
             icon: '/icu/assets/img/project.png',
-            state: 'projects',
+            state: 'projects.all',
             display: ['discussions', 'people'],
             open: $scope.isCurrentState({state: 'projects'})
         }, {
             name: 'discussions',
             icon: '/icu/assets/img/meeting.png',
-            state: 'discussions',
+            state: 'discussions.all',
             display: ['projects', 'people'],
             open: $scope.isCurrentState({state: 'discussions'})
         }
