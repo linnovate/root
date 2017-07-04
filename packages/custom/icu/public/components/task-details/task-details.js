@@ -240,6 +240,9 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
+            
+            task.status = $scope.statuses[1];
+
             if (context.entityName === 'discussion') {
                 task.discussion = context.entityId;
             }
