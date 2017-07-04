@@ -37,6 +37,10 @@ directive('icuSidepane', function() {
             //return item.state === context.main;
         };
 
+        $scope.GoToMyTasks = function() {
+            $state.go('main.tasks.byassign');
+        }
+
         $scope.items = [{
             name: 'tasks',
             icon: '/icu/assets/img/task.png',
