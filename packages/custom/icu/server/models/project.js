@@ -63,6 +63,10 @@ var ProjectSchema = new Schema({
   sources: [String],
   circles: {
     type: Schema.Types.Mixed
+  },
+  WantRoom: {
+    type: Boolean,
+    default: false
   }
 });
 

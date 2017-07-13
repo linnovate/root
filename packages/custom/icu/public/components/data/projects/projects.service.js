@@ -110,6 +110,15 @@ angular.module('mean.icu.data.projectsservice', [])
             });
     }
 
+    function WantToCreateRoom(project) {
+        return $http.post(ApiUri + EntityPrefix + '/' + project._id + '/WantToCreateRoom', project)
+            .then(function (result) {
+            	WarningsService.setWarning(result.headers().warning);
+                project.WantToCreateRoom = !project.WantToCreateRoom;
+                return result.data;
+            });
+    }
+
     function getStarred() {
         return $http.get(ApiUri + EntityPrefix + '/starred').then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
@@ -128,6 +137,7 @@ angular.module('mean.icu.data.projectsservice', [])
         star: star,
         getStarred: getStarred,
         data: data,
-        selected: selected
+        selected: selected,
+        WantToCreateRoom: WantToCreateRoom
     };
 });

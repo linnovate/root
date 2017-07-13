@@ -45,6 +45,12 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="HI">
+                <button ng-class="{ 'orange': project.star }" ng-click="WantToCreateRoom(project)">
+                    <i id="HI"></i>
+                </button>
+            </div>
         </div>
         <button icu-comp-modal entity="project" entity-name="project" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
         <div class="description">

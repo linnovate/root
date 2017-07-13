@@ -84,6 +84,10 @@ module.exports = function(Icu, app) {
   app.route('/api/:entity(tasks|discussions|projects)/starred/:type(byAssign)')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
 
+  //Create HI Room if the user wish  
+  app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
+    .post(project.read, notification.createRoom);
+
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
   //.all(auth.requiresLogin, permission.echo)

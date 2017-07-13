@@ -16,6 +16,13 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.shouldAutofocus = !$stateParams.nameFocused;
 
         ProjectsService.getStarred().then(function (starred) {
+
+            // Chack if HI room created and so needs to show HI.png
+            if($scope.project.WantRoom == true)
+            {
+                $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
+            }
+
             $scope.project.star = _(starred).any(function (s) {
                 return s._id === $scope.project._id;
             });
@@ -93,6 +100,22 @@ angular.module('mean.icu.ui.projectdetails', [])
             ProjectsService.star(project).then(function () {
                 navigateToDetails(project);
             });
+        };
+
+        $scope.WantToCreateRoom = function (project) {
+
+            if($scope.project.WantRoom == false)
+            {
+                $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
+
+                project.WantRoom = true;
+
+                $scope.update(project, context);
+
+                ProjectsService.WantToCreateRoom(project).then(function () {
+                    navigateToDetails(project);
+                });
+            }
         };
 
         $scope.deleteProject = function (project) {
