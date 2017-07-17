@@ -43,7 +43,16 @@ exports.delete = function(doc, docType, room, next) {
   });
 };
 
-var buildSearchResponse = exports.buildSearchResponse = function(type, obj) {
+function inArray(elm,array){
+	for(var i=0;i<array.length;i++){
+		if(array[i]==elm){
+			return i;
+		}
+	}
+	return -1;
+}
+
+var buildSearchResponse = exports.buildSearchResponse = function(type, obj,userId) {
 
   console.yon('inbuild response');
   var groups = {};
@@ -63,11 +72,55 @@ var buildSearchResponse = exports.buildSearchResponse = function(type, obj) {
   }
 
   console.yon(groups);
+  if(groups.task!=undefined && groups.task!=null){
+  	var finalResults1=[];
+  	for(var i=0;i<groups.task.length;i++){
+  		var task = groups.task[i];
+  		if(task.creator==userId || task.assign==userId || inArray(userId,task.watchers)!=-1){
+  			finalResults1.push(task);
+  		}
+  	}
+  	groups["task"]=finalResults1;
+  }
+   if(groups.task!=undefined && groups.task!=null){
+  	var finalResults1=[];
+  	for(var i=0;i<groups.task.length;i++){
+  		var task = groups.task[i];
+  		if(task.creator==userId || task.assign==userId || inArray(userId,task.watchers)!=-1){
+  			finalResults1.push(task);
+  		}
+  	}
+  	groups["task"]=finalResults1;
+  }
+
+   if(groups.project!=undefined && groups.project!=null){
+  	var finalResults2=[];
+  	for(var i=0;i<groups.project.length;i++){
+  		var project = groups.project[i];
+  		if(project.creator==userId || inArray(userId,project.watchers)!=-1){
+  			finalResults2.push(project);
+  		}
+  	}
+  	groups["project"]=finalResults2;
+  }
+
+   if(groups.discussion!=undefined && groups.discussion!=null){
+  	var finalResults3=[];
+  	for(var i=0;i<groups.discussion.length;i++){
+  		var discussion = groups.discussion[i];
+  		if(discussion.creator==userId || inArray(userId,discussion.watchers)!=-1){
+  			finalResults3.push(discussion);
+  		}
+  	}
+  	groups["discussion"]=finalResults3;
+  }
+
 
   return groups;
 }
 
 exports.search = function(req, res, next) {
+	var userId=req.user._id;
   if (!req.query.term) {
     return;
   }
@@ -128,9 +181,9 @@ exports.search = function(req, res, next) {
         console.log('result.aggregations=' + result.aggregations);
         return next(new Error('Can\'t find ' + req.query.term));
       }
-      res.send(buildSearchResponse('aggs', result.aggregations.group_by_index.buckets))
+      res.send(buildSearchResponse('aggs', result.aggregations.group_by_index.buckets,userId))
     } else {
-      res.send(buildSearchResponse('simple', result.hits.hits))
+      res.send(buildSearchResponse('simple', result.hits.hits,userId))
     }
   })
 };
