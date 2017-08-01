@@ -252,7 +252,17 @@ angular.module('mean.icu.ui.tasklistdirective', [])
 
                      _(tasks.data).each(function(t) {
                         t.__state = creatingStatuses.Created;
-                    });
+                        t.PartTitle = t.title;
+                        if (t.title.length > 20)
+                        {
+                            t.PartTitle = t.title.substring(0,20) + "...";
+                        }
+                        else
+                        {
+                            t.PartTitle = t.title;
+                        }
+                        t.IsTitle = false;
+                        });
 
                     var offset = $scope.displayOnly ? 0 : 1;
                     

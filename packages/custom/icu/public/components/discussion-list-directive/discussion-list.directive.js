@@ -238,6 +238,16 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
 
                     _(discussions.data).each(function(d) {
                         d.__state = creatingStatuses.Created;
+                        d.PartTitle = d.title;
+                        if (d.title.length > 20)
+                        {
+                            d.PartTitle = d.title.substring(0,20) + "...";
+                        }
+                        else
+                        {
+                            d.PartTitle = d.title;
+                        }
+                        d.IsTitle = false;
                     });
 
                     var offset = $scope.displayOnly ? 0 : 1;

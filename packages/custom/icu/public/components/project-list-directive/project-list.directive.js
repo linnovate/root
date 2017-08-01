@@ -14,6 +14,15 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
             _($scope.projects).each(function(p) {
                 p.__state = creatingStatuses.Created;
+                if (p.title.length > 20)
+                {
+                    p.PartTitle = p.title.substring(0,20) + "...";
+                }
+                else
+                {
+                    p.PartTitle = p.title;
+                }
+                p.IsTitle = false;
             });
 
             var newProject = {
@@ -47,6 +56,13 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                         return project;
                     });
                 } else if (project.__state === creatingStatuses.Created) {
+
+                    if (!project.IsTitle)
+                    {
+                        project.PartTitle = project.PartTitle.split("...")[0] + project.title.substring(project.PartTitle.split("...")[0].length,project.title.length);
+                        project.IsTitle = !project.IsTitle;
+                    }
+                    project.title = project.PartTitle;
                     return ProjectsService.update(project);
                 }
             };
@@ -111,6 +127,8 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                 }
 
                 var nameFocused = angular.element($event.target).hasClass('name');
+
+                project.PartTitle = project.title;
 
                 if (project.__state === creatingStatuses.NotCreated) {
                     $scope.createOrUpdate(project).then(function() {
@@ -193,6 +211,12 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             };
 
             $scope.hideAutoComplete = function(task) {
+
+                if (task.title.length > 20)
+                {
+                    task.PartTitle = task.title.substring(0,20) + "...";
+                }
+
                 task.__autocomplete = false;
                 $scope.searchResults.length = 0;
                 $scope.selectedSuggestion = 0;
@@ -211,6 +235,16 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
                         _(projects.data).each(function(p) {
                             p.__state = creatingStatuses.Created;
+                            p.PartTitle = p.title;
+                            if (p.title.length > 20)
+                            {
+                                p.PartTitle = p.title.substring(0,20) + "...";
+                            }
+                            else
+                            {
+                                p.PartTitle = p.title;
+                            }
+                            p.IsTitle = false;
                         });
 
                         var offset = $scope.displayOnly ? 0 : 1;
