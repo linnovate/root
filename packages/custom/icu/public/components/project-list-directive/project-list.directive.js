@@ -46,7 +46,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                          entityId: context.entityId
                      }, { reload: false });
                     
-                    orderService.setOrder(e, elindex, dropindex);
+                    orderService.setOrder(e, elindex, dropindex, $scope.projects.length - 1);
                 });
                 // $scope.$on('dragularrelease', function (e, el) {
                 //     e.stopPropagation();

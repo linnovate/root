@@ -96,7 +96,10 @@ angular.module('mean.icu.ui.tasklist', [])
 	}
 
 	$scope.changeOrder = function () {
-		$scope.sorting.isReverse = !$scope.sorting.isReverse;
+		if($scope.sorting.field != "custom"){
+			$scope.sorting.isReverse = !$scope.sorting.isReverse;
+		}
+
 		/*Made By OHAD - Needed for reversing sort*/
 		$state.go($state.current.name, { sort: $scope.sorting.field });
 	};
@@ -129,11 +132,15 @@ angular.module('mean.icu.ui.tasklist', [])
 	}, {
 		title: 'created',
 		value: 'created'
-	}, {
-		title: 'custom',
-		value: 'custom'
 	}
 	];
+
+	if(context.entityName != "all"){
+            $scope.sortingList.push({
+                title: 'custom',
+                value: 'custom'
+            });
+        };
 
 	function navigateToDetails(task) {
 		$scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';

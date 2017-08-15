@@ -20,8 +20,10 @@ angular.module('mean.icu.ui.discussionlist', [])
         };
 
         $scope.changeOrder = function () {
-            $scope.sorting.isReverse = !$scope.sorting.isReverse;
-            
+            if($scope.sorting.field != "custom"){
+               $scope.sorting.isReverse = !$scope.sorting.isReverse;
+            }
+
             /*Made By OHAD - Needed for reversing sort*/
             $state.go($state.current.name, { sort: $scope.sorting.field });
         };
@@ -50,11 +52,15 @@ angular.module('mean.icu.ui.discussionlist', [])
             }, {
                 title: 'created',
                 value: 'created'
-            }, {
-                title: 'custom',
-                value: 'custom'
             }
         ];
+
+        if(context.entityName != "all"){
+            $scope.sortingList.push({
+                title: 'custom',
+                value: 'custom'
+            });
+        };
 
         function navigateToDetails(discussion) {
             $scope.detailsState = context.entityName === 'all' ?

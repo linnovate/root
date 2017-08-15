@@ -53,7 +53,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                          entityId: context.entityId
                      }, { reload: false });
                     
-                    orderService.setOrder(e, elindex, dropindex);
+                    orderService.setOrder(e, elindex, dropindex, $scope.tasks.length - 1);
                 });
 
                 // $scope.$on('dragularrelease', function (e, el) {

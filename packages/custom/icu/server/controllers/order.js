@@ -30,7 +30,12 @@ exports.set = function (req, res) {
             data.forEach(function (element) {
 
                 if (element.order == req.body.elindex + 1) {
-                    update = { order: req.body.dropindex + 1 }
+                    if(req.body.size == req.body.dropindex){
+                        update = { order: req.body.dropindex}
+                    }else{
+                        update = { order: req.body.dropindex + 1 }
+                   }
+                    
                 } else {
                     update = { order: element.order -= 1 }
                 }
@@ -48,7 +53,12 @@ exports.set = function (req, res) {
             data.forEach(function (element) {
 
                 if (element.order == req.body.elindex + 1) {
-                    update = { order: req.body.dropindex + 1 }
+                   // if(req.body.dropindex == 0){
+                    //    update = { order: req.body.dropindex}
+                   // }else{
+                           update = { order: req.body.dropindex + 1 }
+                   // }
+                    
                 } else {
                     update = { order: element.order += 1 }
                 }
