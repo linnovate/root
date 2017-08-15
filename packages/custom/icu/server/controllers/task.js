@@ -35,6 +35,8 @@ var task = crud('tasks', options);
 var Task = require('../models/task'),
   mean = require('meanio');
 
+var Order = require('../models/order')
+
 Object.keys(task).forEach(function(methodName) {
   if (methodName !== 'create' || methodName !== 'update') {
     exports[methodName] = task[methodName];
@@ -196,7 +198,28 @@ exports.getByEntity = function(req, res, next) {
         .skip(pagination.start)
         .limit(pagination.limit);
     }
-
+    //if(pagination.sort == "custom"){
+      // Task.aggregate([
+      //   {$unwind: '$ref'},
+      //    {
+      //      $lookup:{
+      //              from: 'Ordertasks',
+      //              localField: '_id',
+      //              foreignField: 'ref',
+      //              as: 'tasks'}
+      //      },
+      //       {$sort: {'tasks.order':1 }}      
+      //  ]).exec(function(err, tasks) {
+      //    console.log(tasks);
+      //  });
+      // query.exec(function(err, tasks) {
+      //       tasks.forEach(function(element){
+      //           Order.find({ref:element._id},function(doc){
+                  
+      //           })
+      //       })
+      //     })
+      //}
     query.exec(function(err, tasks) {
       if (err) {
         req.locals.error = {
@@ -209,9 +232,28 @@ exports.getByEntity = function(req, res, next) {
           });
         }
       }
+      if(pagination.sort == "custom"){
+        var temp = new Array(tasks.length) ;
+        var tasksTemp = tasks;
+        Order.find({name: "Task", project:tasks[0].project}, function(err, data){
+            data.forEach(function(element) {
+              for (var index = 0; index < tasksTemp.length; index++) {
+                if(JSON.stringify(tasksTemp[index]._id) === JSON.stringify(element.ref)){
+                    temp[element.order - 1] = tasks[index];
+                }
+                
+              }
+            });
+             tasks = temp;
+            req.locals.result = tasks;
+            next();
+        })
+      }
+      else{
       req.locals.result = tasks;
 
       next();
+      }
     });
   });
 

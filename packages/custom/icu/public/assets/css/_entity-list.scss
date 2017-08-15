@@ -3,11 +3,11 @@
 
     .entity-list-container {
         &.big {
-            height: calc(100% - 50px);
+            height: calc(100% - 150px);
         }
 
         &.small {
-            height: calc(100% - 146px);
+            height: calc(100% - 150px);
         }
 
         .list-table {
@@ -80,6 +80,12 @@
                     &.id {
                         width: 55px;
                         color: $grey1;
+                        border-left: 5px;
+                    }
+
+                    &.move{
+                        width: 15px;
+                        color: $grey1;
                     }
 
                     &.arrow {
@@ -151,3 +157,26 @@
         }
     }
 }
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    background-color: $light-grey1;
+}
+
+.gu-hide {
+    display: none !important;
+}
+
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+.gu-transit {
+    opacity: 0.2;
+}
+

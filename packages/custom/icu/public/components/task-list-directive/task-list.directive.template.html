@@ -1,10 +1,12 @@
 <div class="list-table" >
     <div ng-show="isLoading" class="loader"></div>
-    <table class="tasks" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
-        <tbody>
+    <table  class="tasks" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
+        <tbody  class='containerVertical'>
             <tr data-ng-repeat="task in tasks | filterByOptions | orderBy:order.field:order.isReverse"
-                data-ng-class="{ 'active': isCurrentState(task._id) }"
+                data-ng-class="{ 'active': isCurrentState(task._id), 'empty' :  !task._id, 'roww' : task._id }"
+                ng-class="task._id ? '': 'empty'"
                 ng-click="initialize($event, task)"
+                ng-mousedown="currentTaskId(task._id)"
                 icu-list-row
                 data-id="{{task._id}}"
                 data="{ task: task,
@@ -34,3 +36,4 @@
         </div>
     </div> -->
 </div>
+<div class="bottomBar" style="height: 10px;"></div>

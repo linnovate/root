@@ -8,7 +8,74 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             Created: 2
         };
 
-        function controller($scope, ProjectsService) {
+        function controller($scope, ProjectsService, orderService, dragularService, $element, $interval, $window) {
+
+            $scope.currentTaskId = function (id) {
+                $scope.taskId = id;
+            };
+            if($scope.order.field == "custom"){
+                var timer,
+                    container = $('.containerVertical'), 
+                    scroll = $('.list-table'),
+                    box = $('middlepane-container'),
+                    topBar = $('.filters'),
+                    buttomBar = $('.bottomBar');
+
+                dragularService.cleanEnviroment();
+
+                dragularService(container, {
+                    scope: $scope,
+                    boundingBox: box,
+                    lockY: true,
+                    moves: function (el, container, handle) {
+                        return handle.className === 'move';
+                    }
+                });
+
+                $scope.$on('dragulardrag', function (e, el) {
+                    e.stopPropagation();
+                    $('tr').removeClass('active')
+                    el.className = 'active';
+                });
+
+                $scope.$on('dragulardrop', function (e, el, targetcontainer, sourcecontainer, conmodel, elindex, targetmodel, dropindex) {
+                    e.stopPropagation();
+                     $state.go($scope.detailsState + '.activities', {
+                         id: $scope.taskId,
+                         entity: context.entityName,
+                         entityId: context.entityId
+                     }, { reload: false });
+                    
+                    orderService.setOrder(e, elindex, dropindex);
+                });
+                // $scope.$on('dragularrelease', function (e, el) {
+                //     e.stopPropagation();
+                //     $state.go($scope.detailsState + '.activities', {
+                //         id: $scope.taskId,
+                //         entity: context.entityName,
+                //         entityId: context.entityId
+                //     }, { reload: false });
+                // });
+
+                registerEvents(topBar, scroll, -4);
+                registerEvents(buttomBar, scroll, 4);
+
+                function registerEvents(bar, container, inc, speed) {
+                    if (!speed) {
+                        speed = 20;
+                    }
+                    angular.element(bar).on('dragularenter', function () {
+                        container[0].scrollTop += inc;
+                        timer = $interval(function moveScroll() {
+                            container[0].scrollTop += inc;
+                        }, speed);
+                    });
+                    angular.element(bar).on('dragularleave dragularrelease', function () {
+                        $interval.cancel(timer);
+                    });
+                }
+        };
+
             $scope.context = context;
             $scope.isLoading = true;
 

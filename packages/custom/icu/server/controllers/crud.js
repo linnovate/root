@@ -14,7 +14,7 @@ module.exports = function(entityName, options) {
           message: 'No Content'
         };
       }
-
+      
       req.locals.result = data;
       next();
     };
@@ -54,7 +54,7 @@ module.exports = function(entityName, options) {
     }
 
     var entity = req.locals.data.body || req.body.data || req.body;
-   
+
     entityService
       .create(entity, { user: req.user }, req.acl)
       .then(success(req, next), error(req, next));

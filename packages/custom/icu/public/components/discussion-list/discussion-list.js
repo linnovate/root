@@ -50,6 +50,9 @@ angular.module('mean.icu.ui.discussionlist', [])
             }, {
                 title: 'created',
                 value: 'created'
+            }, {
+                title: 'custom',
+                value: 'custom'
             }
         ];
 

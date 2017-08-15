@@ -52,6 +52,9 @@ angular.module('mean.icu.ui.projectlist', [])
             }, {
                 title: 'created',
                 value: 'created'
+            }, {
+                title: 'custom',
+                value: 'custom'
             }
         ];
 

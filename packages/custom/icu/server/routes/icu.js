@@ -21,7 +21,7 @@ var pagination = require('../middlewares/pagination.js');
 var error = require('../middlewares/error.js');
 var config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {};
-
+var order = require('../controllers/order');
 var express = require('express')
 
 //update mapping - OHAD
@@ -233,6 +233,11 @@ module.exports = function(Icu, app) {
     .get(task.getOverdueWatchedTasks);
   app.route('/api/watchedTasks')
     .get(task.getWatchedTasksList);
+
+    app.route('/api/order/set')
+    .post(order.set);
+
+   
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);

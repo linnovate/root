@@ -129,6 +129,9 @@ angular.module('mean.icu.ui.tasklist', [])
 	}, {
 		title: 'created',
 		value: 'created'
+	}, {
+		title: 'custom',
+		value: 'custom'
 	}
 	];
 

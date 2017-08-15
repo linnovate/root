@@ -14,7 +14,7 @@
                 {{ 'allTasks' | i18next }}
             </header>
         </div>
-        <div class="header-wrap subtasks" ng-switch-when="task"
+        <div id="leftTopBar" class="header-wrap subtasks" ng-switch-when="task"
             ng-class="{ 'active': isCurrentState(['main.{{currentContext.main}}.byparent.activities']) }"
             >
             <header class="title">

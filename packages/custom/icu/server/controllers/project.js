@@ -21,6 +21,8 @@ var mongoose = require('mongoose'),
   _ = require('lodash'),
   elasticsearch = require('./elasticsearch.js');
 
+var Order = require('../models/order')
+
 Object.keys(projectController).forEach(function(methodName) {
   if (methodName !== 'destroy') {
     exports[methodName] = projectController[methodName];
@@ -136,13 +138,31 @@ exports.getByEntity = function(req, res, next) {
             project.star = true;
           });
         }
-
-        req.locals.result = projects;
+        if(pagination.sort == "custom"){
+        var temp = new Array(projects.length) ;
+        var projectTemp = projects;
+        Order.find({name: "Project", discussion:projects[0].discussion}, function(err, data){
+            data.forEach(function(element) {
+              for (var index = 0; index < projectTemp.length; index++) {
+                if(JSON.stringify(projectTemp[index]._id) === JSON.stringify(element.ref)){
+                    temp[element.order - 1] = projects[index];
+                }
+                
+              }
+            });
+             projects = temp;
+            req.locals.result = projects;
+            next();
+        })
       }
-
-      next();
+      else{
+       
+        req.locals.result = projects;
+         next();
+      }
+      }
     });
-
+    
   });
 
 

@@ -2,12 +2,14 @@
 
 var _ = require('lodash');
 var q = require('q');
+var orderController = require('../controllers/order.js');
 
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
 
 var TaskModel = require('../models/task.js');
 var TaskArchiveModel = mongoose.model('task_archive');
+var Order = require('../models/order.js');
 
 var ProjectModel = require('../models/project.js');
 var ProjectArchiveModel = mongoose.model('project_archive');
@@ -170,6 +172,7 @@ module.exports = function(entityName, options) {
         entity.updated = new Date();
         entity.creator = user.user._id;
         deffered.resolve(new Model(entity).save(user).then(function(e) {
+          orderController.addOrder(e, entity, Model);
           return Model.populate(e, options.includes);
         }));
       }
@@ -203,8 +206,13 @@ module.exports = function(entityName, options) {
 
 
   function destroy(entity, user) {
-    return entity.remove(user);
-  }
+    options.entity = entity;
+    return entity.remove(user, function(err){
+      if(!err){
+        orderController.deleteOrder(options.entity, Model);
+      }
+    });
+    }
 
   function readHistory(id) {
     var Query = ArchiveModel.find({

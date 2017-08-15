@@ -23,6 +23,8 @@ var utils = require('./utils'),
   mailService = require('../services/mail'),
   elasticsearch = require('./elasticsearch.js');
 
+  var Order = require('../models/order');
+
 Object.keys(discussionController).forEach(function(methodName) {
   if (methodName !== 'destroy') {
     exports[methodName] = discussionController[methodName];
@@ -403,11 +405,29 @@ exports.getByEntity = function(req, res, next) {
             discussion.star = true;
           });
         }
+              if(pagination.sort == "custom"){
+        var temp = new Array(discussions.length) ;
+        var discussionTemp = discussions;
+        Order.find({name: "Discussion", project:discussions[0].project}, function(err, data){
+            data.forEach(function(element) {
+              for (var index = 0; index < discussionTemp.length; index++) {
+                if(JSON.stringify(discussionTemp[index]._id) === JSON.stringify(element.ref)){
+                    temp[element.order - 1] = discussions[index];
+                }
+                
+              }
+            });
+             discussions = temp;
+            req.locals.result = discussions;
+            next();
+        })
+      }
+      else{
 
         req.locals.result = discussions;
+        next();
       }
-
-      next();
+      }
     });
 
   });
