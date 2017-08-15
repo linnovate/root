@@ -48,4 +48,25 @@
             <div class="time">{{version.created | date:'medium'}}</div>
         </div>
     </div>
+
+            <div class="add-update" ng-show="stateParams.id">
+            <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save()">
+                <textarea ctrlenter="save()" ng-model="activity.description" ng-focus="expandUpdate()" ng-blur="minimizeUpdate()" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
+
+                <div class="action-buttons">
+                    <button type="button" class="attachment"
+                            ngf-select
+                            ngf-change="upload($files)"
+                            ngf-multiple="true"></button>
+
+                    <span data-ng-repeat="attachment in attachments">
+                        <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
+                    </span>
+
+                    <button type="submit" class="save" >{{ 'add' | i18next }}</button>
+                </div>
+                                <div class="upload-err" ng-show="showMsgErr">failed to upload file </div>
+
+            </form>
+        </div>
 </div>

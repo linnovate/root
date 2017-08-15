@@ -47,7 +47,9 @@ gulp.task('jshint', function () {
 gulp.task('sass', function() {
   return gulp.src(paths.sass)
     .pipe(plugins.sass())
-    .pipe(currentLanguage.direction === 'rtl' ? plugins.rtlcss() : gutil.noop())
+    .pipe(currentLanguage.direction === 'rtl' ? plugins.rtlcss({
+      clean: false
+    }) : gutil.noop())
     .pipe(gulp.dest(function (vinylFile) {
       return vinylFile.cwd;
     }));

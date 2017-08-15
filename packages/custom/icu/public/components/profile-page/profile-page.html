@@ -1,22 +1,27 @@
-<div class="profile-page">
-    <form novalidate name="profileform" ng-submit="editProfile(profileform)">
+<div class="profile-page" ng-init="showProfile=true;">
+    <div class="profile-links">
+        <a href="" ng-click="showProfile=true;">{{ 'Profile' | i18next }}<a> 
+            &nbsp;
+        <a href="" ng-click="showProfile=false;">{{ 'Events' | i18next }}</a>
+    </div>
+    <form novalidate name="profileform" ng-submit="editProfile(profileform)" ng-if="showProfile">
         <div class=form-group>
             <label>{{ 'username' | i18next }}</label>
-            <input class="form-control" type="text" ng-model="me.username">
+            <input class="form-control" type="text" ng-model="me.username" disabled>
         </div>
         <div class=form-group>
             <label>{{ 'name' | i18next }}</label>
-            <input class="form-control" type="text" ng-model="me.name">
+            <input class="form-control" type="text" ng-model="me.fullname" disabled>
         </div>
         <div class=form-group>
             <label>{{ 'email' | i18next }}</label>
-            <input class="form-control" type="text" ng-model="me.email">
+            <input class="form-control" type="text" ng-model="me.email" disabled>
         </div>
-        <div class=form-group>
+        <div class=form-group ng-show="needToBeIgnored">
             <label>{{ 'passwordOptional' | i18next }}</label>
             <input class="form-control" type="password" ng-model="me.password">
         </div>
-        <div class=form-group>
+        <div class=form-group ng-show="needToBeIgnored">
             <label>{{ 'confirmPasswordOptional' | i18next }}</label>
             <input class="form-control" type="password" ng-model="confirm">
         </div>
@@ -27,24 +32,25 @@
             </div>
             <img class="avatar" ng-src="{{avatar}}?cb={{hash}}"></img>
         </div>
-        <div class=form-group>
+        <div class=form-group ng-show="needToBeIgnored">
             <label>{{ 'hiUid' | i18next }}</label>
             <input class="form-control" type="text" ng-model="me.profile.hiUid">
         </div>
-        <div class=form-group>
+        <div class=form-group ng-show="needToBeIgnored">
             <span>You can get your user-id here</span>
         </div>
-        <div class=form-group>
+        <div class=form-group ng-show="needToBeIgnored">
             <label>{{ 'hiUserName' | i18next }}</label>
             <input class="form-control" type="text" ng-model="hiUserName">
         </div>
-        <div class=form-group>
+        <div class=form-group ng-show="needToBeIgnored">
             <label>{{ 'hiPassword' | i18next }}</label>
             <input class="form-control" type="text" ng-model="hiPassword">
         </div>
-        <div class=form-group>
+        <div class=form-group ng-show="needToBeIgnored">
             <span class="btn btn-info" ng-click="loginToHi(hiUserName, hiPassword)">{{ 'getHiUserId' | i18next }}</span>
         </div>
         <button>{{'save' | i18next }}</button>
     </form>
+    <div ng-if="!showProfile" icu-event-drops></div>
 </div>

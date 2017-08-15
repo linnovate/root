@@ -2,9 +2,92 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsDocuments', function () {
-        function controller($scope, $http, DocumentsService, context, ActivitiesService) {
+        function controller($scope, $http, DocumentsService, context, ActivitiesService, $stateParams, UsersService) {
+            
+            ActivitiesService.issueId=$stateParams.id || $stateParams.entityId;
+            
+            $scope.stateParams = $stateParams;
+            
+            ActivitiesService.issue = $scope.entityName;
             $scope.context = context;
             $scope.isOpen = {};
+            $scope.activity = {
+                description: ''
+            };
+
+            $scope.upload = function(files) {
+                $scope.attachments = files;
+            };
+
+            var clearForm = function() {
+                $scope.attachments = [];
+                $scope.activity = {
+                    description: ''
+                };
+            };
+
+            $scope.save = function() {
+                console.log('activity', $scope.activity, 'context', context);
+                if (_.isEmpty($scope.attachments) && _.isEmpty($scope.activity.description)) return;
+                $scope.activity.issue = $scope.entityName;
+                $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
+                $scope.activity.type = $scope.attachments && $scope.attachments.length ? 'document' : 'comment';
+
+                // $scope.activity.size = $scope.attachments[0].size;
+
+                var isRoomProject = $scope.entityName === 'project',
+                    isRoomFortask = $scope.entityName === 'task' && $scope.entity.project,
+                    context = {};
+
+                if (isRoomProject || isRoomFortask) { //for notification in hi
+                    context = {
+                        room: isRoomProject ? $scope.entity.room : $scope.entity.project.room,
+                        action: 'added',
+                        type: $scope.activity.type,
+                        description: $scope.activity.description,
+                        issue: $scope.activity.issue,
+                        issueName: $scope.entity.title,
+                        name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : '',
+                        location: location.href
+                    }
+                }
+
+                ActivitiesService.create({
+                    data: $scope.activity,
+                    context: context
+                }).then(function(result) {
+                    if (!_.isEmpty($scope.attachments)) {
+                        var file = $scope.attachments;
+                        var data = {
+                            issueId: result._id,
+                            issue: 'update',
+                            entity: $scope.entityName,
+                            entityId: $stateParams.id || $stateParams.entityId
+                        };
+                        console.log('if data', data);
+                        console.log('if file', file);
+
+                        result.attachments = [];
+
+                        for (var index = 0; index < file.length; index++) {
+
+                            DocumentsService.saveAttachments(data, file[index]).success(function(attachment) {
+                                console.log('[attachment]', [attachment]);
+                                
+                                result.attachments[result.attachments.length] = attachment;
+
+                                $scope.documents.push(attachment);
+                            });
+                        }
+                    }
+                    //clearForm();
+                    console.log('result', result);
+                    //$scope.documents.push(result);
+                    clearForm();
+                });
+            };
+
+
             $scope.trigger = function (document) {
                 $scope.isOpen[document._id] = !$scope.isOpen[document._id];
             };
@@ -80,7 +163,9 @@ angular.module('mean.icu.ui.tabs')
         return {
             restrict: 'A',
             scope: {
-                documents: '='
+                documents: '=',
+                entity: '=',
+                entityName: '@'
             },
             replace: true,
             controller: controller,

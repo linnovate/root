@@ -12,6 +12,7 @@ var attachments = require('../controllers/attachments');
 var star = require('../controllers/star');
 var elasticsearch = require('../controllers/elasticsearch');
 var templates = require('../controllers/templates');
+var eventDrops = require('../controllers/event-drops');
 
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
@@ -57,7 +58,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics)*').all(circles.acl());
+  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
 
@@ -82,6 +83,10 @@ module.exports = function(Icu, app) {
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
   app.route('/api/:entity(tasks|discussions|projects)/starred/:type(byAssign)')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
+
+  //Create HI Room if the user wish  
+  app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
+    .post(project.read, notification.createRoom);
 
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
@@ -233,11 +238,11 @@ module.exports = function(Icu, app) {
     .get(task.getOverdueWatchedTasks);
   app.route('/api/watchedTasks')
     .get(task.getWatchedTasksList);
-
-    app.route('/api/order/set')
+  app.route('/api/order/set')
     .post(order.set);
+  app.route('/api/event-drops')
+    .get(eventDrops.getMyEvents);
 
-   
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);

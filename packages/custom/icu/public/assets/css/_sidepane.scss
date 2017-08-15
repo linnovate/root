@@ -19,6 +19,11 @@
         color: white;
         font-size: 26px;
         text-align: center;
+
+        .sidepane-title
+        {
+            cursor: pointer
+        }
     }
 
     nav {

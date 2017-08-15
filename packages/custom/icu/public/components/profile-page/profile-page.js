@@ -3,6 +3,8 @@
 angular.module('mean.icu.ui.profile', [])
 .controller('ProfileController', function($scope, $state, me, UsersService, $http) {
     $scope.me = me;
+    $scope.me.fullname = $scope.me.name + " " + $scope.me.lastname;
+    $scope.needToBeIgnored = false;
 
     if (!$scope.me.profile) {
         $scope.me.profile = {};

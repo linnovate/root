@@ -151,6 +151,10 @@ angular.module('mean.icu.ui.tabs')
                     value: ['userObj', 'name'],
                     klass: "user-name"
                 }, {
+                    type: 'deepObject',
+                    value: ['userObj', 'lastname'],
+                    klass: "user-name"
+                }, {
                     type: 'text',
                     value: 'toThis'
                 }, {
