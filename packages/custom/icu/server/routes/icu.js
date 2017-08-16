@@ -91,7 +91,7 @@ module.exports = function(Icu, app) {
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
   //.all(auth.requiresLogin, permission.echo)
-  .post(project.create, notification.createRoom, updates.created)
+  .post(project.create, updates.created)
     .get(pagination.parseParams, project.all, star.isStarred, pagination.formResponse);
   app.route('/api/projects/:id([0-9a-fA-F]{24})')
     .get(project.read, star.isStarred)
