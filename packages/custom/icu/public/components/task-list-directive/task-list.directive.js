@@ -20,7 +20,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
             $scope.currentTaskId = function (id) {
                 $scope.taskId = id;
             };
-            if($scope.order.field == "custom"){
+            if(($scope.order != null) && ($scope.order.field == "custom")){
                 var timer,
                     container = $('.containerVertical'), 
                     scroll = $('.list-table'),
