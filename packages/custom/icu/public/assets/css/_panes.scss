@@ -36,3 +36,22 @@
         }
     }
 }
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .panes-wrapper {
+      margin-left: 0 !important;
+  }
+  .middlepane * {
+    visibility: visible;
+  }
+  .middlepane {
+    visibility: visible;
+    width: 100% !important;
+    position: fixed !important;
+  }
+  .middlepane .header {
+      display: none;
+  }
+}
