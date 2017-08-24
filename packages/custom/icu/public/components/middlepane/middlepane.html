@@ -20,6 +20,10 @@
     		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getWatchedTasks')">{{'tasksImWatching' | i18next}}</div>
     	</div>
     </div>
+    <button class="hide-details"
+            ng-class="{'open': !detailsPane.isHidden, 'collapsed': detailsPane.isHidden}"
+            ng-click="detailsPane.isHidden = !detailsPane.isHidden">
+    </button>
 </header>
 <div data-ng-controller="MiddlepaneController" class="middlepane-container">
     <div data-ui-view="middlepane" class="full-height"></div>

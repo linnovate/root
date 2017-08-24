@@ -15,6 +15,10 @@ angular.module('mean.icu').controller('IcuController',
         isHidden: false
     };
 
+    $scope.detailsPane = {
+        isHidden: false
+    }
+
     $scope.me = me;
     $scope.projects = projects.data || projects;
     $scope.discussions = discussions.data || discussions;

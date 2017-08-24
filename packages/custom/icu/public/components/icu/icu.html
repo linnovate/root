@@ -2,8 +2,8 @@
  <!-- people="people" -->
 <div icu-sidepane projects="projects" discussions="discussions" people="" class="sidepane animate-hide" ng-hide="menu.isHidden"></div>
 <div class="panes-wrapper" ng-class="{ wide: menu.isHidden }">
-    <div icu-middlepane class="middlepane"></div>
-    <div icu-detailspane class="detailspane" me="me" projects="projects" discussions="discussions"></div>
+    <div icu-middlepane class="middlepane" ng-class="{ wide: detailsPane.isHidden }"></div>
+    <div icu-detailspane class="detailspane animate-hide" ng-hide="detailsPane.isHidden" me="me" projects="projects" discussions="discussions"></div>
 </div>
 
 
