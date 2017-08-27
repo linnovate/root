@@ -141,6 +141,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.updateCurrentProject = function(){
+            $scope.project.PartTitle = $scope.project.title;
             ProjectsService.currentProjectName = $scope.project.title;
         }
 

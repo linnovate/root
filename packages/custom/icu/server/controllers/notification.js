@@ -104,7 +104,7 @@ exports.createRoom = function(req, res, next) {
                 req.hi = {
                     error: error
                 };
-                project.hasRoom = false;
+                project.hasRoom = true;
                 project.save();
                 next();
             } else {
@@ -123,7 +123,7 @@ exports.updateRoom = function(req, res, next) {
     if (req.locals.error) {
         return next();
     }
-    if (!req.locals.result.room && !req.locals.result.hasRoom) {
+    if (!req.locals.result.room && !req.locals.result.hasRoom && req.locals.result.WantRoom) {
         Project.findOne({
             _id: req.locals.result._id
         }).exec(function(error, project) {

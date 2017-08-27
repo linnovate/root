@@ -21,7 +21,7 @@
                     <ui-select ng-model="discussion.assign" on-select="update(discussion)">
                         <ui-select-match>
                             <div icu-avatar user="$select.selected"></div>
-                            <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
+                            <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}</span>
                         </ui-select-match>
                         <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search }">
                             <div icu-avatar user="user"></div>
