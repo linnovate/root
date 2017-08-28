@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.projectlistdirective', [])
-    .directive('icuProjectList', function ($state, $uiViewScroll, $timeout, $stateParams, context) {
+    .directive('icuProjectList', function ($state, $uiViewScroll, $timeout, $stateParams, context, LayoutService) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -214,6 +214,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                         nameFocused: nameFocused
                     });
                 }
+                LayoutService.clicked();
             };
 
             $scope.isCurrentState = function (id) {

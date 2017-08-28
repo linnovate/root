@@ -11,6 +11,7 @@ angular.module('mean.icu').controller('IcuController',
         people,
         context,
         tasks,
+        LayoutService,
         TasksService) {
     $scope.menu = {
         isHidden: false
@@ -30,6 +31,24 @@ angular.module('mean.icu').controller('IcuController',
         'discussion': 'discussions',
         'user': 'people'
     };
+
+    $scope.getLayoutIcon = function() {
+      return LayoutService.getLayoutIcon();
+    }
+
+    $scope.changeLayout = function() {
+      var state = LayoutService.changeLayout();
+      if (state === 3) {
+        $scope.detailsPane.isHidden = false;
+        $scope.menu.isHidden = false;
+      } else if (state === 2) {
+          $scope.detailsPane.isHidden = false;
+          $scope.menu.isHidden = true;
+      } else {
+          $scope.detailsPane.isHidden = true;
+          $scope.menu.isHidden = true;
+      }
+    }
     
     //Made By OHAD
     //$state.go('socket');
@@ -79,6 +98,7 @@ angular.module('mean.icu').controller('IcuController',
                 context.entityId = undefined;
             }
         }
+
     }
 
     var state = $state.current;
@@ -93,11 +113,17 @@ angular.module('mean.icu').controller('IcuController',
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
         var state = toState;
         state.params = toParams;
-    initializeContext(state);
+        initializeContext(state);
         initializeContext(state);
     });
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+      if (toState.url !== '/modal') {
+        if (LayoutService.show() && $scope.detailsPane.isHidden) {
+            $state.go(toState.name + '.modal');
+        }
+      }
+
         // console.log(arguments);
     });
 });

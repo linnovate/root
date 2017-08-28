@@ -185,6 +185,26 @@ angular.module('mean.icu').config([
             };
         }
 
+        function getDetailspaneModal() {
+            return {
+                url: '/modal',
+                onEnter: ['$stateParams', '$state', '$uibModal', '$resource', 'LayoutService', function($stateParams, $state, $uibModal, $resource, LayoutService) {
+                    $uibModal.open({
+                        templateUrl: "/icu/components/detailspane/detailspane-modal.html",
+                        size: 'lg',
+                        controller: ['$scope', function($scope) {
+                            $scope.cancel = function() {
+                                $scope.$dismiss();
+                            };
+                        }]
+                    }).result.finally(function() {
+                        LayoutService.unClick();
+                        $state.go('^');      
+                    });
+                }]
+            }
+        }
+
         function getDiscussionDetailsState(urlPrefix) {
             if (!urlPrefix) {
                 urlPrefix = '';
@@ -610,17 +630,20 @@ angular.module('mean.icu').config([
             })
             .state('main.tasks.all.details', getTaskDetailsState())
             .state('main.tasks.all.details.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.all.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.all.details.documents', getDetailsTabState('task', 'documents'))
         // .state('main.tasks.all.details.subtasks', getDetailsSubTasksState())
 
         .state('main.tasks.byentity', generateStateByEntity('task'))
             .state('main.tasks.byentity.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byentity.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.documents', getDetailsTabState('task', 'documents'))
             .state('main.tasks.byentity.tasks', getDetailsTabState('task', 'tasks'))
         // .state('main.tasks.byentity.subtasks', getDetailsSubTasksState())
 
         .state('main.tasks.byentity.details', getTaskDetailsState())
             .state('main.tasks.byentity.details.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.details.documents', getDetailsTabState('task', 'documents'))
         // .state('main.tasks.byentity.details.subtasks', getDetailsSubTasksState())
 
@@ -658,9 +681,11 @@ angular.module('mean.icu').config([
             }
         })
             .state('main.tasks.byassign.activities', getDetailsByAssignTabState('activities'))
+            .state('main.tasks.byassign.activities.modal', getDetailspaneModal())
             .state('main.tasks.byassign.documents', getDetailsByAssignTabState('documents'))
             .state('main.tasks.byassign.details', getTaskDetailsState())
             .state('main.tasks.byassign.details.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byassign.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byassign.details.documents', getDetailsTabState('task', 'documents'))
 
 
@@ -693,9 +718,11 @@ angular.module('mean.icu').config([
             }
         })
             .state('main.tasks.byparent.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byparent.activities.modal', getDetailspaneModal())
             .state('main.tasks.byparent.documents', getDetailsTabState('task', 'documents'))
             .state('main.tasks.byparent.details', getTaskDetailsState())
             .state('main.tasks.byparent.details.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byparent.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byparent.details.documents', getDetailsTabState('task', 'documents'))
 
 
@@ -746,16 +773,19 @@ angular.module('mean.icu').config([
             })
             .state('main.projects.all.details', getProjectDetailsState())
             .state('main.projects.all.details.activities', getDetailsTabState('project', 'activities'))
+            .state('main.projects.all.details.activities.modal', getDetailspaneModal())
             .state('main.projects.all.details.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.all.details.tasks', getDetailsTabState('project', 'tasks'))
 
         .state('main.projects.byentity', generateStateByEntity('project'))
             .state('main.projects.byentity.activities', getDetailsTabState('project', 'activities'))
+            .state('main.projects.byentity.activities.modal', getDetailspaneModal())
             .state('main.projects.byentity.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.byentity.tasks', getDetailsTabState('project', 'tasks'))
 
         .state('main.projects.byentity.details', getProjectDetailsState())
             .state('main.projects.byentity.details.activities', getDetailsTabState('project', 'activities'))
+            .state('main.projects.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.projects.byentity.details.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.byentity.details.tasks', getDetailsTabState('project', 'tasks'))
 
@@ -806,16 +836,19 @@ angular.module('mean.icu').config([
             })
             .state('main.discussions.all.details', getDiscussionDetailsState())
             .state('main.discussions.all.details.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.all.details.activities.modal', getDetailspaneModal())
             .state('main.discussions.all.details.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.discussions.all.details.tasks', getDetailsTabState('discussion', 'tasks'))
 
         .state('main.discussions.byentity', generateStateByEntity('discussion'))
             .state('main.discussions.byentity.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.byentity.activities.modal', getDetailspaneModal())
             .state('main.discussions.byentity.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.discussions.byentity.tasks', getDetailsTabState('discussion', 'tasks'))
 
         .state('main.discussions.byentity.details', getDiscussionDetailsState())
             .state('main.discussions.byentity.details.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.discussions.byentity.details.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.discussions.byentity.details.tasks', getDetailsTabState('discussion', 'tasks'))
 
@@ -859,15 +892,18 @@ angular.module('mean.icu').config([
         })
             .state('main.search.task', getTaskDetailsState('/task'))
             .state('main.search.task.activities', getDetailsTabState('task', 'activities'))
+            .state('main.search.task.activities.modal', getDetailspaneModal())
             .state('main.search.task.documents', getDetailsTabState('task', 'documents'))
 
         .state('main.search.project', getProjectDetailsState('/project'))
             .state('main.search.project.activities', getDetailsTabState('project', 'activities'))
+            .state('main.search.project.activities.modal', getDetailspaneModal())
             .state('main.search.project.documents', getDetailsTabState('project', 'documents'))
             .state('main.search.project.tasks', getDetailsTabState('project', 'tasks'))
 
         .state('main.search.discussion', getDiscussionDetailsState('/discussion'))
             .state('main.search.discussion.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.search.discussion.activities.modal', getDetailspaneModal())
             .state('main.search.discussion.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.search.discussion.tasks', getDetailsTabState('discussion', 'tasks'))
 
