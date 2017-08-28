@@ -10,6 +10,7 @@ angular.module('mean.icu').controller('IcuController',
         discussions,
         people,
         context,
+        tasks,
         TasksService) {
     $scope.menu = {
         isHidden: false
@@ -20,6 +21,7 @@ angular.module('mean.icu').controller('IcuController',
     }
 
     $scope.me = me;
+    $scope.tasks = tasks.data || tasks;
     $scope.projects = projects.data || projects;
     $scope.discussions = discussions.data || discussions;
     $scope.people = people.data || people;

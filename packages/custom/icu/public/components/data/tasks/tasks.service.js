@@ -4,7 +4,7 @@ angular.module('mean.icu.data.tasksservice', [])
 .service('TasksService', function (ApiUri, $http, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
     var EntityPrefix = '/tasks';
     var filterValue = false;
-    var data, tabData;
+    var data, tabData, IsNew;
 
     function getAll(start, limit, sort) {
         var qs = querystring.encode({
@@ -16,9 +16,16 @@ angular.module('mean.icu.data.tasksservice', [])
         if (qs.length) {
             qs = '?' + qs;
         }
+        // return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
+        // 	WarningsService.setWarning(result.headers().warning);
+        //     return PaginationService.processResponse(result.data);
+        // });
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
-            return PaginationService.processResponse(result.data);
+            return result.data;
+        }, function(err) {return err}).then(function (some) {
+            var data = some.content ? some : [];
+            return PaginationService.processResponse(data);
         });
     }
 
@@ -239,6 +246,7 @@ angular.module('mean.icu.data.tasksservice', [])
         deleteTemplate: deleteTemplate,
         assign: assign,
         data: data,
-        tabData: tabData
+        tabData: tabData,
+        IsNew: IsNew
     };
 });

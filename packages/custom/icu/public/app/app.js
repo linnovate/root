@@ -4,6 +4,7 @@ angular.module('mean.icu').config([
     function($meanStateProvider) {
         var LIMIT = 25;
         var SORT = 'created';
+        var BIGLIMIT = 2500;
 
         var capitalize = function(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
@@ -19,11 +20,22 @@ angular.module('mean.icu').config([
                     if (!service[getFn]) {
                         getFn = 'getById';
                     }
-                    return service[getFn]($stateParams.entityId,
+                    if(service.IsNew)
+                    {
+                        return service[getFn]($stateParams.entityId,
+                        $stateParams.start,
+                        BIGLIMIT,
+                        $stateParams.sort,
+                        $stateParams.starred);
+                    }
+                    else
+                    {
+                        return service[getFn]($stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
                         $stateParams.sort,
                         $stateParams.starred);
+                    }
                 }
             ];
 
@@ -429,6 +441,14 @@ angular.module('mean.icu').config([
                             return [];
                         });
                     },
+                    tasks: function(TasksService) {
+                        return TasksService.getAll(0, 0, SORT).then(function(data) {
+                            TasksService.data = data.data || data;
+                            return data;
+                        }, function(err) {
+                            return [];
+                        });
+                    },
                     people: function(UsersService) {
                         return UsersService.getAll();
                     }
@@ -578,6 +598,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return TasksService.getStarred();
                         } else {
+                            if (typeof TasksService.data !== 'undefined'){
+                                $stateParams.limit = TasksService.data.length;
+                            }
                             return TasksService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -624,6 +647,9 @@ angular.module('mean.icu').config([
                     if ($stateParams.starred) {
                         return TasksService.getStarredByassign();
                     } else {
+                        if (typeof TasksService.data !== 'undefined'){
+                                $stateParams.limit = TasksService.data.length;
+                        }
                         return TasksService.getMyTasks($stateParams.start,
                             $stateParams.limit,
                             $stateParams.sort);
@@ -708,6 +734,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return ProjectsService.getStarred();
                         } else {
+                            if (typeof ProjectsService.data !== 'undefined'){
+                                $stateParams.limit = ProjectsService.data.length;
+                            }
                             return ProjectsService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -765,6 +794,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return DiscussionsService.getStarred();
                         } else {
+                            if (typeof DiscussionsService.data !== 'undefined'){
+                                $stateParams.limit = DiscussionsService.data.length;
+                            }
                             return DiscussionsService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);

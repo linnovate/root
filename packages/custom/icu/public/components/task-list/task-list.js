@@ -3,7 +3,7 @@
 angular.module('mean.icu.ui.tasklist', [])
 .controller('TaskListController', function ($scope, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
 	$scope.tasks = tasks.data || tasks;
-	TasksService.data = $scope.tasks;
+	//TasksService.data = $scope.tasks;
 	$scope.loadNext = tasks.next;
 	$scope.loadPrev = tasks.prev;
 

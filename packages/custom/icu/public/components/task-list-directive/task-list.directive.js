@@ -137,6 +137,8 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
 
                         $scope.tasks.push(_(newTask).clone());
 
+                        TasksService.data.push(task);
+
                         return task;
                     });
                 } else if (task.__state === creatingStatuses.Created) {
