@@ -11,11 +11,12 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          DiscussionsService,
                                                          $stateParams) {
         $scope.isLoading = true;
-        if ($state.$current.url.source.includes("search"))
+        if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("discussions")))
         {
             $scope.discussion = entity || context.entity;
         }
-        else{
+        else
+        {
             $scope.discussion = context.entity || entity;
         }
         $scope.tasks = tasks.data || tasks;

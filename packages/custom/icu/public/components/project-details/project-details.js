@@ -10,11 +10,12 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       $state,
                                                       ProjectsService,
                                                       $stateParams) {
-        if ($state.$current.url.source.includes("search"))
+        if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("projects")))
         {
             $scope.project = entity || context.entity;
         }
-        else{
+        else
+        {
             $scope.project = context.entity || entity;
         }
         $scope.tasks = tasks.data || tasks;
