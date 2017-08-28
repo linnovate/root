@@ -11,7 +11,14 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          DiscussionsService,
                                                          $stateParams) {
         $scope.isLoading = true;
-        $scope.discussion = context.entity || entity;
+        if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("discussions")))
+        {
+            $scope.discussion = entity || context.entity;
+        }
+        else
+        {
+            $scope.discussion = context.entity || entity;
+        }
         $scope.tasks = tasks.data || tasks;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.people = people.data || people;

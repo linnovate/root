@@ -20,6 +20,17 @@ angular.module('mean.icu.ui.displayby', [])
             discussions: $scope.discussions,
             tasks: $scope.tasks
         };
+
+        // Reverse list in sideline
+        $scope.projectsList = $scope.projectsList.slice();
+        $scope.projectsList.reverse();
+        $scope.allItems.projects = $scope.allItems.projects.slice();
+        $scope.allItems.projects.reverse();
+        $scope.allItems.discussions = $scope.allItems.discussions.slice();
+        $scope.allItems.discussions.reverse();
+        $scope.discussions = $scope.discussions.slice();
+        $scope.discussions.reverse();
+
         $scope.context = context;
 
         $scope.displayLimit = {
