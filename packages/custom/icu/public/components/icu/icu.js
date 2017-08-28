@@ -10,6 +10,7 @@ angular.module('mean.icu').controller('IcuController',
         discussions,
         people,
         context,
+        LayoutService,
         TasksService) {
     $scope.menu = {
         isHidden: false
@@ -77,6 +78,7 @@ angular.module('mean.icu').controller('IcuController',
                 context.entityId = undefined;
             }
         }
+
     }
 
     var state = $state.current;
@@ -91,11 +93,17 @@ angular.module('mean.icu').controller('IcuController',
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
         var state = toState;
         state.params = toParams;
-    initializeContext(state);
+        initializeContext(state);
         initializeContext(state);
     });
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+      if (toState.url !== '/modal') {
+        if (LayoutService.show() && $scope.detailsPane.isHidden) {
+            $state.go(toState.name + '.modal');
+        }
+      }
+
         // console.log(arguments);
     });
 });

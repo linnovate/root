@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.discussionlistdirective', [])
-.directive('icuDiscussionList', function ($state, $uiViewScroll, $stateParams, $timeout, context ) {
+.directive('icuDiscussionList', function ($state, $uiViewScroll, $stateParams, $timeout, context, LayoutService ) {
     var creatingStatuses = {
         NotCreated: 0,
         Creating: 1,
@@ -233,6 +233,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
                     nameFocused: nameFocused
                 });
             }
+             LayoutService.clicked();
         };
 
         $scope.isCurrentState = function (id) {

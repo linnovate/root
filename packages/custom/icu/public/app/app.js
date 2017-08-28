@@ -112,6 +112,7 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function(tasks, $stateParams, TasksService) {
+                        console.log('entity', tasks, $stateParams)
                         //entity: function ($stateParams, tasks, TasksService) {
                         var task = _(tasks.data || tasks).find(function(t) {
                             return t._id === $stateParams.id;
@@ -171,6 +172,26 @@ angular.module('mean.icu').config([
                     }
                 }
             };
+        }
+
+        function getDetailspaneModal() {
+            return {
+                url: '/modal',
+                onEnter: ['$stateParams', '$state', '$uibModal', '$resource', 'LayoutService', function($stateParams, $state, $uibModal, $resource, LayoutService) {
+                    $uibModal.open({
+                        templateUrl: "/icu/components/detailspane/detailspane-modal.html",
+                        size: 'lg',
+                        controller: ['$scope', function($scope) {
+                            $scope.cancel = function() {
+                                $scope.$dismiss();
+                            };
+                        }]
+                    }).result.finally(function() {
+                        LayoutService.unClick();
+                        $state.go('^');      
+                    });
+                }]
+            }
         }
 
         function getDiscussionDetailsState(urlPrefix) {
@@ -587,6 +608,7 @@ angular.module('mean.icu').config([
             })
             .state('main.tasks.all.details', getTaskDetailsState())
             .state('main.tasks.all.details.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.all.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.all.details.documents', getDetailsTabState('task', 'documents'))
         // .state('main.tasks.all.details.subtasks', getDetailsSubTasksState())
 
@@ -717,6 +739,7 @@ angular.module('mean.icu').config([
             })
             .state('main.projects.all.details', getProjectDetailsState())
             .state('main.projects.all.details.activities', getDetailsTabState('project', 'activities'))
+            .state('main.projects.all.details.activities.modal', getDetailspaneModal())
             .state('main.projects.all.details.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.all.details.tasks', getDetailsTabState('project', 'tasks'))
 
@@ -774,6 +797,7 @@ angular.module('mean.icu').config([
             })
             .state('main.discussions.all.details', getDiscussionDetailsState())
             .state('main.discussions.all.details.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.all.details.activities.modal', getDetailspaneModal())
             .state('main.discussions.all.details.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.discussions.all.details.tasks', getDetailsTabState('discussion', 'tasks'))
 
