@@ -29,6 +29,24 @@ angular.module('mean.icu').controller('IcuController',
         'discussion': 'discussions',
         'user': 'people'
     };
+
+    $scope.getLayoutIcon = function() {
+      return LayoutService.getLayoutIcon();
+    }
+
+    $scope.changeLayout = function() {
+      var state = LayoutService.changeLayout();
+      if (state === 3) {
+        $scope.detailsPane.isHidden = false;
+        $scope.menu.isHidden = false;
+      } else if (state === 2) {
+          $scope.detailsPane.isHidden = false;
+          $scope.menu.isHidden = true;
+      } else {
+          $scope.detailsPane.isHidden = true;
+          $scope.menu.isHidden = true;
+      }
+    }
     
     //Made By OHAD
     //$state.go('socket');

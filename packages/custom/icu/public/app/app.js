@@ -112,7 +112,6 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function(tasks, $stateParams, TasksService) {
-                        console.log('entity', tasks, $stateParams)
                         //entity: function ($stateParams, tasks, TasksService) {
                         var task = _(tasks.data || tasks).find(function(t) {
                             return t._id === $stateParams.id;

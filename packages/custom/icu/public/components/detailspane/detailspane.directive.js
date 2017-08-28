@@ -7,7 +7,6 @@ angular.module('mean.icu.ui.detailspane', [])
     }
 
     function link($scope, $element, $attr) {
-        console.log($scope)
         var changeHeight = function (event) {
             var description = $element.find('.description');
             var tabContent = $element.find('.tab-content');

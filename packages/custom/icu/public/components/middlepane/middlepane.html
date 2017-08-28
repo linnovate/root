@@ -1,7 +1,7 @@
 <header class="header">
     <button class="hide-menu"
-            ng-class="{'open': !menu.isHidden, 'collapsed': menu.isHidden}"
-            ng-click="menu.isHidden = !menu.isHidden">
+            ng-style="{'background-image': 'url(' + getLayoutIcon() + ')'}"
+            ng-click="changeLayout()">
     </button>
     <div class="search" data-ng-controller="SearchController" ng-init="click=false">
         <div class="close-icon" ng-if="term" ng-click="clearSearch();"><i class="fa fa-times-circle"></i></div>
@@ -20,10 +20,6 @@
     		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getWatchedTasks')">{{'tasksImWatching' | i18next}}</div>
     	</div>
     </div>
-    <button class="hide-details"
-            ng-class="{'open': !detailsPane.isHidden, 'collapsed': detailsPane.isHidden}"
-            ng-click="detailsPane.isHidden = !detailsPane.isHidden">
-    </button>
 </header>
 <div data-ng-controller="MiddlepaneController" class="middlepane-container">
     <div data-ui-view="middlepane" class="full-height"></div>
