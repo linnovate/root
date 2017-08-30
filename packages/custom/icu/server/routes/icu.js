@@ -86,7 +86,8 @@ module.exports = function(Icu, app) {
 
   //Create HI Room if the user wish  
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
-    .post(project.read, notification.createRoom);
+    //.post(project.read, notification.createRoom);
+    .post(project.read);
 
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')

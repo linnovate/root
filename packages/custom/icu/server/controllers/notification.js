@@ -98,13 +98,14 @@ exports.createRoom = function(req, res, next) {
     Project.findOne({
         _id: req.locals.result._id
     }).exec(function(error, project) {
-        // if (!req.locals.result.hasRoom) {
+         if (!req.locals.result.hasRoom) {
         createRoom(req.locals.result, function(error, result) {
             if (error) {
                 req.hi = {
                     error: error
                 };
                 project.hasRoom = true;
+                req.locals.result.hasRoom = true;
                 project.save();
                 next();
             } else {
@@ -112,7 +113,7 @@ exports.createRoom = function(req, res, next) {
                 projectController.update(req, res, next);
             }
         })
-        // }
+         }
 
     });
 
