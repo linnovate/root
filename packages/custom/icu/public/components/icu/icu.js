@@ -38,15 +38,18 @@ angular.module('mean.icu').controller('IcuController',
 
     $scope.changeLayout = function() {
       var state = LayoutService.changeLayout();
-      if (state === 3) {
+      if (state === 4) {
         $scope.detailsPane.isHidden = false;
         $scope.menu.isHidden = false;
+      } else if (state === 3) {
+        $scope.detailsPane.isHidden = false;
+        $scope.menu.isHidden = true;
       } else if (state === 2) {
-          $scope.detailsPane.isHidden = false;
+          $scope.detailsPane.isHidden = true;
           $scope.menu.isHidden = true;
       } else {
           $scope.detailsPane.isHidden = true;
-          $scope.menu.isHidden = true;
+          $scope.menu.isHidden = false;
       }
     }
     

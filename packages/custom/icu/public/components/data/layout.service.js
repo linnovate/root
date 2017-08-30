@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.data.layoutservice', [])
 .service('LayoutService', function () {
-	var show = false, state = 3;
+	var show = false, state = 4;
 
     function getShow() {
         return show;
@@ -17,16 +17,18 @@ angular.module('mean.icu.data.layoutservice', [])
     }
     function changeLayout() {
         if (state > 1) state --;
-        else state = 3;
+        else state = 4;
         return state;
     }
 
     function getLayoutIcon() {
         if (state === 1)
-            return '/icu/assets/img/sections1.svg'
-        else if (state === 2)
             return '/icu/assets/img/sections2.svg'
-        else return '/icu/assets/img/sections3.svg'
+        else if (state === 2)
+                return '/icu/assets/img/sections1.svg'
+            else if (state === 3)
+                return '/icu/assets/img/sections2.svg'
+                else return '/icu/assets/img/sections3.svg'
 
     }
 
