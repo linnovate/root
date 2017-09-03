@@ -13,6 +13,9 @@ angular.module('mean.icu.ui.discussionlist', [])
         $scope.loadPrev = discussions.prev;
 
         $scope.starred = $stateParams.starred;
+        if (!$scope.discussions[$scope.discussions.length - 1].id) {
+		    $scope.discussions = [$scope.discussions[0]];
+	    }
 
         $scope.isCurrentState = function() {
             return $state.current.name.indexOf('main.discussions.byentity') === 0 &&

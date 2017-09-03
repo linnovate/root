@@ -13,6 +13,9 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.loadPrev = projects.prev;
 
         $scope.starred = $stateParams.starred;
+        if (!$scope.projects[$scope.projects.length - 1].id) {
+		    $scope.projects = [$scope.projects[0]];
+	    }
 
         $scope.isCurrentState = function (id) {
             return $state.current.name.indexOf('main.projects.byentity') === 0 &&
