@@ -328,6 +328,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         $scope.saveTemplate = function() {
             $scope.isopen = false;
+            $scope.newTemplate.frequentUser = $scope.newTemplate.watcher;
             if ($scope.task.subTasks[0]._id) {
                 TasksService.saveTemplate($stateParams.id, $scope.newTemplate).then(function(result) {
                     $scope.showMsgSavedTpl = true;
