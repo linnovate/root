@@ -33,7 +33,7 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('css', '../lib/angular-ui-select/dist/select.css');
     ICU.aggregateAsset('css', '../lib/jquery-ui/themes/pepper-grinder/jquery-ui.min.css');
     ICU.aggregateAsset('css', '../lib/angularjs-color-picker/angularjs-color-picker.css');
-    ICU.aggregateAsset('css', 'eventDrops.css');
+    // ICU.aggregateAsset('css', 'eventDrops.css');
 
     ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
     ICU.aggregateAsset('js', '../lib/angular-ui-select/dist/select.js');
