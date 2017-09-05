@@ -24,6 +24,7 @@
                 type="task">
                 <td>{{ $index }}<td>
             </tr>
+
         </tbody>
     </table>
     <!-- <div ng-show="autocomplete && searchResults" class="autocomplete">
@@ -37,3 +38,45 @@
     </div> -->
 </div>
 <div class="bottomBar" style="height: 10px;"></div>
+<div class="list-table-print">
+    <div class="header">
+        <div>name</div>
+        <div>project</div>
+        <div>status</div>
+        <div>due</div>
+        <div>watchers</div>
+    </div>
+    <div data-ng-repeat-start="task in tasks | filterByOptions | orderBy:order.field:order.isReverse" class="task-row">
+        <div>{{task.title}}</div>
+        <div>
+            <span class="tag project"
+                title="{{task.project.title}}"
+                ng-style="{'background-color': '#' + task.project.color, 'color': 'white'}">
+                {{task.project.title}}
+            </span> 
+        </div>
+        <div class="status" ng-class="task.status">
+            {{task.status | i18next }}
+        </div>
+        <div>
+            {{task.due | date: 'dd.MM.yyyy'}}
+        </div>
+        <div class="watchers">
+            <span ng-repeat="watcher in task.watchers">{{watcher.name}}</span>
+        </div>
+    </div>
+    <div data-ng-repeat-end="" class="subTasks">
+        <div ng-repeat="subTask in task.subTasks" ng-if="subTask._id">
+            <div>{{subTask.title}}</div>
+            <div class="status" ng-class="subTask.status">
+                {{subTask.status | i18next }}
+            </div>
+            <div>
+                {{subTask.due | date: 'dd.MM.yyyy'}}
+            </div>
+            <div>
+                <span ng-repeat="watcher in subTask.watchers">{{watcher.name}}</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,7 @@
 
 angular.module('mean.icu.ui.discussionlist', [])
     .controller('DiscussionListController', function ($scope,
+                                                        $window,
                                                       $state,
                                                       discussions,
                                                       DiscussionsService,
@@ -11,6 +12,9 @@ angular.module('mean.icu.ui.discussionlist', [])
         $scope.discussions = discussions.data || discussions;
         $scope.loadNext = discussions.next;
         $scope.loadPrev = discussions.prev;
+        $scope.print = function() {
+            $window.print()
+        }
 
         $scope.starred = $stateParams.starred;
         if (!$scope.discussions[$scope.discussions.length - 1].id) {

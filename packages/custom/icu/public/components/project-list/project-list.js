@@ -2,6 +2,7 @@
 
 angular.module('mean.icu.ui.projectlist', [])
     .controller('ProjectListController', function ($scope,
+                                                    $window,
                                                    $state,
                                                    projects,
                                                    ProjectsService,
@@ -11,6 +12,9 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.projects = projects.data || projects;
         $scope.loadNext = projects.next;
         $scope.loadPrev = projects.prev;
+        $scope.print = function() {
+            $window.print()
+        }
 
         $scope.starred = $stateParams.starred;
         if (!$scope.projects[$scope.projects.length - 1].id) {

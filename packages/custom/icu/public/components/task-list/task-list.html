@@ -41,6 +41,12 @@
              <!--   <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span> -->
              <span>"{{getProjName()}}"</span>
             </header>
+            <div class="more-info">
+                <div>status:</div>           
+                <div class="status" ng-class="{{getProjStatus()}}">
+                    {{getProjStatus() | i18next }}
+                </div>
+            </div>
         </div>
     </div>
 
@@ -61,6 +67,11 @@
                     </ui-select>
                 </div>
             </div>
+        </div>
+        <div class="print-wrapper">
+            <button ng-click="print()" ng-class="{ 'orange': starred }" class="favorites">
+                <i class="fa fa-print"></i>
+            </button>
         </div>
 
         <!--<div class="right-wrapper">

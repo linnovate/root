@@ -22,3 +22,17 @@
     </table>
 </div>
 <div class="bottomBar" style="height: 10px;"></div>
+<div class="list-table-print">
+    <div class="header">
+        <div>name</div>
+        <div>status</div>
+    </div>
+    <div data-ng-repeat="project in projects | orderBy:order.field:order.isReverse" class="task-row">
+        <div>
+            {{project.title}}
+        </div>
+        <div class="status" ng-class="project.status">
+            {{project.status | i18next }}
+        </div>
+    </div>
+</div>

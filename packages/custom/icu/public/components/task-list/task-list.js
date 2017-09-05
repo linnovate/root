@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function ($scope, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
+.controller('TaskListController', function ($scope, $window, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
 	$scope.tasks = tasks.data || tasks;
 	//TasksService.data = $scope.tasks;
 	$scope.loadNext = tasks.next;
@@ -55,6 +55,48 @@ angular.module('mean.icu.ui.tasklist', [])
 	$scope.isCurrentState = function(ids) {
 		return ids.indexOf($state.current.name) !== -1;
 	};
+
+	$scope.getProjStatus = function() {
+		var entityType = $scope.currentContext.entityName;
+		if($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined&&
+		 $scope.currentContext.entity.status!=undefined){
+			return $scope.currentContext.entity.status;
+		}
+		else if ($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined
+		 && $scope.currentContext.entity.status!=undefined){
+			return $scope.currentContext.entity.status;
+		}
+		else{
+			if(entityType=="discussion" && DiscussionsService.currentDiscussionName!=undefined){
+				return DiscussionsService.currentDiscussionName;
+			}
+			else if(ProjectsService.currentProjectName!=undefined){
+				return ProjectsService.currentProjectName;
+			}
+			else{
+				var tasks = $scope.tasks;
+				if(tasks.length==1){
+					$state.go('401');
+					return "you dont have permission";
+				}
+				else{
+					var task = tasks[0];
+					var result;
+					if(task.project!=undefined){
+						result = task.project.title
+					}
+					else if(task.discussions!=undefined && task.discussions.title!=undefined){
+						result=task.discussions[0].title;
+					}
+					else{
+						result = "you dont have permission";
+					}
+					return result;
+				}
+			}
+
+		}
+	}
 
 	$scope.getProjName=function(){
 		var entityType = $scope.currentContext.entityName;
@@ -158,6 +200,10 @@ angular.module('mean.icu.ui.tasklist', [])
 	$scope.toggleStarred = function () {
 		$state.go($state.current.name, { starred: !$stateParams.starred });
 	};
+
+	$scope.print = function() {
+		$window.print()
+	}
 	if ($scope.tasks.length) {
 		if ($state.current.name === 'main.tasks.all' ||
 			$state.current.name === 'main.tasks.byentity') {

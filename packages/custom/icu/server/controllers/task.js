@@ -653,5 +653,17 @@ exports.removeSubTask = function(req, res, next) {
   });
 };
 
+exports.populateSubTasks = function(req, res, next) {
+  Task.populate(req.locals.result, {
+    path: 'subTasks.watchers',
+    model: 'User'
+  }, function(err, tasks) {
+    if (err) {
+      req.locals.error = err;
+    } else req.locals.result = tasks;
+    next();
+  })
+}
+
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;
