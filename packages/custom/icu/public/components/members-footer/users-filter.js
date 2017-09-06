@@ -2,7 +2,7 @@ angular.module('mean.icu.ui.usersFilter', [])
 .filter('filterByFrequentUsers', function () {
 	return function(users, me) {
         if (!users) return []; 
-        var frequent = me.profile.frequentUsers;
+        var frequent = me.profile ? me.profile.frequentUsers : {};
         var usersClone = users;
         function sortObject(obj) {
             var arr = [];
