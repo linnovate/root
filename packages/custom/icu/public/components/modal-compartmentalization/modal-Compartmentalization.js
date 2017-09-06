@@ -89,7 +89,8 @@ function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector,
     var serviceMap = {
         project: 'ProjectsService',
         discussion: 'DiscussionsService',
-        task: 'TasksService'
+        task: 'TasksService',
+        office: 'OfficesService'
     };
 
     var serviceName = serviceMap[entityName];

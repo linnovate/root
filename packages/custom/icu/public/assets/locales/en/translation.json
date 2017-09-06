@@ -74,6 +74,7 @@
     "LoadTaskTemplate" : "Load task template",
     "login": "Login",
     "logout": "Logout",
+    "members": "Members",
     "more": "more‬…",
     "manageTasks": "Manage Tasks",
     "modalDeleteText": "All tasks related to this ",

@@ -229,6 +229,7 @@ angular.module('mean.icu.data.tasksservice', [])
         getByUserId: getByEntityId('users'),
         getByProjectId: getByEntityId('projects'),
         getByDiscussionId: getByEntityId('discussions'),
+        getByOfficeId: getByEntityId('offices'),
         search: search,
         create: create,
         update: update,

@@ -1,0 +1,20 @@
+<td class="move">
+    <i ng-if="data.office._id" class="fa fa-ellipsis-v"></i>
+    <i ng-if="data.office._id" class="fa fa-ellipsis-v"></i>
+</td>
+<td class="id" ng-if="data.office._id">{{data.index + 1}}</td>
+<td class="name"
+    ng-attr-colspan="{{data.office._id ? undefined : 2}}"
+    title="{{data.office.title}}"
+    ng-attr-contenteditable="{{!data.displayOnly}}"
+    placeholder="{{'createNewOffice' | i18next}}"
+    strip-br="true"
+    ng-change="data.searchCb(data.office.title) || data.updateCb(data.office)"
+    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+    ng-model="data.office.PartTitle"
+    ng-blur="data.hideAutoCompleteCb(data.office)">
+</td>
+<td class="status col-sm-2" ng-class="data.office.status">{{data.office.status | i18next }}</td>
+<td class="arrow">
+    <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+</td>

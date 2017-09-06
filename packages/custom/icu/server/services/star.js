@@ -7,10 +7,12 @@ var TaskModel = require('../models/task.js');
 var ProjectModel = require('../models/project.js');
 var DiscussionModel = require('../models/discussion.js');
 var UpdateModel = require('../models/update.js');
+var OfficeModel = require('../models/office.js');
 
 var taskOptions = require('../controllers/task.js').defaultOptions;
 var discussionOptions = require('../controllers/discussion.js').defaultOptions;
 var projectOptions = require('../controllers/project.js').defaultOptions;
+var officeOptions = require('../controllers/office.js').defaultOptions;
 
 var entityNameMap = {
   'tasks': {
@@ -30,6 +32,10 @@ var entityNameMap = {
     options: {
       includes: []
     }
+  },
+  'offices': {
+    model: OfficeModel,
+    options: officeOptions
   }
 };
 

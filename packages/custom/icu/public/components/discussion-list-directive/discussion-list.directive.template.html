@@ -25,12 +25,12 @@
 <div class="bottomBar" style="height: 10px;"></div>
 <div class="list-table-print">
     <div class="header">
-        <div>name</div>
-        <div>status</div>
-        <div>due</div>
-        <div>assign</div>
-        <div>location</div>
-        <div>watchers</div>
+        <div>{{'name' | i18next}}</div>
+        <div>{{'status' | i18next}}</div>
+        <div>{{'dueDate' | i18next}}</div>
+        <div>{{'assignee' | i18next}}</div>
+        <div>{{'location' | i18next}}</div>
+        <div>{{'members' | i18next}}</div>
     </div>
     <div data-ng-repeat="discussion in discussions | orderBy:order.field:order.isReverse" class="task-row">
         <div>{{discussion.title}}</div>
