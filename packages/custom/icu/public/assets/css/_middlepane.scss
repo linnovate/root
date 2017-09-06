@@ -173,6 +173,12 @@
                 }
             }
         }
+        .more-info {
+            display: none;
+        }
+        .discussion-info {
+            display: none;
+        }
     }
 
     .search {
@@ -202,6 +208,9 @@
                 top: -30px;
                 right: inherit;
              }
+        }
+        .print-wrapper {
+            float: right;
         }
 
         .right-wrapper {

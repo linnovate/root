@@ -132,17 +132,17 @@ module.exports = function(Icu, app) {
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
     .post(task.create, task.updateParent, notification.sendNotification, updates.created)
-    .get(pagination.parseParams, task.all, star.isStarred, pagination.formResponse);
+    .get(pagination.parseParams, task.all, task.populateSubTasks, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
   app.route('/api/tasks/zombie')
     .get(task.getZombieTasks, star.isStarred);
   app.route('/api/tasks/:id([0-9a-fA-F]{24})')
     .get(task.read, star.isStarred)
-    .put(task.read, task.update, star.isStarred, attachments.sign, updates.updated, notification.updateTaskNotification)
+    .put(task.read, task.update, profile.profile, profile.updateMember, star.isStarred, attachments.sign, updates.updated, notification.updateTaskNotification)
     .delete(star.unstarEntity, task.read, task.removeSubTask, task.destroy);
   app.route('/api/tasks/byAssign')
-    .get(task.byAssign);
+    .get(task.byAssign, task.populateSubTasks);
 
   // app.route('/api/tasks/subtasks')
   // 	.post(task.addSubTasks)
@@ -237,7 +237,7 @@ module.exports = function(Icu, app) {
     .get(updates.readHistory);
 
   app.route('/api/tasks/:id([0-9a-fA-F]{24})/toTemplate')
-    .post(templates.toTemplate);
+    .post(profile.profile, profile.updateMember, templates.toTemplate);
   app.route('/api/templates/:id([0-9a-fA-F]{24})')
     .delete(templates.read, templates.removeSubTask, templates.destroy);
   app.route('/api/templates/:id([0-9a-fA-F]{24})/toSubTasks')

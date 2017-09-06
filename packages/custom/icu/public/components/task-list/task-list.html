@@ -41,6 +41,44 @@
              <!--   <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span> -->
              <span>"{{getProjName()}}"</span>
             </header>
+            <div class="discussion-info" ng-if="discussionContext">
+                <div>
+                    <div>{{'status' | i18next}}:</div>           
+                    <div class="status" ng-class="{{discussionContext.status}}">
+                        {{discussionContext.status | i18next}}
+                    </div>  
+                </div>
+                <div>
+                    <div>{{'location' | i18next}}:</div>           
+                    <div>
+                        {{discussionContext.location}}
+                    </div>  
+                </div>
+                <div>
+                    <div>{{'asignee' | i18next}}:</div>           
+                    <div>
+                        {{discussionContext.assign.name}}
+                    </div>  
+                </div>
+                <div>
+                    <div>{{'deadline' | i18next}}:</div>           
+                    <div>
+                         {{discussionContext.startDate | date: 'dd.MM.yyyy'}}
+                    </div>  
+                </div>
+                <div>
+                    <div>{{'members' | i18next}}:</div>           
+                    <div class="discussion-members">
+                        <span ng-repeat="watcher in discussionContext.watchers">{{watcher.name}}</span>
+                    </div> 
+                </div>
+            </div>
+            <div class="more-info" ng-if="!discussionContext">
+                <div>{{'status' | i18next}}:</div>           
+                <div class="status" ng-class="{{getProjStatus()}}">
+                    {{getProjStatus() | i18next }}
+                </div>
+            </div>
         </div>
     </div>
 
@@ -61,6 +99,11 @@
                     </ui-select>
                 </div>
             </div>
+        </div>
+        <div class="print-wrapper">
+            <button ng-click="print()" ng-class="{ 'orange': starred }" class="favorites">
+                <i class="fa fa-print"></i>
+            </button>
         </div>
 
         <!--<div class="right-wrapper">

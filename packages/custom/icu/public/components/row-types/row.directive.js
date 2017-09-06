@@ -9,7 +9,7 @@
     Add folder of the details of the type (in the right side). Like "/icu/packages/custom/icu/public/components/task-details"
 */
 angular.module('mean.icu.ui.rows', [])
-.directive('icuListRow', function($compile, $http, $templateRequest) {
+.directive('icuListRow', function($compile, $http, $templateRequest, UsersService) {
     var templates = {
         people: '/icu/components/row-types/people-row.html',
         task: '/icu/components/row-types/task-row.html',
@@ -44,6 +44,10 @@ angular.module('mean.icu.ui.rows', [])
         if ($scope.data[$scope.type] && $scope.data[$scope.type].due) {
             $scope.data[$scope.type].due = new Date($scope.data[$scope.type].due)
         }
+        $scope.me = {};
+            UsersService.getMe().then(function(me) {
+                $scope.me = me;
+        });
     }
 
 

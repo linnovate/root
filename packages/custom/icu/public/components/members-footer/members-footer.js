@@ -14,6 +14,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 task: 'TasksService',
                 office: 'OfficesService'
             };
+            $scope.me = {};
             UsersService.getMe().then(function(me) {
                 $scope.me = me;
             });
@@ -62,6 +63,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 return groupsNotAssigned.concat(notAssigned);
             }
 
+
             $scope.notAssigned = getNotAssigned();
                 for(var i =0 ; i<$scope.notAssigned.length;i++){
                     if($scope.notAssigned[i] && ($scope.notAssigned[i].job == undefined || $scope.notAssigned[i].job==null)){
@@ -82,7 +84,8 @@ angular.module('mean.icu.ui.membersfooter', [])
                 var data = {
                     name: member.name,
                     type: member.type ? member.type : 'user',
-                    action: action
+                    action: action,
+                    frequentUser: member._id
                 }
 
                 service.update(entity, data);
