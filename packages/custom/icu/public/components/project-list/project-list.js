@@ -17,7 +17,7 @@ angular.module('mean.icu.ui.projectlist', [])
         }
 
         $scope.starred = $stateParams.starred;
-        if (!$scope.projects[$scope.projects.length - 1].id) {
+        if ($scope.projects.length > 0 && !$scope.projects[$scope.projects.length - 1].id) {
 		    $scope.projects = [$scope.projects[0]];
 	    }
 

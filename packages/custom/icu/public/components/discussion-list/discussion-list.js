@@ -17,7 +17,7 @@ angular.module('mean.icu.ui.discussionlist', [])
         }
 
         $scope.starred = $stateParams.starred;
-        if (!$scope.discussions[$scope.discussions.length - 1].id) {
+        if ($scope.discussions.length > 0 && !$scope.discussions[$scope.discussions.length - 1].id) {
 		    $scope.discussions = [$scope.discussions[0]];
 	    }
 

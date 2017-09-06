@@ -9,7 +9,7 @@ angular.module('mean.icu.ui.tasklist', [])
 
 	$scope.autocomplete = context.entityName === 'discussion';
 	$scope.starred = $stateParams.starred;
-	if (!$scope.tasks[$scope.tasks.length - 1].id) {
+	if ($scope.tasks.length > 0 && !$scope.tasks[$scope.tasks.length - 1].id) {
 		$scope.tasks = [$scope.tasks[0]];
 	}
 
