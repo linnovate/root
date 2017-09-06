@@ -74,6 +74,7 @@
 	"LoadTaskTemplate" : "טען תבנית משימות",
     "login": "התחבר",
 	"logout":  "התנתק",
+	"members": "משתתפים",
 	"more":  "עוד‫…‬",
 	"manageTasks": "נהל משימות",
     "modalDeleteText": "כל המשימות שמקושרות ל",

@@ -40,11 +40,11 @@
 <div class="bottomBar" style="height: 10px;"></div>
 <div class="list-table-print">
     <div class="header">
-        <div>name</div>
-        <div>project</div>
-        <div>status</div>
-        <div>due</div>
-        <div>watchers</div>
+        <div>{{'name' | i18next}}</div>
+        <div>{{'project' | i18next}}</div>
+        <div>{{'status' | i18next}}</div>
+        <div>{{'dueDate' | i18next}}</div>
+        <div>{{'members' | i18next}}</div>
     </div>
     <div data-ng-repeat-start="task in tasks | filterByOptions | orderBy:order.field:order.isReverse" class="task-row">
         <div>{{task.title}}</div>

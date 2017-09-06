@@ -32,6 +32,8 @@ angular.module('mean.icu.ui.tasklist', [])
 			}
 			if(context.entityName === 'project') {
 				ProjectsService.selected = context.entity;
+			} else if(context.entityName === 'discussion') {
+				$scope.discussionContext = context.entity;
 			}
 		}
 		else {
