@@ -8,9 +8,11 @@ angular.module('mean.icu.ui.membersfooter', [])
                 projects: 'ProjectsService',
                 discussions: 'DiscussionsService',
                 tasks: 'TasksService',
+                offices: 'OfficesService',
                 project: 'ProjectsService',
                 discussion: 'DiscussionsService',
-                task: 'TasksService'
+                task: 'TasksService',
+                office: 'OfficesService'
             };
             UsersService.getMe().then(function(me) {
                 $scope.me = me;

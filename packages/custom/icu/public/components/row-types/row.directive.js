@@ -15,12 +15,14 @@ angular.module('mean.icu.ui.rows', [])
         task: '/icu/components/row-types/task-row.html',
         project: '/icu/components/row-types/project-row.html',
         discussion: '/icu/components/row-types/discussion-row.html',
+        office: '/icu/components/row-types/office-row.html',
         'search-task': '/icu/components/row-types/search-task-row.html',
         'search-project': '/icu/components/row-types/search-project-row.html',
         'search-discussion': '/icu/components/row-types/search-discussion-row.html',
         'search-attachment': '/icu/components/row-types/search-attachment-row.html',
         'search-vg-files': '/icu/components/row-types/search-attachment-row.html',
         'search-update': '/icu/components/row-types/search-update-row.html',
+        'search-office': '/icu/components/row-types/search-office-row.html',
         'subtasks': '/icu/components/row-types/sub-tasks-row.html',
     };
 
