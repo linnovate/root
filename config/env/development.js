@@ -128,7 +128,13 @@ module.exports = {
     recipients: ['rivkat@linnovate.net','moshe@linnovate.net','lior@linnovate.net'], //recipients of system mail
     seconds: 10 * 60 //ignore mails for 10 minutes
   },
-  specialUrl:'' //fill with special url
-
+  specialUrl:'', //fill with special url
+  SPHelper: {
+    uri:"uri",
+    SPSiteUrl:"SPSiteUrl",
+    username:"username",
+    password:"password",
+    libraryName:"libraryName"
+  }
 
 };
