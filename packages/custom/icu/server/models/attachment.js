@@ -109,6 +109,14 @@ AttachmentSchema.statics.discussion = function (id, cb) {
     cb(err, {room: discussion.room, title: discussion.title});
   });
 };
+
+AttachmentSchema.statics.office = function (id, cb) {
+  require('./office');
+  var Office = mongoose.model('Office');
+  Office.findById(id, function (err, office) {
+    cb(err, {room: office.room, title: office.title});
+  });
+};
 //END OHAD
 
 // AttachmentSchema.statics.update = function (id, cb) {
