@@ -163,6 +163,10 @@
     "assigned from": "שוייכה אלייך מ-",
     "favorite": "מועדף",
 	"deleteDocument": "מחק(ה) מסמך מ",
+	"office": "לשכה",
+    "offices": "לשכות",
+	"createNewOffice": "צור לשכה חדש",
+	"displayofficesBy": "הצג לשכות לפי",
 
     "st": "",
     "nd": "",
