@@ -69,6 +69,7 @@
   }
   .panes-wrapper {
       margin-left: 0 !important;
+      width: 100% !important;
   }
   .middlepane * {
     visibility: visible;
@@ -76,7 +77,6 @@
   .middlepane {
     visibility: visible;
     width: 100% !important;
-    position: fixed !important;
   }
   .middlepane .filters {
       display: none;
@@ -136,6 +136,7 @@
   }
   .list-table-print {
       display: block !important;
+        height: 100%;
       .header {
         display: flex !important;
         font-weight: bold;
