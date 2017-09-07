@@ -171,7 +171,19 @@
                     font-weight: normal;
                     padding: 0px 10px;
                 }
+
+                &.office {
+                    border-radius: 14px;
+                    font-weight: normal;
+                    padding: 0px 10px;
+                }
             }
+        }
+        .more-info {
+            display: none;
+        }
+        .discussion-info {
+            display: none;
         }
     }
 
@@ -202,6 +214,9 @@
                 top: -30px;
                 right: inherit;
              }
+        }
+        .print-wrapper {
+            float: right;
         }
 
         .right-wrapper {

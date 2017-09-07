@@ -13,6 +13,7 @@ var star = require('../controllers/star');
 var elasticsearch = require('../controllers/elasticsearch');
 var templates = require('../controllers/templates');
 var eventDrops = require('../controllers/event-drops');
+var office = require('../controllers/office');
 
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
@@ -58,7 +59,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops)*').all(circles.acl());
+  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
 
@@ -77,17 +78,22 @@ module.exports = function(Icu, app) {
   //END Notification READ - OHAD
 
   //star & get starred list
-  app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/star')
+  app.route('/api/:entity(tasks|discussions|projects|offices)/:id([0-9a-fA-F]{24})/star')
     .patch(star.toggleStar);
-  app.route('/api/:entity(tasks|discussions|projects)/starred')
+  app.route('/api/:entity(tasks|discussions|projects|offices)/starred')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
-  app.route('/api/:entity(tasks|discussions|projects)/starred/:type(byAssign)')
+  app.route('/api/:entity(tasks|discussions|projects|offices)/starred/:type(byAssign)')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
 
   //Create HI Room if the user wish  
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
     //.post(project.read, notification.createRoom);
     .post(project.read);
+
+  //Create HI Room if the user wish  
+  app.route('/api/:entity(offices)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
+    //.post(project.read, notification.createRoom);
+    .post(office.read)
 
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
@@ -106,29 +112,46 @@ module.exports = function(Icu, app) {
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/projects/starred')
     .get(pagination.parseParams, star.getStarredIds('projects'), project.getByDiscussion, project.getByEntity, pagination.formResponse);
 
+  app.route('/api/offices*').all(entity('offices'));
+  app.route('/api/offices')
+  //.all(auth.requiresLogin, permission.echo)
+  .post(office.create, updates.created)
+    .get(pagination.parseParams, office.all, star.isStarred, pagination.formResponse);
+  app.route('/api/offices/:id([0-9a-fA-F]{24})')
+    .get(office.read, star.isStarred)
+  //.put(project.read, project.update, star.isStarred)
+  .put(office.read, office.update, attachments.sign, notification.updateRoom, star.isStarred)
+    .delete(star.unstarEntity, office.read, office.destroy);
+  app.route('/api/history/offices/:id([0-9a-fA-F]{24})')
+    .get(office.readHistory);
+  app.route('/api/:entity(tasks|discussions|offices)/:id([0-9a-fA-F]{24})/offices')
+    .get(pagination.parseParams, office.getByDiscussion, office.getByEntity, pagination.formResponse);
+  app.route('/api/:entity(tasks|discussions|offices)/:id([0-9a-fA-F]{24})/offices/starred')
+    .get(pagination.parseParams, star.getStarredIds('offices'), office.getByDiscussion, office.getByEntity, pagination.formResponse);
+
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
     .post(task.create, task.updateParent, notification.sendNotification, updates.created)
-    .get(pagination.parseParams, task.all, star.isStarred, pagination.formResponse);
+    .get(pagination.parseParams, task.all, task.populateSubTasks, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
   app.route('/api/tasks/zombie')
     .get(task.getZombieTasks, star.isStarred);
   app.route('/api/tasks/:id([0-9a-fA-F]{24})')
     .get(task.read, star.isStarred)
-    .put(task.read, task.update, star.isStarred, attachments.sign, updates.updated, notification.updateTaskNotification)
+    .put(task.read, task.update, profile.profile, profile.updateMember, star.isStarred, attachments.sign, updates.updated, notification.updateTaskNotification)
     .delete(star.unstarEntity, task.read, task.removeSubTask, task.destroy);
   app.route('/api/tasks/byAssign')
-    .get(task.byAssign);
+    .get(task.byAssign, task.populateSubTasks);
 
   // app.route('/api/tasks/subtasks')
   // 	.post(task.addSubTasks)
   app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
   	.get(task.getSubTasks)
 
-  app.route('/api/:entity(discussions|projects|users)/:id([0-9a-fA-F]{24})/tasks')
+  app.route('/api/:entity(discussions|projects|offices|users)/:id([0-9a-fA-F]{24})/tasks')
     .get(pagination.parseParams, task.getByEntity, pagination.formResponse);
-  app.route('/api/:entity(discussions|projects|users)/:id([0-9a-fA-F]{24})/tasks/starred')
+  app.route('/api/:entity(discussions|projects|offices|users)/:id([0-9a-fA-F]{24})/tasks/starred')
     .get(pagination.parseParams, star.getStarredIds('tasks'), task.getByEntity, pagination.formResponse);
   app.route('/api/history/tasks/:id([0-9a-fA-F]{24})')
     .get(task.readHistory);
@@ -155,7 +178,7 @@ module.exports = function(Icu, app) {
     .get(users.read)
     .put(users.read, users.filterProperties, users.update)
     .delete(users.read, users.destroy);
-  app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/users')
+  app.route('/api/:entity(tasks|discussions|projects|offices)/:id([0-9a-fA-F]{24})/users')
     .get(users.getByEntity);
 
   app.route('/api/attachments*').all(entity('attachments'));
@@ -168,7 +191,7 @@ module.exports = function(Icu, app) {
     .delete(attachments.deleteFile)
   app.route('/api/history/attachments/:id([0-9a-fA-F]{24})')
     .get(attachments.readHistory);
-  app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/attachments')
+  app.route('/api/:entity(tasks|discussions|projects|offices)/:id([0-9a-fA-F]{24})/attachments')
     .get(attachments.getByEntity);
   app.route('/api/tasks/myTasks/attachments')
     .get(attachments.getMyTasks)
@@ -208,13 +231,13 @@ module.exports = function(Icu, app) {
   app.route('/api/tasks/myTasks/updates')
     .get(updates.getMyTasks)
   //     // .delete(updates.destroy);
-  app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/updates')
+  app.route('/api/:entity(tasks|discussions|projects|offices)/:id([0-9a-fA-F]{24})/updates')
     .get(updates.getByEntity, updates.getAttachmentsForUpdate);
   app.route('/api/history/updates/:id([0-9a-fA-F]{24})')
     .get(updates.readHistory);
 
   app.route('/api/tasks/:id([0-9a-fA-F]{24})/toTemplate')
-    .post(templates.toTemplate);
+    .post(profile.profile, profile.updateMember, templates.toTemplate);
   app.route('/api/templates/:id([0-9a-fA-F]{24})')
     .delete(templates.read, templates.removeSubTask, templates.destroy);
   app.route('/api/templates/:id([0-9a-fA-F]{24})/toSubTasks')

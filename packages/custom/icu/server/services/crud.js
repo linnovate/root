@@ -25,6 +25,9 @@ var UserModel = require('../models/user.js');
 var AttachementModel = require('../models/attachment.js');
 var AttachementArchiveModel = mongoose.model('attachment_archive');
 
+var OfficeModel = require('../models/office.js');
+var OfficeArchiveModel = mongoose.model('office_archive');
+
 var circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 var circlesAcl = require('circles-npm')(null, null, circleSettings);
 
@@ -62,6 +65,11 @@ var entityNameMap = {
     mainModel: TaskModel,
     archiveModel: TaskArchiveModel,
     name: 'Task'
+  },
+  'offices': {
+    mainModel: OfficeModel,
+    archiveModel: OfficeArchiveModel,
+    name: 'Office'
   }
 
 };
@@ -73,7 +81,7 @@ var defaults = {
 };
 
 module.exports = function(entityName, options) {
-  var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates'];
+  var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices'];
   if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;
 

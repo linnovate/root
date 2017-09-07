@@ -1,0 +1,25 @@
+.tab-content {
+    .offices {
+        @include table;
+
+        tbody {
+            tr {
+                background-color: $cream;
+                border: none;
+
+                .tag {
+                    @include tag(10px);
+                }
+
+                .tag-column {
+                    width: 40px;
+                    padding: 0 10px;
+                }
+
+                .name-column {
+                    width: 200px;
+                }
+            }
+        }
+    }
+}

@@ -79,3 +79,4 @@ angular.module('mean.icu.decorators.pdsDecorator').decorator('TasksService', pas
 angular.module('mean.icu.decorators.pdsDecorator').decorator('ProjectsService', passiveDataSrtuctureDecorator);
 angular.module('mean.icu.decorators.pdsDecorator').decorator('DiscussionsService', passiveDataSrtuctureDecorator);
 angular.module('mean.icu.decorators.pdsDecorator').decorator('UsersService', passiveDataSrtuctureDecorator);
+angular.module('mean.icu.decorators.pdsDecorator').decorator('OfficesService', passiveDataSrtuctureDecorator);

@@ -23,3 +23,27 @@
     </table>
 </div>
 <div class="bottomBar" style="height: 10px;"></div>
+<div class="list-table-print">
+    <div class="header">
+        <div>{{'name' | i18next}}</div>
+        <div>{{'status' | i18next}}</div>
+        <div>{{'dueDate' | i18next}}</div>
+        <div>{{'assignee' | i18next}}</div>
+        <div>{{'location' | i18next}}</div>
+        <div>{{'members' | i18next}}</div>
+    </div>
+    <div data-ng-repeat="discussion in discussions | orderBy:order.field:order.isReverse" class="task-row">
+        <div>{{discussion.title}}</div>
+        <div class="status" ng-class="discussion.status">
+            {{discussion.status | i18next }}
+        </div>
+        <div>
+            {{discussion.due | date: 'dd.MM.yyyy'}}
+        </div>
+        <div>{{discussion.assign.name}}</div>
+        <div>{{discussion.location}}</div>
+        <div class="watchers">
+            <span ng-repeat="watcher in discussion.watchers">{{watcher.name}}</span>
+        </div>
+    </div>
+</div>

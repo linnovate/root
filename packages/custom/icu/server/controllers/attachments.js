@@ -28,7 +28,8 @@ exports.getByEntity = function (req, res, next) {
     projects: 'project',
     tasks: 'task',
     discussions: 'discussion',
-    updates: 'update'
+    updates: 'update',
+    offices: 'office'
   },
     entity = entities[req.params.entity];
 
@@ -296,7 +297,8 @@ exports.sign = function (req, res, next) {
   var entities = {
     projects: 'project',
     tasks: 'task',
-    discussions: 'discussion'
+    discussions: 'discussion',
+    offices: 'office'
   };
   Attachment.update({
     entity: entities[req.locals.data.entityName],
@@ -315,7 +317,8 @@ exports.signNew = function (req, res, next) {
   var entities = {
     project: 'Project',
     task: 'Task',
-    discussion: 'Discussion'
+    discussion: 'Discussion',
+    office: 'Office'
   };
   var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
   query.findOne({

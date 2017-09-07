@@ -74,6 +74,7 @@
     "LoadTaskTemplate" : "Load task template",
     "login": "Login",
     "logout": "Logout",
+    "members": "Members",
     "more": "more‬…",
     "manageTasks": "Manage Tasks",
     "modalDeleteText": "All tasks related to this ",
@@ -164,6 +165,10 @@
     "assigned from":  "assigned from",
     "favorite": "favorite",
     "deleteDocument": " delete a document frome this ",
+    "office": "Office",
+    "offices": "Offices",
+    "createNewOffice": "Create new office",
+    "displayofficesBy": "Display offices by",
 
     "st": "st",
     "nd": "nd",

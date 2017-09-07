@@ -9,18 +9,26 @@ angular.module('mean.icu.ui.displayby', [])
                      $scope.projectsList.push(project);
                 });
 
+        $scope.officesList = [];
+        $scope.offices.forEach(function(office) {
+                    if(office.title)
+                        $scope.officesList.push(office);
+                });
+
         $scope.singularItemName = {
             discussions: "discussion",
             projects: "project",
             tasks: "task",
-            documents: "document"
+            documents: "document",
+            offices: "office"
         };
 
         $scope.allItems = {
             projects: $scope.projects,
             discussions: $scope.discussions,
-            tasks: $scope.tasks//,
+            tasks: $scope.tasks,
             //documents: $scope.$scope.documents
+            offices: $scope.offices
         };
 
         // Reverse list in sideline
@@ -38,9 +46,11 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.displayLimit = {
             projects : 3,
             discussions : 3,
+            offices: 3,
             reset : function() {
                 this.projects = 3;
                 this.discussions = 3;
+                this.offices = 3;
             }
         };
 
@@ -66,7 +76,8 @@ angular.module('mean.icu.ui.displayby', [])
             project: false,
             discussion: false,
             user: false,
-            document: false
+            document: false,
+            office: false
         };
 
         $scope.visible[$scope.context.entityName] = true;
@@ -95,7 +106,8 @@ angular.module('mean.icu.ui.displayby', [])
             discussions: '=',
             people: '=',
             icuDisplayBy: '=',
-            documents: '='
+            documents: '=',
+            offices: '='
         },
         templateUrl: '/icu/components/display-by/display-by.html',
         controller: controller,

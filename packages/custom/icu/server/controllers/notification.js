@@ -5,12 +5,14 @@ var notifications = require('../root-notifications')({ //CHANGE TO 'root-notific
     rocketChat: config.rocketChat
 });
 var projectController = require('./project.js');
+var officeController = require('./office.js');
 var hiSettings = require(process.cwd() + '/config/hiSettings') || {};
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     Message = mongoose.model('Message'),
     Project = mongoose.model('Project'),
+    Office = mongoose.model('Office'),
     Task = require('../models/task'),
     _ = require('lodash');
 var UserCreator = mongoose.model('User');
@@ -148,6 +150,7 @@ exports.updateRoom = function(req, res, next) {
         var changedArray = [];
         for (var i in data) {
             if (hiSettings.projectNotify[i] && hiSettings.projectNotify[i].chat) {
+            //if (hiSettings.officeNotify[i] && hiSettings.officeNotify[i].chat) {
                 if (data[i] !== oldData[i]) {
                     changed = i + ' changed to ' + data[i];
                     changedArray.push(changed);
@@ -159,10 +162,12 @@ exports.updateRoom = function(req, res, next) {
             req.body.context = {
                 action: 'updated',
                 type: 'project',
+                //type: 'office',
                 name: data.title,
                 user: req.user.username,
                 description: changedArray,
                 url: config.host + ':' + port + '/projects/all/' + data._id + '/activities'
+                //url: config.host + ':' + port + '/offices/all/' + data._id + '/activities'
             }
             notifications.notify(['hi'], 'createMessage', {
                 message: bulidMassage(req.body.context),

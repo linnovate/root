@@ -35,6 +35,12 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
             }
 
             $scope.createOrUpdate = function(task, field) {
+                var data;
+                if (field === 'assign') {
+                    data = {
+                        frequentUser: task.assign
+                    }
+                }
                 if (task.__state === creatingStatuses.NotCreated) {
                     task.__state = creatingStatuses.Creating;
                     task.parent = $scope.parent;
@@ -52,7 +58,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                             TasksService.assign(task, me);
                         });
                     }
-                    return TasksService.update(task);
+                    return TasksService.update(task, data);
                 }
             };
 

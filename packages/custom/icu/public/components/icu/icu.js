@@ -8,6 +8,7 @@ angular.module('mean.icu').controller('IcuController',
         $stateParams,
         projects,
         discussions,
+        offices,
         people,
         context,
         tasks,
@@ -22,6 +23,7 @@ angular.module('mean.icu').controller('IcuController',
     }
 
     $scope.me = me;
+    $scope.offices = offices.data || offices;
     $scope.tasks = tasks.data || tasks;
     $scope.projects = projects.data || projects;
     $scope.discussions = discussions.data || discussions;
@@ -29,7 +31,8 @@ angular.module('mean.icu').controller('IcuController',
     var entityMap = {
         'project': 'projects',
         'discussion': 'discussions',
-        'user': 'people'
+        'user': 'people',
+        'office':'offices'
     };
 
     $scope.getLayoutIcon = function() {
@@ -85,6 +88,14 @@ angular.module('mean.icu').controller('IcuController',
                         context.entity = $scope.projects[0];
                         context.entityId = $scope.projects[0]._id;
                     } else if ($scope.discussions[0] && restoredContext.main === 'project') {
+                        context.entityName = 'discussion';
+                        context.entity = $scope.discussions[0];
+                        context.entityId = $scope.discussions[0]._id;
+                    } else if ($scope.offices[0] && restoredContext.main !== 'office') {
+                        context.entityName = 'office';
+                        context.entity = $scope.offices[0];
+                        context.entityId = $scope.offices[0]._id;
+                    } else if ($scope.discussions[0] && restoredContext.main === 'office') {
                         context.entityName = 'discussion';
                         context.entity = $scope.discussions[0];
                         context.entityId = $scope.discussions[0]._id;

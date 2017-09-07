@@ -185,6 +185,46 @@ angular.module('mean.icu').config([
             };
         }
 
+        function getOfficeDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/office-details/office-details.html',
+                        controller: 'OfficeDetailsController'
+                    }
+                },
+                params: {
+                    nameFocused: false
+                },
+                resolve: {
+                    entity: function($stateParams, offices, OfficesService) {
+                        var office = _(offices.data || offices).find(function(t) {
+                            return t._id === $stateParams.id;
+                        });
+
+                        if (!office) {
+                            return OfficesService.getById($stateParams.id).then(function(office) {
+                                return office;
+                            });
+                        } else {
+                            return office;
+                        }
+                    },
+                    tasks: function(TasksService, $stateParams) {
+                        return TasksService.getByOfficeId($stateParams.id);
+                    },
+                    people: function(UsersService) {
+                        return UsersService.getAll();
+                    }
+                }
+            };
+        }
+
         function getDetailspaneModal() {
             return {
                 url: '/modal',
@@ -469,6 +509,14 @@ angular.module('mean.icu').config([
                             return [];
                         });
                     },
+                    offices: function(OfficesService) {
+                        return OfficesService.getAll(0, 0, SORT).then(function(data) {
+                            OfficesService.data = data.data || data;
+                            return data;
+                        }, function(err) {
+                            return [];
+                        });
+                    },
                     people: function(UsersService) {
                         return UsersService.getAll();
                     }
@@ -539,6 +587,20 @@ angular.module('mean.icu').config([
                         resolve: {
                             userProjects: function(ProjectsService, $stateParams) {
                                 return ProjectsService.getByUserId($stateParams.id);
+                            }
+                        }
+                    }
+                }
+            })
+            .state('main.people.byentity.details.offices', {
+                url: '/offices',
+                views: {
+                    tab: {
+                        templateUrl: '/icu/components/user-details/tabs/offices/offices.html',
+                        controller: 'UserOfficesController',
+                        resolve: {
+                            userOffices: function(OfficesService, $stateParams) {
+                                return OfficesService.getByUserId($stateParams.id);
                             }
                         }
                     }
@@ -852,6 +914,70 @@ angular.module('mean.icu').config([
             .state('main.discussions.byentity.details.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.discussions.byentity.details.tasks', getDetailsTabState('discussion', 'tasks'))
 
+
+        .state('main.offices', {
+            url: '/offices',
+            views: {
+                middlepane: {
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function($state, discussions, context) {
+                        if ($state.current.name === 'main.offices') {
+                            if (discussions.data.length) {
+                                $state.go('.byentity', {
+                                    entity: context.entityName,
+                                    entityId: context.entityId
+                                });
+                            } else {
+                                $state.go('.all');
+                            }
+                        }
+                    }
+                }
+            }
+        })
+            .state('main.offices.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('office'),
+                resolve: {
+                    offices: function(OfficesService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return OfficesService.getStarred();
+                        } else {
+                            if (typeof OfficesService.data !== 'undefined'){
+                                $stateParams.limit = OfficesService.data.length;
+                            }
+                            return OfficesService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.offices.all.details', getOfficeDetailsState())
+            .state('main.offices.all.details.activities', getDetailsTabState('office', 'activities'))
+            .state('main.offices.all.details.activities.modal', getDetailspaneModal())
+            .state('main.offices.all.details.documents', getDetailsTabState('office', 'documents'))
+            .state('main.offices.all.details.tasks', getDetailsTabState('office', 'tasks'))
+
+        .state('main.offices.byentity', generateStateByEntity('office'))
+            .state('main.offices.byentity.activities', getDetailsTabState('office', 'activities'))
+            .state('main.offices.byentity.activities.modal', getDetailspaneModal())
+            .state('main.offices.byentity.documents', getDetailsTabState('office', 'documents'))
+            .state('main.offices.byentity.tasks', getDetailsTabState('office', 'tasks'))
+
+        .state('main.offices.byentity.details', getOfficeDetailsState())
+            .state('main.offices.byentity.details.activities', getDetailsTabState('office', 'activities'))
+            .state('main.offices.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.offices.byentity.details.documents', getDetailsTabState('office', 'documents'))
+            .state('main.offices.byentity.details.tasks', getDetailsTabState('office', 'tasks'))
+
         .state('main.search', {
             url: '/search/:query',
             views: {
@@ -906,6 +1032,12 @@ angular.module('mean.icu').config([
             .state('main.search.discussion.activities.modal', getDetailspaneModal())
             .state('main.search.discussion.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.search.discussion.tasks', getDetailsTabState('discussion', 'tasks'))
+
+        .state('main.search.office', getOfficeDetailsState('/office'))
+            .state('main.search.office.activities', getDetailsTabState('office', 'activities'))
+            .state('main.search.office.activities.modal', getDetailspaneModal())
+            .state('main.search.office.documents', getDetailsTabState('office', 'documents'))
+            .state('main.search.office.tasks', getDetailsTabState('office', 'tasks'))
 
         .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
             .state('main.search.attachment.versions', getAttachmentDetailsTabState())

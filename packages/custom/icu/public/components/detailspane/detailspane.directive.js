@@ -33,7 +33,8 @@ angular.module('mean.icu.ui.detailspane', [])
         scope: {
             me: '=',
             projects: '=',
-            discussions: '='
+            discussions: '=',
+            offices: '=',
         },
         controller: controller,
         link: link,

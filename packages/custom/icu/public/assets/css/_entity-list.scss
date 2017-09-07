@@ -1,4 +1,5 @@
-.task-list, .discussion-list, .project-list, .document-list, .sub-task-list {
+.task-list, .discussion-list, .project-list, .sub-task-list, .office-list, .document-list {
+
     height: 100%;
 
     .entity-list-container {
@@ -118,6 +119,16 @@
                         }
                     }
 
+                    &.office {
+                        text-align: center;
+                        width: 22%;
+                        font-weight: 400;
+                        font-size: 13px;
+                        span {
+                            padding: 3px 13px;                                                                                                          
+                        }
+                    }
+
                     &.status {
                         width: calc(10% - 65px);
                             &.new{color: #ff4081;}
@@ -180,3 +191,6 @@
     opacity: 0.2;
 }
 
+.list-table-print {
+    display: none;
+}
