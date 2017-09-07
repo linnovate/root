@@ -1,4 +1,4 @@
-.task-list, .discussion-list, .project-list, .sub-task-list {
+.task-list, .discussion-list, .project-list, .sub-task-list, .office-list {
     height: 100%;
 
     .entity-list-container {
@@ -109,6 +109,16 @@
                     }
 
                     &.project {
+                        text-align: center;
+                        width: 22%;
+                        font-weight: 400;
+                        font-size: 13px;
+                        span {
+                            padding: 3px 13px;                                                                                                          
+                        }
+                    }
+
+                    &.office {
                         text-align: center;
                         width: 22%;
                         font-weight: 400;

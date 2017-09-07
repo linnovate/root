@@ -165,6 +165,10 @@
     "assigned from":  "assigned from",
     "favorite": "favorite",
     "deleteDocument": " delete a document frome this ",
+    "office": "Office",
+    "offices": "Offices",
+    "createNewOffice": "Create new office",
+    "displayofficesBy": "Display offices by",
 
     "st": "st",
     "nd": "nd",
