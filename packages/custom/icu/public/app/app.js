@@ -920,7 +920,46 @@ angular.module('mean.icu').config([
             controller: function(FilesService) {
                 FilesService.getByPath()
             }
-        });
+        })
+        .state('main.documents', {
+            url: '/docuoments',
+            views: {
+                middlepane: {
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function($state, projects, context) {
+                        if ($state.current.name === 'main.docuoments') {
+                            if (projects.data.length) {
+                                $state.go('.byentity', {
+                                    entity: context.entityName,
+                                    entityId: context.entityId
+                                });
+                            } else {
+                                $state.go('.all');
+                            }
+                        }
+                    }
+                }
+            }
+        })
+            .state('main.documents.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('document'),
+                resolve: {
+                    documents: function() {
+                
+                            return {
+                                title:"txt"
+                            }
+                        }
+                }
+            });
     }
 ]);
 

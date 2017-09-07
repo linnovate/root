@@ -12,13 +12,15 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.singularItemName = {
             discussions: "discussion",
             projects: "project",
-            tasks: "task"
+            tasks: "task",
+            documents: "document"
         };
 
         $scope.allItems = {
             projects: $scope.projects,
             discussions: $scope.discussions,
-            tasks: $scope.tasks
+            tasks: $scope.tasks//,
+            //documents: $scope.$scope.documents
         };
 
         // Reverse list in sideline
@@ -63,7 +65,8 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.visible = {
             project: false,
             discussion: false,
-            user: false
+            user: false,
+            document: false
         };
 
         $scope.visible[$scope.context.entityName] = true;
@@ -91,7 +94,8 @@ angular.module('mean.icu.ui.displayby', [])
             projects: '=',
             discussions: '=',
             people: '=',
-            icuDisplayBy: '='
+            icuDisplayBy: '=',
+            documents: '='
         },
         templateUrl: '/icu/components/display-by/display-by.html',
         controller: controller,

@@ -59,7 +59,7 @@ directive('icuSidepane', function() {
             state: 'discussions.all',
             display: ['projects', 'people'],
             open: $scope.isCurrentState({state: 'discussions'})
-        }
+        },
         // , {
         //     name: 'people',
         //     icon: '/icu/assets/img/people.png',
@@ -67,6 +67,13 @@ directive('icuSidepane', function() {
         //     display: ['projects', 'discussions'],
         //     open: false
         // }
+        {
+            name: 'documents',
+            icon: '/icu/assets/img/icon-document.svg',
+            state: 'documents.all',
+            display: ['new', 'received', 'inProgress'],
+            open: $scope.isCurrentState({state: 'documents'})
+        }
         ];
 
     }
@@ -77,8 +84,9 @@ directive('icuSidepane', function() {
         templateUrl: '/icu/components/sidepane/sidepane.html',
         scope: {
             projects: '=',
-            discussions: '='//,
+            discussions: '=',
             //people: '='
+            documents: '=' 
         }
     };
 });
