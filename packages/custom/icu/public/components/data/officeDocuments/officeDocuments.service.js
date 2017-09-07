@@ -54,7 +54,7 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     function create(odocument) {
-        return $http.post(ApiUri + EntityPrefix, project).then(function(result) {
+        return $http.post(ApiUri + EntityPrefix, odocument).then(function(result) {
 
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
@@ -62,15 +62,7 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
 
-    function update(odocument, context) {
-        context = context || {};
-        if (!context.action) {
-            context.action = 'updated';
-        }
-        if (!context.type) {
-            context.type = 'project';
-        }
-
+    function update(odocument) {
         return $http.put(ApiUri + EntityPrefix + '/' + odocument._id, odocument).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
