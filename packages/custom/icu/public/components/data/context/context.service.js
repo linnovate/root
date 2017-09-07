@@ -6,7 +6,9 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
         user: 'people',
         project: 'projects',
         discussion: 'discussions',
+        document:'documents',
         office: 'offices'
+
     };
 
     return {

@@ -19,6 +19,7 @@ angular.module('mean.icu.ui.displayby', [])
             discussions: "discussion",
             projects: "project",
             tasks: "task",
+            documents: "document",
             offices: "office"
         };
 
@@ -26,6 +27,7 @@ angular.module('mean.icu.ui.displayby', [])
             projects: $scope.projects,
             discussions: $scope.discussions,
             tasks: $scope.tasks,
+            //documents: $scope.$scope.documents
             offices: $scope.offices
         };
 
@@ -74,6 +76,7 @@ angular.module('mean.icu.ui.displayby', [])
             project: false,
             discussion: false,
             user: false,
+            document: false,
             office: false
         };
 
@@ -103,6 +106,7 @@ angular.module('mean.icu.ui.displayby', [])
             discussions: '=',
             people: '=',
             icuDisplayBy: '=',
+            documents: '=',
             offices: '='
         },
         templateUrl: '/icu/components/display-by/display-by.html',
