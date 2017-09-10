@@ -45,5 +45,17 @@ module.exports = {
 		}
 
 	},
+	folderNotify: {
+		status: {
+			chat: true
+		},
+		description: {
+			chat: true
+		},
+		folder: {
+			chat: true
+		}
+
+	},
 	
 };

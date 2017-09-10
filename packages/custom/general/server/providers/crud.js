@@ -118,6 +118,12 @@ class Office extends Crud {
 	}
 }
 
+class Folder extends Crud {
+	constructor(cmd) {
+		super(cmd);
+	}
+}
+
 exports.Crud = Crud;
 exports.Project = Project;
 exports.Task = Task;
@@ -125,3 +131,4 @@ exports.Discussion = Discussion;
 exports.User = User;
 exports.Update = Update;
 exports.Office = Office;
+exports.Folder = Folder;

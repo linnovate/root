@@ -169,6 +169,10 @@
     "offices": "Offices",
     "createNewOffice": "Create new office",
     "displayofficesBy": "Display offices by",
+    "folder": "Folder",
+    "folders": "Folders",
+    "createNewFolder": "Create new folder",
+    "displayfoldersBy": "Display folders by",
 
     "st": "st",
     "nd": "nd",

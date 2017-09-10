@@ -35,6 +35,7 @@ angular.module('mean.icu.ui.detailspane', [])
             projects: '=',
             discussions: '=',
             offices: '=',
+            folders: '=',
         },
         controller: controller,
         link: link,

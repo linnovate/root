@@ -21,6 +21,10 @@
                             color: black;
                         }
 
+                        .folder {
+                            color: black;
+                        }
+
                     }
                     
                     &:not(.active):hover {
@@ -178,6 +182,9 @@
             padding: 3px 13px !important;                                                                                                              
         }
         .office {
+            padding: 3px 13px !important;                                                                                                              
+        }
+        .folder {
             padding: 3px 13px !important;                                                                                                              
         }
         .tag {

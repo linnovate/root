@@ -6,7 +6,8 @@ var entityIssueMap = {
   tasks: 'task',
   projects: 'project',
   discussions: 'discussion',
-  offices: 'office'
+  offices: 'office',
+  folders: 'folder'
 };
 
 module.exports = function(entityName, options) {

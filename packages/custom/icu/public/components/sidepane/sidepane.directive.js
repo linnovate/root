@@ -5,6 +5,7 @@ directive('icuSidepane', function() {
     function controller($scope, $state, context, TasksService, $rootScope) {
         $scope.context = context;
 
+        $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
@@ -73,6 +74,12 @@ directive('icuSidepane', function() {
             state: 'offices.all',
             display: ['people'],
             open: $scope.isCurrentState({state: 'offices'})
+        }, {
+            name: 'folders',
+            icon: '/icu/assets/img/project.png',
+            state: 'folders.all',
+            display: ['people'],
+            open: $scope.isCurrentState({state: 'folders'})
         },
         // , {
         //     name: 'people',
@@ -100,6 +107,7 @@ directive('icuSidepane', function() {
             projects: '=',
             discussions: '=',
             offices: '=',
+            folders: '=',
             //people: '='
             documents: '=' 
         }

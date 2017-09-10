@@ -126,6 +126,17 @@ var buildSearchResponse = exports.buildSearchResponse = function(type, obj,userI
   	groups["office"]=finalResults2;
   }
 
+  if(groups.folder!=undefined && groups.folder!=null){
+  	var finalResults2=[];
+  	for(var i=0;i<groups.folder.length;i++){
+  		var folder = groups.folder[i];
+  		if(folder.creator==userId || inArray(userId,folder.watchers)!=-1){
+  			finalResults2.push(folder);
+  		}
+  	}
+  	groups["folder"]=finalResults2;
+  }
+
 
   return groups;
 }

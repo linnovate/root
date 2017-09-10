@@ -90,7 +90,8 @@ function CompModalCtrl($scope, $uibModalInstance, entity, entityName, $injector,
         project: 'ProjectsService',
         discussion: 'DiscussionsService',
         task: 'TasksService',
-        office: 'OfficesService'
+        office: 'OfficesService',
+        folder: 'FoldersService'
     };
 
     var serviceName = serviceMap[entityName];

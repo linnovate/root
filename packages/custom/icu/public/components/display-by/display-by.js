@@ -11,16 +11,23 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.officesList = [];
         $scope.offices.forEach(function(office) {
-                    if(office.title)
-                        $scope.officesList.push(office);
-                });
+            if(office.title)
+                $scope.officesList.push(office);
+            });
+
+        $scope.foldersList = [];
+        $scope.folders.forEach(function(folder) {
+            if(folder.title)
+                $scope.foldersList.push(folder);
+            });
 
         $scope.singularItemName = {
             discussions: "discussion",
             projects: "project",
             tasks: "task",
             documents: "document",
-            offices: "office"
+            offices: "office",
+            folders: "folder"
         };
 
         $scope.allItems = {
@@ -28,7 +35,8 @@ angular.module('mean.icu.ui.displayby', [])
             discussions: $scope.discussions,
             tasks: $scope.tasks,
             //documents: $scope.$scope.documents
-            offices: $scope.offices
+            offices: $scope.offices,
+            folders: $scope.folders
         };
 
         // Reverse list in sideline
@@ -47,10 +55,12 @@ angular.module('mean.icu.ui.displayby', [])
             projects : 3,
             discussions : 3,
             offices: 3,
+            folders: 3,
             reset : function() {
                 this.projects = 3;
                 this.discussions = 3;
                 this.offices = 3;
+                this.folders = 3;
             }
         };
 
@@ -77,7 +87,8 @@ angular.module('mean.icu.ui.displayby', [])
             discussion: false,
             user: false,
             document: false,
-            office: false
+            office: false,
+            folder: false
         };
 
         $scope.visible[$scope.context.entityName] = true;
@@ -107,7 +118,8 @@ angular.module('mean.icu.ui.displayby', [])
             people: '=',
             icuDisplayBy: '=',
             documents: '=',
-            offices: '='
+            offices: '=',
+            folders: '='
         },
         templateUrl: '/icu/components/display-by/display-by.html',
         controller: controller,

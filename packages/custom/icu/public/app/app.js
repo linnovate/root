@@ -225,6 +225,46 @@ angular.module('mean.icu').config([
             };
         }
 
+            function getFolderDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/folder-details/folder-details.html',
+                        controller: 'FolderDetailsController'
+                    }
+                },
+                params: {
+                    nameFocused: false
+                },
+                resolve: {
+                    entity: function($stateParams, folders, FoldersService) {
+                        var folder = _(folders.data || folders).find(function(t) {
+                            return t._id === $stateParams.id;
+                        });
+
+                        if (!folder) {
+                            return FoldersService.getById($stateParams.id).then(function(folder) {
+                                return folder;
+                            });
+                        } else {
+                            return folder;
+                        }
+                    },
+                    tasks: function(TasksService, $stateParams) {
+                        return TasksService.getByFolderId($stateParams.id);
+                    },
+                    people: function(UsersService) {
+                        return UsersService.getAll();
+                    }
+                }
+            };
+        }
+
         function getDetailspaneModal() {
             return {
                 url: '/modal',
@@ -517,6 +557,14 @@ angular.module('mean.icu').config([
                             return [];
                         });
                     },
+                    folders: function(FoldersService) {
+                        return FoldersService.getAll(0, 0, SORT).then(function(data) {
+                            FoldersService.data = data.data || data;
+                            return data;
+                        }, function(err) {
+                            return [];
+                        });
+                    },
                     people: function(UsersService) {
                         return UsersService.getAll();
                     }
@@ -601,6 +649,20 @@ angular.module('mean.icu').config([
                         resolve: {
                             userOffices: function(OfficesService, $stateParams) {
                                 return OfficesService.getByUserId($stateParams.id);
+                            }
+                        }
+                    }
+                }
+            })
+            .state('main.people.byentity.details.folders', {
+                url: '/folders',
+                views: {
+                    tab: {
+                        templateUrl: '/icu/components/user-details/tabs/folders/folders.html',
+                        controller: 'UserFoldersController',
+                        resolve: {
+                            userFolders: function(FoldersService, $stateParams) {
+                                return FoldersService.getByUserId($stateParams.id);
                             }
                         }
                     }
@@ -978,6 +1040,69 @@ angular.module('mean.icu').config([
             .state('main.offices.byentity.details.documents', getDetailsTabState('office', 'documents'))
             .state('main.offices.byentity.details.tasks', getDetailsTabState('office', 'tasks'))
 
+        .state('main.folders', {
+            url: '/folders',
+            views: {
+                middlepane: {
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function($state, discussions, context) {
+                        if ($state.current.name === 'main.folders') {
+                            if (discussions.data.length) {
+                                $state.go('.byentity', {
+                                    entity: context.entityName,
+                                    entityId: context.entityId
+                                });
+                            } else {
+                                $state.go('.all');
+                            }
+                        }
+                    }
+                }
+            }
+        })
+            .state('main.folders.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('folder'),
+                resolve: {
+                    folders: function(FoldersService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return FoldersService.getStarred();
+                        } else {
+                            if (typeof FoldersService.data !== 'undefined'){
+                                $stateParams.limit = FoldersService.data.length;
+                            }
+                            return FoldersService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.folders.all.details', getFolderDetailsState())
+            .state('main.folders.all.details.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.folders.all.details.activities.modal', getDetailspaneModal())
+            .state('main.folders.all.details.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.all.details.tasks', getDetailsTabState('folder', 'tasks'))
+
+        .state('main.folders.byentity', generateStateByEntity('folder'))
+            .state('main.folders.byentity.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.folders.byentity.activities.modal', getDetailspaneModal())
+            .state('main.folders.byentity.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.byentity.tasks', getDetailsTabState('folder', 'tasks'))
+
+        .state('main.folders.byentity.details', getFolderDetailsState())
+            .state('main.folders.byentity.details.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.folders.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.folders.byentity.details.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.byentity.details.tasks', getDetailsTabState('folder', 'tasks'))
+
         .state('main.search', {
             url: '/search/:query',
             views: {
@@ -1038,6 +1163,12 @@ angular.module('mean.icu').config([
             .state('main.search.office.activities.modal', getDetailspaneModal())
             .state('main.search.office.documents', getDetailsTabState('office', 'documents'))
             .state('main.search.office.tasks', getDetailsTabState('office', 'tasks'))
+
+        .state('main.search.folder', getFolderDetailsState('/folder'))
+            .state('main.search.folder.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.search.folder.activities.modal', getDetailspaneModal())
+            .state('main.search.folder.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.search.folder.tasks', getDetailsTabState('folder', 'tasks'))
 
         .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
             .state('main.search.attachment.versions', getAttachmentDetailsTabState())
