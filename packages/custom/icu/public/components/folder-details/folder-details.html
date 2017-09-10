@@ -53,6 +53,32 @@
             </div>
         </div>
         <button icu-comp-modal entity="folder" entity-name="folder" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
+        <div class="summary wrap-pro">
+            <div class="tags" ng-if="!folder.parent">
+                <div class="tag-wrap">
+                    <ui-select ng-model="folder.office" select-on-blur on-select="updateOffice(folder, 'office',officeName)" ng-keyup="updateOfficeName($select.selected.title)" ng-mouseleave="removeCreateNew">
+                        <ui-select-match placeholder="{{$select.selected.title || 'selectOffice' | i18next}}">
+                            <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
+                                {{$select.selected.title}}
+                                <div class="delete" ng-click="unsetOffice($event, folder)">
+                                    <img src="/icu/assets/img/X.png"></img>
+                                </div>
+                            </div>
+                        </ui-select-match>
+                        <ui-select-choices repeat="office in offices | filter:$select.search">
+                            <div class="line" ng-show="office.title" ng-class="{ 'create new': office.class}">
+                                <div ng-show="office.class" ng-bind-html="office.title | searchfilter:$select.search"  class="title"></div>
+                                <div ng-show="office.class && officeName"  class="create-new">{{ 'createNew' | i18next }}</div>
+                                <span ng-show="!office.class" ng-bind-html="office.title | searchfilter:$select.search"  class="title"></span>
+                            </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="parent" ng-if="folder.parent">
+                {{currentContext.entity.title}}
+            </div>
+        </div>
         <div class="description">
             <div class="title"
                  contenteditable="true"

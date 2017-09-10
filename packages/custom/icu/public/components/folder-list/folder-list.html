@@ -7,8 +7,18 @@
                     entityId: currentContext.entityId
                     })">
         <header class="title">
-            {{'foldersFrom' | i18next}}{{currentContext.entityName | i18next}}
-            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+            <div>
+                <span class="office" 
+                    title="{{currentContext.entity.office.title}}"
+                    ng-style="{'background-color': '#' + currentContext.entity.office.color, 'color': 'white'}">
+                {{currentContext.entity.office.title}}
+                </span>
+            </div>
+            {{ 'foldersFrom' | i18next }}
+            <span ng-click="goToParent()">"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+
+            <!--{{'foldersFrom' | i18next}}{{currentContext.entityName | i18next}}
+            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>-->
         </header>
     </div>
 

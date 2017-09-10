@@ -5,7 +5,7 @@
             <tr data-ng-repeat="folder in folders | orderBy:order.field:order.isReverse"
                 data-ng-class="{ 'active': isCurrentState(folder._id) }"
                 ng-click="initialize($event, folder)"
-                ng-mousedown="currentTaskId(folder._id)"
+                ng-mousedown="currentFolderId(folder._id)"
                 icu-list-row
                 data-id="{{folder._id}}"
                 data="{
@@ -22,3 +22,45 @@
     </table>
 </div>
 <div class="bottomBar" style="height: 10px;"></div>
+<div class="list-table-print">
+    <div class="header">
+        <div>{{'name' | i18next}}</div>
+        <div>{{'office' | i18next}}</div>
+        <div>{{'status' | i18next}}</div>
+        <div>{{'dueDate' | i18next}}</div>
+        <div>{{'members' | i18next}}</div>
+    </div>
+    <div data-ng-repeat-start="folder in folders | filterByOptions | orderBy:order.field:order.isReverse" class="folder-row">
+        <div>{{folder.title}}</div>
+        <div>
+            <span class="tag office"
+                title="{{folder.office.title}}"
+                ng-style="{'background-color': '#' + folder.office.color, 'color': 'white'}">
+                {{folder.office.title}}
+            </span> 
+        </div>
+        <div class="status" ng-class="folder.status">
+            {{folder.status | i18next }}
+        </div>
+        <div>
+            {{folder.due | date: 'dd.MM.yyyy'}}
+        </div>
+        <div class="watchers">
+            <span ng-repeat="watcher in folder.watchers">{{watcher.name}}</span>
+        </div>
+    </div>
+    <div data-ng-repeat-end="" class="subFolders">
+        <div ng-repeat="subFolder in folder.subFolders" ng-if="subFolder._id">
+            <div>{{subFolder.title}}</div>
+            <div class="status" ng-class="subFolder.status">
+                {{subFolder.status | i18next }}
+            </div>
+            <div>
+                {{subFolder.due | date: 'dd.MM.yyyy'}}
+            </div>
+            <div>
+                <span ng-repeat="watcher in subFolder.watchers">{{watcher.name}}</span>
+            </div>
+        </div>
+    </div>
+</div>

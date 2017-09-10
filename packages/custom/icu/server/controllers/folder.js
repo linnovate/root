@@ -3,9 +3,10 @@
 require('../models/folder');
 
 var options = {
-  includes: 'assign watchers',
+  includes: 'assign watchers office',
   defaults: {
-    watchers: []
+    watchers: [],
+    office: undefined
   }
 };
 

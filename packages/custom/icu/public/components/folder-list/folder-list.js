@@ -12,6 +12,31 @@ angular.module('mean.icu.ui.folderlist', [])
         $scope.loadNext = folders.next;
         $scope.loadPrev = folders.prev;
 
+        function init() {
+            if(context.entity){
+                if(!context.entity.parent) {
+                    if(context.entity.office ){
+                        $scope.parentState = 'byentity';
+                        $scope.parentEntity ='office' ;
+                        $scope.parentEntityId = context.entity.office._id;
+                        $scope.parentId = context.entity.id;
+                    }
+                }
+                if(context.entityName === 'office') {
+                    ProjectsService.selected = context.entity;
+                }
+            }
+            else {
+                $scope.parentState = 'byparent';
+                $scope.parentEntity = 'folder';
+                if(context.entity){
+                    $scope.parentEntityId = context.entity.parent;
+                    $scope.parentId = context.entity.id;
+                }
+            }
+	    }
+
+
         $scope.starred = $stateParams.starred;
         if ($scope.folders.length > 0 && !$scope.folders[$scope.folders.length - 1].id) {
  		    $scope.folders = [$scope.folders[0]];
@@ -98,4 +123,48 @@ angular.module('mean.icu.ui.folderlist', [])
                 $state.go('.activities');
             }
         }
+
+
+        $scope.getProjName=function(){
+            var entityType = $scope.currentContext.entityName;
+            if($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined&&
+            $scope.currentContext.entity.title!=undefined){
+                return $scope.currentContext.entity.title;
+            }
+            else if ($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined
+            && $scope.currentContext.entity.name!=undefined){
+                return $scope.currentContext.entity.name;
+            }
+            else{
+                if(entityType=="discussion" && DiscussionsService.currentDiscussionName!=undefined){
+                    return DiscussionsService.currentDiscussionName;
+                }
+                else if(OfficesService.currentOfficeName!=undefined){
+                    return OfficesService.currentOfficeName;
+                }
+                else{
+                    var folders = $scope.folders;
+                    if(folders.length==1){
+                        $state.go('401');
+                        return "you dont have permission";
+                    }
+                    else{
+                        var folder = folders[0];
+                        var result;
+                        if(folder.office!=undefined){
+                            result = folder.office.title
+                        }
+                        else if(folder.discussions!=undefined && folder.discussions.title!=undefined){
+                            result=folder.discussions[0].title;
+                        }
+                        else{
+                            result = "you dont have permission";
+                        }
+                        return result;
+                    }
+                }
+
+            }
+        }
+
     });
