@@ -11,6 +11,42 @@ var mean = require('meanio'),path = require('path'),fs = require('fs'),
   var Update = require('../models/update');
   var ObjectId = require(mongoose).Types.ObjectId;
 
+
+
+function getDocuments(entity,id){
+  var result = [];
+  return new Promise(function(fulfill,reject){
+    Document.find({
+      'entity':entity,
+      'entityId':entityId
+    }, function(err,docs){
+      if(err){
+        reject('error');
+      }
+      else{
+        for(var i=0;i<docx.length;i++){
+          result.push(docx[i]._doc.path);
+        }
+        fulfill(result);
+      }
+    });
+  });
+}
+
+function getCreators(paths){
+  var assigns =[];
+  for(var i=0;i<paths.length;i++){
+    var path = paths[i];
+    var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
+    var path2 = path.substring(0,path.lastIndexOf('/'));
+    var folderName = path2.substring(path2.lastIndexOf('/')+1,path2.length);
+    assigns.push(folderName);
+  }
+  return assigns;
+}  
+
+
+
 function getUsers(users){
   var request = [];
   return new Promise(function(fulfill,reject){
@@ -46,7 +82,7 @@ function getUsers(users){
 */
 
 exports.uploadEmptyDocument = function(req , res){
-  var entityNAme = req.body.entityName;
+  var entityName = req.body.entityName;
   var fileType = req.body.fileType;
   var entityId = req.body.entityId;
   var watchers = req.bodt.watchers;
@@ -128,20 +164,29 @@ exports.getByUserId = function(req,res,next){
 *req.params.entity contains the entity {project,discussion,office,}
 *
 */
-exports.getByEntity = function(req,res,next){
+exports.getByEntity = function (req, res, next) {
+  var entities = {
+    projects: 'project',
+    tasks: 'task',
+    discussions: 'discussion',
+    updates: 'update',
+    offices: 'office',
+    folders: 'folder'
+  },
+  entity = entities[req.params.entity];
   Document.find({
-    
-  }, function (err, data) {
+    entity: entity,
+    entityId: req.params.id
+  }, 
+  function (err, data){
     if (err) {
       req.locals.error = err;
-      req.status(404);
     } else {
       req.locals.result = data
-      res.send(data);
     }
-});
-
-
+    res.send(data);
+    //next();
+  });
 };
 
 exports.upload = function(req,res,next){
@@ -271,3 +316,164 @@ exports.upload = function(req,res,next){
   return req.pipe(busboy);
 
 };
+
+
+
+/**
+*
+* req.params.id contains document mongo id to delete
+*
+*/
+exports.deleteDocument = function(req,res){
+  Document.find({_id:req.params.id},function(err,file){
+    if(err){
+      console.log(err);
+    }
+    else{
+     var path = file[0]._doc.path;
+     var fileName = path.substring(path.lastIndexOf("/")+1,path.length);
+     var path2 = path.substring(0,path.lastIndexOf("/"));
+     var folderName = path2.substring(path2.lastIndexOf("/")+1,path2.length);
+     var path2 = path2.substring(0,path2.lastIndexOf("/"));
+     var libraryName = path2.substring(path2.lastIndexOf("/")+1,path2.length);
+     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
+     var context ={
+      'siteUrl':config.SPHelper.SPSiteUrl,
+      'creds':{
+        'username':config.SPHelper.username,
+        'password':config.SPHelper.password
+      }
+     };
+     var options = {
+      'folder':'/'+libraryName+'/'+folderName,
+      'filePath':'/'+fileName
+     }; 
+
+     var json={
+      'context':context,
+      'options':options
+     };
+     request({
+      'url':config.SPHelper.uri+'/api/delete',
+      'method':'POST',
+      'json':json
+     },function(error,resp,body){
+
+     });
+     var creator = folderName;
+     if(creator==user){
+      Document.remove({_id:req.params.id},function(err){
+        if(err){
+          console.log(err);
+        }
+        else{
+          res.sendStatus(200);
+        }
+      });
+     }
+    }
+  });
+}
+
+
+exports.sign = function (req, res, next) {
+  var zeroReq = [];
+  for(var i=0;i<req.locals.result.zero.length;i++){
+    zeroReq.push({'UserId':req.locals.result.zero[i]});
+  };
+  
+  var entities = {
+    projects: 'project',
+    tasks: 'task',
+    discussions: 'discussion',
+    offices: 'office',
+    folders: 'folder'
+  };
+  var entity = entities[req.locals.data.entityName];
+  var id = req.params.id;
+  getDocuments(entity,id).then(function(documents){
+    var watchArray = req.body.watchers;
+    watchArray.push(req.body.assign);
+    Document.update({
+      'entity':entity,
+      'entityId':id
+    },{
+      'circles':req.body.circles,
+      'watchers':watchArray
+    },{
+      'multi':true
+    },function(err,numAffected){
+      if(documents!=null&&documents!=undefined&&(documents.length>0)){
+        var watchReq =[];
+        for(var i=0;i<watchArray.length;i++){
+          if(watchArray[i]!=undefined){
+            var str = watchArray[i].toString();
+            watchReq.push({'UserId':str});
+          }
+        }
+        getUsers(watchReq).then(function(res){
+          var users = [];
+          for(var i=0;i<watchReq.length;i++){
+            users.push(watchReq[i].UserId);
+          }
+          var creators = getCreators(documents);
+          getUsers(zeroReq).then(function(result){
+            var zero=[];
+            for(var i = 0 ;i<zeroReq.length;i++){
+              zero.push(zeroReq[i].UserId);
+            }
+            var json={
+              'siteUrl':config.SPHelper.SPSiteUrl,
+              'paths':documents,
+              'users':users,
+              'creators':creators,
+              'zero':zero
+            };
+            request({
+              'url':config.SPHelper.uri+"/api/share",
+              'method':'POST',
+              'json':json
+            },function(error,resp,body){
+
+
+
+            })
+          });
+        });
+      }
+    });
+    next();  
+  });
+}
+
+exports.signNew = function (req, res, next) {
+  var entities = {
+    project: 'Project',
+    task: 'Task',
+    discussion: 'Discussion',
+    office: 'Office',
+    folder: 'Folder'
+  };
+  var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+  query.findOne({
+    _id: req.locals.data.body.entityId
+  }).exec(function (err, entity) {
+    if (err) {
+      req.locals.error = err;
+    }
+    if (!entity) {
+      req.locals.error = {
+        status: 404,
+        message: 'Entity not found'
+      };
+    }
+    if (entity) {
+      req.locals.data.body.watchers = entity.watchers;
+      req.locals.data.body.watchers.push(entity.assign);
+      req.locals.data.body.circles = entity.circles;
+    }
+    next();
+  })
+}
+
+
