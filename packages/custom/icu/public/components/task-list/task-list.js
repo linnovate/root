@@ -12,6 +12,22 @@ angular.module('mean.icu.ui.tasklist', [])
 	if ($scope.tasks.length > 0 && !$scope.tasks[$scope.tasks.length - 1].id) {
 		$scope.tasks = [$scope.tasks[0]];
 	}
+	$scope.getFilter = function() {
+		console.log('innnnnnnnnnnnn', TasksService.filterValue);
+		var a = TasksService.filterValue;
+		switch(a) {
+			case 'today': 
+				return 'tasksDueToday';
+			case 'week':
+				return 'tasksDueThisWeek';
+			case 'watched':
+				return 'watchedTasks';
+			case 'overdue':
+				return 'overdueTasks';
+			default:
+				return ''
+		}
+	}
 
 	function init() {
 		if(context.entity){
@@ -54,6 +70,7 @@ angular.module('mean.icu.ui.tasklist', [])
 						$scope.firstStr = $scope.discussionContext.startDate ? $scope.firstStr + " "+startStr : '';
 					}
 					if($scope.discussionContext.endDate){
+						$scope.discussionContext.endDate = new Date($scope.discussionContext.endDate);
 						if($scope.firstStr!='deadline'){
 							$scope.firstStr = $scope.firstStr;
 						}

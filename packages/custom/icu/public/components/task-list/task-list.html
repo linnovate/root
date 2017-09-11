@@ -5,6 +5,7 @@
             ui-sref="main.{{currentContext.main}}.byassign.activities">
             <header class="title">
                 {{ 'myTasks' | i18next }}
+                <div class="showInPrint">{{getFilter() | i18next}}</div>
             </header>
         </div>
         <div class="header-wrap" ng-switch-when="all" 
