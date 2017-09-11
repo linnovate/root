@@ -34,6 +34,47 @@ angular.module('mean.icu.ui.tasklist', [])
 				ProjectsService.selected = context.entity;
 			} else if(context.entityName === 'discussion') {
 				$scope.discussionContext = context.entity;
+				$scope.firstStr = '';
+            	$scope.secondStr = '';
+				if($scope.discussionContext.startDate){
+					$scope.discussionContext.startDate = new Date($scope.discussionContext.startDate);
+					var startStr = $scope.discussionContext.startDate.getDate()+"/"+($scope.discussionContext.startDate.getMonth()+1)+"/"+$scope.discussionContext.startDate.getFullYear();
+					$scope.firstStr = startStr;
+				}
+				if($scope.discussionContext.allDay){
+					$scope.secondStr = "All day long";
+				} else{
+					if($scope.discussionContext.startTime){
+						$scope.discussionContext.startTime = new Date($scope.discussionContext.startTime);
+						var ho = $scope.discussionContext.startTime.getHours().toString().length==1? "0"+$scope.discussionContext.startTime.getHours().toString():
+							$scope.discussionContext.startTime.getHours().toString();
+						var min = $scope.discussionContext.startTime.getMinutes().toString().length==1? "0"+$scope.discussionContext.startTime.getMinutes().toString():
+							$scope.discussionContext.startTime.getMinutes().toString();
+						startStr = ho+":"+min;
+						$scope.firstStr = $scope.discussionContext.startDate ? $scope.firstStr + " "+startStr : '';
+					}
+					if($scope.discussionContext.endDate){
+						if($scope.firstStr!='deadline'){
+							$scope.firstStr = $scope.firstStr;
+						}
+						else{
+							$scope.firstStr = "";
+						}
+						var endStr = $scope.discussionContext.endDate.getDate()+"/"+($scope.discussionContext.endDate.getMonth()+1)+"/"+$scope.discussionContext.endDate.getFullYear();
+						$scope.secondStr = endStr;
+						if($scope.discussionContext.endTime){
+							var ho = $scope.discussionContext.endTime.getHours().toString().length==1? "0"+$scope.discussionContext.endTime.getHours().toString():
+							$scope.discussion.endTime.getHours().toString();
+							var min = $scope.discussionContext.endTime.getMinutes().toString().length==1? "0"+$scope.discussionContext.endTime.getMinutes().toString():
+							$scope.discussionContext.endTime.getMinutes().toString();
+							endStr = ho+":"+min;
+							$scope.secondStr = $scope.secondStr +" "+endStr;
+							$("#secondStr").css("margin-left",margin);
+						}
+				}
+			}
+
+            
 			}
 		}
 		else {
