@@ -79,13 +79,13 @@ angular.module('mean.icu.ui.tasklist', [])
 						var endStr = $scope.discussionContext.endDate.getDate()+"/"+($scope.discussionContext.endDate.getMonth()+1)+"/"+$scope.discussionContext.endDate.getFullYear();
 						$scope.secondStr = endStr;
 						if($scope.discussionContext.endTime){
+							$scope.discussionContext.endTime = new Date($scope.discussionContext.endTime);
 							var ho = $scope.discussionContext.endTime.getHours().toString().length==1? "0"+$scope.discussionContext.endTime.getHours().toString():
-							$scope.discussion.endTime.getHours().toString();
+							$scope.discussionContext.endTime.getHours().toString();
 							var min = $scope.discussionContext.endTime.getMinutes().toString().length==1? "0"+$scope.discussionContext.endTime.getMinutes().toString():
 							$scope.discussionContext.endTime.getMinutes().toString();
 							endStr = ho+":"+min;
 							$scope.secondStr = $scope.secondStr +" "+endStr;
-							$("#secondStr").css("margin-left",margin);
 						}
 				}
 			}
