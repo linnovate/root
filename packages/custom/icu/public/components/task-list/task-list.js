@@ -13,7 +13,6 @@ angular.module('mean.icu.ui.tasklist', [])
 		$scope.tasks = [$scope.tasks[0]];
 	}
 	$scope.getFilter = function() {
-		console.log('innnnnnnnnnnnn', TasksService.filterValue);
 		var a = TasksService.filterValue;
 		switch(a) {
 			case 'today': 
