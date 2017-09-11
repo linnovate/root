@@ -1,7 +1,5 @@
 var crud = require('../controllers/crud.js');
-var attachment = crud('attachments', options);
-var Task = require('../models/task'),
-  Attachment = require('../models/attachment');
+var Task = require('../models/task'),Attachment = require('../models/attachment');
 var Document = require('../models/document');
 var mean = require('meanio'),path = require('path'),fs = require('fs'),
   mkdirp = require('mkdirp'),config = require('meanio').loadConfig(),Busboy = require('busboy'),
@@ -9,7 +7,7 @@ var mean = require('meanio'),path = require('path'),fs = require('fs'),
   var mongoose = require('mongoose');
   var User = mongoose.model('User');
   var Update = require('../models/update');
-  var ObjectId = require(mongoose).Types.ObjectId;
+  var ObjectId = require('mongoose').Types.ObjectId;
 
 
 
@@ -75,13 +73,14 @@ function getUsers(users){
     });
   });
 }
+
 /**
 *
 * request includes entityName,fileType,entityId,watchers (As usernames)
 *
 */
 
-exports.uploadEmptyDocument = function(req , res){
+exports.uploadEmptyDocument = function(req , res,next){
   var entityName = req.body.entityName;
   var fileType = req.body.fileType;
   var entityId = req.body.entityId;
@@ -139,6 +138,40 @@ exports.uploadEmptyDocument = function(req , res){
 };
 
 
+/**
+* req.params.id will consist mongoDB _id of the user
+*/
+exports.getAll = function(req,res,next){
+  Document.find({
+    $or:[ {watchers:{$elemMatch:{$eq:req.user._id}}} , {asign: req.user._id} ]
+  }, function (err, data) {
+    if (err) {
+      req.locals.error = err;
+      req.status(400);
+    } else {
+      req.locals.result = data
+      res.send(data);
+    }
+});
+}
+
+
+/**
+* req.params.id will consist mongoDB _id of the document
+*/
+exports.getById = function(req,res,next){
+  Document.find({
+    _id:req.params.id
+  }, function (err, data) {
+    if (err) {
+      req.locals.error = err;
+      req.status(400);
+    } else {
+      req.locals.result = data
+      res.send(data);
+    }
+});
+}
 
 
 

@@ -15,6 +15,7 @@ var templates = require('../controllers/templates');
 var eventDrops = require('../controllers/event-drops');
 var office = require('../controllers/office');
 var folder = require('../controllers/folder');
+var documents = require('../controllers/documents');
 
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
@@ -25,7 +26,8 @@ var error = require('../middlewares/error.js');
 var config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 var order = require('../controllers/order');
-var express = require('express')
+var express = require('express');
+
 
 //update mapping - OHAD
 //var mean = require('meanio');
@@ -85,7 +87,6 @@ module.exports = function(Icu, app) {
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/starred/:type(byAssign)')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
-
   //Create HI Room if the user wish  
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
     //.post(project.read, notification.createRoom);
@@ -232,7 +233,7 @@ module.exports = function(Icu, app) {
     .get(discussion.read, star.isStarred)
     .put(discussion.read, discussion.update, star.isStarred, attachments.sign, updates.updated)
     .delete(star.unstarEntity, discussion.read, discussion.destroy);
-  app.route('/api/discussions/:id([0-9a-fA-F]{24})/schedule')
+  app.route('/api/discussions/:id([0-9a-fA-eact applicaF]{24})/schedule')
     .post(discussion.read, discussion.schedule, discussion.update, updates.updated);
   app.route('/api/discussions/:id([0-9a-fA-F]{24})/summary')
     .post(discussion.read, discussion.summary, discussion.update, updates.updated);
@@ -293,6 +294,30 @@ module.exports = function(Icu, app) {
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
+  app.route('/api/myTasksStatistics')
+    .get(task.myTasksStatistics);
+  app.route('/api/overdueWatchedTasks')
+    .get(task.getOverdueWatchedTasks);
+  app.route('/api/watchedTasks')
+    .get(task.getWatchedTasksList);
+  app.route('/api/order/set')
+    .post(order.set);
+  app.route('/api/event-drops')
+    .get(eventDrops.getMyEvents);
 
+
+  app.route(/^((?!\/hi\/).)*$/).all(response);
+  app.route(/^((?!\/hi\/).)*$/).all(error);
   //app.use(utils.errorHandler);
+
+
+
+  app.route('/api/documents*').all(entity('documents'));
+  app.route('/api/documents').post(documents.upload, documents.signNew).get(documents.getAll);
+  app.route('/api/documents/:id([0-9a-fA-F]{24})')
+  .get(documents.getById)
+  //.post(documents.upload, documents.update)
+  .delete(documents.deleteDocument);
+   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/documents').get(updates.getByEntity);
+
 };
