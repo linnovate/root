@@ -53,6 +53,13 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
+        function getByFolderId(id) {
+            return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function (result) {
+            	WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
         function getByUserId(id) {
             return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
@@ -102,6 +109,7 @@ angular.module('mean.icu.data.documentsservice', [])
             saveAttachments: saveAttachments,
             updateAttachment: updateAttachment,
             getByTasks: getByTasks,
-            getByOfficeId: getByOfficeId
+            getByOfficeId: getByOfficeId,
+            getByFolderId: getByFolderId
         };
     });

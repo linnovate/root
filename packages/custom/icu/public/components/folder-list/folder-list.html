@@ -1,0 +1,57 @@
+<div class="folder-list">
+    <div class="header-wrap"
+         ng-if="currentContext.entityName !== 'all'"
+         ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
+         ui-sref="main.{{currentContext.main}}.byentity.activities({
+                    entity: currentContext.entityName,
+                    entityId: currentContext.entityId
+                    })">
+        <header class="title">
+            <div>
+                <span class="office" 
+                    title="{{currentContext.entity.office.title}}"
+                    ng-style="{'background-color': '#' + currentContext.entity.office.color, 'color': 'white'}">
+                {{currentContext.entity.office.title}}
+                </span>
+            </div>
+            {{ 'foldersFrom' | i18next }}
+            <span ng-click="goToParent()">"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+
+            <!--{{'foldersFrom' | i18next}}{{currentContext.entityName | i18next}}
+            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>-->
+        </header>
+    </div>
+
+    <div class="filters">
+        <div class="left-wrapper">
+            <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
+                <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
+            </button>
+            <div class="select-wrapper">
+                <div tooltips tooltip-template="{{'sort by' | i18next}}">
+                    <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
+                        <ui-select-match>
+                            <button class="tasks">{{$select.selected.title | i18next}}</button>
+                        </ui-select-match>
+                        <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
+                            {{field.title | i18next}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="right-wrapper">
+            <button class="list"></button>
+            <button class="calendar"></button>
+        </div>-->
+    </div>
+    <div icu-folder-list
+         class="entity-list-container"
+         ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+         folders="folders"
+         load-next="loadNext"
+         load-prev="loadPrev"
+         draw-arrow="true"
+         order="sorting"></div>
+</div>

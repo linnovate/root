@@ -129,6 +129,14 @@ DocumentSchema.statics.office = function (id, cb) {
   });
 };
 
+DocumentSchema.statics.folder = function (id, cb) {
+  require('./folder');
+  var Folder = mongoose.model('Folder');
+  Folder.findById(id, function (err, folder) {
+    cb(err, {room: folder.room, title: folder.title});
+  });
+};
+
 var elasticsearch = require('../controllers/elasticsearch');
 
 DocumentSchema.post('save', function (req, next) {
@@ -137,17 +145,17 @@ DocumentSchema.post('save', function (req, next) {
     if (err) {
       return err;
     }
-    elasticsearch.save(attachment, 'attachment', result.room, result.title);
+    elasticsearch.save(attachment, 'document', result.room, result.title);
     next();
   });
 
 });
 
 DocumentSchema.pre('remove', function (next) {
-  elasticsearch.delete(this, 'attachment', this.room, next);
+  elasticsearch.delete(this, 'document', this.room, next);
   next();
 });
 
-DocumentSchema.plugin(archive, 'attachment');
+DocumentSchema.plugin(archive, 'document');
 
 module.exports = mongoose.model('Document', DocumentSchema);

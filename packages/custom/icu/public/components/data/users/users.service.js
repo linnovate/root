@@ -50,6 +50,13 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
+    function getByFolderId(id) {
+        return $http.get(ApiUri + '/folders/' + id + '/users').then(function(usersResult) {
+        	WarningsService.setWarning(usersResult.headers().warning);
+            return usersResult.data;
+        });
+    }
+
     function getByDiscussionId(id) {
         return $http.get(ApiUri + '/discussions/' + id + '/users').then(function(usersResult) {
         	WarningsService.setWarning(usersResult.headers().warning);
@@ -159,6 +166,7 @@ angular.module('mean.icu.data.usersservice', [])
         updateAvatar: updateAvatar,
         onIdentity: onIdentity,
         loginToHi: loginToHi,
-        getByOfficeId: getByOfficeId
+        getByOfficeId: getByOfficeId,
+        getByFolderId: getByFolderId
     };
 });

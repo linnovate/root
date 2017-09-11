@@ -6,6 +6,7 @@ var notifications = require('../root-notifications')({ //CHANGE TO 'root-notific
 });
 var projectController = require('./project.js');
 var officeController = require('./office.js');
+var folderController = require('./folder.js');
 var hiSettings = require(process.cwd() + '/config/hiSettings') || {};
 
 var mongoose = require('mongoose'),
@@ -13,6 +14,7 @@ var mongoose = require('mongoose'),
     Message = mongoose.model('Message'),
     Project = mongoose.model('Project'),
     Office = mongoose.model('Office'),
+    Folder = mongoose.model('Folder'),
     Task = require('../models/task'),
     _ = require('lodash');
 var UserCreator = mongoose.model('User');

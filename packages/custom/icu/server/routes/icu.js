@@ -14,6 +14,7 @@ var elasticsearch = require('../controllers/elasticsearch');
 var templates = require('../controllers/templates');
 var eventDrops = require('../controllers/event-drops');
 var office = require('../controllers/office');
+var folder = require('../controllers/folder');
 
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
@@ -59,7 +60,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices)*').all(circles.acl());
+  app.route('/api/:entity(tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
 
@@ -78,11 +79,11 @@ module.exports = function(Icu, app) {
   //END Notification READ - OHAD
 
   //star & get starred list
-  app.route('/api/:entity(tasks|discussions|projects|offices)/:id([0-9a-fA-F]{24})/star')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/star')
     .patch(star.toggleStar);
-  app.route('/api/:entity(tasks|discussions|projects|offices)/starred')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/starred')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
-  app.route('/api/:entity(tasks|discussions|projects|offices)/starred/:type(byAssign)')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/starred/:type(byAssign)')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
 
   //Create HI Room if the user wish  
@@ -94,6 +95,11 @@ module.exports = function(Icu, app) {
   app.route('/api/:entity(offices)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
     //.post(project.read, notification.createRoom);
     .post(office.read)
+
+  //Create HI Room if the user wish  
+  app.route('/api/:entity(folders)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
+    //.post(project.read, notification.createRoom);
+    .post(folder.read)
 
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
@@ -129,6 +135,23 @@ module.exports = function(Icu, app) {
   app.route('/api/:entity(tasks|discussions|offices)/:id([0-9a-fA-F]{24})/offices/starred')
     .get(pagination.parseParams, star.getStarredIds('offices'), office.getByDiscussion, office.getByEntity, pagination.formResponse);
 
+  app.route('/api/folders*').all(entity('folders'));
+  app.route('/api/folders')
+  //.all(auth.requiresLogin, permission.echo)
+  .post(folder.create, updates.created)
+    .get(pagination.parseParams, folder.all, star.isStarred, pagination.formResponse);
+  app.route('/api/folders/:id([0-9a-fA-F]{24})')
+    .get(folder.read, star.isStarred)
+  //.put(project.read, project.update, star.isStarred)
+  .put(folder.read, folder.update, attachments.sign, notification.updateRoom, star.isStarred)
+    .delete(star.unstarEntity, folder.read, folder.destroy);
+  app.route('/api/history/folders/:id([0-9a-fA-F]{24})')
+    .get(folder.readHistory);
+  app.route('/api/:entity(tasks|discussions|offices|folders)/:id([0-9a-fA-F]{24})/folders')
+    .get(pagination.parseParams, folder.getByDiscussion, folder.getByEntity, pagination.formResponse);
+  app.route('/api/:entity(tasks|discussions|offices|folders)/:id([0-9a-fA-F]{24})/folders/starred')
+    .get(pagination.parseParams, star.getStarredIds('folders'), folder.getByDiscussion, folder.getByEntity, pagination.formResponse);
+
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
     .post(task.create, task.updateParent, notification.sendNotification, updates.created)
@@ -149,9 +172,9 @@ module.exports = function(Icu, app) {
   app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
   	.get(task.getSubTasks)
 
-  app.route('/api/:entity(discussions|projects|offices|users)/:id([0-9a-fA-F]{24})/tasks')
+  app.route('/api/:entity(discussions|projects|offices|users|folders)/:id([0-9a-fA-F]{24})/tasks')
     .get(pagination.parseParams, task.getByEntity, pagination.formResponse);
-  app.route('/api/:entity(discussions|projects|offices|users)/:id([0-9a-fA-F]{24})/tasks/starred')
+  app.route('/api/:entity(discussions|projects|offices|users|folders)/:id([0-9a-fA-F]{24})/tasks/starred')
     .get(pagination.parseParams, star.getStarredIds('tasks'), task.getByEntity, pagination.formResponse);
   app.route('/api/history/tasks/:id([0-9a-fA-F]{24})')
     .get(task.readHistory);
@@ -178,7 +201,7 @@ module.exports = function(Icu, app) {
     .get(users.read)
     .put(users.read, users.filterProperties, users.update)
     .delete(users.read, users.destroy);
-  app.route('/api/:entity(tasks|discussions|projects|offices)/:id([0-9a-fA-F]{24})/users')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/users')
     .get(users.getByEntity);
 
   app.route('/api/attachments*').all(entity('attachments'));
@@ -191,7 +214,7 @@ module.exports = function(Icu, app) {
     .delete(attachments.deleteFile)
   app.route('/api/history/attachments/:id([0-9a-fA-F]{24})')
     .get(attachments.readHistory);
-  app.route('/api/:entity(tasks|discussions|projects|offices)/:id([0-9a-fA-F]{24})/attachments')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/attachments')
     .get(attachments.getByEntity);
   app.route('/api/tasks/myTasks/attachments')
     .get(attachments.getMyTasks)
@@ -231,7 +254,7 @@ module.exports = function(Icu, app) {
   app.route('/api/tasks/myTasks/updates')
     .get(updates.getMyTasks)
   //     // .delete(updates.destroy);
-  app.route('/api/:entity(tasks|discussions|projects|offices)/:id([0-9a-fA-F]{24})/updates')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/updates')
     .get(updates.getByEntity, updates.getAttachmentsForUpdate);
   app.route('/api/history/updates/:id([0-9a-fA-F]{24})')
     .get(updates.readHistory);

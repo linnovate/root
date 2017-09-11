@@ -167,6 +167,10 @@
     "offices": "לשכות",
 	"createNewOffice": "צור לשכה חדש",
 	"displayofficesBy": "הצג לשכות לפי",
+	"folder": "תיק",
+    "folders": "תיקים",
+	"createNewFolder": "צור תיק חדש",
+	"displayfoldersBy": "הצג תיקים לפי",
 
     "st": "",
     "nd": "",

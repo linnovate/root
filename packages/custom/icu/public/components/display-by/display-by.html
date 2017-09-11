@@ -102,4 +102,20 @@
             <li ng-if="officesList.length == displayLimit['offices'] && displayLimit['offices'] > 3" ng-click="collapse('offices')" class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
+    <div class="list folders" ng-if="foldersList && (icuDisplayBy.indexOf('folders'))>-1">
+        <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}</p>
+        <ul ng-if="visible.folder">
+            <li data-ng-repeat="folder in foldersList | limitTo: displayLimit['folders']"
+                data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
+                data-ng-click="switchTo('folder', folder._id)"
+                ng-if="folder._id && folder.title">
+              <a href class="Names-In-List-On-Side">
+                    {{folder.title}}
+                </a>
+                <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
+            </li>
+            <li ng-if="foldersList.length > displayLimit['folders']" ng-click="showMore(foldersList.length, 'folders')" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="foldersList.length == displayLimit['folders'] && displayLimit['folders'] > 3" ng-click="collapse('folders')" class="more">{{ 'less' | i18next }}</li>
+        </ul>
+    </div>
 </section>

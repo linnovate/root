@@ -64,6 +64,13 @@ angular.module('mean.icu.data.activitiesservice', [])
         });
     }
 
+    function getByFolderId(id) {
+        return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function(updatesResult) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
+            return getUser(updatesResult.data);
+        });
+    }
+
     function create(update) {
         return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
@@ -80,6 +87,7 @@ angular.module('mean.icu.data.activitiesservice', [])
         getByTasks: getByTasks,
         create: create,
         data: data,
-        getByOfficeId: getByOfficeId
+        getByOfficeId: getByOfficeId,
+        getByFolderId: getByFolderId
     };
 });

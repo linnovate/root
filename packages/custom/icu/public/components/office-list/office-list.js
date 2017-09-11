@@ -13,7 +13,7 @@ angular.module('mean.icu.ui.officelist', [])
         $scope.loadPrev = offices.prev;
 
         $scope.starred = $stateParams.starred;
-        if (!$scope.offices[$scope.offices.length - 1].id) {
+        if ($scope.offices.length > 0 && !$scope.offices[$scope.offices.length - 1].id) {
  		    $scope.offices = [$scope.offices[0]];
  	    }
 

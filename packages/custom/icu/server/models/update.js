@@ -90,6 +90,14 @@ UpdateSchema.statics.office = function (id, cb) {
   });
 };
 
+UpdateSchema.statics.folder = function (id, cb) {
+  require('./folder');
+  var Folder = mongoose.model('Folder');
+  Folder.findById(id, function (err, folder) {
+    cb(err, {room: folder.room, title: folder.title});
+  });
+};
+
 /**
  * Post middleware
  */

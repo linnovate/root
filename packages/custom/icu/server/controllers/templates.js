@@ -79,7 +79,7 @@ var addUpdate = function(taskId, creator, type, description, callback) {
   });
 };
 
-var addToTemplate = function(task, due, parentId, name, creator, watchers, circles, project, exist, tType, callback, office) {
+var addToTemplate = function(task, due, parentId, name, creator, watchers, circles, project, exist, tType, callback, office, folder) {
   if (!exist) {
     var template = new Task({
       tType: tType,
@@ -92,6 +92,7 @@ var addToTemplate = function(task, due, parentId, name, creator, watchers, circl
       circles: circles,
       project: project,
       office: office,
+      folder: folder,
       templateId: task._id,
       assign: task.assign,
       status: task.status,
@@ -117,7 +118,7 @@ var addToTemplate = function(task, due, parentId, name, creator, watchers, circl
   }
 }
 
-var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, circles, project, exist, tType, templates, totals, created, callback, office) {
+var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, circles, project, exist, tType, templates, totals, created, callback, office, folder) {
   Task.findOne({
     '_id': taskId
   })
@@ -132,7 +133,7 @@ var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, 
           date = new Date(date.setDate(new Date().getDate() + diffDays));
           due = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
         }
-        addToTemplate(task, due, parentId, name, creator, watchers, circles, project, exist, tType, office, function(template) {
+        addToTemplate(task, due, parentId, name, creator, watchers, circles, project, exist, tType, office, folder, function(template) {
           templates[template.t._id] = template;
           if (parentId) {
             templates[parentId].t.subTasks.push(template.t._id);
@@ -145,8 +146,9 @@ var addRecorsiveTemplates = function(taskId, name, parentId, creator, watchers, 
           circles = template.t.circles;
           project = template.t.project;
           office = template.t.office;
+          folder = template.t.folder;
           for (var i = 0; i < task.subTasks.length; i++) {
-            addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, watchers, circles, project, false, tType, templates, totals, created, callback, office);
+            addRecorsiveTemplates(task.subTasks[i], null, template.t._id, creator, watchers, circles, project, false, tType, templates, totals, created, callback, office, folder);
           }
         })
       } else {
