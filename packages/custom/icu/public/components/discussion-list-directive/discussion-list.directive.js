@@ -43,7 +43,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
 						var endStr = discussion.endDate.getDate()+"/"+(discussion.endDate.getMonth()+1)+"/"+discussion.endDate.getFullYear();
 						discussion.secondStr = endStr;
 						if(discussion.endTime){
-                            discussion.endDate = new Date(discussion.endTime);
+                            discussion.endTime = new Date(discussion.endTime);
 							var ho = discussion.endTime.getHours().toString().length==1? "0"+discussion.endTime.getHours().toString():
 							discussion.endTime.getHours().toString();
 							var min = discussion.endTime.getMinutes().toString().length==1? "0"+discussion.endTime.getMinutes().toString():
