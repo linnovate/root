@@ -131,6 +131,8 @@ angular.module('mean.icu.data.officesservice', [])
         getById: getById,
         getByDiscussionId: getByEntityId('discussions'),
         getByUserId: getByEntityId('users'),
+        getByOfficeId: getByEntityId('offices'),
+        getByFolderId: getByEntityId('folders'),
         create: create,
         update: update,
         remove: remove,

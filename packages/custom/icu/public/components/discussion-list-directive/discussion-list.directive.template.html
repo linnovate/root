@@ -32,13 +32,14 @@
         <div>{{'location' | i18next}}</div>
         <div>{{'members' | i18next}}</div>
     </div>
-    <div data-ng-repeat="discussion in discussions | orderBy:order.field:order.isReverse" class="task-row">
+    <div data-ng-repeat="discussion in discussions | orderBy:order.field:order.isReverse" ng-init="getDate(discussion)"  class="task-row">
         <div>{{discussion.title}}</div>
         <div class="status" ng-class="discussion.status">
             {{discussion.status | i18next }}
         </div>
         <div>
-            {{discussion.due | date: 'dd.MM.yyyy'}}
+            <div id="firstStr">{{discussion.firstStr | i18next}}</div>
+            <div id="secondStr">{{discussion.secondStr | i18next}}</div>
         </div>
         <div>{{discussion.assign.name}}</div>
         <div>{{discussion.location}}</div>

@@ -6,10 +6,12 @@ angular.module('mean.icu.ui.folderdetails', [])
                                                       tasks,
                                                       people,
                                                       folders,
+                                                      offices,
                                                       context,
                                                       $state,
                                                       FoldersService,
-                                                      $stateParams) {
+                                                      $stateParams,
+                                                      OfficesService) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("folders")))
         {
             $scope.folder = entity || context.entity;
@@ -21,6 +23,14 @@ angular.module('mean.icu.ui.folderdetails', [])
         $scope.tasks = tasks.data || tasks;
         $scope.folders = folders.data || folders;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
+        $scope.offices = offices.data || offices;
+        $scope.officeName = '';
+        $scope.offices.push({
+            'status': 'default',
+            'title': $scope.officeName,
+            'class': 'create-new',
+            'color': 'rgb(0, 151, 167)'
+        });
 
         FoldersService.getStarred().then(function (starred) {
 
@@ -34,6 +44,45 @@ angular.module('mean.icu.ui.folderdetails', [])
                 return s._id === $scope.folder._id;
             });
         });
+
+        $scope.$watch('officeName', function(newValue, oldValue) {
+            var index = _.findIndex($scope.offices, function(p) {
+                return p.title == oldValue;
+            });
+            $scope.offices[index].title = $scope.officeName;
+        });
+
+        $scope.createOffice = function(officeName, cb) {
+            var office = {
+                color: '0097A7',
+                title: officeName,
+                watchers: [],
+            };
+
+            OfficesService.create(office).then(function(result) {
+                $scope.offices.push(result);
+                $scope.officeName = '';
+                cb(result);
+                /*        $scope.update(result,'office')
+                 */
+            });
+
+        };
+
+        $scope.unsetOffice = function(event, folder) {
+            event.stopPropagation();
+            delete folder.office;
+            $scope.update(folder);
+        };
+
+        $scope.updateOfficeName = function(x, y) {
+            $scope.officeName = $('.ui-select-search.ng-valid-parse').val()
+        }
+
+        $scope.removeCreateNew = function() {
+            $scope.officeName = '';
+        }
+
 
         if (!$scope.folder) {
             $state.go('main.folders.byentity', {
@@ -143,7 +192,79 @@ angular.module('mean.icu.ui.folderdetails', [])
                     if (context.name === 'color') {
                         FoldersService.selected.color = res.color;
                     }
+
+                    // if (context.entityName === 'office') {
+                    //     var officeId = res.office ? res.office._id : undefined;
+                    //     if (!officeIds) {
+                    //         $state.go('main.folders.all.details', {
+                    //             entity: 'folder',
+                    //             id: folder._id
+                    //         }, {
+                    //             reload: true
+                    //         });
+                    //     } else {
+                    //         if (officeId !== context.entityId || type === 'office') {
+                    //             $state.go('main.folders.byentity.details', {
+                    //                 entity: context.entityName,
+                    //                 entityId: officeId,
+                    //                 id: folder._id
+                    //             }, {
+                    //                 reload: true
+                    //             });
+                    //         }
+                    //     }
+                    // }
                 }
+            });
+        };
+
+
+        $scope.updateOffice = function(folder, type, proj) {
+            if (proj && proj !== '') {
+                $scope.createOffice(proj, function(result) {
+                    folder.office = result;
+                    FoldersService.update(folder).then(function(result) {
+                        if (context.entityName === 'office') {
+                            var officeId = result.office ? result.office._id : undefined;
+                            if (officeId !== context.entityId || type === 'office') {
+                                $state.go('main.folders.byentity.details', {
+                                    entity: context.entityName,
+                                    entityId: officeId,
+                                    id: folder._id
+                                }, {
+                                    reload: true
+                                });
+                            }
+                        }
+                    });
+                });
+            }
+            // if (context.entityName === 'discussion') {
+            //     folder.discussion = context.entityId;
+            // }
+            FoldersService.update(folder).then(function(result) {
+                folder.PartTitle = folder.title;
+                //if (context.entityName === 'office') {
+                    var officeId = result.office ? result.office._id : undefined;
+                    if (!officeId) {
+                        $state.go('main.folders.all.details', {
+                            entity: 'folder',
+                            id: folder._id
+                        }, {
+                            reload: true
+                        });
+                    } else {
+                        if (officeId !== context.entityId || type === 'office') {
+                            $state.go('main.folders.byentity.details', {
+                                entity: context.entityName,
+                                entityId: officeId,
+                                id: folder._id
+                            }, {
+                                reload: true
+                            });
+                        }
+                    }
+                //}
             });
         };
 

@@ -1,4 +1,4 @@
-.task-list, .discussion-list, .project-list, .sub-task-list, .office-list, .folder-list, .document-list {
+.task-list, .discussion-list, .project-list, .sub-task-list, .folder-list, .document-list {
 
     height: 100%;
 
@@ -98,6 +98,185 @@
 
                     &.name {
                         width: 22%;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        cursor: text;
+                        &:before {
+                            font-weight: normal;
+                            font-style: italic;
+                        }
+                        
+                        padding-left: 7px;
+                    }
+
+                    &.project {
+                        text-align: center;
+                        width: 22%;
+                        font-weight: 400;
+                        font-size: 13px;
+                        span {
+                            padding: 3px 13px;                                                                                                          
+                        }
+                    }
+
+                    // &.office {
+                    //     text-align: center;
+                    //     width: 22%;
+                    //     font-weight: 400;
+                    //     font-size: 13px;
+                    //     span {
+                    //         padding: 3px 13px;                                                                                                          
+                    //     }
+                    // }
+
+                    &.folder {
+                        text-align: center;
+                        width: 22%;
+                        font-weight: 400;
+                        font-size: 13px;
+                        span {
+                            padding: 3px 13px;                                                                                                          
+                        }
+                    }
+
+                    &.status {
+                        width: calc(10% - 65px);
+                            &.new{color: #ff4081;}
+                            &.assigned{color: #2979ff;}
+                            &.in-progress{color: #f69679;}
+                            &.review{color: #8dc63f;}
+                            &.rejected{color: #ef5350;}
+                            &.done{color: #598527;}
+                            &.canceled{color: #ef5350;}
+                            &.completed{color: #598527;}
+                            &.archived{color: #ab47bc;}
+                            &.scheduled{color: #0054a6;}
+                    }
+
+                   	&.due {
+                     	width: calc(19% - 65px);
+                    }
+
+                    .tag {
+                        @include tag(14px);
+                        padding: 5px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        width: initial;
+                        max-width: 100%;
+                        display: inline-block;
+                    }
+                }
+
+                &.active {
+                    td.arrow .delete-icon {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+}
+.office-list {
+
+    height: 100%;
+
+    .entity-list-container {
+        &.big {
+            height: calc(100% - 150px);
+        }
+
+        &.small {
+            height: calc(100% - 150px);
+        }
+
+        .list-table {
+            height: 100%;
+            overflow: auto;
+              &::-webkit-scrollbar {
+                width: 5px;
+            }
+             
+            &::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                border-radius: 10px;
+            }
+             
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                background-color: white;
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+            }
+            
+        }
+
+    }
+
+    .autocomplete {
+        position: relative;
+
+        .suggestions {
+            position: absolute;
+            top: -50px;
+            left: 0;
+            border: 1px solid $light-grey1;
+
+            background-color: white;
+            color: black;
+            z-index: 1;
+
+            width: 400px;
+
+            .suggestion {
+                width: inherit;
+                height: 30px;
+
+                &.active {
+                    background-color: $light-grey1;
+                }
+            }
+        }
+    }
+
+    table {
+        /*table-layout: fixed;*/
+
+        tbody {
+            tr {
+                &.new-task {
+                    td {
+                        padding: 10px 15px;
+                    }
+                }
+
+                td {
+                    overflow: hidden;
+                    padding-top: 5px;
+                    outline: none;
+                    &:focus {
+                      outline: none;
+                    }
+
+                    &.id {
+                        width: 55px;
+                        color: $grey1;
+                        border-left: 5px;
+                    }
+
+                    &.move{
+                        width: 15px;
+                        color: $grey1;
+                    }
+
+                    &.arrow {
+                        width: 32px;
+                        overflow: visible;
+                        text-align: center;
+                         padding-right:40px;
+                    }
+
+                    &.name {
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         cursor: text;

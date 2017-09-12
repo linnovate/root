@@ -16,7 +16,7 @@ var FolderSchema = new Schema({
   title: {
     type: String
   },
-  parent: {
+  office: {
     type: Schema.ObjectId,
     ref: 'Office'
   },
@@ -53,6 +53,10 @@ var FolderSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  parent: {
+  	type: Schema.ObjectId,
+    ref: 'Folder'
+  },
   room: {
     type: String
   },
@@ -99,6 +103,41 @@ FolderSchema.statics.load = function(id, cb) {
     _id: id
   }).populate('creator', 'name username').exec(cb);
 };
+FolderSchema.statics.office = function(id, cb) {
+  require('./office');
+  var Office = mongoose.model('Office');
+  Office.findById(id, function(err, office) {
+    cb(err, office || {});
+  });
+};
+/**
+ * Post middleware
+ */
+var elasticsearch = require('../controllers/elasticsearch');
+
+FolderSchema.post('save', function(req, next) {
+  var task = this;
+  FolderSchema.statics.office(this.office, function(err, office) {
+    if (err) {
+      return err;
+    }
+
+
+    elasticsearch.save(task, 'folder', office.room);
+  });
+  next();
+});
+
+FolderSchema.pre('remove', function(next) {
+  var task = this;
+  FolderSchema.statics.office(this.office, function(err, office) {
+    if (err) {
+      return err;
+    }
+    elasticsearch.delete(task, 'task', office.room, next);
+  });
+  next();
+});
 
 /**
  * middleware

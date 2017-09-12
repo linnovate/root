@@ -5,6 +5,7 @@
             ui-sref="main.{{currentContext.main}}.byassign.activities">
             <header class="title">
                 {{ 'myTasks' | i18next }}
+                <div class="showInPrint">{{getFilter() | i18next}}</div>
             </header>
         </div>
         <div class="header-wrap" ng-switch-when="all" 
@@ -55,7 +56,7 @@
                     </div>  
                 </div>
                 <div>
-                    <div>{{'asignee' | i18next}}:</div>           
+                    <div>{{'assignee' | i18next}}:</div>           
                     <div>
                         {{discussionContext.assign.name}}
                     </div>  
@@ -63,7 +64,8 @@
                 <div>
                     <div>{{'deadline' | i18next}}:</div>           
                     <div>
-                         {{discussionContext.startDate | date: 'dd.MM.yyyy'}}
+                        <div id="firstStr">{{firstStr | i18next}}</div>
+                        <div id="secondStr">{{secondStr | i18next}}</div>
                     </div>  
                 </div>
                 <div>
