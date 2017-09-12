@@ -9,6 +9,7 @@ directive('icuSidepane', function() {
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
+        $scope.officeDocuments = /*$scope.officeDocuments.data ||*/ $scope.officeDocuments;
         // $scope.people = $scope.people.data || $scope.people;
         
         $scope.toggleVisibility = function(toggledItem) {
@@ -89,11 +90,11 @@ directive('icuSidepane', function() {
         //     open: false
         // }
         {
-            name: 'documents',
+            name: 'officeDocuments',
             icon: '/icu/assets/img/icon-document.svg',
-            state: 'documents.all',
+            state: 'officeDocuments.all',
             display: ['new', 'received', 'inProgress'],
-            open: $scope.isCurrentState({state: 'documents'})
+            open: $scope.isCurrentState({state: 'officeDocuments'})
         }
         ];
 
@@ -109,7 +110,7 @@ directive('icuSidepane', function() {
             offices: '=',
             folders: '=',
             //people: '='
-            documents: '=' 
+            officeDocuments: '=' 
         }
     };
 });

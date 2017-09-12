@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('mean.icu.data.projectsservice', [])
-.service('officeDocumentService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService) {
-    var EntityPrefix = '/documents';
+angular.module('mean.icu.data.officedocumentsservice', [])
+.service('OfficeDocumentsService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService) {
+    var EntityPrefix = '/officeDocuments';
     var data, selected;
 
     function getAll(start, limit, sort) {
@@ -20,8 +20,9 @@ angular.module('mean.icu.data.projectsservice', [])
         	console.log($rootScope.warning, '$rootScope.warning')
             return result.data;
         }, function(err) {return err}).then(function (some) {
-            var data = some.content ? some : [];
-            return result.data;
+            var data = some.content ? some : [{title:"sraya"}];
+            //result.data = some.content ? some : [];
+            return data;
         });
     }
 

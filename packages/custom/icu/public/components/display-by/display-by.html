@@ -70,22 +70,21 @@
             </li>
         </ul>
     </div>
-    <div class="list documents" ng-if="documentsList && (icuDisplayBy.indexOf('documents'))>-1">
-        <p ng-click="visible.document = !visible.document" class="title">{{ 'documents' | i18next }}</p>
-        <ul ng-if="visible.document">
-            <li data-ng-repeat="document in documentsList | limitTo: displayLimit['documents']"
-                data-ng-class="{'selected': context.entityName === 'document' && document._id === context.entityId }"
-                data-ng-click="switchTo('document', document._id)"
-                ng-if="document._id && document.title">
-              <a href class="Names-In-List-On-Side">
-                    {{document.title}}
+    <div class="list officeDocuments" ng-if="officeDocuments && (icuDisplayBy.indexOf('officeDocuments'))>-1">
+        <p ng-click="visible.officeDocument = !visible.officeDocument" class="title">{{ 'officeDocuments' | i18next }}</p>
+        <ul ng-if="visible.officeDocument">
+            <li data-ng-repeat="officeDocument in officeDocuments | limitTo:displayLimit['officeDocuments']"
+                data-ng-class="{'selected': context.entityName === 'officeDocument' && officeDocument._id === context.entityId }"
+                data-ng-click="switchTo('officeDocument', officeDocument._id)">
+                <a href class="Names-In-List-On-Side">
+                    {{officeDocument.title || officeDocument.name}}
                 </a>
-                <div class="tag-color" ng-style="{'background-color': '#' + project.color}"></div>
             </li>
-            <li ng-if="documentsList.length > displayLimit['documents']" ng-click="showMore(projectsList.length, 'projects')" class="more">{{ 'more' | i18next }}</li>
-            <li ng-if="documentsList.length == displayLimit['documents'] && displayLimit['documents'] > 3" ng-click="collapse('documents')" class="more">{{ 'less' | i18next }}</li>
+            <li ng-if="officeDocuments.length > displayLimit['officeDocuments']" ng-click="showMore(officeDocuments.length, 'officeDocuments')" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="officeDocuments.length == displayLimit['officeDocuments'] && displayLimit['officeDocuments'] > 3" ng-click="collapse('officeDocuments')" class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
+    
     <div class="list offices" ng-if="officesList && (icuDisplayBy.indexOf('offices'))>-1">
         <p ng-click="visible.office = !visible.office" class="title">{{ 'offices' | i18next }}</p>
         <ul ng-if="visible.office">

@@ -20,12 +20,19 @@ angular.module('mean.icu.ui.displayby', [])
             if(folder.title)
                 $scope.foldersList.push(folder);
             });
+        
+            $scope.officeDocumentsList = [];
+            // $scope.officeDocuments.forEach(function(officeDocument) {
+            //            if(officeDocument.title)
+            //              $scope.officeDocumentsList.push(officeDocument);
+            //         });
+        
 
         $scope.singularItemName = {
             discussions: "discussion",
             projects: "project",
             tasks: "task",
-            documents: "document",
+            officeDocuments: "officeDocument",
             offices: "office",
             folders: "folder"
         };
@@ -34,7 +41,7 @@ angular.module('mean.icu.ui.displayby', [])
             projects: $scope.projects,
             discussions: $scope.discussions,
             tasks: $scope.tasks,
-            //documents: $scope.$scope.documents
+            officeDocuments: $scope.officeDocuments,
             offices: $scope.offices,
             folders: $scope.folders
         };
@@ -56,11 +63,13 @@ angular.module('mean.icu.ui.displayby', [])
             discussions : 3,
             offices: 3,
             folders: 3,
+            officeDocuments:3,
             reset : function() {
                 this.projects = 3;
                 this.discussions = 3;
                 this.offices = 3;
                 this.folders = 3;
+                this.officeDocuments = 3;
             }
         };
 
@@ -86,7 +95,7 @@ angular.module('mean.icu.ui.displayby', [])
             project: false,
             discussion: false,
             user: false,
-            document: false,
+            officeDocument: false,
             office: false,
             folder: false
         };
@@ -117,7 +126,7 @@ angular.module('mean.icu.ui.displayby', [])
             discussions: '=',
             people: '=',
             icuDisplayBy: '=',
-            documents: '=',
+            officeDocuments: '=',
             offices: '=',
             folders: '='
         },

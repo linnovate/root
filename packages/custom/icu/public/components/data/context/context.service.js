@@ -6,7 +6,7 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
         user: 'people',
         project: 'projects',
         discussion: 'discussions',
-        document:'documents',
+        officeDocument:'officeDocuments',
         office: 'offices',
         folder: 'folders'
 

@@ -17,6 +17,7 @@ angular.module('mean.icu.ui.rows', [])
         discussion: '/icu/components/row-types/discussion-row.html',
         office: '/icu/components/row-types/office-row.html',
         folder: '/icu/components/row-types/folder-row.html',
+        officeDocument: '/icu/components/row-types/officeDocument-row.html',
         'search-task': '/icu/components/row-types/search-task-row.html',
         'search-project': '/icu/components/row-types/search-project-row.html',
         'search-discussion': '/icu/components/row-types/search-discussion-row.html',
@@ -25,6 +26,7 @@ angular.module('mean.icu.ui.rows', [])
         'search-update': '/icu/components/row-types/search-update-row.html',
         'search-office': '/icu/components/row-types/search-office-row.html',
         'search-folder': '/icu/components/row-types/search-folder-row.html',
+        'search-officeDocument': '/icu/components/row-types/search-officeDocument-row.html',
         'subtasks': '/icu/components/row-types/sub-tasks-row.html',
     };
 

@@ -1,0 +1,99 @@
+<div class="officeDocument-details">
+    <div class="permission" ng-if="officeDocument && !officeDocument._id">
+       <div class="perIcon">
+    </div>
+    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
+    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+    </div>
+    <div class="page-content" ng-if="officeDocument._id">
+        <div class="summary">
+
+            <div class="favorite">
+                <button ng-class="{ 'orange': officeDocument.star }" ng-click="star(officeDocument)">
+                    <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
+                </button>
+            </div>
+
+            <div class="status">
+                <div tooltips tooltip-template="{{'status' | i18next}}">
+                    <ui-select ng-model="officeDocument.status" on-select="update(officeDocument)">
+                        <ui-select-match>
+                            <i class='{{$select.selected}}'></i>
+                            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
+                            <i class='{{status}}'></i>
+                            <span class='{{status}}'>{{status | i18next}}</span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+            <div class="color">
+                <div icu-colorpicker ng-model="officeDocument.color"></div>
+            </div>
+            <div class="dropdown dropdown-container" uib-dropdown>
+                <div class="dropdown-trigger" uib-dropdown-toggle>
+                    <i class="fa fa-chevron-down"></i>
+                </div>
+                <ul class="dropdown-menu menu-items" role="menu">
+                    <li>
+                        <a href="#" icu-open-modal entity-name="officeDocument" show-modal="tasks.length" delete-fn="deleteOfficeDocument(officeDocument)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span>{{ 'deleteOfficeDocument' | i18next }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="HI">
+                <button ng-class="{ 'orange': officeDocument.star }" ng-click="WantToCreateRoom(officeDocument)">
+                    <i id="HI"></i>
+                </button>
+            </div>
+        </div>
+        <button icu-comp-modal entity="officeDocument" entity-name="officeDocument" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
+        <div class="description">
+            <div class="title"
+                 contenteditable="true"
+                 tabindex="1"
+                 ng-attr-autofocus="{{shouldAutofocus || undefined}}"
+                 strip-br="true"
+                 ng-keydown="onEnter($event)"
+                 ng-model="officeDocument.title"
+                 ng-change="updateCurrentOfficeDocument()">
+
+            </div>
+
+            <div class="text"
+                 contenteditable="true"
+                 tabindex="2"
+                 strip-br="true"
+                 medium-editor
+                 ng-model="officeDocument.description"
+                 options="{{options}}">
+            </div>
+        </div>
+        <div class="tabs">
+            <div class="switcher">
+                <button class="tab three"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".activities">
+                    {{ 'updates' | i18next }}
+                </button>
+                <button class="tab three"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".documents">
+                    {{ 'documents' | i18next }}
+                </button>
+                <button class="tab three"
+                        data-ui-sref-active="active"
+                        data-ui-sref=".tasks">
+                    {{ 'tasks' | i18next }}
+                </button>
+            </div>
+        </div>
+        <div class="tab-content" data-ui-view="tab"></div>
+    </div>
+    <div ng-if="officeDocument._id" icu-members-footer entity="officeDocument" users="people"></div>
+</div>

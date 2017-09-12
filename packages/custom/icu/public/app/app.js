@@ -185,6 +185,46 @@ angular.module('mean.icu').config([
             };
         }
 
+        function getOfficeDocumentDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/officeDocument-details/officeDocument-details.html',
+                        controller: 'OfficeDocumentDetailsController'
+                    }
+                },
+                params: {
+                    nameFocused: false
+                },
+                resolve: {
+                    entity: function($stateParams, officeDocuments, OfficeDocumentsService) {
+                        var officeDocument = _(officeDocuments.data || officeDocuments).find(function(t) {
+                            return t._id === $stateParams.id;
+                        });
+
+                        if (!officeDocument) {
+                            return OfficeDocumentsService.getById($stateParams.id).then(function(officeDocument) {
+                                return officeDocument;
+                            });
+                        } else {
+                            return officeDocument;
+                        }
+                    },
+                    tasks: function(TasksService, $stateParams) {
+                        return TasksService.getByOfficeDocumentId($stateParams.id);
+                    },
+                    people: function(UsersService) {
+                        return UsersService.getAll();
+                    }
+                }
+            };
+        }
+
         function getOfficeDetailsState(urlPrefix) {
             if (!urlPrefix) {
                 urlPrefix = '';
@@ -565,6 +605,14 @@ angular.module('mean.icu').config([
                             return [];
                         });
                     },
+                    officeDocuments: function(OfficeDocumentsService) {
+                        return OfficeDocumentsService.getAll(0, 0, SORT).then(function(data) {
+                            OfficeDocumentsService.data = data.data || data;
+                            return data;
+                        }, function(err) {
+                            return [];
+                        });
+                    },
                     people: function(UsersService) {
                         return UsersService.getAll();
                     }
@@ -640,6 +688,20 @@ angular.module('mean.icu').config([
                     }
                 }
             })
+            // .state('main.people.byentity.details.officeDocuments', {
+            //     url: '/officeDocuments',
+            //     views: {
+            //         tab: {
+            //             templateUrl: '/icu/components/user-details/tabs/officeDocuments/officeDocuments.html',
+            //             controller: 'UserOfficeDocumentsController',
+            //             resolve: {
+            //                 userOfficeDocuments: function(OfficeDocumentsService, $stateParams) {
+            //                     return OfficeDocumentsService.getByUserId($stateParams.id);
+            //                 }
+            //             }
+            //         }
+            //     }
+            // })
             .state('main.people.byentity.details.offices', {
                 url: '/offices',
                 views: {
@@ -913,6 +975,69 @@ angular.module('mean.icu').config([
             .state('main.projects.byentity.details.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.byentity.details.tasks', getDetailsTabState('project', 'tasks'))
 
+        .state('main.officeDocuments', {
+            url: '/officeDocuments',
+            views: {
+                middlepane: {
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function($state, discussions, context) {
+                        if ($state.current.name === 'main.officeDocuments') {
+                            if (discussions.data.length) {
+                                $state.go('.byentity', {
+                                    entity: context.entityName,
+                                    entityId: context.entityId
+                                });
+                            } else {
+                                $state.go('.all');
+                            }
+                        }
+                    }
+                }
+            }
+        })
+            .state('main.officeDocuments.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('officeDocument'),
+                resolve: {
+                    officeDocuments: function(OfficeDocumentsService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return OfficeDocumentsService.getStarred();
+                        } else {
+                            if (typeof OfficeDocumentsService.data !== 'undefined'){
+                                $stateParams.limit = OfficeDocumentsService.data.length;
+                            }
+                            return OfficeDocumentsService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.officeDocuments.all.details', getOfficeDocumentDetailsState())
+            .state('main.officeDocuments.all.details.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.officeDocuments.all.details.activities.modal', getDetailspaneModal())
+            .state('main.officeDocuments.all.details.documents', getDetailsTabState('officeDocument', 'documents'))
+            .state('main.officeDocuments.all.details.tasks', getDetailsTabState('officeDocument', 'tasks'))
+
+        .state('main.officeDocuments.byentity', generateStateByEntity('officeDocument'))
+            .state('main.officeDocuments.byentity.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.officeDocuments.byentity.activities.modal', getDetailspaneModal())
+            .state('main.officeDocuments.byentity.documents', getDetailsTabState('officeDocument', 'documents'))
+            .state('main.officeDocuments.byentity.tasks', getDetailsTabState('officeDocument', 'tasks'))
+
+        .state('main.officeDocuments.byentity.details', getOfficeDocumentDetailsState())
+            .state('main.officeDocuments.byentity.details.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.officeDocuments.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.officeDocuments.byentity.details.documents', getDetailsTabState('officeDocument', 'documents'))
+            .state('main.officeDocuments.byentity.details.tasks', getDetailsTabState('officeDocument', 'tasks'))
+
         .state('main.discussions', {
             url: '/discussions',
             views: {
@@ -1152,6 +1277,12 @@ angular.module('mean.icu').config([
             .state('main.search.project.documents', getDetailsTabState('project', 'documents'))
             .state('main.search.project.tasks', getDetailsTabState('project', 'tasks'))
 
+        // .state('main.search.officeDocument', getOfficeDocumentDetailsState('/officeDocument'))
+        //     .state('main.search.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
+        //     .state('main.search.officeDocument.activities.modal', getDetailspaneModal())
+        //     .state('main.search.officeDocument.documents', getDetailsTabState('officeDocument', 'documents'))
+        //     .state('main.search.officeDocument.tasks', getDetailsTabState('officeDocument', 'tasks'))
+
         .state('main.search.discussion', getDiscussionDetailsState('/discussion'))
             .state('main.search.discussion.activities', getDetailsTabState('discussion', 'activities'))
             .state('main.search.discussion.activities.modal', getDetailspaneModal())
@@ -1184,45 +1315,45 @@ angular.module('mean.icu').config([
                 FilesService.getByPath()
             }
         })
-        .state('main.documents', {
-            url: '/docuoments',
-            views: {
-                middlepane: {
-                    //hack around the fact that state current name is initialized in controller only
-                    template: '',
-                    controller: function($state, projects, context) {
-                        if ($state.current.name === 'main.docuoments') {
-                            if (projects.data.length) {
-                                $state.go('.byentity', {
-                                    entity: context.entityName,
-                                    entityId: context.entityId
-                                });
-                            } else {
-                                $state.go('.all');
-                            }
-                        }
-                    }
-                }
-            }
-        })
-            .state('main.documents.all', {
-                url: '/all',
-                params: {
-                    starred: false,
-                    start: 0,
-                    limit: LIMIT,
-                    sort: SORT
-                },
-                views: getListView('document'),
-                resolve: {
-                    documents: function() {
+        // .state('main.documents', {
+        //     url: '/docuoments',
+        //     views: {
+        //         middlepane: {
+        //             //hack around the fact that state current name is initialized in controller only
+        //             template: '',
+        //             controller: function($state, projects, context) {
+        //                 if ($state.current.name === 'main.docuoments') {
+        //                     if (projects.data.length) {
+        //                         $state.go('.byentity', {
+        //                             entity: context.entityName,
+        //                             entityId: context.entityId
+        //                         });
+        //                     } else {
+        //                         $state.go('.all');
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // })
+        //     .state('main.documents.all', {
+        //         url: '/all',
+        //         params: {
+        //             starred: false,
+        //             start: 0,
+        //             limit: LIMIT,
+        //             sort: SORT
+        //         },
+        //         views: getListView('document'),
+        //         resolve: {
+        //             documents: function() {
                 
-                            return {
-                                title:"txt"
-                            }
-                        }
-                }
-            });
+        //                     return {
+        //                         title:"txt"
+        //                     }
+        //                 }
+        //         }
+        //     });
     }
 ]);
 

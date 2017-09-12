@@ -23,6 +23,16 @@
                         data-ng-class="{ 'caret-right': !isCurrentState(item) || !item.open, 'fa-caret-down': isCurrentState(item) || item.open}"></i>
                 </div>
             </div>
+            <!-- <div class="display-by"
+            ng-class= "{'collapsed' : isCurrentState(item) && !item.open }"
+            ng-if="isCurrentState(item)"
+            icu-display-by="item.display"
+            people="people"
+            projects="projects"
+            discussions="discussions"
+            offices="offices"
+            folders="folders">
+            </div> -->
             <div class="display-by"
                  ng-class= "{'collapsed' : isCurrentState(item) && !item.open }"
                  ng-if="isCurrentState(item)"
@@ -30,7 +40,7 @@
                  people="people"
                  projects="projects"
                  discussions="discussions"
-                 documents="documents"
+                 officeDocuments="officeDocuments"
                  offices="offices"
                  folders="folders">
             </div>
