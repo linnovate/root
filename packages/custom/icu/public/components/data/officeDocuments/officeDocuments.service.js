@@ -2,7 +2,14 @@
 
 angular.module('mean.icu.data.officedocumentsservice', [])
     .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService) {
-        var EntityPrefix = '/attachments';
+        var EntityPrefix = '/documents';
+
+          function getAll() {
+            return $http.get(ApiUri + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
 
          function delete(id) {
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
