@@ -48,12 +48,13 @@ var DocumentSchema = new Schema({
   sender: {
     type: Schema.ObjectId,
     ref: 'User'
+
   },
   sendingAs: {
     type: Schema.ObjectId,
     ref: 'User'
   },
-  asign:{
+  assign:{
     type: Schema.ObjectId,
     ref: 'User'
   },

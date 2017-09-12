@@ -316,7 +316,7 @@ module.exports = function(Icu, app) {
   app.route('/api/documents').post(documents.upload, documents.signNew).get(documents.getAll);
   app.route('/api/documents/:id([0-9a-fA-F]{24})')
   .get(documents.getById)
-  //.post(documents.upload, documents.update)
+  .post(documents.update)
   .delete(documents.deleteDocument);
    app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/documents').get(updates.getByEntity);
 

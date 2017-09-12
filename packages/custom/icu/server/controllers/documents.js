@@ -16,7 +16,7 @@ function getDocuments(entity,id){
   return new Promise(function(fulfill,reject){
     Document.find({
       'entity':entity,
-      'entityId':entityId
+      'entityId':id
     }, function(err,docs){
       if(err){
         reject('error');
@@ -76,7 +76,7 @@ function getUsers(users){
 
 /**
 *
-* request includes entityName,fileType,entityId,watchers (As usernames)
+* request body includes entityName,fileType,entityId,watchers (As usernames)
 *
 */
 
@@ -98,7 +98,7 @@ exports.uploadEmptyDocument = function(req , res,next){
     'method':'POST',
     'json':json
   }, function(error,resp,body){
-    var path = body.path;
+    var path = body.path?body.path:"/undefined";
     var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
     var upd={
       'created':new Date(),
@@ -120,7 +120,7 @@ exports.uploadEmptyDocument = function(req , res,next){
         'entity':entityName,
         'entityId':new ObjectId(entityId),
         'issue':'update',
-        'issueId':issueId,
+        'issueId':new ObjectId(issueId),
         'updated':new Date()
       };
       var attachment = new Attachment(attach);
@@ -143,7 +143,7 @@ exports.uploadEmptyDocument = function(req , res,next){
 */
 exports.getAll = function(req,res,next){
   Document.find({
-    $or:[ {watchers:{$elemMatch:{$eq:req.user._id}}} , {asign: req.user._id} ]
+    $or:[ {watchers:{$elemMatch:{$eq:req.user._id}}} , {assign: req.user._id} ]
   }, function (err, data) {
     if (err) {
       req.locals.error = err;
@@ -165,15 +165,13 @@ exports.getById = function(req,res,next){
   }, function (err, data) {
     if (err) {
       req.locals.error = err;
-      req.status(400);
+      res.status(400);
     } else {
       req.locals.result = data
       res.send(data);
     }
 });
 }
-
-
 
 /**
 * req.params.id will consist mongoDB _id of the user
@@ -195,7 +193,7 @@ exports.getByUserId = function(req,res,next){
 /*
 *
 *req.params.entity contains the entity {project,discussion,office,}
-*
+*req.params.id contains the entity mongoDB id
 */
 exports.getByEntity = function (req, res, next) {
   var entities = {
@@ -222,118 +220,158 @@ exports.getByEntity = function (req, res, next) {
   });
 };
 
+
+/**
+*
+* Assumes req.body contains description,sendingAsId,classification,relatedDocuments array of documents ids
+* and watchers
+*
+*
+*
+*/
 exports.upload = function(req,res,next){
   var d = formatDate(new Date());
-    req.locals.data.documents = [];
-    req.locals.data.body = {};
-    var busboy = new Busboy({
-      headers: req.headers
-    });
-    var hasFile = false;
-    busboy.on('file', function (fieldname, file, filename) {
-      var port = config.https && config.https.port ? config.https.port : config.http.port;
-      var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
-      var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
-      var fileType = path.extname(filename).substr(1).toLowerCase();
-      mkdirp(path.join(config.attachmentDir, d), function () {
-          file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
-            var arr = hostFileLocation.split("/files");
-            var pathFor = "./files" + arr[1];
-            var stats = fs.statSync(pathFor);
-            console.log(pathFor + 'test path')
-            var fileSizeInBytes = stats["size"];
-            req.locals.data.body.size = fileSizeInBytes;
-          });
-
+  req.locals.data.documents = [];
+  req.locals.data.body = {};
+  var busboy = new Busboy({
+    headers: req.headers
+  });
+  var hasFile = false;
+  busboy.on('file', function (fieldname, file, filename) {
+    var port = config.https && config.https.port ? config.https.port : config.http.port;
+    var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+    var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
+    var fileType = path.extname(filename).substr(1).toLowerCase();
+    mkdirp(path.join(config.attachmentDir, d), function () {
+        file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
+          var arr = hostFileLocation.split("/files");
+          var pathFor = "./files" + arr[1];
+          var stats = fs.statSync(pathFor);
+          console.log(pathFor + 'test path')
+          var fileSizeInBytes = stats["size"];
+          req.locals.data.body.size = fileSizeInBytes;
+        });
         req.locals.data.body.name = filename;
-          req.locals.data.body.path = hostFileLocation;
-          req.locals.data.body.attachmentType = fileType;
-          req.locals.data.body.size = file._readableState.length;
-          hasFile = true;
-      });
+        req.locals.data.body.path = hostFileLocation;
+        req.locals.data.body.attachmentType = fileType;
+        req.locals.data.body.size = file._readableState.length;
+        hasFile = true;
     });
+  });
 
-    busboy.on('field', function (fieldname, val) {
-      req.locals.data.body[fieldname] = val;
-    });
+  busboy.on('field', function (fieldname, val) {
+    req.locals.data.body[fieldname] = val;
+  });
 
-    busboy.on('finish', function () {
-      var user = req.user.email.substring(0,req.user.email.indexOf('@'));
-      var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
-      var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
-
-      req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+filename;
-      var result = fs.readFile("."+path,function(err,result){
-        result=JSON.parse(JSON.stringify(result));
-        var coreOptions={
-          "siteUrl":config.SPHelper.SPSiteUrl
-        };
-        var creds={
-          "username":config.SPHelper.username,
-          "password":config.SPHelper.password
+  busboy.on('finish', function () {
+    var user = req.user.email.substring(0,req.user.email.indexOf('@'));
+    var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
+    var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
+    req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+filename;
+    var result = fs.readFile("."+path,function(err,result){
+      result=JSON.parse(JSON.stringify(result));
+      var coreOptions={
+        "siteUrl":config.SPHelper.SPSiteUrl
+      };
+      var creds={
+        "username":config.SPHelper.username,
+        "password":config.SPHelper.password
+      }
+      var folder = config.SPHelper.libraryName+"/"+user;
+      var fileOptions = {
+        "folder":folder,
+        "fileName":fileName,
+        "fileContent":result
+      };
+      var entities={
+        "project":"Project",
+        "task":"Task",
+        "discussion":"Discussion"
+      };
+      var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+      query.findOne({
+        _id:req.locals.data.body.entityId
+      }).exec(function(err,entity){
+        if(err){
+          req.locals.error = err;
         }
-        var folder = config.SPHelper.libraryName+"/"+user;
-        var fileOptions = {
-          "folder":folder,
-          "fileName":fileName,
-          "fileContent":result
-        };
-
-        var entities={
-          "project":"Project",
-          "task":"Task",
-          "discussion":"Discussion"
-        };
-        var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
-        query.findOne({
-          _id:req.locals.data.body.entityId
-        }).exec(function(err,entity){
-          if(err){
-            req.locals.error = err;
-          }
-          if(!entity){
-            req.locals.error={
-              status:404,
-              message:'Entity not found'
-            };
-          }
-          if(entity){
-            var users = [];
-            users.push({
-              '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-              'Role':3,
-              'UserId':user
-            });
-            entity.watchers.forEach(function(watcher){
-              if(watcher!=req.user._id){
-                users.push({
-                  '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-                  'Role':2,
-                  'UserId':watcher
-                });
-              }
-            });
-            getUsers(users).then(function(result){
-              if(result=='success'){
-                var json = {
-                  'coreOptions':coreOptions,
-                  'creds':creds,
-                  'fileOptions':fileOptions,
-                  'permissions':users,
-                  'isTemplate':false,
-                  'entity':req.locals.data.body.entity,
-                  'entityId':req.locals.data.body.entityId
-                };
-                request({
-                  'url':config.SPHelper.uri,
-                  'method':'POST',
-                  'json':json
-                });
-              }
-              else{
-
-              }
-            });
+        if(!entity){
+          req.locals.error={
+            status:404,
+            message:'Entity not found'
+          };
+        }
+        if(entity){
+          var users = [];
+          users.push({
+            '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+            'Role':3,
+            'UserId':user
+          });
+          entity.watchers.forEach(function(watcher){
+            if(watcher!=req.user._id){
+              users.push({
+                '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+                'Role':2,
+                'UserId':watcher
+              });
+            }
+          });
+          getUsers(users).then(function(result){
+            if(result=='success'){
+              var json = {
+                'coreOptions':coreOptions,
+                'creds':creds,
+                'fileOptions':fileOptions,
+                'permissions':users,
+                'isTemplate':false,
+                'entity':req.locals.data.body.entity,
+                'entityId':req.locals.data.body.entityId
+              };
+              request({
+                'url':config.SPHelper.uri+"/api/upload",
+                'method':'POST',
+                'json':json
+              },function(error,resp,body){
+                if(error){
+                  res.send(error);
+                }
+                else{
+                  var path = body.path;
+                  var doc = {
+                    'created': new Date(),
+                    'updated':new Date(),
+                    'name':fileName,
+                    'path':body.path,
+                    'description':req.body.description, //important
+                    'serial':body.serial,
+                    'documentType':fileName.substring(fileName.indexOf('.')+1,fileName.length),
+                    'entity': req.locals.data.body.entity,
+                    'entityId':req.locals.data.body.entityId,
+                    'creator':new ObjectId(req.user._id),
+                    'updater':new ObjectId(req.user._id),
+                    'sender':new ObjectId(req.user._id),
+                    'sendingAs':new ObjectId(req.body.sendingAsId), //important
+                    'assign': new ObjectId(req.user._id),
+                    'classification':req.body.classification,//important
+                    'relatedDocuments':req.body.relatedDocuments,//important
+                    'watchers':req.body.watchers//important
+                  };
+                  Document.save(doc,function(error,result){
+                    if(error){
+                      res.send(error);
+                    }
+                    else{
+                      res.send(result);
+                    }
+                  });
+                }
+              });
+            }
+            else{
+              res.send(error);
+            }
+          });
           }
         });
       });
@@ -408,13 +446,103 @@ exports.deleteDocument = function(req,res){
   });
 }
 
+/**
+* req.body contains zero permission array,entityName,entityId,description,name,assign,classification,relatedDocuments
+*
+*
+*
+*
+*/
+exports.update = function(req,res,next){
+  var zeroReq = [];
+  for(var i=0;i<req.locals.result.zero.length;i++){
+    zeroReq.push({'UserId':req.body.zero[i]});
+  };
+  var entities = {
+    projects: 'project',
+    tasks: 'task',
+    discussions: 'discussion',
+    offices: 'office',
+    folders: 'folder'
+  };
+  var entity = entities[req.body.entityName];
+  var entityId=req.body.entityId;
+  var id = req.params.id;
+  getDocuments(entity,id).then(function(documents){
+    var watchArray = req.body.watchers;
+    watchArray.push(req.body.assign);
+    Document.update({
+      '_id':id,
+    },{
+      'watchers':watchArray,
+      'description':req.body.description,
+      'updated':new Date(),
+      'name':req.body.name,
+      'assign':req.body.assign,
+      'classification':req.body.classification,
+      'relatedDocuments':relatedDocuments,
+    },{
+      'multi':true
+    },function(err,numAffected){
+      if(documents!=null&&documents!=undefined&&(documents.length>0)){
+        var watchReq =[];
+        for(var i=0;i<watchArray.length;i++){
+          if(watchArray[i]!=undefined){
+            var str = watchArray[i].toString();
+            watchReq.push({'UserId':str});
+          }
+        }
+        getUsers(watchReq).then(function(res){
+          var users = [];
+          for(var i=0;i<watchReq.length;i++){
+            users.push(watchReq[i].UserId);
+          }
+          var creators = getCreators(documents);
+          getUsers(zeroReq).then(function(result){
+            var zero=[];
+            for(var i = 0 ;i<zeroReq.length;i++){
+              zero.push(zeroReq[i].UserId);
+            }
+            var json={
+              'siteUrl':config.SPHelper.SPSiteUrl,
+              'paths':documents,
+              'users':users,
+              'creators':creators,
+              'zero':zero
+            };
+            request({
+              'url':config.SPHelper.uri+"/api/share",
+              'method':'POST',
+              'json':json
+            },function(error,resp,body){
+              if(error){
+                res.send('error');
+              }
+              else{
+                res.send('OK');
+              }
+            });
+          });
+        });
+      }
+    });
+    next();  
+  });
 
+};
+
+/**
+* req.body.watchers
+* req.body.
+*
+*
+*
+*/
 exports.sign = function (req, res, next) {
   var zeroReq = [];
   for(var i=0;i<req.locals.result.zero.length;i++){
     zeroReq.push({'UserId':req.locals.result.zero[i]});
   };
-  
   var entities = {
     projects: 'project',
     tasks: 'task',
