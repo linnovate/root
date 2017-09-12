@@ -42,10 +42,9 @@ angular.module('mean.icu.ui.folderlist', [])
  		    $scope.folders = [$scope.folders[0]];
  	    }
 
-        $scope.isCurrentState = function (id) {
-            return $state.current.name.indexOf('main.folders.byentity') === 0 &&
-                $state.current.name.indexOf('details') === -1;
-        };
+        	$scope.isCurrentState = function(ids) {
+		return ids.indexOf($state.current.name) !== -1;
+	};
 
         $scope.changeOrder = function () {
             if($scope.sorting.field != "custom"){

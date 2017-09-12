@@ -215,8 +215,8 @@ angular.module('mean.icu').config([
                             return office;
                         }
                     },
-                    tasks: function(TasksService, $stateParams) {
-                        return TasksService.getByOfficeId($stateParams.id);
+                    folders: function(FoldersService, $stateParams) {
+                        return FoldersService.getByOfficeId($stateParams.id);
                     },
                     people: function(UsersService) {
                         return UsersService.getAll();
@@ -1026,19 +1026,19 @@ angular.module('mean.icu').config([
             .state('main.offices.all.details.activities', getDetailsTabState('office', 'activities'))
             .state('main.offices.all.details.activities.modal', getDetailspaneModal())
             .state('main.offices.all.details.documents', getDetailsTabState('office', 'documents'))
-            .state('main.offices.all.details.tasks', getDetailsTabState('office', 'tasks'))
+            .state('main.offices.all.details.folders', getDetailsTabState('office', 'folders'))
 
         .state('main.offices.byentity', generateStateByEntity('office'))
             .state('main.offices.byentity.activities', getDetailsTabState('office', 'activities'))
             .state('main.offices.byentity.activities.modal', getDetailspaneModal())
             .state('main.offices.byentity.documents', getDetailsTabState('office', 'documents'))
-            .state('main.offices.byentity.tasks', getDetailsTabState('office', 'tasks'))
+            .state('main.offices.byentity.folders', getDetailsTabState('office', 'folders'))
 
         .state('main.offices.byentity.details', getOfficeDetailsState())
             .state('main.offices.byentity.details.activities', getDetailsTabState('office', 'activities'))
             .state('main.offices.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.offices.byentity.details.documents', getDetailsTabState('office', 'documents'))
-            .state('main.offices.byentity.details.tasks', getDetailsTabState('office', 'tasks'))
+            .state('main.offices.byentity.details.folders', getDetailsTabState('office', 'folders'))
 
         .state('main.folders', {
             url: '/folders',
