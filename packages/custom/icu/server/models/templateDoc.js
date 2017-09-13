@@ -114,21 +114,21 @@ var elasticsearch = require('../controllers/elasticsearch');
 
 TemplateDocSchema.post('save', function (req, next) {
   var attachment = this;
-  DocumentSchema.statics[attachment.entity](attachment.entityId, function (err, result) {
+  TemplateDocSchema.statics[attachment.entity](attachment.entityId, function (err, result) {
     if (err) {
       return err;
     }
-    elasticsearch.save(attachment, 'attachment', result.room, result.title);
+    elasticsearch.save(attachment, 'templateDoc', result.room, result.title);
     next();
   });
 
 });
 
 TemplateDocSchema.pre('remove', function (next) {
-  elasticsearch.delete(this, 'attachment', this.room, next);
+  elasticsearch.delete(this, 'templateDocSchema', this.room, next);
   next();
 });
 
 TemplateDocSchema.plugin(archive, 'attachment');
 
-module.exports = mongoose.model('Template', TemplateDocSchema);
+module.exports = mongoose.model('TemplateDoc', TemplateDocSchema);

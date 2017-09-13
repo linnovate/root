@@ -11,8 +11,8 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
-         function delete1(id) {
-             return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+        function delete1(id) {
+            return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
              	//WarningsService.setWarning(result.headers().warning);
                  return result.status;
              });
@@ -67,22 +67,22 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
-        function saveDocument(data, file) {
+        function saveDocument(data, file){
             return Upload.upload({
-                url: '/api/documents',
+                url: '/api/attachments',
                 fields: data,
                 file: file
             });
         }
 
-        function updateAttachment(id, data) {
+        function updateAttachment(id, data){
             return $http.post(ApiUri + EntityPrefix + id, data).then(function (result) {
             	WarningsService.setWarning(result.headers().warning);
                 return result.data;
             });
         }
 
-        function getByTasks() {
+        function getByTasks(){
 	        return $http.get(ApiUri + '/tasks/myTasks'  + EntityPrefix).then(function(result) {
 	        	WarningsService.setWarning(result.headers().warning);
 	            return result.data;
