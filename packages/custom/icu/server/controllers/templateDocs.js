@@ -31,19 +31,12 @@ function getTemplates(entity,id){
     });
   });
 }
-
-function getCreators(paths){
-  var assigns =[];
-  for(var i=0;i<paths.length;i++){
-    var path = paths[i];
-    var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
-    var path2 = path.substring(0,path.lastIndexOf('/'));
-    var folderName = path2.substring(path2.lastIndexOf('/')+1,path2.length);
-    assigns.push(folderName);
-  }
-  return assigns;
-}  
-
+/**
+*	req.params contains entity,id (mongoDB _id of entity)
+*
+*
+*
+*/
 exports.sendTemplateList = function(req,res,next){
 	var entity = req.params.entity;
 	var entityId = req.params.id;
@@ -210,11 +203,8 @@ exports.getByEntity = function (req, res, next) {
 
 /**
 *
-* Assumes req.body contains description,sendingAsId,classification,relatedDocuments array of documents ids
+* Assumes req.body contains description,classification
 * and watchers
-*
-*
-*
 */
 exports.upload = function(req,res,next){
   var d = formatDate(new Date());
@@ -336,7 +326,6 @@ exports.upload = function(req,res,next){
                     'entityId':req.locals.data.body.entityId,
                     'creator':new ObjectId(req.user._id),
                     'classification':req.body.classification,//important
-                    'relatedDocuments':req.body.relatedDocuments,//important
                     'watchers':req.body.watchers//important
                   };
                   TemplateDoc.save(doc,function(error,result){
@@ -434,203 +423,71 @@ exports.deleteTemplate = function(req,res){
      //}
     }
   });
-}
-
-/**
-* 
-*
-*
-*
-*
-*/
-/**
-exports.update = function(req,res,next){
-  var zeroReq = [];
-  for(var i=0;i<req.locals.result.zero.length;i++){
-    zeroReq.push({'UserId':req.body.zero[i]});
-  };
-  var entities = {
-    projects: 'project',
-    tasks: 'task',
-    discussions: 'discussion',
-    offices: 'office',
-    folders: 'folder'
-  };
-  var entity = entities[req.body.entityName];
-  var entityId=req.body.entityId;
-  var id = req.params.id;
-  getDocuments(entity,id).then(function(documents){
-    var watchArray = req.body.watchers;
-    watchArray.push(req.body.assign);
-    Document.update({
-      '_id':id,
-    },{
-      'watchers':watchArray,
-      'description':req.body.description,
-      'updated':new Date(),
-      'name':req.body.name,
-      'assign':req.body.assign,
-      'classification':req.body.classification,
-      'relatedDocuments':relatedDocuments,
-    },{
-      'multi':true
-    },function(err,numAffected){
-      if(documents!=null&&documents!=undefined&&(documents.length>0)){
-        var watchReq =[];
-        for(var i=0;i<watchArray.length;i++){
-          if(watchArray[i]!=undefined){
-            var str = watchArray[i].toString();
-            watchReq.push({'UserId':str});
-          }
-        }
-        getUsers(watchReq).then(function(res){
-          var users = [];
-          for(var i=0;i<watchReq.length;i++){
-            users.push(watchReq[i].UserId);
-          }
-          var creators = getCreators(documents);
-          getUsers(zeroReq).then(function(result){
-            var zero=[];
-            for(var i = 0 ;i<zeroReq.length;i++){
-              zero.push(zeroReq[i].UserId);
-            }
-            var json={
-              'siteUrl':config.SPHelper.SPSiteUrl,
-              'paths':documents,
-              'users':users,
-              'creators':creators,
-              'zero':zero
-            };
-            request({
-              'url':config.SPHelper.uri+"/api/share",
-              'method':'POST',
-              'json':json
-            },function(error,resp,body){
-              if(error){
-                res.send('error');
-              }
-              else{
-                res.send('OK');
-              }
-            });
-          });
-        });
-      }
-    });
-    next();  
-  });
-
 };
-*/
+
+
 
 /**
-* req.body.watchers
-* req.body.
-*
-*
+* req.body.zero contains ids of watchers before change
+* req.body.newTemplate contains : name,description,classification,watchers
+*	req.params.id contains templateDoc id to update
+*  
 *
 */
+exports.update = function(req,res,next){
+    TemplateDoc.findOne({"_id":req.params.id},function(err,template){
+    	var creator = template.creator;
+    	var zero = template.watchers;
+    	var zeroReq=[];
+  		for(var i=0;i<zero;i++){
+    		zeroReq.push({'UserId':req.body.zero[i]});
+  		}
+  		TemplateDoc.update({
+  			"_id":req.params.id
+  		},{
+  			"description": req.body.updated.description,
+  			"watchers": req.body.updated.watchers,
+  			"name": req.body.updated.name,
+  			"classification":req.body.updated.classification
+  		},function(err,numAffected){
+  			var watchReq =[];
+  			for(var i=0;i<req.body.updated.watchers.length;i++){
+          		if(req.body.updated.watchers[i]!=undefined){
+            		var str = req.body.updated.watchers[i].toString();
+            		watchReq.push({'UserId':str});
+          		}
+        	}
+        	var creatorReq=[];
+        	creatorReq.push({'UserId':creator});
+        	getUsers(zeroReq).then(function(res){
+        		getUsers(watchReq).then(function(res){
+        			getUsers(creatorReq).then(function(res){
+        				var zero=[];
+        				var watch=[];
+        				var creator=[];
+        				zeroReq.forEach(function(x){zero.push(x.UserId)});
+        				watchReq.forEach(function(x){watch.push(x.UserId)});
+        				creatorReq.forEach(function(x){creator.push(x.UserId)});
+        				var paths = [template.path];
+        				var json={
+              				'siteUrl':config.SPHelper.SPSiteUrl,
+              				'paths':paths,
+              				'users':watchReq,
+              				'creators':creator,
+              				'zero':zero
+            			};
+            			request({
+              				'url':config.SPHelper.uri+"/api/share",
+              				'method':'POST',
+              				'json':json
+            			},function(error,resp,body){
+            				res.send("ok");
+            			});
+        			});
+        		});
+        	});
 
-/**
-
-exports.sign = function (req, res, next) {
-  var zeroReq = [];
-  for(var i=0;i<req.locals.result.zero.length;i++){
-    zeroReq.push({'UserId':req.locals.result.zero[i]});
-  };
-  var entities = {
-    projects: 'project',
-    tasks: 'task',
-    discussions: 'discussion',
-    offices: 'office',
-    folders: 'folder'
-  };
-  var entity = entities[req.locals.data.entityName];
-  var id = req.params.id;
-  getDocuments(entity,id).then(function(documents){
-    var watchArray = req.body.watchers;
-    watchArray.push(req.body.assign);
-    Document.update({
-      'entity':entity,
-      'entityId':id
-    },{
-      'circles':req.body.circles,
-      'watchers':watchArray
-    },{
-      'multi':true
-    },function(err,numAffected){
-      if(documents!=null&&documents!=undefined&&(documents.length>0)){
-        var watchReq =[];
-        for(var i=0;i<watchArray.length;i++){
-          if(watchArray[i]!=undefined){
-            var str = watchArray[i].toString();
-            watchReq.push({'UserId':str});
-          }
-        }
-        getUsers(watchReq).then(function(res){
-          var users = [];
-          for(var i=0;i<watchReq.length;i++){
-            users.push(watchReq[i].UserId);
-          }
-          var creators = getCreators(documents);
-          getUsers(zeroReq).then(function(result){
-            var zero=[];
-            for(var i = 0 ;i<zeroReq.length;i++){
-              zero.push(zeroReq[i].UserId);
-            }
-            var json={
-              'siteUrl':config.SPHelper.SPSiteUrl,
-              'paths':documents,
-              'users':users,
-              'creators':creators,
-              'zero':zero
-            };
-            request({
-              'url':config.SPHelper.uri+"/api/share",
-              'method':'POST',
-              'json':json
-            },function(error,resp,body){
-
-
-
-            })
-          });
-        });
-      }
+  		});
     });
-    next();  
-  });
-}
+};
 
-exports.signNew = function (req, res, next) {
-  var entities = {
-    project: 'Project',
-    task: 'Task',
-    discussion: 'Discussion',
-    office: 'Office',
-    folder: 'Folder'
-  };
-  var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
-  query.findOne({
-    _id: req.locals.data.body.entityId
-  }).exec(function (err, entity) {
-    if (err) {
-      req.locals.error = err;
-    }
-    if (!entity) {
-      req.locals.error = {
-        status: 404,
-        message: 'Entity not found'
-      };
-    }
-    if (entity) {
-      req.locals.data.body.watchers = entity.watchers;
-      req.locals.data.body.watchers.push(entity.assign);
-      req.locals.data.body.circles = entity.circles;
-    }
-    next();
-  })
-}
-
-
-*/

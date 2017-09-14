@@ -16,7 +16,7 @@ var eventDrops = require('../controllers/event-drops');
 var office = require('../controllers/office');
 var folder = require('../controllers/folder');
 var documents = require('../controllers/documents');
-
+var templateDocs = require('../controllers/templateDocs');
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
 var entity = require('../middlewares/entity.js');
@@ -322,5 +322,15 @@ module.exports = function(Icu, app) {
   .post(documents.update)
   .delete(documents.deleteDocument);
    app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/documents').get(updates.getByEntity);
+
+
+
+   app.route('/api/templates*').all(entity('templateDocs'));
+  app.route('/api/templates').post(templateDocs.upload).get(templateDocs.getAll);
+  app.route('/api/documents/:id([0-9a-fA-F]{24})')
+  .get(templateDocs.getById)
+  .post(templateDocs.update)
+  .delete(templateDocs.deleteTemplate);
+   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(updates.getByEntity);
 
 };
