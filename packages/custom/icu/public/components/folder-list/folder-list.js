@@ -124,7 +124,7 @@ angular.module('mean.icu.ui.folderlist', [])
         }
 
 
-        $scope.getProjName=function(){
+        $scope.getOfficeName=function(){
             var entityType = $scope.currentContext.entityName;
             if($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined&&
             $scope.currentContext.entity.title!=undefined){
@@ -135,10 +135,7 @@ angular.module('mean.icu.ui.folderlist', [])
                 return $scope.currentContext.entity.name;
             }
             else{
-                if(entityType=="discussion" && DiscussionsService.currentDiscussionName!=undefined){
-                    return DiscussionsService.currentDiscussionName;
-                }
-                else if(OfficesService.currentOfficeName!=undefined){
+                if(OfficesService.currentOfficeName!=undefined){
                     return OfficesService.currentOfficeName;
                 }
                 else{
@@ -152,9 +149,6 @@ angular.module('mean.icu.ui.folderlist', [])
                         var result;
                         if(folder.office!=undefined){
                             result = folder.office.title
-                        }
-                        else if(folder.discussions!=undefined && folder.discussions.title!=undefined){
-                            result=folder.discussions[0].title;
                         }
                         else{
                             result = "you dont have permission";

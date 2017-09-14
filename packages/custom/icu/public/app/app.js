@@ -1095,7 +1095,7 @@ angular.module('mean.icu').config([
             .state('main.folders.byentity.activities', getDetailsTabState('folder', 'activities'))
             .state('main.folders.byentity.activities.modal', getDetailspaneModal())
             .state('main.folders.byentity.documents', getDetailsTabState('folder', 'documents'))
-            .state('main.folders.byentity.tasks', getDetailsTabState('folder', 'tasks'))
+            .state('main.folders.byentity.folders', getDetailsTabState('folder', 'folders'))
 
         .state('main.folders.byentity.details', getFolderDetailsState())
             .state('main.folders.byentity.details.activities', getDetailsTabState('folder', 'activities'))

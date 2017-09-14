@@ -174,6 +174,8 @@
     "createNewFolder": "Create new folder",
     "displayfoldersBy": "Display folders by",
     "manageFolders": "Manage Folders",
+    "foldersFrom": "Folders from ",
+    "allFolders": "All Folders",
 
     "st": "st",
     "nd": "nd",
