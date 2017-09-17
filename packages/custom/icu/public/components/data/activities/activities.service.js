@@ -57,6 +57,20 @@ angular.module('mean.icu.data.activitiesservice', [])
         });
     }
 
+    function getByOfficeId(id) {
+        return $http.get(ApiUri + '/offices/' + id + EntityPrefix).then(function(updatesResult) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
+            return getUser(updatesResult.data);
+        });
+    }
+
+    function getByFolderId(id) {
+        return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function(updatesResult) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
+            return getUser(updatesResult.data);
+        });
+    }
+
     function create(update) {
         return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
@@ -72,6 +86,8 @@ angular.module('mean.icu.data.activitiesservice', [])
         getByDiscussionId: getByDiscussionId,
         getByTasks: getByTasks,
         create: create,
-        data: data
+        data: data,
+        getByOfficeId: getByOfficeId,
+        getByFolderId: getByFolderId
     };
 });

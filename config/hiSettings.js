@@ -32,6 +32,30 @@ module.exports = {
 		description: {
 			chat: true
 		}
-	}
+	},
+	officeNotify: {
+		status: {
+			chat: true
+		},
+		description: {
+			chat: true
+		},
+		office: {
+			chat: true
+		}
+
+	},
+	folderNotify: {
+		status: {
+			chat: true
+		},
+		description: {
+			chat: true
+		},
+		folder: {
+			chat: true
+		}
+
+	},
 	
 };

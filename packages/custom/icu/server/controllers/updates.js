@@ -27,7 +27,9 @@ var updateService = require('../services/updates.js'),
 var entityIssueMap = {
   tasks: 'task',
   projects: 'project',
-  discussions: 'discussion'
+  discussions: 'discussion',
+  offices: 'office',
+  folders: 'folder'
 };
 
 Object.keys(update).forEach(function(methodName) {
@@ -159,7 +161,7 @@ exports.getMyTasks = function(req, res, next) {
 }
 
 exports.signNew = function(req, res, next) {
-  var entities = {project: 'Project', task: 'Task', discussion: 'Discussion'};
+  var entities = {project: 'Project', task: 'Task', discussion: 'Discussion', office: 'Office', folder: 'Folder'};
   var query = req.acl.mongoQuery(entities[req.body.data.issue]);
   query.findOne({_id: req.body.data.issueId}).exec(function(err, entity){
     if(err) {

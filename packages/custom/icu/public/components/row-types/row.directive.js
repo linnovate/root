@@ -9,18 +9,22 @@
     Add folder of the details of the type (in the right side). Like "/icu/packages/custom/icu/public/components/task-details"
 */
 angular.module('mean.icu.ui.rows', [])
-.directive('icuListRow', function($compile, $http, $templateRequest) {
+.directive('icuListRow', function($compile, $http, $templateRequest, UsersService) {
     var templates = {
         people: '/icu/components/row-types/people-row.html',
         task: '/icu/components/row-types/task-row.html',
         project: '/icu/components/row-types/project-row.html',
         discussion: '/icu/components/row-types/discussion-row.html',
+        office: '/icu/components/row-types/office-row.html',
+        folder: '/icu/components/row-types/folder-row.html',
         'search-task': '/icu/components/row-types/search-task-row.html',
         'search-project': '/icu/components/row-types/search-project-row.html',
         'search-discussion': '/icu/components/row-types/search-discussion-row.html',
         'search-attachment': '/icu/components/row-types/search-attachment-row.html',
         'search-vg-files': '/icu/components/row-types/search-attachment-row.html',
         'search-update': '/icu/components/row-types/search-update-row.html',
+        'search-office': '/icu/components/row-types/search-office-row.html',
+        'search-folder': '/icu/components/row-types/search-folder-row.html',
         'subtasks': '/icu/components/row-types/sub-tasks-row.html',
     };
 
@@ -42,6 +46,10 @@ angular.module('mean.icu.ui.rows', [])
         if ($scope.data[$scope.type] && $scope.data[$scope.type].due) {
             $scope.data[$scope.type].due = new Date($scope.data[$scope.type].due)
         }
+        $scope.me = {};
+            UsersService.getMe().then(function(me) {
+                $scope.me = me;
+        });
     }
 
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.discussionlistdirective', [])
-.directive('icuDiscussionList', function ($state, $uiViewScroll, $stateParams, $timeout, context ) {
+.directive('icuDiscussionList', function ($state, $uiViewScroll, $stateParams, $timeout, context, LayoutService ) {
     var creatingStatuses = {
         NotCreated: 0,
         Creating: 1,
@@ -9,6 +9,52 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
     };
 
     function controller($scope, DiscussionsService, orderService, dragularService, $element, $interval, $window) {
+
+            $scope.getDate = function(discussion) {
+                // console.log('ddddddddddd', discussion);
+                // $scope.discussionContext = context.entity;
+				discussion.firstStr = '';
+            	discussion.secondStr = '';
+				if(discussion.startDate){
+					discussion.startDate = new Date(discussion.startDate);
+					var startStr = discussion.startDate.getDate()+"/"+(discussion.startDate.getMonth()+1)+"/"+discussion.startDate.getFullYear();
+					discussion.firstStr = startStr;
+				}
+				if(discussion.allDay){
+					discussion.secondStr = "All day long";
+				} else{
+					if(discussion.startTime){
+						discussion.startTime = new Date(discussion.startTime);
+						var ho = discussion.startTime.getHours().toString().length==1? "0"+discussion.startTime.getHours().toString():
+							discussion.startTime.getHours().toString();
+						var min = discussion.startTime.getMinutes().toString().length==1? "0"+discussion.startTime.getMinutes().toString():
+							discussion.startTime.getMinutes().toString();
+						startStr = ho+":"+min;
+						discussion.firstStr = discussion.startDate ? discussion.firstStr + " "+startStr : '';
+					}
+					if(discussion.endDate){
+						discussion.endDate = new Date(discussion.endDate);
+						if(discussion.firstStr!='deadline'){
+							discussion.firstStr = discussion.firstStr;
+						}
+						else{
+							discussion.firstStr = "";
+						}
+						var endStr = discussion.endDate.getDate()+"/"+(discussion.endDate.getMonth()+1)+"/"+discussion.endDate.getFullYear();
+						discussion.secondStr = endStr;
+						if(discussion.endTime){
+                            discussion.endTime = new Date(discussion.endTime);
+							var ho = discussion.endTime.getHours().toString().length==1? "0"+discussion.endTime.getHours().toString():
+							discussion.endTime.getHours().toString();
+							var min = discussion.endTime.getMinutes().toString().length==1? "0"+discussion.endTime.getMinutes().toString():
+							discussion.endTime.getMinutes().toString();
+							endStr = ho+":"+min;
+							discussion.secondStr = discussion.secondStr +" "+endStr;
+						}
+				    }
+			    }
+
+            }
 
             $scope.currentTaskId = function (id) {
                 $scope.taskId = id;
@@ -233,6 +279,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
                     nameFocused: nameFocused
                 });
             }
+             LayoutService.clicked();
         };
 
         $scope.isCurrentState = function (id) {

@@ -1,14 +1,32 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function ($scope, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
+.controller('TaskListController', function ($scope, $window, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
 	$scope.tasks = tasks.data || tasks;
-	TasksService.data = $scope.tasks;
+	//TasksService.data = $scope.tasks;
 	$scope.loadNext = tasks.next;
 	$scope.loadPrev = tasks.prev;
 
 	$scope.autocomplete = context.entityName === 'discussion';
 	$scope.starred = $stateParams.starred;
+	if ($scope.tasks.length > 0 && !$scope.tasks[$scope.tasks.length - 1].id) {
+		$scope.tasks = [$scope.tasks[0]];
+	}
+	$scope.getFilter = function() {
+		var a = TasksService.filterValue;
+		switch(a) {
+			case 'today': 
+				return 'tasksDueToday';
+			case 'week':
+				return 'tasksDueThisWeek';
+			case 'watched':
+				return 'watchedTasks';
+			case 'overdue':
+				return 'overdueTasks';
+			default:
+				return ''
+		}
+	}
 
 	function init() {
 		if(context.entity){
@@ -29,6 +47,50 @@ angular.module('mean.icu.ui.tasklist', [])
 			}
 			if(context.entityName === 'project') {
 				ProjectsService.selected = context.entity;
+			} else if(context.entityName === 'discussion') {
+				$scope.discussionContext = context.entity;
+				$scope.firstStr = '';
+            	$scope.secondStr = '';
+				if($scope.discussionContext.startDate){
+					$scope.discussionContext.startDate = new Date($scope.discussionContext.startDate);
+					var startStr = $scope.discussionContext.startDate.getDate()+"/"+($scope.discussionContext.startDate.getMonth()+1)+"/"+$scope.discussionContext.startDate.getFullYear();
+					$scope.firstStr = startStr;
+				}
+				if($scope.discussionContext.allDay){
+					$scope.secondStr = "All day long";
+				} else{
+					if($scope.discussionContext.startTime){
+						$scope.discussionContext.startTime = new Date($scope.discussionContext.startTime);
+						var ho = $scope.discussionContext.startTime.getHours().toString().length==1? "0"+$scope.discussionContext.startTime.getHours().toString():
+							$scope.discussionContext.startTime.getHours().toString();
+						var min = $scope.discussionContext.startTime.getMinutes().toString().length==1? "0"+$scope.discussionContext.startTime.getMinutes().toString():
+							$scope.discussionContext.startTime.getMinutes().toString();
+						startStr = ho+":"+min;
+						$scope.firstStr = $scope.discussionContext.startDate ? $scope.firstStr + " "+startStr : '';
+					}
+					if($scope.discussionContext.endDate){
+						$scope.discussionContext.endDate = new Date($scope.discussionContext.endDate);
+						if($scope.firstStr!='deadline'){
+							$scope.firstStr = $scope.firstStr;
+						}
+						else{
+							$scope.firstStr = "";
+						}
+						var endStr = $scope.discussionContext.endDate.getDate()+"/"+($scope.discussionContext.endDate.getMonth()+1)+"/"+$scope.discussionContext.endDate.getFullYear();
+						$scope.secondStr = endStr;
+						if($scope.discussionContext.endTime){
+							$scope.discussionContext.endTime = new Date($scope.discussionContext.endTime);
+							var ho = $scope.discussionContext.endTime.getHours().toString().length==1? "0"+$scope.discussionContext.endTime.getHours().toString():
+							$scope.discussionContext.endTime.getHours().toString();
+							var min = $scope.discussionContext.endTime.getMinutes().toString().length==1? "0"+$scope.discussionContext.endTime.getMinutes().toString():
+							$scope.discussionContext.endTime.getMinutes().toString();
+							endStr = ho+":"+min;
+							$scope.secondStr = $scope.secondStr +" "+endStr;
+						}
+				}
+			}
+
+            
 			}
 		}
 		else {
@@ -52,6 +114,48 @@ angular.module('mean.icu.ui.tasklist', [])
 	$scope.isCurrentState = function(ids) {
 		return ids.indexOf($state.current.name) !== -1;
 	};
+
+	$scope.getProjStatus = function() {
+		var entityType = $scope.currentContext.entityName;
+		if($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined&&
+		 $scope.currentContext.entity.status!=undefined){
+			return $scope.currentContext.entity.status;
+		}
+		else if ($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined
+		 && $scope.currentContext.entity.status!=undefined){
+			return $scope.currentContext.entity.status;
+		}
+		else{
+			if(entityType=="discussion" && DiscussionsService.currentDiscussionName!=undefined){
+				return DiscussionsService.currentDiscussionName;
+			}
+			else if(ProjectsService.currentProjectName!=undefined){
+				return ProjectsService.currentProjectName;
+			}
+			else{
+				var tasks = $scope.tasks;
+				if(tasks.length==1){
+					$state.go('401');
+					return "you dont have permission";
+				}
+				else{
+					var task = tasks[0];
+					var result;
+					if(task.project!=undefined){
+						result = task.project.title
+					}
+					else if(task.discussions!=undefined && task.discussions.title!=undefined){
+						result=task.discussions[0].title;
+					}
+					else{
+						result = "you dont have permission";
+					}
+					return result;
+				}
+			}
+
+		}
+	}
 
 	$scope.getProjName=function(){
 		var entityType = $scope.currentContext.entityName;
@@ -155,6 +259,10 @@ angular.module('mean.icu.ui.tasklist', [])
 	$scope.toggleStarred = function () {
 		$state.go($state.current.name, { starred: !$stateParams.starred });
 	};
+
+	$scope.print = function() {
+		$window.print()
+	}
 	if ($scope.tasks.length) {
 		if ($state.current.name === 'main.tasks.all' ||
 			$state.current.name === 'main.tasks.byentity') {

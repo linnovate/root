@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.searchlist', [])
-.directive('icuSearchList', function () {
+.directive('icuSearchList', function (LayoutService) {
     function controller($scope, $state, SearchService) {
 
         SearchService.builtInSearchArray = false;
@@ -10,6 +10,9 @@ angular.module('mean.icu.ui.searchlist', [])
             var active  = $scope.results[0];
 
            // $state.go('.' + active._type, { id: active._id } );
+        }
+        $scope.rowClicked = function() {
+            LayoutService.clicked();
         }
     }
 

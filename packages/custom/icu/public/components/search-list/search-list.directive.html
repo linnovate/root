@@ -6,6 +6,7 @@
                 data-ui-sref="main.search.{{result._type}}({id: result.id})"
                 icu-list-row
                 data="{ index: $index, result: result }"
+                ng-click="rowClicked()"
                 type="search-{{result._type}}">
             </tr>
         </tbody>

@@ -25,7 +25,7 @@
                         <div icu-avatar user="$select.selected"></div>
                         <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}</span>
                     </ui-select-match>
-                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search }">
+                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search } | filterByFrequentUsers: me">
                         <div icu-avatar user="user"></div>
                         <span class="summary-content">{{user.job}}</span>
                     </ui-select-choices>
@@ -195,7 +195,7 @@
                         <div icu-avatar user="$select.selected"></div>
                         <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
                     </ui-select-match>
-                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search }">
+                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search } | filterByFrequentUsers: me">
                         <div icu-avatar user="user"></div>
                         <span class="summary-content">{{user.job}}</span>
                     </ui-select-choices>
@@ -238,5 +238,5 @@ parent="{{task._id}}">
 </div>
 <div class="tab-content" data-ui-view="tab"></div>
 </div>
-<div ng-if="task._id"  icu-members-footer entity="task" users="people"></div>
+<div ng-if="task._id"  icu-members-footer entity="task" users="people" me="me"></div>
 </div>

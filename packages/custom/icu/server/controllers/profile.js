@@ -26,6 +26,24 @@ exports.profile = function (req, res, next) {
   });
 };
 
+
+exports.updateMember = function(req, res, next) {
+  next();
+  if (!req.body.frequentUser) return;
+  var profile = req.profile || {};
+  var member = req.body.frequentUser;
+  var frequent = profile.frequentUsers || {};
+  //profile.frequentUsers = profile.frequentUsers || {};
+  if (frequent[member]) {
+    frequent[member] ++;
+  } else frequent[member] = 1;
+  profile = _.extend(profile, {frequentUsers: frequent});
+  var id = req.user._id;
+  User.update({_id: id}, {$set: {profile: profile}}, function (err) {
+    utils.checkAndHandleError(err, 'Cannot update the profile', next);
+  });
+}
+
 /**
  * Update user profile
  */

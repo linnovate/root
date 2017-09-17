@@ -5,6 +5,8 @@ directive('icuSidepane', function() {
     function controller($scope, $state, context, TasksService, $rootScope) {
         $scope.context = context;
 
+        $scope.folders = $scope.folders.data || $scope.folders;
+        $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
         // $scope.people = $scope.people.data || $scope.people;
@@ -59,7 +61,14 @@ directive('icuSidepane', function() {
             state: 'discussions.all',
             display: ['projects', 'people'],
             open: $scope.isCurrentState({state: 'discussions'})
-        }
+        },
+        {
+            name: 'settings',
+            icon: '/icu/assets/img/project.png',
+            state: 'folders.all',
+            display: ['offices'],
+            open: $scope.isCurrentState({state: 'folders'})
+        },
         // , {
         //     name: 'people',
         //     icon: '/icu/assets/img/people.png',
@@ -67,6 +76,13 @@ directive('icuSidepane', function() {
         //     display: ['projects', 'discussions'],
         //     open: false
         // }
+        {
+            name: 'documents',
+            icon: '/icu/assets/img/icon-document.svg',
+            state: 'documents.all',
+            display: ['new', 'received', 'inProgress'],
+            open: $scope.isCurrentState({state: 'documents'})
+        }
         ];
 
     }
@@ -77,8 +93,11 @@ directive('icuSidepane', function() {
         templateUrl: '/icu/components/sidepane/sidepane.html',
         scope: {
             projects: '=',
-            discussions: '='//,
+            discussions: '=',
+            offices: '=',
+            folders: '=',
             //people: '='
+            documents: '=' 
         }
     };
 });

@@ -143,6 +143,8 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 }
 
                 TasksService.create(task).then(function(result) {
+                    TasksService.data.push(result);
+                    TasksService.IsNew = true;
                     params.id = result._id;
                     $state.go(state, params, {
                         reload: true
@@ -234,6 +236,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 createState: '@',
                 discussions: '=',
                 projects: '=',
+                tasks: '=',
                 me: '='
             },
             link: link,

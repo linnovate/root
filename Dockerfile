@@ -8,6 +8,7 @@ RUN npm install
 RUN echo '{}' > /root/.mean
 RUN node tools/scripts/postinstall
 RUN bower install --allow-root
+RUN cd packages/custom/icu && bower install --allow-root
 RUN gulp sass
 ENV PORT 3100
 ENV MONGODB_URI mongodb://db/icu

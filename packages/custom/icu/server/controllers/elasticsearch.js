@@ -115,6 +115,28 @@ var buildSearchResponse = exports.buildSearchResponse = function(type, obj,userI
   	groups["discussion"]=finalResults3;
   }
 
+   if(groups.office!=undefined && groups.office!=null){
+  	var finalResults2=[];
+  	for(var i=0;i<groups.office.length;i++){
+  		var office = groups.office[i];
+  		if(office.creator==userId || inArray(userId,office.watchers)!=-1){
+  			finalResults2.push(office);
+  		}
+  	}
+  	groups["office"]=finalResults2;
+  }
+
+  if(groups.folder!=undefined && groups.folder!=null){
+  	var finalResults2=[];
+  	for(var i=0;i<groups.folder.length;i++){
+  		var folder = groups.folder[i];
+  		if(folder.creator==userId || inArray(userId,folder.watchers)!=-1){
+  			finalResults2.push(folder);
+  		}
+  	}
+  	groups["folder"]=finalResults2;
+  }
+
 
   return groups;
 }

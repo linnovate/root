@@ -31,8 +31,10 @@ exports.defaultOptions = options;
 
 var crud = require('../controllers/crud.js');
 var task = crud('tasks', options);
+var Project = require('../controllers/project');
 
 var Task = require('../models/task'),
+  Discussion = require('../models/discussion'),
   mean = require('meanio');
 
 var Order = require('../models/order')
@@ -62,18 +64,22 @@ Date.prototype.getWeek = function() {
     Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate(), 23, 59, 59, 999)]
 }
 
+
 exports.create = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-
   req.body.discussions = [];
   if (req.body.discussion) {
     req.body.discussions = [req.body.discussion];
     req.body.tags = [];
-  }
-
-  task.create(req, res, next);
+    Discussion.findById(req.body.discussion, function (err, discussion) {
+      if (discussion && discussion.project) {
+        req.body.project = discussion.project
+      }
+      task.create(req, res, next);
+    })
+  } else task.create(req, res, next);
 };
 
 exports.update = function(req, res, next) {
@@ -646,6 +652,18 @@ exports.removeSubTask = function(req, res, next) {
     }
   });
 };
+
+exports.populateSubTasks = function(req, res, next) {
+  Task.populate(req.locals.result, {
+    path: 'subTasks.watchers',
+    model: 'User'
+  }, function(err, tasks) {
+    if (err) {
+      req.locals.error = err;
+    } else req.locals.result = tasks;
+    next();
+  })
+}
 
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;

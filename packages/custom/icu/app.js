@@ -33,7 +33,7 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('css', '../lib/angular-ui-select/dist/select.css');
     ICU.aggregateAsset('css', '../lib/jquery-ui/themes/pepper-grinder/jquery-ui.min.css');
     ICU.aggregateAsset('css', '../lib/angularjs-color-picker/angularjs-color-picker.css');
-    ICU.aggregateAsset('css', 'eventDrops.css');
+    // ICU.aggregateAsset('css', 'eventDrops.css');
 
     ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
     ICU.aggregateAsset('js', '../lib/angular-ui-select/dist/select.js');
@@ -85,10 +85,19 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.tasklist',
         'mean.icu.ui.tasklistdirective',
         'mean.icu.ui.tasklistFilter',
+        'mean.icu.ui.folderlistFilter',
+        'mean.icu.ui.usersFilter',
         'mean.icu.ui.taskdetails',
         'mean.icu.ui.projectlist',
+        'mean.icu.ui.documentlist',
         'mean.icu.ui.projectlistdirective',
         'mean.icu.ui.projectdetails',
+        'mean.icu.ui.officelist',
+        'mean.icu.ui.officelistdirective',
+        'mean.icu.ui.officedetails',
+        'mean.icu.ui.folderlist',
+        'mean.icu.ui.folderlistdirective',
+        'mean.icu.ui.folderdetails',
         'mean.icu.ui.discussionlist',
         'mean.icu.ui.discussionlistdirective',
         'mean.icu.ui.discussiondetails',
@@ -108,6 +117,8 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.usersservice',
         'mean.icu.data.notificationsservice',
         'mean.icu.data.projectsservice',
+        'mean.icu.data.officesservice',
+        'mean.icu.data.foldersservice',
         'mean.icu.data.orderservice',
         'mean.icu.data.discussionsservice',
         'mean.icu.data.tasksservice',
@@ -118,6 +129,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.circlesservice',
         'mean.icu.data.warningsservice',
         'mean.icu.data.eventdropsservice',
+        'mean.icu.data.layoutservice',
         'mean.icu.decorators.pdsDecorator',
         'infinite-scroll',
         'mean.icu.ui.modaldeletetasksbyentity',

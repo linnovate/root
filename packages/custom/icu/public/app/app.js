@@ -4,6 +4,7 @@ angular.module('mean.icu').config([
     function($meanStateProvider) {
         var LIMIT = 25;
         var SORT = 'created';
+        var BIGLIMIT = 2500;
 
         var capitalize = function(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
@@ -19,11 +20,22 @@ angular.module('mean.icu').config([
                     if (!service[getFn]) {
                         getFn = 'getById';
                     }
-                    return service[getFn]($stateParams.entityId,
+                    if(service.IsNew)
+                    {
+                        return service[getFn]($stateParams.entityId,
+                        $stateParams.start,
+                        BIGLIMIT,
+                        $stateParams.sort,
+                        $stateParams.starred);
+                    }
+                    else
+                    {
+                        return service[getFn]($stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
                         $stateParams.sort,
                         $stateParams.starred);
+                    }
                 }
             ];
 
@@ -171,6 +183,106 @@ angular.module('mean.icu').config([
                     }
                 }
             };
+        }
+
+        function getOfficeDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/office-details/office-details.html',
+                        controller: 'OfficeDetailsController'
+                    }
+                },
+                params: {
+                    nameFocused: false
+                },
+                resolve: {
+                    entity: function($stateParams, offices, OfficesService) {
+                        var office = _(offices.data || offices).find(function(t) {
+                            return t._id === $stateParams.id;
+                        });
+
+                        if (!office) {
+                            return OfficesService.getById($stateParams.id).then(function(office) {
+                                return office;
+                            });
+                        } else {
+                            return office;
+                        }
+                    },
+                    folders: function(FoldersService, $stateParams) {
+                        return FoldersService.getByOfficeId($stateParams.id);
+                    },
+                    people: function(UsersService) {
+                        return UsersService.getAll();
+                    }
+                }
+            };
+        }
+
+            function getFolderDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/folder-details/folder-details.html',
+                        controller: 'FolderDetailsController'
+                    }
+                },
+                params: {
+                    nameFocused: false
+                },
+                resolve: {
+                    entity: function($stateParams, folders, FoldersService) {
+                        var folder = _(folders.data || folders).find(function(t) {
+                            return t._id === $stateParams.id;
+                        });
+
+                        if (!folder) {
+                            return FoldersService.getById($stateParams.id).then(function(folder) {
+                                return folder;
+                            });
+                        } else {
+                            return folder;
+                        }
+                    },
+                    tasks: function(TasksService, $stateParams) {
+                        return TasksService.getByFolderId($stateParams.id);
+                    },
+                    people: function(UsersService) {
+                        return UsersService.getAll();
+                    }
+                }
+            };
+        }
+
+        function getDetailspaneModal() {
+            return {
+                url: '/modal',
+                onEnter: ['$stateParams', '$state', '$uibModal', '$resource', 'LayoutService', function($stateParams, $state, $uibModal, $resource, LayoutService) {
+                    $uibModal.open({
+                        templateUrl: "/icu/components/detailspane/detailspane-modal.html",
+                        size: 'lg',
+                        controller: ['$scope', function($scope) {
+                            $scope.cancel = function() {
+                                $scope.$dismiss();
+                            };
+                        }]
+                    }).result.finally(function() {
+                        LayoutService.unClick();
+                        $state.go('^');      
+                    });
+                }]
+            }
         }
 
         function getDiscussionDetailsState(urlPrefix) {
@@ -429,6 +541,30 @@ angular.module('mean.icu').config([
                             return [];
                         });
                     },
+                    tasks: function(TasksService) {
+                        return TasksService.getAll(0, 0, SORT).then(function(data) {
+                            TasksService.data = data.data || data;
+                            return data;
+                        }, function(err) {
+                            return [];
+                        });
+                    },
+                    offices: function(OfficesService) {
+                        return OfficesService.getAll(0, 0, SORT).then(function(data) {
+                            OfficesService.data = data.data || data;
+                            return data;
+                        }, function(err) {
+                            return [];
+                        });
+                    },
+                    folders: function(FoldersService) {
+                        return FoldersService.getAll(0, 0, SORT).then(function(data) {
+                            FoldersService.data = data.data || data;
+                            return data;
+                        }, function(err) {
+                            return [];
+                        });
+                    },
                     people: function(UsersService) {
                         return UsersService.getAll();
                     }
@@ -499,6 +635,34 @@ angular.module('mean.icu').config([
                         resolve: {
                             userProjects: function(ProjectsService, $stateParams) {
                                 return ProjectsService.getByUserId($stateParams.id);
+                            }
+                        }
+                    }
+                }
+            })
+            .state('main.people.byentity.details.offices', {
+                url: '/offices',
+                views: {
+                    tab: {
+                        templateUrl: '/icu/components/user-details/tabs/offices/offices.html',
+                        controller: 'UserOfficesController',
+                        resolve: {
+                            userOffices: function(OfficesService, $stateParams) {
+                                return OfficesService.getByUserId($stateParams.id);
+                            }
+                        }
+                    }
+                }
+            })
+            .state('main.people.byentity.details.folders', {
+                url: '/folders',
+                views: {
+                    tab: {
+                        templateUrl: '/icu/components/user-details/tabs/folders/folders.html',
+                        controller: 'UserFoldersController',
+                        resolve: {
+                            userFolders: function(FoldersService, $stateParams) {
+                                return FoldersService.getByUserId($stateParams.id);
                             }
                         }
                     }
@@ -578,6 +742,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return TasksService.getStarred();
                         } else {
+                            if (typeof TasksService.data !== 'undefined'){
+                                $stateParams.limit = TasksService.data.length;
+                            }
                             return TasksService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -587,17 +754,20 @@ angular.module('mean.icu').config([
             })
             .state('main.tasks.all.details', getTaskDetailsState())
             .state('main.tasks.all.details.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.all.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.all.details.documents', getDetailsTabState('task', 'documents'))
         // .state('main.tasks.all.details.subtasks', getDetailsSubTasksState())
 
         .state('main.tasks.byentity', generateStateByEntity('task'))
             .state('main.tasks.byentity.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byentity.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.documents', getDetailsTabState('task', 'documents'))
             .state('main.tasks.byentity.tasks', getDetailsTabState('task', 'tasks'))
         // .state('main.tasks.byentity.subtasks', getDetailsSubTasksState())
 
         .state('main.tasks.byentity.details', getTaskDetailsState())
             .state('main.tasks.byentity.details.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.details.documents', getDetailsTabState('task', 'documents'))
         // .state('main.tasks.byentity.details.subtasks', getDetailsSubTasksState())
 
@@ -624,6 +794,9 @@ angular.module('mean.icu').config([
                     if ($stateParams.starred) {
                         return TasksService.getStarredByassign();
                     } else {
+                        if (typeof TasksService.data !== 'undefined'){
+                                $stateParams.limit = TasksService.data.length;
+                        }
                         return TasksService.getMyTasks($stateParams.start,
                             $stateParams.limit,
                             $stateParams.sort);
@@ -632,9 +805,11 @@ angular.module('mean.icu').config([
             }
         })
             .state('main.tasks.byassign.activities', getDetailsByAssignTabState('activities'))
+            .state('main.tasks.byassign.activities.modal', getDetailspaneModal())
             .state('main.tasks.byassign.documents', getDetailsByAssignTabState('documents'))
             .state('main.tasks.byassign.details', getTaskDetailsState())
             .state('main.tasks.byassign.details.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byassign.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byassign.details.documents', getDetailsTabState('task', 'documents'))
 
 
@@ -667,9 +842,11 @@ angular.module('mean.icu').config([
             }
         })
             .state('main.tasks.byparent.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byparent.activities.modal', getDetailspaneModal())
             .state('main.tasks.byparent.documents', getDetailsTabState('task', 'documents'))
             .state('main.tasks.byparent.details', getTaskDetailsState())
             .state('main.tasks.byparent.details.activities', getDetailsTabState('task', 'activities'))
+            .state('main.tasks.byparent.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byparent.details.documents', getDetailsTabState('task', 'documents'))
 
 
@@ -708,6 +885,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return ProjectsService.getStarred();
                         } else {
+                            if (typeof ProjectsService.data !== 'undefined'){
+                                $stateParams.limit = ProjectsService.data.length;
+                            }
                             return ProjectsService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -717,16 +897,19 @@ angular.module('mean.icu').config([
             })
             .state('main.projects.all.details', getProjectDetailsState())
             .state('main.projects.all.details.activities', getDetailsTabState('project', 'activities'))
+            .state('main.projects.all.details.activities.modal', getDetailspaneModal())
             .state('main.projects.all.details.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.all.details.tasks', getDetailsTabState('project', 'tasks'))
 
         .state('main.projects.byentity', generateStateByEntity('project'))
             .state('main.projects.byentity.activities', getDetailsTabState('project', 'activities'))
+            .state('main.projects.byentity.activities.modal', getDetailspaneModal())
             .state('main.projects.byentity.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.byentity.tasks', getDetailsTabState('project', 'tasks'))
 
         .state('main.projects.byentity.details', getProjectDetailsState())
             .state('main.projects.byentity.details.activities', getDetailsTabState('project', 'activities'))
+            .state('main.projects.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.projects.byentity.details.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.byentity.details.tasks', getDetailsTabState('project', 'tasks'))
 
@@ -765,6 +948,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return DiscussionsService.getStarred();
                         } else {
+                            if (typeof DiscussionsService.data !== 'undefined'){
+                                $stateParams.limit = DiscussionsService.data.length;
+                            }
                             return DiscussionsService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -774,18 +960,148 @@ angular.module('mean.icu').config([
             })
             .state('main.discussions.all.details', getDiscussionDetailsState())
             .state('main.discussions.all.details.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.all.details.activities.modal', getDetailspaneModal())
             .state('main.discussions.all.details.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.discussions.all.details.tasks', getDetailsTabState('discussion', 'tasks'))
 
         .state('main.discussions.byentity', generateStateByEntity('discussion'))
             .state('main.discussions.byentity.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.byentity.activities.modal', getDetailspaneModal())
             .state('main.discussions.byentity.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.discussions.byentity.tasks', getDetailsTabState('discussion', 'tasks'))
 
         .state('main.discussions.byentity.details', getDiscussionDetailsState())
             .state('main.discussions.byentity.details.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.discussions.byentity.details.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.discussions.byentity.details.tasks', getDetailsTabState('discussion', 'tasks'))
+
+
+        .state('main.offices', {
+            url: '/offices',
+            views: {
+                middlepane: {
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function($state, discussions, context) {
+                        if ($state.current.name === 'main.offices') {
+                            if (discussions.data.length) {
+                                $state.go('.byentity', {
+                                    entity: context.entityName,
+                                    entityId: context.entityId
+                                });
+                            } else {
+                                $state.go('.all');
+                            }
+                        }
+                    }
+                }
+            }
+        })
+            .state('main.offices.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('office'),
+                resolve: {
+                    offices: function(OfficesService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return OfficesService.getStarred();
+                        } else {
+                            if (typeof OfficesService.data !== 'undefined'){
+                                $stateParams.limit = OfficesService.data.length;
+                            }
+                            return OfficesService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.offices.all.details', getOfficeDetailsState())
+            .state('main.offices.all.details.activities', getDetailsTabState('office', 'activities'))
+            .state('main.offices.all.details.activities.modal', getDetailspaneModal())
+            .state('main.offices.all.details.documents', getDetailsTabState('office', 'documents'))
+            .state('main.offices.all.details.folders', getDetailsTabState('office', 'folders'))
+
+        .state('main.offices.byentity', generateStateByEntity('office'))
+            .state('main.offices.byentity.activities', getDetailsTabState('office', 'activities'))
+            .state('main.offices.byentity.activities.modal', getDetailspaneModal())
+            .state('main.offices.byentity.documents', getDetailsTabState('office', 'documents'))
+            .state('main.offices.byentity.folders', getDetailsTabState('office', 'folders'))
+
+        .state('main.offices.byentity.details', getOfficeDetailsState())
+            .state('main.offices.byentity.details.activities', getDetailsTabState('office', 'activities'))
+            .state('main.offices.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.offices.byentity.details.documents', getDetailsTabState('office', 'documents'))
+            .state('main.offices.byentity.details.folders', getDetailsTabState('office', 'folders'))
+
+        .state('main.folders', {
+            url: '/folders',
+            views: {
+                middlepane: {
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function($state, discussions, context) {
+                        if ($state.current.name === 'main.folders') {
+                            if (discussions.data.length) {
+                                $state.go('.byentity', {
+                                    entity: context.entityName,
+                                    entityId: context.entityId
+                                });
+                            } else {
+                                $state.go('.all');
+                            }
+                        }
+                    }
+                }
+            }
+        })
+            .state('main.folders.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('folder'),
+                resolve: {
+                    folders: function(FoldersService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return FoldersService.getStarred();
+                        } else {
+                            if (typeof FoldersService.data !== 'undefined'){
+                                $stateParams.limit = FoldersService.data.length;
+                            }
+                            return FoldersService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.folders.all.details', getFolderDetailsState())
+            .state('main.folders.all.details.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.folders.all.details.activities.modal', getDetailspaneModal())
+            .state('main.folders.all.details.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.all.details.tasks', getDetailsTabState('folder', 'tasks'))
+
+        .state('main.folders.byentity', generateStateByEntity('folder'))
+            .state('main.folders.byentity.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.folders.byentity.activities.modal', getDetailspaneModal())
+            .state('main.folders.byentity.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.byentity.folders', getDetailsTabState('folder', 'folders'))
+
+        .state('main.folders.byentity.details', getFolderDetailsState())
+            .state('main.folders.byentity.details.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.folders.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.folders.byentity.details.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.byentity.details.tasks', getDetailsTabState('folder', 'tasks'))
 
         .state('main.search', {
             url: '/search/:query',
@@ -827,17 +1143,32 @@ angular.module('mean.icu').config([
         })
             .state('main.search.task', getTaskDetailsState('/task'))
             .state('main.search.task.activities', getDetailsTabState('task', 'activities'))
+            .state('main.search.task.activities.modal', getDetailspaneModal())
             .state('main.search.task.documents', getDetailsTabState('task', 'documents'))
 
         .state('main.search.project', getProjectDetailsState('/project'))
             .state('main.search.project.activities', getDetailsTabState('project', 'activities'))
+            .state('main.search.project.activities.modal', getDetailspaneModal())
             .state('main.search.project.documents', getDetailsTabState('project', 'documents'))
             .state('main.search.project.tasks', getDetailsTabState('project', 'tasks'))
 
         .state('main.search.discussion', getDiscussionDetailsState('/discussion'))
             .state('main.search.discussion.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.search.discussion.activities.modal', getDetailspaneModal())
             .state('main.search.discussion.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.search.discussion.tasks', getDetailsTabState('discussion', 'tasks'))
+
+        .state('main.search.office', getOfficeDetailsState('/office'))
+            .state('main.search.office.activities', getDetailsTabState('office', 'activities'))
+            .state('main.search.office.activities.modal', getDetailspaneModal())
+            .state('main.search.office.documents', getDetailsTabState('office', 'documents'))
+            .state('main.search.office.tasks', getDetailsTabState('office', 'tasks'))
+
+        .state('main.search.folder', getFolderDetailsState('/folder'))
+            .state('main.search.folder.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.search.folder.activities.modal', getDetailspaneModal())
+            .state('main.search.folder.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.search.folder.tasks', getDetailsTabState('folder', 'tasks'))
 
         .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
             .state('main.search.attachment.versions', getAttachmentDetailsTabState())
@@ -852,7 +1183,46 @@ angular.module('mean.icu').config([
             controller: function(FilesService) {
                 FilesService.getByPath()
             }
-        });
+        })
+        .state('main.documents', {
+            url: '/docuoments',
+            views: {
+                middlepane: {
+                    //hack around the fact that state current name is initialized in controller only
+                    template: '',
+                    controller: function($state, projects, context) {
+                        if ($state.current.name === 'main.docuoments') {
+                            if (projects.data.length) {
+                                $state.go('.byentity', {
+                                    entity: context.entityName,
+                                    entityId: context.entityId
+                                });
+                            } else {
+                                $state.go('.all');
+                            }
+                        }
+                    }
+                }
+            }
+        })
+            .state('main.documents.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('document'),
+                resolve: {
+                    documents: function() {
+                
+                            return {
+                                title:"txt"
+                            }
+                        }
+                }
+            });
     }
 ]);
 

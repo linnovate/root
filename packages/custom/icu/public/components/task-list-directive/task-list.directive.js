@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
-    .directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context, UsersService) {
+    .directive('icuTaskList', function ($state, $uiViewScroll, $stateParams, $timeout, context, UsersService, LayoutService) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -137,6 +137,8 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
 
                         $scope.tasks.push(_(newTask).clone());
 
+                        TasksService.data.push(task);
+
                         return task;
                     });
                 } else if (task.__state === creatingStatuses.Created) {
@@ -237,6 +239,9 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                         nameFocused: nameFocused
                     });
                 }
+
+                LayoutService.clicked();
+                
             };
 
             $scope.isCurrentState = function (id) {

@@ -5,7 +5,11 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
         task: 'tasks',
         user: 'people',
         project: 'projects',
-        discussion: 'discussions'
+        discussion: 'discussions',
+        document:'documents',
+        office: 'offices',
+        folder: 'folders'
+
     };
 
     return {

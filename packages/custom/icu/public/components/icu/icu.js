@@ -8,22 +8,56 @@ angular.module('mean.icu').controller('IcuController',
         $stateParams,
         projects,
         discussions,
+        offices,
+        folders,
         people,
         context,
+        tasks,
+        LayoutService,
         TasksService) {
     $scope.menu = {
         isHidden: false
     };
 
+    $scope.detailsPane = {
+        isHidden: false
+    }
+
     $scope.me = me;
+    $scope.folders = folders.data || folders;
+    $scope.offices = offices.data || offices;
+    $scope.tasks = tasks.data || tasks;
     $scope.projects = projects.data || projects;
     $scope.discussions = discussions.data || discussions;
     $scope.people = people.data || people;
     var entityMap = {
         'project': 'projects',
         'discussion': 'discussions',
-        'user': 'people'
+        'user': 'people',
+        'office':'offices',
+        'folder': 'folders'
     };
+
+    $scope.getLayoutIcon = function() {
+      return LayoutService.getLayoutIcon();
+    }
+
+    $scope.changeLayout = function() {
+      var state = LayoutService.changeLayout();
+      if (state === 4) {
+        $scope.detailsPane.isHidden = false;
+        $scope.menu.isHidden = false;
+      } else if (state === 3) {
+        $scope.detailsPane.isHidden = false;
+        $scope.menu.isHidden = true;
+      } else if (state === 2) {
+          $scope.detailsPane.isHidden = true;
+          $scope.menu.isHidden = true;
+      } else {
+          $scope.detailsPane.isHidden = true;
+          $scope.menu.isHidden = false;
+      }
+    }
     
     //Made By OHAD
     //$state.go('socket');
@@ -60,6 +94,22 @@ angular.module('mean.icu').controller('IcuController',
                         context.entityName = 'discussion';
                         context.entity = $scope.discussions[0];
                         context.entityId = $scope.discussions[0]._id;
+                    } else if ($scope.offices[0] && restoredContext.main !== 'office') {
+                        context.entityName = 'office';
+                        context.entity = $scope.offices[0];
+                        context.entityId = $scope.offices[0]._id;
+                    } else if ($scope.discussions[0] && restoredContext.main === 'office') {
+                        context.entityName = 'discussion';
+                        context.entity = $scope.discussions[0];
+                        context.entityId = $scope.discussions[0]._id;
+                    } else if ($scope.folders[0] && restoredContext.main !== 'folder') {
+                        context.entityName = 'folder';
+                        context.entity = $scope.folders[0];
+                        context.entityId = $scope.folders[0]._id;
+                    } else if ($scope.discussions[0] && restoredContext.main === 'folder') {
+                        context.entityName = 'discussion';
+                        context.entity = $scope.discussions[0];
+                        context.entityId = $scope.discussions[0]._id;
                     } else {
                         context.entityName = 'all';
                         context.entity = undefined;
@@ -73,6 +123,7 @@ angular.module('mean.icu').controller('IcuController',
                 context.entityId = undefined;
             }
         }
+
     }
 
     var state = $state.current;
@@ -87,11 +138,17 @@ angular.module('mean.icu').controller('IcuController',
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
         var state = toState;
         state.params = toParams;
-    initializeContext(state);
+        initializeContext(state);
         initializeContext(state);
     });
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+      if (toState.url !== '/modal') {
+        if (LayoutService.show() && $scope.detailsPane.isHidden) {
+            $state.go(toState.name + '.modal');
+        }
+      }
+
         // console.log(arguments);
     });
 });

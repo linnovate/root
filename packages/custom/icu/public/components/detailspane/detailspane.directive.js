@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('mean.icu.ui.detailspane', [])
-.directive('icuDetailspane', function () {
+.directive('icuDetailspane', function ($uibModal) {
     function controller() {
 
     }
 
-    function link($scope, $element) {
+    function link($scope, $element, $attr) {
         var changeHeight = function (event) {
             var description = $element.find('.description');
             var tabContent = $element.find('.tab-content');
@@ -33,10 +33,23 @@ angular.module('mean.icu.ui.detailspane', [])
         scope: {
             me: '=',
             projects: '=',
-            discussions: '='
+            discussions: '=',
+            offices: '=',
+            folders: '=',
         },
         controller: controller,
         link: link,
         templateUrl: '/icu/components/detailspane/detailspane.html'
     };
+});
+
+angular.module('mean.icu').controller('DetailsPaneModalInstanceCtrl', function ($uibModalInstance) {
+
+  function ok () {
+    $uibModalInstance.close();
+  };
+
+  function cancel () {
+    $uibModalInstance.dismiss('cancel');
+  };
 });

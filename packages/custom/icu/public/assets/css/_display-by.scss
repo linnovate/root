@@ -88,6 +88,30 @@
             }
         }
 
+        &.offices {
+            ul {
+                li {
+                    .tag-color {
+                        @include tag(5px);
+                        float: right;
+                        margin-right: 23px;
+                    }
+                }
+            }
+        }
+
+        &.folders {
+            ul {
+                li {
+                    .tag-color {
+                        @include tag(5px);
+                        float: right;
+                        margin-right: 23px;
+                    }
+                }
+            }
+        }
+
         &.people {
             ul {
                 li {
@@ -116,8 +140,12 @@
             }
         }
 
-        &.projects, &.discussions {
+        &.projects, &.discussions, &.offices, &.folders {
             border-bottom: 1px solid #424e52;
+        }
+
+        .go-to-Offices {
+            border-top: 1px solid #424e52;
         }
     }
 

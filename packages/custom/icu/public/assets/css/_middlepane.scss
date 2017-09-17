@@ -40,18 +40,24 @@
     background-color: $cream;
     float: left;
     position: relative;
+    transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
+    &.wide {
+        width: 100%;
+    }
 
     .header {
         height: $header-height;
         border-bottom: 1px solid $light-grey1;
 
-        .hide-menu {
+        .hide-menu, .hide-details {
             float: left;
             height: $header-height;
             width: $header-height;
             background-color: white;
             border: 1px solid $light-grey1;
-            background: url('/icu/assets/img/menu.png') no-repeat center center;
+            background-repeat: no-repeat;
+            background-position: center center;
+            //background: url('/icu/assets/img/menu.png') no-repeat center center;
 
             .menu-icon {
                 padding-left: 5px;
@@ -80,11 +86,20 @@
             }
         }
 
+        .hide-details:before {
+            margin-left: 35px;
+        }
+
+        .hide-details.open:before {
+            border-right: none;
+            border-left: 5px solid $orange;
+        }
+
         .search {
             position: relative;
             float: left;
             margin-top: 1px;
-            width: calc(100% - #{$header-height});
+            width: calc(100% - #{$header-height} - #{$header-height});
            
             .close-icon {
                 position: absolute;
@@ -156,7 +171,28 @@
                     font-weight: normal;
                     padding: 0px 10px;
                 }
+
+                &.office {
+                    border-radius: 14px;
+                    font-weight: normal;
+                    padding: 0px 10px;
+                }
+
+                &.folder {
+                    border-radius: 14px;
+                    font-weight: normal;
+                    padding: 0px 10px;
+                }
             }
+            .showInPrint {
+                display: none;
+            }
+        }
+        .more-info {
+            display: none;
+        }
+        .discussion-info {
+            display: none;
         }
     }
 
@@ -187,6 +223,9 @@
                 top: -30px;
                 right: inherit;
              }
+        }
+        .print-wrapper {
+            float: right;
         }
 
         .right-wrapper {

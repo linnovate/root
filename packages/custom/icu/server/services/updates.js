@@ -5,7 +5,9 @@ var UpdateModel = require('../models/update.js');
 var entityIssueMap = {
   tasks: 'task',
   projects: 'project',
-  discussions: 'discussion'
+  discussions: 'discussion',
+  offices: 'office',
+  folders: 'folder'
 };
 
 module.exports = function(entityName, options) {

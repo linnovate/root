@@ -4,7 +4,7 @@ angular.module('mean.icu.data.tasksservice', [])
 .service('TasksService', function (ApiUri, $http, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
     var EntityPrefix = '/tasks';
     var filterValue = false;
-    var data, tabData;
+    var data, tabData, IsNew;
 
     function getAll(start, limit, sort) {
         var qs = querystring.encode({
@@ -16,9 +16,16 @@ angular.module('mean.icu.data.tasksservice', [])
         if (qs.length) {
             qs = '?' + qs;
         }
+        // return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
+        // 	WarningsService.setWarning(result.headers().warning);
+        //     return PaginationService.processResponse(result.data);
+        // });
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
-            return PaginationService.processResponse(result.data);
+            return result.data;
+        }, function(err) {return err}).then(function (some) {
+            var data = some.content ? some : [];
+            return PaginationService.processResponse(data);
         });
     }
 
@@ -74,7 +81,8 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    function update(task) {
+    function update(task, data) {
+        if (data) task.frequentUser = data.frequentUser;
         if (task.subTasks && task.subTasks.length && task.subTasks[task.subTasks.length-1] && !task.subTasks[task.subTasks.length-1]._id) {
             var subTask = task.subTasks[task.subTasks.length-1];
         }
@@ -163,6 +171,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function saveTemplate(id, name){
+        console.log('ddddddddddd', name);
         return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
@@ -220,6 +229,8 @@ angular.module('mean.icu.data.tasksservice', [])
         getByUserId: getByEntityId('users'),
         getByProjectId: getByEntityId('projects'),
         getByDiscussionId: getByEntityId('discussions'),
+        getByOfficeId: getByEntityId('offices'),
+        getByFolderId: getByEntityId('folders'),
         search: search,
         create: create,
         update: update,
@@ -239,6 +250,7 @@ angular.module('mean.icu.data.tasksservice', [])
         deleteTemplate: deleteTemplate,
         assign: assign,
         data: data,
-        tabData: tabData
+        tabData: tabData,
+        IsNew: IsNew
     };
 });

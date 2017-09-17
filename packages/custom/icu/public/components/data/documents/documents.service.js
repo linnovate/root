@@ -11,8 +11,8 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
-         function delete1(id) {
-             return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+        function delete1(id) {
+            return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
              	//WarningsService.setWarning(result.headers().warning);
                  return result.status;
              });
@@ -46,6 +46,20 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
+        function getByOfficeId(id) {
+            return $http.get(ApiUri + '/offices/' + id + EntityPrefix).then(function (result) {
+            	WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function getByFolderId(id) {
+            return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function (result) {
+            	WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
         function getByUserId(id) {
             return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
@@ -53,16 +67,7 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
-        function saveAttachments(data, file) {
-
-            // For SIze of the file - Angular sacks!
-            //file = file[0];
-            // file[1] = file[0];
-            // file[2] = file[0];
-            // file[3] = file[0];
-            // file[4] = file[0];
-            // file[5] = file[0];
-            
+        function saveAttachments(data, file){
             return Upload.upload({
                 url: '/api/attachments',
                 fields: data,
@@ -70,14 +75,14 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
-        function updateAttachment(id, data) {
+        function updateAttachment(id, data){
             return $http.post(ApiUri + EntityPrefix + id, data).then(function (result) {
             	WarningsService.setWarning(result.headers().warning);
                 return result.data;
             });
         }
 
-        function getByTasks() {
+        function getByTasks(){
 	        return $http.get(ApiUri + '/tasks/myTasks'  + EntityPrefix).then(function(result) {
 	        	WarningsService.setWarning(result.headers().warning);
 	            return result.data;
@@ -94,6 +99,8 @@ angular.module('mean.icu.data.documentsservice', [])
             getByUserId: getByUserId,
             saveAttachments: saveAttachments,
             updateAttachment: updateAttachment,
-            getByTasks: getByTasks
+            getByTasks: getByTasks,
+            getByOfficeId: getByOfficeId,
+            getByFolderId: getByFolderId
         };
     });

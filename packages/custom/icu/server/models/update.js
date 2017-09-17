@@ -82,6 +82,22 @@ UpdateSchema.statics.project = function (id, cb) {
   })
 };
 
+UpdateSchema.statics.office = function (id, cb) {
+  require('./office');
+  var Office = mongoose.model('Office');
+  Office.findById(id, function (err, office) {
+    cb(err, {room: office.room, title: office.title});
+  });
+};
+
+UpdateSchema.statics.folder = function (id, cb) {
+  require('./folder');
+  var Folder = mongoose.model('Folder');
+  Folder.findById(id, function (err, folder) {
+    cb(err, {room: folder.room, title: folder.title});
+  });
+};
+
 /**
  * Post middleware
  */
