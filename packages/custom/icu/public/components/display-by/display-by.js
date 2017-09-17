@@ -93,6 +93,9 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.visible[$scope.context.entityName] = true;
 
+        $scope.GoToOffices = function() {
+            $state.go('main.offices.all');
+        }
     }
 
         function link($scope, $element, context) {

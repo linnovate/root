@@ -40,7 +40,7 @@ angular.module('mean.icu.ui.tabs')
             sort();
 
             $scope.manageFolders = function () {
-                $state.go('main.folders.byentity.folders', {
+                $state.go('main.folders.byentity.activities', {
                     entity: $scope.entityName,
                     id: $scope.entity._id,
                     entityId: $scope.entity._id

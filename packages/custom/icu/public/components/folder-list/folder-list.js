@@ -11,6 +11,9 @@ angular.module('mean.icu.ui.folderlist', [])
         $scope.folders = folders.data || folders;
         $scope.loadNext = folders.next;
         $scope.loadPrev = folders.prev;
+        if ($scope.folders.length > 0 && !$scope.folders[$scope.folders.length - 1].id) {
+		    $scope.folders = [$scope.folders[0]];
+	    }
 
         function init() {
             if(context.entity){
@@ -158,6 +161,21 @@ angular.module('mean.icu.ui.folderlist', [])
                 }
 
             }
+        }
+
+        if ($scope.folders.length) {
+            if ($state.current.name === 'main.folders.all' ||
+                $state.current.name === 'main.folders.byentity') {
+                navigateToDetails($scope.folders[0]);
+            }
+        } else if (
+            $state.current.name !== 'main.folders.byentity.activities'
+                && $state.current.name !== 'main.folders.byentity.folders'
+                && $state.current.name !== 'main.folders.all'
+                && $state.current.name !== 'main.folders.byentity.details.activities'
+                && $state.current.name !== 'main.folders.byassign.details.activities'
+                ) {
+            $state.go('.activities');
         }
 
     });

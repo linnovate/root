@@ -5,9 +5,10 @@
        data-ng-class="{ 'selected': context.entityName === 'my' }">
         {{ 'myTasks' | i18next }}
     </p>
+    <div ng-if="context.main != 'folders'">
     <p class="title all"
        ui-sref="main.{{context.main}}.all" ui-sref-active="active"
-       data-ng-class="{ 'selected': context.entityName === 'all' }">
+       data-ng-class="{ 'selected': context.entityName === 'all'}" >
         {{ 'all' | i18next }}
         <div class="list {{context.main}}">
         <ul>
@@ -23,9 +24,9 @@
         </ul>
     </div>
     </p>
-
+    
     <p class="intro">{{'display'+context.main+'By' | i18next}}:</p>
-
+    </div>
     <div class="list projects" ng-if="projectsList && (icuDisplayBy.indexOf('projects'))>-1">
         <p ng-click="visible.project = !visible.project" class="title">{{ 'projects' | i18next }}</p>
         <ul ng-if="visible.project">
@@ -87,7 +88,7 @@
         </ul>
     </div>
     <div class="list offices" ng-if="officesList && (icuDisplayBy.indexOf('offices'))>-1">
-        <p ng-click="visible.office = !visible.office" class="title">{{ 'offices' | i18next }}</p>
+        <p ng-click="visible.office = !visible.office" class="title">{{ 'folders' | i18next }}</p>
         <ul ng-if="visible.office">
             <li data-ng-repeat="office in officesList | limitTo: displayLimit['offices']"
                 data-ng-class="{'selected': context.entityName === 'office' && office._id === context.entityId }"
@@ -101,6 +102,7 @@
             <li ng-if="officesList.length > displayLimit['offices']" ng-click="showMore(officesList.length, 'offices')" class="more">{{ 'more' | i18next }}</li>
             <li ng-if="officesList.length == displayLimit['offices'] && displayLimit['offices'] > 3" ng-click="collapse('offices')" class="more">{{ 'less' | i18next }}</li>
         </ul>
+        <p class="title go-to-Offices" ng-click="GoToOffices()"> {{ 'offices' | i18next }} </p>
     </div>
     <div class="list folders" ng-if="foldersList && (icuDisplayBy.indexOf('folders'))>-1">
         <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}</p>
