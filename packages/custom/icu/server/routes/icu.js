@@ -327,10 +327,10 @@ module.exports = function(Icu, app) {
 
    app.route('/api/templates*').all(entity('templateDocs'));
   app.route('/api/templates').post(templateDocs.upload).get(templateDocs.getAll);
-  app.route('/api/documents/:id([0-9a-fA-F]{24})')
+  app.route('/api/templates/:id([0-9a-fA-F]{24})')
   .get(templateDocs.getById)
   .post(templateDocs.update)
   .delete(templateDocs.deleteTemplate);
-   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(updates.getByEntity);
+   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
 
 };
