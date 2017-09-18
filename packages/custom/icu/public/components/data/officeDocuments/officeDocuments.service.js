@@ -1,11 +1,17 @@
 'use strict';
 
 angular.module('mean.icu.data.officedocumentsservice', [])
-.service('OfficeDocumentsService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService) {
-    var EntityPrefix = '/officeDocuments';
-    var data, selected;
+    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService) {
+        var EntityPrefix = '/documents';
 
-         function delete(id) {
+          function getAll() {
+            return $http.get(ApiUri + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+         function delete2(id) {
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                  return result.status;
              });
@@ -75,7 +81,8 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
         return {
-            delete:delete,
+            getAll: getAll,
+            delete:delete2,
             getById: getById,
             getByTaskId: getByTaskId,
             getByProjectId: getByProjectId,
