@@ -30,6 +30,12 @@ var UpdateSchema = new Schema({
   type: {
     type: String
   },
+  TaskDue: {
+    type: String
+  },
+  miscData: {
+    type: String
+  },
   userObj: {
     type: Schema.ObjectId,
     ref: 'User'

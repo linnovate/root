@@ -162,11 +162,11 @@ angular.module('mean.icu.ui.taskdetails', [])
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
         };
 
-        if ($scope.task.due) $scope.task.due = new Date($scope.task.due);
+//        if ($scope.task.due) $scope.task.due = new Date($scope.task.due);
 
         $scope.dueOptions = {
             onSelect: function() {
-                $scope.update($scope.task);
+                $scope.updateDue($scope.task);
             },
             onClose: function() {
                 if ($scope.checkDate()){
@@ -240,6 +240,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
+            console.log('updateAndNotify') ;
             
             task.status = $scope.statuses[1];
 
@@ -272,8 +273,39 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
         //END Made By OHAD
 
+        // Nevo
+        $scope.updateDue = function(task) {
+            console.log('updateDue') ;
+            task.status = $scope.statuses[1];
+
+            if (context.entityName === 'discussion') {
+                task.discussion = context.entityId;
+            }
+
+            TasksService.updateDue(task, me).then(function(result) {
+                ActivitiesService.data.push(result);
+            });
+
+            TasksService.update(task).then(function(result) {
+                if (context.entityName === 'project') {
+                    var projId = result.project ? result.project._id : undefined;
+                    if (projId !== context.entityId) {
+                        $state.go('main.tasks.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {
+                            reload: true
+                        });
+                    }
+                }
+            });
+
+        };
+
         $scope.update = function(task, type, proj) {
+            console.log('update***') ;
             if (proj && proj !== '') {
+                console.log('proj1') ;
                 $scope.createProject(proj, function(result) {
                     task.project = result;
                     TasksService.update(task).then(function(result) {
@@ -293,9 +325,15 @@ angular.module('mean.icu.ui.taskdetails', [])
                 });
             }
             if (context.entityName === 'discussion') {
+                console.log('proj2') ;
                 task.discussion = context.entityId;
             }
             TasksService.update(task).then(function(result) {
+                console.log('proj3') ;
+                // TasksService.assign(task, {"ZZZ": "yyy"}).then(function(result) {
+                //     ActivitiesService.data.push(result);
+                // });
+    
                 task.PartTitle = task.title;
                 if (context.entityName === 'project') {
                     var projId = result.project ? result.project._id : undefined;

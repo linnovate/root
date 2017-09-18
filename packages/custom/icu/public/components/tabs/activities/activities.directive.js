@@ -81,6 +81,19 @@ angular.module('mean.icu.ui.tabs')
                     type: 'object',
                     value: 'issue'
                 }],
+                updateDue: [{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'updateDue'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'TaskDue'
+                }],
                 copy: [{
                     type: 'text',
                     value: 'copiedThe'
