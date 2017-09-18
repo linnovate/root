@@ -1,18 +1,19 @@
-<td class="move">
+<td  class="move" style="width: 15px;">
     <i ng-if="data.folder._id" class="fa fa-ellipsis-v"></i>
     <i ng-if="data.folder._id" class="fa fa-ellipsis-v"></i>
 </td>
 <td class="id" ng-if="data.folder._id">{{data.index + 1}}</td>
 <td class="name"
-    ng-attr-colspan="{{data.folder._id ? undefined : 2}}"
+    ng-attr-colspan="{{data.folder._id ? undefined : 5}}"
     title="{{data.folder.title}}"
     ng-attr-contenteditable="{{!data.displayOnly}}"
     placeholder="{{'createNewFolder' | i18next}}"
     strip-br="true"
-    ng-change="data.searchCb(data.folder.title) || data.updateCb(data.folder)"
+    ng-attr-tabindex="{{ data.folder._id ? undefined : '3'}}"
+    ng-change="data.searchCb(data.folder) || data.updateCb(data.folder)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-model="data.folder.PartTitle"
-    ng-blur="data.hideAutoCompleteCb(data.folder)">
+    ng-blur="data.hideAutoCompleteCb(data.folder)"
+    ng-model="data.folder.PartTitle">
 </td>
 <td class="office">
     <span class="tag office"
@@ -21,7 +22,8 @@
         {{data.folder.office.title}}
     </span>
 </td>
-<td class="status col-sm-2" ng-class="data.folder.status">{{data.folder.status | i18next }}</td>
-<td class="arrow">
-    <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+<td ng-if="data.folder._id" class="status col-sm-2"  ng-class="data.folder.status">{{data.folder.status | i18next }}</td>
+<td ng-if="data.folder._id" class="due">{{data.folder.due | date: 'dd.MM.yyyy'}}</td>
+<td class="arrow" ng-if="data.folder._id">
+   <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

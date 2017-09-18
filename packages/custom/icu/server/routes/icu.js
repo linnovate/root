@@ -16,7 +16,7 @@ var eventDrops = require('../controllers/event-drops');
 var office = require('../controllers/office');
 var folder = require('../controllers/folder');
 var documents = require('../controllers/documents');
-
+var templateDocs = require('../controllers/templateDocs');
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
 var entity = require('../middlewares/entity.js');
@@ -149,7 +149,7 @@ module.exports = function(Icu, app) {
   app.route('/api/history/folders/:id([0-9a-fA-F]{24})')
     .get(folder.readHistory);
   app.route('/api/:entity(tasks|discussions|offices|folders)/:id([0-9a-fA-F]{24})/folders')
-    .get(pagination.parseParams, folder.getByDiscussion, folder.getByEntity, pagination.formResponse);
+    .get(pagination.parseParams, folder.getByEntity, pagination.formResponse);
   app.route('/api/:entity(tasks|discussions|offices|folders)/:id([0-9a-fA-F]{24})/folders/starred')
     .get(pagination.parseParams, star.getStarredIds('folders'), folder.getByDiscussion, folder.getByEntity, pagination.formResponse);
 
@@ -174,6 +174,9 @@ module.exports = function(Icu, app) {
   // 	.post(task.addSubTasks)
   app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
   	.get(task.getSubTasks)
+
+// app.route('/api/:entity(discussions|projects|offices|users|folders)/:id([0-9a-fA-F]{24})/folders')
+//     .get(pagination.parseParams, folder.getByEntity, pagination.formResponse);
 
   app.route('/api/:entity(discussions|projects|offices|users|folders)/:id([0-9a-fA-F]{24})/tasks')
     .get(pagination.parseParams, task.getByEntity, pagination.formResponse);
@@ -321,5 +324,15 @@ module.exports = function(Icu, app) {
   .post(documents.update)
   .delete(documents.deleteDocument);
    app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/documents').get(updates.getByEntity);
+
+
+
+   app.route('/api/templates*').all(entity('templateDocs'));
+  app.route('/api/templates').post(templateDocs.upload).get(templateDocs.getAll);
+  app.route('/api/templates/:id([0-9a-fA-F]{24})')
+  .get(templateDocs.getById)
+  .post(templateDocs.update)
+  .delete(templateDocs.deleteTemplate);
+   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
 
 };

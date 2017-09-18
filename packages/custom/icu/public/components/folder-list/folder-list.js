@@ -11,6 +11,9 @@ angular.module('mean.icu.ui.folderlist', [])
         $scope.folders = folders.data || folders;
         $scope.loadNext = folders.next;
         $scope.loadPrev = folders.prev;
+        if ($scope.folders.length > 0 && !$scope.folders[$scope.folders.length - 1].id) {
+		    $scope.folders = [$scope.folders[0]];
+	    }
 
         function init() {
             if(context.entity){
@@ -42,10 +45,9 @@ angular.module('mean.icu.ui.folderlist', [])
  		    $scope.folders = [$scope.folders[0]];
  	    }
 
-        $scope.isCurrentState = function (id) {
-            return $state.current.name.indexOf('main.folders.byentity') === 0 &&
-                $state.current.name.indexOf('details') === -1;
-        };
+        	$scope.isCurrentState = function(ids) {
+		return ids.indexOf($state.current.name) !== -1;
+	};
 
         $scope.changeOrder = function () {
             if($scope.sorting.field != "custom"){
@@ -125,7 +127,7 @@ angular.module('mean.icu.ui.folderlist', [])
         }
 
 
-        $scope.getProjName=function(){
+        $scope.getOfficeName=function(){
             var entityType = $scope.currentContext.entityName;
             if($scope.currentContext!=undefined && $scope.currentContext.entity!=undefined&&
             $scope.currentContext.entity.title!=undefined){
@@ -136,10 +138,7 @@ angular.module('mean.icu.ui.folderlist', [])
                 return $scope.currentContext.entity.name;
             }
             else{
-                if(entityType=="discussion" && DiscussionsService.currentDiscussionName!=undefined){
-                    return DiscussionsService.currentDiscussionName;
-                }
-                else if(OfficesService.currentOfficeName!=undefined){
+                if(OfficesService.currentOfficeName!=undefined){
                     return OfficesService.currentOfficeName;
                 }
                 else{
@@ -154,9 +153,6 @@ angular.module('mean.icu.ui.folderlist', [])
                         if(folder.office!=undefined){
                             result = folder.office.title
                         }
-                        else if(folder.discussions!=undefined && folder.discussions.title!=undefined){
-                            result=folder.discussions[0].title;
-                        }
                         else{
                             result = "you dont have permission";
                         }
@@ -165,6 +161,21 @@ angular.module('mean.icu.ui.folderlist', [])
                 }
 
             }
+        }
+
+        if ($scope.folders.length) {
+            if ($state.current.name === 'main.folders.all' ||
+                $state.current.name === 'main.folders.byentity') {
+                navigateToDetails($scope.folders[0]);
+            }
+        } else if (
+            $state.current.name !== 'main.folders.byentity.activities'
+                && $state.current.name !== 'main.folders.byentity.folders'
+                && $state.current.name !== 'main.folders.all'
+                && $state.current.name !== 'main.folders.byentity.details.activities'
+                && $state.current.name !== 'main.folders.byassign.details.activities'
+                ) {
+            $state.go('.activities');
         }
 
     });
