@@ -11,7 +11,8 @@
                             <span ng-switch-when="object">{{activity[val.value] | i18next}}</span>
                             <span ng-switch-when="deepObject" class="{{val.klass}}">{{activity[val.value[0]][val.value[1]] | i18next}}&nbsp</span>
                             <span ng-switch-when="nbsp">{{' '}}&nbsp</span>
-                            <span ng-switch-when="string">{{activity[val.value] | date:'MM/dd/yy'}}</span>
+                            <span ng-switch-when="date">{{activity[val.value] | date:'MM/dd/yy'}}</span>
+                            <span ng-switch-when="string">{{activity[val.value] | i18next}}</span>
                             <span ng-switch-default>{{val.value | i18next}}</span>
                         </span>
                     </span>

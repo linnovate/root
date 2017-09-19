@@ -75,9 +75,6 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function create(task) {
-        console.log("create") ;
-        console.log(ApiUri + EntityPrefix) ;
-        console.log(JSON.stringify(task)) ; 
         return $http.post(ApiUri + EntityPrefix, task).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
@@ -89,9 +86,7 @@ angular.module('mean.icu.data.tasksservice', [])
         if (task.subTasks && task.subTasks.length && task.subTasks[task.subTasks.length-1] && !task.subTasks[task.subTasks.length-1]._id) {
             var subTask = task.subTasks[task.subTasks.length-1];
         }
-        console.log("update") ;
-        console.log(ApiUri + EntityPrefix + '/' + task._id) ;
-        console.log(JSON.stringify(task)) ; 
+
         return $http.put(ApiUri + EntityPrefix + '/' + task._id, task).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
             for (var i = 0; i < result.data.subTasks.length; i++) {
@@ -198,15 +193,41 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function updateWatcher(task, me, watcher) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'task',
+                issueId: task.id,
+                type: 'updateWatcher',
+                userObj: watcher                
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateStatus(task, me) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'task',
+                issueId: task.id,
+                type: 'updateStatus',
+                status: task.status
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     function updateDue(task, me) {
-        console.log("task.service updateDue") ;
         return ActivitiesService.create({
             data: {
                 issue: 'task',
                 issueId: task.id,
                 type: 'updateDue',
                 TaskDue: task.due
-//                description: ""
             },
             context: {}
         }).then(function(result) {
@@ -273,6 +294,8 @@ angular.module('mean.icu.data.tasksservice', [])
         deleteTemplate: deleteTemplate,
         assign: assign,
         updateDue: updateDue,
+        updateStatus: updateStatus,
+        updateWatcher: updateWatcher,
         data: data,
         tabData: tabData,
         IsNew: IsNew

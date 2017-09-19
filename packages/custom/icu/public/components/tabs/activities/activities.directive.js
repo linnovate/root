@@ -91,9 +91,46 @@ angular.module('mean.icu.ui.tabs')
                 }, {
                     type: 'nbsp'
                 }, {
-                    type: 'string',
+                    type: 'date',
                     value: 'TaskDue'
                 }],
+                updateStatus: [{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'updateStatus'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateWatcher: [{
+                    type: 'text',
+                    value: 'updateWatcher'
+                },{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                },{
+                    type: 'deepObject',
+                    value: ['userObj', 'lastname'],
+                    klass: "user-name"
+                }],                
+                updateColor: [{
+                    type: 'text',
+                    value: 'updateColor'
+                },{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                },{
+                    type: 'deepObject',
+                    value: ['userObj', 'lastname'],
+                    klass: "user-name"
+                }],                
                 copy: [{
                     type: 'text',
                     value: 'copiedThe'

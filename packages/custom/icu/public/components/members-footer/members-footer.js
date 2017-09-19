@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.membersfooter', [])
     .directive('icuMembersFooter', function() {
-        function controller($scope, $injector, context, $stateParams, $timeout, circlesService, UsersService) {
+        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService, UsersService, ActivitiesService,TasksService,ProjectsService) {
 
             var serviceMap = {
                 projects: 'ProjectsService',
@@ -118,6 +118,7 @@ angular.module('mean.icu.ui.membersfooter', [])
             };
 
             $scope.addMember = function(member) {
+
                 $scope.showSelect = false;
                 if (member.type) {
                     if (!$scope.entity.circles) $scope.entity.circles = {};
@@ -128,6 +129,31 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
                 update($scope.entity, member, 'added');
                 $scope.animate = true;
+
+                var task = $scope.entity ;
+                var me = $scope.me ;
+                
+                if (context.entityName === 'discussion') {
+                    task.discussion = context.entityId;
+                }
+                
+                switch(context.main) {
+                    case 'projects':
+                        ProjectsService.updateWatcher(task, me, member).then(function(result) {
+                            ActivitiesService.data = [] ;
+                            ActivitiesService.data.push(result);
+                        });
+                        $state.go('main.projects.all.details.activities', {
+                            entity: 'all'
+                        }, {reload: true});                
+                        break ;
+                    case 'tasks':
+                        TasksService.updateWatcher(task, me, member).then(function(result) {
+                            ActivitiesService.data.push(result);
+                        });
+                        break ;
+                }
+
             };
 
             $scope.deleteMember = function(member) {

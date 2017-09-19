@@ -16,7 +16,7 @@
 
             <div class="status">
                 <div tooltips tooltip-template="{{'status' | i18next}}">
-                    <ui-select ng-model="project.status" on-select="update(project)">
+                    <ui-select ng-model="project.status" on-select="updateStatus(project)">
                         <ui-select-match>
                             <i class='{{$select.selected}}'></i>
                             <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>

@@ -33,6 +33,15 @@ var UpdateSchema = new Schema({
   TaskDue: {
     type: String
   },
+  status: {
+    type: String
+  },
+  color: {
+    type: String
+  },
+  watcher: {
+    type: String
+  },
   miscData: {
     type: String
   },
