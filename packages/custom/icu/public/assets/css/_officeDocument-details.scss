@@ -1,0 +1,35 @@
+.officeDocument-details {
+    .page-content {
+        .detailspane.tabs {
+            .tab {
+                width: calc((100% - 60px) / 2);
+
+                &.two {
+                    width: calc((100% - 60px) / 2);
+                }
+                &.three {
+                    width: calc((100% - 60px) / 3);
+                }
+            }
+        }
+    }
+}
+ul.dropdown-menu {
+	text-align: inherit;
+}
+.oldDate {
+	color:#EF7875;
+}
+.wrap-title {
+	position: relative;
+}
+.tplSaved {
+	transition: height 0.4s;
+    text-align: center;
+    color: #fda102;
+    margin-top: 10px;
+    font-style: italic;
+    width: 100%;
+    position: absolute;
+    top: -25%;
+}   

@@ -11,9 +11,15 @@ var DocumentSchema = new Schema({
   updated: {
     type: Date
   },
-  name: {
+  title: {
     type: String,
     required: true
+  },
+  status: {
+    type: String,
+    required: true,
+    enum: ['new', 'in-progress', 'received', 'done'],
+    default: 'new'
   },
   path: {
     type: String,
@@ -25,17 +31,9 @@ var DocumentSchema = new Schema({
   serial:{ //Simuchin
     type:String
   },
-  documentType: { //docx,pptx,xlsx
-    type: String,
-    required: true
-  },
-  entity: {
-    type: String,
-    required: true
-  },
-  entityId: {
-    type: Schema.Types.ObjectId,
-    required: true
+  folder:{
+    type: Schema.ObjectId,
+    ref: 'Folder'
   },
   creator: {
     type: Schema.ObjectId,
@@ -69,7 +67,11 @@ var DocumentSchema = new Schema({
   },
   relatedDocuments: [{
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: 'Document'
+  }],
+  tags:[{
+    type:String,
+    default:"new"
   }],
 
   watchers: [{
@@ -78,13 +80,19 @@ var DocumentSchema = new Schema({
   }]
 });
 
-
+var starVirtual = DocumentSchema.virtual('star');
+starVirtual.get(function() {
+  return this._star;
+});
+starVirtual.set(function(value) {
+  this._star = value;
+});
 
 /**
  * Validations
  */
-DocumentSchema.path('name').validate(function (name) {
-  return !!name;
+DocumentSchema.path('title').validate(function (title) {
+  return !!title;
 }, 'Name cannot be blank');
 
 /**
@@ -157,6 +165,6 @@ DocumentSchema.pre('remove', function (next) {
   next();
 });
 
-DocumentSchema.plugin(archive, 'document');
+DocumentSchema.plugin(archive, 'officeDocument');
 
 module.exports = mongoose.model('Document', DocumentSchema);

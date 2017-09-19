@@ -102,7 +102,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
 
             $scope.officeDocuments.push(_(newOfficeDocument).clone());
 
-            $scope.detailsState = context.entityName === 'all' ? 'main.officeDocument.all.details' : 'main.officeDocument.byentity.details';
+            $scope.detailsState = context.entityName === 'all' ? 'main.officeDocuments.all.details' : 'main.officeDocuments.byentity.details';
 
             $scope.createOrUpdate = function(officeDocument) {
 
@@ -137,6 +137,15 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             $scope.debouncedUpdate = _.debounce($scope.createOrUpdate, 300);
 
             $scope.searchResults = [];
+            
+            $scope.upload = function(file) {
+                $scope.test = file;
+                var data = {
+                    name: file.name,
+
+                }
+                //OfficeDocumentsService.saveDocument(data, file);
+            };
 
             $scope.search = function(officeDocument) {
                 if (context.entityName !== 'discussion') {

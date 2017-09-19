@@ -10,7 +10,13 @@ var mean = require('meanio'),path = require('path'),fs = require('fs'),
   var ObjectId = require('mongoose').Types.ObjectId;
 
 
+  var options = {
+    includes: 'assign watchers',
+    defaults: {watchers: []}
+  };
 
+  exports.defaultOptions = options;
+  
 function getDocuments(entity,id){
   var result = [];
   return new Promise(function(fulfill,reject){
@@ -143,7 +149,7 @@ exports.uploadEmptyDocument = function(req , res,next){
 */
 exports.getAll = function(req,res,next){
   Document.find({
-    $or:[ {watchers:{$elemMatch:{$eq:req.user._id}}} , {assign: req.user._id} ]
+    $or:[ {watchers:{$in:[req.user._id]}} , {assign:req.user._id} ]
   }, function (err, data) {
     if (err) {
       req.locals.error = err;
@@ -195,19 +201,9 @@ exports.getByUserId = function(req,res,next){
 *req.params.entity contains the entity {project,discussion,office,}
 *req.params.id contains the entity mongoDB id
 */
-exports.getByEntity = function (req, res, next) {
-  var entities = {
-    projects: 'project',
-    tasks: 'task',
-    discussions: 'discussion',
-    updates: 'update',
-    offices: 'office',
-    folders: 'folder'
-  },
-  entity = entities[req.params.entity];
+exports.getByFolder = function (req, res, next) {
   Document.find({
-    entity: entity,
-    entityId: req.params.id
+    folder: req.params.id
   }, 
   function (err, data){
     if (err) {
@@ -453,7 +449,7 @@ exports.deleteDocument = function(req,res){
 *
 *
 */
-exports.update = function(req,res,next){
+exports.update2 = function(req,res,next){
   var zeroReq = [];
   for(var i=0;i<req.locals.result.zero.length;i++){
     zeroReq.push({'UserId':req.body.zero[i]});
@@ -530,6 +526,20 @@ exports.update = function(req,res,next){
   });
 
 };
+
+
+
+
+exports.update = function(req,res,next){
+  var context = req.body.context;
+  var json = {};
+  json[''+req.body.name]=req.body.newVal;
+Document.update({"_id":req.params.id},json).then(function(err,result){
+  console.log("Err="+err+" result="+result);
+});
+
+};
+
 
 /**
 * req.body.watchers

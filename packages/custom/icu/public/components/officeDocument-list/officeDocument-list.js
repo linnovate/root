@@ -16,9 +16,10 @@ angular.module('mean.icu.ui.officedocumentlist', [])
         }
 
         $scope.starred = $stateParams.starred;
-        if ($scope.officeDocuments.length > 0 && !$scope.officeDocuments[$scope.officeDocuments.length - 1].id) {
-            $scope.officeDocuments = [$scope.officeDocuments[0]];
-        }
+        // It caused partial showing of documents, it cutted the documents array
+        //  if ($scope.officeDocuments.length > 0 && !$scope.officeDocuments[$scope.officeDocuments.length - 1].id) {
+        //      $scope.officeDocuments = [$scope.officeDocuments[0]];
+        //  }
 
         $scope.isCurrentState = function (id) {
             return $state.current.name.indexOf('main.officeDocuments.byentity') === 0 &&

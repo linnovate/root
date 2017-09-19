@@ -1,94 +1,129 @@
 <div class="officeDocument-details">
     <div class="permission" ng-if="officeDocument && !officeDocument._id">
-       <div class="perIcon">
-    </div>
-    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
-    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+        <div class="perIcon">
+        </div>
+        <div class="perTitle">{{ 'perTitle' | i18next }}</div>
+        <div class="perMsg">{{ 'perMsg' | i18next }}</div>
     </div>
     <div class="page-content" ng-if="officeDocument._id">
         <div class="summary">
-
-            <div class="favorite">
-                <button ng-class="{ 'orange': officeDocument.star }" ng-click="star(officeDocument)">
-                    <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
-                </button>
-            </div>
-
-            <div class="status">
-                <div tooltips tooltip-template="{{'status' | i18next}}">
-                    <ui-select ng-model="officeDocument.status" on-select="update(officeDocument)">
-                        <ui-select-match>
-                            <i class='{{$select.selected}}'></i>
-                            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
-                            <i class='{{status}}'></i>
-                            <span class='{{status}}'>{{status | i18next}}</span>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-
-            <div class="color">
-                <div icu-colorpicker ng-model="officeDocument.color"></div>
-            </div>
-            <div class="dropdown dropdown-container" uib-dropdown>
-                <div class="dropdown-trigger" uib-dropdown-toggle>
-                    <i class="fa fa-chevron-down"></i>
-                </div>
-                <ul class="dropdown-menu menu-items" role="menu">
-                    <li>
-                        <a href="#" icu-open-modal entity-name="officeDocument" show-modal="tasks.length" delete-fn="deleteOfficeDocument(officeDocument)">
-                            <i class="fa fa-2x fa-times-circle"></i>
-                            <span>{{ 'deleteOfficeDocument' | i18next }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="HI">
-                <button ng-class="{ 'orange': officeDocument.star }" ng-click="WantToCreateRoom(officeDocument)">
-                    <i id="HI"></i>
-                </button>
-            </div>
-        </div>
+            
+                        <div class="favorite">
+                            <button ng-class="{ 'orange': officeDocument.star }" ng-click="star(officeDocument)">
+                            <i class="fa fa-star" tooltips tooltip-template="{{'favorite' | i18next}}"></i>
+                        </button>
+                        </div>
+            
+                        <div class="user">
+                            <div class="no-assignee" ng-if="!officeDocument.assign">
+                                <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
+                            </div>
+                            <!--<ui-select ng-model="task.assign" on-select="update(task)">-->
+                            <div tooltips tooltip-template="{{'assignee' | i18next}}">
+                                <ui-select ng-model="officeDocument.assign" on-select="updateAndNotify(officeDocument)">
+                                    <ui-select-match>
+                                        <div icu-avatar user="$select.selected"></div>
+                                        <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}</span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search } | filterByFrequentUsers: me">
+                                        <div icu-avatar user="user"></div>
+                                        <span class="summary-content">{{user.job}}</span>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+            
+            
+                        <div class="due">
+                            <div class="placeholder" ng-if="!officeDocument.due">{{ 'dueDate' | i18next }}</div>
+                            <input ng-click="open()" ui-date="dueOptions" ng-model="officeDocument.due" ng-class='{"oldDate":checkDate()}'>
+                        </div>
+                        <div id="past">
+                            {{'This Deadline is in the past!' | i18next }}
+                            <div id="close" ng-click="closeOldDateNotification()">x</div>
+                        </div>
+            
+                        <div class="status">
+                            <div tooltips tooltip-template="{{'status' | i18next}}">
+                                <ui-select ng-model="officeDocument.status" on-select="updateStatus(officeDocument)">
+                                    <ui-select-match>
+                                        <i class='{{$select.selected}}'></i>
+                                        <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="status as status in statuses | filter: $select.search">
+                                        <i class='{{status}}'></i>
+                                        <span class='{{status}}'>{{status | i18next}}</span>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="dropdown dropdown-container" uib-dropdown>
+                            <div class="dropdown-trigger" uib-dropdown-toggle>
+                                <i class="fa fa-chevron-down"></i>
+                            </div>
+                            <ul class="dropdown-menu menu-items" role="menu">
+                                <li>
+                                    <a href="#" ng-click="deleteOfficeDocument(officeDocument)">
+                                    <i class="fa fa-2x fa-times-circle"></i>
+                                    <span>{{ 'deleteOfficeDocument' | i18next }}</span>
+                                </a>
+                                </li>
+                                <li ng-if="officeDocument.parent">
+                                    <a href="#" ng-click="statusType()">
+                                    <i class="flag"></i>
+                                    <span>{{ 'statusType' | i18next }}</span>
+                                </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
         <button icu-comp-modal entity="officeDocument" entity-name="officeDocument" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
         <div class="description">
-            <div class="title"
-                 contenteditable="true"
-                 tabindex="1"
-                 ng-attr-autofocus="{{shouldAutofocus || undefined}}"
-                 strip-br="true"
-                 ng-keydown="onEnter($event)"
-                 ng-model="officeDocument.title"
-                 ng-change="updateCurrentOfficeDocument()">
+            <div class="title" contenteditable="true" tabindex="1" ng-attr-autofocus="{{shouldAutofocus || undefined}}" strip-br="true"
+                ng-keydown="onEnter($event)" ng-model="officeDocument.title" ng-change="updateCurrentOfficeDocument()">
 
             </div>
 
-            <div class="text"
-                 contenteditable="true"
-                 tabindex="2"
-                 strip-br="true"
-                 medium-editor
-                 ng-model="officeDocument.description"
-                 options="{{options}}">
+            <div class="text" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="officeDocument.description"
+                options="{{options}}">
+            </div>
+            <div class="tags">
+                <ul class="list">
+                    <li ng-show="!officeDocument.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
+                    <li class="tag-item" ng-repeat="tag in officeDocument.tags">
+                        <span>{{tag}}</span>
+                        <button ng-click="removeTag(tag)">
+                    <i class="fa fa-times"></i>
+                </button>
+                    </li>
+                    <li class="new-tag-input" ng-show="tagInputVisible">
+                        <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" autofocus=true on-select="addTag(newTag)" select-on-blur
+                            test tag-on-blur="true">
+                            <ui-select-match placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
+                            <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
+                                {{tag}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </li>
+                </ul>
+                <div class="button">
+                    <button class="new-tag-icon" ng-click="addTagClicked()" ng-show="!tagInputVisible">
+                <div tooltips tooltip-template="add tag" tooltip-side="left">
+                    <i class="fa fa-plus" ></i>
+                </div>
+            </button>
+                </div>
             </div>
         </div>
         <div class="tabs">
             <div class="switcher">
-                <button class="tab three"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".activities">
+                <button class="tab three" data-ui-sref-active="active" data-ui-sref=".activities">
                     {{ 'updates' | i18next }}
                 </button>
-                <button class="tab three"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".documents">
+                <button class="tab three" data-ui-sref-active="active" data-ui-sref=".documents">
                     {{ 'documents' | i18next }}
                 </button>
-                <button class="tab three"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".tasks">
+                <button class="tab three" data-ui-sref-active="active" data-ui-sref=".tasks">
                     {{ 'tasks' | i18next }}
                 </button>
             </div>

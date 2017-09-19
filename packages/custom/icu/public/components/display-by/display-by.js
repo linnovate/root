@@ -21,12 +21,25 @@ angular.module('mean.icu.ui.displayby', [])
                 $scope.foldersList.push(folder);
             });
         
-            $scope.officeDocumentsList = [];
-            // $scope.officeDocuments.forEach(function(officeDocument) {
-            //            if(officeDocument.title)
-            //              $scope.officeDocumentsList.push(officeDocument);
-            //         });
+        $scope.officeDocumentsList = [];
+        $scope.officeDocuments.forEach(function(officeDocument) {
+            if(officeDocument.title)
+               $scope.officeDocumentsList.push(officeDocument);
+            });
         
+        $scope.typesList = [{
+            name: 'new',
+             color:''
+        },{
+            name:  'received',
+            color:'' 
+        },{
+            name:  'inProgress',
+            color:''
+        },{
+            name:  'done',
+            color:''
+        }]
 
         $scope.singularItemName = {
             discussions: "discussion",

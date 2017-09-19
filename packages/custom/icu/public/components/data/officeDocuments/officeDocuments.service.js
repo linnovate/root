@@ -2,16 +2,29 @@
 
 angular.module('mean.icu.data.officedocumentsservice', [])
     .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService) {
-        var EntityPrefix = '/documents';
+        var EntityPrefix = '/officeDocuments';
 
           function getAll() {
             return $http.get(ApiUri + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
+                // result.data = [{
+                //             created: new Date,
+                //             updated: new Date,
+                //             _id: "hgjg",
+                //             title: "sraya",
+                //             path: "/gfdgdgf/dfgdfhg",
+                //             description: "hello world",
+                //             documentType: "pptx",
+                //             entity: "project",
+                //             entityId: "fff",
+                //             creator: "avraham",
+                //             status: "new"
+                //                }]
                 return result.data;
             });
         }
 
-         function delete2(id) {
+         function deleteDocument(id) {
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                  return result.status;
              });
@@ -68,21 +81,38 @@ angular.module('mean.icu.data.officedocumentsservice', [])
 
         function saveDocument(data, file) {    
             return Upload.upload({
-                url: '/api/attachments',
+                url: '/api/documents',
                 fields: data,
                 file: file
             });
         }
 
         function updateDocument(id, data) {
-            return $http.post(ApiUri + EntityPrefix + id, data).then(function (result) {
+            return $http.post(ApiUri + EntityPrefix + "/" +id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
             });
         }
+
+        function star(officeDocument) {
+            return $http.patch(ApiUri + EntityPrefix + '/' + officeDocument._id + '/star', {star: !officeDocument.star})
+                .then(function (result) {
+                    WarningsService.setWarning(result.headers().warning);
+                    officeDocument.star = !officeDocument.star;
+                    return result.data;
+                });
+        }
+
+        function getStarred() {
+            return $http.get(ApiUri + EntityPrefix + '/starred').then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
         return {
             getAll: getAll,
-            delete:delete2,
+            delete:deleteDocument,
             getById: getById,
             getByTaskId: getByTaskId,
             getByProjectId: getByProjectId,
@@ -91,6 +121,8 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             saveDocument: saveDocument,
             updateDocument: updateDocument,
             getByOfficeId: getByOfficeId,
-            getByFolderId: getByFolderId
+            getByFolderId: getByFolderId,
+            star: star,
+            getStarred: getStarred
         };
     });

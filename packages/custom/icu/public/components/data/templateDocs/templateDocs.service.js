@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.icu.data.officedocumentsservice', [])
+angular.module('mean.icu.data.templatedocsservice', [])
     .service('TemplateDocsService', function ($http, ApiUri, Upload, WarningsService) {
         var EntityPrefix = '/templates';
 
@@ -11,7 +11,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-         function delete(id) {
+         function deleteTemplate(id) {
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                  return result.status;
              });
@@ -81,7 +81,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
         return {
-            delete:delete,
+            delete:deleteTemplate,
             getById: getById,
             getByTaskId: getByTaskId,
             getByProjectId: getByProjectId,

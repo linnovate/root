@@ -81,9 +81,9 @@ module.exports = function(Icu, app) {
   //END Notification READ - OHAD
 
   //star & get starred list
-  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/star')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/star')
     .patch(star.toggleStar);
-  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/starred')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/starred')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/starred/:type(byAssign)')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
@@ -317,13 +317,16 @@ module.exports = function(Icu, app) {
 
 
 
-  app.route('/api/documents*').all(entity('documents'));
-  app.route('/api/documents').post(documents.upload, documents.signNew).get(documents.getAll);
-  app.route('/api/documents/:id([0-9a-fA-F]{24})')
+  app.route('/api/officeDocuments*').all(entity('documents'));
+  app.route('/api/officeDocuments')
+  //.post(documents.upload, documents.signNew)
+  .post(documents.upload)
+  .get(documents.getAll);
+  app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
   .get(documents.getById)
   .post(documents.update)
   .delete(documents.deleteDocument);
-   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/documents').get(updates.getByEntity);
+   app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
 
 
 

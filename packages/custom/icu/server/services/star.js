@@ -9,12 +9,14 @@ var DiscussionModel = require('../models/discussion.js');
 var UpdateModel = require('../models/update.js');
 var OfficeModel = require('../models/office.js');
 var FolderModel = require('../models/folder.js');
+var OfficeDocumentsModel = require('../models/document.js');
 
 var taskOptions = require('../controllers/task.js').defaultOptions;
 var discussionOptions = require('../controllers/discussion.js').defaultOptions;
 var projectOptions = require('../controllers/project.js').defaultOptions;
 var officeOptions = require('../controllers/office.js').defaultOptions;
 var folderOptions = require('../controllers/folder.js').defaultOptions;
+var officeDocumentOptions = require('../controllers/documents.js').defaultOptions;
 
 var entityNameMap = {
   'tasks': {
@@ -42,6 +44,10 @@ var entityNameMap = {
   'folders': {
     model: FolderModel,
     options: folderOptions
+  },
+  'officeDocuments': {
+    model: OfficeDocumentsModel,
+    options: officeDocumentOptions
   }
 };
 

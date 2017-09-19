@@ -215,9 +215,9 @@ angular.module('mean.icu').config([
                             return officeDocument;
                         }
                     },
-                    tasks: function(TasksService, $stateParams) {
-                        return TasksService.getByOfficeDocumentId($stateParams.id);
-                    },
+                    // tasks: function(TasksService, $stateParams) {
+                    //     return TasksService.getByOfficeDocumentId($stateParams.id);
+                    // },
                     people: function(UsersService) {
                         return UsersService.getAll();
                     }

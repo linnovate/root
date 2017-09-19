@@ -34,6 +34,9 @@ var FolderArchiveModel = mongoose.model('folder_archive');
 var circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 var circlesAcl = require('circles-npm')(null, null, circleSettings);
 
+var OfficeDocumentsModel = require('../models/document.js');
+var OfficeDocumentsArchiveModel = mongoose.model('officeDocument_archive');
+
 var entityNameMap = {
   'tasks': {
     mainModel: TaskModel,
@@ -78,6 +81,11 @@ var entityNameMap = {
     mainModel: FolderModel,
     archiveModel: FolderArchiveModel,
     name: 'Folder'
+  },
+  'officeDocuments': {
+    mainModel: OfficeDocumentsModel,
+    archiveModel: OfficeDocumentsArchiveModel,
+    name: 'Document'
   }
 
 };
@@ -89,7 +97,7 @@ var defaults = {
 };
 
 module.exports = function(entityName, options) {
-  var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders'];
+  var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders', 'officeDocuments'];
   if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;
 

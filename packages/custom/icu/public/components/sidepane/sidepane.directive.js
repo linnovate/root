@@ -9,7 +9,7 @@ directive('icuSidepane', function() {
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
-        $scope.officeDocuments = /*$scope.officeDocuments.data ||*/ $scope.officeDocuments;
+        $scope.officeDocuments = $scope.officeDocuments.data || $scope.officeDocuments;
         // $scope.people = $scope.people.data || $scope.people;
         
         $scope.toggleVisibility = function(toggledItem) {
@@ -81,7 +81,7 @@ directive('icuSidepane', function() {
             name: 'officeDocuments',
             icon: '/icu/assets/img/icon-document.svg',
             state: 'officeDocuments.all',
-            display: ['new', 'received', 'inProgress'],
+            display: ['folders'],//['new', 'received', 'inProgress'],
             open: $scope.isCurrentState({state: 'officeDocuments'})
         }
         ];

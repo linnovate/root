@@ -9,7 +9,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                                                       context,
                                                       $state,
                                                       OfficeDocumentsService,
-                                                      $stateParams) {
+                                                      $stateParams,
+                                                    $timeout) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments")))
         {
             $scope.officeDocument = entity || context.entity;
@@ -18,17 +19,18 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         {
             $scope.officeDocument = context.entity || entity;
         }
+        $scope.tags = ['tag'];
         $scope.tasks = tasks.data || tasks;
         $scope.officeDocuments = officeDocuments.data || officeDocuments;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
-
+        $scope.tagInputVisible = false;
         OfficeDocumentsService.getStarred().then(function (starred) {
 
-            // Chack if HI room created and so needs to show HI.png
-            if($scope.officeDocument.WantRoom == true)
-            {
-                $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
-            }
+            // // Chack if HI room created and so needs to show HI.png
+            // if($scope.officeDocument.WantRoom == true)
+            // {
+            //     $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
+            // }
 
             $scope.officeDocument.star = _(starred).any(function (s) {
                 return s._id === $scope.officeDocument._id;
@@ -64,6 +66,67 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 $scope.delayedUpdate($scope.officeDocument, newContext);
             }
         });
+        $scope.getUnusedTags = function() {
+            // return _.chain($scope.tags).reject(function(t) {
+            //     return $scope.task.tags.indexOf(t.term) >= 0;
+            // }).sortBy(function(a, b) {
+            //     return b.count - a.count;
+            // }).pluck('term').value();
+
+            return $scope.tags.filter(function(x) { return $scope.officeDocument.tags.indexOf(x) < 0 })
+        };
+        
+
+       
+
+
+        $scope.addTagClicked=function(){
+        	$scope.setFocusToTagSelect();
+        	$scope.tagInputVisible=true;
+        }
+
+        $scope.addTag = function(tag) {
+        	if(tag!=undefined && $.inArray(tag,$scope.officeDocument.tags)==-1){
+                var array = [];
+                $scope.officeDocument.tags.forEach(function(t){
+                    array.push(t);
+                });
+                $scope.officeDocument.tags.push(tag);
+                var context = {
+                    name: 'tags',
+                    oldVal: array,
+                    newVal:  $scope.officeDocument.tags,
+                    action: 'changed'
+                };
+            	$scope.update($scope.officeDocument, context);
+        	}
+
+            $scope.tagInputVisible = false;
+        };
+
+        $scope.removeTag = function(tag) {
+            var array = [];
+            $scope.officeDocument.tags.forEach(function(t){
+                array.push(t);
+            });
+            $scope.officeDocument.tags = _($scope.officeDocument.tags).without(tag);
+           
+            var context = {
+                name: 'tags',
+                oldVal: array,
+                newVal: $scope.officeDocument.tags,
+                action: 'changed'
+            };
+            $scope.update($scope.officeDocument, context);
+
+        };
+
+        $scope.setFocusToTagSelect = function() {
+            var element = angular.element('#addTag > input.ui-select-focusser')[0];
+            $timeout(function() {
+                element.focus();
+            }, 0);
+        };
 
         $scope.$watch('officeDocument.color', function (nVal, oVal) {
             if (nVal !== oVal) {
@@ -109,22 +172,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
-        $scope.WantToCreateRoom = function (officeDocument) {
-
-            if($scope.officeDocument.WantRoom == false)
-            {
-                $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
-
-                officeDocument.WantRoom = true;
-
-                $scope.update(officeDocument, context);
-
-                OfficeDocumentsService.WantToCreateRoom(officeDocument).then(function () {
-                    navigateToDetails(officeDocument);
-                });
-            }
-        };
-
         $scope.deleteOfficeDocument = function (officeDocument) {
             OfficeDocumentsService.remove(officeDocument._id).then(function () {
 
@@ -134,17 +181,24 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
+
+        
+
         $scope.update = function (officeDocument, context) {
-            OfficeDocumentsService.update(officeDocument, context).then(function(res) {
-                if (OfficeDocumentsService.selected && res._id === OfficeDocumentsService.selected._id) {
-                    if (context.name === 'title') {
-                        OfficeDocumentsService.selected.title = res.title;
-                    }
-                    if (context.name === 'color') {
-                        OfficeDocumentsService.selected.color = res.color;
-                    }
-                }
+            OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {
+
             });
+        };
+
+        $scope.updateStatus = function(officeDoc){
+            var context = {
+                "name":"status",
+                "newVal":$scope.officeDocument.status,
+                "oldVal":officeDoc.status
+            };
+            
+            $scope.update($scope.officeDocument, context);
+
         };
 
         $scope.updateCurrentOfficeDocument = function(){
@@ -160,4 +214,35 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             $state.current.name === 'main.officeDocuments.byentity.details')) {
             $state.go('.activities');
         }
+    }).directive('selectOnBlur', function($timeout) {
+        return {
+            require: 'uiSelect',
+            link: function(scope, elm, attrs, ctrl) {
+                elm.on('blur', 'input.ui-select-search', function(e) {
+                	var ngModelName = attrs.id;
+                	if(ngModelName == "addTag"){
+                		ctrl.select();
+                		ctrl.ngModel.$setViewValue(undefined);
+                		scope.tagInputVisible=false;
+                	}
+                });
+
+                elm.on('blur', 'input.ui-select-focusser', function(e, g) {
+                    $timeout(function() {
+                        if (!e.target.hasAttribute('disabled')) {
+                            scope.tagInputVisible = false;
+                        }
+                    }, 5);
+                });
+
+            }
+        };
+    }).directive('test',function(){
+    	return{
+    		scope:true,
+    		require:'ngModel',
+    		link: function($scope,$elm,$attrs,ngModel){
+    			ngModel.$setViewValue('hi');
+    		}
+    	}
     });
