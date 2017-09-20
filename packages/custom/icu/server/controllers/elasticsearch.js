@@ -60,7 +60,7 @@ var buildSearchResponse = exports.buildSearchResponse = function(type, obj,userI
     obj.forEach(function(i) {
       groups[i.key] =
         i.top.hits.hits.map(function(j) {
-          return j._source;
+          return Object.assign(j._source,j.highlight);
         });
     });
   } else {
@@ -148,7 +148,19 @@ exports.search = function(req, res, next) {
   }
 
   var query = {
-    query: {
+    "highlight" : {
+      "pre_tags" : ["<bold>"],
+      "post_tags" : ["</bold>"],
+      "fields" : {
+          "title" : {},
+          "color": {},
+          "name": {},
+          "tags": {},
+          "description": {},
+          "file.filename": {}
+      }
+    },    
+      query: {    
       'multi_match': {
         'query': req.query.term.replace(',', '* ') + '*',
         'type': 'cross_fields',
@@ -163,7 +175,13 @@ exports.search = function(req, res, next) {
         },
         aggs: {
           top: {
-            top_hits: {}
+            top_hits: {              
+              "highlight": {
+                "fields": {
+                   "title": {}
+                }
+              }
+            }
           }
         }
       }

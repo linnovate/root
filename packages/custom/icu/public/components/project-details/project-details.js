@@ -9,6 +9,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       context,
                                                       $state,
                                                       ProjectsService,
+                                                      ActivitiesService,
                                                       $stateParams) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("projects")))
         {
@@ -134,6 +135,20 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         };
 
+
+        $scope.updateStatus = function(project) {           
+                        if (context.entityName === 'discussion') {
+                            project.discussion = context.entityId;
+                        }
+            
+                        ProjectsService.updateStatus(project).then(function(result) {
+                            ActivitiesService.data =[] ;
+                            ActivitiesService.data.push(result);
+                        });
+                        $scope.update(project, context) ;
+                    }
+            
+
         $scope.update = function (project, context) {
             ProjectsService.update(project, context).then(function(res) {
                 if (ProjectsService.selected && res._id === ProjectsService.selected._id) {
@@ -144,6 +159,17 @@ angular.module('mean.icu.ui.projectdetails', [])
                         ProjectsService.selected.color = res.color;
                     }
                 }
+                if (context.name === 'color') {
+                    // update activity                
+                    ProjectsService.updateColor(project).then(function(result) {
+                        ActivitiesService.data = [] ; // TBD
+                        ActivitiesService.data.push(result);
+                    });
+                }
+                
+                $state.go('main.projects.all.details.activities', {
+                    entity: 'all'
+                }, {reload: true});
             });
         };
 

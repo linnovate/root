@@ -162,11 +162,11 @@ angular.module('mean.icu.ui.taskdetails', [])
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
         };
 
-        if ($scope.task.due) $scope.task.due = new Date($scope.task.due);
+//        if ($scope.task.due) $scope.task.due = new Date($scope.task.due);
 
         $scope.dueOptions = {
             onSelect: function() {
-                $scope.update($scope.task);
+                $scope.updateDue($scope.task);
             },
             onClose: function() {
                 if ($scope.checkDate()){
@@ -272,6 +272,83 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
         //END Made By OHAD
 
+        // Nevo
+        $scope.updateWatcher = function(task) {
+            
+            if (context.entityName === 'discussion') {
+                task.discussion = context.entityId;
+            }
+
+            TasksService.updateStatus(task, me).then(function(result) {
+                ActivitiesService.data.push(result);
+            });
+
+            TasksService.update(task).then(function(result) {
+                if (context.entityName === 'project') {
+                    var projId = result.project ? result.project._id : undefined;
+                    if (projId !== context.entityId) {
+                        $state.go('main.tasks.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {
+                            reload: true
+                        });
+                    }
+                }
+            });
+        }
+
+        $scope.updateStatus = function(task) {
+
+            if (context.entityName === 'discussion') {
+                task.discussion = context.entityId;
+            }
+
+            TasksService.updateStatus(task, me).then(function(result) {
+                ActivitiesService.data.push(result);
+            });
+
+            TasksService.update(task).then(function(result) {
+                if (context.entityName === 'project') {
+                    var projId = result.project ? result.project._id : undefined;
+                    if (projId !== context.entityId) {
+                        $state.go('main.tasks.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {
+                            reload: true
+                        });
+                    }
+                }
+            });
+        }
+            
+        $scope.updateDue = function(task) {
+
+            if (context.entityName === 'discussion') {
+                task.discussion = context.entityId;
+            }
+
+            TasksService.updateDue(task, me).then(function(result) {
+                ActivitiesService.data.push(result);
+            });
+
+            TasksService.update(task).then(function(result) {
+                if (context.entityName === 'project') {
+                    var projId = result.project ? result.project._id : undefined;
+                    if (projId !== context.entityId) {
+                        $state.go('main.tasks.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {
+                            reload: true
+                        });
+                    }
+                }
+            });
+
+        };
+
         $scope.update = function(task, type, proj) {
             if (proj && proj !== '') {
                 $scope.createProject(proj, function(result) {
@@ -326,7 +403,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             'watcher': me
         };
 
-        $scope.saveTemplate = function() {
+        $scope.saveTemplate = function() {            
             $scope.isopen = false;
             $scope.newTemplate.frequentUser = $scope.newTemplate.watcher;
             if ($scope.task.subTasks[0]._id) {

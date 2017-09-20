@@ -3,7 +3,7 @@
 angular.module('mean.icu.data.activitiesservice', [])
 .service('ActivitiesService', function (ApiUri, $http, UsersService, WarningsService) {
     var EntityPrefix = '/updates';
-    var data;
+    var data ;
 
     function getByUserId(id) {
         return [];
@@ -73,7 +73,7 @@ angular.module('mean.icu.data.activitiesservice', [])
 
     function create(update) {
         return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
