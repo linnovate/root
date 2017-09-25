@@ -1,9 +1,9 @@
 .officeDocument-details {
     .page-content {
-        .detailspane.tabs {
-            .tab {
-                width: calc((100% - 60px) / 2);
-
+        .tabs {
+            .switcher{
+                .tab {
+                     width: calc((100% - 60px) / 2);
                 &.two {
                     width: calc((100% - 60px) / 2);
                 }
@@ -11,6 +11,7 @@
                     width: calc((100% - 60px) / 3);
                 }
             }
+        }
         }
     }
 }
@@ -32,4 +33,25 @@ ul.dropdown-menu {
     width: 100%;
     position: absolute;
     top: -25%;
-}   
+} 
+
+.folder-title{
+        -webkit-border-radius: 28;
+        -moz-border-radius: 28;
+        border-radius: 28px;
+        color: #2b4c02;
+        font-size: 15px;
+        text-decoration: none;
+        margin: 3%;
+        margin-right: 70%;
+        width: 20%;
+        height: 10%
+}
+
+.folder-name{
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}

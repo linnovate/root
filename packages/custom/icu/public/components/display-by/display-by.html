@@ -79,12 +79,15 @@
             <li ng-if="officeDocuments.length == displayLimit['officeDocuments'] && displayLimit['officeDocuments'] > 3" ng-click="collapse('officeDocuments')" class="more">{{ 'less' | i18next }}</li>
         </ul> -->
         <p class="title type"> {{ 'type' | i18next }} </p>
+        <ul>
         <li data-ng-repeat="type in typesList" 
             data-ng-class="{'selected': context.entityName === 'officeDocument' && officeDocument._id === context.entityId }"
             data-ng-click="switchToType()">
             <p>{{type.name}}</p>
             <div class="tag-color" ng-style="{'background-color': '#' + type.color}"></div>
         </li>
+    </ul>
+
     </div>
 
     <div class="list offices" ng-if="officesList && (icuDisplayBy.indexOf('offices'))>-1">

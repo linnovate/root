@@ -73,6 +73,9 @@ var DocumentSchema = new Schema({
     type:String,
     default:"new"
   }],
+  documentType:{
+    type:String
+  },
 
   watchers: [{
     type: Schema.ObjectId,
@@ -148,6 +151,7 @@ DocumentSchema.statics.folder = function (id, cb) {
 
 var elasticsearch = require('../controllers/elasticsearch');
 
+/** 
 DocumentSchema.post('save', function (req, next) {
   var attachment = this;
   DocumentSchema.statics[attachment.entity](attachment.entityId, function (err, result) {
@@ -159,7 +163,7 @@ DocumentSchema.post('save', function (req, next) {
   });
 
 });
-
+*/
 DocumentSchema.pre('remove', function (next) {
   elasticsearch.delete(this, 'document', this.room, next);
   next();

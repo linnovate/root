@@ -80,6 +80,9 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             $scope.isLoading = true;
 
             _($scope.officeDocuments).each(function(p) {
+                if(p.folder){
+                    p.folderName = p.folderName;
+                }
                 p.__state = creatingStatuses.Created;
                 if (p.title.length > 20)
                 {
@@ -141,10 +144,15 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             $scope.upload = function(file) {
                 $scope.test = file;
                 var data = {
-                    name: file.name,
-
+                    'folderId':$stateParams.entityId
+                };
+                if(file.length > 0){
+                    OfficeDocumentsService.saveDocument(data, file).then(function(result){
+                        console.dir("===Document===");
+                        console.dir(result);
+                        $scope.officeDocuments.push(result.data);
+                    });
                 }
-                //OfficeDocumentsService.saveDocument(data, file);
             };
 
             $scope.search = function(officeDocument) {

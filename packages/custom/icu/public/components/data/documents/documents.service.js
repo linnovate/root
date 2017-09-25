@@ -70,8 +70,8 @@ angular.module('mean.icu.data.documentsservice', [])
         function saveAttachments(data, file){
             return Upload.upload({
                 url: '/api/attachments',
-                fields: data,
-                file: file
+                //fields: data,
+                data: {file: file}
             });
         }
 

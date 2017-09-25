@@ -317,7 +317,7 @@ module.exports = function(Icu, app) {
 
 
 
-  app.route('/api/officeDocuments*').all(entity('documents'));
+  app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
   //.post(documents.upload, documents.signNew)
   .post(documents.upload)

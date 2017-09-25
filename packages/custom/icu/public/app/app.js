@@ -732,7 +732,9 @@ angular.module('mean.icu').config([
             })
             .state('main.people.byentity.details.tasks', {
                 url: '/tasks',
-                views: {
+                views: {                    // tasks: function(TasksService, $stateParams) {
+                    //     return TasksService.getByOfficeDocumentId($stateParams.id);
+                    // },
                     tab: {
                         templateUrl: '/icu/components/user-details/tabs/tasks/tasks.html',
                         controller: 'UserTasksController',
@@ -891,7 +893,9 @@ angular.module('mean.icu').config([
                 'detailspane@main': {
                     templateUrl: '/icu/components/task-details/task-details.html',
                     controller: 'TaskDetailsController'
-                }
+                }                    // tasks: function(TasksService, $stateParams) {
+                    //     return TasksService.getByOfficeDocumentId($stateParams.id);
+                    // },
             },
             resolve: {
                 entity: function(TasksService, $stateParams) {

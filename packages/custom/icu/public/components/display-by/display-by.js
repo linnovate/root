@@ -29,13 +29,13 @@ angular.module('mean.icu.ui.displayby', [])
         
         $scope.typesList = [{
             name: 'new',
-             color:''
+             color:'bbe77e'
         },{
             name:  'received',
-            color:'' 
+            color:'37afef' 
         },{
             name:  'inProgress',
-            color:''
+            color:'757575'
         },{
             name:  'done',
             color:''

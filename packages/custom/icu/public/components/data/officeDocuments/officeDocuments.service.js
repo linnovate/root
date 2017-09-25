@@ -81,7 +81,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
 
         function saveDocument(data, file) {    
             return Upload.upload({
-                url: '/api/documents',
+                url: '/api/officeDocuments',
                 fields: data,
                 file: file
             });
