@@ -79,7 +79,7 @@ var addUpdate = function(taskId, creator, type, description, callback) {
   });
 };
 
-var addToTemplate = function(task, due, parentId, name, creator, watchers, circles, project, exist, tType, callback, office, folder) {
+var addToTemplate = function(task, due, parentId, name, creator, watchers, circles, project, exist, tType, office, folder, callback) {
   if (!exist) {
     var template = new Task({
       tType: tType,
