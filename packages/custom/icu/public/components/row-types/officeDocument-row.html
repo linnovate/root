@@ -17,16 +17,13 @@
 
 
 <td class="name" ng-if="!data.officeDocument._id" 
-    ngf-select 
-    ngf-change="data.u($files)" 
-    ngf-multiple="true" 
+    ng-click="data.create()"
     ng-attr-colspan="{{data.officeDocument._id ? undefined : 2}}"
     title="{{data.officeDocument.title}}" 
     ng-attr-contenteditable="{{!data.displayOnly}}" 
     placeholder="{{'createNewofficeDocument' | i18next}}"
     strip-br="true" 
-    ng-change="data.searchCb(data.officeDocument.title) || data.updateCb(data.officeDocument)" 
-    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+
     ng-model="data.officeDocument.PartTitle" 
     ng-blur="data.hideAutoCompleteCb(data.officeDocument)">
 </td>

@@ -45,7 +45,7 @@ ul.dropdown-menu {
         margin: 3%;
         margin-right: 70%;
         width: 20%;
-        height: 10%
+        height: 10%;
 }
 
 .folder-name{
@@ -54,4 +54,66 @@ ul.dropdown-menu {
     margin-bottom: auto;
     padding-top: 5%;
     padding-bottom: 5%;
+}
+
+.sendBtn{
+    @include ellipse(12px);
+    @include button;
+    background-color: $orange;
+    box-shadow: 0 3px 0 0 $dark-orange;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    width: 80px;
+    margin: 9.5%;
+    
+    &:hover{
+        background-color: #FFB435;
+        transition: 0.8s;
+    }  
+}
+
+.row-buttons{
+    border-bottom: 1px solid $light-grey1;
+    border-top: 1px solid $light-grey1;
+    display: table;
+
+    width: 100%;
+    min-height: 50px;
+    
+    .create, .choose {
+        margin-right: 10px !important;
+        @include ellipse(12px);
+        @include button;
+        background-color: #323d41;
+        box-shadow: 0 3px 0 0 #101314;
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+        padding-left: 5px;
+        padding-right: 5px;
+        margin-top: 10px;
+        &:hover{
+            background-color: #4C5D63;
+            transition: 0.8s;
+        }   
+    }
+}
+
+.simochin{
+    margin-right: 10px !important;
+    @include ellipse(12px);
+    @include button;
+    background-color: #323d41;
+    box-shadow: 0 3px 0 0 #101314;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 10px;
+    &:hover{
+        background-color: #4C5D63;
+        transition: 0.8s;
+    }   
 }

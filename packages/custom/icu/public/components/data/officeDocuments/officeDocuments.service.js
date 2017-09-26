@@ -94,6 +94,21 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function createDocument(data) {
+            return $http.post(ApiUri + EntityPrefix + "/create" , data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function uploadFileToDocument(data,file){
+            return Upload.upload({
+                url: '/api/officeDocuments/uploadFileToDocument',
+                fields: data,
+                file: file
+            });
+        }
+
         function star(officeDocument) {
             return $http.patch(ApiUri + EntityPrefix + '/' + officeDocument._id + '/star', {star: !officeDocument.star})
                 .then(function (result) {
@@ -123,6 +138,8 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             getByOfficeId: getByOfficeId,
             getByFolderId: getByFolderId,
             star: star,
-            getStarred: getStarred
+            getStarred: getStarred,
+            createDocument:createDocument,
+            uploadFileToDocument:uploadFileToDocument
         };
     });

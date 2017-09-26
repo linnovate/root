@@ -340,7 +340,7 @@ exports.upload = function (req, res, next) {
                       var doc = {
                         'created': new Date(),
                         'updated':new Date(),
-                        'title':fileName,
+                        'title':fileName.substring(fileName.indexOf('-')+1,fileName.length),
                         'status':'new',
                         'path':path,
                         'description':'', //important
@@ -408,7 +408,7 @@ exports.upload = function (req, res, next) {
               var doc = {
                 'created': new Date(),
                 'updated':new Date(),
-                'title':fileName,
+                'title':fileName.substring(fileName.indexOf('-')+1,fileName.length),
                 'status':'new',
                 'path':path,
                 'description':'', //important
@@ -442,6 +442,228 @@ exports.upload = function (req, res, next) {
       })
 
       return req.pipe(busboy);
+};
+
+
+
+exports.uploadFileToDocument = function(req,res,next){
+  req.locals.data={};
+  req.locals.data.body={};
+  var d = formatDate(new Date());
+  var busboy = new Busboy({
+    headers: req.headers
+  });
+  var hasFile = false;
+  busboy.on('file', function (fieldname, file, filename) {
+    console.log("I got a file  "+filename);
+    var port = config.https && config.https.port ? config.https.port : config.http.port;
+    var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+    var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
+    var fileType = path.extname(filename).substr(1).toLowerCase();
+    mkdirp(path.join(config.attachmentDir, d), function () {
+      file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
+        var arr = hostFileLocation.split("/files");
+        var pathFor = "./files" + arr[1];
+        var stats = fs.statSync(pathFor);
+        console.log(pathFor + 'test path')
+        var fileSizeInBytes = stats["size"];
+        req.locals.data.body.size = fileSizeInBytes;
+      });
+      req.locals.data.body.name = filename;
+      req.locals.data.body.path = hostFileLocation;
+      req.locals.data.body.originalPath = hostFileLocation;
+      req.locals.data.body.attachmentType = fileType;
+      req.locals.data.body.size = file._readableState.length;
+      hasFile = true;
+    });
+  });
+
+  busboy.on('field', function (fieldname, val) {
+    req.locals.data.body[fieldname] = val;
+  });
+
+  busboy.on('finish', function () {
+    var user = req.user.email.substring(0,req.user.email.indexOf('@'));
+    var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
+    var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
+    req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+req.locals.data.body.name;
+    var result = fs.readFile("."+path,function(err,result){
+      result=JSON.parse(JSON.stringify(result));
+      var coreOptions={
+        "siteUrl":config.SPHelper.SPSiteUrl
+      };
+      var creds={
+        "username":config.SPHelper.username,
+        "password":config.SPHelper.password
+      }
+      var folder = config.SPHelper.libraryName+"/"+user;
+      var fileOptions = {
+        "folder":folder,
+        "fileName":fileName,
+        "fileContent":result
+      };
+      var documentId = req.locals.data.body['id'];
+      Document.findOne({
+        _id:documentId
+      }).exec(function(err,result){
+      if(err){
+        req.locals.error = err;
+      }
+      if(!result){
+        req.locals.error={
+          status:404,
+          message:'Entity not found'
+        };
+      }
+      if(result){
+            var users = [];
+              users.push({
+                '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+                'Role':3,
+                'UserId':user,
+                'isCreator':true
+              });
+              result.watchers.forEach(function(watcher){
+                if(watcher!=req.user._id){
+                  users.push({
+                    '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+                    'Role':2,
+                    'UserId':watcher
+                  });
+                }
+              });
+              result.forNotice.forEach(function(notice){
+                if(notice!=req.user._id){
+                  users.push({
+                    '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+                    'Role':2,
+                    'UserId':notice
+                  });
+                }
+              });
+              getUsers(users).then(function(result){
+                if(result=='success'){
+                  var json = {
+                    'coreOptions':coreOptions,
+                    'creds':creds,
+                    'fileOptions':fileOptions,
+                    'permissions':users,
+                    'isTemplate':false,
+                    'entity':'folder',
+                    'entityId':req.locals.data.body['folderId']
+                  };
+                  request({
+                    'url':config.SPHelper.uri+"/api/upload",
+                    'method':'POST',
+                    'json':json
+                  },function(error,resp,body){
+                   // if(error){
+                   //   res.send(error);
+                   // }
+                    //else{
+                      //var path = body.path;
+                      var path = req.locals.data.body.originalPath;
+                      Document.update({'_id':documentId},{$set:{'path':path,'title':req.locals.data.body.name}},function(error,result){
+                        if(error){
+                          res.send(error);
+                        }
+                        else{
+                          res.send(result);
+                        }
+                      });
+                    });
+                  }
+                  else{
+                    res.send('error');
+                  }
+                });
+              }
+            });
+          });
+        });
+        return req.pipe(busboy);
+      };
+
+
+
+
+
+
+
+
+exports.create = function(req,res,next){
+  var folder = req.body.folder;//contains folder Id
+  if(!folder){
+    var doc = {
+      'created': new Date(),
+      'updated':new Date(),
+      'title':'',
+      'status':'new',
+      'path':undefined,
+      'description':'', //important
+      'serial':'',
+      'folder':undefined,
+      'creator':new ObjectId(req.user._id),
+      'updater':new ObjectId(req.user._id),
+      'sender':new ObjectId(req.user._id),
+      'sendingAs': new ObjectId(),
+      'assign': new ObjectId(req.user._id),
+      'classification':'',//important
+      'size':0,
+      'circles':[],
+      'relatedDocuments':[],//important
+      'watchers':[req.user._id],//important
+      'documentType':''  
+    };
+    var obj = new Document(doc);
+    obj.save(function(error,result){
+      if(error){
+        res.send(error);
+      }
+      else{
+        res.send(result);
+      }
+    });
+  }
+  else{
+    Folder.findOne({'_id':folder}).exec(function(err,folderObj){
+      if(err){
+        res.send(err);
+      }
+      else{
+        var doc = {
+          'created': new Date(),
+          'updated':new Date(),
+          'title':'',
+          'status':'new',
+          'path':undefined,
+          'description':'', //important
+          'serial':'',
+          'folder':new ObjectId(folder),
+          'creator':new ObjectId(req.user._id),
+          'updater':new ObjectId(req.user._id),
+          'sender':new ObjectId(req.user._id),
+          'sendingAs': new ObjectId(),
+          'assign': new ObjectId(req.user._id),
+          'classification':'',//important
+          'size':0,
+          'circles':[],
+          'relatedDocuments':[],//important
+          'watchers':folderObj.watchers,//important
+          'documentType':'',     
+        };
+        var obj = new Document(doc);
+        obj.save(function(error,result){
+          if(error){
+            res.send(error);
+          }
+          else{
+            res.send(result);
+          }
+        });
+    }
+  });
+}
 };
 
 /**

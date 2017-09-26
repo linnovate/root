@@ -77,7 +77,20 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         };
         
 
-       
+        $scope.upload = function(file) {
+            $scope.test = file;
+            var data = {
+                'id':$stateParams.id,
+                'folderId':$stateParams.entityId
+            };
+            if(file.length > 0){
+                OfficeDocumentsService.uploadFileToDocument(data, file).then(function(result){
+                    console.dir("===Document===");
+                    console.dir(result);
+                    $scope.officeDocuments.push(result.data);
+                });
+            }
+        };
 
 
         $scope.addTagClicked=function(){

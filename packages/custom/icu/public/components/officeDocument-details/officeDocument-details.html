@@ -35,8 +35,8 @@
 
 
             <div class="due">
-                <div class="placeholder" ng-if="!officeDocument.due">{{ 'dueDate' | i18next }}</div>
-                <input ng-click="open()" ui-date="dueOptions" ng-model="officeDocument.due" ng-class='{"oldDate":checkDate()}'>
+                <div class="placeholder" ng-if="!officeDocument.created">{{ 'dueDate' | i18next }}</div>
+                <input ng-click="open()" ui-date="dueOptions" ng-model="officeDocument.created" ng-class='{"oldDate":checkDate()}'>
             </div>
             <div id="past">
                 {{'This Deadline is in the past!' | i18next }}
@@ -56,6 +56,9 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
+            </div>
+            <div class="send">
+                <button class="sendBtn" >{{ 'send' | i18next }}</button>
             </div>
             <div class="dropdown dropdown-container" uib-dropdown>
                 <div class="dropdown-trigger" uib-dropdown-toggle>
@@ -77,15 +80,31 @@
                 </ul>
             </div>
         </div>
-        <div class='folder-title' ng-style="{'background-color': '#' + officeDocument.folder.color}"><p class="folder-name">{{officeDocument.folder.title}}</p></div>
+        <div class='folder-title' ng-style="{'background-color': '#' + officeDocument.folder.color}">
+            <p class="folder-name">{{officeDocument.folder.title}}</p>
+            <!-- <button class="simochin" >{{ 'simochin' | i18next }}</button> -->
+        </div>
         <div class="description">
-            <div class="title" contenteditable="true" tabindex="1" ng-attr-autofocus="{{shouldAutofocus || undefined}}" strip-br="true"
+            <div class="title"  contenteditable="true" tabindex="1"  strip-br="true"
                 ng-keydown="onEnter($event)" ng-model="officeDocument.title" ng-change="updateCurrentOfficeDocument()">
 
             </div>
 
             <div class="text" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="officeDocument.description"
                 options="{{options}}">
+            </div>
+            <div class="row-buttons">
+                <button class="create" ng-if="!officeDocument.path">{{ 'createFromTemplate' | i18next }} </button>
+                <button ngf-select
+                        ngf-change="upload($files)"
+                        ngf-multiple="true"
+                        class="choose" ng-if="!officeDocument.path">{{ 'chooseFile' | i18next }}
+                </button>
+                <div ng-if="officeDocument.path" class="document" >
+                        <a href="{{officeDocument.path}}" target="window">
+                            <div class="icon {{officeDocument.documentType}}"></div>
+                        </a>
+                </div>   
             </div>
             <div class="tags">
                 <ul class="list">

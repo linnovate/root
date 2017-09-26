@@ -12,8 +12,7 @@ var DocumentSchema = new Schema({
     type: Date
   },
   title: {
-    type: String,
-    required: true
+    type: String
   },
   status: {
     type: String,
@@ -22,8 +21,7 @@ var DocumentSchema = new Schema({
     default: 'new'
   },
   path: {
-    type: String,
-    required: true
+    type: String
   },
   description: {
     type: String,
@@ -76,7 +74,10 @@ var DocumentSchema = new Schema({
   documentType:{
     type:String
   },
-
+  forNotice: [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }],
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User'
@@ -94,10 +95,12 @@ starVirtual.set(function(value) {
 /**
  * Validations
  */
+
+ /** 
 DocumentSchema.path('title').validate(function (title) {
   return !!title;
 }, 'Name cannot be blank');
-
+*/
 /**
  * Statics
  */

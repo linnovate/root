@@ -295,12 +295,17 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 }
 
+.send{
+    padding: 0.5%;
+    width: 100px
+ }
+
 .summary {
     height: $panel-height;
     border-bottom: 3px solid $light-grey1;
     background-color: #F6F6F6;
 
-    .favorite, .due, .status, .tags, .color, .location , .HI{
+    .favorite, .due, .status, .tags, .color, .location , .HI , .send{
         height: $panel-height;
         float: left;
         position: relative;
@@ -310,6 +315,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             transition: 0.8s;
         } 
     }
+
+
 
     #close {
         float: right !important;
@@ -404,7 +411,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
 
 
-    .favorite, .user, .due, .location , .HI{
+    .favorite, .user, .due, .location , .HI, .send{
         border-right: 1px solid $light-grey1;
     }
 
@@ -476,7 +483,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
     }
 
-    .due, .status, .tags, .location {
+    .due, .status, .tags, .location,{
         width: calc((100% - #{$panel-height}) * 0.19);
 
         .summary-content {
@@ -497,7 +504,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             top: 50%;
             transform: translateX(80%) translateY(-50%);
             color: $light-grey-placeholder;
-            padding-left: 5px;
+            margin-right:5px;
+            //padding-left: 5px;
         }
 
         input {

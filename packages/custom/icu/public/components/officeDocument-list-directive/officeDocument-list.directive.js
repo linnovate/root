@@ -80,9 +80,6 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             $scope.isLoading = true;
 
             _($scope.officeDocuments).each(function(p) {
-                if(p.folder){
-                    p.folderName = p.folderName;
-                }
                 p.__state = creatingStatuses.Created;
                 if (p.title.length > 20)
                 {
@@ -141,19 +138,25 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
 
             $scope.searchResults = [];
             
-            $scope.upload = function(file) {
-                $scope.test = file;
-                var data = {
-                    'folderId':$stateParams.entityId
-                };
-                if(file.length > 0){
-                    OfficeDocumentsService.saveDocument(data, file).then(function(result){
-                        console.dir("===Document===");
-                        console.dir(result);
-                        $scope.officeDocuments.push(result.data);
-                    });
+            
+
+            $scope.create = function(){
+                var data = {};
+                if($stateParams.entity=='folder'){
+                    data['folder']=$stateParams.entityId;
                 }
-            };
+                console.log("===DATA===");
+                console.dir(data);
+                OfficeDocumentsService.createDocument(data).then(function(result){
+                    $scope.officeDocuments.push(result);
+                    $state.go($scope.detailsState+'.activities', {
+                        id: result._id,
+                        entity: context.entityName,
+                        entityId: context.entityId,
+                        nameFocused: false,
+                    },{'reload':true});
+                });
+            }
 
             $scope.search = function(officeDocument) {
                 if (context.entityName !== 'discussion') {
