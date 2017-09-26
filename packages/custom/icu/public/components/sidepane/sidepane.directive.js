@@ -65,7 +65,7 @@ directive('icuSidepane', function() {
         },
         {
             name: 'settings',
-            icon: '/icu/assets/img/project.png',
+            icon: '/icu/assets/img/settings.png',
             state: 'folders.all',
             display: ['offices'],
             open: $scope.isCurrentState({state: 'folders'})

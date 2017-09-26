@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="27" height="28" viewBox="0 0 27 28">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #313c40;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="office" class="cls-1" d="M268,1096v-20.63h9v-2.95l4.5-4.42,4.5,4.42v8.84h9V1096H268Zm6-17.68h-3v2.94h3v-2.94Zm0,5.89h-3v2.95h3v-2.95Zm0,5.89h-3v2.95h3v-2.95Zm9-17.68h-3v2.95h3v-2.95Zm0,5.9h-3v2.94h3v-2.94Zm0,5.89h-3v2.95h3v-2.95Zm0,5.89h-3v2.95h3v-2.95Zm9-5.89h-3v2.95h3v-2.95Zm0,5.89h-3v2.95h3v-2.95Z" transform="translate(-268 -1068)"/>
+</svg>
