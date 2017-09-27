@@ -894,19 +894,19 @@ exports.deleteDocument = function (req, res) {
         'method': 'POST',
         'json': json
       }, function (error, resp, body) {
-
+     //   var creator = folderName;
+     //   if (creator == user) {
+          Document.remove({ _id: req.params.id }, function (err) {
+            if (err) {
+              console.log(err);
+            }
+            else {
+              res.sendStatus(200);
+            }
+          });
+      //  }
       });
-      var creator = folderName;
-      if (creator == user) {
-        Document.remove({ _id: req.params.id }, function (err) {
-          if (err) {
-            console.log(err);
-          }
-          else {
-            res.sendStatus(200);
-          }
-        });
-      }
+
     }
   });
 }

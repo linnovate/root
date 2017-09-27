@@ -222,7 +222,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         };
 
         $scope.deleteOfficeDocument = function (officeDocument) {
-            OfficeDocumentsService.remove(officeDocument._id).then(function () {
+            OfficeDocumentsService.delete(officeDocument._id).then(function () {
 
                 $state.go('main.officeDocuments.all', {
                     entity: 'all'
