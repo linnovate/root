@@ -15,6 +15,7 @@
         }
     }
 }
+
 ul.dropdown-menu {
 	text-align: inherit;
 }
@@ -73,6 +74,10 @@ ul.dropdown-menu {
     }  
 }
 
+#documentTitle{
+    margin:10px 0 0 10px;
+}
+
 .row-buttons{
     border-bottom: 1px solid $light-grey1;
     border-top: 1px solid $light-grey1;
@@ -99,6 +104,8 @@ ul.dropdown-menu {
         }   
     }
 }
+
+
 
 .simochin{
     margin-right: 10px !important;

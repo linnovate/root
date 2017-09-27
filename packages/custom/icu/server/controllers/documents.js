@@ -563,7 +563,8 @@ exports.uploadFileToDocument = function(req,res,next){
                     //else{
                       //var path = body.path;
                       var path = req.locals.data.body.originalPath;
-                      Document.update({'_id':documentId},{$set:{'path':path,'title':req.locals.data.body.name}},function(error,result){
+                      var fileType = path.substring(path.lastIndexOf('.')+1,path.length);
+                      Document.update({'_id':documentId},{$set:{'path':path,'title':req.locals.data.body.name,'documentType':fileType}},function(error,result){
                         if(error){
                           res.send(error);
                         }

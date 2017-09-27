@@ -100,11 +100,21 @@
                         ngf-multiple="true"
                         class="choose" ng-if="!officeDocument.path">{{ 'chooseFile' | i18next }}
                 </button>
-                <div ng-if="officeDocument.path" class="document" >
-                        <a href="{{officeDocument.path}}" target="window">
-                            <div class="icon {{officeDocument.documentType}}"></div>
-                        </a>
-                </div>   
+
+                <div class="tab-content">
+                    <div class="documents">
+                            <div ng-if="officeDocument.path" class="document" >
+                                    <!-- <a href="{{officeDocument.path}}" target="window"> -->
+                                         <a href="{{officeDocument.path}}" target="window">
+                                                 <div class="icon {{officeDocument.documentType}}"></div>       
+                                                 <div id="documentTitle">{{officeDocument.title}}</div>
+                                         </a>
+                            </div> 
+                    </div>
+                </div>
+
+
+                  
             </div>
             <div class="tags">
                 <ul class="list">
