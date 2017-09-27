@@ -11,6 +11,7 @@ var Folder = require('../models/folder');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 
+
 var options = {
   includes: 'assign watchers',
   defaults: { watchers: [] }
@@ -442,6 +443,30 @@ exports.upload = function (req, res, next) {
       })
 
       return req.pipe(busboy);
+};
+
+
+exports.getByPath = function (req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
+  //var query = req.acl.mongoQuery('Document');
+  var path = decodeURI(req.url).replace(/pdf$/, '');
+  var conditions = {
+    path: new RegExp(path)
+  };
+  Document.findOne(conditions).exec(function (err, attachment) {
+    if (err) {
+      req.locals.error = err;
+    }
+    if (!attachment) {
+      req.locals.error = {
+        status: 404,
+        message: 'Entity not found'
+      };
+    }
+    next();
+  })
 };
 
 

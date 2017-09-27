@@ -10,7 +10,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                                                       $state,
                                                       OfficeDocumentsService,
                                                       $stateParams,
-                                                    $timeout) {
+                                                    $timeout,$http) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments")))
         {
             $scope.officeDocument = entity || context.entity;
@@ -66,6 +66,42 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 $scope.delayedUpdate($scope.officeDocument, newContext);
             }
         });
+
+
+        $scope.view = function(document1) {
+            // Check if need to view as pdf
+            if ((document1.documentType == "docx") ||
+                (document1.documentType == "doc") ||
+                (document1.documentType == "xlsx") ||
+                (document1.documentType == "xls") ||
+                (document1.documentType == "ppt") ||
+                (document1.documentType == "pptx")) {
+                var arr = document1.path.split("." + document1.documentType);
+                var ToHref = arr[0] + ".pdf";
+                // Check if convert file exists allready
+                $http({
+                    url: ToHref.replace('/files/', '/api/files/'),
+                    method: 'HEAD'
+                }).success(function() {
+                    // There is allready the convert file
+                    window.open(ToHref + '?view=true')
+                }).error(function() {
+                    // Send to server
+                    $.post('/officeDocsAppend.js', document1).done(function(document2) {
+                        // The convert is OK and now we open the pdf to the client in new window
+                        window.open(ToHref + '?view=true');
+                    }).fail(function(xhr) {
+                        console.error(xhr.responseText);
+                    });
+                });
+            }
+            // Format is NOT needed to view as pdf
+            else {
+                window.open(document1.path + '?view=true');
+            }
+        };
+
+
         $scope.getUnusedTags = function() {
             // return _.chain($scope.tags).reject(function(t) {
             //     return $scope.task.tags.indexOf(t.term) >= 0;

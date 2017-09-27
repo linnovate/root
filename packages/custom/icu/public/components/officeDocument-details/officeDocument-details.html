@@ -105,7 +105,7 @@
                     <div class="documents">
                             <div ng-if="officeDocument.path" class="document" >
                                     <!-- <a href="{{officeDocument.path}}" target="window"> -->
-                                         <a href="{{officeDocument.path}}" target="window">
+                                         <a ng-click="view(officeDocument)" target="window">
                                                  <div class="icon {{officeDocument.documentType}}"></div>       
                                                  <div id="documentTitle">{{officeDocument.title}}</div>
                                          </a>
