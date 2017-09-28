@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="send">
-                <button class="sendBtn" >{{ 'send' | i18next }}</button>
+                <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" send="true" data="officeDocument" send-fn="sendDocument(officeDocument)" class="sendBtn" >{{ 'send' | i18next }}</button>
             </div>
             <div class="dropdown dropdown-container" uib-dropdown>
                 <div class="dropdown-trigger" uib-dropdown-toggle>

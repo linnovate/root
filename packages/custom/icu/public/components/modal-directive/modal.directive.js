@@ -1,6 +1,6 @@
 'use strict';
 angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
-    .directive('icuOpenModal', function ($state, $uibModal) {
+    .directive('icuOpenModal', function ($state, $uibModal ) {
 
         function link(scope, elem, attrs) {
             elem.bind('click', function() {
@@ -16,6 +16,24 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             });
 
             function buildModal() {
+                if(scope.send && scope.entityName == "officeDocument"){
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        size:  'lg',
+                        templateUrl: '/icu/components/modal-directive/sendDocument.html',
+                        controller: controllerDocument,
+                        resolve: {
+                            officeDocument: function () {
+                                return scope.data;
+                            },
+                            people:function () {
+                                return scope.people;
+                            }
+                        }
+                    
+                    }); 
+
+                }else {
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: '/icu/components/modal-directive/modal.html',
@@ -25,8 +43,9 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                             return scope.entityName;
                         }
                     }
-
+                
                 });
+            }
 
                 modalInstance.result.then(function () {
                     scope.deleteFn();
@@ -41,7 +60,11 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             scope: {
                 showModal: '=',
                 deleteFn: '&',
-                entityName: '@'
+                entityName: '@',
+                send: '=',
+                sendDocument: '&',
+                data: '=',
+                people: "="
             },
             link: link
         };
@@ -56,6 +79,20 @@ function controller($scope, $uibModalInstance, $filter, entity) {
         else
             $scope.cancel();
 
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}
+
+function controllerDocument($scope, $uibModalInstance, $filter, officeDocument, people) {
+    //$scope.entity = {type: entity};
+    $scope.officeDocument = officeDocument;
+    $scope.people = people;
+
+    $scope.ok = function () {
+       
     };
 
     $scope.cancel = function () {

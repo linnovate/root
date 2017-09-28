@@ -44,6 +44,20 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         }
 
+        $scope.people = people.data || people;
+        if ($scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+            var newPeople = {
+                name: 'no select'
+            };
+
+            $scope.people.push(_(newPeople).clone());
+        }
+         for(var i =0 ; i<$scope.people.length;i++){
+                    if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job==null)){
+                        $scope.people[i].job = $scope.people[i].name;
+                    }
+        }
+
         $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
 
         $scope.$watchGroup(['officeDocument.description', 'officeDocument.title'], function (nVal, oVal, scope) {

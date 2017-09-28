@@ -221,7 +221,7 @@ module.exports = function(Icu, app) {
     .delete(attachments.deleteFile)
   app.route('/api/history/attachments/:id([0-9a-fA-F]{24})')
     .get(attachments.readHistory);
-  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/attachments')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/attachments')
     .get(attachments.getByEntity);
   app.route('/api/tasks/myTasks/attachments')
     .get(attachments.getMyTasks)
