@@ -29,7 +29,8 @@ var entityIssueMap = {
   projects: 'project',
   discussions: 'discussion',
   offices: 'office',
-  folders: 'folder'
+  folders: 'folder',
+  officeDocuments:'Document'
 };
 
 Object.keys(update).forEach(function(methodName) {
@@ -76,6 +77,9 @@ exports.getByEntity = function(req, res, next) {
   }
 
   var type = entityIssueMap[req.params.entity];
+  if(type=='Document'){
+    type="officeDocument";
+  }
   Update.find({
     issue: type,
     issueId: req.params.id
@@ -161,7 +165,7 @@ exports.getMyTasks = function(req, res, next) {
 }
 
 exports.signNew = function(req, res, next) {
-  var entities = {project: 'Project', task: 'Task', discussion: 'Discussion', office: 'Office', folder: 'Folder'};
+  var entities = {project: 'Project', task: 'Task', discussion: 'Discussion', office: 'Office', folder: 'Folder',officeDocument:"Document"};
   var query = req.acl.mongoQuery(entities[req.body.data.issue]);
   query.findOne({_id: req.body.data.issueId}).exec(function(err, entity){
     if(err) {

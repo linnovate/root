@@ -261,7 +261,7 @@ module.exports = function(Icu, app) {
   app.route('/api/tasks/myTasks/updates')
     .get(updates.getMyTasks)
   //     // .delete(updates.destroy);
-  app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/updates')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/updates')
     .get(updates.getByEntity, updates.getAttachmentsForUpdate);
   app.route('/api/history/updates/:id([0-9a-fA-F]{24})')
     .get(updates.readHistory);
