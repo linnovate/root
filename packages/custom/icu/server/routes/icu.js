@@ -321,7 +321,7 @@ module.exports = function(Icu, app) {
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
   //.post(documents.upload, documents.signNew)
-  .post(documents.upload, documents.updateParent, notification.sendNotification, updates.created)
+  .post(documents.upload)
   .get(documents.getAll);
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
   .get(documents.getById)
