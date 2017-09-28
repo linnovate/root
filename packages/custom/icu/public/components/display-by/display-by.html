@@ -106,12 +106,23 @@
         <p class="title go-to-Offices" ng-click="GoToOffices()"> {{ 'offices' | i18next }} </p>
     </div>
     <div class="list folders" ng-if="foldersList && (icuDisplayBy.indexOf('folders'))>-1">
-        <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}</p>
+        <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}
+            <div tooltips tooltip-template="{{'Select office' | i18next}}">
+                <ui-select ng-model="officesList.office" on-select="changeOrder()" search-enabled="false">
+                    <ui-select-match>
+                        <button class="tasks">{{$select.selected.title | i18next}} </button>
+                    </ui-select-match>
+                    <ui-select-choices repeat="office in officesList">
+                        {{office.title | i18next}}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </p>
         <ul ng-if="visible.folder">
-            <li data-ng-repeat="folder in foldersList | limitTo: displayLimit['folders']" data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
-                data-ng-click="switchTo('folder', folder._id)" ng-if="folder._id && folder.title">
+                <li data-ng-repeat="folder in foldersList | limitTo: 100 | filter: myFilter" data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
+                data-ng-click="switchTo('folder', folder._id)" ng-if="folder._id && folder.title && folder.office.title">
                 <a href class="Names-In-List-On-Side">
-                    {{folder.title}}
+                    {{folder.title}} 
                 </a>
                 <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
             </li>

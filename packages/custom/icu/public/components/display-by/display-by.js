@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context) {
+    function controller($scope, $state, context, $stateParams) {
         $scope.projectsList = [];
         $scope.projects.forEach(function(project) {
                    if(project.title)
@@ -26,6 +26,35 @@ angular.module('mean.icu.ui.displayby', [])
             if(officeDocument.title)
                $scope.officeDocumentsList.push(officeDocument);
             });
+
+        if($scope.officesList.length > 0)
+        {
+            $scope.officesList.office = $scope.officesList[0];
+        }
+
+        $scope.myFilter = function (item) { 
+            if(item.office.title && $scope.officesList.office.title)
+            {
+                return item.office.title === $scope.officesList.office.title;
+            }
+            else
+            {
+                return false;
+            }
+            
+        };
+
+        //$scope.temp = {};
+        $scope.changeOrder = function () {
+            //$scope.temp.office = $scope.officesList.office;
+
+            // if($scope.officesList.office.title != "custom"){
+            //     $scope.sorting.isReverse = !$scope.sorting.isReverse;
+            // }
+            
+            /*Made By OHAD - Needed for reversing sort*/
+            //$state.go($state.current.name, { sort: $scope.officesList.office.title });
+        };
         
         $scope.typesList = [{
             name: 'new',
