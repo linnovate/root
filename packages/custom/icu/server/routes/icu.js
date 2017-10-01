@@ -15,6 +15,7 @@ var templates = require('../controllers/templates');
 var eventDrops = require('../controllers/event-drops');
 var office = require('../controllers/office');
 var folder = require('../controllers/folder');
+var webHook = require('../controllers/webhook');
 
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
@@ -44,7 +45,7 @@ module.exports = function(Icu, app) {
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
-  app.route(/^((?!\/hi\/).)*$/).all(authorization);
+  app.route(/^((?!\/(hi|new)\/).)*$/).all(authorization);
 
   //app.route(/^((?!\/hi\/).)*$/).all(authorization, socket);
 
@@ -290,9 +291,13 @@ module.exports = function(Icu, app) {
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
 
+  app.route('/api/new/:uid')
+    .post(webHook.create); //notification.0, updates.created)
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
+
+
 
   //app.use(utils.errorHandler);
 };

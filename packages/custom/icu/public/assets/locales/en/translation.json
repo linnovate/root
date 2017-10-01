@@ -46,6 +46,7 @@
     "createNewDiscussion": "Create new discussion",
     "createNewProject": "Create new project",
     "createNewTask": "Create new task",
+    "createWebhook": "Create Webhook",
     "DELETE": "DELETE",
     "deadline": "Deadline",
     "deleteDiscussion": "Delete discussion",

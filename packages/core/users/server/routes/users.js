@@ -11,7 +11,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
   app.route('/api/logout')
     .get(users.signout);
   app.route('/api/users/me')
-    .get(users.me);
+    .get(users.uid, users.me);
 
   // Setting up the users api
   app.route('/api/register')

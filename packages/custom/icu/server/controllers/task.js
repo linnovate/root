@@ -40,7 +40,7 @@ var Task = require('../models/task'),
 var Order = require('../models/order')
 
 Object.keys(task).forEach(function(methodName) {
-  if (methodName !== 'create' || methodName !== 'update') {
+  if (methodName !== 'create' && methodName !== 'update') {
     exports[methodName] = task[methodName];
   }
 });

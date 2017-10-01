@@ -1,5 +1,7 @@
 app:
   build: .
+  volumes:
+    - ./:/usr/src/app
   ports:
     - "3100:3100"
   links:

@@ -17,7 +17,8 @@ var mongoose = require('mongoose'),
   jwt = require('jsonwebtoken'), //https://npmjs.org/package/node-jsonwebtoken
   config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {},
-  circles = require('circles-npm')(null, config.circles.uri, circleSettings);
+  circles = require('circles-npm')(null, config.circles.uri, circleSettings),
+  Uid = require('uid');
 
 
 exports.authCallbackSaml = function(req, res) {
@@ -165,9 +166,37 @@ exports.getJwt = function(req, res) {
  * Send User
  */
 exports.me = function(req, res) {
+  console.log('------------------------2-------------------------')
   res.json(req.user || null);
 };
 
+exports.uid = function(req, res, next) {
+  console.log('----------------1--------------')
+  console.log(JSON.stringify(req.user))
+  if (req.user.uid) {
+    console.log('--------------4----------------')
+    console.log(req.user.uid)
+    next();
+  } else {
+    let uid = Uid(10);
+    console.log(uid)
+    //req.user.uid = uid;
+    User.findByIdAndUpdate(
+      req.user._id, 
+      { uid: uid }, 
+      function (err, user) {
+        // return res.status(400).json({
+        //   msg: err
+        // });
+        console.log('--------3----------------');
+        console.log(err);
+        console.log(user)
+        if (err) return next();
+        req.user.uid = uid;
+        next();
+    });
+  }
+}
 /**
  * Find user by id
  */
