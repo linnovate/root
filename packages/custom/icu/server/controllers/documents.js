@@ -9,6 +9,7 @@ var User = mongoose.model('User');
 var Update = require('../models/update');
 var Folder = require('../models/folder');
 var ObjectId = require('mongoose').Types.ObjectId;
+var _ = require('lodash');
 
 
 
@@ -152,7 +153,15 @@ exports.uploadEmptyDocument = function (req, res, next) {
 exports.getAll = function (req, res, next) {
   Document.find({
     $or: [{ watchers: { $in: [req.user._id] } }, { assign: req.user._id }]
-  }).populate('folder').exec(function(err,data){
+  }).populate('folder')
+  .populate('creator')
+  .populate('updater')
+  .populate('sender')
+  .populate('sendingAs')
+  .populate('assign')
+  .populate('relatedDocuments')
+  .populate('forNotice')
+  .populate('watchers').exec(function(err,data){
       if (err) {
         req.locals.error = err;
         req.status(400);
@@ -208,7 +217,15 @@ exports.getByUserId = function (req, res, next) {
 exports.getByFolder = function (req, res, next) {
   Document.find({
     folder: req.params.id
-  }).populate('folder').exec(function(err,data){
+  }).populate('folder')
+    .populate('creator')
+    .populate('updater')
+    .populate('sender')
+    .populate('sendingAs')
+    .populate('assign')
+    .populate('relatedDocuments')
+    .populate('forNotice')
+    .populate('watchers').exec(function(err,data){
     if (err) {
       req.locals.error = err;
       req.status(400);
@@ -1115,5 +1132,53 @@ exports.signNew = function (req, res, next) {
     next();
   })
 }
+
+exports.signNew = function (req, res, next) {
+  var entities = {
+    project: 'Project',
+    task: 'Task',
+    discussion: 'Discussion',
+    office: 'Office',
+    folder: 'Folder'
+  };
+  var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+  query.findOne({
+    _id: req.locals.data.body.entityId
+  }).exec(function (err, entity) {
+    if (err) {
+      req.locals.error = err;
+    }
+    if (!entity) {
+      req.locals.error = {
+        status: 404,
+        message: 'Entity not found'
+      };
+    }
+    if (entity) {
+      req.locals.data.body.watchers = entity.watchers;
+      req.locals.data.body.watchers.push(entity.assign);
+      req.locals.data.body.circles = entity.circles;
+    }
+    next();
+  })
+}
+
+
+exports.sendDocument = function (req, res, next) {
+  var officeDocument = req.body.officeDocument;
+  var sendingForm = req.body.sendingForm;
+  var assign = officeDocument.assign._id;
+  if(sendingForm['classification']){
+    sendingForm['classification']=sendingForm['classification'].toLowerCase();
+  }
+  sendingForm['watchers']=_.union(sendingForm['doneBy'],_.union(sendingForm['forNotice'],_.union([assign],[sendingForm['sendingAs']])));
+  console.log('hi');
+  Document.update({'_id':officeDocument._id},{$set:sendingForm},function(result){
+    res.send(result);
+  });
+}
+
+
+
 
 

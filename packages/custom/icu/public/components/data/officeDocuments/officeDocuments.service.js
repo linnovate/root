@@ -125,7 +125,20 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function sendDocument(sendingForm, officeDocument) {
+            var data = {
+                'sendingForm':sendingForm,
+                'officeDocument':officeDocument
+            };
+            return $http.post(ApiUri + EntityPrefix +  '/sendDocument', data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+         
         return {
+            sendDocument:sendDocument,
             getAll: getAll,
             delete:deleteDocument,
             getById: getById,

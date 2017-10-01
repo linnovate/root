@@ -1,6 +1,6 @@
 'use strict';
 angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
-    .directive('icuOpenModal', function ($state, $uibModal ) {
+    .directive('icuOpenModal', function ($state, $uibModal, OfficeDocumentsService ) {
 
         function link(scope, elem, attrs) {
             elem.bind('click', function() {
@@ -86,13 +86,16 @@ function controller($scope, $uibModalInstance, $filter, entity) {
     };
 }
 
-function controllerDocument($scope, $uibModalInstance, $filter, officeDocument, people) {
+function controllerDocument($scope, $uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
     //$scope.entity = {type: entity};
     $scope.officeDocument = officeDocument;
     $scope.people = people;
 
-    $scope.ok = function () {
-       
+    $scope.classificationList = ['Unclassified','Private','Secret','Top Secret' ]; 
+
+    $scope.ok = function (sendingForm) {
+        
+        OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument)    
     };
 
     $scope.cancel = function () {

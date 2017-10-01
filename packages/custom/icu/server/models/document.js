@@ -78,6 +78,10 @@ var DocumentSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  doneBy: [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }],
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User'

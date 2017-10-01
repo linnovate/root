@@ -331,6 +331,8 @@ module.exports = function(Icu, app) {
   .post(documents.create);
   app.route('/api/officeDocuments/uploadFileToDocument')
   .post(documents.uploadFileToDocument);
+  app.route('/api/officeDocuments/sendDocument')
+  .post(documents.sendDocument);
    app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
 
 
