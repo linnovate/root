@@ -68,7 +68,9 @@ angular.module('mean.icu.ui.displayby', [])
         },{
             name:  'done',
             color:''
-        }]
+        }];
+
+        $scope.typeSelected = '';
 
         $scope.singularItemName = {
             discussions: "discussion",
@@ -115,6 +117,11 @@ angular.module('mean.icu.ui.displayby', [])
             }
         };
 
+
+        $scope.switchToType= function(type){
+            $scope.typeSelected = type.name;
+
+        };
         $scope.switchTo = function(entityName, id) {
 
             // If we are switching between entities, then shrink the display limit again

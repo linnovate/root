@@ -81,9 +81,11 @@
         <p class="title type"> {{ 'type' | i18next }} </p>
         <ul>
         <li data-ng-repeat="type in typesList" 
-            data-ng-class="{'selected': context.entityName === 'officeDocument' && officeDocument._id === context.entityId }"
-            data-ng-click="switchToType()">
-            <p>{{type.name}}</p>
+            data-ng-class="{'selected': typeSelected == type.name}"
+            data-ng-click="switchToType(type)">
+            <a href class="Names-In-List-On-Side">
+                {{type.name}}
+            </a>
             <div class="tag-color" ng-style="{'background-color': '#' + type.color}"></div>
         </li>
     </ul>
