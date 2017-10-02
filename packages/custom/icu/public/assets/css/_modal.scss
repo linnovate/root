@@ -181,3 +181,30 @@
 }
 
 
+$icon-width: 60px;
+$icon-padding: 19px;
+.templateIcon {
+	position: absolute;
+	top: 15px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	height: 80px;
+	width: $icon-width;
+	@include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');
+}
+
+.card{
+	margin-top: 130px;
+	
+}
+
+.template{
+	border: solid 1px;
+	margin: 7px;
+	&:hover{
+		background: green;
+	}
+}
+
+
+

@@ -94,7 +94,7 @@
                 options="{{options}}">
             </div>
             <div class="row-buttons">
-                <button class="create" ng-if="!officeDocument.path">{{ 'createFromTemplate' | i18next }} </button>
+                <button class="create" ng-if="!officeDocument.path" icu-open-modal entity-name="officeDocument" show-modal="true" modal-name="template" data="officeDocument" >{{ 'createFromTemplate' | i18next }} </button>
                 <button ngf-select
                         ngf-change="upload($files)"
                         ngf-multiple="true"

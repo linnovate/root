@@ -336,13 +336,16 @@ module.exports = function(Icu, app) {
    app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
 
 
+   app.route('/api/officeTemplates').post(templateDocs.upload).get(templateDocs.getAll);
+   app.route('/api/officeTemplates/getByofficeId')
+   .post(templateDocs.getByOfficeId)
 
-   app.route('/api/templates*').all(entity('templateDocs'));
-  app.route('/api/templates').post(templateDocs.upload).get(templateDocs.getAll);
-  app.route('/api/templates/:id([0-9a-fA-F]{24})')
+   app.route('/api/officeTemplates*').all(entity('templateDocs'));
+  
+  app.route('/api/officeTemplates/:id([0-9a-fA-F]{24})')
   .get(templateDocs.getById)
   .post(templateDocs.update)
   .delete(templateDocs.deleteTemplate);
-   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
+   //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
 
 };

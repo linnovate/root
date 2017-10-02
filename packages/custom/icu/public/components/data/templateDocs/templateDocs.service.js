@@ -2,10 +2,19 @@
 
 angular.module('mean.icu.data.templatedocsservice', [])
     .service('TemplateDocsService', function ($http, ApiUri, Upload, WarningsService) {
-        var EntityPrefix = '/templates';
+        var EntityPrefix = '/officeTemplates';
 
           function getAll() {
             return $http.get(ApiUri + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function getTemplatesByFolder(folder){
+            return $http.post(ApiUri + EntityPrefix+"/getByOfficeId",{'folder':folder}).then(function (result) {
+                console.log("Data from getTEmplatesBYoffice");
+                console.dir(result);
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
             });
@@ -90,6 +99,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
             saveTemplateDoc: saveTemplateDoc,
             updateTemplateDoc: updateTemplateDoc,
             getByOfficeId: getByOfficeId,
-            getByFolderId: getByFolderId
+            getByFolderId: getByFolderId,
+            getTemplatesByFolder:getTemplatesByFolder
         };
     });

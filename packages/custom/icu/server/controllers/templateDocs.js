@@ -170,6 +170,24 @@ exports.getByUserId = function(req,res,next){
 });
 }
 
+
+//req.body.folder.office contains id of office
+exports.getByOfficeId = function(req,res,next){
+ 
+  console.log("hi");
+  TemplateDoc.find({
+    'office':req.body.folder.office
+  }, function (err, data) {
+    if (err) {
+      req.locals.error = err;
+      req.status(400);
+    } else {
+      req.locals.result = data
+      res.send(data);
+    }
+});
+}
+
 /*
 *
 *req.params.entity contains the entity {project,discussion,office,}
