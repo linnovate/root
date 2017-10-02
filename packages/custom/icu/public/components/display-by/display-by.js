@@ -132,7 +132,13 @@ angular.module('mean.icu.ui.displayby', [])
                     return officeDocument.status == type.name;
                 }      
             });
-            $state.go($state.current,{'officeDocuments':temp});
+            if(temp.length==0){
+                $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
+            }
+            else{
+                $state.go($state.current,{'officeDocuments':temp});
+                
+            }
 
             /** 
             var temp=[];

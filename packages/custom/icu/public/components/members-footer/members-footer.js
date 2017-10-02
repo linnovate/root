@@ -14,7 +14,8 @@ angular.module('mean.icu.ui.membersfooter', [])
                 discussion: 'DiscussionsService',
                 task: 'TasksService',
                 office: 'OfficesService',
-                folder: 'FoldersService'
+                folder: 'FoldersService',
+                officeDocument:'officeDocumentsService'
             };
             $scope.me = {};
             UsersService.getMe().then(function(me) {

@@ -881,6 +881,13 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         padding: 0px 0px 8px 0px;
         font-weight: 700;
         outline: none;
+
+        &.medium-editor-placeholder {
+            &:not(:focus):before {
+                position: inherit;
+                color: $light-grey-placeholder;
+            }
+        }   
     }
 
     .text {

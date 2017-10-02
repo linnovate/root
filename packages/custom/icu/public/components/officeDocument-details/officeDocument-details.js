@@ -244,9 +244,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
-
-        
-
         $scope.update = function (officeDocument, context) {
             OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {
 

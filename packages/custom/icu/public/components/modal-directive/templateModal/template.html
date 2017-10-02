@@ -1,8 +1,14 @@
 <div class="modal-header">
-    <h3 class="modal-title" id="exampleModalLabel">{{'sendDocument' | i18next }}</h3>
     <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
-          </button>
+    </button>
+    <br>
+    <div class="container-fluid">
+            <div class="row">
+                <h3 class="modal-title pull-left" id="exampleModalLabel">{{'sendDocument' | i18next }}</h3>
+                <button class="manageTemplate pull-right" >{{ 'manageTemplate' | i18next }} </button>
+            </div>
+    </div>            
 </div>
 <div class="modal-body">
     <div ng-if="officeTemplates==null||officeTemplates==undefined||officeTemplates.length==0">
