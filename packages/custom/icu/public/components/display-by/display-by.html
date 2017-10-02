@@ -112,7 +112,7 @@
             <div tooltips tooltip-template="{{'Select office' | i18next}}">
                 <ui-select ng-model="officesList.office" on-select="changeOrder()" search-enabled="false">
                     <ui-select-match>
-                        <button class="tasks">{{$select.selected.title | i18next}} </button>
+                        <button class="tasks">{{$select.selected.title | i18next}} <i class="fa fa-caret-down"></i></button>
                     </ui-select-match>
                     <ui-select-choices repeat="office in officesList">
                         {{office.title | i18next}}
