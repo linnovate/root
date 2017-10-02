@@ -130,23 +130,35 @@ angular.module('mean.icu.ui.displayby', [])
                 }
                 else{
                     return officeDocument.status == type.name;
+                }      
+            });
+            $state.go($state.current,{'officeDocuments':temp});
+
+            /** 
+            var temp=[];
+            $scope.officeDocuments.forEach(function(d){
+                temp.push(d);
+            });
+            temp = temp.filter(function(officeDocument){
+                if(context.entityName=='folder'){
+                    return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+                }
+                else{
+                    return officeDocument.status == type.name;
                 }
                    
             });
 
-            if(context.entityName == 'all'){
-                $state.go('main.' + context.main + '.all', {
-                    id: context.entityId,
-                    entity: context.entityName,
-                    officeDocuments: temp
-                },{reload: true});
+
+            /*if(context.entityName == 'all'){
+                $state.go('main.' + context.main + '.all', {},{reload: true});
             }else if (context.entityName == 'folder'){
                 $state.go('main.' + context.main + '.byentity', {
                     entityId: context.entityId,
                     entity: 'folder',
                     officeDocuments: temp
                 },{reload: true});
-            }
+            }*/
             
 
         };
@@ -158,14 +170,15 @@ angular.module('mean.icu.ui.displayby', [])
             }
             $state.go('main.' + context.main  +  '.byentity', {
                 entity: entityName,
-                entityId: id
+                entityId: id,
+                officeDocuments:undefined
             });
         };
         $scope.switchToAll = function (entityName, id) {
             $state.go('main.' + context.main + '.all.details.activities', {
                 id: id,
                 entity: entityName,
-            },{reload:true});
+            });
         }
 
         $scope.visible = {

@@ -3,7 +3,7 @@
         {{ 'myTasks' | i18next }}
     </p>
     <div ng-if="context.main != 'folders'">
-        <p class="title all" ui-sref="main.{{context.main}}.all" ui-sref-active="active" data-ng-class="{ 'selected': context.entityName === 'all'}">
+        <p class="title all" ui-sref="main.{{context.main}}.all({'officeDocuments':undefined})" ui-sref-active="active" data-ng-class="{ 'selected': context.entityName === 'all'}">
             {{ 'all' | i18next }}
             <div class="list {{context.main}}">
                 <ul>

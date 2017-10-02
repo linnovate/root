@@ -1016,12 +1016,11 @@ angular.module('mean.icu').config([
                 views: getListView('officeDocument'),
                 resolve: {
                     officeDocuments: function (OfficeDocumentsService, $stateParams) {
-                        console.log("State params");
-                        console.dir($stateParams);
-                      if($stateParams['officeDocuments']) {
-                            return $stateParams['officeDocuments'];
+                        var docs = $stateParams.officeDocuments;
+                        if(docs){
+                            return docs;
                         }
-                        else {
+                        else{
                             if ($stateParams.starred) {
                                 return OfficeDocumentsService.getStarred();
                             } else {
@@ -1033,6 +1032,7 @@ angular.module('mean.icu').config([
                                     $stateParams.sort);
                             }
                         }
+
 
                     }
                 }
