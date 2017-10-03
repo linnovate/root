@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.officedocumentsservice', [])
-    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService) {
+    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService, ActivitiesService) {
         var EntityPrefix = '/officeDocuments';
 
           function getAll() {
@@ -29,6 +29,13 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                  return result.status;
              });
          }
+
+        function update(officeDocument) {
+            return $http.put(ApiUri + EntityPrefix + '/' + officeDocument._id, officeDocument).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
 
         function getById(id) {
             return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
@@ -125,9 +132,52 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function updateWatcher(officeDocument, me, watcher, type) {
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument._id,
+                    type: type || 'updateWatcher',
+                    userObj: watcher                
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
+        function updateStatus(officeDocument, me) {
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument._id,
+                    type: 'updateStatus',
+                    status: officeDocument.status
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
+        function updateDue(officeDocument, me) {
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument._id,
+                    type: 'updateDue',
+                    TaskDue: officeDocument.due
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
         return {
             getAll: getAll,
             delete:deleteDocument,
+            update: update,
             getById: getById,
             getByTaskId: getByTaskId,
             getByProjectId: getByProjectId,
@@ -140,6 +190,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             star: star,
             getStarred: getStarred,
             createDocument:createDocument,
-            uploadFileToDocument:uploadFileToDocument
+            uploadFileToDocument:uploadFileToDocument,
+            updateWatcher: updateWatcher,
+            updateStatus: updateStatus,
+            updateDue: updateDue
         };
     });

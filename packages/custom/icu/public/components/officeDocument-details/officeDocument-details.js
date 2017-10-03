@@ -9,6 +9,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                                                       context,
                                                       $state,
                                                       OfficeDocumentsService,
+                                                      ActivitiesService, 
                                                       $stateParams,
                                                     $timeout,$http) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments")))
@@ -19,6 +20,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         {
             $scope.officeDocument = context.entity || entity;
         }
+
         $scope.tags = ['tag'];
         $scope.tasks = tasks.data || tasks;
         $scope.officeDocuments = officeDocuments.data || officeDocuments;
@@ -43,7 +45,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 entityId: context.entityId
             });
         }
-
+        
         $scope.people = people.data || people;
         if ($scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
             var newPeople = {
@@ -212,7 +214,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
         $scope.dueOptions = {
             onSelect: function () {
-                $scope.update($scope.officeDocument, 'due');
+                $scope.update($scope.officeDocument, {name: 'due'});
             },
             dateFormat: 'd.m.yy'
         };
@@ -244,13 +246,34 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
+        var reloadCurrent = function() {
+            $state.go($state.current.name, {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {reload: true});
+        }
 
-        
 
         $scope.update = function (officeDocument, context) {
+            
             OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {
-
+                
             });
+            ActivitiesService.data = ActivitiesService.data || [];
+            let me = $scope.me;
+            switch (context.name) {
+                case 'due':
+                    OfficeDocumentsService.updateDue(officeDocument, me).then(function(result) {
+                        ActivitiesService.data.push(result);
+                        reloadCurrent();
+                    });
+                    break;
+                case 'status':
+                    OfficeDocumentsService.updateStatus(officeDocument, me).then(function(result) {
+                        ActivitiesService.data.push(result);
+                        reloadCurrent();
+                    });
+            }
         };
 
         $scope.updateStatus = function(officeDoc){

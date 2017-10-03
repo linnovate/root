@@ -152,7 +152,7 @@ exports.uploadEmptyDocument = function (req, res, next) {
 exports.getAll = function (req, res, next) {
   Document.find({
     $or: [{ watchers: { $in: [req.user._id] } }, { assign: req.user._id }]
-  }).populate('folder').exec(function(err,data){
+  }).populate('folder').populate('watchers').exec(function(err,data){
       if (err) {
         req.locals.error = err;
         req.status(400);
@@ -1027,7 +1027,7 @@ exports.sign = function (req, res, next) {
     tasks: 'task',
     discussions: 'discussion',
     offices: 'office',
-    folders: 'folder'
+    folders: 'folder',
   };
   var entity = entities[req.locals.data.entityName];
   var id = req.params.id;

@@ -9,6 +9,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          $timeout,
                                                          people,
                                                          DiscussionsService,
+                                                         ActivitiesService, 
                                                          $stateParams) {
         $scope.isLoading = true;
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("discussions")))
@@ -235,7 +236,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
         $scope.dueOptions = {
             onSelect: function () {
-                $scope.update($scope.discussion);
+                $scope.update($scope.discussion, 'due');
                 $scope.open();
             },
             onClose: function() {
@@ -361,9 +362,44 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         };
 
-        $scope.update = function (discussion) {
+        var reloadCurrent = function() {
+            $state.go($state.current.name, {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {reload: true});
+        }       
+
+        $scope.update = function (discussion, type) {
+            let me = $scope.me;
+            
             $scope.updateDatesString();
             DiscussionsService.update(discussion);
+            switch (type) {
+                case 'due':
+                    DiscussionsService.updateDue(discussion, me).then(function(result) {
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                        reloadCurrent();
+                    });
+                    break;
+
+                case 'status':
+                    DiscussionsService.updateStatus(discussion, me).then(function(result) {
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                        reloadCurrent();
+                    });
+                    break;
+
+                case 'location':
+                    DiscussionsService.updateLocation(discussion, me).then(function(result) {
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                        reloadCurrent();
+                    });
+                    break;
+            }
+                        
         };
 
         $scope.updateCurrentDiscussion= function(){

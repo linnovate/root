@@ -118,6 +118,18 @@ angular.module('mean.icu.ui.tabs')
                     type: 'deepObject',
                     value: ['userObj', 'lastname'],
                     klass: "user-name"
+                }],
+                removeWatcher: [{
+                    type: 'text',
+                    value: 'removeWatcher'
+                },{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                },{
+                    type: 'deepObject',
+                    value: ['userObj', 'lastname'],
+                    klass: "user-name"
                 }],                
                 updateColor: [{
                     type: 'text',
@@ -130,7 +142,19 @@ angular.module('mean.icu.ui.tabs')
                     type: 'deepObject',
                     value: ['userObj', 'lastname'],
                     klass: "user-name"
-                }],                
+                }], 
+                updateLocation: [{
+                    type: 'text',
+                    value: 'updateLocation'
+                },{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                },{
+                    type: 'deepObject',
+                    value: ['userObj', 'lastname'],
+                    klass: "user-name"
+                }],               
                 copy: [{
                     type: 'text',
                     value: 'copiedThe'
