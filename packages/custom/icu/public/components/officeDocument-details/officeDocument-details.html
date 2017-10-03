@@ -80,12 +80,39 @@
                 </ul>
             </div>
         </div>
-        <div class="rowSimochin">
-        <div class='folder-title' ng-style="{'background-color': '#' + officeDocument.folder.color}">
-            <p class="folder-name">{{officeDocument.folder.title}}</p>
+        <div class="summary wrap-pro">
+            <div class="tags" ng-if="!officeDocument.parent">
+                <div class="tag-wrap">
+                    <ui-select ng-model="officeDocument.folder" select-on-blur on-select="updateFolder(officeDocument,$select.selected._id)" ng-keyup="updateFolderName($select.selected.title)" ng-mouseleave="removeCreateNew">
+                        <ui-select-match placeholder="{{$select.selected.title || 'selectOffice' | i18next}}">
+                            <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
+                                {{$select.selected.title}}
+                                <div class="delete" ng-click="unsetFolder($event, templateDoc)">
+                                    <img src="/icu/assets/img/X.png"></img>
+                                </div>
+                            </div>
+                        </ui-select-match>
+                        <ui-select-choices repeat="folder in folders | filter:$select.search">
+                            <div class="line" ng-show="folder.title" ng-class="{ 'create new': folder.class}">
+                                <div ng-show="folder.class" ng-bind-html="folder.title | searchfilter:$select.search"  class="title"></div>
+                                <div ng-show="folder.class && folderName"  class="create-new">{{ 'createNew' | i18next }}</div>
+                                <span ng-show="!folder.class" ng-bind-html="folder.title | searchfilter:$select.search"  class="title"></span>
+                            </div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+            <div class="parent" ng-if="officeDocument.parent">
+                {{currentContext.entity.title}}
+            </div>
         </div>
         <button class="simochin" >{{'simochin' | i18next }}</button>
-    </div>
+        <!-- <div class="rowSimochin">
+        <div class='folder-title' ng-style="{'background-color': '#' + officeDocument.folder.color}">
+            <p class="folder-name">{{officeDocument.folder.title}}</p>
+        </div> >
+        <button class="simochin" >{{'simochin' | i18next }}</button>
+    </div-->
         <div class="description">
             <div class="title"  contenteditable="true" tabindex="1"  strip-br="true"
                 ng-keydown="onEnter($event)" ng-model="officeDocument.title" ng-change="updateCurrentOfficeDocument()">

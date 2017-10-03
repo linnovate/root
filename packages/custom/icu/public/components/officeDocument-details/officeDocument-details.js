@@ -264,6 +264,30 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         };
 
 
+        $scope.updateFolderName = function(x, y) {
+            $scope.folderName = $('.ui-select-search.ng-valid-parse').val()
+        }
+
+        $scope.unsetFolder = function(event, folder) {
+            event.stopPropagation();
+            delete $scope.officeDocument.folder;
+            $scope.updateFolder($scope.officeDocument,undefined);
+        };
+
+        $scope.removeCreateNew = function() {
+            $scope.folderName = '';
+        }
+
+
+        $scope.updateFolder = function(officeDocument,folderId) {
+            var json ={
+                'name':'folder',
+                'newVal':folderId
+            };
+            OfficeDocumentsService.updateDocument(officeDocument._id,json);
+        };
+
+
         $scope.update = function (officeDocument, context) {
             
             OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {

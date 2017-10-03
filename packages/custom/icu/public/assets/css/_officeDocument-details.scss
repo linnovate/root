@@ -126,3 +126,23 @@ ul.dropdown-menu {
     }   
 }
 }
+
+.simochin{
+    margin-right: 10px !important;
+    @include ellipse(12px);
+    @include button;
+    background-color: #323d41;
+    box-shadow: 0 3px 0 0 #101314;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 3%;
+    float: right;
+    width: 15%;
+    &:hover{
+        background-color: #4C5D63;
+        transition: 0.8s;
+    }   
+}
