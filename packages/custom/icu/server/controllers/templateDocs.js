@@ -10,12 +10,13 @@ var mean = require('meanio'),path = require('path'),fs = require('fs'),
   var ObjectId = require('mongoose').Types.ObjectId;
   var TemplateDoc = require('../models/templateDoc')
 
-  var templateDocs = crud('templateDocs', options);  
+   
 
   var options = {
     includes: 'creator office watchers',
     defaults: { watchers: [] }
   };
+  var templateDocs = crud('templateDocs', options); 
   
   Object.keys(templateDocs).forEach(function(methodName) {
     if (methodName !== 'create' && methodName !== 'update') {
@@ -78,7 +79,7 @@ exports.createNew=function(req,res,next){
 exports.sendTemplateList = function(req,res,next){
 	var entity = req.params.entity;
 	var entityId = req.params.id;
-	var userId=req.user._id;
+	var userId=req.user._iwatchersd;
 	var entities={
 		project:'Project',
 		task:'Task',
@@ -101,7 +102,7 @@ exports.sendTemplateList = function(req,res,next){
 		if(entity){
 			if(entity.assign){
 				if(entity.assign==userId){
-					flag=true;
+					flag=true;watchers
 				}
 			}
 			entity.watchers.forEach(function(watcher){

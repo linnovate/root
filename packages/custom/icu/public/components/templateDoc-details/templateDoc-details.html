@@ -18,11 +18,11 @@
         <div class="summary wrap-pro">
             <div class="tags" ng-if="!templateDoc.parent">
                 <div class="tag-wrap">
-                    <ui-select ng-model="folder.office" select-on-blur on-select="updateOffice(templateDoc,$select.selected._id)" ng-keyup="updateOfficeName($select.selected.title)" ng-mouseleave="removeCreateNew">
+                    <ui-select ng-model="templateDoc.office" select-on-blur on-select="updateOffice(templateDoc,$select.selected._id)" ng-keyup="updateOfficeName($select.selected.title)" ng-mouseleave="removeCreateNew">
                         <ui-select-match placeholder="{{$select.selected.title || 'selectOffice' | i18next}}">
                             <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
                                 {{$select.selected.title}}
-                                <div class="delete" ng-click="unsetOffice($event, folder)">
+                                <div class="delete" ng-click="unsetOffice($event, templateDoc)">
                                     <img src="/icu/assets/img/X.png"></img>
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                     </ui-select>
                 </div>
             </div>
-            <div class="parent" ng-if="folder.parent">
+            <div class="parent" ng-if="templateDoc.parent">
                 {{currentContext.entity.title}}
             </div>
         </div>

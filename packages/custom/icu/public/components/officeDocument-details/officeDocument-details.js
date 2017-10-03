@@ -253,6 +253,16 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             }, {reload: true});
         }
 
+        $scope.updateAssign = function(officeDocument) {
+            var json = {
+                'name':'assign',
+                'newVal':officeDocument.assign
+            };
+            OfficeDocumentsService.updateDocument(officeDocument._id,json);
+            
+
+        };
+
 
         $scope.update = function (officeDocument, context) {
             

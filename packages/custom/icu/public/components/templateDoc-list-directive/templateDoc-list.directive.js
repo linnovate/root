@@ -104,7 +104,7 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
 
             $scope.detailsState = context.entityName === 'all' ? 'main.templateDocs.all.details' : 'main.templateDocs.byentity.details';
 
-        /** 
+         
             $scope.createOrUpdate = function(templateDoc) {
 
                 if (context.entityName !== 'all') {
@@ -131,10 +131,14 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
                         templateDoc.IsTitle = !templateDoc.IsTitle;
                     }
                     templateDoc.title = templateDoc.PartTitle;
-                    return TemplateDocsService.update(templateDoc);
+                    var json = {
+                        'name':'title',
+                        'newVal':templateDoc.title
+                    };
+                    return TemplateDocsService.updateTemplateDoc(templateDoc._id,json);
                 }
             };
-*/
+
             $scope.debouncedUpdate = _.debounce($scope.createOrUpdate, 300);
 
             $scope.searchResults = [];

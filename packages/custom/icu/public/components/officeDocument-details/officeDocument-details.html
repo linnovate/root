@@ -20,7 +20,7 @@
                 </div>
                 <!--<ui-select ng-model="task.assign" on-select="update(task)">-->
                 <div tooltips tooltip-template="{{'assignee' | i18next}}">
-                    <ui-select ng-model="officeDocument.assign" on-select="updateAndNotify(officeDocument)">
+                    <ui-select ng-model="officeDocument.assign" on-select="updateAssign(officeDocument)">
                         <ui-select-match>
                             <div icu-avatar user="$select.selected"></div>
                             <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}</span>

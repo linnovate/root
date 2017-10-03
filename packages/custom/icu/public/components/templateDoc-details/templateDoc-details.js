@@ -156,7 +156,18 @@ angular.module('mean.icu.ui.templateDocdetails', [])
         $scope.updateOfficeName = function(x, y) {
             $scope.officeName = $('.ui-select-search.ng-valid-parse').val()
         }
-        
+
+        $scope.unsetOffice = function(event, folder) {
+            event.stopPropagation();
+            delete folder.office;
+            $scope.updateOffice($scope.templateDoc,undefined);
+        };
+
+        $scope.removeCreateNew = function() {
+            $scope.officeName = '';
+        }
+
+
         $scope.updateOffice = function(templateDoc,officeId) {
             var json ={
                 'name':'office',
