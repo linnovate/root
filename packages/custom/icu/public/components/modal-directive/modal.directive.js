@@ -1,6 +1,6 @@
 'use strict';
 angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
-    .directive('icuOpenModal', function ($state, $uibModal ) {
+    .directive('icuOpenModal', function ($state, $uibModal, OfficeDocumentsService, TemplateDocsService ) {
 
         function link(scope, elem, attrs) {
             elem.bind('click', function() {
@@ -33,6 +33,23 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                     
                     }); 
 
+                } else if(scope.modalName == 'template' && scope.entityName == "officeDocument"){
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        size:  'lg',
+                        templateUrl: '/icu/components/modal-directive/templateModal/template.html',
+                        controller: controllerTemplate,
+                        resolve: {
+                            templates: function () {
+                                if(scope.data.folder == undefined){
+                                  return [];                                                                     
+                                }else{
+                                    return TemplateDocsService.getTemplatesByFolder(scope.data.folder);
+                                } 
+                            }
+                        }
+                    
+                    }); 
                 }else {
                 var modalInstance = $uibModal.open({
                     animation: true,
@@ -64,7 +81,8 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                 send: '=',
                 sendDocument: '&',
                 data: '=',
-                people: "="
+                people: "=",
+                modalName: '@'
             },
             link: link
         };
@@ -86,16 +104,33 @@ function controller($scope, $uibModalInstance, $filter, entity) {
     };
 }
 
-function controllerDocument($scope, $uibModalInstance, $filter, officeDocument, people) {
-    //$scope.entity = {type: entity};
+function controllerDocument($scope, $uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
+    
     $scope.officeDocument = officeDocument;
     $scope.people = people;
 
-    $scope.ok = function () {
-       
+    $scope.classificationList = ['Unclassified','Private','Secret','Top Secret' ]; 
+
+    $scope.ok = function (sendingForm) {
+        
+        OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument)    
     };
 
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
 }
+
+
+// function controllerTemplate($scope, $uibModalInstance, $filter) {
+    
+    
+//         $scope.ok = function (sendingForm) {
+            
+//            // OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument)    
+//         };
+    
+//         $scope.cancel = function () {
+//             $uibModalInstance.dismiss('cancel');
+//         };
+// }

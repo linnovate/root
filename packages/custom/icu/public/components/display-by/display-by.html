@@ -3,7 +3,7 @@
         {{ 'myTasks' | i18next }}
     </p>
     <div ng-if="context.main != 'folders'">
-        <p class="title all" ui-sref="main.{{context.main}}.all" ui-sref-active="active" data-ng-class="{ 'selected': context.entityName === 'all'}">
+        <p class="title all" ui-sref="main.{{context.main}}.all({'officeDocuments':undefined})" ui-sref-active="active" data-ng-class="{ 'selected': context.entityName === 'all'}">
             {{ 'all' | i18next }}
             <div class="list {{context.main}}">
                 <ul>
@@ -81,9 +81,11 @@
         <p class="title type"> {{ 'type' | i18next }} </p>
         <ul>
         <li data-ng-repeat="type in typesList" 
-            data-ng-class="{'selected': context.entityName === 'officeDocument' && officeDocument._id === context.entityId }"
-            data-ng-click="switchToType()">
-            <p>{{type.name}}</p>
+            data-ng-class="{'selected': typeSelected == type.name}"
+            data-ng-click="switchToType(type)">
+            <a href class="Names-In-List-On-Side">
+                {{type.name}}
+            </a>
             <div class="tag-color" ng-style="{'background-color': '#' + type.color}"></div>
         </li>
     </ul>
@@ -104,13 +106,14 @@
             <li ng-if="officesList.length == displayLimit['offices'] && displayLimit['offices'] > 3" ng-click="collapse('offices')" class="more">{{ 'less' | i18next }}</li>
         </ul>
         <p class="title go-to-Offices" ng-click="GoToOffices()"> {{ 'offices' | i18next }} </p>
+        <p class="title go-to-Offices" ng-click="GoToTemplateDocs()"> {{ 'templateDoc' | i18next }} </p>
     </div>
     <div class="list folders" ng-if="foldersList && (icuDisplayBy.indexOf('folders'))>-1">
         <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}
             <div tooltips tooltip-template="{{'Select office' | i18next}}">
                 <ui-select ng-model="officesList.office" on-select="changeOrder()" search-enabled="false">
                     <ui-select-match>
-                        <button class="tasks">{{$select.selected.title | i18next}} </button>
+                        <button class="tasks">{{$select.selected.title | i18next}} <i class="fa fa-caret-down"></i></button>
                     </ui-select-match>
                     <ui-select-choices repeat="office in officesList">
                         {{office.title | i18next}}

@@ -10,6 +10,7 @@ directive('icuSidepane', function() {
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
         $scope.officeDocuments = $scope.officeDocuments.data || $scope.officeDocuments;
+        //$scope.templateDocs = $scope.templateDocs.data || $scope.templateDocs;
         // $scope.people = $scope.people.data || $scope.people;
         
         $scope.toggleVisibility = function(toggledItem) {
@@ -98,7 +99,8 @@ directive('icuSidepane', function() {
             offices: '=',
             folders: '=',
             //people: '='
-            officeDocuments: '=' 
+            officeDocuments: '=',
+            templateDocs: '='
         }
     };
 });

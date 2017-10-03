@@ -80,10 +80,12 @@
                 </ul>
             </div>
         </div>
+        <div class="rowSimochin">
         <div class='folder-title' ng-style="{'background-color': '#' + officeDocument.folder.color}">
             <p class="folder-name">{{officeDocument.folder.title}}</p>
-            <!-- <button class="simochin" >{{ 'simochin' | i18next }}</button> -->
         </div>
+        <button class="simochin" >{{'simochin' | i18next }}</button>
+    </div>
         <div class="description">
             <div class="title"  contenteditable="true" tabindex="1"  strip-br="true"
                 ng-keydown="onEnter($event)" ng-model="officeDocument.title" ng-change="updateCurrentOfficeDocument()">
@@ -94,7 +96,7 @@
                 options="{{options}}">
             </div>
             <div class="row-buttons">
-                <button class="create" ng-if="!officeDocument.path">{{ 'createFromTemplate' | i18next }} </button>
+                <button class="create" ng-if="!officeDocument.path" icu-open-modal entity-name="officeDocument" show-modal="true" modal-name="template" data="officeDocument" >{{ 'createFromTemplate' | i18next }} </button>
                 <button ngf-select
                         ngf-change="upload($files)"
                         ngf-multiple="true"
@@ -156,5 +158,5 @@
         </div>
         <div class="tab-content" data-ui-view="tab"></div>
     </div>
-    <div ng-if="officeDocument._id" icu-members-footer entity="officeDocument" users="people"></div>
+    <div ng-if="officeDocument._id" ng-model="officeDocument.watchers" icu-members-footer entity="officeDocument" users="people"></div>
 </div>

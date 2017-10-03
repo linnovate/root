@@ -1,11 +1,41 @@
 'use strict';
 
 angular.module('mean.icu.data.templatedocsservice', [])
-    .service('TemplateDocsService', function ($http, ApiUri, Upload, WarningsService) {
-        var EntityPrefix = '/templates';
+    .service('TemplateDocsService', function ($http, ApiUri, Upload, WarningsService, PaginationService, $rootScope) {
+        var EntityPrefix = '/officeTemplates';
+        var data, selected;
 
-          function getAll() {
-            return $http.get(ApiUri + EntityPrefix).then(function (result) {
+        //   function getAll() {
+        //     return $http.get(ApiUri + EntityPrefix).then(function (result) {
+        //         WarningsService.setWarning(result.headers().warning);
+        //         return result.data;
+        //     });
+        // }
+
+        function getAll(start, limit, sort) {
+            var qs = querystring.encode({
+                start: start,
+                limit: limit,
+                sort: sort
+            });
+
+            if (qs.length) {
+                qs = '?' + qs;
+            }
+            return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                console.log($rootScope.warning, '$rootScope.warning')
+                return result.data;
+            }, function(err) {return err}).then(function (some) {
+                var data = some.content ? some : [];
+                return PaginationService.processResponse(data);
+            });
+        }
+
+        function getTemplatesByFolder(folder){
+            return $http.post(ApiUri + EntityPrefix+"/getByOfficeId",{'folder':folder}).then(function (result) {
+                console.log("Data from getTEmplatesBYoffice");
+                console.dir(result);
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
             });
@@ -90,6 +120,10 @@ angular.module('mean.icu.data.templatedocsservice', [])
             saveTemplateDoc: saveTemplateDoc,
             updateTemplateDoc: updateTemplateDoc,
             getByOfficeId: getByOfficeId,
-            getByFolderId: getByFolderId
+            getByFolderId: getByFolderId,
+            getTemplatesByFolder:getTemplatesByFolder,
+            getAll: getAll,
+            data: data,
+            selected : selected
         };
     });

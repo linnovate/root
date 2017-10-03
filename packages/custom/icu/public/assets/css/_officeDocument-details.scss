@@ -44,7 +44,7 @@ ul.dropdown-menu {
         font-size: 15px;
         text-decoration: none;
         margin: 3%;
-        margin-right: 70%;
+        margin-right: 60%;
         width: 20%;
         height: 10%;
 }
@@ -105,9 +105,10 @@ ul.dropdown-menu {
     }
 }
 
-
-
-.simochin{
+.rowSimochin{
+   display: flex;
+   border-bottom: 1px solid $light-grey1;
+   .simochin{
     margin-right: 10px !important;
     @include ellipse(12px);
     @include button;
@@ -118,9 +119,10 @@ ul.dropdown-menu {
     font-weight: 700;
     padding-left: 5px;
     padding-right: 5px;
-    margin-top: 10px;
+    margin-top: 3%;
     &:hover{
         background-color: #4C5D63;
         transition: 0.8s;
     }   
+}
 }

@@ -62,7 +62,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments)*').all(circles.acl());
+  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
 
@@ -311,13 +311,6 @@ module.exports = function(Icu, app) {
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
 
-
-  app.route(/^((?!\/hi\/).)*$/).all(response);
-  app.route(/^((?!\/hi\/).)*$/).all(error);
-  //app.use(utils.errorHandler);
-
-
-
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
   //.post(documents.upload, documents.signNew)
@@ -332,16 +325,25 @@ module.exports = function(Icu, app) {
   .post(documents.create);
   app.route('/api/officeDocuments/uploadFileToDocument')
   .post(documents.uploadFileToDocument);
+  app.route('/api/officeDocuments/sendDocument')
+  .post(documents.sendDocument);
    app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
 
+   app.route('/api/officeTemplates')
+   .post(templateDocs.upload)
+   .get(pagination.parseParams, templateDocs.all, pagination.formResponse);
+   app.route('/api/officeTemplates/getByofficeId')
+   .post(templateDocs.getByOfficeId)
 
-
-   app.route('/api/templates*').all(entity('templateDocs'));
-  app.route('/api/templates').post(templateDocs.upload).get(templateDocs.getAll);
-  app.route('/api/templates/:id([0-9a-fA-F]{24})')
+   app.route('/api/officeTemplates*').all(entity('templateDocs'));
+  
+  app.route('/api/officeTemplates/:id([0-9a-fA-F]{24})')
   .get(templateDocs.getById)
   .post(templateDocs.update)
   .delete(templateDocs.deleteTemplate);
-   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
-
+   //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
+   
+   app.route(/^((?!\/hi\/).)*$/).all(response);
+   app.route(/^((?!\/hi\/).)*$/).all(error);
+   //app.use(utils.errorHandler);
 };

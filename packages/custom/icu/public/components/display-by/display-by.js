@@ -63,12 +63,14 @@ angular.module('mean.icu.ui.displayby', [])
             name:  'received',
             color:'37afef' 
         },{
-            name:  'inProgress',
+            name:  'in-progress',
             color:'757575'
         },{
             name:  'done',
             color:''
-        }]
+        }];
+
+        $scope.typeSelected = '';
 
         $scope.singularItemName = {
             discussions: "discussion",
@@ -115,6 +117,57 @@ angular.module('mean.icu.ui.displayby', [])
             }
         };
 
+
+        $scope.switchToType= function(type){
+            $scope.typeSelected = type.name;
+            var temp=[];
+            $scope.officeDocuments.forEach(function(d){
+                temp.push(d);
+            });
+            temp = temp.filter(function(officeDocument){
+                if(context.entityName=='folder'){
+                    return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+                }
+                else{
+                    return officeDocument.status == type.name;
+                }      
+            });
+            if(temp.length==0){
+                $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
+            }
+            else{
+                $state.go($state.current,{'officeDocuments':temp});
+                
+            }
+
+            /** 
+            var temp=[];
+            $scope.officeDocuments.forEach(function(d){
+                temp.push(d);
+            });
+            temp = temp.filter(function(officeDocument){
+                if(context.entityName=='folder'){
+                    return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+                }
+                else{
+                    return officeDocument.status == type.name;
+                }
+                   
+            });
+
+
+            /*if(context.entityName == 'all'){
+                $state.go('main.' + context.main + '.all', {},{reload: true});
+            }else if (context.entityName == 'folder'){
+                $state.go('main.' + context.main + '.byentity', {
+                    entityId: context.entityId,
+                    entity: 'folder',
+                    officeDocuments: temp
+                },{reload: true});
+            }*/
+            
+
+        };
         $scope.switchTo = function(entityName, id) {
 
             // If we are switching between entities, then shrink the display limit again
@@ -123,13 +176,14 @@ angular.module('mean.icu.ui.displayby', [])
             }
             $state.go('main.' + context.main  +  '.byentity', {
                 entity: entityName,
-                entityId: id
+                entityId: id,
+                officeDocuments:undefined
             });
         };
         $scope.switchToAll = function (entityName, id) {
             $state.go('main.' + context.main + '.all.details.activities', {
                 id: id,
-                entity: entityName
+                entity: entityName,
             });
         }
 
@@ -146,6 +200,10 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.GoToOffices = function() {
             $state.go('main.offices.all');
+        }
+
+        $scope.GoToTemplateDocs = function() {
+            $state.go('main.templateDocs.all');
         }
     }
 

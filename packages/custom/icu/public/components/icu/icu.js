@@ -11,6 +11,7 @@ angular.module('mean.icu').controller('IcuController',
         officeDocuments,
         offices,
         folders,
+        templateDocs,
         people,
         context,
         tasks,
@@ -30,6 +31,7 @@ angular.module('mean.icu').controller('IcuController',
     $scope.tasks = tasks.data || tasks;
     $scope.projects = projects.data || projects;
     $scope.officeDocuments = officeDocuments.data || officeDocuments;
+    $scope.templateDocs = templateDocs.data || templateDocs;
     $scope.discussions = discussions.data || discussions;
     $scope.people = people.data || people;
     var entityMap = {
@@ -38,7 +40,8 @@ angular.module('mean.icu').controller('IcuController',
         'user': 'people',
         'office':'offices',
         'folder': 'folders',
-        'officeDocument': 'officeDocuments'
+        'officeDocument': 'officeDocuments',
+        'templateDoc': 'templateDocs'
     };
 
     $scope.getLayoutIcon = function() {
@@ -102,6 +105,14 @@ angular.module('mean.icu').controller('IcuController',
                         context.entity = $scope.offices[0];
                         context.entityId = $scope.offices[0]._id;
                     } else if ($scope.discussions[0] && restoredContext.main === 'office') {
+                        context.entityName = 'discussion';
+                        context.entity = $scope.discussions[0];
+                        context.entityId = $scope.discussions[0]._id;
+                    } else if ($scope.templateDocs[0] && restoredContext.main !== 'templateDoc') {
+                        context.entityName = 'templateDoc';
+                        context.entity = $scope.templateDocs[0];
+                        context.entityId = $scope.templateDocs[0]._id;
+                    } else if ($scope.discussions[0] && restoredContext.main === 'templateDoc') {
                         context.entityName = 'discussion';
                         context.entity = $scope.discussions[0];
                         context.entityId = $scope.discussions[0]._id;

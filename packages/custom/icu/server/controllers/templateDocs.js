@@ -10,7 +10,18 @@ var mean = require('meanio'),path = require('path'),fs = require('fs'),
   var ObjectId = require('mongoose').Types.ObjectId;
   var TemplateDoc = require('../models/templateDoc')
 
+  var templateDocs = crud('templateDocs', options);  
 
+  var options = {
+    includes: 'creator office watchers',
+    defaults: { watchers: [] }
+  };
+  
+  Object.keys(templateDocs).forEach(function(methodName) {
+    if (methodName !== 'create' && methodName !== 'update') {
+      exports[methodName] = templateDocs[methodName];
+    }
+  });  
 
 function getTemplates(entity,id){
   var result = [];
@@ -159,6 +170,24 @@ exports.getById = function(req,res,next){
 exports.getByUserId = function(req,res,next){
   TemplateDoc.find({
     $or:[ {watchers:{$elemMatch:{$eq:req.params.id}}} , {creator: req.params.id} ]
+  }, function (err, data) {
+    if (err) {
+      req.locals.error = err;
+      req.status(400);
+    } else {
+      req.locals.result = data
+      res.send(data);
+    }
+});
+}
+
+
+//req.body.folder.office contains id of office
+exports.getByOfficeId = function(req,res,next){
+ 
+  console.log("hi");
+  TemplateDoc.find({
+    'office':req.body.folder.office
   }, function (err, data) {
     if (err) {
       req.locals.error = err;
