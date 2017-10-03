@@ -94,8 +94,8 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function update(id, data) {
-            return $http.post(ApiUri + EntityPrefix + "/" +id, data).then(function (result) {
+        function update(entity, data) {
+            return $http.post(ApiUri + EntityPrefix + "/" +entity._id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
             });
@@ -160,6 +160,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             star: star,
             getStarred: getStarred,
             createDocument:createDocument,
-            uploadFileToDocument:uploadFileToDocument
+            uploadFileToDocument:uploadFileToDocument,
+            update:update
         };
     });

@@ -104,6 +104,7 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
 
             $scope.detailsState = context.entityName === 'all' ? 'main.templateDocs.all.details' : 'main.templateDocs.byentity.details';
 
+        /** 
             $scope.createOrUpdate = function(templateDoc) {
 
                 if (context.entityName !== 'all') {
@@ -133,7 +134,7 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
                     return TemplateDocsService.update(templateDoc);
                 }
             };
-
+*/
             $scope.debouncedUpdate = _.debounce($scope.createOrUpdate, 300);
 
             $scope.searchResults = [];

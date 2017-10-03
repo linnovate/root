@@ -299,9 +299,6 @@ angular.module('mean.icu').config([
                             return templateDoc;
                         }
                     },
-                    folders: function (FoldersService, $stateParams) {
-                        return FoldersService.getByTemplateDocId($stateParams.id);
-                    },
                     people: function (UsersService) {
                         return UsersService.getAll();
                     }
@@ -450,7 +447,9 @@ angular.module('mean.icu').config([
             //task , activities
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
-
+            if(main=='templateDoc'){
+                console.log("hi");
+            }
             var resolve = {};
             resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
             function (service, $stateParams) {

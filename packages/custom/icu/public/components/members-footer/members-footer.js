@@ -17,7 +17,8 @@ angular.module('mean.icu.ui.membersfooter', [])
                 office: 'OfficesService',
                 templateDoc: 'TemplateDocsService',
                 folder: 'FoldersService',
-                officeDocument:'officeDocumentsService'
+                officeDocument:'OfficeDocumentsService',
+                officeDocuments:'OfficeDocumentsService'
             };
             $scope.me = {};
             UsersService.getMe().then(function(me) {
@@ -93,8 +94,25 @@ angular.module('mean.icu.ui.membersfooter', [])
                     frequentUser: member._id
                 }
 
-                service.update(entity, data);
+                if(context.main=="officeDocuments"){
+                    var a = [];
+                    entity.watchers.forEach(function(watcher){
+                        a.push(watcher._id);
+                    });
+                    var json = {
+                        'name':'watchers',
+                        'newVal':a
+                    }
+                    service.update(entity,json);
+                    $state.reload();
+                }
+                else{
+                    service.update(entity, data);
+                }
+
+                
                 getWatchersGroups();
+                
 
             };
 

@@ -42,6 +42,33 @@ function getTemplates(entity,id){
     });
   });
 }
+
+
+
+exports.createNew=function(req,res,next){
+  var template = {
+    'created': new Date(),
+    'title':'',
+    'path':undefined,
+    'spPath':undefined,
+    'description':'', //important
+    'templateType':'',
+    'office':undefined,
+    'assign':req.user._id,
+    'size':0,
+    'circles':undefined,
+    'watchers':[req.user._id] 
+  };
+  var obj = new TemplateDoc(template);
+  obj.save(function(error,result){
+    if(error){
+      res.send(error);
+    }
+    else{
+      res.send(result);
+    }
+  });
+};
 /**
 *	req.params contains entity,id (mongoDB _id of entity)
 *
@@ -454,7 +481,18 @@ exports.deleteTemplate = function(req,res){
   });
 };
 
+exports.update2 = function (req, res, next) {
+  var json = {};
+  json['' + req.body.name] = req.body.newVal;
+  TemplateDoc.update({ "_id": req.params.id }, json).then(function (err, result) {
+    console.log("Err=" + err + " result=" + result);
+    if(req.body.name=='watchers'){
+      //ADD SP FUNCTIONALITY !!!
+    }
+    res.send('ok');
+  });
 
+};
 
 /**
 * req.body.zero contains ids of watchers before change

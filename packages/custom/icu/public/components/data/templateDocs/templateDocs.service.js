@@ -47,6 +47,14 @@ angular.module('mean.icu.data.templatedocsservice', [])
              });
          }
 
+
+         function getByTemplateDocId(id) {
+            return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
         function getById(id) {
             return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
@@ -105,7 +113,13 @@ angular.module('mean.icu.data.templatedocsservice', [])
         }
 
         function updateTemplateDoc(id, data) {
-            return $http.post(ApiUri + EntityPrefix + id, data).then(function (result) {
+            return $http.post(ApiUri + EntityPrefix +'/'+ id, data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+        function create(templateDoc) {
+            return $http.post(ApiUri + EntityPrefix+"/createNew", templateDoc).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
             });
@@ -113,6 +127,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
         return {
             delete:deleteTemplate,
             getById: getById,
+            getByTemplateDocId:getByTemplateDocId,
             getByTaskId: getByTaskId,
             getByProjectId: getByProjectId,
             getByDiscussionId: getByDiscussionId,
@@ -124,6 +139,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
             getTemplatesByFolder:getTemplatesByFolder,
             getAll: getAll,
             data: data,
-            selected : selected
+            selected : selected,
+            create:create
         };
     });

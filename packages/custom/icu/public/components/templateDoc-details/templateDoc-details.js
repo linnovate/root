@@ -23,7 +23,7 @@ angular.module('mean.icu.ui.templateDocdetails', [])
         $scope.folders = folders.data || folders;
         $scope.templateDocs = templateDocs.data || templateDocs;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
-
+/** 
         TemplateDocsService.getStarred().then(function (starred) {
 
             // Chack if HI room created and so needs to show HI.png
@@ -36,6 +36,7 @@ angular.module('mean.icu.ui.templateDocdetails', [])
                 return s._id === $scope.templateDoc._id;
             });
         });
+        */
 
         if (!$scope.templateDoc) {
             $state.go('main.templateDocs.byentity', {
@@ -136,8 +137,36 @@ angular.module('mean.icu.ui.templateDocdetails', [])
             });
         };
 
+        $scope.updateTitle = function(templateDoc,title){
+            var json ={
+                'name':'title',
+                'newVal':title
+            };
+            TemplateDocsService.updateTemplateDoc(templateDoc._id,json);
+        };
+
+        $scope.updateDescription = function(templateDoc,desc){
+            var json ={
+                'name':'description',
+                'newVal':desc
+            };
+            TemplateDocsService.updateTemplateDoc(templateDoc._id,json);
+        };
+
+        $scope.updateOfficeName = function(x, y) {
+            $scope.officeName = $('.ui-select-search.ng-valid-parse').val()
+        }
+        
+        $scope.updateOffice = function(templateDoc,officeId) {
+            var json ={
+                'name':'office',
+                'newVal':officeId
+            };
+            TemplateDocsService.updateTemplateDoc(templateDoc._id,json);
+        };
+/** 
         $scope.update = function (templateDoc, context) {
-            TemplateDocsService.update(templateDoc, context).then(function(res) {
+            TemplateDocsService.update(templateDocId, context).then(function(res) {
                 if (TemplateDocsService.selected && res._id === TemplateDocsService.selected._id) {
                     if (context.name === 'title') {
                         TemplateDocsService.selected.title = res.title;
@@ -148,6 +177,7 @@ angular.module('mean.icu.ui.templateDocdetails', [])
                 }
             });
         };
+        */
 
         $scope.updateCurrentTemplateDoc = function(){
             $scope.templateDoc.PartTitle = $scope.templateDoc.title;

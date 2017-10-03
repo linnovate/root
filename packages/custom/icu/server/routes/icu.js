@@ -62,7 +62,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates)*').all(circles.acl());
+  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
 
@@ -263,6 +263,8 @@ module.exports = function(Icu, app) {
   //     // .delete(updates.destroy);
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/updates')
     .get(updates.getByEntity, updates.getAttachmentsForUpdate);
+  app.route('/api/:entity(templateDocs)/:id([0-9a-fA-F]{24})/updates')
+    .get(updates.getByEntity);
   app.route('/api/history/updates/:id([0-9a-fA-F]{24})')
     .get(updates.readHistory);
 
@@ -328,6 +330,10 @@ module.exports = function(Icu, app) {
   .post(documents.sendDocument);
    app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
 
+
+   app.route('/api/officeTemplates/createNew')
+   .post(templateDocs.createNew)
+
    app.route('/api/officeTemplates')
    .post(templateDocs.upload)
    .get(pagination.parseParams, templateDocs.all, pagination.formResponse);
@@ -338,7 +344,7 @@ module.exports = function(Icu, app) {
   
   app.route('/api/officeTemplates/:id([0-9a-fA-F]{24})')
   .get(templateDocs.getById)
-  .post(templateDocs.update)
+  .post(templateDocs.update2)
   .delete(templateDocs.deleteTemplate);
    //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
    

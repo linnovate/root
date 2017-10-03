@@ -13,9 +13,9 @@ angular.module('mean.icu.ui.templateDoclist', [])
         $scope.loadPrev = templateDocs.prev;
 
         $scope.starred = $stateParams.starred;
-        if ($scope.templateDocs.length > 0 && !$scope.templateDocs[$scope.templateDocs.length - 1].id) {
- 		    $scope.templateDocs = [$scope.templateDocs[0]];
- 	    }
+        // if ($scope.templateDocs.length > 0 && !$scope.templateDocs[$scope.templateDocs.length - 1].id) {
+ 		//     $scope.templateDocs = [$scope.templateDocs[0]];
+ 	    // }
 
         $scope.isCurrentState = function (id) {
             return $state.current.name.indexOf('main.templateDocs.byentity') === 0 &&

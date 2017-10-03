@@ -1017,7 +1017,6 @@ exports.update2 = function (req, res, next) {
 
 
 exports.update = function (req, res, next) {
-  var context = req.body.context;
   var json = {};
   json['' + req.body.name] = req.body.newVal;
   Document.update({ "_id": req.params.id }, json).then(function (err, result) {

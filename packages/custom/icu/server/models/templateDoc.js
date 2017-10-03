@@ -27,7 +27,7 @@ var TemplateDocSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref:'Office'
   },
-  creator: {
+  assign: {
     type: Schema.ObjectId,
     ref: 'User'
   },
