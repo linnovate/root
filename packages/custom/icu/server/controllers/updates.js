@@ -79,7 +79,7 @@ exports.getByEntity = function(req, res, next) {
 
   var type = entityIssueMap[req.params.entity];
   if(type=='Document'){
-    type="officeDocument";
+    type="officeDocuments";
   }
   if(type=='TemplateDoc'){
     type='templateDoc';
@@ -88,7 +88,6 @@ exports.getByEntity = function(req, res, next) {
     issue: type,
     issueId: req.params.id
   }).populate('userObj', 'name lastname profile').populate('creator', 'name lastname profile').then(function(updates) {
-    console.log(JSON.stringify(updates))
     req.locals.result = updates;
     next();
   });

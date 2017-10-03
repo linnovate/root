@@ -5,7 +5,6 @@ angular.module('mean.icu.ui.avatar', [])
 
         function controller($scope) {
             $scope.imgUrl = '?' + Date.now();
-
         }
 
         return {

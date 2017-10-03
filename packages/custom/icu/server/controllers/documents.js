@@ -1043,7 +1043,7 @@ exports.sign = function (req, res, next) {
     tasks: 'task',
     discussions: 'discussion',
     offices: 'office',
-    folders: 'folder'
+    folders: 'folder',
   };
   var entity = entities[req.locals.data.entityName];
   var id = req.params.id;

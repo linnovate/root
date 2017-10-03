@@ -237,7 +237,7 @@ module.exports = function(Icu, app) {
     .get(discussion.readHistory);
   app.route('/api/discussions/:id([0-9a-fA-F]{24})')
     .get(discussion.read, star.isStarred)
-    .put(discussion.read, discussion.update, star.isStarred, attachments.sign, updates.updated)
+    .put(discussion.read, discussion.update, star.isStarred, attachments.sign)
     .delete(star.unstarEntity, discussion.read, discussion.destroy);
   app.route('/api/discussions/:id([0-9a-fA-eact applicaF]{24})/schedule')
     .post(discussion.read, discussion.schedule, discussion.update, updates.updated);
@@ -321,6 +321,7 @@ module.exports = function(Icu, app) {
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
   .get(documents.getById)
   .post(documents.update)
+  .put(documents.update, star.isStarred, attachments.sign)
   .delete(documents.deleteDocument);
   app.route('/api/officeDocuments/create')
   .post(documents.create);

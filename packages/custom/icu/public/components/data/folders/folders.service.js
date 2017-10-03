@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.foldersservice', [])
-.service('FoldersService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService) {
+.service('FoldersService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/folders';
     var data, selected;
 
@@ -126,6 +126,49 @@ angular.module('mean.icu.data.foldersservice', [])
         });
     }
 
+    function updateWatcher(folder, me, watcher, type) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'folder',
+                issueId: folder.id,
+                type: type || 'updateWatcher',
+                userObj: watcher                
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateStatus(folder) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'folder',
+                issueId: folder.id,
+                type: 'updateStatus',
+                status: folder.status
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+
+    function updateColor(folder, me) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'folder',
+                issueId: folder.id,
+                type: 'updateColor',
+                status: folder.color
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     return {
         getAll: getAll,
         getById: getById,
@@ -140,6 +183,9 @@ angular.module('mean.icu.data.foldersservice', [])
         getStarred: getStarred,
         data: data,
         selected: selected,
-        WantToCreateRoom: WantToCreateRoom
+        WantToCreateRoom: WantToCreateRoom,
+        updateWatcher: updateWatcher,
+        updateStatus: updateStatus,
+        updateColor: updateColor
     };
 });

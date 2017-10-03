@@ -38,7 +38,7 @@ angular.module('mean.icu.data.activitiesservice', [])
 
     function getByOfficeDocumentId(id) {
         return $http.get(ApiUri + '/officeDocuments/' + id + EntityPrefix).then(function(updatesResult) {
-        	WarningsService.setWarning(updatesResult.headers().warning);
+            WarningsService.setWarning(updatesResult.headers().warning);
             return getUser(updatesResult.data);
         });
     }

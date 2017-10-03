@@ -127,12 +127,12 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     // update activities
-    function updateWatcher(project, me, watcher) {
+    function updateWatcher(project, me, watcher, type) {
         return ActivitiesService.create({
             data: {
                 issue: 'project',
                 issueId: project.id,
-                type: 'updateWatcher',
+                type: type || 'updateWatcher',
                 userObj: watcher                
             },
             context: {}

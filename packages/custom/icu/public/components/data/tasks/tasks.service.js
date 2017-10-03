@@ -193,12 +193,12 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    function updateWatcher(task, me, watcher) {
+    function updateWatcher(task, me, watcher, type) {
         return ActivitiesService.create({
             data: {
                 issue: 'task',
                 issueId: task.id,
-                type: 'updateWatcher',
+                type: type || 'updateWatcher',
                 userObj: watcher                
             },
             context: {}

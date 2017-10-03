@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.discussionsservice', [])
-.service('DiscussionsService', function (ApiUri, $http, PaginationService, WarningsService) {
+.service('DiscussionsService', function (ApiUri, $http, PaginationService, WarningsService, ActivitiesService) {
     var EntityPrefix = '/discussions';
     var data;
 
@@ -17,7 +17,7 @@ angular.module('mean.icu.data.discussionsservice', [])
         }
 
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
@@ -101,7 +101,6 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function schedule(discussion) {
-        console.log(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule');
         return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule').then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
@@ -109,10 +108,65 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function cancele(discussion) {
-        console.log(ApiUri + EntityPrefix + '/' + discussion._id + '/cancele');
         return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/cancele').then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
+        });
+    }
+
+    function updateWatcher(discussion, me, watcher, type) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'discussion',
+                issueId: discussion.id,
+                type: type || 'updateWatcher',
+                userObj: watcher                
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateStatus(discussion, me) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'discussion',
+                issueId: discussion.id,
+                type: 'updateStatus',
+                status: discussion.status
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateDue(discussion, me) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'discussion',
+                issueId: discussion.id,
+                type: 'updateDue',
+                TaskDue: discussion.due
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateLocation(discussion, me) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'discussion',
+                issueId: discussion.id,
+                type: 'updateLocation',
+                TaskDue: discussion.due
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
         });
     }
 
@@ -128,6 +182,10 @@ angular.module('mean.icu.data.discussionsservice', [])
         schedule: schedule,
         summary: summary,
         data: data,
-        cancele: cancele
+        cancele: cancele,
+        updateWatcher: updateWatcher,
+        updateStatus: updateStatus,
+        updateDue: updateDue,
+        updateLocation: updateLocation
     };
 });

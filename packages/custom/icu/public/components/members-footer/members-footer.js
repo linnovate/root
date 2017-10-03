@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.membersfooter', [])
     .directive('icuMembersFooter', function() {
-        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService, UsersService, ActivitiesService,TasksService,ProjectsService) {
+        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService, UsersService, ActivitiesService,TasksService,ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService) {
 
             var serviceMap = {
                 projects: 'ProjectsService',
@@ -11,14 +11,15 @@ angular.module('mean.icu.ui.membersfooter', [])
                 offices: 'OfficesService',
                 templateDocs: 'TemplateDocsService',
                 folders: 'FoldersService',
+                officeDocuments: 'OfficeDocumentsService',
                 project: 'ProjectsService',
                 discussion: 'DiscussionsService',
                 task: 'TasksService',
                 office: 'OfficesService',
-                templateDoc: 'TemplateDocsService',
                 folder: 'FoldersService',
-                officeDocument:'OfficeDocumentsService',
-                officeDocuments:'OfficeDocumentsService'
+                officeDocuments:'OfficeDocumentsService',
+                officeDocument: 'OfficeDocumentsService',
+                templateDoc: 'TemplateDocsService',
             };
             $scope.me = {};
             UsersService.getMe().then(function(me) {
@@ -84,7 +85,6 @@ angular.module('mean.icu.ui.membersfooter', [])
                         $scope.notAssigned[i].job = $scope.notAssigned[i].name;
                     }
                 }
-
                 var serviceName = serviceMap[$stateParams.id ? context.main : context.entityName];
                 var service = $injector.get(serviceName);
                 var data = {
@@ -112,7 +112,6 @@ angular.module('mean.icu.ui.membersfooter', [])
 
                 
                 getWatchersGroups();
-                
 
             };
 
@@ -139,33 +138,33 @@ angular.module('mean.icu.ui.membersfooter', [])
             };
 
             $scope.addMember = function(member) {
-
                 $scope.showSelect = false;
                 if (member.type) {
+
                     if (!$scope.entity.circles) $scope.entity.circles = {};
                     if (!$scope.entity.circles[member.type]) $scope.entity.circles[member.type] = [];
                     $scope.entity.circles[member.type].push(member._id);
                 } else {
                     $scope.entity.watchers.push(member);
                 }
+
                 update($scope.entity, member, 'added');
                 $scope.animate = true;
 
                 var task = $scope.entity ;
                 var me = $scope.me ;
-                
                 if (context.entityName === 'discussion') {
                     task.discussion = context.entityId;
                 }
-                
                 switch(context.main) {
                     case 'projects':
                         ProjectsService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = [] ;
                             ActivitiesService.data.push(result);
                         });
-                        $state.go('main.projects.all.details.activities', {
-                            entity: 'all'
+                        $state.go($state.current.name, {
+                            entity: context.entityName,
+                            entityId: context.entityId
                         }, {reload: true});                
                         break ;
                     case 'tasks':
@@ -173,9 +172,46 @@ angular.module('mean.icu.ui.membersfooter', [])
                             ActivitiesService.data.push(result);
                         });
                         break ;
+                    case 'discussions':
+                        DiscussionsService.updateWatcher(task, me, member).then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                        });
+                        $state.go($state.current.name, {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {reload: true});                
+                        break ;
+                    case 'officeDocument':
+                        OfficeDocumentsService.updateWatcher(task, me, member).then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                        });
+                        $state.go($state.current.name, {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {reload: true});                
+                        break ;
+                    case 'folders':
+                        FoldersService.updateWatcher(task, me, member).then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                        });
+                        $state.go($state.current.name, {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {reload: true});                
+                        break ;
                 }
 
             };
+
+            var reloadCurrent = function() {
+                $state.go($state.current.name, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {reload: true});      
+            }
 
             $scope.deleteMember = function(member) {
                 if (member.type) {
@@ -187,7 +223,51 @@ angular.module('mean.icu.ui.membersfooter', [])
                         return _.isEqual(member, mem);
                     });
                 }
+
                 update($scope.entity, member, 'removed');
+
+                var task = $scope.entity ;
+                var me = $scope.me ;
+                if (context.entityName === 'discussion') {
+                    task.discussion = context.entityId;
+                }
+                
+                switch(context.main) {
+                    case 'projects':
+                        ProjectsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                            reloadCurrent()
+                        });         
+                        break ;
+
+                    case 'tasks':
+                        TasksService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
+                            ActivitiesService.data.push(result);
+                        });
+                        break ;
+                    case 'discussions':
+                        DiscussionsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                            reloadCurrent();
+                        });           
+                        break ;
+                    case 'officeDocument':
+                        OfficeDocumentsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                            reloadCurrent();
+                        });                
+                        break ;
+                    case 'folders':
+                        FoldersService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                            reloadCurrent();
+                        });                
+                        break ;
+                }
             };
         }
 

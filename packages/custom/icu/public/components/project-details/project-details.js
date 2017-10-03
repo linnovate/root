@@ -135,19 +135,12 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         };
 
-
-        $scope.updateStatus = function(project) {           
-                        if (context.entityName === 'discussion') {
-                            project.discussion = context.entityId;
-                        }
-            
-                        ProjectsService.updateStatus(project).then(function(result) {
-                            ActivitiesService.data =[] ;
-                            ActivitiesService.data.push(result);
-                        });
-                        $scope.update(project, context) ;
-                    }
-            
+        var reloadCurrent = function() {
+            $state.go($state.current.name, {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {reload: true});
+        }            
 
         $scope.update = function (project, context) {
             ProjectsService.update(project, context).then(function(res) {
@@ -159,17 +152,27 @@ angular.module('mean.icu.ui.projectdetails', [])
                         ProjectsService.selected.color = res.color;
                     }
                 }
-                if (context.name === 'color') {
-                    // update activity                
-                    ProjectsService.updateColor(project).then(function(result) {
-                        ActivitiesService.data = [] ; // TBD
-                        ActivitiesService.data.push(result);
-                    });
-                }
+                switch (context.name) {
+                    case 'status':
+                        if (context.entityName === 'discussion') {
+                            project.discussion = context.entityId;
+                        }
+
+                        ProjectsService.updateStatus(project).then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                            reloadCurrent();
+                        });
+                        break;
                 
-                $state.go('main.projects.all.details.activities', {
-                    entity: 'all'
-                }, {reload: true});
+                    case 'color':
+                        ProjectsService.updateColor(project).then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ; // TBD
+                            ActivitiesService.data.push(result);
+                            reloadCurrent();
+                        });
+                        break;   
+                }
             });
         };
 
