@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.membersfooter', [])
     .directive('icuMembersFooter', function() {
-        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService, UsersService, ActivitiesService,TasksService,ProjectsService, DiscussionsService, OfficeDocumentsService) {
+        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService, UsersService, ActivitiesService,TasksService,ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService) {
 
             var serviceMap = {
                 projects: 'ProjectsService',
@@ -174,6 +174,16 @@ angular.module('mean.icu.ui.membersfooter', [])
                             entityId: context.entityId
                         }, {reload: true});                
                         break ;
+                    case 'folders':
+                        FoldersService.updateWatcher(task, me, member).then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                        });
+                        $state.go($state.current.name, {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {reload: true});                
+                        break ;
                 }
 
             };
@@ -227,6 +237,13 @@ angular.module('mean.icu.ui.membersfooter', [])
                         break ;
                     case 'officeDocument':
                         OfficeDocumentsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                            reloadCurrent();
+                        });                
+                        break ;
+                    case 'folders':
+                        FoldersService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
                             reloadCurrent();
