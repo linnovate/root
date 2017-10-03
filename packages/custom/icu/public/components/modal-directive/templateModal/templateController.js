@@ -1,5 +1,5 @@
 
-function controllerTemplate($scope, $uibModalInstance, $filter, templates) {
+function controllerTemplate($scope, $uibModalInstance, $filter, templates, $state) {
 
     $scope.officeTemplates = templates;
     
@@ -11,5 +11,10 @@ function controllerTemplate($scope, $uibModalInstance, $filter, templates) {
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
+
+    $scope.GoToTemplateDocs = function () {
+        $scope.cancel();
+        $state.go('main.templateDocs.all');
+    }
 }
 
