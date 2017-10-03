@@ -269,6 +269,46 @@ angular.module('mean.icu').config([
             };
         }
 
+        function getTemplateDocDetailsState(urlPrefix) {
+            if (!urlPrefix) {
+                urlPrefix = '';
+            }
+
+            return {
+                url: urlPrefix + '/:id',
+                views: {
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/templateDoc-details/templateDoc-details.html',
+                        controller: 'TemplateDocDetailsController'
+                    }
+                },
+                params: {
+                    nameFocused: false
+                },
+                resolve: {
+                    entity: function ($stateParams, templateDocs, TemplateDocsService) {
+                        var templateDoc = _(templateDocs.data || templateDocs).find(function (t) {
+                            return t._id === $stateParams.id;
+                        });
+
+                        if (!templateDoc) {
+                            return TemplateDocsService.getById($stateParams.id).then(function (templateDoc) {
+                                return templateDoc;
+                            });
+                        } else {
+                            return templateDoc;
+                        }
+                    },
+                    folders: function (FoldersService, $stateParams) {
+                        return FoldersService.getByTemplateDocId($stateParams.id);
+                    },
+                    people: function (UsersService) {
+                        return UsersService.getAll();
+                    }
+                }
+            };
+        }
+
         function getFolderDetailsState(urlPrefix) {
             if (!urlPrefix) {
                 urlPrefix = '';
@@ -596,6 +636,15 @@ angular.module('mean.icu').config([
                     offices: function (OfficesService) {
                         return OfficesService.getAll(0, 0, SORT).then(function (data) {
                             OfficesService.data = data.data || data;
+                            return data;
+                        }, function (err) {
+                            return [];
+                        });
+                    },
+                    templateDocs: function (TemplateDocsService) {
+                        //return TemplateDocsService.getAll().then(function (data) {
+                        return TemplateDocsService.getAll(0, 0, SORT).then(function (data) {
+                            TemplateDocsService.data = data.data || data;
                             return data;
                         }, function (err) {
                             return [];
@@ -1182,6 +1231,69 @@ angular.module('mean.icu').config([
             .state('main.offices.byentity.details.documents', getDetailsTabState('office', 'documents'))
             .state('main.offices.byentity.details.folders', getDetailsTabState('office', 'folders'))
 
+            .state('main.templateDocs', {
+                url: '/templateDocs',
+                views: {
+                    middlepane: {
+                        //hack around the fact that state current name is initialized in controller only
+                        template: '',
+                        controller: function ($state, discussions, context) {
+                            if ($state.current.name === 'main.templateDocs') {
+                                if (discussions.data.length) {
+                                    $state.go('.byentity', {
+                                        entity: context.entityName,
+                                        entityId: context.entityId
+                                    });
+                                } else {
+                                    $state.go('.all');
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            .state('main.templateDocs.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('templateDoc'),
+                resolve: {
+                    templateDocs: function (TemplateDocsService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return TemplateDocsService.getStarred();
+                        } else {
+                            if (typeof TemplateDocsService.data !== 'undefined') {
+                                $stateParams.limit = TemplateDocsService.data.length;
+                            }
+                            return TemplateDocsService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.templateDocs.all.details', getTemplateDocDetailsState())
+            .state('main.templateDocs.all.details.activities', getDetailsTabState('templateDoc', 'activities'))
+            .state('main.templateDocs.all.details.activities.modal', getDetailspaneModal())
+            .state('main.templateDocs.all.details.documents', getDetailsTabState('templateDoc', 'documents'))
+            .state('main.templateDocs.all.details.folders', getDetailsTabState('templateDoc', 'folders'))
+
+            .state('main.templateDocs.byentity', generateStateByEntity('templateDoc'))
+            .state('main.templateDocs.byentity.activities', getDetailsTabState('templateDoc', 'activities'))
+            .state('main.templateDocs.byentity.activities.modal', getDetailspaneModal())
+            .state('main.templateDocs.byentity.documents', getDetailsTabState('templateDoc', 'documents'))
+            .state('main.templateDocs.byentity.folders', getDetailsTabState('templateDoc', 'folders'))
+
+            .state('main.templateDocs.byentity.details', getTemplateDocDetailsState())
+            .state('main.templateDocs.byentity.details.activities', getDetailsTabState('templateDoc', 'activities'))
+            .state('main.templateDocs.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.templateDocs.byentity.details.documents', getDetailsTabState('templateDoc', 'documents'))
+            .state('main.templateDocs.byentity.details.folders', getDetailsTabState('templateDoc', 'folders'))
+
             .state('main.folders', {
                 url: '/folders',
                 views: {
@@ -1311,6 +1423,12 @@ angular.module('mean.icu').config([
             .state('main.search.office.activities.modal', getDetailspaneModal())
             .state('main.search.office.documents', getDetailsTabState('office', 'documents'))
             .state('main.search.office.tasks', getDetailsTabState('office', 'tasks'))
+
+            .state('main.search.templateDoc', getTemplateDocDetailsState('/templateDoc'))
+            .state('main.search.templateDoc.activities', getDetailsTabState('templateDoc', 'activities'))
+            .state('main.search.templateDoc.activities.modal', getDetailspaneModal())
+            .state('main.search.templateDoc.documents', getDetailsTabState('templateDoc', 'documents'))
+            .state('main.search.templateDoc.tasks', getDetailsTabState('templateDoc', 'tasks'))
 
             .state('main.search.folder', getFolderDetailsState('/folder'))
             .state('main.search.folder.activities', getDetailsTabState('folder', 'activities'))

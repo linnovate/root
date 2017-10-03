@@ -201,6 +201,10 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.GoToOffices = function() {
             $state.go('main.offices.all');
         }
+
+        $scope.GoToTemplateDocs = function() {
+            $state.go('main.templateDocs.all');
+        }
     }
 
         function link($scope, $element, context) {

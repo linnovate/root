@@ -1,13 +1,34 @@
 'use strict';
 
 angular.module('mean.icu.data.templatedocsservice', [])
-    .service('TemplateDocsService', function ($http, ApiUri, Upload, WarningsService) {
+    .service('TemplateDocsService', function ($http, ApiUri, Upload, WarningsService, PaginationService, $rootScope) {
         var EntityPrefix = '/officeTemplates';
+        var data, selected;
 
-          function getAll() {
-            return $http.get(ApiUri + EntityPrefix).then(function (result) {
+        //   function getAll() {
+        //     return $http.get(ApiUri + EntityPrefix).then(function (result) {
+        //         WarningsService.setWarning(result.headers().warning);
+        //         return result.data;
+        //     });
+        // }
+
+        function getAll(start, limit, sort) {
+            var qs = querystring.encode({
+                start: start,
+                limit: limit,
+                sort: sort
+            });
+
+            if (qs.length) {
+                qs = '?' + qs;
+            }
+            return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
+                console.log($rootScope.warning, '$rootScope.warning')
                 return result.data;
+            }, function(err) {return err}).then(function (some) {
+                var data = some.content ? some : [];
+                return PaginationService.processResponse(data);
             });
         }
 
@@ -100,6 +121,9 @@ angular.module('mean.icu.data.templatedocsservice', [])
             updateTemplateDoc: updateTemplateDoc,
             getByOfficeId: getByOfficeId,
             getByFolderId: getByFolderId,
-            getTemplatesByFolder:getTemplatesByFolder
+            getTemplatesByFolder:getTemplatesByFolder,
+            getAll: getAll,
+            data: data,
+            selected : selected
         };
     });

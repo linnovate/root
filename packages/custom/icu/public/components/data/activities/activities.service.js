@@ -71,6 +71,13 @@ angular.module('mean.icu.data.activitiesservice', [])
         });
     }
 
+    function getByTemplateDocId(id) {
+        return $http.get(ApiUri + '/templateDocs/' + id + EntityPrefix).then(function(updatesResult) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
+            return getUser(updatesResult.data);
+        });
+    }
+
     function getByFolderId(id) {
         return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function(updatesResult) {
         	WarningsService.setWarning(updatesResult.headers().warning);
@@ -95,6 +102,7 @@ angular.module('mean.icu.data.activitiesservice', [])
         create: create,
         data: data,
         getByOfficeId: getByOfficeId,
+        getByTemplateDocId: getByTemplateDocId,
         getByFolderId: getByFolderId,
         getByOfficeDocumentId:getByOfficeDocumentId
     };

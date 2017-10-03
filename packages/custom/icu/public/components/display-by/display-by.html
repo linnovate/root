@@ -106,6 +106,7 @@
             <li ng-if="officesList.length == displayLimit['offices'] && displayLimit['offices'] > 3" ng-click="collapse('offices')" class="more">{{ 'less' | i18next }}</li>
         </ul>
         <p class="title go-to-Offices" ng-click="GoToOffices()"> {{ 'offices' | i18next }} </p>
+        <p class="title go-to-Offices" ng-click="GoToTemplateDocs()"> {{ 'templateDoc' | i18next }} </p>
     </div>
     <div class="list folders" ng-if="foldersList && (icuDisplayBy.indexOf('folders'))>-1">
         <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}

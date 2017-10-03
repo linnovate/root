@@ -9,11 +9,13 @@ angular.module('mean.icu.ui.membersfooter', [])
                 discussions: 'DiscussionsService',
                 tasks: 'TasksService',
                 offices: 'OfficesService',
+                templateDocs: 'TemplateDocsService',
                 folders: 'FoldersService',
                 project: 'ProjectsService',
                 discussion: 'DiscussionsService',
                 task: 'TasksService',
                 office: 'OfficesService',
+                templateDoc: 'TemplateDocsService',
                 folder: 'FoldersService',
                 officeDocument:'officeDocumentsService'
             };
