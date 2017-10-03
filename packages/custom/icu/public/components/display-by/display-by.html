@@ -84,7 +84,7 @@
             data-ng-class="{'selected': typeSelected == type.name}"
             data-ng-click="switchToType(type)">
             <a href class="Names-In-List-On-Side">
-                {{type.name}}
+                {{type.name | i18next}}
             </a>
             <div class="tag-color" ng-style="{'background-color': '#' + type.color}"></div>
         </li>

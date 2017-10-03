@@ -28,6 +28,7 @@ angular.module('mean.icu.ui.rows', [])
         'search-office': '/icu/components/row-types/search-office-row.html',
         'search-folder': '/icu/components/row-types/search-folder-row.html',
         'search-officeDocument': '/icu/components/row-types/search-officeDocument-row.html',
+        'search-templateDoc': '/icu/components/row-types/search-templateDoc-row.html',
         'subtasks': '/icu/components/row-types/sub-tasks-row.html',
     };
 
