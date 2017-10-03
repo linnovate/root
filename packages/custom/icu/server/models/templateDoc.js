@@ -45,14 +45,14 @@ var TemplateDocSchema = new Schema({
 
 
 
-
+/**
 TemplateDocSchema.statics.load = function (id, cb) {
   this.findOne({
     _id: id
   }).populate('creator', 'name username').exec(cb);
 };
 
-/**
+
  * Validations
 
 
@@ -110,7 +110,7 @@ TemplateDocSchema.statics.folder = function (id, cb) {
     cb(err, {room: folder.room, title: folder.title});
   });
 };
-*/
+
 var elasticsearch = require('../controllers/elasticsearch');
 
 TemplateDocSchema.post('save', function (req, next) {
@@ -130,6 +130,8 @@ TemplateDocSchema.pre('remove', function (next) {
   next();
 });
 
-TemplateDocSchema.plugin(archive, 'attachment');
+*/
+
+TemplateDocSchema.plugin(archive, 'templateDoc');
 
 module.exports = mongoose.model('TemplateDoc', TemplateDocSchema);

@@ -311,13 +311,6 @@ module.exports = function(Icu, app) {
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
 
-
-  app.route(/^((?!\/hi\/).)*$/).all(response);
-  app.route(/^((?!\/hi\/).)*$/).all(error);
-  //app.use(utils.errorHandler);
-
-
-
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
   //.post(documents.upload, documents.signNew)
@@ -335,8 +328,9 @@ module.exports = function(Icu, app) {
   .post(documents.sendDocument);
    app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
 
-   app.route('/api/officeTemplates*').all(entity('officeTemplates'));
-   app.route('/api/officeTemplates').post(templateDocs.upload).get(templateDocs.getAll);
+   app.route('/api/officeTemplates')
+   .post(templateDocs.upload)
+   .get(pagination.parseParams, templateDocs.all, pagination.formResponse);
    app.route('/api/officeTemplates/getByofficeId')
    .post(templateDocs.getByOfficeId)
 
@@ -347,5 +341,8 @@ module.exports = function(Icu, app) {
   .post(templateDocs.update)
   .delete(templateDocs.deleteTemplate);
    //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
-
+   
+   app.route(/^((?!\/hi\/).)*$/).all(response);
+   app.route(/^((?!\/hi\/).)*$/).all(error);
+   //app.use(utils.errorHandler);
 };

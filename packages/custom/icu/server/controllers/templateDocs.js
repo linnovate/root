@@ -10,7 +10,18 @@ var mean = require('meanio'),path = require('path'),fs = require('fs'),
   var ObjectId = require('mongoose').Types.ObjectId;
   var TemplateDoc = require('../models/templateDoc')
 
+  var templateDocs = crud('templateDocs', options);  
 
+  var options = {
+    includes: 'creator office watchers',
+    defaults: { watchers: [] }
+  };
+  
+  Object.keys(templateDocs).forEach(function(methodName) {
+    if (methodName !== 'create' && methodName !== 'update') {
+      exports[methodName] = templateDocs[methodName];
+    }
+  });  
 
 function getTemplates(entity,id){
   var result = [];
