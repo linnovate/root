@@ -366,10 +366,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
     .dueDiv{
         position: fixed;
-        width : 151px;
+        width : 160px;
         height : 370px;
         z-index : 999;
-        margin-left : 250px;
+        margin-left : 260px;
         margin-top : 54px;
         background-color: $light-grey-placeholder;
     }
