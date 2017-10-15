@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.officesservice', [])
-.service('OfficesService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService) {
+.service('OfficesService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/offices';
     var data, selected;
 
@@ -126,6 +126,34 @@ angular.module('mean.icu.data.officesservice', [])
         });
     }
 
+    function updateWatcher(office, me, watcher, type) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'office',
+                issueId: office.id,
+                type: type || 'updateWatcher',
+                userObj: watcher                
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateColor(office, me) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'office',
+                issueId: office.id,
+                type: 'updateColor',
+                status: office.color
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     return {
         getAll: getAll,
         getById: getById,
@@ -140,6 +168,8 @@ angular.module('mean.icu.data.officesservice', [])
         getStarred: getStarred,
         data: data,
         selected: selected,
-        WantToCreateRoom: WantToCreateRoom
+        WantToCreateRoom: WantToCreateRoom,
+        updateWatcher: updateWatcher,
+        updateColor: updateColor
     };
 });

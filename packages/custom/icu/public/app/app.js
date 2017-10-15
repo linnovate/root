@@ -447,9 +447,9 @@ angular.module('mean.icu').config([
             //task , activities
             var capitalizedMain = capitalize(main);
             var capitalizedTab = capitalize(tab);
-            if(main=='templateDoc'){
-                console.log("hi");
-            }
+            // if(main=='templateDoc'){
+            //     console.log("hi");
+            // }
             var resolve = {};
             resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
             function (service, $stateParams) {

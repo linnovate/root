@@ -10,7 +10,8 @@ angular.module('mean.icu.ui.officedetails', [])
                                                       context,
                                                       $state,
                                                       OfficesService,
-                                                      $stateParams) {
+                                                      $stateParams,
+                                                      ActivitiesService) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("offices")))
         {
             $scope.office = entity || context.entity;
@@ -136,6 +137,13 @@ angular.module('mean.icu.ui.officedetails', [])
             });
         };
 
+        var reloadCurrent = function() {
+            $state.go($state.current.name, {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {reload: true});
+        }
+
         $scope.update = function (office, context) {
             OfficesService.update(office, context).then(function(res) {
                 if (OfficesService.selected && res._id === OfficesService.selected._id) {
@@ -146,6 +154,15 @@ angular.module('mean.icu.ui.officedetails', [])
                         OfficesService.selected.color = res.color;
                     }
                 }
+
+                if (context.name === 'color') {
+                    OfficesService.updateColor(office).then(function(result) {
+                        ActivitiesService.data = ActivitiesService.data || [] ;
+                        ActivitiesService.data.push(result);
+                        reloadCurrent();
+                    });
+                }
+                
             });
         };
 
