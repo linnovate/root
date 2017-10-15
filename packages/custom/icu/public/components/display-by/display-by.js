@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context) {
+    function controller($scope, $state, context, $stateParams) {
         $scope.projectsList = [];
         $scope.projects.forEach(function(project) {
                    if(project.title)
@@ -20,12 +20,63 @@ angular.module('mean.icu.ui.displayby', [])
             if(folder.title)
                 $scope.foldersList.push(folder);
             });
+        
+        $scope.officeDocumentsList = [];
+        $scope.officeDocuments.forEach(function(officeDocument) {
+            if(officeDocument.title)
+               $scope.officeDocumentsList.push(officeDocument);
+            });
+
+        if($scope.officesList.length > 0)
+        {
+            $scope.officesList.office = $scope.officesList[0];
+        }
+
+        $scope.myFilter = function (item) { 
+            if(item.office.title && $scope.officesList.office.title)
+            {
+                return item.office.title === $scope.officesList.office.title;
+            }
+            else
+            {
+                return false;
+            }
+            
+        };
+
+        //$scope.temp = {};
+        $scope.changeOrder = function () {
+            //$scope.temp.office = $scope.officesList.office;
+
+            // if($scope.officesList.office.title != "custom"){
+            //     $scope.sorting.isReverse = !$scope.sorting.isReverse;
+            // }
+            
+            /*Made By OHAD - Needed for reversing sort*/
+            //$state.go($state.current.name, { sort: $scope.officesList.office.title });
+        };
+        
+        $scope.typesList = [{
+            name: 'new',
+             color:'bbe77e'
+        },{
+            name:  'received',
+            color:'37afef' 
+        },{
+            name:  'in-progress',
+            color:'757575'
+        },{
+            name:  'done',
+            color:''
+        }];
+
+        $scope.typeSelected = '';
 
         $scope.singularItemName = {
             discussions: "discussion",
             projects: "project",
             tasks: "task",
-            documents: "document",
+            officeDocuments: "officeDocument",
             offices: "office",
             folders: "folder"
         };
@@ -34,7 +85,7 @@ angular.module('mean.icu.ui.displayby', [])
             projects: $scope.projects,
             discussions: $scope.discussions,
             tasks: $scope.tasks,
-            //documents: $scope.$scope.documents
+            officeDocuments: $scope.officeDocuments,
             offices: $scope.offices,
             folders: $scope.folders
         };
@@ -56,14 +107,67 @@ angular.module('mean.icu.ui.displayby', [])
             discussions : 3,
             offices: 3,
             folders: 3,
+            officeDocuments:3,
             reset : function() {
                 this.projects = 3;
                 this.discussions = 3;
                 this.offices = 3;
                 this.folders = 3;
+                this.officeDocuments = 3;
             }
         };
 
+
+        $scope.switchToType= function(type){
+            $scope.typeSelected = type.name;
+            var temp=[];
+            $scope.officeDocuments.forEach(function(d){
+                temp.push(d);
+            });
+            temp = temp.filter(function(officeDocument){
+                if(context.entityName=='folder'){
+                    return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+                }
+                else{
+                    return officeDocument.status == type.name;
+                }      
+            });
+            if(temp.length==0){
+                $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
+            }
+            else{
+                $state.go($state.current,{'officeDocuments':temp});
+                
+            }
+
+            /** 
+            var temp=[];
+            $scope.officeDocuments.forEach(function(d){
+                temp.push(d);
+            });
+            temp = temp.filter(function(officeDocument){
+                if(context.entityName=='folder'){
+                    return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+                }
+                else{
+                    return officeDocument.status == type.name;
+                }
+                   
+            });
+
+
+            /*if(context.entityName == 'all'){
+                $state.go('main.' + context.main + '.all', {},{reload: true});
+            }else if (context.entityName == 'folder'){
+                $state.go('main.' + context.main + '.byentity', {
+                    entityId: context.entityId,
+                    entity: 'folder',
+                    officeDocuments: temp
+                },{reload: true});
+            }*/
+            
+
+        };
         $scope.switchTo = function(entityName, id) {
 
             // If we are switching between entities, then shrink the display limit again
@@ -72,13 +176,14 @@ angular.module('mean.icu.ui.displayby', [])
             }
             $state.go('main.' + context.main  +  '.byentity', {
                 entity: entityName,
-                entityId: id
+                entityId: id,
+                officeDocuments:undefined
             });
         };
         $scope.switchToAll = function (entityName, id) {
             $state.go('main.' + context.main + '.all.details.activities', {
                 id: id,
-                entity: entityName
+                entity: entityName,
             });
         }
 
@@ -86,13 +191,20 @@ angular.module('mean.icu.ui.displayby', [])
             project: false,
             discussion: false,
             user: false,
-            document: false,
+            officeDocument: false,
             office: false,
             folder: false
         };
 
         $scope.visible[$scope.context.entityName] = true;
 
+        $scope.GoToOffices = function() {
+            $state.go('main.offices.all');
+        }
+
+        $scope.GoToTemplateDocs = function() {
+            $state.go('main.templateDocs.all');
+        }
     }
 
         function link($scope, $element, context) {
@@ -117,7 +229,7 @@ angular.module('mean.icu.ui.displayby', [])
             discussions: '=',
             people: '=',
             icuDisplayBy: '=',
-            documents: '=',
+            officeDocuments: '=',
             offices: '=',
             folders: '='
         },

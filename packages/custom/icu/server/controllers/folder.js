@@ -3,7 +3,7 @@
 require('../models/folder');
 
 var options = {
-  includes: 'assign watchers office',
+  includes: 'assign watchers office folder',
   defaults: {
     watchers: [],
     office: undefined
@@ -91,18 +91,34 @@ exports.destroy = function(req, res, next) {
 };
 
 exports.getByEntity = function(req, res, next) {
+
   if (req.locals.error) {
     return next();
   }
 
-  var entities = {
-    users: 'creator',
-    _id: '_id',
-    discussions: 'discussion'
-  },
-    entityQuery = {};
+console.log("bla");
 
-  entityQuery[entities[req.params.entity]] = req.params.id;
+  var entities = {
+    offices: 'office',
+    users: 'assign',
+    discussions: 'discussions',
+    tags: 'tags'
+  },
+    entityQuery = {
+      tType: {
+        $ne: 'template'
+      },
+      $or: [{
+        parent: null
+      }, {
+        parent: {
+          $exists: false
+        }
+      }]
+    };
+  entityQuery[entities[req.params.entity]] = (req.params.id instanceof Array) ? {
+    $in: req.params.id
+  } : req.params.id;
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
@@ -113,13 +129,13 @@ exports.getByEntity = function(req, res, next) {
     starredOnly = true;
   }
   var query = req.acl.mongoQuery('Folder');
-  
-  query.find(entityQuery);
 
+  query.find(entityQuery);
   query.populate(options.includes);
 
   Folder.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;
+
 
     var pagination = req.locals.data.pagination;
     if (pagination && pagination.type && pagination.type === 'page') {
@@ -127,11 +143,32 @@ exports.getByEntity = function(req, res, next) {
         .skip(pagination.start)
         .limit(pagination.limit);
     }
-
+    //if(pagination.sort == "custom"){
+      // Task.aggregate([
+      //   {$unwind: '$ref'},
+      //    {
+      //      $lookup:{
+      //              from: 'Ordertasks',
+      //              localField: '_id',
+      //              foreignField: 'ref',
+      //              as: 'tasks'}
+      //      },
+      //       {$sort: {'tasks.order':1 }}      
+      //  ]).exec(function(err, tasks) {
+      //    console.log(tasks);
+      //  });
+      // query.exec(function(err, tasks) {
+      //       tasks.forEach(function(element){
+      //           Order.find({ref:element._id},function(doc){
+                  
+      //           })
+      //       })
+      //     })
+      //}
     query.exec(function(err, folders) {
       if (err) {
         req.locals.error = {
-          message: 'Can\'t get folders'
+          message: 'Can\'t get tags'
         };
       } else {
         if (starredOnly) {
@@ -139,35 +176,113 @@ exports.getByEntity = function(req, res, next) {
             folder.star = true;
           });
         }
-        if(pagination.sort == "custom"){
-        var temp = new Array(folders.length) ;
-        var folderTemp = folders;
-        Order.find({name: "Folder", discussion:folders[0].discussion}, function(err, data){
+      }
+      if(pagination.sort == "custom"){
+        var temp = new Array(tasks.length) ;
+        var tasksTemp = tasks;
+        Order.find({name: "Task", project:tasks[0].project}, function(err, data){
             data.forEach(function(element) {
-              for (var index = 0; index < folderTemp.length; index++) {
-                if(JSON.stringify(folderTemp[index]._id) === JSON.stringify(element.ref)){
-                    temp[element.order - 1] = folders[index];
+              for (var index = 0; index < tasksTemp.length; index++) {
+                if(JSON.stringify(tasksTemp[index]._id) === JSON.stringify(element.ref)){
+                    temp[element.order - 1] = tasks[index];
                 }
                 
               }
             });
-             folders = temp;
-            req.locals.result = folders;
+             tasks = temp;
+            req.locals.result = tasks;
             next();
         })
       }
       else{
-       
-        req.locals.result = folders;
-         next();
-      }
+      req.locals.result = folders;
+
+      next();
       }
     });
-    
   });
 
 
 };
+
+// exports.getByEntity = function(req, res, next) {
+//   if (req.locals.error) {
+//     return next();
+//   }
+
+//   var entities = {
+//     users: 'creator',
+//     _id: '_id',
+//     discussions: 'discussion'
+//   },
+//     entityQuery = {};
+
+//   entityQuery[entities[req.params.entity]] = req.params.id;
+
+//   var starredOnly = false;
+//   var ids = req.locals.data.ids;
+//   if (ids && ids.length) {
+//     entityQuery._id = {
+//       $in: ids
+//     };
+//     starredOnly = true;
+//   }
+//   var query = req.acl.mongoQuery('Folder');
+  
+//   query.find(entityQuery);
+
+//   query.populate(options.includes);
+
+//   Folder.find(entityQuery).count({}, function(err, c) {
+//     req.locals.data.pagination.count = c;
+
+//     var pagination = req.locals.data.pagination;
+//     if (pagination && pagination.type && pagination.type === 'page') {
+//       query.sort(pagination.sort)
+//         .skip(pagination.start)
+//         .limit(pagination.limit);
+//     }
+
+//     query.exec(function(err, folders) {
+//       if (err) {
+//         req.locals.error = {
+//           message: 'Can\'t get folders'
+//         };
+//       } else {
+//         if (starredOnly) {
+//           folders.forEach(function(folder) {
+//             folder.star = true;
+//           });
+//         }
+//         if(pagination.sort == "custom"){
+//         var temp = new Array(folders.length) ;
+//         var folderTemp = folders;
+//         Order.find({name: "Folder", discussion:folders[0].discussion}, function(err, data){
+//             data.forEach(function(element) {
+//               for (var index = 0; index < folderTemp.length; index++) {
+//                 if(JSON.stringify(folderTemp[index]._id) === JSON.stringify(element.ref)){
+//                     temp[element.order - 1] = folders[index];
+//                 }
+                
+//               }
+//             });
+//              folders = temp;
+//             req.locals.result = folders;
+//             next();
+//         })
+//       }
+//       else{
+       
+//         req.locals.result = folders;
+//          next();
+//       }
+//       }
+//     });
+    
+//   });
+
+
+// };
 
 exports.getByDiscussion = function(req, res, next) {
   if (req.locals.error) {

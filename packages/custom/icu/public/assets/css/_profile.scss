@@ -29,6 +29,22 @@
         justify-content: center;
     }
 
+    #saveprofile{
+        height: calc(12px * 2);
+        border-radius: 12px;
+        appearance: none;
+        border: none;
+        padding: 0;
+        outline: none;
+        background-color: #fda102;
+        box-shadow: 0 3px 0 0 #ff6400;
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+        float: left;
+        width: 80px;
+    }
+
     .profile-links {
         margin: 20px;
     }

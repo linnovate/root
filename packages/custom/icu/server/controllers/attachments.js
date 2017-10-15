@@ -30,7 +30,8 @@ exports.getByEntity = function (req, res, next) {
     discussions: 'discussion',
     updates: 'update',
     offices: 'office',
-    folders: 'folder'
+    folders: 'folder',
+    officeDocuments: 'officeDocument'
   },
     entity = entities[req.params.entity];
 
@@ -279,18 +280,30 @@ exports.getByPath = function (req, res, next) {
     path: new RegExp(path)
   };
   query.findOne(conditions).exec(function (err, attachment) {
-    if (err) {
-      req.locals.error = err;
+    if (err || !attachment ) {
+      var query = req.acl.mongoQuery('Document');
+      query.findOne(conditions).exec(function (err, attachment) {
+        if (err || !attachment ) {
+          req.locals.error = {
+            status: 404,
+            message: 'Entity not found'
+          };
+          next();
+        }
+        else{
+          next();
+        }
+        
+      });
     }
-    if (!attachment) {
-      req.locals.error = {
-        status: 404,
-        message: 'Entity not found'
-      };
+    else{
+      next();
     }
-    next();
-  })
+    
+  });
 };
+
+
 
 exports.sign = function (req, res, next) {
   var watchArray = req.body.watchers;
@@ -321,7 +334,8 @@ exports.signNew = function (req, res, next) {
     task: 'Task',
     discussion: 'Discussion',
     office: 'Office',
-    folder: 'Folder'
+    folder: 'Folder',
+    officeDocument: 'Document'
   };
   var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
   query.findOne({

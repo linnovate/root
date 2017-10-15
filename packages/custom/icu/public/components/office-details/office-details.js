@@ -4,6 +4,7 @@ angular.module('mean.icu.ui.officedetails', [])
     .controller('OfficeDetailsController', function ($scope,
                                                       entity,
                                                       tasks,
+                                                      folders,
                                                       people,
                                                       offices,
                                                       context,
@@ -19,6 +20,7 @@ angular.module('mean.icu.ui.officedetails', [])
             $scope.office = context.entity || entity;
         }
         $scope.tasks = tasks.data || tasks;
+        $scope.folders = folders.data || folders;
         $scope.offices = offices.data || offices;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
 

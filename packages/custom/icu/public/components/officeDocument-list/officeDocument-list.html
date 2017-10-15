@@ -1,4 +1,4 @@
-<div class="project-list">
+<div class="officeDocument-list">
     <div class="header-wrap"
          ng-if="currentContext.entityName !== 'all'"
          ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
@@ -7,7 +7,7 @@
                     entityId: currentContext.entityId
                     })">
         <header class="title">
-            {{'projectsFrom' | i18next}}{{currentContext.entityName | i18next}}
+            {{'officeDocumentsFrom' | i18next}}{{currentContext.entityName | i18next}}
             <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
         </header>
     </div>
@@ -31,17 +31,17 @@
             </div>
         </div>
 
-        <!--<div class="right-wrapper">
+        <div class="right-wrapper">
             <button class="list"></button>
             <button class="calendar"></button>
-        </div>-->
+        </div>
     </div>
-    <!-- <div icu-project-list
+    <div icu-office-document-list
          class="entity-list-container"
          ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
-         projects="projects"
+         office-documents="officeDocuments"
          load-next="loadNext"
          load-prev="loadPrev"
          draw-arrow="true"
          order="sorting"></div>
-</div> -->
+</div>

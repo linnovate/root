@@ -1,92 +1,218 @@
 'use strict';
 
-angular.module('mean.icu.data.projectsservice', [])
-.service('officeDocumentService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService) {
-    var EntityPrefix = '/documents';
-    var data, selected;
+angular.module('mean.icu.data.officedocumentsservice', [])
+    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService, ActivitiesService) {
+        var EntityPrefix = '/officeDocuments';
 
-    function getAll(start, limit, sort) {
-        var qs = querystring.encode({
-            start: start,
-            limit: limit,
-            sort: sort
-        });
-
-        if (qs.length) {
-            qs = '?' + qs;
-        }
-        return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
-        	console.log($rootScope.warning, '$rootScope.warning')
-            return result.data;
-        }, function(err) {return err}).then(function (some) {
-            var data = some.content ? some : [];
-            return result.data;
-        });
-    }
-
-    function getById(id) {
-        return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
-        	WarningsService.setWarning(result.headers().warning);
-            return result.data;
-        });
-    }
-
-    function getByEntityId(entity) {
-        return function(id, start, limit, sort) {
-            var qs = querystring.encode({
-                start: start,
-                limit: limit,
-                sort: sort
-            });
-
-            if (qs.length) {
-                qs = '?' + qs;
-            }
-
-            var url = ApiUri + '/' + entity + '/' + id + EntityPrefix;
-
-            return $http.get(url + qs).then(function(result) {
-            	WarningsService.setWarning(result.headers().warning);
+          function getAll() {
+            return $http.get(ApiUri + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                // result.data = [{
+                //             created: new Date,
+                //             updated: new Date,
+                //             _id: "hgjg",
+                //             title: "sraya",
+                //             path: "/gfdgdgf/dfgdfhg",
+                //             description: "hello world",
+                //             documentType: "pptx",
+                //             entity: "project",
+                //             entityId: "fff",
+                //             creator: "avraham",
+                //             status: "new"
+                //                }]
                 return result.data;
             });
         }
-    }
 
-    function create(odocument) {
-        return $http.post(ApiUri + EntityPrefix, odocument).then(function(result) {
+         function deleteDocument(id) {
+             return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+                 return result.status;
+             });
+         }
 
-        	WarningsService.setWarning(result.headers().warning);
-            return result.data;
-        });
-    }
+        function update(officeDocument) {
+            return $http.put(ApiUri + EntityPrefix + '/' + officeDocument._id, officeDocument).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
 
+        function getById(id) {
+            return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
 
-    function update(odocument) {
-        return $http.put(ApiUri + EntityPrefix + '/' + odocument._id, odocument).then(function(result) {
-        	WarningsService.setWarning(result.headers().warning);
-            return result.data;
-        });
-    }
+        function getByTaskId(id) {
+            return $http.get(ApiUri + '/tasks/' + id + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
 
-    function remove(id) {
-        return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function(result) {
-        	WarningsService.setWarning(result.headers().warning);
-            return result.data;
-        });
-    }
+        function getByProjectId(id) {
+            return $http.get(ApiUri + '/projects/' + id + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
 
-    return {
-        getAll: getAll,
-        getById: getById,
-        getByDiscussionId: getByEntityId('discussions'),
-        getByUserId: getByEntityId('users'),
-        getByProjectId: getByEntityId('projects'),
-        getByOfficeId: getByEntityId('offices'),
-        create: create,
-        update: update,
-        remove: remove,
-        data: data,
-        selected: selected
-    };
-});
+        function getByDiscussionId(id) {
+            return $http.get(ApiUri + '/discussions/' + id + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function getByOfficeId(id) {
+            return $http.get(ApiUri + '/offices/' + id + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function getByFolderId(id) {
+            return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function getByUserId(id) {
+            return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function saveDocument(data, file) {    
+            return Upload.upload({
+                url: '/api/officeDocuments',
+                fields: data,
+                file: file
+            });
+        }
+
+        function updateDocument(id, data) {
+            return $http.post(ApiUri + EntityPrefix + "/" +id, data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function update(entity, data) {
+            return $http.post(ApiUri + EntityPrefix + "/" +entity._id, data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function createDocument(data) {
+            return $http.post(ApiUri + EntityPrefix + "/create" , data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function uploadFileToDocument(data,file){
+            return Upload.upload({
+                url: '/api/officeDocuments/uploadFileToDocument',
+                fields: data,
+                file: file
+            });
+        }
+
+        function star(officeDocument) {
+            return $http.patch(ApiUri + EntityPrefix + '/' + officeDocument._id + '/star', {star: !officeDocument.star})
+                .then(function (result) {
+                    WarningsService.setWarning(result.headers().warning);
+                    officeDocument.star = !officeDocument.star;
+                    return result.data;
+                });
+        }
+
+        function getStarred() {
+            return $http.get(ApiUri + EntityPrefix + '/starred').then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function updateWatcher(officeDocument, me, watcher, type) {
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument._id,
+                    type: type || 'updateWatcher',
+                    userObj: watcher                
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
+        function updateStatus(officeDocument, me) {
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument._id,
+                    type: 'updateStatus',
+                    status: officeDocument.status
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
+        function updateDue(officeDocument, me) {
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument._id,
+                    type: 'updateDue',
+                    TaskDue: officeDocument.due
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
+        function sendDocument(sendingForm, officeDocument) {
+            var data = {
+                'sendingForm':sendingForm,
+                'officeDocument':officeDocument
+            };
+            return $http.post(ApiUri + EntityPrefix +  '/sendDocument', data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        return {
+            sendDocument:sendDocument,
+            getAll: getAll,
+            delete:deleteDocument,
+            update: update,
+            getById: getById,
+            getByTaskId: getByTaskId,
+            getByProjectId: getByProjectId,
+            getByDiscussionId: getByDiscussionId,
+            getByUserId: getByUserId,
+            saveDocument: saveDocument,
+            updateDocument: updateDocument,
+            getByOfficeId: getByOfficeId,
+            getByFolderId: getByFolderId,
+            star: star,
+            getStarred: getStarred,
+            createDocument:createDocument,
+            uploadFileToDocument:uploadFileToDocument,
+            update:update,
+            updateWatcher: updateWatcher,
+            updateStatus: updateStatus,
+            updateDue: updateDue
+        };
+    });

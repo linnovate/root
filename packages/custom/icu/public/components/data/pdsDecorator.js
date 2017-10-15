@@ -81,3 +81,5 @@ angular.module('mean.icu.decorators.pdsDecorator').decorator('DiscussionsService
 angular.module('mean.icu.decorators.pdsDecorator').decorator('UsersService', passiveDataSrtuctureDecorator);
 angular.module('mean.icu.decorators.pdsDecorator').decorator('OfficesService', passiveDataSrtuctureDecorator);
 angular.module('mean.icu.decorators.pdsDecorator').decorator('FoldersService', passiveDataSrtuctureDecorator);
+angular.module('mean.icu.decorators.pdsDecorator').decorator('OfficeDocumentsService', passiveDataSrtuctureDecorator);
+angular.module('mean.icu.decorators.pdsDecorator').decorator('TemplateDocsService', passiveDataSrtuctureDecorator);

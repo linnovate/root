@@ -349,8 +349,9 @@
     .placeholder {
         position: absolute;
         top: 50%;
-        transform: translateX(60%) translateY(-50%);
+        transform: translateX(80%) translateY(-50%);
         color: $light-grey-placeholder;
+        padding-left:5px;
     }
 
     input {

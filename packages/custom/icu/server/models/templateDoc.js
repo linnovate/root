@@ -8,35 +8,28 @@ var TemplateDocSchema = new Schema({
   created: {
     type: Date
   },
-  name: {
-    type: String,
-    required: true
+  title: {
+    type: String
   },
   path: {
-    type: String,
-    required: true
+    type: String
+  },
+  spPath:{
+    type:String
   },
   description: {
-    type: String,
+    type: String
   },
   templateType: { //docx,pptx,xlsx
-    type: String,
-    required: true
+    type: String
   },
-  entity: {
-    type: String,
-    required: true
-  },
-  entityId: {
+  office: {
     type: Schema.Types.ObjectId,
-    required: true
+    ref:'Office'
   },
-  creator: {
+  assign: {
     type: Schema.ObjectId,
     ref: 'User'
-  },
-  classification: {
-    type:String
   },
   size: {
     type: Number
@@ -48,20 +41,28 @@ var TemplateDocSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }]
-});
+},{collection: 'template_docs'});
 
 
 
 /**
+TemplateDocSchema.statics.load = function (id, cb) {
+  this.findOne({
+    _id: id
+  }).populate('creator', 'name username').exec(cb);
+};
+
+
  * Validations
- */
+
+
 TemplateDocSchema.path('name').validate(function (name) {
   return !!name;
 }, 'Name cannot be blank');
 
 /**
  * Statics
- */
+ 
 TemplateDocSchema.statics.load = function (id, cb) {
   this.findOne({
     _id: id
@@ -114,21 +115,23 @@ var elasticsearch = require('../controllers/elasticsearch');
 
 TemplateDocSchema.post('save', function (req, next) {
   var attachment = this;
-  DocumentSchema.statics[attachment.entity](attachment.entityId, function (err, result) {
+  TemplateDocSchema.statics[attachment.entity](attachment.entityId, function (err, result) {
     if (err) {
       return err;
     }
-    elasticsearch.save(attachment, 'attachment', result.room, result.title);
+    elasticsearch.save(attachment, 'templateDoc', result.room, result.title);
     next();
   });
 
 });
 
 TemplateDocSchema.pre('remove', function (next) {
-  elasticsearch.delete(this, 'attachment', this.room, next);
+  elasticsearch.delete(this, 'templateDocSchema', this.room, next);
   next();
 });
 
-TemplateDocSchema.plugin(archive, 'attachment');
+*/
 
-module.exports = mongoose.model('Template', TemplateDocSchema);
+TemplateDocSchema.plugin(archive, 'templateDoc');
+
+module.exports = mongoose.model('TemplateDoc', TemplateDocSchema);

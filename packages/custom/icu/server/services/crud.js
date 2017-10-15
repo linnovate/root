@@ -34,6 +34,13 @@ var FolderArchiveModel = mongoose.model('folder_archive');
 var circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 var circlesAcl = require('circles-npm')(null, null, circleSettings);
 
+var OfficeDocumentsModel = require('../models/document.js');
+var OfficeDocumentsArchiveModel = mongoose.model('officeDocument_archive');
+
+var TemplateDocsModel = require('../models/templateDoc.js');
+var TemplateDocsArchiveModel = mongoose.model('templateDoc_archive');
+
+
 var entityNameMap = {
   'tasks': {
     mainModel: TaskModel,
@@ -78,7 +85,18 @@ var entityNameMap = {
     mainModel: FolderModel,
     archiveModel: FolderArchiveModel,
     name: 'Folder'
+  },
+  'officeDocuments': {
+    mainModel: OfficeDocumentsModel,
+    archiveModel: OfficeDocumentsArchiveModel,
+    name: 'Document'
+  },
+  'templateDocs': {
+    mainModel: TemplateDocsModel,
+    archiveModel: TemplateDocsArchiveModel,
+    name: 'TemplateDoc'
   }
+
 
 };
 
@@ -89,7 +107,7 @@ var defaults = {
 };
 
 module.exports = function(entityName, options) {
-  var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders'];
+  var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders', 'officeDocuments', 'templateDocs'];
   if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;
 
@@ -190,7 +208,7 @@ module.exports = function(entityName, options) {
         deffered.resolve(new Model(entity).save(user).then(function(e) {
           orderController.addOrder(e, entity, Model);
           return Model.populate(e, options.includes);
-        }));
+        }));all
       }
     });
 

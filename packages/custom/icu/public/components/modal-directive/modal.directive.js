@@ -1,6 +1,6 @@
 'use strict';
 angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
-    .directive('icuOpenModal', function ($state, $uibModal) {
+    .directive('icuOpenModal', function ($state, $uibModal, OfficeDocumentsService, TemplateDocsService ) {
 
         function link(scope, elem, attrs) {
             elem.bind('click', function() {
@@ -16,6 +16,41 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             });
 
             function buildModal() {
+                if(scope.send && scope.entityName == "officeDocument"){
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        size:  'lg',
+                        templateUrl: '/icu/components/modal-directive/sendDocument.html',
+                        controller: controllerDocument,
+                        resolve: {
+                            officeDocument: function () {
+                                return scope.data;
+                            },
+                            people:function () {
+                                return scope.people;
+                            }
+                        }
+                    
+                    }); 
+
+                } else if(scope.modalName == 'template' && scope.entityName == "officeDocument"){
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        size:  'lg',
+                        templateUrl: '/icu/components/modal-directive/templateModal/template.html',
+                        controller: controllerTemplate,
+                        resolve: {
+                            templates: function () {
+                                if(scope.data.folder == undefined){
+                                  return [];                                                                     
+                                }else{
+                                    return TemplateDocsService.getTemplatesByFolder(scope.data.folder);
+                                } 
+                            }
+                        }
+                    
+                    }); 
+                }else {
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: '/icu/components/modal-directive/modal.html',
@@ -25,8 +60,9 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                             return scope.entityName;
                         }
                     }
-
+                
                 });
+            }
 
                 modalInstance.result.then(function () {
                     scope.deleteFn();
@@ -41,7 +77,12 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             scope: {
                 showModal: '=',
                 deleteFn: '&',
-                entityName: '@'
+                entityName: '@',
+                send: '=',
+                sendDocument: '&',
+                data: '=',
+                people: "=",
+                modalName: '@'
             },
             link: link
         };
@@ -62,3 +103,34 @@ function controller($scope, $uibModalInstance, $filter, entity) {
         $uibModalInstance.dismiss('cancel');
     };
 }
+
+function controllerDocument($scope, $uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
+    
+    $scope.officeDocument = officeDocument;
+    $scope.people = people;
+
+    $scope.classificationList = ['Unclassified','Private','Secret','Top Secret' ]; 
+
+    $scope.ok = function (sendingForm) {
+        
+        OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument)    
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}
+
+
+// function controllerTemplate($scope, $uibModalInstance, $filter) {
+    
+    
+//         $scope.ok = function (sendingForm) {
+            
+//            // OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument)    
+//         };
+    
+//         $scope.cancel = function () {
+//             $uibModalInstance.dismiss('cancel');
+//         };
+// }

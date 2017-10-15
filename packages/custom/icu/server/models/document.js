@@ -11,13 +11,17 @@ var DocumentSchema = new Schema({
   updated: {
     type: Date
   },
-  name: {
+  title: {
+    type: String
+  },
+  status: {
     type: String,
-    required: true
+    required: true,
+    enum: ['new', 'in-progress', 'received', 'done'],
+    default: 'new'
   },
   path: {
-    type: String,
-    required: true
+    type: String
   },
   description: {
     type: String,
@@ -25,17 +29,9 @@ var DocumentSchema = new Schema({
   serial:{ //Simuchin
     type:String
   },
-  documentType: { //docx,pptx,xlsx
-    type: String,
-    required: true
-  },
-  entity: {
-    type: String,
-    required: true
-  },
-  entityId: {
-    type: Schema.Types.ObjectId,
-    required: true
+  folder:{
+    type: Schema.ObjectId,
+    ref: 'Folder'
   },
   creator: {
     type: Schema.ObjectId,
@@ -48,12 +44,13 @@ var DocumentSchema = new Schema({
   sender: {
     type: Schema.ObjectId,
     ref: 'User'
+
   },
   sendingAs: {
     type: Schema.ObjectId,
     ref: 'User'
   },
-  asign:{
+  assign:{
     type: Schema.ObjectId,
     ref: 'User'
   },
@@ -68,24 +65,46 @@ var DocumentSchema = new Schema({
   },
   relatedDocuments: [{
     type: Schema.ObjectId,
+    ref: 'Document'
+  }],
+  tags:[{
+    type:String,
+    default:"new"
+  }],
+  documentType:{
+    type:String
+  },
+  forNotice: [{
+    type: Schema.ObjectId,
     ref: 'User'
   }],
-
+  doneBy: [{
+    type: Schema.ObjectId,
+    ref: 'User'
+  }],
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User'
   }]
 });
 
-
+var starVirtual = DocumentSchema.virtual('star');
+starVirtual.get(function() {
+  return this._star;
+});
+starVirtual.set(function(value) {
+  this._star = value;
+});
 
 /**
  * Validations
  */
-DocumentSchema.path('name').validate(function (name) {
-  return !!name;
-}, 'Name cannot be blank');
 
+ /** 
+DocumentSchema.path('title').validate(function (title) {
+  return !!title;
+}, 'Name cannot be blank');
+*/
 /**
  * Statics
  */
@@ -139,6 +158,7 @@ DocumentSchema.statics.folder = function (id, cb) {
 
 var elasticsearch = require('../controllers/elasticsearch');
 
+/** 
 DocumentSchema.post('save', function (req, next) {
   var attachment = this;
   DocumentSchema.statics[attachment.entity](attachment.entityId, function (err, result) {
@@ -150,12 +170,12 @@ DocumentSchema.post('save', function (req, next) {
   });
 
 });
-
+*/
 DocumentSchema.pre('remove', function (next) {
   elasticsearch.delete(this, 'document', this.room, next);
   next();
 });
 
-DocumentSchema.plugin(archive, 'document');
+DocumentSchema.plugin(archive, 'officeDocument');
 
 module.exports = mongoose.model('Document', DocumentSchema);

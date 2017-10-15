@@ -74,6 +74,10 @@
                     }
                 }
             }
+
+            .ui-select-choices-group{
+                display: block;
+            }
         }
 
         &.projects {
@@ -100,6 +104,18 @@
             }
         }
 
+        &.officeDocuments {
+            ul {
+                li {
+                    .tag-color {
+                        @include tag(5px);
+                        float: right;
+                        margin-right: 23px;
+                    }
+                }
+            }
+        }
+
         &.folders {
             ul {
                 li {
@@ -110,6 +126,79 @@
                     }
                 }
             }
+
+            .tasks {
+                background-color: transparent;
+                color: white;
+                font-family: inherit;
+                line-height: inherit;
+                border: inherit;
+                padding: 0px;
+            }
+
+            .tooltips {
+                display: block;
+                position: relative;
+                padding-left: 65px;
+                bottom: 30px;
+                height: 12px;
+
+                        i {
+                            &.caret-right:before{
+                                content: '';
+                                display: inline-block;
+                                width: 0;
+                                height: 0;
+                                margin-top: 5px;
+                                border-top: 6px solid transparent;
+                                border-bottom: 6px solid transparent;
+                                border-left: 6px solid #ffffff;
+                            }
+
+                            &.caret-down:before{
+                                content: '';
+                                display: inline-block;
+                                width: 0;
+                                height: 0;
+                                margin-top: 5px;
+                                border-right: 6px solid transparent;
+                                border-left: 6px solid transparent;
+                                border-top: 6px solid #ffffff;
+                            }
+
+
+                            position: absolute;
+                            top: 50%;
+                            transform: translate(-50%, -50%);
+                            font-size: 1.5em;
+                            right: -25px;
+                            display: inline-table;
+                        }
+            }
+
+            span.ui-select-toggle {
+                color: transparent;
+                background-color: black;
+                height: 22px;
+                outline: 0;
+                border: none;
+            }
+            span.ui-select-match-text{
+                bottom: 50%;
+                position: relative
+            }
+
+            .ui-select-container .ui-select-choices-row .ui-select-choices-row-inner {
+                display: flex;
+                align-items: center;
+                color: white;
+		    }
+
+            .ui-select-choices{
+                background-color: black;
+                position: inherit;
+            }
+        
         }
 
         &.people {
@@ -140,9 +229,13 @@
             }
         }
 
-        &.projects, &.discussions, &.offices, &.folders {
+        &.projects, &.discussions, &.offices, &.folders, &.officeDocuments {
             border-bottom: 1px solid #424e52;
         }
+
+        .go-to-Offices {
+            border-top: 1px solid #424e52;
+        }      
     }
 
     .more {

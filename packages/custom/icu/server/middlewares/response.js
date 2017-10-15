@@ -14,7 +14,7 @@ module.exports = function(req, res, next) {
       }
       catch(err) {}
 
-      res.set('Warning', '{"circles":"'+ err +'"}');
+      // res.set('Warning', '{"circles":"'+ err +'"}');
    }
     
     res.status(200);

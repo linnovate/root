@@ -16,7 +16,7 @@
 
             <div class="status">
                 <div tooltips tooltip-template="{{'status' | i18next}}">
-                    <ui-select ng-model="folder.status" on-select="update(folder)">
+                    <ui-select ng-model="folder.status" on-select="update(folder, {name: 'status'})">
                         <ui-select-match>
                             <i class='{{$select.selected}}'></i>
                             <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
@@ -102,20 +102,15 @@
         </div>
         <div class="tabs">
             <div class="switcher">
-                <button class="tab three"
+                <button class="tab two"
                         data-ui-sref-active="active"
                         data-ui-sref=".activities">
                     {{ 'updates' | i18next }}
                 </button>
-                <button class="tab three"
+                <button class="tab two"
                         data-ui-sref-active="active"
                         data-ui-sref=".documents">
                     {{ 'documents' | i18next }}
-                </button>
-                <button class="tab three"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".tasks">
-                    {{ 'tasks' | i18next }}
                 </button>
             </div>
         </div>

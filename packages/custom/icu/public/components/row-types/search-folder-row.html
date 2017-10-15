@@ -1,0 +1,12 @@
+<td class="id">{{data.index + 1}}</td>
+<td class="icon icon-folder"></td>
+<td class="name search-row" title="{{data.folder.title}}" ng-bind-html="data.result.title[0]"></td>
+
+<td class="office">
+    <span class="tag office"
+          title="{{data.folder.office.title}}"
+          ng-style="color={'background-color': '#' + data.folder.office.color}">
+        {{data.folder.office.title}}
+    </span>
+</td>
+<td class="arrow"><i class="fa chevron-right"></i></td>

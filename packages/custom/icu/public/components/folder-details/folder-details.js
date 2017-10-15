@@ -11,7 +11,8 @@ angular.module('mean.icu.ui.folderdetails', [])
                                                       $state,
                                                       FoldersService,
                                                       $stateParams,
-                                                      OfficesService) {
+                                                      OfficesService, 
+                                                      ActivitiesService) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("folders")))
         {
             $scope.folder = entity || context.entity;
@@ -183,6 +184,13 @@ angular.module('mean.icu.ui.folderdetails', [])
             });
         };
 
+        var reloadCurrent = function() {
+            $state.go($state.current.name, {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {reload: true});
+        }    
+
         $scope.update = function (folder, context) {
             FoldersService.update(folder, context).then(function(res) {
                 if (FoldersService.selected && res._id === FoldersService.selected._id) {
@@ -215,6 +223,23 @@ angular.module('mean.icu.ui.folderdetails', [])
                     //     }
                     // }
                 }
+                    switch (context.name) {
+                        case 'status':
+                            FoldersService.updateStatus(folder).then(function(result) {
+                                ActivitiesService.data = ActivitiesService.data || [] ;
+                                ActivitiesService.data.push(result);
+                                reloadCurrent();
+                            });
+                            break;
+                    
+                        case 'color':
+                            FoldersService.updateColor(folder).then(function(result) {
+                                ActivitiesService.data = ActivitiesService.data || [] ; // TBD
+                                ActivitiesService.data.push(result);
+                                reloadCurrent();
+                            });
+                            break;   
+                    }
             });
         };
 
@@ -270,7 +295,7 @@ angular.module('mean.icu.ui.folderdetails', [])
 
         $scope.updateCurrentFolder = function(){
             $scope.folder.PartTitle = $scope.folder.title;
-            FolderesService.currentFolderName = $scope.folder.title;
+            FoldersService.currentFolderName = $scope.folder.title;
         }
 
         $scope.delayedUpdate = _.debounce($scope.update, 500);

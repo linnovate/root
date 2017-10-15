@@ -9,6 +9,8 @@ directive('icuSidepane', function() {
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
+        $scope.officeDocuments = $scope.officeDocuments.data || $scope.officeDocuments;
+        //$scope.templateDocs = $scope.templateDocs.data || $scope.templateDocs;
         // $scope.people = $scope.people.data || $scope.people;
         
         $scope.toggleVisibility = function(toggledItem) {
@@ -64,21 +66,9 @@ directive('icuSidepane', function() {
         },
         {
             name: 'settings',
-            icon: '/icu/assets/img/project.png',
-            state: 'projects.all',
-            display: ['offices'],
-            open: $scope.isCurrentState({state: 'projects'})
-        }, {
-            name: 'offices',
-            icon: '/icu/assets/img/project.png',
-            state: 'offices.all',
-            display: ['people'],
-            open: $scope.isCurrentState({state: 'offices'})
-        }, {
-            name: 'folders',
-            icon: '/icu/assets/img/project.png',
+            icon: '/icu/assets/img/settings.png',
             state: 'folders.all',
-            display: ['people'],
+            display: ['offices'],
             open: $scope.isCurrentState({state: 'folders'})
         },
         // , {
@@ -89,11 +79,11 @@ directive('icuSidepane', function() {
         //     open: false
         // }
         {
-            name: 'documents',
+            name: 'officeDocuments',
             icon: '/icu/assets/img/icon-document.svg',
-            state: 'documents.all',
-            display: ['new', 'received', 'inProgress'],
-            open: $scope.isCurrentState({state: 'documents'})
+            state: 'officeDocuments.all',
+            display: ['folders'],//['new', 'received', 'inProgress'],
+            open: $scope.isCurrentState({state: 'officeDocuments'})
         }
         ];
 
@@ -109,7 +99,8 @@ directive('icuSidepane', function() {
             offices: '=',
             folders: '=',
             //people: '='
-            documents: '=' 
+            officeDocuments: '=',
+            templateDocs: '='
         }
     };
 });

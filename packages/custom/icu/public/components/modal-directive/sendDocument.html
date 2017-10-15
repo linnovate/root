@@ -1,0 +1,96 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="exampleModalLabel">{{'sendDocument' | i18next }}</h3>
+    <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+</div>
+<div class="modal-body">
+    <form>
+        <div class="row">
+            <div class="col-xs-2 col-md-9">
+                <label>{{'subject' | i18next }}</label>
+                <input type="text" class="form-control" value={{officeDocument.title}} placeholder="title" ng-model="sendingForm.title">
+            </div>
+            <div class="col-xs-3  col-md-3">
+                <label>{{'date' | i18next }}</label>
+                <input type="text" class="form-control" value='{{officeDocument.created | date: "dd-MM-yy"}}' placeholder="date" disabled>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-2 col-md-3">
+                <label>{{'sender' | i18next }}</label>
+                <input type="text" class="form-control" value={{officeDocument.assign.name}} placeholder="sender" disabled>
+            </div>
+            <div class="col-xs-3 col-md-3">
+                <label>{{'sendingAs' | i18next }}</label>
+                <div class="user">
+                    <div tooltips tooltip-template="{{'assignee' | i18next}}">
+                        <ui-select ng-model="sendingForm.sendingAs">
+                            <ui-select-match>
+                                <div icu-avatar user="$select.selected"></div>
+                                <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}</span>
+                            </ui-select-match>
+                            <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search }">
+                                <div icu-avatar user="user"></div>
+                                <span class="summary-content">{{user.job}}</span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 col-md-3">
+                <label>{{'serial' | i18next }}</label>
+                <input type="text" class="form-control" value={{officeDocument.serial}} placeholder="{{'serial' | i18next }}" disabled>
+            </div>
+            <div class="col-xs-5 col-md-3">
+                <label>{{'classification' | i18next }}</label>
+                <select class="form-control" ng-model="sendingForm.classification">
+                <option ng-repeat="classification in classificationList">{{classification | i18next }}</option>
+              </select>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-2 col-md-12">
+                <div class="doneBy">
+                    <label>{{'doneBy' | i18next }}</label>
+                    <!--  <input type="text" class="form-control" placeholder=".col-xs-2">-->
+
+                    <ui-select multiple ng-model="sendingForm.doneBy">
+                        <ui-select-match class="verticalUser">
+                            <div icu-avatar user="$item"></div>
+                            <span ng-if="$item._id" class="summary-content">{{$item.name}} {{$item.lastname?$$item.lastname:""}}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search }">
+                            <div icu-avatar user="user"></div>
+                            <span class="summary-content">{{user.job}}</span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-2 col-md-12">
+                <label>{{'notice' | i18next }}</label>
+               <!-- <input type="text" class="form-control" placeholder=".col-xs-2">-->
+               
+               <ui-select multiple ng-model="sendingForm.forNotice">
+                    <ui-select-match class="verticalUser">
+                        <div icu-avatar user="$item"></div>
+                        <span ng-if="$item._id" class="summary-content">{{$item.name}} {{$item.lastname?$$item.lastname:""}}</span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search }">
+                        <div icu-avatar user="user"></div>
+                        <span class="summary-content">{{user.job}}</span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary float-right" ng-click="cancel()">{{'Cancel' | i18next }}</button>
+    <button type="submit" class="btn btn-warning float-left" ng-click="ok(sendingForm)">{{'send' | i18next }}</button>
+</div>
+</form>

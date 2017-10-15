@@ -13,7 +13,7 @@
                     <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
                 </button>
             </div>
-
+<!--
             <div class="status">
                 <div tooltips tooltip-template="{{'status' | i18next}}">
                     <ui-select ng-model="office.status" on-select="update(office)">
@@ -27,7 +27,7 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
-            </div>
+            </div>-->
 
             <div class="color">
                 <div icu-colorpicker ng-model="office.color"></div>
@@ -83,13 +83,13 @@
                 </button>
                 <button class="tab three"
                         data-ui-sref-active="active"
-                        data-ui-sref=".documents">
-                    {{ 'documents' | i18next }}
+                        data-ui-sref=".folders">
+                    {{ 'folders' | i18next }}
                 </button>
                 <button class="tab three"
                         data-ui-sref-active="active"
-                        data-ui-sref=".tasks">
-                    {{ 'tasks' | i18next }}
+                        data-ui-sref=".documents">
+                    {{ 'documents' | i18next }}
                 </button>
             </div>
         </div>

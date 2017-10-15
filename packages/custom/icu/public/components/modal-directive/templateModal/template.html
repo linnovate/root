@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+    </button>
+    <br>
+    <div class="container-fluid">
+            <div class="row">
+                <h3 class="modal-title pull-left" id="exampleModalLabel">{{'sendDocument' | i18next }}</h3>
+                <button class="manageTemplate pull-right" ng-click="GoToTemplateDocs()">{{ 'manageTemplate' | i18next }} </button>
+            </div>
+    </div>            
+</div>
+<div class="modal-body">
+    <div ng-if="officeTemplates==null||officeTemplates==undefined||officeTemplates.length==0">
+        <h4>{{'noTemplates' | i18next }}</h4>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 template" ng-repeat="template in officeTemplates">
+                <div class="card">
+                    <a class="templateIcon {{template.templateType}}"></a>
+                    <div class="card-block">
+                        <h4 class="card-title">{{template.title}}</h4>
+                        <p class="card-text">{{template.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@
 angular.module('mean.icu.data.activitiesservice', [])
 .service('ActivitiesService', function (ApiUri, $http, UsersService, WarningsService) {
     var EntityPrefix = '/updates';
-    var data;
+    var data ;
 
     function getByUserId(id) {
         return [];
@@ -36,6 +36,13 @@ angular.module('mean.icu.data.activitiesservice', [])
         });
     }
 
+    function getByOfficeDocumentId(id) {
+        return $http.get(ApiUri + '/officeDocuments/' + id + EntityPrefix).then(function(updatesResult) {
+            WarningsService.setWarning(updatesResult.headers().warning);
+            return getUser(updatesResult.data);
+        });
+    }
+
     function getByTaskId(id) {
         return $http.get(ApiUri + '/tasks/' + id + EntityPrefix).then(function(updatesResult) {
         	WarningsService.setWarning(updatesResult.headers().warning);
@@ -64,6 +71,13 @@ angular.module('mean.icu.data.activitiesservice', [])
         });
     }
 
+    function getByTemplateDocId(id) {
+        return $http.get(ApiUri + '/templateDocs/' + id + EntityPrefix).then(function(updatesResult) {
+        	WarningsService.setWarning(updatesResult.headers().warning);
+            return getUser(updatesResult.data);
+        });
+    }
+
     function getByFolderId(id) {
         return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function(updatesResult) {
         	WarningsService.setWarning(updatesResult.headers().warning);
@@ -73,7 +87,7 @@ angular.module('mean.icu.data.activitiesservice', [])
 
     function create(update) {
         return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -88,6 +102,8 @@ angular.module('mean.icu.data.activitiesservice', [])
         create: create,
         data: data,
         getByOfficeId: getByOfficeId,
-        getByFolderId: getByFolderId
+        getByTemplateDocId: getByTemplateDocId,
+        getByFolderId: getByFolderId,
+        getByOfficeDocumentId:getByOfficeDocumentId
     };
 });

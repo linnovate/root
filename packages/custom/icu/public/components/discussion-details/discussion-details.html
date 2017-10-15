@@ -36,8 +36,8 @@
             
             <div ng-click="dueClicked()" class="due">
                 <div class="placeholder">
-                    <div style="font-size:xx-small;color:black;margin-right:12px" id="firstStr">{{firstStr | i18next}}</div>
-                    <div style="font-size:xx-small;color:black;margin-right:12px" id="secondStr">{{secondStr | i18next}}</div>
+                    <div id="firstStr" style="font-size:medium;color:#bdbcbc">{{firstStr | i18next}}</div>
+                    <div style="font-size:xx-small;color:black;margin-right:-11px" id="secondStr">{{secondStr | i18next}}</div>
 
 
                 </div>
@@ -73,12 +73,12 @@
 
             <div class="location">
                 <div class="placeholder" ng-if="!discussion.location">{{ 'location' | i18next }}</div>
-               <input type="text"  ng-model="discussion.location" ng-change="update(discussion)">
+               <input type="text"  ng-model="discussion.location" ng-change="update(discussion, 'location')">
             </div>
 
             <div class="status">
                 <div tooltips tooltip-template="{{'status' | i18next}}">
-                    <ui-select ng-model="discussion.status" on-select="update(discussion)">
+                    <ui-select ng-model="discussion.status" on-select="update(discussion, 'status')">
                         <ui-select-match>
                             <i class='{{$select.selected}}'></i>
                             <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>

@@ -1,25 +1,37 @@
 <div class="folder-list">
-    <div class="header-wrap"
-         ng-if="currentContext.entityName !== 'all'"
-         ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
-         ui-sref="main.{{currentContext.main}}.byentity.activities({
+    <div ng-switch="currentContext.entityName">
+        <div class="header-wrap" ng-switch-when="all" 
+            ng-class="{ 'active': isCurrentState(['main.{{currentContext.main}}.all']) }"
+            ui-sref="main.{{currentContext.main}}.all">
+            <header class="title">
+                {{ 'allFolders' | i18next }}
+            </header>
+        </div>
+        <div id="leftTopBar" class="header-wrap subfolders" ng-switch-when="folder"
+            ng-class="{ 'active': isCurrentState(['main.{{currentContext.main}}.byparent.activities']) }">
+            <header class="title">
+                <div>
+                    <span class="office" 
+                      title="{{currentContext.entity.office.title}}"
+                      ng-style="{'background-color': '#' + currentContext.entity.office.color, 'color': 'white'}">
+                    {{currentContext.entity.office.title}}
+                    </span>
+                </div>
+                {{ 'foldersFrom' | i18next }}
+            <span ng-click="goToParent()">"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span> 
+            </header>
+        </div>
+            <div class="header-wrap" ng-switch-default
+            ng-class="{ 'active': isCurrentState(['main.{{currentContext.main}}.byentity.activities', 'main.{{currentContext.main}}.byentity.documents', 'main.{{currentContext.main}}.byentity.folders']) }"
+            ui-sref="main.{{currentContext.main}}.byentity.activities({
                     entity: currentContext.entityName,
                     entityId: currentContext.entityId
                     })">
-        <header class="title">
-            <div>
-                <span class="office" 
-                    title="{{currentContext.entity.office.title}}"
-                    ng-style="{'background-color': '#' + currentContext.entity.office.color, 'color': 'white'}">
-                {{currentContext.entity.office.title}}
-                </span>
-            </div>
-            {{ 'foldersFrom' | i18next }}
-            <span ng-click="goToParent()">"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
-
-            <!--{{'foldersFrom' | i18next}}{{currentContext.entityName | i18next}}
-            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>-->
-        </header>
+            <header class="title">
+             {{ 'foldersFrom' | i18next }}{{ currentContext.entityName | i18next }}
+             <span>"{{getOfficeName()}}"</span>
+            </header>
+        </div>
     </div>
 
     <div class="filters">

@@ -14,7 +14,8 @@
     ng-model="data.office.PartTitle"
     ng-blur="data.hideAutoCompleteCb(data.office)">
 </td>
-<td class="status col-sm-2" ng-class="data.office.status">{{data.office.status | i18next }}</td>
+<!--<td class="status col-sm-2" ng-class="data.office.status">{{data.office.status | i18next }}</td>-->
+<td class="status col-sm-2" ng-class="data.office.status">{{}}</td>
 <td class="arrow">
     <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

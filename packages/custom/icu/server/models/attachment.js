@@ -125,6 +125,14 @@ AttachmentSchema.statics.folder = function (id, cb) {
     cb(err, {room: folder.room, title: folder.title});
   });
 };
+
+AttachmentSchema.statics.officeDocument = function (id, cb) {
+  require('./document');
+  var Document = mongoose.model('Document');
+  Document.findById(id, function (err, officeDocument) {
+    cb(err, {room: officeDocument.room, title: officeDocument.title});
+  });
+};
 //END OHAD
 
 // AttachmentSchema.statics.update = function (id, cb) {

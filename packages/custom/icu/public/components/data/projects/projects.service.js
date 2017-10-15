@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService) {
+.service('ProjectsService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/projects';
     var data, selected;
 
@@ -126,6 +126,50 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
+    // update activities
+    function updateWatcher(project, me, watcher, type) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'project',
+                issueId: project.id,
+                type: type || 'updateWatcher',
+                userObj: watcher                
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateStatus(project) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'project',
+                issueId: project.id,
+                type: 'updateStatus',
+                status: project.status
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+
+    function updateColor(project, me) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'project',
+                issueId: project.id,
+                type: 'updateColor',
+                status: project.color
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     return {
         getAll: getAll,
         getById: getById,
@@ -138,6 +182,9 @@ angular.module('mean.icu.data.projectsservice', [])
         getStarred: getStarred,
         data: data,
         selected: selected,
-        WantToCreateRoom: WantToCreateRoom
+        WantToCreateRoom: WantToCreateRoom,
+        updateWatcher: updateWatcher,
+        updateStatus: updateStatus,
+        updateColor: updateColor
     };
 });
