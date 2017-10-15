@@ -94,6 +94,7 @@ directive('icuSidepane', function() {
         controller: controller,
         templateUrl: '/icu/components/sidepane/sidepane.html',
         scope: {
+            me: '=',
             projects: '=',
             discussions: '=',
             offices: '=',

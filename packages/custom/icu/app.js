@@ -81,6 +81,8 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.sidepane',
         'mean.icu.ui.middlepane',
         'mean.icu.ui.detailspane',
+        'mean.icu.ui.mainpane',
+        'mean.icu.ui.admin',
         'mean.icu.ui.userlist',
         'mean.icu.ui.userdetails',
         'mean.icu.ui.tasklist',

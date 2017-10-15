@@ -148,6 +148,7 @@ angular.module('mean.icu').controller('IcuController',
 
     }
 
+    $scope.state = $state;
     var state = $state.current;
     state.params = $state.params;
     initializeContext(state);
