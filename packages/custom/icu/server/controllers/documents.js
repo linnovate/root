@@ -883,7 +883,7 @@ exports.deleteDocument = function (req, res) {
       console.log(err);
     }
     else {
-      var path = file[0]._doc.path;
+      var path = file[0]._doc.path?file[0]._doc.path:"/no_name/no_name/no_name";
       var fileName = path.substring(path.lastIndexOf("/") + 1, path.length);
       var path2 = path.substring(0, path.lastIndexOf("/"));
       var folderName = path2.substring(path2.lastIndexOf("/") + 1, path2.length);
@@ -1017,11 +1017,22 @@ exports.update2 = function (req, res, next) {
 
 
 exports.update = function (req, res, next) {
+  if(req.body.name){
   var json = {};
   json['' + req.body.name] = req.body.newVal;
   Document.update({ "_id": req.params.id }, json).then(function (err, result) {
     console.log("Err=" + err + " result=" + result);
+    if(err){
+      res.send(err);
+    }
+    else{
+      res.send(result);
+    }
   });
+}
+else{
+  res.send('OK');
+}
 
 };
 
