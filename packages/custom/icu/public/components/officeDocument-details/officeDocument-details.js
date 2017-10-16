@@ -26,6 +26,11 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         $scope.officeDocuments = officeDocuments.data || officeDocuments;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.tagInputVisible = false;
+        
+        
+        $scope.officeDocument.created = new Date($scope.officeDocument.created);
+        
+        
         OfficeDocumentsService.getStarred().then(function (starred) {
 
             // // Chack if HI room created and so needs to show HI.png
@@ -63,7 +68,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     }
         }
 
-        $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
+        $scope.statuses = ['new', 'in-progress', 'received', 'done'];
 
         $scope.$watchGroup(['officeDocument.description', 'officeDocument.title'], function (nVal, oVal, scope) {
             if (nVal !== oVal && oVal) {

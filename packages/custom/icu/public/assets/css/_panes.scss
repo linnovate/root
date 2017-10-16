@@ -115,6 +115,8 @@
             &.canceled{color: #ef5350;}
             &.completed{color: #598527;}
             &.archived{color: #ab47bc;}
+            &.received{color: #37afef;}
+            
         }
       .more-info {
           display: block !important;
@@ -180,6 +182,7 @@
             &.canceled{color: #ef5350;}
             &.completed{color: #598527;}
             &.archived{color: #ab47bc;}
+            &.received{color: #37afef;}
         }
         .project {
             padding: 3px 13px !important;                                                                                                              
