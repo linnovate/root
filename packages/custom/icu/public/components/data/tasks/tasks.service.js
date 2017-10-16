@@ -207,27 +207,30 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    function updateStatus(task, me) {
+    function updateStatus(task, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'task',
                 issueId: task.id,
                 type: 'updateStatus',
-                status: task.status
+                status: task.status,
+                prev: prev.status
             },
             context: {}
         }).then(function(result) {
+            console.log('res',result)
             return result;
         });
     }
 
-    function updateDue(task, me) {
+    function updateDue(task, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'task',
                 issueId: task.id,
                 type: 'updateDue',
-                TaskDue: task.due
+                TaskDue: task.due,
+                prev: prev.due
             },
             context: {}
         }).then(function(result) {

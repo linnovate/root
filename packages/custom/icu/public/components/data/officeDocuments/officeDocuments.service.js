@@ -153,13 +153,14 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateStatus(officeDocument, me) {
+        function updateStatus(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: 'updateStatus',
-                    status: officeDocument.status
+                    status: officeDocument.status,
+                    prev: prev.status
                 },
                 context: {}
             }).then(function(result) {
@@ -167,13 +168,14 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateDue(officeDocument, me) {
+        function updateDue(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: 'updateDue',
-                    TaskDue: officeDocument.due
+                    TaskDue: officeDocument.due,
+                    prev: prev.due
                 },
                 context: {}
             }).then(function(result) {
@@ -210,7 +212,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             getStarred: getStarred,
             createDocument:createDocument,
             uploadFileToDocument:uploadFileToDocument,
-            update:update,
             updateWatcher: updateWatcher,
             updateStatus: updateStatus,
             updateDue: updateDue

@@ -46,6 +46,9 @@ angular.module('mean.icu.ui.folderdetails', [])
             });
         });
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.folder));
+
         $scope.$watch('officeName', function(newValue, oldValue) {
             var index = _.findIndex($scope.offices, function(p) {
                 return p.title == oldValue;
@@ -225,7 +228,8 @@ angular.module('mean.icu.ui.folderdetails', [])
                 }
                     switch (context.name) {
                         case 'status':
-                            FoldersService.updateStatus(folder).then(function(result) {
+                            FoldersService.updateStatus(folder, backupEntity).then(function(result) {
+                                backupEntity = JSON.parse(JSON.stringify($scope.folder));
                                 ActivitiesService.data = ActivitiesService.data || [] ;
                                 ActivitiesService.data.push(result);
                                 reloadCurrent();

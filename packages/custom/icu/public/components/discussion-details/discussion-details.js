@@ -78,6 +78,9 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         });
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.discussion));
+
         var errors = {
             'assign': 'please select assignee!',
             'startDate': 'please choose deadline!',
@@ -376,7 +379,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
             DiscussionsService.update(discussion);
             switch (type) {
                 case 'due':
-                    DiscussionsService.updateDue(discussion, me).then(function(result) {
+                    DiscussionsService.updateDue(discussion, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
                         reloadCurrent();
@@ -384,7 +388,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     break;
 
                 case 'status':
-                    DiscussionsService.updateStatus(discussion, me).then(function(result) {
+                    DiscussionsService.updateStatus(discussion, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
                         reloadCurrent();
@@ -392,7 +397,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     break;
 
                 case 'location':
-                    DiscussionsService.updateLocation(discussion, me).then(function(result) {
+                    DiscussionsService.updateLocation(discussion, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
                         reloadCurrent();

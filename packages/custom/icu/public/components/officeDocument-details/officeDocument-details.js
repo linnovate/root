@@ -39,6 +39,9 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         });
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
+
         if (!$scope.officeDocument) {
             $state.go('main.officeDocuments.byentity', {
                 entity: context.entityName,
@@ -297,13 +300,15 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             let me = $scope.me;
             switch (context.name) {
                 case 'due':
-                    OfficeDocumentsService.updateDue(officeDocument, me).then(function(result) {
+                    OfficeDocumentsService.updateDue(officeDocument, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
                         ActivitiesService.data.push(result);
                         reloadCurrent();
                     });
                     break;
                 case 'status':
-                    OfficeDocumentsService.updateStatus(officeDocument, me).then(function(result) {
+                    OfficeDocumentsService.updateStatus(officeDocument, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
                         ActivitiesService.data.push(result);
                         reloadCurrent();
                     });

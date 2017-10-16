@@ -52,6 +52,9 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         }
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.task));
+
         $scope.people = people.data || people;
         if ($scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
             var newPeople = {
@@ -304,7 +307,8 @@ angular.module('mean.icu.ui.taskdetails', [])
                 task.discussion = context.entityId;
             }
 
-            TasksService.updateStatus(task, me).then(function(result) {
+            TasksService.updateStatus(task, backupEntity).then(function(result) {
+                backupEntity = JSON.parse(JSON.stringify($scope.task));
                 ActivitiesService.data.push(result);
             });
 
@@ -329,7 +333,8 @@ angular.module('mean.icu.ui.taskdetails', [])
                 task.discussion = context.entityId;
             }
 
-            TasksService.updateDue(task, me).then(function(result) {
+            TasksService.updateDue(task, backupEntity).then(function(result) {
+                backupEntity = JSON.parse(JSON.stringify($scope.task));
                 ActivitiesService.data.push(result);
             });
 

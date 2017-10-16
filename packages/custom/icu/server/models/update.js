@@ -48,7 +48,10 @@ var UpdateSchema = new Schema({
   userObj: {
     type: Schema.ObjectId,
     ref: 'User'
-  }
+  },
+  prev: {
+    type: String
+  },
 });
 
 var attachmentsVirtual = UpdateSchema.virtual('attachments');

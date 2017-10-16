@@ -36,6 +36,9 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         });
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.project));
+
         if (!$scope.project) {
             $state.go('main.projects.byentity', {
                 entity: context.entityName,
@@ -158,7 +161,8 @@ angular.module('mean.icu.ui.projectdetails', [])
                             project.discussion = context.entityId;
                         }
 
-                        ProjectsService.updateStatus(project).then(function(result) {
+                        ProjectsService.updateStatus(project, backupEntity).then(function(result) {
+                            backupEntity = JSON.parse(JSON.stringify($scope.project));
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
                             reloadCurrent();

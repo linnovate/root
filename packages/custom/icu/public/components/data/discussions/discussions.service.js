@@ -128,13 +128,14 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
-    function updateStatus(discussion, me) {
+    function updateStatus(discussion, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'discussion',
                 issueId: discussion.id,
                 type: 'updateStatus',
-                status: discussion.status
+                status: discussion.status,
+                prev: prev.status
             },
             context: {}
         }).then(function(result) {
@@ -142,13 +143,14 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
-    function updateDue(discussion, me) {
+    function updateDue(discussion, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'discussion',
                 issueId: discussion.id,
                 type: 'updateDue',
-                TaskDue: discussion.due
+                TaskDue: discussion.due,
+                prev: prev.due
             },
             context: {}
         }).then(function(result) {
@@ -156,13 +158,14 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
-    function updateLocation(discussion, me) {
+    function updateLocation(discussion, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'discussion',
                 issueId: discussion.id,
                 type: 'updateLocation',
-                TaskDue: discussion.due
+                status: discussion.location,
+                prev: prev.location
             },
             context: {}
         }).then(function(result) {

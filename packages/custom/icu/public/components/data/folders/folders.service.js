@@ -140,13 +140,14 @@ angular.module('mean.icu.data.foldersservice', [])
         });
     }
 
-    function updateStatus(folder) {
+    function updateStatus(folder, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'folder',
                 issueId: folder.id,
                 type: 'updateStatus',
-                status: folder.status
+                status: folder.status,
+                prev: prev.status
             },
             context: {}
         }).then(function(result) {

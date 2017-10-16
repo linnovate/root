@@ -141,13 +141,14 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
-    function updateStatus(project) {
+    function updateStatus(project, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'project',
                 issueId: project.id,
                 type: 'updateStatus',
-                status: project.status
+                status: project.status,
+                prev: prev.status
             },
             context: {}
         }).then(function(result) {

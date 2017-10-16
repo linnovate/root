@@ -89,6 +89,15 @@ angular.module('mean.icu.ui.tabs')
                     type: 'text',
                     value: 'updateDue'
                 }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'prev-date',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'to'
+                }, {
                     type: 'nbsp'
                 }, {
                     type: 'date',
@@ -101,6 +110,15 @@ angular.module('mean.icu.ui.tabs')
                 }, {
                     type: 'text',
                     value: 'updateStatus'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'prev-string',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
                 }, {
                     type: 'nbsp'
                 }, {
