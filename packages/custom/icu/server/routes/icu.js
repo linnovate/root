@@ -336,7 +336,7 @@ module.exports = function(Icu, app) {
    .post(templateDocs.createNew)
 
    app.route('/api/officeTemplates')
-   .post(templateDocs.upload)
+   //.post(templateDocs.upload)
    .get(pagination.parseParams, templateDocs.all, pagination.formResponse);
    app.route('/api/officeTemplates/getByofficeId')
    .post(templateDocs.getByOfficeId)
@@ -347,6 +347,9 @@ module.exports = function(Icu, app) {
   .get(templateDocs.getById)
   .post(templateDocs.update2)
   .delete(templateDocs.deleteTemplate);
+
+  app.route('/api/officeTemplates/uploadTemplate')
+  .post(templateDocs.uploadTemplate);
    //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
    
    app.route(/^((?!\/hi\/).)*$/).all(response);

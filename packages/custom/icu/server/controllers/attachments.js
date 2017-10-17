@@ -284,11 +284,20 @@ exports.getByPath = function (req, res, next) {
       var query = req.acl.mongoQuery('Document');
       query.findOne(conditions).exec(function (err, attachment) {
         if (err || !attachment ) {
-          req.locals.error = {
-            status: 404,
-            message: 'Entity not found'
-          };
-          next();
+          var query = req.acl.mongoQuery('TemplateDoc');
+          query.findOne(conditions).exec(function (err, attachment) {
+            if(err){
+            req.locals.error = {
+              status: 404,
+              message: 'Entity not found'
+            };
+          }
+          else{
+            next();
+          }
+            
+          });
+         
         }
         else{
           next();
