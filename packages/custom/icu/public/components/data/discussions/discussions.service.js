@@ -143,14 +143,14 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
-    function updateDue(discussion, prev) {
+    function updateDue(discussion, prev, type) {
         return ActivitiesService.create({
             data: {
                 issue: 'discussion',
                 issueId: discussion.id,
-                type: 'updateDue',
-                TaskDue: discussion.due,
-                prev: prev.due
+                type: 'update' + type[0].toUpperCase() + type.slice(1),
+                TaskDue: type === 'startDue' ? discussion.startDate : discussion.endDate,
+                prev: type === 'startDue' ? prev.startDate : prev.endDate
             },
             context: {}
         }).then(function(result) {

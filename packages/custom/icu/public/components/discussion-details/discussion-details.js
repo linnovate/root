@@ -236,8 +236,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         }
         };
        
-
-        $scope.dueOptions = {
+        $scope.startDueOptions = {
             onSelect: function () {
                 $scope.update($scope.discussion, 'due');
                 $scope.open();
@@ -253,6 +252,17 @@ angular.module('mean.icu.ui.discussiondetails', [])
             },
             dateFormat: 'd.m.yy'
         };
+        $scope.endDueOptions = _.clone($scope.startDueOptions);
+
+        $scope.startDueOptions.onSelect = function () {
+            $scope.update($scope.discussion, 'startDue');
+            $scope.open();
+        },
+
+        $scope.endDueOptions.onSelect = function () {
+            $scope.update($scope.discussion, 'endDue');
+            $scope.open();
+        },
 
         $scope.timeOptions ={
             minuteStep: 5,
@@ -378,8 +388,9 @@ angular.module('mean.icu.ui.discussiondetails', [])
             $scope.updateDatesString();
             DiscussionsService.update(discussion);
             switch (type) {
-                case 'due':
-                    DiscussionsService.updateDue(discussion, backupEntity).then(function(result) {
+                case 'startDue':
+                case 'endDue':
+                    DiscussionsService.updateDue(discussion, backupEntity, type).then(function(result) {
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
