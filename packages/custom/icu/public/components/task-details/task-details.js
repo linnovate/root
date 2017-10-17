@@ -18,6 +18,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         ProjectsService,
         me //,subtasks
     ) {
+        console.log(entity, context.entity)
         $scope.task = entity || context.entity;
         $scope.addSubTasks = false;
         $scope.me = me;
@@ -243,7 +244,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
-            
+            console.log('backupEntity',backupEntity)
             task.status = $scope.statuses[1];
 
             if (context.entityName === 'discussion') {
@@ -253,10 +254,6 @@ angular.module('mean.icu.ui.taskdetails', [])
             if (task.assign === undefined || task.assign === null) {
                 delete task['assign'];
             }
-
-            TasksService.assign(task, me).then(function(result) {
-                ActivitiesService.data.push(result);
-            });
 
             TasksService.update(task).then(function(result) {
                 if (context.entityName === 'project') {
@@ -270,6 +267,11 @@ angular.module('mean.icu.ui.taskdetails', [])
                         });
                     }
                 }
+
+                TasksService.assign(task, me, backupEntity).then(function(res) {
+                    backupEntity = JSON.parse(JSON.stringify(result));
+                    ActivitiesService.data.push(res);
+                });
             });
 
         };

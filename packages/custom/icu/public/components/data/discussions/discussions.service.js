@@ -173,6 +173,26 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
+    function updateAssign(discussion, prev) {
+        if (discussion.assign) {
+            var activityType = prev.assign ? 'assign' : 'assignNew';
+        } else {
+            var activityType = 'unassign';
+        }
+        return ActivitiesService.create({
+            data: {
+                issue: 'discussion',
+                issueId: discussion.id,
+                type: activityType,
+                userObj: discussion.assign,
+                prev: prev.assign ? prev.assign.name : ''
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     return {
         getAll: getAll,
         getById: getById,
@@ -189,6 +209,7 @@ angular.module('mean.icu.data.discussionsservice', [])
         updateWatcher: updateWatcher,
         updateStatus: updateStatus,
         updateDue: updateDue,
-        updateLocation: updateLocation
+        updateLocation: updateLocation,
+        updateAssign: updateAssign
     };
 });

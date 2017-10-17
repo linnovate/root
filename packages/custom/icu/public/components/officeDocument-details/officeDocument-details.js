@@ -267,7 +267,12 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 'newVal':officeDocument.assign
             };
             OfficeDocumentsService.updateDocument(officeDocument._id,json);
-            
+            OfficeDocumentsService.updateAssign(officeDocument, backupEntity).then(function(result) {
+                backupEntity = JSON.parse(JSON.stringify(officeDocument));
+                ActivitiesService.data = ActivitiesService.data || [];
+                ActivitiesService.data.push(result);
+                reloadCurrent();
+            }); 
 
         };
 

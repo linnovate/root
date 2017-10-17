@@ -194,6 +194,26 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function updateAssign(officeDocument, prev) {
+            if (officeDocument.assign) {
+                var activityType = prev.assign ? 'assign' : 'assignNew';
+            } else {
+                var activityType = 'unassign';
+            }
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocument',
+                    issueId: officeDocument.id,
+                    type: activityType,
+                    userObj: officeDocument.assign,
+                    prev: prev.assign ? prev.assign.name : ''
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
         return {
             sendDocument:sendDocument,
             getAll: getAll,
@@ -214,6 +234,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             uploadFileToDocument:uploadFileToDocument,
             updateWatcher: updateWatcher,
             updateStatus: updateStatus,
-            updateDue: updateDue
+            updateDue: updateDue,
+            updateAssign: updateAssign
         };
     });

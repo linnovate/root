@@ -218,7 +218,6 @@ angular.module('mean.icu.data.tasksservice', [])
             },
             context: {}
         }).then(function(result) {
-            console.log('res',result)
             return result;
         });
     }
@@ -239,7 +238,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
     }
         
-    function assign(task, me) {
+    function assign(task, me, prev) {
         if (task.assign) {
             var message = {};
             message.content = task.title || '-';
@@ -252,7 +251,7 @@ angular.module('mean.icu.data.tasksservice', [])
                 type: 'assign'
             });
 
-            var activityType = 'assign';
+            var activityType = prev.assign ? 'assign' : 'assignNew';
         } else {
             var activityType = 'unassign';
         }
@@ -261,7 +260,8 @@ angular.module('mean.icu.data.tasksservice', [])
                 issue: 'task',
                 issueId: task.id,
                 type: activityType,
-                userObj: task.assign
+                userObj: task.assign,
+                prev: prev.assign ? prev.assign.name : ''
             },
             context: {}
         }).then(function(result) {

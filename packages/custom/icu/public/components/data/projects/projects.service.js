@@ -171,6 +171,7 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
+
     return {
         getAll: getAll,
         getById: getById,

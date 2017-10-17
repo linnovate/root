@@ -63,10 +63,45 @@ angular.module('mean.icu.ui.tabs')
                     klass: "user-name"
                 }, {
                     type: 'text',
+                    value: 'instead'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'prev-assign',
+                    value: 'prev',
+                    klass: "user-name"
+                }, {
+                    type: 'text',
                     value: 'toThis'
                 }, {
                     type: 'object',
                     value: 'issue'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
+                }],
+                assignNew: [{
+                    type: 'text',
+                    value: 'assignedUser'
+                }, {
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'deepObject',
+                    value: ['userObj', 'lastname'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'toThis'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
                 }],
                 unassign: [{
                     type: 'deepObject',
@@ -80,6 +115,17 @@ angular.module('mean.icu.ui.tabs')
                 }, {
                     type: 'object',
                     value: 'issue'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'prev-assign',
+                    value: 'prev',
+                    klass: "user-name"
                 }],
                 updateDue: [{
                     type: 'deepObject',
@@ -279,28 +325,6 @@ angular.module('mean.icu.ui.tabs')
                     type: 'object',
                     value: 'issue'
                 }],
-                assign: [{
-                    type: 'text',
-                    value: 'assignedUser'
-                }, {
-                    type: 'deepObject',
-                    value: ['userObj', 'name'],
-                    klass: "user-name"
-                }, {
-                    type: 'deepObject',
-                    value: ['userObj', 'lastname'],
-                    klass: "user-name"
-                }, {
-                    type: 'text',
-                    value: 'toThis'
-                }, {
-                    type: 'object',
-                    value: 'issue'
-                }, {
-                    type: 'deepObject',
-                    value: ['issueId', 'title'],
-                    klass: "user-name"
-                }],
                 unassign: [{
                     type: 'deepObject',
                     value: ['userObj', 'name'],
@@ -309,7 +333,14 @@ angular.module('mean.icu.ui.tabs')
                     type: 'text',
                     value: 'unassign'
                 }, {
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
                     type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from this'
                 }, {
                     type: 'object',
                     value: 'issue'

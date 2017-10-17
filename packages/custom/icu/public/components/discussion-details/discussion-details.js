@@ -415,6 +415,15 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         reloadCurrent();
                     });
                     break;
+                
+                case 'assign':
+                    DiscussionsService.updateAssign(discussion, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                        reloadCurrent();
+                    });
+                    break;
             }
                         
         };
