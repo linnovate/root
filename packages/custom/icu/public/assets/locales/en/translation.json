@@ -68,6 +68,7 @@
     "email": "Email",
     "emailAddressIsAlreadyInUse": "E-mail address is already in-use",
     "enterDescription": "Enter a description",
+    "from": "from",
     "fromtemplate": "from template",
     "in-progress": "In progress",
     "instead": "instead",
