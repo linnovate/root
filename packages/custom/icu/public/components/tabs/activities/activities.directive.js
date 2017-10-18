@@ -262,7 +262,69 @@ angular.module('mean.icu.ui.tabs')
                     type: 'deepObject',
                     value: ['userObj', 'lastname'],
                     klass: "user-name"
-                }],               
+                }],
+                updateEntity: [{
+                    type: 'text',
+                    value: 'added'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'entityType'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'entity',
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'instead'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'prev-string',
+                    value: 'prev',
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'toThis'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
+                }],
+                updateNewEntity: [{
+                    type: 'text',
+                    value: 'added'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'entityType'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'entity',
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'toThis'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
+                }],
                 copy: [{
                     type: 'text',
                     value: 'copiedThe'

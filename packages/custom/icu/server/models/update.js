@@ -52,6 +52,12 @@ var UpdateSchema = new Schema({
   prev: {
     type: String
   },
+  entity: {
+    type: String
+  },
+  entityType: {
+    type: String
+  }
 });
 
 var attachmentsVirtual = UpdateSchema.virtual('attachments');

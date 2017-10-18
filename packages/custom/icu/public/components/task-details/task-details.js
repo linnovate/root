@@ -18,7 +18,6 @@ angular.module('mean.icu.ui.taskdetails', [])
         ProjectsService,
         me //,subtasks
     ) {
-        console.log(entity, context.entity)
         $scope.task = entity || context.entity;
         $scope.addSubTasks = false;
         $scope.me = me;
@@ -244,7 +243,6 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
-            console.log('backupEntity',backupEntity)
             task.status = $scope.statuses[1];
 
             if (context.entityName === 'discussion') {
@@ -361,6 +359,11 @@ angular.module('mean.icu.ui.taskdetails', [])
                 $scope.createProject(proj, function(result) {
                     task.project = result;
                     TasksService.update(task).then(function(result) {
+                        TasksService.updateEntity(task, backupEntity).then(function(result) {
+                            backupEntity = JSON.parse(JSON.stringify($scope.task));
+                            ActivitiesService.data.push(result);
+                        });
+                        
                         if (context.entityName === 'project') {
                             var projId = result.project ? result.project._id : undefined;
                             if (projId !== context.entityId || type === 'project') {
@@ -381,6 +384,12 @@ angular.module('mean.icu.ui.taskdetails', [])
             }
             TasksService.update(task).then(function(result) {
                 task.PartTitle = task.title;
+                if (type === 'project') {
+                    TasksService.updateEntity(task, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.task));
+                        ActivitiesService.data.push(result);
+                    });
+                }
                 if (context.entityName === 'project') {
                     var projId = result.project ? result.project._id : undefined;
                     if (!projId) {

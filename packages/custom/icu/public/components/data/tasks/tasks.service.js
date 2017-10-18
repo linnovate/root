@@ -269,6 +269,24 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function updateEntity(task, prev) {
+        var activityType = prev.project ? 'updateEntity' : 'updateNewEntity';
+        return ActivitiesService.create({
+            data: {
+                issue: 'task',
+                issueId: task.id,
+                type: activityType,
+                entityType: 'project',
+                entity: task.project.title,
+                prev: prev.project ? prev.project.title : ''
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -301,6 +319,7 @@ angular.module('mean.icu.data.tasksservice', [])
         updateWatcher: updateWatcher,
         data: data,
         tabData: tabData,
-        IsNew: IsNew
+        IsNew: IsNew,
+        updateEntity: updateEntity
     };
 });
