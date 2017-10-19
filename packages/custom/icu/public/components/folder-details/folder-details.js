@@ -238,7 +238,7 @@ angular.module('mean.icu.ui.folderdetails', [])
                     
                         case 'color':
                             FoldersService.updateColor(folder).then(function(result) {
-                                ActivitiesService.data = ActivitiesService.data || [] ; // TBD
+                                ActivitiesService.data = ActivitiesService.data || [] ;
                                 ActivitiesService.data.push(result);
                                 reloadCurrent();
                             });
@@ -254,6 +254,12 @@ angular.module('mean.icu.ui.folderdetails', [])
                     folder.office = result;
                     FoldersService.update(folder).then(function(result) {
                         if (context.entityName === 'office') {
+                            FoldersService.updateEntity(folder, backupEntity).then(function(result) {
+                                backupEntity = JSON.parse(JSON.stringify($scope.folder));
+                                ActivitiesService.data = ActivitiesService.data || [] ;
+                                ActivitiesService.data.push(result);
+                                reloadCurrent();
+                            });
                             var officeId = result.office ? result.office._id : undefined;
                             if (officeId !== context.entityId || type === 'office') {
                                 $state.go('main.folders.byentity.details', {
@@ -272,6 +278,12 @@ angular.module('mean.icu.ui.folderdetails', [])
             //     folder.discussion = context.entityId;
             // }
             FoldersService.update(folder).then(function(result) {
+                FoldersService.updateEntity(folder, backupEntity).then(function(result) {
+                    backupEntity = JSON.parse(JSON.stringify($scope.folder));
+                    ActivitiesService.data = ActivitiesService.data || [] ;
+                    ActivitiesService.data.push(result);
+                    reloadCurrent();
+                });
                 folder.PartTitle = folder.title;
                 //if (context.entityName === 'office') {
                     var officeId = result.office ? result.office._id : undefined;

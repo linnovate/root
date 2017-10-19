@@ -298,7 +298,14 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 'name':'folder',
                 'newVal':folderId
             };
-            OfficeDocumentsService.updateDocument(officeDocument._id,json);
+            OfficeDocumentsService.updateDocument(officeDocument._id,json).then(function(res) {
+                OfficeDocumentsService.updateEntity(officeDocument, backupEntity).then(function(result) {
+                    backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
+                    ActivitiesService.data = ActivitiesService.data || [] ;
+                    ActivitiesService.data.push(result);
+                    reloadCurrent();
+                });
+            });
         };
 
 
