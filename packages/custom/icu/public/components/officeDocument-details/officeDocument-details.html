@@ -58,7 +58,8 @@
                 </div>
             </div>
             <div class="send">
-                <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" send="true" data="officeDocument" send-fn="sendDocument(officeDocument)" class="sendBtn" >{{ 'send' | i18next }}</button>
+                <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" send="true" data="officeDocument" send-fn="sendDocument(officeDocument)"
+                    class="sendBtn">{{ 'send' | i18next }}</button>
             </div>
             <div class="dropdown dropdown-container" uib-dropdown>
                 <div class="dropdown-trigger" uib-dropdown-toggle>
@@ -83,8 +84,9 @@
         <div class="summary wrap-pro">
             <div class="tags" ng-if="!officeDocument.parent">
                 <div class="tag-wrap">
-                    <ui-select ng-model="officeDocument.folder" select-on-blur on-select="updateFolder(officeDocument,$select.selected._id)" ng-keyup="updateFolderName($select.selected.title)" ng-mouseleave="removeCreateNew">
-                        <ui-select-match placeholder="{{$select.selected.title || 'selectOffice' | i18next}}">
+                    <ui-select ng-model="officeDocument.folder" select-on-blur on-select="updateFolder(officeDocument,$select.selected._id)"
+                        ng-keyup="updateFolderName($select.selected.title)" ng-mouseleave="removeCreateNew">
+                        <ui-select-match placeholder="{{$select.selected.title || 'selectFolder' | i18next}}">
                             <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
                                 {{$select.selected.title}}
                                 <div class="delete" ng-click="unsetFolder($event, templateDoc)">
@@ -94,9 +96,9 @@
                         </ui-select-match>
                         <ui-select-choices repeat="folder in folders | filter:$select.search">
                             <div class="line" ng-show="folder.title" ng-class="{ 'create new': folder.class}">
-                                <div ng-show="folder.class" ng-bind-html="folder.title | searchfilter:$select.search"  class="title"></div>
-                                <div ng-show="folder.class && folderName"  class="create-new">{{ 'createNew' | i18next }}</div>
-                                <span ng-show="!folder.class" ng-bind-html="folder.title | searchfilter:$select.search"  class="title"></span>
+                                <div ng-show="folder.class" ng-bind-html="folder.title | searchfilter:$select.search" class="title"></div>
+                                <div ng-show="folder.class && folderName" class="create-new">{{ 'createNew' | i18next }}</div>
+                                <span ng-show="!folder.class" ng-bind-html="folder.title | searchfilter:$select.search" class="title"></span>
                             </div>
                         </ui-select-choices>
                     </ui-select>
@@ -106,7 +108,11 @@
                 {{currentContext.entity.title}}
             </div>
         </div>
-        <button class="simochin" >{{'simochin' | i18next }}</button>
+        <button ng-if="!officeDocument.serial" class="simochin">{{'simochin' | i18next }}</button>
+        <div class="info">
+            <p class="classification" ng-if="officeDocument.classification">{{'classification' | i18next }}: {{officeDocument.classification}} </p>
+            <p ng-if="officeDocument.serial">{{'simochin' | i18next }}: {{officeDocument.serial}} </p>
+        </div>
         <!-- <div class="rowSimochin">
         <div class='folder-title' ng-style="{'background-color': '#' + officeDocument.folder.color}">
             <p class="folder-name">{{officeDocument.folder.title}}</p>
@@ -114,8 +120,8 @@
         <button class="simochin" >{{'simochin' | i18next }}</button>
     </div-->
         <div class="description">
-            <div class="title"  contenteditable="true" tabindex="1"  strip-br="true"
-                ng-keydown="onEnter($event)" ng-model="officeDocument.title" ng-change="updateCurrentOfficeDocument()">
+            <div class="title" contenteditable="true" tabindex="1" strip-br="true" ng-keydown="onEnter($event)" ng-model="officeDocument.title"
+                ng-change="updateCurrentOfficeDocument()">
 
             </div>
 
@@ -123,27 +129,25 @@
                 options="{{options}}">
             </div>
             <div class="row-buttons">
-                <button class="create" ng-if="!officeDocument.path" icu-open-modal entity-name="officeDocument" show-modal="true" modal-name="template" data="officeDocument" >{{ 'createFromTemplate' | i18next }} </button>
-                <button ngf-select
-                        ngf-change="upload($files)"
-                        ngf-multiple="true"
-                        class="choose" ng-if="!officeDocument.path">{{ 'chooseFile' | i18next }}
+                <button class="create" ng-if="!officeDocument.path" icu-open-modal entity-name="officeDocument" show-modal="true" modal-name="template"
+                    data="officeDocument">{{ 'createFromTemplate' | i18next }} </button>
+                <button ngf-select ngf-change="upload($files)" ngf-multiple="true" class="choose" ng-if="!officeDocument.path">{{ 'chooseFile' | i18next }}
                 </button>
 
                 <div class="tab-content">
                     <div class="documents">
-                            <div ng-if="officeDocument.path" class="document" >
-                                    <!-- <a href="{{officeDocument.path}}" target="window"> -->
-                                         <a ng-click="view(officeDocument)" target="window">
-                                                 <div class="icon {{officeDocument.documentType}}"></div>       
-                                                 <div id="documentTitle">{{officeDocument.title}}</div>
-                                         </a>
-                            </div> 
+                        <div ng-if="officeDocument.path" class="document">
+                            <!-- <a href="{{officeDocument.path}}" target="window"> -->
+                            <a ng-click="view(officeDocument)" target="window">
+                                <div class="icon {{officeDocument.documentType}}"></div>
+                                <div id="documentTitle">{{officeDocument.title}}</div>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
 
-                  
+
             </div>
             <div class="tags">
                 <ul class="list">
@@ -171,6 +175,20 @@
                 </div>
             </button>
                 </div>
+            </div>
+            <div   class="membersInfo" ng-if="officeDocument.status != 'new'">
+                   
+                    <p class="doneBy" ng-if="officeDocument.doneBy"><b>{{'doneBy' | i18next }}: </b>
+                        <span ng-repeat="doneBy in officeDocument.doneBy">{{doneBy.name}}
+                                <span ng-if="$index != officeDocument.doneBy.length-1">,</span>
+                            </span> 
+                        
+                    </p>
+                    <p class="forNotice" ng-if="officeDocument.forNotice"><b>{{'forNotice' | i18next }}: </b>
+                        <span ng-repeat="forNotice in officeDocument.forNotice">{{forNotice.name}} 
+                            <span ng-if="$index != officeDocument.forNotice.length-1">,</span>
+                        </span> 
+                    </p>
             </div>
         </div>
         <div class="tabs">

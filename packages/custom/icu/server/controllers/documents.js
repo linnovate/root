@@ -161,6 +161,7 @@ exports.getAll = function (req, res, next) {
   .populate('assign')
   .populate('relatedDocuments')
   .populate('forNotice')
+  .populate('doneBy')
   .populate('watchers').exec(function(err,data){
       if (err) {
         req.locals.error = err;

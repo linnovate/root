@@ -28,7 +28,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         $scope.tagInputVisible = false;
         
         
-        $scope.officeDocument.created = new Date($scope.officeDocument.created);
+        //$scope.officeDocument.created = new Date($scope.officeDocument.created);
         
         
         OfficeDocumentsService.getStarred().then(function (starred) {
@@ -67,6 +67,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                         $scope.people[i].job = $scope.people[i].name;
                     }
         }
+
 
         $scope.statuses = ['new', 'in-progress', 'received', 'done'];
 
