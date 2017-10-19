@@ -170,6 +170,24 @@ angular.module('mean.icu.data.foldersservice', [])
         });
     }
 
+    function updateEntity(folder, prev) {
+        var activityType = prev.office ? 'updateEntity' : 'updateNewEntity';
+        return ActivitiesService.create({
+            data: {
+                issue: 'folder',
+                issueId: folder.id,
+                type: activityType,
+                entityType: 'office',
+                entity: folder.office.title,
+                prev: prev.office ? prev.office.title : ''
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+
+    }
+
     return {
         getAll: getAll,
         getById: getById,
@@ -187,6 +205,7 @@ angular.module('mean.icu.data.foldersservice', [])
         WantToCreateRoom: WantToCreateRoom,
         updateWatcher: updateWatcher,
         updateStatus: updateStatus,
-        updateColor: updateColor
+        updateColor: updateColor,
+        updateEntity: updateEntity
     };
 });

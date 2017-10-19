@@ -84,7 +84,7 @@
             <div class="tags" ng-if="!officeDocument.parent">
                 <div class="tag-wrap">
                     <ui-select ng-model="officeDocument.folder" select-on-blur on-select="updateFolder(officeDocument,$select.selected._id)" ng-keyup="updateFolderName($select.selected.title)" ng-mouseleave="removeCreateNew">
-                        <ui-select-match placeholder="{{$select.selected.title || 'selectOffice' | i18next}}">
+                        <ui-select-match placeholder="{{$select.selected.title || 'selectFolder' | i18next}}">
                             <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
                                 {{$select.selected.title}}
                                 <div class="delete" ng-click="unsetFolder($event, templateDoc)">
