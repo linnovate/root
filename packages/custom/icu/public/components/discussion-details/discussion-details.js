@@ -428,6 +428,16 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         
         };
 
+        var activeTimeout;
+        $scope.updateLocation = function(discussion) {
+            if (activeTimeout) {
+                clearTimeout(activeTimeout)
+            }
+            activeTimeout = setTimeout(function(){ 
+                $scope.update(discussion, 'location')
+            }, 3000);
+        }
+
         $scope.updateCurrentDiscussion= function(){
             $scope.discussion.PartTitle = $scope.discussion.title;
             DiscussionsService.currentDiscussionName = $scope.discussion.title;

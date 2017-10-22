@@ -73,7 +73,7 @@
 
             <div class="location">
                 <div class="placeholder" ng-if="!discussion.location">{{ 'location' | i18next }}</div>
-               <input type="text"  ng-model="discussion.location" ng-change="update(discussion, 'location')">
+               <input type="text"  ng-model="discussion.location" ng-change="updateLocation(discussion)">
             </div>
 
             <div class="status">

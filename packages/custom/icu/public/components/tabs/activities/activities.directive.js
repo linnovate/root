@@ -254,14 +254,38 @@ angular.module('mean.icu.ui.tabs')
                 updateLocation: [{
                     type: 'text',
                     value: 'updateLocation'
-                },{
-                    type: 'deepObject',
-                    value: ['userObj', 'name'],
-                    klass: "user-name"
-                },{
-                    type: 'deepObject',
-                    value: ['userObj', 'lastname'],
-                    klass: "user-name"
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateNewLocation: [{
+                    type: 'text',
+                    value: 'updateLocation'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
                 }],
                 updateEntity: [{
                     type: 'text',

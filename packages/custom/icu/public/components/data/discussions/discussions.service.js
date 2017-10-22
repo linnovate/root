@@ -159,11 +159,12 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function updateLocation(discussion, prev) {
+        var activityType = prev.location ? 'updateLocation' : 'updateNewLocation';
         return ActivitiesService.create({
             data: {
                 issue: 'discussion',
                 issueId: discussion.id,
-                type: 'updateLocation',
+                type: activityType,
                 status: discussion.location,
                 prev: prev.location
             },
