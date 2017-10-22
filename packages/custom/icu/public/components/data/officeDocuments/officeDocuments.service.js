@@ -20,6 +20,10 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 //             creator: "avraham",
                 //             status: "new"
                 //                }]
+
+                result.data.forEach(function(officeDocument) {
+                    officeDocument.created = new Date(officeDocument.created);
+                });
                 return result.data;
             });
         }

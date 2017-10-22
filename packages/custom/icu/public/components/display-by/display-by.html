@@ -2,7 +2,7 @@
     <p class="title my" ng-if="context.main === 'tasks'" ui-sref="main.{{context.main}}.byassign" ui-sref-active="active" data-ng-class="{ 'selected': context.entityName === 'my' }">
         {{ 'myTasks' | i18next }}
     </p>
-    <div ng-if="context.main != 'folders'">
+    <div ng-if="(context.main != 'folders') && (context.main != 'templateDocs') && (context.main != 'offices')">
         <p class="title all" ui-sref="main.{{context.main}}.all({'officeDocuments':undefined})" ui-sref-active="active" data-ng-class="{ 'selected': context.entityName === 'all'}">
             {{ 'all' | i18next }}
             <div class="list {{context.main}}">
@@ -92,7 +92,7 @@
 
     </div>
 
-    <div class="list offices" ng-if="officesList && (icuDisplayBy.indexOf('offices'))>-1">
+    <div class="list offices" ng-if="(icuDisplayBy.indexOf('templateDocs')>-1) || (officesList && (icuDisplayBy.indexOf('offices'))>-1)">
         <p ng-click="visible.office = !visible.office" class="title">{{ 'folders' | i18next }}</p>
         <ul ng-if="visible.office">
             <li data-ng-repeat="office in officesList | limitTo: displayLimit['offices']" data-ng-class="{'selected': context.entityName === 'office' && office._id === context.entityId }"

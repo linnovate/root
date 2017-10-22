@@ -146,3 +146,46 @@ ul.dropdown-menu {
         transition: 0.8s;
     }   
 }
+
+.info{
+    margin-right: 10px;
+    margin-top: 3%;
+    float: right;
+}
+
+.info p {
+    margin-left: 5px;
+    margin-right: 5px; 
+    display: inline-block;
+    vertical-align: top;
+}
+
+.classification{
+    border-right: 2px solid $light-grey1;
+    padding-right: 10px;
+}
+
+.membersInfo {
+    border-bottom: 1px solid $light-grey1;
+
+    p{
+        margin-top: 10px;
+        display: inline-table;
+       
+    }
+
+    .forNotice{
+        border-left: 2px solid $light-grey1;
+        padding-left: 5px;
+        width: 49%;
+      
+    }
+
+    .doneBy{
+        border-right: 2px solid $light-grey1;
+        padding-right: 7px;
+        width: 50%;
+        margin-right: -6px; 
+
+    }
+}
