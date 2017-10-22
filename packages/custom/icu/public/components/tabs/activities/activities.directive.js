@@ -481,7 +481,6 @@ angular.module('mean.icu.ui.tabs')
                         location: location.href
                     }
                 }
-                console.log('activity', $scope.activity, 'context', context);
 
                 ActivitiesService.create({
                     data: $scope.activity,

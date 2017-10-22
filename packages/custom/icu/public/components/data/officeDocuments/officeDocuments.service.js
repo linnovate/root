@@ -142,7 +142,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function updateWatcher(officeDocument, me, watcher, type) {
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: type || 'updateWatcher',
                     userObj: watcher                
@@ -156,7 +156,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function updateStatus(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: 'updateStatus',
                     status: officeDocument.status,
@@ -171,7 +171,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function updateDue(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: 'updateDue',
                     TaskDue: officeDocument.due,
@@ -203,7 +203,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocument',
-                    issueId: officeDocument.id,
+                    issueId: officeDocument._id,
                     type: activityType,
                     userObj: officeDocument.assign,
                     prev: prev.assign ? prev.assign.name : ''
@@ -219,7 +219,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocument',
-                    issueId: officeDocument.id,
+                    issueId: officeDocument._id,
                     type: activityType,
                     entityType: 'folder',
                     entity: officeDocument.folder.title,
