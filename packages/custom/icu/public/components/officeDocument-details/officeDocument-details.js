@@ -194,7 +194,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             $scope.update($scope.officeDocument, context);
 
         };
-
+        
         $scope.setFocusToTagSelect = function() {
             var element = angular.element('#addTag > input.ui-select-focusser')[0];
             $timeout(function() {

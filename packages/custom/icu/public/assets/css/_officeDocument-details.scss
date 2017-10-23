@@ -189,3 +189,22 @@ ul.dropdown-menu {
 
     }
 }
+
+.send-by{
+    margin-top: 13px;
+    .sender{
+        display: inline;
+    }
+    .sending-as{
+        display: inline;
+        div{
+            display: inline-flex;
+        }
+    }
+}
+
+.sending-as{
+    tooltip tip{
+        width: max-content;
+    }
+}

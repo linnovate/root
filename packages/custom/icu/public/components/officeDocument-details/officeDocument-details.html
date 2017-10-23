@@ -19,7 +19,7 @@
                     <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
                 </div>
                 <!--<ui-select ng-model="task.assign" on-select="update(task)">-->
-                <div tooltips tooltip-template="{{'assignee' | i18next}}">
+                <div tooltips tooltip-template="{{'assignee' | i18next}}" ng-if="officeDocument.status == 'new'">
                     <ui-select ng-model="officeDocument.assign" on-select="updateAssign(officeDocument)">
                         <ui-select-match>
                             <div icu-avatar user="$select.selected"></div>
@@ -30,9 +30,24 @@
                             <span class="summary-content">{{user.job}}</span>
                         </ui-select-choices>
                     </ui-select>
+                    
+                </div>
+                <div class="send-by" ng-if="officeDocument.status != 'new'" >
+                    <div class="sender">
+                        <div icu-avatar user=officeDocument.sender></div>
+                        <b><span  class="summary-content">{{officeDocument.sender.name}} {{officeDocument.sender.lastname?officeDocument.sender.lastname:""}}</span></b>
+                    </div>    
+                    <div class="sending-as" ng-if="officeDocument.sendingAs">
+                        <span tooltips tooltip-template="
+                        {{officeDocument.sender.name}} {{officeDocument.sender.lastname?officeDocument.sender.lastname:''}}
+                        {{ 'by' | i18next }}
+                        {{officeDocument.sendingAs.name}} {{officeDocument.sendingAs.lastname?officeDocument.sendingAs.lastname:''}}
+                        " tooltip-side="bottom" >{{ 'by' | i18next }} ...</span>
+                        <!-- <div icu-avatar user=officeDocument.sendingAs></div>
+                        <b><span  class="summary-content">{{officeDocument.sendingAs.name}} {{officeDocument.sendingAs.lastname?officeDocument.sendingAs.lastname:""}}</span></b> -->
+                    </div>
                 </div>
             </div>
-
 
             <div class="due">
                 <div class="placeholder" ng-if="!officeDocument.created">{{ 'dueDate' | i18next }}</div>
@@ -57,7 +72,7 @@
                     </ui-select>
                 </div>
             </div>
-            <div class="send">
+            <div class="send" ng-if="officeDocument.status == 'new'">
                 <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" send="true" data="officeDocument" send-fn="sendDocument(officeDocument)"
                     class="sendBtn">{{ 'send' | i18next }}</button>
             </div>
