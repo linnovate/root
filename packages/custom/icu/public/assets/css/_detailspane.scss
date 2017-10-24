@@ -727,6 +727,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     i.archived{background-color: #ab47bc;}
     i.scheduled{background-color: #0054a6;}
     i.received{background-color: #37afef;}
+    i.sent{background-color: #bbe77e;}
     .new{color: #ff4081; }
     .assigned{color: #2979ff;}
     .in-progress{color: #f69679;}
@@ -738,6 +739,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     .archived{color: #ab47bc;}
     .scheduled{color: #0054a6;}
     .received{color: #37afef;}
+    .sent{color: #bbe77e;}
 }
 }
 

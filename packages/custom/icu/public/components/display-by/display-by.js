@@ -58,16 +58,21 @@ angular.module('mean.icu.ui.displayby', [])
         
         $scope.typesList = [{
             name: 'new',
-             color:'bbe77e'
+             color:'ff4081'
         },{
             name:  'received',
             color:'37afef' 
-        },{
-            name:  'in-progress',
-            color:'757575'
+        }
+        //,{
+        //    name:  'in-progress',
+        //    color:'757575'
+        //}
+        ,{
+            name:  'sent',
+            color:'bbe77e'
         },{
             name:  'done',
-            color:''
+            color:'757575'
         }];
 
         $scope.typeSelected = '';

@@ -5,11 +5,11 @@
           </button>
 </div>
 <div class="modal-body">
-    <form>
+    <form ng-init="sendingForm.title=officeDocument.title">
         <div class="row">
             <div class="col-xs-2 col-md-9">
                 <label>{{'subject' | i18next }}</label>
-                <input type="text" class="form-control" value={{officeDocument.title}} placeholder="title" ng-model="sendingForm.title">
+                <input  type="text" class="form-control" value={{officeDocument.title}} placeholder="title" ng-model="sendingForm.title">
             </div>
             <div class="col-xs-3  col-md-3">
                 <label>{{'date' | i18next }}</label>

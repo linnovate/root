@@ -46,6 +46,9 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                                 }else{
                                     return TemplateDocsService.getTemplatesByFolder(scope.data.folder);
                                 } 
+                            },
+                            officeDocument: function(){
+                                return scope.data;
                             }
                         }
                     
@@ -112,8 +115,14 @@ function controllerDocument($scope, $uibModalInstance, $filter, officeDocument, 
     $scope.classificationList = ['Unclassified','Private','Secret','Top Secret' ]; 
 
     $scope.ok = function (sendingForm) {
-        
-        OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument)    
+        OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument).then(function(result){
+            console.log("===RETURNED===");
+            console.dir(result);
+            Object.keys(result).forEach(function(key){
+                $scope.officeDocument[key]=result[key];
+            });
+
+        });  
     };
 
     $scope.cancel = function () {

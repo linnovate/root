@@ -50,26 +50,25 @@
             <div class="text" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="templateDoc.description"
              ng-change="updateDescription(templateDoc,templateDoc.description)" options="{{options}}">
             </div>
-        </div>
-        <div class="row-buttons">
-            <button ng-if="!templateDoc.path && !templateDoc.spPath" ngf-select
-                    ngf-change="upload($files)"
-                    ngf-multiple="true"
-                    class="choose" >{{ 'chooseFile' | i18next }}
-            </button>
-
-            <div class="tab-content">
-                <div class="documents">
-                        <div ng-if="templateDoc.path || templateDoc.spPath" class="document" >
-                                <!-- <a href="{{officeDocument.path}}" target="window"> -->
-                                     <a ng-click="view(templateDoc)" target="window">
-                                             <div class="icon {{templateDoc.templateType}}"></div>       
-                                             <div id="templateDocTitle">{{templateDoc.title}}</div>
-                                     </a>
-                        </div> 
+            </div>
+                <div class="row-buttons">
+                <button ngf-select
+                        ngf-change="upload($files)"
+                        ngf-multiple="true"
+                        class="choose" ng-if="(!templateDoc.path && !templateDoc.spPath)">{{ 'chooseFile' | i18next }}
+                </button>  
+                <div style="overflow:inherit" class="tab-content">
+                    <div class="documents">
+                            <div ng-if="templateDoc.path||templateDoc.spPath" class="document" >
+                                    <!-- <a href="{{officeDocument.path}}" target="window"> -->
+                                         <a ng-click="view(templateDoc)" target="window">
+                                                 <div class="icon {{templateDoc.templateType}}"></div>       
+                                                 <div id="templateDocTitle">{{templateDoc.title}}</div>
+                                         </a>
+                            </div> 
+                    </div>
                 </div>
-            </div>  
-        </div>
+                </div>
         <div class="tabs">
             <div class="switcher">
                 <button class="tab three" data-ui-sref-active="active" data-ui-sref=".activities">

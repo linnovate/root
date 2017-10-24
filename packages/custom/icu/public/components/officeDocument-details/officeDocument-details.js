@@ -26,11 +26,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         $scope.officeDocuments = officeDocuments.data || officeDocuments;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.tagInputVisible = false;
-        
-        
         //$scope.officeDocument.created = new Date($scope.officeDocument.created);
-        
-        
         OfficeDocumentsService.getStarred().then(function (starred) {
 
             // // Chack if HI room created and so needs to show HI.png
@@ -43,9 +39,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 return s._id === $scope.officeDocument._id;
             });
         });
-
-        // backup for previous changes - for updates
-        var backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
+       // backup for previous changes - for updates
+       var backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
 
         if (!$scope.officeDocument) {
             $state.go('main.officeDocuments.byentity', {
@@ -68,8 +63,9 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     }
         }
 
+        $scope.statuses = ['new', 'in-progress', 'received', 'sent', 'done'];
 
-        $scope.statuses = ['new', 'in-progress', 'received', 'done'];
+
 
         $scope.$watch('officeDocument.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {
@@ -94,7 +90,41 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             }
         });
 
+        $scope.addSerialTitle = function(document1){
+            console.log("===UPLOAD EMPTY====");
+            OfficeDocumentsService.addSerialTitle(document1).then(function(result){
+                if(result && result.spPath){
+                    document1.spPath = result.spPath;
+                }
+                if(result && result.serial){
+                    document1.serial = result.serial;
+                }
+                if(result && result.documentType){
+                    document1.documentType = result.documentType;
+                }
+                if(result && result.title){
+                    document1.title = result.title;
+                }
+            });
+        }
+
+        $scope.sendDocument = function(document1){
+            console.log("HEY");
+            console.dir(document1);
+        }
+
         $scope.view = function(document1) {
+            console.dir(document1);
+            if(document1.spPath){
+                var spSite = document1.spPath.substring(0,document1.spPath.indexOf('ICU')+3);
+                console.log("SPSITE:");
+                console.log(spSite);
+                var uri = spSite+"/_layouts/15/WopiFrame.aspx?sourcedoc="+document1.spPath+"&action=default";
+                console.log("URI:");
+                console.log(uri);
+                 window.open(uri,'_blank');
+            }
+            else{
             // Check if need to view as pdf
             if ((document1.documentType == "docx") ||
                 (document1.documentType == "doc") ||
@@ -105,6 +135,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 var arr = document1.path.split("." + document1.documentType);
                 var ToHref = arr[0] + ".pdf";
                 // Check if convert file exists allready
+                console.log("ToHref");
+                console.log(ToHref);
                 $http({
                     url: ToHref.replace('/files/', '/api/files/'),
                     method: 'HEAD'
@@ -125,6 +157,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             else {
                 window.open(document1.path + '?view=true');
             }
+        }
         };
 
 
@@ -147,9 +180,11 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             };
             if(file.length > 0){
                 OfficeDocumentsService.uploadFileToDocument(data, file).then(function(result){
-                    console.dir("===Document===");
-                    console.dir(result);
-                    $scope.officeDocuments.push(result.data);
+                    $scope.officeDocument.title = result.data.title;
+                    $scope.officeDocument.path = result.data.path;
+                    $scope.officeDocument.spPath = result.data.spPath;
+                    $scope.officeDocument.documentType = result.data.documentType;
+
                 });
             }
         };
@@ -195,7 +230,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             $scope.update($scope.officeDocument, context);
 
         };
-        
+
         $scope.setFocusToTagSelect = function() {
             var element = angular.element('#addTag > input.ui-select-focusser')[0];
             $timeout(function() {
@@ -268,6 +303,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 ActivitiesService.data.push(result);
             }); 
 
+
         };
 
 
@@ -322,6 +358,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                         ActivitiesService.data = ActivitiesService.data || [] ;
                         ActivitiesService.data.push(result);
                     });
+                    break; 
                 case 'title':
                 case 'description':
                     OfficeDocumentsService.updateTitle(officeDocument, backupEntity, context.name).then(function(result) {
