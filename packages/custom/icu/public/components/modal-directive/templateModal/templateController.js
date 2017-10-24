@@ -1,5 +1,5 @@
 
-function controllerTemplate($scope, $uibModalInstance, $filter, templates, $state) {
+function controllerTemplate($scope, $uibModalInstance, $filter, templates,$state,  OfficeDocumentsService) {
 
     $scope.officeTemplates = templates;
     
@@ -16,5 +16,22 @@ function controllerTemplate($scope, $uibModalInstance, $filter, templates, $stat
         $scope.cancel();
         $state.go('main.templateDocs.all');
     }
+
+    $scope.uploadOfficeDocumentFromTemplate = function(template){
+        console.log("Hi");
+        OfficeDocumentsService.uploadDocumentFromTemplate(template,$scope.$resolve.officeDocument).then(function(result){
+            console.log(result);
+            $scope.$resolve.officeDocument.path = result.path;
+            $scope.$resolve.officeDocument.title = result.title;
+            $scope.$resolve.officeDocument.documentType = result.documentType;
+            if(result.spPath){
+                $scope.$resolve.officeDocument.spPath = result.spPath;
+            }
+            $scope.cancel();
+
+
+        });
+
+    };
 }
 

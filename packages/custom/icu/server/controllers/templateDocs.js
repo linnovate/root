@@ -263,165 +263,164 @@ exports.getByEntity = function (req, res, next) {
 * Assumes req.body contains description,classification
 * and watchers
 */
-// exports.upload = function(req,res,next){
-//   var d = formatDate(new Date());
-//   req.locals.data.documents = [];
-//   req.locals.data.body = {};
-//   var busboy = new Busboy({
-//     headers: req.headers
-//   });
-//   var hasFile = false;
-//   busboy.on('file', function (fieldname, file, filename) {
-//     var port = config.https && config.https.port ? config.https.port : config.http.port;
-//     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
-//     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
-//     var fileType = path.extname(filename).substr(1).toLowerCase();
-//     mkdirp(path.join(config.attachmentDir, d), function () {
-//         file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
-//           var arr = hostFileLocation.split("/files");
-//           var pathFor = "./files" + arr[1];
-//           var stats = fs.statSync(pathFor);
-//           console.log(pathFor + 'test path')
-//           var fileSizeInBytes = stats["size"];
-//           req.locals.data.body.size = fileSizeInBytes;
-//         });
-//         req.locals.data.body.name = filename;
-//         req.locals.data.body.path = hostFileLocation;
-//         req.locals.data.body.attachmentType = fileType;
-//         req.locals.data.body.size = file._readableState.length;
-//         hasFile = true;
-//     });
-//   });
 
-//   busboy.on('field', function (fieldname, val) {
-//     req.locals.data.body[fieldname] = val;
-//   });
+/**
+exports.upload = function(req,res,next){
+  var d = formatDate(new Date());
+  req.locals.data.documents = [];
+  req.locals.data.body = {};
+  var busboy = new Busboy({
+    headers: req.headers
+  });
+  var hasFile = false;
+  busboy.on('file', function (fieldname, file, filename) {
+    var port = config.https && config.https.port ? config.https.port : config.http.port;
+    var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+    var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
+    var fileType = path.extname(filename).substr(1).toLowerCase();
+    mkdirp(path.join(config.attachmentDir, d), function () {
+        file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
+          var arr = hostFileLocation.split("/files");
+          var pathFor = "./files" + arr[1];
+          var stats = fs.statSync(pathFor);
+          console.log(pathFor + 'test path')
+          var fileSizeInBytes = stats["size"];
+          req.locals.data.body.size = fileSizeInBytes;
+        });
+        req.locals.data.body.name = filename;
+        req.locals.data.body.path = hostFileLocation;
+        req.locals.data.body.attachmentType = fileType;
+        req.locals.data.body.size = file._readableState.length;
+        hasFile = true;
+    });
+  });
 
-//   busboy.on('finish', function () {
-//     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
-//     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
-//     var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
-//     //req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+filename;
-//     req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+req.body.entity+"/"+req.body.entityId+"/"+fileName;
-//     var result = fs.readFile("."+path,function(err,result){
-//       result=JSON.parse(JSON.stringify(result));
-//       var coreOptions={
-//         "siteUrl":config.SPHelper.SPSiteUrl
-//       };
-//       var creds={
-//         "username":config.SPHelper.username,
-//         "password":config.SPHelper.password
-//       }
-//       var folder = config.SPHelper.libraryName+"/"+req.body.entity+"/"+req.body.entityName;
-//       var fileOptions = {
-//         "folder":folder,
-//         "fileName":fileName,
-//         "fileContent":result
-//       };
-//       var entities={
-//         "project":"Project",
-//         "task":"Task",
-//         "discussion":"Discussion"
-//       };
-//       var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
-//       query.findOne({
-//         _id:req.locals.data.body.entityId
-//       }).exec(function(err,entity){
-//         if(err){
-//           req.locals.error = err;
-//         }
-//         if(!entity){
-//           req.locals.error={
-//             status:404,
-//             message:'Entity not found'
-//           };
-//         }
-//         if(entity){
-//           var users = [];
-//           users.push({
-//             '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-//             'Role':3,
-//             'UserId':user
-//           });
-//           entity.watchers.forEach(function(watcher){
-//             if(watcher!=req.user._id){
-//               users.push({
-//                 '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-//                 'Role':2,
-//                 'UserId':watcher
-//               });
-//             }
-//           });
-//           getUsers(users).then(function(result){
-//             if(result=='success'){
-//               var json = {
-//                 'coreOptions':coreOptions,
-//                 'creds':creds,
-//                 'fileOptions':fileOptions,
-//                 'permissions':users,
-//                 'isTemplate':true,
-//                 'entity':req.locals.data.body.entity,
-//                 'entityId':req.locals.data.body.entityId
-//               };
-//               request({
-//                 'url':config.SPHelper.uri+"/api/upload",
-//                 'method':'POST',
-//                 'json':json
-//               },function(error,resp,body){
-//                 if(error){
-//                   res.send(error);
-//                 }
-//                 else{
-//                   var path = body.path;
-//                   var doc = {
-//                     'created': new Date(),
-//                     'name':fileName,
-//                     'path':body.path,
-//                     'description':req.body.description, //important
-//                     'templateType':fileName.substring(fileName.indexOf('.')+1,fileName.length),
-//                     'entity': req.locals.data.body.entity,
-//                     'entityId':req.locals.data.body.entityId,
-//                     'creator':new ObjectId(req.user._id),
-//                     'classification':req.body.classification,//important
-//                     'watchers':req.body.watchers//important
-//                   };
-//                   TemplateDoc.save(doc,function(error,result){
-//                     if(error){
-//                       res.send(error);
-//                     }
-//                     else{
-//                       res.send(result);
-//                     }
-//                   });
-//                 }
-//               });
-//             }
-//             else{
-//               res.send(error);
-//             }
-//           });
-//           }
-//         });
-//       });
-//       if (!hasFile) {
-//           req.locals.error = {
-//             message: 'No file was attached'
-//           };
-//       }
+  busboy.on('field', function (fieldname, val) {
+    req.locals.data.body[fieldname] = val;
+  });
 
-//       next();
-//     });
+  busboy.on('finish', function () {
+    var user = req.user.email.substring(0,req.user.email.indexOf('@'));
+    var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
+    var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
+    //req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+filename;
+    req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+req.body.entity+"/"+req.body.entityId+"/"+fileName;
+    var result = fs.readFile("."+path,function(err,result){
+      result=JSON.parse(JSON.stringify(result));
+      var coreOptions={
+        "siteUrl":config.SPHelper.SPSiteUrl
+      };
+      var creds={
+        "username":config.SPHelper.username,
+        "password":config.SPHelper.password
+      }
+      var folder = config.SPHelper.libraryName+"/"+req.body.entity+"/"+req.body.entityName;
+      var fileOptions = {
+        "folder":folder,
+        "fileName":fileName,
+        "fileContent":result
+      };
+      var entities={
+        "project":"Project",
+        "task":"Task",
+        "discussion":"Discussion"
+      };
+      var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+      query.findOne({
+        _id:req.locals.data.body.entityId
+      }).exec(function(err,entity){
+        if(err){
+          req.locals.error = err;
+        }
+        if(!entity){
+          req.locals.error={
+            status:404,
+            message:'Entity not found'
+          };
+        }
+        if(entity){
+          var users = [];
+          users.push({
+            '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+            'Role':3,
+            'UserId':user
+          });
+          entity.watchers.forEach(function(watcher){
+            if(watcher!=req.user._id){
+              users.push({
+                '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+                'Role':2,
+                'UserId':watcher
+              });
+            }
+          });
+          getUsers(users).then(function(result){
+            if(result=='success'){
+              var json = {
+                'coreOptions':coreOptions,
+                'creds':creds,
+                'fileOptions':fileOptions,
+                'permissions':users,
+                'isTemplate':true,
+                'entity':req.locals.data.body.entity,
+                'entityId':req.locals.data.body.entityId
+              };
+              request({
+                'url':config.SPHelper.uri+"/api/upload",
+                'method':'POST',
+                'json':json
+              },function(error,resp,body){
+                if(error){
+                  res.send(error);
+                }
+                else{
+                  var path = body.path;
+                  var doc = {
+                    'created': new Date(),
+                    'name':fileName,
+                    'path':body.path,
+                    'description':req.body.description, //important
+                    'templateType':fileName.substring(fileName.indexOf('.')+1,fileName.length),
+                    'entity': req.locals.data.body.entity,
+                    'entityId':req.locals.data.body.entityId,
+                    'creator':new ObjectId(req.user._id),
+                    'classification':req.body.classification,//important
+                    'watchers':req.body.watchers//important
+                  };
+                  TemplateDoc.save(doc,function(error,result){
+                    if(error){
+                      res.send(error);
+                    }
+                    else{
+                      res.send(result);
+                    }
+                  });
+                }
+              });
+            }
+            else{
+              res.send(error);
+            }
+          });
+          }
+        });
+      });
+      if (!hasFile) {
+          req.locals.error = {
+            message: 'No file was attached'
+          };
+      }
 
-//   return req.pipe(busboy);
+      next();
+    });
 
-// };
+  return req.pipe(busboy);
 
-var formatDate = function (date) {
-  var yyyy = date.getFullYear().toString();
-  var mm = (date.getMonth() + 1).toString();
-  var dd = date.getDate().toString();
-  return yyyy + '/' + (mm[1] ? mm : '0' + mm[0]) + '/' + (dd[1] ? dd : '0' + dd[0]);
 };
+*/
+
+
+
 
 exports.uploadTemplate = function(req,res,next){
   req.locals.data={};
@@ -476,7 +475,7 @@ exports.uploadTemplate = function(req,res,next){
       var folder = config.SPHelper.libraryName+"/"+user;
       var fileOptions = {
         "folder":folder,
-        "fileName":fileName,
+        "fileName":'Template_'+fileName,
         "fileContent":result
       };
       var documentId = req.locals.data.body['id'];
@@ -493,6 +492,7 @@ exports.uploadTemplate = function(req,res,next){
         };
       }
       if(result){
+        var officeId = result.office;
             var users = [];
               users.push({
                 '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
@@ -505,7 +505,7 @@ exports.uploadTemplate = function(req,res,next){
                   users.push({
                     '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
                     'Role':2,
-                    'UserId':watcher.toString()
+                    'UserId':watcher
                   });
                 }
               });
@@ -517,29 +517,41 @@ exports.uploadTemplate = function(req,res,next){
                     'fileOptions':fileOptions,
                     'permissions':users,
                     'isTemplate':false,
-                    'entity':'office',
-                    'entityId':result.office?result.office.toString():undefined
+                    'entity':'folder',
+                    'entityId':officeId?officeId.toString():undefined
                   };
+                  console.log("\n\n\n\n\n\nJSON");
+                  console.dir(json);
                   request({
                     'url':config.SPHelper.uri+"/api/upload",
                     'method':'POST',
                     'json':json
                   },function(error,resp,body){
-                   // if(error){
-                   //   res.send(error);
-                   // }
-                    //else{
-                      //var path = body.path;
-                      var path = req.locals.data.body.originalPath;
+                    var path = req.locals.data.body.originalPath;
                       var fileType = path.substring(path.lastIndexOf('.')+1,path.length);
-                      TemplateDoc.update({'_id':documentId},{$set:{'path':path,'title':req.locals.data.body.name,'templateType':fileType}},function(error,result){
+                    if(error){
+                        var set = {'path':req.locals.data.body.originalPath,'title':req.locals.data.body.name,'templateType':fileType};
+                        TemplateDoc.update({'_id':documentId},{$set:set},function(error,result){
                         if(error){
                           res.send(error);
                         }
                         else{
-                          res.send(result);
+                          res.send(set);
                         }
                       });
+                    }
+                    else{
+                      var spPath = body.path;
+                      var set = {'path':req.locals.data.body.originalPath,'spPath':spPath,'title':req.locals.data.body.name,'templateType':fileType};
+                      TemplateDoc.update({'_id':documentId},{$set:set},function(error,result){
+                        if(error){
+                          res.send(error);
+                        }
+                        else{
+                          res.send(set);
+                        }
+                      });
+                    }
                     });
                   }
                   else{
@@ -555,6 +567,13 @@ exports.uploadTemplate = function(req,res,next){
 
 
 
+
+var formatDate = function (date) {
+  var yyyy = date.getFullYear().toString();
+  var mm = (date.getMonth() + 1).toString();
+  var dd = date.getDate().toString();
+  return yyyy + '/' + (mm[1] ? mm : '0' + mm[0]) + '/' + (dd[1] ? dd : '0' + dd[0]);
+};
 
 /**
 *

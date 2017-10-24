@@ -17,11 +17,14 @@ var DocumentSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ['new', 'in-progress', 'received', 'done'],
+    enum: ['new', 'in-progress', 'received', 'done','sent'],
     default: 'new'
   },
   path: {
     type: String
+  },
+  spPath:{
+    type:String
   },
   description: {
     type: String,
@@ -76,11 +79,13 @@ var DocumentSchema = new Schema({
   },
   forNotice: [{
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    default:[]
   }],
   doneBy: [{
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    default:[]
   }],
   watchers: [{
     type: Schema.ObjectId,

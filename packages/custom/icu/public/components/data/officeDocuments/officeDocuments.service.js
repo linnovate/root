@@ -20,10 +20,10 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 //             creator: "avraham",
                 //             status: "new"
                 //                }]
-
-                result.data.forEach(function(officeDocument) {
-                    officeDocument.created = new Date(officeDocument.created);
-                });
+                result.data.forEach(function(officeDocument){
+                      officeDocument.created = new Date(officeDocument.created);
+                }) 
+                       
                 return result.data;
             });
         }
@@ -41,6 +41,12 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function addSerialTitle(document1){
+            return $http.post(ApiUri + EntityPrefix + "/addSerialTitle", document1).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
         function getById(id) {
             return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
@@ -127,6 +133,17 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function uploadDocumentFromTemplate(template,officeDocument){
+            var json={
+                'officeDocument':officeDocument,
+                'templateDoc':template
+            };
+            return $http.post(ApiUri + EntityPrefix + "/uploadDocumentFromTemplate" , json).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
         function star(officeDocument) {
             return $http.patch(ApiUri + EntityPrefix + '/' + officeDocument._id + '/star', {star: !officeDocument.star})
                 .then(function (result) {
@@ -146,7 +163,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function updateWatcher(officeDocument, me, watcher, type) {
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocument',
+                    issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: type || 'updateWatcher',
                     userObj: watcher                
@@ -197,7 +214,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 return result.data;
             });
         }
-
         function updateAssign(officeDocument, prev) {
             if (officeDocument.assign) {
                 var activityType = prev.assign ? 'assign' : 'assignNew';
@@ -254,9 +270,12 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             getStarred: getStarred,
             createDocument:createDocument,
             uploadFileToDocument:uploadFileToDocument,
+            update:update,
             updateWatcher: updateWatcher,
             updateStatus: updateStatus,
             updateDue: updateDue,
+            uploadDocumentFromTemplate:uploadDocumentFromTemplate,
+            addSerialTitle:addSerialTitle,
             updateAssign: updateAssign,
             updateEntity: updateEntity
         };

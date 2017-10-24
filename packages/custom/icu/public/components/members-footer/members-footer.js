@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.membersfooter', [])
     .directive('icuMembersFooter', function() {
-        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService, UsersService, ActivitiesService,TasksService,ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService, OfficesService) {
+        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService, UsersService, ActivitiesService,TasksService,ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService) {
 
             var serviceMap = {
                 projects: 'ProjectsService',
@@ -17,6 +17,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 task: 'TasksService',
                 office: 'OfficesService',
                 folder: 'FoldersService',
+                officeDocuments:'OfficeDocumentsService',
                 officeDocument: 'OfficeDocumentsService',
                 templateDoc: 'TemplateDocsService',
             };
@@ -201,7 +202,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                             entityId: context.entityId
                         }, {reload: true});                
                         break ;
-                    case 'offices':
+                        case 'offices':
                         OfficesService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
@@ -276,7 +277,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                             reloadCurrent();
                         });                
                         break ;
-                    case 'offices':
+                        case 'offices':
                         OfficesService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
