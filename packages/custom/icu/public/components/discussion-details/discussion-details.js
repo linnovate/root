@@ -162,11 +162,14 @@ angular.module('mean.icu.ui.discussiondetails', [])
             canceled: canceleAction
         };
 
-        $scope.$watchGroup(['discussion.description', 'discussion.title'], function (nVal, oVal) {
-            if (nVal !== oVal && oVal) {
-                $scope.delayedUpdate($scope.discussion);
-            }
-        });
+        // $scope.$watchGroup(['discussion.description', 'discussion.title'], function (nVal, oVal,jj,uu) {
+        //     console.log('eatch',nVal, oVal,$scope.discussion.description, $scope.discussion.title)
+        //     if (nVal !== oVal && oVal) {
+        //         $scope.delayedUpdate($scope.discussion);
+        //     }
+        // });
+
+        
         /**
   #firstStr{
         margin-left:-20px;
@@ -383,6 +386,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         }       
 
         $scope.update = function (discussion, type) {
+            console.log('come to here  after change ', type)
             let me = $scope.me;
             
             $scope.updateDatesString();
@@ -424,19 +428,51 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         reloadCurrent();
                     });
                     break;
-            }
-                        
+                case 'title':
+                case 'description':
+                    DiscussionsService.updateTitle(discussion, backupEntity, type).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                        reloadCurrent();
+                    });
+                    break;
+            }            
         };
 
-        var activeTimeout;
+        var activeLocationTimeout;
         $scope.updateLocation = function(discussion) {
-            if (activeTimeout) {
-                clearTimeout(activeTimeout)
+            if (activeLocationTimeout) {
+                clearTimeout(activeLocationTimeout)
             }
-            activeTimeout = setTimeout(function(){ 
+            activeLocationTimeout = setTimeout(function(){ 
                 $scope.update(discussion, 'location')
             }, 3000);
         }
+
+        var activeTitleTimeout;
+        $scope.$watch('discussion.title', function (nVal, oVal) {
+            if (nVal !== oVal && oVal) {
+                if (activeTitleTimeout) {
+                    clearTimeout(activeTitleTimeout)
+                }
+                activeTitleTimeout = setTimeout(function(){ 
+                    $scope.update($scope.discussion, 'title')
+                }, 3000);
+            }
+        });
+
+        var activeDescriptionTimeout;
+        $scope.$watch('discussion.description', function (nVal, oVal) {
+            if (nVal !== oVal && oVal) {
+                if (activeDescriptionTimeout) {
+                    clearTimeout(activeDescriptionTimeout)
+                }
+                activeDescriptionTimeout = setTimeout(function(){ 
+                    $scope.update($scope.discussion, 'description')
+                }, 3000);
+            }
+        });
 
         $scope.updateCurrentDiscussion= function(){
             $scope.discussion.PartTitle = $scope.discussion.title;

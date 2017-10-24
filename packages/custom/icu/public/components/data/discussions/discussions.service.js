@@ -174,6 +174,23 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
+    function updateTitle(discussion, prev, type) {
+        var capitalizedType = type[0].toUpperCase() + type.slice(1);
+        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+        return ActivitiesService.create({
+            data: {
+                issue: 'discussion',
+                issueId: discussion.id,
+                type: activityType,
+                status: discussion[type],
+                prev: prev[type]
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     function updateAssign(discussion, prev) {
         if (discussion.assign) {
             var activityType = prev.assign ? 'assign' : 'assignNew';
@@ -211,6 +228,7 @@ angular.module('mean.icu.data.discussionsservice', [])
         updateStatus: updateStatus,
         updateDue: updateDue,
         updateLocation: updateLocation,
-        updateAssign: updateAssign
+        updateAssign: updateAssign,
+        updateTitle: updateTitle
     };
 });

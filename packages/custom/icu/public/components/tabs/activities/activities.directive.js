@@ -287,6 +287,78 @@ angular.module('mean.icu.ui.tabs')
                     type: 'string',
                     value: 'status'
                 }],
+                updateTitle: [{
+                    type: 'text',
+                    value: 'updateTitle'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateNewTitle: [{
+                    type: 'text',
+                    value: 'updateTitle'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateDescription: [{
+                    type: 'text',
+                    value: 'updateDescription'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateNewDescription: [{
+                    type: 'text',
+                    value: 'updateDescription'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
                 updateEntity: [{
                     type: 'text',
                     value: 'added'
