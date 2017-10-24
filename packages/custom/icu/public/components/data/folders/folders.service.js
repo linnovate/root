@@ -188,6 +188,23 @@ angular.module('mean.icu.data.foldersservice', [])
 
     }
 
+    function updateTitle(folder, prev, type) {
+        var capitalizedType = type[0].toUpperCase() + type.slice(1);
+        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+        return ActivitiesService.create({
+            data: {
+                issue: 'folder',
+                issueId: folder.id,
+                type: activityType,
+                status: folder[type],
+                prev: prev[type]
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     return {
         getAll: getAll,
         getById: getById,
@@ -206,6 +223,7 @@ angular.module('mean.icu.data.foldersservice', [])
         updateWatcher: updateWatcher,
         updateStatus: updateStatus,
         updateColor: updateColor,
-        updateEntity: updateEntity
+        updateEntity: updateEntity,
+        updateTitle: updateTitle
     };
 });

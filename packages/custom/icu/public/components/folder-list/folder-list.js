@@ -7,7 +7,8 @@ angular.module('mean.icu.ui.folderlist', [])
                                                    FoldersService,
                                                    context,
                                                    $filter,
-                                                   $stateParams) {
+                                                   $stateParams,
+                                                   OfficesService) {
         $scope.folders = folders.data || folders;
         $scope.loadNext = folders.next;
         $scope.loadPrev = folders.prev;

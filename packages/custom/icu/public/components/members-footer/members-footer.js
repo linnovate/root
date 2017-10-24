@@ -158,13 +158,8 @@ angular.module('mean.icu.ui.membersfooter', [])
                 switch(context.main) {
                     case 'projects':
                         ProjectsService.updateWatcher(task, me, member).then(function(result) {
-                            ActivitiesService.data = [] ;
                             ActivitiesService.data.push(result);
                         });
-                        $state.go($state.current.name, {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {reload: true});                
                         break ;
                     case 'tasks':
                         TasksService.updateWatcher(task, me, member).then(function(result) {
@@ -175,52 +170,29 @@ angular.module('mean.icu.ui.membersfooter', [])
                         DiscussionsService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });
-                        $state.go($state.current.name, {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {reload: true});                
+                        });              
                         break ;
                     case 'officeDocument':
                         OfficeDocumentsService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });
-                        $state.go($state.current.name, {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {reload: true});                
+                        });               
                         break ;
                     case 'folders':
                         FoldersService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });
-                        $state.go($state.current.name, {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {reload: true});                
+                        });              
                         break ;
                     case 'offices':
                         OfficesService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });
-                        $state.go($state.current.name, {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {reload: true});                
+                        });             
                         break ;
                 }
 
             };
-
-            var reloadCurrent = function() {
-                $state.go($state.current.name, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {reload: true});      
-            }
 
             $scope.deleteMember = function(member) {
                 if (member.type) {
@@ -246,7 +218,6 @@ angular.module('mean.icu.ui.membersfooter', [])
                         ProjectsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                            reloadCurrent()
                         });         
                         break ;
 
@@ -259,28 +230,24 @@ angular.module('mean.icu.ui.membersfooter', [])
                         DiscussionsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                            reloadCurrent();
                         });           
                         break ;
                     case 'officeDocument':
                         OfficeDocumentsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                            reloadCurrent();
                         });                
                         break ;
                     case 'folders':
                         FoldersService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                            reloadCurrent();
                         });                
                         break ;
                     case 'offices':
                         OfficesService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                            reloadCurrent();
                         });                
                         break ;
                 }

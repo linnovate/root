@@ -71,27 +71,28 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
         $scope.statuses = ['new', 'in-progress', 'received', 'done'];
 
-        $scope.$watchGroup(['officeDocument.description', 'officeDocument.title'], function (nVal, oVal, scope) {
+        $scope.$watch('officeDocument.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {
-                var newContext;
-                if (nVal[1] !== oVal[1]) {
-                    newContext = {
-                        name: 'title',
-                        oldVal: oVal[1],
-                        newVal: nVal[1],
-                        action: 'renamed'
-                    };
-                } else {
-                    newContext = {
-                        name: 'description',
-                        oldVal: oVal[0],
-                        newVal: nVal[0]
-                    };
-                }
+                var newContext = {
+                    name: 'title',
+                    oldVal: oVal,
+                    newVal: nVal,
+                    action: 'renamed'
+                };
                 $scope.delayedUpdate($scope.officeDocument, newContext);
             }
         });
 
+        $scope.$watch('officeDocument.description', function(nVal, oVal) {
+            if (nVal !== oVal && oVal) {
+                var newContext = {
+                    name: 'description',
+                    oldVal: oVal,
+                    newVal: nVal,
+                };
+                $scope.delayedUpdate($scope.officeDocument, newContext);
+            }
+        });
 
         $scope.view = function(document1) {
             // Check if need to view as pdf
@@ -255,13 +256,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
-        var reloadCurrent = function() {
-            $state.go($state.current.name, {
-                entity: context.entityName,
-                entityId: context.entityId
-            }, {reload: true});
-        }
-
         $scope.updateAssign = function(officeDocument) {
             var json = {
                 'name':'assign',
@@ -272,7 +266,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 backupEntity = JSON.parse(JSON.stringify(officeDocument));
                 ActivitiesService.data = ActivitiesService.data || [];
                 ActivitiesService.data.push(result);
-                reloadCurrent();
             }); 
 
         };
@@ -303,7 +296,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
                     ActivitiesService.data = ActivitiesService.data || [] ;
                     ActivitiesService.data.push(result);
-                    reloadCurrent();
                 });
             });
         };
@@ -320,16 +312,24 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 case 'due':
                     OfficeDocumentsService.updateDue(officeDocument, backupEntity).then(function(result) {
                         backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
+                        ActivitiesService.data = ActivitiesService.data || [] ;
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
                     break;
                 case 'status':
                     OfficeDocumentsService.updateStatus(officeDocument, backupEntity).then(function(result) {
                         backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
+                        ActivitiesService.data = ActivitiesService.data || [] ;
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
+                case 'title':
+                case 'description':
+                    OfficeDocumentsService.updateTitle(officeDocument, backupEntity, context.name).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                    });
+                    break; 
             }
         };
 
@@ -349,7 +349,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             OfficeDocumentsService.currentOfficeDocumentName = $scope.officeDocument.title;
         }
 
-        $scope.delayedUpdate = _.debounce($scope.update, 500);
+        $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
         if ($scope.officeDocument &&
             ($state.current.name === 'main.officeDocuments.all.details' ||

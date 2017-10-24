@@ -154,6 +154,23 @@ angular.module('mean.icu.data.officesservice', [])
         });
     }
 
+    function updateTitle(office, prev, type) {
+        var capitalizedType = type[0].toUpperCase() + type.slice(1);
+        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+        return ActivitiesService.create({
+            data: {
+                issue: 'office',
+                issueId: office.id,
+                type: activityType,
+                status: office[type],
+                prev: prev[type]
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     return {
         getAll: getAll,
         getById: getById,
@@ -170,6 +187,7 @@ angular.module('mean.icu.data.officesservice', [])
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
         updateWatcher: updateWatcher,
-        updateColor: updateColor
+        updateColor: updateColor,
+        updateTitle: updateTitle
     };
 });

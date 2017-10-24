@@ -162,12 +162,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
             canceled: canceleAction
         };
 
-        // $scope.$watchGroup(['discussion.description', 'discussion.title'], function (nVal, oVal,jj,uu) {
-        //     console.log('eatch',nVal, oVal,$scope.discussion.description, $scope.discussion.title)
-        //     if (nVal !== oVal && oVal) {
-        //         $scope.delayedUpdate($scope.discussion);
-        //     }
-        // });
 
         
         /**
@@ -376,18 +370,9 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     entity: 'all'
                 }, {reload: true});
             });
-        };
-
-        var reloadCurrent = function() {
-            // $state.go('.activities', {
-            //     entity: context.entityName,
-            //     entityId: context.entityId
-            // }, {reload: true});
-            $state.reload();
-        }       
+        };    
 
         $scope.update = function (discussion, type) {
-            console.log('come to here  after change ', type)
             let me = $scope.me;
             
             $scope.updateDatesString();
@@ -399,7 +384,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
                     break;
 
@@ -408,7 +392,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
                     break;
 
@@ -417,7 +400,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
                     break;
                 
@@ -426,7 +408,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
                     break;
                 case 'title':
@@ -435,7 +416,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
                     break;
             }            
@@ -448,7 +428,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
             }
             activeLocationTimeout = setTimeout(function(){ 
                 $scope.update(discussion, 'location')
-            }, 3000);
+            }, 2000);
         }
 
         var activeTitleTimeout;
@@ -459,19 +439,20 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 }
                 activeTitleTimeout = setTimeout(function(){ 
                     $scope.update($scope.discussion, 'title')
-                }, 3000);
+                }, 2000);
             }
         });
 
         var activeDescriptionTimeout;
         $scope.$watch('discussion.description', function (nVal, oVal) {
             if (nVal !== oVal && oVal) {
+                console.log(nVal, oVal)
                 if (activeDescriptionTimeout) {
                     clearTimeout(activeDescriptionTimeout)
                 }
                 activeDescriptionTimeout = setTimeout(function(){ 
                     $scope.update($scope.discussion, 'description')
-                }, 3000);
+                }, 2000);
             }
         });
 

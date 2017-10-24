@@ -287,6 +287,23 @@ angular.module('mean.icu.data.tasksservice', [])
 
     }
 
+    function updateTitle(task, prev, type) {
+        var capitalizedType = type[0].toUpperCase() + type.slice(1);
+        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+        return ActivitiesService.create({
+            data: {
+                issue: 'task',
+                issueId: task.id,
+                type: activityType,
+                status: task[type],
+                prev: prev[type]
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -320,6 +337,7 @@ angular.module('mean.icu.data.tasksservice', [])
         data: data,
         tabData: tabData,
         IsNew: IsNew,
-        updateEntity: updateEntity
+        updateEntity: updateEntity,
+        updateTitle: updateTitle
     };
 });

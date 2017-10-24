@@ -135,9 +135,17 @@ angular.module('mean.icu.ui.taskdetails', [])
             return $scope.tags.filter(function(x) { return $scope.task.tags.indexOf(x) < 0 })
         };
 
-        $scope.$watchGroup(['task.description', 'task.title'], function(nVal, oVal) {
+        $scope.$watch('task.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {
-                $scope.delayedUpdate($scope.task);
+                $scope.task.PartTitle = $scope.task.title;
+                $scope.delayedUpdate($scope.task, 'title');
+            }
+        });
+
+        $scope.$watch('task.description', function(nVal, oVal) {
+            console.log(nVal, oVal)
+            if (nVal !== oVal && oVal) {
+                $scope.delayedUpdate($scope.task, 'description');
             }
         });
 
@@ -411,6 +419,13 @@ angular.module('mean.icu.ui.taskdetails', [])
                         }
                     }
                 }
+                if (type === 'title' || type === 'description') {
+                    TasksService.updateTitle(task, backupEntity, type).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.task));
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                    });
+                }
             });
         };
 
@@ -475,7 +490,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                 $scope.template.splice(index, 1);
             })
         }
-        $scope.delayedUpdate = _.debounce($scope.update, 500);
+        $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
         // if ($scope.task &&
         //         ($state.current.name === 'main.tasks.byentity.details' ||

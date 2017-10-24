@@ -236,6 +236,23 @@ angular.module('mean.icu.data.officedocumentsservice', [])
 
         }
 
+        function updateTitle(officeDocument, prev, type) {
+            var capitalizedType = type[0].toUpperCase() + type.slice(1);
+            var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocument',
+                    issueId: officeDocument.id,
+                    type: activityType,
+                    status: officeDocument[type],
+                    prev: prev[type]
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
         return {
             sendDocument:sendDocument,
             getAll: getAll,
@@ -258,6 +275,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             updateStatus: updateStatus,
             updateDue: updateDue,
             updateAssign: updateAssign,
-            updateEntity: updateEntity
+            updateEntity: updateEntity,
+            updateTitle: updateTitle
         };
     });
