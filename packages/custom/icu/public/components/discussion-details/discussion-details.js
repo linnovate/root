@@ -379,10 +379,11 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         var reloadCurrent = function() {
-            $state.go($state.current.name, {
-                entity: context.entityName,
-                entityId: context.entityId
-            }, {reload: true});
+            // $state.go('.activities', {
+            //     entity: context.entityName,
+            //     entityId: context.entityId
+            // }, {reload: true});
+            $state.reload();
         }       
 
         $scope.update = function (discussion, type) {
