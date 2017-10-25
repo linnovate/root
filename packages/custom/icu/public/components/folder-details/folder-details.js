@@ -109,8 +109,11 @@ angular.module('mean.icu.ui.folderdetails', [])
             }
         });
 
+        var nText, oText;
         $scope.$watch('folder.description', function (nVal, oVal) {
-            if (nVal !== oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
                 var context = {
                     name: 'description',
                     oldVal: oVal,

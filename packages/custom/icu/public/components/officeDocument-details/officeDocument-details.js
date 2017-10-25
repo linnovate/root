@@ -79,8 +79,11 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             }
         });
 
+        var nText, oText;
         $scope.$watch('officeDocument.description', function(nVal, oVal) {
-            if (nVal !== oVal && oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
                 var newContext = {
                     name: 'description',
                     oldVal: oVal,

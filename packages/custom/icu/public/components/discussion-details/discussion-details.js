@@ -443,9 +443,11 @@ angular.module('mean.icu.ui.discussiondetails', [])
             }
         });
 
-        var activeDescriptionTimeout;
+        var activeDescriptionTimeout, nText, oText;
         $scope.$watch('discussion.description', function (nVal, oVal) {
-            if (nVal !== oVal && oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
                 console.log(nVal, oVal)
                 if (activeDescriptionTimeout) {
                     clearTimeout(activeDescriptionTimeout)

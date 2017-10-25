@@ -142,9 +142,11 @@ angular.module('mean.icu.ui.taskdetails', [])
             }
         });
 
+        var nText, oText;
         $scope.$watch('task.description', function(nVal, oVal) {
-            console.log(nVal, oVal)
-            if (nVal !== oVal && oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
                 $scope.delayedUpdate($scope.task, 'description');
             }
         });

@@ -60,8 +60,11 @@ angular.module('mean.icu.ui.projectdetails', [])
             }
         });
 
+        var nText, oText;
         $scope.$watch('project.description', function(nVal, oVal) {
-            if (nVal !== oVal && oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
                 var newContext = {
                     name: 'description',
                     oldVal: oVal,
