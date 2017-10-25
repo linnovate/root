@@ -251,6 +251,11 @@
     "endDate":"Ending date:",
     "endTime": "on:",
     "allDay": "All day",
-    "Ending date is earlier than starting date": "Ending date is earlier than starting date"
+    "Ending date is earlier than starting date": "Ending date is earlier than starting date",
+
+    "secret":"Secret",
+	"topSecret":"Top Secret",
+	"private":"Private",
+	"unclassified":"Unclassified"
 
 }

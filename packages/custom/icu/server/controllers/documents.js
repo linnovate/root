@@ -1551,9 +1551,9 @@ exports.sendDocument = function (req, res, next) {
   sendingForm['forNotice'] = sendingForm['forNotice']?sendingForm['forNotice']:[];
   sendingForm['sendingAs'] = sendingForm['sendingAs']?sendingForm['sendingAs']:[];
 
-  if(sendingForm['classification']){
-    sendingForm['classification']=sendingForm['classification'].toLowerCase();
-  }
+  //if(sendingForm['classification']){
+    //sendingForm['classification']=sendingForm['classification'].toLowerCase();
+  //}
   sendingForm['sender']=req.user._id;
   var watchers =_.union(sendingForm['doneBy'],_.union(sendingForm['forNotice'],_.union([assign],[sendingForm['sendingAs']])));
   watchers=_.union(watchers,officeDocument.watchers);

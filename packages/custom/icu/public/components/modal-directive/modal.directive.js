@@ -112,7 +112,7 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter, officeDoc
     $scope.officeDocument = officeDocument;
     $scope.people = people;
 
-    $scope.classificationList = ['Unclassified','Private','Secret','Top Secret' ]; 
+    $scope.classificationList = ['unclassified','private','secret','topSecret' ]; 
 
     $scope.ok = function (sendingForm) {
         OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument).then(function(result){

@@ -126,7 +126,7 @@
         </div>
         <button ng-if="!officeDocument.serial" ng-click="addSerialTitle(officeDocument)" class="simochin" >{{'simochin' | i18next }}</button>
         <div class="info">
-            <p class="classification" ng-if="officeDocument.classification">{{'classification' | i18next }}: {{officeDocument.classification}} </p>
+            <p class="classification" ng-if="officeDocument.classification">{{'classification' | i18next }}: {{officeDocument.classification| i18next}} </p>
             <p ng-if="officeDocument.serial">{{'simochin' | i18next }}: {{officeDocument.serial}} </p>
         </div>
         <!-- <div class="rowSimochin">

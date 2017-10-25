@@ -252,5 +252,10 @@
 	"allDay": "כל היום",
 	"Ending date is earlier than starting date":"מועד הסיום הוא לפני מועד ההתחלה",
 	"Profile": "פרופיל",
-	"Events": "אירועים"
+	"Events": "אירועים",
+
+	"secret":"סודי",
+	"topSecret":"סודי ביותר",
+	"private":"שמור",
+	"unclassified":"בלמס"
 }
