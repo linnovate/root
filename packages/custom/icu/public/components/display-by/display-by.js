@@ -69,7 +69,7 @@ angular.module('mean.icu.ui.displayby', [])
         //}
         ,{
             name:  'sent',
-            color:'bbe77e'
+            color:'359123'
         },{
             name:  'done',
             color:'757575'
