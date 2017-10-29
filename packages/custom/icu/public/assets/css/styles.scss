@@ -3,8 +3,16 @@ $open-sans-path: '../lib/open-sans/fonts';
 
 body {
     direction: ltr;
+    font-family: 'openSansHebrew';
+    /*rtl:remove*/
     font-family: 'Open Sans'
 }
+
+@font-face {
+  font-family: 'openSansHebrew';
+  src: url("../fonts/open-sans-hebrew/OpenSansHebrew-Regular.ttf");
+  font-weight: normal;
+  font-style: normal; }
 
 @import '../lib/font-awesome/scss/font-awesome';
 @import '../lib/open-sans/scss/open-sans.scss';
