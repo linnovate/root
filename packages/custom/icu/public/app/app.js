@@ -1064,6 +1064,7 @@ angular.module('mean.icu').config([
                 views: getListView('officeDocument'),
                 resolve: {
                     officeDocuments: function (OfficeDocumentsService, $stateParams) {
+                      
                         var docs = $stateParams.officeDocuments;
                         if(docs){
                             return docs;
