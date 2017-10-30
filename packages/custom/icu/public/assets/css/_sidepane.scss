@@ -17,7 +17,7 @@
         width: $sidepane-width;
         background-color: $dark-grey;
         color: white;
-        font-size: 26px;
+        font-size: 23px;
         text-align: center;
 
         .sidepane-title
@@ -88,7 +88,7 @@
                     
 
                     .icon {
-                        width: $header-height;
+                        width: 57px;
                         height: $header-height;
                         float: left;
                         padding: 18px;
@@ -103,8 +103,9 @@
                         span {
                             position: absolute;
                             left: 0;
-                            top: 50%;
+                            top: 51%;
                             transform: translate(0, -50%);
+                            font-size: 17px;
                         }
                     }
 
@@ -142,7 +143,7 @@
                             top: 50%;
                             transform: translate(-50%, -50%);
                             font-size: 1.5em;
-                            right: 18px;
+                            right: 12px;
                         }
                     }
                 }
