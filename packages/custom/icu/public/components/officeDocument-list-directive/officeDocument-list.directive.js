@@ -147,14 +147,38 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 }
                 console.log("===DATA===");
                 console.dir(data);
+                debugger;
                 OfficeDocumentsService.createDocument(data).then(function(result){
                     $scope.officeDocuments.push(result);
-                    $state.go($scope.detailsState+'.activities', {
-                        id: result._id,
-                        entity: context.entityName,
-                        entityId: context.entityId,
-                        nameFocused: false,
-                    },{'reload':true});
+                    if(localStorage.getItem('type') == 'new'){
+                        if(context.entityName=='folder'){
+                            $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
+                                return officeDocument.status =='new' &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+                            });
+            
+                        }else{
+            
+                            $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
+                                return officeDocument.status == 'new' ;
+                            });
+            
+                        }
+                        $state.go($scope.detailsState+'.activities', {
+                            id: result._id,
+                            entity: context.entityName,
+                            entityId: context.entityId,
+                            nameFocused: false,
+                            officeDocuments:$scope.officeDocuments
+                        },{'reload':true});
+                    }else{
+
+                        $state.go($scope.detailsState+'.activities', {
+                            id: result._id,
+                            entity: context.entityName,
+                            entityId: context.entityId,
+                            nameFocused: false,
+                        },{'reload':true});
+                }
                 });
             }
 

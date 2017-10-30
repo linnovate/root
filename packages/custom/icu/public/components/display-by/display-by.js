@@ -126,6 +126,11 @@ angular.module('mean.icu.ui.displayby', [])
             localStorage.removeItem("type");
         };
 
+        $scope.reset = function(main){
+            localStorage.removeItem("type");
+            $scope.typeSelected = null;
+        };
+
         $scope.typeSelected = localStorage.getItem("type");
 
         $scope.switchToType= function(type){

@@ -1064,7 +1064,6 @@ angular.module('mean.icu').config([
                 views: getListView('officeDocument'),
                 resolve: {
                     officeDocuments: function (OfficeDocumentsService, $stateParams) {
-                      
                         var docs = $stateParams.officeDocuments;
                         if(docs){
                             return docs;
@@ -1076,6 +1075,7 @@ angular.module('mean.icu').config([
                                 if (typeof OfficeDocumentsService.data !== 'undefined') {
                                     $stateParams.limit = OfficeDocumentsService.data.length;
                                 }
+                                localStorage.removeItem("type");
                                 return OfficeDocumentsService.getAll($stateParams.start,
                                     $stateParams.limit,
                                     $stateParams.sort);
