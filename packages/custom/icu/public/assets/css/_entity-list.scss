@@ -74,6 +74,7 @@
                     overflow: hidden;
                     padding-top: 5px;
                     outline: none;
+                    line-height: 40px;
                     &:focus {
                       outline: none;
                     }
@@ -90,14 +91,16 @@
                     }
 
                     &.arrow {
-                        width: 32px;
+                        width: 14px;
                         overflow: visible;
                         text-align: center;
                          padding-right:40px;
+                         margin-left: 27px;
                     }
 
                     &.name {
-                        width: 22%;
+                        width: 120px;
+                        display: inline-block;
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         cursor: text;
@@ -106,14 +109,17 @@
                             font-style: italic;
                         }
                         
-                        padding-left: 7px;
+                        margin-left: 10px;
                     }
 
                     &.project {
                         text-align: center;
-                        width: 22%;
+                        width: 85px;
                         font-weight: 400;
                         font-size: 13px;
+                        display: inline-block;
+                        // margin-left: 10px;
+                        line-height: initial;
                         span {
                             padding: 3px 13px;                                                                                                          
                         }
@@ -141,6 +147,11 @@
 
                     &.status {
                         width: calc(10% - 65px);
+                        display: inline-block;
+                        width: 100px;
+                        margin-left: 10px;
+                        padding-right: 0;
+                        padding-left: 0;
                             &.new{color: #ff4081;}
                             &.assigned{color: #2979ff;}
                             &.in-progress{color: #f69679;}
@@ -157,6 +168,9 @@
 
                    	&.due {
                      	width: calc(19% - 65px);
+                        display: inline-block;
+                        width: 80px;
+                        margin-left: 10px;
                     }
 
                     .tag {
