@@ -17,7 +17,7 @@ Date.prototype.getWeek = function()
 }
 
 angular.module('mean.icu.ui.folderlistFilter', [])
-.filter('filterByOptions', function (FoldersService) {
+.filter('filterByOptionsFolder', function (FoldersService) {
 	return function(folders) {
 		if (!folders || !(folders instanceof Array)) return folders;
 		var filterValue = FoldersService.filterValue;

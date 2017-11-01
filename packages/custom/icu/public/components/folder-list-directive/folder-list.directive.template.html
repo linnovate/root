@@ -31,7 +31,7 @@
         <div>{{'dueDate' | i18next}}</div>
         <div>{{'members' | i18next}}</div>
     </div>
-    <div data-ng-repeat-start="folder in folders | filterByOptions | orderBy:order.field:order.isReverse" class="folder-row">
+    <div data-ng-repeat-start="folder in folders | filterByOptionsFolder | orderBy:order.field:order.isReverse" class="folder-row">
         <div>{{folder.title}}</div>
         <div>
             <span class="tag office"

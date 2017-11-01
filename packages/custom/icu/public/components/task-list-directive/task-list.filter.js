@@ -8,12 +8,11 @@ Date.prototype.getThisDay = function()
 
 Date.prototype.getWeek = function()
 {
-    var today = new Date(this.setHours(0, 0, 0, 0));
-    var date = today.getDate() - today.getDay();
-
-    var StartDate = new Date(today.setDate(date));
-    var EndDate = new Date(today.setDate(date + 6));
-    return [StartDate, EndDate];
+    var curr = new Date(this.setHours(0, 0, 0, 0));
+    var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+	var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay()+6));
+	lastday = new Date(lastday.setHours(23, 59, 59, 0))
+    return [firstday, lastday];
 }
 
 angular.module('mean.icu.ui.tasklistFilter', [])
