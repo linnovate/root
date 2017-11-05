@@ -63,10 +63,12 @@
             textarea {
                 padding: 5px 9px;
                 width: calc(100% - 60px);
-                height: 50px;
+                min-height: 125px;
+                width: 527px;
                 margin: 10px 0;
                 transition: height 0.4s;
                 border-color: #C8C8C6;
+                font-size: 13px;
                 &::-webkit-input-placeholder {
                     font-size: 14px;
                     font-style: italic;
@@ -101,11 +103,13 @@
                     background-color: $orange;
                     box-shadow: 0 3px 0 0 $dark-orange;
                     color: white;
-                    font-size: 13px;
+                    font-size: 12px;
                     font-weight: 700;
-
+                    line-height: 26px;
                     float: right;
-                    width: 80px;
+                    width: 83px;
+                    height: 32px;
+                    border-radius: 32px;
                     
                     &:hover{
                         background-color: #FFB435;

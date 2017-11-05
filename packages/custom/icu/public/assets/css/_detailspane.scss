@@ -9,7 +9,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
     width: 690px;
     border-left: 1px solid #C8C8C6;
-    height: 100%;
+    // height: 100%;
+    min-height: 963px;
     background-color: $cream;
     // float: left;
 
@@ -138,7 +139,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
             span, i {
                 position: absolute;
-                right: 10px;
+                right: 20px;
                 top: 50%;
 
                 display: inline-block;
@@ -208,11 +209,12 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             @include circle($header-height / 2);
 
             background-color: $green;
-            width: 37px;
-            height: 37px;
-            margin: 13px;
-            font-size: 30px;
-            line-height: 36px;
+            width: 35px;
+            height: 35px;
+            margin-top: 12px;
+            margin-left: 14px;
+            font-size: 28px;
+            line-height: 35px;
             cursor: pointer;
         }
     }
@@ -220,8 +222,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     .add-menu, .user-menu {
         float: left;
         display: inline-block;
-        width: $header-height - 7;
-        height: $header-height - 1;
+        width: 55px;
+        height: $header-height;
 
         .menu-items {
             &.dropdown-menu {
@@ -248,7 +250,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
       border: none;
       position: absolute;
       right: 1%;
-      margin: 15px 30px;
+      margin: 13px 30px;
       outline: none;
       tooltip{
         position: absolute;
@@ -301,7 +303,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
  }
 
 .summary {
-    height: $panel-height;
+    height: 55px;
     border-bottom: 3px solid $light-grey1;
     background-color: #F6F6F6;
 
@@ -479,7 +481,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
         .summary-content {
             display: inline-block;
-            line-height: 30px;
+            line-height: 26px;
         }
     }
 
@@ -641,7 +643,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
 @mixin ui-select {
     .ui-select-container {
-        padding-top: 13px;
+        padding-top: 15px;
         background-color: transparent;
 
         .ui-select-match {
@@ -654,6 +656,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 color: #00AEEF;
                 display: flex;
                 align-items: center;
+                margin-top: 0;
             }
 
             .ui-select-toggle {
@@ -700,7 +703,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     .ui-select-match .ui-select-toggle {
         float: right;
         width: calc(100% - 10px);
-        height: 30px;
+        height: auto;
         position: absolute;
         right: 50%;
         transform: translateX(50%) translateY(15%);
@@ -921,7 +924,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         display: table;
 
         width: 100%;
-        min-height: 50px;
+        min-height: 35px;
 
         & > * {
             display: table-cell;
@@ -1277,7 +1280,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 .summary.wrap-pro {
     border-bottom: none;
     background: transparent;
-    margin: 10px 28px 0;
+    margin: 0px 22px 0;
     position: relative;
     display: inline-block;
     /*height: 52px;*/

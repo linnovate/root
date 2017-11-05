@@ -36,7 +36,8 @@
 
 .middlepane {
     width: 575px;
-    height: 100vh;
+    // height: 100vh;
+    min-height: 963px;
     background-color: $cream;
     // float: left;
     position: relative;

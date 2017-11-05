@@ -65,12 +65,16 @@
     .panes-wrapper {
         margin-left: 0;
         width: 100%;
+        
     }
     .sidepane, .middlepane {
         display: none !important;
     }
     .detailspane {
         width: 100%;
+    }
+    .sidepane, .datapane {
+        float: left;
     }
 }
 
