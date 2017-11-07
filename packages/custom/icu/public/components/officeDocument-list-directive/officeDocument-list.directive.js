@@ -176,7 +176,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                             id: result._id,
                             entity: context.entityName,
                             entityId: context.entityId,
-                            nameFocused: false,
+                            nameFocused: false
                         },{'reload':true});
                 }
                 });

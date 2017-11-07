@@ -1081,9 +1081,15 @@ angular.module('mean.icu').config([
                                     $stateParams.sort);
                             }
                         }
-
-
-                    }
+                    },
+                    // firstTime: function($stateParams){
+                    //     var docs = $stateParams.officeDocuments;
+                    //     if(docs){
+                    //         return false;
+                    //     }else{
+                    //         return true;
+                    //     }
+                    // }
                 }
             })
             .state('main.officeDocuments.all.details', getOfficeDocumentDetailsState())
