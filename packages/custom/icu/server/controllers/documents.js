@@ -1292,10 +1292,12 @@ exports.update2 = function (req, res, next) {
 
 
 exports.update = function (req, res, next) {
+  var docToUpdate;
   if(req.body.name){
     if(req.body.name=='watchers'){
       var watchers = req.body.newVal;
       Document.findOne({'_id':req.params.id},function(err,doc){
+        docToUpdate = doc;
         var oldWatchers=[];
         doc.watchers.forEach(function(w){
           oldWatchers.push(w.toString());
@@ -1385,9 +1387,24 @@ exports.update = function (req, res, next) {
       }
 });
     }
+
+    Document.findOne({'_id':req.params.id},function(err,docToUpdate){
       var json = {};
-      json['' + req.body.name] = req.body.newVal;
-      Document.update({ "_id": req.params.id }, json).then(function (err, result) {
+      //json['' + req.body.name] = req.body.newVal;
+      docToUpdate['' + req.body.name]=req.body.newVal;
+      docToUpdate['id']=docToUpdate._id;
+      docToUpdate.save(function(err,result){
+        if(err){
+          res.send(err);
+        }
+        else{
+          res.send(result);
+        }
+      });
+
+    });
+      /**
+       *  Document.update({ "_id": req.params.id }, json).then(function (err, result) {
         console.log("Err=" + err + " result=" + result);
         if(err){
           res.send(err);
@@ -1396,6 +1413,8 @@ exports.update = function (req, res, next) {
           res.send(result);
         }
       });
+       */
+     
 
     }
 

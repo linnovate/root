@@ -581,62 +581,60 @@ var formatDate = function (date) {
 *
 */
 exports.deleteTemplate = function(req,res){
-  TemplateDoc.find({_id:req.params.id},function(err,file){
-    if(err){
+  TemplateDoc.find({ _id: req.params.id }, function (err, file) {
+
+  if (err) {
+    console.log(err);
+  }
+  else {
+    var spPath = file[0]._doc.spPath;
+    if(spPath){
+    var fileName = spPath.substring(spPath.lastIndexOf("/") + 1, spPath.length);
+    var spPath2 = spPath.substring(0, spPath.lastIndexOf("/"));
+    var folderName = spPath.substring(spPath2.lastIndexOf("/") + 1, spPath2.length);
+    var spPath2 = spPath2.substring(0, spPath2.lastIndexOf("/"));
+    var libraryName = spPath2.substring(spPath2.lastIndexOf("/") + 1, spPath2.length);
+    var user = req.user.email.substring(0, req.user.email.indexOf('@'));
+    var context = {
+      'siteUrl': config.SPHelper.SPSiteUrl,
+      'creds': {
+        'username': config.SPHelper.username,
+        'password': config.SPHelper.password,
+        'domain':config.SPHelper.domain
+      }
+    };
+    var options = {
+      'folder': '/' + libraryName + '/' + folderName,
+      'filePath': '/' + fileName
+    };
+
+    var json = {
+      'context': context,
+      'options': options
+    };
+    request({
+      'url': config.SPHelper.uri + '/api/delete',
+      'method': 'POST',
+      'json': json
+    }, function (error, resp, body) {
+   //   var creator = folderName;
+   //   if (creator == user) {
+    //  }
+    });
+
+
+  }
+  }
+
+  TemplateDoc.remove({ _id: req.params.id }, function (err) {
+    if (err) {
       console.log(err);
     }
-    else{
-     var path = file[0]._doc.path;
-     var fileName = path.substring(path.lastIndexOf("/")+1,path.length);
-     var path2 = path.substring(0,path.lastIndexOf("/"));
-     var folderName = path2.substring(path2.lastIndexOf("/")+1,path2.length);
-     var path2 = path2.substring(0,path2.lastIndexOf("/"));
-
-     var path3 = path2.substring(0,path2.lastIndexOf("/"));
-     var folderName2 = path3.substring(path3.lastIndexOf("/")+1,path3.length);
-
-
-     var libraryName = config.SPSiteUrl.libraryName;
-     folderName = folderName2+"/"+folderName;
-     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
-
-     folderName = libraryName+"/"+folderName;
-     var context ={
-      'siteUrl':config.SPHelper.SPSiteUrl,
-      'creds':{
-        'username':config.SPHelper.username,
-        'password':config.SPHelper.password
-      }
-     };
-     var options = {
-      'folder':'/'+libraryName+'/'+folderName,
-      'filePath':'/'+fileName
-     }; 
-
-     var json={
-      'context':context,
-      'options':options
-     };
-     request({
-      'url':config.SPHelper.uri+'/api/delete',
-      'method':'POST',
-      'json':json
-     },function(error,resp,body){
-
-     });
-     var creator = folderName;
-    // if(creator==user){
-      TemplateDoc.remove({_id:req.params.id},function(err){
-        if(err){
-          console.log(err);
-        }
-        else{
-          res.sendStatus(200);
-        }
-      });
-     //}
+    else {
+      res.sendStatus(200);
     }
   });
+  })
 };
 
 exports.update2 = function (req, res, next) {

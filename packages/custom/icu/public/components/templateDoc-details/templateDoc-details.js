@@ -128,6 +128,17 @@ angular.module('mean.icu.ui.templateDocdetails', [])
             }
         };
 
+        $scope.deleteTemplateDoc = function (templateDoc) {
+            TemplateDocsService.delete(templateDoc._id).then(function () {
+
+                $state.go('main.templateDocs.all', {
+                    entity: 'all'
+                }, {reload: true});
+            });
+        };
+                
+
+
 
         $scope.view = function(document1) {
             console.dir(document1);
@@ -186,14 +197,14 @@ angular.module('mean.icu.ui.templateDocdetails', [])
             }
         };
 
-        $scope.deleteTemplateDoc = function (templateDoc) {
-            TemplateDocsService.remove(templateDoc._id).then(function () {
+        // $scope.deleteTemplateDoc = function (templateDoc) {
+        //     TemplateDocsService.remove(templateDoc._id).then(function () {
 
-                $state.go('main.templateDocs.all', {
-                    entity: 'all'
-                }, {reload: true});
-            });
-        };
+        //         $state.go('main.templateDocs.all', {
+        //             entity: 'all'
+        //         }, {reload: true});
+        //     });
+        // };
 
         $scope.updateTitle = function(templateDoc,title){
             var json ={

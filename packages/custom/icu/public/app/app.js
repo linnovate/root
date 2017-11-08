@@ -1075,14 +1075,21 @@ angular.module('mean.icu').config([
                                 if (typeof OfficeDocumentsService.data !== 'undefined') {
                                     $stateParams.limit = OfficeDocumentsService.data.length;
                                 }
+                                localStorage.removeItem("type");
                                 return OfficeDocumentsService.getAll($stateParams.start,
                                     $stateParams.limit,
                                     $stateParams.sort);
                             }
                         }
-
-
-                    }
+                    },
+                    // firstTime: function($stateParams){
+                    //     var docs = $stateParams.officeDocuments;
+                    //     if(docs){
+                    //         return false;
+                    //     }else{
+                    //         return true;
+                    //     }
+                    // }
                 }
             })
             .state('main.officeDocuments.all.details', getOfficeDocumentDetailsState())
@@ -1434,6 +1441,17 @@ angular.module('mean.icu').config([
             .state('main.search.folder.activities.modal', getDetailspaneModal())
             .state('main.search.folder.documents', getDetailsTabState('folder', 'documents'))
             .state('main.search.folder.tasks', getDetailsTabState('folder', 'tasks'))
+
+            .state('main.search.officedocument', getOfficeDocumentDetailsState('/officeDocument'))
+            .state('main.search.officedocument.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.search.officedocument.activities.modal', getDetailspaneModal())
+            .state('main.search.officedocument.documents', getDetailsTabState('officeDocument', 'documents'))
+
+            // .state('main.officeDocuments.byentity.details', getOfficeDocumentDetailsState())
+            // .state('main.officeDocuments.byentity.details.activities', getDetailsTabState('officeDocument', 'activities'))
+            // .state('main.officeDocuments.byentity.details.activities.modal', getDetailspaneModal())
+            // .state('main.officeDocuments.byentity.details.documents', getDetailsTabState('officeDocument', 'documents'))
+            // .state('main.officeDocuments.byentity.details.tasks', getDetailsTabState('officeDocument', 'tasks'))
 
             .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
             .state('main.search.attachment.versions', getAttachmentDetailsTabState())

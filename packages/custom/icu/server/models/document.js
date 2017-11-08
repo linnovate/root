@@ -36,6 +36,9 @@ var DocumentSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Folder'
   },
+  id:{
+    type: Schema.ObjectId
+  },
   creator: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -163,21 +166,29 @@ DocumentSchema.statics.folder = function (id, cb) {
 
 var elasticsearch = require('../controllers/elasticsearch');
 
-/** 
-DocumentSchema.post('save', function (req, next) {
-  var attachment = this;
-  DocumentSchema.statics[attachment.entity](attachment.entityId, function (err, result) {
-    if (err) {
-      return err;
-    }
-    elasticsearch.save(attachment, 'document', result.room, result.title);
-    next();
-  });
 
+DocumentSchema.post('save', function (req, next) {
+  var document = this;
+  // DocumentSchema.statics.folder(document.folder._id, function (err, result) {
+  //   if (err) {
+  //     return err;
+  //   }
+  //   elasticsearch.save(document, 'officeDocument', result.room, result.title);
+  //   next();
+  // });
+  elasticsearch.save(document, 'officedocument', undefined, undefined);
+  next();
 });
-*/
+
+// DocumentSchema.post('update', function (req, next) {
+//   var document = this;
+
+//   elasticsearch.save(document, 'officedocument', undefined, undefined);
+//   next();
+// });
+
 DocumentSchema.pre('remove', function (next) {
-  elasticsearch.delete(this, 'document', this.room, next);
+  elasticsearch.delete(this, 'officedocument', this.room, next);
   next();
 });
 
