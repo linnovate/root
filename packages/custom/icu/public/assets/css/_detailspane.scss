@@ -7,10 +7,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
 .detailspane {
 
-    width: 690px;
+    width: $detailspane-width;
     border-left: 1px solid #C8C8C6;
     // height: 100%;
-    min-height: 963px;
+    height: 963px;
     background-color: $cream;
     // float: left;
 

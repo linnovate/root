@@ -99,7 +99,8 @@
                     }
 
                     &.name {
-                        width: 120px;
+                        // width: 120px;
+                        width: 8.3vw;
                         display: inline-block;
                         text-overflow: ellipsis;
                         white-space: nowrap;
@@ -114,7 +115,8 @@
 
                     &.project {
                         text-align: center;
-                        width: 85px;
+                        // width: 85px;
+                        width: 5.8vw;
                         font-weight: 400;
                         font-size: 13px;
                         display: inline-block;

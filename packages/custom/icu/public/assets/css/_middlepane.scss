@@ -35,9 +35,10 @@
 }
 
 .middlepane {
-    width: 575px;
+    min-width: 575px;
     // height: 100vh;
-    min-height: 963px;
+    width: calc(100% - #{$detailspane-width});
+    height: 963px;
     background-color: $cream;
     // float: left;
     position: relative;
