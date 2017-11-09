@@ -1,4 +1,4 @@
-.task-list, .discussion-list, .project-list, .sub-task-list, .folder-list, .officeDocument-list, .templateDoc-list {
+.task-list, .discussion-list, .project-list, .sub-task-list, .folder-list, .officeDocument-list, .templateDoc-list, .office-list {
 
     height: 100%;
 
@@ -127,7 +127,9 @@
                         }
                     }
 
-                    // &.office {
+                    &.office {
+                        width: 9.6vw;
+                        line-height: 18px;
                     //     text-align: center;
                     //     width: 22%;
                     //     font-weight: 400;
@@ -135,13 +137,14 @@
                     //     span {
                     //         padding: 3px 13px;                                                                                                          
                     //     }
-                    // }
+                    }
 
                     &.folder {
                         text-align: center;
                         width: 22%;
                         font-weight: 400;
                         font-size: 13px;
+                        line-height: 18px;
                         span {
                             padding: 3px 13px;                                                                                                          
                         }
