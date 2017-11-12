@@ -20,6 +20,7 @@
                             <span ng-switch-when="string">{{activity[val.value] | i18next}}</span>
                             <span ng-switch-default>{{val.value | i18next}}</span>
                         </span>
+                        
                     </span>
                     <span class="activity-date">{{activity.created | date:"MM/dd/yyyy 'at' h:mma"}}</span>
                 </div>
