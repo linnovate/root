@@ -177,7 +177,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function updateStatus(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocument',
+                    issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: 'updateStatus',
                     status: officeDocument.status,
@@ -192,11 +192,11 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function updateDue(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocument',
+                    issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: 'updateDue',
-                    TaskDue: officeDocument.due,
-                    prev: prev.due
+                    TaskDue: officeDocument.created,
+                    prev: prev.created
                 },
                 context: {}
             }).then(function(result) {
@@ -222,7 +222,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             }
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocument',
+                    issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: activityType,
                     userObj: officeDocument.assign,
@@ -238,7 +238,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             var activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocument',
+                    issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: activityType,
                     entityType: 'folder',
@@ -257,7 +257,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocument',
+                    issue: 'officeDocuments',
                     issueId: officeDocument.id,
                     type: activityType,
                     status: officeDocument[type],
