@@ -87,7 +87,6 @@ angular.module('mean.icu.ui.officedocumentlist', [])
         $scope.toggleStarred = function () {
             $state.go($state.current.name, { starred: !$stateParams.starred });
         };
-      debugger
         if ($scope.officeDocuments.length ) {
             if ($state.current.name === 'main.officeDocuments.all' ||
                 $state.current.name === 'main.officeDocuments.byentity' ||

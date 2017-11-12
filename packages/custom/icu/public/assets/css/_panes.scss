@@ -8,7 +8,8 @@
             tbody {
                 tr {
                     cursor: pointer;
-
+                    display: flex;
+                    justify-content: space-between;
                     &.active {
                         background-color: $grey;
                         color: white;
@@ -36,8 +37,10 @@
 
                     .id {
                         text-align: left;
-                        width: 10px;
-                        padding-left:11px;
+                        width: 40px;
+                        padding-left:8px;
+                        display: inline-block;
+
                     }
                 }
             }
@@ -62,6 +65,7 @@
     .panes-wrapper {
         margin-left: 0;
         width: 100%;
+        
     }
     .sidepane, .middlepane {
         display: none !important;

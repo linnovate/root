@@ -6,6 +6,7 @@
                 <div icu-avatar user="activity.creator"></div>
                 <div class="text">
                     <span class="user-name">{{activity.creator.name}} {{activity.creator.lastname}}</span>
+                    &nbsp
                     <span class="activity-details" ng-repeat="val in details[activity.type]">
                         <span ng-switch="val.type">
                             <span ng-switch-when="object">{{activity[val.value] | i18next}}</span>
@@ -19,6 +20,7 @@
                             <span ng-switch-when="string">{{activity[val.value] | i18next}}</span>
                             <span ng-switch-default>{{val.value | i18next}}</span>
                         </span>
+                        
                     </span>
                     <span class="activity-date">{{activity.created | date:"MM/dd/yyyy 'at' h:mma"}}</span>
                 </div>

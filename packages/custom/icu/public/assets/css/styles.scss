@@ -65,10 +65,19 @@ table {
         box-shadow:inset 0px 0px 0px 2px gray;
     }
 }
-
+// .datapane {
+    // width: calc(100% - 269px);
+    // float: left;
+// }
+.icu-data {
+    display: flex;
+}
 .panes-wrapper {
-    margin-left: $sidepane-width;
+    // margin-left: $sidepane-width;
     width: calc(100% - #{$sidepane-width});
+    display: flex;
+    justify-content: flex-start;
+    min-width: 1303px;
 
     &.wide {
         margin-left: 0;

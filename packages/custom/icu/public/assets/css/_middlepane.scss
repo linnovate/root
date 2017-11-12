@@ -35,10 +35,12 @@
 }
 
 .middlepane {
-    width: 46%;
-    height: 100vh;
+    min-width: 575px;
+    // height: 100vh;
+    width: calc(100% - #{$detailspane-width});
+    height: 963px;
     background-color: $cream;
-    float: left;
+    // float: left;
     position: relative;
     transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
     &.wide {
@@ -57,6 +59,7 @@
             border: 1px solid $light-grey1;
             background-repeat: no-repeat;
             background-position: center center;
+            margin-left: 6px;
             //background: url('/icu/assets/img/menu.png') no-repeat center center;
 
             .menu-icon {
@@ -114,17 +117,20 @@
             input {
                 border: none;
                 background-color: white;
-                padding-left: $header-height;
+                padding-left: 69px;
                 width: 100%;
                 font-size: 15px;
                 height: $header-height - 2;
+                font-style: italic;
             }
 
             img {
                 position: absolute;
-                left: 30px;
-                top: 28px;
+                left: 33px;
+                top: 18px;
                 transform: translate(0, -50%);
+                -webkit-transform: scaleX(-1);
+                transform: scaleX(-1);
             }
 			.build-in-search {
 				position: absolute;
@@ -150,10 +156,10 @@
     }
 
     .header-wrap {
-        height: 97px;
+        height: 103px;
         border-bottom: 1px solid #e1e1e1;
         background-color: white;
-        padding: 38px 23px 27px 14px;
+        // padding: 38px 23px 27px 23px;
         cursor: pointer;
         &.active {
             background-color: $grey;
@@ -163,7 +169,10 @@
             padding: 17px 23px 27px 14px;
         }
         .title {
-            font-size: 24px;
+            font-size: 22px;
+            padding: 42px 23px 0;
+            width: 100%;
+            line-height: 26px;
             span {
                 font-weight: 700;
                 &.project {
@@ -244,7 +253,7 @@
 
             margin: 0 5px;
             background-color: white;
-            border: 1px solid $light-grey1;
+            border: 1px solid #c3bfbf;
         }
 
         .favorites {
@@ -294,9 +303,9 @@
         }
 
         .tasks {
-            width: 100px;
-            height: 27px;
-            padding-left: 19px;
+            width: 92px;
+            height: 26px;
+            padding-left: 0;
             background: url('/icu/assets/img/status.png') no-repeat 15% center;
             background-position: left 10% center;
             

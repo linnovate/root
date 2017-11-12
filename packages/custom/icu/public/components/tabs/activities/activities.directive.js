@@ -663,17 +663,17 @@ angular.module('mean.icu.ui.tabs')
             var activityList = $element.find('.activities-list');
             var addUpdateField = $element.find('.add-update textarea');
 
-            $scope.expandUpdate = function() {
-                if (addUpdateField.height() < 150) {
-                    addUpdateField.css("height", "100px");
-                    activityList.css("height", "calc(100% - 170px)");
-                }
-            };
-            $scope.minimizeUpdate = function() {
-                addUpdateField.css("height", "50px");
-                activityList.css("height", "calc(100% - 120px)");
+            // $scope.expandUpdate = function() {
+            //     if (addUpdateField.height() < 150) {
+            //         addUpdateField.css("height", "100px");
+            //         activityList.css("height", "calc(100% - 170px)");
+            //     }
+            // };
+            // $scope.minimizeUpdate = function() {
+            //     addUpdateField.css("height", "50px");
+            //     activityList.css("height", "calc(100% - 120px)");
 
-            };
+            // };
         }
 
         return {
