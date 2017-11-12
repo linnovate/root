@@ -222,5 +222,6 @@
         </div>
         <div class="tab-content" data-ui-view="tab"></div>
     </div>
-    <div ng-if="officeDocument._id" ng-model="officeDocument.watchers" icu-members-footer entity="officeDocument" users="people"></div>
+    <!-- <div ng-if="officeDocument._id" ng-model="officeDocument.watchers" icu-members-footer entity="officeDocuments" users="people"></div> -->
+    <div ng-if="officeDocument._id" icu-members-footer entity="officeDocument" users="people" me="me"></div>
 </div>

@@ -1398,7 +1398,14 @@ exports.update = function (req, res, next) {
           res.send(err);
         }
         else{
-          res.send(result);
+          result.populate('watchers', function (err, result) {
+            if(err){
+              res.send(err);
+            }else{
+              res.send(result);
+            }
+          });
+          
         }
       });
 

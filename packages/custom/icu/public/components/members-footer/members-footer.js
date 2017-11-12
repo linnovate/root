@@ -104,7 +104,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                         'newVal':a
                     }
                     service.update(entity,json);
-                    $state.reload();
+                    //$state.reload();
                 }
                 else{
                     service.update(entity, data);
