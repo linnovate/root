@@ -198,6 +198,7 @@
 	"type": "סוג",
     "received": "התקבל",
 	"updateColor": "עדכן צבע ל",
+	"updateCreated": "עדכן תאריך יצירה מ",
 	"updateDue": "עדכן תאריך יעד מ",
 	"updateEndDue": "עדכן תאריך סיום מ",
     "updateLocation": "עדכן מיקום",

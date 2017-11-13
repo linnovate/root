@@ -17,7 +17,6 @@ angular.module('mean.icu.ui.membersfooter', [])
                 task: 'TasksService',
                 office: 'OfficesService',
                 folder: 'FoldersService',
-                officeDocuments:'OfficeDocumentsService',
                 officeDocument: 'OfficeDocumentsService',
                 templateDoc: 'TemplateDocsService',
             };

@@ -199,7 +199,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 data: {
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
-                    type: 'updateDue',
+                    type: 'updateCreated',
                     TaskDue: officeDocument.created,
                     prev: prev.created
                 },

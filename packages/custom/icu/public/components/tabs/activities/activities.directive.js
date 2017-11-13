@@ -149,6 +149,28 @@ angular.module('mean.icu.ui.tabs')
                     type: 'date',
                     value: 'TaskDue'
                 }],
+                updateCreated: [{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'updateCreated'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'prev-date',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'date',
+                    value: 'TaskDue'
+                }],
                 updateStartDue: [{
                     type: 'deepObject',
                     value: ['userObj', 'name'],
