@@ -149,6 +149,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 console.dir(data);
                 debugger;
                 OfficeDocumentsService.createDocument(data).then(function(result){
+                    result.created=new Date(result.created);
                     $scope.officeDocuments.push(result);
                     if(localStorage.getItem('type') == 'new'){
                         if(context.entityName=='folder'){
@@ -177,7 +178,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                             entity: context.entityName,
                             entityId: context.entityId,
                             nameFocused: false
-                        },{'reload':true});
+                        });
                 }
                 });
             }

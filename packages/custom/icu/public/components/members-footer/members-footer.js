@@ -173,7 +173,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                             ActivitiesService.data.push(result);
                         });              
                         break ;
-                    case 'officeDocument':
+                    case 'officeDocuments':
                         OfficeDocumentsService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
@@ -233,7 +233,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                             ActivitiesService.data.push(result);
                         });           
                         break ;
-                    case 'officeDocument':
+                    case 'officeDocuments':
                         OfficeDocumentsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
