@@ -128,13 +128,14 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
-    function updateStatus(discussion, me) {
+    function updateStatus(discussion, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'discussion',
                 issueId: discussion.id,
                 type: 'updateStatus',
-                status: discussion.status
+                status: discussion.status,
+                prev: prev.status
             },
             context: {}
         }).then(function(result) {
@@ -142,13 +143,14 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
-    function updateDue(discussion, me) {
+    function updateDue(discussion, prev, type) {
         return ActivitiesService.create({
             data: {
                 issue: 'discussion',
                 issueId: discussion.id,
-                type: 'updateDue',
-                TaskDue: discussion.due
+                type: 'update' + type[0].toUpperCase() + type.slice(1),
+                TaskDue: type === 'startDue' ? discussion.startDate : discussion.endDate,
+                prev: type === 'startDue' ? prev.startDate : prev.endDate
             },
             context: {}
         }).then(function(result) {
@@ -156,13 +158,52 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
-    function updateLocation(discussion, me) {
+    function updateLocation(discussion, prev) {
+        var activityType = prev.location ? 'updateLocation' : 'updateNewLocation';
         return ActivitiesService.create({
             data: {
                 issue: 'discussion',
                 issueId: discussion.id,
-                type: 'updateLocation',
-                TaskDue: discussion.due
+                type: activityType,
+                status: discussion.location,
+                prev: prev.location
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateTitle(discussion, prev, type) {
+        var capitalizedType = type[0].toUpperCase() + type.slice(1);
+        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+        return ActivitiesService.create({
+            data: {
+                issue: 'discussion',
+                issueId: discussion.id,
+                type: activityType,
+                status: discussion[type],
+                prev: prev[type]
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateAssign(discussion, prev) {
+        if (discussion.assign) {
+            var activityType = prev.assign ? 'assign' : 'assignNew';
+        } else {
+            var activityType = 'unassign';
+        }
+        return ActivitiesService.create({
+            data: {
+                issue: 'discussion',
+                issueId: discussion.id,
+                type: activityType,
+                userObj: discussion.assign,
+                prev: prev.assign ? prev.assign.name : ''
             },
             context: {}
         }).then(function(result) {
@@ -186,6 +227,8 @@ angular.module('mean.icu.data.discussionsservice', [])
         updateWatcher: updateWatcher,
         updateStatus: updateStatus,
         updateDue: updateDue,
-        updateLocation: updateLocation
+        updateLocation: updateLocation,
+        updateAssign: updateAssign,
+        updateTitle: updateTitle
     };
 });

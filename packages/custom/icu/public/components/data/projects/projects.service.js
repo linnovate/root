@@ -141,13 +141,14 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
-    function updateStatus(project) {
+    function updateStatus(project, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'project',
                 issueId: project.id,
                 type: 'updateStatus',
-                status: project.status
+                status: project.status,
+                prev: prev.status
             },
             context: {}
         }).then(function(result) {
@@ -170,6 +171,24 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
+    function updateTitle(project, prev, type) {
+        var capitalizedType = type[0].toUpperCase() + type.slice(1);
+        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+        return ActivitiesService.create({
+            data: {
+                issue: 'project',
+                issueId: project.id,
+                type: activityType,
+                status: project[type],
+                prev: prev[type]
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+
     return {
         getAll: getAll,
         getById: getById,
@@ -185,6 +204,7 @@ angular.module('mean.icu.data.projectsservice', [])
         WantToCreateRoom: WantToCreateRoom,
         updateWatcher: updateWatcher,
         updateStatus: updateStatus,
-        updateColor: updateColor
+        updateColor: updateColor,
+        updateTitle: updateTitle
     };
 });

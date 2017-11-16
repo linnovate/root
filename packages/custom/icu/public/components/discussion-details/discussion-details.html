@@ -18,7 +18,7 @@
                     <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
                 </div>
                 <div tooltips tooltip-template="{{'assignee' | i18next}}">
-                    <ui-select ng-model="discussion.assign" on-select="update(discussion)">
+                    <ui-select ng-model="discussion.assign" on-select="update(discussion, 'assign')">
                         <ui-select-match>
                             <div icu-avatar user="$select.selected"></div>
                             <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}</span>
@@ -36,8 +36,12 @@
             
             <div ng-click="dueClicked()" class="due">
                 <div class="placeholder">
-                    <div id="firstStr" style="font-size:medium;color:#bdbcbc">{{firstStr | i18next}}</div>
-                    <div style="font-size:xx-small;color:black;margin-right:-11px" id="secondStr">{{secondStr | i18next}}</div>
+                    <div id="firstStr" ng-if="!discussion.startDate">{{'deadline' | i18next}}</div>
+                    <div id="firstStr" ng-if="discussion.startDate && discussion.startTime" style="transform: translateX(50%);">{{firstStr | i18next}}</div>
+                    <div id="firstStr" ng-if="discussion.startDate && !discussion.startTime">{{firstStr | i18next}}</div>
+                    <div id="secondStr" ng-if="!discussion.endDate">{{secondStr | i18next}}</div>
+                    <div id="secondStr" ng-if="discussion.endDate && discussion.endTime" style="transform: translateX(50%);">{{secondStr | i18next}}</div>
+                    <div id="secondStr" ng-if="discussion.endDate && !discussion.endTime">{{secondStr | i18next}}</div>
 
 
                 </div>
@@ -48,12 +52,12 @@
 
             <div id="dueDiv" style="display:none" class="dueDiv">
                 <div class="dateTitle" id="startDateTitle">{{'startDate' | i18next}}</div>
-                <input id="startDate" ng-click="open()" ui-date="dueOptions" ng-model="discussion.startDate" ng-class='{"oldDate":!checkDate()}'> 
+                <input id="startDate" ng-click="open()" ui-date="startDueOptions" ng-model="discussion.startDate" ng-class='{"oldDate":!checkDate()}'> 
                 <div ng-hide="discussion.allDay" class="dateTitle" id="startTimeTitle">{{'startTime' | i18next}}</div>
                 <div style="direction:ltr" ng-hide="discussion.allDay" id="startTime" uib-timepicker="timeOptions" ng-model="discussion.startTime" show-meridian="false" ng-change="update(discussion)"></div>
 
                 <div ng-hide="discussion.allDay" class="dateTitle" id="endDateTitle">{{'endDate' | i18next}}</div>
-                <input ng-hide="discussion.allDay" id="endDate" ng-click="open()" ui-date="dueOptions" ng-model="discussion.endDate" ng-class='{"oldDate":!checkDate()}'>
+                <input ng-hide="discussion.allDay" id="endDate" ng-click="open()" ui-date="endDueOptions" ng-model="discussion.endDate" ng-class='{"oldDate":!checkDate()}'>
                 <div ng-hide="discussion.allDay" class="dateTitle" id="endTimeTitle">{{'endTime' | i18next}}</div> 
                 <div style="direction:ltr" ng-hide="discussion.allDay" id="endTime" ng-model="discussion.endTime" uib-timepicker="timeOptions" ng-model="discussion.endTime" show-meridian="false" ng-change="update(discussion)"></div>
                 <div id="allDayTitle">{{allDayTitle}}</div>
@@ -73,7 +77,7 @@
 
             <div class="location">
                 <div class="placeholder" ng-if="!discussion.location">{{ 'location' | i18next }}</div>
-               <input type="text"  ng-model="discussion.location" ng-change="update(discussion, 'location')">
+               <input type="text"  ng-model="discussion.location" ng-change="updateLocation(discussion)">
             </div>
 
             <div class="status">

@@ -124,6 +124,14 @@ angular.module('mean.icu.data.templatedocsservice', [])
                 return result.data;
             });
         }
+
+        function uploadTemplate(data,file){
+            return Upload.upload({
+                url: '/api/officeTemplates/uploadTemplate',
+                fields: data,
+                file: file
+            });
+        }
         return {
             delete:deleteTemplate,
             getById: getById,
@@ -140,6 +148,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
             getAll: getAll,
             data: data,
             selected : selected,
-            create:create
+            create:create,
+            uploadTemplate:uploadTemplate
         };
     });

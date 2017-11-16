@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context, $stateParams) {
+    function controller($scope, $state, context, $stateParams, $window) {
         $scope.projectsList = [];
         $scope.projects.forEach(function(project) {
                    if(project.title)
@@ -58,16 +58,21 @@ angular.module('mean.icu.ui.displayby', [])
         
         $scope.typesList = [{
             name: 'new',
-             color:'bbe77e'
+             color:'ff4081'
         },{
             name:  'received',
             color:'37afef' 
-        },{
-            name:  'in-progress',
-            color:'757575'
+        }
+        //,{
+        //    name:  'in-progress',
+        //    color:'757575'
+        //}
+        ,{
+            name:  'sent',
+            color:'359123'
         },{
             name:  'done',
-            color:''
+            color:'757575'
         }];
 
         $scope.typeSelected = '';
@@ -117,28 +122,59 @@ angular.module('mean.icu.ui.displayby', [])
             }
         };
 
+        $window.onbeforeunload = function(){
+            localStorage.removeItem("type");
+        };
+
+        $scope.reset = function(main){
+            localStorage.removeItem("type");
+            $scope.typeSelected = null;
+        };
+
+        $scope.typeSelected = localStorage.getItem("type");
 
         $scope.switchToType= function(type){
+
             $scope.typeSelected = type.name;
-            var temp=[];
-            $scope.officeDocuments.forEach(function(d){
-                temp.push(d);
-            });
-            temp = temp.filter(function(officeDocument){
-                if(context.entityName=='folder'){
+            
+            if(context.entityName=='folder'){
+                $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
                     return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
-                }
-                else{
-                    return officeDocument.status == type.name;
-                }      
-            });
-            if(temp.length==0){
-                $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
+                });
+
+            }else{
+
+                $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
+                    return officeDocument.status == type.name ;
+                });
+
             }
-            else{
-                $state.go($state.current,{'officeDocuments':temp});
+        
+            localStorage.setItem("type", type.name);
+
+            $state.go($state.current, {officeDocuments:$scope.officeDocuments}, {reload: true})
+           
+            
+            // var temp=[];
+            // debugger;
+            // $scope.officeDocuments.forEach(function(d){
+            //     temp.push(d);
+            // });
+            // temp = temp.filter(function(officeDocument){
+            //     if(context.entityName=='folder'){
+            //         return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+            //     }
+            //     else{
+            //         return officeDocument.status == type.name;
+            //     }      
+            // });
+            // if(temp.length==0){
+            //     $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
+            // }
+            // else{
+            //     $state.go($state.current,{'officeDocuments':temp});
                 
-            }
+            // }
 
             /** 
             var temp=[];

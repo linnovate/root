@@ -46,6 +46,9 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                                 }else{
                                     return TemplateDocsService.getTemplatesByFolder(scope.data.folder);
                                 } 
+                            },
+                            officeDocument: function(){
+                                return scope.data;
                             }
                         }
                     
@@ -104,16 +107,25 @@ function controller($scope, $uibModalInstance, $filter, entity) {
     };
 }
 
-function controllerDocument($scope, $uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
+function controllerDocument($scope, $state,$uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
     
     $scope.officeDocument = officeDocument;
     $scope.people = people;
 
-    $scope.classificationList = ['Unclassified','Private','Secret','Top Secret' ]; 
+    $scope.classificationList = ['unclassified','private','secret','topSecret' ]; 
 
     $scope.ok = function (sendingForm) {
-        
-        OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument)    
+        OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument).then(function(result){
+            console.log("===RETURNED===");
+           debugger;
+            console.dir(result);
+           // Object.keys(result).forEach(function(key){
+            //    $scope.officeDocument[key]=result[key];
+           // });
+           $state.reload();
+            $scope.cancel();
+            
+        });  
     };
 
     $scope.cancel = function () {

@@ -20,6 +20,10 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 //             creator: "avraham",
                 //             status: "new"
                 //                }]
+                result.data.forEach(function(officeDocument){
+                      officeDocument.created = new Date(officeDocument.created);
+                }) 
+                       
                 return result.data;
             });
         }
@@ -37,6 +41,12 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function addSerialTitle(document1){
+            return $http.post(ApiUri + EntityPrefix + "/addSerialTitle", document1).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
         function getById(id) {
             return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
@@ -75,6 +85,11 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function getByFolderId(id) {
             return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
+
+                result.data.forEach(function(officeDocument){
+                    officeDocument.created = new Date(officeDocument.created);
+              }) 
+              
                 return result.data;
             });
         }
@@ -123,6 +138,17 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function uploadDocumentFromTemplate(template,officeDocument){
+            var json={
+                'officeDocument':officeDocument,
+                'templateDoc':template
+            };
+            return $http.post(ApiUri + EntityPrefix + "/uploadDocumentFromTemplate" , json).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
         function star(officeDocument) {
             return $http.patch(ApiUri + EntityPrefix + '/' + officeDocument._id + '/star', {star: !officeDocument.star})
                 .then(function (result) {
@@ -153,13 +179,14 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateStatus(officeDocument, me) {
+        function updateStatus(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: 'updateStatus',
-                    status: officeDocument.status
+                    status: officeDocument.status,
+                    prev: prev.status
                 },
                 context: {}
             }).then(function(result) {
@@ -167,13 +194,14 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateDue(officeDocument, me) {
+        function updateDue(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
-                    type: 'updateDue',
-                    TaskDue: officeDocument.due
+                    type: 'updateCreated',
+                    TaskDue: officeDocument.created,
+                    prev: prev.created
                 },
                 context: {}
             }).then(function(result) {
@@ -189,6 +217,60 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return $http.post(ApiUri + EntityPrefix +  '/sendDocument', data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
+            });
+        }
+        function updateAssign(officeDocument, prev) {
+            if (officeDocument.assign) {
+                var activityType = prev.assign ? 'assign' : 'assignNew';
+            } else {
+                var activityType = 'unassign';
+            }
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument._id,
+                    type: activityType,
+                    userObj: officeDocument.assign,
+                    prev: prev.assign ? prev.assign.name : ''
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
+        function updateEntity(officeDocument, prev) {
+            var activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument._id,
+                    type: activityType,
+                    entityType: 'folder',
+                    entity: officeDocument.folder.title,
+                    prev: prev.folder ? prev.folder.title : ''
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+
+        }
+
+        function updateTitle(officeDocument, prev, type) {
+            var capitalizedType = type[0].toUpperCase() + type.slice(1);
+            var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument.id,
+                    type: activityType,
+                    status: officeDocument[type],
+                    prev: prev[type]
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
             });
         }
 
@@ -213,6 +295,11 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             update:update,
             updateWatcher: updateWatcher,
             updateStatus: updateStatus,
-            updateDue: updateDue
+            updateDue: updateDue,
+            uploadDocumentFromTemplate:uploadDocumentFromTemplate,
+            addSerialTitle:addSerialTitle,
+            updateAssign: updateAssign,
+            updateEntity: updateEntity,
+            updateTitle: updateTitle
         };
     });

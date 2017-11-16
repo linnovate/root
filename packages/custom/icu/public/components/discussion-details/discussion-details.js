@@ -78,6 +78,9 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         });
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.discussion));
+
         var errors = {
             'assign': 'please select assignee!',
             'startDate': 'please choose deadline!',
@@ -159,11 +162,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
             canceled: canceleAction
         };
 
-        $scope.$watchGroup(['discussion.description', 'discussion.title'], function (nVal, oVal) {
-            if (nVal !== oVal && oVal) {
-                $scope.delayedUpdate($scope.discussion);
-            }
-        });
+
+        
         /**
   #firstStr{
         margin-left:-20px;
@@ -233,8 +233,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         }
         };
        
-
-        $scope.dueOptions = {
+        $scope.startDueOptions = {
             onSelect: function () {
                 $scope.update($scope.discussion, 'due');
                 $scope.open();
@@ -250,6 +249,17 @@ angular.module('mean.icu.ui.discussiondetails', [])
             },
             dateFormat: 'd.m.yy'
         };
+        $scope.endDueOptions = _.clone($scope.startDueOptions);
+
+        $scope.startDueOptions.onSelect = function () {
+            $scope.update($scope.discussion, 'startDue');
+            $scope.open();
+        },
+
+        $scope.endDueOptions.onSelect = function () {
+            $scope.update($scope.discussion, 'endDue');
+            $scope.open();
+        },
 
         $scope.timeOptions ={
             minuteStep: 5,
@@ -360,14 +370,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     entity: 'all'
                 }, {reload: true});
             });
-        };
-
-        var reloadCurrent = function() {
-            $state.go($state.current.name, {
-                entity: context.entityName,
-                entityId: context.entityId
-            }, {reload: true});
-        }       
+        };    
 
         $scope.update = function (discussion, type) {
             let me = $scope.me;
@@ -375,32 +378,85 @@ angular.module('mean.icu.ui.discussiondetails', [])
             $scope.updateDatesString();
             DiscussionsService.update(discussion);
             switch (type) {
-                case 'due':
-                    DiscussionsService.updateDue(discussion, me).then(function(result) {
+                case 'startDue':
+                case 'endDue':
+                    DiscussionsService.updateDue(discussion, backupEntity, type).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
                     break;
 
                 case 'status':
-                    DiscussionsService.updateStatus(discussion, me).then(function(result) {
+                    DiscussionsService.updateStatus(discussion, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
                     break;
 
                 case 'location':
-                    DiscussionsService.updateLocation(discussion, me).then(function(result) {
+                    DiscussionsService.updateLocation(discussion, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
-                        reloadCurrent();
                     });
                     break;
-            }
-                        
+                
+                case 'assign':
+                    DiscussionsService.updateAssign(discussion, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                    });
+                    break;
+                case 'title':
+                case 'description':
+                    DiscussionsService.updateTitle(discussion, backupEntity, type).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.discussion));
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                    });
+                    break;
+            }            
         };
+
+        var activeLocationTimeout;
+        $scope.updateLocation = function(discussion) {
+            if (activeLocationTimeout) {
+                clearTimeout(activeLocationTimeout)
+            }
+            activeLocationTimeout = setTimeout(function(){ 
+                $scope.update(discussion, 'location')
+            }, 2000);
+        }
+
+        var activeTitleTimeout;
+        $scope.$watch('discussion.title', function (nVal, oVal) {
+            if (nVal !== oVal && oVal) {
+                if (activeTitleTimeout) {
+                    clearTimeout(activeTitleTimeout)
+                }
+                activeTitleTimeout = setTimeout(function(){ 
+                    $scope.update($scope.discussion, 'title')
+                }, 2000);
+            }
+        });
+
+        var activeDescriptionTimeout, nText, oText;
+        $scope.$watch('discussion.description', function (nVal, oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
+                console.log(nVal, oVal)
+                if (activeDescriptionTimeout) {
+                    clearTimeout(activeDescriptionTimeout)
+                }
+                activeDescriptionTimeout = setTimeout(function(){ 
+                    $scope.update($scope.discussion, 'description')
+                }, 2000);
+            }
+        });
 
         $scope.updateCurrentDiscussion= function(){
             $scope.discussion.PartTitle = $scope.discussion.title;

@@ -52,6 +52,9 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         }
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.task));
+
         $scope.people = people.data || people;
         if ($scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
             var newPeople = {
@@ -132,9 +135,19 @@ angular.module('mean.icu.ui.taskdetails', [])
             return $scope.tags.filter(function(x) { return $scope.task.tags.indexOf(x) < 0 })
         };
 
-        $scope.$watchGroup(['task.description', 'task.title'], function(nVal, oVal) {
+        $scope.$watch('task.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {
-                $scope.delayedUpdate($scope.task);
+                $scope.task.PartTitle = $scope.task.title;
+                $scope.delayedUpdate($scope.task, 'title');
+            }
+        });
+
+        var nText, oText;
+        $scope.$watch('task.description', function(nVal, oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
+                $scope.delayedUpdate($scope.task, 'description');
             }
         });
 
@@ -240,7 +253,6 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
-            
             task.status = $scope.statuses[1];
 
             if (context.entityName === 'discussion') {
@@ -250,10 +262,6 @@ angular.module('mean.icu.ui.taskdetails', [])
             if (task.assign === undefined || task.assign === null) {
                 delete task['assign'];
             }
-
-            TasksService.assign(task, me).then(function(result) {
-                ActivitiesService.data.push(result);
-            });
 
             TasksService.update(task).then(function(result) {
                 if (context.entityName === 'project') {
@@ -267,6 +275,11 @@ angular.module('mean.icu.ui.taskdetails', [])
                         });
                     }
                 }
+
+                TasksService.assign(task, me, backupEntity).then(function(res) {
+                    backupEntity = JSON.parse(JSON.stringify(result));
+                    ActivitiesService.data.push(res);
+                });
             });
 
         };
@@ -304,7 +317,8 @@ angular.module('mean.icu.ui.taskdetails', [])
                 task.discussion = context.entityId;
             }
 
-            TasksService.updateStatus(task, me).then(function(result) {
+            TasksService.updateStatus(task, backupEntity).then(function(result) {
+                backupEntity = JSON.parse(JSON.stringify($scope.task));
                 ActivitiesService.data.push(result);
             });
 
@@ -329,7 +343,8 @@ angular.module('mean.icu.ui.taskdetails', [])
                 task.discussion = context.entityId;
             }
 
-            TasksService.updateDue(task, me).then(function(result) {
+            TasksService.updateDue(task, backupEntity).then(function(result) {
+                backupEntity = JSON.parse(JSON.stringify($scope.task));
                 ActivitiesService.data.push(result);
             });
 
@@ -354,6 +369,11 @@ angular.module('mean.icu.ui.taskdetails', [])
                 $scope.createProject(proj, function(result) {
                     task.project = result;
                     TasksService.update(task).then(function(result) {
+                        TasksService.updateEntity(task, backupEntity).then(function(result) {
+                            backupEntity = JSON.parse(JSON.stringify($scope.task));
+                            ActivitiesService.data.push(result);
+                        });
+                        
                         if (context.entityName === 'project') {
                             var projId = result.project ? result.project._id : undefined;
                             if (projId !== context.entityId || type === 'project') {
@@ -374,6 +394,12 @@ angular.module('mean.icu.ui.taskdetails', [])
             }
             TasksService.update(task).then(function(result) {
                 task.PartTitle = task.title;
+                if (type === 'project') {
+                    TasksService.updateEntity(task, backupEntity).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.task));
+                        ActivitiesService.data.push(result);
+                    });
+                }
                 if (context.entityName === 'project') {
                     var projId = result.project ? result.project._id : undefined;
                     if (!projId) {
@@ -394,6 +420,13 @@ angular.module('mean.icu.ui.taskdetails', [])
                             });
                         }
                     }
+                }
+                if (type === 'title' || type === 'description') {
+                    TasksService.updateTitle(task, backupEntity, type).then(function(result) {
+                        backupEntity = JSON.parse(JSON.stringify($scope.task));
+                        ActivitiesService.data = ActivitiesService.data || [];
+                        ActivitiesService.data.push(result);
+                    });
                 }
             });
         };
@@ -459,7 +492,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                 $scope.template.splice(index, 1);
             })
         }
-        $scope.delayedUpdate = _.debounce($scope.update, 500);
+        $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
         // if ($scope.task &&
         //         ($state.current.name === 'main.tasks.byentity.details' ||

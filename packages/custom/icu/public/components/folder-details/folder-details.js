@@ -46,6 +46,9 @@ angular.module('mean.icu.ui.folderdetails', [])
             });
         });
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.folder));
+
         $scope.$watch('officeName', function(newValue, oldValue) {
             var index = _.findIndex($scope.offices, function(p) {
                 return p.title == oldValue;
@@ -94,24 +97,29 @@ angular.module('mean.icu.ui.folderdetails', [])
 
         $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
 
-        $scope.$watchGroup(['folder.description', 'folder.title'], function (nVal, oVal, scope) {
-            if (nVal !== oVal && oVal) {
-                var newContext;
-                if (nVal[1] !== oVal[1]) {
-                    newContext = {
-                        name: 'title',
-                        oldVal: oVal[1],
-                        newVal: nVal[1],
-                        action: 'renamed'
-                    };
-                } else {
-                    newContext = {
-                        name: 'description',
-                        oldVal: oVal[0],
-                        newVal: nVal[0]
-                    };
-                }
-                $scope.delayedUpdate($scope.folder, newContext);
+        $scope.$watch('folder.title', function (nVal, oVal) {
+            if (nVal !== oVal) {
+                var context = {
+                    name: 'title',
+                    oldVal: oVal,
+                    newVal: nVal,
+                    action: 'renamed'
+                };
+                $scope.delayedUpdate($scope.folder, context);
+            }
+        });
+
+        var nText, oText;
+        $scope.$watch('folder.description', function (nVal, oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
+                var context = {
+                    name: 'description',
+                    oldVal: oVal,
+                    newVal: nVal,
+                };
+                $scope.delayedUpdate($scope.folder, context);
             }
         });
 
@@ -184,13 +192,6 @@ angular.module('mean.icu.ui.folderdetails', [])
             });
         };
 
-        var reloadCurrent = function() {
-            $state.go($state.current.name, {
-                entity: context.entityName,
-                entityId: context.entityId
-            }, {reload: true});
-        }    
-
         $scope.update = function (folder, context) {
             FoldersService.update(folder, context).then(function(res) {
                 if (FoldersService.selected && res._id === FoldersService.selected._id) {
@@ -225,20 +226,27 @@ angular.module('mean.icu.ui.folderdetails', [])
                 }
                     switch (context.name) {
                         case 'status':
-                            FoldersService.updateStatus(folder).then(function(result) {
+                            FoldersService.updateStatus(folder, backupEntity).then(function(result) {
+                                backupEntity = JSON.parse(JSON.stringify($scope.folder));
                                 ActivitiesService.data = ActivitiesService.data || [] ;
                                 ActivitiesService.data.push(result);
-                                reloadCurrent();
                             });
                             break;
                     
                         case 'color':
                             FoldersService.updateColor(folder).then(function(result) {
-                                ActivitiesService.data = ActivitiesService.data || [] ; // TBD
+                                ActivitiesService.data = ActivitiesService.data || [] ;
                                 ActivitiesService.data.push(result);
-                                reloadCurrent();
                             });
                             break;   
+                        case 'title':
+                        case 'description':
+                            FoldersService.updateTitle(folder, backupEntity, context.name).then(function(result) {
+                                backupEntity = JSON.parse(JSON.stringify($scope.folder));
+                                ActivitiesService.data = ActivitiesService.data || [];
+                                ActivitiesService.data.push(result);
+                            });
+                            break; 
                     }
             });
         };
@@ -250,6 +258,11 @@ angular.module('mean.icu.ui.folderdetails', [])
                     folder.office = result;
                     FoldersService.update(folder).then(function(result) {
                         if (context.entityName === 'office') {
+                            FoldersService.updateEntity(folder, backupEntity).then(function(result) {
+                                backupEntity = JSON.parse(JSON.stringify($scope.folder));
+                                ActivitiesService.data = ActivitiesService.data || [] ;
+                                ActivitiesService.data.push(result);
+                            });
                             var officeId = result.office ? result.office._id : undefined;
                             if (officeId !== context.entityId || type === 'office') {
                                 $state.go('main.folders.byentity.details', {
@@ -268,6 +281,11 @@ angular.module('mean.icu.ui.folderdetails', [])
             //     folder.discussion = context.entityId;
             // }
             FoldersService.update(folder).then(function(result) {
+                FoldersService.updateEntity(folder, backupEntity).then(function(result) {
+                    backupEntity = JSON.parse(JSON.stringify($scope.folder));
+                    ActivitiesService.data = ActivitiesService.data || [] ;
+                    ActivitiesService.data.push(result);
+                });
                 folder.PartTitle = folder.title;
                 //if (context.entityName === 'office') {
                     var officeId = result.office ? result.office._id : undefined;
@@ -298,7 +316,7 @@ angular.module('mean.icu.ui.folderdetails', [])
             FoldersService.currentFolderName = $scope.folder.title;
         }
 
-        $scope.delayedUpdate = _.debounce($scope.update, 500);
+        $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
         if ($scope.folder &&
             ($state.current.name === 'main.folders.all.details' ||

@@ -8,10 +8,29 @@
     <div class="page-content" ng-if="templateDoc._id">
         <div class="summary">
 
-            <div class="favorite">
+            <!-- <div class="favorite">
                 <button ng-class="{ 'orange': templateDoc.star }" ng-click="star(z)">
                     <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
                 </button>
+            </div> -->
+            <div class="dropdown dropdown-container" uib-dropdown>
+                <div class="dropdown-trigger" uib-dropdown-toggle>
+                    <i class="fa fa-chevron-down"></i>
+                </div>
+                <ul class="dropdown-menu menu-items" role="menu">
+                    <li>
+                        <a href="#" ng-click="deleteTemplateDoc(templateDoc)">
+                                    <i class="fa fa-2x fa-times-circle"></i>
+                                    <span>{{ 'deleteTemplateDoc' | i18next }}</span>
+                                </a>
+                    </li>
+                    <li ng-if="officeDocument.parent">
+                        <a href="#" ng-click="statusType()">
+                                    <i class="flag"></i>
+                                    <span>{{ 'statusType' | i18next }}</span>
+                                </a>
+                    </li>
+                </ul>
             </div>
         </div>
         <button icu-comp-modal entity="templateDoc" entity-name="templateDoc" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
@@ -50,7 +69,25 @@
             <div class="text" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="templateDoc.description"
              ng-change="updateDescription(templateDoc,templateDoc.description)" options="{{options}}">
             </div>
-        </div>
+            </div>
+                <div class="row-buttons">
+                <button ngf-select
+                        ngf-change="upload($files)"
+                        ngf-multiple="true"
+                        class="choose" ng-if="(!templateDoc.path && !templateDoc.spPath)">{{ 'chooseFile' | i18next }}
+                </button>  
+                <div style="overflow:inherit" class="tab-content">
+                    <div class="documents">
+                            <div ng-if="templateDoc.path||templateDoc.spPath" class="document" >
+                                    <!-- <a href="{{officeDocument.path}}" target="window"> -->
+                                         <a ng-click="view(templateDoc)" target="window">
+                                                 <div class="icon {{templateDoc.templateType}}"></div>       
+                                                 <div id="templateDocTitle">{{templateDoc.title}}</div>
+                                         </a>
+                            </div> 
+                    </div>
+                </div>
+                </div>
         <div class="tabs">
             <div class="switcher">
                 <button class="tab three" data-ui-sref-active="active" data-ui-sref=".activities">

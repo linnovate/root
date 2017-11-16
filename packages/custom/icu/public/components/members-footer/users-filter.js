@@ -26,7 +26,18 @@ angular.module('mean.icu.ui.usersFilter', [])
         }
         var ordered = [];
         for(var i =0; i<= arr.length; i++) {
-            var q = usersClone.findIndex(findElem, arr[i]);
+            //var q = usersClone.findIndex(findElem, arr[i]);
+            //the function: 'findIndex' NOT Exists.
+            var q = -1;
+            for(var x = 0; x < usersClone.length; x++)
+            {
+                if (usersClone[x] == findElem)
+                {
+                    q = x;
+                    break;
+                }
+            }
+
             if (q > -1 && arr[i]) {
                 ordered.push(users[q]);
                 usersClone.splice(q, 1);

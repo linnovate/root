@@ -29,6 +29,15 @@ directive('icuSidepane', function() {
 
         $scope.isCurrentState = function(item) {
 
+            if ((context.main === 'templateDocs') && (item.display != undefined) && (item.display[1] === 'templateDocs'))
+            {
+                return true;
+            }
+            else if ((context.main === 'offices') && (item.display != undefined) && (item.display[0] === 'offices'))
+            {
+                return true;
+            }
+
             if (item.state.includes("."))
             {
                 return item.state.split(".")[0] === context.main;
@@ -68,7 +77,7 @@ directive('icuSidepane', function() {
             name: 'settings',
             icon: '/icu/assets/img/settings.png',
             state: 'folders.all',
-            display: ['offices'],
+            display: ['offices', 'templateDocs'],
             open: $scope.isCurrentState({state: 'folders'})
         },
         // , {

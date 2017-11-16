@@ -63,10 +63,45 @@ angular.module('mean.icu.ui.tabs')
                     klass: "user-name"
                 }, {
                     type: 'text',
+                    value: 'instead'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'prev-assign',
+                    value: 'prev',
+                    klass: "user-name"
+                }, {
+                    type: 'text',
                     value: 'toThis'
                 }, {
                     type: 'object',
                     value: 'issue'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
+                }],
+                assignNew: [{
+                    type: 'text',
+                    value: 'assignedUser'
+                }, {
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'deepObject',
+                    value: ['userObj', 'lastname'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'toThis'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
+                    type: 'deepObject',
+                    value: ['issueId', 'title'],
+                    klass: "user-name"
                 }],
                 unassign: [{
                     type: 'deepObject',
@@ -80,6 +115,17 @@ angular.module('mean.icu.ui.tabs')
                 }, {
                     type: 'object',
                     value: 'issue'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'prev-assign',
+                    value: 'prev',
+                    klass: "user-name"
                 }],
                 updateDue: [{
                     type: 'deepObject',
@@ -88,6 +134,81 @@ angular.module('mean.icu.ui.tabs')
                 }, {
                     type: 'text',
                     value: 'updateDue'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'prev-date',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'date',
+                    value: 'TaskDue'
+                }],
+                updateCreated: [{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'updateCreated'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'prev-date',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'date',
+                    value: 'TaskDue'
+                }],
+                updateStartDue: [{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'updateStartDue'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'prev-date',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'date',
+                    value: 'TaskDue'
+                }],
+                updateEndDue: [{
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
+                    type: 'text',
+                    value: 'updateEndDue'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'prev-date',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'to'
                 }, {
                     type: 'nbsp'
                 }, {
@@ -101,6 +222,15 @@ angular.module('mean.icu.ui.tabs')
                 }, {
                     type: 'text',
                     value: 'updateStatus'
+                }, {
+                    type: 'nbsp'    
+                }, {
+                    type: 'prev-string',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
                 }, {
                     type: 'nbsp'
                 }, {
@@ -146,15 +276,173 @@ angular.module('mean.icu.ui.tabs')
                 updateLocation: [{
                     type: 'text',
                     value: 'updateLocation'
-                },{
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateNewLocation: [{
+                    type: 'text',
+                    value: 'updateLocation'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateTitle: [{
+                    type: 'text',
+                    value: 'updateTitle'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateNewTitle: [{
+                    type: 'text',
+                    value: 'updateTitle'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateDescription: [{
+                    type: 'text',
+                    value: 'updateDescription'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'prev'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateNewDescription: [{
+                    type: 'text',
+                    value: 'updateDescription'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'to'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'status'
+                }],
+                updateEntity: [{
+                    type: 'text',
+                    value: 'added'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'entityType'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'entity',
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'instead'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'prev-string',
+                    value: 'prev',
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'toThis'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
                     type: 'deepObject',
-                    value: ['userObj', 'name'],
+                    value: ['issueId', 'title'],
                     klass: "user-name"
-                },{
+                }],
+                updateNewEntity: [{
+                    type: 'text',
+                    value: 'added'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'entityType'
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'string',
+                    value: 'entity',
+                }, {
+                    type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'toThis'
+                }, {
+                    type: 'object',
+                    value: 'issue'
+                }, {
                     type: 'deepObject',
-                    value: ['userObj', 'lastname'],
+                    value: ['issueId', 'title'],
                     klass: "user-name"
-                }],               
+                }],
                 copy: [{
                     type: 'text',
                     value: 'copiedThe'
@@ -217,28 +505,6 @@ angular.module('mean.icu.ui.tabs')
                     type: 'object',
                     value: 'issue'
                 }],
-                assign: [{
-                    type: 'text',
-                    value: 'assignedUser'
-                }, {
-                    type: 'deepObject',
-                    value: ['userObj', 'name'],
-                    klass: "user-name"
-                }, {
-                    type: 'deepObject',
-                    value: ['userObj', 'lastname'],
-                    klass: "user-name"
-                }, {
-                    type: 'text',
-                    value: 'toThis'
-                }, {
-                    type: 'object',
-                    value: 'issue'
-                }, {
-                    type: 'deepObject',
-                    value: ['issueId', 'title'],
-                    klass: "user-name"
-                }],
                 unassign: [{
                     type: 'deepObject',
                     value: ['userObj', 'name'],
@@ -247,7 +513,14 @@ angular.module('mean.icu.ui.tabs')
                     type: 'text',
                     value: 'unassign'
                 }, {
+                    type: 'deepObject',
+                    value: ['userObj', 'name'],
+                    klass: "user-name"
+                }, {
                     type: 'nbsp'
+                }, {
+                    type: 'text',
+                    value: 'from this'
                 }, {
                     type: 'object',
                     value: 'issue'
@@ -326,7 +599,6 @@ angular.module('mean.icu.ui.tabs')
                         location: location.href
                     }
                 }
-                console.log('activity', $scope.activity, 'context', context);
 
                 ActivitiesService.create({
                     data: $scope.activity,
@@ -413,17 +685,17 @@ angular.module('mean.icu.ui.tabs')
             var activityList = $element.find('.activities-list');
             var addUpdateField = $element.find('.add-update textarea');
 
-            $scope.expandUpdate = function() {
-                if (addUpdateField.height() < 150) {
-                    addUpdateField.css("height", "100px");
-                    activityList.css("height", "calc(100% - 170px)");
-                }
-            };
-            $scope.minimizeUpdate = function() {
-                addUpdateField.css("height", "50px");
-                activityList.css("height", "calc(100% - 120px)");
+            // $scope.expandUpdate = function() {
+            //     if (addUpdateField.height() < 150) {
+            //         addUpdateField.css("height", "100px");
+            //         activityList.css("height", "calc(100% - 170px)");
+            //     }
+            // };
+            // $scope.minimizeUpdate = function() {
+            //     addUpdateField.css("height", "50px");
+            //     activityList.css("height", "calc(100% - 120px)");
 
-            };
+            // };
         }
 
         return {

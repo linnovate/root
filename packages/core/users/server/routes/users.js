@@ -198,6 +198,75 @@ module.exports = function(MeanUser, app, auth, database, passport) {
 
 
 
+  app.post('/templateDocsAppend.js' , function(req, res){
+    
+    var StartOFPath = config.root + '/';
+    
+    // Check the type of the file, and if needed to viewed as pdf
+    if((req.body.templateType == "docx") ||
+       (req.body.templateType == "doc") ||
+       (req.body.templateType == "xlsx") ||
+       (req.body.templateType == "xls") ||
+       (req.body.templateType == "ppt") ||
+       (req.body.templateType == "pptx"))
+    {
+        var str = req.body.path;
+        
+        //Check if there is space, if there is, add '\' before it
+        if (str.indexOf(' ') >= 0)
+        {
+            console.log('space');
+            
+            var temp1 = str.split(' ');
+            var temp2 = temp1[0];
+            
+            
+            for(var i=1; i < temp1.length; i++)
+            {
+                
+                temp2 = temp2.concat("\\ " + temp1[i]);
+            }
+            str = temp2;
+        }
+        
+        //###start_of_url 
+        var arr = str.split(config.host + ':' + config.http.port);
+        var realpath = arr[1].replace('(', '\(').replace(')', '\)');
+        var arr1 = str.split("/");
+        var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
+        var arr2 = arr1[7].split("." + req.body.templateType);
+
+    console.log('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf');
+    console.log('lowriter --headless --convert-to pdf ' + config.root + realpath);
+    
+        // Make the convert from it's origin type to pdf
+        exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
+        if (err) {
+            res.send(500, arguments);
+        } else {
+            
+            // Move the converted file to the path of the origin file
+            exec('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf' , function (err, stout, sterr){
+                if (err) {
+                    res.send(500, arguments);
+                } else {
+                    
+                    res.send(stout);
+                }
+            });
+            //res.send(stout);
+        }
+    });
+    
+}
+else{
+    console.log("OhAd waS HEre");
+};
+    
+});
+
+
+
 
 
 

@@ -140,13 +140,14 @@ angular.module('mean.icu.data.foldersservice', [])
         });
     }
 
-    function updateStatus(folder) {
+    function updateStatus(folder, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'folder',
                 issueId: folder.id,
                 type: 'updateStatus',
-                status: folder.status
+                status: folder.status,
+                prev: prev.status
             },
             context: {}
         }).then(function(result) {
@@ -162,6 +163,41 @@ angular.module('mean.icu.data.foldersservice', [])
                 issueId: folder.id,
                 type: 'updateColor',
                 status: folder.color
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateEntity(folder, prev) {
+        var activityType = prev.office ? 'updateEntity' : 'updateNewEntity';
+        return ActivitiesService.create({
+            data: {
+                issue: 'folder',
+                issueId: folder.id,
+                type: activityType,
+                entityType: 'office',
+                entity: folder.office.title,
+                prev: prev.office ? prev.office.title : ''
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+
+    }
+
+    function updateTitle(folder, prev, type) {
+        var capitalizedType = type[0].toUpperCase() + type.slice(1);
+        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+        return ActivitiesService.create({
+            data: {
+                issue: 'folder',
+                issueId: folder.id,
+                type: activityType,
+                status: folder[type],
+                prev: prev[type]
             },
             context: {}
         }).then(function(result) {
@@ -186,6 +222,8 @@ angular.module('mean.icu.data.foldersservice', [])
         WantToCreateRoom: WantToCreateRoom,
         updateWatcher: updateWatcher,
         updateStatus: updateStatus,
-        updateColor: updateColor
+        updateColor: updateColor,
+        updateEntity: updateEntity,
+        updateTitle: updateTitle
     };
 });

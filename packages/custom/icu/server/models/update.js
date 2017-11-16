@@ -48,6 +48,15 @@ var UpdateSchema = new Schema({
   userObj: {
     type: Schema.ObjectId,
     ref: 'User'
+  },
+  prev: {
+    type: String
+  },
+  entity: {
+    type: String
+  },
+  entityType: {
+    type: String
   }
 });
 

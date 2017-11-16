@@ -6,9 +6,11 @@
     width: $sidepane-width;
     left: 0;
     top: 0;
-    height: 100vh;
+    // height: 100vh;
+    height: 963px;
 
     background-color: $grey;
+    min-width: $sidepane-width;
 
     header {
         display: table-cell;
@@ -17,7 +19,7 @@
         width: $sidepane-width;
         background-color: $dark-grey;
         color: white;
-        font-size: 26px;
+        font-size: 23px;
         text-align: center;
 
         .sidepane-title
@@ -83,12 +85,12 @@
                 }
 
                 .menu-item {
-                    height: $header-height;
+                    height: 59px;
 
                     
 
                     .icon {
-                        width: $header-height;
+                        width: 57px;
                         height: $header-height;
                         float: left;
                         padding: 18px;
@@ -103,8 +105,9 @@
                         span {
                             position: absolute;
                             left: 0;
-                            top: 50%;
+                            top: 51%;
                             transform: translate(0, -50%);
+                            font-size: 18px;
                         }
                     }
 
@@ -142,7 +145,7 @@
                             top: 50%;
                             transform: translate(-50%, -50%);
                             font-size: 1.5em;
-                            right: 18px;
+                            right: 12px;
                         }
                     }
                 }
@@ -168,11 +171,16 @@
     // left: -100%;
     opacity: 1;
     display: block !important;
+    position: relative;
+    transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
+    // z-index: 999;
 }
 
 .animate-hide.ng-hide {
     opacity: 0;
-    padding: 0 10px;
+    // padding: 0 10px;
     display: block !important;
     transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
+    width: 0;
+    min-width: 0;
 }

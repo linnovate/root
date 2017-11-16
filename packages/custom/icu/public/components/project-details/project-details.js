@@ -36,6 +36,9 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         });
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.project));
+
         if (!$scope.project) {
             $state.go('main.projects.byentity', {
                 entity: context.entityName,
@@ -45,23 +48,29 @@ angular.module('mean.icu.ui.projectdetails', [])
 
         $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
 
-        $scope.$watchGroup(['project.description', 'project.title'], function (nVal, oVal, scope) {
+        $scope.$watch('project.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {
-                var newContext;
-                if (nVal[1] !== oVal[1]) {
-                    newContext = {
-                        name: 'title',
-                        oldVal: oVal[1],
-                        newVal: nVal[1],
-                        action: 'renamed'
-                    };
-                } else {
-                    newContext = {
-                        name: 'description',
-                        oldVal: oVal[0],
-                        newVal: nVal[0]
-                    };
-                }
+                var newContext = {
+                    name: 'title',
+                    oldVal: oVal,
+                    newVal: nVal,
+                    action: 'renamed'
+                };
+                $scope.delayedUpdate($scope.project, newContext);
+            }
+        });
+
+        var nText, oText;
+        $scope.$watch('project.description', function(nVal, oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
+                var newContext = {
+                    name: 'description',
+                    oldVal: oVal,
+                    newVal: nVal,
+                    action: 'renamed'
+                };
                 $scope.delayedUpdate($scope.project, newContext);
             }
         });
@@ -135,13 +144,6 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         };
 
-        var reloadCurrent = function() {
-            $state.go($state.current.name, {
-                entity: context.entityName,
-                entityId: context.entityId
-            }, {reload: true});
-        }            
-
         $scope.update = function (project, context) {
             ProjectsService.update(project, context).then(function(res) {
                 if (ProjectsService.selected && res._id === ProjectsService.selected._id) {
@@ -158,20 +160,28 @@ angular.module('mean.icu.ui.projectdetails', [])
                             project.discussion = context.entityId;
                         }
 
-                        ProjectsService.updateStatus(project).then(function(result) {
+                        ProjectsService.updateStatus(project, backupEntity).then(function(result) {
+                            backupEntity = JSON.parse(JSON.stringify($scope.project));
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                            reloadCurrent();
                         });
                         break;
                 
                     case 'color':
                         ProjectsService.updateColor(project).then(function(result) {
-                            ActivitiesService.data = ActivitiesService.data || [] ; // TBD
+                            backupEntity = JSON.parse(JSON.stringify($scope.project));
+                            ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                            reloadCurrent();
                         });
-                        break;   
+                        break;
+                    case 'title':
+                    case 'description':
+                        ProjectsService.updateTitle(project, backupEntity, context.name).then(function(result) {
+                            backupEntity = JSON.parse(JSON.stringify($scope.project));
+                            ActivitiesService.data = ActivitiesService.data || [];
+                            ActivitiesService.data.push(result);
+                        });
+                        break; 
                 }
             });
         };
@@ -181,7 +191,7 @@ angular.module('mean.icu.ui.projectdetails', [])
             ProjectsService.currentProjectName = $scope.project.title;
         }
 
-        $scope.delayedUpdate = _.debounce($scope.update, 500);
+        $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
         if ($scope.project &&
             ($state.current.name === 'main.projects.all.details' ||

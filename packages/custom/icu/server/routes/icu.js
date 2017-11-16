@@ -329,24 +329,31 @@ module.exports = function(Icu, app) {
   .delete(documents.deleteDocument);
   app.route('/api/officeDocuments/create')
   .post(documents.create);
+  app.route('/api/officeDocuments/addSerialTitle')
+  .post(documents.addSerialTitle);
   app.route('/api/officeDocuments/uploadFileToDocument')
   .post(documents.uploadFileToDocument);
   app.route('/api/officeDocuments/sendDocument')
   .post(documents.sendDocument);
    app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
 
-
    app.route('/api/officeTemplates/createNew')
    .post(templateDocs.createNew)
 
    app.route('/api/officeTemplates')
-   .post(templateDocs.upload)
+   //.post(templateDocs.upload)
    .get(pagination.parseParams, templateDocs.all, pagination.formResponse);
    app.route('/api/officeTemplates/getByofficeId')
    .post(templateDocs.getByOfficeId)
 
    app.route('/api/officeTemplates*').all(entity('templateDocs'));
   
+
+   app.route('/api/officeDocuments/uploadDocumentFromTemplate')
+  .post(documents.uploadDocumentsFromTemplate);
+
+  app.route('/api/officeTemplates/uploadTemplate')
+  .post(templateDocs.uploadTemplate);
   app.route('/api/officeTemplates/:id([0-9a-fA-F]{24})')
   .get(templateDocs.getById)
   .post(templateDocs.update2)

@@ -4,6 +4,7 @@ angular.module('mean.icu.ui.officedocumentlist', [])
     .controller('OfficeDocumentListController', function ($scope,
                                                            $state,
                                                             officeDocuments,
+                                                            //firstTime,
                                                             OfficeDocumentsService,
                                                             context,
                                                             $filter,
@@ -11,6 +12,7 @@ angular.module('mean.icu.ui.officedocumentlist', [])
         $scope.officeDocuments = officeDocuments.data || officeDocuments;
         $scope.loadNext = officeDocuments.next;
         $scope.loadPrev = officeDocuments.prev;
+        //$scope.firstTime = firstTime;
         $scope.print = function () {
             $window.print()
         }
@@ -85,10 +87,11 @@ angular.module('mean.icu.ui.officedocumentlist', [])
         $scope.toggleStarred = function () {
             $state.go($state.current.name, { starred: !$stateParams.starred });
         };
-
-        if ($scope.officeDocuments.length) {
+        if ($scope.officeDocuments.length ) {
             if ($state.current.name === 'main.officeDocuments.all' ||
-                $state.current.name === 'main.officeDocuments.byentity') {
+                $state.current.name === 'main.officeDocuments.byentity' ||
+                $state.current.name === 'main.officeDocuments.all.details.activities'||
+                $state.current.name === 'main.officeDocuments.byentity.details.activities') {
                 navigateToDetails($scope.officeDocuments[0]);
             }
         }
@@ -96,10 +99,13 @@ angular.module('mean.icu.ui.officedocumentlist', [])
             if ($state.current.name === 'main.officeDocuments.all') {
                 return;
             }
-            if (
-                $state.current.name !== 'main.officeDocuments.byentity.activities' &&
-                $state.current.name !== 'main.officeDocuments.byentity.details.activities') {
-                $state.go('.activities');
+            // if (
+            //     $state.current.name !== 'main.officeDocuments.byentity.activities' &&
+            //     $state.current.name !== 'main.officeDocuments.byentity.details.activities') {
+            //     $state.go('.activities');
+            // }
+            if($state.current.name == 'main.officeDocuments.all.details.activities'){
+                $state.go('main.officeDocuments.all');
             }
         }
 

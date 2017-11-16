@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.templateDocdetails', [])
-    .controller('TemplateDocDetailsController', function ($scope,
+    .controller('TemplateDocDetailsController', function ($scope,$http,
                                                       entity,
                                                       tasks,
                                                       folders,
@@ -129,13 +129,82 @@ angular.module('mean.icu.ui.templateDocdetails', [])
         };
 
         $scope.deleteTemplateDoc = function (templateDoc) {
-            TemplateDocsService.remove(templateDoc._id).then(function () {
+            TemplateDocsService.delete(templateDoc._id).then(function () {
 
                 $state.go('main.templateDocs.all', {
                     entity: 'all'
                 }, {reload: true});
             });
         };
+                
+
+
+
+        $scope.view = function(document1) {
+            console.dir(document1);
+            if(document1.spPath){
+                var spSite = document1.spPath.substring(0,document1.spPath.indexOf('ICU')+3);
+                var uri = spSite+"/_layouts/15/WopiFrame.aspx?sourcedoc="+document1.spPath+"&action=default";
+                 window.open(uri,'_blank');
+            }
+            else{
+            // Check if need to view as pdf
+            if ((document1.templateType == "docx") ||
+                (document1.templateType == "doc") ||
+                (document1.templateType == "xlsx") ||
+                (document1.templateType == "xls") ||
+                (document1.templateType == "ppt") ||
+                (document1.templateType== "pptx")) {
+                var arr = document1.path.split("." + document1.templateType);
+                var ToHref = arr[0] + ".pdf";
+                // Check if convert file exists allready
+                $http({
+                    url: ToHref.replace('/files/', '/api/files/'),
+                    method: 'HEAD'
+                }).success(function() {
+                    // There is allready the convert file
+                    window.open(ToHref + '?view=true')
+                }).error(function() {
+                    // Send to server
+                    $.post('/templateDocsAppend.js', document1).done(function(document2) {
+                        // The convert is OK and now we open the pdf to the client in new window
+                        window.open(ToHref + '?view=true');
+                    }).fail(function(xhr) {
+                        console.error(xhr.responseText);
+                    });
+                });
+            }
+            // Format is NOT needed to view as pdf
+            else {
+                window.open(document1.path + '?view=true');
+            }
+        }
+        };
+
+        $scope.upload = function(file){
+            $scope.test=file;
+            var data={
+                'id':$stateParams.id,
+                'officeId':$stateParams.entityId
+            };
+            if(file.length>0){
+                TemplateDocsService.uploadTemplate(data,file).then(function(result){
+                    $scope.templateDoc.title = result.data.title;
+                    $scope.templateDoc.path = result.data.path;
+                    $scope.templateDoc.templateType = result.data.templateType;
+                    $scope.templateDoc.spPath = result.data.spPath;
+                });
+            }
+        };
+
+        // $scope.deleteTemplateDoc = function (templateDoc) {
+        //     TemplateDocsService.remove(templateDoc._id).then(function () {
+
+        //         $state.go('main.templateDocs.all', {
+        //             entity: 'all'
+        //         }, {reload: true});
+        //     });
+        // };
 
         $scope.updateTitle = function(templateDoc,title){
             var json ={

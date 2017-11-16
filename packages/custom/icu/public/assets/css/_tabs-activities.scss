@@ -22,9 +22,10 @@ $activityListDefaultMaxH: 80px;
 
         .activities-list {
             border-bottom: 1px solid $light-grey1;
-            height: calc(100% - 120px);
+            // height: calc(100% - 120px);
             transition: height 0.4s;
-            max-height: 200px;
+            // max-height: 200px;
+            height: 282px;
             overflow: auto;
             &.my {
 				height: 100%;
@@ -55,12 +56,13 @@ $activityListDefaultMaxH: 80px;
                 margin-bottom: 10px;
                 .user-name {
                     font-weight: 700;
-                    line-height: 14px;
+                    // line-height: 14px;
                 }
 
                 .text {
                     padding-top: 16px;
-
+                    display: flex;
+                    flex-wrap: wrap;
                     .activity-details {
                         font-weight: 100;
                         & > span {
@@ -118,11 +120,12 @@ $activityListDefaultMaxH: 80px;
             max-height: 210px;
             overflow: auto;
             width: 100%;
+            margin-top: 12px;
 
             textarea {
                 padding: 5px 9px;
                 width: calc(100% - 60px);
-                height: 50px;
+                height: 125px;
                 margin: 10px 0;
                 transition: height 0.4s;
                 border-color: #C8C8C6;

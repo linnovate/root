@@ -10,7 +10,8 @@ angular.module('mean.icu.ui.officedetails', [])
                                                       context,
                                                       $state,
                                                       OfficesService,
-                                                      $stateParams) {
+                                                      $stateParams,
+                                                      ActivitiesService) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("offices")))
         {
             $scope.office = entity || context.entity;
@@ -37,6 +38,9 @@ angular.module('mean.icu.ui.officedetails', [])
             });
         });
 
+        // backup for previous changes - for updates
+        var backupEntity = JSON.parse(JSON.stringify($scope.office));
+
         if (!$scope.office) {
             $state.go('main.offices.byentity', {
                 entity: context.entityName,
@@ -46,23 +50,28 @@ angular.module('mean.icu.ui.officedetails', [])
 
         $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
 
-        $scope.$watchGroup(['office.description', 'office.title'], function (nVal, oVal, scope) {
+        $scope.$watch('office.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {
-                var newContext;
-                if (nVal[1] !== oVal[1]) {
-                    newContext = {
-                        name: 'title',
-                        oldVal: oVal[1],
-                        newVal: nVal[1],
-                        action: 'renamed'
-                    };
-                } else {
-                    newContext = {
-                        name: 'description',
-                        oldVal: oVal[0],
-                        newVal: nVal[0]
-                    };
-                }
+                var newContext = {
+                    name: 'title',
+                    oldVal: oVal,
+                    newVal: nVal,
+                    action: 'renamed'
+                };
+                $scope.delayedUpdate($scope.office, newContext);
+            }
+        });
+
+        var nText, oText;
+        $scope.$watch('office.description', function(nVal, oVal) {
+            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+            if (nText != oText && oText) {
+                var newContext = {
+                    name: 'description',
+                    oldVal: oVal,
+                    newVal: nVal
+                };
                 $scope.delayedUpdate($scope.office, newContext);
             }
         });
@@ -146,6 +155,24 @@ angular.module('mean.icu.ui.officedetails', [])
                         OfficesService.selected.color = res.color;
                     }
                 }
+
+                switch(context.name) {
+                    case 'color':
+                        OfficesService.updateColor(office).then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                        });
+                    case 'title':
+                    case 'description':
+                        OfficesService.updateTitle(office, backupEntity, context.name).then(function(result) {
+                            backupEntity = JSON.parse(JSON.stringify($scope.office));
+                            ActivitiesService.data = ActivitiesService.data || [];
+                            ActivitiesService.data.push(result);
+
+                        });
+                        break; 
+                }
+                
             });
         };
 
@@ -154,7 +181,7 @@ angular.module('mean.icu.ui.officedetails', [])
             OfficesService.currentOfficeName = $scope.office.title;
         }
 
-        $scope.delayedUpdate = _.debounce($scope.update, 500);
+        $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
         if ($scope.office &&
             ($state.current.name === 'main.offices.all.details' ||

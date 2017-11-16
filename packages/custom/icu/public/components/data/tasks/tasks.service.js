@@ -207,13 +207,14 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    function updateStatus(task, me) {
+    function updateStatus(task, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'task',
                 issueId: task.id,
                 type: 'updateStatus',
-                status: task.status
+                status: task.status,
+                prev: prev.status
             },
             context: {}
         }).then(function(result) {
@@ -221,13 +222,14 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    function updateDue(task, me) {
+    function updateDue(task, prev) {
         return ActivitiesService.create({
             data: {
                 issue: 'task',
                 issueId: task.id,
                 type: 'updateDue',
-                TaskDue: task.due
+                TaskDue: task.due,
+                prev: prev.due
             },
             context: {}
         }).then(function(result) {
@@ -236,7 +238,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
     }
         
-    function assign(task, me) {
+    function assign(task, me, prev) {
         if (task.assign) {
             var message = {};
             message.content = task.title || '-';
@@ -249,7 +251,7 @@ angular.module('mean.icu.data.tasksservice', [])
                 type: 'assign'
             });
 
-            var activityType = 'assign';
+            var activityType = prev.assign ? 'assign' : 'assignNew';
         } else {
             var activityType = 'unassign';
         }
@@ -258,7 +260,43 @@ angular.module('mean.icu.data.tasksservice', [])
                 issue: 'task',
                 issueId: task.id,
                 type: activityType,
-                userObj: task.assign
+                userObj: task.assign,
+                prev: prev.assign ? prev.assign.name : ''
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function updateEntity(task, prev) {
+        var activityType = prev.project ? 'updateEntity' : 'updateNewEntity';
+        return ActivitiesService.create({
+            data: {
+                issue: 'task',
+                issueId: task.id,
+                type: activityType,
+                entityType: 'project',
+                entity: task.project.title,
+                prev: prev.project ? prev.project.title : ''
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+
+    }
+
+    function updateTitle(task, prev, type) {
+        var capitalizedType = type[0].toUpperCase() + type.slice(1);
+        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
+        return ActivitiesService.create({
+            data: {
+                issue: 'task',
+                issueId: task.id,
+                type: activityType,
+                status: task[type],
+                prev: prev[type]
             },
             context: {}
         }).then(function(result) {
@@ -298,6 +336,8 @@ angular.module('mean.icu.data.tasksservice', [])
         updateWatcher: updateWatcher,
         data: data,
         tabData: tabData,
-        IsNew: IsNew
+        IsNew: IsNew,
+        updateEntity: updateEntity,
+        updateTitle: updateTitle
     };
 });

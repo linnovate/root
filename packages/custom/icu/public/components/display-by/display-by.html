@@ -3,7 +3,7 @@
         {{ 'myTasks' | i18next }}
     </p>
     <div ng-if="context.main != 'folders'">
-        <p class="title all" ui-sref="main.{{context.main}}.all({'officeDocuments':undefined})" ui-sref-active="active" data-ng-class="{ 'selected': context.entityName === 'all'}">
+        <p class="title all" ui-sref="main.{{context.main}}.all({'officeDocuments':undefined})" ng-click="reset(context.main)" ui-sref-active="active" data-ng-class="{ 'selected': context.entityName === 'all'}">
             {{ 'all' | i18next }}
             <div class="list {{context.main}}">
                 <ul>
@@ -111,7 +111,7 @@
     </div>
     <div class="list folders" ng-if="foldersList && (icuDisplayBy.indexOf('folders'))>-1">
         <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}
-            <div tooltips tooltip-template="{{'Select office' | i18next}}">
+            <div tooltips tooltip-template="{{'selectOffice' | i18next}}">
                 <ui-select ng-model="officesList.office" on-select="changeOrder()" search-enabled="false">
                     <ui-select-match>
                         <button class="tasks">{{$select.selected.title | i18next}} <i class="fa fa-caret-down"></i></button>
