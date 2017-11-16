@@ -24,7 +24,11 @@ exports.create = function(req, res, next) {
         msg: 'Incorrect UId'
       });
     }
-    req.user = user
+    req.user = user;
+    req.body.watchers = [req.user];
+    req.body.assign = req.user;
+    req.body.circles = {};
+    req.body.entity = req.body.entity || req.query.entity || 'task';
 
     var options = {
       includes: 'assign watchers project subTasks discussions',
@@ -36,9 +40,7 @@ exports.create = function(req, res, next) {
         circles: {}
       },
     }
-
     var entity = crud(req.body.entity.toLowerCase() + 's', options);
-
     entity.create(req, res, next);
   });
 
