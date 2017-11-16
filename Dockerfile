@@ -10,8 +10,8 @@ RUN echo '{}' > $HOME/.mean
 RUN npm install
 RUN bower install
 ENV PORT 3100
-ENV MONGODB_URI mongodb://db/icu
-ENV ELASTICSEARCH_IP 172.17.0.3
+ENV MONGODB_URI mongodb://root-db/icu
+ENV ELASTICSEARCH_IP root-elastic
 CMD ["npm", "start"]
 EXPOSE 3100
 #test
