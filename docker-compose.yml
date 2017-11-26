@@ -1,15 +1,19 @@
-app:
-  build: .
-  ports:
-    - "3100:3100"
-  links:
-    - db
-    - elastic
-db:
-  image: mongo
-  expose:
-    - "27017"
-elastic:
-  image: elasticsearch
-  expose:
-    - "9200"
+version: '3'
+
+services:
+  root-app:
+    build: .
+    restart: always
+    ports:
+      - "3100:3100"
+    links:
+      - root-db
+      - root-elastic
+  root-db:
+    image: mongo
+    expose:
+      - "27017"
+  root-elastic:
+    image: elasticsearch
+    expose:
+      - "9200"

@@ -85,6 +85,11 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function getByFolderId(id) {
             return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
+
+                result.data.forEach(function(officeDocument){
+                    officeDocument.created = new Date(officeDocument.created);
+              }) 
+              
                 return result.data;
             });
         }
