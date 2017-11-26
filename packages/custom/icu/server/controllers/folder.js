@@ -19,6 +19,7 @@ var mongoose = require('mongoose'),
   Folder = mongoose.model('Folder'),
   Task = mongoose.model('Task'),
   User = mongoose.model('User'),
+  Document = mongoose.model('Document'),
   _ = require('lodash'),
   elasticsearch = require('./elasticsearch.js');
 
@@ -88,6 +89,32 @@ exports.destroy = function(req, res, next) {
     folderController.destroy(req, res, next);
 
   });
+};
+
+exports.update = function(req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
+
+  if (req.body.watcherAction) {
+    if (req.body.watcherAction == 'added') {
+      Document.update(
+        {
+          folder: req.body._id
+        }, {
+          $push: { watchers: watcherId }
+      }).exec();
+    } else {
+      Document.update(
+        {
+          folder: req.body._id
+        }, {
+          $pull: { watchers: watcherId }
+      }).exec();
+    }
+  }
+
+  folderController.update(req, res, next);
 };
 
 exports.getByEntity = function(req, res, next) {

@@ -131,7 +131,10 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
 
                 if (folder.__state === creatingStatuses.NotCreated) {
                     folder.__state = creatingStatuses.Creating;
-
+                    if (folder.office) {
+                        folder.watchers = folder.watchers.concat(folder.office.watchers);
+                        folder.watchers = _.uniq(folder.watchers);
+                    }
                     return FoldersService.create(folder).then(function (result) {
                         folder.__state = creatingStatuses.Created;
 
@@ -148,7 +151,10 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                         folder.IsTitle = !folder.IsTitle;
                     }
                     folder.title = folder.PartTitle;
-
+                    if (folder.office) {
+                        folder.watchers = folder.watchers.concat(folder.office.watchers);
+                        folder.watchers = _.uniq(folder.watchers);
+                    }
                     return FoldersService.update(folder);
                 }
             };

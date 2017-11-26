@@ -330,6 +330,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 'name':'folder',
                 'newVal':folderId
             };
+            // officeDocument.watchers = officeDocument.watchers.concat(officeDocument.office.watchers);
+            // officeDocument.watchers = _.uniq(folder.watchers);
             OfficeDocumentsService.updateDocument(officeDocument._id,json).then(function(res) {
                 OfficeDocumentsService.updateEntity(officeDocument, backupEntity).then(function(result) {
                     backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));

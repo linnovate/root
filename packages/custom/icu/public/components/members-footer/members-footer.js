@@ -102,11 +102,11 @@ angular.module('mean.icu.ui.membersfooter', [])
                         'name':'watchers',
                         'newVal':a
                     }
-                    service.update(entity,json);
+                    service.update(entity,json, action, watcherId);
                     //$state.reload();
                 }
                 else{
-                    service.update(entity, data);
+                    service.update(entity, data, action);
                 }
 
                 
