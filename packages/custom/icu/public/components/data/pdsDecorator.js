@@ -45,14 +45,14 @@ var passiveDataSrtuctureDecorator = function($delegate) {
     };
 
     function action(cb) {
-        return function (entity, context) {
+        return function (entity, context, watcherAction, watcherId) {
             var entityData = _(entity).omit(function(value, key) {
                 return key.indexOf('__') === 0;
             });
 
             normalize(entityData);
 
-            return cb(entityData, context).then(function(result) {
+            return cb(entityData, context, watcherAction, watcherId).then(function(result) {
                 denormalize(entity, result);
 
                 return entity;

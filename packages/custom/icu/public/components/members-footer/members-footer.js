@@ -92,7 +92,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     action: action,
                     frequentUser: member._id
                 }
-
+                
                 if(context.main=="officeDocuments"){
                     var a = [];
                     entity.watchers.forEach(function(watcher){
@@ -102,11 +102,11 @@ angular.module('mean.icu.ui.membersfooter', [])
                         'name':'watchers',
                         'newVal':a
                     }
-                    service.update(entity,json, action, watcherId);
+                    service.update(entity,json, action, member._id);
                     //$state.reload();
                 }
                 else{
-                    service.update(entity, data, action);
+                    service.update(entity, data, action, member._id);
                 }
 
                 

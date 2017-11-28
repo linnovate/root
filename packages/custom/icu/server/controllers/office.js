@@ -94,22 +94,26 @@ exports.update = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-
+  console.log('************************************watcher action********************************************')
+  console.log(req.body)
+  console.log(JSON.stringify(req.body));
+  console.log(req.body.watcherAction);
+  console.log(req.body.watcherId);
   if (req.body.watcherAction) {
     if (req.body.watcherAction == 'added') {
       Folder.update(
         {
           office: req.body._id
         }, {
-          $push: { watchers: watcherId }
-      }).exec();
+          $push: { watchers: req.body.watcherId }
+      }, {multi: true}).exec();
     } else {
       Folder.update(
         {
           office: req.body._id
         }, {
-          $pull: { watchers: watcherId }
-      }).exec();
+          $pull: { watchers: req.body.watcherId }
+      }, {multi: true}).exec();
     }
   }
 

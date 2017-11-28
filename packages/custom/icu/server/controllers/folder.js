@@ -95,22 +95,21 @@ exports.update = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-
   if (req.body.watcherAction) {
     if (req.body.watcherAction == 'added') {
       Document.update(
         {
           folder: req.body._id
         }, {
-          $push: { watchers: watcherId }
-      }).exec();
+          $push: { watchers: req.body.watcherId }
+      }, {multi: true}).exec();
     } else {
       Document.update(
         {
           folder: req.body._id
         }, {
-          $pull: { watchers: watcherId }
-      }).exec();
+          $pull: { watchers: req.body.watcherId }
+      }, {multi: true}).exec();
     }
   }
 
