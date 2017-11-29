@@ -51,7 +51,7 @@ module.exports = {
     direction: 'rtl',
   }],
   currentLanguage: 'en',
-  //currentLanguage: 'he',
+  // currentLanguage: 'he',
   // The session cookie name
   sessionName: 'connect.sid',
   attachmentDir: rootPath + '/files',

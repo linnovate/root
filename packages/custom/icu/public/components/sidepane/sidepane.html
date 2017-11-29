@@ -6,7 +6,19 @@
 	{{$root.warnings.circles | i18next}}
 </div>
 -->
-<nav>
+<nav class="searchPane" ng-if="currentState.indexOf('search') > -1" >
+    show results of:
+    <ul>
+        <li ng-repeat="(key, value) in entities">
+            <input type="checkbox" ng-model="entities[key]" ng-change="filterSearchResults()"/>
+            <span>{{key}}</span>
+        </li>
+    </ul>
+
+    filter results by:
+    <button ng-click="resetFilter()">reset</button>
+</nav>
+<nav ng-if="currentState.indexOf('search') == -1">
     <ul>
         <li data-ng-repeat="item in items" data-ng-class="{ 'active': isCurrentState(item) && item.open }" ng-click="removeFilterValue()">
             <div class="menu-item"

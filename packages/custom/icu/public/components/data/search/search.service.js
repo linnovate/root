@@ -15,7 +15,6 @@ angular.module('mean.icu.data.searchservice', [])
                     results.push(entity);
                 });
             }
-
             return results;
         });
     }

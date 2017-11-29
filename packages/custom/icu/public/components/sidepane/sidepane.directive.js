@@ -4,7 +4,7 @@ angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, context, TasksService, $rootScope) {
         $scope.context = context;
-
+        
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
@@ -96,6 +96,23 @@ directive('icuSidepane', function() {
         }
         ];
 
+        $scope.entities = {
+            'tasks': false, 
+            'projects': false, 
+            'discussions': false, 
+            'offices': false, 
+            'folders': false, 
+            'documents':false
+        }
+
+        $scope.filterSearchResults = function() {
+            console.log('entities', $scope.entities);
+        }
+
+        $scope.resetFilter = function() {
+
+        }
+
     }
 
     return {
@@ -109,7 +126,8 @@ directive('icuSidepane', function() {
             folders: '=',
             //people: '='
             officeDocuments: '=',
-            templateDocs: '='
+            templateDocs: '=',
+            currentState: '@'
         }
     };
 });
