@@ -4,6 +4,7 @@ angular.module('mean.icu.data.searchservice', [])
 .service('SearchService', function($http, ApiUri, WarningsService) {
 
 	var  builtInSearchArray = false;
+    var filteringData = [];
 
     function find(query) {
         return $http.get(ApiUri + '/search?term=' + query).then(function(result) {
@@ -21,7 +22,8 @@ angular.module('mean.icu.data.searchservice', [])
 
     return {
         find: find,
-        builtInSearchArray: builtInSearchArray
+        builtInSearchArray: builtInSearchArray,
+        filteringData: filteringData
     };
 });
 

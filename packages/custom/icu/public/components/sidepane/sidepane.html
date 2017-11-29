@@ -9,9 +9,9 @@
 <nav class="searchPane" ng-if="currentState.indexOf('search') > -1" >
     show results of:
     <ul>
-        <li ng-repeat="(key, value) in entities">
-            <input type="checkbox" ng-model="entities[key]" ng-change="filterSearchResults()"/>
-            <span>{{key}}</span>
+        <li ng-repeat="entity in entities">
+            <input type="radio" ng-model="filteringData.entity" ng-value="entity.name" ng-change="filterSearchResults()"/>
+            <span>{{entity.label}}</span>
         </li>
     </ul>
 

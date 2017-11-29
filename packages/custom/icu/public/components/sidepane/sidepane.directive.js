@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context, TasksService, $rootScope) {
+    function controller($scope, $state, context, TasksService, $rootScope, SearchService) {
         $scope.context = context;
         
         $scope.folders = $scope.folders.data || $scope.folders;
@@ -96,18 +96,23 @@ directive('icuSidepane', function() {
         }
         ];
 
-        $scope.entities = {
-            'tasks': false, 
-            'projects': false, 
-            'discussions': false, 
-            'offices': false, 
-            'folders': false, 
-            'documents':false
+        $scope.entities = [
+            {label:'tasks', value: true, name: 'task'}, 
+            {label:'projects', value: false, name: 'project'},
+            {label:'discussions', value: false, name: 'discussion'},
+            {label:'offices', value: false, name: 'office'},
+            {label:'folders', value: false, name: 'folder'},
+            {label:'documents', value:true, name: 'officeDocument'}
+        ];
+        $scope.filteringData = {
+            entity: 'task'
         }
 
         $scope.filterSearchResults = function() {
-            console.log('entities', $scope.entities);
+            SearchService.filteringData = $scope.filteringData;
         }
+
+        $scope.filterSearchResults();
 
         $scope.resetFilter = function() {
 
