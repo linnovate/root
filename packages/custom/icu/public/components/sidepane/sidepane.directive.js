@@ -117,20 +117,11 @@ directive('icuSidepane', function() {
             projects: [],
             discussions: [],
             folders: [],
-            offices: []
+            offices: [],
+            watchers: []
         }
         
-
-        $scope.filterSearchByType = function() {
-            var results = SearchService.results;
-            var filteredByType = []
-            for (var i=0; i< results.length; i++) {
-                if (results[i]._type == $scope.filteringData.issue) {
-                    filteredByType.push(results[i])
-                }
-            }
-            SearchService.filteringResults = filteredByType;
-
+        var getEntitiesAndWatchers = function(filteredByType) {
             for (var i=0; i< filteredByType.length; i++) {
                 if (filteredByType[i].project)
                     $scope.filteringData.projects.push(filteredByType[i].project);
@@ -140,6 +131,8 @@ directive('icuSidepane', function() {
                     $scope.filteringData.folders.push(filteredByType[i].folder);
                 if (filteredByType[i].office)
                     $scope.filteringData.offices.push(filteredByType[i].office)
+                if (filteredByType[i].watchers && filteredByType[i].watchers.length)
+                    $scope.filteringData.watchers = $scope.filteringData.watchers.concat(filteredByType[i].watchers)
             }
 
             $scope.filteringData.projects = $scope.projects.filter(function(e) {
@@ -154,7 +147,21 @@ directive('icuSidepane', function() {
             $scope.filteringData.offices = $scope.offices.filter(function(e) {
                 return $scope.filteringData.offices.indexOf(e._id) > -1;
             });
+
             SearchService.filteringData = $scope.filteringData;
+        }
+
+        $scope.filterSearchByType = function() {
+            var results = SearchService.results;
+            var filteredByType = []
+            for (var i=0; i< results.length; i++) {
+                if (results[i]._type == $scope.filteringData.issue) {
+                    filteredByType.push(results[i])
+                }
+            }
+            SearchService.filteringResults = filteredByType;
+
+            getEntitiesAndWatchers(filteredByType)
         }
 
         var getTruth = function(obj) { // return truth value in a single object
