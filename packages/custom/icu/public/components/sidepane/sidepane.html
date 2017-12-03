@@ -6,17 +6,58 @@
 	{{$root.warnings.circles | i18next}}
 </div>
 -->
-<nav class="searchPane" ng-if="currentState.indexOf('search') > -1" >
+<nav class="searchPane" ng-if="currentState.indexOf('search') > -1" ng-init="filterSearchByType()">
     show results of:
     <ul>
-        <li ng-repeat="entity in entities">
-            <input type="radio" ng-model="filteringData.entity" ng-value="entity.name" ng-change="filterSearchResults()"/>
-            <span>{{entity.label}}</span>
+        <li ng-repeat="issue in issues">
+            <input type="radio" ng-model="filteringData.issue" ng-value="issue.name" ng-change="filterSearchByType()"/>
+            <span>{{issue.label}}</span>
         </li>
     </ul>
 
     filter results by:
     <button ng-click="resetFilter()">reset</button>
+
+    linked to:
+    <div ng-if="filteringData.projects.length">
+        projects:
+        <ul>
+            <li ng-repeat="p in filteringData.projects">
+                <input type="checkbox" ng-model="filteringData.selectedEntities.projects[p._id]" ng-change="filterSearchByEntity()"/>
+                {{p.title}}
+            </li>
+        </ul>
+    </div>
+    <div ng-if="filteringData.discussions.length">
+        discussions:
+        <ul>
+            <li ng-repeat="d in filteringData.discussions">
+                <input type="checkbox" ng-model="filteringData.selectedEntities.discussions[d._id]" ng-change="filterSearchByEntity()"/>
+                {{d.title}}
+            </li>
+        </ul>
+    </div>
+    <div ng-if="filteringData.folders.length">
+        folders:
+        <ul>
+            <li ng-repeat="f in filteringData.folders">
+                <input type="checkbox" ng-model="filteringData.selectedEntities.folders[f._id]" ng-change="filterSearchByEntity()"/>
+                {{f.title}}
+            </li>
+        </ul>
+    </div>
+    <div ng-if="filteringData.offices.length">
+        offices:
+        <ul>
+            <li ng-repeat="o in filteringData.offices">
+                <input type="checkbox" ng-model="filteringData.selectedEntities.offices[o._id]" ng-change="filterSearchByEntity()"/>
+                {{o.title}}
+            </li>
+        </ul>
+    </div>
+
+    watchers:
+
 </nav>
 <nav ng-if="currentState.indexOf('search') == -1">
     <ul>

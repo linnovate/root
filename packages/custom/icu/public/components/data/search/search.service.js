@@ -5,8 +5,11 @@ angular.module('mean.icu.data.searchservice', [])
 
 	var  builtInSearchArray = false;
     var filteringData = [];
+    var results = []
+    var filteringResults = [];
 
     function find(query) {
+        var _this = this;
         return $http.get(ApiUri + '/search?term=' + query).then(function(result) {
             WarningsService.setWarning(result.headers().warning);
             var results = [];
@@ -16,6 +19,7 @@ angular.module('mean.icu.data.searchservice', [])
                     results.push(entity);
                 });
             }
+            _this.results = _this.filteringResults = results;
             return results;
         });
     }
@@ -23,7 +27,8 @@ angular.module('mean.icu.data.searchservice', [])
     return {
         find: find,
         builtInSearchArray: builtInSearchArray,
-        filteringData: filteringData
+        filteringData: filteringData,
+        filteringResults: filteringResults
     };
 });
 

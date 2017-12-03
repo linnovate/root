@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context, TasksService, $rootScope, SearchService) {
+    function controller($scope, $state, context, TasksService, $rootScope, SearchService, $filter) {
         $scope.context = context;
         
         $scope.folders = $scope.folders.data || $scope.folders;
@@ -96,7 +96,9 @@ directive('icuSidepane', function() {
         }
         ];
 
-        $scope.entities = [
+        /********************************** search **********************************/
+
+        $scope.issues = [
             {label:'tasks', value: true, name: 'task'}, 
             {label:'projects', value: false, name: 'project'},
             {label:'discussions', value: false, name: 'discussion'},
@@ -105,14 +107,84 @@ directive('icuSidepane', function() {
             {label:'documents', value:true, name: 'officeDocument'}
         ];
         $scope.filteringData = {
-            entity: 'task'
+            issue: 'task',
+            selectedEntities: {
+                projects: {},
+                discussions: {},
+                folders: {},
+                offices: {}
+            },
+            projects: [],
+            discussions: [],
+            folders: [],
+            offices: []
         }
+        
 
-        $scope.filterSearchResults = function() {
+        $scope.filterSearchByType = function() {
+            var results = SearchService.results;
+            var filteredByType = []
+            for (var i=0; i< results.length; i++) {
+                if (results[i]._type == $scope.filteringData.issue) {
+                    filteredByType.push(results[i])
+                }
+            }
+            SearchService.filteringResults = filteredByType;
+
+            for (var i=0; i< filteredByType.length; i++) {
+                if (filteredByType[i].project)
+                    $scope.filteringData.projects.push(filteredByType[i].project);
+                if (filteredByType[i].discussions && filteredByType[i].discussions.length)
+                    $scope.filteringData.discussions.push(filteredByType[i].discussions[0]);                    
+                if (filteredByType[i].folder)
+                    $scope.filteringData.folders.push(filteredByType[i].folder);
+                if (filteredByType[i].office)
+                    $scope.filteringData.offices.push(filteredByType[i].office)
+            }
+
+            $scope.filteringData.projects = $scope.projects.filter(function(e) {
+                return $scope.filteringData.projects.indexOf(e._id) > -1;
+            });
+            $scope.filteringData.discussions = $scope.discussions.filter(function(e) {
+                return $scope.filteringData.discussions.indexOf(e._id) > -1;
+            });
+            $scope.filteringData.folders = $scope.folders.filter(function(e) {
+                return $scope.filteringData.folders.indexOf(e._id) > -1;
+            });
+            $scope.filteringData.offices = $scope.offices.filter(function(e) {
+                return $scope.filteringData.offices.indexOf(e._id) > -1;
+            });
             SearchService.filteringData = $scope.filteringData;
         }
 
-        $scope.filterSearchResults();
+        var getTruth = function(obj) { // return truth value in a single object
+            var arr = [];
+            for (var key in obj) {
+                if (obj[key]) {
+                    arr.push(key)
+                }
+            }
+            return arr;
+        }
+
+        $scope.filterSearchByEntity = function() {
+            var results = SearchService.results;
+            $scope.filterSearchByType()
+            var projects = getTruth($scope.filteringData.selectedEntities.projects);
+            var discussions = getTruth($scope.filteringData.selectedEntities.discussions);
+            var folders = getTruth($scope.filteringData.selectedEntities.folders);
+            var offices = getTruth($scope.filteringData.selectedEntities.offices);
+            var filteredByEntity = [];
+            for (var i=0; i< results.length; i++) {
+                if (results[i].project && projects.indexOf(results[i].project) > -1 ||
+                    results[i].folder && folders.indexOf(results[i].folder) > -1 ||
+                    results[i].office && offices.indexOf(results[i].office) > -1)
+                        filteredByEntity.push(results[i]);
+                if (results[i].discussions && results[i].discussions.length && discussions.indexOf(results[i].discussions[0]) > -1)
+                    filteredByEntity.push(results[0]);
+            }
+            SearchService.filteringResults = filteredByEntity;
+        }
 
         $scope.resetFilter = function() {
 

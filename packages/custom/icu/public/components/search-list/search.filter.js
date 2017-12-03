@@ -1,18 +1,17 @@
 'use strict';
 
-angular.module('mean.icu.ui.rows', [])
-.filter('searchFilter', function (SearchService) {
+angular.module('mean.icu.ui.searchlistfilter', [])
+.filter('searchResultsFilter', function (SearchService) {
 	return function(results) {
-		var out = [];
-        var filtering = SearchService.filteringData;
+		var filteringResults = SearchService.filteringResults.map(function(e) {
+            return e.id
+        });
+        var out = [];
         for (var i=0; i< results.length; i++) {
-                    console.log(filtering.entity,  results[i]._type, results[i]._type == filtering.entity)
-
-            if (results[i]._type == filtering.entity) {
+            if (filteringResults.indexOf(results[i].id) > -1) {
                 out.push(results[i])
             }
         }
-		
-		return out;
+        return out;
 	}
 });
