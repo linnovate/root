@@ -65,7 +65,7 @@ angular.module('mean.icu.data.foldersservice', [])
     }
 
 
-    function update(folder, context) {
+    function update(folder, context, watcherAction, watcherId) {
         context = context || {};
         if (!context.action) {
             context.action = 'updated';
@@ -74,6 +74,8 @@ angular.module('mean.icu.data.foldersservice', [])
             context.type = 'folder';
         }
 
+        folder.watcherAction = watcherAction;
+        folder.watcherId = watcherId;
         return $http.put(ApiUri + EntityPrefix + '/' + folder._id, folder).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             if(TasksService.data) {

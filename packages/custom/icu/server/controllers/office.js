@@ -18,6 +18,7 @@ var mongoose = require('mongoose'),
   Office = mongoose.model('Office'),
   Task = mongoose.model('Task'),
   User = mongoose.model('User'),
+  Folder = mongoose.model('Folder'),
   _ = require('lodash'),
   elasticsearch = require('./elasticsearch.js');
 
@@ -87,6 +88,36 @@ exports.destroy = function(req, res, next) {
     officeController.destroy(req, res, next);
 
   });
+};
+
+exports.update = function(req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
+  console.log('************************************watcher action********************************************')
+  console.log(req.body)
+  console.log(JSON.stringify(req.body));
+  console.log(req.body.watcherAction);
+  console.log(req.body.watcherId);
+  if (req.body.watcherAction) {
+    if (req.body.watcherAction == 'added') {
+      Folder.update(
+        {
+          office: req.body._id
+        }, {
+          $push: { watchers: req.body.watcherId }
+      }, {multi: true}).exec();
+    } else {
+      Folder.update(
+        {
+          office: req.body._id
+        }, {
+          $pull: { watchers: req.body.watcherId }
+      }, {multi: true}).exec();
+    }
+  }
+
+  officeController.update(req, res, next);
 };
 
 exports.getByEntity = function(req, res, next) {

@@ -45,7 +45,6 @@ angular.module('mean.icu.ui.folderdetails', [])
                 return s._id === $scope.folder._id;
             });
         });
-
         // backup for previous changes - for updates
         var backupEntity = JSON.parse(JSON.stringify($scope.folder));
 
@@ -280,6 +279,13 @@ angular.module('mean.icu.ui.folderdetails', [])
             // if (context.entityName === 'discussion') {
             //     folder.discussion = context.entityId;
             // }
+            folder.watchers = folder.watchers.concat(folder.office.watchers);
+            folder.watchers = _.map(_.groupBy(folder.watchers,function(doc){
+                return doc._id;
+            }),function(grouped){
+                return grouped[0];
+            });
+
             FoldersService.update(folder).then(function(result) {
                 FoldersService.updateEntity(folder, backupEntity).then(function(result) {
                     backupEntity = JSON.parse(JSON.stringify($scope.folder));

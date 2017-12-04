@@ -65,7 +65,7 @@ angular.module('mean.icu.data.officesservice', [])
     }
 
 
-    function update(office, context) {
+    function update(office, context, watcherAction, watcherId) {
         context = context || {};
         if (!context.action) {
             context.action = 'updated';
@@ -73,7 +73,8 @@ angular.module('mean.icu.data.officesservice', [])
         if (!context.type) {
             context.type = 'office';
         }
-
+        office.watcherAction = watcherAction;
+        office.watcherId = watcherId;
         return $http.put(ApiUri + EntityPrefix + '/' + office._id, office).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             if(TasksService.data) {

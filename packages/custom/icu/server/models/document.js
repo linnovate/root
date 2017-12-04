@@ -92,7 +92,8 @@ var DocumentSchema = new Schema({
   }],
   watchers: [{
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    unique: true 
   }]
 });
 
