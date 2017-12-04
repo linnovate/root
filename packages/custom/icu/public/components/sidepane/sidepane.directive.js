@@ -11,8 +11,7 @@ directive('icuSidepane', function() {
         $scope.discussions = $scope.discussions.data || $scope.discussions;
         $scope.officeDocuments = $scope.officeDocuments.data || $scope.officeDocuments;
         //$scope.templateDocs = $scope.templateDocs.data || $scope.templateDocs;
-        // $scope.people = $scope.people.data || $scope.people;
-        
+        $scope.people = $scope.people.data || $scope.people;
         $scope.toggleVisibility = function(toggledItem) {
             var prev = toggledItem.open;
 
@@ -114,6 +113,7 @@ directive('icuSidepane', function() {
                 folders: {},
                 offices: {}
             },
+            selectedWatchers: {},
             projects: [],
             discussions: [],
             folders: [],
@@ -147,6 +147,9 @@ directive('icuSidepane', function() {
             $scope.filteringData.offices = $scope.offices.filter(function(e) {
                 return $scope.filteringData.offices.indexOf(e._id) > -1;
             });
+            $scope.filteringData.watchers = $scope.people.filter(function(e) {
+                return $scope.filteringData.watchers.indexOf(e._id) > -1;
+            });
 
             SearchService.filteringData = $scope.filteringData;
         }
@@ -175,26 +178,51 @@ directive('icuSidepane', function() {
         }
 
         $scope.filterSearchByEntity = function() {
-            var results = SearchService.results;
-            $scope.filterSearchByType()
+            var filteringResults = SearchService.filteringResults
             var projects = getTruth($scope.filteringData.selectedEntities.projects);
             var discussions = getTruth($scope.filteringData.selectedEntities.discussions);
             var folders = getTruth($scope.filteringData.selectedEntities.folders);
             var offices = getTruth($scope.filteringData.selectedEntities.offices);
+            if (!projects.length && !discussions.length && !folders.length && !offices.length)
+                return;
             var filteredByEntity = [];
-            for (var i=0; i< results.length; i++) {
-                if (results[i].project && projects.indexOf(results[i].project) > -1 ||
-                    results[i].folder && folders.indexOf(results[i].folder) > -1 ||
-                    results[i].office && offices.indexOf(results[i].office) > -1)
-                        filteredByEntity.push(results[i]);
-                if (results[i].discussions && results[i].discussions.length && discussions.indexOf(results[i].discussions[0]) > -1)
-                    filteredByEntity.push(results[0]);
+            for (var i=0; i< filteringResults.length; i++) {
+                if (filteringResults[i].project && projects.indexOf(filteringResults[i].project) > -1 ||
+                    filteringResults[i].folder && folders.indexOf(filteringResults[i].folder) > -1 ||
+                    filteringResults[i].office && offices.indexOf(filteringResults[i].office) > -1)
+                        filteredByEntity.push(filteringResults[i]);
+                if (filteringResults[i].discussions && filteringResults[i].discussions.length && discussions.indexOf(filteringResults[i].discussions[0]) > -1)
+                    filteredByEntity.push(filteringResults[i]);
             }
             SearchService.filteringResults = filteredByEntity;
         }
 
-        $scope.resetFilter = function() {
+        $scope.filterSearchByWatcher = function() {
+            var filteringResults = SearchService.filteringResults
+            var watchers = getTruth($scope.filteringData.selectedWatchers);
+            if (!watchers.length) return;
+            var filteredByWatchers = [];
+            for (var i=0; i< filteringResults.length; i++) {
+                if (_.intersection(filteringResults[i].watchers, watchers).length)
+                    filteredByWatchers.push(filteringResults[i]);
+            }
+            SearchService.filteringResults = filteredByWatchers;
+        }
 
+        $scope.filterSearch = function() {
+            $scope.filterSearchByType();
+            $scope.filterSearchByEntity();
+            $scope.filterSearchByWatcher();
+        }
+
+        $scope.resetFilter = function() {
+            $scope.filteringData.selectedEntities = {
+                projects: {},
+                discussions: {},
+                folders: {},
+                offices: {}
+            };
+            $scope.filteringData.selectedWatchers = {};
         }
 
     }
@@ -208,7 +236,7 @@ directive('icuSidepane', function() {
             discussions: '=',
             offices: '=',
             folders: '=',
-            //people: '='
+            people: '=',
             officeDocuments: '=',
             templateDocs: '=',
             currentState: '@'

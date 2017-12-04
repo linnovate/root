@@ -6,11 +6,11 @@
 	{{$root.warnings.circles | i18next}}
 </div>
 -->
-<nav class="searchPane" ng-if="currentState.indexOf('search') > -1" ng-init="filterSearchByType()">
+<nav class="searchPane" ng-if="currentState.indexOf('search') > -1" ng-init="filterSearchByType();resetFilter();">
     show results of:
     <ul>
         <li ng-repeat="issue in issues">
-            <input type="radio" ng-model="filteringData.issue" ng-value="issue.name" ng-change="filterSearchByType()"/>
+            <input type="radio" ng-model="filteringData.issue" ng-value="issue.name" ng-change="filterSearchByType();resetFilter();"/>
             <span>{{issue.label}}</span>
         </li>
     </ul>
@@ -23,7 +23,7 @@
         projects:
         <ul>
             <li ng-repeat="p in filteringData.projects">
-                <input type="checkbox" ng-model="filteringData.selectedEntities.projects[p._id]" ng-change="filterSearchByEntity()"/>
+                <input type="checkbox" ng-model="filteringData.selectedEntities.projects[p._id]" ng-change="filterSearch()"/>
                 {{p.title}}
             </li>
         </ul>
@@ -32,7 +32,7 @@
         discussions:
         <ul>
             <li ng-repeat="d in filteringData.discussions">
-                <input type="checkbox" ng-model="filteringData.selectedEntities.discussions[d._id]" ng-change="filterSearchByEntity()"/>
+                <input type="checkbox" ng-model="filteringData.selectedEntities.discussions[d._id]" ng-change="filterSearch()"/>
                 {{d.title}}
             </li>
         </ul>
@@ -41,7 +41,7 @@
         folders:
         <ul>
             <li ng-repeat="f in filteringData.folders">
-                <input type="checkbox" ng-model="filteringData.selectedEntities.folders[f._id]" ng-change="filterSearchByEntity()"/>
+                <input type="checkbox" ng-model="filteringData.selectedEntities.folders[f._id]" ng-change="filterSearch()"/>
                 {{f.title}}
             </li>
         </ul>
@@ -50,13 +50,19 @@
         offices:
         <ul>
             <li ng-repeat="o in filteringData.offices">
-                <input type="checkbox" ng-model="filteringData.selectedEntities.offices[o._id]" ng-change="filterSearchByEntity()"/>
+                <input type="checkbox" ng-model="filteringData.selectedEntities.offices[o._id]" ng-change="filterSearch()"/>
                 {{o.title}}
             </li>
         </ul>
     </div>
 
     watchers:
+    <ul>
+        <li ng-repeat="w in filteringData.watchers">
+            <input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
+            {{w.name}}
+        </li>
+    </ul>
 
 </nav>
 <nav ng-if="currentState.indexOf('search') == -1">
