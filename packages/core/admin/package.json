@@ -15,12 +15,12 @@
     "node": "0.10.x",
     "npm": "1.4.x"
   },
-  "scripts": {
-    "postinstall": "bower install"
+   "scripts": {
+    "postinstall" : "bower install"
   },
   "dependencies": {
-    "mean-health": "^0.1.7",
-    "request": "^2.83.0"
+    "request": "^2.36.0",
+    "mean-health": "~0.1.2"
   },
   "license": "MIT",
   "_id": "mean-admin@0.0.3",
