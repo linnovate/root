@@ -176,35 +176,35 @@ exports.uploadEmpty = function(req,res,next){
 
 exports.addSerialTitle = function(req,res,next){
   var doc = req.body;
-  var user = req.user.email.substring(0,req.user.email.indexOf('@').toLowerCase());
+  var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
   var docFolder,docOffice;
   if(req.body.folder){
-    docFolder=req.body.folder.title?req.body.folder.title:'NoFolder';
+    docFolder=req.body.folder.title?req.body.folder.title:"NoFolder";
     if(req.body.folder.office){
-      docOffice = req.body.folder.office.title?req.body.folder.office.title:'NoOffice';
+      docOffice = req.body.folder.office.title?req.body.folder.office.title:"NoOffice";
     }
     else{
-      docOffice = 'NoOffice';
+      docOffice = "NoOffice";
     }
   }
   else{
-    docFolder = 'NoFolder';
-    docOffice = 'NoOffice';
+    docFolder = "NoFolder";
+    docOffice = "NoOffice";
   }
   var spPath = doc.spPath;
   var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
   var coreOptions = {
-    'siteUrl':config.SPHelper.SPSiteUrl
+    "siteUrl":config.SPHelper.SPSiteUrl
   };
   var creds = {
-    'username':config.SPHelper.username,
-    'password':config.SPHelper.password
+    "username":config.SPHelper.username,
+    "password":config.SPHelper.password
   };
-  var folder = config.SPHelper.libraryName+"/"+user.toLowerCase();
+  var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
   var fileOptions = {
-    'folder':folder,
-    'fileName':fileName,
-    'fileContent':undefined
+    "folder":folder,
+    "fileName":fileName,
+    "fileContent":undefined
   };
   var users = [];
   users.push({
@@ -263,7 +263,7 @@ exports.addSerialTitle = function(req,res,next){
 
 exports.deleteDocumentFile = function(req,res,next){
   var id = req.params.id;
-  Document.update({'id':id},{$set:{path:undefined,spPath:undefined}},function(error,result){
+  Document.update({'_id':id},{$set:{path:undefined,spPath:undefined}},function(error,result){
     if(error){
       res.send(error);
     }
@@ -271,7 +271,7 @@ exports.deleteDocumentFile = function(req,res,next){
       res.send('ok');
     }
   });
-}
+};
  
 
 
@@ -925,9 +925,7 @@ exports.uploadFileToDocument = function(req,res,next){
                       var path = req.locals.data.body.originalPath;
                       var fileType = path.substring(path.lastIndexOf('.')+1,path.length);
                       var set = {'path':req.locals.data.body.originalPath,'title':req.locals.data.body.name,'documentType':fileType};
-                      Document.findOne({
-                        '_id':documentId
-                      },function(err,doc){
+                      Document.findOne({'_id':documentId},function(err,doc){
                         doc.path = req.locals.data.body.originalPath;
                         doc.title = req.locals.data.body.name;
                         doc.documentType = fileType;
@@ -1720,8 +1718,6 @@ exports.sendDocument = function (req, res, next) {
     watchers.forEach(function(w){
       watchersReq.push({'UserId':w});
     })
-  });
-
   Document.update({'_id':officeDocument._id},{$set:sendingForm},function(error,result){
     if(error||!result){
       res.send(error);
@@ -1738,16 +1734,16 @@ exports.sendDocument = function (req, res, next) {
             users.push(w.UserId);
           });
           var json = {
-            'siteUrl':config.SPHelper.SPSiteUrl,
-            'paths':[spPath],
-            'users':users,
-            'creators':creators,
-            'zero':zero
+            "siteUrl":config.SPHelper.SPSiteUrl,
+            "paths":[spPath],
+            "users":users,
+            "creators":creators,
+            "zero":zero
           };
           request({
-            'url':config.SPHelper.uri+"/api/share",
-            'method':'POST',
-            'json':json
+            "url":config.SPHelper.uri+"/api/share",
+            "method":'POST',
+            "json":json
           }, function(error,resp,body){
            res.send(sendingForm); 
           }
@@ -1758,6 +1754,7 @@ exports.sendDocument = function (req, res, next) {
     }
     
   });
+});
 }
 
 

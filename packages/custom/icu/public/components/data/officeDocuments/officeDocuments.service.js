@@ -97,7 +97,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
 
                 result.data.forEach(function(officeDocument){
                     officeDocument.created = new Date(officeDocument.created);
-              }) 
+              }) ;
               
                 return result.data;
             });
@@ -191,7 +191,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function updateStatus(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: 'updateStatus',
                     status: officeDocument.status,

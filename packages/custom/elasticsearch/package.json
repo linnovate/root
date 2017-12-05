@@ -11,7 +11,7 @@
     "npm": "1.4.x"
   },
   "dependencies": {
-    "elasticsearch":"latest"
+    "elasticsearch": "^14.0.0"
   },
   "license": "MIT"
 }
