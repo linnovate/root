@@ -258,6 +258,7 @@
     "secret":"Secret",
 	"topSecret":"Top Secret",
 	"private":"Private",
-	"unclassified":"Unclassified"
+    "unclassified":"Unclassified",
+    "files":"Files"
 
 }

@@ -11,13 +11,13 @@
     "npm": "1.4.x"
   },
   "dependencies": {
-    "ejs": "^2.3.4",
-    "email-templates": "^2.0.1",
+    "ejs": "^2.5.7",
+    "email-templates": "^2.7.1",
     "emblem": "^0.6.1",
-    "handlebars": "^4.0.2",
+    "handlebars": "^4.0.11",
     "jade": "^1.11.0",
-    "less": "^2.5.1",
-    "node-sass": "^3.3.2",
+    "less": "^2.7.3",
+    "node-sass": "^3.13.1",
     "styl": "^0.2.9",
     "stylus": "^0.52.4",
     "swig": "^1.4.2"

@@ -259,5 +259,6 @@
 	"secret":"סודי",
 	"topSecret":"סודי ביותר",
 	"private":"שמור",
-	"unclassified":"בלמס"
+	"unclassified":"בלמס",
+	"files":"קבצים"
 }

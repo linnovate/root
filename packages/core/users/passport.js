@@ -59,7 +59,8 @@ module.exports = function(passport) {
                 {$set: {
                     lastname : profile[config.saml.strategy.claims.lastname],
                     job :      profile[config.saml.strategy.claims.job],
-                    email    : profile[config.saml.strategy.claims.email]
+                    email    : profile[config.saml.strategy.claims.email],
+                    name: profile[config.saml.strategy.claims.name]
                   }
                 },
                 {upsert: true},
@@ -92,6 +93,10 @@ module.exports = function(passport) {
               updateUser(user, profile);
             }
 
+            if(user.job!=profile[config.saml.strategy.claims.job]){
+              updateUser(user,profile);
+            }
+
             return done(null, user);
           }
 
@@ -100,9 +105,8 @@ module.exports = function(passport) {
       lastname : profile[config.saml.strategy.claims.lastname],
       job :      profile[config.saml.strategy.claims.job],
 			username : profile[config.saml.strategy.claims.username],
-			email 	 : profile[config.saml.strategy.claims.email] + 
-				    config.saml.strategy.claims.emailSuffix,
-			id 	 : profile[config.saml.strategy.claims.email] +
+			email 	 : profile[config.saml.strategy.claims.email],
+			id 	 : profile[config.saml.strategy.claims.username] +
 				    config.saml.strategy.claims.emailSuffix,
 			provider : config.saml.strategy.claims.provider,
 			roles 	 : config.saml.strategy.claims.roles
