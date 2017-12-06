@@ -10,6 +10,7 @@ var Update = require('../models/update');
 var Folder = require('../models/folder');
 var ObjectId = require('mongoose').Types.ObjectId;
 var _ = require('lodash');
+var config = require('meanio').loadConfig();
 
 
 
@@ -71,7 +72,7 @@ function getUsers(users) {
         request.push(new Promise(function (resolve, error) {
           User.findOne({ '_id': u.UserId }).exec(function (err, user) {
             if (!err) {
-              u.UserId = user.id.substring(0, user.id.indexOf('@'))+"@aman";
+              u.UserId = user.id.substring(0, user.id.indexOf('@'))+config.usersDomain;
               u.UserId=u.UserId.toLowerCase();
               resolve(user);
             }
@@ -302,7 +303,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
       users.push({
         '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
         'Role':3,
-        'UserId':user+'@aman',
+        'UserId':user+config.usersDomain,
         'isCreator':true
       });
       officeDocument.watchers.forEach(function(watcher){
@@ -884,7 +885,7 @@ exports.uploadFileToDocument = function(req,res,next){
               users.push({
                 '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
                 'Role':3,
-                'UserId':user.toLowerCase()+'@aman',
+                'UserId':user.toLowerCase()+config.usersDomain,
                 'isCreator':true
               });
               result.watchers.forEach(function(watcher){

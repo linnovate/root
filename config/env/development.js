@@ -135,6 +135,7 @@ module.exports = {
     username:"username",
     password:"password",
     libraryName:"libraryName"
-  }
+  },
+  usersDomain:"@domain"
 
 };
