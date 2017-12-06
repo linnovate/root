@@ -27,7 +27,9 @@
             <li ng-repeat="p in filteringData.projects">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.projects[p._id]" ng-change="filterSearch()"/>-->
                 <!--{{p.title}}-->
-                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.projects[p._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.projects, p._id);filterSearch()">{{p.title}}</div>
+                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.projects[p._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.projects, p._id);filterSearch()">{{p.title}}
+                    <div class="tag-color" ng-style="{'background-color': '#' + p.color}"></div>
+                </div>
             </li>
         </ul>
     </div>
@@ -47,7 +49,9 @@
             <li ng-repeat="f in filteringData.folders">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.folders[f._id]" ng-change="filterSearch()"/>-->
                 <!--{{f.title}}-->
-                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.folders[f._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.folders, f._id);filterSearch()">{{f.title}}</div>
+                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.folders[f._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.folders, f._id);filterSearch()">{{f.title}}
+                    <div class="tag-color" ng-style="{'background-color': '#' + f.color}"></div>
+                </div>
             </li>
         </ul>
     </div>
@@ -57,17 +61,22 @@
             <li ng-repeat="o in filteringData.offices">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.offices[o._id]" ng-change="filterSearch()"/>-->
                 <!--{{o.title}}-->
-                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.offices[o._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.offices, o._id);filterSearch()">{{o.title}}</div>
+                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.offices[o._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.offices, o._id);filterSearch()">{{o.title}}
+                    <div class="tag-color" ng-style="{'background-color': '#' + o.color}"></div>
+                </div>
             </li>
         </ul>
     </div>
 
-    {{'watchersInThe' | i18next}}:
+    <div class="subtitle">{{'watchersInThe' | i18next}}</div>
     <ul>
         <li ng-repeat="w in filteringData.watchers">
             <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
             {{w.name}}-->
-            <div class="filteringElement" ng-class="{active: filteringData.selectedWatchers[w._id]}" ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">{{w.name}}</div>
+            <div class="filteringElement watcher" ng-class="{active: filteringData.selectedWatchers[w._id]}" ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
+                <div icu-avatar user="w"></div>
+                <span>{{w.name}}</span>
+            </div>
         </li>
     </ul>
 

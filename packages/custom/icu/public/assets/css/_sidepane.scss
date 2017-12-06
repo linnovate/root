@@ -177,7 +177,7 @@
         }
 
         .subtitle {
-            padding-left: 3px;
+            padding-left: 17px;
             margin-top: 19px;
             margin-bottom: 6px;
             font-size: 17px;
@@ -216,9 +216,28 @@
         .filteringElement {
             width: 100%;
             cursor: pointer;
+            height: 26px;
+            padding: 4px 17px;
             &.active {
                 background-color: #e89309;
             }
+            &.watcher {
+                height: 50px;
+                > div {
+                    float: left;
+                    > div {
+                        margin: 4px 15px 0 0px;
+                    }
+                }
+                > span {
+                    line-height: 42px;
+                    font-weight: bold;
+                }
+            }
+        }
+        .tag-color {
+            @include tag(5px);
+            float: right;
         }
     }
 }
