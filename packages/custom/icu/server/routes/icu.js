@@ -331,6 +331,14 @@ module.exports = function(Icu, app) {
   .post(documents.create);
   app.route('/api/officeDocuments/addSerialTitle')
   .post(documents.addSerialTitle);
+
+  app.route('/api/officeDocuments/uploadEmpty')
+  .post(documents.uploadEmpty);
+
+  app.route('/api/officeDocuments/deleteDocumentFile/:id([0-9a-fA-F]{24})')
+  .post(documents.deleteDocumentFile);
+
+
   app.route('/api/officeDocuments/uploadFileToDocument')
   .post(documents.uploadFileToDocument);
   app.route('/api/officeDocuments/sendDocument')

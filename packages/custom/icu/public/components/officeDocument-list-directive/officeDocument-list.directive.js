@@ -145,9 +145,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 if($stateParams.entity=='folder'){
                     data['folder']=$stateParams.entityId;
                 }
-                console.log("===DATA===");
-                console.dir(data);
-                debugger;
+
                 OfficeDocumentsService.createDocument(data).then(function(result){
                     result.created=new Date(result.created);
                     $scope.officeDocuments.push(result);

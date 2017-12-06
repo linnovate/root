@@ -50,7 +50,7 @@
                             <i class='{{$select.selected}}'></i>
                             <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
                         </ui-select-match>
-                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
+                        <ui-select-choices class="selectStatus" repeat="status as status in statuses | filter: $select.search">
                             <i class='{{status}}'></i>
                             <span class='{{status}}'>{{status | i18next}}</span>
                         </ui-select-choices>
@@ -77,7 +77,7 @@
                 </ul>
             </div>
         </div>
-        <button icu-comp-modal entity="task" entity-name="task" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
+        <!--<button icu-comp-modal entity="task" entity-name="task" type="button" ng-mouseover="showTooltip()" class="compBtn"></button> -->
         <div class="summary wrap-pro">
             <div class="tags" ng-if="!task.parent">
                 <div class="tag-wrap">

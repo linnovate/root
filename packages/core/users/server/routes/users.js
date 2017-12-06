@@ -94,6 +94,11 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             
             //###start_of_url 
             var arr = str.split(config.host + ':' + config.http.port);
+
+            // !!! in case of https
+            //var arr = str.split(config.host + ':' + config.https.port);
+            // !!!
+
             var realpath = arr[1].replace('(', '\(').replace(')', '\)');
             var arr1 = str.split("/");
             var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
@@ -103,7 +108,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
         console.log('lowriter --headless --convert-to pdf ' + config.root + realpath);
         
             // Make the convert from it's origin type to pdf
-            exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
+            exec('sudo lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
             if (err) {
                 res.send(500, arguments);
             } else {
@@ -162,6 +167,9 @@ module.exports = function(MeanUser, app, auth, database, passport) {
           
           //###start_of_url 
           var arr = str.split(config.host + ':' + config.http.port);
+          // !!! in case of https
+          //var arr = str.split(config.host + ':' + config.https.port);
+          // !!! in case of https
           var realpath = arr[1].replace('(', '\(').replace(')', '\)');
           var arr1 = str.split("/");
           var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
@@ -231,6 +239,12 @@ module.exports = function(MeanUser, app, auth, database, passport) {
         
         //###start_of_url 
         var arr = str.split(config.host + ':' + config.http.port);
+
+        // !!! in case of https
+          //var arr = str.split(config.host + ':' + config.https.port);
+          // !!! in case of https
+
+
         var realpath = arr[1].replace('(', '\(').replace(')', '\)');
         var arr1 = str.split("/");
         var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
@@ -277,7 +291,7 @@ else{
     
   app.all('/api/index',function(req,res){
     var jsonfile = require('jsonfile');
-    var file = 'data.json';
+    var file = 'url/data.json';
     var ip = req.ip;
     jsonfile.readFile(file , function(err,obj){
       if(obj!=undefined){

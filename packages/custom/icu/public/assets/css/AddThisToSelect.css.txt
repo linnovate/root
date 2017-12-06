@@ -1,0 +1,16 @@
+.ui-select-bootstrap > #folders {
+  width:300px;
+}
+
+.ui-select-bootstrap > #officeForTemplate {
+  width:350px;
+}
+
+.ui-select-bootstrap > .sorting {
+  width:20px;
+}
+.ui-select-bootstrap > .selectStatus{
+  width:100px;
+  z-index:9999;
+  position:absolute;
+}

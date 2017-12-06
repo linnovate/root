@@ -34,6 +34,12 @@ angular.module('mean.icu.data.officedocumentsservice', [])
              });
          }
 
+         function deleteDocumentFile(id){
+             return $http.post(ApiUri+EntityPrefix+'/deleteDocumentFile/'+id).then(function(result){
+                 return result.status;
+             });
+         }
+
         function update(officeDocument) {
             return $http.put(ApiUri + EntityPrefix + '/' + officeDocument._id, officeDocument).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
@@ -78,6 +84,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function getByOfficeId(id) {
             return $http.get(ApiUri + '/offices/' + id + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
+                result.data.forEach(function(officeDocument){
+                    officeDocument.created = new Date(officeDocument.created);
+                });
                 return result.data;
             });
         }
@@ -88,7 +97,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
 
                 result.data.forEach(function(officeDocument){
                     officeDocument.created = new Date(officeDocument.created);
-              }) 
+              }) ;
               
                 return result.data;
             });
@@ -182,7 +191,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function updateStatus(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: 'updateStatus',
                     status: officeDocument.status,
@@ -191,6 +200,13 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 context: {}
             }).then(function(result) {
                 return result;
+            });
+        }
+
+        function uploadEmpty(officeDocument){
+            return $http.post(ApiUri+EntityPrefix+"/uploadEmpty",officeDocument).then(function(result){
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
             });
         }
 
@@ -300,6 +316,8 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             addSerialTitle:addSerialTitle,
             updateAssign: updateAssign,
             updateEntity: updateEntity,
-            updateTitle: updateTitle
+            updateTitle: updateTitle,
+            uploadEmpty:uploadEmpty,
+            deleteDocumentFile:deleteDocumentFile
         };
     });

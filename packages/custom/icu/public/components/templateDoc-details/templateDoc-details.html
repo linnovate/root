@@ -33,7 +33,7 @@
                 </ul>
             </div>
         </div>
-        <button icu-comp-modal entity="templateDoc" entity-name="templateDoc" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>
+        <!--<button icu-comp-modal entity="templateDoc" entity-name="templateDoc" type="button" ng-mouseover="showTooltip()" class="compBtn"></button>-->
         <div class="summary wrap-pro">
             <div class="tags" ng-if="!templateDoc.parent">
                 <div class="tag-wrap">
@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                         </ui-select-match>
-                        <ui-select-choices repeat="office in offices | filter:$select.search">
+                        <ui-select-choices id="officeForTemplate" repeat="office in offices | filter:$select.search">
                             <div class="line" ng-show="office.title" ng-class="{ 'create new': office.class}">
                                 <div ng-show="office.class" ng-bind-html="office.title | searchfilter:$select.search"  class="title"></div>
                                 <div ng-show="office.class && officeName"  class="create-new">{{ 'createNew' | i18next }}</div>

@@ -102,18 +102,25 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 if(result && result.serial){
                     document1.serial = result.serial;
                 }
-                if(result && result.documentType){
+                /**if(result && result.documentType){
                     document1.documentType = result.documentType;
                 }
                 if(result && result.title){
                     document1.title = result.title;
                 }
+                */
             });
         }
 
         $scope.sendDocument = function(document1){
             console.log("HEY");
             console.dir(document1);
+        }
+
+        $scope.uploadEmpty = function(document1){
+            OfficeDocumentsService.uploadEmpty(document1).then(function(result){
+                $state.reload();
+            });
         }
 
         $scope.view = function(document1) {
@@ -291,6 +298,13 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 $state.go('main.officeDocuments.all', {
                     entity: 'all'
                 }, {reload: true});
+            });
+        };
+
+        $scope.deleteDocumentFile = function(officeDocument){
+            OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function(){
+                officeDocument.path = undefined;
+                officeDocument.spPath = undefined;
             });
         };
 
