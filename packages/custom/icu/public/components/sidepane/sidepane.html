@@ -7,60 +7,67 @@
 </div>
 -->
 <nav class="searchPane" ng-if="currentState.indexOf('search') > -1" ng-init="filterSearchByType();resetFilter();">
-    show results of:
-    <ul>
+    <div class="search">{{'search' | i18next}}</div>
+    <div class="subtitle">{{'showResultsOf' | i18next}}:</div>
+    <ul class="issue">
         <li ng-repeat="issue in issues">
             <input type="radio" ng-model="filteringData.issue" ng-value="issue.name" ng-change="filterSearchByType();resetFilter();"/>
-            <span>{{issue.label}}</span>
+            <span>{{issue.label | i18next}}</span>
         </li>
     </ul>
 
-    filter results by:
-    <button ng-click="resetFilter()">reset</button>
+    <div class="filterBy">
+        {{'filterResultsBy' | i18next }}:
+        <button ng-click="resetFilter()">{{'reset' | i18next}}</button>
+    </div>
 
-    linked to:
     <div ng-if="filteringData.projects.length">
-        projects:
+            <div class="subtitle">{{'linkedTo' | i18next}}{{'project' | i18next}}</div>
         <ul>
             <li ng-repeat="p in filteringData.projects">
-                <input type="checkbox" ng-model="filteringData.selectedEntities.projects[p._id]" ng-change="filterSearch()"/>
-                {{p.title}}
+                <!--<input type="checkbox" ng-model="filteringData.selectedEntities.projects[p._id]" ng-change="filterSearch()"/>-->
+                <!--{{p.title}}-->
+                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.projects[p._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.projects, p._id);filterSearch()">{{p.title}}</div>
             </li>
         </ul>
     </div>
     <div ng-if="filteringData.discussions.length">
-        discussions:
+         <div class="subtitle">{{'linkedTo' | i18next}}{{'discussion' | i18next}}</div>
         <ul>
             <li ng-repeat="d in filteringData.discussions">
-                <input type="checkbox" ng-model="filteringData.selectedEntities.discussions[d._id]" ng-change="filterSearch()"/>
-                {{d.title}}
+                <!--<input type="checkbox" ng-model="filteringData.selectedEntities.discussions[d._id]" ng-change="filterSearch()"/>-->
+                <!--{{d.title}}-->
+                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.discussions[d._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.discussions, d._id);filterSearch()">{{d.title}}</div>
             </li>
         </ul>
     </div>
     <div ng-if="filteringData.folders.length">
-        folders:
+         <div class="subtitle">{{'linkedTo' | i18next}}{{'folder' | i18next}}</div>
         <ul>
             <li ng-repeat="f in filteringData.folders">
-                <input type="checkbox" ng-model="filteringData.selectedEntities.folders[f._id]" ng-change="filterSearch()"/>
-                {{f.title}}
+                <!--<input type="checkbox" ng-model="filteringData.selectedEntities.folders[f._id]" ng-change="filterSearch()"/>-->
+                <!--{{f.title}}-->
+                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.folders[f._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.folders, f._id);filterSearch()">{{f.title}}</div>
             </li>
         </ul>
     </div>
     <div ng-if="filteringData.offices.length">
-        offices:
+         <div class="subtitle">{{'linkedTo' | i18next}}{{'office' | i18next}}</div>
         <ul>
             <li ng-repeat="o in filteringData.offices">
-                <input type="checkbox" ng-model="filteringData.selectedEntities.offices[o._id]" ng-change="filterSearch()"/>
-                {{o.title}}
+                <!--<input type="checkbox" ng-model="filteringData.selectedEntities.offices[o._id]" ng-change="filterSearch()"/>-->
+                <!--{{o.title}}-->
+                <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.offices[o._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.offices, o._id);filterSearch()">{{o.title}}</div>
             </li>
         </ul>
     </div>
 
-    watchers:
+    {{'watchersInThe' | i18next}}:
     <ul>
         <li ng-repeat="w in filteringData.watchers">
-            <input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
-            {{w.name}}
+            <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
+            {{w.name}}-->
+            <div class="filteringElement" ng-class="{active: filteringData.selectedWatchers[w._id]}" ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">{{w.name}}</div>
         </li>
     </ul>
 

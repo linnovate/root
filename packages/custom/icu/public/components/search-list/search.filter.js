@@ -14,4 +14,10 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         }
         return out;
 	}
+})
+.filter('searchResultsLength', function (SearchService) {
+    return function(length) {
+        return  SearchService.filteringResults.length;
+    }
+    
 });

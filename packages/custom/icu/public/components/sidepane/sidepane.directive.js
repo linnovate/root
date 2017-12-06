@@ -176,6 +176,14 @@ directive('icuSidepane', function() {
             }
             return arr;
         }
+        
+        $scope.simulateCheckbox = function(obj, value) {
+            if (obj[value]) {
+                obj[value] = false;
+            } else {
+                obj[value] = true;
+            }
+        }
 
         $scope.filterSearchByEntity = function() {
             var filteringResults = SearchService.filteringResults

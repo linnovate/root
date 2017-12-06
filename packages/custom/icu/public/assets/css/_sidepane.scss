@@ -167,6 +167,59 @@
     }
     .searchPane {
         height: auto;
+
+        .search {
+            background-color: #37464B;
+            width: 100%;
+            height: 58px;
+            padding: 20px 40px;
+            font-size: 17px;
+        }
+
+        .subtitle {
+            padding-left: 3px;
+            margin-top: 19px;
+            margin-bottom: 6px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+        .issue {
+            line-height: 26px;
+            input {
+                margin-left: 5px;
+            }
+            span {
+                margin-left: 6px;
+            }
+        }
+        .filterBy {
+            margin-top: 26px;
+            font-weight: bold;
+            color: #5d6c72;
+            button {
+                float: right;
+                margin-right: 12px;
+                background-color: #1f282b;
+                border-radius: 15px;
+                border-color: #1f282b;
+                padding: 0 15px;
+                margin-top: -3px;
+            }
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+            li {
+                font-size: 13px;
+            }
+        }
+        .filteringElement {
+            width: 100%;
+            cursor: pointer;
+            &.active {
+                background-color: #e89309;
+            }
+        }
     }
 }
 
