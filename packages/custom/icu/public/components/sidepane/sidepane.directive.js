@@ -105,67 +105,13 @@ directive('icuSidepane', function() {
             {label:'folders', value: false, name: 'folder'},
             {label:'documents', value:true, name: 'officeDocument'}
         ];
-        $scope.filteringData = {
-            issue: 'task',
-            selectedEntities: {
-                projects: {},
-                discussions: {},
-                folders: {},
-                offices: {}
-            },
-            selectedWatchers: {},
-            projects: [],
-            discussions: [],
-            folders: [],
-            offices: [],
-            watchers: []
-        }
+        $scope.filteringData = SearchService.filteringData;
         
-        var getEntitiesAndWatchers = function(filteredByType) {
-            for (var i=0; i< filteredByType.length; i++) {
-                if (filteredByType[i].project)
-                    $scope.filteringData.projects.push(filteredByType[i].project);
-                if (filteredByType[i].discussions && filteredByType[i].discussions.length)
-                    $scope.filteringData.discussions.push(filteredByType[i].discussions[0]);                    
-                if (filteredByType[i].folder)
-                    $scope.filteringData.folders.push(filteredByType[i].folder);
-                if (filteredByType[i].office)
-                    $scope.filteringData.offices.push(filteredByType[i].office)
-                if (filteredByType[i].watchers && filteredByType[i].watchers.length)
-                    $scope.filteringData.watchers = $scope.filteringData.watchers.concat(filteredByType[i].watchers)
-            }
-
-            $scope.filteringData.projects = $scope.projects.filter(function(e) {
-                return $scope.filteringData.projects.indexOf(e._id) > -1;
-            });
-            $scope.filteringData.discussions = $scope.discussions.filter(function(e) {
-                return $scope.filteringData.discussions.indexOf(e._id) > -1;
-            });
-            $scope.filteringData.folders = $scope.folders.filter(function(e) {
-                return $scope.filteringData.folders.indexOf(e._id) > -1;
-            });
-            $scope.filteringData.offices = $scope.offices.filter(function(e) {
-                return $scope.filteringData.offices.indexOf(e._id) > -1;
-            });
-            $scope.filteringData.watchers = $scope.people.filter(function(e) {
-                return $scope.filteringData.watchers.indexOf(e._id) > -1;
-            });
-
-            SearchService.filteringData = $scope.filteringData;
-        }
-
+        
         $scope.filterSearchByType = function() {
-            var results = SearchService.results;
-            var filteredByType = []
-            for (var i=0; i< results.length; i++) {
-                if (results[i]._type == $scope.filteringData.issue) {
-                    filteredByType.push(results[i])
-                }
-            }
-            SearchService.filteringResults = filteredByType;
-
-            getEntitiesAndWatchers(filteredByType)
-        }
+            $scope.filteringData = SearchService.filterSearchByType($scope.projects, $scope.discussions, $scope.folders, $scope.offices, $scope.people)
+            console.log('filtering',$scope.filteringData)
+    }
 
         var getTruth = function(obj) { // return truth value in a single object
             var arr = [];
@@ -232,6 +178,10 @@ directive('icuSidepane', function() {
             };
             $scope.filteringData.selectedWatchers = {};
         }
+
+        $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+            $scope.filterSearchByType();
+        });
 
     }
 
