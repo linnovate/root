@@ -300,7 +300,7 @@ module.exports = function(Icu, app) {
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
 
-  app.route('/api/new/:uid')
+  app.route('/api/new')
     .post(webHook.create); //notification.0, updates.created)
 
   app.route(/^((?!\/hi\/).)*$/).all(response);

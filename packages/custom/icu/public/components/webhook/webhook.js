@@ -2,20 +2,18 @@
 
 angular.module('mean.icu.ui.webhook', []).controller('webhookController', 
     function($scope, me) {
-        console.log('asd')
         $scope.data = {
             entity: 'task'
         }
 
         $scope.createWebhook = function() {
-            console.log('asdasdasd',$scope.url, me)
             if (me.uid) {
-                var url = location.origin + '/api/new/' + (me.uid);
+                var url = location.origin + '/api/new';
                 var query = {
                     entity: $scope.data.entity,
                     name: $scope.data.name
                 }
-                $scope.url = url + '?entity=' + query.entity;
+                $scope.url = url + '?entity=' + query.entity + '&uid=' + me.uid;
             }
             
         }
