@@ -110,7 +110,7 @@
                                 </div>
                             </div>
                         </ui-select-match>
-                        <ui-select-choices repeat="folder in folders | filter:$select.search">
+                        <ui-select-choices id="folders" repeat="folder in folders | filter:$select.search">
                             <div class="line" ng-show="folder.title" ng-class="{ 'create new': folder.class}">
                                 <div ng-show="folder.class" ng-bind-html="folder.title | searchfilter:$select.search" class="title"></div>
                                 <div ng-show="folder.class && folderName" class="create-new">{{ 'createNew' | i18next }}</div>
@@ -160,6 +160,7 @@
                                                  <div class="icon {{officeDocument.documentType}}"></div>       
                                                  <div id="documentTitle">{{officeDocument.title}}</div>
                                          </a>
+                                         <button ng-click="deleteDocumentFile(officeDocument)">X</button>
                             </div> 
                     </div>
                 </div>
@@ -216,7 +217,7 @@
                     {{ 'updates' | i18next }}
                 </button>
                 <button class="tab three" data-ui-sref-active="active" data-ui-sref=".documents">
-                    {{ 'documents' | i18next }}
+                    {{ 'files' | i18next }}
                 </button>
             </div>
         </div>

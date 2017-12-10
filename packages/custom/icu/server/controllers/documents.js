@@ -10,6 +10,7 @@ var Update = require('../models/update');
 var Folder = require('../models/folder');
 var ObjectId = require('mongoose').Types.ObjectId;
 var _ = require('lodash');
+var config = require('meanio').loadConfig();
 
 
 
@@ -71,7 +72,7 @@ function getUsers(users) {
         request.push(new Promise(function (resolve, error) {
           User.findOne({ '_id': u.UserId }).exec(function (err, user) {
             if (!err) {
-              u.UserId = user.id.substring(0, user.id.indexOf('@'))+"@aman";
+              u.UserId = user.id.substring(0, user.id.indexOf('@'))+config.usersDomain;
               u.UserId=u.UserId.toLowerCase();
               resolve(user);
             }
@@ -93,7 +94,7 @@ function getUsers(users) {
   });
 }
 
-/**
+
 exports.uploadEmpty = function(req,res,next){
   var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
   var users = [];
@@ -172,35 +173,105 @@ exports.uploadEmpty = function(req,res,next){
 
 };
 
-*/
+
 
 exports.addSerialTitle = function(req,res,next){
+  var doc = req.body;
+  var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
+  var docFolder,docOffice;
+  if(req.body.folder){
+    docFolder=req.body.folder.title?req.body.folder.title:"NoFolder";
+    if(req.body.folder.office){
+      docOffice = req.body.folder.office.title?req.body.folder.office.title:"NoOffice";
+    }
+    else{
+      docOffice = "NoOffice";
+    }
+  }
+  else{
+    docFolder = "NoFolder";
+    docOffice = "NoOffice";
+  }
+  var spPath = doc.spPath;
+  var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
+  var coreOptions = {
+    "siteUrl":config.SPHelper.SPSiteUrl
+  };
+  var creds = {
+    "username":config.SPHelper.username,
+    "password":config.SPHelper.password
+  };
+  var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
+  var fileOptions = {
+    "folder":folder,
+    "fileName":fileName,
+    "fileContent":undefined
+  };
+  var users = [];
+  users.push({
+    '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+    'Role':3,
+    'UserId':doc.creator.username.toLowerCase()
+  });
+  doc.watchers.forEach(function(watcher){
+    users.push({
+      '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+      'Role':3,
+      'UserId':watcher.username.toLowerCase()
+    });
+  });
+
   var json = {
     'siteUrl':config.SPHelper.SPSiteUrl,
-    'fileUrl':req.body.spPath
+    'fileUrl':spPath,
+    'folder':docFolder,
+    'office':docOffice,
+    'coreOptions':coreOptions,
+    'creds':creds,
+    'fileOptions':fileOptions,
+    'permissions':users,
+    'isTemplate':false
   };
-  console.log("===UPLOAD EMPTY JSON===");
-  console.dir(json);
+
   request({
     'url':config.SPHelper.uri+"/api/addSerialTitle",
     'method':'POST',
     'json':json
   },function(error,resp,body){
-        if(error){
-          res.send(error);
-        }
-        else{
-          var set = {'serial':body.serial};
-          Document.update({'_id':req.body._id},{$set:set},function(error,result){
-            if(error){
-              res.send(error);
-            }
-            else{
-              res.send(set);
-            }
-          });
-        }
+    if(error){
+      res.send(error);
+    }
+    else{
+      var set = {'serial':body.serial,'spPath':body.path};
+      Document.findOne({
+        '_id':req.body._id
+      },function(error,doc){
+        doc.serial = body.serial;
+        doc.spPath = body.path;
+        doc['id'] = req.body._id;
+        doc.save(function(err,result){
+          if(err){
+            res.send(err);
+          }
+          else{
+            res.send(set);
+          }
+        });
       });
+    }
+  });
+};
+
+exports.deleteDocumentFile = function(req,res,next){
+  var id = req.params.id;
+  Document.update({'_id':id},{$set:{path:undefined,spPath:undefined}},function(error,result){
+    if(error){
+      res.send(error);
+    }
+    else{
+      res.send('ok');
+    }
+  });
 };
  
 
@@ -232,7 +303,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
       users.push({
         '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
         'Role':3,
-        'UserId':user+'@aman',
+        'UserId':user+config.usersDomain,
         'isCreator':true
       });
       officeDocument.watchers.forEach(function(watcher){
@@ -814,7 +885,7 @@ exports.uploadFileToDocument = function(req,res,next){
               users.push({
                 '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
                 'Role':3,
-                'UserId':user.toLowerCase()+'@aman',
+                'UserId':user.toLowerCase()+config.usersDomain,
                 'isCreator':true
               });
               result.watchers.forEach(function(watcher){
@@ -846,8 +917,6 @@ exports.uploadFileToDocument = function(req,res,next){
                     'entity':'folder',
                     'entityId':req.locals.data.body['folderId']
                   };
-                  console.log("\n\n\n\n\n\nJSON");
-                  console.dir(json);
                   request({
                     'url':config.SPHelper.uri+"/api/upload",
                     'method':'POST',
@@ -857,13 +926,18 @@ exports.uploadFileToDocument = function(req,res,next){
                       var path = req.locals.data.body.originalPath;
                       var fileType = path.substring(path.lastIndexOf('.')+1,path.length);
                       var set = {'path':req.locals.data.body.originalPath,'title':req.locals.data.body.name,'documentType':fileType};
-                        Document.update({'_id':documentId},{$set:set},function(error,result){
-                        if(error){
-                          res.send(error);
-                        }
-                        else{
-                          res.send(set);
-                        }
+                      Document.findOne({'_id':documentId},function(err,doc){
+                        doc.path = req.locals.data.body.originalPath;
+                        doc.title = req.locals.data.body.name;
+                        doc.documentType = fileType;
+                        doc.save(function(error,result){
+                          if(error){
+                            res.send(error);
+                          }
+                          else{
+                            res.send(set);
+                          }
+                        });
                       });
                     }
                     else{
@@ -871,13 +945,19 @@ exports.uploadFileToDocument = function(req,res,next){
                       var path = req.locals.data.body.originalPath;
                       var fileType = path.substring(path.lastIndexOf('.')+1,path.length);
                       var set = {'path':req.locals.data.body.originalPath,'spPath':spPath,'title':req.locals.data.body.name,'documentType':fileType};
-                      Document.update({'_id':documentId},{$set:set},function(error,result){
-                        if(error){
-                          res.send(error);
-                        }
-                        else{
-                          res.send(set);
-                        }
+                      Document.findOne({'_id':documentId},function(err,doc){
+                        doc.path = req.locals.data.body.originalPath;
+                        doc.spPath = spPath;
+                        doc.title = req.locals.data.body.name;
+                        doc.documentType = fileType;
+                        doc.save(function(error,result){
+                          if(error){
+                            res.send(error);
+                          }
+                          else{
+                            res.send(set);
+                          }
+                        });
                       });
                     }
                     });
@@ -1319,11 +1399,15 @@ exports.update = function (req, res, next) {
               'UserId':w,
             });
           });
-          var creator = [{
+          var creator = [];
+          if(doc.assign){
+            creator = [{
               'type':'SP.Sharing.UserRoleAssignment',
               'Role':2,
               'UserId':doc.assign.toString(),
             }];
+          }  
+          
           getUsers(creator).then(function(){
             getUsers(watchersReq).then(function(){
               getUsers(oldWatchersReq).then(function(){
@@ -1389,8 +1473,6 @@ exports.update = function (req, res, next) {
     }
 
     Document.findOne({'_id':req.params.id},function(err,docToUpdate){
-      var json = {};
-      //json['' + req.body.name] = req.body.newVal;
       docToUpdate['' + req.body.name]=req.body.newVal;
       docToUpdate['id']=docToUpdate._id;
       docToUpdate.save(function(err,result){
@@ -1572,7 +1654,9 @@ exports.signNew = function (req, res, next) {
 exports.sendDocument = function (req, res, next) {
   var officeDocument = req.body.officeDocument;
   var sendingForm = req.body.sendingForm;
+  var spPath = officeDocument.spPath;
   var assign = officeDocument.assign._id;
+  var creators = [officeDocument.creator.username.toLowerCase()];
   sendingForm['doneBy'] = sendingForm['doneBy']?sendingForm['doneBy']:[];
   sendingForm['forNotice'] = sendingForm['forNotice']?sendingForm['forNotice']:[];
   sendingForm['sendingAs'] = sendingForm['sendingAs']?sendingForm['sendingAs']:[];
@@ -1582,7 +1666,10 @@ exports.sendDocument = function (req, res, next) {
   //}
   sendingForm['sender']=req.user._id;
   var watchers =_.union(sendingForm['doneBy'],_.union(sendingForm['forNotice'],_.union([assign],[sendingForm['sendingAs']])));
-  watchers=_.union(watchers,officeDocument.watchers);
+  officeDocument.watchers.forEach(function(w){
+    watchers.push(w._id);
+  });
+  watchers=_.union(watchers,watchers);
   sendingForm['status']='sent';
   watchers.forEach(function(watcher){
     var watcher = watcher._id?watcher._id:watcher;
@@ -1620,15 +1707,55 @@ exports.sendDocument = function (req, res, next) {
     }
 
   });
+
+  Document.findOne({
+    '_id':officeDocument._id
+  },function(err,prevDoc){
+    var oldWatchers =[];
+    prevDoc.watchers.forEach(function(w){
+      oldWatchers.push({'UserId':w});
+    });
+    var watchersREq = [];
+    watchers.forEach(function(w){
+      watchersReq.push({'UserId':w});
+    })
   Document.update({'_id':officeDocument._id},{$set:sendingForm},function(error,result){
     if(error||!result){
       res.send(error);
     }
     else{
-      res.send(sendingForm);
+      getUsers(oldWatchers).then(function(){
+        getUsers(watchersReq).then(function(){
+          var zero = [];
+          var users = [];
+          oldWatchers.forEach(function(w){
+            zero.push(w.UserId);
+          });
+          watchersReq.forEach(function(w){
+            users.push(w.UserId);
+          });
+          var json = {
+            "siteUrl":config.SPHelper.SPSiteUrl,
+            "paths":[spPath],
+            "users":users,
+            "creators":creators,
+            "zero":zero
+          };
+          request({
+            "url":config.SPHelper.uri+"/api/share",
+            "method":'POST',
+            "json":json
+          }, function(error,resp,body){
+           res.send(sendingForm); 
+          }
+          );
+        });
+      });
+      
     }
     
   });
+});
 }
 
 

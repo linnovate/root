@@ -3,7 +3,7 @@
 var mean = require('meanio');
 var config = mean.loadConfig();
 var jsonfile = require('jsonfile');
-var file = 'data.json';
+var file = 'url/data.json';
 
 var circlesLocations = function() {
 	var locations = {};

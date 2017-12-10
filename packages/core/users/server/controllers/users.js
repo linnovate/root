@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 var jsonfile = require('jsonfile');
-var file = 'data.json';
+var file = 'url/data.json';
 
 
 var mongoose = require('mongoose'),

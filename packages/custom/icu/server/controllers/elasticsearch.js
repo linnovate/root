@@ -157,14 +157,15 @@ exports.search = function(req, res, next) {
           "name": {},
           "tags": {},
           "description": {},
-          "file.filename": {}
+          "file.filename": {},
+          "serial":{}
       }
     },    
       query: {    
       'multi_match': {
         'query': req.query.term.replace(',', '* ') + '*',
         'type': 'cross_fields',
-        'fields': ['title^3', 'color', 'name', 'tags', 'description', 'file.filename'],
+        'fields': ['title^3', 'color', 'name', 'tags', 'description', 'file.filename','serial'],
         'operator': 'or'
       }
     },
