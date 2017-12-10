@@ -1,17 +1,15 @@
 'use strict';
-
-angular.module('mean.icu.ui.webhook', [])
+angular.module('mean.icu.ui.webhook')
 .directive('icuWebhook', function ($uibModal) {
-    function controller() {
+    function controller($scope) {
         $scope.createWebhook = function() {
-            if (me.uid) {
-                var url = location.origin + '/' + (me.uid);
+            if ($scope.me && $scope.me.uid) {
+                var url = location.origin + '/api/new';
                 var query = {
                     entity: $scope.data.entity,
                     name: $scope.data.name
                 }
-                $scope.url = url + query.toString();
-                
+                $scope.url = url + '?entity=' + query.entity + '&uid=' + $scope.me.uid;
             }
             
         }
@@ -24,9 +22,9 @@ angular.module('mean.icu.ui.webhook', [])
     }
 
     return {
-        restrict: 'A',
+        restrict: 'AE',
         scope: {
-           
+            me: "="
         },
         controller: controller,
         link: link,
