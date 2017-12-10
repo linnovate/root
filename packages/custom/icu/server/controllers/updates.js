@@ -79,7 +79,7 @@ exports.getByEntity = function(req, res, next) {
 
   var type = entityIssueMap[req.params.entity];
   if(type=='Document'){
-    type="officeDocument";
+    type="officeDocuments";
   }
   if(type=='TemplateDoc'){
     type='templateDoc';
