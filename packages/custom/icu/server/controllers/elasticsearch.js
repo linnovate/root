@@ -180,7 +180,8 @@ exports.search = function(req, res, next) {
                 "fields": {
                    "title": {}
                 }
-              }
+              },
+              "size" : 100,
             }
           }
         }

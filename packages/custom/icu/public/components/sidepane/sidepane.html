@@ -24,53 +24,65 @@
     <div ng-if="filteringData.projects.length">
             <div class="subtitle">{{'linkedTo' | i18next}}{{'project' | i18next}}</div>
         <ul>
-            <li ng-repeat="p in filteringData.projects">
+            <li ng-repeat="p in filteringData.projects | limitTo: displayLimit['projects']">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.projects[p._id]" ng-change="filterSearch()"/>-->
                 <!--{{p.title}}-->
                 <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.projects[p._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.projects, p._id);filterSearch()">{{p.title}}
                     <div class="tag-color" ng-style="{'background-color': '#' + p.color}"></div>
                 </div>
             </li>
+            <li ng-if="filteringData.projects.length > displayLimit['projects']" ng-click="showMore(filteringData.projects.length, 'projects')" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="filteringData.projects.length == displayLimit['projects'] && displayLimit['projects'] > 3" ng-click="collapse('projects')"
+                class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
     <div ng-if="filteringData.discussions.length">
          <div class="subtitle">{{'linkedTo' | i18next}}{{'discussion' | i18next}}</div>
         <ul>
-            <li ng-repeat="d in filteringData.discussions">
+            <li ng-repeat="d in filteringData.discussions | limitTo: displayLimit['discussions']">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.discussions[d._id]" ng-change="filterSearch()"/>-->
                 <!--{{d.title}}-->
                 <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.discussions[d._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.discussions, d._id);filterSearch()">{{d.title}}</div>
             </li>
+            <li ng-if="filteringData.discussions.length > displayLimit['discussions']" ng-click="showMore(filteringData.discussions.length, 'discussions')" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="filteringData.discussions.length == displayLimit['discussions'] && displayLimit['discussions'] > 3" ng-click="collapse('discussions')"
+                class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
     <div ng-if="filteringData.folders.length">
          <div class="subtitle">{{'linkedTo' | i18next}}{{'folder' | i18next}}</div>
         <ul>
-            <li ng-repeat="f in filteringData.folders">
+            <li ng-repeat="f in filteringData.folders | limitTo: displayLimit['folders']">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.folders[f._id]" ng-change="filterSearch()"/>-->
                 <!--{{f.title}}-->
                 <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.folders[f._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.folders, f._id);filterSearch()">{{f.title}}
                     <div class="tag-color" ng-style="{'background-color': '#' + f.color}"></div>
                 </div>
             </li>
+            <li ng-if="filteringData.folders.length > displayLimit['folders']" ng-click="showMore(filteringData.folders.length, 'folders')" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="filteringData.folders.length == displayLimit['folders'] && displayLimit['folders'] > 3" ng-click="collapse('folders')"
+                class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
     <div ng-if="filteringData.offices.length">
          <div class="subtitle">{{'linkedTo' | i18next}}{{'office' | i18next}}</div>
         <ul>
-            <li ng-repeat="o in filteringData.offices">
+            <li ng-repeat="o in filteringData.offices | limitTo: displayLimit['offices']">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.offices[o._id]" ng-change="filterSearch()"/>-->
                 <!--{{o.title}}-->
                 <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.offices[o._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.offices, o._id);filterSearch()">{{o.title}}
                     <div class="tag-color" ng-style="{'background-color': '#' + o.color}"></div>
                 </div>
             </li>
+            <li ng-if="filteringData.offices.length > displayLimit['offices']" ng-click="showMore(filteringData.offices.length, 'offices')" class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="filteringData.offices.length == displayLimit['offices'] && displayLimit['offices'] > 3" ng-click="collapse('offices')"
+                class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
 
     <div class="subtitle">{{'watchersInThe' | i18next}}</div>
     <ul>
-        <li ng-repeat="w in filteringData.watchers">
+        <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
             <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
             {{w.name}}-->
             <div class="filteringElement watcher" ng-class="{active: filteringData.selectedWatchers[w._id]}" ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
@@ -78,6 +90,9 @@
                 <span>{{w.name}}</span>
             </div>
         </li>
+        <li ng-if="filteringData.watchers.length > displayLimit['watchers']" ng-click="showMore(filteringData.watchers.length, 'watchers')" class="more">{{ 'more' | i18next }}</li>
+        <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3" ng-click="collapse('watchers')"
+                class="more">{{ 'less' | i18next }}</li>
     </ul>
 
 </nav>

@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context, TasksService, $rootScope, SearchService, $filter) {
+    function controller($scope, $state, context, TasksService, $rootScope, SearchService, $filter, $location) {
         $scope.context = context;
         
         $scope.folders = $scope.folders.data || $scope.folders;
@@ -105,13 +105,14 @@ directive('icuSidepane', function() {
             {label:'folders', value: false, name: 'folder'},
             {label:'documents', value:true, name: 'officeDocument'}
         ];
+        
         $scope.filteringData = {
-            issue: 'task',
+            issue: $location.$$search && $location.$$search.type ? $location.$$search.type : 'task',
             selectedEntities: {
                 projects: {},
                 discussions: {},
                 folders: {},
-                offices: {}
+                offices: {},
             },
             selectedWatchers: {},
             projects: [],
@@ -120,6 +121,21 @@ directive('icuSidepane', function() {
             offices: [],
             watchers: []
         }
+
+        $scope.displayLimit = {
+            projects : 4,
+            discussions : 4,
+            offices: 4,
+            folders: 4,
+            watchers: 2,
+            reset : function() {
+                this.projects = 4;
+                this.discussions = 4;
+                this.offices = 4;
+                this.folders = 4;
+                this.watchers = 2;
+            }
+        };
         
         var getEntitiesAndWatchers = function(filteredByType) {
             for (var i=0; i< filteredByType.length; i++) {
@@ -154,7 +170,10 @@ directive('icuSidepane', function() {
             SearchService.filteringData = $scope.filteringData;
         }
 
+        $state.current.reloadOnSearch = false;
+
         $scope.filterSearchByType = function() {
+            $location.search('type', $scope.filteringData.issue);
             var results = SearchService.results;
             var filteredByType = []
             for (var i=0; i< results.length; i++) {
@@ -232,6 +251,19 @@ directive('icuSidepane', function() {
             };
             $scope.filteringData.selectedWatchers = {};
         }
+
+        $scope.showMore = function(limit, entityName) {
+            if (($scope.displayLimit[entityName] + 3) >= limit) {
+                $scope.displayLimit[entityName] = limit;
+            } else {
+                $scope.displayLimit[entityName]  += 3;
+
+            }
+        };
+
+        $scope.collapse = function(entityName) {
+            $scope.displayLimit[entityName] = 3;
+        };
 
         $rootScope.$on('$stateChangeSuccess', function (event, toState) {
             if (toState.name.indexOf('search') > -1) {
