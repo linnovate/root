@@ -34,6 +34,7 @@ angular.module('mean.icu').controller('IcuController',
     $scope.templateDocs = templateDocs.data || templateDocs;
     $scope.discussions = discussions.data || discussions;
     $scope.people = people.data || people;
+    $scope.currentState = $state.current.name;
     var entityMap = {
         'project': 'projects',
         'discussion': 'discussions',
@@ -166,6 +167,7 @@ angular.module('mean.icu').controller('IcuController',
     });
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+      $scope.currentState = toState.name;
       if (toState.url !== '/modal') {
         if (LayoutService.show() && $scope.detailsPane.isHidden) {
             $state.go(toState.name + '.modal');

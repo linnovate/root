@@ -1,9 +1,8 @@
 <!--<div icu-sidepane projects="projects" discussions="discussions" people="people" ng-if="!menu.isHidden" class="sidepane"></div>-->
 <!-- people="people" -->
 <div class="icu-data">
-    <div icu-sidepane projects="projects" discussions="discussions" people="" offices="offices" folders="folders" office-documents="officeDocuments"
-        templateDocs="templateDocs" class="sidepane animate-hide" ng-hide="menu.isHidden"></div>
-    <!--<div class="datapane" ng-class="{ wide: menu.isHidden }">-->
+<div icu-sidepane projects="projects" discussions="discussions" people="people" offices="offices" folders="folders" office-documents="officeDocuments" templateDocs="templateDocs" current-state="{{currentState}}" class="sidepane animate-hide" ng-hide="menu.isHidden"></div>
+<!--<div class="datapane" ng-class="{ wide: menu.isHidden }">-->
     <div class="panes-wrapper" ng-class="{ wide: menu.isHidden }">
         <div icu-middlepane class="middlepane" ng-class="{ wide: detailsPane.isHidden }"></div>
         <div icu-detailspane class="detailspane animate-hide" ng-hide="detailsPane.isHidden" me="me" projects="projects" discussions="discussions"

@@ -2,17 +2,16 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context, TasksService, $rootScope) {
+    function controller($scope, $state, context, TasksService, $rootScope, SearchService, $filter, $location) {
         $scope.context = context;
-
+        
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
         $scope.officeDocuments = $scope.officeDocuments.data || $scope.officeDocuments;
         //$scope.templateDocs = $scope.templateDocs.data || $scope.templateDocs;
-        // $scope.people = $scope.people.data || $scope.people;
-        
+        $scope.people = $scope.people.data || $scope.people;
         $scope.toggleVisibility = function(toggledItem) {
             var prev = toggledItem.open;
 
@@ -96,6 +95,182 @@ directive('icuSidepane', function() {
         }
         ];
 
+        /********************************** search **********************************/
+
+        $scope.issues = [
+            {label:'tasks', value: true, name: 'task'}, 
+            {label:'projects', value: false, name: 'project'},
+            {label:'discussions', value: false, name: 'discussion'},
+            {label:'offices', value: false, name: 'office'},
+            {label:'folders', value: false, name: 'folder'},
+            {label:'documents', value:true, name: 'officeDocument'}
+        ];
+        
+        $scope.filteringData = {
+            issue: $location.$$search && $location.$$search.type ? $location.$$search.type : 'task',
+            selectedEntities: {
+                projects: {},
+                discussions: {},
+                folders: {},
+                offices: {},
+            },
+            selectedWatchers: {},
+            projects: [],
+            discussions: [],
+            folders: [],
+            offices: [],
+            watchers: []
+        }
+
+        $scope.displayLimit = {
+            projects : 4,
+            discussions : 4,
+            offices: 4,
+            folders: 4,
+            watchers: 2,
+            reset : function() {
+                this.projects = 4;
+                this.discussions = 4;
+                this.offices = 4;
+                this.folders = 4;
+                this.watchers = 2;
+            }
+        };
+        
+        var getEntitiesAndWatchers = function(filteredByType) {
+            for (var i=0; i< filteredByType.length; i++) {
+                if (filteredByType[i].project)
+                    $scope.filteringData.projects.push(filteredByType[i].project);
+                if (filteredByType[i].discussions && filteredByType[i].discussions.length)
+                    $scope.filteringData.discussions.push(filteredByType[i].discussions[0]);                    
+                if (filteredByType[i].folder)
+                    $scope.filteringData.folders.push(filteredByType[i].folder);
+                if (filteredByType[i].office)
+                    $scope.filteringData.offices.push(filteredByType[i].office)
+                if (filteredByType[i].watchers && filteredByType[i].watchers.length)
+                    $scope.filteringData.watchers = $scope.filteringData.watchers.concat(filteredByType[i].watchers)
+            }
+
+            $scope.filteringData.projects = $scope.projects.filter(function(e) {
+                return $scope.filteringData.projects.indexOf(e._id) > -1;
+            });
+            $scope.filteringData.discussions = $scope.discussions.filter(function(e) {
+                return $scope.filteringData.discussions.indexOf(e._id) > -1;
+            });
+            $scope.filteringData.folders = $scope.folders.filter(function(e) {
+                return $scope.filteringData.folders.indexOf(e._id) > -1;
+            });
+            $scope.filteringData.offices = $scope.offices.filter(function(e) {
+                return $scope.filteringData.offices.indexOf(e._id) > -1;
+            });
+            $scope.filteringData.watchers = $scope.people.filter(function(e) {
+                return $scope.filteringData.watchers.indexOf(e._id) > -1;
+            });
+
+            SearchService.filteringData = $scope.filteringData;
+        }
+
+        $state.current.reloadOnSearch = false;
+
+        $scope.filterSearchByType = function() {
+            $location.search('type', $scope.filteringData.issue);
+            var results = SearchService.results;
+            var filteredByType = []
+            for (var i=0; i< results.length; i++) {
+                if (results[i]._type == $scope.filteringData.issue) {
+                    filteredByType.push(results[i])
+                }
+            }
+            SearchService.filteringResults = filteredByType;
+
+            getEntitiesAndWatchers(filteredByType)
+        }
+
+        var getTruth = function(obj) { // return truth value in a single object
+            var arr = [];
+            for (var key in obj) {
+                if (obj[key]) {
+                    arr.push(key)
+                }
+            }
+            return arr;
+        }
+        
+        $scope.simulateCheckbox = function(obj, value) {
+            if (obj[value]) {
+                obj[value] = false;
+            } else {
+                obj[value] = true;
+            }
+        }
+
+        $scope.filterSearchByEntity = function() {
+            var filteringResults = SearchService.filteringResults
+            var projects = getTruth($scope.filteringData.selectedEntities.projects);
+            var discussions = getTruth($scope.filteringData.selectedEntities.discussions);
+            var folders = getTruth($scope.filteringData.selectedEntities.folders);
+            var offices = getTruth($scope.filteringData.selectedEntities.offices);
+            if (!projects.length && !discussions.length && !folders.length && !offices.length)
+                return;
+            var filteredByEntity = [];
+            for (var i=0; i< filteringResults.length; i++) {
+                if (filteringResults[i].project && projects.indexOf(filteringResults[i].project) > -1 ||
+                    filteringResults[i].folder && folders.indexOf(filteringResults[i].folder) > -1 ||
+                    filteringResults[i].office && offices.indexOf(filteringResults[i].office) > -1)
+                        filteredByEntity.push(filteringResults[i]);
+                if (filteringResults[i].discussions && filteringResults[i].discussions.length && discussions.indexOf(filteringResults[i].discussions[0]) > -1)
+                    filteredByEntity.push(filteringResults[i]);
+            }
+            SearchService.filteringResults = filteredByEntity;
+        }
+
+        $scope.filterSearchByWatcher = function() {
+            var filteringResults = SearchService.filteringResults
+            var watchers = getTruth($scope.filteringData.selectedWatchers);
+            if (!watchers.length) return;
+            var filteredByWatchers = [];
+            for (var i=0; i< filteringResults.length; i++) {
+                if (_.intersection(filteringResults[i].watchers, watchers).length)
+                    filteredByWatchers.push(filteringResults[i]);
+            }
+            SearchService.filteringResults = filteredByWatchers;
+        }
+
+        $scope.filterSearch = function() {
+            $scope.filterSearchByType();
+            $scope.filterSearchByEntity();
+            $scope.filterSearchByWatcher();
+        }
+
+        $scope.resetFilter = function() {
+            $scope.filteringData.selectedEntities = {
+                projects: {},
+                discussions: {},
+                folders: {},
+                offices: {}
+            };
+            $scope.filteringData.selectedWatchers = {};
+        }
+
+        $scope.showMore = function(limit, entityName) {
+            if (($scope.displayLimit[entityName] + 3) >= limit) {
+                $scope.displayLimit[entityName] = limit;
+            } else {
+                $scope.displayLimit[entityName]  += 3;
+
+            }
+        };
+
+        $scope.collapse = function(entityName) {
+            $scope.displayLimit[entityName] = 3;
+        };
+
+        $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+            if (toState.name.indexOf('search') > -1) {
+                $scope.filterSearchByType();
+            }
+        });
+
     }
 
     return {
@@ -108,9 +283,10 @@ directive('icuSidepane', function() {
             discussions: '=',
             offices: '=',
             folders: '=',
-            //people: '='
+            people: '=',
             officeDocuments: '=',
-            templateDocs: '='
+            templateDocs: '=',
+            currentState: '@'
         }
     };
 });
