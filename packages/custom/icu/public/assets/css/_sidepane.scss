@@ -187,6 +187,9 @@
             line-height: 26px;
             input {
                 margin-left: 5px;
+                &[type=radio] {
+                    visibility: hidden;
+                }
             }
             span {
                 margin-left: 6px;
@@ -211,6 +214,7 @@
             padding-left: 0;
             li {
                 font-size: 13px;
+                position: relative;
                 &.more {
                     padding: 5px 0;
                     color: #fda102;
@@ -244,6 +248,75 @@
         .tag-color {
             @include tag(5px);
             float: right;
+        }
+        .icon {
+            /*height: 25px;*/
+            width: 16px;
+        }
+        .close-search {
+            cursor: pointer;
+            background-color: #8c8c8c;
+            color: #37464b;
+            float: right;
+            width: 14px;
+            height: 14px;
+            line-height: 12px;
+            border-radius: 15px;
+            margin-top: 5px;
+            margin-right: -22px;
+            font-size: 13px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .arrow-left {
+            width: 0; 
+            height: 0; 
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent; 
+            border-left:4px solid #ffa000; 
+            position: absolute;
+            left: 10px;
+            top: 45%;
+        }
+        .icon {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .icon-task {
+		    background: url('/icu/assets/img/task-white.svg') no-repeat center center;
+            height: 17px;
+        }
+        .icon-project {
+            background: url('/icu/assets/img/project.png') no-repeat center center;
+            height: 14px;
+            background-size: 17px 14px;
+            width: 18px;
+        }
+        .icon-discussion {
+            background: url('/icu/assets/img/icon-discussion-white.svg') no-repeat center center;
+            height: 15px;
+            background-size: 15px 15px;
+        }
+        .icon-document {
+            background: url('/icu/assets/img/icon-document.svg') no-repeat center center;
+            height: 17px;
+            background-size: 15px 15px;
+        }
+        .icon-officeDocument {
+            background: url('/icu/assets/img/icon-document.svg') no-repeat center center;
+            height: 17px;
+            background-size: 15px 15px;
+        }
+        .icon-folder {
+            background: url('/icu/assets/img/folder-grey.png') no-repeat center center;
+            height: 15px;
+            width: 20px;
+            background-size: 17px 14px;
+        }
+        .icon-office {
+            background: url("/icu/assets/img/office-grey.png") no-repeat center center;
+            height: 17px;
+            background-size: 16px 17px;
         }
     }
 }

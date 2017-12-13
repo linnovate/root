@@ -19,6 +19,10 @@
 	background: url("/icu/assets/img/document-grey.svg") no-repeat center center;
 }
 
+.icon-officeDocument {
+	background: url("/icu/assets/img/document-grey.svg") no-repeat center center;
+}
+
 .icon-folder {
 	background: url("/icu/assets/img/folder.svg") no-repeat center center;
 }
@@ -40,6 +44,9 @@
 	.icon-document {
 		background: url("/icu/assets/img/icon-document.svg") no-repeat center center;
 	}
+	.icon-officeDocument {
+		background: url("/icu/assets/img/icon-document.svg") no-repeat center center;
+	}
 	.icon-folder {
 		background: url("/icu/assets/img/folder-grey.png") no-repeat center center;
 	}
@@ -51,6 +58,10 @@
 
 em {
 	font-weight: 700;
+}
+.search-row em {
+	font-style: normal;
+	font-weight: bold;
 }
 
 .panes-wrapper .list-table table .search-row {

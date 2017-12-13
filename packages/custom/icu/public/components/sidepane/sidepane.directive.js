@@ -98,12 +98,12 @@ directive('icuSidepane', function() {
         /********************************** search **********************************/
 
         $scope.issues = [
-            {label:'tasks', value: true, name: 'task'}, 
-            {label:'projects', value: false, name: 'project'},
-            {label:'discussions', value: false, name: 'discussion'},
-            {label:'offices', value: false, name: 'office'},
-            {label:'folders', value: false, name: 'folder'},
-            {label:'documents', value:true, name: 'officeDocument'}
+            {label:'tasks', value: true, name: 'task', length: 0}, 
+            {label:'projects', value: false, name: 'project', length: 0},
+            {label:'discussions', value: false, name: 'discussion', length: 0},
+            {label:'offices', value: false, name: 'office', length: 0},
+            {label:'folders', value: false, name: 'folder', length: 0},
+            {label:'documents', value: false, name: 'officeDocument', length: 0}
         ];
         
         $scope.filteringData = {
@@ -172,14 +172,24 @@ directive('icuSidepane', function() {
 
         $state.current.reloadOnSearch = false;
 
+        var issuesOrder = $scope.issues.map(function(i) {
+            return i.name;
+        })
+
         $scope.filterSearchByType = function() {
             $location.search('type', $scope.filteringData.issue);
             var results = SearchService.results;
-            var filteredByType = []
+            var filteredByType = [], index;
+            
+            for (var i = 0; i < $scope.issues.length; i++) {
+                $scope.issues[i].length = 0;
+            }
             for (var i=0; i< results.length; i++) {
                 if (results[i]._type == $scope.filteringData.issue) {
                     filteredByType.push(results[i])
                 }
+                index = issuesOrder.indexOf(results[i]._type);
+                $scope.issues[index].length++;
             }
             SearchService.filteringResults = filteredByType;
 
@@ -265,9 +275,13 @@ directive('icuSidepane', function() {
             $scope.displayLimit[entityName] = 3;
         };
 
+        $scope.closeSearch = function(){
+            $state.go('main.tasks')
+        }
+
         $rootScope.$on('$stateChangeSuccess', function (event, toState) {
             if (toState.name.indexOf('search') > -1) {
-                $scope.filterSearchByType();
+                $scope.filterSearch();
             }
         });
 

@@ -7,12 +7,16 @@
 </div>
 -->
 <nav class="searchPane" ng-if="currentState.indexOf('search') > -1" ng-init="filterSearchByType();resetFilter();">
-    <div class="search">{{'search' | i18next}}</div>
+    <div class="search">{{'search' | i18next}}
+        <span class="close-search" ng-click="closeSearch()">x</span>
+    </div>
     <div class="subtitle">{{'showResultsOf' | i18next}}:</div>
     <ul class="issue">
-        <li ng-repeat="issue in issues">
-            <input type="radio" ng-model="filteringData.issue" ng-value="issue.name" ng-change="filterSearchByType();resetFilter();"/>
-            <span>{{issue.label | i18next}}</span>
+        <li ng-repeat="issue in issues" ng-click="filteringData.issue = issue.name;filterSearchByType();resetFilter();">
+            <input type="radio" ng-model="filteringData.issue" ng-value="issue.name"/>
+            <span class="arrow-left" ng-show="filteringData.issue == issue.name"></span>
+            <span class="icon icon-{{issue.name}}"></span>
+            <span>{{issue.label | i18next}} ({{issue.length}})</span>
         </li>
     </ul>
 
