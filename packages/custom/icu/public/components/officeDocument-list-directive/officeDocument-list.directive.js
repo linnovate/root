@@ -113,7 +113,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 if (officeDocument.__state === creatingStatuses.NotCreated) {
                     officeDocument.__state = creatingStatuses.Creating;
 
-                    return OfficeDocumentsService.create(officeDocument).then(function(result) {
+                    return OfficeDocumentsService.createDocument(officeDocument).then(function(result) {
                         officeDocument.__state = creatingStatuses.Created;
 
                         $scope.officeDocuments.push(_(newOfficeDocument).clone());

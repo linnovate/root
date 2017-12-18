@@ -182,6 +182,9 @@
             margin-bottom: 6px;
             font-size: 17px;
             font-weight: bold;
+            &.typeList {
+                cursor: pointer;
+            }
         }
         .issue {
             line-height: 26px;

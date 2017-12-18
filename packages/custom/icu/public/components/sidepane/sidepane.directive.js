@@ -98,7 +98,7 @@ directive('icuSidepane', function() {
         /********************************** search **********************************/
 
         $scope.issues = [
-            {label:'tasks', value: true, name: 'task', length: 0}, 
+            {label:'tasks', value: false, name: 'task', length: 0}, 
             {label:'projects', value: false, name: 'project', length: 0},
             {label:'discussions', value: false, name: 'discussion', length: 0},
             {label:'offices', value: false, name: 'office', length: 0},
@@ -107,7 +107,7 @@ directive('icuSidepane', function() {
         ];
         
         $scope.filteringData = {
-            issue: $location.$$search && $location.$$search.type ? $location.$$search.type : 'task',
+            issue: $location.$$search && $location.$$search.type ? $location.$$search.type : 'all',
             selectedEntities: {
                 projects: {},
                 discussions: {},
@@ -177,7 +177,11 @@ directive('icuSidepane', function() {
         })
 
         $scope.filterSearchByType = function() {
-            $location.search('type', $scope.filteringData.issue);
+            if ($scope.filteringData.issue === 'all') {
+                $location.search('');
+            } else {
+                $location.search('type', $scope.filteringData.issue);
+            }
             var results = SearchService.results;
             var filteredByType = [], index;
             
@@ -185,7 +189,7 @@ directive('icuSidepane', function() {
                 $scope.issues[i].length = 0;
             }
             for (var i=0; i< results.length; i++) {
-                if (results[i]._type == $scope.filteringData.issue) {
+                if (results[i]._type == $scope.filteringData.issue || $scope.filteringData.issue === 'all') {
                     filteredByType.push(results[i])
                 }
                 index = issuesOrder.indexOf(results[i]._type);

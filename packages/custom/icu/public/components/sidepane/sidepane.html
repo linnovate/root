@@ -10,7 +10,7 @@
     <div class="search">{{'search' | i18next}}
         <span class="close-search" ng-click="closeSearch()">x</span>
     </div>
-    <div class="subtitle">{{'showResultsOf' | i18next}}:</div>
+    <div class="subtitle typeList" ng-click="filteringData.issue='all';resetFilter();filterSearchByType();">{{'showResultsOf' | i18next}}:</div>
     <ul class="issue">
         <li ng-repeat="issue in issues" ng-click="filteringData.issue = issue.name;filterSearchByType();resetFilter();">
             <input type="radio" ng-model="filteringData.issue" ng-value="issue.name"/>

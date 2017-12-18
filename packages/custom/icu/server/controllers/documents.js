@@ -1374,8 +1374,10 @@ exports.update2 = function (req, res, next) {
 exports.update = function (req, res, next) {
   var docToUpdate;
   if(req.body.name){
-    if(req.body.name=='watchers'){
-      var watchers = req.body.newVal;
+    if(req.body.name=='watchers' || req.body.watchers){
+      var watchers = req.body.name=='watchers' ? req.body.newVal : req.body.watchers.map(function(w) {
+        return w._id;
+      });
       Document.findOne({'_id':req.params.id},function(err,doc){
         docToUpdate = doc;
         var oldWatchers=[];
@@ -1475,6 +1477,9 @@ exports.update = function (req, res, next) {
     Document.findOne({'_id':req.params.id},function(err,docToUpdate){
       docToUpdate['' + req.body.name]=req.body.newVal;
       docToUpdate['id']=docToUpdate._id;
+      if (req.body.watchers) {
+        docToUpdate['watchers'] = req.body.watchers;
+      }
       docToUpdate.save(function(err,result){
         if(err){
           res.send(err);
