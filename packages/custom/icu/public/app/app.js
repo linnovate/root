@@ -599,19 +599,6 @@ angular.module('mean.icu').config([
                     }
                 }
             })
-            .state('webhook', {
-                url: '/webhook',
-                templateUrl: '/icu/components/webhook/webhook.html',
-                controller: 'webhookController',
-                resolve: {
-                    me: function(UsersService) {
-                        return UsersService.getMe().then(function(result) {
-                            return UsersService.getById(result._id);
-                        });
-                    }
-                }
-            })
-
             .state('main', {
                 abstract: true,
                 url: '',
