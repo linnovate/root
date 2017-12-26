@@ -109,20 +109,22 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 if (context.entityName !== 'all') {
                     officeDocument[context.entityName] = context.entity;
                 }
+//
+                // if (officeDocument.__state === creatingStatuses.NotCreated) {
+                //     officeDocument.__state = creatingStatuses.Creating;
 
-                if (officeDocument.__state === creatingStatuses.NotCreated) {
-                    officeDocument.__state = creatingStatuses.Creating;
+                //     return OfficeDocumentsService.create(officeDocument).then(function(result) {
+                //         officeDocument.__state = creatingStatuses.Created;
 
-                    return OfficeDocumentsService.createDocument(officeDocument).then(function(result) {
-                        officeDocument.__state = creatingStatuses.Created;
+                //         $scope.officeDocuments.push(_(newOfficeDocument).clone());
 
-                        $scope.officeDocuments.push(_(newOfficeDocument).clone());
+                //         OfficeDocumentsService.data.push(officeDocument);
 
-                        OfficeDocumentsService.data.push(officeDocument);
-
-                        return officeDocument;
-                    });
-                } else if (officeDocument.__state === creatingStatuses.Created) {
+                //         return officeDocument;
+                //     });
+                // } else
+                //
+                 if (officeDocument.__state === creatingStatuses.Created) {
 
                     if (!officeDocument.IsTitle)
                     {
@@ -156,7 +158,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                             });
             
                         }else{
-            
+                            
                             $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
                                 return officeDocument.status == 'new' ;
                             });
@@ -241,14 +243,16 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 officeDocument.PartTitle = officeDocument.title;
 
                 if (officeDocument.__state === creatingStatuses.NotCreated) {
-                    $scope.createOrUpdate(officeDocument).then(function() {
-                        $state.go($scope.detailsState, {
-                            id: officeDocument._id,
-                            entity: context.entityName,
-                            entityId: context.entityId,
-                            nameFocused: nameFocused
-                        });
-                    });
+                    //
+                    // $scope.createOrUpdate(officeDocument).then(function() {
+                    //     $state.go($scope.detailsState, {
+                    //         id: officeDocument._id,
+                    //         entity: context.entityName,
+                    //         entityId: context.entityId,
+                    //         nameFocused: nameFocused
+                    //     });
+                    // });
+                    //
                 } else {
                     $state.go($scope.detailsState+'.activities', {
                         id: officeDocument._id,
