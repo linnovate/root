@@ -1,5 +1,5 @@
 'use strict';
-angular.module('mean.icu.ui.webhook')
+angular.module('mean.icu.ui.webhook', [])
 .directive('icuWebhook', function ($uibModal) {
     function controller($scope) {
         $scope.createWebhook = function() {

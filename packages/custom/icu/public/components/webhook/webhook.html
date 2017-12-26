@@ -1,18 +1,14 @@
 <div class="webhook">
-    <div>
-        <div>
-            Entity To Create:
-            <input type="radio" ng-model="data.entity" value="task"/>Task
-            <input type="radio" ng-model="data.entity" value="project"/>Project
-            <input type="radio" ng-model="data.entity" value="discussion"/>Discussion
-        </div>
-        <!-- <div>
-            Entity Name
-            <input type="text" ng-model="data.name" />
-        </div> -->
+    <h4>Entity To Create:</h4>
+    <div class="btn-group">
+        <label class="btn btn-light" ng-model="data.entity" uib-btn-radio="'task'">Task</label>
+        <label class="btn btn-light" ng-model="data.entity" uib-btn-radio="'project'">Project</label>
+        <label class="btn btn-light" ng-model="data.entity" uib-btn-radio="'discussion'">Discussion</label>
     </div>
-
-    <button ng-click="createWebhook()">Create Webhook</button>
-
-    <div>{{url}}</div>
+    <br>
+    <br>
+    <button type="button" class="btn btn-success" ng-click="createWebhook()">Create Webhook</button>
+    <br>
+    <br>
+    <code>{{url}}</code>
 </div>
