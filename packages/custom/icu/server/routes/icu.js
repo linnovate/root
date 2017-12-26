@@ -47,7 +47,7 @@ module.exports = function(Icu, app) {
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
-  app.route(/^((?!\/(hi|new)\/).)*$/).all(authorization);
+  app.route(/^((?!\/hi\/).)*$/).all(authorization);
 
   //app.route(/^((?!\/hi\/).)*$/).all(authorization, socket);
 
