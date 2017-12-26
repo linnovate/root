@@ -241,6 +241,10 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.GoToTemplateDocs = function() {
             $state.go('main.templateDocs.all');
         }
+
+        $scope.GoToAdminSettings = function() {
+            $state.go('main.adminSettings');
+        }
     }
 
         function link($scope, $element, context) {
@@ -267,7 +271,8 @@ angular.module('mean.icu.ui.displayby', [])
             icuDisplayBy: '=',
             officeDocuments: '=',
             offices: '=',
-            folders: '='
+            folders: '=',
+            me: '='
         },
         templateUrl: '/icu/components/display-by/display-by.html',
         controller: controller,

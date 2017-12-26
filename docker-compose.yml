@@ -3,6 +3,8 @@ version: '3'
 services:
   root-app:
     build: .
+    image: root-app
+    # image: localhost:5000/root-app
     restart: always
     ports:
       - "3100:3100"

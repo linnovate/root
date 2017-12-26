@@ -45,6 +45,7 @@
     "createNewDiscussion": "צור דיון חדש",
     "createNewProject": "צור פרויקט חדש",
     "createNewTask": "צור משימה חדשה",
+	"createWebhook": "צור Webhook",
 	"DELETE": "מחק",
 	"deadline":  "תאריך יעד",
     "deleteDiscussion": "מחק דיון",

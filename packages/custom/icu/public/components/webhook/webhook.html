@@ -1,0 +1,14 @@
+<div class="webhook">
+    <h5><b>Entity To Create:</b></h5>
+    <div class="btn-group">
+        <label class="btn btn-light" ng-model="data.entity" uib-btn-radio="'task'">Task</label>
+        <label class="btn btn-light" ng-model="data.entity" uib-btn-radio="'project'">Project</label>
+        <label class="btn btn-light" ng-model="data.entity" uib-btn-radio="'discussion'">Discussion</label>
+    </div>
+    <br>
+    <br>
+    <button type="button" class="btn btn-success" ng-click="createWebhook()">Create Webhook</button>
+    <br>
+    <br>
+    <code>{{url}}</code>
+</div>

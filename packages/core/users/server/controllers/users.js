@@ -17,7 +17,8 @@ var mongoose = require('mongoose'),
   jwt = require('jsonwebtoken'), //https://npmjs.org/package/node-jsonwebtoken
   config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {},
-  circles = require('circles-npm')(null, config.circles.uri, circleSettings);
+  circles = require('circles-npm')(null, config.circles.uri, circleSettings),
+  uuidv1 = require('uuid/v1');
 
 
 exports.authCallbackSaml = function(req, res) {
@@ -102,6 +103,7 @@ exports.create = function(req, res, next) {
   // Hard coded for now. Will address this with the user permissions system in v0.3.5
   user.roles = ['authenticated'];
   user.id = user.email;
+  user.uid = uuidv1();
   user.save(function(err) {
     if (err) {
       console.log(err)
