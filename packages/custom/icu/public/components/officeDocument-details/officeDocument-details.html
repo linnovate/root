@@ -76,7 +76,11 @@
             <div class="send" ng-if="officeDocument.status == 'new'">
                 <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" send="true" data="officeDocument" send-fn="sendDocument(officeDocument)"
                     class="sendBtn">{{ 'send' | i18next }}</button>
-                </div>
+            </div>
+            <div class="receive" ng-if="officeDocument.status == 'received'">
+                <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" modal-name="receive" send="false" receive="true" data="officeDocument" send-fn="receiveDocument(officeDocument)"
+                    class="sendBtn">{{ 'receive' | i18next }}</button>
+            </div>
             <div class="dropdown dropdown-container" uib-dropdown>
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
@@ -95,6 +99,13 @@
                                 </a>
                     </li>
                 </ul>
+            </div>
+        </div>
+        <div ng-controller="testCtrl">
+            <div id="container">
+
+            <div draggable-toggle='dragOptions'>Drag me!</div>        
+            <div class="shape" draggable-toggle='dragOptions'>ZZZZ</div>
             </div>
         </div>
         <div class="summary wrap-pro">
