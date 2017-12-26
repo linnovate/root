@@ -18,7 +18,7 @@ var mongoose = require('mongoose'),
   config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {},
   circles = require('circles-npm')(null, config.circles.uri, circleSettings),
-  Uid = require('uid');
+  uuidv1 = require('uuid/v1');
 
 
 exports.authCallbackSaml = function(req, res) {
@@ -103,7 +103,7 @@ exports.create = function(req, res, next) {
   // Hard coded for now. Will address this with the user permissions system in v0.3.5
   user.roles = ['authenticated'];
   user.id = user.email;
-  user.uid = Uid(10);
+  user.uid = uuidv1();
   user.save(function(err) {
     if (err) {
       console.log(err)
@@ -167,37 +167,9 @@ exports.getJwt = function(req, res) {
  * Send User
  */
 exports.me = function(req, res) {
-  console.log('------------------------2-------------------------')
   res.json(req.user || null);
 };
 
-exports.uid = function(req, res, next) {
-  console.log('----------------1--------------')
-  console.log(JSON.stringify(req.user))
-  if (req.user.uid) {
-    console.log('--------------4----------------')
-    console.log(req.user.uid)
-    next();
-  } else {
-    let uid = Uid(10);
-    console.log(uid)
-    //req.user.uid = uid;
-    User.findByIdAndUpdate(
-      req.user._id, 
-      { uid: uid }, 
-      function (err, user) {
-        // return res.status(400).json({
-        //   msg: err
-        // });
-        console.log('--------3----------------');
-        console.log(err);
-        console.log(user)
-        if (err) return next();
-        req.user.uid = uid;
-        next();
-    });
-  }
-}
 /**
  * Find user by id
  */
