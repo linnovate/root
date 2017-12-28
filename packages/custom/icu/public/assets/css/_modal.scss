@@ -1,4 +1,42 @@
+
 .modal-dialog {
+	#dragcontainer {
+		width : 200px;
+		height: 44px;
+		background-color: black;
+		position: relative;
+		display: block;
+		border: 2px solid gray;
+		-webkit-border-radius: 17px;
+		-moz-border-radius: 17px;
+		border-radius: 17px;
+	}
+	.dragshape {
+		position: absolute;
+		width : 40px;
+		height: 40px;
+		-webkit-border-radius: 15px;
+		-moz-border-radius: 15px;
+		border-radius: 15px;
+		background-color:#FFA000;
+				-webkit-border-radius: 15px;
+		-moz-border-radius: 15px;
+		border-radius: 15px;
+
+		&.selected {
+			background-color:green;			
+		}
+	}
+	.modal-table {
+		padding: 10px 0;
+		background-color: #eee ;
+		tr {
+			background-color: #eee ;			
+			border-top: 1px solid #aaaaaa;
+			border-bottom: 1px solid #aaaaaa;
+		}
+	}
+	
 	.modal-content {
 		border-radius: 0px;
 	}
@@ -105,6 +143,7 @@
 	&.modal-body {
 		height: 350px;
 	}
+
 }
    
 @mixin ui-select {

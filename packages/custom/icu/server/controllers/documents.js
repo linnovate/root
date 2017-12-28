@@ -273,7 +273,7 @@ exports.deleteDocumentFile = function(req,res,next){
     }
   });
 };
- 
+
 
 
 exports.uploadDocumentsFromTemplate = function(req,res,next){
@@ -1656,15 +1656,89 @@ exports.signNew = function (req, res, next) {
 }
 
 
+// update user document received.
+exports.receiveDocument = function(req,res,next){
+//  console.log("receiveDocument ***************" ) ;  
+  officeDocument  = req.body.officeDocument  ;
+  var id = req.params.id;  
+  Document.update({'_id':officeDocument.ref },{$push:{readBy: req.user._id }},function(error,result){
+    if(error){
+        //TBD
+//      res.send(error);
+//        console.log("error updating sender user read") ;
+
+    }
+    else{
+        //TBD
+//      res.send('ok');
+//      console.log("success updating sender user read") ;
+    }
+  });
+
+  Document.update({'_id':id},{$set:{status:"viewed"}},function(error,result){
+//    console.log("updating doc status to viewed") ;  
+    if(error){
+      res.send(error);
+    }
+    else{
+      res.send('ok');
+    }
+  });
+};
+
+
+// update user document distributed == viewed.
+exports.distributedDocument = function(req,res,next){
+//  console.log("distributedDocument ***************" ) ;  
+  officeDocument  = req.body.officeDocument  ;
+  var id = req.params.id;  
+  Document.update({'_id':id},{$set:{status:"viewed"}},function(error,result){
+//    console.log("updating doc status to viewed") ;  
+    if(error){
+      res.send(error);
+    }
+    else{
+      res.send('ok');
+    }
+  });
+};
+
+// update user document distributed == viewed.
+exports.readByDocument = function(req,res,next){
+//  console.log("readByDocument ***************" ) ;  
+
+  officeDocument  = req.body.officeDocument  ;
+  var readBy = officeDocument.readBy ;
+  readbyToId = [] ;
+  readBy.forEach(function(element) {
+    console.log(element);
+    readbyToId.push(new mongoose.Types.ObjectId( element)) ;
+  });
+  console.log( JSON.stringify(readbyToId )) ;  
+  var id = req.params.id;  
+  User.find({
+    '_id': { $in: readbyToId }
+    }, function(err, docs){
+      if(err){
+        res.send(error);
+      }
+      else{
+        res.send(docs);
+      }
+      });
+};
+
+
 exports.sendDocument = function (req, res, next) {
   var officeDocument = req.body.officeDocument;
   var sendingForm = req.body.sendingForm;
   var spPath = officeDocument.spPath;
   var assign = officeDocument.assign._id;
-  var creators = [officeDocument.creator.username.toLowerCase()];
+  var creators = officeDocument.creator ? [officeDocument.creator.username.toLowerCase()] : [];
   sendingForm['doneBy'] = sendingForm['doneBy']?sendingForm['doneBy']:[];
   sendingForm['forNotice'] = sendingForm['forNotice']?sendingForm['forNotice']:[];
   sendingForm['sendingAs'] = sendingForm['sendingAs']?sendingForm['sendingAs']:[];
+  sendingForm['ref'] = req.body.officeDocument._id ;
 
   //if(sendingForm['classification']){
     //sendingForm['classification']=sendingForm['classification'].toLowerCase();
@@ -1697,7 +1771,8 @@ exports.sendDocument = function (req, res, next) {
         'watchers':[watcher],
         'documentType':officeDocument.documentType,
         'sender': sendingForm['sender'],
-        'sendingAs':sendingForm['sendingAs']
+        'sendingAs':sendingForm['sendingAs'],
+        'ref': sendingForm['ref']
       };
       var doc2 = new Document(doc);
       doc2.save(function(error,result){
@@ -1720,8 +1795,9 @@ exports.sendDocument = function (req, res, next) {
     prevDoc.watchers.forEach(function(w){
       oldWatchers.push({'UserId':w});
     });
-    var watchersREq = [];
+    var watchersReq = [];
     watchers.forEach(function(w){
+//      console.log(watchers) ;
       watchersReq.push({'UserId':w});
     })
   Document.update({'_id':officeDocument._id},{$set:sendingForm},function(error,result){

@@ -1,9 +1,10 @@
-    <div class="modal-header">
+<!-- {{readBy| json}} -->
+<div class="modal-header">
         <button type="button" class="btn close" aria-hidden="true" ng-click="cancel()">&times;</button>
         <h3 class="modal-title" ng-if='entity.type != "Document"'>            
-            {{ 'modalReceiveText' | i18next }}{{ entity.type | i18next }} 
+            {{ 'modalDistributedText' | i18next }}{{ entity.type | i18next }} 
         </h3>
-        <p>{{ 'modalReceiveTextContinue' | i18next }}</p>
+        <p>{{ 'modalDistributedTextContinue' | i18next }}</p>
     </div>
 
     <table class="modal-table">
@@ -15,9 +16,24 @@
         </tr>
     </table>
     
+    <p>{{ 'modalDistributedViewedBy' | i18next }}</p>    
+    
+    <table ng-if="readBy.length">
+            <thead>
+                <th>Name</th>
+                <th>Email</th>
+            </thead>
+            <tbody ng-repeat="item in readBy">
+                <tr>
+                    <td>{{item.username}}</td>
+                    <td>{{item.email}}</td>
+                </tr>
+            </tbody>
+        </table>
+    
     
     <div class="modal-body">
-        {{ 'modalReceiveSlideText' | i18next }}
+        {{ 'modalDistributedSlideText' | i18next }}
         <div id="dragwidget">
                     <div id="dragcontainer">
                         <div class="dragshape" draggable-toggle='dragOptions'></div>
@@ -27,7 +43,6 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="ok()">{{'YES' | i18next }}</button>
-        <button class="btn btn-warning" type="button" ng-click="cancel()">{{'Cancel' | i18next }}</button>
     </div>
     
     

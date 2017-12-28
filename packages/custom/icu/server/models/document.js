@@ -90,6 +90,14 @@ var DocumentSchema = new Schema({
     ref: 'User',
     default:[]
   }],
+  ref: {
+    type: Schema.ObjectId
+  },
+  readBy: [{
+    type: Schema.ObjectId,
+    ref: 'User',
+    default:[]
+  }],
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User',

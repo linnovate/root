@@ -1,15 +1,14 @@
 'use strict';
 angular.module('mean.icu.ui.draggabletoggle', [])
     .directive('draggableToggle', function($document) {
-        console.log("draggableToggle") ;
   return {
     restrict: 'A',
     scope: {
-      dragOptions: '=ngDraggable'
+      dragOptions: '=draggableToggle'
     },
     link: function(scope, elem, attr) {
       var startX, startY, x = 0, y = 0,
-          start, stop, drag, container;
+          start, stop, drag, receive , container;
 
       var width  = elem[0].offsetWidth,
           height = elem[0].offsetHeight;
@@ -19,17 +18,23 @@ angular.module('mean.icu.ui.draggabletoggle', [])
         start  = scope.dragOptions.start;
         drag   = scope.dragOptions.drag;
         stop   = scope.dragOptions.stop;
-        var id = scope.dragOptions.container;
-        if (id) {
-            container = document.getElementById(id).getBoundingClientRect();
-        }
+        receive   = scope.dragOptions.receive;
+
+        // var id = 'dragcontainer';
+        // if (id) {
+        //     container = document.getElementById(id).getBoundingClientRect();
+        // }
       }
 
       // Bind mousedown event
-      elem.on('mousedown', function(e) {
-        e.preventDefault();
+      elem.on('mousedown', function(e) {    
+        if(elem.hasClass('selected')) {
+            return ;
+        }
+        e.preventDefault();        
+
         startX = e.clientX - elem[0].offsetLeft;
-        startY = e.clientY - elem[0].offsetTop;
+//        startY = e.clientY - elem[0].offsetTop;
         $document.on('mousemove', mousemove);
         $document.on('mouseup', mouseup);
         if (start) start(e);
@@ -39,7 +44,7 @@ angular.module('mean.icu.ui.draggabletoggle', [])
       function mousemove(e) {
         y = e.clientY - startY;
         x = e.clientX - startX;
-        setPosition();
+        setPosition(e);
         if (drag) drag(e);
       }
 
@@ -47,23 +52,41 @@ angular.module('mean.icu.ui.draggabletoggle', [])
       function mouseup(e) {
         $document.unbind('mousemove', mousemove);
         $document.unbind('mouseup', mouseup);
+        if(x>=90) {
+            elem.css({ left: 160 + 'px' });            
+        }
         if (stop) stop(e);
       }
 
+    var animate = function(pos) {
+        setTimeout(function(){
+            if(pos<90 && pos > 0){
+                pos-- ;
+                setTimeout(function() {
+                elem.css({ left: pos + 'px' });;
+            }, 25);
+        } 
+        }) ;
+    }
+      
+
       // Move element, within container if provided
-      function setPosition() {
-        if (container) {
-          if (x < container.left) {
-            x = container.left;
-          } else if (x > container.right - width) {
-            x = container.right - width;
-          }
-          if (y < container.top) {
-            y = container.top;
-          } else if (y > container.bottom - height) {
-            y = container.bottom - height;
-          }
-        }
+      function setPosition(e) {
+//          console.log("container", container) ;
+          console.log("e", e) ;
+          console.log("x", x) ;
+            if (x < 89) {
+                x = 0 ;
+            } 
+            if (x < 90) {
+                animate(x);
+//                x = 0 ;
+                elem.css({
+//                    'background-color': 'yellow'
+                })        
+                if (receive && !elem.hasClass('selected')) receive(e);
+                elem.addClass('selected');                
+            } 
 
         elem.css({
           top: y + 'px',
@@ -72,20 +95,4 @@ angular.module('mean.icu.ui.draggabletoggle', [])
       }
     }
   }
-
-}).controller('testCtrl', function($scope) { 
-    console.log("testCtrl") ;
-    $scope.dragOptions = {
-        start: function(e) {
-          console.log("STARTING");
-        },
-        drag: function(e) {
-          console.log("DRAGGING");
-        },
-        stop: function(e) {
-          console.log("STOPPING");
-        },
-        container: 'container'
-    }
-
-});
+})
