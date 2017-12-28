@@ -134,7 +134,8 @@ exports.uploadEmpty = function(req,res,next){
     users.forEach(function(u){
       perm.push(u.UserId.substring(0,u.UserId.indexOf('@')).toUpperCase());
     });
-    if(result=='success'){
+    if(result=='success') {
+      if (config.documentProvider === "SP") { // move code to sharepoint.js
       var json = {
         'siteUrl':config.SPHelper.SPSiteUrl,
         'library':config.SPHelper.libraryName,
@@ -168,6 +169,7 @@ exports.uploadEmpty = function(req,res,next){
           });
         }
       });
+      } // move code to sharepoint.js
     }
   });
 
@@ -176,6 +178,7 @@ exports.uploadEmpty = function(req,res,next){
 
 
 exports.addSerialTitle = function(req,res,next){
+  if (config.documentProvider === "SP") { // move code to sharepoint.js
   var doc = req.body;
   var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
   var docFolder,docOffice;
@@ -260,6 +263,7 @@ exports.addSerialTitle = function(req,res,next){
       });
     }
   });
+} // move code to sharepoint.js
 };
 
 exports.deleteDocumentFile = function(req,res,next){
@@ -277,6 +281,7 @@ exports.deleteDocumentFile = function(req,res,next){
 
 
 exports.uploadDocumentsFromTemplate = function(req,res,next){
+  if (config.documentProvider === "SP") { // move code to sharepoint.js
   var template = req.body.templateDoc;
   var officeDocument = req.body.officeDocument;
   if(template.spPath){
@@ -394,6 +399,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
       res.send('error');
     }
 });
+  }  // move code to sharepoint.js
 
 }
 else{
@@ -415,6 +421,7 @@ else{
 */
 
 exports.uploadEmptyDocument = function (req, res, next) {
+  if (config.documentProvider === "SP") { // move code to sharepoint.js
   var entityName = req.body.entityName;
   var fileType = req.body.fileType;
   var entityId = req.body.entityId;
@@ -469,6 +476,7 @@ exports.uploadEmptyDocument = function (req, res, next) {
       });
     });
   });
+} // move code to sharepoint.js
 };
 
 
@@ -602,7 +610,8 @@ exports.upload = function (req, res, next) {
   busboy.on('field', function (fieldname, val) {
     req.locals.data.body[fieldname] = val;
   });
-
+  
+  if (config.documentProvider === "SP") { // move code to sharepoint.js
   busboy.on('finish', function () {
     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
@@ -780,6 +789,7 @@ exports.upload = function (req, res, next) {
         }
       });
       })
+    } // move code to sharepoint.js
 
       return req.pipe(busboy);
 };
@@ -846,6 +856,7 @@ exports.uploadFileToDocument = function(req,res,next){
     req.locals.data.body[fieldname] = val;
   });
 
+  if (config.documentProvider === "SP") { // move code to sharepoint.js
   busboy.on('finish', function () {
     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
@@ -970,6 +981,10 @@ exports.uploadFileToDocument = function(req,res,next){
             });
           });
         });
+      }  // move code to sharepoint.js
+
+
+
         return req.pipe(busboy);
       };
 
@@ -1232,43 +1247,46 @@ exports.deleteDocument = function (req, res) {
       console.log(err);
     }
     else {
-      var spPath = file[0]._doc.spPath;
-      if(spPath){
-      var fileName = spPath.substring(spPath.lastIndexOf("/") + 1, spPath.length);
-      var spPath2 = spPath.substring(0, spPath.lastIndexOf("/"));
-      var folderName = spPath.substring(spPath2.lastIndexOf("/") + 1, spPath2.length);
-      var spPath2 = spPath2.substring(0, spPath2.lastIndexOf("/"));
-      var libraryName = spPath2.substring(spPath2.lastIndexOf("/") + 1, spPath2.length);
-      var user = req.user.email.substring(0, req.user.email.indexOf('@'));
-      var context = {
-        'siteUrl': config.SPHelper.SPSiteUrl,
-        'creds': {
-          'username': config.SPHelper.username,
-          'password': config.SPHelper.password,
-          'domain':config.SPHelper.domain
-        }
-      };
-      var options = {
-        'folder': '/' + libraryName + '/' + folderName,
-        'filePath': '/' + fileName
-      };
+      if (config.documentProvider === "SP") { // move code to sharepoint.js
 
-      var json = {
-        'context': context,
-        'options': options
-      };
-      request({
-        'url': config.SPHelper.uri + '/api/delete',
-        'method': 'POST',
-        'json': json
-      }, function (error, resp, body) {
-     //   var creator = folderName;
-     //   if (creator == user) {
-      //  }
-      });
+        var spPath = file[0]._doc.spPath;
+        if(spPath){
+        var fileName = spPath.substring(spPath.lastIndexOf("/") + 1, spPath.length);
+        var spPath2 = spPath.substring(0, spPath.lastIndexOf("/"));
+        var folderName = spPath.substring(spPath2.lastIndexOf("/") + 1, spPath2.length);
+        var spPath2 = spPath2.substring(0, spPath2.lastIndexOf("/"));
+        var libraryName = spPath2.substring(spPath2.lastIndexOf("/") + 1, spPath2.length);
+        var user = req.user.email.substring(0, req.user.email.indexOf('@'));
+        var context = {
+          'siteUrl': config.SPHelper.SPSiteUrl,
+          'creds': {
+            'username': config.SPHelper.username,
+            'password': config.SPHelper.password,
+            'domain':config.SPHelper.domain
+          }
+        };
+        var options = {
+          'folder': '/' + libraryName + '/' + folderName,
+          'filePath': '/' + fileName
+        };
+
+        var json = {
+          'context': context,
+          'options': options
+        };
+        request({
+          'url': config.SPHelper.uri + '/api/delete',
+          'method': 'POST',
+          'json': json
+        }, function (error, resp, body) {
+      //   var creator = folderName;
+      //   if (creator == user) {
+        //  }
+        });
 
 
-    }
+      }
+    } // move code to sharepoint.js
     }
 
     Document.remove({ _id: req.params.id }, function (err) {
@@ -1378,6 +1396,7 @@ exports.update = function (req, res, next) {
       var watchers = req.body.name=='watchers' ? req.body.newVal : req.body.watchers.map(function(w) {
         return w._id;
       });
+      if (config.documentProvider === "SP") { // move code to sharepoint.js
       Document.findOne({'_id':req.params.id},function(err,doc){
         docToUpdate = doc;
         var oldWatchers=[];
@@ -1440,10 +1459,12 @@ exports.update = function (req, res, next) {
    
         }
     });
+      } // move code to sharepoint.js
     }
     else if(req.body.name=='assign'){
       Document.findOne({'_id':req.params.id},function(err,doc){
         var spPath = doc.spPath;
+        if (config.documentProvider === "SP") { // move code to sharepoint.js
         if(spPath){
         var oldAssign = doc.assign;
         var assignReq=[{
@@ -1471,6 +1492,8 @@ exports.update = function (req, res, next) {
           });
         });
       }
+    } // move code to sharepoint.js
+      
 });
     }
 
@@ -1571,6 +1594,7 @@ exports.sign = function (req, res, next) {
               for (var i = 0; i < zeroReq.length; i++) {
                 zero.push(zeroReq[i].UserId);
               }
+              // TODO if (config.documentProvider === "SP") { // move code to sharepoint.js
               var json = {
                 'siteUrl': config.SPHelper.SPSiteUrl,
                 'paths': documents,
@@ -1815,6 +1839,8 @@ exports.sendDocument = function (req, res, next) {
           watchersReq.forEach(function(w){
             users.push(w.UserId);
           });
+
+          // TBD if (config.documentProvider === "SP") { // move code to sharepoint.js
           var json = {
             "siteUrl":config.SPHelper.SPSiteUrl,
             "paths":[spPath],

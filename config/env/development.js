@@ -129,6 +129,11 @@ module.exports = {
     seconds: 10 * 60 //ignore mails for 10 minutes
   },
   specialUrl:'', //fill with special url
+
+
+
+  documentProvider: "FS", // documentProvider Options: [FS = file system,SP = sharepoint,GGL = google docs]
+
   SPHelper: {
     uri:"uri",
     SPSiteUrl:"SPSiteUrl",

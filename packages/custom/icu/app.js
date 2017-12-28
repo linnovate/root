@@ -56,7 +56,6 @@ ICU.register(function (app, auth, database,swagger) {
 
     ICU.aggregateAsset('js', '../lib/d3/d3.min.js', {weight: 0});
     ICU.aggregateAsset('js', './eventDrops.js', {weight: 1});
-    ICU.aggregateAsset('js', './Toggles.js', {weight: 2});
 
     ICU.angularDependencies([
         'jm.i18next',
