@@ -16,7 +16,42 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             });
 
             function buildModal() {
-                if(scope.send && scope.entityName == "officeDocument"){
+                if(scope.modalName == 'receive' && scope.entityName == "officeDocument") { 
+//                    console.log("buildModal receive", scope) ;
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        size:  'md',
+                        templateUrl: '/icu/components/modal-directive/receiveModal.html',
+                        controller: dragCtrl,
+                        resolve: {
+                            officeDocument: function () {
+                                return scope.data;
+                            },
+                            people:function () {
+                                return scope.people;
+                            }
+                        }
+                    }); 
+                }
+                else if(scope.modalName == 'distributed' && scope.entityName == "officeDocument") { 
+//                    console.log("buildModal distributed", scope) ;
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        size:  'md',
+                        templateUrl: '/icu/components/modal-directive/distributedModal.html',
+                        controller: distributedCtrl,
+                        resolve: {
+                            officeDocument: function () {
+                                return scope.data;
+                            },
+                            people:function () {
+                                return scope.people;
+                            }
+                        }
+                    }); 
+                }
+
+                else if(scope.send && scope.entityName == "officeDocument"){
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'lg',
@@ -33,7 +68,8 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                     
                     }); 
 
-                } else if(scope.modalName == 'template' && scope.entityName == "officeDocument"){
+                } 
+                else if(scope.modalName == 'template' && scope.entityName == "officeDocument"){
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'lg',
@@ -108,7 +144,7 @@ function controller($scope, $uibModalInstance, $filter, entity) {
 }
 
 function controllerDocument($scope, $state,$uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
-    
+      
     $scope.officeDocument = officeDocument;
     $scope.people = people;
 
@@ -133,6 +169,77 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter, officeDoc
     };
 }
 
+
+function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
+    console.log("dragCtrl") ;
+    $scope.officeDocument = officeDocument;
+    $scope.dragOptions = {
+        start: function(e) {
+//          console.log("STARTING");
+        },
+        drag: function(e) {
+//          console.log("DRAGGING");
+        },
+        stop: function(e) {
+//          console.log("STOPPING");
+        },
+        receive: function(e) {
+            console.log("RECEIVED", e);
+//            $scope.receiveStatus = "received" ;
+//            console.log("OfficeDocumentsService.receiveDocument") ;
+
+            OfficeDocumentsService.receiveDocument($scope.officeDocument) ;
+        },
+        container: 'dragcontainer'
+    }
+    $scope.ok = function (sendingForm) {
+            // console.log("===RETURNED===");
+            // console.log($scope.receiveStatus);            
+            $scope.cancel();            
+    };    
+    $scope.cancel = function () {
+        $state.reload();
+        $uibModalInstance.dismiss('cancel');
+    };
+}
+
+
+function distributedCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
+    OfficeDocumentsService.readByDocument(officeDocument).then(function(res) { 
+        // console.log("distributedCtrl") ;
+        // console.log(res) ;
+        $scope.readBy  = res ;
+    }) ;
+    $scope.officeDocument = officeDocument;
+    $scope.dragOptions = {
+        start: function(e) {
+//          console.log("STARTING");
+        },
+        drag: function(e) {
+//          console.log("DRAGGING");
+        },
+        stop: function(e) {
+//          console.log("STOPPING");
+        },
+        receive: function(e) {
+//            console.log("RECEIVED", e);
+//            $scope.receiveStatus = "received" ;
+//            console.log("OfficeDocumentsService.distributedDocument") ;
+
+            OfficeDocumentsService.distributedDocument($scope.officeDocument) ;
+        },
+        container: 'dragcontainer'
+    }
+    $scope.ok = function (sendingForm) {
+            // console.log("===RETURNED===");
+            // console.log($scope.receiveStatus);            
+            $scope.cancel();            
+    };    
+    $scope.cancel = function () {
+        $state.reload();
+        $uibModalInstance.dismiss('cancel');
+    };
+}
 
 // function controllerTemplate($scope, $uibModalInstance, $filter) {
     

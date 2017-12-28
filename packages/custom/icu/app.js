@@ -56,6 +56,7 @@ ICU.register(function (app, auth, database,swagger) {
 
     ICU.aggregateAsset('js', '../lib/d3/d3.min.js', {weight: 0});
     ICU.aggregateAsset('js', './eventDrops.js', {weight: 1});
+    ICU.aggregateAsset('js', './Toggles.js', {weight: 2});
 
     ICU.angularDependencies([
         'jm.i18next',
@@ -143,13 +144,13 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.layoutservice',
         'mean.icu.decorators.pdsDecorator',
         'infinite-scroll',
-        'mean.icu.ui.modaldeletetasksbyentity',
+        'mean.icu.ui.modaldeletetasksbyentity',        
         'mean.icu.ui.modalcompartmentalization',
         'mean.icu.ui.taskoptions',
         'mean.icu.ui.subtasks',
-        'mean.icu.ui.subtaskslistdirective',
+        'mean.icu.ui.subtaskslistdirective',        
         '720kb.tooltips',
-
+        'mean.icu.ui.draggabletoggle',
     ]);
 
 

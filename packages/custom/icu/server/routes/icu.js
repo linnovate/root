@@ -345,6 +345,15 @@ module.exports = function(Icu, app) {
   .post(documents.sendDocument);
    app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
 
+  app.route('/api/officeDocuments/receiveDocument/:id([0-9a-fA-F]{24})')
+  .post(documents.receiveDocument);
+
+  app.route('/api/officeDocuments/distributedDocument/:id([0-9a-fA-F]{24})')
+  .post(documents.distributedDocument);
+
+  app.route('/api/officeDocuments/readByDocument/:id([0-9a-fA-F]{24})')
+  .post(documents.readByDocument);
+
    app.route('/api/officeTemplates/createNew')
    .post(templateDocs.createNew)
 

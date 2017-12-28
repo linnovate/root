@@ -235,6 +235,37 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 return result.data;
             });
         }
+
+        function receiveDocument(officeDocument) {
+            var data = {
+                'officeDocument':officeDocument
+            };
+            return $http.post(ApiUri + EntityPrefix +  '/receiveDocument/' + officeDocument._id, data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function distributedDocument(officeDocument) {
+            var data = {
+                'officeDocument':officeDocument
+            };
+            return $http.post(ApiUri + EntityPrefix +  '/distributedDocument/' + officeDocument._id, data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
+        function readByDocument(officeDocument) {
+            var data = {
+                'officeDocument':officeDocument
+            };
+            return $http.post(ApiUri + EntityPrefix +  '/readByDocument/' + officeDocument._id, data).then(function (result) {
+//                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
         function updateAssign(officeDocument, prev) {
             if (officeDocument.assign) {
                 var activityType = prev.assign ? 'assign' : 'assignNew';
@@ -307,6 +338,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             star: star,
             getStarred: getStarred,
             createDocument:createDocument,
+            receiveDocument, receiveDocument,
+            distributedDocument, distributedDocument,
+            readByDocument, readByDocument,
             uploadFileToDocument:uploadFileToDocument,
             update:update,
             updateWatcher: updateWatcher,

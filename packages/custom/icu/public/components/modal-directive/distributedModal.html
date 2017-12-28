@@ -1,0 +1,48 @@
+<!-- {{readBy| json}} -->
+<div class="modal-header">
+        <button type="button" class="btn close" aria-hidden="true" ng-click="cancel()">&times;</button>
+        <h3 class="modal-title" ng-if='entity.type != "Document"'>            
+            {{ 'modalDistributedText' | i18next }}{{ entity.type | i18next }} 
+        </h3>
+        <p>{{ 'modalDistributedTextContinue' | i18next }}</p>
+    </div>
+
+    <table class="modal-table">
+        <tr>
+            <td class="status col-sm-2" ng-class="officeDocument.status">{{ officeDocument.title | i18next }}</td>
+            <td class="status col-sm-2" ng-class="officeDocument.status">{{ officeDocument.status | i18next }}</td>    
+            <td class="status col-sm-2" ng-class="officeDocument.tags">{{officeDocument.tags[0] | json}}</td>
+            <td class="status col-sm-2" ng-class="officeDocument.date">{{officeDocument.created | date: "dd-MM-yy"}}</td>
+        </tr>
+    </table>
+    
+    <p>{{ 'modalDistributedViewedBy' | i18next }}</p>    
+    
+    <table ng-if="readBy.length">
+            <thead>
+                <th>Name</th>
+                <th>Email</th>
+            </thead>
+            <tbody ng-repeat="item in readBy">
+                <tr>
+                    <td>{{item.username}}</td>
+                    <td>{{item.email}}</td>
+                </tr>
+            </tbody>
+        </table>
+    
+    
+    <div class="modal-body">
+        {{ 'modalDistributedSlideText' | i18next }}
+        <div id="dragwidget">
+                    <div id="dragcontainer">
+                        <div class="dragshape" draggable-toggle='dragOptions'></div>
+                    </div>
+        </div>
+            
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="ok()">{{'YES' | i18next }}</button>
+    </div>
+    
+    

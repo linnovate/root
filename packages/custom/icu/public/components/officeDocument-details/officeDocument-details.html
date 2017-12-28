@@ -76,7 +76,16 @@
             <div class="send" ng-if="officeDocument.status == 'new'">
                 <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" send="true" data="officeDocument" send-fn="sendDocument(officeDocument)"
                     class="sendBtn">{{ 'send' | i18next }}</button>
-                </div>
+            </div>
+            
+            <div class="receive" ng-if="officeDocument.status == 'sent'">
+                    <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" modal-name="distributed" send="false" sent="true" data="officeDocument" send-fn="distributedDocument(officeDocument)"
+                        class="sendBtn">{{ 'distributed' | i18next }}</button>
+            </div>    
+            <div class="receive" ng-if="officeDocument.status == 'received'">
+                <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" modal-name="receive" send="false" receive="true" data="officeDocument" send-fn="receiveDocument(officeDocument)"
+                    class="sendBtn">{{ 'receive' | i18next }}</button>
+            </div>
             <div class="dropdown dropdown-container" uib-dropdown>
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
@@ -97,6 +106,13 @@
                 </ul>
             </div>
         </div>
+            <!-- <div ng-controller="dragCtrl">
+                <div id="dragwidget">
+                            <div id="dragcontainer">
+                                <div class="dragshape" draggable-toggle='dragOptions'></div>
+                            </div>
+                </div>
+            </div> -->
         <div class="summary wrap-pro">
             <div class="tags" ng-if="!officeDocument.parent">
                 <div class="tag-wrap">
@@ -119,7 +135,7 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
-            </div>
+            </div>        
             <div class="parent" ng-if="officeDocument.parent">
                 {{currentContext.entity.title}}
             </div>

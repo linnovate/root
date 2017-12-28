@@ -297,7 +297,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 }
 
-.send{
+ .send , .receive{
     padding: 0.5%;
     width: 100px
  }
@@ -307,7 +307,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     border-bottom: 3px solid $light-grey1;
     background-color: #F6F6F6;
 
-    .favorite, .due, .status, .tags, .color, .location , .HI , .send{
+    .favorite, .due, .status, .tags, .color, .location , .HI , .send, .receive {
         height: $panel-height;
         float: left;
         position: relative;
@@ -413,7 +413,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
 
 
-    .favorite, .user, .due, .location , .HI, .send{
+    .favorite, .user, .due, .location , .HI, .send, .receive {
         border-right: 1px solid $light-grey1;
     }
 
