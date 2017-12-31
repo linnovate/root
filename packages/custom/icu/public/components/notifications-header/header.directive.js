@@ -20,6 +20,20 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 // Get the saved Notifications of the user, and show it to him
                 NotificationsService.getByUserId($scope.me._id).then(function(response) {
                     $scope.data = NotificationsService.data;
+
+                    if(NotificationsService.data.lastNotification)
+                    {
+                        if (NotificationsService.data.lastNotification.content.length > 25) {
+                            NotificationsService.data.lastNotification.content = 
+                                NotificationsService.data.lastNotification.content.substring(0, 25) + "...";
+                        }
+                    };
+
+                    _(NotificationsService.data.notifications).each(function (n) {
+                        if (n.content.length > 25) {
+                            n.content = n.content.substring(0, 25) + "...";
+                        }
+                    });
                 });
             };
 
