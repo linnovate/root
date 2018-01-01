@@ -894,6 +894,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 position: inherit;
                 color: $light-grey-placeholder;
             }
+
+            &:after {
+                content: none;
+            }
         }   
     }
 
