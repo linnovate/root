@@ -277,5 +277,7 @@
 	"topSecret":"סודי ביותר",
 	"private":"שמור",
 	"unclassified":"בלמס",
-	"files":"קבצים"
+	"files":"קבצים",
+	"unit":"יחידה",
+	"tel":"מספר טלפון"
 }

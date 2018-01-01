@@ -74,6 +74,25 @@
                  ng-model="office.description"
                  options="{{options}}">
             </div>
+
+       <label>{{ 'unit' | i18next }}</label>
+       <div class="text"
+       contenteditable="true"
+       tabindex="2"
+       strip-br="true"
+       ng-model="office.unit"
+       options="{{options}}">
+     
+  </div>
+
+  <label>{{ 'tel' | i18next }}</label>
+  <div class="text"
+  contenteditable="true"
+  tabindex="2"
+  strip-br="true"
+  ng-model="office.tel"
+  options="{{options}}">
+</div>
         </div>
         <div class="tabs">
             <div class="switcher">

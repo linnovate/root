@@ -67,6 +67,12 @@ var OfficeSchema = new Schema({
   WantRoom: {
     type: Boolean,
     default: false
+  },
+  unit: {
+    type:String
+  },
+  tel:{
+    type:String
   }
 });
 

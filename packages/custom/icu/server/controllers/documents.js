@@ -178,19 +178,37 @@ exports.uploadEmpty = function(req,res,next){
 exports.addSerialTitle = function(req,res,next){
   var doc = req.body;
   var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
-  var docFolder,docOffice;
+  var docFolder,docOffice,telOffice,unitOffice;
   if(req.body.folder){
-    docFolder=req.body.folder.title?req.body.folder.title:"NoFolder";
+    docFolder=req.body.folder.title?req.body.folder.title:"noFolder";
     if(req.body.folder.office){
-      docOffice = req.body.folder.office.title?req.body.folder.office.title:"NoOffice";
+      docOffice = req.body.folder.office.title?req.body.folder.office.title:"noOffice";
+      if(req.body.folder.office.tel){
+        telOffice = req.body.folder.office.tel;
+      }
+      else{
+        telOffice = "noTel";
+      }
+
+      if(req.body.folder.office.unit){
+        unitOffice = req.body.folder.office.unit;
+      }
+      else{
+        unitOffice = "noUnit";
+      }
+
     }
     else{
-      docOffice = "NoOffice";
+      docOffice = "noOffice";
+      unitOffice = "noUnit";
+      docFolder = "noFolder";
     }
   }
   else{
-    docFolder = "NoFolder";
-    docOffice = "NoOffice";
+    unitOffice = "noUnit";
+    docFolder = "noFolder";
+    docOffice = "noOffice";
+    docOffice = "noOffice";
   }
   var spPath = doc.spPath;
   var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
@@ -226,6 +244,8 @@ exports.addSerialTitle = function(req,res,next){
     'fileUrl':spPath,
     'folder':docFolder,
     'office':docOffice,
+    'tel':telOffice,
+    'unit':unitOffice,
     'coreOptions':coreOptions,
     'creds':creds,
     'fileOptions':fileOptions,

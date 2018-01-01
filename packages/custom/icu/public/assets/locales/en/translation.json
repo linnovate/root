@@ -274,6 +274,9 @@
 	"topSecret":"Top Secret",
 	"private":"Private",
     "unclassified":"Unclassified",
-    "files":"Files"
+    "files":"Files",
+    "unit":"Unit",
+    "tel":"Phone number"
+
 
 }

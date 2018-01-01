@@ -88,6 +88,30 @@ angular.module('mean.icu.ui.officedetails', [])
             }
         });
 
+        $scope.$watch('office.tel', function (nVal, oVal) {
+            if (nVal !== oVal) {
+                var context = {
+                    name: 'tel',
+                    oldVal: oVal,
+                    newVal: nVal,
+                    action: 'changed'
+                };
+                $scope.delayedUpdate($scope.office, context);
+            }
+        });
+
+        $scope.$watch('office.unit', function (nVal, oVal) {
+            if (nVal !== oVal) {
+                var context = {
+                    name: 'unit',
+                    oldVal: oVal,
+                    newVal: nVal,
+                    action: 'changed'
+                };
+                $scope.delayedUpdate($scope.office, context);
+            }
+        });
+
         $scope.people = people.data || people;
 
         $scope.options = {
@@ -170,6 +194,14 @@ angular.module('mean.icu.ui.officedetails', [])
                             ActivitiesService.data.push(result);
 
                         });
+                        case 'tel':
+                        case 'unit':
+                            OfficesService.updateTitle(office, backupEntity, context.name).then(function(result) {
+                                backupEntity = JSON.parse(JSON.stringify($scope.office));
+                                // ActivitiesService.data = ActivitiesService.data || [];
+                                // ActivitiesService.data.push(result);
+    
+                            });
                         break; 
                 }
                 
