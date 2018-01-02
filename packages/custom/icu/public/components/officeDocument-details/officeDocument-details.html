@@ -140,8 +140,12 @@
                 {{currentContext.entity.title}}
             </div>
         </div>
-        <button ng-if="!officeDocument.serial" ng-click="addSerialTitle(officeDocument)" class="simochin" >{{'simochin' | i18next }}</button>
+        <button ng-if="!officeDocument.serial && !settingSerial" ng-click="addSerialTitle(officeDocument)" class="simochin" >{{'simochin' | i18next }}</button>
+        
+        
+        
         <div class="info">
+                <div ng-if="settingSerial" class="loader1"></div>  
             <p class="classification" ng-if="officeDocument.classification">{{'classification' | i18next }}: {{officeDocument.classification| i18next}} </p>
             <p ng-if="officeDocument.serial">{{'simochin' | i18next }}: {{officeDocument.serial}} </p>
         </div>
@@ -161,12 +165,19 @@
                 options="{{options}}">
             </div>
             <div class="row-buttons">
-                <button class="create" ng-if="(!officeDocument.path && !officeDocument.spPath)" icu-open-modal entity-name="officeDocument" show-modal="true" modal-name="template" data="officeDocument" >{{ 'createFromTemplate' | i18next }} </button>
+                <button class="create" ng-if="(!officeDocument.path && !officeDocument.spPath && !uploading)" icu-open-modal entity-name="officeDocument" show-modal="true" modal-name="template" data="officeDocument" >{{ 'createFromTemplate' | i18next }} </button>
                 <button ngf-select
                         ngf-change="upload($files)"
                         ngf-multiple="true"
-                        class="choose" ng-if="(!officeDocument.path && !officeDocument.spPath)">{{ 'chooseFile' | i18next }}
+                        class="choose" ng-if="(!officeDocument.path && !officeDocument.spPath && !uploading)">{{ 'chooseFile' | i18next }}
                 </button>
+                
+                <div class="progress" ng-if="uploading">
+                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40"
+                    aria-valuemin="0" aria-valuemax="100" ng-style="{width:progressPercentage+'%'}">
+                      {{progressPercentage}}%
+                    </div>
+                  </div>
 
                 <div style="overflow:inherit" class="tab-content">
                     <div class="documents">

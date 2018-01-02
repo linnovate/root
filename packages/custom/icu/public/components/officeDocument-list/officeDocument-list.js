@@ -92,7 +92,17 @@ angular.module('mean.icu.ui.officedocumentlist', [])
                 $state.current.name === 'main.officeDocuments.byentity' ||
                 $state.current.name === 'main.officeDocuments.all.details.activities'||
                 $state.current.name === 'main.officeDocuments.byentity.details.activities') {
-                navigateToDetails($scope.officeDocuments[0]);
+                var date = new Date();
+                var lastIndex = $scope.officeDocuments.length-1;
+                var diff = date.getTime()-$scope.officeDocuments[lastIndex].created.getTime();
+                if($scope.officeDocuments[lastIndex].title=="" 
+                &&  diff<=2500){
+                    navigateToDetails($scope.officeDocuments[lastIndex]);
+                }
+                else{
+                    navigateToDetails($scope.officeDocuments[0]);
+                }
+                    
             }
         }
         else {

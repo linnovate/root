@@ -1363,6 +1363,16 @@ angular.module('mean.icu').config([
             .state('main.folders.byentity.details.documents', getDetailsTabState('folder', 'documents'))
             .state('main.folders.byentity.details.tasks', getDetailsTabState('folder', 'tasks'))
 
+            .state('main.adminSettings', {
+                url: '/adminSettings',
+                views: {
+                    'mainpane@main': {
+                        templateUrl: '/icu/components/admin/settings.html',
+                        controller: 'adminSettingsController'
+                    }
+                }
+            })
+            
             .state('main.search', {
                 url: '/search/:query',
                 views: {

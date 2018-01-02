@@ -95,7 +95,9 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
         $scope.addSerialTitle = function(document1){
             console.log("===UPLOAD EMPTY====");
+            $scope.settingSerial = true;
             OfficeDocumentsService.addSerialTitle(document1).then(function(result){
+                $scope.settingSerial = false;                
                 if(result && result.spPath){
                     document1.spPath = result.spPath;
                 }
@@ -183,6 +185,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         
 
         $scope.upload = function(file) {
+            $scope.uploading = true;
             $scope.test = file;
             var data = {
                 'id':$stateParams.id,
@@ -190,11 +193,16 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             };
             if(file.length > 0){
                 OfficeDocumentsService.uploadFileToDocument(data, file).then(function(result){
+                    $scope.uploading = false;
                     $scope.officeDocument.title = result.data.title;
                     $scope.officeDocument.path = result.data.path;
                     $scope.officeDocument.spPath = result.data.spPath;
                     $scope.officeDocument.documentType = result.data.documentType;
 
+                },function (resp) {
+                    console.log('Error status: ' + resp.status);
+                }, function (evt) {
+                    $scope.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                 });
             }
         };

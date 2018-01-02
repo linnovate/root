@@ -15,6 +15,7 @@ var templates = require('../controllers/templates');
 var eventDrops = require('../controllers/event-drops');
 var office = require('../controllers/office');
 var folder = require('../controllers/folder');
+var webHook = require('../controllers/webhook');
 var documents = require('../controllers/documents');
 var templateDocs = require('../controllers/templateDocs');
 var authorization = require('../middlewares/auth.js');
@@ -299,6 +300,8 @@ module.exports = function(Icu, app) {
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
 
+  app.route('/api/new')
+    .post(webHook.create); //notification.0, updates.created)
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
@@ -312,6 +315,7 @@ module.exports = function(Icu, app) {
     .post(order.set);
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
+
 
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
