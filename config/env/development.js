@@ -1,5 +1,5 @@
 'use strict';
-
+console.log("************ DEVELOPMENT MODE *****************")
 module.exports = {
  db: (process.env.MONGODB_URI || 'mongodb://localhost/icu-dev'),
   debug: true,

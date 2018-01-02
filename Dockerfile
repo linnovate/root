@@ -1,6 +1,7 @@
 FROM node:4
 
 RUN npm install -g bower gulp
+RUN npm install -g nodemon@1.11.0
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app/
