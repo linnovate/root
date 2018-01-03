@@ -82,7 +82,7 @@
                     <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" modal-name="distributed" send="false" sent="true" data="officeDocument" send-fn="distributedDocument(officeDocument)"
                         class="sendBtn">{{ 'distributed' | i18next }}</button>
             </div>    
-            <div class="receive" ng-if="officeDocument.status == 'received'">
+            <div class="receive" ng-if="officeDocument.status == 'received' && officeDocument.viewed != true">
                 <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" modal-name="receive" send="false" receive="true" data="officeDocument" send-fn="receiveDocument(officeDocument)"
                     class="sendBtn">{{ 'receive' | i18next }}</button>
             </div>

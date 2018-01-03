@@ -91,6 +91,7 @@
     "modalDistributedText": "Approve Document Receipt",    
     "modalReceiveTextContinue": "document details",
     "modalDistributedTextContinue": "document details",
+    "modalNotDistributedText": "Not Distributed",
     "modalReceiveSlideText": "Slide to approve document receipt",
     "modalDistributedSlideText": "Slide to approve document distribution",
     "modalDistributedViewedBy": "Viewed by the following:",
