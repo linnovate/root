@@ -12,6 +12,7 @@
   },
   "scripts": {
     "start": "node server",
+    "startdev": "nodemon server",
     "test": "export NODE_ENV=test && gulp test",
     "postinstall": "node tools/scripts/postinstall.js && gulp sass"
   },
@@ -42,6 +43,7 @@
     "morgan": "1.5.3",
     "ms": "0.7.1",
     "nodemailer": "1.3.4",
+    "nodemon": "^1.11.0",
     "npm": "^2.9.1",
     "officegen": "latest",
     "passport-facebook": "2.0.0",

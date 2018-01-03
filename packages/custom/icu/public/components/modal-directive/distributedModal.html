@@ -16,23 +16,29 @@
         </tr>
     </table>
     
-    <p>{{ 'modalDistributedViewedBy' | i18next }}</p>    
+    <p>{{ 'modalDistributedViewedBy' | i18next }}:</p>    
     
-    <table ng-if="readBy.length">
+    <table ng-if="readBy.length" class="modal-readby-table">
             <thead>
-                <th>Name</th>
-                <th>Email</th>
+                <th>{{ 'name' | i18next }}</th>
+                <th>{{ 'email' | i18next }}</th>
+                <th>{{ 'received' | i18next }}</th>
             </thead>
             <tbody ng-repeat="item in readBy">
                 <tr>
                     <td>{{item.username}}</td>
                     <td>{{item.email}}</td>
+                    <td>{{item.date | date: "dd-MM-yy"}}</td>
                 </tr>
             </tbody>
         </table>
+    <div ng-if="readBy.length==0" class="modal-readby-table">
+        {{ 'modalNotDistributedText' | i18next }}
+    </div>
+            
     
     
-    <div class="modal-body">
+    <!-- <div class="modal-body">
         {{ 'modalDistributedSlideText' | i18next }}
         <div id="dragwidget">
                     <div id="dragcontainer">
@@ -40,7 +46,7 @@
                     </div>
         </div>
             
-    </div>
+    </div> -->
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="ok()">{{'YES' | i18next }}</button>
     </div>

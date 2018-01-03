@@ -1681,22 +1681,22 @@ exports.receiveDocument = function(req,res,next){
 //  console.log("receiveDocument ***************" ) ;  
   officeDocument  = req.body.officeDocument  ;
   var id = req.params.id;  
-  Document.update({'_id':officeDocument.ref },{$push:{readBy: req.user._id }},function(error,result){
+  Document.update({'_id':officeDocument.ref },{$push:{readBy: {date: Date.now(), user: req.user._id }}},function(error,result){
     if(error){
         //TBD
 //      res.send(error);
-//        console.log("error updating sender user read") ;
+        console.log("error updating sender user read") ;
 
     }
     else{
         //TBD
 //      res.send('ok');
-//      console.log("success updating sender user read") ;
+      console.log("success updating sender user read") ;
     }
   });
 
-  Document.update({'_id':id},{$set:{status:"viewed"}},function(error,result){
-//    console.log("updating doc status to viewed") ;  
+  //    console.log("updating doc status to viewed") ;  
+  Document.update({'_id':id},{$set:{viewed: true}},function(error,result){
     if(error){
       res.send(error);
     }
@@ -1725,14 +1725,11 @@ exports.distributedDocument = function(req,res,next){
 
 // update user document distributed == viewed.
 exports.readByDocument = function(req,res,next){
-//  console.log("readByDocument ***************" ) ;  
-
   officeDocument  = req.body.officeDocument  ;
   var readBy = officeDocument.readBy ;
-  readbyToId = [] ;
+  var readbyToId = [] ;
   readBy.forEach(function(element) {
-    console.log(element);
-    readbyToId.push(new mongoose.Types.ObjectId( element)) ;
+    readbyToId.push(new mongoose.Types.ObjectId(element.user)) ;
   });
   console.log( JSON.stringify(readbyToId )) ;  
   var id = req.params.id;  
@@ -1759,16 +1756,13 @@ exports.sendDocument = function (req, res, next) {
   sendingForm['forNotice'] = sendingForm['forNotice']?sendingForm['forNotice']:[];
   sendingForm['sendingAs'] = sendingForm['sendingAs']?sendingForm['sendingAs']:[];
   sendingForm['ref'] = req.body.officeDocument._id ;
-
-  //if(sendingForm['classification']){
-    //sendingForm['classification']=sendingForm['classification'].toLowerCase();
-  //}
   sendingForm['sender']=req.user._id;
   var watchers =_.union(sendingForm['doneBy'],_.union(sendingForm['forNotice'],_.union([assign],[sendingForm['sendingAs']])));
   officeDocument.watchers.forEach(function(w){
     watchers.push(w._id);
   });
-  watchers=_.union(watchers,watchers);
+  watchers=_.union(watchers,watchers);  
+  watchers.filter(n => n).filter(n => true) ;
   sendingForm['status']='sent';
   watchers.forEach(function(watcher){
     var watcher = watcher._id?watcher._id:watcher;
@@ -1797,10 +1791,12 @@ exports.sendDocument = function (req, res, next) {
       var doc2 = new Document(doc);
       doc2.save(function(error,result){
         if(error||!result){
-       
+            console.log("error sending document");
+            console.log(error);
+            console.log(result);
         }
         else{
-          
+//          console.log("success sending document")          
         }
         
       });
@@ -1817,44 +1813,51 @@ exports.sendDocument = function (req, res, next) {
     });
     var watchersReq = [];
     watchers.forEach(function(w){
-//      console.log(watchers) ;
       watchersReq.push({'UserId':w});
     })
-  Document.update({'_id':officeDocument._id},{$set:sendingForm},function(error,result){
-    if(error||!result){
-      res.send(error);
+
+    // update the original document with who it was sent to + date.
+    sentTo = [] ;
+    watchers.forEach(function(watcher){      
+      watcher!=sendingForm.sender ? sentTo.push({date: Date.now(), user: watcher}) : '';
+    });
+    if (sentTo.length) {
+      sendingForm = Object.assign({sentTo, sendingForm}) ;
+      sendingForm.status = 'sent'
     }
-    else{
-      getUsers(oldWatchers).then(function(){
-        getUsers(watchersReq).then(function(){
-          var zero = [];
-          var users = [];
-          oldWatchers.forEach(function(w){
-            zero.push(w.UserId);
+    Document.update({'_id':officeDocument._id},{$set:sendingForm},function(error,result){
+      if(error||!result){
+        res.send(error);
+      }
+      else{
+        getUsers(oldWatchers).then(function(){
+          getUsers(watchersReq).then(function(){
+            var zero = [];
+            var users = [];
+            oldWatchers.forEach(function(w){
+              zero.push(w.UserId);
+            });
+            watchersReq.forEach(function(w){
+              users.push(w.UserId);
+            });
+            var json = {
+              "siteUrl":config.SPHelper.SPSiteUrl,
+              "paths":[spPath],
+              "users":users,
+              "creators":creators,
+              "zero":zero
+            };
+            request({
+              "url":config.SPHelper.uri+"/api/share",
+              "method":'POST',
+              "json":json
+            }, function(error,resp,body){
+            res.send(sendingForm); 
+            }
+            );
           });
-          watchersReq.forEach(function(w){
-            users.push(w.UserId);
-          });
-          var json = {
-            "siteUrl":config.SPHelper.SPSiteUrl,
-            "paths":[spPath],
-            "users":users,
-            "creators":creators,
-            "zero":zero
-          };
-          request({
-            "url":config.SPHelper.uri+"/api/share",
-            "method":'POST',
-            "json":json
-          }, function(error,resp,body){
-           res.send(sendingForm); 
-          }
-          );
-        });
-      });
-      
-    }
-    
+        });      
+      }    
   });
 });
 }
