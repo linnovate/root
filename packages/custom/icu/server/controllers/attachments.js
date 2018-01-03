@@ -31,7 +31,7 @@ exports.getByEntity = function (req, res, next) {
     updates: 'update',
     offices: 'office',
     folders: 'folder',
-    officeDocuments: 'officeDocument'
+    officeDocuments: 'officeDocuments'
   },
     entity = entities[req.params.entity];
 
@@ -343,7 +343,7 @@ exports.signNew = function (req, res, next) {
     discussion: 'Discussion',
     office: 'Office',
     folder: 'Folder',
-    officeDocument: 'Document'
+    officeDocuments: 'Document'
   };
   var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
   query.findOne({
