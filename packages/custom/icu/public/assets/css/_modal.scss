@@ -1,5 +1,6 @@
 
 .modal-dialog {
+	padding: 10px ;
 	#dragcontainer {
 		width : 200px;
 		height: 44px;
@@ -28,6 +29,7 @@
 		}
 	}
 	.modal-table {
+		width: 100% ;
 		padding: 10px 0;
 		background-color: #eee ;
 		tr {
@@ -35,8 +37,30 @@
 			border-top: 1px solid #aaaaaa;
 			border-bottom: 1px solid #aaaaaa;
 		}
-	}
+		th {
+			text-align: center;
+		}
+		td,th {
+			padding: 5px 10px;
+		}
 	
+	}
+
+	.modal-readby-table {
+		padding: 10px 0;
+		tr {
+			background-color: #eee ;			
+			border-top: 1px solid #aaaaaa;
+		}
+		th {
+			text-align: center;
+		}
+		td,th {
+			padding: 5px 10px;
+		}
+	}		
+
+
 	.modal-content {
 		border-radius: 0px;
 	}

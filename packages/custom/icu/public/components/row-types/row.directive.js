@@ -19,7 +19,7 @@ angular.module('mean.icu.ui.rows', [])
         templateDoc: '/icu/components/row-types/templateDoc-row.html',
         folder: '/icu/components/row-types/folder-row.html',
         officeDocument: '/icu/components/row-types/officeDocument-row.html',
-        officedocument: '/icu/components/row-types/officeDocument-row.html',
+//        officedocument: '/icu/components/row-types/officeDocument-row.html',
         'search-task': '/icu/components/row-types/search-task-row.html',
         'search-project': '/icu/components/row-types/search-project-row.html',
         'search-discussion': '/icu/components/row-types/search-discussion-row.html',

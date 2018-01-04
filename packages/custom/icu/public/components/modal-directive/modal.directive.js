@@ -217,11 +217,19 @@ function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, peo
 
 
 function distributedCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
-    OfficeDocumentsService.readByDocument(officeDocument).then(function(res) { 
-        // console.log("distributedCtrl") ;
-        // console.log(res) ;
-        $scope.readBy  = res ;
+    if(officeDocument.readBy && officeDocument.readBy.length) {
+    OfficeDocumentsService.readByDocument(officeDocument).then(function(res) {         
+        let resWithDate = res.map(r => { 
+            let currentReadBy = officeDocument.readBy.filter(rb => rb.user == r._id) ;
+            return Object.assign({date: currentReadBy[0].date}, r) ;
+         } )
+        // add the read date as it appears on the doc.
+        $scope.readBy  = resWithDate ;
     }) ;
+    }
+    else {
+        $scope.readBy = [] ;
+    }
     $scope.officeDocument = officeDocument;
     $scope.dragOptions = {
         start: function(e) {

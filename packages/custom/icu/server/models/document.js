@@ -93,11 +93,23 @@ var DocumentSchema = new Schema({
   ref: {
     type: Schema.ObjectId
   },
+  sentTo: [{    
+    date: Date,
+    user: {
+        type: Schema.ObjectId,
+        ref: 'User',
+//        unique: true,
+      }
+    }],    
   readBy: [{
-    type: Schema.ObjectId,
-    ref: 'User',
-    default:[]
+    date: Date,
+    user: {
+        type: Schema.ObjectId,
+        ref: 'User',
+//        unique: true,
+      }
   }],
+  viewed: Boolean,  
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User',
