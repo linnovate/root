@@ -91,6 +91,15 @@ var UserSchema = new Schema({
     type: String,
     default: 'local'
   },
+  GetMailEveryWeekAboutMyTasks: {
+    type: String,
+    default: 'no'
+  },
+  GetMailEveryWeekAboutGivenTasks:
+  {
+    type: String,
+    default: 'no'
+  },
   salt: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,

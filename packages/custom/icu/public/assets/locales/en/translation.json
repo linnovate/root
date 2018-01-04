@@ -279,5 +279,7 @@
     "unit":"Unit",
     "tel":"Phone number",
     "dontShowMeAgain": "Don't show me again",
-    "whatsNew" : "What's new"
+    "whatsNew" : "What's new",
+    "IWantToGetMailEveryWeekAboutMyTasks": "I Want To Get Mail Every Week About My Tasks",
+    "IWantToGetMailEveryWeekAboutGivenTasks": "I Want To Get Mail Every Week About Given Tasks"
 }

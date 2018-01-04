@@ -6,6 +6,14 @@ angular.module('mean.icu.ui.profile', [])
     $scope.me.fullname = $scope.me.name + " " + $scope.me.lastname;
     $scope.needToBeIgnored = false;
 
+    if (!$scope.me.GetMailEveryWeekAboutMyTasks) {
+        $scope.me.GetMailEveryWeekAboutMyTasks="no";
+    }
+
+    if (!$scope.me.GetMailEveryWeekAboutMyTasks) {
+        $scope.me.GetMailEveryWeekAboutGivenTasks="no";
+    }
+
     if (!$scope.me.profile) {
         $scope.me.profile = {};
     }

@@ -578,6 +578,190 @@ exports.send = function(type, data) {
   });
 };
 
+
+exports.sendMyTasksOfNextWeekSummary = function(type, data) {
+  if (type === 'comment_email') {
+    return;
+  }
+  var rootPath='';
+
+  var port = config.https && config.https.port ? config.https.port : config.http.port;
+  data.uriRoot = config.host + ':' + port;
+  data.date = new Date();
+  
+  var recipients = [];
+  recipients[0] = data.user;
+
+  var unique = [];
+  var json ={};
+  for(var i=0;i<recipients.length;i++){
+    json[recipients[i]._id]=recipients[i];
+  }
+  for(var key in json){
+    unique.push(json[key]);
+  }
+  recipients = unique;
+
+  var attendingPeople=[];
+  data.attendees = [];
+   var ids = [], emails = [];
+  for (var i = 0; i < recipients.length; i++) {
+    if (ids.indexOf(recipients[i]._id.toString()) === -1) {
+      var json = {
+        "name": recipients[i].name,
+        "email": recipients[i].email
+      };
+      attendingPeople.push(json);
+      ids.push(recipients[i]._id.toString());
+       emails.push(recipients[i].email);
+      data.attendees.push(recipients[i].name);
+    }
+  }
+  var calMethod = "REQUEST";
+
+  var builder = icalToolkit.createIcsFileBuilder();
+  builder.spaces = true;
+  builder.NEWLINE_CHAR = '\r\n';
+  builder.throwError = false;
+  builder.ignoreTZIDMismatch = true;
+  builder.calname = "This My Week tasks";
+  builder.timezone = 'asia/istanbul';
+  builder.tzid = 'asia/istanbul';
+  builder.method = calMethod;
+
+  var content = builder.toString();
+  var buffer = new Buffer(content);
+
+  exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
+    rootPath = stdout;
+      render(type, data).then(function(results) {
+    var promises = emails.map(function(recipient) {
+      var mailOptions = {
+        "to" : recipient,
+        "from" : config.emailFrom,
+        "subject" : "This My Week tasks",
+        "html" : results.html,
+        "text" : results.text,
+        "forceEmbeddedImages" : true
+      };
+
+      return send(mailOptions);
+    });
+
+    return Q.all(promises);
+  });
+  });
+
+
+  return render(type, data).then(function(results) {
+    var promises = emails.map(function(recipient) {
+      var mailOptions = {
+        "to" : 'test@test.test',
+        "from" : config.emailFrom,
+        "subject" : "This My Week tasks",
+        "html" : results.html,
+        "text" : results.text,
+        "forceEmbeddedImages" : true
+      };
+
+      return send(mailOptions);
+    });
+
+    return Q.all(promises);
+  });
+};
+
+exports.sendGivenTasksOfNextWeekSummary = function(type, data) {
+  if (type === 'comment_email') {
+    return;
+  }
+  var rootPath='';
+
+  var port = config.https && config.https.port ? config.https.port : config.http.port;
+  data.uriRoot = config.host + ':' + port;
+  data.date = new Date();
+  
+  var recipients = [];
+  recipients[0] = data.user;
+
+  var unique = [];
+  var json ={};
+  for(var i=0;i<recipients.length;i++){
+    json[recipients[i]._id]=recipients[i];
+  }
+  for(var key in json){
+    unique.push(json[key]);
+  }
+  recipients = unique;
+  var attendingPeople=[];
+  data.attendees = [];
+   var ids = [], emails = [];
+  for (var i = 0; i < recipients.length; i++) {
+    if (ids.indexOf(recipients[i]._id.toString()) === -1) {
+      var json = {
+        "name": recipients[i].name,
+        "email": recipients[i].email
+      };
+      attendingPeople.push(json);
+      ids.push(recipients[i]._id.toString());
+       emails.push(recipients[i].email);
+      data.attendees.push(recipients[i].name);
+    }
+  }
+  var calMethod = "REQUEST";
+
+  var builder = icalToolkit.createIcsFileBuilder();
+  builder.spaces = true;
+  builder.NEWLINE_CHAR = '\r\n';
+  builder.throwError = false;
+  builder.ignoreTZIDMismatch = true;
+  builder.calname = "This Week Given tasks";
+  builder.timezone = 'asia/istanbul';
+  builder.tzid = 'asia/istanbul';
+  builder.method = calMethod;
+
+  var content = builder.toString();
+  var buffer = new Buffer(content);
+
+  exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
+    rootPath = stdout;
+      render(type, data).then(function(results) {
+    var promises = emails.map(function(recipient) {
+      var mailOptions = {
+        "to" : recipient,
+        "from" : config.emailFrom,
+        "subject" : "This Week Given tasks",
+        "html" : results.html,
+        "text" : results.text,
+        "forceEmbeddedImages" : true
+      };
+
+      return send(mailOptions);
+    });
+
+    return Q.all(promises);
+  });
+  });
+
+
+  return render(type, data).then(function(results) {
+    var promises = emails.map(function(recipient) {
+      var mailOptions = {
+        "to" : 'test@test.test',
+        "from" : config.emailFrom,
+        "subject" : "This Week Given tasks",
+        "html" : results.html,
+        "text" : results.text,
+        "forceEmbeddedImages" : true
+      };
+
+      return send(mailOptions);
+    });
+
+    return Q.all(promises);
+  });
+};
+
 exports.system = function(data) {
   var port = config.https && config.https.port ? config.https.port : config.http.port;
   data.uriRoot = config.host + ':' + port;

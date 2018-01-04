@@ -282,5 +282,7 @@
 	"unit":"יחידה",
 	"tel":"מספר טלפון",
 	"dontShowMeAgain": "אל תראה לי שוב",
-	"whatsNew": "מה חדש"
+	"whatsNew": "מה חדש",
+	"IWantToGetMailEveryWeekAboutMyTasks": "אני רוצה לקבל כל שבוע מייל על המשימות השבועיות שלי",
+    "IWantToGetMailEveryWeekAboutGivenTasks": "אני רוצה לקבל כל שבוע מייל על המשימות השבועיות שנתתי לאחרים"
 }

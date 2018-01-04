@@ -177,6 +177,12 @@ module.exports = function(Icu, app) {
   app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
   	.get(task.getSubTasks)
 
+  app.route('/api/tasks/MyTasksOfNextWeekSummary')
+    .post(task.read, task.MyTasksOfNextWeekSummary);
+
+  app.route('/api/tasks/GivenTasksOfNextWeekSummary')
+    .post(task.read, task.GivenTasksOfNextWeekSummary);
+
 // app.route('/api/:entity(discussions|projects|offices|users|folders)/:id([0-9a-fA-F]{24})/folders')
 //     .get(pagination.parseParams, folder.getByEntity, pagination.formResponse);
 

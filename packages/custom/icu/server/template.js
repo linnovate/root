@@ -4,6 +4,12 @@ var dateFormat = function (date) {
   return ('3:07 PM on July 16, 2015');
 };
 
+var curr = new Date();
+curr.setHours(0,0,0,0);
+var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay()+6));
+lastday = new Date(lastday.setHours(23, 59, 59, 0))
+
 module.exports = {
   comment_email: function (user, text, from, task, icu, mailOptions) {
     mailOptions.html = [
@@ -97,6 +103,29 @@ module.exports = {
       // '<% }); %>',
       '<h4>Additional tasks: </h4>',
       '<ol><% additionalTasks.forEach(function(task) { %><li><a href="<%= uriRoot %>/tasks/by-discussion/<%= discussion._id %>/<%= task._id %>"><%- task.title %></a></li><% }); %></ol>',
+    ].join('\n\n')
+  },
+  MyTasksOfNextWeekSummary: {
+    subject: 'My Tasks Of Next week summary',
+    body: [
+      '<div style="display:block;margin:0 auto;max-width:580px;padding:12px 16px;background-color:orange">',
+      '<div style="margin:0 auto;max-height:37px;max-width:122px;text-align: center;">ICU</div></div>',
+      '<div style="display:block;margin:0 auto;max-width:580px;padding:12px 16px;background-color:#FCFBF6">',
+      '<p>Today Date: <%= new Date().toLocaleString() %></p>',
+      '<p>End day Date: <%= ' + lastday + ' %></p>',
+      // '<h2><%= discussion.title %>, <%= discussion.due.toLocaleString() %></h2>',
+      // '<img style="appearance: none;border: none;height: calc(30px * 2);border-radius: 30px;width: calc(30px * 2);background-color: #b8e77f;width: 45px;height: 44px;margin: 0 7.5px;"/>',
+
+      // '<p>Attendees: <%= discussion.watchers.map(function(w) { return w.name; }).join(",") %></p>',
+
+      // '<div style="background-color:#fff;border:1px solid #dbdbdb;border-radius:3px;display:block;margin:6px 60px;padding:10px 12px">',
+      // '<% print(discussion.description) %>',
+      // '</div>',
+
+      '<h2>Tasks: </h2>',
+      '<ol><% WeekTasks.forEach(function(task) { %><li><a href="<%= uriRoot %>/tasks/all/<%= task._id %>"><%- task.title %></a>, ', 
+      '<%- task.due %>',
+      '</li><% }); %></ol>',
     ].join('\n\n')
   }
 };

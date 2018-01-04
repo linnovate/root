@@ -304,6 +304,20 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function MyTasksOfNextWeekSummary() {
+        return $http.post(ApiUri + EntityPrefix + '/MyTasksOfNextWeekSummary').then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function GivenTasksOfNextWeekSummary() {
+        return $http.post(ApiUri + EntityPrefix + '/GivenTasksOfNextWeekSummary').then(function(result) {
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -338,6 +352,8 @@ angular.module('mean.icu.data.tasksservice', [])
         tabData: tabData,
         IsNew: IsNew,
         updateEntity: updateEntity,
-        updateTitle: updateTitle
+        updateTitle: updateTitle,
+        MyTasksOfNextWeekSummary: MyTasksOfNextWeekSummary,
+        GivenTasksOfNextWeekSummary: GivenTasksOfNextWeekSummary
     };
 });

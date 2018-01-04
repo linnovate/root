@@ -26,6 +26,18 @@
             <input class="form-control" type="password" ng-model="confirm">
         </div>
         <div class=form-group>
+            <label>{{ 'IWantToGetMailEveryWeekAboutMyTasks' | i18next }}</label>
+            <input class="form-control" type="radio" name="GetMailEveryWeekAboutMyTasks" value="yes" ng-model="me.GetMailEveryWeekAboutMyTasks" /> {{ 'yes' | i18next }}<br>
+            <input id="GetMyWeekTasksNO" class="form-control" type="radio" name="GetMailEveryWeekAboutMyTasks" value="no"  ng-model="me.GetMailEveryWeekAboutMyTasks" checked="true" /> {{ 'no' | i18next }}<br>
+            <input type="submit" value="Submit">
+        </div>
+        <div class=form-group>
+            <label>{{ 'IWantToGetMailEveryWeekAboutGivenTasks' | i18next }}</label>
+            <input class="form-control" type="radio" name="GetMailEveryWeekAboutGivenTasks" value="yes" ng-model="me.GetMailEveryWeekAboutGivenTasks" /> {{ 'yes' | i18next }}<br>
+            <input id="GetMyWeekTasksNO" class="form-control" type="radio" name="GetMailEveryWeekAboutGivenTasks" value="no"  ng-model="me.GetMailEveryWeekAboutGivenTasks" checked="true" /> {{ 'no' | i18next }}<br>
+            <input type="submit" value="Submit">
+        </div>
+        <div class=form-group>
             <label>{{ 'avatar' | i18next }}</label>
             <div class="upload" ngf-select ngf-change="uploadAvatar($files)" ng-model="me.profile.avatar">
                 {{ 'upload' | i18next }}
@@ -50,7 +62,7 @@
         <div class=form-group ng-show="needToBeIgnored">
             <span class="btn btn-info" ng-click="loginToHi(hiUserName, hiPassword)">{{ 'getHiUserId' | i18next }}</span>
         </div>
-        <button id="saveprofile">{{'save' | i18next }}</button>
+        <button id="saveprofile">{{'save' | i18next }} {{ 'avatar' | i18next }}</button>
     </form>
     <div ng-if="!showProfile" icu-event-drops></div>
 </div>
