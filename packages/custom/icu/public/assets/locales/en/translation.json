@@ -276,7 +276,7 @@
     "unclassified":"Unclassified",
     "files":"Files",
     "unit":"Unit",
-    "tel":"Phone number"
-
-
+    "tel":"Phone number",
+    "dontShowMeAgain": "Don't show me again",
+    "whatsNew" : "What's new"
 }

@@ -279,5 +279,7 @@
 	"unclassified":"בלמס",
 	"files":"קבצים",
 	"unit":"יחידה",
-	"tel":"מספר טלפון"
+	"tel":"מספר טלפון",
+	"dontShowMeAgain": "אל תראה לי שוב",
+	"whatsNew": "מה חדש"
 }

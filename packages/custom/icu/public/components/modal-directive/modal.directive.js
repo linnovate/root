@@ -2,9 +2,21 @@
 angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
     .directive('icuOpenModal', function ($state, $uibModal, OfficeDocumentsService, TemplateDocsService ) {
 
+        if( window.config.version !=  localStorage.getItem("icuVersion")){
+            $uibModal.open({
+                animation: true,
+                size:  'lg',
+                templateUrl: '/icu/components/modal-directive/whats-new/whats-new.html',
+                controller: controllerwhatsNew,
+                resolve: {
+    
+                }
+            }); 
+        }
+
         function link(scope, elem, attrs) {
             elem.bind('click', function() {
-
+               
                 if($state.current.name.indexOf('main.tasks.byentity') != -1 && scope.entityName != 'Document')
                    scope.showModal --;
 

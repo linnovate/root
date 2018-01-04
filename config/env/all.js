@@ -50,12 +50,15 @@ module.exports = {
     name: 'he',
     direction: 'rtl',
   }],
-  // currentLanguage: 'en',
-  currentLanguage: 'he',
+   currentLanguage: 'en',
+  //currentLanguage: 'he',
   // The session cookie name
   sessionName: 'connect.sid',
   attachmentDir: rootPath + '/files',
 //  activeProvider: 'google',
   activeProvider: 'local',
-  circleSettings: require('../circleSettings') || {}
+  circleSettings: require('../circleSettings') || {},
+
+  version: '1.0.5',
+  whatsNew:['fix document...bla bla', 'now you can bla bla bla']
 };

@@ -59,7 +59,9 @@ exports.render = function(req, res) {
 			'activeProvider': config.activeProvider,
 			'host': config.host,
 			'socketPort': config.socketPort,
-			'circles': circlesLocations()
+			'circles': circlesLocations(),
+			'version': config.version,
+			'whatsNew': config.whatsNew
 		}
 	});
 };

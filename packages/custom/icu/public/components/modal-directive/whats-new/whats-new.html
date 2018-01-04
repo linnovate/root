@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <button type="button" class="btn close" aria-hidden="true" ng-click="cancel()">&times;</button>
+    <h3 class="modal-title" ng-if='entity.type != "Document"'>
+        {{ 'whatsNew' | i18next }}
+    </h3>
+</div>
+<div class="modal-body">
+    <ul>
+        <li ng-repeat="x in whatsNew">{{x}}</li>
+    </ul>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">{{'dontShowMeAgain' | i18next }}</button>
+</div> 
