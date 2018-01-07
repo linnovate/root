@@ -279,5 +279,6 @@
     "unit":"Unit",
     "tel":"Phone number",
     "dontShowMeAgain": "Don't show me again",
-    "whatsNew" : "What's new"
+    "whatsNew" : "What's new",
+    "optional":"Optional"
 }

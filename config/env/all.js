@@ -59,6 +59,14 @@ module.exports = {
   activeProvider: 'local',
   circleSettings: require('../circleSettings') || {},
 
-  version: '1.0.5',
-  whatsNew:['fix document...bla bla', 'now you can bla bla bla']
+  version: '1.0.7',
+  whatsNew:[
+    {content:'fix document...bla bla',
+    header:'hjghjghj', 
+    img:"url/img_example" },
+
+    {content:'fix document... hahaha',
+    header:'hjghjghj', 
+    img:"url/img_example" }
+  ]
 };

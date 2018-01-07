@@ -314,7 +314,158 @@ $icon-padding: 19px;
 		background-color: #4C5D63;
 		transition: 0.8s;
 	} 
-}  
+} 
+
+// .ulWhatsNew{
+// 	list-style: none;
+// 	padding:0;
+//     margin:0;
+// }
+// .liWhatsNew { 
+//     padding-left: 1em; 
+//     text-indent: -.7em;
+// }
+
+// .liWhatsNew:before {
+//     content: "\f105";
+//     font-family: FontAwesome;
+//     color: #337ab7; /* or whatever color you prefer */
+//     margin-right: 4px;
+// }
+
+// $turquoise      : #34768E;
+// $seafoam        : #79B7AA;
+// $navy           : #043F6C;
 
 
+// .hero {
+
+// 	text-align: center;
+// 	position: relative;
+// 	//height: 100%;
+// 	color: #fff;
+// 	background: linear-gradient(to bottom left, rgba(120,180,170,0.25), rgba(0,40,65,0.75));
+// 	animation: 15s linear 0s normal none infinite background1;
+// 	animation: 15s linear 0s normal none infinite background1;
+// }
+
+// .hero__content {
+// 	position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+// 	height: 3em;
+// 	overflow: hidden;
+// }
+
+// .ulWhatsNew {
+// 	width: max-content;
+//   margin: 0;
+// 	padding: 0;
+//   list-style: none;
+//   animation: 12s linear 0s normal none infinite scroll1;
+// }
+
+// .ulWhatsNew .liWhatsNew {
+// 	font-size: 2.5em;
+//   margin: 0;
+// }
+
+// .liWhatsNew {
+	
+// }
+
+// .spanWhatsNew {
+// 	display: block;
+// 	margin-left: -100%;
+// }
+
+// .modal-body-WhatsNew{
+// 	height: 400px;
+// }
+
+// @keyframes scroll1 {
+//   0%, 93%, 100% {
+//     -webkit-transform: translateY(0);
+//             transform: translateY(0);
+//   }
+//   3%, 23% {
+//     -webkit-transform: translateY(-20%);
+//             transform: translateY(-20%);
+//   }
+// 	25%, 45% {
+//     -webkit-transform: translateY(-40%);
+//             transform: translateY(-40%);
+//   }
+//   48%, 68% {
+//     -webkit-transform: translateY(-60%);
+//             transform: translateY(-60%);
+//   }
+//   71%, 91% {
+//     -webkit-transform: translateY(-80%);
+//             transform: translateY(-80%);
+//   }
+// }
+
+// @keyframes background1 {
+//   0%, 100% {
+//     background-color: $seafoam;
+//   }
+//   25%, 75% {
+//     background-color: $turquoise;
+//   }
+//   50% {
+//     background-color: $navy;
+//   }
+// }
+
+.carousel-inner .item{
+	background: #a7cfdf; /* Old browsers */
+	background: -moz-linear-gradient(top,  #a7cfdf 0%, #23538a 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #a7cfdf 0%,#23538a 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #a7cfdf 0%,#23538a 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a7cfdf', endColorstr='#23538a',GradientType=0 ); /* IE6-9 */
+    text-align: center;
+	height: 400px;/*change as your needs*/
+}
+
+.carousel-inner .item .container .carousel-caption{
+	margin-bottom:200px;
+}
+
+
+
+.control-buttons{
+	text-align:center;
+}
+
+.carousel-control{
+	z-index: 11;
+}
+.myCarousel .carousel-indicators li , .myCarousel .carousel-indicators li.active {
+  border-radius: 0;
+  width: 50px;
+  height: 3px;
+  margin: 0 5px 0;
+  border:0;
+}
+.myCarousel .carousel-indicators li{
+  position: relative;
+  background-color:gray;
+}
+.carousel-progress-bar {
+  position:absolute;
+  left:0;
+  top:0;
+  height: 100%;
+  background-color: #5cb85c;/*progress bar color*/
+  width: 0;
+  margin: 0 0 0 0;
+  border: none;
+  z-index: 11;
+  opacity:0;
+}
+.myCarousel .carousel-indicators li.active .carousel-progress-bar{
+  opacity:1;
+}
 

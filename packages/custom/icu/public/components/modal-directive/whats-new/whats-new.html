@@ -4,11 +4,61 @@
         {{ 'whatsNew' | i18next }}
     </h3>
 </div>
-<div class="modal-body">
-    <ul>
-        <li ng-repeat="x in whatsNew">{{x}}</li>
-    </ul>
+<div class="modal-body-WhatsNew">
+    <!-- <section class="hero">
+	<div class="hero__content">
+		<ul class="ulWhatsNew">
+      <li class="liWhatsNew">UI Designer</li>
+      <li class="liWhatsNew">UX Designer</li>
+      <li class="liWhatsNew">Email Designer hjnhhhhhhhhhhhhhhhhhhhhhhh </li>
+      <li class="liWhatsNew">Product Designer</li>
+      <li class="liWhatsNew">Front-End Developer</li>
+		</ul>
+	</div>
+</section> -->
+    <!-- <ul class="ulWhatsNew">
+        <li class="liWhatsNew" ng-repeat="x in whatsNew">{{x}}</li>
+    </ul> -->
+        
+    <div id="myCarousel" class="carousel slide myCarousel" data-interval="false" data-ride="carousel">
+        <ul class="carousel-indicators whatsNewList">
+         <!--  <li data-target="#myCarousel" data-slide-to="0"><hr class="carousel-progress-bar" /></li> -->
+          <!--<li data-target="#myCarousel" data-slide-to="1"><hr class="carousel-progress-bar" /></li>
+          <li data-target="#myCarousel" data-slide-to="2"><hr class="carousel-progress-bar" /></li> -->
+        <!--  <li ng-repeat="x in whatsNew" data-target="#myCarousel" data-slide-to="{{$index +1}}"><hr class="carousel-progress-bar" /></li> -->
+        </ul> 
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+          <div class="active item">
+            <!--put img inside itens like this-->
+            <!-- <img src="../../../../public/assets/img/dog.jpg" alt="..."/> -->
+              <div class="container">
+          <div class="carousel-caption">
+                <h3>First slide label</h3>
+                <p>It's Responsive and Pauses on hover</p>
+              </div>
+              </div>
+          </div>
+          <div ng-repeat="x in whatsNew" class="item">
+              <div class="container">
+              <div class="carousel-caption">
+                <h3>{{x.header}}}</h3>
+                <p>{{x.content}}</p>
+              </div>
+              </div>
+          </div>
+        </div>
+        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="ok()">{{'dontShowMeAgain' | i18next }}</button>
-</div> 
+</div>  
+
