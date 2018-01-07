@@ -51,7 +51,7 @@ module.exports = {
     direction: 'rtl',
   }],
    currentLanguage: 'en',
-  //currentLanguage: 'he',
+   //currentLanguage: 'he',
   // The session cookie name
   sessionName: 'connect.sid',
   attachmentDir: rootPath + '/files',
@@ -60,5 +60,6 @@ module.exports = {
   circleSettings: require('../circleSettings') || {},
 
   version: '1.0.5',
-  whatsNew:['fix document...bla bla', 'now you can bla bla bla']
+  whatsNew:['fix document...bla bla', 'now you can bla bla bla'],
+  ScheduledMailSend: '59 1 * * 0'
 };

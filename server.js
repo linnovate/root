@@ -61,10 +61,11 @@ if ((cluster.isMaster) &&
         //OHAD      
         
         var cron = require('node-cron');
-        var taskController = require('/home/icu/Desktop/root/packages/custom/icu/server/controllers/task.js');
+        var taskController = require(__dirname + '/packages/custom/icu/server/controllers/task.js');
 
         // Need to write date to send mail
-        cron.schedule('* * * * *', function(){
+        //cron.schedule('26 * * * *', function(){
+        cron.schedule(config.ScheduledMailSend, function(){
             console.log('running a task every minute');
 
             taskController.GetUsersWantGetMyTasksMail();
