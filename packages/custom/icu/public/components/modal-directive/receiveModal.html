@@ -8,16 +8,16 @@
 
     <table class="modal-table">
         <tr>
-            <td class="status col-sm-2" ng-class="officeDocument.status">{{ officeDocument.title | i18next }}</td>
+            <td class="status col-sm-2  filename" ng-class="officeDocument.status">{{ officeDocument.title | i18next }}</td>
             <td class="status col-sm-2" ng-class="officeDocument.status">{{ officeDocument.status | i18next }}</td>    
             <td class="status col-sm-2" ng-class="officeDocument.tags">{{officeDocument.tags[0] | json}}</td>
             <td class="status col-sm-2" ng-class="officeDocument.date">{{officeDocument.created | date: "dd-MM-yy"}}</td>
         </tr>
     </table>
     
-    
-    <div class="modal-body">
-        {{ 'modalReceiveSlideText' | i18next }}
+        
+    <div class="modal-body center">
+        <p class="modal-separator">{{ 'modalReceiveSlideText' | i18next }}</p>    
         <div id="dragwidget">
                     <div id="dragcontainer">
                         <div class="dragshape" draggable-toggle='dragOptions'></div>
@@ -27,7 +27,6 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="ok()">{{'YES' | i18next }}</button>
-        <button class="btn btn-warning" type="button" ng-click="cancel()">{{'Cancel' | i18next }}</button>
     </div>
     
     

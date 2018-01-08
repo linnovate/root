@@ -63,7 +63,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     }
         }
 
-        $scope.statuses = ['new', 'in-progress', 'received', 'viewed', 'sent', 'done'];
+        $scope.statuses = ['new', 'in-progress', 'received', 'sent', 'done'];
 
 
 

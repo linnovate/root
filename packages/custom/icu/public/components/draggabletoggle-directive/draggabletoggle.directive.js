@@ -75,16 +75,19 @@ angular.module('mean.icu.ui.draggabletoggle', [])
 //          console.log("container", container) ;
           console.log("e", e) ;
           console.log("x", x) ;
+          if (x > 160) { 
+            // too far right
+            x = 160 ;
+          }
             if (x < 89) {
                 x = 0 ;
             } 
             if (x < 90) {
                 animate(x);
-//                x = 0 ;
                 elem.css({
 //                    'background-color': 'yellow'
                 })        
-                if (receive && !elem.hasClass('selected')) receive(e);
+            if (receive && !elem.hasClass('selected')) receive(e);
                 elem.addClass('selected');                
             } 
 

@@ -1,29 +1,40 @@
 
 .modal-dialog {
 	padding: 10px ;
+	.modal-body.center {
+		width: 230px;
+		margin: 0 auto; 
+	}	
+
+	.modal-separator {
+		margin-top: 25px;
+		margin-bottom: 5px;
+	}
 	#dragcontainer {
 		width : 200px;
 		height: 44px;
-		background-color: black;
+		background-color: white;
 		position: relative;
 		display: block;
-		border: 2px solid gray;
+		border: 2px solid #ddd;
 		-webkit-border-radius: 17px;
 		-moz-border-radius: 17px;
 		border-radius: 17px;
+		background: white url("/icu/assets/img/swipe-arrows.png") no-repeat center center;
+		background-position-x: -10px;
+		padding: 2px;
 	}
 	.dragshape {
 		position: absolute;
-		width : 40px;
-		height: 40px;
+		width : 34px;
+		height: 36px;
 		-webkit-border-radius: 15px;
 		-moz-border-radius: 15px;
 		border-radius: 15px;
-		background-color:#FFA000;
-				-webkit-border-radius: 15px;
+		-webkit-border-radius: 15px;
 		-moz-border-radius: 15px;
 		border-radius: 15px;
-
+		background:#FFA000 url("/icu/assets/img/swipe-arrow.png") no-repeat center center;
 		&.selected {
 			background-color:green;			
 		}
@@ -33,24 +44,30 @@
 		padding: 10px 0;
 		background-color: #eee ;
 		tr {
-			background-color: #eee ;			
-			border-top: 1px solid #aaaaaa;
-			border-bottom: 1px solid #aaaaaa;
+			background-color: #F3F1F6 ;			
+			border-top: 1px solid #F3F1F6;
+			border-bottom: 1px solid #F3F1F6;
 		}
 		th {
-			text-align: center;
+			text-align: right;
 		}
 		td,th {
+			&.filename {
+				background: url(/icu/assets/img/document-grey.svg) no-repeat center right;
+				padding-right: 30px;
+				background-position: right 10px center;
+			}			
 			padding: 5px 10px;
-		}
-	
+			height: 50px ;
+		}	
 	}
 
 	.modal-readby-table {
 		padding: 10px 0;
+		margin-bottom: 7px;
 		tr {
 			background-color: #eee ;			
-			border-top: 1px solid #aaaaaa;
+			border-top: 1px solid #F3F1F6;
 		}
 		th {
 			text-align: center;
@@ -58,9 +75,20 @@
 		td,th {
 			padding: 5px 10px;
 		}
+		td {
+		&.wasupgreen {
+			color: green ;
+		}
+		&.wasupgray {
+			color: gray ;
+		}
+		}
+
 	}		
 
-
+    .modal-body {
+		padding: 15px;
+	}
 	.modal-content {
 		border-radius: 0px;
 	}
@@ -91,7 +119,7 @@
 		font-size: 20px;
 		margin-top: 14px;
 	}
-	.compBtn {
+	.compBtn {		
 	    background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
 	    width: 30px;
 	    height: 30px;
@@ -167,7 +195,6 @@
 	&.modal-body {
 		height: 350px;
 	}
-
 }
    
 @mixin ui-select {
