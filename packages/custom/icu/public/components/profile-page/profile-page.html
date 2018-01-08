@@ -3,6 +3,8 @@
         <a href="" ng-click="showProfile=true;">{{ 'Profile' | i18next }}<a> 
             &nbsp;
         <a href="" ng-click="showProfile=false;">{{ 'Events' | i18next }}</a>
+            &nbsp;
+         <a href="" ng-click="GoToMyTasks()"> {{ 'icu' | i18next }} </a>
     </div>
     <form novalidate name="profileform" ng-submit="editProfile(profileform)" ng-if="showProfile">
         <div class=form-group>
@@ -35,6 +37,12 @@
             <label>{{ 'IWantToGetMailEveryWeekAboutGivenTasks' | i18next }}</label>
             <input class="form-control" type="radio" name="GetMailEveryWeekAboutGivenTasks" value="yes" ng-model="me.GetMailEveryWeekAboutGivenTasks" /> {{ 'yes' | i18next }}<br>
             <input id="GetMyWeekTasksNO" class="form-control" type="radio" name="GetMailEveryWeekAboutGivenTasks" value="no"  ng-model="me.GetMailEveryWeekAboutGivenTasks" checked="true" /> {{ 'no' | i18next }}<br>
+            <input type="submit" value="Submit">
+        </div>
+        <div class=form-group>
+            <label>{{ 'IWantToGetMailEveryDayAboutMyTasks' | i18next }}</label>
+            <input class="form-control" type="radio" name="GetMailEveryDayAboutMyTasks" value="yes" ng-model="me.GetMailEveryDayAboutMyTasks" /> {{ 'yes' | i18next }}<br>
+            <input id="GetMyWeekTasksNO" class="form-control" type="radio" name="GetMailEveryDayAboutMyTasks" value="no"  ng-model="me.GetMailEveryDayAboutMyTasks" checked="true" /> {{ 'no' | i18next }}<br>
             <input type="submit" value="Submit">
         </div>
         <div class=form-group>

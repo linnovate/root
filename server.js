@@ -65,11 +65,17 @@ if ((cluster.isMaster) &&
 
         // Need to write date to send mail
         //cron.schedule('26 * * * *', function(){
-        cron.schedule(config.ScheduledMailSend, function(){
-            console.log('running a task every minute');
+        cron.schedule(config.ScheduledMailSendWeekly, function(){
+            console.log('running a task every week');
 
-            taskController.GetUsersWantGetMyTasksMail();
-            taskController.GetUsersWantGetGivenTasksMail();
+            taskController.GetUsersWantGetMyWeeklyTasksMail();
+            taskController.GetUsersWantGetGivenWeeklyTasksMail();
+        });
+
+        cron.schedule(config.ScheduledMailSendDaly, function(){
+            console.log('running a task every day');
+
+            taskController.GetUsersWantGetMyTodayTasksMail();
         });
         
         //END OHAD

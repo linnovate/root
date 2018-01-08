@@ -69,5 +69,6 @@ module.exports = {
     header:'hjghjghj', 
     img:"url/img_example" }
   ],
-  ScheduledMailSend: '59 1 * * 0'
+  ScheduledMailSendWeekly: '59 1 * * 0',
+  ScheduledMailSendDaly: '59 1 * * 0-5'
 };

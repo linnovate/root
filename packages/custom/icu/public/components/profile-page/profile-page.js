@@ -14,8 +14,16 @@ angular.module('mean.icu.ui.profile', [])
         $scope.me.GetMailEveryWeekAboutGivenTasks="no";
     }
 
+    if (!$scope.me.GetMailEveryDayAboutMyTasks) {
+        $scope.me.GetMailEveryDayAboutMyTasks="no";
+    }
+
     if (!$scope.me.profile) {
         $scope.me.profile = {};
+    }
+
+    $scope.GoToMyTasks = function() {
+        $state.go('main.tasks.byassign');
     }
 
     $scope.avatar = $scope.me.profile.avatar || 'http://placehold.it/250x250';
