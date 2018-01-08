@@ -71,9 +71,6 @@ angular.module('mean.icu.ui.displayby', [])
             name:  'sent',
             color:'FFCC33'
         },{
-            name:  'viewed',
-            color:'359123'
-        },{
             name:  'done',
             color:'757575'
         }];

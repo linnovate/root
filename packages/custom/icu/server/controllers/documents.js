@@ -1703,7 +1703,7 @@ exports.distributedDocument = function(req,res,next){
   });
 };
 
-// update user document distributed == viewed.
+// get user document distributed == viewed.
 exports.readByDocument = function(req,res,next){
   officeDocument  = req.body.officeDocument  ;
   var readBy = officeDocument.readBy ;
@@ -1715,6 +1715,29 @@ exports.readByDocument = function(req,res,next){
   var id = req.params.id;  
   User.find({
     '_id': { $in: readbyToId }
+    }, function(err, docs){
+      if(err){
+        res.send(error);
+      }
+      else{
+        res.send(docs);
+      }
+      });
+};
+
+
+// get users in document sentTo.
+exports.sentToDocument = function(req,res,next){
+  officeDocument  = req.body.officeDocument  ;
+  var sentTo = officeDocument.sentTo ;
+  var sentToId = [] ;
+  sentTo.forEach(function(element) {
+    sentToId.push(new mongoose.Types.ObjectId(element.user)) ;
+  });
+  console.log( JSON.stringify(sentToId)) ;  
+  var id = req.params.id;  
+  User.find({
+    '_id': { $in: sentToId }
     }, function(err, docs){
       if(err){
         res.send(error);
