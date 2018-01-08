@@ -32,6 +32,7 @@ exports.defaultOptions = options;
 var crud = require('../controllers/crud.js');
 var task = crud('tasks', options);
 var Project = require('../controllers/project');
+var mailService = require('../services/mail');
 
 var Task = require('../models/task'),
   Discussion = require('../models/discussion'),
@@ -664,6 +665,159 @@ exports.populateSubTasks = function(req, res, next) {
     next();
   })
 }
+
+
+exports.GetUsersWantGetMyTasksMail = function() {
+
+var UserModel = require('../models/user.js');
+
+  var query = UserModel.find({
+    GetMailEveryWeekAboutMyTasks: 'yes'
+  })
+  .populate(options.includes)
+  .exec(function(err, users) {
+    if (err) {
+      console.log('Can\'t get users');
+    } else {
+
+      users.forEach(function(user) {
+        MyTasksOfNextWeekSummary(user._doc);
+      });
+
+    }
+        //next();
+  });
+
+};
+
+//If we ever need to use as button in the UI == *AsButton*
+exports.MyTasksOfNextWeekSummary = function(req, res, next) {}
+
+function MyTasksOfNextWeekSummary(user) {
+
+  var TaskModel = require('../models/task.js');
+
+  //*AsButton*
+  //var query = req.acl.mongoQuery('Task');
+  //query.find({
+  var query = TaskModel.find({
+    //*AsButton* assign: req.user._id,
+    assign: user._id,
+    status: {$nin: ['rejected', 'done']},
+    tType: {$ne: 'template'}
+  })
+  .populate(options.includes)
+  .exec(function(err, tasks) {
+    if (err) {
+      //*AsButton* req.locals.error = {
+      //   message: 'Can\'t get my tasks'
+      // };
+      console.log('Can\'t get my tasks');
+    } else {
+      //*AsButton* req.locals.result = tasks;
+
+      var curr = new Date();
+      curr.setHours(0,0,0,0);
+      var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+      var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay()+6));
+      lastday = new Date(lastday.setHours(23, 59, 59, 0))
+      var date = [firstday, lastday];
+
+      var WeekTasks = [];
+
+      tasks.forEach(function(task) {
+        var due = new Date(task.due);
+        if (due >= date[0] && due <= date[1]) {
+          WeekTasks.push(task);
+        }
+      });
+
+      mailService.sendMyTasksOfNextWeekSummary('MyTasksOfNextWeekSummary', {
+        WeekTasks: WeekTasks,
+        //*AsButton* user: req.user
+        user: user
+      }).then(function() {
+        //next();
+      });
+    }
+        //next();
+  });
+
+};
+
+
+exports.GetUsersWantGetGivenTasksMail = function() {
+
+var UserModel = require('../models/user.js');
+
+  var query = UserModel.find({
+    GetMailEveryWeekAboutGivenTasks: 'yes'
+  })
+  .populate(options.includes)
+  .exec(function(err, users) {
+    if (err) {
+      console.log('Can\'t get users');
+    } else {
+
+      users.forEach(function(user) {
+        GivenTasksOfNextWeekSummary(user._doc);
+      });
+    }
+        //next();
+  });
+
+};
+
+//If we ever need to use as button in the UI == *AsButton*
+exports.GivenTasksOfNextWeekSummary = function(req, res, next) {}
+
+function GivenTasksOfNextWeekSummary(user) {
+
+    //*AsButton* var query = req.acl.mongoQuery('Task');
+
+    var TaskModel = require('../models/task.js');
+
+    var query = TaskModel.find({
+  	//*AsButton* query.find({
+  		//creator: req.user._id,
+      creator: user._id,
+  		tType: {$ne: 'template'}
+		})
+		.populate(options.includes)
+		.exec(function(err, tasks) {
+  		if (err) {
+	      req.locals.error = {
+	        message: 'Can\'t get my tasks'
+	      };
+	    } else {
+
+        var curr = new Date();
+        curr.setHours(0,0,0,0);
+        var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+        var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay()+6));
+        lastday = new Date(lastday.setHours(23, 59, 59, 0))
+        var date = [firstday, lastday];
+
+        var WeekTasks = [];
+
+        tasks.forEach(function(task) {
+          var due = new Date(task.due);
+          if (due >= date[0] && due <= date[1]) {
+            WeekTasks.push(task);
+          }
+        });
+
+        mailService.sendGivenTasksOfNextWeekSummary('GivenTasksOfNextWeekSummary', {
+	        WeekTasks: WeekTasks,
+          user: user
+	      }).then(function() {
+          //next();
+	      });
+      }
+	        //next();
+    });
+
+  };
 
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;

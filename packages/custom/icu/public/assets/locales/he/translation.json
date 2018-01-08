@@ -283,5 +283,7 @@
 	"tel":"מספר טלפון",
 	"dontShowMeAgain": "אל תראה לי שוב",
 	"whatsNew": "מה חדש",
-	"optional":"אופציונלי"
+	"optional":"אופציונלי",
+	"IWantToGetMailEveryWeekAboutMyTasks": "אני רוצה לקבל כל שבוע מייל על המשימות השבועיות שלי",
+    "IWantToGetMailEveryWeekAboutGivenTasks": "אני רוצה לקבל כל שבוע מייל על המשימות השבועיות שנתתי לאחרים"
 }

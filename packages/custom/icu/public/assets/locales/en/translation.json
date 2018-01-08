@@ -280,5 +280,7 @@
     "tel":"Phone number",
     "dontShowMeAgain": "Don't show me again",
     "whatsNew" : "What's new",
-    "optional":"Optional"
+    "optional":"Optional",
+    "IWantToGetMailEveryWeekAboutMyTasks": "I Want To Get Mail Every Week About My Tasks",
+    "IWantToGetMailEveryWeekAboutGivenTasks": "I Want To Get Mail Every Week About Given Tasks"
 }

@@ -51,7 +51,7 @@ module.exports = {
     direction: 'rtl',
   }],
    currentLanguage: 'en',
-  //currentLanguage: 'he',
+   //currentLanguage: 'he',
   // The session cookie name
   sessionName: 'connect.sid',
   attachmentDir: rootPath + '/files',
@@ -68,5 +68,6 @@ module.exports = {
     {content:'fix document... hahaha',
     header:'hjghjghj', 
     img:"url/img_example" }
-  ]
+  ],
+  ScheduledMailSend: '59 1 * * 0'
 };

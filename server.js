@@ -58,38 +58,19 @@ if ((cluster.isMaster) &&
         var port = config.https && config.https.port ? config.https.port : config.http.port;
         console.log('Mean app started on port ' + port + ' (' + process.env.NODE_ENV + ') cluster.worker.id:', workerId);
         
-        //OHAD 
-        //configlate = app.config.clean; 
-        //portlate =  configlate.https && configlate.https.port ? configlate.https.port : configlate.http.port;
-        //require('./packages/custom/icu/server/middlewares/socket.js')(configlate);
+        //OHAD      
         
-        
-        
-        // var sockets = require('/home/as/Desktop/icu/packages/custom/icu/server/providers/socket.js');
-        // var app1 = require('express')();
+        var cron = require('node-cron');
+        var taskController = require(__dirname + '/packages/custom/icu/server/controllers/task.js');
 
-        // console.log("3003");
-        // var server = app1.listen(3003);
+        // Need to write date to send mail
+        //cron.schedule('26 * * * *', function(){
+        cron.schedule(config.ScheduledMailSend, function(){
+            console.log('running a task every minute');
 
-        // var io = require('socket.io')(server);
-
-
-        // //console.log("io");
-        // //console.log(JSON.stringify(io));    
-        // console.log("sockets");
-        // console.log(JSON.stringify(sockets));
-        
-        // io.on('connection', function(socket) {
-        //     socket.emit('user joined', {success: true});
-        //     console.log("io success");
-        //     socket.on('user joined token', function(data) {
-        //         console.log("data");
-        //         console.log(JSON.stringify(data));
-        //         sockets._new(data, socket);
-        //     });
-        // });
-        
-        
+            taskController.GetUsersWantGetMyTasksMail();
+            taskController.GetUsersWantGetGivenTasksMail();
+        });
         
         //END OHAD
     });
