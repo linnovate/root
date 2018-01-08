@@ -261,10 +261,19 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 'officeDocument':officeDocument
             };
             return $http.post(ApiUri + EntityPrefix +  '/readByDocument/' + officeDocument._id, data).then(function (result) {
-//                WarningsService.setWarning(result.headers().warning);
                 return result.data;
             });
         }
+
+        function sentToDocument(officeDocument) {
+            var data = {
+                'officeDocument':officeDocument
+            };
+            return $http.post(ApiUri + EntityPrefix +  '/sentToDocument/' + officeDocument._id, data).then(function (result) {
+                return result.data;
+            });
+        }
+        
 
         function updateAssign(officeDocument, prev) {
             if (officeDocument.assign) {
@@ -341,6 +350,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             receiveDocument, receiveDocument,
             distributedDocument, distributedDocument,
             readByDocument, readByDocument,
+            sentToDocument, sentToDocument,
             uploadFileToDocument:uploadFileToDocument,
             update:update,
             updateWatcher: updateWatcher,
