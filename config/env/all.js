@@ -61,13 +61,16 @@ module.exports = {
 
   version: '1.0.7',
   whatsNew:[
-    {content:'fix document...bla bla',
-    header:'hjghjghj', 
-    img:"url/img_example" },
-
-    {content:'fix document... hahaha',
-    header:'hjghjghj', 
-    img:"url/img_example" }
+    {
+      content:'fix document...bla bla',
+      header:'hjghjghj', 
+      img:"/icu/assets/img/whatsNew/t.png" 
+    },
+    {
+      content:'fix document... hahaha',
+      header:'hjghjghj', 
+      img:"" 
+    }
   ],
   ScheduledMailSend: '59 1 * * 0'
 };

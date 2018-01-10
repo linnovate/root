@@ -29,20 +29,21 @@
         </ul> 
         <!-- Carousel items -->
         <div class="carousel-inner">
-          <div class="active item">
+          <div ng-style="{'background-color':'red'}" class="active item">
             <!--put img inside itens like this-->
-            <!-- <img src="../../../../public/assets/img/dog.jpg" alt="..."/> -->
+            <img src="/icu/assets/img/krip.jpg" alt="...">
               <div class="container">
           <div class="carousel-caption">
-                <h3>First slide label</h3>
-                <p>It's Responsive and Pauses on hover</p>
+                <h3></h3>
+                <p></p>
               </div>
               </div>
           </div>
           <div ng-repeat="x in whatsNew" class="item">
+            <img ng-if="x.img" src="{{x.img}}"  alt="...">
               <div class="container">
               <div class="carousel-caption">
-                <h3>{{x.header}}}</h3>
+                <h3>{{x.header}}</h3>
                 <p>{{x.content}}</p>
               </div>
               </div>
