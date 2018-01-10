@@ -667,7 +667,85 @@ exports.populateSubTasks = function(req, res, next) {
 }
 
 
-exports.GetUsersWantGetMyTasksMail = function() {
+exports.GetUsersWantGetMyTodayTasksMail = function() {
+
+var UserModel = require('../models/user.js');
+
+  var query = UserModel.find({
+    GetMailEveryDayAboutMyTasks: 'yes'
+  })
+  .populate(options.includes)
+  .exec(function(err, users) {
+    if (err) {
+      console.log('Can\'t get users');
+    } else {
+
+      users.forEach(function(user) {
+        MyTasksOfTodaySummary(user._doc);
+      });
+
+    }
+        //next();
+  });
+
+};
+
+//If we ever need to use as button in the UI == *AsButton*
+exports.MyTasksOfTodaySummary = function(req, res, next) {}
+
+function MyTasksOfTodaySummary(user) {
+
+  var TaskModel = require('../models/task.js');
+
+  //*AsButton*
+  //var query = req.acl.mongoQuery('Task');
+  //query.find({
+  var query = TaskModel.find({
+    //*AsButton* assign: req.user._id,
+    assign: user._id,
+    status: {$nin: ['rejected', 'done']},
+    tType: {$ne: 'template'}
+  })
+  .populate(options.includes)
+  .exec(function(err, tasks) {
+    if (err) {
+      //*AsButton* req.locals.error = {
+      //   message: 'Can\'t get my tasks'
+      // };
+      console.log('Can\'t get my tasks');
+    } else {
+      //*AsButton* req.locals.result = tasks;
+
+      var curr = new Date();
+      curr.setHours(0,0,0,0);
+      var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+
+      var TodayTasks = [];
+
+      tasks.forEach(function(task) {
+        var due = new Date(task.due);
+        //if (due >= date[0] && due <= date[1]) {
+        if (due.getDay() == firstday.getDay()) {
+          task.due.setDate(task.due.getDate() + 1);
+          TodayTasks.push(task);
+        }
+      });
+
+      mailService.sendMyTasksOfTodaySummary('MyTasksOfTodaySummary', {
+        TodayTasks: TodayTasks,
+        //*AsButton* user: req.user
+        user: user
+      }).then(function() {
+        //next();
+      });
+    }
+        //next();
+  });
+
+};
+
+
+exports.GetUsersWantGetMyWeeklyTasksMail = function() {
 
 var UserModel = require('../models/user.js');
 
@@ -728,6 +806,7 @@ function MyTasksOfNextWeekSummary(user) {
       tasks.forEach(function(task) {
         var due = new Date(task.due);
         if (due >= date[0] && due <= date[1]) {
+          task.due.setDate(task.due.getDate() + 1);
           WeekTasks.push(task);
         }
       });
@@ -746,7 +825,7 @@ function MyTasksOfNextWeekSummary(user) {
 };
 
 
-exports.GetUsersWantGetGivenTasksMail = function() {
+exports.GetUsersWantGetGivenWeeklyTasksMail = function() {
 
 var UserModel = require('../models/user.js');
 
@@ -803,6 +882,7 @@ function GivenTasksOfNextWeekSummary(user) {
         tasks.forEach(function(task) {
           var due = new Date(task.due);
           if (due >= date[0] && due <= date[1]) {
+            task.due.setDate(task.due.getDate() + 1);
             WeekTasks.push(task);
           }
         });

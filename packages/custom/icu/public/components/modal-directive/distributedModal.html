@@ -1,4 +1,3 @@
-<!-- {{readBy| json}} -->
 <div class="modal-header">
         <button type="button" class="btn close" aria-hidden="true" ng-click="cancel()">&times;</button>
         <h3 class="modal-title" ng-if='entity.type != "Document"'>            
@@ -9,44 +8,38 @@
 
     <table class="modal-table">
         <tr>
-            <td class="status col-sm-2" ng-class="officeDocument.status">{{ officeDocument.title | i18next }}</td>
+            <td class="status col-sm-2 filename" ng-class="officeDocument.status">{{ officeDocument.title | i18next }}</td>
             <td class="status col-sm-2" ng-class="officeDocument.status">{{ officeDocument.status | i18next }}</td>    
             <td class="status col-sm-2" ng-class="officeDocument.tags">{{officeDocument.tags[0] | json}}</td>
             <td class="status col-sm-2" ng-class="officeDocument.date">{{officeDocument.created | date: "dd-MM-yy"}}</td>
         </tr>
     </table>
     
-    <p>{{ 'modalDistributedViewedBy' | i18next }}:</p>    
-    
-    <table ng-if="readBy.length" class="modal-readby-table">
-            <thead>
-                <th>{{ 'name' | i18next }}</th>
-                <th>{{ 'email' | i18next }}</th>
-                <th>{{ 'received' | i18next }}</th>
-            </thead>
-            <tbody ng-repeat="item in readBy">
-                <tr>
-                    <td>{{item.username}}</td>
-                    <td>{{item.email}}</td>
-                    <td>{{item.date | date: "dd-MM-yy"}}</td>
-                </tr>
-            </tbody>
-        </table>
-    <div ng-if="readBy.length==0" class="modal-readby-table">
-        {{ 'modalNotDistributedText' | i18next }}
-    </div>
-            
-    
-    
-    <!-- <div class="modal-body">
-        {{ 'modalDistributedSlideText' | i18next }}
-        <div id="dragwidget">
-                    <div id="dragcontainer">
-                        <div class="dragshape" draggable-toggle='dragOptions'></div>
-                    </div>
+    <div class="modal-body">
+        <p class="modal-separator">{{ 'modalDistributedViewedBy' | i18next }}:</p>    
+        
+        <table ng-if="distributedList.length" class="modal-readby-table">
+                <thead>
+                    <th>{{ 'name' | i18next }}</th>
+                    <th>{{ 'email' | i18next }}</th>
+                    <th>{{ 'status' | i18next }}</th>
+                    <th>{{ 'date' | i18next }}</th>
+                </thead>
+                <tbody ng-repeat="item in distributedList">
+                    <tr>
+                        <td>{{item.username}}</td>
+                        <td>{{item.email}}</td>                    
+                        <td ng-if="item.received" class="wasupgreen">&#10003;&#10003</td>
+                        <td ng-if="!item.received" class="wasupgray">&#10003</td>
+                        <td>{{item.date | date: "dd-MM-yy"}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        <div ng-if="distributedList.length==0" class="modal-readby-table">
+            {{ 'modalNotDistributedText' | i18next }}
         </div>
-            
-    </div> -->
+    </div>
+                
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="ok()">{{'YES' | i18next }}</button>
     </div>

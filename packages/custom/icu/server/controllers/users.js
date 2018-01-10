@@ -28,7 +28,7 @@ exports.filterProperties = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-  req.body = _.pick(req.body, ['name', 'username', 'password', 'email', 'profile', 'GetMailEveryWeekAboutMyTasks', 'GetMailEveryWeekAboutGivenTasks']);
+  req.body = _.pick(req.body, ['name', 'username', 'password', 'email', 'profile', 'GetMailEveryWeekAboutMyTasks', 'GetMailEveryWeekAboutGivenTasks', 'GetMailEveryDayAboutMyTasks']);
   next();
 }
 

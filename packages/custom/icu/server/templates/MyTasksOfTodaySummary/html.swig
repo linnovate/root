@@ -1,6 +1,6 @@
 <div class="header">
   <div class="logo">
-    ICU - My Tasks Of Next week summary
+    ICU - My Tasks Of Today summary
   </div>
 </div>
 
@@ -31,7 +31,7 @@
   </ol>-->
   <h2>Tasks: </h2>
   <ol>
-    {% for task in WeekTasks %}
+    {% for task in TodayTasks %}
     <li>
       <a href="{{ uriRoot }}/tasks/all/{{ task._id.toString() }}">{{ task.title }}</a> , <b> Status Task: </b> {{ task.status }} , <b> Due Date: </b> {{ task.due | date('F jS, Y') }}
     </li>

@@ -196,17 +196,12 @@ function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, peo
 //          console.log("STOPPING");
         },
         receive: function(e) {
-            console.log("RECEIVED", e);
-//            $scope.receiveStatus = "received" ;
-//            console.log("OfficeDocumentsService.receiveDocument") ;
-
+            // $scope.receiveStatus = "received" ;
             OfficeDocumentsService.receiveDocument($scope.officeDocument) ;
         },
         container: 'dragcontainer'
     }
     $scope.ok = function (sendingForm) {
-            // console.log("===RETURNED===");
-            // console.log($scope.receiveStatus);            
             $scope.cancel();            
     };    
     $scope.cancel = function () {
@@ -217,41 +212,32 @@ function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, peo
 
 
 function distributedCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
-    if(officeDocument.readBy && officeDocument.readBy.length) {
-    OfficeDocumentsService.readByDocument(officeDocument).then(function(res) {         
-        let resWithDate = res.map(r => { 
-            let currentReadBy = officeDocument.readBy.filter(rb => rb.user == r._id) ;
-            return Object.assign({date: currentReadBy[0].date}, r) ;
+    $scope.distributedList = [] ;
+    if(officeDocument.sentTo && officeDocument.sentTo.length) {
+        OfficeDocumentsService.sentToDocument(officeDocument).then(function(res) {
+        // gets the user names, with ids as present in the sentTo field
+        let resWithDate = res.map(r => {
+            let currentSentTo = officeDocument.readBy.filter(rb => { 
+                return rb.user == r._id }) ;
+
+                if(currentSentTo.length) {
+                return Object.assign({date: currentSentTo[0].date, received: true}, r) ;
+                
+            }
+            else {
+                return Object.assign({received: false}, r) ;
+            }
          } )
         // add the read date as it appears on the doc.
-        $scope.readBy  = resWithDate ;
+        $scope.distributedList  = resWithDate ;        
     }) ;
     }
     else {
-        $scope.readBy = [] ;
+        $scope.distributedList = [] ;
     }
-    $scope.officeDocument = officeDocument;
-    $scope.dragOptions = {
-        start: function(e) {
-//          console.log("STARTING");
-        },
-        drag: function(e) {
-//          console.log("DRAGGING");
-        },
-        stop: function(e) {
-//          console.log("STOPPING");
-        },
-        receive: function(e) {
-//            console.log("RECEIVED", e);
-//            $scope.receiveStatus = "received" ;
-//            console.log("OfficeDocumentsService.distributedDocument") ;
 
-            OfficeDocumentsService.distributedDocument($scope.officeDocument) ;
-        },
-        container: 'dragcontainer'
-    }
+    $scope.officeDocument = officeDocument;
     $scope.ok = function (sendingForm) {
-            // console.log("===RETURNED===");
             // console.log($scope.receiveStatus);            
             $scope.cancel();            
     };    
