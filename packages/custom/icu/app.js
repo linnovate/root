@@ -130,6 +130,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.officedocumentsservice',
         'mean.icu.data.templatedocsservice',
         'mean.icu.data.officesservice',
+        'mean.icu.data.signaturesservice',
         'mean.icu.data.foldersservice',
         'mean.icu.data.orderservice',
         'mean.icu.data.discussionsservice',

@@ -370,10 +370,10 @@ module.exports = function(Icu, app) {
 
    app.route('/api/signatures/create')
    .post(signatures.createSignature);
-  app.route('/api/signatures/getByOffice/:id([0-9a-fA-F]{24})')
+  app.route('/api/signatures/getByOfficeId/:id([0-9a-fA-F]{24})')
   .get(signatures.getByOffice);   
-  app.route('/api/signatures/remove/:id([0-9a-fA-F]{24})')
-  .post(signatures.removeSignature);   
+  app.route('/api/signatures/:id([0-9a-fA-F]{24})')
+  .delete(signatures.removeSignature);   
 
    app.route('/api/officeTemplates')
    //.post(templateDocs.upload)

@@ -20,6 +20,10 @@ var SignatureSchema = new Schema({
         type: String,
         default: "noRole"
     },
+    rank: {
+        type: String,
+        default: "noRank"
+    },
     office: {
         type: Schema.ObjectId,
         ref: 'Office'

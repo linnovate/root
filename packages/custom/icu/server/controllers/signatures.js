@@ -2,7 +2,7 @@ var Signature = require('../models/signature');
 
 
 exports.createSignature = function(req,res,next){
-    var signature = new Signature(req.body.signature);
+    var signature = new Signature(req.body);
     signature.save(function(err,result){
         if(err){
             res.status(500).send(err);

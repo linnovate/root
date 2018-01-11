@@ -1224,18 +1224,21 @@ angular.module('mean.icu').config([
             .state('main.offices.all.details.activities.modal', getDetailspaneModal())
             .state('main.offices.all.details.documents', getDetailsTabState('office', 'documents'))
             .state('main.offices.all.details.folders', getDetailsTabState('office', 'folders'))
+            .state('main.offices.all.details.signatures', getDetailsTabState('office', 'signatures'))
 
             .state('main.offices.byentity', generateStateByEntity('office'))
             .state('main.offices.byentity.activities', getDetailsTabState('office', 'activities'))
             .state('main.offices.byentity.activities.modal', getDetailspaneModal())
             .state('main.offices.byentity.documents', getDetailsTabState('office', 'documents'))
             .state('main.offices.byentity.folders', getDetailsTabState('office', 'folders'))
+            .state('main.offices.byentity.signatures', getDetailsTabState('office', 'signatures'))
 
             .state('main.offices.byentity.details', getOfficeDetailsState())
             .state('main.offices.byentity.details.activities', getDetailsTabState('office', 'activities'))
             .state('main.offices.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.offices.byentity.details.documents', getDetailsTabState('office', 'documents'))
             .state('main.offices.byentity.details.folders', getDetailsTabState('office', 'folders'))
+            .state('main.offices.byentity.details.signatures', getDetailsTabState('office', 'signatures'))
 
             .state('main.templateDocs', {
                 url: '/templateDocs',

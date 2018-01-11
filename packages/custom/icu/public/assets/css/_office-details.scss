@@ -10,7 +10,28 @@
                 &.three {
                     width: calc((100% - 60px) / 3);
                 }
+                &.four {
+                    width: calc((100% - 60px) / 4);
+                }
             }
         }
+    }
+}
+
+.addSignature{
+height: calc(17px * 2);
+border-radius: 17px;
+width: calc(17px * 2);
+border: none;
+outline: none;
+background-color: #fda102;
+    &:hover{
+        background-color: #f5c166;
+    }
+}
+
+.signature-hover{
+    &:hover{
+        background-color: #f5c166;
     }
 }

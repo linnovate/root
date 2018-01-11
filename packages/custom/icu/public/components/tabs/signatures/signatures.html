@@ -1,0 +1,49 @@
+<div class="">
+    <table class="table " ng-if='signatures.length > 0'>
+        <thead>
+            <tr>
+            <th>#</th>
+            <th>{{ 'fullName' | i18next}}</th>
+            <th>{{ 'rank' | i18next}}</th>
+            <th>{{ 'role' | i18next}}</th>
+            <th>{{ 'unit' | i18next}}</th>
+            </tr>
+        </thead>
+        <tbody>
+          <div >
+            <tr class="signature-hover" ng-repeat="signature in signatures"
+                                        ng-mouseover="showButton = true" 
+                                        ng-mouseleave="showButton = false">
+              <td>{{$index + 1}}</td>
+              <td >{{signature.fullName}}</td>
+              <td>{{signature.rank}}</td>
+              <td>{{signature.role}}</td>
+              <td>{{signature.unit}}</td>
+             <!-- <td> <button class="addSignature"  ng-show="showButton" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></td> -->
+            </tr>
+          </div>
+        </tbody>
+      </table>
+
+      <div ng-if="signatures.length == 0">{{ 'noSignatures' | i18next}}</div>
+
+      <div class="row" ng-style="{'width': 'inherit'}">
+            <form ng-submit="submit()">
+            <div class="col-xs-3">
+              <input type="text" class="form-control" ng-model="signature.fullName" placeholder="{{ 'fullName' | i18next}}" required>
+            </div>
+            <div class="col-xs-2">
+              <input type="text" class="form-control" ng-model="signature.rank" placeholder="{{ 'rank' | i18next}}" >
+            </div>
+            <div class="col-xs-3">
+              <input type="text" class="form-control" ng-model="signature.role" placeholder="{{ 'role' | i18next}}" required>
+            </div>
+            <div class="col-xs-3">
+                <input type="text" class="form-control" ng-model="signature.unit" placeholder="{{ 'unit' | i18next}}" >
+            </div>
+            <div class="col-xs-1">
+                    <button type="submit" class="addSignature"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+            </div>    
+            </form>
+          </div>
+</div>
