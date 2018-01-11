@@ -18,6 +18,7 @@ var folder = require('../controllers/folder');
 var webHook = require('../controllers/webhook');
 var documents = require('../controllers/documents');
 var templateDocs = require('../controllers/templateDocs');
+var signatures = require('../controllers/signatures');
 var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
 var entity = require('../middlewares/entity.js');
@@ -364,7 +365,15 @@ module.exports = function(Icu, app) {
   .post(documents.sentToDocument);
   
    app.route('/api/officeTemplates/createNew')
-   .post(templateDocs.createNew)
+   .post(templateDocs.createNew);
+
+
+   app.route('/api/signatures/create')
+   .post(signatures.createSignature);
+  app.route('/api/signatures/getByOffice/:id([0-9a-fA-F]{24})')
+  .get(signatures.getByOffice);   
+  app.route('/api/signatures/remove/:id([0-9a-fA-F]{24})')
+  .post(signatures.removeSignature);   
 
    app.route('/api/officeTemplates')
    //.post(templateDocs.upload)
