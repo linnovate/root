@@ -5,10 +5,10 @@ angular.module('mean.icu.ui.searchlist')
 	$scope.results = results;
 
 	for (var i = 0; i< $scope.results.length; i++) {
-		if ($scope.results[i].project)
-			$scope.results[i].projectObj = $scope.$parent.projects.find(function(e) { 
-				return e._id == $scope.results[i].project
-			})
+		// if ($scope.results[i].project)
+		// 	$scope.results[i].projectObj = $scope.$parent.projects.find(function(e) { 
+		// 		return e._id == $scope.results[i].project
+		// 	})
 		/*if ($scope.results[i].discussions && $scope.results[i].discussions.length)
 			$scope.results[i].discussionObj = $scope.$parent.discussions.find(function(e) { 
 				return e._id == $scope.results[i].discussions[0]
@@ -17,10 +17,10 @@ angular.module('mean.icu.ui.searchlist')
 			$scope.results[i].folderObj = $scope.$parent.folders.find(function(e) { 
 				return e._id == $scope.results[i].folder
 			})*/
-		if ($scope.results[i].office)
-			$scope.results[i].officeObj = $scope.$parent.offices.find(function(e) { 
-				return e._id == $scope.results[i].office
-			})
+		// if ($scope.results[i].office)
+		// 	$scope.results[i].officeObj = $scope.$parent.offices.find(function(e) { 
+		// 		return e._id == $scope.results[i].office
+		// 	})
 	}
 
 	$scope.inObjArray = function(id,array){
