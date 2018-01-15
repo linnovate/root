@@ -29,9 +29,46 @@ background-color: #fda102;
         background-color: #f5c166;
     }
 }
+.partOfTable {
+    display:table;
+    width:100%;
+    table-layout:fixed;/* even columns width , fix width of table too*/
+}
+
+.sigTable{
+    display:block;
+    height:200px;
+    overflow:auto;
+}
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
 
 .signature-hover{
     &:hover{
         background-color: #f5c166;
     }
+}
+
+p.full-name{
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+td.deleteSignature{
+    width: 45px;
+}
+
+.deleteSignature-button{
+    height: calc(15px * 2);
+    border-radius: 17px;
+    width: calc(15px * 2);
+    border: none;
+    outline: none;
+    background-color: #f5c166;
+        &:hover{
+            background-color: #fda102;
+        }
 }

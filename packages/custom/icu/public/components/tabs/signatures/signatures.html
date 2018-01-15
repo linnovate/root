@@ -1,6 +1,6 @@
-<div class="">
+<div >
     <table class="table " ng-if='signatures.length > 0'>
-        <thead>
+        <thead class="partOfTable">
             <tr>
             <th>#</th>
             <th>{{ 'fullName' | i18next}}</th>
@@ -9,37 +9,39 @@
             <th>{{ 'unit' | i18next}}</th>
             </tr>
         </thead>
-        <tbody>
-          <div >
-            <tr class="signature-hover" ng-repeat="signature in signatures"
+
+        <tbody   class="signature-table sigTable">
+
+            <tr class="signature-hover partOfTable" ng-repeat="signature in signatures"
                                         ng-mouseover="showButton = true" 
                                         ng-mouseleave="showButton = false">
               <td>{{$index + 1}}</td>
-              <td >{{signature.fullName}}</td>
-              <td>{{signature.rank}}</td>
-              <td>{{signature.role}}</td>
-              <td>{{signature.unit}}</td>
-             <!-- <td> <button class="addSignature"  ng-show="showButton" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></td> -->
+              <td><p class="full-name">{{signature.fullName}}</p></td>
+              <td><p class="full-name">{{signature.rank}}</p></td>
+              <td><p class="full-name">{{signature.role}}</p></td>
+              <td><p class="full-name">{{signature.unit}}</p></td>
+             <td class="deleteSignature"> <button class="deleteSignature-button" ng-show="showButton" ng-click="delete(signature)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
             </tr>
-          </div>
+
         </tbody>
+
       </table>
 
       <div ng-if="signatures.length == 0">{{ 'noSignatures' | i18next}}</div>
 
-      <div class="row" ng-style="{'width': 'inherit'}">
+      <div class="row" ng-style="{'width': '100%'}">
             <form ng-submit="submit()">
-            <div class="col-xs-3">
-              <input type="text" class="form-control" ng-model="signature.fullName" placeholder="{{ 'fullName' | i18next}}" required>
+            <div class="col-xs-3 ">
+              <input type="text" class="form-control" ng-model="signature.fullName" placeholder="{{ 'fullName' | i18next}}" maxlength="20" required>
             </div>
             <div class="col-xs-2">
-              <input type="text" class="form-control" ng-model="signature.rank" placeholder="{{ 'rank' | i18next}}" >
+              <input type="text" class="form-control" ng-model="signature.rank" placeholder="{{ 'rank' | i18next}}" maxlength="20">
             </div>
             <div class="col-xs-3">
-              <input type="text" class="form-control" ng-model="signature.role" placeholder="{{ 'role' | i18next}}" required>
+              <input type="text" class="form-control" ng-model="signature.role" placeholder="{{ 'role' | i18next}}" required maxlength="20">
             </div>
             <div class="col-xs-3">
-                <input type="text" class="form-control" ng-model="signature.unit" placeholder="{{ 'unit' | i18next}}" >
+                <input type="text" class="form-control" ng-model="signature.unit" placeholder="{{ 'unit' | i18next}}" maxlength="20">
             </div>
             <div class="col-xs-1">
                     <button type="submit" class="addSignature"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>

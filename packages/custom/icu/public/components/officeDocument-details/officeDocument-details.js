@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                                                       $state,
                                                       OfficeDocumentsService,
                                                       ActivitiesService, 
+                                                      SignaturesService,
                                                       $stateParams,
                                                     $timeout,$http) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments")))
@@ -19,6 +20,24 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         else
         {
             $scope.officeDocument = context.entity || entity;
+        }
+
+        if($scope.officeDocument.folder && $scope.officeDocument.folder.office){
+            SignaturesService.getByOfficeId( $scope.officeDocument.folder.office)
+            .then(function (result) {
+                $scope.signatures = result;
+            
+            })
+        }
+
+        $scope.selectedSignature;
+
+        $scope.SignatureSelected = function (signature) {
+            $scope.selectedSignature = signature;
+        }
+
+        $scope.Sign = function () {
+            console.log($scope.selectedSignature)
         }
 
         $scope.tags = ['tag'];

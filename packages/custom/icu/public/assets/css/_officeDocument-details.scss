@@ -229,3 +229,36 @@ ul.dropdown-menu {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  .select-sig{
+    width: 267px;
+    border: none;
+    border-bottom: solid 1px;
+ background   : transparent;
+    margin-bottom: 15px;
+    outline: none;
+  }
+
+
+
+  .sig{
+  margin-right: 10px !important;
+  height: calc(15px * 2);
+  border-radius: 40px;
+  appearance: none;
+  border: none;
+  padding: 0;
+  outline: none;
+  background-color: #323d41;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  padding-left: 5px;
+  padding-right: 5px;
+  width: calc(15px * 2);
+  &:hover{
+    background-color: #4C5D63;
+    transition: 0.8s;
+}
+  }
+

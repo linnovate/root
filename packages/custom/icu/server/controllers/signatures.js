@@ -17,8 +17,8 @@ exports.createSignature = function(req,res,next){
 exports.removeSignature = function (req, res, next) {
     Signature.remove({
       _id : req.params.id
-    }).then(function (err) {
-        if (err){
+    }).then(function (result) {
+        if (!result){
             res.status(500).send(error);
         }
         else{
