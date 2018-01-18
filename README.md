@@ -12,4 +12,4 @@ docker-compose up
 
 ### Prerequisites
 
-- **Docker , docker-compose**
+- **Docker , docker-compose** , node 4.x
