@@ -315,6 +315,10 @@
             } 
         }
 
+        .active-status {
+            width: 100px;            
+        }
+
         .list, .calendar {
             @include button;
             margin: -2px;

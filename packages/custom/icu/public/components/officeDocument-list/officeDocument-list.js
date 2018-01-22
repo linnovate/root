@@ -8,7 +8,8 @@ angular.module('mean.icu.ui.officedocumentlist', [])
                                                             OfficeDocumentsService,
                                                             context,
                                                             $filter,
-                                                            $stateParams) {
+                                                            $stateParams,
+                                                            EntityService) {
         $scope.officeDocuments = officeDocuments.data || officeDocuments;
         $scope.loadNext = officeDocuments.next;
         $scope.loadPrev = officeDocuments.prev;
@@ -18,10 +19,14 @@ angular.module('mean.icu.ui.officedocumentlist', [])
         }
 
         $scope.starred = $stateParams.starred;
-        // It caused partial showing of documents, it cutted the documents array
-        //  if ($scope.officeDocuments.length > 0 && !$scope.officeDocuments[$scope.officeDocuments.length - 1].id) {
-        //      $scope.officeDocuments = [$scope.officeDocuments[0]];
-        //  }
+        
+        // activeToggle
+        $scope.activeToggleList = EntityService.activeToggleList;
+        $scope.activeToggle = {
+                field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
+                disabled: !EntityService.isActiveStatusAvailable() 
+        };
+        /*---*/
 
         $scope.isCurrentState = function (id) {
             return $state.current.name.indexOf('main.officeDocuments.byentity') === 0 &&
@@ -87,6 +92,12 @@ angular.module('mean.icu.ui.officedocumentlist', [])
         $scope.toggleStarred = function () {
             $state.go($state.current.name, { starred: !$stateParams.starred });
         };
+
+        $scope.filterActive = function () {
+            EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
+            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
+        };
+    
         if ($scope.officeDocuments.length ) {
             if ($state.current.name === 'main.officeDocuments.all' ||
                 $state.current.name === 'main.officeDocuments.byentity' ||

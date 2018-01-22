@@ -86,9 +86,22 @@
 
     <div class="filters">
         <div class="left-wrapper">
+            <div class="select-wrapper select-wrapper-active-status">
+                <div tooltips tooltip-template="{{'filter by activity status' | i18next}}">
+                    <ui-select ng-disabled="activeToggle.disabled" ng-model="activeToggle.field" on-select="filterActive()" search-enabled="false">
+                        <ui-select-match>
+                            <button class="tasks active-status">{{$select.selected.title | i18next }}</button>
+                        </ui-select-match>
+                        <ui-select-choices class="sorting" repeat="field.value as field in activeToggleList">
+                            {{field.title | i18next}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>        
             <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
-                <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
-            </button>
+                    <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
+                </button>
+                
             <div class="select-wrapper">
                 <div tooltips tooltip-template="{{'sort by' | i18next}}">
                     <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
@@ -108,10 +121,6 @@
             </button>
         </div>
 
-        <!--<div class="right-wrapper">
-            <button class="list"></button>
-            <button class="calendar"></button>
-        </div>-->
     </div>
     <div icu-task-list
          class="entity-list-container"

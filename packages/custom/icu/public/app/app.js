@@ -848,6 +848,7 @@ angular.module('mean.icu').config([
                 url: '/all',
                 views: getListView('task'),
                 params: {
+                    activeToggle: 'active',
                     starred: false,
                     start: 0,
                     limit: LIMIT,

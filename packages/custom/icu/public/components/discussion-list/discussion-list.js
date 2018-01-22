@@ -8,7 +8,8 @@ angular.module('mean.icu.ui.discussionlist', [])
                                                       DiscussionsService,
                                                       context,
                                                       $filter,
-                                                      $stateParams) {
+                                                      $stateParams,
+                                                      EntityService) {
         $scope.discussions = discussions.data || discussions;
         $scope.loadNext = discussions.next;
         $scope.loadPrev = discussions.prev;
@@ -19,7 +20,16 @@ angular.module('mean.icu.ui.discussionlist', [])
         $scope.starred = $stateParams.starred;
         if ($scope.discussions.length > 0 && !$scope.discussions[$scope.discussions.length - 1].id) {
 		    $scope.discussions = [$scope.discussions[0]];
-	    }
+        }
+        
+        // activeToggle
+        $scope.activeToggleList = EntityService.activeToggleList;
+        $scope.activeToggle = {
+                field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
+                disabled: !EntityService.isActiveStatusAvailable() 
+        };
+        /*---*/
+
 
         $scope.isCurrentState = function() {
             return $state.current.name.indexOf('main.discussions.byentity') === 0 &&
@@ -83,6 +93,11 @@ angular.module('mean.icu.ui.discussionlist', [])
         $scope.toggleStarred = function () {
             $state.go($state.current.name, { starred: !$stateParams.starred });
         };
+
+        $scope.filterActive = function () {
+            EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
+            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
+        };    
 
         if ($scope.discussions.length) {
             if ($state.current.name === 'main.discussions.all' ||

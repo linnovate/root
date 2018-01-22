@@ -8,7 +8,8 @@ angular.module('mean.icu.ui.projectlist', [])
                                                    ProjectsService,
                                                    context,
                                                    $filter,
-                                                   $stateParams) {
+                                                   $stateParams,
+                                                   EntityService) {
         $scope.projects = projects.data || projects;
         $scope.loadNext = projects.next;
         $scope.loadPrev = projects.prev;
@@ -17,6 +18,15 @@ angular.module('mean.icu.ui.projectlist', [])
         }
 
         $scope.starred = $stateParams.starred;
+
+        // activeToggle
+        $scope.activeToggleList = EntityService.activeToggleList;
+        $scope.activeToggle = {
+                field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
+                disabled: !EntityService.isActiveStatusAvailable() 
+        };
+        /*---*/
+
         if ($scope.projects.length > 0 && !$scope.projects[$scope.projects.length - 1].id) {
 		    $scope.projects = [$scope.projects[0]];
 	    }
@@ -84,6 +94,11 @@ angular.module('mean.icu.ui.projectlist', [])
 
         $scope.toggleStarred = function () {
             $state.go($state.current.name, { starred: !$stateParams.starred });
+        };
+
+        $scope.filterActive = function () {
+            EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
+            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
         };
         
         if ($scope.projects.length) {

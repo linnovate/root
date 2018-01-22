@@ -16,6 +16,23 @@ Date.prototype.getWeek = function()
 }
 
 angular.module('mean.icu.ui.tasklistFilter', [])
+.filter('filterByActiveStatus', function (EntityService) {
+	return function(entities,type) {
+		if (!entities || !(entities instanceof Array) || !EntityService.isActiveStatusAvailable()) return entities;
+		var filterValue = EntityService.activeStatusFilterValue;
+		var out = []
+		switch(filterValue) {
+			default:
+			out = 	entities.filter(function(entity) {
+//						console.log("filterByActiveStatus:::", entity, filterValue,type.entity,entity.status)
+						let entityActiveValue = EntityService.getEntityActivityStatus(filterValue,type.entity,entity.status)
+//						console.log("display entity?", entityActiveValue) ;
+						return entityActiveValue ;
+					});
+		}
+		return out;
+	}
+})
 .filter('filterByOptions', function (TasksService) {
 	return function(tasks) {
 		if (!tasks || !(tasks instanceof Array)) return tasks;
@@ -64,4 +81,7 @@ angular.module('mean.icu.ui.tasklistFilter', [])
 		return out;
 	}
 });
+
+
+
 
