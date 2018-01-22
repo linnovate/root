@@ -23,18 +23,18 @@ function SearchController($scope, $state, $stateParams, context, TasksService, $
         }
     });
 
-function onDocumentClick() {
-        // check for flag
-        if(angular.element('#build-in-search').css('display') == 'block')
-        {
-            angular.element('#build-in-search').css('display', 'none');
-        }
-        else{
-            angular.element('#build-in-search').css('display', 'block');
-        }
-    }
+// function onDocumentClick() {
+//         // check for flag
+//         if(angular.element('#build-in-search').css('display') == 'block')
+//         {
+//             angular.element('#build-in-search').css('display', 'none');
+//         }
+//         else{
+//             angular.element('#build-in-search').css('display', 'block');
+//         }
+//     }
 
-    $document.on("click", onDocumentClick);
+//     $document.on("click", onDocumentClick);
 
     $scope.clearSearch = function () {
         $scope.term = '';
