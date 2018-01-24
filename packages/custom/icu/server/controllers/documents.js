@@ -1777,7 +1777,7 @@ exports.sendDocument = function (req, res, next) {
   var creators = officeDocument.creator ? [officeDocument.creator.username.toLowerCase()] : [];
   sendingForm['doneBy'] = sendingForm['doneBy']?sendingForm['doneBy']:[];
   sendingForm['forNotice'] = sendingForm['forNotice']?sendingForm['forNotice']:[];
-  sendingForm['sendingAs'] = sendingForm['sendingAs']?sendingForm['sendingAs']:[];
+  sendingForm['sendingAs'] = sendingForm['sendingAs']?sendingForm['sendingAs']:null;
   sendingForm['ref'] = req.body.officeDocument._id ;
   sendingForm['sender']=req.user._id;
   var watchers =_.union(sendingForm['doneBy'],_.union(sendingForm['forNotice'],_.union([assign],[sendingForm['sendingAs']])));
@@ -1785,7 +1785,8 @@ exports.sendDocument = function (req, res, next) {
     watchers.push(w._id);
   });
   watchers=_.union(watchers,watchers);  
-  watchers.filter(n => n).filter(n => true) ;
+  //watchers.filter(n => n).filter(n => true) ;
+  watchers = watchers.filter(function(e){return e}); 
   sendingForm['status']='sent';
   watchers.forEach(function(watcher){
     var watcher = watcher._id?watcher._id:watcher;
@@ -1793,7 +1794,7 @@ exports.sendDocument = function (req, res, next) {
       var doc = {
         'created':officeDocument.created,
         'updated':officeDocument.created,
-        'title':officeDocument.title,
+        'title':sendingForm.title,
         'status':'received',
         'path':officeDocument.path,
         'spPath':officeDocument.spPath,
@@ -1819,7 +1820,43 @@ exports.sendDocument = function (req, res, next) {
             console.log(result);
         }
         else{
-//          console.log("success sending document")          
+//          console.log("success sending document")  
+            if(sendingForm['sendWithAttachments']){
+
+              Attachment.find({entityId:officeDocument._id}).then(function (attachments) {
+                attachments.forEach(function (oldAttachment) {
+
+                 
+                  var attachment = new Attachment({
+                    "entity" : "officeDocuments",
+                    "entityId" : result._doc._id,
+                    "issue":"update",
+                    "issueId":new ObjectId(),
+                    "name" : oldAttachment.name,
+                    "path" : oldAttachment.path,
+                    "attachmentType" : oldAttachment.attachmentType,
+                    "size" : oldAttachment.size,
+                    "created" :oldAttachment.created ,
+                    "updated" : oldAttachment.updated,
+                    "creator" : oldAttachment.creator,
+                    "watchers" : [watcher],
+                  });
+                  attachment.save(function(error,result2){
+                    if(error||!result2){
+                        console.log("error sending document");
+                        console.log(error);
+                        console.log(result2);
+                    }
+                    else{
+
+                    }
+                  });
+                })
+
+              })
+              console.log("sendWithAttachments") 
+              
+            }
         }
         
       });
@@ -1884,6 +1921,36 @@ exports.sendDocument = function (req, res, next) {
   });
 });
 }
+
+var copyFile = function (file, dir2) {
+  
+       //gets file name and adds it to dir2
+      // var f = path.basename(file);
+      // var source = fs.createReadStream(file);
+      // var dest = fs.createWriteStream(path.resolve("http://localhost:3002/files/2018/01/22/", f));
+  
+      // source.pipe(dest);
+      // source.on('end', function() { console.log('Succesfully copied'); });
+      // source.on('error', function(err) { console.log(err); });
+      file = "/home/sraya/Desktop/ICU_25.12.17/root/files/2018/01/22/1516632480971-Combined.pdf"
+      console.time('copying')
+      fs.stat(file, function(err, stat){
+        // var filesize = stat.size
+        // var bytesCopied = 0
+      
+        var readStream = fs.createReadStream(file)
+      
+        readStream.on('data', function(buffer){
+          //bytesCopied+= buffer.length
+          //var porcentage = ((bytesCopied/filesize)*100).toFixed(2)
+          //console.log(porcentage+'%') // run once with this and later with this line commented
+        })
+        readStream.on('end', function(){
+          console.timeEnd('copying')
+        })
+        readStream.pipe(fs.createWriteStream("/home/sraya/Desktop/ICU_25.12.17/root/files/2018/01/22/yyyy.pdf"));
+      })
+};
 
 
 

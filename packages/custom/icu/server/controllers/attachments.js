@@ -169,30 +169,47 @@ exports.deleteFile = function (req, res) {
       if (err) {
         console.log(err)
       } else {
-        var strUrl = file[0]._doc.path;
-        var index = strUrl.indexOf('/files');
-        var pathFile = '.' + strUrl.substring(index);
-        fs.stat(pathFile, function (err, stats) {
-          if (err) {
-            console.log(JSON.stringify(err))
-          } else {
-            if (stats.isFile()) {
-              fs.unlink(pathFile, function (err) {
-                if (err) {
-                  console.log(JSON.stringify(err));
-                } else {
-                  Attachment.remove({ _id: req.params.id }, function (err) {
-                    if (err) {
-                      console.log(err)
-                    } else {
-                       res.sendStatus(200);
-                    };
-                  });
-                }
-              })
-            }
-          }
+        Attachment.count({path:file[0]._doc.path},function(err,c){
+          Attachment.remove({ _id: req.params.id }, function (err) {
+            if (err) {
+              console.log(err)
+            } else {
+              if(!err && c<=1){
+                var strUrl = file[0]._doc.path;
+                var index = strUrl.indexOf('/files');
+                var pathFile = '.' + strUrl.substring(index);
+                fs.stat(pathFile, function (err, stats) {
+                  if (err) {
+                    console.log(JSON.stringify(err))
+                  } else {
+                    if (stats.isFile()) {
+                      fs.unlink(pathFile, function (err) {
+                        if (err) {
+                          console.log(JSON.stringify(err));
+                        } else {
+                          Attachment.remove({ _id: req.params.id }, function (err) {
+                            if (err) {
+                              console.log(err)
+                            } else {
+                               res.sendStatus(200);
+                            };
+                          });
+                        }
+                      })
+                    }
+                  }
+                });
+              }
+              else{
+                res.sendStatus(200);
+              }
+               
+
+            };
+          });
+          
         });
+      
       }
     });
     return res;

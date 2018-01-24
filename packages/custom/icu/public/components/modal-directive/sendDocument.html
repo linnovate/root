@@ -45,7 +45,7 @@
             </div>
             <div class="col-xs-5 col-md-3">
                 <label>{{'classification' | i18next }}</label>
-                <select class="form-control" ng-model="sendingForm.classification">
+                <select class="form-control" ng-model="sendingForm.classification" required>
                 <option ng-repeat="classification in classificationList">{{classification | i18next }}</option>
               </select>
             </div>
@@ -57,7 +57,7 @@
                     <label>{{'doneBy' | i18next }}</label>
                     <!--  <input type="text" class="form-control" placeholder=".col-xs-2">-->
 
-                    <ui-select multiple ng-model="sendingForm.doneBy">
+                    <ui-select multiple ng-model="sendingForm.doneBy" >
                         <ui-select-match class="verticalUser">
                             <div icu-avatar user="$item"></div>
                             <span ng-if="$item._id" class="summary-content">{{$item.name}} {{$item.lastname?$$item.lastname:""}}</span>
@@ -88,9 +88,13 @@
                 </ui-select>
             </div>
         </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" ng-model="sendingForm.sendWithAttachments">
+            <label class="form-check-label" for="inlineCheckbox1">{{'sendWithAttachment' | i18next }}</label>
+          </div>
 </div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary float-right" ng-click="cancel()">{{'Cancel' | i18next }}</button>
-    <button type="submit" class="btn btn-warning float-left" ng-click="ok(sendingForm)">{{'send' | i18next }}</button>
+<div class="modal-footer" id="message">
+    <button type="button" class="btn btn-secondary " ng-click="cancel()">{{'Cancel' | i18next }}</button>
+    <button type="submit" class="btn btn-warning " ng-click="ok(sendingForm)">{{'send' | i18next }}</button>
 </div>
 </form>

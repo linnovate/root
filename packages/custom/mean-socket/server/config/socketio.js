@@ -8,7 +8,7 @@ var config = require('meanio').loadConfig(),
 module.exports = function(http) {
 
     var io = socketio.listen(http);
-
+    
     io.use(function(socket, next) {
         var data = socket.request;
         next();

@@ -284,5 +284,6 @@
     "whatsNew" : "What's new",
     "optional":"Optional",
     "IWantToGetMailEveryWeekAboutMyTasks": "I Want To Get Mail Every Week About My Tasks",
-    "IWantToGetMailEveryWeekAboutGivenTasks": "I Want To Get Mail Every Week About Given Tasks"
+    "IWantToGetMailEveryWeekAboutGivenTasks": "I Want To Get Mail Every Week About Given Tasks",
+    "sendWithAttachment": "send with attachments"
 }

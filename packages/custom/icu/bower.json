@@ -17,6 +17,7 @@
     "angular-tooltips": "^1.1.4",
     "angular-timeago": "^0.4.4",
     "dragular": "^4.4.4",
-    "d3": "^4.9.1"
+    "d3": "^4.9.1",
+    "alertifyjs": "^1.0.11"
   }
 }

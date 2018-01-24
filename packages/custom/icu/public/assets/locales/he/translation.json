@@ -285,5 +285,6 @@
 	"whatsNew": "מה חדש",
 	"optional":"אופציונלי",
 	"IWantToGetMailEveryWeekAboutMyTasks": "אני רוצה לקבל כל שבוע מייל על המשימות השבועיות שלי",
-    "IWantToGetMailEveryWeekAboutGivenTasks": "אני רוצה לקבל כל שבוע מייל על המשימות השבועיות שנתתי לאחרים"
+	"IWantToGetMailEveryWeekAboutGivenTasks": "אני רוצה לקבל כל שבוע מייל על המשימות השבועיות שנתתי לאחרים",
+	"sendWithAttachment": "שלח עם המסמכים המצורפים"
 }

@@ -155,25 +155,42 @@ function controller($scope, $uibModalInstance, $filter, entity) {
     };
 }
 
-function controllerDocument($scope, $state,$uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
+function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocument, people, OfficeDocumentsService) {
       
     $scope.officeDocument = officeDocument;
     $scope.people = people;
+    // $scope.sendingForm.title = undefined;
+    // $scope.sendingForm.sendingAs = undefined;
+    // $scope.sendingForm.classification = undefined;
 
     $scope.classificationList = ['unclassified','private','secret','topSecret' ]; 
 
     $scope.ok = function (sendingForm) {
-        OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument).then(function(result){
-            console.log("===RETURNED===");
-           debugger;
-            console.dir(result);
-           // Object.keys(result).forEach(function(key){
-            //    $scope.officeDocument[key]=result[key];
-           // });
-           $state.reload();
-            $scope.cancel();
-            
+
+        var elem = document.getElementById("message");
+        alertify.parent(elem);
+        alertify.logPosition("bottom right");
+        console.log(sendingForm)
+     
+        if(sendingForm.classification == undefined || 
+            sendingForm.doneBy == undefined ||
+            sendingForm.forNotice == undefined){
+            alertify.error("נא למלא סיווג לידיעה ולטיפול");
+        }else{
+
+            OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument).then(function(result){
+                console.log("===RETURNED===");
+                console.dir(result);
+                // Object.keys(result).forEach(function(key){
+                    //    $scope.officeDocument[key]=result[key];
+                // });
+                $state.reload();
+                $scope.cancel();
+                alertify.reset();
+                alertify.logPosition("bottom right");
+                alertify.success("המסמך נשלח בהצלחה");
         });  
+    }
     };
 
     $scope.cancel = function () {
