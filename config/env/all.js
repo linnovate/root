@@ -73,5 +73,7 @@ module.exports = {
     }
   ],
   ScheduledMailSendWeekly: '59 1 * * 0',
-  ScheduledMailSendDaly: '59 1 * * 0-5'
+  ScheduledMailSendDaly: '59 1 * * 0-5',
+  activeStatus: require('../activeStatusSettings'),
+  
 };

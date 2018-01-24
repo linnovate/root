@@ -8,8 +8,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             Created: 2
         };
 
-        function controller($scope, ProjectsService, orderService, dragularService, $element, $interval, $window) {
-
+        function controller($scope, ProjectsService, orderService, dragularService, $element, $interval, $window,EntityService) {
             $scope.currentTaskId = function (id) {
                 $scope.taskId = id;
             };

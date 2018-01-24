@@ -1,14 +1,21 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function ($scope, $window, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams) {
+.controller('TaskListController', function ($scope, $window, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams,EntityService) {
 	$scope.tasks = tasks.data || tasks;
-	//TasksService.data = $scope.tasks;
 	$scope.loadNext = tasks.next;
 	$scope.loadPrev = tasks.prev;
-
 	$scope.autocomplete = context.entityName === 'discussion';
 	$scope.starred = $stateParams.starred;
+
+	// activeToggle
+	$scope.activeToggleList = EntityService.activeToggleList;
+	$scope.activeToggle = {
+			 field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
+			 disabled: !EntityService.isActiveStatusAvailable() 
+	};
+	/*---*/
+		
 	if ($scope.tasks.length > 0 && !$scope.tasks[$scope.tasks.length - 1].id) {
 		$scope.tasks = [$scope.tasks[0]];
 	}
@@ -207,6 +214,7 @@ angular.module('mean.icu.ui.tasklist', [])
 		/*Made By OHAD - Needed for reversing sort*/
 		$state.go($state.current.name, { sort: $scope.sorting.field });
 	};
+	
 
 	$scope.sorting = {
 		field: $stateParams.sort || 'created',
@@ -257,7 +265,12 @@ angular.module('mean.icu.ui.tasklist', [])
 	}
 
 	$scope.toggleStarred = function () {
-		$state.go($state.current.name, { starred: !$stateParams.starred });
+		$state.go($state.current.name, { starred: !$stateParams.starred});
+	};
+
+	$scope.filterActive = function () {
+		EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
+		$state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
 	};
 
 	$scope.print = function() {

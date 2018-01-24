@@ -232,6 +232,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             delete task.project;
             $scope.update(task);
         };
+        
 
         $scope.deleteTask = function(task) {
             TasksService.remove(task._id).then(function() {
@@ -246,10 +247,23 @@ angular.module('mean.icu.ui.taskdetails', [])
                 });
 
                 });
-
-
             });
         };
+
+
+        let refreshView = function() {
+            var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
+            TasksService.getWatchedTasks().then(function(result){
+               TasksService.watchedTasksArray = result;
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                reload: true
+            });
+
+            });
+        }
 
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
@@ -312,7 +326,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         }
 
         $scope.updateStatus = function(task) {
-
+            
             if (context.entityName === 'discussion') {
                 task.discussion = context.entityId;
             }
@@ -323,6 +337,9 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
 
             TasksService.update(task).then(function(result) {
+                refreshView() ;
+
+                // not sure what this next code is for.
                 if (context.entityName === 'project') {
                     var projId = result.project ? result.project._id : undefined;
                     if (projId !== context.entityId) {
@@ -335,6 +352,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                     }
                 }
             });
+            
         }
             
         $scope.updateDue = function(task) {

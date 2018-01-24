@@ -61,7 +61,8 @@ exports.render = function(req, res) {
 			'socketPort': config.socketPort,
 			'circles': circlesLocations(),
 			'version': config.version,
-			'whatsNew': config.whatsNew
+			'whatsNew': config.whatsNew,
+			'activeStatus': config.activeStatus,
 		}
 	});
 };
