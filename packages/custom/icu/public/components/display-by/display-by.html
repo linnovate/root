@@ -7,7 +7,7 @@
             {{ 'all' | i18next }}
             <div class="list {{context.main}}">
                 <ul>
-                    <li data-ng-repeat="item in allItems[context.main] | limitTo:displayLimit[context.main]" data-ng-class="{'selected': context.entityName === singularItemName[context.main] && item._id === context.entityId }"
+                    <li data-ng-repeat="item in allItems[context.main] | filterRecycled | limitTo:displayLimit[context.main]" data-ng-class="{'selected': context.entityName === singularItemName[context.main] && item._id === context.entityId }"
                         data-ng-click="switchToAll(singularItemName[context.main], item._id)">
                         <a href class="Names-In-List-On-Side">
                     {{item.title || item.name}}
@@ -26,7 +26,7 @@
     <div class="list projects" ng-if="projectsList && (icuDisplayBy.indexOf('projects'))>-1">
         <p ng-click="visible.project = !visible.project" class="title">{{ 'projects' | i18next }}</p>
         <ul ng-if="visible.project">
-            <li data-ng-repeat="project in projectsList | limitTo: displayLimit['projects']" data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
+            <li data-ng-repeat="project in projectsList | filterRecycled | limitTo: displayLimit['projects']" data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
                 data-ng-click="switchTo('project', project._id)" ng-if="project._id && project.title">
                 <a href class="Names-In-List-On-Side">
                     {{project.title}}
@@ -42,7 +42,7 @@
     <div class="list discussions" ng-if="discussions && (icuDisplayBy.indexOf('discussions'))>-1">
         <p ng-click="visible.discussion = !visible.discussion" class="title">{{ 'discussions' | i18next }}</p>
         <ul ng-if="visible.discussion">
-            <li data-ng-repeat="discussion in discussions | limitTo:displayLimit['discussions']" data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
+            <li data-ng-repeat="discussion in discussions | filterRecycled | limitTo:displayLimit['discussions']" data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
                 <a href class="Names-In-List-On-Side">
                     {{discussion.title || discussion.name}}
@@ -80,7 +80,7 @@
         </ul> -->
         <p class="title type"> {{ 'type' | i18next }} </p>
         <ul>
-        <li data-ng-repeat="type in typesList" 
+        <li data-ng-repeat="type in typesList | filterRecycled" 
             data-ng-class="{'selected': typeSelected == type.name}"
             data-ng-click="switchToType(type)">
             <a href class="Names-In-List-On-Side">
