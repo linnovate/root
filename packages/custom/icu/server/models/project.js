@@ -13,6 +13,9 @@ var ProjectSchema = new Schema({
   updated: {
     type: Date
   },
+  recycled: {
+    type: Date,
+  },  
   title: {
     type: String
   },

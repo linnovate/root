@@ -3,7 +3,7 @@
     <div ng-init="entityType = {entity: 'discussion'};" />
     <table class="discussions" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody class='containerVertical'>
-            <tr data-ng-repeat="discussion in discussions | filterByActiveStatus:entityType | orderBy:order.field:order.isReverse"
+            <tr data-ng-repeat="discussion in discussions | filterRecycled | filterByActiveStatus:entityType | orderBy:order.field:order.isReverse"
                 data-ng-class="{ 'active': isCurrentState(discussion._id) }"
                 ng-click="initialize($event, discussion)"
                 ng-mousedown="currentTaskId(discussion._id)"
@@ -33,7 +33,7 @@
         <div>{{'location' | i18next}}</div>
         <div>{{'members' | i18next}}</div>
     </div>
-    <div data-ng-repeat="discussion in discussions | filterByActiveStatus:entityType | orderBy:order.field:order.isReverse" ng-init="getDate(discussion)"  class="task-row">
+    <div data-ng-repeat="discussion in discussions | filterRecycled | filterByActiveStatus:entityType | orderBy:order.field:order.isReverse" ng-init="getDate(discussion)"  class="task-row">
         <div>{{discussion.title}}</div>
         <div class="status" ng-class="discussion.status">
             {{discussion.status | i18next }}

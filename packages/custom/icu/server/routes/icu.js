@@ -10,6 +10,7 @@ var updates = require('../controllers/updates');
 var notification = require('../controllers/notification');
 var attachments = require('../controllers/attachments');
 var star = require('../controllers/star');
+var recycle = require('../controllers/recycle');
 var elasticsearch = require('../controllers/elasticsearch');
 var templates = require('../controllers/templates');
 var eventDrops = require('../controllers/event-drops');
@@ -82,6 +83,12 @@ module.exports = function(Icu, app) {
   app.route('/api/notification1/:id([0-9a-fA-F]{24})')
     .put(notification.updateDropDown);
   //END Notification READ - OHAD
+
+  //recycle && recycleRestore
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/recycle')
+  .patch(recycle.recycleEntity);
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/recycle_restore')
+  .patch(recycle.recycleRestoreEntity);
 
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/star')
