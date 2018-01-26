@@ -9,7 +9,7 @@
     // height: 100vh;
     //height: 963px;
 
-    background-color: $grey;
+    background-color: $dark-grey;
     min-width: $sidepane-width;
 
     header {
@@ -21,31 +21,85 @@
         color: white;
         font-size: 23px;
         text-align: center;
-
+        line-height: 28px;
+        border-bottom: 1px solid $border;
+        .header-title
+        {
+            padding-top: 16px;
+            line-height: 27px;
+            font-size: 20px;
+        }
+        .header-button
+        {
+            width:85px;
+            height: 55px;
+            float:left;
+            .hide-butt
+            {
+                background-color: #141D20;
+                background-repeat: no-repeat;
+                height: 32px;
+                width: 32px;
+                border:none;
+                margin-top: 16px;
+                margin-left: 12px;
+            }
+        }
         .sidepane-title
         {
+            padding: 16px auto 11px auto;
             cursor: pointer
         }
+        .hide-button
+        {
+            float: left;
+            height: 56px;
+            width: 56px;
+            background-color: white;
+            border: 1px solid #e1e1e1;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin-left: 6px;
+        }
     }
-
+    .sideMenu {
+        height: calc(100% - 56px);
+        display: flex;
+        flex-direction:row;
+    }
     nav {
+        width: 85px;
         color: white;
         overflow: auto;
         height: calc(100% - 60px);
-         &::-webkit-scrollbar {
-                width: 5px;
-            }
-             
-            &::-webkit-scrollbar-track {
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-                border-radius: 10px;
-            }
-             
-            &::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                background-color: white;
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-            }
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        .yellowTab {
+            background-color:#FFA000;
+        }
+        .greenTab {
+            background-color:#2AB541;
+        }
+        .purpleTab {
+            background-color:#662D91;
+        }
+        .darkBlueTab {
+            background-color:#2E3192;
+        }
+        .redTab {
+            background-color:#D43D3D;
+        }
+        .blueTab {
+            background-color:#00AEEF;
+        }
+
         & > ul {
             list-style: none;
             padding-left: 0;
@@ -56,10 +110,8 @@
             position: relative;
             margin-bottom: 0;
             &:before {
-                box-shadow: -2px 0px 14px 1px rgba(0, 0, 0, 0.73);
                 pointer-events: none;
                 position: absolute;
-                top: 0px;
                 bottom: 0;
                 right: 0;
                 content: "";
@@ -68,46 +120,45 @@
             }
             & > li {
                 cursor: pointer;
-                width: 100%;
-                transition: all .5s;
+                width: 85px;
+                border-bottom: 1px solid $border;
                 &.active {
-                        background-color: #313C40;
-                        .arrow {
-                            box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
-                        }
-                        flex-grow: 1;
-                        .menu-item {
-                            background-color: #37464B;
-                        }
+                    background-color: #313C40;
+                    .arrow {
+                        box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
                     }
+                    flex-grow: 1;
+                    .menu-item {
+                        background-color: #141D20;
+                    }
+                }
                 &:hover{
                     background-color: #37464B;
                 }
 
                 .menu-item {
-                    height: 59px;
-
-                    
-
+                    height: 113px;
+                    width: 85px;
                     .icon {
-                        width: 57px;
-                        height: $header-height;
-                        float: left;
-                        padding: 18px;
+                        width: 100%;
+                        height: 32px;
+                        margin: 26px auto 4px auto;
+                        text-align: center;
+                        vertical-align: middle;
+                        float:none;
+                        display: inline-block;
                     }
 
                     .item-name {
-                        position: relative;
-                        width: calc(100% - (#{$header-height} + #{$sidepane-width - $header-height}* 0.2 + 5px));
+                        width: 100%;
                         height: $header-height;
+                        text-align: center;
+                        position: relative;
+                        margin:0 auto 0 auto;
                         display: inline-block;
-
                         span {
-                            position: absolute;
-                            left: 0;
-                            top: 51%;
-                            transform: translate(0, -50%);
-                            font-size: 18px;
+                            line-height: 18px;
+                            font-size: 13px;
                         }
                     }
 
@@ -164,6 +215,11 @@
                 }
             }
         }
+    }
+    .submenu {
+        height: 100%;
+        width:calc(100% - 86px);
+        background-color: $grey;
     }
     .searchPane {
         height: auto;
@@ -272,11 +328,11 @@
             font-weight: bold;
         }
         .arrow-left {
-            width: 0; 
-            height: 0; 
+            width: 0;
+            height: 0;
             border-top: 5px solid transparent;
-            border-bottom: 5px solid transparent; 
-            border-left:4px solid #ffa000; 
+            border-bottom: 5px solid transparent;
+            border-left:4px solid #ffa000;
             position: absolute;
             left: 10px;
             top: 45%;
@@ -286,7 +342,7 @@
             vertical-align: middle;
         }
         .icon-task {
-		    background: url('/icu/assets/img/task-white.svg') no-repeat center center;
+            background: url('/icu/assets/img/task-white.svg') no-repeat center center;
             height: 17px;
         }
         .icon-project {

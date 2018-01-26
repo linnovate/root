@@ -4,7 +4,7 @@ angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, context, TasksService, $rootScope, SearchService, $filter, $location) {
         $scope.context = context;
-        
+
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
@@ -20,12 +20,14 @@ directive('icuSidepane', function() {
             });
 
             toggledItem.open = !prev;
-        }
+        };
 
         $scope.removeFilterValue = function() {
         	TasksService.filterValue = false;
-        }
-
+        };
+        $scope.getLayOutIcon = function(){
+            return '/icu/assets/img/sections4.svg';
+        };
         $scope.isCurrentState = function(item) {
 
             if ((context.main === 'templateDocs') && (item.display != undefined) && (item.display[1] === 'templateDocs'))
@@ -45,13 +47,21 @@ directive('icuSidepane', function() {
             {
                 return item.state === context.main;
             }
-            
+
             //return item.state === context.main;
         };
 
         $scope.GoToMyTasks = function() {
             $state.go('main.tasks.byassign');
         }
+
+
+
+        $scope.setActive = function(item){
+            $scope.$broadcast('sidepan', item);
+            $scope.activeTab = item;
+        };
+
 
         $scope.items = [{
             name: 'tasks',
@@ -94,18 +104,19 @@ directive('icuSidepane', function() {
             open: $scope.isCurrentState({state: 'officeDocuments'})
         }
         ];
+        $scope.activeTab = $scope.items[0];
 
         /********************************** search **********************************/
 
         $scope.issues = [
-            {label:'tasks', value: false, name: 'task', length: 0}, 
+            {label:'tasks', value: false, name: 'task', length: 0},
             {label:'projects', value: false, name: 'project', length: 0},
             {label:'discussions', value: false, name: 'discussion', length: 0},
             {label:'offices', value: false, name: 'office', length: 0},
             {label:'folders', value: false, name: 'folder', length: 0},
             {label:'documents', value: false, name: 'officeDocument', length: 0}
         ];
-        
+
         $scope.filteringData = {
             issue: $location.$$search && $location.$$search.type ? $location.$$search.type : 'all',
             selectedEntities: {
@@ -136,13 +147,13 @@ directive('icuSidepane', function() {
                 this.watchers = 2;
             }
         };
-        
+
         var getEntitiesAndWatchers = function(filteredByType) {
             for (var i=0; i< filteredByType.length; i++) {
                 if (filteredByType[i].project)
                     $scope.filteringData.projects.push(filteredByType[i].project);
                 if (filteredByType[i].discussions && filteredByType[i].discussions.length)
-                    $scope.filteringData.discussions.push(filteredByType[i].discussions[0]);                    
+                    $scope.filteringData.discussions.push(filteredByType[i].discussions[0]);
                 if (filteredByType[i].folder)
                     $scope.filteringData.folders.push(filteredByType[i].folder);
                 if (filteredByType[i].office)
@@ -184,7 +195,7 @@ directive('icuSidepane', function() {
             }
             var results = SearchService.results;
             var filteredByType = [], index;
-            
+
             for (var i = 0; i < $scope.issues.length; i++) {
                 $scope.issues[i].length = 0;
             }
@@ -209,7 +220,7 @@ directive('icuSidepane', function() {
             }
             return arr;
         }
-        
+
         $scope.simulateCheckbox = function(obj, value) {
             if (obj[value]) {
                 obj[value] = false;

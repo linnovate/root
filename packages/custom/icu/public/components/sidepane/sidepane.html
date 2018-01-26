@@ -1,5 +1,15 @@
 <header>
-    <span class="sidepane-title" ng-click="GoToMyTasks()"> {{ 'icu' | i18next }} </span>
+    <div class="header-button">
+        <button class="hide-butt"
+                ng-style="{'background-image': 'url(' + getLayOutIcon() + ')'}"
+                ng-click="changeLayout()"
+                style="background-image: url(&quot;/icu/assets/img/sections4.svg&quot;);">
+        </button>
+    </div>
+    <div class="header-title">
+
+        <span class="sidepane-title" ng-click="GoToMyTasks()"> {{ 'icu' | i18next }} </span>
+    </div>
 </header>
 <!-- until there is integration with Circles
 <div ng-if="$root.warnings.circles !== 'undefined'" style="color:red;">
@@ -27,7 +37,7 @@
     </div>
 
     <div ng-if="filteringData.projects.length">
-            <div class="subtitle">{{'linkedTo' | i18next}}{{'project' | i18next}}</div>
+        <div class="subtitle">{{'linkedTo' | i18next}}{{'project' | i18next}}</div>
         <ul>
             <li ng-repeat="p in filteringData.projects | limitTo: displayLimit['projects']">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.projects[p._id]" ng-change="filterSearch()"/>-->
@@ -42,7 +52,7 @@
         </ul>
     </div>
     <div ng-if="filteringData.discussions.length">
-         <div class="subtitle">{{'linkedTo' | i18next}}{{'discussion' | i18next}}</div>
+        <div class="subtitle">{{'linkedTo' | i18next}}{{'discussion' | i18next}}</div>
         <ul>
             <li ng-repeat="d in filteringData.discussions | limitTo: displayLimit['discussions']">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.discussions[d._id]" ng-change="filterSearch()"/>-->
@@ -55,7 +65,7 @@
         </ul>
     </div>
     <div ng-if="filteringData.folders.length">
-         <div class="subtitle">{{'linkedTo' | i18next}}{{'folder' | i18next}}</div>
+        <div class="subtitle">{{'linkedTo' | i18next}}{{'folder' | i18next}}</div>
         <ul>
             <li ng-repeat="f in filteringData.folders | limitTo: displayLimit['folders']">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.folders[f._id]" ng-change="filterSearch()"/>-->
@@ -70,7 +80,7 @@
         </ul>
     </div>
     <div ng-if="filteringData.offices.length">
-         <div class="subtitle">{{'linkedTo' | i18next}}{{'office' | i18next}}</div>
+        <div class="subtitle">{{'linkedTo' | i18next}}{{'office' | i18next}}</div>
         <ul>
             <li ng-repeat="o in filteringData.offices | limitTo: displayLimit['offices']">
                 <!--<input type="checkbox" ng-model="filteringData.selectedEntities.offices[o._id]" ng-change="filterSearch()"/>-->
@@ -97,54 +107,48 @@
         </li>
         <li ng-if="filteringData.watchers.length > displayLimit['watchers']" ng-click="showMore(filteringData.watchers.length, 'watchers')" class="more">{{ 'more' | i18next }}</li>
         <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3" ng-click="collapse('watchers')"
-                class="more">{{ 'less' | i18next }}</li>
+            class="more">{{ 'less' | i18next }}</li>
     </ul>
 
 </nav>
-<nav ng-if="currentState.indexOf('search') == -1">
-    <ul>
-        <li data-ng-repeat="item in items" data-ng-class="{ 'active': isCurrentState(item) && item.open }" ng-click="removeFilterValue()">
-            <div class="menu-item"
-                data-ui-sref="{{'main.' + item.state}}"          
-                ng-click="toggleVisibility(item)">
-                <div class="icon">
-                    <img ng-src="{{item.icon}}"/>
+<div class="sideMenu">
+    <nav ng-if="currentState.indexOf('search') == -1" >
+        <ul>
+            <li data-ng-repeat="item in items"
+                ng-class="{
+                'redTab': activeTab === item,
+                'blueTab': activeTab === item,
+                'greenTab': activeTab === item,
+                'purpleTab': activeTab === item,
+                'yellowTab': activeTab === item,
+                'darkBlueTab': activeTab === item,
+                }"
+                ng-click="setActive(item); removeFilterValue()">
+                <div class="menu-item nav-item"
+                     data-ui-sref="{{'main.' + item.state}}"
+                     ng-click="toggleVisibility(item)">
+                    <div class="icon">
+                        <img ng-src="{{item.icon}}"/>
+                    </div>
+                    <div class="item-name align-items-center">
+                        <span>{{item.name | i18next | uppercase}}</span>
+                    </div>
                 </div>
-                <div class="item-name">
-                    <span>{{item.name | i18next | uppercase}}</span>
-                </div>
-                <div class="arrow">
-                    <i class="fa"
-                        data-ng-class="{ 'caret-right': !isCurrentState(item) || !item.open, 'fa-caret-down': isCurrentState(item) || item.open}"></i>
-                </div>
-            </div>
-            <!-- <div class="display-by"
-            ng-class= "{'collapsed' : isCurrentState(item) && !item.open }"
-            ng-if="isCurrentState(item)"
-            icu-display-by="item.display"
-            people="people"
-            projects="projects"
-            discussions="discussions"
-            offices="offices"
-            folders="folders">
-            </div> -->
-            <div class="display-by"
-                 ng-class= "{'collapsed' : isCurrentState(item) && !item.open }"
-                 ng-if="isCurrentState(item)"
-                 icu-display-by="item.display"
-                 people="people"
-                 projects="projects"
-                 discussions="discussions"
-                 office-documents="officeDocuments"
-                 offices="offices"
-                 folders="folders"
-                 me="me"
-                 templateDocs= "templateDocs">
-            </div>
-            <!-- <div class="help-block"
-                ng-if="isCurrentState(item) && ((item.name === 'projects' && !projects.length) || (item.name === 'discussions' && !discussions.length))">
-                No {{ item.name }} - please create your first
-            </div> -->
-        </li>
-    </ul>
-</nav>
+            </li>
+        </ul>
+    </nav>
+    <div class="submenu">
+        <div class="display-by"
+             icu-display-by="activeTab.display"
+             people="people"
+             projects="projects"
+             discussions="discussions"
+             office-documents="officeDocuments"
+             offices="offices"
+             folders="folders"
+             me="me"
+             templateDocs= "templateDocs">
+        </div>
+    </div>
+</div>
+

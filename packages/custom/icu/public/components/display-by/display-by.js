@@ -3,6 +3,12 @@
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
     function controller($scope, $state, context, $stateParams, $window) {
+
+        $scope.$on('sidepan', function (ev,item) {
+            $scope.context = item;
+        });
+        console.log($scope);
+
         $scope.projectsList = [];
         $scope.projects.forEach(function(project) {
                    if(project.title)
@@ -20,7 +26,7 @@ angular.module('mean.icu.ui.displayby', [])
             if(folder.title)
                 $scope.foldersList.push(folder);
             });
-        
+
         $scope.officeDocumentsList = [];
         $scope.officeDocuments.forEach(function(officeDocument) {
             if(officeDocument.title)
@@ -32,7 +38,7 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.officesList.office = $scope.officesList[0];
         }
 
-        $scope.myFilter = function (item) { 
+        $scope.myFilter = function (item) {
             if(item.office.title && $scope.officesList.office.title)
             {
                 return item.office.title === $scope.officesList.office.title;
@@ -41,8 +47,9 @@ angular.module('mean.icu.ui.displayby', [])
             {
                 return false;
             }
-            
+
         };
+
 
         //$scope.temp = {};
         $scope.changeOrder = function () {
@@ -51,17 +58,17 @@ angular.module('mean.icu.ui.displayby', [])
             // if($scope.officesList.office.title != "custom"){
             //     $scope.sorting.isReverse = !$scope.sorting.isReverse;
             // }
-            
+
             /*Made By OHAD - Needed for reversing sort*/
             //$state.go($state.current.name, { sort: $scope.officesList.office.title });
         };
-        
+
         $scope.typesList = [{
             name: 'new',
              color:'ff4081'
         },{
             name:  'received',
-            color:'37afef' 
+            color:'37afef'
         }
         //,{
         //    name:  'in-progress',
@@ -136,7 +143,7 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.switchToType= function(type){
 
             $scope.typeSelected = type.name;
-            
+
             if(context.entityName=='folder'){
                 $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
                     return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
@@ -149,12 +156,12 @@ angular.module('mean.icu.ui.displayby', [])
                 });
 
             }
-        
+
             localStorage.setItem("type", type.name);
 
             $state.go($state.current, {officeDocuments:$scope.officeDocuments}, {reload: true})
-           
-            
+
+
             // var temp=[];
             // debugger;
             // $scope.officeDocuments.forEach(function(d){
@@ -166,17 +173,17 @@ angular.module('mean.icu.ui.displayby', [])
             //     }
             //     else{
             //         return officeDocument.status == type.name;
-            //     }      
+            //     }
             // });
             // if(temp.length==0){
             //     $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
             // }
             // else{
             //     $state.go($state.current,{'officeDocuments':temp});
-                
+
             // }
 
-            /** 
+            /**
             var temp=[];
             $scope.officeDocuments.forEach(function(d){
                 temp.push(d);
@@ -188,7 +195,7 @@ angular.module('mean.icu.ui.displayby', [])
                 else{
                     return officeDocument.status == type.name;
                 }
-                   
+
             });
 
 
@@ -201,7 +208,7 @@ angular.module('mean.icu.ui.displayby', [])
                     officeDocuments: temp
                 },{reload: true});
             }*/
-            
+
 
         };
         $scope.switchTo = function(entityName, id) {
