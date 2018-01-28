@@ -250,6 +250,38 @@ directive('icuSidepane', function() {
             SearchService.filteringResults = filteredByWatchers;
         }
 
+
+        ////******* */
+        let lastMonth = new Date();
+        lastMonth.setDate(lastMonth.getMonth() -1 ) ;
+        $scope.updatedDate = lastMonth ;
+        $scope.updatedOptions = {            
+                    onClose: (value, picker, $element) => {
+                        // console.log("on close", value, picker, $element) ;
+                        $scope.updatedDate = new Date(value) ;
+                        document.getElementById('ui-datepicker-div').style.display = 'block';
+                        SearchService.filteringByUpdated = value;
+                        $state.go('main.search') ;
+                    },
+                    dateFormat: 'd.m.yy'
+        };                
+        
+
+        $scope.checkUpdated = function() {
+        };
+
+        $scope.open = function() {
+            if ($scope.checkUpdated()) {
+                document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
+                document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
+            } else {
+                document.getElementById('past').style.display = 'none';
+            }
+        };
+
+        
+        ////******* */
+
         $scope.filterSearch = function() {
             $scope.filterSearchByType();
             $scope.filterSearchByEntity();

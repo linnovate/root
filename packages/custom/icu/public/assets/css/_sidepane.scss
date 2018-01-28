@@ -226,6 +226,32 @@
                 }
             }
         }
+
+        .filterUpdated  {
+            .placeholder {
+                position: absolute;
+                top: 50%;
+                transform: translateX(80%) translateY(-50%);
+                color: $light-grey-placeholder;
+                margin-right:5px;
+                //padding-left: 5px;
+            }
+    
+            input {
+                appearance: none;
+                border: none;
+                float: right;
+                width: calc(100% - 10px);
+                margin-left: 10px;
+                padding: 17px 0;
+                padding-left: 25px;
+                background: url(/icu/assets/img/calendar.png) no-repeat scroll;
+                cursor: pointer;
+                outline: none;
+                background-position: left center;
+            }
+        }
+    
         .filteringElement {
             width: 100%;
             cursor: pointer;

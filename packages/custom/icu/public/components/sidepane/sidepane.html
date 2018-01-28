@@ -26,6 +26,16 @@
         <button ng-click="resetFilter()">{{'reset' | i18next}}</button>
     </div>
 
+    <div class="filterUpdated">
+    <div class="subtitle">{{'Updated After' | i18next}}</div>    
+        <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate" ng-class='{"updatedAt":checkDate()}'>
+    </div>
+    <!-- <div id="past" >
+        {{'Updated filter should be in the past!' | i18next }}
+        <div id="close" ng-click="closeOldDateNotification()">x</div>
+    </div> -->
+
+
     <div ng-if="filteringData.projects.length">
             <div class="subtitle">{{'linkedTo' | i18next}}{{'project' | i18next}}</div>
         <ul>
