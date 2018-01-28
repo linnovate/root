@@ -45,6 +45,7 @@ var ProjectSchema = new Schema({
     enum: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
     default: 'new'
   },
+  tags: [String],
   description: {
     type: String
   },

@@ -184,6 +184,11 @@ angular.module('mean.icu').config([
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
+                    },
+                    tags: function (ProjectsService) {
+                        return ProjectsService.getTags().then(function (tags) {
+                            return tags;
+                        });
                     }
                 }
             };
@@ -341,6 +346,11 @@ angular.module('mean.icu').config([
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
+                    },
+                    tags: function (FoldersService) {
+                        return FoldersService.getTags().then(function (tags) {
+                            return tags;
+                        });
                     }
                 }
             };
@@ -398,6 +408,11 @@ angular.module('mean.icu').config([
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByDiscussionId($stateParams.id);
+                    },
+                    tags: function (DiscussionsService) {
+                        return DiscussionsService.getTags().then(function (tags) {
+                            return tags;
+                        });
                     }
                 }
             };

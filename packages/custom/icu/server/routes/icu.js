@@ -121,6 +121,8 @@ module.exports = function(Icu, app) {
     .get(pagination.parseParams, project.getByDiscussion, project.getByEntity, pagination.formResponse);
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/projects/starred')
     .get(pagination.parseParams, star.getStarredIds('projects'), project.getByDiscussion, project.getByEntity, pagination.formResponse);
+  app.route('/api/projects/tags')
+    .get(project.tagsList);
 
   app.route('/api/offices*').all(entity('offices'));
   app.route('/api/offices')
@@ -155,6 +157,8 @@ module.exports = function(Icu, app) {
     .get(pagination.parseParams, folder.getByEntity, pagination.formResponse);
   app.route('/api/:entity(tasks|discussions|offices|folders)/:id([0-9a-fA-F]{24})/folders/starred')
     .get(pagination.parseParams, star.getStarredIds('folders'), folder.getByDiscussion, folder.getByEntity, pagination.formResponse);
+  app.route('/api/folders/tags')
+    .get(folder.tagsList);
 
     app.route('/api/officeDocuments*').all(entity('officeDocuments'));
 
@@ -257,6 +261,8 @@ module.exports = function(Icu, app) {
     .get(pagination.parseParams, discussion.getByProject, discussion.getByEntity, star.isStarred, pagination.formResponse); //, discussion.getByEntity);
   app.route('/api/:entity(projects)/:id([0-9a-fA-F]{24})/discussions/starred')
     .get(pagination.parseParams, star.getStarredIds('discussions'), discussion.getByProject, discussion.getByEntity, pagination.formResponse); //, discussion.getByEntity);
+  app.route('/api/discussions/tags')
+    .get(discussion.tagsList);
 
   app.route('/api/updates*').all(entity('updates'));
   app.route('/api/updates')

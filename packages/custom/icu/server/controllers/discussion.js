@@ -357,6 +357,24 @@ exports.cancele = function(req, res, next) {
     });
 };
 
+exports.tagsList = function(req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
+  var query = req.acl.mongoQuery('Discussion');
+  query.distinct('tags', function(error, tags) {
+    if (error) {
+      req.locals.error = {
+        message: 'Can\'t get tags'
+      };
+    } else {
+      req.locals.result = tags || [];
+    }
+
+    next();
+  });
+};
+
 exports.getByEntity = function(req, res, next) {
   if (req.locals.error) {
     return next();
