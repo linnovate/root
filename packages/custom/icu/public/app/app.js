@@ -1379,6 +1379,9 @@ angular.module('mean.icu').config([
             
             .state('main.search', {
                 url: '/search/:query',
+                params: {
+                    dateUpdated: 'active',                    
+                },
                 views: {
                     'middlepane@main': {
                         templateUrl: '/icu/components/search-list/search-list.html',
@@ -1405,7 +1408,7 @@ angular.module('mean.icu').config([
                             }
                         }
                     },
-                    tasks: function (results) {
+                    tasks: function (results) {                                            
                         return _(results).filter(function (r) {
                             return r._type === 'task';
                         });
