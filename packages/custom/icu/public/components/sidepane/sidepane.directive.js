@@ -104,6 +104,20 @@ directive('icuSidepane', function() {
         ];
         $scope.activeTab = $scope.items[0];
 
+        $scope.menuColorStyles = [
+            'pinkTab',
+            'blueTab',
+            'greenTab',
+            'purpleTab',
+            'yellowTab',
+            'darkBlueTab',
+            'redTab',
+        ];
+        $scope.getNavColor = function(item, index){
+            if($scope.activeTab === item){
+                return $scope.menuColorStyles[index];
+            }
+        }
 
         /********************************** search **********************************/
 
