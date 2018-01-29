@@ -41,6 +41,12 @@ function SearchController($scope, $state, $stateParams, context, TasksService, $
         $scope.search();
     };
 
+    // $scope.focusSearch = function () {
+    //     $scope.term = '';
+    //     $scope.search();
+    // };
+
+
     $scope.search = function (term) {
         SearchService.builtInSearchArray = false;
         if (term && term.length) {

@@ -1,7 +1,9 @@
 <div class="list-table">
+        {{$scope | json}}
     <table class="search">
+        
         <tbody>
-            <tr data-ng-repeat="result in results | searchResultsFilter | filteringByUpdated" 
+            <tr data-ng-repeat="result in results | searchResultsFilter | filteringByUpdated | filterByActiveStatus" 
                 data-ui-sref-active="active"
                 data-ui-sref="main.search.{{result._type}}({id: result.id})"
                 icu-list-row

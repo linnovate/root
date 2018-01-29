@@ -14,16 +14,25 @@ angular.module('mean.icu.data.settingsservice', [])
         task: ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'],
         project: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
         discussion: ['new', 'scheduled', 'done', 'canceled', 'archived'],
-        officedocument: ['new', 'in-progress', 'received', 'done','sent'],
+        officedocument: ['new', 'in-progress', 'received', 'done','sent']
+    }
+
+    statusList.Typed = function(type) {
+        if(type == "all") {
+            // someone (search) is asking for a mixed list of all the statuses to check for activity...
+            let merged = new Set([...this["task"], ...this["project"], ...this["discussion"], ...this["officedocument"]]) ;            
+            return Array.from(merged) ;
+        }
+        return this[type]  ;
     }
 
     let activeStatusConfigured = config.activeStatus && config.activeStatus.nonActiveStatus ? true : false ;
     let configNonActiveStatus = config.activeStatus && config.activeStatus.nonActiveStatus ? config.activeStatus.nonActiveStatus : null ;
 
     function getActiveStatuses(type) {
-        configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList[type] ;
+        configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList.Typed(type) ;
         let nonActiveStatus = new Set(Object.values(configNonActiveStatus)) ;
-        let typeStatusLowerCase =  statusList[type].map(element => element.toLowerCase());
+        let typeStatusLowerCase =  statusList.Typed(type).map(element => element.toLowerCase());
         let typeStatuses = new Set(typeStatusLowerCase) ;
         
         let difference = new Set(
@@ -32,10 +41,10 @@ angular.module('mean.icu.data.settingsservice', [])
         return Array.from(difference) ;
     }
 
-    function getNonActiveStatuses(type) {   
-        configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList[type] ;     
+    function getNonActiveStatuses(type) {
+        configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList.Typed(type) ;     
         let nonActiveStatus = new Set(Object.values(configNonActiveStatus)) ;
-        let typeStatusLowerCase =  statusList[type].map(element => element.toLowerCase());        
+        let typeStatusLowerCase =  statusList.Typed(type).map(element => element.toLowerCase());        
         let typeStatuses = new Set(typeStatusLowerCase) ;
         let intersection = new Set(
             [...typeStatuses].filter(x => nonActiveStatus.has(x)));

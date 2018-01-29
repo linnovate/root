@@ -31,8 +31,7 @@ angular.module('mean.icu.data.searchservice', [])
         builtInSearchArray: builtInSearchArray,
         filteringData: filteringData,
         filteringResults: filteringResults,
-        filteringByUpdated: filteringByUpdated
-        
+        filteringByUpdated: filteringByUpdated,
     };
 });
 

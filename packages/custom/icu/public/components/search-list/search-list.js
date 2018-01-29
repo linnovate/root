@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.searchlist')
-.controller('SearchListController', function ($scope, results, term, UsersService) {
+.controller('SearchListController', function ($scope, results, term, UsersService,$stateParams) {
 	$scope.results = results;
 
 	for (var i = 0; i< $scope.results.length; i++) {

@@ -81,6 +81,8 @@
 	"instead": "במקום",
 	"less": "פחות‫…‬",
 	"linkedTo": "שייך ל",
+	"updatedAfter": "עודכן אחרי",
+	"filterByActiveStatus": "Active Status",
 	"LoadTaskTemplate" : "טען תבנית משימות",
     "login": "התחבר",
 	"logout":  "התנתק",

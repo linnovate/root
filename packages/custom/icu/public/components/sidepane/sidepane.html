@@ -7,7 +7,7 @@
 </div>
 -->
 <icu-open-modal/>
-<nav class="searchPane" ng-if="currentState.indexOf('search') > -1" ng-init="filterSearchByType();resetFilter();">
+<nav class="sidefilters searchPane" ng-if="currentState.indexOf('search') > -1" ng-init="filterSearchByType();resetFilter();">
     <div class="search">{{'search' | i18next}}
         <span class="close-search" ng-click="closeSearch()">x</span>
     </div>
@@ -27,9 +27,25 @@
     </div>
 
     <div class="filterUpdated">
-    <div class="subtitle">{{'Updated After' | i18next}}</div>    
+    <div class="subtitle">{{'updatedAfter' | i18next}}</div>    
         <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate" ng-class='{"updatedAt":checkDate()}'>
     </div>
+
+    <div class="filterActive">
+        <div class="subtitle">{{'filterByActiveStatus' | i18next}}</div>    
+        <div class="select-wrapper select-wrapper-active-status">
+        <div tooltips tooltip-template="{{'filter by activity status' | i18next}}">
+            <ui-select ng-disabled="activeToggle.disabled" ng-model="activeToggle.field" on-select="filterActive()" search-enabled="false">
+                <ui-select-match>
+                    <button class="tasks active-status">{{$select.selected.title | i18next }}</button>
+                </ui-select-match>
+                <ui-select-choices class="sorting" repeat="field.value as field in activeToggleList">
+                    {{field.title | i18next}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>                
+
     <!-- <div id="past" >
         {{'Updated filter should be in the past!' | i18next }}
         <div id="close" ng-click="closeOldDateNotification()">x</div>

@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context, TasksService, $rootScope, SearchService, $filter, $location) {
+    function controller($scope, $state, $stateParams,context, TasksService, $rootScope, SearchService, $filter, $location, EntityService) {
         $scope.context = context;
         
         $scope.folders = $scope.folders.data || $scope.folders;
@@ -25,6 +25,21 @@ directive('icuSidepane', function() {
         $scope.removeFilterValue = function() {
         	TasksService.filterValue = false;
         }
+
+        // updatedDate        
+        let lastMonth = new Date();
+        lastMonth.setDate(lastMonth.getMonth() -1 ) ;
+        $scope.updatedDate = lastMonth ;
+        SearchService.filteringByUpdated = $scope.updatedDate;
+
+        // activeToggle
+        $scope.activeToggleList = EntityService.activeToggleList;
+        $scope.activeToggle = {
+                field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
+                disabled: !EntityService.isActiveStatusAvailable() 
+        };
+        /*---*/
+        
 
         $scope.isCurrentState = function(item) {
 
@@ -252,35 +267,27 @@ directive('icuSidepane', function() {
 
 
         ////******* */
-        let lastMonth = new Date();
-        lastMonth.setDate(lastMonth.getMonth() -1 ) ;
-        $scope.updatedDate = lastMonth ;
         $scope.updatedOptions = {            
                     onClose: (value, picker, $element) => {
-                        // console.log("on close", value, picker, $element) ;
+//                        console.log("on close", value, picker, $element) ;
+                        let splut = value.split('.') ;
+                        let valueChanged = new Date(splut[2],splut[1] -1 ,splut[0]) ;
                         $scope.updatedDate = new Date(value) ;
                         document.getElementById('ui-datepicker-div').style.display = 'block';
-                        SearchService.filteringByUpdated = value;
-                        $state.go('main.search') ;
+                        SearchService.filteringByUpdated = valueChanged;
+//                        console.log("SearchService.filteringByUpdated", SearchService.filteringByUpdated)
+                        $state.go('main.search', { dateUpdated: value }) ;
                     },
                     dateFormat: 'd.m.yy'
-        };                
-        
-
-        $scope.checkUpdated = function() {
-        };
-
-        $scope.open = function() {
-            if ($scope.checkUpdated()) {
-                document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
-                document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
-            } else {
-                document.getElementById('past').style.display = 'none';
-            }
-        };
-
-        
+        };     
+                
         ////******* */
+
+        $scope.filterActive = function () {
+            EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
+            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
+        };    
+
 
         $scope.filterSearch = function() {
             $scope.filterSearchByType();
@@ -320,6 +327,8 @@ directive('icuSidepane', function() {
                 $scope.filterSearch();
             }
         });
+
+
 
     }
 

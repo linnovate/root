@@ -79,6 +79,8 @@
     "sent":"Sent",
     "less": "less…",
     "linkedTo": "linked to",
+    "updatedAfter": "Updated After",
+    "filterByActiveStatus": "Active Status",
     "LoadTaskTemplate" : "Load task template",
     "login": "Login",
     "logout": "Logout",

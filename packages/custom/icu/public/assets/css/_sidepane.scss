@@ -1,4 +1,152 @@
 .sidepane {
+    .sidefilters {
+        .filterUpdated,  {
+            .placeholder {
+                position: absolute;
+                top: 50%;
+                transform: translateX(80%) translateY(-50%);
+                color: $light-grey-placeholder;
+                margin-right:5px;
+                //padding-left: 5px;
+            }
+    
+            input {
+                color: wheat ;
+                appearance: none;
+                border: none;
+                float: left;
+                width: calc(100% - 10px);
+                margin-left: 30px;
+                margin-bottom: 10px;
+                padding-left: 25px;
+                background: url(/icu/assets/img/calendar.png) no-repeat scroll;
+                cursor: pointer;
+                outline: none;
+                background-position: left center;
+            }
+        }
+    
+
+        .ui-select-container .ui-select-choices-row .ui-select-choices-row-inner {
+		    display: flex;
+    		align-items: center;
+		}
+
+        .left-wrapper {
+            float: left;
+            
+             tooltip{
+                 display: block;
+             }
+             tip{
+                position: relative;
+                top: -30px;
+                right: inherit;
+             }
+        }
+        .print-wrapper {
+            float: right;
+        }
+
+        .right-wrapper {
+            float: right;
+        }
+
+        .favorites, .tasks {
+            @include ellipse(13px);
+            @include button;
+
+            margin: 0 5px;
+            background-color: white;
+            border: 1px solid #c3bfbf;
+        }
+
+
+        .select-wrapper {
+            float: left;
+            width: 100% ;
+            margin-bottom: 10px;
+            margin-left: 25px;
+            
+            tooltip{
+                display: block;
+                position: relative;
+            }
+            tip{
+                position: absolute;
+                top: -15px;
+                left: inherit;
+                right: -40%;
+            }
+            
+
+            .ui-select-match {
+                background-color: transparent;
+                box-shadow: none;
+                outline: none;
+                display: block !important;
+                span.ui-select-toggle {
+                    background-color: transparent;
+                    border: none;
+                    box-shadow: none;
+                    padding: 0;
+                    .caret {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .tasks {
+            width: 92px;
+            height: 26px;
+            padding-left: 0;
+            background: url('/icu/assets/img/status.png') no-repeat 15% center;
+            background-position: left 10% center;
+            
+            &:hover{
+                 box-shadow: 0px 0px 0px 2px #FFB435;
+                 transition: 0.8s;
+            } 
+        }
+
+        .active-status {
+            width: 100px;      
+            color: wheat ;      
+        }
+
+        .list, {
+            @include button;
+            margin: -2px;
+            padding: 0;
+            height: 26px;
+            width: 37px;
+            border: 1px solid $light-grey1;
+        }
+
+        .list {
+            border-top-left-radius: 13px;
+            border-bottom-left-radius: 13px;
+            border-color: $dark-grey;
+            background: url('/icu/assets/img/list.png') no-repeat center center;
+            background-color: $dark-grey;
+        }
+
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
     display: block;
     box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
 
@@ -226,32 +374,6 @@
                 }
             }
         }
-
-        .filterUpdated  {
-            .placeholder {
-                position: absolute;
-                top: 50%;
-                transform: translateX(80%) translateY(-50%);
-                color: $light-grey-placeholder;
-                margin-right:5px;
-                //padding-left: 5px;
-            }
-    
-            input {
-                appearance: none;
-                border: none;
-                float: right;
-                width: calc(100% - 10px);
-                margin-left: 10px;
-                padding: 17px 0;
-                padding-left: 25px;
-                background: url(/icu/assets/img/calendar.png) no-repeat scroll;
-                cursor: pointer;
-                outline: none;
-                background-position: left center;
-            }
-        }
-    
         .filteringElement {
             width: 100%;
             cursor: pointer;
