@@ -64,15 +64,22 @@ angular.module('mean.icu').controller('IcuController',
           $scope.detailsPane.isHidden = true;
           $scope.menu.isHidden = false;
       }
-    }
-    
+      if(state !== 4 && state !== 1){
+          $scope.hiddenButton = true;
+      } else {
+          $scope.hiddenButton = false;
+      }
+    };
+
+    $scope.hiddenButton = false;
+
     //Made By OHAD
     //$state.go('socket');
     //END Made By OHAD
 
     function initializeContext(state) {
         if (state.name.indexOf('main') === 0) {
-            
+
             var restoredContext = context.getContextFromState(state);
             if (restoredContext.entityName !== 'all' && restoredContext.entityName !== 'my') {
                 context.setMain(restoredContext.main);
@@ -86,7 +93,7 @@ angular.module('mean.icu').controller('IcuController',
                     var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
                         return e._id === restoredContext.entityId;
                     });
-    				
+
                     restoredContext.entity = currentEntity;
 
                     if (restoredContext.entityName) {

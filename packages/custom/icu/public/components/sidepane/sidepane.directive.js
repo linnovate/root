@@ -314,7 +314,8 @@ directive('icuSidepane', function() {
             people: '=',
             officeDocuments: '=',
             templateDocs: '=',
-            currentState: '@'
+            currentState: '@',
+            changeLayout: '='
         }
     };
 });

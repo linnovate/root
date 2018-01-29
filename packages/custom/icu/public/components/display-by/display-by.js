@@ -231,12 +231,12 @@ angular.module('mean.icu.ui.displayby', [])
         }
 
         $scope.visible = {
-            project: false,
-            discussion: false,
-            user: false,
-            officeDocument: false,
-            office: false,
-            folder: false
+            project: true,
+            discussion: true,
+            user: true,
+            officeDocument: true,
+            office: true,
+            folder: true
         };
 
         $scope.visible[$scope.context.entityName] = true;
