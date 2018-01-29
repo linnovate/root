@@ -49,6 +49,10 @@ angular.module('mean.icu').controller('IcuController',
       return LayoutService.getLayoutIcon();
     }
 
+    $scope.getSideMenuIcon = function() {
+        return LayoutService.getSideMenuIcon();
+    }
+
     $scope.changeLayout = function() {
       var state = LayoutService.changeLayout();
       if (state === 4) {

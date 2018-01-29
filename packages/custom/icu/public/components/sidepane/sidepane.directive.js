@@ -25,9 +25,7 @@ directive('icuSidepane', function() {
         $scope.removeFilterValue = function() {
         	TasksService.filterValue = false;
         };
-        $scope.getLayOutIcon = function(){
-            return '/icu/assets/img/sections4.svg';
-        };
+
         $scope.isCurrentState = function(item) {
 
             if ((context.main === 'templateDocs') && (item.display != undefined) && (item.display[1] === 'templateDocs'))
@@ -329,7 +327,8 @@ directive('icuSidepane', function() {
             officeDocuments: '=',
             templateDocs: '=',
             currentState: '@',
-            changeLayout: '='
+            changeLayout: '=',
+            getSideMenuIcon: '='
         }
     };
 });

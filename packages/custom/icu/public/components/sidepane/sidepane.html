@@ -1,9 +1,8 @@
 <header>
     <div class="header-button">
         <button class="hide-butt"
-                ng-style="{'background-image': 'url(' + getLayOutIcon() + ')'}"
-                ng-click="changeLayout()"
-                style="background-image: url(&quot;/icu/assets/img/sections4.svg&quot;);">
+                ng-style="{'background-image': 'url(' + getSideMenuIcon() + ')'}"
+                ng-click="changeLayout()">
         </button>
     </div>
     <div class="header-title">
@@ -115,9 +114,9 @@
     <nav ng-if="currentState.indexOf('search') == -1" >
         <ul>
             <li data-ng-repeat="item in items"
-                class="{{getNavColor(item, $index)}}"
+                class=""
                 ng-click="setActive(item); removeFilterValue()">
-                <div class="menu-item nav-item"
+                <div class="menu-item nav-item {{getNavColor(item, $index)}}"
                      data-ui-sref="{{'main.' + item.state}}"
                      ng-click="toggleVisibility(item)">
                     <div class="icon">
