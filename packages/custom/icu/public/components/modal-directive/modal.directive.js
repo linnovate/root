@@ -159,8 +159,9 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocu
       
     $scope.officeDocument = officeDocument;
     $scope.people = people;
+    // $scope.sendingForm={};
     // $scope.sendingForm.title = undefined;
-    // $scope.sendingForm.sendingAs = undefined;
+    // $scope.sendingForm.doneBy = undefined;
     // $scope.sendingForm.classification = undefined;
 
     $scope.classificationList = ['unclassified','private','secret','topSecret' ]; 
@@ -174,8 +175,8 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocu
      
         if(sendingForm.classification == undefined || 
             sendingForm.doneBy == undefined ||
-            sendingForm.forNotice == undefined){
-            alertify.error("נא למלא סיווג לידיעה ולטיפול");
+            sendingForm.title == ""){
+            alertify.error("נא למלא הנדון סיווג ולטיפול");
         }else{
 
             OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument).then(function(result){

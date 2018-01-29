@@ -16,6 +16,7 @@ var officeController = crud('offices', options);
 
 var mongoose = require('mongoose'),
   Office = mongoose.model('Office'),
+  TemplateDoc = mongoose.model('TemplateDoc'),
   Task = mongoose.model('Task'),
   User = mongoose.model('User'),
   Folder = mongoose.model('Folder'),
@@ -107,6 +108,13 @@ exports.update = function(req, res, next) {
         }, {
           $push: { watchers: req.body.watcherId }
       }, {multi: true}).exec();
+      TemplateDoc.update(
+        {
+          office: req.body._id
+        }, {
+          $push: { watchers: req.body.watcherId }
+      }, {multi: true}).exec();
+      
     } else {
       Folder.update(
         {
@@ -114,9 +122,15 @@ exports.update = function(req, res, next) {
         }, {
           $pull: { watchers: req.body.watcherId }
       }, {multi: true}).exec();
+      TemplateDoc.update(
+        {
+          office: req.body._id
+        }, {
+          $pull: { watchers: req.body.watcherId }
+      }, {multi: true}).exec();
     }
   }
-
+  
   officeController.update(req, res, next);
 };
 

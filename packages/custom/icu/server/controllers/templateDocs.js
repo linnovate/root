@@ -8,7 +8,8 @@ var mean = require('meanio'),path = require('path'),fs = require('fs'),
   var User = mongoose.model('User');
   var Update = require('../models/update');
   var ObjectId = require('mongoose').Types.ObjectId;
-  var TemplateDoc = require('../models/templateDoc')
+  var TemplateDoc = require('../models/templateDoc');
+  var Office = require('../models/office')
 
    
 
@@ -640,14 +641,25 @@ exports.deleteTemplate = function(req,res){
 exports.update2 = function (req, res, next) {
   var json = {};
   json['' + req.body.name] = req.body.newVal;
-  TemplateDoc.update({ "_id": req.params.id }, json).then(function (err, result) {
+
+  if(req.body.name=='office'){
+    Office.findOne({_id:req.body.newVal}, function (err,result) {
+      if(result){
+        //todo
+        json["watchers"] = result.watchers;
+        TemplateDoc.update({ "_id": req.params.id }, json).then(function (err, result) {
+          res.send('ok');
+        })
+      }else{
+        console.log(err)
+      }
+    })
+  }else{
+TemplateDoc.update({ "_id": req.params.id }, json).then(function (err, result) {
     console.log("Err=" + err + " result=" + result);
-    if(req.body.name=='watchers'){
-      //ADD SP FUNCTIONALITY !!!
-    }
     res.send('ok');
   });
-
+  }
 };
 
 /**
