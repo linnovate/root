@@ -34,7 +34,7 @@
         <p class="intro">{{'display'+context.main+'By' | i18next}}:</p>
     </div>
     <div class="list projects" ng-if="projectsList && (icuDisplayBy.indexOf('projects'))>-1">
-        <p ng-click="visible.project = !visible.project" class="title">{{ 'projects' | i18next }}</p>
+        <p ng-click="visible.project = !visible.project" class="title">{{ 'tasksInProject' | i18next }}</p>
         <ul ng-if="visible.project">
             <li data-ng-repeat="project in projectsList | limitTo: displayLimit['projects']" data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
                 data-ng-click="switchTo('project', project._id)" ng-if="project._id && project.title">
@@ -50,7 +50,7 @@
     </div>
 
     <div class="list discussions" ng-if="discussions && (icuDisplayBy.indexOf('discussions'))>-1">
-        <p ng-click="visible.discussion = !visible.discussion" class="title">{{ 'discussions' | i18next }}</p>
+        <p ng-click="visible.discussion = !visible.discussion" class="title">{{ 'tasksFromMeeting' | i18next }}</p>
         <ul ng-if="visible.discussion">
             <li data-ng-repeat="discussion in discussions | limitTo:displayLimit['discussions']" data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
@@ -65,7 +65,7 @@
     </div>
 
     <div class="list people" ng-if="people && (icuDisplayBy.indexOf('people'))>-1">
-        <p ng-click="visible.user = !visible.user" class="title">{{ 'people' | i18next }}</p>
+        <p ng-click="visible.user = !visible.user" class="title">{{ 'tasksAssignedTo' | i18next }}</p>
         <ul ng-if="visible.user">
             <li data-ng-repeat="user in people | limitTo:3" data-ng-click="switchTo('user', user._id)">
                 <a href data-ng-link="main.users.details({id: user._id})">

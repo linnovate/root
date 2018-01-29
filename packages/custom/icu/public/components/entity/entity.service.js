@@ -9,12 +9,12 @@ angular.module('mean.icu.ui.entity', [])
         return SettingServices.activeStatusConfigured == null ? false : true ;
     }
 
-    function getActiveStatusFilterValue() { 
-        return activeStatusFilterValue ; 
+    function getActiveStatusFilterValue() {
+        return activeStatusFilterValue ;
     }
 
-    function setActiveStatusFilterValue(_activeStatusFilterValue) { 
-        activeStatusFilterValue = _activeStatusFilterValue ; 
+    function setActiveStatusFilterValue(_activeStatusFilterValue) {
+        activeStatusFilterValue = _activeStatusFilterValue ;
     }
 
     function getEntityActivityStatus(filterValue,entityType,entityStatus) {
@@ -43,6 +43,6 @@ angular.module('mean.icu.ui.entity', [])
         setActiveStatusFilterValue: setActiveStatusFilterValue,
         activeStatusFilterValue: activeStatusFilterValue,
         getEntityActivityStatus: getEntityActivityStatus,
-        activeToggleList, activeToggleList,        
+        activeToggleList, activeToggleList,
     };
 }) ;

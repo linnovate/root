@@ -1,21 +1,24 @@
 version: '3'
 
 services:
-  root-app:
-    build: .
-    image: root-app
-    # image: localhost:5000/root-app
-    restart: always
-    ports:
-      - "3100:3100"
-    links:
-      - root-db
-      - root-elastic
-  root-db:
-    image: mongo
-    expose:
-      - "27017"
-  root-elastic:
-    image: elasticsearch
-    expose:
-      - "9200"
+ root-app:
+   build: .
+   image: root-app
+   # image: localhost:5000/root-app
+   #restart: always
+   ports:
+     - "3100:3100"
+   links:
+     - root-db
+     - root-elastic
+   volumes:
+       - ./packages:/usr/src/app/packages
+       - ./config:/usr/src/app/config
+ root-db:
+   image: mongo
+   expose:
+     - "27017"
+ root-elastic:
+   image: elasticsearch
+   expose:
+     - "9200"

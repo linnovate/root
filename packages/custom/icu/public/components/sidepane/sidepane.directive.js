@@ -55,8 +55,6 @@ directive('icuSidepane', function() {
             $state.go('main.tasks.byassign');
         }
 
-
-
         $scope.setActive = function(item){
             $scope.$broadcast('sidepan', item);
             $scope.activeTab = item;
@@ -105,6 +103,7 @@ directive('icuSidepane', function() {
         }
         ];
         $scope.activeTab = $scope.items[0];
+
 
         /********************************** search **********************************/
 

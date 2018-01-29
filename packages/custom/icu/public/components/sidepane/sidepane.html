@@ -116,12 +116,13 @@
         <ul>
             <li data-ng-repeat="item in items"
                 ng-class="{
-                'redTab': activeTab === item && item === items[0],
+                'pinkTab': activeTab === item && item === items[0],
                 'blueTab': activeTab === item && item === items[1],
                 'greenTab': activeTab === item && item === items[2],
                 'purpleTab': activeTab === item && item === items[3],
                 'yellowTab': activeTab === item && item === items[4],
                 'darkBlueTab': activeTab === item && item === items[5],
+                'redTab': activeTab === item && item === items[6],
                 }"
                 ng-click="setActive(item); removeFilterValue()">
                 <div class="menu-item nav-item"
