@@ -5,12 +5,18 @@ services:
     build: .
     image: root-app
     # image: localhost:5000/root-app
-    restart: always
+    #restart: always
     ports:
       - "3100:3100"
+#      - "5858:5858"      
     links:
       - root-db
       - root-elastic
+    volumes:
+        - ./packages:/usr/src/app/packages
+        - ./config:/usr/src/app/config
+        - ./node_modules:/usr/src/app/node_modules
+        # - ./files:/usr/src/app/files
   root-db:
     image: mongo
     expose:

@@ -1,5 +1,5 @@
 FROM node:4
-
+#test1
 RUN npm install -g bower gulp
 RUN npm install -g nodemon@1.11.0
 RUN mkdir -p /usr/src/app

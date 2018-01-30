@@ -12,7 +12,7 @@ angular.module('mean.icu.ui.middlepane', [])
     };
 });
 
-function SearchController($scope, $state, $stateParams, context, TasksService, $timeout, SearchService, $document) {
+function SearchController($scope, $state, $stateParams, context, NotifyingService, TasksService, $timeout, SearchService, $document) {
     $scope.$on('$stateChangeSuccess', function ($event, toState) {
         if (toState.name.indexOf('main.search') !== 0) {
             if ($stateParams.query && $stateParams.query.length) {
@@ -41,6 +41,12 @@ function SearchController($scope, $state, $stateParams, context, TasksService, $
         $scope.search();
     };
 
+    // $scope.focusSearch = function () {
+    //     $scope.term = '';
+    //     $scope.search();
+    // };
+
+
     $scope.search = function (term) {
         SearchService.builtInSearchArray = false;
         if (term && term.length) {
@@ -56,6 +62,10 @@ function SearchController($scope, $state, $stateParams, context, TasksService, $
     		SearchService.builtInSearchArray = res;
     		$state.go('main.search', {query: ''}, {reload: true});
     	});
+    }
+
+    $scope.activeSearchNav = function(){
+        NotifyingService.notify('activeSearch');
     }
 
     // $scope.blur = function(){

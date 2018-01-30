@@ -1,17 +1,18 @@
 <header class="header">
     <button class="hide-menu"
+            ng-show="hiddenButton"
             ng-style="{'background-image': 'url(' + getLayoutIcon() + ')'}"
             ng-click="changeLayout()">
     </button>
     <div class="search" data-ng-controller="SearchController" ng-init="click=false">
         <div class="close-icon" ng-if="term" ng-click="clearSearch();"><i class="fa fa-times-circle"></i></div>
         <input type="text"
-            placeholder="{{ 'search' | i18next }}" 
-            ng-model="term" 
-            ng-change="search(term)" 
-            ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}" 
-            ng-keyup="click=false" 
-            ng-click="click=!click; onDocumentClick()">
+            placeholder="{{ 'search' | i18next }}"
+            ng-model="term"
+            ng-change="search(term)"
+            ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}"
+            ng-keyup="click=false"
+            ng-click="click=!click; onDocumentClick(); activeSearchNav()">
         </input>
         <img src="/icu/assets/img/search.png"></img>
     	<!--<div id="build-in-search" class="build-in-search" ng-if="click">

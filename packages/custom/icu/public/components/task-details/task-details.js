@@ -16,6 +16,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         people,
         $timeout,
         ProjectsService,
+        EntityService,
         me //,subtasks
     ) {
         $scope.task = entity || context.entity;
@@ -224,6 +225,20 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.star = function(task) {
             TasksService.star(task).then(function() {
                 navigateToDetails(task);
+            });
+        };        
+
+        $scope.recycle = function(entity) {            
+            console.log("$scope.recycle") ;
+            EntityService.recycle('tasks', entity._id).then(function() {
+                navigateToDetails(entity);
+            });
+        };
+
+        $scope.recycleRestore = function(entity) {            
+            console.log("$scope.recycleRestore") ;
+            EntityService.recycleRestore('tasks', entity._id).then(function() {
+                navigateToDetails(entity);
             });
         };
 

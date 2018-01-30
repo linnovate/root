@@ -5,16 +5,15 @@ angular.module('mean.icu.ui.entity', [])
     var activeStatusFilterValue = "default" ;
 
     function isActiveStatusAvailable() {
-        console.log("isActiveStatusAvailable", SettingServices.activeStatusConfigured == null) ;
         return SettingServices.activeStatusConfigured == null ? false : true ;
     }
 
-    function getActiveStatusFilterValue() { 
-        return activeStatusFilterValue ; 
+    function getActiveStatusFilterValue() {
+        return activeStatusFilterValue ;
     }
 
-    function setActiveStatusFilterValue(_activeStatusFilterValue) { 
-        activeStatusFilterValue = _activeStatusFilterValue ; 
+    function setActiveStatusFilterValue(_activeStatusFilterValue) {
+        activeStatusFilterValue = _activeStatusFilterValue ;
     }
 
     function getEntityActivityStatus(filterValue,entityType,entityStatus) {
@@ -36,6 +35,25 @@ angular.module('mean.icu.ui.entity', [])
 	];
 
 
+    function recycle(type,id) {
+        console.log('calling entityService recycle', type, id);
+        return $http.patch(ApiUri + '/' + type +  '/' + id + '/recycle').then(function (result) {
+            
+            console.log("recycle returned:" ,result) ;
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function recycleRestore(type,id) {
+        console.log('calling entityService recycle', type, id);
+        return $http.patch(ApiUri + '/' + type +  '/' + id + '/recycle_restore').then(function (result) {
+            
+            console.log("recycle returned:" ,result) ;
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
 
     return {
         isActiveStatusAvailable, isActiveStatusAvailable,
@@ -43,6 +61,8 @@ angular.module('mean.icu.ui.entity', [])
         setActiveStatusFilterValue: setActiveStatusFilterValue,
         activeStatusFilterValue: activeStatusFilterValue,
         getEntityActivityStatus: getEntityActivityStatus,
-        activeToggleList, activeToggleList,        
+        activeToggleList, activeToggleList,   
+        recycle, recycle,  
+        recycleRestore, recycleRestore,   
     };
 }) ;
