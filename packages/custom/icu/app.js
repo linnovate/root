@@ -20,7 +20,7 @@ ICU.register(function (app, auth, database,swagger) {
 
     app.set('views', __dirname + '/server/views');
 
-    
+
 
     //We are adding a link to the main menu for all authenticated users
     ICU.menus.add({
@@ -147,31 +147,32 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.layoutservice',
         'mean.icu.decorators.pdsDecorator',
         'infinite-scroll',
-        'mean.icu.ui.modaldeletetasksbyentity',        
+        'mean.icu.ui.modaldeletetasksbyentity',
         'mean.icu.ui.modalcompartmentalization',
         'mean.icu.ui.taskoptions',
         'mean.icu.ui.subtasks',
-        'mean.icu.ui.subtaskslistdirective',        
+        'mean.icu.ui.subtaskslistdirective',
         '720kb.tooltips',
         'mean.icu.ui.draggabletoggle',
+        'mean.icu.ui.notify',
     ]);
 
 
 console.yon = function(data, inspect) {
-    
+
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-    
+
     if (typeof data === 'object') {
-        
+
         if (inspect) {
             return console.dir(data);
         }
-        
+
         return console.dir(data);
     }
-    
+
     console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-    
+
     console.log(data);
 
 }
@@ -227,6 +228,6 @@ console.yon = function(data, inspect) {
     //
     //var myChild = new Child('dwayne', 27);
     //myChild.sayName();
-   
+
     return ICU;
 });
