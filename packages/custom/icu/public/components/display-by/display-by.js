@@ -14,7 +14,6 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.officeDocuments = officeDocuments;
             $scope.people = people;
         });
-        console.log($scope);
 
         $scope.projectsList = [];
         $scope.projects.forEach(function(project) {
