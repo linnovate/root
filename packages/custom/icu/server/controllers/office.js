@@ -13,6 +13,7 @@ exports.defaultOptions = options;
 
 var crud = require('../controllers/crud.js');
 var officeController = crud('offices', options);
+var config = require('meanio').loadConfig();
 
 var mongoose = require('mongoose'),
   Office = mongoose.model('Office'),
@@ -25,13 +26,13 @@ var mongoose = require('mongoose'),
 
 var Order = require('../models/order')
 
-Object.keys(officeController).forEach(function(methodName) {
+Object.keys(officeController).forEach(function (methodName) {
   if (methodName !== 'destroy') {
     exports[methodName] = officeController[methodName];
   }
 });
 
-exports.destroy = function(req, res, next) {
+exports.destroy = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
@@ -39,9 +40,9 @@ exports.destroy = function(req, res, next) {
   Task.find({
     office: req.params.id,
     currentUser: req.user
-  }).then(function(tasks) {
+  }).then(function (tasks) {
     //FIXME: do it with mongo aggregate
-    var groupedTasks = _.groupBy(tasks, function(task) {
+    var groupedTasks = _.groupBy(tasks, function (task) {
       return task.discussions.length > 0 ? 'release' : 'remove';
     });
 
@@ -53,22 +54,22 @@ exports.destroy = function(req, res, next) {
         $in: groupedTasks.release
       }
     }, {
-      office: null
-    }).exec();
+        office: null
+      }).exec();
 
     Task.remove({
       _id: {
         $in: groupedTasks.remove
       }
-    }).then(function() {
+    }).then(function () {
       //FIXME: needs to be optimized to one query
-      groupedTasks.remove.forEach(function(task) {
+      groupedTasks.remove.forEach(function (task) {
         elasticsearch.delete(task, 'task', null, next);
       });
 
       var removeTaskIds = _(groupedTasks.remove)
         .pluck('_id')
-        .map(function(i) {
+        .map(function (i) {
           return i.toString();
         })
         .value();
@@ -78,12 +79,12 @@ exports.destroy = function(req, res, next) {
           $in: removeTaskIds
         }
       }, {
-        $pull: {
-          'profile.starredTasks': {
-            $in: removeTaskIds
+          $pull: {
+            'profile.starredTasks': {
+              $in: removeTaskIds
+            }
           }
-        }
-      }).exec();
+        }).exec();
     });
 
     officeController.destroy(req, res, next);
@@ -91,7 +92,107 @@ exports.destroy = function(req, res, next) {
   });
 };
 
-exports.update = function(req, res, next) {
+function getUsers(users) {
+  var request = [];
+  return new Promise(function (fulfill, reject) {
+    users.forEach(function (u) {
+      if (u.isCreator == undefined) {
+        request.push(new Promise(function (resolve, error) {
+          User.findOne({ '_id': u.UserId }).exec(function (err, user) {
+            if (!err) {
+              u.UserId = user.username
+              resolve(user);
+            }
+            else {
+              error('error');
+            }
+          });
+        }));
+      }
+      else {
+        delete u.isCreator;
+      }
+    });
+    Promise.all(request).then(function (dataAll) {
+      fulfill('success');
+    }).catch(function (reason) {
+      reject('reject');
+    });
+  });
+}
+
+
+
+function updateAllTemplates(officeId, watcher, action) {
+  return new Promise(function (fullfil, reject) {
+    Office.find({ '_id': officeId }, function (err1, office) {
+      TemplateDoc.find({ 'office': officeId }, function (err2, templates) {
+        var paths = [];
+        var officeWatchers = office[0]._doc.watchers;
+        templates.forEach(function (template) {
+          if (template.spPath) {
+            paths.push(template.spPath);
+          }
+        });
+        var zeroReq = [];
+        var usersReq = [];
+        if (action == 'added') {
+          zeroReq = [];
+          officeWatchers.forEach(function(w){
+            usersReq.push({'UserId':w});
+          });
+        }
+        else {
+          zeroReq = [{ 'UserId': watcher }];
+          officeWatchers.forEach(function(w){
+            if(w.toString()!=watcher.toString()){
+              usersReq.push({'UserId':w});
+            }
+            
+          });
+        }
+        var creators = [];
+        
+        
+        getUsers(zeroReq).then(function (zeroResult) {
+          getUsers(usersReq).then(function (result) {
+            var users = [];
+            var zero =[];
+            usersReq.forEach(function (u) {
+              users.push(u.UserId);
+            });
+            zeroReq.forEach(function (u) {
+              zero.push(u.UserId);
+            });
+              var json = {
+                'siteUrl': config.SPHelper.SPSiteUrl,
+                'paths': paths,
+                'users': users,
+                'creators': creators,
+                'zero': zero
+              };
+              console.log("HI");
+              request({
+                'url': config.SPHelper.uri + "/api/share",
+                'method': 'POST',
+                'json': json
+              }, function (error, resp, body) {
+                if (error) {
+                  reject(error);
+                }
+                else {
+                  fullfil('ok');
+                }
+              });
+            });
+          });
+        });
+
+      });
+    });
+}
+
+exports.update = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
@@ -107,34 +208,50 @@ exports.update = function(req, res, next) {
           office: req.body._id
         }, {
           $push: { watchers: req.body.watcherId }
-      }, {multi: true}).exec();
+        }, { multi: true }).exec();
       TemplateDoc.update(
         {
           office: req.body._id
         }, {
           $push: { watchers: req.body.watcherId }
-      }, {multi: true}).exec();
-      
+        }, { multi: true }).exec(function () {
+          if(config.isWorking){
+          updateAllTemplates(req.body._id, req.body.watcherId, req.body.watcherAction).then(function (result) {
+          
+          });
+        }
+
+        });
+
     } else {
       Folder.update(
         {
           office: req.body._id
         }, {
           $pull: { watchers: req.body.watcherId }
-      }, {multi: true}).exec();
+        }, { multi: true }).exec();
       TemplateDoc.update(
         {
           office: req.body._id
         }, {
           $pull: { watchers: req.body.watcherId }
-      }, {multi: true}).exec();
+        }, { multi: true }).exec(function(){
+          if(config.isWorking){
+            
+          updateAllTemplates(req.body._id, req.body.watcherId, req.body.watcherAction).then(function (result) {
+            
+                      });
+                    }
+        });
     }
+
+
   }
-  
+
   officeController.update(req, res, next);
 };
 
-exports.getByEntity = function(req, res, next) {
+exports.getByEntity = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
@@ -157,12 +274,12 @@ exports.getByEntity = function(req, res, next) {
     starredOnly = true;
   }
   var query = req.acl.mongoQuery('Office');
-  
+
   query.find(entityQuery);
 
   query.populate(options.includes);
 
-  Office.find(entityQuery).count({}, function(err, c) {
+  Office.find(entityQuery).count({}, function (err, c) {
     req.locals.data.pagination.count = c;
 
     var pagination = req.locals.data.pagination;
@@ -172,48 +289,48 @@ exports.getByEntity = function(req, res, next) {
         .limit(pagination.limit);
     }
 
-    query.exec(function(err, offices) {
+    query.exec(function (err, offices) {
       if (err) {
         req.locals.error = {
           message: 'Can\'t get offices'
         };
       } else {
         if (starredOnly) {
-          offices.forEach(function(office) {
+          offices.forEach(function (office) {
             office.star = true;
           });
         }
-        if(pagination.sort == "custom"){
-        var temp = new Array(offices.length) ;
-        var officeTemp = offices;
-        Order.find({name: "Office", discussion:offices[0].discussion}, function(err, data){
-            data.forEach(function(element) {
+        if (pagination.sort == "custom") {
+          var temp = new Array(offices.length);
+          var officeTemp = offices;
+          Order.find({ name: "Office", discussion: offices[0].discussion }, function (err, data) {
+            data.forEach(function (element) {
               for (var index = 0; index < officeTemp.length; index++) {
-                if(JSON.stringify(officeTemp[index]._id) === JSON.stringify(element.ref)){
-                    temp[element.order - 1] = offices[index];
+                if (JSON.stringify(officeTemp[index]._id) === JSON.stringify(element.ref)) {
+                  temp[element.order - 1] = offices[index];
                 }
-                
+
               }
             });
-             offices = temp;
+            offices = temp;
             req.locals.result = offices;
             next();
-        })
-      }
-      else{
-       
-        req.locals.result = offices;
-         next();
-      }
+          })
+        }
+        else {
+
+          req.locals.result = offices;
+          next();
+        }
       }
     });
-    
+
   });
 
 
 };
 
-exports.getByDiscussion = function(req, res, next) {
+exports.getByDiscussion = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
@@ -242,19 +359,19 @@ exports.getByDiscussion = function(req, res, next) {
   });
   Query.populate('office');
 
-  Query.exec(function(err, offices) {
+  Query.exec(function (err, offices) {
     if (err) {
       req.locals.error = {
         message: 'Can\'t get offices'
       };
     } else {
       offices = _.uniq(offices, 'office._id');
-      offices = _.map(offices, function(item) {
+      offices = _.map(offices, function (item) {
         return item.office;
       });
 
       if (starredOnly) {
-        offices.forEach(function(office) {
+        offices.forEach(function (office) {
           office.star = true;
         });
       }
