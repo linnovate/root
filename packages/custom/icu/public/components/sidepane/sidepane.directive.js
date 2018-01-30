@@ -4,10 +4,10 @@ angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, $stateParams,context, TasksService, $rootScope, SearchService, $filter, $location, EntityService) {
         $scope.context = context;
-        
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
+        $scope.attachments = $scope.officeDocuments.data || $scope.officeDocuments;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
         $scope.officeDocuments = $scope.officeDocuments.data || $scope.officeDocuments;
         //$scope.templateDocs = $scope.templateDocs.data || $scope.templateDocs;
@@ -118,6 +118,7 @@ directive('icuSidepane', function() {
             {label:'discussions', value: false, name: 'discussion', length: 0},
             {label:'offices', value: false, name: 'office', length: 0},
             {label:'folders', value: false, name: 'folder', length: 0},
+            {label:'Attachments', value: false, name: 'attachment', length: 0},
             {label:'documents', value: false, name: 'officeDocument', length: 0}
         ];
         
@@ -127,6 +128,7 @@ directive('icuSidepane', function() {
                 projects: {},
                 discussions: {},
                 folders: {},
+                attachments: {},
                 offices: {},
             },
             selectedWatchers: {},
@@ -148,6 +150,7 @@ directive('icuSidepane', function() {
                 this.discussions = 4;
                 this.offices = 4;
                 this.folders = 4;
+                this.attachments = 4;
                 this.watchers = 2;
             }
         };
@@ -162,6 +165,8 @@ directive('icuSidepane', function() {
                     $scope.filteringData.folders.push(filteredByType[i].folder);
                 if (filteredByType[i].office)
                     $scope.filteringData.offices.push(filteredByType[i].office)
+                if (filteredByType[i].attachment)
+                    $scope.filteringData.attachments.push(filteredByType[i].attachment)                    
                 if (filteredByType[i].watchers && filteredByType[i].watchers.length)
                     $scope.filteringData.watchers = $scope.filteringData.watchers.concat(filteredByType[i].watchers)
             }
@@ -178,6 +183,11 @@ directive('icuSidepane', function() {
             $scope.filteringData.offices = $scope.offices.filter(function(e) {
                 return $scope.filteringData.offices.indexOf(e._id) > -1;
             });
+
+            $scope.filteringData.attachments = $scope.attachments.filter(function(e) {
+                return $scope.filteringData.offices.indexOf(e._id) > -1;
+            });
+
             $scope.filteringData.watchers = $scope.people.filter(function(e) {
                 return $scope.filteringData.watchers.indexOf(e._id) > -1;
             });
@@ -211,7 +221,7 @@ directive('icuSidepane', function() {
                 $scope.issues[index].length++;
             }
             SearchService.filteringResults = filteredByType;
-
+            
             getEntitiesAndWatchers(filteredByType)
         }
 
@@ -300,6 +310,7 @@ directive('icuSidepane', function() {
                 projects: {},
                 discussions: {},
                 folders: {},
+                attachments: {},
                 offices: {}
             };
             $scope.filteringData.selectedWatchers = {};
