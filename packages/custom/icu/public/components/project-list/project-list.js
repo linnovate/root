@@ -82,6 +82,8 @@ angular.module('mean.icu.ui.projectlist', [])
         };
 
         function navigateToDetails(project) {
+            if(!project) return ;
+            
             $scope.detailsState = context.entityName === 'all' ?
                 'main.projects.all.details' : 'main.projects.byentity.details';
 
@@ -101,10 +103,14 @@ angular.module('mean.icu.ui.projectlist', [])
             $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
         };
         
-        if ($scope.projects.length) {
+        let possibleNavigate = $scope.projects.filter(function(t) {
+            return t.recycled == null ; 
+        })
+    
+        if (possibleNavigate.length) {            
             if ($state.current.name === 'main.projects.all' ||
                 $state.current.name === 'main.projects.byentity') {
-                navigateToDetails($scope.projects[0]);
+                navigateToDetails(possibleNavigate[0]);
             }
         }
         else {

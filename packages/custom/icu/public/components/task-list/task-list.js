@@ -255,8 +255,8 @@ angular.module('mean.icu.ui.tasklist', [])
         };
 
 	function navigateToDetails(task) {
+		if(!task) return ;
 		$scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
-
 		$state.go($scope.detailsState, {
 			id: task._id,
 			entity: $scope.currentContext.entityName,
@@ -276,10 +276,17 @@ angular.module('mean.icu.ui.tasklist', [])
 	$scope.print = function() {
 		$window.print()
 	}
-	if ($scope.tasks.length) {
+
+	let possibleNavigate = $scope.tasks.filter(function(t) {
+		return t.recycled == null ; 
+	})
+
+	if (possibleNavigate.length) {
 		if ($state.current.name === 'main.tasks.all' ||
 			$state.current.name === 'main.tasks.byentity') {
-			navigateToDetails($scope.tasks[0]);
+			// navigate to first task on details
+			
+			navigateToDetails(possibleNavigate[0]);
 	}
 	} else if (
 		$state.current.name !== 'main.tasks.byentity.activities'
