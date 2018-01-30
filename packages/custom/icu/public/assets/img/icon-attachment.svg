@@ -1,11 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" width="15" height="21" viewBox="0 0 15 21">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #fff;
-        fill-rule: evenodd;
-      }
-    </style>
-  </defs>
-  <path d="M14.906,5.005 L10.134,0.105 C10.070,0.040 9.983,0.003 9.893,0.003 L0.347,0.003 C0.159,0.003 0.006,0.159 0.006,0.353 L0.006,20.652 C0.006,20.846 0.159,21.002 0.347,21.002 L14.665,21.002 C14.854,21.002 15.006,20.846 15.006,20.652 L15.006,5.253 C15.006,5.160 14.970,5.071 14.906,5.005 ZM9.893,5.253 L9.893,0.353 L14.665,5.253 L9.893,5.253 Z" class="cls-1"/>
+<svg width="32" height="32" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>icon-attachment</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(93 79)">
+<g id="icon-attachment">
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="translate(-83 -75)"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" fill-rule="evenodd" d="M 10.3635 5.454L 10.3635 18C 10.3635 20.409 8.4105 22.3635 6 22.3635C 3.5895 22.3635 1.6365 20.4105 1.6365 18L 1.6365 4.3635C 1.6365 2.8575 2.856 1.6365 4.3635 1.6365C 5.871 1.6365 7.0905 2.856 7.0905 4.3635L 7.0905 15.819C 7.0905 16.4205 6.603 16.9095 6 16.9095C 5.3955 16.9095 4.908 16.4205 4.908 15.819L 4.908 5.454L 3.2715 5.454L 3.2715 15.819C 3.2715 17.325 4.494 18.5445 6 18.5445C 7.506 18.5445 8.727 17.325 8.727 15.819L 8.727 4.3635C 8.727 1.9545 6.774 0 4.3635 0C 1.9545 0 0 1.9545 0 4.3635L 0 18C 0 21.315 2.6865 24 6 24C 9.312 24 12 21.315 12 18L 12 5.454L 10.3635 5.454Z"/>
+</defs>
 </svg>
