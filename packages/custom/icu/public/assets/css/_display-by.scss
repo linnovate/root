@@ -15,7 +15,7 @@
         font-size: 12px;
         font-weight: 700;
         line-height: 16px;
-
+        padding-top: 15px;
         cursor: pointer;
     }
 
@@ -37,6 +37,12 @@
         }
     }
 
+    #searchNav {
+        width: 233px;
+        color: #fff;
+        cursor: pointer;
+    }
+
     .list {
         padding-left: 20px;
         color: white;
@@ -45,6 +51,7 @@
             list-style: none;
             padding-left: 0;
             padding-bottom: 20px;
+            margin-bottom: 20px;
 
             li {
                     display: flex;

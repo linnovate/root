@@ -4,8 +4,15 @@ angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
     function controller($scope, $state, context, $stateParams, $window) {
 
-        $scope.$on('sidepan', function (ev,item) {
-            $scope.context = item;
+        $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
+            $scope.item = item;
+            $scope.context = context;
+            $scope.folders = folders;
+            $scope.offices = offices;
+            $scope.projects = projects;
+            $scope.discussions = discussions;
+            $scope.officeDocuments = officeDocuments;
+            $scope.people = people;
         });
         console.log($scope);
 
@@ -271,16 +278,6 @@ angular.module('mean.icu.ui.displayby', [])
 
     return {
         restrict: 'A',
-        scope: {
-            projects: '=',
-            discussions: '=',
-            people: '=',
-            icuDisplayBy: '=',
-            officeDocuments: '=',
-            offices: '=',
-            folders: '=',
-            me: '='
-        },
         templateUrl: '/icu/components/display-by/display-by.html',
         controller: controller,
         link: link

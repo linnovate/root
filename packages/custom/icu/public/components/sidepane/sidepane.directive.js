@@ -53,13 +53,13 @@ directive('icuSidepane', function() {
             $state.go('main.tasks.byassign');
         }
 
-        $scope.setActive = function(item){
-            $scope.$broadcast('sidepan', item);
-            $scope.activeTab = item;
-        };
-
-
         $scope.items = [{
+            name: 'search',
+            icon: '/icu/assets/img/search-nav.svg',
+            state: 'search.all',
+            display: ['projects', 'discussions', 'people', 'offices', 'templateDocs'],
+            open: $scope.isCurrentState({state: 'tasks'})
+        }, {
             name: 'tasks',
             icon: '/icu/assets/img/task.png',
             state: 'tasks.all',
@@ -101,6 +101,16 @@ directive('icuSidepane', function() {
         }
         ];
         $scope.activeTab = $scope.items[0];
+
+        $scope.setActive = function(item, context){
+            $scope.activeTab = item;
+            $scope.$broadcast('sidepan', item,
+                $scope.context, $scope.folders,
+                $scope.offices, $scope.projects,
+                $scope.discussions, $scope.officeDocuments,
+                $scope.people);
+        };
+
 
         $scope.menuColorStyles = [
             'pinkTab',

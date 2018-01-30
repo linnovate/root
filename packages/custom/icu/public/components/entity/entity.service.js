@@ -5,7 +5,6 @@ angular.module('mean.icu.ui.entity', [])
     var activeStatusFilterValue = "default" ;
 
     function isActiveStatusAvailable() {
-        console.log("isActiveStatusAvailable", SettingServices.activeStatusConfigured == null) ;
         return SettingServices.activeStatusConfigured == null ? false : true ;
     }
 
