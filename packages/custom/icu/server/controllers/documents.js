@@ -72,7 +72,7 @@ function getUsers(users) {
         request.push(new Promise(function (resolve, error) {
           User.findOne({ '_id': u.UserId }).exec(function (err, user) {
             if (!err) {
-              u.UserId = user.id.substring(0, user.id.indexOf('@'))+config.usersDomain;
+              u.UserId = user.username;
               u.UserId=u.UserId.toLowerCase();
               resolve(user);
             }
@@ -303,6 +303,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
     var fileName = template.spPath.substring(template.spPath.lastIndexOf('/')+1,template.spPath.length);
     fileName=fileName.substring(fileName.indexOf('_')+1,fileName.length);
     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
+    var username = req.user.username;
     var folder = config.SPHelper.libraryName+"/"+user;
     var templateUrl = template.spPath.substring(template.spPath.indexOf("/ICU"),template.spPath.length);
     var serverName = config.SPHelper.serverName;
@@ -323,7 +324,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
       users.push({
         '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
         'Role':3,
-        'UserId':user+config.usersDomain,
+        'UserId':username,
         'isCreator':true
       });
       officeDocument.watchers.forEach(function(watcher){
@@ -868,6 +869,8 @@ exports.uploadFileToDocument = function(req,res,next){
 
   busboy.on('finish', function () {
     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
+    
+    var username = req.user.username;
     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
     var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
     req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+req.locals.data.body.name;
@@ -905,7 +908,7 @@ exports.uploadFileToDocument = function(req,res,next){
               users.push({
                 '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
                 'Role':3,
-                'UserId':user.toLowerCase()+config.usersDomain,
+                'UserId':username,
                 'isCreator':true
               });
               result.watchers.forEach(function(watcher){

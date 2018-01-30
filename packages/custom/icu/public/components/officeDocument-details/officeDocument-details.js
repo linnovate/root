@@ -204,7 +204,9 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         
 
         $scope.upload = function(file) {
-            $scope.uploading = true;
+            if(file.length>0){
+                $scope.uploading = true;
+            }
             $scope.test = file;
             var data = {
                 'id':$stateParams.id,
