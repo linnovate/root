@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, context, TasksService, $rootScope, SearchService, $filter, $location) {
+    function controller($scope, $state, context, NotifyingService, TasksService, $rootScope, SearchService, $filter, $location) {
         $scope.context = context;
 
         $scope.folders = $scope.folders.data || $scope.folders;
@@ -111,6 +111,9 @@ directive('icuSidepane', function() {
                 $scope.people);
         };
 
+        NotifyingService.subscribe('activeSearch', function (ev) {
+            $scope.activeTab = $scope.items[0];
+        }, $scope);
 
         $scope.menuColorStyles = [
             'pinkTab',
