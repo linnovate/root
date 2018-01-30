@@ -12,7 +12,7 @@
             ng-change="search(term)"
             ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}"
             ng-keyup="click=false"
-            ng-click="click=!click; onDocumentClick()">
+            ng-click="click=!click; onDocumentClick(); activeSearchNav()">
         </input>
         <img src="/icu/assets/img/search.png"></img>
     	<!--<div id="build-in-search" class="build-in-search" ng-if="click">

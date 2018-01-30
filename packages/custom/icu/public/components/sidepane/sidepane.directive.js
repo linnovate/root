@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, $stateParams,context, TasksService, $rootScope, SearchService, $filter, $location, EntityService) {
+    function controller($scope, $state, $stateParams, context, NotifyingService, TasksService, $rootScope, SearchService, $filter, $location, EntityService) {
         $scope.context = context;
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
@@ -26,7 +26,7 @@ directive('icuSidepane', function() {
         	TasksService.filterValue = false;
         };
 
-        // updatedDate        
+        // updatedDate
         let lastMonth = new Date();
         lastMonth.setDate(lastMonth.getMonth() -1 ) ;
         $scope.updatedDate = lastMonth ;
@@ -36,10 +36,10 @@ directive('icuSidepane', function() {
         $scope.activeToggleList = EntityService.activeToggleList;
         $scope.activeToggle = {
                 field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
-                disabled: !EntityService.isActiveStatusAvailable() 
+                disabled: !EntityService.isActiveStatusAvailable()
         };
         /*---*/
-        
+
 
         $scope.isCurrentState = function(item) {
 
@@ -126,6 +126,9 @@ directive('icuSidepane', function() {
                 $scope.people);
         };
 
+        NotifyingService.subscribe('activeSearch', function (ev) {
+            $scope.activeTab = $scope.items[0];
+        }, $scope);
 
         $scope.menuColorStyles = [
             'pinkTab',
@@ -140,7 +143,7 @@ directive('icuSidepane', function() {
             if($scope.activeTab === item){
                 return $scope.menuColorStyles[index];
             }
-        }
+        };
 
         /********************************** search **********************************/
 
@@ -169,7 +172,7 @@ directive('icuSidepane', function() {
             folders: [],
             offices: [],
             watchers: []
-        }
+        };
 
         $scope.displayLimit = {
             projects : 4,
@@ -198,7 +201,7 @@ directive('icuSidepane', function() {
                 if (filteredByType[i].office)
                     $scope.filteringData.offices.push(filteredByType[i].office)
                 if (filteredByType[i].attachment)
-                    $scope.filteringData.attachments.push(filteredByType[i].attachment)                    
+                    $scope.filteringData.attachments.push(filteredByType[i].attachment)
                 if (filteredByType[i].watchers && filteredByType[i].watchers.length)
                     $scope.filteringData.watchers = $scope.filteringData.watchers.concat(filteredByType[i].watchers)
             }
@@ -225,13 +228,13 @@ directive('icuSidepane', function() {
             });
 
             SearchService.filteringData = $scope.filteringData;
-        }
+        };
 
         $state.current.reloadOnSearch = false;
 
         var issuesOrder = $scope.issues.map(function(i) {
             return i.name;
-        })
+        });
 
         $scope.filterSearchByType = function() {
             if ($scope.filteringData.issue === 'all') {
@@ -253,7 +256,7 @@ directive('icuSidepane', function() {
                 $scope.issues[index].length++;
             }
             SearchService.filteringResults = filteredByType;
-            
+
             getEntitiesAndWatchers(filteredByType)
         }
 
@@ -309,7 +312,7 @@ directive('icuSidepane', function() {
 
 
         ////******* */
-        $scope.updatedOptions = {            
+        $scope.updatedOptions = {
                     onClose: (value, picker, $element) => {
 //                        console.log("on close", value, picker, $element) ;
                         let splut = value.split('.') ;
@@ -321,14 +324,14 @@ directive('icuSidepane', function() {
                         $state.go('main.search', { dateUpdated: value }) ;
                     },
                     dateFormat: 'd.m.yy'
-        };     
-                
+        };
+
         ////******* */
 
         $scope.filterActive = function () {
             EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
-            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
-        };    
+            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
+        };
 
 
         $scope.filterSearch = function() {
@@ -370,8 +373,6 @@ directive('icuSidepane', function() {
                 $scope.filterSearch();
             }
         });
-
-
 
     }
 
