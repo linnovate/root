@@ -96,18 +96,19 @@ exports.upload = function (req, res, next) {
 
   var hasFile = false;
 
-  busboy.on('file', function (fieldname, file, filename) {
+  busboy.on('file', function (fieldname, file, filename) {    
     var port = config.https && config.https.port ? config.https.port : config.http.port;
+    var portStr = ":" + port ;
+    portStr = config.isPortNeeded ? portStr : '' ;
+    
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
-    var hostFileLocation = config.host + ':' + config.isPortNeeded ? port : '' + saveTo.substring(saveTo.indexOf('/files'));
+    var hostFileLocation = config.host + portStr + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
 
     mkdirp(path.join(config.attachmentDir, d), function () {
-      file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
-
+      file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {        
         var arr = hostFileLocation.split("/files");
         var pathFor = "./files" + arr[1];
-
         var stats = fs.statSync(pathFor);
         //var stats = fs.statSync("." + saveTo.substring(saveTo.indexOf('/files')));
         console.log(pathFor + 'test path')
