@@ -20,11 +20,11 @@ directive('icuSidepane', function() {
             });
 
             toggledItem.open = !prev;
-        }
+        };
 
         $scope.removeFilterValue = function() {
         	TasksService.filterValue = false;
-        }
+        };
 
         // updatedDate        
         let lastMonth = new Date();
@@ -60,7 +60,7 @@ directive('icuSidepane', function() {
             {
                 return item.state === context.main;
             }
-            
+
             //return item.state === context.main;
         };
 
@@ -69,6 +69,12 @@ directive('icuSidepane', function() {
         }
 
         $scope.items = [{
+            name: 'search',
+            icon: '/icu/assets/img/search-nav.svg',
+            state: 'search.all',
+            display: ['projects', 'discussions', 'people', 'offices', 'templateDocs'],
+            open: $scope.isCurrentState({state: 'tasks'})
+        }, {
             name: 'tasks',
             icon: '/icu/assets/img/task.png',
             state: 'tasks.all',
@@ -109,11 +115,37 @@ directive('icuSidepane', function() {
             open: $scope.isCurrentState({state: 'officeDocuments'})
         }
         ];
+        $scope.activeTab = $scope.items[0];
+
+        $scope.setActive = function(item, context){
+            $scope.activeTab = item;
+            $scope.$broadcast('sidepan', item,
+                $scope.context, $scope.folders,
+                $scope.offices, $scope.projects,
+                $scope.discussions, $scope.officeDocuments,
+                $scope.people);
+        };
+
+
+        $scope.menuColorStyles = [
+            'pinkTab',
+            'blueTab',
+            'greenTab',
+            'purpleTab',
+            'yellowTab',
+            'darkBlueTab',
+            'redTab',
+        ];
+        $scope.getNavColor = function(item, index){
+            if($scope.activeTab === item){
+                return $scope.menuColorStyles[index];
+            }
+        }
 
         /********************************** search **********************************/
 
         $scope.issues = [
-            {label:'tasks', value: false, name: 'task', length: 0}, 
+            {label:'tasks', value: false, name: 'task', length: 0},
             {label:'projects', value: false, name: 'project', length: 0},
             {label:'discussions', value: false, name: 'discussion', length: 0},
             {label:'offices', value: false, name: 'office', length: 0},
@@ -121,7 +153,7 @@ directive('icuSidepane', function() {
             {label:'Attachments', value: false, name: 'attachment', length: 0},
             {label:'documents', value: false, name: 'officeDocument', length: 0}
         ];
-        
+
         $scope.filteringData = {
             issue: $location.$$search && $location.$$search.type ? $location.$$search.type : 'all',
             selectedEntities: {
@@ -154,13 +186,13 @@ directive('icuSidepane', function() {
                 this.watchers = 2;
             }
         };
-        
+
         var getEntitiesAndWatchers = function(filteredByType) {
             for (var i=0; i< filteredByType.length; i++) {
                 if (filteredByType[i].project)
                     $scope.filteringData.projects.push(filteredByType[i].project);
                 if (filteredByType[i].discussions && filteredByType[i].discussions.length)
-                    $scope.filteringData.discussions.push(filteredByType[i].discussions[0]);                    
+                    $scope.filteringData.discussions.push(filteredByType[i].discussions[0]);
                 if (filteredByType[i].folder)
                     $scope.filteringData.folders.push(filteredByType[i].folder);
                 if (filteredByType[i].office)
@@ -209,7 +241,7 @@ directive('icuSidepane', function() {
             }
             var results = SearchService.results;
             var filteredByType = [], index;
-            
+
             for (var i = 0; i < $scope.issues.length; i++) {
                 $scope.issues[i].length = 0;
             }
@@ -234,7 +266,7 @@ directive('icuSidepane', function() {
             }
             return arr;
         }
-        
+
         $scope.simulateCheckbox = function(obj, value) {
             if (obj[value]) {
                 obj[value] = false;
@@ -356,7 +388,9 @@ directive('icuSidepane', function() {
             people: '=',
             officeDocuments: '=',
             templateDocs: '=',
-            currentState: '@'
+            currentState: '@',
+            changeLayout: '=',
+            getSideMenuIcon: '='
         }
     };
 });

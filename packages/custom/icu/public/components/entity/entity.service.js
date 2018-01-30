@@ -5,16 +5,15 @@ angular.module('mean.icu.ui.entity', [])
     var activeStatusFilterValue = "default" ;
 
     function isActiveStatusAvailable() {
-//        console.log("isActiveStatusAvailable", SettingServices.activeStatusConfigured == null) ;
         return SettingServices.activeStatusConfigured == null ? false : true ;
     }
 
-    function getActiveStatusFilterValue() { 
-        return activeStatusFilterValue ; 
+    function getActiveStatusFilterValue() {
+        return activeStatusFilterValue ;
     }
 
-    function setActiveStatusFilterValue(_activeStatusFilterValue) { 
-        activeStatusFilterValue = _activeStatusFilterValue ; 
+    function setActiveStatusFilterValue(_activeStatusFilterValue) {
+        activeStatusFilterValue = _activeStatusFilterValue ;
     }
 
     function getEntityActivityStatus(filterValue,entityType,entityStatus) {

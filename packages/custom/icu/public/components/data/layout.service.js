@@ -31,12 +31,21 @@ angular.module('mean.icu.data.layoutservice', [])
                 else return '/icu/assets/img/sections3.svg'
 
     }
+    function getSideMenuIcon() {
+        if (state === 4){
+            return '/icu/assets/img/sections4.svg';
+        }
+        else if (state === 1)
+            return '/icu/assets/img/sections7.svg';
+
+    }
 
     return {
         show: getShow,
         clicked: clicked,
         unClick: unClick,
         changeLayout: changeLayout,
-        getLayoutIcon: getLayoutIcon
+        getLayoutIcon: getLayoutIcon,
+        getSideMenuIcon: getSideMenuIcon
     };
 });
