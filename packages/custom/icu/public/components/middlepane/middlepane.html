@@ -9,10 +9,10 @@
         <input type="text"
             placeholder="{{ 'search' | i18next }}"
             ng-model="term"
-            ng-change="search(term)"
+            ng-change="search(term);activeSearchNav()"
             ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}"
             ng-keyup="click=false"
-            ng-click="click=!click; onDocumentClick(); activeSearchNav()">
+            ng-click="click=!click; onDocumentClick()">
         </input>
         <img src="/icu/assets/img/search.png"></img>
     	<!--<div id="build-in-search" class="build-in-search" ng-if="click">

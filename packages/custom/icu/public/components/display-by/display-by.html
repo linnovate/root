@@ -106,17 +106,6 @@
 
     <div class="list offices" ng-if="officesList && item.display.indexOf('offices') !== -1">
         <p ng-click="visible.office = !visible.office && folders.length !== 0" class="title">{{ 'folders' | i18next }}</p>
-        <ul ng-if="!visible.office && office.length !== 0">
-            <li data-ng-repeat="office in officesList | filterRecycled | limitTo: displayLimit['offices']" data-ng-class="{'selected': context.entityName === 'office' && office._id === context.entityId }"
-                data-ng-click="switchTo('office', office._id)" ng-if="office._id && office.title">
-                <a href class="Names-In-List-On-Side">
-                    {{office.title}}
-                </a>
-                <div class="tag-color" ng-style="{'background-color': '#' + office.color}"></div>
-            </li>
-            <li ng-if="officesList.length > displayLimit['offices']" ng-click="showMore(officesList.length, 'offices')" class="more">{{ 'more' | i18next }}</li>
-            <li ng-if="officesList.length == displayLimit['offices'] && displayLimit['offices'] > 3" ng-click="collapse('offices')" class="more">{{ 'less' | i18next }}</li>
-        </ul>
         <p class="title go-to-Offices" ng-click="GoToOffices()"> {{ 'offices' | i18next }} </p>
         <p class="title go-to-Offices" ng-click="GoToTemplateDocs()"> {{ 'templateDoc' | i18next }} </p>
         <p class="title go-to-Offices" ng-if="me.roles.indexOf('admin')>=-1" ng-click="GoToAdminSettings()"> {{ 'adminSettings' | i18next }} </p>
@@ -169,12 +158,12 @@
         </div>
 
         <div class="filterUpdated">
-            <div class="subtitle">{{'updatedAfter' | i18next}}</div>    
+            <div class="subtitle">{{'updatedAfter' | i18next}}</div>
                 <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate" ng-class='{"updatedAt":checkDate()}'>
         </div>
-        
+
         <div class="filterActive">
-            <div class="subtitle">{{'filterByActiveStatus' | i18next}}</div>    
+            <div class="subtitle">{{'filterByActiveStatus' | i18next}}</div>
             <div class="select-wrapper select-wrapper-active-status">
             <div tooltips tooltip-template="{{'filter by activity status' | i18next}}">
                 <ui-select ng-disabled="activeToggle.disabled" ng-model="activeToggle.field" on-select="filterActive()" search-enabled="false">
@@ -186,8 +175,8 @@
                     </ui-select-choices>
                 </ui-select>
             </div>
-        </div>                
-        
+        </div>
+
 
         <div ng-if="filteringData.projects.length">
             <div class="subtitle">{{'linkedTo' | i18next}}{{'project' | i18next}}</div>

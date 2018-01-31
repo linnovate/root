@@ -49,11 +49,12 @@
             list-style: none;
             padding-left: 0;
             display: inline-block;
-            margin-bottom: inherit;
 
             li {
-                    display: flex;
-   	                justify-content: space-between;
+                display: flex;
+                justify-content: space-between;
+                padding: 0px 10px;
+
                 a {
                     text-decoration: none;
                     cursor: pointer;

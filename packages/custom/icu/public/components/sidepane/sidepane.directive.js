@@ -108,8 +108,8 @@ directive('icuSidepane', function() {
         //     open: false
         // }
         {
-            name: 'officeDocuments',
-            icon: '/icu/assets/img/icon-document.svg',
+            name: 'Documents',
+            icon: '/icu/assets/img/document-nav.svg',
             state: 'officeDocuments.all',
             display: ['folders'],//['new', 'received', 'inProgress'],
             open: $scope.isCurrentState({state: 'officeDocuments'})
