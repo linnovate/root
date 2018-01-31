@@ -1,5 +1,44 @@
 .sidepane {
     .sidefilters {
+        .filterRecycled {
+            @include button;
+            margin-left: 23px;
+            height: 40px;
+
+            .recycled {
+                color: red;                
+                box-shadow: 0px 0px 0px 2px #FFB435;
+                transition: 0.8s;                   
+            }
+
+            button {
+                color: wheat ;
+                appearance: none;
+                border: none;
+                float: left;
+                margin-left: 30px;
+                margin-bottom: 10px;
+                cursor: pointer;
+                outline: none;
+                background-position: left center;
+
+                background-color: transparent;                
+                width: auto;
+                height: auto;
+
+                border-radius: 13px;
+                outline: none;
+                margin: 0 8px;
+                border: 1px solid #c3bfbf;
+
+                &:hover{
+                     box-shadow: 0px 0px 0px 2px #FFB435;
+                     transition: 0.8s;
+                } 
+
+            }
+        }
+
         .filterUpdated,  {
             .placeholder {
                 position: absolute;
@@ -407,6 +446,7 @@
         }
         .filterBy {
             margin-top: 26px;
+            margin-left: 16px;
             font-weight: bold;
             color: #5d6c72;
             button {

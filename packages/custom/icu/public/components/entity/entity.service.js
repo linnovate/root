@@ -55,6 +55,14 @@ angular.module('mean.icu.ui.entity', [])
         });
     }
 
+    function getRecycleBin(type) {
+    	return $http.get(ApiUri + '/' + type + '/get_recycle_bin').then(function (result) {
+    		WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+
     return {
         isActiveStatusAvailable, isActiveStatusAvailable,
         getActiveStatusFilterValue: getActiveStatusFilterValue,
@@ -64,5 +72,6 @@ angular.module('mean.icu.ui.entity', [])
         activeToggleList, activeToggleList,   
         recycle, recycle,  
         recycleRestore, recycleRestore,   
+        getRecycleBin,getRecycleBin
     };
 }) ;

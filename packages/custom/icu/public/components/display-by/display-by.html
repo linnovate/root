@@ -167,7 +167,7 @@
             {{'filterResultsBy' | i18next }}:
             <button ng-click="resetFilter()">{{'reset' | i18next}}</button>
         </div>
-
+    
         <div class="filterUpdated">
             <div class="subtitle">{{'updatedAfter' | i18next}}</div>    
                 <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate" ng-class='{"updatedAt":checkDate()}'>
@@ -262,6 +262,12 @@
             <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3" ng-click="collapse('watchers')"
                 class="more">{{ 'less' | i18next }}</li>
         </ul>
+        <hr />
+        <div class="filterRecycled">
+                <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">
+                    Show Deleted Items
+                </button>
+        </div>
 
     </div>
 </section>

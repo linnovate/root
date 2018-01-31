@@ -43,9 +43,36 @@ function recycleRestoreEntity(entityType, id) {
         var promise = Model.update({'_id':id},{$unset:{'recycled': Date.now()}}).exec();  
         return promise ;  
 }
+
+function recycleGetBin(entityType) {    
+  var request = [];
+  return new Promise(function (fulfill, reject) {
+    for(var key in entityNameMap) {
+      let Model = entityNameMap[key].mainModel ;
+      request.push(new Promise(function (resolve, error) {
+        Model.find({recycled: { $exists: true }}).exec(function (err, entities) {            
+          if (err) {
+            console.log("recycleGetBin err")
+            error('error');
+          }
+
+          resolve(entities);            
+        });
+      }));
+  }
+  Promise.all(request).then(function (result) {
+    fulfill(result);
+  }).catch(function (reason) {
+    console.log("recycleGetBin promise all reject") ;
+    reject('reject');
+  });
+});
+}
+
     
 module.exports = {
     recycleEntity: recycleEntity,
     recycleRestoreEntity: recycleRestoreEntity,
+    recycleGetBin, recycleGetBin
 };
       

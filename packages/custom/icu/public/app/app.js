@@ -536,6 +536,53 @@ angular.module('mean.icu').config([
             };
         }
 
+
+
+
+
+        function getRecycledEntities(main) {
+//            console.log("getRecycledEntities main.search.recycled") ;
+            return {
+                url: 'search/recycled',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },            
+                views: {
+                    'middlepane@main': {
+                        templateUrl: '/icu/components/search-list/search-list.html',
+                        controller: 'SearchListController'
+                    },                    'detailspane@main': {
+                        templateUrl: '/icu/components/task-options/task-options.html',
+                        controller: 'TaskOptionsController'
+                    }
+                },
+                resolve: {
+                    results: function (EntityService,SearchService, $stateParams) {
+                        let unmerged = EntityService.getRecycleBin("all") ;
+                        return unmerged.then(function(arrays) {
+                            let merged = [].concat.apply([], arrays);
+                            let mergedAdjuested = merged.map(function(item) {
+                                item._type = 'task';
+                                item.id = item._id;
+                                return item ;
+                            })
+                            return mergedAdjuested ;                            
+                        })
+                    }
+                    },
+                    tasks: function (results) {                                            
+                        return _(results).filter(function (r) {
+                            return r._type === 'task';
+                        });
+                    }
+            }
+        }
+
+
+
         $meanStateProvider
             .state('404', {
                 url: '/404',
@@ -1418,6 +1465,7 @@ angular.module('mean.icu').config([
                     }
                 }
             })
+            .state('main.search.recycled', getRecycledEntities('recycled'))
             .state('main.search.task', getTaskDetailsState('/task'))
             .state('main.search.task.activities', getDetailsTabState('task', 'activities'))
             .state('main.search.task.activities.modal', getDetailspaneModal())
