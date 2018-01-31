@@ -22,7 +22,7 @@
         </ui-select>
     </div>
 
-    <div class="add-member-container">
+    <div class="add-member-container" ng-if="hideAddButton">
         <button class="add" id="addMember" ng-click="triggerSelect()" ng-class="{transition: animate}">
             <i tooltips tooltip-template="{{'add watcher' | i18next }}" tooltip-side='left' class="fa fa-plus"></i>
         </button>

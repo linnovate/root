@@ -113,7 +113,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         });
 
         $scope.addSerialTitle = function(document1){
-            console.log("===UPLOAD EMPTY====");
             $scope.settingSerial = true;
             OfficeDocumentsService.addSerialTitle(document1).then(function(result){
                 $scope.settingSerial = false;                
@@ -123,14 +122,17 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 if(result && result.serial){
                     document1.serial = result.serial;
                 }
-                /**if(result && result.documentType){
-                    document1.documentType = result.documentType;
-                }
-                if(result && result.title){
-                    document1.title = result.title;
-                }
-                */
             });
+        }
+
+        $scope.signOnDocx = function(document1){
+            //if(document1.spPath){
+            OfficeDocumentsService.signOnDocx(document1,$scope.selectedSignature).then(function(result){              
+                if(result && result.spPath){
+                    document1.spPath = result.spPath;
+                }
+            });
+       // }
         }
 
         $scope.sendDocument = function(document1){

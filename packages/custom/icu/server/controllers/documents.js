@@ -174,6 +174,83 @@ exports.uploadEmpty = function(req,res,next){
 };
 
 
+exports.signOnDocx = function(req,res,next){
+  var doc = req.body.document;
+  var signature = JSON.parse(req.body.signature);
+  var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
+  //var spPath = doc.spPath;
+  //var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
+  var spPath = " hi";
+  var fileName="Hi";
+  
+  var coreOptions = {
+    "siteUrl":config.SPHelper.SPSiteUrl
+  };
+  var creds = {
+    "username":config.SPHelper.username,
+    "password":config.SPHelper.password
+  };
+  var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
+  var fileOptions = {
+    "folder":folder,
+    "fileName":fileName,
+    "fileContent":undefined
+  };
+  var users = [];
+  users.push({
+    '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+    'Role':3,
+    'UserId':doc.creator.username.toLowerCase()
+  });
+  doc.watchers.forEach(function(watcher){
+    users.push({
+      '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+      'Role':3,
+      'UserId':watcher.username.toLowerCase()
+    });
+  });
+
+  var json = {
+    'siteUrl':config.SPHelper.SPSiteUrl,
+    'fileUrl':spPath,
+    'signature':signature,
+    'coreOptions':coreOptions,
+    'creds':creds,
+    'fileOptions':fileOptions,
+    'permissions':users,
+    'isTemplate':false
+  };
+
+  request({
+    'url':config.SPHelper.uri+"/api/signOnDocx",
+    'method':'POST',
+    'json':json
+  },function(error,resp,body){
+    if(error){
+      res.send(error);
+    }
+    else{
+      var set = {'spPath':body.path};
+      Document.findOne({
+        '_id':req.body._id
+      },function(error,doc){
+        doc.spPath = body.path;
+        doc['id'] = req.body._id;
+        doc.save(function(err,result){
+          if(err){
+            res.send(err);
+          }
+          else{
+            res.send(set);
+          }
+        });
+      });
+    }
+  });
+};
+
+
+
 
 exports.addSerialTitle = function(req,res,next){
   var doc = req.body;
