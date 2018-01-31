@@ -15,6 +15,7 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.people = people;
         });
 
+
         $scope.projectsList = [];
         $scope.projects.forEach(function(project) {
                    if(project.title)
@@ -121,17 +122,17 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.context = context;
 
         $scope.displayLimit = {
-            projects : 3,
-            discussions : 3,
-            offices: 3,
-            folders: 3,
-            officeDocuments:3,
+            projects : 4,
+            discussions : 4,
+            offices: 4,
+            folders: 4,
+            officeDocuments:4,
             reset : function() {
-                this.projects = 3;
-                this.discussions = 3;
-                this.offices = 3;
-                this.folders = 3;
-                this.officeDocuments = 3;
+                this.projects = 4;
+                this.discussions = 4;
+                this.offices = 4;
+                this.folders = 4;
+                this.officeDocuments = 4;
             }
         };
 
@@ -152,7 +153,9 @@ angular.module('mean.icu.ui.displayby', [])
 
             if(context.entityName=='folder'){
                 $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
-                    return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+                    return officeDocument.status == type.name
+                        && officeDocument.folder
+                        && officeDocument.folder._id == context.entityId ;
                 });
 
             }else{
@@ -165,7 +168,10 @@ angular.module('mean.icu.ui.displayby', [])
 
             localStorage.setItem("type", type.name);
 
-            $state.go($state.current, {officeDocuments:$scope.officeDocuments}, {reload: true})
+            $state.go($state.current, {
+                officeDocuments: $scope.officeDocuments,
+                activeTab: $scope.item
+            }, {reload: true});
 
 
             // var temp=[];
@@ -262,16 +268,16 @@ angular.module('mean.icu.ui.displayby', [])
 
         function link($scope, $element, context) {
             $scope.showMore = function(limit, entityName) {
-                if (($scope.displayLimit[entityName] + 3) >= limit) {
+                if (($scope.displayLimit[entityName] + 4) >= limit) {
                     $scope.displayLimit[entityName] = limit;
                 } else {
-                    $scope.displayLimit[entityName]  += 3;
+                    $scope.displayLimit[entityName]  += 4;
 
                 }
             };
 
             $scope.collapse = function(entityName) {
-                $scope.displayLimit[entityName] = 3;
+                $scope.displayLimit[entityName] = 4;
             };
         }
 

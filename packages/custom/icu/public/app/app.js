@@ -1060,7 +1060,8 @@ angular.module('mean.icu').config([
                     start: 0,
                     limit: LIMIT,
                     sort: SORT,
-                    officeDocuments:undefined
+                    officeDocuments:undefined,
+                    activeTab: undefined
                 },
                 views: getListView('officeDocument'),
                 resolve: {
@@ -1376,11 +1377,11 @@ angular.module('mean.icu').config([
                     }
                 }
             })
-            
+
             .state('main.search', {
                 url: '/search/:query',
                 params: {
-                    dateUpdated: 'active',                    
+                    dateUpdated: 'active',
                 },
                 views: {
                     'middlepane@main': {
@@ -1408,7 +1409,7 @@ angular.module('mean.icu').config([
                             }
                         }
                     },
-                    tasks: function (results) {                                            
+                    tasks: function (results) {
                         return _(results).filter(function (r) {
                             return r._type === 'task';
                         });
