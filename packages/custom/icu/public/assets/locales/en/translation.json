@@ -243,6 +243,12 @@
     "manageTemplate": "Manage Template",
     "createNewTemplateDoc": "Create new TemplateDoc",
     "createNewofficeDocument": "Create new Office Document",
+    "document": "Document",
+    "signatures": "Signatures",
+    "role":"Role",
+    "rank":"Rank",
+    "fullName": "Full name",
+    "selectSignatures": "Select signatures",
 
     "st": "st",
     "nd": "nd",

@@ -241,7 +241,13 @@
     "notice": "לידיעה",
     "manageTemplate": "ניהול תבניות",
 	"createNewTemplateDoc": "צור תבנית מסמך חדש",
-    "createNewofficeDocument": "צור מסמך חדש",
+	"createNewofficeDocument": "צור מסמך חדש",
+	"document": "מסמך",
+    "signatures": "חתימות",
+    "role":"תפקיד",
+    "rank":"דרגה",
+    "fullName": "שם",
+    "selectSignatures": "בחר חתימה",
 
 
     "st": "",
