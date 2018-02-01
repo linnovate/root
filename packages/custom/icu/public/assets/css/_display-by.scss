@@ -12,13 +12,13 @@
         font-size: 12px;
         font-weight: 700;
         line-height: 16px;
-        padding: 15px;
+        padding: 20px;
         padding-left: 10px;
         cursor: pointer;
     }
 
     .all > p, .my > p {
-        padding-left: 10px;
+        padding-left: 0;
 
         &.selected:before {
             display: inline-block;
@@ -42,7 +42,7 @@
     }
 
     .list {
-        padding-left: 20px;
+        padding-left: 10px;
         color: white;
         border-bottom: 1px solid #424e52;
 
@@ -109,7 +109,7 @@
                     .tag-color {
                         @include tag(5px);
                         position: absolute;
-                        left: 100%;
+                        left: 109%;
                     }
                 }
             }
@@ -121,7 +121,7 @@
                     .tag-color {
                         @include tag(5px);
                         position: absolute;
-                        left: 100%;
+                        left: 109%;
                     }
                 }
             }
@@ -133,7 +133,7 @@
                     .tag-color {
                         @include tag(5px);
                         position: absolute;
-                        left: 100%;
+                        left: 109%;
                     }
                 }
             }
@@ -145,7 +145,7 @@
                     .tag-color {
                         @include tag(5px);
                         position: absolute;
-                        left: 100%;
+                        left: 109%;
                     }
                 }
             }
@@ -234,6 +234,7 @@
                 }
                 a {
                     width: 100%;
+                    padding: 0;
                 }
             }
 
@@ -266,7 +267,7 @@
         padding: 5px 0;
         color: $orange;
         cursor: pointer;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
         &:hover{
            text-decoration: underline;
         }
