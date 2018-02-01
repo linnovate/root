@@ -47,7 +47,6 @@ directive('icuSidepane', function() {
         };
         /*---*/
 
-
         $scope.isCurrentState = function(item) {
 
             if ((context.main === 'templateDocs') && (item.display != undefined) && (item.display[1] === 'templateDocs'))
@@ -97,8 +96,15 @@ directive('icuSidepane', function() {
             name: 'discussions',
             icon: '/icu/assets/img/meeting.png',
             state: 'discussions.all',
-            display: ['projects', 'people'],
+            display: ['projects', 'discussions', 'people'],
             open: $scope.isCurrentState({state: 'discussions'})
+        },
+        {
+            name: 'Documents',
+            icon: '/icu/assets/img/document-nav.svg',
+            state: 'officeDocuments.all',
+            display: ['folders'],//['new', 'received', 'inProgress'],
+            open: $scope.isCurrentState({state: 'officeDocuments'})
         },
         {
             name: 'settings',
@@ -106,7 +112,7 @@ directive('icuSidepane', function() {
             state: 'folders.all',
             display: ['offices', 'templateDocs'],
             open: $scope.isCurrentState({state: 'folders'})
-        },
+        }
         // , {
         //     name: 'people',
         //     icon: '/icu/assets/img/people.png',
@@ -114,15 +120,9 @@ directive('icuSidepane', function() {
         //     display: ['projects', 'discussions'],
         //     open: false
         // }
-        {
-            name: 'officeDocuments',
-            icon: '/icu/assets/img/icon-document.svg',
-            state: 'officeDocuments.all',
-            display: ['folders'],//['new', 'received', 'inProgress'],
-            open: $scope.isCurrentState({state: 'officeDocuments'})
-        }
         ];
-        $scope.activeTab = $scope.items[0];
+        $scope.activeTab = $stateParams.activeTab || $scope.items[1];
+        $scope.savedTab = $stateParams.activeTab;
 
         $scope.setActive = function(item, context){
             $scope.activeTab = item;
@@ -146,9 +146,17 @@ directive('icuSidepane', function() {
             'darkBlueTab',
             'redTab',
         ];
+
         $scope.getNavColor = function(item, index){
-            if($scope.activeTab === item){
-                return $scope.menuColorStyles[index];
+            for(var i = 0; i < $scope.items.length ; i++){
+                if($scope.activeTab.name === item.name){
+                    $scope.$broadcast('sidepan', item,
+                        $scope.context, $scope.folders,
+                        $scope.offices, $scope.projects,
+                        $scope.discussions, $scope.officeDocuments,
+                        $scope.people);
+                    return $scope.menuColorStyles[index];
+                }
             }
         };
 

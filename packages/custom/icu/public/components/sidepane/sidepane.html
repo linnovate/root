@@ -19,7 +19,7 @@
 
 <div class="sideMenu">
     <nav>
-        <ul>
+        <ul ng-init="setActive(savedTab || items[1])">
             <li data-ng-repeat="item in items"
                 ng-click="setActive(item); removeFilterValue()">
                 <div class="menu-item nav-item {{getNavColor(item, $index)}}"
