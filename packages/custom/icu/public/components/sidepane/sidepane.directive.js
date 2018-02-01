@@ -78,7 +78,7 @@ directive('icuSidepane', function() {
             name: 'search',
             icon: '/icu/assets/img/search-nav.svg',
             state: 'search.all',
-            display: ['projects', 'discussions', 'people', 'offices', 'templateDocs'],
+            display: ['projects', 'discussions', 'people'],
             open: $scope.isCurrentState({state: 'tasks'})
         }, {
             name: 'tasks',

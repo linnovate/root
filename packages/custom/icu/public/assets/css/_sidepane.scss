@@ -1,4 +1,10 @@
 .sidepane {
+    box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
+    width: $sidepane-width;
+    left: 0;
+    top: 0;
+    background-color: $dark-grey;
+    min-width: $sidepane-width;
     .sidefilters {
         .filterRecycled {
             @include button;
@@ -45,12 +51,12 @@
                 top: 50%;
                 transform: translateX(80%) translateY(-50%);
                 color: $light-grey-placeholder;
-                margin-right:5px;
+                margin-right: 5px;
                 //padding-left: 5px;
             }
-    
+
             input {
-                color: wheat ;
+                color: wheat;
                 appearance: none;
                 border: none;
                 float: left;
@@ -64,24 +70,23 @@
                 background-position: left center;
             }
         }
-    
 
         .ui-select-container .ui-select-choices-row .ui-select-choices-row-inner {
-		    display: flex;
-    		align-items: center;
-		}
+            display: flex;
+            align-items: center;
+        }
 
         .left-wrapper {
             float: left;
-            
-             tooltip{
-                 display: block;
-             }
-             tip{
+
+            tooltip {
+                display: block;
+            }
+            tip {
                 position: relative;
                 top: -30px;
                 right: inherit;
-             }
+            }
         }
         .print-wrapper {
             float: right;
@@ -100,24 +105,22 @@
             border: 1px solid #c3bfbf;
         }
 
-
         .select-wrapper {
             float: left;
-            width: 100% ;
+            width: 100%;
             margin-bottom: 10px;
             margin-left: 25px;
-            
-            tooltip{
+
+            tooltip {
                 display: block;
                 position: relative;
             }
-            tip{
+            tip {
                 position: absolute;
                 top: -15px;
                 left: inherit;
                 right: -40%;
             }
-            
 
             .ui-select-match {
                 background-color: transparent;
@@ -142,16 +145,16 @@
             padding-left: 0;
             background: url('/icu/assets/img/status.png') no-repeat 15% center;
             background-position: left 10% center;
-            
-            &:hover{
-                 box-shadow: 0px 0px 0px 2px #FFB435;
-                 transition: 0.8s;
-            } 
+
+            &:hover {
+                box-shadow: 0px 0px 0px 2px #FFB435;
+                transition: 0.8s;
+            }
         }
 
         .active-status {
-            width: 100px;      
-            color: wheat ;      
+            width: 100px;
+            color: wheat;
         }
 
         .list, {
@@ -161,43 +164,14 @@
             height: 26px;
             width: 37px;
             border: 1px solid $light-grey1;
-        }
-
-        .list {
             border-top-left-radius: 13px;
             border-bottom-left-radius: 13px;
             border-color: $dark-grey;
             background: url('/icu/assets/img/list.png') no-repeat center center;
             background-color: $dark-grey;
         }
-
     }
-    
 
-
-
-
-
-
-
-
-
-
-
-
-
-    display: block;
-    box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
-
-    position: fixed;
-    width: $sidepane-width;
-    left: 0;
-    top: 0;
-    // height: 100vh;
-    //height: 963px;
-
-    background-color: $dark-grey;
-    min-width: $sidepane-width;
 
     header {
         display: table-cell;
@@ -234,8 +208,9 @@
         }
         .sidepane-title
         {
-            padding: 16px auto 11px auto;
-            cursor: pointer
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: -10px;
         }
         .hide-button
         {
@@ -327,16 +302,17 @@
                 }
 
                 .menu-item {
-                    height: 113px;
+                    height: 115px;
                     width: 85px;
                     .icon {
                         width: 100%;
-                        height: 32px;
-                        margin: 26px auto 4px auto;
+                        height: 28px;
+                        margin: 30px auto 4px auto;
                         text-align: center;
                         vertical-align: middle;
                         float:none;
                         display: inline-block;
+
                     }
 
                     .item-name {
@@ -349,6 +325,7 @@
                         span {
                             line-height: 18px;
                             font-size: 13px;
+                            font-weight: bold;
                         }
                     }
 
