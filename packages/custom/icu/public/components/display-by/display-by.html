@@ -54,8 +54,9 @@
 
     <div class="list discussions" ng-if="discussions && item.display.indexOf('discussions') !== -1">
         <p ng-click="visible.discussion = !visible.discussion" class="title">{{ 'tasksFromMeeting' | i18next }}</p>
-        <ul ng-if="!visible.discussion && discussions.length !== 0">
-            <li data-ng-repeat="discussion in discussions | filterRecycled | limitTo:displayLimit['discussions']" data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
+        <ul ng-if="visible.discussion && discussions.length !== 0">
+            <li data-ng-repeat="discussion in discussions | filterRecycled | limitTo:displayLimit['discussions']"
+                data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
                 <a href class="Names-In-List-On-Side">
                     {{discussion.title || discussion.name}}
@@ -70,7 +71,9 @@
     <div class="list people" ng-if="people && item.display.indexOf('people') !== -1">
         <p ng-click="visible.user = !visible.user" class="title">{{ 'tasksAssignedTo' | i18next }}</p>
         <ul ng-if="visible.user">
-            <li data-ng-repeat="user in people | limitTo:3" data-ng-click="switchTo('user', user._id)">
+            <li ng-if="user === people[0] && user.name !== 'no select'"
+                data-ng-repeat="user in people | limitTo:3"
+                data-ng-click="switchTo('user', user._id)">
                 <a href data-ng-link="main.users.details({id: user._id})">
                     <div icu-avatar user="user"></div>
                     <span class="name">{{user.name}}</span>
@@ -200,10 +203,15 @@
                 <li ng-repeat="d in filteringData.discussions | filterRecycled | limitTo: displayLimit['discussions']">
                     <!--<input type="checkbox" ng-model="filteringData.selectedEntities.discussions[d._id]" ng-change="filterSearch()"/>-->
                     <!--{{d.title}}-->
-                    <div class="filteringElement" ng-class="{active: filteringData.selectedEntities.discussions[d._id]}" ng-click="simulateCheckbox(filteringData.selectedEntities.discussions, d._id);filterSearch()">{{d.title}}</div>
+                    <div class="filteringElement"
+                         ng-class="{active: filteringData.selectedEntities.discussions[d._id]}"
+                         ng-click="simulateCheckbox(filteringData.selectedEntities.discussions, d._id);filterSearch()">{{d.title}}</div>
                 </li>
-                <li ng-if="filteringData.discussions.length > displayLimit['discussions']" ng-click="showMore(filteringData.discussions.length, 'discussions')" class="more">{{ 'more' | i18next }}</li>
-                <li ng-if="filteringData.discussions.length == displayLimit['discussions'] && displayLimit['discussions'] > 3" ng-click="collapse('discussions')"
+                <li ng-if="filteringData.discussions.length > displayLimit['discussions']"
+                    ng-click="showMore(filteringData.discussions.length, 'discussions')"
+                    class="more">{{ 'more' | i18next }}</li>
+                <li ng-if="filteringData.discussions.length == displayLimit['discussions'] && displayLimit['discussions'] > 3"
+                    ng-click="collapse('discussions')"
                     class="more">{{ 'less' | i18next }}</li>
             </ul>
         </div>

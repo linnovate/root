@@ -52,6 +52,10 @@
             display: inline-block;
             margin-bottom: 0;
 
+            &:last-of-type {
+                margin-bottom: 5px;
+            }
+
             li {
                 display: flex;
                 justify-content: space-between;
