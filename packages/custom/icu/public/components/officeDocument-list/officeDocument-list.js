@@ -79,6 +79,8 @@ angular.module('mean.icu.ui.officedocumentlist', [])
         };
 
         function navigateToDetails(officeDocument) {
+            if(!officeDocument) return ;
+
             $scope.detailsState = context.entityName === 'all' ?
                 'main.officeDocuments.all.details' : 'main.officeDocuments.byentity.details';
 
@@ -97,23 +99,26 @@ angular.module('mean.icu.ui.officedocumentlist', [])
             EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
             $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
         };
+
+        let possibleNavigate = $scope.officeDocuments.filter(function(t) {
+            return t.recycled == null ; 
+        })
     
-        if ($scope.officeDocuments.length ) {
+        if (possibleNavigate.length) {            
             if ($state.current.name === 'main.officeDocuments.all' ||
                 $state.current.name === 'main.officeDocuments.byentity' ||
                 $state.current.name === 'main.officeDocuments.all.details.activities'||
                 $state.current.name === 'main.officeDocuments.byentity.details.activities') {
                 var date = new Date();
-                var lastIndex = $scope.officeDocuments.length-1;
-                var diff = date.getTime()-$scope.officeDocuments[lastIndex].created.getTime();
-                if($scope.officeDocuments[lastIndex].title=="" 
+                var lastIndex = possibleNavigate.length-1;
+                var diff = date.getTime()-possibleNavigate[lastIndex].created.getTime();
+                if(possibleNavigate[lastIndex].title=="" 
                 &&  diff<=2500){
-                    navigateToDetails($scope.officeDocuments[lastIndex]);
+                    navigateToDetails(possibleNavigate[lastIndex]);
                 }
                 else{
-                    navigateToDetails($scope.officeDocuments[0]);
-                }
-                    
+                    navigateToDetails(possibleNavigate[0]);
+                }                    
             }
         }
         else {

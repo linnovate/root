@@ -89,6 +89,8 @@ module.exports = function(Icu, app) {
   .patch(recycle.recycleEntity);
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/recycle_restore')
   .patch(recycle.recycleRestoreEntity);
+  app.route('/api/:entity(all|tasks|discussions|projects|offices|folders|officeDocuments)/get_recycle_bin')
+  .get(recycle.recycleGetBin);
 
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/star')

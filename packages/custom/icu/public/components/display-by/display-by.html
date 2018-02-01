@@ -248,8 +248,9 @@
             </div>
         </p>
         <ul ng-if="!visible.folder && folderList.length !== 0">
-                <li data-ng-repeat="folder in foldersList | filterRecycled | limitTo: 100 | filter: myFilter" data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
-                data-ng-click="switchTo('folder', folder._id)" ng-if="folder._id && folder.title && folder.office.title">
+                <li data-ng-repeat="folder in foldersList | filterRecycled | limitTo: 100 | filter: myFilter"
+                    data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
+                    data-ng-click="switchTo('folder', folder._id)" ng-if="folder._id && folder.title && folder.office.title">
                 <a href class="Names-In-List-On-Side">
                     {{folder.title}}
                 </a>

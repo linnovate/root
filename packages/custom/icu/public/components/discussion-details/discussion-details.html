@@ -103,12 +103,17 @@
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
                     <li>
+                        <a href="#" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="recycle(discussion)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span id="deleteDiscussion" >{{ 'recycleDiscussion' | i18next}}</span>
+                        </a>
+                    </li>                    
+                    <!-- <li>
                         <a href="#" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="deleteDiscussion(discussion)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span id="deleteDiscussion" >{{ 'deleteDiscussion' | i18next}}</span>
                         </a>
-
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             

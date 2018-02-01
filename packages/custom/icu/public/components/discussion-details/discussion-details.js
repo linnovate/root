@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          people,
                                                          DiscussionsService,
                                                          ActivitiesService, 
+                                                         EntityService,
                                                          $stateParams) {
         $scope.isLoading = true;
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("discussions")))
@@ -360,6 +361,23 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.star = function (discussion) {
             DiscussionsService.star(discussion).then(function () {
                 navigateToDetails(discussion);
+            });
+        };
+
+
+        $scope.recycle = function(entity) {            
+            console.log("$scope.recycle") ;
+            EntityService.recycle('discussions', entity._id).then(function() {
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "Recycled" // just for activity status
+                DiscussionsService.updateStatus(clonedEntity, entity).then(function(result) {                    
+                    ActivitiesService.data.push(result);
+                });
+    
+                $state.go('main.discussions.all', {
+                    entity: 'all'
+                }, {reload: true});
+
             });
         };
 

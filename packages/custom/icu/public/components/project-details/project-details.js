@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       $state,
                                                       ProjectsService,
                                                       ActivitiesService,
+                                                      EntityService,
                                                       $stateParams) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("projects")))
         {
@@ -134,6 +135,23 @@ angular.module('mean.icu.ui.projectdetails', [])
                 });
             }
         };
+
+        $scope.recycle = function(entity) {            
+            console.log("$scope.recycle") ;
+            EntityService.recycle('projects', entity._id).then(function() {
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "Recycled" // just for activity status
+                ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {                    
+                    ActivitiesService.data.push(result);
+                });
+    
+                $state.go('main.projects.all', {
+                    entity: 'all'
+                }, {reload: true});
+
+            });
+        };
+
 
         $scope.deleteProject = function (project) {
             ProjectsService.remove(project._id).then(function () {

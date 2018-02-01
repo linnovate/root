@@ -80,6 +80,8 @@ angular.module('mean.icu.ui.discussionlist', [])
         };
 
         function navigateToDetails(discussion) {
+            if(!discussion) return ;
+
             $scope.detailsState = context.entityName === 'all' ?
                 'main.discussions.all.details' : 'main.discussions.byentity.details';
 
@@ -99,10 +101,14 @@ angular.module('mean.icu.ui.discussionlist', [])
             $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
         };    
 
-        if ($scope.discussions.length) {
+        let possibleNavigate = $scope.discussions.filter(function(t) {
+            return t.recycled == null ; 
+        })
+            
+        if (possibleNavigate.length) {
             if ($state.current.name === 'main.discussions.all' ||
                 $state.current.name === 'main.discussions.byentity') {
-                navigateToDetails($scope.discussions[0]);
+                navigateToDetails(possibleNavigate[0]);
             }
         } else {
             if ($state.current.name === 'main.discussions.all') {

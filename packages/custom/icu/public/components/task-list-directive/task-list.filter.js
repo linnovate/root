@@ -16,8 +16,9 @@ Date.prototype.getWeek = function()
 }
 
 angular.module('mean.icu.ui.tasklistFilter', [])
-.filter('filterRecycled', function (EntityService) {
+.filter('filterRecycled', function (EntityService,$state) {	
 	return function(entities) {
+		if($state.current.name === "main.search.recycled") return entities ;
 		if (!entities || !(entities instanceof Array)) return entities;
 		var out = []
 		out = entities.filter(function(entity) {

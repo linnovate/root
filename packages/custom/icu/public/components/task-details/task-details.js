@@ -71,6 +71,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         }
 
         if (!$scope.task) {
+            console.log("$scope.task",$scope.task) ;
             $state.go('main.tasks.byentity', {
                 entity: context.entityName,
                 entityId: context.entityId
@@ -218,7 +219,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         function navigateToDetails(task) {
             $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
-
+            console.log('main.tasks.all.details')  ;
             $state.reload('main.tasks');
         }
 
@@ -231,7 +232,20 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.recycle = function(entity) {            
             console.log("$scope.recycle") ;
             EntityService.recycle('tasks', entity._id).then(function() {
-                navigateToDetails(entity);
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "Recycled" // just for activity status
+                TasksService.updateStatus(clonedEntity, entity).then(function(result) {                    
+                    ActivitiesService.data.push(result);
+                });
+    
+                var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                reload: true
+            });
+
             });
         };
 
@@ -398,6 +412,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
 
         $scope.update = function(task, type, proj) {
+            console.log('main.tasks.all.details')  ;
             if (proj && proj !== '') {
                 $scope.createProject(proj, function(result) {
                     task.project = result;
@@ -534,7 +549,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         //         $state.current.name === 'main.tasks.byassign.details')) {
         //     $state.go('.subtasks');
         // }
-
+        console.log('main.tasks.all.details')  ;
         if ($scope.task &&
             ($state.current.name === 'main.tasks.byentity.details' ||
                 $state.current.name === 'main.search.task' ||

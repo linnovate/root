@@ -4,6 +4,13 @@ angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, $stateParams, context, NotifyingService, TasksService, $rootScope, SearchService, $filter, $location, EntityService) {
         $scope.context = context;
+        if ($location.path().split("/").pop() == "recycled") {
+            $scope.recycled = true ;    
+        }
+        else {
+            $scope.recycled = false ;    
+        }
+
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
@@ -251,6 +258,7 @@ directive('icuSidepane', function() {
                 $location.search('type', $scope.filteringData.issue);
             }
             var results = SearchService.results;
+            if (!results || !results.length) return ;
             var filteredByType = [], index;
 
             for (var i = 0; i < $scope.issues.length; i++) {
@@ -341,6 +349,25 @@ directive('icuSidepane', function() {
             $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
         };
 
+        $scope.toggleRecycle = function () {
+            console.log("toggleRecycle...") ;
+            if ($location.path().split("/").pop() == "recycled") {
+                $scope.recycled = true ;    
+            }
+            else {
+                $scope.recycled = false ;    
+            }
+
+            $scope.recycled = !$scope.recycled ;
+    
+            $scope.recycledClass =  $scope.recycled ? "recycled" : '';
+            if($scope.recycled == false) {
+                $state.go('main.search', {reload: true});
+            }
+            else {
+                $state.go('main.search.recycled');
+            }
+        };
 
         $scope.filterSearch = function() {
             $scope.filterSearchByType();
