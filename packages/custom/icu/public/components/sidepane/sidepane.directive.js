@@ -93,12 +93,19 @@ directive('icuSidepane', function() {
             open: $scope.isCurrentState({state: 'discussions'})
         },
         {
+            name: 'Documents',
+            icon: '/icu/assets/img/document-nav.svg',
+            state: 'officeDocuments.all',
+            display: ['folders'],//['new', 'received', 'inProgress'],
+            open: $scope.isCurrentState({state: 'officeDocuments'})
+        },
+        {
             name: 'settings',
             icon: '/icu/assets/img/settings.png',
             state: 'folders.all',
             display: ['offices', 'templateDocs'],
             open: $scope.isCurrentState({state: 'folders'})
-        },
+        }
         // , {
         //     name: 'people',
         //     icon: '/icu/assets/img/people.png',
@@ -106,13 +113,6 @@ directive('icuSidepane', function() {
         //     display: ['projects', 'discussions'],
         //     open: false
         // }
-        {
-            name: 'Documents',
-            icon: '/icu/assets/img/document-nav.svg',
-            state: 'officeDocuments.all',
-            display: ['folders'],//['new', 'received', 'inProgress'],
-            open: $scope.isCurrentState({state: 'officeDocuments'})
-        }
         ];
         $scope.activeTab = $stateParams.activeTab || $scope.items[1];
         $scope.savedTab = $stateParams.activeTab;
