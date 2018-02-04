@@ -96,7 +96,7 @@ directive('icuSidepane', function() {
             name: 'discussions',
             icon: '/icu/assets/img/meeting.png',
             state: 'discussions.all',
-            display: ['projects', 'discussions', 'people'],
+            display: ['projects', 'people'],
             open: $scope.isCurrentState({state: 'discussions'})
         },
         {

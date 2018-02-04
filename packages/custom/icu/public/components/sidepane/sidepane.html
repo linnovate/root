@@ -29,7 +29,7 @@
                         <img ng-src="{{item.icon}}"/>
                     </div>
                     <div class="item-name align-items-center">
-                        <span>{{item.name | i18next | uppercase}}</span>
+                        <span>{{item.name.toLowerCase() | i18next | uppercase}}</span>
                     </div>
                 </div>
             </li>

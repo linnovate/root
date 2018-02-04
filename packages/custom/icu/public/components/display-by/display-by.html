@@ -156,8 +156,9 @@
 
         <!--<p class="intro">{{'display'+context.main+'By' | i18next}}:</p>-->
     </div>
+    
     <div class="list projects" ng-if="projectsList && item.display.indexOf('projects') !== -1 && item.name !== 'search'">
-        <p ng-click="visible.project = !visible.project" class="title">{{ 'tasksInProject' | i18next }}</p>
+        <p ng-click="visible.project = !visible.project" class="title">{{ item.state == "discussions.all" ? "discussionsFromProject" : 'tasksInProject' | i18next }}</p>
         <ul ng-if="visible.project && projectsList.length !== 0">
             <li data-ng-repeat="project in projectsList | filterRecycled | limitTo: displayLimit['projects']" data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
                 data-ng-click="switchTo('project', project._id)" ng-if="project._id && project.title">
@@ -171,9 +172,9 @@
                 class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
-
+    <!-- list discussions in: tasks and projects -->
     <div class="list discussions" ng-if="discussions && item.display.indexOf('discussions') !== -1 && item.name !== 'search'">
-        <p ng-click="visible.discussion = !visible.discussion" class="title">{{ 'tasksFromMeeting' | i18next }}</p>
+        <p ng-click="visible.discussion = !visible.discussion" class="title">{{ item.state == "projects.all" ? 'projectsFromDiscussion' : 'tasksFromMeeting' | i18next }}</p>
         <ul ng-if="visible.discussion && discussions.length !== 0">
             <li data-ng-repeat="discussion in discussions | filterRecycled | limitTo:displayLimit['discussions']"
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
