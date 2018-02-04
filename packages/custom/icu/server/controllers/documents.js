@@ -279,13 +279,14 @@ exports.addSerialTitle = function(req,res,next){
       docOffice = "noOffice";
       unitOffice = "noUnit";
       docFolder = "noFolder";
+      telOffice = "noTel";
     }
   }
   else{
     unitOffice = "noUnit";
     docFolder = "noFolder";
     docOffice = "noOffice";
-    docOffice = "noOffice";
+    telOffice = "noTel";
   }
   var spPath = doc.spPath;
   var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
@@ -321,8 +322,8 @@ exports.addSerialTitle = function(req,res,next){
     'fileUrl':spPath,
     'folder':docFolder,
     'office':docOffice,
-    'tel':telOffice,
-    'unit':unitOffice,
+    'telOffice':telOffice,
+    'unitOffice':unitOffice,
     'coreOptions':coreOptions,
     'creds':creds,
     'fileOptions':fileOptions,

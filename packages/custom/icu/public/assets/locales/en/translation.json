@@ -248,7 +248,7 @@
     "role":"Role",
     "rank":"Rank",
     "fullName": "Full name",
-    "selectSignatures": "Select signatures",
+    "selectSignature": "Select signature",
 
     "st": "st",
     "nd": "nd",

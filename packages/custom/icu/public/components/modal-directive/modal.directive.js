@@ -234,8 +234,8 @@ function distributedCtrl($scope, $state,$uibModalInstance, $filter, officeDocume
     if(officeDocument.sentTo && officeDocument.sentTo.length) {
         OfficeDocumentsService.sentToDocument(officeDocument).then(function(res) {
         // gets the user names, with ids as present in the sentTo field
-        let resWithDate = res.map(r => {
-            let currentSentTo = officeDocument.readBy.filter(rb => { 
+        var resWithDate = res.map(function(r){
+            var currentSentTo = officeDocument.readBy.filter(function(rb){ 
                 return rb.user == r._id }) ;
 
                 if(currentSentTo.length) {

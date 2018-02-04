@@ -251,7 +251,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
 
 
-        let refreshView = function() {
+        var refreshView = function() {
             var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
             TasksService.getWatchedTasks().then(function(result){
                TasksService.watchedTasksArray = result;

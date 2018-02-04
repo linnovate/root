@@ -20,7 +20,7 @@ angular.module('mean.icu.data.searchservice', [])
                 });
             }
             _this.results = _this.filteringResults = results;
-            _this.results.map(d => {d._type=="officedocument" ? d._type="officeDocument" : d })
+            _this.results.map(function(d){return d._type=="officedocument" ? d._type="officeDocument" : d})
             return results;
         });
     }

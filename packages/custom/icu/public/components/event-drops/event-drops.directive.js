@@ -14,8 +14,9 @@ angular.module('mean.icu')
                     .start(new Date(new Date().getTime() - (3600000 * 24 * 7))) // one year ago
                     .end(new Date())
                     .eventLineColor((d, i) => colors[i])
-                    .date(d => new Date(d.created))
-                    .mouseover(showTooltip)
+                    .date(function(d){
+                        return new Date(d.created);
+                    }).mouseover(showTooltip)
                     .mouseout(hideTooltip);
                 d3.select('#chart_placeholder')
                     .datum(data)

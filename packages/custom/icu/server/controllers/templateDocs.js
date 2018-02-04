@@ -80,7 +80,7 @@ exports.createNew = function (req, res, next) {
 exports.sendTemplateList = function (req, res, next) {
   var entity = req.params.entity;
   var entityId = req.params.id;
-  var userId = req.user._iwatchersd;
+  var userId = req.user._id;
   var entities = {
     project: 'Project',
     task: 'Task',
@@ -103,7 +103,7 @@ exports.sendTemplateList = function (req, res, next) {
     if (entity) {
       if (entity.assign) {
         if (entity.assign == userId) {
-          flag = true; watchers
+          flag = true;
         }
       }
       entity.watchers.forEach(function (watcher) {
@@ -137,7 +137,7 @@ function getUsers(users) {
         request.push(new Promise(function (resolve, error) {
           User.findOne({ '_id': u.UserId }).exec(function (err, user) {
             if (!err) {
-              u.UserId = user.username
+              u.UserId = user.username;
               resolve(user);
             }
             else {
@@ -302,6 +302,7 @@ exports.uploadTemplate = function (req, res, next) {
     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"), req.locals.data.body.path.length);
     var fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
     req.locals.data.body.path = config.SPHelper.SPSiteUrl + "/" + config.SPHelper.libraryName + "/" + user + "/" + req.locals.data.body.name;
+    var username=req.user.username;
     var result = fs.readFile("." + path, function (err, result) {
       result = JSON.parse(JSON.stringify(result));
       var coreOptions = {
@@ -343,7 +344,7 @@ exports.uploadTemplate = function (req, res, next) {
           users.push({
             '__metadata': { 'type': 'SP.Sharing.UserRoleAssignment' },
             'Role': 3,
-            'UserId': user,
+            'UserId': username,
             'isCreator': true
           });
           result.watchers.forEach(function (watcher) {

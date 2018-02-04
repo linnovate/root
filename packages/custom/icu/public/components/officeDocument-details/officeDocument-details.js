@@ -398,7 +398,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 
             });
             ActivitiesService.data = ActivitiesService.data || [];
-            let me = $scope.me;
+            var me = $scope.me;
             switch (context.name) {
                 case 'due':
                     OfficeDocumentsService.updateDue(officeDocument, backupEntity).then(function(result) {
