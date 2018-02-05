@@ -276,6 +276,15 @@
             <li ng-if="foldersList.length == displayLimit['folders'] && displayLimit['folders'] > 3" ng-click="collapse('folders')" class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
+    <div class="sidefilters" ng-if="item.name == 'search'">
+            <hr />
+            <div class="filterRecycled">
+                <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">
+                    Show Deleted Items
+                </button>
+        </div>    
+    </div>
+
     </div>
 
 </section>
