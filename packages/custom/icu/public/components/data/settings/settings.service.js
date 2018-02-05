@@ -31,7 +31,7 @@ angular.module('mean.icu.data.settingsservice', [])
     
     function getActiveStatuses(type) {
         configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList[type];
-        var nonActiveStatus = new Set(Object.values(configNonActiveStatus));
+        var nonActiveStatus = new Set(values(configNonActiveStatus));
         var typeStatusLowerCase = statusList[type].map(function (element) {
             return element.toLowerCase();
         });
@@ -46,7 +46,7 @@ angular.module('mean.icu.data.settingsservice', [])
     
     function getNonActiveStatuses(type) {
         configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList[type];
-        var nonActiveStatus = new Set(Object.values(configNonActiveStatus));
+        var nonActiveStatus = new Set(values(configNonActiveStatus));
         var typeStatusLowerCase = statusList[type].map(function (element) {
             return element.toLowerCase();
         });
