@@ -530,9 +530,13 @@
             background-size: 15px 15px;
         }
         .icon-attachment {
-            background: url('/icu/assets/img/icon-attachment.svg') no-repeat center center;
+            background: 0 none;
             height: 17px;
-            background-size: 15px 15px;
+            background-size: 15px 17px;
+            background-color: white;
+            -webkit-mask: url(/icu/assets/img/icon-attachment.svg) no-repeat;
+            mask: url(/icu/assets/img/icon-attachment.svg) no-repeat 100% 100%;
+            -webkit-mask-size: 15px 17px;
         }
         .icon-officeDocument {
             background: url('/icu/assets/img/icon-document.svg') no-repeat center center;
