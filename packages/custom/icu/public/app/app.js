@@ -419,7 +419,7 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($stateParams, results) {
                         return _(results).find(function (r) {
-                            return r._id === $stateParams.id;
+                            return r.entityId === $stateParams.id;
                         });
                     }
                 }

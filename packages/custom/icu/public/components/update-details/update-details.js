@@ -2,6 +2,7 @@
 
 angular.module('mean.icu.ui.attachmentdetails', [])
     .controller('AttachmentDetailsController', function ($scope,
+                                                        $http,
                                                          entity,
                                                          tasks,
                                                          context,
@@ -11,6 +12,7 @@ angular.module('mean.icu.ui.attachmentdetails', [])
         $scope.update = entity || context.entity;
         $scope.tasks = tasks;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
+        $scope.attachment = entity ;
 
         $scope.$watchGroup(['update.description', 'update.title'], function (nVal, oVal) {
             if (nVal !== oVal && oVal) {
@@ -39,6 +41,11 @@ angular.module('mean.icu.ui.attachmentdetails', [])
                 navigateToDetails(update);
             });
         };
+          
+        $scope.viewAttachment = function (document1) { 
+                        return(document1.path + '?view=true') ;      
+
+                        }
 
         $scope.deleteUpdate = function (update) {
             DocumentsService.remove(update._id).then(function () {
