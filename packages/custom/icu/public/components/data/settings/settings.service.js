@@ -19,6 +19,12 @@ angular.module('mean.icu.data.settingsservice', [])
         discussion: ['new', 'scheduled', 'done', 'canceled', 'archived'],
         officedocument: ['new', 'in-progress', 'received', 'done', 'sent']
     };
+
+    function values(obj){
+        Object.keys(obj).map(function(key){
+            return obj[key];
+        });
+    }
     
     var activeStatusConfigured = config.activeStatus && config.activeStatus.nonActiveStatus ? true : false;
     var configNonActiveStatus = config.activeStatus && config.activeStatus.nonActiveStatus ? config.activeStatus.nonActiveStatus : null;
