@@ -4,12 +4,7 @@ angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, $stateParams, context, NotifyingService, TasksService, $rootScope, SearchService, $filter, $location, EntityService) {
         $scope.context = context;
-        if ($location.path().split("/").pop() == "recycled") {
-            $scope.recycled = true ;    
-        }
-        else {
-            $scope.recycled = false ;    
-        }
+        $scope.recycled = $location.path().split("/").pop() === "recycled";
 
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
@@ -20,7 +15,7 @@ directive('icuSidepane', function() {
         //$scope.templateDocs = $scope.templateDocs.data || $scope.templateDocs;
         $scope.people = $scope.people.data || $scope.people;
         $scope.toggleVisibility = function(toggledItem) {
-            var prev = toggledItem.open;
+            let prev = toggledItem.open;
 
             $scope.items.forEach(function(i) {
                 i.open = false;
@@ -49,11 +44,11 @@ directive('icuSidepane', function() {
 
         $scope.isCurrentState = function(item) {
 
-            if ((context.main === 'templateDocs') && (item.display != undefined) && (item.display[1] === 'templateDocs'))
+            if ((context.main === 'templateDocs') && (item.display !== undefined) && (item.display[1] === 'templateDocs'))
             {
                 return true;
             }
-            else if ((context.main === 'offices') && (item.display != undefined) && (item.display[0] === 'offices'))
+            else if ((context.main === 'offices') && (item.display !== undefined) && (item.display[0] === 'offices'))
             {
                 return true;
             }
@@ -72,7 +67,7 @@ directive('icuSidepane', function() {
 
         $scope.GoToMyTasks = function() {
             $state.go('main.tasks.byassign');
-        }
+        };
 
         $scope.items = [{
             name: 'search',
@@ -93,7 +88,7 @@ directive('icuSidepane', function() {
             display: ['discussions', 'people'],
             open: $scope.isCurrentState({state: 'projects'})
         }, {
-            name: 'discussions',
+            name: 'meetings',
             icon: '/icu/assets/img/meeting.png',
             state: 'discussions.all',
             display: ['projects', 'discussions', 'people'],
@@ -124,7 +119,7 @@ directive('icuSidepane', function() {
         $scope.activeTab = $stateParams.activeTab || $scope.items[1];
         $scope.savedTab = $stateParams.activeTab;
 
-        $scope.setActive = function(item, context){
+        $scope.setActive = function(item){
             $scope.activeTab = item;
             $scope.$broadcast('sidepan', item,
                 $scope.context, $scope.folders,
@@ -133,7 +128,7 @@ directive('icuSidepane', function() {
                 $scope.people);
         };
 
-        NotifyingService.subscribe('activeSearch', function (ev) {
+        NotifyingService.subscribe('activeSearch', function () {
             $scope.activeTab = $scope.items[0];
         }, $scope);
 
@@ -148,7 +143,7 @@ directive('icuSidepane', function() {
         ];
 
         $scope.getNavColor = function(item, index){
-            for(var i = 0; i < $scope.items.length ; i++){
+            for(let i = 0; i < $scope.items.length ; i++){
                 if($scope.activeTab.name === item.name){
                     $scope.$broadcast('sidepan', item,
                         $scope.context, $scope.folders,
@@ -205,8 +200,8 @@ directive('icuSidepane', function() {
             }
         };
 
-        var getEntitiesAndWatchers = function(filteredByType) {
-            for (var i=0; i< filteredByType.length; i++) {
+        let getEntitiesAndWatchers = function(filteredByType) {
+            for (let i=0; i< filteredByType.length; i++) {
                 if (filteredByType[i].project)
                     $scope.filteringData.projects.push(filteredByType[i].project);
                 if (filteredByType[i].discussions && filteredByType[i].discussions.length)
@@ -214,9 +209,9 @@ directive('icuSidepane', function() {
                 if (filteredByType[i].folder)
                     $scope.filteringData.folders.push(filteredByType[i].folder);
                 if (filteredByType[i].office)
-                    $scope.filteringData.offices.push(filteredByType[i].office)
+                    $scope.filteringData.offices.push(filteredByType[i].office);
                 if (filteredByType[i].attachment)
-                    $scope.filteringData.attachments.push(filteredByType[i].attachment)
+                    $scope.filteringData.attachments.push(filteredByType[i].attachment);
                 if (filteredByType[i].watchers && filteredByType[i].watchers.length)
                     $scope.filteringData.watchers = $scope.filteringData.watchers.concat(filteredByType[i].watchers)
             }
@@ -247,7 +242,7 @@ directive('icuSidepane', function() {
 
         $state.current.reloadOnSearch = false;
 
-        var issuesOrder = $scope.issues.map(function(i) {
+        let issuesOrder = $scope.issues.map(function(i) {
             return i.name;
         });
 
@@ -257,15 +252,15 @@ directive('icuSidepane', function() {
             } else {
                 $location.search('type', $scope.filteringData.issue);
             }
-            var results = SearchService.results;
+            let results = SearchService.results;
             if (!results || !results.length) return ;
-            var filteredByType = [], index;
+            let filteredByType = [], index;
 
-            for (var i = 0; i < $scope.issues.length; i++) {
+            for (let i = 0; i < $scope.issues.length; i++) {
                 $scope.issues[i].length = 0;
             }
-            for (var i=0; i< results.length; i++) {
-                if (results[i]._type == $scope.filteringData.issue || $scope.filteringData.issue === 'all') {
+            for (let i=0; i< results.length; i++) {
+                if (results[i]._type === $scope.filteringData.issue || $scope.filteringData.issue === 'all') {
                     filteredByType.push(results[i])
                 }
                 index = issuesOrder.indexOf(results[i]._type);
@@ -274,36 +269,28 @@ directive('icuSidepane', function() {
             SearchService.filteringResults = filteredByType;
 
             getEntitiesAndWatchers(filteredByType)
-        }
+        };
 
-        var getTruth = function(obj) { // return truth value in a single object
-            var arr = [];
-            for (var key in obj) {
+        let getTruth = function(obj) { // return truth value in a single object
+            let arr = [];
+            for (let key in obj) {
                 if (obj[key]) {
                     arr.push(key)
                 }
             }
             return arr;
-        }
-
-        $scope.simulateCheckbox = function(obj, value) {
-            if (obj[value]) {
-                obj[value] = false;
-            } else {
-                obj[value] = true;
-            }
-        }
+        };
 
         $scope.filterSearchByEntity = function() {
-            var filteringResults = SearchService.filteringResults
-            var projects = getTruth($scope.filteringData.selectedEntities.projects);
-            var discussions = getTruth($scope.filteringData.selectedEntities.discussions);
-            var folders = getTruth($scope.filteringData.selectedEntities.folders);
-            var offices = getTruth($scope.filteringData.selectedEntities.offices);
+            let filteringResults = SearchService.filteringResults;
+            let projects = getTruth($scope.filteringData.selectedEntities.projects);
+            let discussions = getTruth($scope.filteringData.selectedEntities.discussions);
+            let folders = getTruth($scope.filteringData.selectedEntities.folders);
+            let offices = getTruth($scope.filteringData.selectedEntities.offices);
             if (!projects.length && !discussions.length && !folders.length && !offices.length)
                 return;
-            var filteredByEntity = [];
-            for (var i=0; i< filteringResults.length; i++) {
+            let filteredByEntity = [];
+            for (let i=0; i< filteringResults.length; i++) {
                 if (filteringResults[i].project && projects.indexOf(filteringResults[i].project) > -1 ||
                     filteringResults[i].folder && folders.indexOf(filteringResults[i].folder) > -1 ||
                     filteringResults[i].office && offices.indexOf(filteringResults[i].office) > -1)
@@ -312,26 +299,26 @@ directive('icuSidepane', function() {
                     filteredByEntity.push(filteringResults[i]);
             }
             SearchService.filteringResults = filteredByEntity;
-        }
+        };
 
         $scope.filterSearchByWatcher = function() {
-            var filteringResults = SearchService.filteringResults
-            var watchers = getTruth($scope.filteringData.selectedWatchers);
+            let filteringResults = SearchService.filteringResults;
+            let watchers = getTruth($scope.filteringData.selectedWatchers);
             if (!watchers.length) return;
-            var filteredByWatchers = [];
-            for (var i=0; i< filteringResults.length; i++) {
+            let filteredByWatchers = [];
+            for (let i=0; i< filteringResults.length; i++) {
                 if (_.intersection(filteringResults[i].watchers, watchers).length)
                     filteredByWatchers.push(filteringResults[i]);
             }
             SearchService.filteringResults = filteredByWatchers;
-        }
+        };
 
 
         ////******* */
         $scope.updatedOptions = {
-                    onClose: (value, picker, $element) => {
+                    onClose: (value/*, picker, $element*/) => {
 //                        console.log("on close", value, picker, $element) ;
-                        let splut = value.split('.') ;
+                        let splut = value.split('.');
                         let valueChanged = new Date(splut[2],splut[1] -1 ,splut[0]) ;
                         $scope.updatedDate = new Date(value) ;
                         document.getElementById('ui-datepicker-div').style.display = 'block';
@@ -351,17 +338,12 @@ directive('icuSidepane', function() {
 
         $scope.toggleRecycle = function () {
             console.log("toggleRecycle...") ;
-            if ($location.path().split("/").pop() == "recycled") {
-                $scope.recycled = true ;    
-            }
-            else {
-                $scope.recycled = false ;    
-            }
+            $scope.recycled = $location.path().split("/").pop() === "recycled";
 
             $scope.recycled = !$scope.recycled ;
-    
+
             $scope.recycledClass =  $scope.recycled ? "recycled" : '';
-            if($scope.recycled == false) {
+            if($scope.recycled === false) {
                 $state.go('main.search', {reload: true});
             }
             else {
@@ -373,7 +355,7 @@ directive('icuSidepane', function() {
             $scope.filterSearchByType();
             $scope.filterSearchByEntity();
             $scope.filterSearchByWatcher();
-        }
+        };
 
         $scope.resetFilter = function() {
             $scope.filteringData.selectedEntities = {
@@ -384,24 +366,11 @@ directive('icuSidepane', function() {
                 offices: {}
             };
             $scope.filteringData.selectedWatchers = {};
-        }
-
-        $scope.showMore = function(limit, entityName) {
-            if (($scope.displayLimit[entityName] + 3) >= limit) {
-                $scope.displayLimit[entityName] = limit;
-            } else {
-                $scope.displayLimit[entityName]  += 3;
-
-            }
-        };
-
-        $scope.collapse = function(entityName) {
-            $scope.displayLimit[entityName] = 3;
         };
 
         $scope.closeSearch = function(){
             $state.go('main.tasks')
-        }
+        };
 
         $rootScope.$on('$stateChangeSuccess', function (event, toState) {
             if (toState.name.indexOf('search') > -1) {
@@ -426,7 +395,14 @@ directive('icuSidepane', function() {
             templateDocs: '=',
             currentState: '@',
             changeLayout: '=',
-            getSideMenuIcon: '='
+            getSideMenuIcon: '=',
+            filterSearchByType: '=',
+            filterSearchByEntity: '=',
+            filterSearchByWatcher: '=',
+            filterSearch: '=',
+            filteringData: '=',
+            resetFilter: '=',
+            getEntitiesAndWatchers: '=',
         }
     };
 });
