@@ -178,10 +178,10 @@ exports.signOnDocx = function(req,res,next){
   var doc = req.body.document;
   var signature = JSON.parse(req.body.signature);
   var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
-  //var spPath = doc.spPath;
-  //var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
-  var spPath = " hi";
-  var fileName="Hi";
+  var spPath = doc.spPath?doc.spPath:"spPath";
+  var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
+  fileName=fileName?fileName:"hi";
+
   
   var coreOptions = {
     "siteUrl":config.SPHelper.SPSiteUrl

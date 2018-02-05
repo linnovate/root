@@ -215,7 +215,7 @@ exports.update = function (req, res, next) {
         }, {
           $push: { watchers: req.body.watcherId }
         }, { multi: true }).exec(function () {
-          if(config.isWorking){
+          if(config.SPHelper.isWorking){
           updateAllTemplates(req.body._id, req.body.watcherId, req.body.watcherAction).then(function (result) {
           
           });
@@ -236,7 +236,7 @@ exports.update = function (req, res, next) {
         }, {
           $pull: { watchers: req.body.watcherId }
         }, { multi: true }).exec(function(){
-          if(config.isWorking){
+          if(config.SPHelper.isWorking){
             
           updateAllTemplates(req.body._id, req.body.watcherId, req.body.watcherAction).then(function (result) {
             

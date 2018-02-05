@@ -19,13 +19,19 @@ angular.module('mean.icu.data.settingsservice', [])
         discussion: ['new', 'scheduled', 'done', 'canceled', 'archived'],
         officedocument: ['new', 'in-progress', 'received', 'done', 'sent']
     };
+
+    function values(obj){
+        Object.keys(obj).map(function(key){
+            return obj[key];
+        });
+    }
     
     var activeStatusConfigured = config.activeStatus && config.activeStatus.nonActiveStatus ? true : false;
     var configNonActiveStatus = config.activeStatus && config.activeStatus.nonActiveStatus ? config.activeStatus.nonActiveStatus : null;
     
     function getActiveStatuses(type) {
         configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList[type];
-        var nonActiveStatus = new Set(Object.values(configNonActiveStatus));
+        var nonActiveStatus = new Set(values(configNonActiveStatus));
         var typeStatusLowerCase = statusList[type].map(function (element) {
             return element.toLowerCase();
         });
@@ -40,7 +46,7 @@ angular.module('mean.icu.data.settingsservice', [])
     
     function getNonActiveStatuses(type) {
         configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList[type];
-        var nonActiveStatus = new Set(Object.values(configNonActiveStatus));
+        var nonActiveStatus = new Set(values(configNonActiveStatus));
         var typeStatusLowerCase = statusList[type].map(function (element) {
             return element.toLowerCase();
         });
