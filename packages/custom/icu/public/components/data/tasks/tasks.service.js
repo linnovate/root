@@ -172,7 +172,6 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function saveTemplate(id, name){
-        console.log('ddddddddddd', name);
         return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;

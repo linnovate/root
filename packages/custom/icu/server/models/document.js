@@ -11,6 +11,9 @@ var DocumentSchema = new Schema({
   updated: {
     type: Date
   },
+  recycled: {
+    type: Date,
+  },  
   title: {
     type: String
   },

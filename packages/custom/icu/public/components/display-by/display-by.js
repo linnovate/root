@@ -3,6 +3,19 @@
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
     function controller($scope, $state, context, $stateParams, $window) {
+
+        $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
+            $scope.item = item;
+            $scope.context = context;
+            $scope.folders = folders;
+            $scope.offices = offices;
+            $scope.projects = projects;
+            $scope.discussions = discussions;
+            $scope.officeDocuments = officeDocuments;
+            $scope.people = people;
+        });
+
+
         $scope.projectsList = [];
         $scope.projects.forEach(function(project) {
                    if(project.title)
@@ -20,7 +33,7 @@ angular.module('mean.icu.ui.displayby', [])
             if(folder.title)
                 $scope.foldersList.push(folder);
             });
-        
+
         $scope.officeDocumentsList = [];
         $scope.officeDocuments.forEach(function(officeDocument) {
             if(officeDocument.title)
@@ -32,7 +45,7 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.officesList.office = $scope.officesList[0];
         }
 
-        $scope.myFilter = function (item) { 
+        $scope.myFilter = function (item) {
             if(item.office.title && $scope.officesList.office.title)
             {
                 return item.office.title === $scope.officesList.office.title;
@@ -41,8 +54,9 @@ angular.module('mean.icu.ui.displayby', [])
             {
                 return false;
             }
-            
+
         };
+
 
         //$scope.temp = {};
         $scope.changeOrder = function () {
@@ -51,17 +65,17 @@ angular.module('mean.icu.ui.displayby', [])
             // if($scope.officesList.office.title != "custom"){
             //     $scope.sorting.isReverse = !$scope.sorting.isReverse;
             // }
-            
+
             /*Made By OHAD - Needed for reversing sort*/
             //$state.go($state.current.name, { sort: $scope.officesList.office.title });
         };
-        
+
         $scope.typesList = [{
             name: 'new',
              color:'ff4081'
         },{
             name:  'received',
-            color:'37afef' 
+            color:'37afef'
         }
         //,{
         //    name:  'in-progress',
@@ -108,17 +122,17 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.context = context;
 
         $scope.displayLimit = {
-            projects : 3,
-            discussions : 3,
-            offices: 3,
-            folders: 3,
-            officeDocuments:3,
+            projects : 4,
+            discussions : 4,
+            offices: 4,
+            folders: 4,
+            officeDocuments:4,
             reset : function() {
-                this.projects = 3;
-                this.discussions = 3;
-                this.offices = 3;
-                this.folders = 3;
-                this.officeDocuments = 3;
+                this.projects = 4;
+                this.discussions = 4;
+                this.offices = 4;
+                this.folders = 4;
+                this.officeDocuments = 4;
             }
         };
 
@@ -136,10 +150,12 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.switchToType= function(type){
 
             $scope.typeSelected = type.name;
-            
+
             if(context.entityName=='folder'){
                 $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
-                    return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+                    return officeDocument.status == type.name
+                        && officeDocument.folder
+                        && officeDocument.folder._id == context.entityId ;
                 });
 
             }else{
@@ -149,12 +165,15 @@ angular.module('mean.icu.ui.displayby', [])
                 });
 
             }
-        
+
             localStorage.setItem("type", type.name);
 
-            $state.go($state.current, {officeDocuments:$scope.officeDocuments}, {reload: true})
-           
-            
+            $state.go($state.current, {
+                officeDocuments: $scope.officeDocuments,
+                activeTab: $scope.item
+            }, {reload: true});
+
+
             // var temp=[];
             // debugger;
             // $scope.officeDocuments.forEach(function(d){
@@ -166,17 +185,17 @@ angular.module('mean.icu.ui.displayby', [])
             //     }
             //     else{
             //         return officeDocument.status == type.name;
-            //     }      
+            //     }
             // });
             // if(temp.length==0){
             //     $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
             // }
             // else{
             //     $state.go($state.current,{'officeDocuments':temp});
-                
+
             // }
 
-            /** 
+            /**
             var temp=[];
             $scope.officeDocuments.forEach(function(d){
                 temp.push(d);
@@ -188,7 +207,7 @@ angular.module('mean.icu.ui.displayby', [])
                 else{
                     return officeDocument.status == type.name;
                 }
-                   
+
             });
 
 
@@ -201,7 +220,7 @@ angular.module('mean.icu.ui.displayby', [])
                     officeDocuments: temp
                 },{reload: true});
             }*/
-            
+
 
         };
         $scope.switchTo = function(entityName, id) {
@@ -224,12 +243,12 @@ angular.module('mean.icu.ui.displayby', [])
         }
 
         $scope.visible = {
-            project: false,
-            discussion: false,
-            user: false,
-            officeDocument: false,
-            office: false,
-            folder: false
+            project: true,
+            discussion: true,
+            user: true,
+            officeDocument: true,
+            office: true,
+            folder: true
         };
 
         $scope.visible[$scope.context.entityName] = true;
@@ -249,31 +268,21 @@ angular.module('mean.icu.ui.displayby', [])
 
         function link($scope, $element, context) {
             $scope.showMore = function(limit, entityName) {
-                if (($scope.displayLimit[entityName] + 3) >= limit) {
+                if (($scope.displayLimit[entityName] + 4) >= limit) {
                     $scope.displayLimit[entityName] = limit;
                 } else {
-                    $scope.displayLimit[entityName]  += 3;
+                    $scope.displayLimit[entityName]  += 4;
 
                 }
             };
 
             $scope.collapse = function(entityName) {
-                $scope.displayLimit[entityName] = 3;
+                $scope.displayLimit[entityName] = 4;
             };
         }
 
     return {
         restrict: 'A',
-        scope: {
-            projects: '=',
-            discussions: '=',
-            people: '=',
-            icuDisplayBy: '=',
-            officeDocuments: '=',
-            offices: '=',
-            folders: '=',
-            me: '='
-        },
         templateUrl: '/icu/components/display-by/display-by.html',
         controller: controller,
         link: link

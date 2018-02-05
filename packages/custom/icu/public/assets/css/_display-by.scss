@@ -7,20 +7,18 @@
     }
 
     .title {
-        margin: 0;
-        margin-top: 10px;
         color: white;
-        margin-bottom: 10px;
-
-        font-size: 17px;
+        margin-bottom: 0;
+        font-size: 12px;
         font-weight: 700;
-        line-height: 26px;
-
+        line-height: 16px;
+        padding: 20px;
+        padding-left: 10px;
         cursor: pointer;
     }
 
-    .all, .my {
-        padding-left: 20px;
+    .all > p, .my > p {
+        padding-left: 0;
 
         &.selected:before {
             display: inline-block;
@@ -37,24 +35,48 @@
         }
     }
 
+    #searchNav {
+        width: 233px;
+        color: #fff;
+        cursor: pointer;
+    }
+
     .list {
-        padding-left: 20px;
+        padding-left: 10px;
         color: white;
+        border-bottom: 1px solid #424e52;
 
         ul {
             list-style: none;
             padding-left: 0;
-            padding-bottom: 20px;
+            display: inline-block;
+            margin-bottom: 0;
+
+            &:last-of-type {
+                margin-bottom: 5px;
+            }
 
             li {
-                    display: flex;
-   	                justify-content: space-between;
+                display: flex;
+                justify-content: space-between;
+                padding: 1.5px 10px;
+                position: relative;
+                width: 185px;
+                &last-of-type {
+                    margin-bottom: 10px;
+                }
+
                 a {
-                    text-decoration: none;
-                    cursor: pointer;
-                    color: #DDEAF0;
+                    padding: 6px 0;
                     font-size: 13px;
-                    line-height: 26px;
+                    max-width: 165px;
+                    line-height: 18px;
+                    color: #DDEAF0;
+                    cursor: pointer;
+                    display: inherit;
+                    position: relative;
+                    word-break: break-all;
+                    text-decoration: none;
                 }
 
                 &.selected {
@@ -71,6 +93,11 @@
                         border-right: 5px solid transparent;
                         border-top: 5px solid transparent;
                         border-bottom: 5px solid transparent;
+
+                        position: absolute;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        -webkit-transform: translateY(-50%);
                     }
                 }
             }
@@ -85,8 +112,8 @@
                 li {
                     .tag-color {
                         @include tag(5px);
-                        float: right;
-                        margin-right: 23px;
+                        position: absolute;
+                        left: 109%;
                     }
                 }
             }
@@ -97,8 +124,8 @@
                 li {
                     .tag-color {
                         @include tag(5px);
-                        float: right;
-                        margin-right: 23px;
+                        position: absolute;
+                        left: 109%;
                     }
                 }
             }
@@ -109,8 +136,8 @@
                 li {
                     .tag-color {
                         @include tag(5px);
-                        float: right;
-                        margin-right: 23px;
+                        position: absolute;
+                        left: 109%;
                     }
                 }
             }
@@ -121,8 +148,8 @@
                 li {
                     .tag-color {
                         @include tag(5px);
-                        float: right;
-                        margin-right: 23px;
+                        position: absolute;
+                        left: 109%;
                     }
                 }
             }
@@ -198,18 +225,20 @@
                 background-color: black;
                 position: inherit;
             }
-        
+
         }
 
         &.people {
             ul {
                 li {
-                    margin: 5px 0;
+                    margin: 0;
                     float: left;
+                    padding: 0 10px;
                     width: 100%;
                 }
                 a {
                     width: 100%;
+                    padding: 0;
                 }
             }
 
@@ -217,7 +246,6 @@
                 float: left;
                 @include circle(17px);
                 border: 1px solid black;
-                background-color: $green;
                 font-size: 20px;
                 margin: 0;
             }
@@ -235,20 +263,31 @@
 
         .go-to-Offices {
             border-top: 1px solid #424e52;
-        }      
+        }
     }
+
 
     .more {
         padding: 5px 0;
         color: $orange;
+        cursor: pointer;
+        margin-bottom: 15px;
         &:hover{
            text-decoration: underline;
         }
     }
 }
 
+div.all, div.my {
+    border-bottom: 1px solid #424e52;
+    padding-left: 20px;
+}
 a.Names-In-List-On-Side{
     &:hover{
         color: #FFB435 !important;
     }
+}
+
+p {
+    margin: 0;
 }

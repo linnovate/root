@@ -11,6 +11,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                                                       OfficeDocumentsService,
                                                       ActivitiesService, 
                                                       SignaturesService,
+                                                      EntityService,
                                                       $stateParams,
                                                     $timeout,$http) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments")))
@@ -331,6 +332,23 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 }, {reload: true});
             });
         };
+
+        $scope.recycle = function(entity) {            
+            console.log("$scope.recycle") ;
+            EntityService.recycle('officeDocuments', entity._id).then(function() {
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "Recycled" // just for activity status
+                OfficeDocumentsService.updateStatus(clonedEntity, entity).then(function(result) {                    
+                    ActivitiesService.data.push(result);
+                });
+    
+                $state.go('main.officeDocuments.all', {
+                    entity: 'all'
+                }, {reload: true});
+
+            });
+        };
+
 
         $scope.deleteDocumentFile = function(officeDocument){
             OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function(){

@@ -307,7 +307,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     border-bottom: 3px solid $light-grey1;
     background-color: #F6F6F6;
 
-    .favorite, .due, .status, .tags, .color, .location , .HI , .send, .receive {
+    .favorite, .deletebtn, .due, .status, .tags, .color, .location , .HI , .send, .receive {
         height: $panel-height;
         float: left;
         position: relative;
@@ -413,7 +413,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
 
 
-    .favorite, .user, .due, .location , .HI, .send, .receive {
+    .favorite, .user, .deletebtn, .due, .location , .HI, .send, .receive {
         border-right: 1px solid $light-grey1;
     }
 
@@ -485,7 +485,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
     }
 
-    .due, .status, .tags, .location,{
+    .deletebtn, .due, .status, .tags, .location,{
         width: calc((100% - #{$panel-height}) * 0.19);
 
         .summary-content {
@@ -549,6 +549,22 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             background-position: left center;
         }
     }
+
+    .deletebtn {
+        width: 47px;
+        font-size: 1.4em;
+
+        button {
+            background-color: transparent;
+            background: url(/icu/assets/img/delete.png) no-repeat center;
+
+            border: none;
+            width: 100%;
+            height: 100%;
+         }
+
+    }
+
 
     .favorite {
         width: 47px;

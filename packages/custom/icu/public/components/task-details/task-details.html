@@ -14,6 +14,12 @@
                 </button>
             </div>
     
+            <!-- <div class="deletebtn">
+                <button class="dbtn" ng-class="recycle" ng-click="recycle(task)">
+                    <i tooltips tooltip-template="{{'delete' | i18next}}"></i>
+                </button>
+            </div> -->
+    
             <div class="user">
                 <div class="no-assignee" ng-if="!task.assign">
                     <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
@@ -63,11 +69,17 @@
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
                     <li>
+                        <a href="#" ng-click="recycle(task)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span>{{ 'recycleTask' | i18next }}</span>
+                        </a>
+                    </li>        
+                    <!-- <li>
                         <a href="#" ng-click="deleteTask(task)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span>{{ 'deleteTask' | i18next }}</span>
                         </a>
-                    </li>
+                    </li> -->
                     <li ng-if="task.parent">
                         <a href="#" ng-click="statusType()">
                             <i class="flag"></i>

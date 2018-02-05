@@ -3,10 +3,11 @@
 angular.module('mean.icu.data.searchservice', [])
 .service('SearchService', function($http, ApiUri, WarningsService) {
 
-	var  builtInSearchArray = false;
+	var builtInSearchArray = false;
     var filteringData = [];
     var results = []
     var filteringResults = [];
+    let filteringByUpdated = null ;
 
     function find(query) {
         var _this = this;
@@ -29,7 +30,8 @@ angular.module('mean.icu.data.searchservice', [])
         find: find,
         builtInSearchArray: builtInSearchArray,
         filteringData: filteringData,
-        filteringResults: filteringResults
+        filteringResults: filteringResults,
+        filteringByUpdated: filteringByUpdated,
     };
 });
 

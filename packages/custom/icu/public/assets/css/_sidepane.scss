@@ -1,16 +1,177 @@
 .sidepane {
-    display: block;
     box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
-
-    position: fixed;
     width: $sidepane-width;
     left: 0;
     top: 0;
-    // height: 100vh;
-    //height: 963px;
-
-    background-color: $grey;
+    background-color: $dark-grey;
     min-width: $sidepane-width;
+    .sidefilters {
+        .filterRecycled {
+            @include button;
+            margin-left: 23px;
+            height: 40px;
+
+            .recycled {
+                color: red;                
+                box-shadow: 0px 0px 0px 2px #FFB435;
+                transition: 0.8s;                   
+            }
+
+            button {
+                color: wheat ;
+                appearance: none;
+                border: none;
+                float: left;
+                margin-left: 30px;
+                margin-bottom: 10px;
+                cursor: pointer;
+                outline: none;
+                background-position: left center;
+
+                background-color: transparent;                
+                width: auto;
+                height: auto;
+
+                border-radius: 13px;
+                outline: none;
+                margin: 0 8px;
+                border: 1px solid #c3bfbf;
+
+                &:hover{
+                     box-shadow: 0px 0px 0px 2px #FFB435;
+                     transition: 0.8s;
+                } 
+
+            }
+        }
+
+        .filterUpdated,  {
+            .placeholder {
+                position: absolute;
+                top: 50%;
+                transform: translateX(80%) translateY(-50%);
+                color: $light-grey-placeholder;
+                margin-right: 5px;
+                //padding-left: 5px;
+            }
+
+            input {
+                color: wheat;
+                appearance: none;
+                border: none;
+                float: left;
+                width: calc(100% - 10px);
+                margin-left: 30px;
+                margin-bottom: 10px;
+                padding-left: 25px;
+                background: url(/icu/assets/img/calendar.png) no-repeat scroll;
+                cursor: pointer;
+                outline: none;
+                background-position: left center;
+            }
+        }
+
+        .ui-select-container .ui-select-choices-row .ui-select-choices-row-inner {
+            display: flex;
+            align-items: center;
+        }
+
+        .left-wrapper {
+            float: left;
+
+            tooltip {
+                display: block;
+            }
+            tip {
+                position: relative;
+                top: -30px;
+                right: inherit;
+            }
+        }
+        .print-wrapper {
+            float: right;
+        }
+
+        .right-wrapper {
+            float: right;
+        }
+
+        .favorites, .tasks {
+            @include ellipse(13px);
+            @include button;
+
+            margin: 0 5px;
+            background-color: white;
+            border: 1px solid #c3bfbf;
+        }
+
+        .select-wrapper {
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
+            margin-left: 25px;
+
+            tooltip {
+                display: block;
+                position: relative;
+            }
+            tip {
+                position: absolute;
+                top: -15px;
+                left: inherit;
+                right: -40%;
+            }
+
+            .ui-select-match {
+                background-color: transparent;
+                box-shadow: none;
+                outline: none;
+                display: block !important;
+                span.ui-select-toggle {
+                    background-color: transparent;
+                    border: none;
+                    box-shadow: none;
+                    padding: 0;
+                    .caret {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .tasks {
+            width: 92px;
+            height: 26px;
+            padding-left: 0;
+            background: url('/icu/assets/img/status.png') no-repeat 15% center;
+            background-position: left 10% center;
+
+            &:hover {
+                box-shadow: 0px 0px 0px 2px #FFB435;
+                transition: 0.8s;
+            }
+        }
+
+        .active-status {
+            width: 100px;
+            color: wheat;
+        }
+
+        .list, {
+            @include button;
+            margin: -2px;
+            padding: 0;
+            height: 26px;
+            width: 37px;
+            border: 1px solid $light-grey1;
+            border-top-left-radius: 13px;
+            border-bottom-left-radius: 13px;
+            border-color: $dark-grey;
+            background: url('/icu/assets/img/list.png') no-repeat center center;
+            background-color: $dark-grey;
+        }
+    }
+
 
     header {
         display: table-cell;
@@ -21,31 +182,89 @@
         color: white;
         font-size: 23px;
         text-align: center;
-
+        line-height: 28px;
+        border-bottom: 1px solid $border;
+        .header-title
+        {
+            padding-top: 16px;
+            line-height: 27px;
+            font-size: 20px;
+        }
+        .header-button
+        {
+            width:85px;
+            height: 55px;
+            float:left;
+            .hide-butt
+            {
+                background-color: #141D20;
+                background-repeat: no-repeat;
+                height: 55px;
+                width: 55px;
+                border:none;
+                background-repeat: no-repeat;
+                background-position: center center;
+            }
+        }
         .sidepane-title
         {
-            cursor: pointer
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: -10px;
+        }
+        .hide-button
+        {
+            float: left;
+            height: 56px;
+            width: 56px;
+            background-color: white;
+            border: 1px solid #e1e1e1;
+            background-repeat: no-repeat;
+            background-position: center center;
+            margin-left: 6px;
         }
     }
-
+    .sideMenu {
+        height: calc(100% - 56px);
+        display: flex;
+        flex-direction:row;
+    }
     nav {
+        width: 85px;
         color: white;
         overflow: auto;
         height: calc(100% - 60px);
-         &::-webkit-scrollbar {
-                width: 5px;
-            }
-             
-            &::-webkit-scrollbar-track {
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
-                border-radius: 10px;
-            }
-             
-            &::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                background-color: white;
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-            }
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+
+        .pinkTab {
+            background-color:#C248AE;
+        }
+        .blueTab {
+            background-color:#00AEEF;
+        }
+        .yellowTab {
+            background-color:#FFA000;
+        }
+        .greenTab {
+            background-color:#2AB541;
+        }
+        .purpleTab {
+            background-color:#662D91;
+        }
+        .darkBlueTab {
+            background-color:#2E3192;
+        }
+        .redTab {
+            background-color:#D43D3D;
+        }
+
         & > ul {
             list-style: none;
             padding-left: 0;
@@ -56,10 +275,8 @@
             position: relative;
             margin-bottom: 0;
             &:before {
-                box-shadow: -2px 0px 14px 1px rgba(0, 0, 0, 0.73);
                 pointer-events: none;
                 position: absolute;
-                top: 0px;
                 bottom: 0;
                 right: 0;
                 content: "";
@@ -68,46 +285,47 @@
             }
             & > li {
                 cursor: pointer;
-                width: 100%;
-                transition: all .5s;
+                width: 85px;
+                border-bottom: 1px solid $border;
                 &.active {
-                        background-color: #313C40;
-                        .arrow {
-                            box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
-                        }
-                        flex-grow: 1;
-                        .menu-item {
-                            background-color: #37464B;
-                        }
+                    background-color: #313C40;
+                    .arrow {
+                        box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
                     }
+                    flex-grow: 1;
+                    .menu-item {
+                        background-color: #141D20;
+                    }
+                }
                 &:hover{
                     background-color: #37464B;
                 }
 
                 .menu-item {
-                    height: 59px;
-
-                    
-
+                    height: 115px;
+                    width: 85px;
                     .icon {
-                        width: 57px;
-                        height: $header-height;
-                        float: left;
-                        padding: 18px;
+                        width: 100%;
+                        height: 28px;
+                        margin: 30px auto 4px auto;
+                        text-align: center;
+                        vertical-align: middle;
+                        float:none;
+                        display: inline-block;
+
                     }
 
                     .item-name {
-                        position: relative;
-                        width: calc(100% - (#{$header-height} + #{$sidepane-width - $header-height}* 0.2 + 5px));
+                        width: 100%;
                         height: $header-height;
+                        text-align: center;
+                        position: relative;
+                        margin:0 auto 0 auto;
                         display: inline-block;
-
                         span {
-                            position: absolute;
-                            left: 0;
-                            top: 51%;
-                            transform: translate(0, -50%);
-                            font-size: 18px;
+                            line-height: 18px;
+                            font-size: 13px;
+                            font-weight: bold;
                         }
                     }
 
@@ -165,6 +383,11 @@
             }
         }
     }
+    .submenu {
+        height: 100%;
+        width:calc(100% - 86px);
+        background-color: $grey;
+    }
     .searchPane {
         height: auto;
         overflow: hidden;
@@ -200,6 +423,7 @@
         }
         .filterBy {
             margin-top: 26px;
+            margin-left: 16px;
             font-weight: bold;
             color: #5d6c72;
             button {
@@ -272,11 +496,11 @@
             font-weight: bold;
         }
         .arrow-left {
-            width: 0; 
-            height: 0; 
+            width: 0;
+            height: 0;
             border-top: 5px solid transparent;
-            border-bottom: 5px solid transparent; 
-            border-left:4px solid #ffa000; 
+            border-bottom: 5px solid transparent;
+            border-left:4px solid #ffa000;
             position: absolute;
             left: 10px;
             top: 45%;
@@ -286,7 +510,7 @@
             vertical-align: middle;
         }
         .icon-task {
-		    background: url('/icu/assets/img/task-white.svg') no-repeat center center;
+            background: url('/icu/assets/img/task-white.svg') no-repeat center center;
             height: 17px;
         }
         .icon-project {
@@ -302,6 +526,11 @@
         }
         .icon-document {
             background: url('/icu/assets/img/icon-document.svg') no-repeat center center;
+            height: 17px;
+            background-size: 15px 15px;
+        }
+        .icon-attachment {
+            background: url('/icu/assets/img/icon-attachment.svg') no-repeat center center;
             height: 17px;
             background-size: 15px 15px;
         }
