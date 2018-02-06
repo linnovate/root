@@ -121,23 +121,6 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.context = context;
 
-        $scope.displayLimit = {
-            projects : 4,
-            discussions : 4,
-            offices: 4,
-            folders: 4,
-            officeDocuments:4,
-            people:2,
-            reset : function() {
-                this.projects = 4;
-                this.discussions = 4;
-                this.offices = 4;
-                this.folders = 4;
-                this.officeDocuments = 4;
-                this.people = 2;
-            }
-        };
-
         $window.onbeforeunload = function(){
             localStorage.removeItem("type");
         };
@@ -243,7 +226,7 @@ angular.module('mean.icu.ui.displayby', [])
                 id: id,
                 entity: entityName,
             });
-        }
+        };
 
         $scope.visible = {
             project: true,
@@ -258,11 +241,11 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.GoToOffices = function() {
             $state.go('main.offices.all');
-        }
+        };
 
         $scope.GoToTemplateDocs = function() {
             $state.go('main.templateDocs.all');
-        }
+        };
 
         $scope.GoToAdminSettings = function() {
             $state.go('main.adminSettings');
@@ -280,7 +263,7 @@ angular.module('mean.icu.ui.displayby', [])
             };
 
             $scope.collapse = function(entityName) {
-                $scope.displayLimit[entityName] = 4;
+                $scope.displayLimit[entityName] = $scope.displayLimit.default[entityName];
             };
         }
 

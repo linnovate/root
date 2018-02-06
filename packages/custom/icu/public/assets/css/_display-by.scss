@@ -65,6 +65,18 @@
                 &last-of-type {
                     margin-bottom: 10px;
                 }
+                &.more {
+                    color: $orange;
+                    cursor: pointer;
+                    margin-bottom: 17px;
+                    font-size: 10px;
+                    line-height: 14px;
+                    font-weight: bold;
+                    margin-top:10px;
+                    &:hover{
+                        text-decoration: underline;
+                    }
+                }
 
                 a {
                     padding-bottom: 11px;
@@ -224,7 +236,7 @@
         &.people {
             ul {
                 li {
-                    margin: 0;
+                    margin: inherit;
                     float: left;
                     padding: 0 10px;
                     width: 100%;
@@ -257,19 +269,6 @@
 
         .go-to-Offices {
             border-top: 1px solid #424e52;
-        }
-    }
-
-
-    .more {
-        color: $orange;
-        cursor: pointer;
-        margin-bottom: 17px;
-        font-size: 10px;
-        line-height: 14px;
-        font-weight: bold;
-        &:hover{
-           text-decoration: underline;
         }
     }
 }

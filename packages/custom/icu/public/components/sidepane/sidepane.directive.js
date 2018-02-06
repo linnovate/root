@@ -25,7 +25,7 @@ directive('icuSidepane', function() {
         };
 
         $scope.removeFilterValue = function() {
-        	TasksService.filterValue = false;
+            TasksService.filterValue = false;
         };
 
         // updatedDate
@@ -37,8 +37,8 @@ directive('icuSidepane', function() {
         // activeToggle
         $scope.activeToggleList = EntityService.activeToggleList;
         $scope.activeToggle = {
-                field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
-                disabled: !EntityService.isActiveStatusAvailable()
+            field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
+            disabled: !EntityService.isActiveStatusAvailable()
         };
         /*---*/
 
@@ -94,27 +94,27 @@ directive('icuSidepane', function() {
             display: ['projects', 'people'],
             open: $scope.isCurrentState({state: 'discussions'})
         },
-        {
-            name: 'Documents',
-            icon: '/icu/assets/img/document-nav.svg',
-            state: 'officeDocuments.all',
-            display: ['folders'],//['new', 'received', 'inProgress'],
-            open: $scope.isCurrentState({state: 'officeDocuments'})
-        },
-        {
-            name: 'settings',
-            icon: '/icu/assets/img/settings.png',
-            state: 'folders.all',
-            display: ['offices', 'templateDocs'],
-            open: $scope.isCurrentState({state: 'folders'})
-        }
-        // , {
-        //     name: 'people',
-        //     icon: '/icu/assets/img/people.png',
-        //     state: 'people',
-        //     display: ['projects', 'discussions'],
-        //     open: false
-        // }
+            {
+                name: 'Documents',
+                icon: '/icu/assets/img/document-nav.svg',
+                state: 'officeDocuments.all',
+                display: ['folders'],//['new', 'received', 'inProgress'],
+                open: $scope.isCurrentState({state: 'officeDocuments'})
+            },
+            {
+                name: 'settings',
+                icon: '/icu/assets/img/settings.png',
+                state: 'folders.all',
+                display: ['offices', 'templateDocs'],
+                open: $scope.isCurrentState({state: 'folders'})
+            }
+            // , {
+            //     name: 'people',
+            //     icon: '/icu/assets/img/people.png',
+            //     state: 'people',
+            //     display: ['projects', 'discussions'],
+            //     open: false
+            // }
         ];
         $scope.activeTab = $stateParams.activeTab || $scope.items[1];
         $scope.savedTab = $stateParams.activeTab;
@@ -190,13 +190,15 @@ directive('icuSidepane', function() {
             offices: 4,
             folders: 4,
             watchers: 2,
-            reset : function() {
-                this.projects = 4;
-                this.discussions = 4;
-                this.offices = 4;
-                this.folders = 4;
-                this.attachments = 4;
-                this.watchers = 2;
+            people: 2,
+            default : {
+                projects: 4,
+                discussions: 4,
+                offices: 4,
+                folders: 4,
+                attachments: 4,
+                watchers: 2,
+                people: 2,
             }
         };
 
@@ -294,7 +296,7 @@ directive('icuSidepane', function() {
                 if (filteringResults[i].project && projects.indexOf(filteringResults[i].project) > -1 ||
                     filteringResults[i].folder && folders.indexOf(filteringResults[i].folder) > -1 ||
                     filteringResults[i].office && offices.indexOf(filteringResults[i].office) > -1)
-                        filteredByEntity.push(filteringResults[i]);
+                    filteredByEntity.push(filteringResults[i]);
                 if (filteringResults[i].discussions && filteringResults[i].discussions.length && discussions.indexOf(filteringResults[i].discussions[0]) > -1)
                     filteredByEntity.push(filteringResults[i]);
             }
@@ -316,17 +318,17 @@ directive('icuSidepane', function() {
 
         ////******* */
         $scope.updatedOptions = {
-                    onClose: (value/*, picker, $element*/) => {
+            onClose: (value/*, picker, $element*/) => {
 //                        console.log("on close", value, picker, $element) ;
-                        let splut = value.split('.');
-                        let valueChanged = new Date(splut[2],splut[1] -1 ,splut[0]) ;
-                        $scope.updatedDate = new Date(value) ;
-                        document.getElementById('ui-datepicker-div').style.display = 'block';
-                        SearchService.filteringByUpdated = valueChanged;
+                let splut = value.split('.');
+                let valueChanged = new Date(splut[2],splut[1] -1 ,splut[0]) ;
+                $scope.updatedDate = new Date(value) ;
+                document.getElementById('ui-datepicker-div').style.display = 'block';
+                SearchService.filteringByUpdated = valueChanged;
 //                        console.log("SearchService.filteringByUpdated", SearchService.filteringByUpdated)
-                        $state.go('main.search', { dateUpdated: value }) ;
-                    },
-                    dateFormat: 'd.m.yy'
+                $state.go('main.search', { dateUpdated: value }) ;
+            },
+            dateFormat: 'd.m.yy'
         };
 
         ////******* */

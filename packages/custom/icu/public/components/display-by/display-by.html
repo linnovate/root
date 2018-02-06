@@ -161,7 +161,7 @@
 
         <!--<p class="intro">{{'display'+context.main+'By' | i18next}}:</p>-->
     </div>
-    
+
     <div class="list projects" ng-if="projectsList && item.display.indexOf('projects') !== -1 && item.name !== 'search'">
         <p ng-click="visible.project = !visible.project" class="title">{{ item.state == "discussions.all" ? "discussionsFromProject" : 'tasksInProject' | i18next }}</p>
         <ul ng-if="visible.project && projectsList.length !== 0">
@@ -204,8 +204,8 @@
         <p ng-click="visible.user = !visible.user"
            class="title">{{ 'tasksAssignedTo' | i18next }}</p>
         <ul ng-if="visible.user">
-            <li ng-if="user === people[0] && user.name !== 'no select'"
-                data-ng-repeat="user in people | limitTo:3"
+            <li ng-if="user.name !== 'no select'"
+                data-ng-repeat="user in people | limitTo: displayLimit['people']"
                 data-ng-click="switchTo('user', user._id)">
                 <a href data-ng-link="main.users.details({id: user._id})">
                     <div icu-avatar user="user"></div>
@@ -215,6 +215,9 @@
             <li ng-if="people.length > displayLimit['people']"
                 ng-click="showMore(people.length, 'people')"
                 class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="people.length == displayLimit['people'] && displayLimit['people'] > 4"
+                ng-click="collapse('people')"
+                class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
     <div class="list officeDocuments" ng-if="context.main == 'officeDocuments' && item.name !== 'search'">
@@ -282,7 +285,7 @@
                 <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">
                     Show Deleted Items
                 </button>
-        </div>    
+        </div>
     </div>
 
     </div>
