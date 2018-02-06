@@ -103,18 +103,23 @@
                 </ul>
             </div>
 
-            <div class="subtitle">{{'watchersInThe' | i18next}}</div>
+            <div class="subtitle" >{{'watchersInThe' | i18next}}</div>
             <ul>
                 <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
                     <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
                     {{w.name}}-->
-                    <div class="filteringElement watcher" ng-class="{active: filteringData.selectedWatchers[w._id]}" ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
+                    <div class="filteringElement watcher"
+                         ng-class="{active: filteringData.selectedWatchers[w._id]}"
+                         ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
                         <div icu-avatar user="w"></div>
                         <span>{{w.name}}</span>
                     </div>
                 </li>
-                <li ng-if="filteringData.watchers.length > displayLimit['watchers']" ng-click="showMore(filteringData.watchers.length, 'watchers')" class="more">{{ 'more' | i18next }}</li>
-                <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3" ng-click="collapse('watchers')"
+                <li ng-if="filteringData.watchers.length > displayLimit['watchers']"
+                    ng-click="showMore(filteringData.watchers.length, 'watchers')"
+                    class="more">{{ 'more' | i18next }}</li>
+                <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3"
+                    ng-click="collapse('watchers')"
                     class="more">{{ 'less' | i18next }}</li>
             </ul>
 
@@ -156,7 +161,7 @@
 
         <!--<p class="intro">{{'display'+context.main+'By' | i18next}}:</p>-->
     </div>
-    
+
     <div class="list projects" ng-if="projectsList && item.display.indexOf('projects') !== -1 && item.name !== 'search'">
         <p ng-click="visible.project = !visible.project" class="title">{{ item.state == "discussions.all" ? "discussionsFromProject" : 'tasksInProject' | i18next }}</p>
         <ul ng-if="visible.project && projectsList.length !== 0">
@@ -167,8 +172,11 @@
                 </a>
                 <div class="tag-color" ng-style="{'background-color': '#' + project.color}"></div>
             </li>
-            <li ng-if="projectsList.length > displayLimit['projects']" ng-click="showMore(projectsList.length, 'projects')" class="more">{{ 'more' | i18next }}</li>
-            <li ng-if="projectsList.length == displayLimit['projects'] && displayLimit['projects'] > 3" ng-click="collapse('projects')"
+            <li ng-if="projectsList.length > displayLimit['projects']"
+                ng-click="showMore(projectsList.length, 'projects')"
+                class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="projectsList.length == displayLimit['projects'] && displayLimit['projects'] > 3"
+                ng-click="collapse('projects')"
                 class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
@@ -183,23 +191,33 @@
                     {{discussion.title || discussion.name}}
                 </a>
             </li>
-            <li ng-if="discussions.length > displayLimit['discussions']" ng-click="showMore(discussions.length, 'discussions')" class="more">{{ 'more' | i18next }}</li>
-            <li ng-if="discussions.length == displayLimit['discussions'] && displayLimit['discussions'] > 3" ng-click="collapse('discussions')"
+            <li ng-if="discussions.length > displayLimit['discussions']"
+                ng-click="showMore(discussions.length, 'discussions')"
+                class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="discussions.length == displayLimit['discussions'] && displayLimit['discussions'] > 3"
+                ng-click="collapse('discussions')"
                 class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
 
-    <div class="list people" ng-if="people && item.display.indexOf('people') !== -1 && item.name === 'search'">
-        <p ng-click="visible.user = !visible.user" class="title">{{ 'tasksAssignedTo' | i18next }}</p>
+    <div class="list people" ng-if="people && item.display.indexOf('people') !== -1 || item.name === 'search'">
+        <p ng-click="visible.user = !visible.user"
+           class="title">{{ 'tasksAssignedTo' | i18next }}</p>
         <ul ng-if="visible.user">
-            <li ng-if="user === people[0] && user.name !== 'no select'"
-                data-ng-repeat="user in people | limitTo:3"
+            <li ng-if="user.name !== 'no select'"
+                data-ng-repeat="user in people | limitTo: displayLimit['people']"
                 data-ng-click="switchTo('user', user._id)">
                 <a href data-ng-link="main.users.details({id: user._id})">
                     <div icu-avatar user="user"></div>
                     <span class="name">{{user.name}}</span>
                 </a>
             </li>
+            <li ng-if="people.length > displayLimit['people']"
+                ng-click="showMore(people.length, 'people')"
+                class="more">{{ 'more' | i18next }}</li>
+            <li ng-if="people.length == displayLimit['people'] && displayLimit['people'] > 4"
+                ng-click="collapse('people')"
+                class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
     <div class="list officeDocuments" ng-if="context.main == 'officeDocuments' && item.name !== 'search'">
@@ -249,8 +267,9 @@
             </div>
         </p>
         <ul ng-if="!visible.folder && folderList.length !== 0">
-                <li data-ng-repeat="folder in foldersList | filterRecycled | limitTo: 100 | filter: myFilter" data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
-                data-ng-click="switchTo('folder', folder._id)" ng-if="folder._id && folder.title && folder.office.title">
+                <li data-ng-repeat="folder in foldersList | filterRecycled | limitTo: 100 | filter: myFilter"
+                    data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
+                    data-ng-click="switchTo('folder', folder._id)" ng-if="folder._id && folder.title && folder.office.title">
                 <a href class="Names-In-List-On-Side">
                     {{folder.title}}
                 </a>

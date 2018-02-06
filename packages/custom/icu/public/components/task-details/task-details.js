@@ -2,23 +2,24 @@
 
 angular.module('mean.icu.ui.taskdetails', [])
     .controller('TaskDetailsController', function($scope,
-        entity,
-        tags,
-        projects,
-        $state,
-        TasksService,
-        ActivitiesService,
-        context,
-        $stateParams,
-        $rootScope,
-        MeanSocket,
-        UsersService,
-        people,
-        $timeout,
-        ProjectsService,
-        EntityService,
-        me //,subtasks
+                                                  entity,
+                                                  tags,
+                                                  projects,
+                                                  $state,
+                                                  TasksService,
+                                                  ActivitiesService,
+                                                  context,
+                                                  $stateParams,
+                                                  $rootScope,
+                                                  MeanSocket,
+                                                  UsersService,
+                                                  people,
+                                                  $timeout,
+                                                  ProjectsService,
+                                                  EntityService,
+                                                  me //,subtasks
     ) {
+        $scope.testString = 'testString';
         $scope.task = entity || context.entity;
         $scope.addSubTasks = false;
         $scope.me = me;
@@ -57,17 +58,17 @@ angular.module('mean.icu.ui.taskdetails', [])
         var backupEntity = JSON.parse(JSON.stringify($scope.task));
 
         $scope.people = people.data || people;
-        if ($scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+        if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
             var newPeople = {
                 name: 'no select'
             };
 
             $scope.people.push(_(newPeople).clone());
         }
-         for(var i =0 ; i<$scope.people.length;i++){
-                    if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job==null)){
-                        $scope.people[i].job = $scope.people[i].name;
-                    }
+        for(var i =0 ; i<$scope.people.length;i++){
+            if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job==null)){
+                $scope.people[i].job = $scope.people[i].name;
+            }
         }
 
         if (!$scope.task) {
@@ -154,15 +155,15 @@ angular.module('mean.icu.ui.taskdetails', [])
         });
 
         $scope.addTagClicked=function(){
-        	$scope.setFocusToTagSelect();
-        	$scope.tagInputVisible=true;
+            $scope.setFocusToTagSelect();
+            $scope.tagInputVisible=true;
         }
 
         $scope.addTag = function(tag) {
-        	if(tag!=undefined && $.inArray(tag,$scope.task.tags)==-1){
-        		$scope.task.tags.push(tag);
-            	$scope.update($scope.task);
-        	}
+            if(tag!=undefined && $.inArray(tag,$scope.task.tags)==-1){
+                $scope.task.tags.push(tag);
+                $scope.update($scope.task);
+            }
 
             $scope.tagInputVisible = false;
         };
@@ -227,29 +228,29 @@ angular.module('mean.icu.ui.taskdetails', [])
             TasksService.star(task).then(function() {
                 navigateToDetails(task);
             });
-        };        
+        };
 
-        $scope.recycle = function(entity) {            
+        $scope.recycle = function(entity) {
             console.log("$scope.recycle") ;
             EntityService.recycle('tasks', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
                 clonedEntity.status = "Recycled" // just for activity status
-                TasksService.updateStatus(clonedEntity, entity).then(function(result) {                    
+                TasksService.updateStatus(clonedEntity, entity).then(function(result) {
                     ActivitiesService.data.push(result);
                 });
-    
+
                 var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
                 $state.go(state, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {
-                reload: true
-            });
+                    reload: true
+                });
 
             });
         };
 
-        $scope.recycleRestore = function(entity) {            
+        $scope.recycleRestore = function(entity) {
             console.log("$scope.recycleRestore") ;
             EntityService.recycleRestore('tasks', entity._id).then(function() {
                 navigateToDetails(entity);
@@ -261,19 +262,19 @@ angular.module('mean.icu.ui.taskdetails', [])
             delete task.project;
             $scope.update(task);
         };
-        
+
 
         $scope.deleteTask = function(task) {
             TasksService.remove(task._id).then(function() {
                 var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
                 TasksService.getWatchedTasks().then(function(result){
-                   TasksService.watchedTasksArray = result;
+                    TasksService.watchedTasksArray = result;
                     $state.go(state, {
                         entity: context.entityName,
                         entityId: context.entityId
                     }, {
-                    reload: true
-                });
+                        reload: true
+                    });
 
                 });
             });
@@ -283,13 +284,13 @@ angular.module('mean.icu.ui.taskdetails', [])
         let refreshView = function() {
             var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
             TasksService.getWatchedTasks().then(function(result){
-               TasksService.watchedTasksArray = result;
+                TasksService.watchedTasksArray = result;
                 $state.go(state, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {
-                reload: true
-            });
+                    reload: true
+                });
 
             });
         }
@@ -330,7 +331,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         // Nevo
         $scope.updateWatcher = function(task) {
-            
+
             if (context.entityName === 'discussion') {
                 task.discussion = context.entityId;
             }
@@ -355,7 +356,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         }
 
         $scope.updateStatus = function(task) {
-            
+
             if (context.entityName === 'discussion') {
                 task.discussion = context.entityId;
             }
@@ -381,9 +382,9 @@ angular.module('mean.icu.ui.taskdetails', [])
                     }
                 }
             });
-            
+
         }
-            
+
         $scope.updateDue = function(task) {
 
             if (context.entityName === 'discussion') {
@@ -421,7 +422,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                             backupEntity = JSON.parse(JSON.stringify($scope.task));
                             ActivitiesService.data.push(result);
                         });
-                        
+
                         if (context.entityName === 'project') {
                             var projId = result.project ? result.project._id : undefined;
                             if (projId !== context.entityId || type === 'project') {
@@ -484,7 +485,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             'watcher': me
         };
 
-        $scope.saveTemplate = function() {            
+        $scope.saveTemplate = function() {
             $scope.isopen = false;
             $scope.newTemplate.frequentUser = $scope.newTemplate.watcher;
             if ($scope.task.subTasks[0]._id) {
@@ -563,12 +564,12 @@ angular.module('mean.icu.ui.taskdetails', [])
             require: 'uiSelect',
             link: function(scope, elm, attrs, ctrl) {
                 elm.on('blur', 'input.ui-select-search', function(e) {
-                	var ngModelName = attrs.id;
-                	if(ngModelName == "addTag"){
-                		ctrl.select();
-                		ctrl.ngModel.$setViewValue(undefined);
-                		scope.tagInputVisible=false;
-                	}
+                    var ngModelName = attrs.id;
+                    if(ngModelName == "addTag"){
+                        ctrl.select();
+                        ctrl.ngModel.$setViewValue(undefined);
+                        scope.tagInputVisible=false;
+                    }
                 });
 
                 elm.on('blur', 'input.ui-select-focusser', function(e, g) {
@@ -582,17 +583,17 @@ angular.module('mean.icu.ui.taskdetails', [])
             }
         };
     }).directive('test',function(){
-    	return{
-    		scope:true,
-    		require:'ngModel',
-    		link: function($scope,$elm,$attrs,ngModel){
-    			ngModel.$setViewValue('hi');
-    		}
-    	}
-    }).filter('searchfilter', function() {
-        return function(input, query) {
-            var r = RegExp('(' + query + ')');
-            if (input !== undefined)
-                return input.replace(r, '<span class="super-class">$1</span>');
+    return{
+        scope:true,
+        require:'ngModel',
+        link: function($scope,$elm,$attrs,ngModel){
+            ngModel.$setViewValue('hi');
         }
-    });
+    }
+}).filter('searchfilter', function() {
+    return function(input, query) {
+        var r = RegExp('(' + query + ')');
+        if (input !== undefined)
+            return input.replace(r, '<span class="super-class">$1</span>');
+    }
+});

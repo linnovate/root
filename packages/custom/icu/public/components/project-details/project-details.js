@@ -136,15 +136,15 @@ angular.module('mean.icu.ui.projectdetails', [])
             }
         };
 
-        $scope.recycle = function(entity) {            
+        $scope.recycle = function(entity) {
             console.log("$scope.recycle") ;
             EntityService.recycle('projects', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
                 clonedEntity.status = "Recycled" // just for activity status
-                ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {                    
+                ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {
                     ActivitiesService.data.push(result);
                 });
-    
+
                 $state.go('main.projects.all', {
                     entity: 'all'
                 }, {reload: true});
@@ -184,7 +184,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                             ActivitiesService.data.push(result);
                         });
                         break;
-                
+
                     case 'color':
                         ProjectsService.updateColor(project).then(function(result) {
                             backupEntity = JSON.parse(JSON.stringify($scope.project));
@@ -199,7 +199,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                             ActivitiesService.data = ActivitiesService.data || [];
                             ActivitiesService.data.push(result);
                         });
-                        break; 
+                        break;
                 }
             });
         };
@@ -213,8 +213,8 @@ angular.module('mean.icu.ui.projectdetails', [])
 
         if ($scope.project &&
             ($state.current.name === 'main.projects.all.details' ||
-            $state.current.name === 'main.search.project' ||
-            $state.current.name === 'main.projects.byentity.details')) {
+                $state.current.name === 'main.search.project' ||
+                $state.current.name === 'main.projects.byentity.details')) {
             $state.go('.activities');
         }
     });

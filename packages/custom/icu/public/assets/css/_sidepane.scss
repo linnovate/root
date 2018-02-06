@@ -12,9 +12,9 @@
             height: 40px;
 
             .recycled {
-                color: red;                
+                color: red;
                 box-shadow: 0px 0px 0px 2px #FFB435;
-                transition: 0.8s;                   
+                transition: 0.8s;
             }
 
             button {
@@ -28,7 +28,7 @@
                 outline: none;
                 background-position: left center;
 
-                background-color: transparent;                
+                background-color: transparent;
                 width: auto;
                 height: auto;
 
@@ -40,7 +40,7 @@
                 &:hover{
                      box-shadow: 0px 0px 0px 2px #FFB435;
                      transition: 0.8s;
-                } 
+                }
 
             }
         }
@@ -108,8 +108,7 @@
         .select-wrapper {
             float: left;
             width: 100%;
-            margin-bottom: 10px;
-            margin-left: 25px;
+            margin:10px 20px;
 
             tooltip {
                 display: block;
@@ -320,7 +319,7 @@
                         height: $header-height;
                         text-align: center;
                         position: relative;
-                        margin:0 auto 0 auto;
+                        margin: 2px auto 0 auto;
                         display: inline-block;
                         span {
                             line-height: 18px;
@@ -391,6 +390,7 @@
     .searchPane {
         height: auto;
         overflow: hidden;
+        position: relative;
         .search {
             background-color: #37464B;
             width: 100%;
@@ -400,7 +400,7 @@
         }
 
         .subtitle {
-            padding-left: 17px;
+            padding-left: 25px;
             margin-top: 19px;
             margin-bottom: 6px;
             font-size: 17px;
@@ -439,6 +439,7 @@
         ul {
             list-style: none;
             padding-left: 0;
+            position: relative;
             li {
                 font-size: 13px;
                 position: relative;
@@ -496,14 +497,15 @@
             font-weight: bold;
         }
         .arrow-left {
-            width: 0;
             height: 0;
+            width: 0;
+            top: 50%;
+            left: 10px;
+            margin-top: -5px;
+            position: absolute;
             border-top: 5px solid transparent;
             border-bottom: 5px solid transparent;
             border-left:4px solid #ffa000;
-            position: absolute;
-            left: 10px;
-            top: 45%;
         }
         .icon {
             display: inline-block;
