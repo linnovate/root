@@ -19,7 +19,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
         function controller($scope, TasksService, UsersService) {
             UsersService.getAll().then(function(people) {
                 $scope.people = people;
-            })
+            });
 
             $scope.isLoading = true;
             _($scope.tasks).each(function(t) {

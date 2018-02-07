@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('mean.icu').controller('IcuController',
-    function ($rootScope,
+    function (
+        $rootScope,
         $scope,
         me,
         $state,
@@ -23,7 +24,7 @@ angular.module('mean.icu').controller('IcuController',
 
     $scope.detailsPane = {
         isHidden: false
-    }
+    };
 
     $scope.me = me;
     $scope.folders = folders.data || folders;
@@ -47,11 +48,11 @@ angular.module('mean.icu').controller('IcuController',
 
     $scope.getLayoutIcon = function() {
       return LayoutService.getLayoutIcon();
-    }
+    };
 
     $scope.getSideMenuIcon = function() {
         return LayoutService.getSideMenuIcon();
-    }
+    };
 
     $scope.changeLayout = function() {
       var state = LayoutService.changeLayout();

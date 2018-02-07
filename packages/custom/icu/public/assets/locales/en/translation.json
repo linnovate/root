@@ -244,6 +244,7 @@
     "received": "Received",
     "officeDocument": "Office Document",
     "displayofficeDocumentsBy": "Display Office Documents By",
+    "displayOnly": "DISPLAY ONLY",
     "sendDocument": "Send Document",
     "noTemplates": "NO Templates",
     "subject": "Subject",

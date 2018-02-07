@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.discussionsservice', [])
-.service('DiscussionsService', function (ApiUri, $http, PaginationService, WarningsService, ActivitiesService) {
+.service('DiscussionsService', function (ApiUri, $http, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
     var EntityPrefix = '/discussions';
     var data;
 
@@ -59,12 +59,14 @@ angular.module('mean.icu.data.discussionsservice', [])
     function create(discussion) {
         return $http.post(ApiUri + EntityPrefix, discussion).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
+            NotifyingService.notify('editionData');
             return result.data;
         });
     }
 
     function update(discussion) {
         return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion).then(function (result) {
+            NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
@@ -72,6 +74,7 @@ angular.module('mean.icu.data.discussionsservice', [])
 
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+            NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
@@ -120,7 +123,7 @@ angular.module('mean.icu.data.discussionsservice', [])
                 issue: 'discussion',
                 issueId: discussion.id,
                 type: type || 'updateWatcher',
-                userObj: watcher                
+                userObj: watcher
             },
             context: {}
         }).then(function(result) {

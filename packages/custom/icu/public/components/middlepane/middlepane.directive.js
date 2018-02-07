@@ -16,7 +16,7 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
     $scope.$on('$stateChangeSuccess', function ($event, toState) {
 //        console.log("stateChangeSuccess", $location.path())  ;
         if ($location.path().split("/").pop() == "recycled") {
-            $scope.term = "recycled" ;            
+            $scope.term = "recycled" ;
         }
         else {
             if($scope.term == "recycled") {
@@ -72,7 +72,7 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
     		SearchService.builtInSearchArray = res;
     		$state.go('main.search', {query: ''}, {reload: true});
     	});
-    }
+    };
 
     $scope.activeSearchNav = function(){
         NotifyingService.notify('activeSearch');

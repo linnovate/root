@@ -118,6 +118,7 @@ angular.module('mean.icu.data.usersservice', [])
     function register(credentials) {
         return $http.post('/api/register', credentials).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
+            NotifyingService.notify('editionData');
             localStorage.setItem('JWT', result.data.token);
             return result;
         }, function(err) {
@@ -131,6 +132,7 @@ angular.module('mean.icu.data.usersservice', [])
             file: file
         }).success(function(data) {
             me.profile.avatar = data.avatar;
+            NotifyingService.notify('editionData');
         });
     }
 
@@ -139,7 +141,7 @@ angular.module('mean.icu.data.usersservice', [])
         $rootScope.$emit('loggedin');
         $state.go('main.tasks');
 
-    };
+    }
 
     function loginToHi(username, password) {
         return $http.post('/api/hi/login', {
@@ -150,7 +152,7 @@ angular.module('mean.icu.data.usersservice', [])
         }, function(err) {
             return err;
         });
-    };
+    }
 
     return {
         getAll: getAll,
