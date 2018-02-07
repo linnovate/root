@@ -195,7 +195,7 @@ exports.load = function(swagger, parms) {
       nickname: 'GetTask',
       produces: ['application/json'],
        parameters: [swagger.paramTypes.path('entity', 'entity', 'string'),swagger.paramTypes.path('id', 'Task Id', 'string')]
-     
+
     }
   };*/
 
@@ -359,7 +359,7 @@ exports.load = function(swagger, parms) {
       nickname: 'attachmentByEntity',
       produces: ['application/json'],
       parameters: [swagger.paramTypes.path('entity', 'Entity Id', 'string'),swagger.paramTypes.path('id', 'Task Id', 'string')]
- 
+
     }
   };*/
 

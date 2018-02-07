@@ -1,6 +1,6 @@
 <div class="attachment-details">
     <div class="page-content">
-        <div class="summary">
+        <!-- <div class="summary">
 
             <div class="favorite">
                 <button ng-class="{ 'orange': attachment.star }" ng-click="star(attachment)">
@@ -25,7 +25,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> -->
 
         <div class="description">
             <div class="title"
@@ -45,17 +45,9 @@
                  ng-model="attachment.description"
                  options="{{options}}">
             </div>
+            <div>
+                    <iframe ng-src="{{viewAttachment(attachment)}}" width="100%"  height="300px"></iframe>
+            </div>        
         </div>
-        <div class="tabs">
-            <div class="switcher">
-                <button class="tab"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".versions">
-                    {{ 'versions' | i18next }}
-                </button>
-            </div>
-        </div>
-        <div class="tab-content" data-ui-view="tab"></div>
     </div>
-    <div icu-members-footer entity="attachment" users="people"></div>
 </div>

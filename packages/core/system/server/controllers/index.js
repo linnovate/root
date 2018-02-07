@@ -63,6 +63,7 @@ exports.render = function(req, res) {
 			'version': config.version,
 			'whatsNew': config.whatsNew,
 			'activeStatus': config.activeStatus,
+			'isPortNeeded': config.isPortNeeded,
 		}
 	});
 };

@@ -4,8 +4,14 @@
             ng-style="{'background-image': 'url(' + getLayoutIcon() + ')'}"
             ng-click="changeLayout()">
     </button>
-    <div class="search" data-ng-controller="SearchController" ng-init="click=false">
-        <div class="close-icon" ng-if="term" ng-click="clearSearch();"><i class="fa fa-times-circle"></i></div>
+    <div class="search"
+         data-ng-controller="SearchController"
+         ng-init="click=false">
+        <div class="close-icon"
+             ng-if="term"
+             ng-click="clearSearch();">
+            <i class="fa fa-times-circle"></i>
+        </div>
         <input type="text"
             placeholder="{{ 'search' | i18next }}"
             ng-model="term"

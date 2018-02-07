@@ -25,7 +25,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     if(NotificationsService.data.lastNotification)
                     {
                         if (NotificationsService.data.lastNotification.content.length > 25) {
-                            NotificationsService.data.lastNotification.content = 
+                            NotificationsService.data.lastNotification.content =
                                 NotificationsService.data.lastNotification.content.substring(0, 25) + "...";
                         }
                     };
@@ -281,7 +281,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
             if (input === undefined) return '------';
             var now = new Date();
             var inputDate = new Date(input).setHours(0, 0, 0, 0);
-            if (inputDate == now.setHours(0, 0, 0, 0)) {
+            if (inputDate === now.setHours(0, 0, 0, 0)) {
                 // return $filter('i18next')('today') + ', ' + $filter('date')(input, "hh:mm");
                 return $filter('timeAgo')(input);
             }

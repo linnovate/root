@@ -53,21 +53,33 @@
             margin-bottom: 0;
 
             &:last-of-type {
-                margin-bottom: 5px;
+                margin-bottom: 10px;
             }
 
             li {
                 display: flex;
                 justify-content: space-between;
-                padding: 1.5px 10px;
+                padding: 0 10px;
                 position: relative;
                 width: 185px;
                 &last-of-type {
                     margin-bottom: 10px;
                 }
+                &.more {
+                    color: $orange;
+                    cursor: pointer;
+                    margin-bottom: 17px;
+                    font-size: 10px;
+                    line-height: 14px;
+                    font-weight: bold;
+                    margin-top:10px;
+                    &:hover{
+                        text-decoration: underline;
+                    }
+                }
 
                 a {
-                    padding: 6px 0;
+                    padding-bottom: 11px;
                     font-size: 13px;
                     max-width: 165px;
                     line-height: 18px;
@@ -96,6 +108,7 @@
 
                         position: absolute;
                         top: 50%;
+                        margin-top: -6px;
                         transform: translateY(-50%);
                         -webkit-transform: translateY(-50%);
                     }
@@ -112,8 +125,6 @@
                 li {
                     .tag-color {
                         @include tag(5px);
-                        position: absolute;
-                        left: 109%;
                     }
                 }
             }
@@ -124,8 +135,6 @@
                 li {
                     .tag-color {
                         @include tag(5px);
-                        position: absolute;
-                        left: 109%;
                     }
                 }
             }
@@ -136,8 +145,6 @@
                 li {
                     .tag-color {
                         @include tag(5px);
-                        position: absolute;
-                        left: 109%;
                     }
                 }
             }
@@ -148,8 +155,6 @@
                 li {
                     .tag-color {
                         @include tag(5px);
-                        position: absolute;
-                        left: 109%;
                     }
                 }
             }
@@ -231,7 +236,7 @@
         &.people {
             ul {
                 li {
-                    margin: 0;
+                    margin: inherit;
                     float: left;
                     padding: 0 10px;
                     width: 100%;
@@ -248,12 +253,13 @@
                 border: 1px solid black;
                 font-size: 20px;
                 margin: 0;
+                margin-right: 10px;
             }
 
             .name {
                 float: left;
                 line-height: 34px;
-                padding-left: 10px;
+                width: 100%;
             }
         }
 
@@ -263,17 +269,6 @@
 
         .go-to-Offices {
             border-top: 1px solid #424e52;
-        }
-    }
-
-
-    .more {
-        padding: 5px 0;
-        color: $orange;
-        cursor: pointer;
-        margin-bottom: 15px;
-        &:hover{
-           text-decoration: underline;
         }
     }
 }
