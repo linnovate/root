@@ -264,7 +264,10 @@
     "role":"תפקיד",
     "rank":"דרגה",
     "fullName": "שם",
-    "selectSignature": "בחר חתימה",
+	"selectSignature": "בחר חתימה",
+    "signBy":"חתום על ידי",
+    "noSignatures": "אין חתימות",
+
 
 
     "st": "",

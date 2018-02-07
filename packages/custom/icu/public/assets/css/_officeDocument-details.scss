@@ -218,6 +218,20 @@ ul.dropdown-menu {
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
   }
+
+  .loader3 {
+      position: absolute;
+      margin-left: 275px;
+      margin-top: -40px;
+      margin-bottom: 10px;
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #556169;
+    width: 30px;
+    height: 30px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
   
   /* Safari */
   @-webkit-keyframes spin {

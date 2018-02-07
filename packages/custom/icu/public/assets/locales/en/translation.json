@@ -263,6 +263,8 @@
     "rank":"Rank",
     "fullName": "Full name",
     "selectSignature": "Select signature",
+    "signBy": "Sign by",
+    "noSignatures": "No signatures",
 
     "st": "st",
     "nd": "nd",

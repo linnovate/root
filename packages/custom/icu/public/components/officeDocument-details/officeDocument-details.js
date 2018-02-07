@@ -23,13 +23,17 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             $scope.officeDocument = context.entity || entity;
         }
 
-        if($scope.officeDocument.folder && $scope.officeDocument.folder.office){
-            SignaturesService.getByOfficeId( $scope.officeDocument.folder.office)
-            .then(function (result) {
-                $scope.signatures = result;
-            
-            })
+        $scope.getSignatures = function () {
+            if($scope.officeDocument.folder && $scope.officeDocument.folder.office && $scope.officeDocument.path){
+                SignaturesService.getByOfficeId( $scope.officeDocument.folder.office._id || $scope.officeDocument.folder.office)
+                    .then(function (result) {
+                        $scope.signatures = result;
+                })
+            }
         }
+
+        $scope.getSignatures();
+        $scope.signBy = $scope.officeDocument.signBy;
 
         $scope.selectedSignature;
 
@@ -125,13 +129,18 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 }
             });
         }
-
+       
+        $scope.signatory = false; 
         $scope.signOnDocx = function(document1){
             //if(document1.spPath){
+            $scope.signatory = true; 
             OfficeDocumentsService.signOnDocx(document1,$scope.selectedSignature).then(function(result){              
                 if(result && result.spPath){
                     document1.spPath = result.spPath;
+                    $scope.signatory = false; 
                 }
+                $scope.signatory = false; 
+                $scope.signBy = JSON.parse($scope.selectedSignature);
             });
        // }
         }
@@ -222,6 +231,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     $scope.officeDocument.path = result.data.path;
                     $scope.officeDocument.spPath = result.data.spPath;
                     $scope.officeDocument.documentType = result.data.documentType;
+                    $scope.getSignatures();
 
                 },function (resp) {
                     console.log('Error status: ' + resp.status);
@@ -354,6 +364,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function(){
                 officeDocument.path = undefined;
                 officeDocument.spPath = undefined;
+                $scope.signatures = undefined;
             });
         };
 
@@ -379,7 +390,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
         $scope.unsetFolder = function(event, folder) {
             event.stopPropagation();
-            delete $scope.officeDocument.folder;
+            //delete $scope.officeDocument.folder;
             $scope.updateFolder($scope.officeDocument,undefined);
         };
 
@@ -402,6 +413,12 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             json.watchers = officeDocument.watchers;
             OfficeDocumentsService.updateDocument(officeDocument._id,json).then(function(res) {
                 OfficeDocumentsService.updateEntity(officeDocument, backupEntity).then(function(result) {
+                    if(folderId == undefined){
+                        delete $scope.officeDocument.folder;
+                        $scope.signatures = undefined; 
+                    }else{
+                        $scope.getSignatures();
+                    }
                     backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
                     ActivitiesService.data = ActivitiesService.data || [] ;
                     ActivitiesService.data.push(result);
