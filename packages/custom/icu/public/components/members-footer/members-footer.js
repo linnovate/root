@@ -44,9 +44,9 @@ angular.module('mean.icu.ui.membersfooter', [])
                                 obj.type = groupTypes[i];
                                 $scope.watchersGroups.push(obj);
                             }
-                        };
+                        }
                 }
-            }
+            };
 
             var getNotAssigned = function() {
                 var arr1 = _.filter($scope.users, function(u) {
@@ -73,11 +73,11 @@ angular.module('mean.icu.ui.membersfooter', [])
 
 
             $scope.notAssigned = getNotAssigned();
-                for(var i =0 ; i<$scope.notAssigned.length;i++){
-                    if($scope.notAssigned[i] && ($scope.notAssigned[i].job == undefined || $scope.notAssigned[i].job==null)){
-                        $scope.notAssigned[i].job = $scope.notAssigned[i].name;
-                    }
+            for(var i =0 ; i<$scope.notAssigned.length;i++){
+                if($scope.notAssigned[i] && ($scope.notAssigned[i].job == undefined || $scope.notAssigned[i].job==null)){
+                    $scope.notAssigned[i].job = $scope.notAssigned[i].name;
                 }
+            }
 
             var update = function(entity, member, action) {
                 $scope.notAssigned = getNotAssigned();
@@ -94,7 +94,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     action: action,
                     frequentUser: member._id
                 }
-                
+
                 if(context.main=="officeDocuments"){
                     var a = [];
                     entity.watchers.forEach(function(watcher){
@@ -111,7 +111,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     service.update(entity, data, action, member._id);
                 }
 
-                
+
                 getWatchersGroups();
 
             };
@@ -172,25 +172,25 @@ angular.module('mean.icu.ui.membersfooter', [])
                         DiscussionsService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });              
+                        });
                         break ;
                     case 'officeDocuments':
                         OfficeDocumentsService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });               
+                        });
                         break ;
                     case 'folders':
                         FoldersService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });              
+                        });
                         break ;
                         case 'offices':
                         OfficesService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });             
+                        });
                         break ;
                 }
 
@@ -214,13 +214,13 @@ angular.module('mean.icu.ui.membersfooter', [])
                 if (context.entityName === 'discussion') {
                     task.discussion = context.entityId;
                 }
-                
+
                 switch(context.main) {
                     case 'projects':
                         ProjectsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });         
+                        });
                         break ;
 
                     case 'tasks':
@@ -232,25 +232,25 @@ angular.module('mean.icu.ui.membersfooter', [])
                         DiscussionsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });           
+                        });
                         break ;
                     case 'officeDocuments':
                         OfficeDocumentsService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });                
+                        });
                         break ;
                     case 'folders':
                         FoldersService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });                
+                        });
                         break ;
                         case 'offices':
                         OfficesService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
-                        });                
+                        });
                         break ;
                 }
             };

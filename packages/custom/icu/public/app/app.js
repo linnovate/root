@@ -191,7 +191,7 @@ angular.module('mean.icu').config([
                         });
                     }
                 }
-            };
+            }
         }
 
         function getOfficeDocumentDetailsState(urlPrefix) {
@@ -434,7 +434,7 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($stateParams, results) {
                         return _(results).find(function (r) {
-                            return r._id === $stateParams.id;
+                            return r.entityId === $stateParams.id;
                         });
                     }
                 }
@@ -564,7 +564,7 @@ angular.module('mean.icu').config([
                     start: 0,
                     limit: LIMIT,
                     sort: SORT
-                },            
+                },
                 views: {
                     'middlepane@main': {
                         templateUrl: '/icu/components/search-list/search-list.html',
@@ -584,11 +584,11 @@ angular.module('mean.icu').config([
                                 item.id = item._id;
                                 return item ;
                             })
-                            return mergedAdjuested ;                            
+                            return mergedAdjuested ;
                         })
                     }
                     },
-                    tasks: function (results) {                                            
+                    tasks: function (results) {
                         return _(results).filter(function (r) {
                             return r._type === 'task';
                         });

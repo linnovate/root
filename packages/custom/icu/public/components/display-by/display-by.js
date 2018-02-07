@@ -15,7 +15,6 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.people = people;
         });
 
-
         $scope.projectsList = [];
         $scope.projects.forEach(function(project) {
                    if(project.title)
@@ -97,7 +96,8 @@ angular.module('mean.icu.ui.displayby', [])
             tasks: "task",
             officeDocuments: "officeDocument",
             offices: "office",
-            folders: "folder"
+            folders: "folder",
+            watchers: "watcher"
         };
 
         $scope.allItems = {
@@ -120,21 +120,6 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.discussions.reverse();
 
         $scope.context = context;
-
-        $scope.displayLimit = {
-            projects : 4,
-            discussions : 4,
-            offices: 4,
-            folders: 4,
-            officeDocuments:4,
-            reset : function() {
-                this.projects = 4;
-                this.discussions = 4;
-                this.offices = 4;
-                this.folders = 4;
-                this.officeDocuments = 4;
-            }
-        };
 
         $window.onbeforeunload = function(){
             localStorage.removeItem("type");
@@ -227,7 +212,7 @@ angular.module('mean.icu.ui.displayby', [])
 
             // If we are switching between entities, then shrink the display limit again
             if (!$scope.visible[entityName]) {
-                displayLimit.reset();
+                $scope.displayLimit.reset();
             }
             $state.go('main.' + context.main  +  '.byentity', {
                 entity: entityName,
@@ -235,12 +220,13 @@ angular.module('mean.icu.ui.displayby', [])
                 officeDocuments:undefined
             });
         };
+
         $scope.switchToAll = function (entityName, id) {
             $state.go('main.' + context.main + '.all.details.activities', {
                 id: id,
                 entity: entityName,
             });
-        }
+        };
 
         $scope.visible = {
             project: true,
@@ -255,11 +241,11 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.GoToOffices = function() {
             $state.go('main.offices.all');
-        }
+        };
 
         $scope.GoToTemplateDocs = function() {
             $state.go('main.templateDocs.all');
-        }
+        };
 
         $scope.GoToAdminSettings = function() {
             $state.go('main.adminSettings');
@@ -277,7 +263,7 @@ angular.module('mean.icu.ui.displayby', [])
             };
 
             $scope.collapse = function(entityName) {
-                $scope.displayLimit[entityName] = 4;
+                $scope.displayLimit[entityName] = $scope.displayLimit.default[entityName];
             };
         }
 

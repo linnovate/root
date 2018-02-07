@@ -21,7 +21,7 @@ angular.module('mean.icu.data.settingsservice', [])
     };
 
     function values(obj){
-        Object.keys(obj).map(function(key){
+        return Object.keys(obj).map(function(key){
             return obj[key];
         });
     }
@@ -45,6 +45,7 @@ angular.module('mean.icu.data.settingsservice', [])
     }
     
     function getNonActiveStatuses(type) {
+        
         configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList[type];
         var nonActiveStatus = new Set(values(configNonActiveStatus));
         var typeStatusLowerCase = statusList[type].map(function (element) {
@@ -54,7 +55,6 @@ angular.module('mean.icu.data.settingsservice', [])
         var intersection = new Set([].concat(_toConsumableArray(typeStatuses)).filter(function (x) {
             return nonActiveStatus.has(x);
         }));
-        //        console.log("intersection",Array.from(intersection)) ;
         return Array.from(intersection);
     }
     

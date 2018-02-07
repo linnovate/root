@@ -9,17 +9,19 @@
         {{'noWatchers' | i18next}}
     </div>
 
-    <div class="new-member-input" ng-if="showSelect">
-        <ui-select ng-model="member" on-select="addMember(member)" autofocus>
+    <div class="new-member-input" ng-if="showSelect" on-select="addMember(member)" autofocus>
+        <ui-select ng-model="member" theme="bootstrap">
             <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}">
-                {{$item}}
+                {{$select.selected.name}}
             </ui-select-match>
-            <ui-select-choices repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
-                <div icu-avatar user="user" ng-mouseover="getGroupDetails(user)"></div>
-                <span ng-mouseover="getGroupDetails(user)">{{user.job}}</span>
-                <span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>
+            <ui-select-choices ng-click="addMember(member)" repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
+                <div ng-bind-html="user.name | highlight: $select.search"></div>
+                <!--<div icu-avatar user="user" ng-mouseover="getGroupDetails(user)"></div>-->
+                <!--<span ng-mouseover="getGroupDetails(user)">{{user.job}}</span>-->
+                <!--<span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>-->
             </ui-select-choices>
         </ui-select>
+
     </div>
 
     <div class="add-member-container" ng-if="hideAddButton">
