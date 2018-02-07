@@ -2,7 +2,10 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, $stateParams, context, NotifyingService, TasksService, $rootScope, SearchService, $filter, $location, EntityService) {
+    function controller($scope, $state, $stateParams, $filter, $location, $rootScope,
+                        context, SearchService, EntityService,
+                        NotifyingService, TasksService
+    ){
         $scope.context = context;
         $scope.recycled = $location.path().split("/").pop() === "recycled";
 
@@ -127,6 +130,7 @@ directive('icuSidepane', function() {
                 $scope.discussions, $scope.officeDocuments,
                 $scope.people);
         };
+
 
         NotifyingService.subscribe('activeSearch', function () {
             $scope.activeTab = $scope.items[0];
@@ -388,6 +392,7 @@ directive('icuSidepane', function() {
         templateUrl: '/icu/components/sidepane/sidepane.html',
         scope: {
             me: '=',
+            tasks: '=',
             projects: '=',
             discussions: '=',
             offices: '=',
