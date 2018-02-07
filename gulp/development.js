@@ -87,7 +87,7 @@ gulp.task('babel', function () {
     .pipe(babel({
       presets: [['env', {
         targets: {
-          browsers: ['last 3 versions']
+          browsers: ['chrome >= 44']
         }
       }]]
     }))
