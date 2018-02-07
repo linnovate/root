@@ -1,6 +1,6 @@
 <div class="folder-list">
     <div ng-switch="currentContext.entityName">
-        <div class="header-wrap" ng-switch-when="all" 
+        <div class="header-wrap" ng-switch-when="all"
             ng-class="{ 'active': isCurrentState(['main.{{currentContext.main}}.all']) }"
             ui-sref="main.{{currentContext.main}}.all">
             <header class="title">
@@ -11,14 +11,14 @@
             ng-class="{ 'active': isCurrentState(['main.{{currentContext.main}}.byparent.activities']) }">
             <header class="title">
                 <div>
-                    <span class="office" 
+                    <span class="office"
                       title="{{currentContext.entity.office.title}}"
                       ng-style="{'background-color': '#' + currentContext.entity.office.color, 'color': 'white'}">
                     {{currentContext.entity.office.title}}
                     </span>
                 </div>
                 {{ 'foldersFrom' | i18next }}
-            <span ng-click="goToParent()">"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span> 
+            <span ng-click="goToParent()">"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
             </header>
         </div>
             <div class="header-wrap" ng-switch-default
@@ -37,15 +37,22 @@
     <div class="filters">
         <div class="left-wrapper">
             <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
-                <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
+                <i class="fa fa-star"  tooltips
+                   tooltip-template="{{'sort by star' | i18next}}">
+                </i>
             </button>
             <div class="select-wrapper">
                 <div tooltips tooltip-template="{{'sort by' | i18next}}">
-                    <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
+                    <ui-select ng-model="sorting.field"
+                               on-select="changeOrder()"
+                               search-enabled="false">
                         <ui-select-match>
-                            <button class="tasks">{{$select.selected.title | i18next}}</button>
+                            <button class="tasks">
+                                {{$select.selected.title | i18next}}
+                            </button>
                         </ui-select-match>
-                        <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
+                        <ui-select-choices
+                            repeat="field.value as field in sortingList | filter: $select.search">
                             {{field.title | i18next}}
                         </ui-select-choices>
                     </ui-select>
