@@ -84,7 +84,7 @@ angular.module('mean.icu').config([
                     }
                 },
                 resolve: resolve
-            };
+            }
         };
 
         var getListView = function (entity, resolve) {
@@ -535,10 +535,6 @@ angular.module('mean.icu').config([
                 resolve: resolve
             };
         }
-
-
-
-
 
         function getRecycledEntities(main) {
 //            console.log("getRecycledEntities main.search.recycled") ;
