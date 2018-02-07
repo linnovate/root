@@ -1,13 +1,23 @@
 <section class="display-by">
-    <div id="searchNav" class="searchPane sidefilters" ng-if="item.name === 'search'" ng-init="filterSearchByType();resetFilter();">
+    <div id="searchNav" class="searchPane sidefilters"
+         ng-if="item.name === 'search'"
+         ng-init="filterSearchByType();resetFilter();">
         <div class="search">{{'search' | i18next}}
-            <span class="close-search" ng-click="closeSearch()">x</span>
+            <span class="close-search"
+                  ng-click="closeSearch()">x</span>
         </div>
-        <div class="subtitle typeList" ng-click="filteringData.issue='all';resetFilter();filterSearchByType();">{{'showResultsOf' | i18next}}:</div>
+        <div class="subtitle typeList"
+             ng-click="filteringData.issue='all';resetFilter();filterSearchByType();">
+            {{'showResultsOf' | i18next}}:
+        </div>
         <ul class="issue">
-            <li ng-repeat="issue in issues" ng-click="filteringData.issue = issue.name;filterSearchByType();resetFilter();">
-                <input type="radio" ng-model="filteringData.issue" ng-value="issue.name"/>
-                <span class="arrow-left" ng-show="filteringData.issue == issue.name"></span>
+            <li ng-repeat="issue in issues"
+                ng-click="filteringData.issue = issue.name;filterSearchByType();resetFilter();">
+                <input type="radio"
+                       ng-model="filteringData.issue"
+                       ng-value="issue.name"/>
+                <span class="arrow-left"
+                      ng-show="filteringData.issue == issue.name"></span>
                 <span class="icon icon-{{issue.name}}"></span>
                 <span>{{issue.label | i18next}} ({{issue.length}})</span>
             </li>
