@@ -60,19 +60,27 @@ gulp.task('sass', function() {
     .pipe(currentLanguage.direction === 'rtl' ? plugins.rtlcss({
       clean: false
     }) : gutil.noop())
-    .pipe(fixPath())
-    .pipe(gulp.dest('dist/'));
+    .pipe(gulp.dest(function (vinylFile) {
+      return vinylFile.cwd + '/packages';
+    }));
 });
 
 gulp.task('less', function() {
-    return gulp.src(paths.less)
-      .pipe(plugins.less())
-      .pipe(fixPath())
-      .pipe(gulp.dest('dist/'));
+  return gulp.src(paths.less)
+    .pipe(plugins.less())
+    .pipe(gulp.dest(function (vinylFile) {
+      return vinylFile.cwd + '/packages';
+    }));
 });
 
 gulp.task('dist:public', function() {
   return gulp.src(paths.public)
+    .pipe(fixPath())
+    .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('dist:css', function() {
+  return gulp.src(paths.css)
     .pipe(fixPath())
     .pipe(gulp.dest('dist/'));
 });
@@ -112,6 +120,7 @@ gulp.task('watch', function () {
   gulp.watch(paths.less, ['less']).on('change', plugins.livereload.changed);
   gulp.watch(paths.babel, ['babel']).on('change', plugins.livereload.changed);
   gulp.watch(paths.sass, ['sass']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.css, ['dist:css']).on('change', plugins.livereload.changed);
   plugins.livereload.listen({interval: 500});
 });
 
@@ -132,8 +141,9 @@ function count(taskName, message) {
 gulp.task('development', function(callback) {
   runSequence(
     'clean',
+    ['less', 'sass'],
     ['dist:public', 'dist:bower'],
-    ['less', 'sass', 'babel'],
+    'babel',
     ['devServe', 'watch'],
     callback
   );
