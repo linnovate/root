@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.usersservice', [])
-.service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state, $cookies, $window, WarningsService) {
+    .service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state, $cookies, $window, NotifyingService, WarningsService) {
     var EntityPrefix = '/users';
     var me = null;
 
