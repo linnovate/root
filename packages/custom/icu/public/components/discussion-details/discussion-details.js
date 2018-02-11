@@ -5,6 +5,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          entity,
                                                          tasks,
                                                          context,
+                                                         tags,
                                                          $state,
                                                          $timeout,
                                                          people,
@@ -13,6 +14,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          EntityService,
                                                          $stateParams) {
         $scope.isLoading = true;
+        $scope.tagInputVisible = false;
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("discussions")))
         {
             $scope.discussion = entity || context.entity;
@@ -27,6 +29,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.main = context.main;
         $scope.CanceledMailSend = false;
         $scope.fade = false;
+        $scope.tags = tags;
 
         if($scope.discussion.startDate){
             $scope.discussion.startDate = new Date($scope.discussion.startDate);
@@ -346,6 +349,37 @@ angular.module('mean.icu.ui.discussiondetails', [])
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
         };
 
+        $scope.getUnusedTags = function() {
+
+            return $scope.tags.filter(function(x) { return $scope.discussion.tags.indexOf(x) < 0 })
+        };
+
+        $scope.addTagClicked=function(){
+        	$scope.setFocusToTagSelect();
+        	$scope.tagInputVisible=true;
+        }
+
+        $scope.addTag = function(tag) {
+        	if(tag!=undefined && $.inArray(tag,$scope.discussion.tags)==-1){
+        		$scope.discussion.tags.push(tag);
+            	$scope.update($scope.discussion);
+        	}
+
+            $scope.tagInputVisible = false;
+        };
+
+        $scope.removeTag = function(tag) {
+            $scope.discussion.tags = _($scope.discussion.tags).without(tag);
+            $scope.update($scope.discussion);
+        };
+
+        $scope.setFocusToTagSelect = function() {
+            var element = angular.element('#addTag > input.ui-select-focusser')[0];
+            $timeout(function() {
+                element.focus();
+            }, 0);
+        };
+
         function navigateToDetails(discussion) {
             $scope.detailsState = context.entityName === 'all' ?
                 'main.discussions.all.details' : 'main.discussions.byentity.details';
@@ -380,6 +414,27 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
             });
         };
+
+        $scope.recycleRestore = function(entity) {
+            console.log("$scope.recycleRestore") ;
+            EntityService.recycleRestore('discussions', entity._id).then(function() {
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "un-deleted" // just for activity status
+                DiscussionsService.updateStatus(clonedEntity, entity).then(function(result) {
+                    ActivitiesService.data.push(result);
+                });
+
+                var state = 'main.discussions.all' ;
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
+
+            });
+        };
+        
 
         $scope.deleteDiscussion = function (discussion) {
             DiscussionsService.remove(discussion._id).then(function () {

@@ -23,13 +23,17 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             $scope.officeDocument = context.entity || entity;
         }
 
-        if($scope.officeDocument.folder && $scope.officeDocument.folder.office){
-            SignaturesService.getByOfficeId( $scope.officeDocument.folder.office)
-            .then(function (result) {
-                $scope.signatures = result;
-            
-            })
+        $scope.getSignatures = function () {
+            if($scope.officeDocument.folder && $scope.officeDocument.folder.office && $scope.officeDocument.path){
+                SignaturesService.getByOfficeId( $scope.officeDocument.folder.office._id || $scope.officeDocument.folder.office)
+                    .then(function (result) {
+                        $scope.signatures = result;
+                })
+            }
         }
+
+        $scope.getSignatures();
+        $scope.signBy = $scope.officeDocument.signBy;
 
         $scope.selectedSignature;
 
@@ -114,7 +118,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         });
 
         $scope.addSerialTitle = function(document1){
-            console.log("===UPLOAD EMPTY====");
             $scope.settingSerial = true;
             OfficeDocumentsService.addSerialTitle(document1).then(function(result){
                 $scope.settingSerial = false;                
@@ -124,14 +127,22 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 if(result && result.serial){
                     document1.serial = result.serial;
                 }
-                /**if(result && result.documentType){
-                    document1.documentType = result.documentType;
-                }
-                if(result && result.title){
-                    document1.title = result.title;
-                }
-                */
             });
+        }
+       
+        $scope.signatory = false; 
+        $scope.signOnDocx = function(document1){
+            //if(document1.spPath){
+            $scope.signatory = true; 
+            OfficeDocumentsService.signOnDocx(document1,$scope.selectedSignature).then(function(result){              
+                if(result && result.spPath){
+                    document1.spPath = result.spPath;
+                    $scope.signatory = false; 
+                }
+                $scope.signatory = false; 
+                $scope.signBy = JSON.parse($scope.selectedSignature);
+            });
+       // }
         }
 
         $scope.sendDocument = function(document1){
@@ -205,7 +216,9 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         
 
         $scope.upload = function(file) {
-            $scope.uploading = true;
+            if(file.length>0){
+                $scope.uploading = true;
+            }
             $scope.test = file;
             var data = {
                 'id':$stateParams.id,
@@ -218,6 +231,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     $scope.officeDocument.path = result.data.path;
                     $scope.officeDocument.spPath = result.data.spPath;
                     $scope.officeDocument.documentType = result.data.documentType;
+                    $scope.getSignatures();
 
                 },function (resp) {
                     console.log('Error status: ' + resp.status);
@@ -345,11 +359,33 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
+        $scope.recycleRestore = function(entity) {
+            console.log("$scope.recycleRestore") ;
+            EntityService.recycleRestore('officeDocuments', entity._id).then(function() {
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "un-deleted" // just for activity status
+                OfficeDocumentsService.updateStatus(clonedEntity, entity).then(function(result) {
+                    ActivitiesService.data.push(result);
+                });
+
+                var state = 'main.officeDocuments.all' ;
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
+
+            });
+        };
+
+
 
         $scope.deleteDocumentFile = function(officeDocument){
             OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function(){
                 officeDocument.path = undefined;
                 officeDocument.spPath = undefined;
+                $scope.signatures = undefined;
             });
         };
 
@@ -375,7 +411,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
         $scope.unsetFolder = function(event, folder) {
             event.stopPropagation();
-            delete $scope.officeDocument.folder;
+            //delete $scope.officeDocument.folder;
             $scope.updateFolder($scope.officeDocument,undefined);
         };
 
@@ -398,6 +434,12 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             json.watchers = officeDocument.watchers;
             OfficeDocumentsService.updateDocument(officeDocument._id,json).then(function(res) {
                 OfficeDocumentsService.updateEntity(officeDocument, backupEntity).then(function(result) {
+                    if(folderId == undefined){
+                        delete $scope.officeDocument.folder;
+                        $scope.signatures = undefined; 
+                    }else{
+                        $scope.getSignatures();
+                    }
                     backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
                     ActivitiesService.data = ActivitiesService.data || [] ;
                     ActivitiesService.data.push(result);
@@ -412,7 +454,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 
             });
             ActivitiesService.data = ActivitiesService.data || [];
-            let me = $scope.me;
+            var me = $scope.me;
             switch (context.name) {
                 case 'due':
                     OfficeDocumentsService.updateDue(officeDocument, backupEntity).then(function(result) {

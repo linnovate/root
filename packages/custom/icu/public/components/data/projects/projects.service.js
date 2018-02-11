@@ -126,6 +126,13 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
+    function getTags() {
+        return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
     // update activities
     function updateWatcher(project, me, watcher, type) {
         return ActivitiesService.create({
@@ -194,6 +201,7 @@ angular.module('mean.icu.data.projectsservice', [])
         getById: getById,
         getByDiscussionId: getByEntityId('discussions'),
         getByUserId: getByEntityId('users'),
+        getTags: getTags,
         create: create,
         update: update,
         remove: remove,

@@ -9,6 +9,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
         ProjectsService,
         DiscussionsService,
         UsersService,
+        OfficeDocumentsService,
         $document) {
         function controller($scope) {
 
@@ -230,7 +231,24 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     });
                 });
             };
+
+            $scope.createOfficeDocument = function() {
+
+                var params = {};
+                var state = 'main.officeDocuments.all.details.activities';
+
+                OfficeDocumentsService.createDocument({}).then(function(result){
+                    result.created=new Date(result.created);
+                    $scope.officeDocuments.push(result);
+                    params.id = result._id;
+                    debugger;
+                    $state.go(state, params, {
+                        reload: true
+                    });
+              
+                });
         }
+    }
 
         function link($scope, $element) {
             // var list = $element.find('.last-notification');
@@ -251,6 +269,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 discussions: '=',
                 projects: '=',
                 tasks: '=',
+                officeDocuments:'=',
                 me: '='
             },
             link: link,

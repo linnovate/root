@@ -6,6 +6,8 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       tasks,
                                                       people,
                                                       projects,
+                                                      tags,
+                                                      $timeout,
                                                       context,
                                                       $state,
                                                       ProjectsService,
@@ -23,6 +25,9 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.tasks = tasks.data || tasks;
         $scope.projects = projects.data || projects;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
+        $scope.tags = tags;
+
+        $scope.tagInputVisible = false;
 
         ProjectsService.getStarred().then(function (starred) {
 
@@ -102,6 +107,37 @@ angular.module('mean.icu.ui.projectdetails', [])
             dateFormat: 'd.m.yy'
         };
 
+         $scope.getUnusedTags = function() {
+
+            return $scope.tags.filter(function(x) { return $scope.project.tags.indexOf(x) < 0 })
+        };
+
+        $scope.addTagClicked=function(){
+        	$scope.setFocusToTagSelect();
+        	$scope.tagInputVisible=true;
+        }
+
+        $scope.addTag = function(tag) {
+        	if(tag!=undefined && $.inArray(tag,$scope.project.tags)==-1){
+        		$scope.project.tags.push(tag);
+            	$scope.update($scope.project);
+        	}
+
+            $scope.tagInputVisible = false;
+        };
+
+        $scope.removeTag = function(tag) {
+            $scope.project.tags = _($scope.project.tags).without(tag);
+            $scope.update($scope.project);
+        };
+
+        $scope.setFocusToTagSelect = function() {
+            var element = angular.element('#addTag > input.ui-select-focusser')[0];
+            $timeout(function() {
+                element.focus();
+            }, 0);
+        };
+
         function navigateToDetails(project) {
             $scope.detailsState = context.entityName === 'all' ?
                 'main.projects.all.details' : 'main.projects.byentity.details';
@@ -148,6 +184,26 @@ angular.module('mean.icu.ui.projectdetails', [])
                 $state.go('main.projects.all', {
                     entity: 'all'
                 }, {reload: true});
+
+            });
+        };
+
+        $scope.recycleRestore = function(entity) {
+            console.log("$scope.recycleRestore") ;
+            EntityService.recycleRestore('projects', entity._id).then(function() {
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "un-deleted" // just for activity status
+                ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {
+                    ActivitiesService.data.push(result);
+                });
+
+                var state = 'main.projects.all' ;
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
 
             });
         };

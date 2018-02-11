@@ -12,22 +12,22 @@ var entityNameMap = {
     'tasks': {
       mainModel: TaskModel,
 //      archiveModel: TaskArchiveModel,
-      name: 'Task'
+      name: 'task'
     },
     'projects': {
       mainModel: ProjectModel,
 //      archiveModel: ProjectArchiveModel,
-      name: 'Project'
+      name: 'project'
     },
     'discussions': {
       mainModel: DiscussionModel,
 //      archiveModel: DiscussionArchiveModel,
-      name: 'Discussion'
+      name: 'discussion'
     },
     'officeDocuments': {
       mainModel: OfficeDocumentsModel,
 //      archiveModel: OfficeDocumentsArchiveModel,
-      name: 'Document'
+      name: 'officeDocument'
     },
 };
 
@@ -47,7 +47,7 @@ function recycleRestoreEntity(entityType, id) {
 function recycleGetBin(entityType) {    
   var request = [];
   return new Promise(function (fulfill, reject) {
-    for(var key in entityNameMap) {
+    for(let key in entityNameMap) {
       let Model = entityNameMap[key].mainModel ;
       request.push(new Promise(function (resolve, error) {
         Model.find({recycled: { $exists: true }}).exec(function (err, entities) {            
@@ -56,7 +56,14 @@ function recycleGetBin(entityType) {
             error('error');
           }
 
-          resolve(entities);            
+          // add type entity support for recycle bin
+          let typedEntities = entities.map(function(entity) {
+            var json=JSON.stringify(entity);
+            let typedEntity = JSON.parse(json);
+            typedEntity['type'] = entityNameMap[key].name ;
+            return typedEntity ;
+          });
+          resolve(typedEntities);            
         });
       }));
   }
