@@ -92,9 +92,15 @@
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
                     <li>
-                        <a href="#" ng-click="recycle(officeDocument)">
+                        <a href="#" ng-if="!officeDocument.recycled" ng-click="recycle(officeDocument)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span>{{ 'recycleOfficeDocument' | i18next }}</span>
+                        </a>
+                    </li>                            
+                    <li>
+                        <a href="#" ng-if="officeDocument.recycled" ng-click="recycleRestore(officeDocument)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span>{{ 'unrecycleOfficeDocument' | i18next }}</span>
                         </a>
                     </li>                            
                     <!-- <li>

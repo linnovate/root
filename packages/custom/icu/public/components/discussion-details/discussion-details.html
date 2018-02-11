@@ -103,9 +103,15 @@
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
                     <li>
-                        <a href="#" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="recycle(discussion)">
+                        <a href="#" ng-if="!discussion.recycled" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="recycle(discussion)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span id="deleteDiscussion" >{{ 'recycleDiscussion' | i18next}}</span>
+                        </a>
+                    </li>                    
+                    <li>
+                        <a href="#" ng-if="discussion.recycled" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="recycleRestore(discussion)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span id="undeleteDiscussion" >{{ 'unrecycleDiscussion' | i18next}}</span>
                         </a>
                     </li>                    
                     <!-- <li>

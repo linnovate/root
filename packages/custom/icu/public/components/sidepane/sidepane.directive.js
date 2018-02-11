@@ -315,8 +315,6 @@ directive('icuSidepane', function() {
             SearchService.filteringResults = filteredByWatchers;
         };
 
-
-        ////******* */
         $scope.updatedOptions = {
             onClose: (value/*, picker, $element*/) => {
 //                        console.log("on close", value, picker, $element) ;
@@ -331,7 +329,7 @@ directive('icuSidepane', function() {
             dateFormat: 'd.m.yy'
         };
 
-        ////******* */
+
 
         $scope.filterActive = function () {
             EntityService.activeStatusFilterValue = $scope.activeToggle.field ;

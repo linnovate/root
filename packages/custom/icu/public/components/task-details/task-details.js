@@ -231,10 +231,10 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
 
         $scope.recycle = function(entity) {
-            console.log("$scope.recycle") ;
+            console.log("$scope.recycle1") ;
             EntityService.recycle('tasks', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "Recycled" // just for activity status
+                clonedEntity.status = "deleted" // just for activity status
                 TasksService.updateStatus(clonedEntity, entity).then(function(result) {
                     ActivitiesService.data.push(result);
                 });
@@ -253,7 +253,20 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.recycleRestore = function(entity) {
             console.log("$scope.recycleRestore") ;
             EntityService.recycleRestore('tasks', entity._id).then(function() {
-                navigateToDetails(entity);
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "un-deleted" // just for activity status
+                TasksService.updateStatus(clonedEntity, entity).then(function(result) {
+                    ActivitiesService.data.push(result);
+                });
+
+                var state = 'main.tasks.all' ;
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
+
             });
         };
 
