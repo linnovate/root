@@ -359,6 +359,27 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
+        $scope.recycleRestore = function(entity) {
+            console.log("$scope.recycleRestore") ;
+            EntityService.recycleRestore('officeDocuments', entity._id).then(function() {
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "un-deleted" // just for activity status
+                OfficeDocumentsService.updateStatus(clonedEntity, entity).then(function(result) {
+                    ActivitiesService.data.push(result);
+                });
+
+                var state = 'main.officeDocuments.all' ;
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
+
+            });
+        };
+
+
 
         $scope.deleteDocumentFile = function(officeDocument){
             OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function(){

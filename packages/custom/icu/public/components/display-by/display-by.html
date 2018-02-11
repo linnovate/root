@@ -13,10 +13,10 @@
             </li>
         </ul>
 
-        <div class="filterBy">
+        <!-- <div class="filterBy">
             {{'filterResultsBy' | i18next }}:
             <button ng-click="resetFilter()">{{'reset' | i18next}}</button>
-        </div>
+        </div> -->
 
         <div class="filterUpdated">
             <div class="subtitle">{{'updatedAfter' | i18next}}</div>
@@ -282,8 +282,8 @@
     <div class="sidefilters" ng-if="item.name == 'search'">
             <hr />
             <div class="filterRecycled">
-                <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">
-                    Show Deleted Items
+                <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">                    
+                    {{'showDeletedItems' | i18next}}
                 </button>
         </div>
     </div>

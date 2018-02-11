@@ -188,6 +188,26 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         };
 
+        $scope.recycleRestore = function(entity) {
+            console.log("$scope.recycleRestore") ;
+            EntityService.recycleRestore('projects', entity._id).then(function() {
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "un-deleted" // just for activity status
+                ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {
+                    ActivitiesService.data.push(result);
+                });
+
+                var state = 'main.projects.all' ;
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
+
+            });
+        };
+
 
         $scope.deleteProject = function (project) {
             ProjectsService.remove(project._id).then(function () {

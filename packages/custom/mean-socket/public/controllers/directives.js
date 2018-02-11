@@ -17,7 +17,7 @@ angular.module('mean.mean-socket').directive('meanSocket', function(Global, Mean
             
             UsersServicefunc.getMe().then(function (me) {
             //myname = me.name;
-            myname = me._id;
+            let myname = me._id;
             
 			scope.global = Global;
             
@@ -65,7 +65,7 @@ angular.module('mean.mean-socket').directive('useMeanSocket', function(Global, M
             
             UsersServicefunc.getMe().then(function (me) {
                 //myname = me.name;
-                myname = me._id;
+                let myname = me._id;
             //});
 
 			scope.global = Global;

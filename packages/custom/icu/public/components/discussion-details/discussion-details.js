@@ -415,6 +415,27 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         };
 
+        $scope.recycleRestore = function(entity) {
+            console.log("$scope.recycleRestore") ;
+            EntityService.recycleRestore('discussions', entity._id).then(function() {
+                let clonedEntity = JSON.parse(JSON.stringify(entity));
+                clonedEntity.status = "un-deleted" // just for activity status
+                DiscussionsService.updateStatus(clonedEntity, entity).then(function(result) {
+                    ActivitiesService.data.push(result);
+                });
+
+                var state = 'main.discussions.all' ;
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
+
+            });
+        };
+        
+
         $scope.deleteDiscussion = function (discussion) {
             DiscussionsService.remove(discussion._id).then(function () {
 
