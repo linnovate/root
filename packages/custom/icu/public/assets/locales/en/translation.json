@@ -311,5 +311,6 @@
     "optional":"Optional",
     "IWantToGetMailEveryWeekAboutMyTasks": "I Want To Get Mail Every Week About My Tasks",
     "IWantToGetMailEveryWeekAboutGivenTasks": "I Want To Get Mail Every Week About Given Tasks",
+    "IWantToGetMailEveryDayAboutMyTasks": "I Want To Get Mail Every Day About My Tasks",
     "sendWithAttachment": "send with attachments"
 }

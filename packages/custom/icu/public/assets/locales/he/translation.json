@@ -316,5 +316,6 @@
 	"optional":"אופציונלי",
 	"IWantToGetMailEveryWeekAboutMyTasks": "אני רוצה לקבל כל שבוע מייל על המשימות השבועיות שלי",
 	"IWantToGetMailEveryWeekAboutGivenTasks": "אני רוצה לקבל כל שבוע מייל על המשימות השבועיות שנתתי לאחרים",
+	"IWantToGetMailEveryDayAboutMyTasks": "אני רוצה לקבל כל יום מייל על המשימות היומיות שלי",
 	"sendWithAttachment": "שלח עם המסמכים המצורפים"
 }
