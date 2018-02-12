@@ -6,6 +6,12 @@
     background-color: $dark-grey;
     min-width: $sidepane-width;
     .sidefilters {
+        .filterActive {
+            width: 100% ;
+            display: inline-block;
+            width: 200px;
+        }
+
         .filterRecycled {
             @include button;
             margin-left: 23px;

@@ -20,7 +20,7 @@ angular.module('mean.icu.ui.entity', [])
         return SettingServices.getIsActiveStatus(filterValue,entityType,entityStatus)  ;
     }
 
-    let activeToggleList = [
+    var activeToggleList = [
 		{
 			title: 'Active',
 			value: 'active'

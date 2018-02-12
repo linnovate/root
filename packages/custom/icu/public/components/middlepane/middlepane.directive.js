@@ -15,14 +15,14 @@ angular.module('mean.icu.ui.middlepane', [])
 function SearchController($scope, $state, $stateParams, context, NotifyingService, TasksService, $timeout, SearchService, $document, $location) {
     $scope.$on('$stateChangeSuccess', function ($event, toState) {
 //        console.log("stateChangeSuccess", $location.path())  ;
-        if ($location.path().split("/").pop() == "recycled") {
-            $scope.term = "recycled" ;            
-        }
-        else {
-            if($scope.term == "recycled") {
-                $scope.term = $location.path().split("/").pop() ;
-            }
-        }
+        // if ($location.path().split("/").pop() == "recycled") {
+        //     $scope.term = "recycled" ;            
+        // }
+        // else {
+        //     if($scope.term == "recycled") {
+        //         $scope.term = $location.path().split("/").pop() ;
+        //     }
+        // }
 
         if (toState.name.indexOf('main.search') !== 0) {
             if ($stateParams.query && $stateParams.query.length) {
