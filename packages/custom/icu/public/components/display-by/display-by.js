@@ -5,7 +5,6 @@ angular.module('mean.icu.ui.displayby', [])
     function controller($scope, $state, context, $stateParams, $window) {
 
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
-            $scope.item = item;
             $scope.context = context;
             $scope.folders = folders;
             $scope.offices = offices;
