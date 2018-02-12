@@ -801,6 +801,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             white-space: nowrap;
             display: inline-table;
             float: left;
+            left: auto;            
 
             .delete {
                 display: none;
@@ -1019,6 +1020,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             cursor: pointer;
             width: 30px;
             height: 30px;
+            top: auto;
+            left: auto;
             background: url("/icu/assets/img/new_lable.png") $orange no-repeat center;
             .fa {
              display: none;
@@ -1171,6 +1174,9 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             cursor: pointer;
             width: 30px;
             height: 30px;
+            top: auto;
+            left: auto;
+            margin: 0 -28px;
             background: url("/icu/assets/img/new_lable.png") $orange no-repeat center;
             .fa {
              display: none;
