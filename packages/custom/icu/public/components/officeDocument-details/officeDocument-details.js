@@ -137,6 +137,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             OfficeDocumentsService.signOnDocx(document1,$scope.selectedSignature).then(function(result){              
                 if(result && result.spPath){
                     document1.spPath = result.spPath;
+                    document1.signBy = result.signBy;
                     $scope.signatory = false; 
                 }
                 $scope.signatory = false; 
