@@ -128,17 +128,11 @@ directive('icuSidepane', function() {
 
         $scope.getActiveTab = function(){
             $scope.items.forEach(function(item){
-                if($scope.currentState.indexOf(item.state) !== -1){
+                if($scope.currentState.indexOf(item.state.split('.')[0]) !== -1){
                     return $scope.setActive(item);
                 }
             })
         };
-
-        // if($stateParams.activeTab){
-        //     $scope.activeTab = $stateParams.activeTab
-        // } else {
-        //     $scope.getActiveTab();
-        // }
 
         $scope.savedTab = $stateParams.activeTab;
 
@@ -157,8 +151,11 @@ directive('icuSidepane', function() {
         ];
 
         $scope.getNavColor = function(item, index){
+            if(!$scope.activeTab){
+                $scope.getActiveTab();
+            }
             for(let i = 0; i < $scope.items.length ; i++){
-                if($scope.activeTab.name === item.name){
+                if($scope.activeTab === item){
                     $scope.$broadcast('sidepan', item,
                         $scope.context, $scope.folders,
                         $scope.offices, $scope.projects,
