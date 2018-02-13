@@ -30,6 +30,7 @@ angular.module('mean.icu.data.settingsservice', [])
     let configNonActiveStatus = config.activeStatus && config.activeStatus.nonActiveStatus ? config.activeStatus.nonActiveStatus : null ;
 
     function getActiveStatuses(type) {
+//        console.log(type) ;
         configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList.Typed(type) ;
         let nonActiveStatus = new Set(Object.values(configNonActiveStatus)) ;
         let typeStatusLowerCase =  statusList.Typed(type).map(element => element.toLowerCase());

@@ -1089,6 +1089,157 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 }
 }
 
+   .tags {
+        border-bottom: 1px solid $light-grey1;
+        border-top: 1px solid $light-grey1;
+        background: 0 center url('/icu/assets/img/tags.png') no-repeat;
+        display: table;
+
+        width: 100%;
+        min-height: 35px;
+
+        & > * {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .list {
+            padding: 5px 25px;
+
+            .placeholder {
+                color: $light-grey-placeholder;
+                padding-left: 10px;
+            }
+
+            li {
+                list-style: none;
+                display: inline-block;
+            }
+
+            .tag-item {
+                display: inline-block;
+                cursor: pointer;
+
+                margin-left: 10px;
+                margin-top: 3px;
+                font-size: 12px;
+                padding: 0 5px;
+                background-color: white;
+                border: 1px solid $light-grey1;
+
+                &:hover {
+                    background-color: $light-grey1;
+                    border: 1px solid;
+
+                    button {
+                        display: inline-block;
+                        background-color: inherit;
+                    }
+                }
+
+                button {
+                    @include button;
+                    display: none;
+                    color: $light-grey1;
+                    line-height: 12px;
+
+                    i {
+                        background-color: $dark-grey;
+                        line-height: 12px;
+                        border-radius: 6px;
+                        width: 13px;
+                        height: 12px;
+                    }
+                }
+            }
+        }
+
+        .new-tag-input {
+            line-height: 28px;
+            height: 28px;
+            float: left;
+            margin: 0 10px;
+        }
+
+        .new-tag-icon {
+            @include tag(15px);
+            @include button;
+
+            margin: 0;
+            float: right;
+            color: white;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            background: url("/icu/assets/img/new_lable.png") $orange no-repeat center;
+            .fa {
+             display: none;
+         }
+         div{
+            width: 30px;
+            height: 30px;
+        }
+        &:hover{
+            background-color: #FFB435;
+            transition: 0.8s;
+        }
+
+    }
+
+    .ui-select-container {
+        appearance: none;
+        background-color: $cream;
+        border: none;
+       
+        box-shadow: none;
+
+        .ui-select-match {
+            display: inline-block;
+            width: 150px;
+            height: 24px;
+
+            .btn {
+                border-radius: 0;
+                font-size: 12px;
+                line-height: 0.9;
+
+                .ui-select-placeholder {
+                    float: left !important;
+                }
+            }
+
+            &.btn-default-focus {
+                background-color: transparent;
+                box-shadow: none;
+            }
+
+            i.caret {
+                display: none;
+            }
+        }
+
+        .ui-select-choices {
+            width: 150px;
+            min-width: 150px;
+            border-radius: 0;
+            margin-top: -2px;
+        }
+
+        input {
+            border-radius: 0;
+            font-size: 12px;
+            line-height: 0.9;
+            width: 150px;
+            box-shadow: none;
+        }
+
+        .form-control {
+            height: 24px;
+            display: inline-block;
+        }
+    }
+}
+
 .tabs {
     height: $switcher-height;
     margin: 0 30px;

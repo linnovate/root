@@ -93,6 +93,13 @@ angular.module('mean.icu.data.discussionsservice', [])
         });
     }
 
+    function getTags() {
+        return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
     function summary(discussion) {
         return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/summary').then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
@@ -215,6 +222,7 @@ angular.module('mean.icu.data.discussionsservice', [])
         getAll: getAll,
         getById: getById,
         getByProjectId: getByEntityId('projects'),
+        getTags: getTags,
         create: create,
         update: update,
         remove: remove,

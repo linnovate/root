@@ -7,6 +7,8 @@ angular.module('mean.icu.ui.folderdetails', [])
                                                       people,
                                                       folders,
                                                       offices,
+                                                      tags,
+                                                      $timeout,
                                                       context,
                                                       $state,
                                                       FoldersService,
@@ -32,6 +34,9 @@ angular.module('mean.icu.ui.folderdetails', [])
             'class': 'create-new',
             'color': 'rgb(0, 151, 167)'
         });
+        $scope.tags = tags;
+
+        $scope.tagInputVisible = false;
 
         FoldersService.getStarred().then(function (starred) {
 
@@ -146,6 +151,37 @@ angular.module('mean.icu.ui.folderdetails', [])
                 $scope.update($scope.folder, 'due');
             },
             dateFormat: 'd.m.yy'
+        };
+
+        $scope.getUnusedTags = function() {
+
+            return $scope.tags.filter(function(x) { return $scope.folder.tags.indexOf(x) < 0 })
+        };
+
+        $scope.addTagClicked=function(){
+        	$scope.setFocusToTagSelect();
+        	$scope.tagInputVisible=true;
+        }
+
+        $scope.addTag = function(tag) {
+        	if(tag!=undefined && $.inArray(tag,$scope.folder.tags)==-1){
+        		$scope.folder.tags.push(tag);
+            	$scope.update($scope.folder);
+        	}
+
+            $scope.tagInputVisible = false;
+        };
+
+        $scope.removeTag = function(tag) {
+            $scope.folder.tags = _($scope.folder.tags).without(tag);
+            $scope.update($scope.folder);
+        };
+
+        $scope.setFocusToTagSelect = function() {
+            var element = angular.element('#addTag > input.ui-select-focusser')[0];
+            $timeout(function() {
+                element.focus();
+            }, 0);
         };
 
         function navigateToDetails(folder) {

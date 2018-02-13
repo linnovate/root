@@ -21,6 +21,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 officeDocument: 'OfficeDocumentsService',
                 templateDoc: 'TemplateDocsService',
             };
+            $scope.hideAddButton = context.main=="templateDocs" ? false:true;
             $scope.me = {};
             UsersService.getMe().then(function(me) {
                 $scope.me = me;

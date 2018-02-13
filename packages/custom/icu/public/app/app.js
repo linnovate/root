@@ -184,6 +184,11 @@ angular.module('mean.icu').config([
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
+                    },
+                    tags: function (ProjectsService) {
+                        return ProjectsService.getTags().then(function (tags) {
+                            return tags;
+                        });
                     }
                 }
             }
@@ -341,6 +346,11 @@ angular.module('mean.icu').config([
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
+                    },
+                    tags: function (FoldersService) {
+                        return FoldersService.getTags().then(function (tags) {
+                            return tags;
+                        });
                     }
                 }
             };
@@ -398,6 +408,11 @@ angular.module('mean.icu').config([
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByDiscussionId($stateParams.id);
+                    },
+                    tags: function (DiscussionsService) {
+                        return DiscussionsService.getTags().then(function (tags) {
+                            return tags;
+                        });
                     }
                 }
             };
@@ -565,8 +580,8 @@ angular.module('mean.icu').config([
                         return unmerged.then(function(arrays) {
                             let merged = [].concat.apply([], arrays);
                             let mergedAdjuested = merged.map(function(item) {
-                                item._type = 'task';
-                                item.id = item._id;
+                                item._type = "task"; // not entity type. type kept in "type".
+                                item.id = item._id; 
                                 return item ;
                             })
                             return mergedAdjuested ;
