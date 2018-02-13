@@ -7,14 +7,18 @@
     </div>
     <div class="header-title">
 
-        <span class="sidepane-title" ng-click="GoToMyTasks()"> {{ 'icu' | i18next }} </span>
+        <span class="sidepane-title"
+              data-ng-class="{ 'selected': context.entityName === 'all'}"
+              ng-click="switchToAll(singularItemName[context.main], activeTab._id)"
+        >
+            {{ 'icu' | i18next }}
+        </span>
     </div>
 </header>
 <!-- until there is integration with Circles
 <div ng-if="$root.warnings.circles !== 'undefined'" style="color:red;">
 	{{$root.warnings.circles | i18next}}
-</div>
--->
+</div>-->
 <icu-open-modal/>
 
 <div class="sideMenu">
