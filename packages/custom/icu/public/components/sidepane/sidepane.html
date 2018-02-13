@@ -9,9 +9,14 @@
 
         <span class="sidepane-title"
               data-ng-class="{ 'selected': context.entityName === 'all'}"
-              ng-click="switchToAll(singularItemName[context.main], activeTab._id);
+              href="/tasks/all"
+              ui-sref="main.tasks.all({'officeDocuments':undefined})"
+              ui-sref-active="active"
+              ng-click="reset(context.main);
+              switchToAll(singularItemName[context.main], activeTab._id);
               filteringData.issue='all';resetFilter();filterSearchByType()">
             {{ 'icu' | i18next }}
+
         </span>
     </div>
 </header>
