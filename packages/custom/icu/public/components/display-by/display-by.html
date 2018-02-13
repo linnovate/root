@@ -1,5 +1,7 @@
 <section class="display-by">
-    <div id="searchNav" class="searchPane sidefilters" ng-if="item.name === 'search'" ng-init="filterSearchByType();resetFilter();">
+    <div id="searchNav" class="searchPane sidefilters"
+         ng-if="activeTab.name === 'search'"
+         ng-init="filterSearchByType();resetFilter();">
         <div class="search">{{'search' | i18next}}
             <span class="close-search" ng-click="closeSearch()">x</span>
         </div>
@@ -125,7 +127,7 @@
 
         </div>
     </div>
-    <div class="all" ng-if="context.main != 'folders' && item.name !== 'search'">
+    <div class="all" ng-if="context.main != 'folders' && activeTab.name !== 'search'">
         <p class="title my" ng-if="context.main === 'tasks'"
            ui-sref="main.{{context.main}}.byassign"
            ui-sref-active="active"
@@ -133,7 +135,7 @@
             {{ 'MYTASKS' | i18next }}
         </p>
     </div>
-    <div class="all" ng-if="context.main != 'folders' && item.name !== 'search'">
+    <div class="all" ng-if="context.main != 'folders' && activeTab.name !== 'search'">
         <p class="title all"
            ui-sref="main.{{context.main}}.all({'officeDocuments':undefined})"
            ng-click="reset(context.main)"
@@ -162,10 +164,11 @@
         <!--<p class="intro">{{'display'+context.main+'By' | i18next}}:</p>-->
     </div>
 
-    <div class="list projects" ng-if="projectsList  && item.name !== 'search'">
+    <div class="list projects" ng-if="projectsList  && activeTab.name !== 'search'">
         <p ng-click="visible.project = !visible.project"
            class="title">
-            {{ currentState.indexOf('discussions') !== -1 ? "discussionsFromProject" : 'projectsFromDiscussion' | i18next }}
+            {{ currentState.indexOf('discussions') !== -1 ? "discussionsFromProject" :
+            (currentState.indexOf('tasks') !== -1 ? "tasksInProject" : 'projectsFromDiscussion') | i18next }}
         </p>
         <ul ng-if="visible.project && projectsList.length !== 0">
             <li data-ng-repeat="project in projectsList | filterRecycled | limitTo: displayLimit['projects']"
@@ -187,8 +190,9 @@
     </div>
     <!-- list discussions in: tasks and projects -->
     <div class="list discussions"
-         ng-if="discussions && item.display.indexOf('discussions') == -1
-         && item.name !== 'search' && currentState.indexOf('discussion') == -1">
+         ng-if="discussions
+         && currentState.indexOf('tasks') != -1
+         && activeTab.name !== 'search'">
         <p ng-click="visible.discussion = !visible.discussion"
            class="title">
             {{ item.state == "projects.all" ? 'projectsFromDiscussion' : 'tasksFromMeeting' | i18next }}</p>
@@ -209,7 +213,7 @@
         </ul>
     </div>
 
-    <div class="list people" ng-if="people && item.display.indexOf('people') !== -1 || item.name === 'search'">
+    <div class="list people" ng-if="people && item.display.indexOf('people') !== -1 || activeTab.name === 'search'">
         <p ng-click="visible.user = !visible.user"
            class="title">{{ 'tasksAssignedTo' | i18next }}</p>
         <ul ng-if="visible.user">
@@ -229,7 +233,7 @@
                 class="more">{{ 'less' | i18next }}</li>
         </ul>
     </div>
-    <div class="list officeDocuments" ng-if="context.main == 'officeDocuments' && item.name !== 'search'">
+    <div class="list officeDocuments" ng-if="context.main == 'officeDocuments' && activeTab.name !== 'search'">
         <!-- <p ng-click="visible.officeDocument = !visible.officeDocument" class="title">{{ 'officeDocuments' | i18next }}</p>
         <ul ng-if="visible.officeDocument">
             <li data-ng-repeat="officeDocument in officeDocuments | limitTo:displayLimit['officeDocuments']"
@@ -256,7 +260,10 @@
 
     </div>
 
-    <div class="list offices" ng-if="officesList && item.display.indexOf('offices') !== -1 && item.display !== undefined && item.name !== 'search'">
+    <div class="list offices"
+         ng-if="officesList && item.display.indexOf('offices') !== -1
+                && item.display !== undefined
+                && activeTab.name !== 'search'">
         <p ng-click="visible.office = !visible.office && folders.length !== 0" class="title">{{ 'folders' | i18next }}</p>
         <p class="title go-to-Offices" ng-click="GoToOffices()"> {{ 'offices' | i18next }} </p>
         <p class="title go-to-Offices" ng-click="GoToTemplateDocs()"> {{ 'templateDoc' | i18next }} </p>
