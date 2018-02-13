@@ -10,11 +10,8 @@
         <span class="sidepane-title"
               data-ng-class="{ 'selected': context.entityName === 'all'}"
               href="/tasks/all"
-              ui-sref="main.tasks.all({'officeDocuments':undefined})"
               ui-sref-active="active"
-              ng-click="reset(context.main);
-              switchToAll(singularItemName[context.main], activeTab._id);
-              filteringData.issue='all';resetFilter();filterSearchByType()">
+              ng-click="GoToMyTasks()">
             {{ 'icu' | i18next }}
         </span>
     </div>
