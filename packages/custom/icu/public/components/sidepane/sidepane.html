@@ -11,7 +11,7 @@
               data-ng-class="{ 'selected': context.entityName === 'all'}"
               href="/tasks/all"
               ui-sref-active="active"
-              ng-click="GoToMyTasks()">
+              ng-click="GoToMyTasks();activeTab = items[1]">
             {{ 'icu' | i18next }}
         </span>
     </div>
