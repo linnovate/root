@@ -50,7 +50,7 @@
     "createWebhook": "Create Webhook",
     "DELETE": "DELETE",
     "deadline": "Deadline",
-    "deleteDiscussion": "Delete discussion",
+    "deleteDiscussion": "Delete discussion",    
     "recycleDiscussion": "Delete discussion",
     "unrecycleDiscussion": "Un-delete discussion",
     "deleteProject": "Delete project",

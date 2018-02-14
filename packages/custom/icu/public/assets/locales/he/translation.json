@@ -231,6 +231,8 @@
 	"deleteOfficeDocument": "מחק מסמך",
 	"recycleOfficeDocument": "מחק מסמך",
 	"unrecycleOfficeDocument": "אחזר מסמך",
+	"recycleOfficeDocument": "מחק מסמך",
+	"unrecycleOfficeDocument": "אחזר מסמך",
     "simochin": "סימוכין",
     "chooseFile": "בחר מסמך",
     "createFromTemplate": "צור מתוך תבנית",
