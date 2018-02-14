@@ -177,90 +177,180 @@ exports.uploadEmpty = function(req,res,next){
 exports.signOnDocx = function(req,res,next){
   var doc = req.body.document;
   var signature = JSON.parse(req.body.signature);
-  var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
-  var spPath = doc.spPath?doc.spPath:"spPath";
-  var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
-  fileName=fileName?fileName:"hi";
 
-  // Document.findOne({'_id':doc._id},function(error,doc){
-  //           doc.signBy = signature._id
-  //           doc.save(function(err,result){
-  //             if(err){
-  //               res.send(err);
-  //             }
-  //             else{
-  //               res.send(result);
-  //             }
-        
-  //     });
-  
-  var coreOptions = {
-    "siteUrl":config.SPHelper.SPSiteUrl
-  };
-  var creds = {
-    "username":config.SPHelper.username,
-    "password":config.SPHelper.password
-  };
-  var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
-  var fileOptions = {
-    "folder":folder,
-    "fileName":fileName,
-    "fileContent":undefined
-  };
-  var users = [];
-  users.push({
-    '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-    'Role':3,
-    'UserId':doc.creator.username.toLowerCase()
-  });
-  doc.watchers.forEach(function(watcher){
-    users.push({
-      '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-      'Role':3,
-      'UserId':watcher.username.toLowerCase()
-    });
-  });
+  Document.find({"_id":doc._id})
+  .populate('folder')
+  .populate('creator')
+  .populate('updater')
+  .populate('sender')
+  .populate('sendingAs')
+  .populate('assign')
+  .populate('relatedDocuments')
+  .populate('forNotice')
+  .populate('watchers')
+  .populate('doneBy')
+  .populate('signBy')
+  .exec(function(err,data){
+    if(err){
 
-  var json = {
-    'siteUrl':config.SPHelper.SPSiteUrl,
-    'fileUrl':spPath,
-    'signature':signature,
-    'coreOptions':coreOptions,
-    'creds':creds,
-    'fileOptions':fileOptions,
-    'permissions':users,
-    'isTemplate':false
-  };
+    }else{
+      doc = data[0];
+      var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
+      var spPath = doc.spPath?doc.spPath:"spPath";
+      var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
+      fileName=fileName?fileName:"hi";
 
-
-
-  request({
-    'url':config.SPHelper.uri+"/api/signOnDocx",
-    'method':'POST',
-    'json':json
-  },function(error,resp,body){
-    if(error){
-      res.send(error);
-    }
-    else{
-      var set = {'spPath':body.path};
-      Document.findOne({
-        '_id':req.body._id
-      },function(error,doc){
-        doc.spPath = body.path;
-        doc.signBy = signature._id
-        doc['id'] = req.body._id;
-        doc.save(function(err,result){
-          if(err){
-            res.send(err);
-          }
-          else{
-            res.send(set);
-          }
+      var coreOptions = {
+        "siteUrl":config.SPHelper.SPSiteUrl
+      };
+      var creds = {
+        "username":config.SPHelper.username,
+        "password":config.SPHelper.password
+      };
+      var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
+      var fileOptions = {
+        "folder":folder,
+        "fileName":fileName,
+        "fileContent":undefined
+      };
+      var users = [];
+      users.push({
+        '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+        'Role':3,
+        'UserId':doc.creator.username.toLowerCase()
+      });
+      doc.watchers.forEach(function(watcher){
+        users.push({
+          '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+          'Role':3,
+          'UserId':watcher.username.toLowerCase()
         });
       });
-     }
+    
+      var json = {
+        'siteUrl':config.SPHelper.SPSiteUrl,
+        'fileUrl':spPath,
+        'signature':signature,
+        'coreOptions':coreOptions,
+        'creds':creds,
+        'fileOptions':fileOptions,
+        'permissions':users,
+        'isTemplate':false
+      };
+
+      request({
+        'url':config.SPHelper.uri+"/api/signOnDocx",
+        'method':'POST',
+        'json':json
+      },function(error,resp,body){
+        if(error){
+          res.send(error);
+        }else{
+          var set = {'spPath':body.path,
+                     'signBy':signature};
+          Document.findOne({
+            '_id':doc._id
+          },function(error,doc1){
+            doc1.spPath = body.path;
+            doc1.signBy = signature._id
+            //doc1['id'] = req.body._id;
+            doc1.save(function(err,result){
+              if(err){
+                res.send(err);
+              }
+              else{
+                res.send(set);
+              }
+            });
+          });
+         }
+      });
+    }
   });
+  // var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
+  // var spPath = doc.spPath?doc.spPath:"spPath";
+  // var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
+  // fileName=fileName?fileName:"hi";
+
+  // // Document.findOne({'_id':doc._id},function(error,doc){
+  // //           doc.signBy = signature._id
+  // //           doc.save(function(err,result){
+  // //             if(err){
+  // //               res.send(err);
+  // //             }
+  // //             else{
+  // //               res.send(result);
+  // //             }
+        
+  // //     });
+  
+  // var coreOptions = {
+  //   "siteUrl":config.SPHelper.SPSiteUrl
+  // };
+  // var creds = {
+  //   "username":config.SPHelper.username,
+  //   "password":config.SPHelper.password
+  // };
+  // var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
+  // var fileOptions = {
+  //   "folder":folder,
+  //   "fileName":fileName,
+  //   "fileContent":undefined
+  // };
+  // var users = [];
+  // users.push({
+  //   '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+  //   'Role':3,
+  //   'UserId':doc.creator.username.toLowerCase()
+  // });
+  // doc.watchers.forEach(function(watcher){
+  //   users.push({
+  //     '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+  //     'Role':3,
+  //     'UserId':watcher.username.toLowerCase()
+  //   });
+  // });
+
+  // var json = {
+  //   'siteUrl':config.SPHelper.SPSiteUrl,
+  //   'fileUrl':spPath,
+  //   'signature':signature,
+  //   'coreOptions':coreOptions,
+  //   'creds':creds,
+  //   'fileOptions':fileOptions,
+  //   'permissions':users,
+  //   'isTemplate':false
+  // };
+
+
+
+  // request({
+  //   'url':config.SPHelper.uri+"/api/signOnDocx",
+  //   'method':'POST',
+  //   'json':json
+  // },function(error,resp,body){
+  //   if(error){
+  //     res.send(error);
+  //   }
+  //   else{
+  //     var set = {'spPath':body.path};
+  //     Document.findOne({
+  //       '_id':req.body._id
+  //     },function(error,doc){
+  //       doc.spPath = body.path;
+  //       doc.signBy = signature._id
+  //       doc['id'] = req.body._id;
+  //       doc.save(function(err,result){
+  //         if(err){
+  //           res.send(err);
+  //         }
+  //         else{
+  //           res.send(set);
+  //         }
+  //       });
+  //     });
+  //    }
+  // });
 
   };
 
