@@ -238,6 +238,10 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.visible[$scope.context.entityName] = true;
 
+        $scope.GoToFolders = function() {
+            $state.go('main.folders.all');
+        };
+
         $scope.GoToOffices = function() {
             $state.go('main.offices.all');
         };
