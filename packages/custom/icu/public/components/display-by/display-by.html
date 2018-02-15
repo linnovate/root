@@ -220,7 +220,10 @@
         </ul>
     </div>
 
-    <div class="list people" ng-if="people && item.display.indexOf('people') !== -1 || activeTab.name === 'search'">
+    <div class="list people"
+         ng-if="people
+                && activeTab.display.indexOf('people') !== -1
+                && activeTab.name !== 'search'">
         <p ng-click="visible.user = !visible.user"
            class="title">{{ 'tasksAssignedTo' | i18next }}</p>
         <ul ng-if="visible.user">
