@@ -135,7 +135,8 @@
             {{ 'MYTASKS' | i18next }}
         </p>
     </div>
-    <div class="all" ng-if="context.main != 'folders' && activeTab.name !== 'search'">
+
+    <div class="all" ng-if="context.main != 'folders' && context.main != 'offices' && context.main != 'templateDocs' && activeTab.name !== 'search'">
         <p class="title all"
            ui-sref="main.{{context.main}}.all({'officeDocuments':undefined})"
            ng-click="reset(context.main)"
@@ -273,6 +274,7 @@
     </div>
 
     <div class="list offices"
+         
          ng-if="officesList
          && activeTab.display.indexOf('offices') !== -1
          && activeTab.display.indexOf('templateDocs') !== -1
