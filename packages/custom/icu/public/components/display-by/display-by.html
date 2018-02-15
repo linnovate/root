@@ -164,11 +164,18 @@
         <!--<p class="intro">{{'display'+context.main+'By' | i18next}}:</p>-->
     </div>
 
-    <div class="list projects" ng-if="projectsList  && activeTab.name !== 'search'">
+    <div class="list projects"
+         ng-if="projectsList
+         && activeTab.display.indexOf('projects') !== -1
+         && activeTab.name !== 'search'">
         <p ng-click="visible.project = !visible.project"
            class="title">
-            {{ currentState.indexOf('discussions') !== -1 ? "discussionsFromProject" :
-            (currentState.indexOf('tasks') !== -1 ? "tasksInProject" : 'projectsFromDiscussion') | i18next }}
+            {{
+            currentState.indexOf('discussions') !== -1 ? "discussionsFromProject" : (
+            currentState.indexOf('tasks') !== -1 ? "tasksInProject" :
+            currentState.indexOf('folders') !== -1 ? "foldersFromProject" :
+            currentState.indexOf('officeDocuments') !== -1 ? "documentsFromProject" :
+            'projectsFromDiscussion') | i18next | uppercase}}
         </p>
         <ul ng-if="visible.project && projectsList.length !== 0">
             <li data-ng-repeat="project in projectsList | filterRecycled | limitTo: displayLimit['projects']"
@@ -191,7 +198,7 @@
     <!-- list discussions in: tasks and projects -->
     <div class="list discussions"
          ng-if="discussions
-         && currentState.indexOf('tasks') != -1
+         && activeTab.display.indexOf('discussions') != -1
          && activeTab.name !== 'search'">
         <p ng-click="visible.discussion = !visible.discussion"
            class="title">
@@ -213,7 +220,10 @@
         </ul>
     </div>
 
-    <div class="list people" ng-if="people && item.display.indexOf('people') !== -1 || activeTab.name === 'search'">
+    <div class="list people"
+         ng-if="people
+                && activeTab.display.indexOf('people') !== -1
+                && activeTab.name !== 'search'">
         <p ng-click="visible.user = !visible.user"
            class="title">{{ 'tasksAssignedTo' | i18next }}</p>
         <ul ng-if="visible.user">
@@ -261,15 +271,19 @@
     </div>
 
     <div class="list offices"
-         ng-if="officesList && item.display.indexOf('offices') !== -1
-                && item.display !== undefined
+         ng-if="officesList
+         && activeTab.display.indexOf('offices') !== -1
+         && activeTab.display.indexOf('templateDocs') !== -1
                 && activeTab.name !== 'search'">
-        <p ng-click="visible.office = !visible.office && folders.length !== 0" class="title">{{ 'folders' | i18next }}</p>
+        <!--<p ng-click="visible.office = !visible.office && folders.length !== 0" class="title">{{ 'folders' | i18next }}</p>-->
+        <p class="title go-to-Offices" ng-click="GoToFolders()" >{{ 'folders' | i18next }}</p>
         <p class="title go-to-Offices" ng-click="GoToOffices()"> {{ 'offices' | i18next }} </p>
         <p class="title go-to-Offices" ng-click="GoToTemplateDocs()"> {{ 'templateDoc' | i18next }} </p>
         <p class="title go-to-Offices" ng-if="me.roles.indexOf('admin')>=-1" ng-click="GoToAdminSettings()"> {{ 'adminSettings' | i18next }} </p>
     </div>
-    <div class="list folders" ng-if="foldersList && item.display.indexOf('folders') !== -1 && item.display !== undefined">
+    <div class="list folders"
+         ng-if="foldersList
+                && activeTab.display.indexOf('folders') !== -1">
         <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}
             <div ng-if="folders.length !== 0" tooltips tooltip-template="{{'selectOffice' | i18next}}">
                 <ui-select ng-model="officesList.office" on-select="changeOrder()" search-enabled="false">
@@ -298,7 +312,7 @@
     <div class="sidefilters" ng-if="item.name == 'search'">
             <hr />
             <div class="filterRecycled">
-                <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">                    
+                <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">
                     {{'showDeletedItems' | i18next}}
                 </button>
         </div>
