@@ -233,12 +233,8 @@
     "templateDocsFrom": "תבנית מסמך מ",
     "templateDoc": "תבנית מסמך",
 	"deleteOfficeDocument": "מחק מסמך",
-<<<<<<< HEAD
-	"recycleOfficeDocument": "מחק",
-=======
 	"recycleOfficeDocument": "מחק מסמך",
 	"unrecycleOfficeDocument": "אחזר מסמך",
->>>>>>> master
     "simochin": "סימוכין",
     "chooseFile": "בחר מסמך",
     "createFromTemplate": "צור מתוך תבנית",
