@@ -171,10 +171,10 @@
         <p ng-click="visible.project = !visible.project"
            class="title">
             {{
-            currentState.indexOf('discussions') !== -1 ? "discussionsFromProject" : (
-            currentState.indexOf('tasks') !== -1 ? "tasksInProject" :
-            currentState.indexOf('folders') !== -1 ? "foldersFromProject" :
-            currentState.indexOf('officeDocuments') !== -1 ? "documentsFromProject" :
+            activeTab.name == 'meetings' ? "discussionsFromProject" : (
+            activeTab.name =='tasks' ? "tasksInProject" :
+            activeTab.name =='folders' ? "foldersFromProject" :
+            activeTab.name =='officeDocuments' ? "documentsFromProject" :
             'projectsFromDiscussion') | i18next | uppercase}}
         </p>
         <ul ng-if="visible.project && projectsList.length !== 0">
@@ -202,7 +202,9 @@
          && activeTab.name !== 'search'">
         <p ng-click="visible.discussion = !visible.discussion"
            class="title">
-            {{ item.state == "projects.all" ? 'projectsFromDiscussion' : 'tasksFromMeeting' | i18next }}</p>
+            {{ activeTab.name =='projects'
+            ? 'projectsFromDiscussion'
+            : 'tasksFromMeeting' | i18next }}</p>
         <ul ng-if="visible.discussion && discussions.length !== 0">
             <li data-ng-repeat="discussion in discussions | filterRecycled | limitTo:displayLimit['discussions']"
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
