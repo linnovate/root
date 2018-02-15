@@ -164,7 +164,10 @@
         <!--<p class="intro">{{'display'+context.main+'By' | i18next}}:</p>-->
     </div>
 
-    <div class="list projects" ng-if="projectsList  && activeTab.name !== 'search'">
+    <div class="list projects"
+         ng-if="projectsList
+         && activeTab.display.indexOf('projects') !== -1
+         && activeTab.name !== 'search'">
         <p ng-click="visible.project = !visible.project"
            class="title">
             {{
@@ -269,7 +272,8 @@
          && activeTab.display.indexOf('offices') !== -1
          && activeTab.display.indexOf('templateDocs') !== -1
                 && activeTab.name !== 'search'">
-        <p ng-click="visible.office = !visible.office && folders.length !== 0" class="title">{{ 'folders' | i18next }}</p>
+        <!--<p ng-click="visible.office = !visible.office && folders.length !== 0" class="title">{{ 'folders' | i18next }}</p>-->
+        <p class="title go-to-Offices" ng-click="GoToFolders()" >{{ 'folders' | i18next }}</p>
         <p class="title go-to-Offices" ng-click="GoToOffices()"> {{ 'offices' | i18next }} </p>
         <p class="title go-to-Offices" ng-click="GoToTemplateDocs()"> {{ 'templateDoc' | i18next }} </p>
         <p class="title go-to-Offices" ng-if="me.roles.indexOf('admin')>=-1" ng-click="GoToAdminSettings()"> {{ 'adminSettings' | i18next }} </p>
