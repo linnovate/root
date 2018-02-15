@@ -198,7 +198,7 @@
     <!-- list discussions in: tasks and projects -->
     <div class="list discussions"
          ng-if="discussions
-         && currentState.indexOf('tasks') != -1
+         && activeTab.display.indexOf('discussions') != -1
          && activeTab.name !== 'search'">
         <p ng-click="visible.discussion = !visible.discussion"
            class="title">
