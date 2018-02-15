@@ -5,12 +5,12 @@
                 ng-click="changeLayout()">
         </button>
     </div>
-    <div class="header-title">
-
+    <div class="header-title">            
         <span class="sidepane-title"
-              data-ng-class="{ 'selected': context.entityName === 'all'}"
-              ng-click="switchToAll(singularItemName[context.main], activeTab._id);
-              filteringData.issue='all';resetFilter();filterSearchByType()">
+                data-ng-class="{ 'selected': context.entityName === 'all'}"
+                href="/tasks/all"
+                ui-sref-active="active"
+                ng-click="GoToMyTasks();activeTab = items[1]">
             {{ 'icu' | i18next }}
         </span>
     </div>
