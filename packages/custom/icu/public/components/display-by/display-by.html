@@ -278,7 +278,9 @@
         <p class="title go-to-Offices" ng-click="GoToTemplateDocs()"> {{ 'templateDoc' | i18next }} </p>
         <p class="title go-to-Offices" ng-if="me.roles.indexOf('admin')>=-1" ng-click="GoToAdminSettings()"> {{ 'adminSettings' | i18next }} </p>
     </div>
-    <div class="list folders" ng-if="foldersList && item.display.indexOf('folders') !== -1 && item.display !== undefined">
+    <div class="list folders"
+         ng-if="foldersList
+                && activeTab.display.indexOf('folders') !== -1">
         <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}
             <div ng-if="folders.length !== 0" tooltips tooltip-template="{{'selectOffice' | i18next}}">
                 <ui-select ng-model="officesList.office" on-select="changeOrder()" search-enabled="false">
