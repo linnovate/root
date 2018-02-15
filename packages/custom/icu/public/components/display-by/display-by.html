@@ -167,8 +167,12 @@
     <div class="list projects" ng-if="projectsList  && activeTab.name !== 'search'">
         <p ng-click="visible.project = !visible.project"
            class="title">
-            {{ currentState.indexOf('discussions') !== -1 ? "discussionsFromProject" :
-            (currentState.indexOf('tasks') !== -1 ? "tasksInProject" : 'projectsFromDiscussion') | i18next }}
+            {{
+            currentState.indexOf('discussions') !== -1 ? "discussionsFromProject" : (
+            currentState.indexOf('tasks') !== -1 ? "tasksInProject" :
+            currentState.indexOf('folders') !== -1 ? "foldersFromProject" :
+            currentState.indexOf('officeDocuments') !== -1 ? "documentsFromProject" :
+            'projectsFromDiscussion') | i18next | uppercase}}
         </p>
         <ul ng-if="visible.project && projectsList.length !== 0">
             <li data-ng-repeat="project in projectsList | filterRecycled | limitTo: displayLimit['projects']"
@@ -261,8 +265,9 @@
     </div>
 
     <div class="list offices"
-         ng-if="officesList && item.display.indexOf('offices') !== -1
-                && item.display !== undefined
+         ng-if="officesList
+         && activeTab.display.indexOf('offices') !== -1
+         && activeTab.display.indexOf('templateDocs') !== -1
                 && activeTab.name !== 'search'">
         <p ng-click="visible.office = !visible.office && folders.length !== 0" class="title">{{ 'folders' | i18next }}</p>
         <p class="title go-to-Offices" ng-click="GoToOffices()"> {{ 'offices' | i18next }} </p>
@@ -298,7 +303,7 @@
     <div class="sidefilters" ng-if="item.name == 'search'">
             <hr />
             <div class="filterRecycled">
-                <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">                    
+                <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">
                     {{'showDeletedItems' | i18next}}
                 </button>
         </div>
