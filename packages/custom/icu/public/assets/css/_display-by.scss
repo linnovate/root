@@ -136,6 +136,12 @@
                     .tag-color {
                         @include tag(5px);
                     }
+                    a:before {
+                        margin-top: -1px;
+                    }
+                }
+                &:last-of-type {
+                    margin-bottom: 0;
                 }
             }
         }
@@ -268,7 +274,13 @@
         }
 
         .go-to-Offices {
+            list-style: none;
+            color: white;
             border-top: 1px solid #424e52;
+            a {
+                color: #DDEAF0;
+                padding-bottom: 0;
+            }
         }
     }
 }

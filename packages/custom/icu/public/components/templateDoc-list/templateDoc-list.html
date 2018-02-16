@@ -1,6 +1,5 @@
 <div class="templateDoc-list">
     <div class="header-wrap"
-         ng-if="currentContext.entityName !== 'all'"
          ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
          ui-sref="main.{{currentContext.main}}.byentity.activities({
                     entity: currentContext.entityName,
@@ -8,7 +7,7 @@
                     })">
         <header class="title">
             {{'templateDocsFrom' | i18next}}{{currentContext.entityName | i18next}}
-            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+            <!--<span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>-->
         </header>
     </div>
 
