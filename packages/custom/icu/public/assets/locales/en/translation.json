@@ -234,6 +234,9 @@
     "foldersFrom": "Folders from ",
     "foldersFromProject": "Folders from Project",
     "allFolders": "All Folders",
+    "allOffices": "All Offices",
+    "allTemplateDocs": "All TemplateDocs",
+    
     "settings": "settings",
     "selectOffice": "Select office",
     "selectFolder": "Select folder",
