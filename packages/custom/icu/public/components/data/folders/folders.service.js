@@ -129,6 +129,13 @@ angular.module('mean.icu.data.foldersservice', [])
         });
     }
 
+    function getTags() {
+        return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
     function updateWatcher(folder, me, watcher, type) {
         return ActivitiesService.create({
             data: {
@@ -215,6 +222,7 @@ angular.module('mean.icu.data.foldersservice', [])
         getByUserId: getByEntityId('users'),
         getByOfficeId: getByEntityId('offices'),
         getByFolderId: getByEntityId('folders'),
+        getTags: getTags,
         create: create,
         update: update,
         remove: remove,

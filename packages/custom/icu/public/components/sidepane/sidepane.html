@@ -5,21 +5,25 @@
                 ng-click="changeLayout()">
         </button>
     </div>
-    <div class="header-title">
-
-        <span class="sidepane-title" ng-click="GoToMyTasks()"> {{ 'icu' | i18next }} </span>
+    <div class="header-title">            
+        <span class="sidepane-title"
+                data-ng-class="{ 'selected': context.entityName === 'all'}"
+                href="/tasks/all"
+                ui-sref-active="active"
+                ng-click="GoToMyTasks();activeTab = items[1]">
+            {{ 'icu' | i18next }}
+        </span>
     </div>
 </header>
 <!-- until there is integration with Circles
 <div ng-if="$root.warnings.circles !== 'undefined'" style="color:red;">
 	{{$root.warnings.circles | i18next}}
-</div>
--->
+</div>-->
 <icu-open-modal/>
 
 <div class="sideMenu">
     <nav>
-        <ul ng-init="setActive(savedTab || items[1])">
+        <ul ng-init="getActiveTab()">
             <li data-ng-repeat="item in items"
                 ng-click="setActive(item); removeFilterValue()">
                 <div class="menu-item nav-item {{getNavColor(item, $index)}}"

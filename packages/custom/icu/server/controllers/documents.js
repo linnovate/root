@@ -72,7 +72,7 @@ function getUsers(users) {
         request.push(new Promise(function (resolve, error) {
           User.findOne({ '_id': u.UserId }).exec(function (err, user) {
             if (!err) {
-              u.UserId = user.id.substring(0, user.id.indexOf('@'))+config.usersDomain;
+              u.UserId = user.username;
               u.UserId=u.UserId.toLowerCase();
               resolve(user);
             }
@@ -174,112 +174,426 @@ exports.uploadEmpty = function(req,res,next){
 };
 
 
+exports.signOnDocx = function(req,res,next){
+  var doc = req.body.document;
+  var signature = JSON.parse(req.body.signature);
 
-exports.addSerialTitle = function(req,res,next){
-  var doc = req.body;
-  var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
-  var docFolder,docOffice,telOffice,unitOffice;
-  if(req.body.folder){
-    docFolder=req.body.folder.title?req.body.folder.title:"noFolder";
-    if(req.body.folder.office){
-      docOffice = req.body.folder.office.title?req.body.folder.office.title:"noOffice";
-      if(req.body.folder.office.tel){
-        telOffice = req.body.folder.office.tel;
-      }
-      else{
-        telOffice = "noTel";
-      }
+  Document.find({"_id":doc._id})
+  .populate('folder')
+  .populate('creator')
+  .populate('updater')
+  .populate('sender')
+  .populate('sendingAs')
+  .populate('assign')
+  .populate('relatedDocuments')
+  .populate('forNotice')
+  .populate('watchers')
+  .populate('doneBy')
+  .populate('signBy')
+  .exec(function(err,data){
+    if(err){
 
-      if(req.body.folder.office.unit){
-        unitOffice = req.body.folder.office.unit;
-      }
-      else{
-        unitOffice = "noUnit";
-      }
+    }else{
+      doc = data[0];
+      var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
+      var spPath = doc.spPath?doc.spPath:"spPath";
+      var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
+      fileName=fileName?fileName:"hi";
 
-    }
-    else{
-      docOffice = "noOffice";
-      unitOffice = "noUnit";
-      docFolder = "noFolder";
-    }
-  }
-  else{
-    unitOffice = "noUnit";
-    docFolder = "noFolder";
-    docOffice = "noOffice";
-    docOffice = "noOffice";
-  }
-  var spPath = doc.spPath;
-  var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
-  var coreOptions = {
-    "siteUrl":config.SPHelper.SPSiteUrl
-  };
-  var creds = {
-    "username":config.SPHelper.username,
-    "password":config.SPHelper.password
-  };
-  var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
-  var fileOptions = {
-    "folder":folder,
-    "fileName":fileName,
-    "fileContent":undefined
-  };
-  var users = [];
-  users.push({
-    '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-    'Role':3,
-    'UserId':doc.creator.username.toLowerCase()
-  });
-  doc.watchers.forEach(function(watcher){
-    users.push({
-      '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-      'Role':3,
-      'UserId':watcher.username.toLowerCase()
-    });
-  });
-
-  var json = {
-    'siteUrl':config.SPHelper.SPSiteUrl,
-    'fileUrl':spPath,
-    'folder':docFolder,
-    'office':docOffice,
-    'tel':telOffice,
-    'unit':unitOffice,
-    'coreOptions':coreOptions,
-    'creds':creds,
-    'fileOptions':fileOptions,
-    'permissions':users,
-    'isTemplate':false
-  };
-
-  request({
-    'url':config.SPHelper.uri+"/api/addSerialTitle",
-    'method':'POST',
-    'json':json
-  },function(error,resp,body){
-    if(error){
-      res.send(error);
-    }
-    else{
-      var set = {'serial':body.serial,'spPath':body.path};
-      Document.findOne({
-        '_id':req.body._id
-      },function(error,doc){
-        doc.serial = body.serial;
-        doc.spPath = body.path;
-        doc['id'] = req.body._id;
-        doc.save(function(err,result){
-          if(err){
-            res.send(err);
-          }
-          else{
-            res.send(set);
-          }
+      var coreOptions = {
+        "siteUrl":config.SPHelper.SPSiteUrl
+      };
+      var creds = {
+        "username":config.SPHelper.username,
+        "password":config.SPHelper.password
+      };
+      var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
+      var fileOptions = {
+        "folder":folder,
+        "fileName":fileName,
+        "fileContent":undefined
+      };
+      var users = [];
+      users.push({
+        '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+        'Role':3,
+        'UserId':doc.creator.username.toLowerCase()
+      });
+      doc.watchers.forEach(function(watcher){
+        users.push({
+          '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+          'Role':3,
+          'UserId':watcher.username.toLowerCase()
         });
+      });
+    
+      var json = {
+        'siteUrl':config.SPHelper.SPSiteUrl,
+        'fileUrl':spPath,
+        'signature':signature,
+        'coreOptions':coreOptions,
+        'creds':creds,
+        'fileOptions':fileOptions,
+        'permissions':users,
+        'isTemplate':false
+      };
+
+      request({
+        'url':config.SPHelper.uri+"/api/signOnDocx",
+        'method':'POST',
+        'json':json
+      },function(error,resp,body){
+        if(error){
+          res.send(error);
+        }else{
+          var set = {'spPath':body.path,
+                     'signBy':signature};
+          Document.findOne({
+            '_id':doc._id
+          },function(error,doc1){
+            doc1.spPath = body.path;
+            doc1.signBy = signature._id
+            //doc1['id'] = req.body._id;
+            doc1.save(function(err,result){
+              if(err){
+                res.send(err);
+              }
+              else{
+                res.send(set);
+              }
+            });
+          });
+         }
       });
     }
   });
+  // var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
+  // var spPath = doc.spPath?doc.spPath:"spPath";
+  // var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
+  // fileName=fileName?fileName:"hi";
+
+  // // Document.findOne({'_id':doc._id},function(error,doc){
+  // //           doc.signBy = signature._id
+  // //           doc.save(function(err,result){
+  // //             if(err){
+  // //               res.send(err);
+  // //             }
+  // //             else{
+  // //               res.send(result);
+  // //             }
+        
+  // //     });
+  
+  // var coreOptions = {
+  //   "siteUrl":config.SPHelper.SPSiteUrl
+  // };
+  // var creds = {
+  //   "username":config.SPHelper.username,
+  //   "password":config.SPHelper.password
+  // };
+  // var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
+  // var fileOptions = {
+  //   "folder":folder,
+  //   "fileName":fileName,
+  //   "fileContent":undefined
+  // };
+  // var users = [];
+  // users.push({
+  //   '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+  //   'Role':3,
+  //   'UserId':doc.creator.username.toLowerCase()
+  // });
+  // doc.watchers.forEach(function(watcher){
+  //   users.push({
+  //     '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+  //     'Role':3,
+  //     'UserId':watcher.username.toLowerCase()
+  //   });
+  // });
+
+  // var json = {
+  //   'siteUrl':config.SPHelper.SPSiteUrl,
+  //   'fileUrl':spPath,
+  //   'signature':signature,
+  //   'coreOptions':coreOptions,
+  //   'creds':creds,
+  //   'fileOptions':fileOptions,
+  //   'permissions':users,
+  //   'isTemplate':false
+  // };
+
+
+
+  // request({
+  //   'url':config.SPHelper.uri+"/api/signOnDocx",
+  //   'method':'POST',
+  //   'json':json
+  // },function(error,resp,body){
+  //   if(error){
+  //     res.send(error);
+  //   }
+  //   else{
+  //     var set = {'spPath':body.path};
+  //     Document.findOne({
+  //       '_id':req.body._id
+  //     },function(error,doc){
+  //       doc.spPath = body.path;
+  //       doc.signBy = signature._id
+  //       doc['id'] = req.body._id;
+  //       doc.save(function(err,result){
+  //         if(err){
+  //           res.send(err);
+  //         }
+  //         else{
+  //           res.send(set);
+  //         }
+  //       });
+  //     });
+  //    }
+  // });
+
+  };
+
+
+
+
+exports.addSerialTitle = function(req,res,next){
+  var doc = req.body;
+  if(!doc.creator.username){
+    Document.find({"_id":doc._id})
+    .populate('folder')
+    .populate('creator')
+    .populate('updater')
+    .populate('sender')
+    .populate('sendingAs')
+    .populate('assign')
+    .populate('relatedDocuments')
+    .populate('forNotice')
+    .populate('watchers')
+    .populate('doneBy')
+    .populate('signBy')
+    .exec(function(err,data){
+      if (err) {
+        // req.locals.error = err;
+        // req.status(400);
+      }   
+      else { 
+        doc.creator = data[0].creator;
+        doc.watchers = data[0].watchers;
+        var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
+        var docFolder,docOffice,telOffice,unitOffice;
+        if(req.body.folder){
+          docFolder=req.body.folder.title?req.body.folder.title:"noFolder";
+          if(req.body.folder.office){
+            docOffice = req.body.folder.office.title?req.body.folder.office.title:"noOffice";
+            if(req.body.folder.office.tel){
+              telOffice = req.body.folder.office.tel;
+            }
+            else{
+              telOffice = "noTel";
+            }
+      
+            if(req.body.folder.office.unit){
+              unitOffice = req.body.folder.office.unit;
+            }
+            else{
+              unitOffice = "noUnit";
+            }
+      
+          }
+          else{
+            docOffice = "noOffice";
+            unitOffice = "noUnit";
+            docFolder = "noFolder";
+            telOffice = "noTel";
+          }
+        }
+        else{
+          unitOffice = "noUnit";
+          docFolder = "noFolder";
+          docOffice = "noOffice";
+          telOffice = "noTel";
+        }
+        var spPath = doc.spPath;
+        var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
+        var coreOptions = {
+          "siteUrl":config.SPHelper.SPSiteUrl
+        };
+        var creds = {
+          "username":config.SPHelper.username,
+          "password":config.SPHelper.password
+        };
+        var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
+        var fileOptions = {
+          "folder":folder,
+          "fileName":fileName,
+          "fileContent":undefined
+        };
+        var users = [];
+        users.push({
+          '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+          'Role':3,
+          'UserId':doc.creator.username.toLowerCase()
+        });
+        doc.watchers.forEach(function(watcher){
+          users.push({
+            '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+            'Role':3,
+            'UserId':watcher.username.toLowerCase()
+          });
+        });
+      
+        var json = {
+          'siteUrl':config.SPHelper.SPSiteUrl,
+          'fileUrl':spPath,
+          'folder':docFolder,
+          'office':docOffice,
+          'telOffice':telOffice,
+          'unitOffice':unitOffice,
+          'coreOptions':coreOptions,
+          'creds':creds,
+          'fileOptions':fileOptions,
+          'permissions':users,
+          'isTemplate':false
+        };
+      
+        request({
+          'url':config.SPHelper.uri+"/api/addSerialTitle",
+          'method':'POST',
+          'json':json
+        },function(error,resp,body){
+          if(error){
+            res.send(error);
+          }
+          else{
+            var set = {'serial':body.serial,'spPath':body.path};
+            Document.findOne({
+              '_id':req.body._id
+            },function(error,doc){
+              doc.serial = body.serial;
+              doc.spPath = body.path;
+              doc['id'] = req.body._id;
+              doc.save(function(err,result){
+                if(err){
+                  res.send(err);
+                }
+                else{
+                  res.send(set);
+                }
+              });
+            });
+      } 
+    })
+  }
+})
+  }
+  else{
+    var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
+    var docFolder,docOffice,telOffice,unitOffice;
+    if(req.body.folder){
+      docFolder=req.body.folder.title?req.body.folder.title:"noFolder";
+      if(req.body.folder.office){
+        docOffice = req.body.folder.office.title?req.body.folder.office.title:"noOffice";
+        if(req.body.folder.office.tel){
+          telOffice = req.body.folder.office.tel;
+        }
+        else{
+          telOffice = "noTel";
+        }
+  
+        if(req.body.folder.office.unit){
+          unitOffice = req.body.folder.office.unit;
+        }
+        else{
+          unitOffice = "noUnit";
+        }
+  
+      }
+      else{
+        docOffice = "noOffice";
+        unitOffice = "noUnit";
+        docFolder = "noFolder";
+        telOffice = "noTel";
+      }
+    }
+    else{
+      unitOffice = "noUnit";
+      docFolder = "noFolder";
+      docOffice = "noOffice";
+      telOffice = "noTel";
+    }
+    var spPath = doc.spPath;
+    var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
+    var coreOptions = {
+      "siteUrl":config.SPHelper.SPSiteUrl
+    };
+    var creds = {
+      "username":config.SPHelper.username,
+      "password":config.SPHelper.password
+    };
+    var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
+    var fileOptions = {
+      "folder":folder,
+      "fileName":fileName,
+      "fileContent":undefined
+    };
+    var users = [];
+    users.push({
+      '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+      'Role':3,
+      'UserId':doc.creator.username.toLowerCase()
+    });
+    doc.watchers.forEach(function(watcher){
+      users.push({
+        '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+        'Role':3,
+        'UserId':watcher.username.toLowerCase()
+      });
+    });
+  
+    var json = {
+      'siteUrl':config.SPHelper.SPSiteUrl,
+      'fileUrl':spPath,
+      'folder':docFolder,
+      'office':docOffice,
+      'telOffice':telOffice,
+      'unitOffice':unitOffice,
+      'coreOptions':coreOptions,
+      'creds':creds,
+      'fileOptions':fileOptions,
+      'permissions':users,
+      'isTemplate':false
+    };
+  
+    request({
+      'url':config.SPHelper.uri+"/api/addSerialTitle",
+      'method':'POST',
+      'json':json
+    },function(error,resp,body){
+      if(error){
+        res.send(error);
+      }
+      else{
+        var set = {'serial':body.serial,'spPath':body.path};
+        Document.findOne({
+          '_id':req.body._id
+        },function(error,doc){
+          doc.serial = body.serial;
+          doc.spPath = body.path;
+          doc['id'] = req.body._id;
+          doc.save(function(err,result){
+            if(err){
+              res.send(err);
+            }
+            else{
+              res.send(set);
+            }
+          });
+        });
+      }
+    });
+  }
+
 };
 
 exports.deleteDocumentFile = function(req,res,next){
@@ -303,6 +617,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
     var fileName = template.spPath.substring(template.spPath.lastIndexOf('/')+1,template.spPath.length);
     fileName=fileName.substring(fileName.indexOf('_')+1,fileName.length);
     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
+    var username = req.user.username;
     var folder = config.SPHelper.libraryName+"/"+user;
     var templateUrl = template.spPath.substring(template.spPath.indexOf("/ICU"),template.spPath.length);
     var serverName = config.SPHelper.serverName;
@@ -323,7 +638,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
       users.push({
         '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
         'Role':3,
-        'UserId':user+config.usersDomain,
+        'UserId':username,
         'isCreator':true
       });
       officeDocument.watchers.forEach(function(watcher){
@@ -508,6 +823,7 @@ exports.getAll = function (req, res, next) {
   .populate('forNotice')
   .populate('watchers')
   .populate('doneBy')
+  .populate('signBy')
   .exec(function(err,data){
       if (err) {
         req.locals.error = err;
@@ -572,6 +888,7 @@ exports.getByFolder = function (req, res, next) {
     .populate('assign')
     .populate('relatedDocuments')
     .populate('forNotice')
+    .populate('signBy')
     .populate('watchers').exec(function(err,data){
     if (err) {
       req.locals.error = err;
@@ -868,6 +1185,8 @@ exports.uploadFileToDocument = function(req,res,next){
 
   busboy.on('finish', function () {
     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
+    
+    var username = req.user.username;
     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
     var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
     req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+req.locals.data.body.name;
@@ -905,7 +1224,7 @@ exports.uploadFileToDocument = function(req,res,next){
               users.push({
                 '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
                 'Role':3,
-                'UserId':user.toLowerCase()+config.usersDomain,
+                'UserId':username,
                 'isCreator':true
               });
               result.watchers.forEach(function(watcher){

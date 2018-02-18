@@ -21,16 +21,18 @@
   <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
   <!--<link rel="stylesheet" href="/icu/assets/lib/dralular/dist/dragular.css">-->
 
+  <script src="/dist/polyfill.min.js"></script>
+
   {% for file in aggregatedassets.header.css %}
-    <link rel="stylesheet" href="{{file}}">
+    <link rel="stylesheet" href="/dist{{file}}">
   {% endfor %}
 
   {% for file in aggregatedassets.footer.css %}
-    <link rel="stylesheet" href="{{file}}">
+    <link rel="stylesheet" href="/dist{{file}}">
   {% endfor %}
 
   {% for file in aggregatedassets.header.js %}
-    <script type="text/javascript" src="{{file}}"></script>
+    <script type="text/javascript" src="/dist{{file}}"></script>
   {% endfor %}
 
     <!--[if lt IE 9]>

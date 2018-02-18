@@ -103,9 +103,15 @@
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
                     <li>
-                        <a href="#" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="recycle(discussion)">
+                        <a href="#" ng-if="!discussion.recycled" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="recycle(discussion)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span id="deleteDiscussion" >{{ 'recycleDiscussion' | i18next}}</span>
+                        </a>
+                    </li>                    
+                    <li>
+                        <a href="#" ng-if="discussion.recycled" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="recycleRestore(discussion)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span id="undeleteDiscussion" >{{ 'unrecycleDiscussion' | i18next}}</span>
                         </a>
                     </li>                    
                     <!-- <li>
@@ -146,6 +152,34 @@
                  medium-editor
                  ng-model="discussion.description"
                  options="{{options}}">
+            </div>
+        </div>
+
+        <div class="tags">
+            <ul class="list">
+                <li ng-show="!discussion.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
+                <li class="tag-item" ng-repeat="tag in discussion.tags">
+                    <span>{{tag}}</span>
+                    <button ng-click="removeTag(tag)">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </li>
+                <li class="new-tag-input" ng-show="tagInputVisible" >
+                    <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" autofocus=true on-select="addTag(newTag)"
+                     test tag-on-blur="true">
+                        <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
+                        <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
+                            {{tag}}
+                        </ui-select-choices>
+                    </ui-select>
+                </li>
+            </ul>
+            <div class="button">
+                <button class="new-tag-icon" ng-click="addTagClicked()" ng-show="!tagInputVisible" >
+                    <div tooltips tooltip-template="add tag" tooltip-side="left">
+                        <i class="fa fa-plus" ></i>
+                    </div>
+                </button>
             </div>
         </div>
 

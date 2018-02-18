@@ -99,9 +99,9 @@ directive('icuSidepane', function() {
         },
             {
                 name: 'Documents',
-                icon: '/icu/assets/img/document-nav.svg',
+                icon: '/icu/assets/img/icon-document.svg',
                 state: 'officeDocuments.all',
-                display: ['folders'],//['new', 'received', 'inProgress'],
+                display: [''],//['new', 'received', 'inProgress'],
                 open: $scope.isCurrentState({state: 'officeDocuments'})
             },
             {
@@ -119,18 +119,25 @@ directive('icuSidepane', function() {
             //     open: false
             // }
         ];
-        $scope.activeTab = $stateParams.activeTab || $scope.items[1];
-        $scope.savedTab = $stateParams.activeTab;
 
         $scope.setActive = function(item){
-            $scope.activeTab = item;
             $scope.$broadcast('sidepan', item,
                 $scope.context, $scope.folders,
                 $scope.offices, $scope.projects,
                 $scope.discussions, $scope.officeDocuments,
                 $scope.people);
+            return $scope.activeTab = item;
         };
 
+        $scope.getActiveTab = function(){
+            $scope.items.forEach(function(item){
+                if($scope.currentState.indexOf(item.state.split('.')[0]) !== -1){
+                    return $scope.setActive(item);
+                }
+            })
+        };
+
+        $scope.savedTab = $stateParams.activeTab;
 
         NotifyingService.subscribe('activeSearch', function () {
             $scope.activeTab = $scope.items[0];
@@ -147,8 +154,11 @@ directive('icuSidepane', function() {
         ];
 
         $scope.getNavColor = function(item, index){
+            if(!$scope.activeTab){
+                $scope.getActiveTab();
+            }
             for(let i = 0; i < $scope.items.length ; i++){
-                if($scope.activeTab.name === item.name){
+                if($scope.activeTab === item){
                     $scope.$broadcast('sidepan', item,
                         $scope.context, $scope.folders,
                         $scope.offices, $scope.projects,
@@ -319,8 +329,6 @@ directive('icuSidepane', function() {
             SearchService.filteringResults = filteredByWatchers;
         };
 
-
-        ////******* */
         $scope.updatedOptions = {
             onClose: (value/*, picker, $element*/) => {
 //                        console.log("on close", value, picker, $element) ;
@@ -335,7 +343,7 @@ directive('icuSidepane', function() {
             dateFormat: 'd.m.yy'
         };
 
-        ////******* */
+
 
         $scope.filterActive = function () {
             EntityService.activeStatusFilterValue = $scope.activeToggle.field ;

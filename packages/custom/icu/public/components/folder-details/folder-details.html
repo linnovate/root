@@ -101,6 +101,33 @@
                  options="{{options}}">
             </div>
         </div>
+            <div class="tags">
+                <ul class="list">
+                    <li ng-show="!folder.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
+                    <li class="tag-item" ng-repeat="tag in folder.tags">
+                        <span>{{tag}}</span>
+                        <button ng-click="removeTag(tag)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </li>
+                    <li class="new-tag-input" ng-show="tagInputVisible" >
+                        <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" autofocus=true on-select="addTag(newTag)"
+                        test tag-on-blur="true">
+                            <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
+                            <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
+                                {{tag}}
+                            </ui-select-choices>
+                        </ui-select>
+                    </li>
+                </ul>
+                <div class="button">
+                    <button class="new-tag-icon" ng-click="addTagClicked()" ng-show="!tagInputVisible" >
+                        <div tooltips tooltip-template="add tag" tooltip-side="left">
+                            <i class="fa fa-plus" ></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
         <div class="tabs">
             <div class="switcher">
                 <button class="tab two"

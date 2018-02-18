@@ -35,6 +35,10 @@ var DocumentSchema = new Schema({
   serial:{ //Simuchin
     type:String
   },
+  signBy:{
+    type: Schema.ObjectId,
+    ref: 'Signature'
+  },
   folder:{
     type: Schema.ObjectId,
     ref: 'Folder'

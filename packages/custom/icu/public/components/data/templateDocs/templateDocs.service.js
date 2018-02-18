@@ -16,7 +16,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
             var qs = querystring.encode({
                 start: start,
                 limit: limit,
-                sort: sort
+                sort: sort 
             });
 
             if (qs.length) {

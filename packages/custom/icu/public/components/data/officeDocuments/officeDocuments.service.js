@@ -54,6 +54,18 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 return result.data;
             });
         }
+
+        function signOnDocx(document1,signature){
+            var json = {
+                'document':document1,
+                'signature':signature
+            };
+            return $http.post(ApiUri + EntityPrefix + "/signOnDocx", json).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
         function getById(id) {
             return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
@@ -364,6 +376,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             updateEntity: updateEntity,
             updateTitle: updateTitle,
             uploadEmpty:uploadEmpty,
-            deleteDocumentFile:deleteDocumentFile
+            deleteDocumentFile:deleteDocumentFile,
+            signOnDocx:signOnDocx
         };
     });

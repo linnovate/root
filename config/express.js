@@ -36,6 +36,8 @@ module.exports = function(app, db) {
   // Enable compression on bower_components
   app.use('/bower_components', express.static(config.root + '/bower_components'));
 
+  app.use('/dist/', express.static(config.root + '/dist'));
+
   // Adds logging based on logging config in config/env/ entry
   require('./middlewares/logging')(app, config.logging);
 

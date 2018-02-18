@@ -8,7 +8,6 @@ angular.module('mean.icu.ui.displayby', [])
     ) {
 
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
-            $scope.item = item;
             $scope.context = context;
             $scope.folders = folders;
             $scope.offices = offices;
@@ -276,6 +275,10 @@ angular.module('mean.icu.ui.displayby', [])
         };
 
         $scope.visible[$scope.context.entityName] = true;
+
+        $scope.GoToFolders = function() {
+            $state.go('main.folders.all');
+        };
 
         $scope.GoToOffices = function() {
             $state.go('main.offices.all');

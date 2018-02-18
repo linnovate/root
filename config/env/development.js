@@ -135,7 +135,8 @@ module.exports = {
     SPSiteUrl:"SPSiteUrl",
     username:"username",
     password:"password",
-    libraryName:"libraryName"
+    libraryName:"libraryName",
+    isWorking:false
   },
   usersDomain:"@domain"
 
