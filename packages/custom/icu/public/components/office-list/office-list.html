@@ -1,6 +1,5 @@
 <div class="office-list">
     <div class="header-wrap"
-         ng-if="currentContext.entityName !== 'all'"
          ng-class="{ 'active': isCurrentState(currentContext.entityId) }"
          ui-sref="main.{{currentContext.main}}.byentity.activities({
                     entity: currentContext.entityName,
@@ -8,14 +7,14 @@
                     })">
         <header class="title">
             {{'officesFrom' | i18next}}{{currentContext.entityName | i18next}}
-            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+            <!--<span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>-->
         </header>
     </div>
 
     <div class="filters">
         <div class="left-wrapper">
             <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
-                <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
+                <i class="fa fa-star" tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
             </button>
             <div class="select-wrapper">
                 <div tooltips tooltip-template="{{'sort by' | i18next}}">
