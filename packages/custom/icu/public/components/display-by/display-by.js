@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context, $stateParams, $window) {
+    function controller($scope, $state, context, $stateParams, $window,OfficeDocumentsService) {
 
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
             $scope.context = context;
@@ -130,83 +130,76 @@ angular.module('mean.icu.ui.displayby', [])
         };
 
         $scope.typeSelected = localStorage.getItem("type");
+        $scope.switchToType = function (type) {
+            OfficeDocumentsService.getAll().then(function(result){
 
-        $scope.switchToType= function(type){
+            $scope.officeDocuments=result;
 
-            $scope.typeSelected = type.name;
+         $scope.typeSelected = type.name;
 
-            if(context.entityName=='folder'){
-                $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
-                    return officeDocument.status == type.name
-                        && officeDocument.folder
-                        && officeDocument.folder._id == context.entityId ;
-                });
+         if (context.entityName == 'folder') {
+             $scope.officeDocuments = $scope.officeDocuments.filter(function (officeDocument) {
+                 return officeDocument.status == type.name && officeDocument.folder && officeDocument.folder._id == context.entityId;
+             });
+         } else {
 
-            }else{
+             $scope.officeDocuments = $scope.officeDocuments.filter(function (officeDocument) {
+                 return officeDocument.status == type.name;
+             });
+         }
 
-                $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
-                    return officeDocument.status == type.name ;
-                });
+         localStorage.setItem("type", type.name);
 
-            }
-
-            localStorage.setItem("type", type.name);
-
-            $state.go($state.current, {
-                officeDocuments: $scope.officeDocuments,
-                activeTab: $scope.item
-            }, {reload: true});
-
-
-            // var temp=[];
-            // debugger;
-            // $scope.officeDocuments.forEach(function(d){
-            //     temp.push(d);
-            // });
-            // temp = temp.filter(function(officeDocument){
-            //     if(context.entityName=='folder'){
-            //         return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
-            //     }
-            //     else{
-            //         return officeDocument.status == type.name;
-            //     }
-            // });
-            // if(temp.length==0){
-            //     $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
-            // }
-            // else{
-            //     $state.go($state.current,{'officeDocuments':temp});
-
-            // }
-
-            /**
-            var temp=[];
-            $scope.officeDocuments.forEach(function(d){
-                temp.push(d);
-            });
-            temp = temp.filter(function(officeDocument){
-                if(context.entityName=='folder'){
-                    return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
-                }
-                else{
-                    return officeDocument.status == type.name;
-                }
-
+         $state.go($state.current, {
+             officeDocuments: $scope.officeDocuments,
+             activeTab: $scope.item
+         }, { reload: true });
             });
 
+         // var temp=[];
+         // debugger;
+         // $scope.officeDocuments.forEach(function(d){
+         //     temp.push(d);
+         // });
+         // temp = temp.filter(function(officeDocument){
+         //     if(context.entityName=='folder'){
+         //         return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+         //     }
+         //     else{
+         //         return officeDocument.status == type.name;
+         //     }
+         // });
+         // if(temp.length==0){
+         //     $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
+         // }
+         // else{
+         //     $state.go($state.current,{'officeDocuments':temp});
 
-            /*if(context.entityName == 'all'){
-                $state.go('main.' + context.main + '.all', {},{reload: true});
-            }else if (context.entityName == 'folder'){
-                $state.go('main.' + context.main + '.byentity', {
-                    entityId: context.entityId,
-                    entity: 'folder',
-                    officeDocuments: temp
-                },{reload: true});
-            }*/
+         // }
 
-
-        };
+         /**
+         var temp=[];
+         $scope.officeDocuments.forEach(function(d){
+             temp.push(d);
+         });
+         temp = temp.filter(function(officeDocument){
+             if(context.entityName=='folder'){
+                 return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
+             }
+             else{
+                 return officeDocument.status == type.name;
+             }
+          });
+           /*if(context.entityName == 'all'){
+             $state.go('main.' + context.main + '.all', {},{reload: true});
+         }else if (context.entityName == 'folder'){
+             $state.go('main.' + context.main + '.byentity', {
+                 entityId: context.entityId,
+                 entity: 'folder',
+                 officeDocuments: temp
+             },{reload: true});
+         }*/
+     };
         $scope.switchTo = function(entityName, id) {
 
             // If we are switching between entities, then shrink the display limit again
