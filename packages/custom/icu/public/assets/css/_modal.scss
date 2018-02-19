@@ -111,7 +111,13 @@
     }
     .modal-footer .btn + .btn {
         margin-right: 5px;
-    }
+	}
+	
+	#iframeDoc {
+		iframe#document-preview {
+			border: 0 none;
+		}		
+	}
 }
 .comp {
 	button {
