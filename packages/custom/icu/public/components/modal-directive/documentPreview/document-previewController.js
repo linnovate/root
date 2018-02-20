@@ -1,4 +1,4 @@
-function controllerDocumentPreview($scope, $uibModalInstance, attachment, people, $filter,$http) {
+function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filter,$http) {
 
     $scope.path = "" ;
 
