@@ -72,7 +72,7 @@ directive('icuSidepane', function() {
         $scope.items = [{
             name: 'search',
             icon: '/icu/assets/img/search-nav.svg',
-            state: 'search.all',
+            state: 'search.recycled',
             display: ['projects', 'discussions', 'people'],
             open: $scope.isCurrentState({state: 'tasks'})
         }, {
