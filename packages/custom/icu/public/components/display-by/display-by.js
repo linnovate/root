@@ -55,6 +55,9 @@ angular.module('mean.icu.ui.displayby', [])
 
         };
 
+        $scope.getLinkUrl = function(){
+            return $state.href('main.' + $scope.activeTab.state ,{'officeDocuments':undefined});
+        };
 
         //$scope.temp = {};
         $scope.changeOrder = function () {
@@ -127,6 +130,13 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.reset = function(main){
             localStorage.removeItem("type");
             $scope.typeSelected = null;
+        };
+
+        $scope.changeState = function(state){
+            $state.go(state, {
+                officeDocuments: undefined,
+                activeTab: $scope.item
+            }, {reload: false});
         };
 
         $scope.typeSelected = localStorage.getItem("type");
