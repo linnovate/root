@@ -27,7 +27,9 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             if($scope.officeDocument.folder && $scope.officeDocument.folder.office && $scope.officeDocument.path){
                 SignaturesService.getByOfficeId( $scope.officeDocument.folder.office._id || $scope.officeDocument.folder.office)
                     .then(function (result) {
+                        if(result.length > 0){
                         $scope.signatures = result;
+                        }
                 })
             }
         }
