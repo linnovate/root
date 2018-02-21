@@ -551,9 +551,45 @@ angular.module('mean.icu').config([
             };
         }
 
-
-
-
+        function getAllSearch(main) {
+            return {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: {
+                    'middlepane@main': {
+                        templateUrl: '/icu/components/search-list/search-list.html',
+                        controller: 'SearchListController'
+                    },                    'detailspane@main': {
+                        templateUrl: '/icu/components/task-options/task-options.html',
+                        controller: 'TaskOptionsController'
+                    }
+                },
+                resolve: {
+                    results: function (EntityService,SearchService, $stateParams) {
+                        let unmerged = EntityService.getRecycleBin("all") ;
+                        return unmerged.then(function(arrays) {
+                            let merged = [].concat.apply([], arrays);
+                            let mergedAdjuested = merged.map(function(item) {
+                                item._type = "task"; // not entity type. type kept in "type".
+                                item.id = item._id;
+                                return item ;
+                            })
+                            return mergedAdjuested ;
+                        })
+                    }
+                },
+                tasks: function (results) {
+                    return _(results).filter(function (r) {
+                        return r._type === 'task';
+                    });
+                }
+            }
+        }
 
         function getRecycledEntities(main) {
 //            console.log("getRecycledEntities main.search.recycled") ;
@@ -581,7 +617,7 @@ angular.module('mean.icu').config([
                             let merged = [].concat.apply([], arrays);
                             let mergedAdjuested = merged.map(function(item) {
                                 item._type = "task"; // not entity type. type kept in "type".
-                                item.id = item._id; 
+                                item.id = item._id;
                                 return item ;
                             })
                             return mergedAdjuested ;
@@ -1441,7 +1477,7 @@ angular.module('mean.icu').config([
             })
 
             .state('main.search', {
-                url: '/search/:query',
+                url: '/search',
                 params: {
                     dateUpdated: 'active',
                 },
@@ -1481,6 +1517,7 @@ angular.module('mean.icu').config([
                     }
                 }
             })
+            .state('main.search.all', getAllSearch('all'))
             .state('main.search.recycled', getRecycledEntities('recycled'))
             .state('main.search.task', getTaskDetailsState('/task'))
             .state('main.search.task.activities', getDetailsTabState('task', 'activities'))
@@ -1541,6 +1578,48 @@ angular.module('mean.icu').config([
             .state('main.search.update', getAttachmentDetailsState('/attachment'))
 
             .state('main.search.update.versions', getAttachmentDetailsTabState())
+
+            .state('main.search.find', {
+                url: '/find/:query',
+                params: {
+                    dateUpdated: 'active',
+                },
+                views: {
+                    'middlepane@main': {
+                        templateUrl: '/icu/components/search-list/search-list.html',
+                        controller: 'SearchListController'
+                    },
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/search-list/no-results.html',
+                        controller: 'SearchListController'
+                    }
+                },
+                resolve: {
+                    results: function (SearchService, $stateParams) {
+                        if ($stateParams.query && $stateParams.query.length) {
+                            return SearchService.find($stateParams.query);
+                        } else {
+                            if (SearchService.builtInSearchArray) {
+                                var data = SearchService.builtInSearchArray.map(function (d) {
+                                    d._type = 'task';
+                                    return d;
+                                });
+                                return data;
+                            } else {
+                                return {};
+                            }
+                        }
+                    },
+                    tasks: function (results) {
+                        return _(results).filter(function (r) {
+                            return r._type === 'task';
+                        });
+                    },
+                    term: function ($stateParams) {
+                        return $stateParams.query;
+                    }
+                }
+            })
 
             .state('files', {
                 url: "/files/:y/:m/:d/:n.:f?view",
