@@ -289,7 +289,9 @@ directive('icuSidepane', function() {
                     filteredByType.push(results[i])
                 }
                 index = issuesOrder.indexOf(results[i]._type);
-                $scope.issues[index].length++;
+                if($scope.currentState !== 'search.all'){
+                    $scope.issues[index].length++;
+                }
             }
             SearchService.filteringResults = filteredByType;
 
