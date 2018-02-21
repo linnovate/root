@@ -98,7 +98,7 @@ directive('icuSidepane', function() {
                 name: 'Documents',
                 icon: '/icu/assets/img/icon-document.svg',
                 state: 'officeDocuments.all',
-                display: [''],//['new', 'received', 'inProgress'],
+                display: ['folders'],//['new', 'received', 'inProgress'],
                 open: $scope.isCurrentState({state: 'officeDocuments'})
             },
             {
@@ -126,12 +126,24 @@ directive('icuSidepane', function() {
             return $scope.activeTab = item;
         };
 
-        $scope.getActiveTab = function(){
-            $scope.items.forEach(function(item){
-                if($scope.currentState.indexOf(item.state.split('.')[0]) !== -1){
+        $scope.getActiveTab = function () {
+            var items = $scope.items;
+            items.forEach(function (item) {
+                if ($scope.currentState.indexOf(item.state.split('.')[0]) !== -1) {
                     return $scope.setActive(item);
                 }
-            })
+            });
+            if(!$scope.activeTab){
+                items.forEach(function(item){
+                    if(_.intersection(item.display, $scope.currentState.split('.')) !== 0){
+                        return $scope.setActive(item);
+                    }
+                })
+            }
+        };
+
+        $scope.setCurrentState = function(state){
+            $scope.currentState = state;
         };
 
         $scope.savedTab = $stateParams.activeTab;
