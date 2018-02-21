@@ -142,6 +142,10 @@ directive('icuSidepane', function() {
             }
         };
 
+        $scope.setCurrentState = function(state){
+            $scope.currentState = state;
+        };
+
         $scope.savedTab = $stateParams.activeTab;
 
         NotifyingService.subscribe('activeSearch', function () {
