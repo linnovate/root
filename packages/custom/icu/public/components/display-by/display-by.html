@@ -382,7 +382,7 @@
                 <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100"
                     data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
                     data-ng-click="switchTo('folder', folder._id)"
-                    ng-if="folder._id && folder.title && (officesList.office.title == folder.office.title)"
+                    ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)"
                 >
                     <a href class="Names-In-List-On-Side">
                         {{folder.title}}
