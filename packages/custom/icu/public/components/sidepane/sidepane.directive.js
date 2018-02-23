@@ -72,7 +72,7 @@ directive('icuSidepane', function() {
         $scope.items = [{
             name: 'search',
             icon: '/icu/assets/img/search-nav.svg',
-            state: 'search.all',
+            state: 'search',
             display: ['projects', 'discussions', 'people'],
             open: $scope.isCurrentState({state: 'tasks'})
         }, {
@@ -289,7 +289,11 @@ directive('icuSidepane', function() {
                     filteredByType.push(results[i])
                 }
                 index = issuesOrder.indexOf(results[i]._type);
-                $scope.issues[index].length++;
+                if($stateParams.query == ''){
+                    $scope.issues[index].length = 0;
+                } else {
+                    $scope.issues[index].length++;
+                }
             }
             SearchService.filteringResults = filteredByType;
 
@@ -372,6 +376,15 @@ directive('icuSidepane', function() {
             else {
                 $state.go('main.search.recycled');
             }
+        };
+
+        $scope.clearResults = function(){
+            SearchService.clearResults();
+            $scope.issues = $scope.issues.map(function(issue){
+                issue.length = 0;
+                return issue;
+            });
+            return $scope.issues;
         };
 
         $scope.filterSearch = function() {
