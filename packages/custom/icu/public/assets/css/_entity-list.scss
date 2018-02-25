@@ -124,6 +124,9 @@
                         line-height: initial;
                         span {
                             padding: 3px 13px;
+                            position: relative;
+                            top: 50%;
+                            left: 0;
                         }
                     }
 
@@ -134,9 +137,12 @@
                     //     width: 22%;
                     //     font-weight: 400;
                     //     font-size: 13px;
-                    //     span {
-                    //         padding: 3px 13px;
-                    //     }
+                        span {
+                            padding: 3px 13px;
+                            position: relative;
+                            top: 50%;
+                            left: 0;
+                        }
                     }
 
                     &.folder {
