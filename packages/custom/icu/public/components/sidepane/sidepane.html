@@ -5,7 +5,7 @@
                 ng-click="changeLayout()">
         </button>
     </div>
-    <div class="header-title">            
+    <div class="header-title">
         <span class="sidepane-title"
                 data-ng-class="{ 'selected': context.entityName === 'all'}"
                 href="/tasks/all"
@@ -25,7 +25,7 @@
     <nav>
         <ul ng-init="getActiveTab()">
             <li data-ng-repeat="item in items"
-                ng-click="setActive(item); removeFilterValue()">
+                ng-click="setActive(item); removeFilterValue();setCurrentState(item.state);clearResults()">
                 <div class="menu-item nav-item {{getNavColor(item, $index)}}"
                      data-ui-sref="{{'main.' + item.state}}"
                      ng-click="toggleVisibility(item)">

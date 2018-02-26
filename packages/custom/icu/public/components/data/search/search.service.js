@@ -26,12 +26,19 @@ angular.module('mean.icu.data.searchservice', [])
         });
     }
 
+        function clearResults(){
+            this.filteringData = [];
+            this.results = []
+            this.filteringResults = [];
+        }
+
     return {
         find: find,
         builtInSearchArray: builtInSearchArray,
         filteringData: filteringData,
         filteringResults: filteringResults,
         filteringByUpdated: filteringByUpdated,
+        clearResults: clearResults,
     };
 });
 

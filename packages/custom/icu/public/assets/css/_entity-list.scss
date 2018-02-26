@@ -17,18 +17,18 @@
               &::-webkit-scrollbar {
                 width: 5px;
             }
-             
+
             &::-webkit-scrollbar-track {
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
                 border-radius: 10px;
             }
-             
+
             &::-webkit-scrollbar-thumb {
                 border-radius: 10px;
                 background-color: white;
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
             }
-            
+
         }
 
     }
@@ -109,7 +109,7 @@
                             font-weight: normal;
                             font-style: italic;
                         }
-                        
+
                         margin-left: 10px;
                     }
 
@@ -123,7 +123,10 @@
                         // margin-left: 10px;
                         line-height: initial;
                         span {
-                            padding: 3px 13px;                                                                                                          
+                            padding: 3px 13px;
+                            position: relative;
+                            top: 50%;
+                            left: 0;
                         }
                     }
 
@@ -134,9 +137,12 @@
                     //     width: 22%;
                     //     font-weight: 400;
                     //     font-size: 13px;
-                    //     span {
-                    //         padding: 3px 13px;                                                                                                          
-                    //     }
+                        span {
+                            padding: 3px 13px;
+                            position: relative;
+                            top: 50%;
+                            left: 0;
+                        }
                     }
 
                     &.folder {
@@ -146,7 +152,10 @@
                         font-size: 13px;
                         line-height: 18px;
                         span {
-                            padding: 3px 13px;                                                                                                          
+                            padding: 3px 13px;
+                            position: relative;
+                            top: 50%;
+                            left: 0;
                         }
                     }
 
@@ -218,18 +227,18 @@
               &::-webkit-scrollbar {
                 width: 5px;
             }
-             
+
             &::-webkit-scrollbar-track {
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
                 border-radius: 10px;
             }
-             
+
             &::-webkit-scrollbar-thumb {
                 border-radius: 10px;
                 background-color: white;
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
             }
-            
+
         }
 
     }
@@ -305,7 +314,7 @@
                             font-weight: normal;
                             font-style: italic;
                         }
-                        
+
                         padding-left: 7px;
                     }
 
@@ -315,7 +324,7 @@
                         font-weight: 400;
                         font-size: 13px;
                         span {
-                            padding: 3px 13px;                                                                                                          
+                            padding: 3px 13px;
                         }
                     }
 
@@ -325,7 +334,7 @@
                         font-weight: 400;
                         font-size: 13px;
                         span {
-                            padding: 3px 13px;                                                                                                          
+                            padding: 3px 13px;
                         }
                     }
 
@@ -335,7 +344,7 @@
                         font-weight: 400;
                         font-size: 13px;
                         span {
-                            padding: 3px 13px;                                                                                                          
+                            padding: 3px 13px;
                         }
                     }
 
@@ -400,18 +409,18 @@
               &::-webkit-scrollbar {
                 width: 5px;
             }
-             
+
             &::-webkit-scrollbar-track {
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
                 border-radius: 10px;
             }
-             
+
             &::-webkit-scrollbar-thumb {
                 border-radius: 10px;
                 background-color: white;
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
             }
-            
+
         }
 
     }
@@ -487,7 +496,7 @@
                             font-weight: normal;
                             font-style: italic;
                         }
-                        
+
                         padding-left: 7px;
                     }
 
@@ -497,7 +506,7 @@
                         font-weight: 400;
                         font-size: 13px;
                         span {
-                            padding: 3px 13px;                                                                                                          
+                            padding: 3px 13px;
                         }
                     }
 
@@ -507,7 +516,7 @@
                         font-weight: 400;
                         font-size: 13px;
                         span {
-                            padding: 3px 13px;                                                                                                          
+                            padding: 3px 13px;
                         }
                     }
 
@@ -517,7 +526,7 @@
                         font-weight: 400;
                         font-size: 13px;
                         span {
-                            padding: 3px 13px;                                                                                                          
+                            padding: 3px 13px;
                         }
                     }
 
@@ -527,7 +536,7 @@
                         font-weight: 400;
                         font-size: 13px;
                         span {
-                            padding: 3px 13px;                                                                                                          
+                            padding: 3px 13px;
                         }
                     }
 

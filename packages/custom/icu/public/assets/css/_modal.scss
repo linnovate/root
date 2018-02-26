@@ -301,6 +301,13 @@ $icon-padding: 19px;
 	cursor: pointer;
 }
 
+.template-modal-title{
+	text-overflow: ellipsis;
+	width: 115px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 .loader2 {
 	position: absolute;
     border: 4px solid #f3f3f3;

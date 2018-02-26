@@ -93,11 +93,15 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             }
             
             //###start_of_url 
-            var arr = str.split(config.host + ':' + config.http.port);
+            //var arr = str.split(config.host + ':' + config.http.port);
 
             // !!! in case of https
             //var arr = str.split(config.host + ':' + config.https.port);
             // !!!
+
+            //For Or http Or https
+            var port = config.https && config.https.port ? config.https.port : config.http.port;
+            var arr = str.split(config.host + ':' + port);
 
             var realpath = arr[1].replace('(', '\(').replace(')', '\)');
             var arr1 = str.split("/");

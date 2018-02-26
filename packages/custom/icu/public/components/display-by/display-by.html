@@ -170,10 +170,12 @@
     <div class="all"
          ng-if="context.main != 'folders' && context.main != 'offices' && context.main != 'templateDocs' && activeTab.name !== 'search'">
         <p class="title all"
-           ui-sref="main.{{context.main}}.all({'officeDocuments':undefined})"
-           ng-click="reset(context.main)"
+           ng-click="reset(context.main);changeState('main.' + activeTab.state);
+           removeFilterValue();"
            ui-sref-active="active"
-           data-ng-class="{ 'selected': context.entityName === 'all'}">
+           data-ng-class="{ 'selected': context.entityName === 'all'}"
+           ng-href="{{getLinkUrl()}}"
+        >
             {{ 'all' | i18next }}
             <!--<div class="list {{context.main}}">-->
             <!--<ul>-->
@@ -366,16 +368,33 @@
         <div ng-if="folders.length !== 0" tooltips tooltip-template="{{'selectOffice' | i18next}}">
             <ui-select ng-model="officesList.office" on-select="changeOrder()" search-enabled="false">
                 <ui-select-match>
-                    <button class="tasks">{{$select.selected.title | i18next}} <i class="fa fa-caret-down"></i></button>
+                    <button class="tasks">
+                        {{$select.selected.title | i18next}}
+                        <i class="fa fa-caret-down"></i>
+                    </button>
                 </ui-select-match>
                 <ui-select-choices repeat="office in officesList">
                     {{office.title | i18next | uppercase}}
                 </ui-select-choices>
             </ui-select>
+        <div ng-if="foldersList.length !== 0">
+            <ul>
+                <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100"
+                    data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
+                    data-ng-click="switchTo('folder', folder._id)"
+                    ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)"
+                >
+                    <a href class="Names-In-List-On-Side">
+                        {{folder.title}}
+                    </a>
+                    <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
+                </li>
+            </ul>
+        </div>
         </div>
         </p>
-        <ul ng-if="!visible.folder && folderList.length !== 0">
-            <li data-ng-repeat="folder in foldersList | filterRecycled | limitTo: 100 | filter: myFilter"
+        <ul ng-if="!visible.folder && foldersList.length !== 0">
+            <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100 | filter: myFilter"
                 data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
                 data-ng-click="switchTo('folder', folder._id)"
                 ng-if="folder._id && folder.title && folder.office.title">

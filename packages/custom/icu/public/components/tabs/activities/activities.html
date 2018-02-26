@@ -17,8 +17,8 @@
                             <span ng-switch-when="prev-string">{{activity[val.value] | i18next}}</span>
                             <span ng-switch-when="to">{{'to' | i18next}}</span>
                             <span ng-switch-when="date">{{activity[val.value] | date:'MM/dd/yy'}}</span>
-                            <span ng-switch-when="string">{{activity[val.value] | i18next}}</span>
-                            <span ng-switch-default>{{val.value | i18next}}</span>
+                            <span ng-switch-when="string" ng-bind-html="activity[val.value]"></span>
+                            <span ng-switch-default ng-bind-html="val.value | i18next"></span>
                         </span>
                     </span>
                     <span class="activity-date">{{activity.created | date:"MM/dd/yyyy 'at' h:mma"}}</span>
@@ -64,7 +64,7 @@
             <textarea ctrlenter="save()" ng-model="activity.description" ng-focus="expandUpdate()" ng-blur="minimizeUpdate()" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
 
             <div class="action-buttons">
-                <button type="button" class="attachment"
+                <button ng-if="entityName != 'templateDoc'" type="button" class="attachment"
                         ngf-select
                         ngf-change="upload($files)"
                         ngf-multiple="true"></button>

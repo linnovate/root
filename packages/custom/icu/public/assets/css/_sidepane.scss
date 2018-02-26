@@ -237,7 +237,7 @@
     nav {
         width: 85px;
         color: white;
-        overflow: auto;
+        overflow: hidden;
         height: calc(100% - 60px);
         &::-webkit-scrollbar {
             width: 5px;
@@ -389,7 +389,7 @@
         }
     }
     .submenu {
-        height: 100%;
+        height: 100vmin;
         width:calc(100% - 86px);
         background-color: $grey;
     }

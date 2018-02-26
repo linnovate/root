@@ -75,7 +75,7 @@ directive('icuSidepane', function() {
         $scope.items = [{
             name: 'search',
             icon: '/icu/assets/img/search-nav.svg',
-            state: 'search.all',
+            state: 'search',
             display: ['projects', 'discussions', 'people'],
             open: $scope.isCurrentState({state: 'tasks'})
         }, {
@@ -101,7 +101,7 @@ directive('icuSidepane', function() {
                 name: 'Documents',
                 icon: '/icu/assets/img/icon-document.svg',
                 state: 'officeDocuments.all',
-                display: [''],//['new', 'received', 'inProgress'],
+                display: ['folders'],//['new', 'received', 'inProgress'],
                 open: $scope.isCurrentState({state: 'officeDocuments'})
             },
             {
@@ -129,12 +129,24 @@ directive('icuSidepane', function() {
             return $scope.activeTab = item;
         };
 
-        $scope.getActiveTab = function(){
-            $scope.items.forEach(function(item){
-                if($scope.currentState.indexOf(item.state.split('.')[0]) !== -1){
+        $scope.getActiveTab = function () {
+            var items = $scope.items;
+            items.forEach(function (item) {
+                if ($scope.currentState.indexOf(item.state.split('.')[0]) !== -1) {
                     return $scope.setActive(item);
                 }
-            })
+            });
+            if(!$scope.activeTab){
+                items.forEach(function(item){
+                    if(_.intersection(item.display, $scope.currentState.split('.')) !== 0){
+                        return $scope.setActive(item);
+                    }
+                })
+            }
+        };
+
+        $scope.setCurrentState = function(state){
+            $scope.currentState = state;
         };
 
         $scope.savedTab = $stateParams.activeTab;
@@ -280,7 +292,11 @@ directive('icuSidepane', function() {
                     filteredByType.push(results[i])
                 }
                 index = issuesOrder.indexOf(results[i]._type);
-                $scope.issues[index].length++;
+                if($stateParams.query == ''){
+                    $scope.issues[index].length = 0;
+                } else {
+                    $scope.issues[index].length++;
+                }
             }
             SearchService.filteringResults = filteredByType;
 
@@ -363,6 +379,15 @@ directive('icuSidepane', function() {
             else {
                 $state.go('main.search.recycled');
             }
+        };
+
+        $scope.clearResults = function(){
+            SearchService.clearResults();
+            $scope.issues = $scope.issues.map(function(issue){
+                issue.length = 0;
+                return issue;
+            });
+            return $scope.issues;
         };
 
         $scope.filterSearch = function() {
