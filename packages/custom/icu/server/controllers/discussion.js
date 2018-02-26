@@ -192,7 +192,8 @@ exports.summary = function(req, res, next) {
   var query = req.acl.mongoQuery('Task');
   query.find({
     discussions: discussion._id,
-  }).populate('discussions')
+    recycled: {$exists: false}
+  }).populate('discussions').populate('assign').populate('watchers')
     .then(function(tasks) {
       var projects = _.chain(tasks).pluck('project').compact().value();
       _.each(projects, function(project) {
