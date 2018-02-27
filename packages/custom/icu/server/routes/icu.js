@@ -101,8 +101,8 @@ module.exports = function(Icu, app) {
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
   //Create HI Room if the user wish  
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
-    //.post(project.read, notification.createRoom);
-    .post(project.read);
+    .post(project.read, notification.createRoom);
+    //.post(project.read);
 
   //Create HI Room if the user wish  
   app.route('/api/:entity(offices)/:id([0-9a-fA-F]{24})/WantToCreateRoom')

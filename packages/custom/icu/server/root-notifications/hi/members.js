@@ -9,7 +9,7 @@ exports.addMember = function(rocketChat, params, callback) {
 		method: 'POST',
 		form: {
 			roomId: params.roomId,
-			userId: name
+			username: name
 		},
 		cmd: '/api/v1/groups.invite'
 	}, function(error, result) {
@@ -26,7 +26,7 @@ exports.removeMember = function(rocketChat, params, callback) {
 		method: 'POST',
 		form: {
 			roomId: params.roomId,
-			userId: name
+			username: name
 		},
 		cmd: '/api/v1/groups.kick'
 	}, function(error, result) {
