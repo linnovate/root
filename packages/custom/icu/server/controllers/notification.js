@@ -364,7 +364,7 @@ exports.sendUpdate = function (req, res, next) {
                             };
                         }
                     })
-                } else {
+                } else if(req.locals.WantRoom){
                     createRoomAndSendMessage(project, req, next);
                 }
             })
