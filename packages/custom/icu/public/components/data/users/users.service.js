@@ -134,6 +134,10 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
+    function resetAvatar(){
+        return me.profile.avatar = data.avatar;
+    }
+
     function onIdentity(response) {
         localStorage.setItem('JWT', response.token);
         $rootScope.$emit('loggedin');
@@ -162,6 +166,7 @@ angular.module('mean.icu.data.usersservice', [])
         saml: saml,
         logout: logout,
         register: register,
+        resetAvatar: resetAvatar,
         update: update,
         updateAvatar: updateAvatar,
         onIdentity: onIdentity,

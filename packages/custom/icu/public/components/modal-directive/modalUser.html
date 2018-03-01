@@ -1,0 +1,148 @@
+<div class="modal-header" id="modalUser">
+    <div class="avatar" title="{{currentUser.name}} {{currentUser.lastname}}"
+         ng-style="{'background-color': user.profile.avatar ? 'transparent' : '#b8e77f' }">
+    <span ng-if="!currentUser.profile.avatar"
+          class="name">{{currentUser.name.charAt(0)}}{{currentUser.lastname.charAt(0)}}
+    </span>
+        <img ng-if="currentUser.profile.avatar"
+             class="image"
+             ng-src="{{currentUser.profile.avatar + imgUrl}}"
+             alt="{{currentUser.name}}"/>
+    </div>
+
+    <button type="button" class="closeBtn" aria-hidden="true" ng-click="cancel()">&times;</button>
+    <h3 class="modal-title" ng-if='entity.type != "Document"'>
+        {{ currentUser.username | i18next }}{{ entity.type | i18next }}
+    </h3>
+    <div class="tabs">
+        <ul>
+            <li ng-repeat="tab in tabs"
+            class="tab {{isActive(tab)}}"
+                ng-click="setActiveTab(tab)">
+                <a href="#">
+                    {{tab.title}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="modal-body" id="modalUser">
+    <section class="general" ng-show="activeTab.title == 'General'">
+        <div class="title">
+            {{'Account Information' | i18next | uppercase}}
+        </div>
+        <div class="data">
+            <div class="info">
+                <label for="name">{{'Full name' | i18next}}</label>
+                <input id="name" type="text" placeholder="{{currentUser.name}}" disabled="disabled">
+                <label for="email">{{'Email Address' | i18next}}</label>
+                <input id="email" type="text" placeholder="{{currentUser.email}}" disabled="disabled">
+
+                    <span class="title panel-title changePass">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            {{'Change Password' | i18next}}
+                        </a>
+                    </span>
+                <div id="collapseOne" class="changePassword panel-collapse collapse">
+                    <div class="panel-body">
+                        <div data-ng-controller="ResetPasswordCtrl as reset" class="reset-password">
+                            <div class="alert alert-danger animated fadeIn" ng-show="reset.resetpassworderror">{{reset.resetpassworderror}}</div>
+                            <div ng-repeat="error in reset.validationError">
+                                <div class="alert alert-danger animated fadeIn">{{reset.error.msg}}</div>
+                            </div>
+                            <span class="title">Enter your new password</span>
+                            <form ng-submit="reset.resetpassword()" class="reset form-horizontal">
+                                <div class="form-group">
+                                    <label for="password" class="reset-password col-md-6">{{'Current Password' | i18next}}</label>
+                                    <input id="password" type="password" name="password" ng-model="reset.user.password"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newpassword" class="col-md-6">{{'New Password' | i18next}}</label>
+                                    <input id="newpassword" type="password" name="newpassword" ng-model="reset.user.newpassword"/>
+                                </div>
+                                <div class="form-group save">
+                                    <button type="submit" class="btn btn-primary">{{'Save Password' | i18next}}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="changeAvatar">
+                <span class="profPicture">{{'Profile Picture' | i18next}}</span>
+                <div class="picInfo">
+                    <div class="changePic">
+                        <div class="avatar" title="{{currentUser.name}} {{currentUser.lastname}}"
+                             ng-style="{'background-color': user.profile.avatar ? 'transparent' : '#b8e77f' }">
+                        <span ng-if="!currentUser.profile.avatar"
+                              class="name">{{currentUser.name.charAt(0)}}{{currentUser.lastname.charAt(0)}}
+                        </span>
+                            <img ng-if="currentUser.profile.avatar"
+                                 class="image"
+                                 ng-src="{{currentUser.profile.avatar + imgUrl}}"
+                                 alt="{{currentUser.name}}"/>
+                        </div>
+                    </div>
+                    <div class="replace">
+                        <span class="filename">{{currentUser.profile.avatar.split('avatar/')[1]}}</span>
+                        <div class="actions">
+                            <button class="replace" ngf-select ngf-change="uploadAvatar($files)">{{'Replace' | i18next}}</button>
+                            <button class="reset" ng-click="resetAvatar()">{{'Reset' | i18next}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="defaultView" ng-show="activeTab.title == 'defaultView'">
+        <div class="title">
+            {{'Default View' | i18next | uppercase}}
+        </div>
+        <span class="hint">{{'Select a saved filter that will be displayed by default as your home screen' | i18next}}</span>
+        <div class="filters">
+            <div ng-repeat="filter in filters" class="filter">
+                <div class="form-group">
+                    <label class="title col-xl-3 control-label">
+                        {{filter.title | i18next}}
+                    </label>
+
+                        <ui-select ng-model="filter.selected" theme="bootstrap">
+                            <ui-select-match placeholder="{{filter.selected}}">
+                                {{$select.selected}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="option in filter.options | filter: $select.search">
+                                <div ng-bind-html="filter.title | highlight: $select.search"></div>
+                                <small ng-bind-html="option | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="notification" ng-show="activeTab.title == 'Notifications'">
+        <span class="hint">{{'Configure the email notifications you would like to recieve' | i18next}}</span>
+
+        <div class="line" ng-repeat="notification in notifications">
+            <label class="title">{{ notification.title | i18next }}</label>
+            <label class="hint">{{ notification.hint | i18next }}</label>
+
+            <ui-select on-select="updateNotificationSettings(notification, $select.selected)" ng-model="notification.model" theme="bootstrap">
+                <ui-select-match placeholder="{{notification.model}}">
+                    {{currentUser[notification.name]}}
+                </ui-select-match>
+                <ui-select-choices repeat="option in notification.options | filter: $select.search">
+                    <div ng-bind-html="option | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+
+    </section>
+    <section ng-show="activeTab.title == 'Components'">
+        Components
+    </section>
+</div>
