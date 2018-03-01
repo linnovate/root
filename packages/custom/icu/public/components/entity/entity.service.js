@@ -2,7 +2,31 @@
 
 angular.module('mean.icu.ui.entity', [])
 .service('EntityService', function (ApiUri, $http, PaginationService, WarningsService, ActivitiesService, MeanSocket, SettingServices) {
+
     var activeStatusFilterValue = "default" ;
+
+    let entityTypes = [
+        'projects',
+        'tasks',
+        'discussions',
+        'updates',
+        'offices',
+        'folders',
+        'officeDocuments'
+    ]      
+    
+
+    function getByEntityId(type,id) {
+        let entityType = entityTypes.find(elem => elem.includes(type)) ;
+        
+        if (entityType == null) return Promise.resolve(null) ; 
+        return $http.get(ApiUri + '/' + entityType + '/' + id).then(function (result) {
+            console.log("entityType",result.data) ;
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
 
     function isActiveStatusAvailable() {
         return SettingServices.activeStatusConfigured == null ? false : true ;
@@ -64,14 +88,16 @@ angular.module('mean.icu.ui.entity', [])
 
 
     return {
+        getByEntityId: getByEntityId,
         isActiveStatusAvailable, isActiveStatusAvailable,
         getActiveStatusFilterValue: getActiveStatusFilterValue,
         setActiveStatusFilterValue: setActiveStatusFilterValue,
         activeStatusFilterValue: activeStatusFilterValue,
         getEntityActivityStatus: getEntityActivityStatus,
-        activeToggleList, activeToggleList,   
-        recycle, recycle,  
-        recycleRestore, recycleRestore,   
-        getRecycleBin,getRecycleBin
+        activeToggleList: activeToggleList,   
+        recycle: recycle,  
+        recycleRestore: recycleRestore,   
+        getRecycleBin: getRecycleBin
+        
     };
 }) ;

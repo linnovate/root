@@ -1,0 +1,18 @@
+<svg width="32" height="32" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>icon-trash</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-144 71)">
+<g id="icon-trash">
+<g id="Group">
+<g id="delete">
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="translate(151 -67)"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 1.33308 21.3333C 1.33308 22.8 2.53285 24 3.99924 24L 14.6639 24C 16.1303 24 17.3301 22.8 17.3301 21.3333L 17.3301 5.33333L 1.33308 5.33333L 1.33308 21.3333ZM 18.6631 1.33333L 13.9974 1.33333L 12.6643 0L 5.99887 0L 4.66578 1.33333L 0 1.33333L 0 4L 18.6631 4L 18.6631 1.33333Z"/>
+</defs>
+</svg>

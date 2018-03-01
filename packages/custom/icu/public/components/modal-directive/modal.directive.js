@@ -104,8 +104,9 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                 }
                 else if(scope.modalName == 'document-preview') { 
                     var modalInstance = $uibModal.open({
+                        backdropClass: 'backdrop-document-preview',                        
                         animation: true,
-                        size:  'md',
+                        size:  'lg',
                         templateUrl: '/icu/components/modal-directive/documentPreview/document-preview.html',
                         controller: controllerDocumentPreview,
                         resolve: {

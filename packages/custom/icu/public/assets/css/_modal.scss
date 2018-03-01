@@ -1,5 +1,63 @@
+.backdrop-document-preview {
+	opacity: 0.7 !important;
+
+}
 
 .modal-dialog {
+
+	.attachment {
+		display: inline-block;
+		position: relative;
+		height: 120px;
+		width: 100%;
+		left: 0;
+		$icon-width: 60px;
+		$icon-padding: 19px;
+
+		.txt {
+			font-size: 22px;
+		}
+		.attName , .attSize {
+			font-weight: bold ; 
+		}
+		.attCreator {
+			color: #FFA000 ;	
+		}
+
+
+		#Update-icon-download-preview {
+			position: relative;
+			float: right;
+			width: 30px;
+			height: 30px;
+			&:hover{
+				filter: invert(75%);
+			}	
+		}
+
+		.icon {
+			position: relative;
+			float: left ;
+			top: 0;
+			left: 20px;
+			transform: translate(-50%, 0);
+			height: 80px;
+			width: $icon-width;
+			@include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');
+		}
+
+		.name {
+			width: 100%;
+			position: absolute;
+			bottom: 0;
+			text-align: center;
+			color: $light-grey4;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}
+	}
+
 	padding: 10px ;
 	.modal-body.center {
 		width: 230px;
@@ -25,9 +83,7 @@
 		padding: 2px;
 		direction: rtl ;
 	}
-	#dragwidget {
-//	direction: rtl;
-	}
+
 	.dragshape {
 		position: absolute;
 		width : 34px;
@@ -279,7 +335,6 @@
 	display: flex;
 	align-items: center;
 }
-
 
 $icon-width: 60px;
 $icon-padding: 19px;
