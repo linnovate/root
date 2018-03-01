@@ -2,19 +2,42 @@
 
 angular.module('mean.icu.ui.attachmentdetails', [])
     .controller('AttachmentDetailsController', function ($scope,
+                                                        $http,
                                                          entity,
                                                          tasks,
                                                          context,
                                                          $state,
+                                                         AttachmentsService,
                                                          DocumentsService,
+                                                         UsersService,
+                                                         EntityService,
                                                          $stateParams) {
-        $scope.attachment = entity || context.entity;
+        $scope.update = entity || context.entity;
         $scope.tasks = tasks;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
+        $scope.attachment = entity ;
+        let attachment = $scope.attachment ;         
+        
+        $scope.attName =  attachment.name ;
+        $scope.attCreated =  attachment.created ; 
+        $scope.attSize =  attachment.size ;
+        $scope.attCreator = null ; 
+        $scope.attUser ; 
+        UsersService.getById(attachment.creator).then(user => $scope.attUser = user) ;
+        $scope.attPath =  attachment.path ;  
+        $scope.attPrint =  attachment.size ;
+        $scope.attType =  attachment.attachmentType;
+        $scope.attLinkToEntityName ;
+        EntityService.getByEntityId(attachment.entity,attachment.entityId).then(res => $scope.attLinkToEntityName = res) ;
 
-        $scope.$watchGroup(['attachment.description', 'attachment.title'], function (nVal, oVal) {
+        
+
+        $scope.attLinkToEntity = '/' + attachment.entity + 's/all/' + attachment.entityId + '/documents';
+
+
+        $scope.$watchGroup(['update.description', 'update.title'], function (nVal, oVal) {
             if (nVal !== oVal && oVal) {
-                $scope.delayedUpdate($scope.attachment);
+                $scope.delayedUpdate($scope.update);
             }
         });
 
@@ -23,36 +46,38 @@ angular.module('mean.icu.ui.attachmentdetails', [])
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
         };
 
-        function navigateToDetails(attachment) {
-            $scope.detailsState = 'main.search.attachment';
+        function navigateToDetails(update) {
+            $scope.detailsState = 'main.search.update';
 
             $state.go($scope.detailsState, {
-                id: attachment._id,
+                id: update._id,
                 entity: $scope.currentContext.entityName,
                 entityId: $scope.currentContext.entityId,
                 starred: $stateParams.starred
             }, {reload: true});
         }
 
-        $scope.star = function (attachment) {
-            DocumentsService.star(attachment).then(function () {
-                navigateToDetails(attachment);
-            });
-        };
+        $scope.viewAttachment = function (document1) { 
+                        return(document1.path + '?view=true') ;      
+        }
 
-        $scope.deleteAttachment = function (attachment) {
-            DocumentsService.remove(attachment._id).then(function () {
+        $scope.previewTab = function(document) {
+            AttachmentsService.previewTab(document) ;
+        }       
+
+        $scope.deleteUpdate = function (update) {
+            DocumentsService.remove(update._id).then(function () {
                 $state.reload();
             });
         };
 
-        $scope.update = function (attachment) {
-            DocumentsService.update(attachment);
+        $scope.update = function (update) {
+            DocumentsService.update(update);
         };
 
         $scope.delayedUpdate = _.debounce($scope.update, 500);
 
-        if ($scope.attachment && $state.current.name === 'main.search.attachment') {
+        if ($scope.update && $state.current.name === 'main.search.update') {
             $state.go('.versions');
         }
     });

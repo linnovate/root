@@ -1,53 +1,64 @@
 <div class="attachment-details">
     <div class="page-content">
-        <!-- <div class="summary">
+        <div class="summary">
 
-            <div class="favorite">
-                <button ng-class="{ 'orange': attachment.star }" ng-click="star(attachment)">
-                    <i class="fa fa-star"></i>
-                </button>
+            <div class="user att-user">
+                <div icu-avatar user="attUser"></div>
+                <span ng-if="attUser._id" class="summary-content">{{attUser.name}} {{attUser.lastname ? attUser.lastname:""}}</span>
             </div>
 
-            <div class="user">
-                <div icu-avatar user="attachment.creator"></div>
+            <div class="att-size">
+                <img class="att-icon" src="/icu/assets/img/icon-file-size.svg" tooltips tooltip-template="{{'view' |  i18next}}">
+                {{ attachment.size | bytes}}
             </div>
 
             <div class="dropdown dropdown-container" uib-dropdown>
-                <div class="dropdown-trigger" uib-dropdown-toggle>
-                    <i class="fa fa-chevron-down"></i>
-                </div>
-                <ul class="dropdown-menu menu-items" role="menu">
-                    <li>
-                        <a href="#" ng-click="deleteAttachment(attachment)">
-                            <i class="fa fa-2x fa-times-circle"></i>
-                            <span>{{ 'deleteAttachment' | i18next}}</span>
-                        </a>
-                    </li>
-                </ul>
+                    <div class="dropdown-trigger" uib-dropdown-toggle>
+                        <i class="fa fa-chevron-down"></i>
+                    </div>
+                    <ul class="dropdown-menu menu-items" role="menu">
+                        <li>
+                            <a href="#" ng-click="deleteAttachment(attachment)">
+                                <i class="fa fa-2x fa-times-circle"></i>
+                                <span>{{ 'deleteAttachment' | i18next}}</span>
+                            </a>
+                        </li>
+                    </ul>
             </div>
-        </div> -->
+    
+            <button icu-open-modal="attachment" entity-name="document-preview" show-modal="true" modal-name="document-preview" data="attachment" 
+            class="DocumentIconsLine att">
+                    <!-- preview dialog -->
+                    <img class="att-icon" src="/icu/assets/img/icon-view.svg">
+            </button>
+
+            <button id="{{attachment.path}}" ng-click="previewTab(attachment)" title="" 
+            class="DocumentIconsLine att">
+                    <!-- preview new tab -->
+                    <img class="att-icon" src="/icu/assets/img/icon-view.svg" tooltips tooltip-template="{{'view' |  i18next}}">
+            </button>
+
+            <button class="DocumentIconsLine att">
+                    <!-- download -->
+                    <a href="{{attachment.path}}" target="_blank">
+                        <img tooltips tooltip-template="{{'download' |  i18next}}" class="att-icon" ng-src="/icu/assets/img/icon-download.png" src="/icu/assets/img/icon-download.svg">
+                    </a>
+            </button>
+
+
+        </div>
 
         <div class="description">
-            <div class="title"
-                 contenteditable="true"
-                 tabindex="1"
-                 ng-attr-autofocus="{{shouldAutofocus || undefined}}"
-                 strip-br="true"
-                 ng-keydown="onEnter($event)"
-                 ng-model="attachment.name">
+            <div class="attachment">
+                    <span class="att-link-wrapper">
+                        <img class="att-link-icon" src="/icu/assets/img/icon-enter-arrow.svg">
+                        <a class="att-link" href="{{attLinkToEntity}}" ng-bind-html="attLinkToEntityName.title"></a>
+                    </span>
+                    <div class="icon {{attachment.attachmentType}}"></div>
+                    <span class="txt attName">{{attachment.name}}</span><br />
+                    <span class="txt">Uploaded by <span class="txt attCreator">{{attUser.name}} {{attUser.lastname ? attUser.lastname:""}}</span>, </span><span class="txt attCreated">{{attCreated | date : 'h:mma MMM d, yyyy'}}</span> 
             </div>
 
-            <div class="text"
-                 contenteditable="true"
-                 tabindex="2"
-                 strip-br="true"
-                 medium-editor
-                 ng-model="attachment.description"
-                 options="{{options}}">
-            </div>
-            <div>
-                    <iframe ng-src="{{viewAttachment(attachment)}}" width="100%"  height="300px"></iframe>
-            </div>        
         </div>
     </div>
 </div>
