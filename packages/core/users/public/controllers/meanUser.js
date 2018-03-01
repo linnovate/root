@@ -92,10 +92,11 @@ angular.module('mean.users')
       };
     }
   ])
-  .controller('ResetPasswordCtrl', ['MeanUser',
-    function(MeanUser) {
+  .controller('ResetPasswordCtrl', ['MeanUser', 'UsersService',
+    function(MeanUser, UsersService) {
       var vm = this;
       vm.user = {};      
+      vm.user.id = UsersService.getMe().$$state.value.id;
       vm.registerForm = MeanUser.registerForm = false;
       vm.resetpassword = function() {
         MeanUser.resetpassword(this.user);

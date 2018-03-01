@@ -112,12 +112,21 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
     };
 
     MeanUserKlass.prototype.resetpassword = function(user) {
+        $stateParams.tokenId = localStorage.getItem('JWT');
         $http.post('/api/reset/' + $stateParams.tokenId, {
           password: user.password,
-          confirmPassword: user.confirmPassword
+          newpassword: user.newpassword,
+          id: user.id,
         })
-          .success(this.onIdentity.bind(this))
-          .error(this.onIdFail.bind(this));
+          .success(function(q){
+            console.log(q);
+          })
+          .error(function(q){
+              console.log(q);
+          });
+          /*.success(this.onIdentity.bind(this))
+          .error(this.onIdFail.bind(this));*/
+        $stateParams.tokenId = undefined;
       };
 
     MeanUserKlass.prototype.forgotpassword = function(user) {

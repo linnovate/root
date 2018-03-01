@@ -106,12 +106,12 @@
             }
         }
         .modal-body {
-            padding: 15px 0;
+            padding: 15px 0 0;
             &#modalUser {
-                height: 700px;
+                min-height: 344px;
                 background-color:#FCFBF6;
                 .general {
-                    height: 303px;
+                    min-height: 303px;
                     border-bottom: 1px solid #DDDDDD;
                     .title {
                         display: block;
@@ -125,9 +125,41 @@
                         display: flex;
                         flex-direction: row;
                         width:50%;
-                        height: 350px;
+                        min-height: 266px;
                         padding-left: 25px;
                         .info {
+                            .changePassword {
+                                .form-group {
+                                    margin: auto 0 15px;
+                                    button {
+                                        display: block;
+                                        margin: 0 auto 25px;
+                                        position: relative;
+                                        left: -50%;
+                                        transform: translateX(50%);
+                                        background-color: #EAEAE4;
+                                        border: 1px solid #D9D9D8;
+                                    }
+                                    label {
+                                        padding-left: 0;
+                                    }
+                                }
+                                span {
+                                    &.title {
+                                        padding-left: 0;
+                                        margin-left: 0;
+                                    }
+                                }
+                            }
+                            .panel-collapse {
+                                .panel-body {
+                                    padding: 0;
+                                    p {
+                                        padding-bottom: 15px;
+                                        margin-left: 0;
+                                    }
+                                }
+                            }
                             .changePass {
                                 color: #FFA000;
                                 background-color: inherit;

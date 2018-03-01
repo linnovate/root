@@ -37,7 +37,36 @@
                 <input id="name" type="text" placeholder="{{currentUser.name}}" disabled="disabled">
                 <label for="email">{{'Email Address' | i18next}}</label>
                 <input id="email" type="text" placeholder="{{currentUser.email}}" disabled="disabled">
-                <button class="changePass">{{'Change Password' | i18next}}</button>
+
+                    <span class="title panel-title changePass">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            {{'Change Password' | i18next}}
+                        </a>
+                    </span>
+                <div id="collapseOne" class="changePassword panel-collapse collapse">
+                    <div class="panel-body">
+                        <div data-ng-controller="ResetPasswordCtrl as reset" class="reset-password">
+                            <div class="alert alert-danger animated fadeIn" ng-show="reset.resetpassworderror">{{reset.resetpassworderror}}</div>
+                            <div ng-repeat="error in reset.validationError">
+                                <div class="alert alert-danger animated fadeIn">{{reset.error.msg}}</div>
+                            </div>
+                            <span class="title">Enter your new password</span>
+                            <form ng-submit="reset.resetpassword()" class="reset form-horizontal">
+                                <div class="form-group">
+                                    <label for="password" class="reset-password col-md-6">{{'Current Password' | i18next}}</label>
+                                    <input id="password" type="password" name="password" ng-model="reset.user.password"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newpassword" class="col-md-6">{{'New Password' | i18next}}</label>
+                                    <input id="newpassword" type="password" name="newpassword" ng-model="reset.user.newpassword"/>
+                                </div>
+                                <div class="form-group save">
+                                    <button type="submit" class="btn btn-primary">{{'Save Password' | i18next}}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
             <hr/>
             <div class="changeAvatar">
@@ -67,7 +96,7 @@
         </div>
     </section>
 
-    <section class="defaultView" ng-show="activeTab.title == 'General'">
+    <section class="defaultView" ng-show="activeTab.title == 'defaultView'">
         <div class="title">
             {{'Default View' | i18next | uppercase}}
         </div>
