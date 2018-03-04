@@ -13,3 +13,4 @@ docker-compose up
 ### Prerequisites
 
 - **Docker , docker-compose** , node 4.x
+- test
