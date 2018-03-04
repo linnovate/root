@@ -8,7 +8,7 @@ angular.module('mean.icu.ui.taskdetails')
         
         var tasksNames = _.object(_.pluck(tasks, '_id'), _.pluck(tasks, 'title'));
 
-        $scope.documents.map(doc => AttachmentsService.getAttachmentUser(doc).then(user =>
+        $scope.documents.map(doc => AttachmentsService.getAttachmentUser(doc.creator).then(user =>
             doc.attUser = user.name 
         ))
 

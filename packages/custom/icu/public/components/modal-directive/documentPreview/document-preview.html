@@ -1,10 +1,13 @@
 <div class="modal-header">
         <div class="attachment">
+                <button class="DocumentIconsLine" id="Update-icon-download-preview" ng-click="previewWindow(attachment)">
+                        <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.svg" src="/icu/assets/img/icon-view.svg">
+                </button>    
                 <button class="DocumentIconsLine" id="Update-icon-download-preview">
                         <a href="{{attPath}}" target="window" tooltip-side="left" tooltip-side="left" tooltips tooltip-template="{{'download' | i18next}}">
                                 <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-download.svg" src="/icu/assets/img/icon-download.svg">
                         </a>
-                    </button>
+                </button>
                 <div class="icon {{attType}}"></div>
                 <span class="txt attName">{{attName}} | </span><span class="txt attSize">{{attSize | bytes}}</span><br />
                 <span class="txt">Uploaded by <span class="txt attCreator">{{attCreator}}</span>, </span><span class="txt attCreated">{{attCreated | date : 'h:mma MMM d, yyyy'}}</span> 
@@ -19,6 +22,7 @@
       <iframe ng-src="{{getPath()}}" id="document-preview" width="100%"  height="100%"></iframe>
     </div>
 </div>
+
 <div class="modal-footer">
     <button class="btn btn-primary" type="button" ng-click="ok()">{{'Close' | i18next }}</button>
 </div>  
