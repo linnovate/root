@@ -1,4 +1,4 @@
-function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filter,$http, UsersService) {
+function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filter,$http, UsersService,AttachmentsService) {
 
     $scope.path = "" ;
 
@@ -11,6 +11,7 @@ function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filte
         //        console.log("$scope.getPath",$scope.path) ;  
                 return attachment ;
     }
+    $scope.attachment = attachment ;
 
     $scope.attName =  attachment.name ;
     $scope.attCreated =  attachment.created ; 
@@ -22,7 +23,10 @@ function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filte
     $scope.attPrint =  attachment.size ;
     $scope.attType =  attachment.attachmentType;
                 
-    
+    $scope.previewWindow = function(document) {
+        AttachmentsService.previewWindow(document) ;
+    }       
+
 
     $scope.previewAttachment = function () { 
 
