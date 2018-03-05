@@ -56,6 +56,13 @@ angular.module('mean.icu.data.projectsservice', [])
         }
     }
 
+    function getSubProjects(projectId) {
+        return $http.get(ApiUri + EntityPrefix + '/subprojects/' + projectId).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
     function create(project) {
         return $http.post(ApiUri + EntityPrefix, project)
             .then(function(result) {
@@ -205,6 +212,7 @@ angular.module('mean.icu.data.projectsservice', [])
         getByDiscussionId: getByEntityId('discussions'),
         getByUserId: getByEntityId('users'),
         getTags: getTags,
+        getSubProjects: getSubProjects,
         create: create,
         update: update,
         remove: remove,

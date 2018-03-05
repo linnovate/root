@@ -15,7 +15,7 @@ var ProjectSchema = new Schema({
   },
   recycled: {
     type: Date,
-  },  
+  },
   title: {
     type: String
   },
@@ -68,6 +68,18 @@ var ProjectSchema = new Schema({
   circles: {
     type: Schema.Types.Mixed
   },
+  subProjects: [{
+    type: Schema.ObjectId,
+    ref: 'Project'
+  }],
+  tType: {
+    type: String
+  },
+  templateId: {
+    type: Schema.ObjectId,
+    ref: 'Project'
+  },
+  customData: {},
   WantRoom: {
     type: Boolean,
     default: false
