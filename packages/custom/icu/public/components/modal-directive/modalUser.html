@@ -1,0 +1,101 @@
+<div class="modal-header" id="modalUser">
+    <div class="avatar" title="{{currentUser.name}} {{currentUser.lastname}}"
+         ng-style="{'background-color': user.profile.avatar ? 'transparent' : '#b8e77f' }">
+    <span ng-if="!currentUser.profile.avatar"
+          class="name">{{currentUser.name.charAt(0)}}{{currentUser.lastname.charAt(0)}}
+    </span>
+        <img ng-if="currentUser.profile.avatar"
+             class="image"
+             ng-src="{{currentUser.profile.avatar + imgUrl}}"
+             alt="{{currentUser.name}}"/>
+    </div>
+
+    <button type="button" class="closeBtn" aria-hidden="true" ng-click="cancel()">&times;</button>
+    <h3 class="modal-title" ng-if='entity.type != "Document"'>
+        {{ currentUser.username | i18next }}{{ entity.type | i18next }}
+    </h3>
+    <div class="tabs">
+        <ul>
+            <li ng-repeat="tab in tabs"
+            class="tab {{isActive(tab)}}"
+                ng-click="setActiveTab(tab)">
+                <a href="#">
+                    {{tab.title}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="modal-body" id="modalUser">
+    <section class="general" ng-show="activeTab.title == 'General'">
+        <div class="title">
+            {{'Account Information' | i18next | uppercase}}
+        </div>
+        <div class="data">
+            <div class="info">
+                <label for="name">{{'Full name' | i18next}}</label>
+                <input id="name" type="text" ng-model="currentUser.name" placeholder="{{currentUser.name}}">
+                <label for="email">{{'Email Address' | i18next}}</label>
+                <input id="email" type="text" ng-model="currentUser.email" placeholder="{{currentUser.email}}">
+                <button class="changePass">{{'Change Password' | i18next}}</button>
+            </div>
+            <hr/>
+            <div class="changeAvatar">
+                <span class="profPicture">{{'Profile Picture' | i18next}}</span>
+                <div class="picInfo">
+                    <div class="changePic">
+                        <div class="avatar" title="{{currentUser.name}} {{currentUser.lastname}}"
+                             ng-style="{'background-color': user.profile.avatar ? 'transparent' : '#b8e77f' }">
+                        <span ng-if="!currentUser.profile.avatar"
+                              class="name">{{currentUser.name.charAt(0)}}{{currentUser.lastname.charAt(0)}}
+                        </span>
+                            <img ng-if="currentUser.profile.avatar"
+                                 class="image"
+                                 ng-src="{{currentUser.profile.avatar + imgUrl}}"
+                                 alt="{{currentUser.name}}"/>
+                        </div>
+                    </div>
+                    <div class="replace">
+                        <span class="filename">me.jpg</span>
+                        <div class="actions">
+                            <button class="replace">{{'Replace' | i18next}}</button>
+                            <button class="reset">{{'Reset' | i18next}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="defaultView" ng-show="activeTab.title == 'General'">
+        <div class="title">
+            {{'Default View' | i18next | uppercase}}
+        </div>
+        <span class="hint">{{'Select a saved filter that will be displayed by default as your home screen' | i18next}}</span>
+        <div class="filters">
+            <div ng-repeat="filter in filters" class="filter">
+                <div class="form-group">
+                    <label class="title col-xl-3 control-label">{{filter.title | i18next}}</label>
+                    <div class="col-lg-5">
+
+                        <ui-select ng-model="filter.selected" theme="bootstrap">
+                            <ui-select-match placeholder="{{filter.selected}}">
+                                {{$select.selected.name}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="option in filter.options | filter: $select.search">
+                                <div ng-bind-html="filter.title | highlight: $select.search"></div>
+                                <small ng-bind-html="option | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section ng-show="activeTab.title == 'Notifications'">
+        Notifications
+    </section>
+    <section ng-show="activeTab.title == 'Components'">
+        Components
+    </section>
+</div>

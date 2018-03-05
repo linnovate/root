@@ -1,6 +1,6 @@
 'use strict';
 angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
-    .directive('icuOpenModal', function ($state, $uibModal, OfficeDocumentsService, TemplateDocsService ) {
+    .directive('icuOpenModal', function ($state, $uibModal,UsersService, OfficeDocumentsService, TemplateDocsService ) {
 
         if( window.config.version !=  localStorage.getItem("icuVersion")){
             $uibModal.open({
@@ -9,14 +9,14 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                 templateUrl: '/icu/components/modal-directive/whats-new/whats-new.html',
                 controller: controllerwhatsNew,
                 resolve: {
-    
+
                 }
-            }); 
+            });
         }
 
         function link(scope, elem, attrs) {
             elem.bind('click', function() {
-               
+
                 if($state.current.name.indexOf('main.tasks.byentity') != -1 && scope.entityName != 'Document')
                    scope.showModal --;
 
@@ -28,9 +28,8 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             });
 
             function buildModal() {
-                // console.log("scope.modalName");
-                // console.log(scope.modalName);
-                if(scope.modalName == 'receive' && scope.entityName == "officeDocument") { 
+                //console.log("buildModal receive", scope) ;
+                if(scope.modalName == 'receive' && scope.entityName == "officeDocument") {
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'md',
@@ -44,9 +43,30 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                                 return scope.people;
                             }
                         }
-                    }); 
+                    });
                 }
-                else if(scope.modalName == 'distributed' && scope.entityName == "officeDocument") { 
+                else if(scope.modalName == 'currentUser') {
+//                    console.log("buildModal distributed", scope) ;
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        size:  'lg',
+                        templateUrl: '/icu/components/modal-directive/modalUser.html',
+                        controller: userCtrl,
+                        resolve: {
+                            officeDocument: function () {
+                                return scope.data;
+                            },
+                            people:function () {
+                                return scope.people;
+                            },
+                            currentUser: function () {
+                                return scope.currentUser;
+                            }
+                        }
+                    });
+                }
+                else if(scope.modalName == 'distributed' && scope.entityName == "officeDocument") {
+//                    console.log("buildModal distributed", scope) ;
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'md',
@@ -60,7 +80,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                                 return scope.people;
                             }
                         }
-                    }); 
+                    });
                 }
 
                 else if(scope.send && scope.entityName == "officeDocument"){
@@ -77,10 +97,10 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                                 return scope.people;
                             }
                         }
-                    
-                    }); 
 
-                } 
+                    });
+
+                }
                 else if(scope.modalName == 'template' && scope.entityName == "officeDocument"){
                     var modalInstance = $uibModal.open({
                         animation: true,
@@ -90,21 +110,21 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                         resolve: {
                             templates: function () {
                                 if(scope.data.folder == undefined){
-                                  return [];                                                                     
+                                  return [];
                                 }else{
                                     return TemplateDocsService.getTemplatesByFolder(scope.data.folder);
-                                } 
+                                }
                             },
                             officeDocument: function(){
                                 return scope.data;
                             }
                         }
-                    
-                    }); 
+
+                    });
                 }
-                else if(scope.modalName == 'document-preview') { 
+                else if(scope.modalName == 'document-preview') {
                     var modalInstance = $uibModal.open({
-                        backdropClass: 'backdrop-document-preview',                        
+                        backdropClass: 'backdrop-document-preview',
                         animation: true,
                         size:  'lg',
                         templateUrl: '/icu/components/modal-directive/documentPreview/document-preview.html',
@@ -114,7 +134,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                                 return scope.data;
                             }
                         }
-                    }); 
+                    });
                 }
 
                 else {
@@ -127,7 +147,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                             return scope.entityName;
                         }
                     }
-                
+
                 });
             }
 
@@ -172,7 +192,7 @@ function controller($scope, $uibModalInstance, $filter, entity) {
 }
 
 function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocument, people, OfficeDocumentsService) {
-      
+
     $scope.officeDocument = officeDocument;
     $scope.people = people;
     // $scope.sendingForm={};
@@ -180,7 +200,7 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocu
     // $scope.sendingForm.doneBy = undefined;
     // $scope.sendingForm.classification = undefined;
 
-    $scope.classificationList = ['unclassified','private','secret','topSecret' ]; 
+    $scope.classificationList = ['unclassified','private','secret','topSecret' ];
 
     $scope.ok = function (sendingForm) {
 
@@ -188,8 +208,8 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocu
         alertify.parent(elem);
         alertify.logPosition("bottom right");
         console.log(sendingForm)
-     
-        if(sendingForm.classification == undefined || 
+
+        if(sendingForm.classification == undefined ||
             sendingForm.doneBy == undefined ||
             sendingForm.title == ""){
             alertify.error("נא למלא הנדון סיווג ולטיפול");
@@ -206,7 +226,7 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocu
                 alertify.reset();
                 alertify.logPosition("bottom right");
                 alertify.success("המסמך נשלח בהצלחה");
-        });  
+        });
     }
     };
 
@@ -236,10 +256,70 @@ function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, peo
         container: 'dragcontainer'
     }
     $scope.ok = function (sendingForm) {
-            $scope.cancel();            
-    };    
+            $scope.cancel();
+    };
     $scope.cancel = function () {
         $state.reload();
+        $uibModalInstance.dismiss('cancel');
+    };
+}
+
+function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, people, UsersService, OfficeDocumentsService) {
+
+    $scope.officeDocument = officeDocument;
+    $scope.people = people;
+    $scope.currentUser = UsersService.getMe().$$state.value;
+    $scope.tabs = [
+        {
+            title: 'General',
+        },
+        {
+            title: 'Notifications',
+        },
+        {
+            title: 'Components',
+        }
+    ];
+    $scope.activeTab = $scope.tabs[0];
+    $scope.setActiveTab = function(tab){
+        $scope.activeTab = tab;
+    };
+    $scope.isActive = function (tab){
+        if($scope.activeTab.title == tab.title){
+            return 'activeTab'
+        }
+        return '';
+    };
+    $scope.filters = [
+        {
+            title: 'Home Screen Filter',
+            options: [
+                '1_option',
+                '2_option',
+            ]
+        }
+    ];
+
+    $scope.classificationList = ['unclassified','private','secret','topSecret' ];
+
+    $scope.ok = function (showUser) {
+
+        var elem = document.getElementById("message");
+        alertify.parent(elem);
+        alertify.logPosition("bottom right");
+        console.log(showUser)
+
+        if(showUser.classification == undefined ||
+            showUser.doneBy == undefined ||
+            showUser.title == ""){
+            alertify.error("access denied");
+        }else{
+
+            console.log('access granted')
+        }
+    };
+
+    $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
 }
@@ -251,19 +331,19 @@ function distributedCtrl($scope, $state,$uibModalInstance, $filter, officeDocume
         OfficeDocumentsService.sentToDocument(officeDocument).then(function(res) {
         // gets the user names, with ids as present in the sentTo field
         var resWithDate = res.map(function(r){
-            var currentSentTo = officeDocument.readBy.filter(function(rb){ 
+            var currentSentTo = officeDocument.readBy.filter(function(rb){
                 return rb.user == r._id }) ;
 
                 if(currentSentTo.length) {
                 return Object.assign({date: currentSentTo[0].date, received: true}, r) ;
-                
+
             }
             else {
                 return Object.assign({received: false}, r) ;
             }
          } )
         // add the read date as it appears on the doc.
-        $scope.distributedList  = resWithDate ;        
+        $scope.distributedList  = resWithDate ;
     }) ;
     }
     else {
@@ -272,24 +352,23 @@ function distributedCtrl($scope, $state,$uibModalInstance, $filter, officeDocume
 
     $scope.officeDocument = officeDocument;
     $scope.ok = function (sendingForm) {
-            // console.log($scope.receiveStatus);            
-            $scope.cancel();            
-    };    
+            // console.log($scope.receiveStatus);
+            $scope.cancel();
+    };
     $scope.cancel = function () {
         $state.reload();
         $uibModalInstance.dismiss('cancel');
     };
 }
 
-
 // function controllerTemplate($scope, $uibModalInstance, $filter) {
-    
-    
+
+
 //         $scope.ok = function (sendingForm) {
-            
-//            // OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument)    
+
+//            // OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument)
 //         };
-    
+
 //         $scope.cancel = function () {
 //             $uibModalInstance.dismiss('cancel');
 //         };
