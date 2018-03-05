@@ -29,15 +29,17 @@ directive('icuSidepane', function() {
         };
 
         // updatedDate
-        let lastMonth = new Date();
-        lastMonth.setDate(lastMonth.getMonth() -1 ) ;
-        $scope.updatedDate = lastMonth ;
+        // var lastMonth = new Date();
+        // lastMonth.setDate(lastMonth.getMonth() - 1);
+        var lastYear = new Date();
+        lastYear.setFullYear(1948);
+        $scope.updatedDate = lastYear;
         SearchService.filteringByUpdated = $scope.updatedDate;
 
         // activeToggle
         $scope.activeToggleList = EntityService.activeToggleList;
         $scope.activeToggle = {
-            field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
+            field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'all',
             disabled: !EntityService.isActiveStatusAvailable()
         };
         /*---*/
