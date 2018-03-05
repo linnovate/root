@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.officedocumentsservice', [])
-    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService, ActivitiesService) {
+    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService, NotifyingService, ActivitiesService) {
         var EntityPrefix = '/officeDocuments';
 
           function getAll() {
@@ -22,14 +22,15 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 //                }]
                 result.data.forEach(function(officeDocument){
                       officeDocument.created = new Date(officeDocument.created);
-                }) 
-                       
+                });
+
                 return result.data;
             });
         }
 
          function deleteDocument(id) {
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+                 NotifyingService.notify('editionData');
                  return result.status;
              });
          }
@@ -110,7 +111,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 result.data.forEach(function(officeDocument){
                     officeDocument.created = new Date(officeDocument.created);
               }) ;
-              
+
                 return result.data;
             });
         }
@@ -122,7 +123,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function saveDocument(data, file) {    
+        function saveDocument(data, file) {
             return Upload.upload({
                 url: '/api/officeDocuments',
                 fields: data,
@@ -147,6 +148,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function createDocument(data) {
             return $http.post(ApiUri + EntityPrefix + "/create" , data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
+                NotifyingService.notify('editionData');
                 return result.data;
             });
         }
@@ -192,7 +194,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: type || 'updateWatcher',
-                    userObj: watcher                
+                    userObj: watcher
                 },
                 context: {}
             }).then(function(result) {
@@ -285,7 +287,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 return result.data;
             });
         }
-        
+
 
         function updateAssign(officeDocument, prev) {
             if (officeDocument.assign) {

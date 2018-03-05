@@ -1,0 +1,32 @@
+**/karma*.js
+**/gulp*.js
+
+# /node_modules/* and /bower_components/* ignored by default
+
+# Ignore built files except build/index.js
+build/*
+bower_components/*
+packages/core/*
+packages/custom/icu/.bower-*
+packages/custom/icu/docs/*
+*assets*
+
+#packages/custom/icu/public/*
+#packages/custom/icu/server/*  
+#packages/custom/actions/*  
+#packages/custom/elasticsearch/*  
+#packages/custom/general/*  
+
+
+packages/custom/mail-templates/*  
+packages/custom/mean-socket/*  
+packages/custom/medium-editor/*  
+packages/custom/theme/*
+
+config/*  
+dist/*  
+files/*  
+gulp/*  
+logs/*  
+test/*  
+tools/*

@@ -34,23 +34,32 @@
                     <div id ="colorTOtransperent"></div>
 
                     <div id="AllUpdateIcons">
-                        <button class="DocumentIconsLine"  id="Update-icon-revert">
-                            <img tooltips tooltip-template="{{'revert' |  i18next}}" class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-revert1.png" src="/icu/assets/img/icon-revert1.png">
-                        </button>
-                        <!--<button class="DocumentIconsLine" id="Update-icon-view" title="צפה">
-                            <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png">
-                        </button>-->
-                        <button id="{{attachment.path}}" ng-click="view(attachment)" title="" class="DocumentIconsLine-Update-icon-view"  >
-                            <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png" tooltips tooltip-template="{{'view' |  i18next}}">
-                        </button>
-                        <button class="DocumentIconsLine" id="Update-icon-edit" >
-                            <img tooltips tooltip-template="{{'edit' |  i18next}}" class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-edit.png" src="/icu/assets/img/icon-edit.png">
-                        </button>
-                        <button class="DocumentIconsLine" id="Update-icon-download" >
-                            <a href="{{attachment.path}}" target="window">
-                                <img tooltips tooltip-template="{{'download' |  i18next}}" class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-download.png" src="/icu/assets/img/icon-download.png">
+                        <!-- <button class="DocumentIconsLine"  id="Update-icon-revert">
+                            <img tooltips tooltip-template="{{'revert' |  i18next}}" class="Icons-In-DocumentLineActivities" ng-src="/icu/assets/img/icon-revert1.png" src="/icu/assets/img/icon-revert1.png">
+                        </button> -->                        
+                        <!-- <button id="{{attachment.path}}" ng-click="view(attachment)" title="" class="DocumentIconsLine-Update-icon-view">
+                            <img class="Icons-In-DocumentLineActivities" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png" tooltips tooltip-template="{{'view' |  i18next}}">
+                        </button> -->
+                        <button class="DocumentIconsLine DocumentIconsLineActivities" id="Update-icon-edit" 
+                            icu-open-modal="attachment" entity-name="document-preview" show-modal="true" modal-name="document-preview" data="attachment">
+                            <!-- preview -->
+                            <a href="#" class="Icons-In-DocumentLineActivities">                                    
+                                <img tooltips tooltip-template="{{'preview' |  i18next}}" class="Icons-In-DocumentLineActivities" ng-src="/icu/assets/img/icon-view.svg" src="/icu/assets/img/icon-view.svg">
                             </a>
                         </button>
+                        <button class="DocumentIconsLine DocumentIconsLineActivities" id="Update-icon-download" >
+                            <!-- download -->
+                            <a href="{{attachment.path}}" target="window">
+                                <img tooltips tooltip-template="{{'download' |  i18next}}" class="Icons-In-DocumentLineActivities" ng-src="/icu/assets/img/icon-download.svg" src="/icu/assets/img/icon-download.svg">
+                            </a>
+                        </button>
+                        <button class="DocumentIconsLine DocumentIconsLineActivities" id="Update-icon-remove">
+                            <a href="#" class="Icons-In-DocumentLineActivities" icu-open-modal entity-name="Document" show-modal=true delete-fn="remove(document, $index)">
+                                <img tooltips tooltip-template="{{'Delete' | i18next}}" class="Icons-In-DocumentLineActivities" ng-src="/icu/assets/img/icon-trash.svg" src="/icu/assets/img/icon-trash.svg">
+                                        <!-- <i class="fa fa-lg fa-trash"></i> -->
+                            </a>
+                        </button>
+           
                     </div>
                 </div>
 
@@ -64,7 +73,7 @@
             <textarea ctrlenter="save()" ng-model="activity.description" ng-focus="expandUpdate()" ng-blur="minimizeUpdate()" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
 
             <div class="action-buttons">
-                <button type="button" class="attachment"
+                <button ng-if="entityName != 'templateDoc'" type="button" class="attachment"
                         ngf-select
                         ngf-change="upload($files)"
                         ngf-multiple="true"></button>

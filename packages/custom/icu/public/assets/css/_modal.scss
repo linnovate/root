@@ -1,6 +1,63 @@
+.backdrop-document-preview {
+	opacity: 0.7 !important;
+
+}
 
 .modal-dialog {
     padding: 10px;
+
+    .attachment {
+        display: inline-block;
+        position: relative;
+        height: 120px;
+        width: 100%;
+        left: 0;
+        $icon-width: 60px;
+        $icon-padding: 19px;
+
+        .txt {
+            font-size: 22px;
+        }
+        .attName , .attSize {
+            font-weight: bold ;
+        }
+        .attCreator {
+            color: #FFA000 ;
+        }
+
+
+        #Update-icon-download-preview {
+            position: relative;
+            float: right;
+            width: 30px;
+            height: 30px;
+            &:hover{
+                filter: invert(75%);
+            }
+        }
+
+        .icon {
+            position: relative;
+            float: left ;
+            top: 0;
+            left: 20px;
+            transform: translate(-50%, 0);
+            height: 80px;
+            width: $icon-width;
+            @include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');
+        }
+
+        .name {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            text-align: center;
+            color: $light-grey4;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
     .modal-body.center {
         width: 230px;
         margin: 0 auto;
@@ -434,140 +491,145 @@
         }
     }
 
-    .modal-readby-table {
-        padding: 10px 0;
-        margin-bottom: 7px;
-        tr {
-            background-color: #eee;
-            border-top: 1px solid #F3F1F6;
-        }
-        th {
-            text-align: center;
-        }
-        td, th {
-            padding: 5px 10px;
-        }
-        td {
-            &.wasupgreen {
-                color: green;
-            }
-            &.wasupgray {
-                color: gray;
-            }
-        }
+	.modal-readby-table {
+		padding: 10px 0;
+		margin-bottom: 7px;
+		tr {
+			background-color: #eee ;
+			border-top: 1px solid #F3F1F6;
+		}
+		th {
+			text-align: center;
+		}
+		td,th {
+			padding: 5px 10px;
+		}
+		td {
+		&.wasupgreen {
+			color: green ;
+		}
+		&.wasupgray {
+			color: gray ;
+		}
+		}
 
-    }
+	}
 
     .modal-body {
-        padding: 15px;
-    }
-    .modal-content {
-        border-radius: 0px;
-    }
+		padding: 15px;
+	}
+	.modal-content {
+		border-radius: 0px;
+	}
     .btn {
         float: right;
-        outline: none !important;
-        &.close {
-            &:hover {
-                transition-duration: 0.8s;
-                -ms-transform: rotate(90deg); /* IE 9 */
-                -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
-                transform: rotate(90deg);
-            }
-        }
+		outline: none !important;
+	    &.close{
+	    	 &:hover{
+	    	 	 transition-duration: 0.8s;
+				-ms-transform: rotate(90deg); /* IE 9 */
+			    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+			    transform: rotate(90deg);
+			}
+	    }
 
     }
     .modal-footer .btn + .btn {
         margin-right: 5px;
-    }
+	}
+
+	#iframeDoc {
+		iframe#document-preview {
+			border: 0 none;
+		}
+	}
 }
-
 .comp {
-    button {
-        font-weight: initial;
-        font-size: 32px;
+	button {
+		font-weight: initial;
+    	font-size: 32px;
+	}
+	h3 {
+		font-weight: 700;
+		font-size: 20px;
+		margin-top: 14px;
+	}
+	.compBtn {
+	    background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+	    width: 30px;
+	    height: 30px;
+	    border-radius: 15px;
+	    border: none;
+	    float: left;
+	    margin: 14px 7px 0 16px;
     }
-    h3 {
-        font-weight: 700;
-        font-size: 20px;
-        margin-top: 14px;
-    }
-    .compBtn {
-        background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-        border: none;
-        float: left;
-        margin: 14px 7px 0 16px;
-    }
-    ul.selectedComp {
-        list-style-type: none;
-        padding-left: 20px;
-        padding-right: 20px;
-        li:first-child div {
-            border-top: 1px solid #aaaaaa;
-        }
-        li div {
-            padding: 10px 0;
-            border-bottom: 1px solid #aaaaaa;
+	ul.selectedComp {
+	    list-style-type: none;
+	    padding-left: 20px;
+    	padding-right: 20px;
+	    li:first-child div{
+	    	border-top: 1px solid #aaaaaa;
+	    }
+		li div {
+			padding: 10px 0;
+			border-bottom: 1px solid #aaaaaa;
 
-            button {
-                color: #fff;
-                background-color: #888;
-                height: 14px;
-                width: 14px;
-                border-radius: 10px;
-                padding: 0 0px 0px 0.4px;;
-                font-size: 14px;
-                opacity: 1;
-                margin-top: 3px;
-                /*line-height: 12px;
-                text-align: center;
-                outline: none;*/
-            }
-        }
-    }
-    .compList {
-        padding-left: 20px;
-        width: 37em;
-        display: inline-block;
-    }
-    .showSelect {
-        width: 26px;
-        height: 26px;
-        margin: 0;
-        padding: 0;
-        line-height: 24px;
-        border-radius: 15px;
-        font-size: 24px;
-        color: white;
-        background-color: #ffa004;
-        display: inline-block;
-        margin-right: 17px;
-        outline: none !important;
-    }
-    .c19nList {
-        float: left;
-        width: 86%;
-        margin-left: 17px;
-        margin-bottom: 10px;
-    }
-    .errorMessage {
-        clear: both;
-        text-align: center;
-        color: red;
-        width: 100%;
-        font-weight: bold;
-        margin-top: 15px;
-        float: left;
-    }
-    &.modal-header {
-        border-bottom: none;
-    }
-    &.modal-body {
-        height: 350px;
-    }
+			button {
+			    color: #fff;
+			    background-color: #888;
+			    height: 14px;
+			    width: 14px;
+			    border-radius: 10px;
+			    padding: 0 0px 0px 0.4px;;
+			    font-size: 14px;
+			    opacity: 1;
+			    margin-top: 3px;
+			    /*line-height: 12px;
+    			text-align: center;
+    			outline: none;*/
+			}
+		}
+	}
+	.compList {
+		padding-left: 20px;
+    	width: 37em;
+    	display: inline-block;
+	}
+	.showSelect {
+	    width: 26px;
+	    height: 26px;
+	    margin: 0;
+	    padding: 0;
+	    line-height: 24px;
+	    border-radius: 15px;
+	    font-size: 24px;
+	    color: white;
+	    background-color: #ffa004;
+	    display: inline-block;
+    	margin-right: 17px;
+		outline: none !important;
+	}
+	.c19nList {
+		float: left;
+		width: 86%;
+    	margin-left: 17px;
+    	margin-bottom: 10px;
+	}
+	.errorMessage {
+		clear: both;
+	    text-align: center;
+	    color: red;
+	    width: 100%;
+	    font-weight: bold;
+	    margin-top: 15px;
+	    float: left;
+	}
+	&.modal-header {
+		border-bottom: none;
+	}
+	&.modal-body {
+		height: 350px;
+	}
 }
 
 @mixin ui-select {
@@ -578,15 +640,15 @@
         .ui-select-match {
             box-shadow: none;
             background-color: transparent;
-            outline: none;
+			outline: none;
 
             .ui-select-match-text {
                 float: left !important;
                 color: #00AEEF;
                 display: flex;
-                align-items: center;
-                height: 60%;
-                margin-top: 6px;
+				align-items: center;
+				height:60%;
+				margin-top:6px;
 
             }
 
@@ -594,7 +656,7 @@
                 background-color: transparent;
                 //border: none;
                 //box-shadow: none;
-                padding: 0;
+				padding: 0;
 
                 i.caret {
                     display: none;
@@ -610,119 +672,120 @@
         .ui-select-choices-row.active {
             .ui-select-choices-row-inner {
                 background-color: #f5f5f5;
-                color: $dark-grey;
+				color: $dark-grey;
 
             }
         }
         .ui-select-choices-row {
             .ui-select-choices-row-inner {
-                display: flex;
-                align-items: center;
-            }
-        }
-    }
+               display: flex;
+			   align-items: center;
+           }
+       }
+   }
 }
 
-.user {
+.user  {
 
-    @include ui-select;
+	@include ui-select;
 }
 
-.doneBy {
+.doneBy  {
 
-    @include ui-select;
+		@include ui-select;
+	}
+
+.notice{
+	@include ui-select;
 }
 
-.notice {
-    @include ui-select;
-}
-
-.verticalUser {
-    //sswidth:160%;
-    display: flex;
-    align-items: center;
+.verticalUser{
+	//sswidth:160%;
+	display: flex;
+	align-items: center;
 }
 
 $icon-width: 60px;
 $icon-padding: 19px;
 .templateIcon {
-    position: absolute;
-    top: 15px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    height: 80px;
-    width: $icon-width;
-    @include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');
+	position: absolute;
+	top: 15px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	height: 80px;
+	width: $icon-width;
+	@include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');
 }
 
-.card {
-    margin-top: 130px;
+.card{
+	margin-top: 130px;
 
 }
 
-.template {
-    border: solid 1px;
-    margin: 7px;
-    &:hover {
-        background: #fda102;
-    }
-    cursor: pointer;
+.template{
+	border: solid 1px;
+	margin: 7px;
+	&:hover{
+		background: #fda102;
+	}
+	cursor: pointer;
+}
+
+.template-modal-title{
+	text-overflow: ellipsis;
+	width: 115px;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .loader2 {
-    position: absolute;
+	position: absolute;
     border: 4px solid #f3f3f3;
     border-radius: 50%;
     border-top: 4px solid #2d82bb;
     width: 30px;
     height: 30px;
     -webkit-animation: spin 2s linear infinite; /* Safari */
-    animation: spin 2s linear infinite;
-    // margin-right:50%;
-    margin-left: 30%;
-    margin-top: 68%;
-    opacity: 1 !important;
+	animation: spin 2s linear infinite;
+	// margin-right:50%;
+	margin-left: 30%;
+	margin-top:68%;
+	opacity: 1!important;
+  }
+
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+
+
+.manageTemplate{
+	margin-right: 10px !important;
+	@include ellipse(12px);
+	@include button;
+	background-color: #323d41;
+	box-shadow: 0 3px 0 0 #101314;
+	color: white;
+	font-size: 13px;
+	font-weight: 700;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-top: 10px;
+	&:hover{
+		background-color: #4C5D63;
+		transition: 0.8s;
+	}
 }
 
-/* Safari */
-@-webkit-keyframes spin {
-    0% {
-        -webkit-transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.manageTemplate {
-    margin-right: 10px !important;
-    @include ellipse(12px);
-    @include button;
-    background-color: #323d41;
-    box-shadow: 0 3px 0 0 #101314;
-    color: white;
-    font-size: 13px;
-    font-weight: 700;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin-top: 10px;
-    &:hover {
-        background-color: #4C5D63;
-        transition: 0.8s;
-    }
-}
-
-.check-box {
-    margin-top: 15px;
+.check-box{
+	margin-top: 15px;
 }
 
 // .ulWhatsNew{
@@ -827,60 +890,56 @@ $icon-padding: 19px;
 //   }
 // }
 
-.carousel-inner .item {
-    background: #a7cfdf; /* Old browsers */
-    background: -moz-linear-gradient(top, #a7cfdf 0%, #23538a 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #a7cfdf 0%, #23538a 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #a7cfdf 0%, #23538a 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a7cfdf', endColorstr='#23538a', GradientType=0); /* IE6-9 */
+.carousel-inner .item{
+	background: #a7cfdf; /* Old browsers */
+	background: -moz-linear-gradient(top,  #a7cfdf 0%, #23538a 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #a7cfdf 0%,#23538a 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #a7cfdf 0%,#23538a 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a7cfdf', endColorstr='#23538a',GradientType=0 ); /* IE6-9 */
     text-align: center;
-    height: 400px; /*change as your needs*/
+	height: 400px;/*change as your needs*/
 }
 
-.carousel-inner .item img {
-    width: 880px;
-    height: 400px;
+.carousel-inner .item img{
+	width:880px;
+	height:400px;
 }
 
-.carousel-inner .item .container .carousel-caption {
-    margin-bottom: 200px;
+.carousel-inner .item .container .carousel-caption{
+	margin-bottom:200px;
 }
 
 .control-buttons {
     text-align: center;
 }
 
-.carousel-control {
-    z-index: 11;
+.carousel-control{
+	z-index: 11;
 }
-
-.myCarousel .carousel-indicators li, .myCarousel .carousel-indicators li.active {
-    border-radius: 0;
-    width: 50px;
-    height: 3px;
-    margin: 0 5px 0;
-    border: 0;
+.myCarousel .carousel-indicators li , .myCarousel .carousel-indicators li.active {
+  border-radius: 0;
+  width: 50px;
+  height: 3px;
+  margin: 0 5px 0;
+  border:0;
 }
-
-.myCarousel .carousel-indicators li {
-    position: relative;
-    background-color: gray;
+.myCarousel .carousel-indicators li{
+  position: relative;
+  background-color:gray;
 }
-
 .carousel-progress-bar {
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background-color: #5cb85c; /*progress bar color*/
-    width: 0;
-    margin: 0 0 0 0;
-    border: none;
-    z-index: 11;
-    opacity: 0;
+  position:absolute;
+  left:0;
+  top:0;
+  height: 100%;
+  background-color: #5cb85c;/*progress bar color*/
+  width: 0;
+  margin: 0 0 0 0;
+  border: none;
+  z-index: 11;
+  opacity:0;
 }
-
-.myCarousel .carousel-indicators li.active .carousel-progress-bar {
-    opacity: 1;
+.myCarousel .carousel-indicators li.active .carousel-progress-bar{
+  opacity:1;
 }
 

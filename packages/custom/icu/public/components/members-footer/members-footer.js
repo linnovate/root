@@ -5,21 +5,20 @@ angular.module('mean.icu.ui.membersfooter', [])
         function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService, UsersService, ActivitiesService,TasksService,ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService, OfficesService) {
 
             var serviceMap = {
-                projects: 'ProjectsService',
-                discussions: 'DiscussionsService',
-                tasks: 'TasksService',
-                offices: 'OfficesService',
-                templateDocs: 'TemplateDocsService',
-                folders: 'FoldersService',
-                officeDocuments: 'OfficeDocumentsService',
-                project: 'ProjectsService',
-                discussion: 'DiscussionsService',
                 task: 'TasksService',
+                tasks: 'TasksService',
+                project: 'ProjectsService',
+                projects: 'ProjectsService',
+                discussion: 'DiscussionsService',
+                discussions: 'DiscussionsService',
                 office: 'OfficesService',
+                offices: 'OfficesService',
                 folder: 'FoldersService',
-                officeDocuments:'OfficeDocumentsService',
+                folders: 'FoldersService',
                 officeDocument: 'OfficeDocumentsService',
+                officeDocuments: 'OfficeDocumentsService',
                 templateDoc: 'TemplateDocsService',
+                templateDocs: 'TemplateDocsService',
             };
             $scope.hideAddButton = context.main=="templateDocs" ? false:true;
             $scope.me = {};
@@ -147,6 +146,9 @@ angular.module('mean.icu.ui.membersfooter', [])
                     $scope.entity.circles[member.type].push(member._id);
                 } else {
                     $scope.entity.watchers.push(member);
+                    $scope.entity.subTasks.forEach((subTask)=>{
+                        subTask.watchers.push(member);
+                    })
                 }
 
                 update($scope.entity, member, 'added');
@@ -186,7 +188,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                             ActivitiesService.data.push(result);
                         });
                         break ;
-                        case 'offices':
+                    case 'offices':
                         OfficesService.updateWatcher(task, me, member).then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);
@@ -246,7 +248,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                             ActivitiesService.data.push(result);
                         });
                         break ;
-                        case 'offices':
+                    case 'offices':
                         OfficesService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
                             ActivitiesService.data = ActivitiesService.data || [] ;
                             ActivitiesService.data.push(result);

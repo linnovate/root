@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.templatedocsservice', [])
-    .service('TemplateDocsService', function ($http, ApiUri, Upload, WarningsService, PaginationService, $rootScope) {
+    .service('TemplateDocsService', function ($http, ApiUri, NotifyingService, Upload, WarningsService, PaginationService, $rootScope) {
         var EntityPrefix = '/officeTemplates';
         var data, selected;
 
@@ -43,6 +43,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
 
          function deleteTemplate(id) {
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+                 NotifyingService.notify('editionData');
                  return result.status;
              });
          }
@@ -104,7 +105,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
             });
         }
 
-        function saveTemplateDoc(data, file) {    
+        function saveTemplateDoc(data, file) {
             return Upload.upload({
                 url: '/api/templates',
                 fields: data,
@@ -121,6 +122,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
         function create(templateDoc) {
             return $http.post(ApiUri + EntityPrefix+"/createNew", templateDoc).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
+                NotifyingService.notify('editionData');
                 return result.data;
             });
         }

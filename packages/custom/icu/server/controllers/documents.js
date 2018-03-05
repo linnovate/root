@@ -2203,6 +2203,10 @@ exports.sendDocument = function (req, res, next) {
     if (sentTo.length) {
       sendingForm = Object.assign({sentTo, sendingForm}) ;
       sendingForm.status = 'sent'
+      sendingForm.doneBy = req.body.sendingForm.doneBy
+      sendingForm.forNotice = req.body.sendingForm.forNotice
+      sendingForm.classification = req.body.sendingForm.classification
+    
     }
     Document.update({'_id':officeDocument._id},{$set:sendingForm},function(error,result){
       if(error||!result){

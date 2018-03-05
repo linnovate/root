@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsDocuments', function () {
-        function controller($scope, $http, DocumentsService, context, ActivitiesService, $stateParams, UsersService) {
+        function controller($scope, $http, DocumentsService, context, ActivitiesService, $stateParams, UsersService, AttachmentsService) {
             
             ActivitiesService.issueId=$stateParams.id || $stateParams.entityId;
             
@@ -76,7 +76,12 @@ angular.module('mean.icu.ui.tabs')
                                 
                                 result.attachments[result.attachments.length] = attachment;
 
-                                $scope.documents.push(attachment);
+                                AttachmentsService.getAttachmentUser(attachment).then(user => {
+                                    attachment.attUser = user.name ;
+                                    $scope.documents.push(attachment);
+                                }
+                                )                        
+                                
                             });
                         }
                     }

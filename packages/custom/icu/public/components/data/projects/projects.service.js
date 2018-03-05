@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('ProjectsService', function(ApiUri, $http, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/projects';
     var data, selected;
 
@@ -17,7 +17,7 @@ angular.module('mean.icu.data.projectsservice', [])
         }
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
-//        	console.log($rootScope.warning, '$rootScope.warning')
+            //console.log($rootScope.warning, '$rootScope.warning')
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
@@ -57,11 +57,12 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     function create(project) {
-        return $http.post(ApiUri + EntityPrefix, project).then(function(result) {
-
-        	WarningsService.setWarning(result.headers().warning);
-            return result.data;
-        });
+        return $http.post(ApiUri + EntityPrefix, project)
+            .then(function(result) {
+                WarningsService.setWarning(result.headers().warning);
+                NotifyingService.notify('editionData');
+                return result.data;
+            });
     }
 
 
@@ -90,12 +91,14 @@ angular.module('mean.icu.data.projectsservice', [])
                     }
                 });
             }
+            NotifyingService.notify('editionData');
             return result.data;
         });
     }
 
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+            NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
@@ -140,7 +143,7 @@ angular.module('mean.icu.data.projectsservice', [])
                 issue: 'project',
                 issueId: project.id,
                 type: type || 'updateWatcher',
-                userObj: watcher                
+                userObj: watcher
             },
             context: {}
         }).then(function(result) {

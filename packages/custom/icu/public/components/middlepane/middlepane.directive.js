@@ -72,7 +72,7 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
     		SearchService.builtInSearchArray = res;
     		$state.go('main.search', {query: ''}, {reload: true});
     	});
-    }
+    };
 
     $scope.activeSearchNav = function(){
         NotifyingService.notify('activeSearch');
