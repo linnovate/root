@@ -75,8 +75,8 @@ angular.module('mean.icu.ui.tabs')
                                 console.log('[attachment]', [attachment]);
                                 
                                 result.attachments[result.attachments.length] = attachment;
-
-                                AttachmentsService.getAttachmentUser(attachment).then(user => {
+                                AttachmentsService.getAttachmentUser(attachment.creator._id).then(user => {
+                                    
                                     attachment.attUser = user.name ;
                                     $scope.documents.push(attachment);
                                 }
@@ -85,9 +85,7 @@ angular.module('mean.icu.ui.tabs')
                             });
                         }
                     }
-                    //clearForm();
-                    console.log('result', result);
-                    //$scope.documents.push(result);
+                    // console.log('result', result);
                     clearForm();
                 });
             };

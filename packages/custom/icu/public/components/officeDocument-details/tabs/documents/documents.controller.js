@@ -5,8 +5,9 @@ angular.module('mean.icu.ui.officeDocumentdetails')
         //$scope.officeDocument = entity || context.entity;
 
         $scope.documents = documents;
-        $scope.documents.map(doc => AttachmentsService.getAttachmentUser(doc).then(user =>
-            doc.attUser = user.name 
+        $scope.documents.map(doc => AttachmentsService.getAttachmentUser(doc.creator)
+            .then(user =>
+                doc.attUser = user.name 
         ))
 
     });
