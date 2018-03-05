@@ -28,8 +28,8 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             });
 
             function buildModal() {
-                //console.log("buildModal receive", scope) ;
                 if(scope.modalName == 'receive' && scope.entityName == "officeDocument") {
+//                    console.log("buildModal receive", scope) ;
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'md',
@@ -66,7 +66,6 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                     });
                 }
                 else if(scope.modalName == 'distributed' && scope.entityName == "officeDocument") {
-//                    console.log("buildModal distributed", scope) ;
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'md',
@@ -300,6 +299,63 @@ function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, peop
         }
     ];
 
+    $scope.uploadAvatar = function(files) {
+        if (files.length) {
+            var file = files[0];
+            UsersService.updateAvatar(file)
+                .success(function(data) {
+                    $scope.avatar = data.avatar;
+                    $scope.hash = Math.random();
+                    $scope.currentUser.profile.avatar = data.avatar;
+                    updatePage();
+                });
+        }
+    };
+
+    $scope.resetAvatar = function () {
+        // $scope.currentUser.profile.avatar = '';
+        UsersService.resetAvatar();
+        updatePage();
+    };
+
+    $scope.notifications = [
+        {
+            title: 'IWantToGetMailEveryWeekAboutMyTasks',
+            hint: 'this hint will help you to understand',
+            options: [
+                'yes',
+                'no',
+            ],
+            model: $scope.currentUser.GetMailEveryWeekAboutMyTasks,
+            name: 'GetMailEveryWeekAboutMyTasks',
+        },
+        {
+            title: 'IWantToGetMailEveryWeekAboutGivenTasks',
+            hint: 'this hint will help you to understand',
+            options: [
+                'yes',
+                'no',
+            ],
+            model: $scope.currentUser.GetMailEveryWeekAboutGivenTasks,
+            name: 'GetMailEveryWeekAboutGivenTasks',
+        },
+        {
+            title: 'IWantToGetMailEveryDayAboutMyTasks',
+            hint: 'this hint will help you to understand',
+            options: [
+                'yes',
+                'no',
+            ],
+            model: $scope.currentUser.GetMailEveryDayAboutMyTasks,
+            name: 'GetMailEveryDayAboutMyTasks',
+        },
+    ];
+
+    $scope.updateNotificationSettings = function(notification, option){
+        $scope.currentUser[notification.name] = option;
+        updatePage();
+    };
+
     $scope.classificationList = ['unclassified','private','secret','topSecret' ];
 
     $scope.ok = function (showUser) {
@@ -322,6 +378,12 @@ function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, peop
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
+
+    function updatePage(){
+        UsersService.update($scope.currentUser).then(function() {
+            $state.go('main.tasks', null, { reload: true });
+        });
+    }
 }
 
 
