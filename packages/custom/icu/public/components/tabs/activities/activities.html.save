@@ -75,7 +75,7 @@
             <textarea ctrlenter="save()" ng-model="activity.description" ng-focus="expandUpdate()" ng-blur="minimizeUpdate()" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
 
             <div class="action-buttons">
-                <button ng-if="entityName != 'templateDoc'" type="button" class="attachment"
+                <button type="button" class="attachment"
                         ngf-select
                         ngf-change="upload($files)"
                         ngf-multiple="true"></button>

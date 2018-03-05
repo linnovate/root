@@ -1,0 +1,18 @@
+<svg width="32" height="32" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>icon-enter-arrow</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(430 -20)">
+<g id="icon-enter-arrow">
+<g id="Group">
+<g id="keyboard return">
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="translate(-426 28)"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 21.4737 1.2634L 21.4737 6.31698L 4.8 6.31698L 9.34737 1.76876L 7.57895 0L 0 7.58038L 7.57895 15.1608L 9.34737 13.392L 4.8 8.84378L 24 8.84378L 24 1.2634L 21.4737 1.2634Z"/>
+</defs>
+</svg>

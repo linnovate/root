@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.icu.ui.attachmentdetails', [])
-    .controller('AttachmentDetailsController', function ($scope,
+angular.module('mean.icu.ui.attachmentdetailszbb', [])
+    .controller('AttachmentDetailsControllerzbb', function ($scope,
                                                         $http,
                                                          entity,
                                                          tasks,
@@ -43,6 +43,8 @@ angular.module('mean.icu.ui.attachmentdetails', [])
         };
           
         $scope.viewAttachment = function (document1) { 
+                        console.log("vvvvvvvvvvvvvvv") ;
+                        console.error("EEEEEEEEEEEEEEEe") ;
                         return(document1.path + '?view=true') ;      
 
                         }
