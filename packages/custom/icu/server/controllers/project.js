@@ -224,12 +224,6 @@ exports.getByEntity = function(req, res, next) {
       }
       }
     });
-
-  });
-
-
-};
-
   });
 };
 
@@ -343,7 +337,7 @@ exports.getByDiscussion = function(req, res, next) {
     };
     starredOnly = true;
   }
-  var Query = Task.find(entityQuery, {
+  var Query = Project.find(entityQuery, {
     project: 1,
     _id: 0
   });
