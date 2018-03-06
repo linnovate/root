@@ -28,8 +28,9 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             });
 
             function buildModal() {
+                // console.log("scope.modalName");
+                // console.log(scope.modalName);
                 if(scope.modalName == 'receive' && scope.entityName == "officeDocument") { 
-//                    console.log("buildModal receive", scope) ;
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'md',
@@ -46,7 +47,6 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                     }); 
                 }
                 else if(scope.modalName == 'distributed' && scope.entityName == "officeDocument") { 
-//                    console.log("buildModal distributed", scope) ;
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'md',
@@ -101,7 +101,23 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                         }
                     
                     }); 
-                }else {
+                }
+                else if(scope.modalName == 'document-preview') { 
+                    var modalInstance = $uibModal.open({
+                        backdropClass: 'backdrop-document-preview',                        
+                        animation: true,
+                        size:  'lg',
+                        templateUrl: '/icu/components/modal-directive/documentPreview/document-preview.html',
+                        controller: controllerDocumentPreview,
+                        resolve: {
+                            attachment: function () {
+                                return scope.data;
+                            }
+                        }
+                    }); 
+                }
+
+                else {
                 var modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: '/icu/components/modal-directive/modal.html',
@@ -264,6 +280,7 @@ function distributedCtrl($scope, $state,$uibModalInstance, $filter, officeDocume
         $uibModalInstance.dismiss('cancel');
     };
 }
+
 
 // function controllerTemplate($scope, $uibModalInstance, $filter) {
     

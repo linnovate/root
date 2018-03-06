@@ -21,6 +21,16 @@ $activityListDefaultMaxH: 80px;
 
 
         .activities-list {
+
+            .DocumentIconsLineActivities {
+                filter: invert(100%);
+            }
+
+            .Icons-In-DocumentLineActivities{
+                width: 30px;
+                height: 30px;
+            }
+            
             border-bottom: 1px solid $light-grey1;
             // height: calc(100% - 120px);
             transition: height 0.4s;
