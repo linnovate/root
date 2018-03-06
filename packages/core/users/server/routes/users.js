@@ -103,16 +103,18 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             var port = config.https && config.https.port ? config.https.port : config.http.port;
             var arr = str.split(config.host + ':' + port);
 
-            var realpath = arr[1].replace('(', '\(').replace(')', '\)');
+            var realpath = arr[0].replace('(', '\(').replace(')', '\)');
+            realpath = str.split(config.host);
+            realpath = arr[1].replace('(', '\(').replace(')', '\)');
             var arr1 = str.split("/");
             var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
             var arr2 = arr1[7].split("." + req.body.attachmentType);
     
         console.log('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf');
-        console.log('lowriter --headless --convert-to pdf ' + config.root + realpath);
+        console.log('lowriter --headless --convert-to pdf ' + config.root + '/' + realpath);
         
             // Make the convert from it's origin type to pdf
-            exec('sudo lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
+            exec('sudo lowriter --headless --convert-to pdf ' + config.root + '/' + realpath, function (err, stout, sterr){
             if (err) {
                 res.send(500, arguments);
             } else {
