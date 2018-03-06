@@ -14,7 +14,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             };
             if($scope.order.field == "custom"){
                 var timer,
-                    container = $('.containerVertical'), 
+                    container = $('.containerVertical'),
                     scroll = $('.list-table'),
                     box = $('middlepane-container'),
                     topBar = $('.filters'),
@@ -44,7 +44,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                          entity: context.entityName,
                          entityId: context.entityId
                      }, { reload: false });
-                    
+
                     orderService.setOrder(e, elindex, dropindex, $scope.projects.length - 1);
                 });
                 // $scope.$on('dragularrelease', function (e, el) {
@@ -340,7 +340,8 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                 projects: '=',
                 drawArrow: '=',
                 order: '=',
-                displayOnly: '='
+                displayOnly: '=',
+                groupProjects: '='
             },
             link: link,
             controller: controller

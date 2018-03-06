@@ -1,15 +1,16 @@
 <div class="list-table" >
     <div ng-show="isLoading" class="loader"></div>
-    <table class="tasks" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
+    <table class="projects" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody>
-            <tr data-ng-repeat="task in tasks track by $index | filterRecycled | filterByOptions | filterByActiveStatus | orderBy:order.field:order.isReverse"
-                ng-click="initialize($event, task)"
+            <tr data-ng-repeat="project in projects track by $index | filterRecycled | filterByOptions | filterByActiveStatus | orderBy:order.field:order.isReverse"
+                ng-click="initialize($event, project)"
              icu-list-row
-             data-id="{{task._id}}",
-             ng-class="{'isNew': task.isNew == true,'notNew':task.isNew == false}",
-             ng-mouseover="task.showDelete = true",
-             ng-mouseleave="deleteShowDlt(task)",
-             data="{    task: task,
+             data-id="{{project._id}}",
+             ng-class="{'isNew': project.isNew == true,'notNew':project.isNew == false}",
+             ng-mouseover="project.showDelete = true",
+             ng-mouseleave="deleteShowDlt(project)",
+             data="{
+                        project: project,
                         index: $index,
                         drawArrow: drawArrow,
                         updateCb: debouncedUpdate,
@@ -29,7 +30,7 @@
                         statuses: statuses,
                         checkDate: checkDate,
                         open: open}"
-            type="subtasks">
+            type="subprojects">
                 <td>{{ $index }}<td>
             </tr>
         </tbody>

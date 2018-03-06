@@ -42,7 +42,6 @@ angular.module('mean.icu.ui.displayby', [])
             UsersService.getAll(0,2500,'created').then(function (data) {
                 $scope.people = data.data || data;
             });
-            console.log($scope.projects);
             $scope.createLists();
         }, $scope);
 

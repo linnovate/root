@@ -49,7 +49,7 @@
                             <span>{{ 'unrecycleProject' | i18next }}</span>
                         </a>
                     </li>
-                            
+
                     <!-- <li>
                         <a href="#" icu-open-modal entity-name="project" show-modal="tasks.length" delete-fn="deleteProject(project)">
                             <i class="fa fa-2x fa-times-circle"></i>
@@ -113,6 +113,98 @@
                             <i class="fa fa-plus" ></i>
                         </div>
                     </button>
+                </div>
+            </div>
+
+            <div class="sub-projects" data-ui-view="subprojects"></div>
+            <div class="sub-projects">
+
+                <div class="wrap-title">
+                    <div class="sub-projects-title" ng-show="addSubProjects || project.subProjects[0]._id">
+                        {{ 'subProjects' | i18next }}
+                    </div>
+                    <div ng-show="!addSubProjects && !project.subProjects[0]._id"
+                         class="add-sub-projects sub-projects-title"
+                         ng-click="addSubProjects = !addSubProjects">
+                        {{ 'add subProject' | i18next }}
+                    </div>
+                    <div ng-show="showMsgSavedTpl" class="tplSaved">template saved</div>
+
+                    <div class="open-template-menu dropdown dropdown-container"
+                         ng-click="isOpen = !isOpen; $event.originalEvent.dropdown" uib-dropdown auto-close="disabled" is-open="isopen">
+                        <div class="dropdown-trigger" uib-dropdown-toggle>
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <ul class="dropdown-menu menu-items" role="menu">
+                            <li class='title'>
+
+                                <span><b>{{ 'LoadProjectTemplate' | i18next }}</b></span>
+
+                            </li>
+                            <li class="templates" ng-if="!template.length">
+                                <span>{{ ' noTemplates' | i18next }}</span>
+                            </li>
+
+                            <li class="templates" ng-repeat="temp in template"  >
+                                <!-- ng-if="temp.subProjects.length" -->
+                                <span ng-click="template2subProjects(temp._id)"
+                                      ng-class="{'last': $last}">
+                                    {{temp.title}} ({{temp.subProjects.length }})
+                        <span class="delete" ng-if="!data.project._id"
+                              ng-click="deleteTemplate(temp._id, $index)">
+                            <!-- <img src="/icu/assets/img/X.png"> -->
+                        </span>
+                    </span>
+
+                            </li>
+                            <li class='new-template'>
+                                <div>
+
+                                    <span><b>{{'saveTemplate' | i18next }}</b></span>
+                                    <input type="text" name="newTemplate"
+                                           placeholder="Template Name" ng-model="newTemplate.name">
+                                </div>
+                            </li>
+                            <li class="avatar">
+                                <span>{{'visibleTo' | i18next }}</span>
+                                <!-- <div icu-avatar user="me"></div>  -->
+                                <!-- <span class="name">Me</span> -->
+                                <!-- {{me.name}} -->
+                                <!-- on-select="updateAndNotiy(project)" -->
+
+                                <ui-select ng-model="newTemplate.watcher" class="template-watcher">
+                                    <ui-select-match>
+                                        <div icu-avatar user="$select.selected"></div>
+                                        <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search } | filterByFrequentUsers: me">
+                                        <div icu-avatar user="user"></div>
+                                        <span class="summary-content">{{user.job}}</span>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </li>
+                            <li class='save'>
+                                <div ng-click='saveTemplate()' class='save-template'
+                                     ng-class="{'empty': !project.subProjects[0]._id }">{{'save' | i18next }}</div>
+                            </li>
+                        </ul>
+
+
+
+                    </div>
+                </div>
+                <div class="sub-project-dir" ng-show="addSubProjects || project.subProjects[0].id"
+                     icu-sub-project-list
+                     class="entity-list-container"
+                     ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+                     autocomplete="autocomplete",
+                     project="project"
+                     projects="project.subProjects"
+                     load-next="loadNext"
+                     load-prev="loadPrev"
+                     draw-arrow="true"
+                     order="sorting"
+                     parent="{{project._id}}">
                 </div>
             </div>
 

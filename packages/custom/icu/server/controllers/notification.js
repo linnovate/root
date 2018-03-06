@@ -12,9 +12,9 @@ var hiSettings = require(process.cwd() + '/config/hiSettings') || {};
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     Message = mongoose.model('Message'),
-    Project = mongoose.model('Project'),
     Office = mongoose.model('Office'),
     Folder = mongoose.model('Folder'),
+    Project = require('../models/project'),
     Task = require('../models/task'),
     _ = require('lodash');
 var UserCreator = mongoose.model('User');
@@ -121,7 +121,7 @@ exports.createRoom = function (req, res, next) {
 
     });
 
-    // END Made By OHAD          
+    // END Made By OHAD
 };
 
 exports.updateRoom = function (req, res, next) {
@@ -292,8 +292,41 @@ exports.sendNotification = function (req, res, next) {
         }
     }
 
+    // added sub project
+    else if (data.project && data.parent)
+        Project.findOne({
+            _id: data.parent
+        }).exec(function(error, project) {
+            if (project.project && project.project.room) {
+                req.body.context = {
+                    sub: 'sub-project',
+                    sub_url: config.host + ':' + port + '/projects/subProjects/' + project._id + '/' + data._id,
+                    parent: project.title,
+                    action: 'added',
+                    type: 'project',
+                    proj: project.project.title,
+                    proj_url: config.host + ':' + port + '/projects/all/' + project.project._id + '/activities',
+                    name: data.title,
+                    user: req.user.username,
+                    url: config.host + ':' + port + '/projects/by-project/' + project.project._id + '/' + project._id + '/activities'
+                }
+                req.body.context.room = project.project.room;
+                req.body.context.user = req.user.name;
+                notifications.notify(['hi'], 'createMessage', {
+                    message: bulidMassage(req.body.context),
+                    roomId: req.body.context.room
+                }, function(error, result) {
+                    if (error) {
+                        req.hi = {
+                            error: error
+                        };
+                    }
+                })
+            }
+        })
+
     // added sub task
-    else if (data.parent)
+    else if (data.task && data.parent)
         Task.findOne({
             _id: data.parent
         }).populate('project').exec(function (error, task) {
@@ -603,9 +636,9 @@ function createRoom(project, callback) {
         });
 
 
-        //End Of callback    
+        //End Of callback
     });
-    // END Made By OHAD          
+    // END Made By OHAD
 
 }
 

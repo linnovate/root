@@ -160,6 +160,10 @@ angular.module('mean.icu').config([
                     'detailspane@main': {
                         templateUrl: '/icu/components/project-details/project-details.html',
                         controller: 'ProjectDetailsController'
+                    },
+                    'subProjects@main': {
+                        templateUrl: '/icu/components/sub-projects/sub-projects.html',
+                        controller: 'SubProjectsController'
                     }
                 },
                 params: {
@@ -167,8 +171,8 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($stateParams, projects, ProjectsService) {
-                        var project = _(projects.data || projects).find(function (t) {
-                            return t._id === $stateParams.id;
+                        var project = _(projects.data || projects).find(function (project) {
+                            return project._id === $stateParams.id;
                         });
 
                         if (!project) {
@@ -577,7 +581,7 @@ angular.module('mean.icu').config([
                             let merged = [].concat.apply([], arrays);
                             let mergedAdjuested = merged.map(function(item) {
                                 item._type = "task"; // not entity type. type kept in "type".
-                                item.id = item._id; 
+                                item.id = item._id;
                                 return item ;
                             })
                             return mergedAdjuested ;
@@ -1089,6 +1093,45 @@ angular.module('mean.icu').config([
             .state('main.projects.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.projects.byentity.details.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.byentity.details.tasks', getDetailsTabState('project', 'tasks'))
+
+            .state('main.projects.byparent', {
+                url: '/subProjects/:entityId',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: {
+                    'middlepane@main': {
+                        templateUrl: '/icu/components/project-list/project-list.html',
+                        controller: 'ProjectListController'
+                    },
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/project-details/project-details.html',
+                        controller: 'ProjectDetailsController'
+                    }                    // tasks: function(TasksService, $stateParams) {
+                    //     return TasksService.getByOfficeDocumentId($stateParams.id);
+                    // },
+                },
+                resolve: {
+                    entity: function (ProjectsService, $stateParams) {
+                        return ProjectsService.getById($stateParams.entityId)
+                    },
+                    projects: function (ProjectsService, $stateParams) {
+                        return ProjectsService.getSubProjects($stateParams.entityId)
+
+                    }
+                }
+            })
+            .state('main.projects.byparent.activities', getDetailsTabState('project', 'activities'))
+            .state('main.projects.byparent.activities.modal', getDetailspaneModal())
+            .state('main.projects.byparent.documents', getDetailsTabState('project', 'documents'))
+            .state('main.projects.byparent.details', getProjectDetailsState())
+            .state('main.projects.byparent.details.activities', getDetailsTabState('project', 'activities'))
+            .state('main.projects.byparent.details.activities.modal', getDetailspaneModal())
+            .state('main.projects.byparent.details.documents', getDetailsTabState('project', 'documents'))
+
 
             .state('main.officeDocuments', {
                 url: '/officeDocuments',

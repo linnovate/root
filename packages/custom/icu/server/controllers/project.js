@@ -17,10 +17,12 @@ var project = crud('projects', options);
 
 var mongoose = require('mongoose'),
   Project = mongoose.model('Project'),
+  projectModel = require('../models/task'),
   Task = mongoose.model('Task'),
   User = mongoose.model('User'),
   _ = require('lodash'),
     Discussion = require('./discussion.js'),
+    discussion = require('../models/discussion'),
   elasticsearch = require('./elasticsearch.js');
 
 var Order = require('../models/order')
@@ -39,7 +41,7 @@ exports.create = function(req, res, next) {
     if (req.body.discussion) {
         req.body.discussions = [req.body.discussion];
         req.body.tags = [];
-        Discussion.findById(req.body.discussion, function (err, discussion) {
+        discussion.findById(req.body.discussion, function (err, discussion) {
             if (discussion && discussion.project) {
                 req.body.project = discussion.project
             }
@@ -67,7 +69,7 @@ exports.update = function(req, res, next) {
         req.body.subProjects.pop();
     }
 
-    task.update(req, res, next);
+    project.update(req, res, next);
 };
 
 exports.destroy = function(req, res, next) {
@@ -303,13 +305,14 @@ exports.removeSubProject = function(req, res, next) {
 };
 
 exports.populateSubProjects = function(req, res, next) {
-    project.populate(req.locals.result, {
+    Project.populate(req.locals.result, {
         path: 'subProjects.watchers',
         model: 'User'
     }, function(err, projects) {
         if (err) {
             req.locals.error = err;
         } else req.locals.result = projects;
+        res.status(202).send(projects);
         next();
     })
 }

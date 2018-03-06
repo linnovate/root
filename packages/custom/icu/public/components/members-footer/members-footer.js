@@ -148,6 +148,9 @@ angular.module('mean.icu.ui.membersfooter', [])
                     $scope.entity.watchers.push(member);
                     $scope.entity.subTasks.forEach((subTask)=>{
                         subTask.watchers.push(member);
+                    });
+                    $scope.entity.subProjects.forEach((subProject)=>{
+                        subProject.watchers.push(member);
                     })
                 }
 

@@ -114,11 +114,14 @@ module.exports = function(Icu, app) {
     //.post(project.read, notification.createRoom);
     .post(folder.read)
 
-  app.route('/api/projects*').all(entity('projects'));
+    app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
   //.all(auth.requiresLogin, permission.echo)
   .post(project.create, project.updateParent, notification.sendNotification, updates.created)
     .get(pagination.parseParams, project.all, project.populateSubProjects, star.isStarred, pagination.formResponse);
+
+
+
   app.route('/api/projects/:id([0-9a-fA-F]{24})')
     .get(project.read, star.isStarred)
   //.put(project.read, project.update, star.isStarred)

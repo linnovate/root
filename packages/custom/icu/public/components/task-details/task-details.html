@@ -73,7 +73,7 @@
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span>{{ 'recycleTask' | i18next }}</span>
                         </a>
-                    </li>                    
+                    </li>
                     <li>
                         <a href="#" ng-if="task.recycled" ng-click="recycleRestore(task)">
                             <i class="fa fa-2x fa-times-circle"></i>
@@ -165,11 +165,19 @@
         <div class="sub-tasks">
 
             <div class="wrap-title"  >
-                <div class="sub-tasks-title" ng-show="addSubTasks || task.subTasks[0]._id">{{ 'subTasks' | i18next }}</div>
-                <div ng-show="!addSubTasks && !task.subTasks[0]._id" class="add-sub-tasks sub-tasks-title" ng-click="addSubTasks = !addSubTasks">{{ 'addSubTask' | i18next }}</div>
+                <div class="sub-tasks-title" ng-show="addSubTasks || task.subTasks[0]._id">
+                    {{ 'subTasks' | i18next }}
+                </div>
+                <div ng-show="!addSubTasks && !task.subTasks[0]._id"
+                     class="add-sub-tasks sub-tasks-title"
+                     ng-click="addSubTasks = !addSubTasks">
+                    {{ 'addSubTask' | i18next }}
+                </div>
                 <div ng-show="showMsgSavedTpl" class="tplSaved">template saved</div>
 
-                <div class="open-template-menu dropdown dropdown-container" ng-click="isOpen = !isOpen; $event.originalEvent.dropdown" uib-dropdown auto-close="disabled" is-open="isopen">
+                <div class="open-template-menu dropdown dropdown-container"
+                     ng-click="isOpen = !isOpen; $event.originalEvent.dropdown"
+                     uib-dropdown auto-close="disabled" is-open="isopen">
                     <div class="dropdown-trigger" uib-dropdown-toggle>
                         <i class="fa fa-chevron-down"></i>
                     </div>
@@ -185,8 +193,11 @@
 
                         <li class="templates" ng-repeat="temp in template"  >
                             <!-- ng-if="temp.subTasks.length" -->
-                            <span ng-click="template2subTasks(temp._id)" ng-class="{'last': $last}">{{temp.title}} ({{temp.subTasks.length }})
-                        <span class="delete" ng-if="!data.task._id" ng-click="deleteTemplate(temp._id, $index)">
+                            <span ng-click="template2subTasks(temp._id)"
+                                  ng-class="{'last': $last}">
+                                {{temp.title}} ({{temp.subTasks.length }})
+                        <span class="delete" ng-if="!data.task._id"
+                              ng-click="deleteTemplate(temp._id, $index)">
                             <!-- <img src="/icu/assets/img/X.png"> -->
                         </span>
                     </span>
