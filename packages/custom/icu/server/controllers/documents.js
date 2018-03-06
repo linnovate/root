@@ -598,7 +598,7 @@ exports.addSerialTitle = function(req,res,next){
 
 exports.deleteDocumentFile = function(req,res,next){
   var id = req.params.id;
-  Document.update({'_id':id},{$set:{path:undefined,spPath:undefined}},function(error,result){
+  Document.update({'_id':id},{$unset:{path:1,spPath:1, serial:1, signBy:1}},function(error,result){
     if(error){
       res.send(error);
     }

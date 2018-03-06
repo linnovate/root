@@ -15,7 +15,7 @@
                 {{$select.selected.name}}
             </ui-select-match>
             <ui-select-choices ng-click="addMember(member)" repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
-                <div ng-bind-html="user.name | highlight: $select.search"></div>
+                <div ng-bind-html="user.job | highlight: $select.search"></div>
                 <!--<div icu-avatar user="user" ng-mouseover="getGroupDetails(user)"></div>-->
                 <!--<span ng-mouseover="getGroupDetails(user)">{{user.job}}</span>-->
                 <!--<span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>-->

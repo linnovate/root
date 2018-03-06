@@ -162,13 +162,14 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
       var currentTask = tasks[i];
       var flag = (currentTask.title.charAt(0)>='א' && currentTask.title.charAt(0)<='ת');
       if(flag){
-        pObj.addText ((i+1)+". " , {font_size: 14, font_face:'David',bold:true});
-        pObj.addText(currentTask.title , {font_size: 14, font_face:'David',bold:true,underline:true});
+       // pObj.addText ((i+1)+". " , {font_size: 14, font_face:'David',bold:true});
+        pObj.addText(currentTask.title , {font_size: 19, font_face:'David',bold:true,underline:true});
       }
       if(!flag){
         pObj.addText(currentTask.title , {font_size: 14, font_face:'David',bold:true,underline:true});
         pObj.addText (" ."+(i+1) , {font_size: 14, font_face:'David',bold:true});
       }
+      if(currentTask.description){
       //description
       var desc = currentTask.description?currentTask.description.substring(3,currentTask.description.length-4):'';
       var pObj = docx.createP ({align: 'right' });
@@ -181,18 +182,23 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
         pObj.addText(desc,{font_size: 14, font_face:'David'});
         pObj.addText (":פירוט", {font_size: 14, font_face:'David',bold:true,underline:true});
       }
+    }
+    if(currentTask.watchers&&currentTask.watchers.length>0){
+
       //participants
       var pObj = docx.createP ({align: 'right' });
       pObj.addText (':');
       pObj.addText ( 'משתתפים', {font_size: 14, font_face:'David',bold:true,underline:true});
       pObj.addLineBreak();
-      for(var j = 0 ; j < tasks[i].watchers.length ; j++){
-        var watcher = assigns[i+tasksNum+j];
+      for(var j = 0 ; j < currentTask.watchers.length ; j++){
+        //var watcher = assigns[i+tasksNum+j];
+        var watcher = currentTask.watchers[j].name;
         pObj.addText (watcher);
-        if(j != tasks[i].watchers.length-1){
+        if(j != currentTask.watchers.length-1){
           pObj.addText (" , ");
         }
       }
+    }
 
       //URL
       var pObj = docx.createP ({align: 'right' });
@@ -202,9 +208,11 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
       pObj.addText(address , {font_face:'David',font_size: 10, underline:true});
 
       //assign
-      var id = currentTask.assign;
       pObj.addLineBreak();
-      var assign = assigns[i];
+
+      if(currentTask.assign){
+
+      var assign = currentTask.assign.name;
       var flag = (assign.charAt(0)>='א' && assign.charAt(0)<='ת');
 
       var pObj = docx.createP ({align: 'left' });
@@ -216,8 +224,11 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
         pObj.addText(assign,{font_size: 14, font_face:'David'});
         pObj.addText (":אחראי", {font_size: 14, font_face:'David',bold:true,underline:true});
       }
+    }
 
       //due
+      if(currentTask.due){
+
       var pObj = docx.createP ({align: 'left' });
       var due = currentTask.due?currentTask.due:null;
       var due = due!=null? new Date(due) : null;
@@ -226,6 +237,7 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
       due.getMinutes().toString():due.getMinutes().toString())+":"+(due.getMinutes().toString().length==1?"0"+due.getMinutes().toString():due.getMinutes().toString()):''; 
       pObj.addText ("תג״ב: " , {font_size: 14, font_face:'David',bold:true,underline:true});
       pObj.addText(dateString,{font_size: 14, font_face:'David'});
+      }
     }
     writeDocxToFile(docx,discussionId).then(function(result){
     if(result=='success'){
@@ -256,6 +268,7 @@ function createPDF(discussion , tasks){
     header.addText (':',{font_size: 14, font_face:'David'});
     header.addText ('תאריך' , {font_size: 14, font_face:'David',bold:true,underline:true});
     var header = docx.getHeader ().createP ({align: 'center' });
+   if(discussion.title){
     //Discussion title
     var flag = (discussion.title.charAt(0)>='א' && discussion.title.charAt(0)<='ת');
     if(flag){
@@ -266,7 +279,10 @@ function createPDF(discussion , tasks){
       header.addText(discussion.title , {font_size: 14, font_face:'David',underline:true});
       header.addText (":דיון" , {font_size: 14, font_face:'David',bold:true,underline:true});
     }
-    //asign
+  }
+
+  if(discussion.assign){
+    //assign
     var pObj = docx.createP ({align: 'right' });
     var flag = (discussion.assign.name.charAt(0)>='א' && discussion.assign.name.charAt(0)<='ת');
 
@@ -281,6 +297,9 @@ function createPDF(discussion , tasks){
       pObj.addText(discussion.assign.name,{font_size: 14, font_face:'David'});
       pObj.addText (":אחראי הדיון" , {font_size: 14, font_face:'David',bold:true,underline:true});
     }
+  }
+
+if(discussion.watchers&&discussion.watchers.length>0){
     //participants
     var pObj = docx.createP ({align: 'right' });
     pObj.addText (':',{font_size: 14, font_face:'David'});
@@ -295,6 +314,7 @@ function createPDF(discussion , tasks){
         pObj.addText (" , ",{font_size: 14, font_face:'David'});
       }
     }
+  }
 
     //starting time
     var date = new Date(discussion.startTime);
@@ -340,6 +360,8 @@ function createPDF(discussion , tasks){
   }
   }
 
+  if(discussion.location){
+
   //location
     var pObj = docx.createP ({align: 'right' });
     var flag = (discussion.location.charAt(0)>='א' && discussion.location.charAt(0)<='ת');
@@ -351,6 +373,7 @@ function createPDF(discussion , tasks){
       pObj.addText(discussion.location,{font_size: 14, font_face:'David'});
       pObj.addText (":מיקום" , {font_size: 14, font_face:'David',bold:true,underline:true});
     }
+  }
 
     //url
     var pObj = docx.createP ({align: 'right' });
@@ -389,6 +412,7 @@ exports.send = function(type, data) {
     return;
   }
   var rootPath='';
+
 
   var port = config.https && config.https.port ? config.https.port : config.http.port;
   data.uriRoot = config.host + ':' + port;
@@ -515,6 +539,13 @@ exports.send = function(type, data) {
   data.attendees.join(', ');
   exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
     rootPath = stdout;
+    if(data.projects){
+      data.projects.forEach(function(p){
+        if(p.tasks && p.tasks.length>0){
+          data.additionalTasks.push(p.tasks[0]);
+        }
+      });
+    }
     createPDF(data.discussion , data.additionalTasks).then(function(result){
       render(type, data).then(function(results) {
     var promises = emails.map(function(recipient) {

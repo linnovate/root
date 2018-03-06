@@ -23,15 +23,15 @@ var port = config.https && config.https.port ? config.https.port : config.http.p
 
 //Made By OHAD
 
-exports.read = function(req, res, next) {
+exports.read = function (req, res, next) {
 
     Message.count({
         user: req.user._id
-    }).exec(function(err, countAll) {
+    }).exec(function (err, countAll) {
         Message.count({
             user: req.user._id,
             DropDownIsWatched: false
-        }).exec(function(err, newMessages) {
+        }).exec(function (err, newMessages) {
             var limit = req.query.limit || 4;
             var skip = req.query.skip || 0;
             if (skip === 0 && newMessages > limit) {
@@ -41,7 +41,7 @@ exports.read = function(req, res, next) {
                 user: req.user._id
             }).sort([
                 ['time', 'descending']
-            ]).populate('user', 'name').limit(limit).skip(skip).populate('user', 'name username').exec(function(err, messages) {
+            ]).populate('user', 'name').limit(limit).skip(skip).populate('user', 'name username').exec(function (err, messages) {
 
                 req.body = messages;
 
@@ -55,94 +55,94 @@ exports.read = function(req, res, next) {
     });
 };
 
-exports.updateIsWatched = function(req, res, next) {
+exports.updateIsWatched = function (req, res, next) {
     Message.update({
         _id: req.params.id
     }, {
-        $set: {
-            IsWatched: true
-        }
-    }).exec(function(err, messages) {
+            $set: {
+                IsWatched: true
+            }
+        }).exec(function (err, messages) {
 
-        req.body = messages;
+            req.body = messages;
 
-        res.json(messages);
-    });
+            res.json(messages);
+        });
 };
-exports.updateDropDown = function(req, res, next) {
+exports.updateDropDown = function (req, res, next) {
 
     Message.update({
         user: req.params.id
     }, {
-        $set: {
-            DropDownIsWatched: true
-        }
-    }, {
-        multi: true
-    }).exec(function(err, messages) {
+            $set: {
+                DropDownIsWatched: true
+            }
+        }, {
+            multi: true
+        }).exec(function (err, messages) {
 
-        req.body = messages;
+            req.body = messages;
 
-        res.json(messages);
-    });
+            res.json(messages);
+        });
 };
 //END Made By OHAD
 
-var generateRoomName = function(name, id) {
+var generateRoomName = function (name, id) {
     if (!name || name === '') {
         name = new Date().toISOString().replace(/\..+/, '').replace(/:/, '-').replace(/:/, '-');
     }
     return name + '-' + id;
 }
 
-exports.createRoom = function(req, res, next) {
+exports.createRoom = function (req, res, next) {
     if (req.locals.error) {
         return next();
     }
     Project.findOne({
         _id: req.locals.result._id
-    }).exec(function(error, project) {
-         if (!req.locals.result.hasRoom) {
-        createRoom(req.locals.result, function(error, result) {
-            if (error) {
-                req.hi = {
-                    error: error
-                };
-                project.hasRoom = true;
-                req.locals.result.hasRoom = true;
-                project.save();
-                next();
-            } else {
-                req.body.room = result.group._id;
-                projectController.update(req, res, next);
-            }
-        })
-         }
+    }).exec(function (error, project) {
+        if (!req.locals.result.hasRoom) {
+            createRoom(req.locals.result, function (error, result) {
+                if (error) {
+                    req.hi = {
+                        error: error
+                    };
+                    project.hasRoom = true;
+                    req.locals.result.hasRoom = true;
+                    project.save();
+                    next();
+                } else {
+                    req.body.room = result.group._id;
+                    projectController.update(req, res, next);
+                }
+            })
+        }
 
     });
 
     // END Made By OHAD          
 };
 
-exports.updateRoom = function(req, res, next) {
+exports.updateRoom = function (req, res, next) {
     if (req.locals.error) {
         return next();
     }
     if (!req.locals.result.room && !req.locals.result.hasRoom && req.locals.result.WantRoom) {
         Project.findOne({
             _id: req.locals.result._id
-        }).exec(function(error, project) {
+        }).exec(function (error, project) {
             if (!project.hasRoom) {
 
                 Project.update({
                     _id: req.locals.result._id
                 }, {
-                    $set: {
-                        hasRoom: true
-                    }
-                }, function() {
-                    exports.createRoom(req, res, next);
-                })
+                        $set: {
+                            hasRoom: true
+                        }
+                    }, function () {
+                        exports.createRoom(req, res, next);
+                    })
             }
         })
     } else {
@@ -152,7 +152,7 @@ exports.updateRoom = function(req, res, next) {
         var changedArray = [];
         for (var i in data) {
             if (hiSettings.projectNotify[i] && hiSettings.projectNotify[i].chat) {
-            //if (hiSettings.officeNotify[i] && hiSettings.officeNotify[i].chat) {
+                //if (hiSettings.officeNotify[i] && hiSettings.officeNotify[i].chat) {
                 if (data[i] !== oldData[i]) {
                     changed = i + ' changed to ' + data[i];
                     changedArray.push(changed);
@@ -174,7 +174,7 @@ exports.updateRoom = function(req, res, next) {
             notifications.notify(['hi'], 'createMessage', {
                 message: bulidMassage(req.body.context),
                 roomId: data.room
-            }, function(error, result) {
+            }, function (error, result) {
                 if (error) {
                     req.hi = {
                         error: error
@@ -184,15 +184,15 @@ exports.updateRoom = function(req, res, next) {
         }
 
         if (req.locals.result.title !== req.locals.old.title) {
-            var str1 = req.locals.result.title.replace(/\s/g , '_');
+            var str1 = req.locals.result.title.replace(/\s/g, '_');
             var d = new Date(req.locals.result.created);
-            var sec = d.getSeconds().toString().length==1 ? '0'+d.getSeconds() : ''+d.getSeconds();
-            var str2 = d.getDate() + "-" + (d.getMonth()+1) + "-" + d.getFullYear() + "_" + d.getHours() + "-" + d.getMinutes() + "-" + sec;
+            var sec = d.getSeconds().toString().length == 1 ? '0' + d.getSeconds() : '' + d.getSeconds();
+            var str2 = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + "_" + d.getHours() + "-" + d.getMinutes() + "-" + sec;
             notifications.notify(['hi'], 'renameRoom', {
                 name: generateRoomName(str1, str2),
                 roomId: req.locals.result.room,
                 message: 'message'
-            }, function(error, result) {
+            }, function (error, result) {
                 if (error) {
                     console.log("there is error in renameRoom")
                     req.hi = {
@@ -201,8 +201,8 @@ exports.updateRoom = function(req, res, next) {
                 }
             })
         }
-        var added = req.locals.result.watchers.filter(function(o1) {
-            return !req.locals.old.watchers.some(function(o2) {
+        var added = req.locals.result.watchers.filter(function (o1) {
+            return !req.locals.old.watchers.some(function (o2) {
                 return o1.id === o2.id;
             });
         });
@@ -211,12 +211,12 @@ exports.updateRoom = function(req, res, next) {
                 notifications.notify(['hi'], 'addMember', {
                     member: added[i].id,
                     roomId: req.locals.result.room
-                }, function(error, result) {})
+                }, function (error, result) { })
             }
         }
 
-        var removed = req.locals.old.watchers.filter(function(o1) {
-            return !req.locals.result.watchers.some(function(o2) {
+        var removed = req.locals.old.watchers.filter(function (o1) {
+            return !req.locals.result.watchers.some(function (o2) {
                 return o1.id === o2.id;
             });
         });
@@ -225,7 +225,7 @@ exports.updateRoom = function(req, res, next) {
                 notifications.notify(['hi'], 'removeMember', {
                     member: removed[i].id,
                     roomId: req.locals.result.room
-                }, function(error, result) {
+                }, function (error, result) {
                     if (error) {
                         req.hi = {
                             error: error
@@ -241,7 +241,7 @@ exports.updateRoom = function(req, res, next) {
 };
 
 
-exports.sendNotification = function(req, res, next) {
+exports.sendNotification = function (req, res, next) {
     if (req.locals.error) {
         return next();
     }
@@ -262,7 +262,7 @@ exports.sendNotification = function(req, res, next) {
             notifications.notify(['hi'], 'createMessage', {
                 message: bulidMassage(req.body.context),
                 roomId: data.project.room
-            }, function(error, result) {
+            }, function (error, result) {
                 if (error) {
                     req.hi = {
                         error: error
@@ -273,12 +273,12 @@ exports.sendNotification = function(req, res, next) {
             console.log("this project not have room!!!!!!!")
             Project.findOne({
                 _id: data.project.id
-            }).exec(function(error, project) {
+            }).exec(function (error, project) {
                 if (project.room) {
                     notifications.notify(['hi'], 'createMessage', {
                         message: bulidMassage(req.body.context),
                         roomId: project.room
-                    }, function(error, result) {
+                    }, function (error, result) {
                         if (error) {
                             req.hi = {
                                 error: error
@@ -296,7 +296,7 @@ exports.sendNotification = function(req, res, next) {
     else if (data.parent)
         Task.findOne({
             _id: data.parent
-        }).populate('project').exec(function(error, task) {
+        }).populate('project').exec(function (error, task) {
             if (task.project && task.project.room) {
                 req.body.context = {
                     sub: 'sub-task',
@@ -315,7 +315,7 @@ exports.sendNotification = function(req, res, next) {
                 notifications.notify(['hi'], 'createMessage', {
                     message: bulidMassage(req.body.context),
                     roomId: req.body.context.room
-                }, function(error, result) {
+                }, function (error, result) {
                     if (error) {
                         req.hi = {
                             error: error
@@ -329,7 +329,7 @@ exports.sendNotification = function(req, res, next) {
     next();
 };
 
-exports.sendUpdate = function(req, res, next) {
+exports.sendUpdate = function (req, res, next) {
     if (req.locals.error) {
         return next();
     }
@@ -339,7 +339,7 @@ exports.sendUpdate = function(req, res, next) {
         notifications.notify(['hi'], 'createMessage', {
             message: bulidMassage(req.body.context),
             roomId: req.body.context.room
-        }, function(error, result) {
+        }, function (error, result) {
             if (error) {
                 req.hi = {
                     error: error
@@ -350,21 +350,21 @@ exports.sendUpdate = function(req, res, next) {
         if (req.body.data.issue === 'project') {
             Project.findOne({
                 _id: req.body.data.issueId
-            }).exec(function(error, project) {
+            }).exec(function (error, project) {
                 if (project.room) {
                     req.body.context.room = project.room;
                     req.body.context.user = req.user.name;
                     notifications.notify(['hi'], 'createMessage', {
                         message: bulidMassage(req.body.context),
                         roomId: req.body.context.room
-                    }, function(error, result) {
+                    }, function (error, result) {
                         if (error) {
                             req.hi = {
                                 error: error
                             };
                         }
                     })
-                } else {
+                } else if(req.locals.WantRoom){
                     createRoomAndSendMessage(project, req, next);
                 }
             })
@@ -372,7 +372,7 @@ exports.sendUpdate = function(req, res, next) {
         } else if (req.body.data.issue === 'task') {
             Task.findOne({
                 _id: req.body.data.issueId
-            }).populate('project').exec(function(error, task) {
+            }).populate('project').exec(function (error, task) {
                 if (task.project) {
                     if (task.project.room) {
                         req.body.context.room = task.room;
@@ -380,7 +380,7 @@ exports.sendUpdate = function(req, res, next) {
                         notifications.notify(['hi'], 'createMessage', {
                             message: bulidMassage(req.body.context),
                             roomId: req.body.context.room
-                        }, function(error, result) {
+                        }, function (error, result) {
                             if (error) {
                                 req.hi = {
                                     error: error
@@ -399,7 +399,7 @@ exports.sendUpdate = function(req, res, next) {
     next();
 };
 
-exports.updateTaskNotification = function(req, res, next) {
+exports.updateTaskNotification = function (req, res, next) {
     if (req.locals.error) {
         return next();
     }
@@ -412,7 +412,7 @@ exports.updateTaskNotification = function(req, res, next) {
     for (var i in data) {
         if (hiSettings.taskNotify[i] && hiSettings.taskNotify[i].chat) {
             console.log("hiSettings notifications")
-            if (i == 'due' && (typeof(data[i]) !== 'undefined' || typeof(oldData[i]) !== 'undefined')) {
+            if (i == 'due' && (typeof (data[i]) !== 'undefined' || typeof (oldData[i]) !== 'undefined')) {
                 if (new Date(data[i]).getTime() !== new Date(oldData[i]).getTime()) {
                     changed = i + ' changed to ' + data[i];
                     changedArray.push(changed);
@@ -426,24 +426,24 @@ exports.updateTaskNotification = function(req, res, next) {
                     changed = i + ' changed to ' + data[i].username;
                     changedArray.push(changed);
                 } else
-            if (!oldData[i] && data[i]) {
-                changed = i + ' set to ' + data[i].username;
-                changedArray.push(changed);
-            } else if (oldData[i] && !data[i]) {
-                changed = i + ' changed to no select';
-                changedArray.push(changed);
-            } else if (i == 'project')
-                if (oldData[i] && data[i] && data[i].title !== oldData[i].title) {
-                    changed = i + ' changed to ' + data[i].title;
-                    changedArray.push(changed);
-                } else
-            if (!oldData[i] && data[i]) {
-                changed = i + ' set to ' + data[i].title;
-                changedArray.push(changed);
-            } else if (oldData[i] && !data[i]) {
-                changed = i + ' changed to no select';
-                changedArray.push(changed);
-            }
+                    if (!oldData[i] && data[i]) {
+                        changed = i + ' set to ' + data[i].username;
+                        changedArray.push(changed);
+                    } else if (oldData[i] && !data[i]) {
+                        changed = i + ' changed to no select';
+                        changedArray.push(changed);
+                    } else if (i == 'project')
+                        if (oldData[i] && data[i] && data[i].title !== oldData[i].title) {
+                            changed = i + ' changed to ' + data[i].title;
+                            changedArray.push(changed);
+                        } else
+                            if (!oldData[i] && data[i]) {
+                                changed = i + ' set to ' + data[i].title;
+                                changedArray.push(changed);
+                            } else if (oldData[i] && !data[i]) {
+                                changed = i + ' changed to no select';
+                                changedArray.push(changed);
+                            }
         }
 
     }
@@ -463,7 +463,7 @@ exports.updateTaskNotification = function(req, res, next) {
             notifications.notify(['hi'], 'createMessage', {
                 message: bulidMassage(req.body.context),
                 roomId: data.project.room
-            }, function(error, result) {
+            }, function (error, result) {
                 if (error) {
                     req.hi = {
                         error: error
@@ -477,7 +477,7 @@ exports.updateTaskNotification = function(req, res, next) {
     else if (data.parent && changed !== '')
         Task.findOne({
             _id: data.parent
-        }).populate('project').exec(function(error, task) {
+        }).populate('project').exec(function (error, task) {
             if (task && task.project && task.project.room) {
                 req.body.context = {
                     sub: 'sub-task',
@@ -497,7 +497,7 @@ exports.updateTaskNotification = function(req, res, next) {
                 notifications.notify(['hi'], 'createMessage', {
                     message: bulidMassage(req.body.context),
                     roomId: req.body.context.room
-                }, function(error, result) {
+                }, function (error, result) {
                     if (error) {
                         req.hi = {
                             error: error
@@ -512,12 +512,12 @@ exports.updateTaskNotification = function(req, res, next) {
 };
 
 
-var msgWithUrl = function(msg, url) {
+var msgWithUrl = function (msg, url) {
     if (!url) return msg;
     return '[' + msg + '](' + url + ')';
 };
 
-var bulidMassage = function(context) {
+var bulidMassage = function (context) {
     console.log("bulidMassage context")
     console.log(JSON.stringify(context))
     if (context.action == 'added')
@@ -563,31 +563,45 @@ var bulidMassage = function(context) {
 
 function createRoom(project, callback) {
     // Made By OHAD
-    var ArrayOfusernames = [];
+    var arrayOfUsernames = [];
 
     // Get the username by the _id from the mongo.
     // There is callback so everything is in the callback
     UserCreator.findOne({
         _id: project.creator
-    }, function(err, user) {
+    }, function (err, user) {
+        Project.findOne({ '_id': project._id }).populate('watchers').exec(function (err, proj) {
+            if (user && user.id) arrayOfUsernames.push(user.id);
 
-        if (user && user.profile && user.profile.hiUid) ArrayOfusernames.push(user.profile.hiUid);
+            // Check if there is watchers
+            if (project.watchers && project.watchers.length != 0) {
+                proj.watchers.forEach(function (item) {
+                    //if (item.profile && item.profile.hiUid && ArrayOfusernames.indexOf(item.profile.hiUid) < 0)
+                    if (item.id) {
+                        arrayOfUsernames.push(item.id);
+                    }
+                });
+            }
+            var str1 = project.title.replace(/\s/g, '_');
+            var d = new Date();
+            var sec = d.getSeconds().toString().length == 1 ? '0' + d.getSeconds() : '' + d.getSeconds();
+            var str2 = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + "_" + d.getHours() + "-" + d.getMinutes() + "-" + sec;
+            var name = generateRoomName(str1, str2);
+            notifications.notify(['hi'], 'createRoom', {
+                name: name,
+                message: 'message',
+                members: arrayOfUsernames
+            }, function (error, result) {
+                if (!error) {
+                    Project.update({ '_id': project._id }, { $set: { 'hasRoom': true, 'room': result.group._id } }, function (err, result) {
 
-        // Check if there is watchers
-        if (project.watchers && project.watchers.length != 0) {
-            project.watchers.forEach(function(item) {
-                //if (item.profile && item.profile.hiUid && ArrayOfusernames.indexOf(item.profile.hiUid) < 0)
-                    ArrayOfusernames.push(item.id);
+                    });
+                }
+                //callback(error, result)
+
             });
-        }
-        notifications.notify(['hi'], 'createRoom', {
-            name: generateRoomName(project.title, project._id),
-            message: 'message',
-            members: ArrayOfusernames
-        }, function(error, result) {
-            callback(error, result)
+        });
 
-        })
 
         //End Of callback    
     });
@@ -596,7 +610,7 @@ function createRoom(project, callback) {
 }
 
 function createRoomAndSendMessage(project, req, next) {
-    createRoom(project, function(error, result) {
+    createRoom(project, function (error, result) {
         if (error) {
             req.hi = {
                 error: error
@@ -610,7 +624,7 @@ function createRoomAndSendMessage(project, req, next) {
             notifications.notify(['hi'], 'createMessage', {
                 message: bulidMassage(req.body.context),
                 roomId: project.room
-            }, function(error, result) {
+            }, function (error, result) {
                 if (error) {
                     req.hi = {
                         error: error
