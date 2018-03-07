@@ -16,6 +16,7 @@ var mongoose = require('mongoose'),
     Folder = mongoose.model('Folder'),
     Project = require('../models/project'),
     Task = require('../models/task'),
+    projectmodel = require('../models/project'),
     _ = require('lodash');
 var UserCreator = mongoose.model('User');
 
@@ -381,7 +382,7 @@ exports.sendUpdate = function (req, res, next) {
         })
     } else if (!req.body.context.room) {
         if (req.body.data.issue === 'project') {
-            Project.findOne({
+            projectmodel.findOne({
                 _id: req.body.data.issueId
             }).exec(function (error, project) {
                 if (project.room) {

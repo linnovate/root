@@ -56,6 +56,37 @@ angular.module('mean.icu.data.projectsservice', [])
         }
     }
 
+    function assign(project, me, prev) {
+        if (project.assign) {
+            var message = {};
+            message.content = project.title || '-';
+            MeanSocket.emit('message:send', {
+                message: message,
+                user: me,
+                channel: project.assign,
+                id: project.id,
+                entity: 'task',
+                type: 'assign'
+            });
+
+            var activityType = prev.assign ? 'assign' : 'assignNew';
+        } else {
+            var activityType = 'unassign';
+        }
+        return ActivitiesService.create({
+            data: {
+                issue: 'project',
+                issueId: project.id,
+                type: activityType,
+                userObj: project.assign,
+                prev: prev.assign ? prev.assign.name : ''
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
     function getSubProjects(projectId) {
         return $http.get(ApiUri + EntityPrefix + '/subprojects/' + projectId).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
@@ -255,6 +286,7 @@ angular.module('mean.icu.data.projectsservice', [])
 
 
     return {
+        assign: assign,
         getAll: getAll,
         getById: getById,
         getByDiscussionId: getByEntityId('discussions'),
