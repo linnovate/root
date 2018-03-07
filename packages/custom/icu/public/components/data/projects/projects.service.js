@@ -56,6 +56,13 @@ angular.module('mean.icu.data.projectsservice', [])
         }
     }
 
+    function getSubProjects(projectId) {
+        return $http.get(ApiUri + EntityPrefix + '/subprojects/' + projectId).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
     function create(project) {
         return $http.post(ApiUri + EntityPrefix, project)
             .then(function(result) {
@@ -77,6 +84,12 @@ angular.module('mean.icu.data.projectsservice', [])
 
         return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
+            if (project.subProjects
+                && project.subProjects.length
+                && project.subProjects[project.subProjects.length-1]
+                && !project.subProjects[project.subProjects.length-1]._id) {
+                var subProject = project.subProjects[project.subProjects.length-1];
+            }
             if(TasksService.data) {
                 TasksService.data.forEach(function(task) {
                     if (task.project && task.project._id === project._id) {
@@ -91,6 +104,12 @@ angular.module('mean.icu.data.projectsservice', [])
                     }
                 });
             }
+            for (var i = 0; i < result.data.subProjects.length; i++) {
+                if(result.data.subProjects[i].due) {
+                    result.data.subProjects[i].due = new Date(result.data.subProjects[i].due);
+                }
+            }
+            if (subProject) result.data.subProjects.push(subProject);
             NotifyingService.notify('editionData');
             return result.data;
         });
@@ -125,6 +144,42 @@ angular.module('mean.icu.data.projectsservice', [])
     function getStarred() {
         return $http.get(ApiUri + EntityPrefix + '/starred').then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function getSubProjects(projectId) {
+        return $http.get(ApiUri + EntityPrefix + '/subprojects/' + projectId).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function getTemplate(projectId) {
+        return $http.get(ApiUri + '/templates' ).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function saveTemplate(id, name){
+        return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function template2subProjects(templateId, data){
+        return $http.post(ApiUri  + '/templates/' + templateId + '/toSubProjects', data).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function deleteTemplate(id){
+        return $http.delete(ApiUri + '/templates/' + id).then(function (result) {
+            NotifyingService.notify('editionData');
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -205,6 +260,11 @@ angular.module('mean.icu.data.projectsservice', [])
         getByDiscussionId: getByEntityId('discussions'),
         getByUserId: getByEntityId('users'),
         getTags: getTags,
+        getSubProjects: getSubProjects,
+        getTemplate: getTemplate,
+        saveTemplate: saveTemplate,
+        template2subProjects: template2subProjects,
+        deleteTemplate: deleteTemplate,
         create: create,
         update: update,
         remove: remove,

@@ -1,0 +1,59 @@
+<td class="id" ng-if="data.project._id">{{data.index + 1}}</td>
+<td class="name"
+    title="{{data.project.title}}"
+    ng-attr-colspan="{{data.project._id ? undefined : 6}}"
+    ng-attr-contenteditable="{{!data.displayOnly}}"
+    placeholder="{{'createNewProject' | i18next}}"
+    strip-br="true"
+    ng-attr-tabindex="{{ data.project._id ? undefined : '3'}}"
+    ng-change="data.updateCb(data.project)"
+    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+    ng-blur="data.hideAutoCompleteCb(data.project)"
+    ng-model="data.project.title">
+</td>
+<td class="user" ng-if="data.project._id">
+<!--     <div class="no-assignee" ng-if="!data.project.assign">
+        <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
+    </div> -->
+    <!--<ui-select ng-model="project.assign" on-select="update(project)">-->
+    <ui-select append-to-body="true" ng-model="data.project.assign" on-select="data.updateCb(data.project, 'assign')" >
+        <ui-select-match>
+            <div icu-avatar user="$select.selected"></div>
+            <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
+        </ui-select-match>
+        <ui-select-choices ng-init="str=user.job?'job':'name'" repeat="user._id as user in data.people | filter: { {{str}} : $select.search } | filterByFrequentUsers: me">
+            <div icu-avatar user="user"></div>
+            <span class="summary-content">{{user.job?user.job:user.name}}</span>
+        </ui-select-choices>
+    </ui-select>
+
+</td>
+<td class="status" ng-if="data.project._id">
+    <ui-select ng-model="data.project.status" on-select="data.updateCb(data.project)" >
+        <ui-select-match>
+            <i class='{{$select.selected}}'></i>
+            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+        </ui-select-match>
+        <ui-select-choices class="selectStatus" repeat="status as status in data.statuses | filter: $select.search">
+            <i class='{{status}}'></i>
+            <span class='{{status}}'>{{status | i18next}}</span>
+        </ui-select-choices>
+    </ui-select>
+
+</td>
+<td class="due" ng-if="data.project._id" ng-init="data.initDue(data.project)">
+    <input ng-click="data.open(data.project)" ui-date="data.dueOptions(data.project)"
+           ng-model="data.project.due" placeholder="{{ 'deadline' | i18next }}"
+           ng-class='{"oldDate":data.checkDate(data.project)}'>
+    <div id="past{{data.project._id}}" class="past">
+        {{'This Deadline is in the past!' | i18next }}
+        <div id="close" ng-click="data.closeOldDateNotification(data.project)">x</div>
+    </div>
+</td>
+
+<td class="arrow" ng-if="data.project._id" ng-click="data.changeState(data.project)">
+    <i  class="fa chevron-right"></i>
+</td>
+<td class="delete">
+ <img src="/icu/assets/img/X.png"  ng-if="data.project._id && data.project.showDelete" ng-click="data.delete(data.project)">
+</td>

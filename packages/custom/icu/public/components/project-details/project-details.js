@@ -14,6 +14,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       ActivitiesService,
                                                       EntityService,
                                                       $stateParams) {
+        $scope.addSubProjects = false;
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("projects")))
         {
             $scope.project = entity || context.entity;
@@ -264,6 +265,61 @@ angular.module('mean.icu.ui.projectdetails', [])
             $scope.project.PartTitle = $scope.project.title;
             ProjectsService.currentProjectName = $scope.project.title;
         }
+
+        $scope.saveTemplate = function () {
+            $scope.isopen = false;
+            $scope.newTemplate.frequentUser = $scope.newTemplate.watcher;
+            if ($scope.project.subProjects[0]._id) {
+                ProjectsService.saveTemplate($stateParams.id, $scope.newTemplate).then(function (result) {
+                    $scope.showMsgSavedTpl = true;
+                    $scope.newTemplate.name = '';
+                    var element = angular.element('.sub-projects .fa-chevron-down')[0];
+                    $timeout(function () {
+                        element.click();
+                    }, 0);
+                    $timeout(function () {
+                        $scope.showMsgSavedTpl = false;
+                    }, 3000);
+                    $scope.template.push(result);
+                });
+            }
+        };
+
+        $scope.setFocusToTagSelect = function () {
+            var element = angular.element('#addTag > input.ui-select-focusser')[0];
+            $timeout(function () {
+                element.focus();
+            }, 0);
+        };
+
+        function deleteClass(projects) {
+            for (var i = projects.length - 1; i >= 0; i--) {
+                projects[i].isNew = false;
+            }
+        }
+        $scope.template2subProjects = function (templateId) {
+            $scope.isopen = false;
+            ProjectsService.template2subProjects(templateId, {
+                'projectId': $stateParams.id
+            }).then(function (result) {
+                for (var i = result.length - 1; i >= 0; i--) {
+                    result[i].isNew = true;
+                }
+
+                $timeout(function () {
+                    deleteClass(result);
+                }, 5000);
+                var tmp = $scope.project.subProjects.pop();
+                $scope.project.subProjects = $scope.project.subProjects.concat(result);
+                $scope.project.subProjects.push(tmp);
+            });
+        };
+
+        $scope.deleteTemplate = function (id, index) {
+            ProjectsService.deleteTemplate(id).then(function (result) {
+                $scope.template.splice(index, 1);
+            });
+        };
 
         $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
