@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context, $stateParams, $window,NotifyingService,TasksService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
+    function controller($scope, $state, context, $stateParams, $window,NotifyingService,TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
 
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
             $scope.context = context;
