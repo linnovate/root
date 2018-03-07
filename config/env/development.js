@@ -18,7 +18,7 @@ module.exports = {
   //hostname: 'http://192.168.245.152:3000',
 //  host: 'http://root.demo.linnovate.net:3008',
   host: 'http://localhost',
-  isPortNeeded: false,
+  isPortNeeded: true,
   facebook: {
     clientID: 'DEFAULT_APP_ID',
     clientSecret: 'APP_SECRET',

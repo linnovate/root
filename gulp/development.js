@@ -124,10 +124,10 @@ gulp.task('watch', function () {
   // gulp.watch(paths.js, ['jshint']).on('change', plugins.livereload.changed);
   gulp.watch(paths.html).on('change', plugins.livereload.changed);
   // gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
-  gulp.watch(paths.less, ['less']).on('change', plugins.livereload.changed);
+  // gulp.watch(paths.less, ['less']).on('change', plugins.livereload.changed);
   gulp.watch(paths.babel, ['babel']).on('change', plugins.livereload.changed);
-  gulp.watch(paths.sass, ['sass']).on('change', plugins.livereload.changed);
-  gulp.watch(paths.css, ['dist:css']).on('change', plugins.livereload.changed);
+  // gulp.watch(paths.sass, ['sass']).on('change', plugins.livereload.changed);
+  // gulp.watch(paths.css, ['dist:css']).on('change', plugins.livereload.changed);
   plugins.livereload.listen({interval: 500});
 });
 
