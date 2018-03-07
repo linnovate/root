@@ -274,10 +274,10 @@ function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, peop
         },
         {
             title: 'Notifications',
-        },
-        {
-            title: 'Components',
         }
+        // ,{
+        //     title: 'Components',
+        // }
     ];
     $scope.activeTab = $scope.tabs[0];
     $scope.setActiveTab = function(tab){
@@ -298,6 +298,10 @@ function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, peop
             ]
         }
     ];
+
+    $scope.updateUserInfo = function () {
+        UsersService.update($scope.currentUser);
+    }
 
     $scope.uploadAvatar = function(files) {
         if (files.length) {

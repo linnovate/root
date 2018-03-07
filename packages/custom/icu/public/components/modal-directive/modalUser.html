@@ -34,9 +34,9 @@
         <div class="data">
             <div class="info">
                 <label for="name">{{'Full name' | i18next}}</label>
-                <input id="name" type="text" placeholder="{{currentUser.name}}" disabled="disabled">
+                <input id="name" ng-change="updateUserInfo()"  type="text" ng-model="currentUser.username" required>
                 <label for="email">{{'Email Address' | i18next}}</label>
-                <input id="email" type="text" placeholder="{{currentUser.email}}" disabled="disabled">
+                <input id="email" ng-change="updateUserInfo()"  type="text" ng-model="currentUser.email" required>
 
                     <span class="title panel-title changePass">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
@@ -142,7 +142,7 @@
         </div>
 
     </section>
-    <section ng-show="activeTab.title == 'Components'">
-        Components
-    </section>
+    <!--<section ng-show="activeTab.title == 'Components'">-->
+        <!--Components-->
+    <!--</section>-->
 </div>
