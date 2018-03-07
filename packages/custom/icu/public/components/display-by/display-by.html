@@ -366,17 +366,16 @@
                 && activeTab.display.indexOf('folders') !== -1">
         <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}
         <div ng-if="folders.length !== 0" tooltips tooltip-template="{{'selectOffice' | i18next}}">
-            <ui-select ng-model="officesList.office" on-select="changeOrder()" search-enabled="false">
-                <ui-select-match>
-                    <button class="tasks">
-                        {{$select.selected.title | i18next}}
-                        <i class="fa fa-caret-down"></i>
-                    </button>
-                </ui-select-match>
-                <ui-select-choices repeat="office in officesList">
+        <ui-select ng-model="officesList.office" on-select="changeOrder()" search-enabled="false" theme="bootstrap">
+            <ui-select-match>
+                {{$select.selected.title || officesList[officesList.length -1] | i18next}}
+            </ui-select-match>
+            <ui-select-choices repeat="office in officesListReversed | limitTo: 3">
+                <div ng-bind-html="office.title | highlight: $select.search">
                     {{office.title | i18next | uppercase}}
-                </ui-select-choices>
-            </ui-select>
+                </div>
+            </ui-select-choices>
+        </ui-select>
         <div ng-if="foldersList.length !== 0">
             <ul>
                 <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100"
