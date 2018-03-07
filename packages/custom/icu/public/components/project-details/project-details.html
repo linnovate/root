@@ -14,6 +14,27 @@
                 </button>
             </div>
 
+            <div class="user">
+                <div class="no-assignee" ng-if="!project.assign">
+                    <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
+                </div>
+                <!--<ui-select ng-model="project.assign" on-select="update(project)">-->
+                <div tooltips tooltip-template="{{'assignee' | i18next}}">
+                    <ui-select ng-model="project.assign" on-select="updateAndNotify(project)">
+                        <ui-select-match>
+                            <div icu-avatar user="$select.selected"></div>
+                            <span ng-if="$select.selected._id" class="summary-content">
+                                {{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}
+                            </span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search } | filterByFrequentUsers: me">
+                            <div icu-avatar user="user"></div>
+                            <span class="summary-content">{{user.job}}</span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
             <div class="status">
                 <div tooltips tooltip-template="{{'status' | i18next}}">
                     <ui-select ng-model="project.status" on-select="update(project, {name: 'status'})">

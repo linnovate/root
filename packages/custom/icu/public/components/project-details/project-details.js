@@ -13,8 +13,10 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       ProjectsService,
                                                       ActivitiesService,
                                                       EntityService,
-                                                      $stateParams) {
-        $scope.addSubProjects = false;
+                                                      $stateParams,
+                                                      me
+    ) {
+        $scope.me = me;
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("projects")))
         {
             $scope.project = entity || context.entity;
@@ -29,6 +31,20 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.tags = tags;
 
         $scope.tagInputVisible = false;
+
+        $scope.people = people.data || people;
+        if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+            var newPeople = {
+                name: 'no select'
+            };
+
+            $scope.people.push(_(newPeople).clone());
+        }
+        for(var i =0 ; i<$scope.people.length;i++){
+            if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job==null)){
+                $scope.people[i].job = $scope.people[i].name;
+            }
+        }
 
         ProjectsService.getStarred().then(function (starred) {
 
@@ -82,6 +98,38 @@ angular.module('mean.icu.ui.projectdetails', [])
             }
         });
 
+        $scope.updateAndNotify = function(project) {
+            project.status = $scope.statuses[1];
+
+            if (context.entityName === 'discussion') {
+                project.discussion = context.entityId;
+            }
+
+            if (project.assign === undefined || project.assign === null) {
+                delete project['assign'];
+            }
+
+            ProjectsService.update(project).then(function(result) {
+                if (context.entityName === 'project') {
+                    var projId = result.project ? result.project._id : undefined;
+                    if (projId !== context.entityId) {
+                        $state.go('main.projects.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {
+                            reload: true
+                        });
+                    }
+                }
+
+                ProjectsService.assign(project, me, backupEntity).then(function(res) {
+                    backupEntity = JSON.parse(JSON.stringify(result));
+                    ActivitiesService.data.push(res);
+                });
+            });
+
+        };
+
         $scope.$watch('project.color', function (nVal, oVal) {
             if (nVal !== oVal) {
                 var context = {
@@ -94,7 +142,6 @@ angular.module('mean.icu.ui.projectdetails', [])
             }
         });
 
-        $scope.people = people.data || people;
 
         $scope.options = {
             theme: 'bootstrap',

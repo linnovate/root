@@ -57,6 +57,10 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  assign: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
   room: {
     type: String
   },
