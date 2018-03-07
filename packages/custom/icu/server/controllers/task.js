@@ -662,7 +662,6 @@ exports.populateSubTasks = function(req, res, next) {
     if (err) {
       req.locals.error = err;
     } else req.locals.result = tasks;
-    res.status(202).send(tasks);
     next();
   })
 }

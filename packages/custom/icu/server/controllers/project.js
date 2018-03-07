@@ -3,7 +3,7 @@
 require('../models/project');
 
 var options = {
-  includes: 'assign watchers',
+  includes: 'assign watchers subProjects',
   defaults: {
     watchers: []
   }
@@ -17,7 +17,7 @@ var project = crud('projects', options);
 
 var mongoose = require('mongoose'),
   Project = mongoose.model('Project'),
-  projectModel = require('../models/task'),
+  projectModel = require('../models/project'),
   Task = mongoose.model('Task'),
   User = mongoose.model('User'),
   _ = require('lodash'),
@@ -198,9 +198,6 @@ exports.getByEntity = function(req, res, next) {
           projects.forEach(function(project) {
             project.star = true;
           });
-            if (project) {
-                req.locals.result = project.subProjects;
-            }
         }
         if(pagination.sort == "custom"){
         var temp = new Array(projects.length) ;
@@ -264,9 +261,8 @@ exports.updateParent = function(req, res, next) {
             subProjects: req.locals.result._id
         }
     };
-    Project.findOneAndUpdate({
-        '_id': req.body.parent,
-        tType: {$ne: 'template'}
+    projectModel.findOneAndUpdate({
+        '_id': req.body.parent
     }, data, function(err, project) {
         if (err) {
             req.locals.error = err;
@@ -305,14 +301,13 @@ exports.removeSubProject = function(req, res, next) {
 };
 
 exports.populateSubProjects = function(req, res, next) {
-    Project.populate(req.locals.result, {
+    projectModel.populate(req.locals.result, {
         path: 'subProjects.watchers',
         model: 'User'
     }, function(err, projects) {
         if (err) {
             req.locals.error = err;
         } else req.locals.result = projects;
-        res.status(202).send(projects);
         next();
     })
 }
