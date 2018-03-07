@@ -136,6 +136,8 @@ angular.module('mean.icu.ui.displayby', [])
             watchers: "watcher"
         };
 
+        $scope.officesListReversed = $scope.officesList.reverse();
+
         $scope.allItems = {
             tasks: $scope.tasks,
             projects: $scope.projects,
