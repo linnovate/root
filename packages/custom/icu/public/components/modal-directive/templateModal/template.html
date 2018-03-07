@@ -17,11 +17,12 @@
     <div class="container-fluid">
         <div class="row">
             <div ng-click="uploadOfficeDocumentFromTemplate(template)" class="col-md-2 template" ng-repeat="template in officeTemplates">
+                <div tooltips tooltip-template={{template.title}}>
                 <div class="loader2" ng-if="template.isUploaded" ></div>
                 <div ng-style="template.isUploaded && {opacity:0.5}" class="card">
                     <div  class="templateIcon {{template.templateType}}"></div>
                     <div class="card-block">
-                        <h4 class="card-title template-modal-title">{{template.title}}</h4>
+                        <h4 class="card-title template-modal-title" >{{template.title}}</h4>
                         <p class="card-text template-modal-title">{{template.description}}</p>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-function controllerwhatsNew($scope, $uibModalInstance, $filter) {
+function controllerwhatsNew($scope, $uibModalInstance, $filter,$location) {
     
     $(document).ready(function(){
         
@@ -50,6 +50,7 @@ function controllerwhatsNew($scope, $uibModalInstance, $filter) {
     $scope.ok = function (sendingForm) {
         localStorage.setItem("icuVersion", window.config.version);
         $uibModalInstance.dismiss('cancel');
+        location.reload();
     };
     
     $scope.cancel = function () {
