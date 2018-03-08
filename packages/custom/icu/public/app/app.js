@@ -1495,26 +1495,41 @@ angular.module('mean.icu').config([
                     }
                 },
                 resolve: {
-                    results: function (SearchService, $stateParams) {
-                        if ($stateParams.query && $stateParams.query.length) {
-                            return SearchService.find($stateParams.query);
-                        } else {
-                            if (SearchService.builtInSearchArray) {
-                                var data = SearchService.builtInSearchArray.map(function (d) {
-                                    d._type = 'task';
-                                    return d;
-                                });
-                                return data;
+                    results: function (EntityService,SearchService, $stateParams) {
+                        if ($stateParams.query && $stateParams.query.indexOf('___')>-1){
+                            let unmerged = EntityService.getRecycleBin("all") ;
+                        return unmerged.then(function(arrays) {
+                            let merged = [].concat.apply([], arrays);
+                            let mergedAdjuested = merged.map(function(item) {
+                                item._type = "task"; // not entity type. type kept in "type".
+                                item.id = item._id; 
+                                return item ;
+                            })
+                            return mergedAdjuested ;
+                        })
+                        }
+                        else {
+                            if ($stateParams.query && $stateParams.query.length) {
+                                return SearchService.find($stateParams.query);
                             } else {
-                                return {};
+                                if (SearchService.builtInSearchArray) {
+                                    var data = SearchService.builtInSearchArray.map(function (d) {
+                                        d._type = 'task';
+                                        return d;
+                                    });
+                                    return data;
+                                } else {
+                                    return {};
+                                }
                             }
                         }
+                        
                     },
                     tasks: function (results) {
                         return _(results).filter(function (r) {
                             return r._type === 'task';
                         });
-                    },
+                    },              
                     term: function ($stateParams) {
                         return $stateParams.query;
                     }

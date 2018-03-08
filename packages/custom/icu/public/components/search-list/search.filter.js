@@ -2,8 +2,8 @@
 
 angular.module('mean.icu.ui.searchlistfilter', [])
 .filter('filteringByUpdated', function (SearchService,$location) {    
-    return function(results) {            
-        if ($location.path().split("/").pop() == "recycled") {
+    return function(results) {  
+        if ($location.path().indexOf('recycle')) {
             SearchService.filteringResults = results ;     
         }
 
@@ -28,7 +28,7 @@ angular.module('mean.icu.ui.searchlistfilter', [])
 })
 .filter('searchResultsFilter', function (SearchService,$location) {
 	return function(results) {
-        if ($location.path().split("/").pop() == "recycled") {
+        if ($location.path().indexOf('recycle')) {
             SearchService.filteringResults = results ;     
         }
 
