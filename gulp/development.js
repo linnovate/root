@@ -116,7 +116,7 @@ gulp.task('devServe', ['env:development'], function () {
     ext: 'html js',
     env: { 'NODE_ENV': 'development' } ,
     ignore: ['node_modules/', 'packages/custom/**/public/', 'dist/'],
-    nodeArgs: ['--debug']
+//    nodeArgs: ['--debug']
   });
 });
 
