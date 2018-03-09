@@ -148,11 +148,72 @@ angular.module('mean.icu.ui.projectdetails', [])
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
         };
 
+        //due start
+        if ($scope.project.due) $scope.project.due = new Date($scope.project.due);
+
         $scope.dueOptions = {
-            onSelect: function () {
-                $scope.update($scope.project, 'due');
+            onSelect: function() {
+                $scope.updateDue($scope.project);
+            },
+            onClose: function() {
+                if ($scope.checkDate()){
+                    document.getElementById('ui-datepicker-div').style.display = 'block';
+                    $scope.open();
+                }else{
+                    document.getElementById('ui-datepicker-div').style.display = 'none';
+                    $scope.open();
+                }
             },
             dateFormat: 'd.m.yy'
+        };
+
+        $scope.checkDate = function() {
+            var d = new Date();
+            d.setHours(0,0,0,0);
+            if (d > $scope.project.due) {
+                return true;
+            }
+            return false;
+        };
+
+        $scope.open = function() {
+            if ($scope.checkDate()) {
+                document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
+                document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
+            } else {
+                document.getElementById('past').style.display = 'none';
+            }
+        };
+
+        $scope.updateDue = function(project) {
+
+            if (context.entityName === 'discussion') {
+                project.discussion = context.entityId;
+            }
+
+            ProjectsService.updateDue(project, backupEntity).then(function(result) {
+                backupEntity = JSON.parse(JSON.stringify($scope.project));
+                ActivitiesService.data.push(result);
+            });
+
+            ProjectsService.update(project).then(function(result) {
+                if (context.entityName === 'project') {
+                    var projId = result.project ? result.project._id : undefined;
+                    if (projId !== context.entityId) {
+                        $state.go('main.projects.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {
+                            reload: true
+                        });
+                    }
+                }
+            });
+        };
+        // end due
+
+        $scope.closeOldDateNotification = function(){
+            document.getElementById('past').style.display = 'none';
         };
 
          $scope.getUnusedTags = function() {
