@@ -301,6 +301,7 @@ function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, peop
 
     $scope.updateUserInfo = function () {
         UsersService.update($scope.currentUser);
+        updatePage();
     }
 
     $scope.uploadAvatar = function(files) {
