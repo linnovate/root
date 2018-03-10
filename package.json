@@ -38,7 +38,7 @@
     "jsonwebtoken": "^5.0.0",
     "lodash": "3.8.0",
     "meanio": "0.8.0",
-    "mongoose": "4.0.3",
+    "mongoose": "^4.13.11",
     "mongoose-auto-increment": "^4.0.0",
     "mongoose-deep-populate": "3.0.0",
     "mongoose-sequence": "^3.2.0",
