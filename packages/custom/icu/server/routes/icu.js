@@ -91,7 +91,8 @@ module.exports = function(Icu, app) {
   .patch(recycle.recycleRestoreEntity);
   app.route('/api/:entity(all|tasks|discussions|projects|offices|folders|officeDocuments)/get_recycle_bin')
   .get(recycle.recycleGetBin);
-
+  app.route('/api/get_search_all')
+  .get(recycle.searchAll);
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/star')
     .patch(star.toggleStar);

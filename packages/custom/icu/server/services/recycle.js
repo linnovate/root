@@ -44,13 +44,54 @@ function recycleRestoreEntity(entityType, id) {
         return promise ;  
 }
 
-function recycleGetBin(entityType) {    
+function recycleGetBin(entityType) {  
+  console.log('rrrrrrr')  
+  console.log(entityType)
   var request = [];
   return new Promise(function (fulfill, reject) {
     for(let key in entityNameMap) {
+      console.log('ssssssssssssss')
+      console.log(key)
       let Model = entityNameMap[key].mainModel ;
       request.push(new Promise(function (resolve, error) {
-        Model.find({recycled: { $exists: true }}).exec(function (err, entities) {            
+        Model.find({'recycled':{$exists:true}}).exec(function (err, entities) {            
+          if (err) {
+            console.log("recycleGetBin err")
+            error('error');
+          }
+
+          // add type entity support for recycle bin
+          let typedEntities = entities.map(function(entity) {
+            var json=JSON.stringify(entity);
+            let typedEntity = JSON.parse(json);
+            typedEntity['type'] = entityNameMap[key].name ;
+            return typedEntity ;
+          });
+          resolve(typedEntities);            
+        });
+      }));
+  }
+  Promise.all(request).then(function (result) {
+    fulfill(result);
+  }).catch(function (reason) {
+    console.log("recycleGetBin promise all reject") ;
+    reject('reject');
+  });
+});
+}
+
+
+function searchAll(entityType) {  
+  console.log('rrrrrrr')  
+  console.log(entityType)
+  var request = [];
+  return new Promise(function (fulfill, reject) {
+    for(let key in entityNameMap) {
+      console.log('ssssssssssssss')
+      console.log(key)
+      let Model = entityNameMap[key].mainModel ;
+      request.push(new Promise(function (resolve, error) {
+        Model.find().exec(function (err, entities) {            
           if (err) {
             console.log("recycleGetBin err")
             error('error');
@@ -80,6 +121,7 @@ function recycleGetBin(entityType) {
 module.exports = {
     recycleEntity: recycleEntity,
     recycleRestoreEntity: recycleRestoreEntity,
-    recycleGetBin, recycleGetBin
+    recycleGetBin :recycleGetBin,
+    searchAll: searchAll,
 };
       

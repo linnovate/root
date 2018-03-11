@@ -368,7 +368,7 @@ directive('icuSidepane', function() {
 
         $scope.toggleRecycle = function () {
             console.log("toggleRecycle...") ;
-            $scope.recycled = $location.path().split("/").pop() === "recycled";
+            $scope.recycled = $location.path().indexOf("recycled") >-1 ;
 
             $scope.recycled = !$scope.recycled ;
 
@@ -377,7 +377,9 @@ directive('icuSidepane', function() {
                 $state.go('main.search', {reload: true});
             }
             else {
-              $state.go('main.search', {query:"___", recycled: true}, {reload: true});
+                console.log('here')
+                $location.search('recycled', true);
+            //   $state.go('main.search', { 'recycled': true});
             }
 
 

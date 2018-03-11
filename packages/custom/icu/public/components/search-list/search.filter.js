@@ -3,8 +3,21 @@
 angular.module('mean.icu.ui.searchlistfilter', [])
 .filter('filteringByUpdated', function (SearchService,$location) {    
     return function(results) {  
-        if ($location.path().indexOf('recycle')) {
-            SearchService.filteringResults = results ;     
+        if($location.search() && $location.search().recycled) {
+          SearchService.filteringResults = [];
+          for(var i = 0;i<results.length;i++){
+              console.log('elassssssssss',results[i])
+              if(results[i].recycled)
+              SearchService.filteringResults.push(results[i])
+          }
+        }
+        else {
+             SearchService.filteringResults = [];
+            for(var i = 0;i<results.length;i++){
+            if(!results[i].recycled)
+                SearchService.filteringResults.push(results[i])
+            }
+
         }
 
         var filteringResults = SearchService.filteringResults.map(function(e) {
@@ -28,7 +41,7 @@ angular.module('mean.icu.ui.searchlistfilter', [])
 })
 .filter('searchResultsFilter', function (SearchService,$location) {
 	return function(results) {
-        if ($location.path().indexOf('recycle')) {
+        if ($location.path().indexOf('recycle') ) {
             SearchService.filteringResults = results ;     
         }
 

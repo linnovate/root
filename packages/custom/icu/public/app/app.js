@@ -1497,7 +1497,8 @@ angular.module('mean.icu').config([
                 resolve: {
                     results: function (EntityService,SearchService, $stateParams) {
                         if ($stateParams.query && $stateParams.query.indexOf('___')>-1){
-                            let unmerged = EntityService.getRecycleBin("all") ;
+                            let unmerged;
+                             unmerged = EntityService.getSearchAll("all") ;
                         return unmerged.then(function(arrays) {
                             let merged = [].concat.apply([], arrays);
                             let mergedAdjuested = merged.map(function(item) {
