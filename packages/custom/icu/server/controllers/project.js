@@ -276,14 +276,14 @@ exports.removeSubProject = function(req, res, next) {
     if (req.locals.error) {
         return next();
     }
-    Project.findOne({
+    projectModel.findOne({
         "_id": req.params.id,
         tType: {$ne: 'template'}
     }, function(err, subProject) {
         if (err) {
             req.locals.error = err;
         } else {
-            Project.update({
+            projectModel.update({
                 '_id': subProject.parent,
                 tType: {$ne: 'template'}
             }, {

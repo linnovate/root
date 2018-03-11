@@ -146,12 +146,16 @@ angular.module('mean.icu.ui.membersfooter', [])
                     $scope.entity.circles[member.type].push(member._id);
                 } else {
                     $scope.entity.watchers.push(member);
-                    $scope.entity.subTasks.forEach((subTask)=>{
-                        subTask.watchers.push(member);
-                    });
-                    $scope.entity.subProjects.forEach((subProject)=>{
-                        subProject.watchers.push(member);
-                    })
+                    if($scope.entity.subTasks){
+                        $scope.entity.subTasks.forEach((subTask)=>{
+                            subTask.watchers.push(member);
+                        });
+                    }
+                    if($scope.entity.subProjects){
+                        $scope.entity.subProjects.forEach((subProject)=>{
+                            subProject.watchers.push(member);
+                        })
+                    }
                 }
 
                 update($scope.entity, member, 'added');
