@@ -275,6 +275,9 @@ directive('icuSidepane', function() {
         });
 
         $scope.filterSearchByType = function() {
+            if ($location.search() && $location.search().recycled){
+                return;
+              }
             if ($scope.filteringData.issue === 'all') {
                 $location.search('');
             } else {
@@ -377,9 +380,9 @@ directive('icuSidepane', function() {
                 $state.go('main.search', {reload: true});
             }
             else {
-                console.log('here')
-                $location.search('recycled', true);
-            //   $state.go('main.search', { 'recycled': true});
+                if ($location.path().split('/')[2]!=='')
+                  $location.search('recycled', 'true');
+                else $state.go('main.search', { 'query':'___', recycled: true});
             }
 
 
