@@ -275,7 +275,12 @@ directive('icuSidepane', function() {
         });
 
         $scope.filterSearchByType = function() {
-            if ($location.search() && $location.search().recycled){
+            if  ($stateParams.recycled == true){
+                $stateParams.recycled = null;
+                $location.search('recycled','true');
+                return;
+            }
+            if ($location.search() && $location.search().recycled && $scope.filteringData.issue == 'all'){
                 return;
               }
             if ($scope.filteringData.issue === 'all') {
@@ -371,12 +376,12 @@ directive('icuSidepane', function() {
 
         $scope.toggleRecycle = function () {
             console.log("toggleRecycle...") ;
-            $scope.recycled = $location.path().indexOf("recycled") >-1 ;
+           $scope.recycled = $location.path().indexOf("recycled") >-1 ;
+            
+           $scope.recycled = !$scope.recycled ;
 
-            $scope.recycled = !$scope.recycled ;
-
-            $scope.recycledClass =  $scope.recycled ? "recycled" : '';
-            if($scope.recycled === false) {
+           $scope.recycledClass =  $scope.recycled ? "recycled" : '';
+        if($scope.recycled === false) {
                 $state.go('main.search', {reload: true});
             }
             else {

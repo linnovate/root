@@ -6,7 +6,6 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         if($location.search() && $location.search().recycled) {
           SearchService.filteringResults = [];
           for(var i = 0;i<results.length;i++){
-              console.log('elassssssssss',results[i])
               if(results[i].recycled)
               SearchService.filteringResults.push(results[i])
           }

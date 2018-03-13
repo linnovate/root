@@ -1483,6 +1483,7 @@ angular.module('mean.icu').config([
                 url: '/search/:query',
                 params: {
                     dateUpdated: 'active',
+                    recycled:  null
                 },
                 views: {
                     'middlepane@main': {
@@ -1495,11 +1496,14 @@ angular.module('mean.icu').config([
                     }
                 },
                 resolve: {
-                    results: function (EntityService,SearchService, $stateParams) {
+                    results: function (EntityService,SearchService, $stateParams, $location) {
                         if ($stateParams.query && $stateParams.query.indexOf('___')>-1){
-                            let unmerged;
-                             unmerged = EntityService.getSearchAll("all") ;
-                        return unmerged.then(function(arrays) {
+													let unmerged;
+													if ($stateParams.recycled == true)  {
+															$location.search('recycled', 'true');
+													}
+                        unmerged = EntityService.getSearchAll("all") ;
+                            return unmerged.then(function(arrays) {
                             let merged = [].concat.apply([], arrays);
                             let mergedAdjuested = merged.map(function(item) {
                                 item._type = "task"; // not entity type. type kept in "type".
