@@ -88,6 +88,9 @@
                     &.move{
                         width: 15px;
                         color: $grey1;
+                        @media screen and (max-width: $small-resolution) {
+                            display:none;
+                        }
                     }
 
                     &.arrow {
