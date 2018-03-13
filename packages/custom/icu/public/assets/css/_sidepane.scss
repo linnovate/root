@@ -415,6 +415,7 @@
         height: 100%;
         width:240px;
         background-color: $grey;
+        overflow-x: auto;
     }
     .searchPane {
         height: auto;
