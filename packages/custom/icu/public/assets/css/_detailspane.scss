@@ -8,8 +8,16 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 .detailspane {
 
     width: $detailspane-width;
+    min-width: $min-detailspane-width;
     border-left: 1px solid #C8C8C6;
     background-color: $cream;
+
+    overflow: scroll;
+    height: 100vh;
+
+    border-left: 1px solid #C8C8C6;
+    top: 0;
+    right: 0;
 
     textarea {
         resize: none;
@@ -235,6 +243,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 }
 
 .page-content {
+    margin-bottom: 35px;
 
     .compBtn {
         &.c19n{
@@ -435,7 +444,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         width: 120px;
         margin-left: 10px;
         padding-top: 13px;
-        float: left;    
+        float: left;
         border-right: 1px solid #e1e1e1;
     }
 
@@ -445,20 +454,20 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 
     .att-user:hover {
-        box-shadow: none !important; 
+        box-shadow: none !important;
     }
 
     .att-size, .att {
         color: #bdbcbc ;
         height: 100% ;
-        box-shadow: 0 none;        
+        box-shadow: 0 none;
     }
 
     .att {
         width: 40px;
         background-color: transparent;
         border: none;
-        float: right; 
+        float: right;
     }
 
     .user {
@@ -466,7 +475,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         height: $panel-height;
         position: relative;
         float: left;
-        
+
 
         &:hover{
             box-shadow: 0 0 0 2px #FFB435;
@@ -921,6 +930,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 .description {
     $icon-width: 60px;
     $icon-padding: 19px;
+    max-height: 715px;
 
     .attachment .attName {
         margin-top: 30px;
@@ -934,7 +944,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     .attachment .attCreator {
         color: #FFA000 ;
     }
-    
+
 
     .attachment .att-link-wrapper {
         display: block;
@@ -942,14 +952,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         margin-bottom: 20px;
     }
 
-    .attachment .att-link {        
+    .attachment .att-link {
         font-size: 22px;
         color: #FFA000;
         text-decoration: none;
         font-weight: 700;
     }
 
-    .attachment .att-link-icon {                
+    .attachment .att-link-icon {
         float: left;
         margin-right: 10px;
     }
@@ -967,7 +977,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         transform: translate(-50%, 0);
         height: 80px;
         width: $icon-width;
-        @include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');        
+        @include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');
     }
 
 
@@ -1575,4 +1585,3 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         line-height: 26px;
     }
 }
-
