@@ -86,6 +86,10 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
             $scope.context = context;
             $scope.isLoading = true;
 
+            $scope.subTasks = getAllSubTasks();
+
+            $scope.tasks = concatAllTasks();
+
             _($scope.tasks).each(function (t) {
                 t.__state = creatingStatuses.Created;
                 if (t.title.length > 20) {
@@ -140,13 +144,8 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
 
             function concatAllTasks() {
                 var allTasks = $scope.tasks.concat($scope.subTasks);
-                var clearedTasks = [];
                 return allTasks;
             }
-
-            $scope.subTasks = getAllSubTasks();
-
-            $scope.allTasks = concatAllTasks();
 
             $scope.createOrUpdate = function (task) {
                 if (context.entityName !== 'all') {
