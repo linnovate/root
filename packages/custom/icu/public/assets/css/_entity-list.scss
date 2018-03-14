@@ -120,6 +120,7 @@
                         @media screen and (max-width: $small-resolution) {
                             margin-right: 5px;
                             width: 13.3vw;
+                            word-wrap: break-word;
                         }
 
                         margin-left: 10px;
@@ -196,6 +197,7 @@
                             &.sent{color: #359123;}
                         @media screen and (max-width: $small-resolution) {
                             text-align: center;
+                            margin-left: 0;
                         }
                     }
 
