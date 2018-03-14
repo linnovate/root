@@ -49,6 +49,10 @@ module.exports = function(entityName, options) {
   }
 
   function create(req, res, next) {
+    // TBD:::: why is officeDocument creating and not updating?
+    console.log("CRUD CONTROLLER CREATE") ;
+    // console.trace() ;
+    
     if (req.locals.error) {
       return next();
     }
@@ -61,7 +65,15 @@ module.exports = function(entityName, options) {
   }
 
   function update(req, res, next) {
+    console.log("CRUD CONTROLLER UPDATE") ;
+    // console.log(JSON.stringify(req.params)) ;
+    // console.log(JSON.stringify(req.body)) ;
+    // console.log(JSON.stringify(req.locals)) ;    
+
     if (req.locals.error) {
+      // console.log("CRUD CONTROLLER UPDATE ERROR") ;
+      // console.log(JSON.stringify(req.locals.error)) ;    
+  
       return next();
     }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('ProjectsService', function(ApiUri, $http, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService, MeanSocket) {
     var EntityPrefix = '/projects';
     var data, selected;
 
@@ -69,7 +69,7 @@ angular.module('mean.icu.data.projectsservice', [])
                 type: 'assign'
             });
 
-            var activityType = prev.assign ? 'assign' : 'assignNew';
+            var activityType = prev && prev.assign ? 'assign' : 'assignNew';
         } else {
             var activityType = 'unassign';
         }
@@ -79,7 +79,7 @@ angular.module('mean.icu.data.projectsservice', [])
                 issueId: project.id,
                 type: activityType,
                 userObj: project.assign,
-                prev: prev.assign ? prev.assign.name : ''
+                prev: prev && prev.assign ? prev.assign.name : ''
             },
             context: {}
         }).then(function(result) {

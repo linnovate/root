@@ -114,7 +114,8 @@ gulp.task('devServe', ['env:development'], function () {
   return plugins.nodemon({
     script: 'server.js',
     ext: 'html js',
-    env: { 'NODE_ENV': 'development' } ,
+//    env: { 'NODE_ENV': 'development', 'DEBUG': 'express:*' } ,
+    env: { 'NODE_ENV': 'development'} ,
     ignore: ['node_modules/', 'packages/custom/**/public/', 'dist/'],
     nodeArgs: ['--debug']
   });

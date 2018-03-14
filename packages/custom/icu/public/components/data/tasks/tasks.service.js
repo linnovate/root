@@ -255,7 +255,7 @@ angular.module('mean.icu.data.tasksservice', [])
                 type: 'assign'
             });
 
-            var activityType = prev.assign ? 'assign' : 'assignNew';
+            var activityType = prev && prev.assign ? 'assign' : 'assignNew';
         } else {
             var activityType = 'unassign';
         }
@@ -265,7 +265,7 @@ angular.module('mean.icu.data.tasksservice', [])
                 issueId: task.id,
                 type: activityType,
                 userObj: task.assign,
-                prev: prev.assign ? prev.assign.name : ''
+                prev: prev && prev.assign ? prev.assign.name : ''
             },
             context: {}
         }).then(function(result) {

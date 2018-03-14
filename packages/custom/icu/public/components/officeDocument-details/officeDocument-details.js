@@ -397,6 +397,20 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 'name':'assign',
                 'newVal':officeDocument.assign
             };
+            console.log("assigning...")
+            if (officeDocument.assign !== undefined || officeDocument.assign !== null) {
+                console.log("assigning... INSIDE")
+                // check the assignee is not a watcher already
+                let filtered = officeDocument.watchers.filter(watcher => {
+                    return watcher._id == officeDocument.assign
+                });
+
+                // add assignee as watcher
+                if(filtered.length == 0) {                    
+                    officeDocument.watchers.push(officeDocument.assign);  
+                }                              
+            }
+
             OfficeDocumentsService.updateDocument(officeDocument._id,json);
             OfficeDocumentsService.updateAssign(officeDocument, backupEntity).then(function(result) {
                 backupEntity = JSON.parse(JSON.stringify(officeDocument));

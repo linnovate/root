@@ -308,7 +308,6 @@ angular.module('mean.icu.ui.taskdetails', [])
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
             task.status = $scope.statuses[1];
-
             if (context.entityName === 'discussion') {
                 task.discussion = context.entityId;
             }
@@ -316,7 +315,24 @@ angular.module('mean.icu.ui.taskdetails', [])
             if (task.assign === undefined || task.assign === null) {
                 delete task['assign'];
             }
+            else {
+                // var data = {
+                //     name: task.assign.name,
+                //     type: 'user',
+                //     action: 'added',
+                //     frequentUser: task.assign._id
+                // }
 
+                // // check the assignee is not a watcher already
+                // let filtered = task.watchers.filter(watcher => {
+                //     return watcher._id == task.assign
+                // });
+
+                // if(filtered.length == 0) {                    
+                //     task.watchers.push(task.assign);  
+                // }                              
+            }
+            
             TasksService.update(task).then(function(result) {
                 if (context.entityName === 'project') {
                     var projId = result.project ? result.project._id : undefined;
@@ -337,6 +353,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
 
         };
+        
         //END Made By OHAD
 
         // Nevo

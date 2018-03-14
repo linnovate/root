@@ -16,7 +16,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 folder: 'FoldersService',
                 folders: 'FoldersService',
                 officeDocument: 'OfficeDocumentsService',
-                officeDocuments: 'OfficeDocumentsService',
+                officeDocuments: 'OfficeDocumentsService',                                  
                 templateDoc: 'TemplateDocsService',
                 templateDocs: 'TemplateDocsService',
             };
@@ -103,6 +103,9 @@ angular.module('mean.icu.ui.membersfooter', [])
                         'name':'watchers',
                         'newVal':a
                     }
+                    console.log("service. name", serviceName) ;
+                    console.log("service.update", service) ;
+                    console.log("service.json", json) ;
                     service.update(entity,json, action, member._id);
                     //$state.reload();
                 }

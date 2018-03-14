@@ -45,6 +45,17 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+
+  permissions: [{
+    _id:false,
+    id: { type: Schema.ObjectId, ref: 'User' },    
+    level: {
+      type: String,
+      enum: ['viewer', 'commenter', 'editor'],
+      default: 'viewer'
+    }
+  }],
+
   assign: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -113,53 +124,28 @@ TaskSchema.statics.project = function(id, cb) {
  */
 var elasticsearch = require('../controllers/elasticsearch');
 
+// TaskSchema.methods.updatePerms = function updatePerms (cb) {
+//   var creator = {id: '5aa506a9e38f521c17e7fbea' , level: "editor"}   ;
+//   this.update(
+//       {},
+//     { $addToSet: { permissions: creator } }
+//  )
+// };
+
+
 TaskSchema.post('save', function(req, next) {
   var task = this;
+
   TaskSchema.statics.project(this.project, function(err, project) {
     if (err) {
       return err;
     }
-
 
     elasticsearch.save(task, 'task', project.room);
   });
   next();
 });
 
-//  var elasticsearch = require('../controllers/elasticsearch');
-
-// TaskSchema.post('/api/save', function(req, res) {
-
-//       var objReq = {
-//         uri: apiUri + '/api/save',
-//         //uri: 'http://192.168.245.152/api/save',
-//         method: 'POST',
-//         form: req.body
-//       };
-
-//       var task = this;
-
-//       request(objReq, function(error, response, body) {
-//         if (error) {
-//             return error;
-//         }
-//         if(response){}
-
-//       });
-//     });     
-
-//  TaskSchema.post('save', function (req, next) {
-
-//   var task = this;
-//   TaskSchema.statics.project(this.project, function (err, project) {
-//     if (err) {
-//       return err;
-//     }
-
-//       elasticsearch.save(task, 'task', project.room);
-//   });
-//   next();
-// });
 
 TaskSchema.pre('remove', function(next) {
   var task = this;
@@ -171,6 +157,7 @@ TaskSchema.pre('remove', function(next) {
   });
   next();
 });
+
 
 TaskSchema.plugin(archive, 'task');
 

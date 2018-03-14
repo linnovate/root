@@ -11,6 +11,7 @@ var Folder = require('../models/folder');
 var ObjectId = require('mongoose').Types.ObjectId;
 var _ = require('lodash');
 var config = require('meanio').loadConfig();
+//var permissions = require('../controllers/permissions.js');
 
 
 
@@ -1320,6 +1321,7 @@ exports.uploadFileToDocument = function(req,res,next){
 
 
 exports.create = function(req,res,next){
+  console.log("OD CREATEOD CREATEOD CREATEOD CREATEOD CREATEOD CREATEOD CREATE")
   var folder = req.body.folder;//contains folder Id
   if(!folder){
     var doc = {
@@ -1333,6 +1335,7 @@ exports.create = function(req,res,next){
       'serial':'',
       'folder':undefined,
       'creator':new ObjectId(req.user._id),
+      'permissions': [{"id": req.user._id, "level":"editor"}],
       'updater':new ObjectId(req.user._id),
       'sender':new ObjectId(req.user._id),
       'sendingAs': new ObjectId(),
@@ -1372,6 +1375,7 @@ exports.create = function(req,res,next){
           'serial':'',
           'folder':new ObjectId(folder),
           'creator':new ObjectId(req.user._id),
+          'permissions': [{"id": req.user._id, "level":"editor"}],
           'updater':new ObjectId(req.user._id),
           'sender':new ObjectId(req.user._id),
           'sendingAs': new ObjectId(),
@@ -1630,6 +1634,7 @@ exports.deleteDocument = function (req, res) {
 *
 */
 exports.update2 = function (req, res, next) {
+  console.log("update2update2update2update2update2")
   var zeroReq = [];
   for (var i = 0; i < req.locals.result.zero.length; i++) {
     zeroReq.push({ 'UserId': req.body.zero[i] });
@@ -1711,6 +1716,8 @@ exports.update2 = function (req, res, next) {
 
 
 exports.update = function (req, res, next) {
+  console.log("documents controller UPDATE")
+  console.log(JSON.stringify(req.user))  ;
   var docToUpdate;
   if(req.body.name){
     if(req.body.name=='watchers' || req.body.watchers){
@@ -1720,9 +1727,12 @@ exports.update = function (req, res, next) {
       Document.findOne({'_id':req.params.id},function(err,doc){
         docToUpdate = doc;
         var oldWatchers=[];
+        
         doc.watchers.forEach(function(w){
           oldWatchers.push(w.toString());
         });
+//        doc.permissions = [{"id": req.user._id, "level":"commenter"}];
+
         var spPath = doc.spPath;
         if(spPath){
           var watchersReq=[],oldWatchersReq=[];
@@ -1781,44 +1791,80 @@ exports.update = function (req, res, next) {
     });
     }
     else if(req.body.name=='assign'){
-      Document.findOne({'_id':req.params.id},function(err,doc){
-        var spPath = doc.spPath;
-        if(spPath){
-        var oldAssign = doc.assign;
-        var assignReq=[{
-          'UserId':req.body.newVal
-        }];
-        var oldAssignReq=[{
-          'UserId':oldAssign
-        }];
-        getUsers(assignReq).then(function(){
-          getUsers(oldAssignReq).then(function(){
-            var json={
-              "siteUrl":config.SPHelper.SPSiteUrl,
-              "paths":[spPath],
-              "users":[],
-              "creators":[assignReq[0].UserId],
-              "zero":[oldAssignReq[0].UserId]
-            };
-            request({
-              "url":config.SPHelper.uri+"/api/share",
-              "method":"POST",
-              "json":json
-            }, function(error,resp,body){
-              });
+      console.log("documents controller assign")
+      console.log(JSON.stringify(req.body)) ;
+      Document.findOne({'_id':req.params.id},function(err,doc){ 
+        
+//        if(permissions.assign) {
+          var spPath = doc.spPath;
+          if(spPath){
+          var oldAssign = doc.assign;
+          var assignReq=[{
+            'UserId':req.body.newVal
+          }];
+          var oldAssignReq=[{
+            'UserId':oldAssign
+          }];
+          getUsers(assignReq).then(function(){
+            getUsers(oldAssignReq).then(function(){
+              var json={
+                "siteUrl":config.SPHelper.SPSiteUrl,
+                "paths":[spPath],
+                "users":[],
+                "creators":[assignReq[0].UserId],
+                "zero":[oldAssignReq[0].UserId]
+              };
+              request({
+                "url":config.SPHelper.uri+"/api/share",
+                "method":"POST",
+                "json":json
+              }, function(error,resp,body){
+                });
 
+            });
           });
-        });
-      }
+        }
+//      }
 });
     }
 
     Document.findOne({'_id':req.params.id},function(err,docToUpdate){
       docToUpdate['' + req.body.name]=req.body.newVal;
       docToUpdate['id']=docToUpdate._id;
+
+
+
+      console.log("JSON.stringify(docToUpdate)")  ;
+//      docToUpdate['permissions'] = [{"id": req.user._id, "level":"commenter"}];
+//      console.log(JSON.stringify(docToUpdate))  ;
+      // console.log(JSON.stringify(docToUpdate.assign))  ;
+
+      
+      // push assignee permissions
+    //  var exist = permissions.searchIdIndex(String(docToUpdate.assign),docToUpdate['permissions']) ;     
+    //   if(exist == null) {
+    //     console.log("updating") ;                
+    //     var tmp = docToUpdate['permissions'].slice() ;
+    //     tmp.push({"id":String(docToUpdate.assign),"level":"commenter"});
+    //     docToUpdate['permissions'] = tmp ;
+    //     console.log(JSON.stringify(docToUpdate));
+    //   }
+
+      // we need to add assignee as watcher if the assignee is not a watcher already
+      // TODO
+
       if (req.body.watchers) {
         docToUpdate['watchers'] = req.body.watchers;
+
+        // we need to sync the watchers with the permission table.
+        // TODO
+        req.body.watchers.forEach(watcherPerm => {
+//          tmp.push({"id":String(docToUpdate.assign),"level":"viewer"});
+        })   
       }
+
+      
+
       docToUpdate.save(function(err,result){
         if(err){
           res.send(err);

@@ -1,8 +1,11 @@
 'use strict';
 
 var _ = require('lodash');
+
 var q = require('q');
 var orderController = require('../controllers/order.js');
+
+//var permissions = require('../controllers/permissions.js');
 
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
@@ -186,7 +189,6 @@ module.exports = function(entityName, options) {
 
     return query.then(function(results) {
       if (!results.length) {
-        // console.log('2222222')
         // throw new Error('Entity not found');
         return {};
       }
@@ -195,16 +197,20 @@ module.exports = function(entityName, options) {
   }
 
   function create(entity, user, acl) {
+    console.log("CRUD CREATE!!!!!!!!!!!!!!!!") ;
+    console.trace() ;
     var deffered = q.defer();
     if (!entity.circles) entity.circles = {};
     circlesAcl.sign('mongoose', entity.sources, entity.circles, acl, function(error, circles) {
       if (error) deffered.reject(error);
       else {
         entity.circles = circles;
-        if (entity.watchers instanceof Array && !entity.watchers.length) entity.watchers = [user.user._id];
+//        if (entity.watchers instanceof Array && !entity.watchers.length) entity.watchers = [user.user._id];
         entity.created = new Date();
         entity.updated = new Date();
         entity.creator = user.user._id;
+        entity.permissions = [{"id": user.user._id, "level":"editor"}];
+        console.log(JSON.stringify(entity)) ;
         deffered.resolve(new Model(entity).save(user).then(function(e) {
           orderController.addOrder(e, entity, Model);
           return Model.populate(e, options.includes);
@@ -215,8 +221,95 @@ module.exports = function(entityName, options) {
     return deffered.promise;
   }
 
+  // function leftIntersect(arr, a) {
+  //   let filtered = arr.filter(function(i) {
+  //     return a.indexOf(i) == -1 ? true : false;
+  //   });
+  //   return filtered;
+  // }
+
+  // function searchIdIndex(idVal, arr) {
+  //   console.log("searchIdIndex") ;
+  //   console.log(JSON.stringify(arr)) ;
+  //   console.log(JSON.stringify(idVal)) ;
+  //   console.log("searchIdIndex<<<") ;
+  //   for (var i = 0; i < arr.length; i++) {
+  //     if (arr[i].id === idVal) {
+  //       return i;
+  //     }
+  //   }
+  // }
+
+
+  // function syncPerms(oldE, newE) {
+  //   console.log("syncPerms") 
+
+  //   let oldWatchers = oldE.watchers.map(function (item) {
+  //     // console.log(JSON.stringify(item._doc)) ;
+  //     // console.log(item._doc._id) ;
+  //     return String(item._doc._id) ;
+  //   }) ;
+
+  //   let newWatchers = newE.watchers.map(function (item) {
+  //     return String(item) ;
+  //   }) ;
+
+  //   // watcher added
+  //   let watcherAdded = leftIntersect(newWatchers,oldWatchers) ;
+
+  //   if(watcherAdded.length > 0) {      
+  //     let watcherAddedPerms = {"id":String(watcherAdded[0]),"level":"viewer"} ; // default watcher perms
+  //     newE.permissions.push(watcherAddedPerms);
+  //   }
+
+                       
+  //     // console.log("old-->");
+  //     // console.log(JSON.stringify(oldWatchers));
+  //     // console.log("new-->");
+  //     // console.log(JSON.stringify(newWatchers));
+  //     // console.log("added ->>");
+  //     // console.log(JSON.stringify(watcherAdded));
+
+  //   // watcher removed
+  //   let watcherRemoved = leftIntersect(oldWatchers,newWatchers) ;
+  //     console.log("old-->");
+  //     console.log(JSON.stringify(oldWatchers));
+  //     console.log("new-->");
+  //     console.log(JSON.stringify(newWatchers));
+  //     console.log("removed ->>");
+  //     console.log(JSON.stringify(watcherRemoved));
+
+
+  //   if(watcherRemoved.length > 0) {      
+  //     var index = searchIdIndex(watcherRemoved[0], newE.permissions) ;// remove from permissions array
+  //     newE.permissions.splice(index,1);
+  //   }
+    
+  //   return newE ;
+
+  // }
+
+  function throwError(err) {
+    var deffered = q.defer();
+    deffered.reject(err);
+    return deffered.promise;
+
+    // let p = new Promise() ;
+    // return p.reject(new error("blaba")) ;
+  }
+
   function update(oldE, newE, user, acl) {
+
+    // check permsArray changes     
+    // var permsArray = permissions.updatePermsArray(user,oldE, newE) ;
+    // if(!permsArray) {
+    //   return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
+    // }
+
+    //    newE.permissions = permsArray ;
+
     var entityWithDefaults = _.defaults(newE, options.defaults);
+    console.log(JSON.stringify(entityWithDefaults));
 
     oldE = _.extend(oldE, entityWithDefaults);
     if (!oldE.circles) oldE.circles = {};
