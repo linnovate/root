@@ -30,7 +30,8 @@ function getDocuments(entity, id) {
       'entityId': id
     }, function (err, docs) {
       if (err) {
-        reject('error');
+        
+        reject(err);
       }
       else {
         for (var i = 0; i < docx.length; i++) {
@@ -78,7 +79,7 @@ function getUsers(users) {
               resolve(user);
             }
             else {
-              error('error');
+              error(err);
             }
           });
         }));
@@ -90,7 +91,7 @@ function getUsers(users) {
     Promise.all(request).then(function (dataAll) {
       fulfill('success');
     }).catch(function (reason) {
-      reject('reject');
+      reject(reason);
     });
   });
 }
@@ -151,6 +152,7 @@ exports.uploadEmpty = function(req,res,next){
         'json':json
       },function(error,resp,body){
         if(error){
+          logger.log('error', '%s uploadEmpty, %s', req.user.name, ' request', {error: error.message});
           res.send(error);
         }
         else{
@@ -160,7 +162,8 @@ exports.uploadEmpty = function(req,res,next){
           var fileType = body.path.substring(body.path.lastIndexOf('.')+1,body.path.length);
           var set = {'spPath':body.path,'serial':body.serial,'documentType':fileType,'title':fileName}
           Document.update({'_id':req.body._id},{$set:set},function(error,result){
-            if(error){
+            if(err){
+              logger.log('error', '%s uploadEmpty, %s', req.user.name, ' Document.update', {error: err.message});
               res.send(error);
             }
             else{
@@ -170,6 +173,8 @@ exports.uploadEmpty = function(req,res,next){
         }
       });
     }
+  }).catch(function(err){
+    logger.log('error', '%s uploadEmpty, %s', req.user.name, ' getUsers(users)', {error: err.message});
   });
 
 };
@@ -271,91 +276,6 @@ exports.signOnDocx = function(req,res,next){
       });
     }
   });
-  // var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
-  // var spPath = doc.spPath?doc.spPath:"spPath";
-  // var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
-  // fileName=fileName?fileName:"hi";
-
-  // // Document.findOne({'_id':doc._id},function(error,doc){
-  // //           doc.signBy = signature._id
-  // //           doc.save(function(err,result){
-  // //             if(err){
-  // //               res.send(err);
-  // //             }
-  // //             else{
-  // //               res.send(result);
-  // //             }
-        
-  // //     });
-  
-  // var coreOptions = {
-  //   "siteUrl":config.SPHelper.SPSiteUrl
-  // };
-  // var creds = {
-  //   "username":config.SPHelper.username,
-  //   "password":config.SPHelper.password
-  // };
-  // var folder = config.SPHelper.libraryName+"/"+user.toUpperCase();
-  // var fileOptions = {
-  //   "folder":folder,
-  //   "fileName":fileName,
-  //   "fileContent":undefined
-  // };
-  // var users = [];
-  // users.push({
-  //   '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-  //   'Role':3,
-  //   'UserId':doc.creator.username.toLowerCase()
-  // });
-  // doc.watchers.forEach(function(watcher){
-  //   users.push({
-  //     '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-  //     'Role':3,
-  //     'UserId':watcher.username.toLowerCase()
-  //   });
-  // });
-
-  // var json = {
-  //   'siteUrl':config.SPHelper.SPSiteUrl,
-  //   'fileUrl':spPath,
-  //   'signature':signature,
-  //   'coreOptions':coreOptions,
-  //   'creds':creds,
-  //   'fileOptions':fileOptions,
-  //   'permissions':users,
-  //   'isTemplate':false
-  // };
-
-
-
-  // request({
-  //   'url':config.SPHelper.uri+"/api/signOnDocx",
-  //   'method':'POST',
-  //   'json':json
-  // },function(error,resp,body){
-  //   if(error){
-  //     res.send(error);
-  //   }
-  //   else{
-  //     var set = {'spPath':body.path};
-  //     Document.findOne({
-  //       '_id':req.body._id
-  //     },function(error,doc){
-  //       doc.spPath = body.path;
-  //       doc.signBy = signature._id
-  //       doc['id'] = req.body._id;
-  //       doc.save(function(err,result){
-  //         if(err){
-  //           res.send(err);
-  //         }
-  //         else{
-  //           res.send(set);
-  //         }
-  //       });
-  //     });
-  //    }
-  // });
-
   };
 
 
@@ -468,14 +388,20 @@ exports.addSerialTitle = function(req,res,next){
           'json':json
         },function(error,resp,body){
           if(error){
-            res.send(error);
+           
             logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
+            res.send(error);
           }
           else{
             var set = {'serial':body.serial,'spPath':body.path};
             Document.findOne({
               '_id':req.body._id
             },function(error,doc){
+              if(error){
+                logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.find()', {error: error.message});
+                res.send(error);
+              }
+              else{
               doc.serial = body.serial;
               doc.spPath = body.path;
               doc['id'] = req.body._id;
@@ -489,7 +415,10 @@ exports.addSerialTitle = function(req,res,next){
                   logger.log('info', '%s addSerialTitle, %s', req.user.name, 'success' );
                 }
               });
+
+            }
             });
+            
       } 
     })
   }
@@ -579,27 +508,37 @@ exports.addSerialTitle = function(req,res,next){
       'json':json
     },function(error,resp,body){
       if(error){
-        res.send(error);
         logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
+        res.send(error);
+        
       }
       else{
         var set = {'serial':body.serial,'spPath':body.path};
         Document.findOne({
           '_id':req.body._id
         },function(error,doc){
+          if(error){
+            logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.findOne()', {error: error.message});
+
+          }
+          else{
           doc.serial = body.serial;
           doc.spPath = body.path;
           doc['id'] = req.body._id;
           doc.save(function(err,result){
             if(err){
-              res.send(err);
+              
               logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.save()', {error: err.message});
+              res.send(err);
             }
             else{
-              res.send(set);
               logger.log('info', '%s addSerialTitle, %s', req.user.name, 'success' );
+              res.send(set);
+
             }
           });
+
+        }
         });
       }
     });
@@ -611,12 +550,13 @@ exports.deleteDocumentFile = function(req,res,next){
   var id = req.params.id;
   Document.update({'_id':id},{$unset:{path:1,spPath:1, serial:1, signBy:1}},function(error,result){
     if(error){
-      res.send(error);
       logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'doc.update()', {error: error.message});
+      res.send(error);
     }
     else{
-      res.send('ok');
       logger.log('info', '%s deleteDocumentFile, %s', req.user.name, 'success' );
+
+      res.send('ok');
     }
   });
 };
@@ -716,6 +656,8 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
                   var set = {'path':template.path,'title':template.title,'documentType':template.templateType};
                   Document.update({'_id':officeDocument._id},{$set:set},function(error,result){
                     if(error){
+                      logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'Document.update()', {error: error.message});
+
                       res.send(error);
                     }
                     else{
@@ -728,6 +670,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
                   var set = {'spPath':body.path,'path':template.path,'title':template.title,'documentType':template.templateType};
                   Document.update({'_id':officeDocument._id},{$set:set},function(error,result){
                     if(error){
+                      logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'Document.update()', {error: error.message});
                       res.send(error);
                     }
                     else{
@@ -741,6 +684,10 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
     else{
       res.send('error');
     }
+}).catch(function(err){
+  logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'getUsers()', {error: error.message});
+  res.send('error');
+
 });
 
 }
@@ -748,6 +695,7 @@ else{
     var set = {'path':template.path,'title':template.title,'documentType':template.templateType};
         Document.update({'_id':officeDocument._id},{$set:set},function(error,result){
             if(error){
+              logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'Document.update()', {error: error.message});
                 res.send(error);
             }
             else{
@@ -839,6 +787,7 @@ exports.getAll = function (req, res, next) {
   .populate('signBy')
   .exec(function(err,data){
       if (err) {
+        logger.log('error', '%s getAll, %s', req.user.name,'Document.find', {error: err.message});
         req.locals.error = err;
         req.status(400);
       }   
@@ -859,6 +808,7 @@ exports.getById = function (req, res, next) {
     _id: req.params.id
   }, function (err, data) {
     if (err) {
+      logger.log('error', '%s getById, %s', req.user.name,'Document.find', {error: err.message});
       req.locals.error = err;
       res.status(400);
     } else {
@@ -876,6 +826,7 @@ exports.getByUserId = function (req, res, next) {
     $or: [{ watchers: { $elemMatch: { $eq: req.params.id } } }, { asign: req.params.id }]
   }, function (err, data) {
     if (err) {
+      logger.log('error', '%s getByUserId, %s', req.user.name,'Document.find', {error: err.message});
       req.locals.error = err;
       req.status(400);
     } else {
@@ -904,6 +855,8 @@ exports.getByFolder = function (req, res, next) {
     .populate('signBy')
     .populate('watchers').exec(function(err,data){
     if (err) {
+      logger.log('error', '%s getByFolder, %s', req.user.name,'Document.find', {error: err.message});
+
       req.locals.error = err;
       req.status(400);
     }   
@@ -916,7 +869,7 @@ exports.getByFolder = function (req, res, next) {
 
 
 
-
+//NOT IN USE
 exports.upload = function (req, res, next) {
   req.locals.data={};
   req.locals.data.body={};
@@ -933,6 +886,9 @@ exports.upload = function (req, res, next) {
     var fileType = path.extname(filename).substr(1).toLowerCase();
     mkdirp(path.join(config.attachmentDir, d), function () {
       file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
+        if(err){
+          logger.log('error', '%s upload, %s', req.user.name,'mkdirp', {error: err.message});
+        }
         var arr = hostFileLocation.split("/files");
         var pathFor = "./files" + arr[1];
         var stats = fs.statSync(pathFor);
@@ -980,6 +936,8 @@ exports.upload = function (req, res, next) {
           _id:folderId
         }).exec(function(err,folder){
           if(err){
+            logger.log('error', '%s upload, %s', req.user.name,'Folder.findOne', {error: err.message});
+
             req.locals.error = err;
           }
           if(!folder){
@@ -1135,6 +1093,7 @@ exports.upload = function (req, res, next) {
 };
 
 
+
 exports.getByPath = function (req, res, next) {
   if (req.locals.error) {
     return next();
@@ -1146,6 +1105,8 @@ exports.getByPath = function (req, res, next) {
   };
   Document.findOne(conditions).exec(function (err, attachment) {
     if (err) {
+      logger.log('error', '%s getByPath, %s', req.user.name,'Document.findOne', {error: err.message});
+
       req.locals.error = err;
     }
     if (!attachment) {
@@ -1204,6 +1165,10 @@ exports.uploadFileToDocument = function(req,res,next){
     var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
     req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+req.locals.data.body.name;
     var result = fs.readFile("."+path,function(err,result){
+      if(err){
+        logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'fs.readFile', {error: err.message});
+
+      }
       result=JSON.parse(JSON.stringify(result));
       var coreOptions={
         "siteUrl":config.SPHelper.SPSiteUrl
@@ -1223,6 +1188,8 @@ exports.uploadFileToDocument = function(req,res,next){
         _id:documentId
       }).exec(function(err,result){
       if(err){
+        logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'Document.findOne', {error: err.message});
+
         req.locals.error = err;
       }
       if(!result){
@@ -1275,6 +1242,8 @@ exports.uploadFileToDocument = function(req,res,next){
                     'json':json
                   },function(error,resp,body){
                     if(error){
+                      logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'request', {error: error.message});
+
                       var path = req.locals.data.body.originalPath;
                       var fileType = path.substring(path.lastIndexOf('.')+1,path.length);
                       var set = {'path':req.locals.data.body.originalPath,'title':req.locals.data.body.name,'documentType':fileType};
@@ -1284,6 +1253,8 @@ exports.uploadFileToDocument = function(req,res,next){
                         doc.documentType = fileType;
                         doc.save(function(error,result){
                           if(error){
+                            logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'doc.save', {error: error.message});
+
                             res.send(error);
                           }
                           else{
@@ -1298,12 +1269,18 @@ exports.uploadFileToDocument = function(req,res,next){
                       var fileType = path.substring(path.lastIndexOf('.')+1,path.length);
                       var set = {'path':req.locals.data.body.originalPath,'spPath':spPath,'title':req.locals.data.body.name,'documentType':fileType};
                       Document.findOne({'_id':documentId},function(err,doc){
+                        if(err){
+                          logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'Document.findOne', {error: err.message});
+
+                        }
                         doc.path = req.locals.data.body.originalPath;
                         doc.spPath = spPath;
                         doc.title = req.locals.data.body.name;
                         doc.documentType = fileType;
                         doc.save(function(error,result){
                           if(error){
+                            logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'doc.save', {error: error.message});
+
                             res.send(error);
                           }
                           else{
@@ -1317,6 +1294,9 @@ exports.uploadFileToDocument = function(req,res,next){
                   else{
                     res.send('error');
                   }
+                }).catch(function(err){
+                  logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'getUsers()', {error: err.message});
+
                 });
               }
             });
@@ -1362,6 +1342,8 @@ exports.create = function(req,res,next){
     var obj = new Document(doc);
     obj.save(function(error,result){
       if(error){
+        logger.log('error', '%s create, %s', req.user.name,' obj.save()', {error: error.message});
+
         res.send(error);
       }
       else{
@@ -1372,6 +1354,8 @@ exports.create = function(req,res,next){
   else{
     Folder.findOne({'_id':folder}).exec(function(err,folderObj){
       if(err){
+        logger.log('error', '%s create, %s', req.user.name,' Folder.findOne', {error: err.message});
+
         res.send(err);
       }
       else{
@@ -1399,6 +1383,8 @@ exports.create = function(req,res,next){
         var obj = new Document(doc);
         obj.save(function(error,result){
           if(error){
+            logger.log('error', '%s create, %s', req.user.name,' obj.save', {error: error.message});
+
             res.send(error);
           }
           else{
@@ -1410,167 +1396,6 @@ exports.create = function(req,res,next){
 }
 };
 
-/**
-*
-* Assumes req.body contains description,sendingAsId,classification,relatedDocuments array of documents ids
-* and watchers
-*
-*
-*
-*/
-
-// exports.upload = function(req,res,next){
-//   var d = formatDate(new Date());
-//   var busboy = new Busboy({
-//     headers: req.headers
-//   });
-//   var hasFile = false;
-//   busboy.on('file', function (fieldname, file, filename) {
-//     var port = config.https && config.https.port ? config.https.port : config.http.port;
-//     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
-//     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
-//     var fileType = path.extname(filename).substr(1).toLowerCase();
-//     mkdirp(path.join(config.attachmentDir, d), function () {
-//         file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
-//           var arr = hostFileLocation.split("/files");
-//           var pathFor = "./files" + arr[1];
-//           var stats = fs.statSync(pathFor);
-//           console.log(pathFor + 'test path')
-//           var fileSizeInBytes = stats["size"];
-//           req.locals.data.body.size = fileSizeInBytes;
-//         });
-//         req.locals.data.body.name = filename;
-//         req.locals.data.body.path = hostFileLocation;
-//         req.locals.data.body.attachmentType = fileType;
-//         req.locals.data.body.size = file._readableState.length;
-//         hasFile = true;
-//     });
-//   });
-
-//   busboy.on('field', function (fieldname, val) {
-//     req.locals.data.body[fieldname] = val;
-//   });
-
-//   busboy.on('finish', function () {
-//     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
-//     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
-//     var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
-//     req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+filename;
-//     var result = fs.readFile("."+path,function(err,result){
-//       result=JSON.parse(JSON.stringify(result));
-//       var coreOptions={
-//         "siteUrl":config.SPHelper.SPSiteUrl
-//       };
-//       var creds={
-//         "username":config.SPHelper.username,
-//         "password":config.SPHelper.password
-//       }
-//       var folder = config.SPHelper.libraryName+"/"+user;
-//       var fileOptions = {
-//         "folder":folder,
-//         "fileName":fileName,
-//         "fileContent":result
-//       };
-//       var query = req.acl.mongoQuery("Folder");
-//       query.findOne({
-//         _id:req.locals.data.body["folderId"]
-//       }).exec(function(err,entity){
-//         if(err){
-//           req.locals.error = err;
-//         }
-//         if(!entity){
-//           req.locals.error={
-//             status:404,
-//             message:'Entity not found'
-//           };
-//         }
-//         if(entity){
-//           var users = [];
-//           users.push({
-//             '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-//             'Role':3,
-//             'UserId':user
-//           });
-//           entity.watchers.forEach(function(watcher){
-//             if(watcher!=req.user._id){
-//               users.push({
-//                 '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
-//                 'Role':2,
-//                 'UserId':watcher
-//               });
-//             }
-//           });
-//           getUsers(users).then(function(result){
-//             if(result=='success'){
-//               var json = {
-//                 'coreOptions':coreOptions,
-//                 'creds':creds,
-//                 'fileOptions':fileOptions,
-//                 'permissions':users,
-//                 'isTemplate':false,
-//                 'entity':req.locals.data.body.entity,
-//                 'entityId':req.locals.data.body.entityId
-//               };
-//               request({
-//                 'url':config.SPHelper.uri+"/api/upload",
-//                 'method':'POST',
-//                 'json':json
-//               },function(error,resp,body){
-//                 if(error){
-//                   res.send(error);
-//                 }
-//                 else{
-//                   var path = body.path;
-//                   var doc = {
-//                     'created': new Date(),
-//                     'updated':new Date(),
-//                     'name':fileName,
-//                     'path':body.path,
-//                     'description':req.body.description, //important
-//                     'serial':body.serial,
-//                     'documentType':fileName.substring(fileName.indexOf('.')+1,fileName.length),
-//                     'entity': req.locals.data.body.entity,
-//                     'entityId':req.locals.data.body.entityId,
-//                     'creator':new ObjectId(req.user._id),
-//                     'updater':new ObjectId(req.user._id),
-//                     'sender':new ObjectId(req.user._id),
-//                     'sendingAs':new ObjectId(req.body.sendingAsId), //important
-//                     'assign': new ObjectId(req.user._id),
-//                     'classification':req.body.classification,//important
-//                     'relatedDocuments':req.body.relatedDocuments,//important
-//                     'watchers':req.body.watchers//important
-//                   };
-//                   Document.save(doc,function(error,result){
-//                     if(error){
-//                       res.send(error);
-//                     }
-//                     else{
-//                       res.send(result);
-//                     }
-//                   });
-//                 }
-//               });
-//             }
-//             else{
-//               res.send(error);
-//             }
-//           });
-//           }
-//         });
-//       });
-//       if (!hasFile) {
-//           req.locals.error = {
-//             message: 'No file was attached'
-//           };
-//       }
-
-//       next();
-//     });
-
-//   return req.pipe(busboy);
-
-// };
-
 
 
 /**
@@ -1581,6 +1406,8 @@ exports.create = function(req,res,next){
 exports.deleteDocument = function (req, res) {
   Document.find({ _id: req.params.id }, function (err, file) {
     if (err) {
+      logger.log('error', '%s deleteDocument, %s', req.user.name,' Document.find', {error: err.message});
+
       console.log(err);
     }
     else {
@@ -1614,6 +1441,10 @@ exports.deleteDocument = function (req, res) {
         'method': 'POST',
         'json': json
       }, function (error, resp, body) {
+        if(error){
+          logger.log('error', '%s deleteDocument, %s', req.user.name,' request', {error: error.message});
+
+        }
      //   var creator = folderName;
      //   if (creator == user) {
       //  }
@@ -1625,6 +1456,8 @@ exports.deleteDocument = function (req, res) {
 
     Document.remove({ _id: req.params.id }, function (err) {
       if (err) {
+        logger.log('error', '%s deleteDocument, %s', req.user.name,' Document.remove', {error: err.message});
+
         console.log(err);
       }
       else {
@@ -1673,6 +1506,10 @@ exports.update2 = function (req, res, next) {
       }, {
         'multi': true
       }, function (err, numAffected) {
+        if(err){
+          logger.log('error', '%s update2, %s', req.user.name,' Document.update', {error: err.message});
+
+        }
         if (documents != null && documents != undefined && (documents.length > 0)) {
           var watchReq = [];
           for (var i = 0; i < watchArray.length; i++) {
@@ -1705,17 +1542,30 @@ exports.update2 = function (req, res, next) {
                 'json': json
               }, function (error, resp, body) {
                 if (error) {
+                  logger.log('error', '%s update2, %s', req.user.name,' request', {error: error.message});
+
                   res.send('error');
                 }
                 else {
                   res.send('OK');
                 }
               });
+            }).catch(function(err){
+              logger.log('error', '%s update2, %s', req.user.name,' getUsers', {error: err.message});
+
             });
+          }).catch(function(err){
+            logger.log('error', '%s update2, %s', req.user.name,' getUsers', {error: err.message});
+
+            res.send('error');
+
           });
         }
       });
     next();
+  }).catch(function(err){
+    logger.log('error', '%s update2, %s', req.user.name,' getUsers', {error: err.message});
+
   });
 
 };
@@ -1731,6 +1581,10 @@ exports.update = function (req, res, next) {
         return w._id;
       });
       Document.findOne({'_id':req.params.id},function(err,doc){
+        if(err){
+          logger.log('error', '%s update, %s', req.user.name,' Document.findOne', {error: err.message});
+
+        }
         docToUpdate = doc;
         var oldWatchers=[];
         doc.watchers.forEach(function(w){
@@ -1784,9 +1638,22 @@ exports.update = function (req, res, next) {
                   "method":"POST",
                   "json":json
                 }, function(error,resp,body){
+                  if(error){
+                    logger.log('error', '%s update, %s', req.user.name,' request', {error: error.message});
+
+                  }
               });
+            }).catch(function(err){
+              logger.log('error', '%s update, %s', req.user.name,' getUsers', {error: err.message});
+
             });
+        }).catch(function(err){
+          logger.log('error', '%s update, %s', req.user.name,' getUsers', {error: err.message});
+
         });
+
+          }).catch(function(err){
+            logger.log('error', '%s update, %s', req.user.name,' getUsers', {error: err.message});
 
           })
    
@@ -1795,6 +1662,10 @@ exports.update = function (req, res, next) {
     }
     else if(req.body.name=='assign'){
       Document.findOne({'_id':req.params.id},function(err,doc){
+        if(err){
+          logger.log('error', '%s update, %s', req.user.name,' Document.findOne', {error: err.message});
+
+        }
         var spPath = doc.spPath;
         if(spPath){
         var oldAssign = doc.assign;
@@ -1818,15 +1689,29 @@ exports.update = function (req, res, next) {
               "method":"POST",
               "json":json
             }, function(error,resp,body){
+              if(error){
+                logger.log('error', '%s update, %s', req.user.name,' request', {error: error.message});
+
+              }
               });
 
+          }).catch(function(err){
+            logger.log('error', '%s update, %s', req.user.name,' getUsers', {error: err.message});
+
           });
+        }).catch(function(err){
+          logger.log('error', '%s update, %s', req.user.name,' getUsers', {error: err.message});
+
         });
       }
 });
     }
 
     Document.findOne({'_id':req.params.id},function(err,docToUpdate){
+      if(err){
+        logger.log('error', '%s update, %s', req.user.name,' Document.findOne', {error: err.message});
+
+      }
       docToUpdate['' + req.body.name]=req.body.newVal;
       docToUpdate['id']=docToUpdate._id;
       if (req.body.watchers) {
@@ -1834,11 +1719,15 @@ exports.update = function (req, res, next) {
       }
       docToUpdate.save(function(err,result){
         if(err){
+          logger.log('error', '%s update, %s', req.user.name,' docToUpdate.save', {error: err.message});
+
           res.send(err);
         }
         else{
           result.populate('watchers', function (err, result) {
             if(err){
+              logger.log('error', '%s update, %s', req.user.name,' result.populate', {error: err.message});
+
               res.send(err);
             }else{
               res.send(result);
@@ -1849,19 +1738,6 @@ exports.update = function (req, res, next) {
       });
 
     });
-      /**
-       *  Document.update({ "_id": req.params.id }, json).then(function (err, result) {
-        console.log("Err=" + err + " result=" + result);
-        if(err){
-          res.send(err);
-        }
-        else{
-          res.send(result);
-        }
-      });
-       */
-     
-
     }
 
 else{
