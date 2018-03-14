@@ -207,17 +207,14 @@
 
 
                             position: absolute;
-                            top: 50%;
+                            top: 72%;
                             transform: translate(-50%, -50%);
                             font-size: 1.5em;
-                            right: -25px;
                             display: inline-table;
                         }
             }
 
             span.ui-select-toggle {
-                color: transparent;
-                background-color: black;
                 height: 22px;
                 outline: 0;
                 border: none;
@@ -231,16 +228,11 @@
             .ui-select-container .ui-select-choices-row .ui-select-choices-row-inner {
                 display: flex;
                 align-items: center;
-                color: white;
 		    }
 
             .ui-select-choices{
-                background-color: black;
                 position: relative;
-                top: -15px;
-                z-index: 1;
             }
-
         }
 
         &.people {
@@ -284,6 +276,49 @@
             a {
                 color: #DDEAF0;
                 padding-bottom: 0;
+            }
+        }
+    }
+    .tooltips {
+        display: block;
+        position: relative;
+        padding-left: 65px;
+        bottom: 30px;
+        height: auto;
+        ul{
+            list-style: none;
+            padding-left: 0;
+            max-height: 90px;
+            li {
+                display: flex;
+                justify-content: space-between;
+                padding: 0 10px;
+                position: relative;
+                width: 185px;
+                a {
+                    padding-bottom: 11px;
+                    font-size: 13px;
+                    max-width: 165px;
+                    line-height: 18px;
+                    color: grey;
+                    cursor: pointer;
+                    position: relative;
+                    word-break: break-all;
+                    text-decoration: none;
+                }
+                .tag-color {
+                    height: calc(5px * 2);
+                    border-radius: 5px;
+                    width: calc(5px * 2);
+                    margin: 0;
+                    position: absolute;
+                    top: 30%;
+                    transform: translateY(-50%);
+                    left: 79%;
+                }
+                &.ui-select-choices-group {
+                    display:list-item;
+                }
             }
         }
     }

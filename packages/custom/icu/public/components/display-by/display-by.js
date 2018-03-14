@@ -38,10 +38,17 @@ angular.module('mean.icu.ui.displayby', [])
                $scope.officeDocumentsList.push(officeDocument);
             });
 
+        $scope.officesList.reverse();
+
         if($scope.officesList.length > 0)
         {
             $scope.officesList.office = $scope.officesList[0];
         }
+
+        $scope.focus = false;
+        $scope.changeFocus = function(){
+            $scope.focus = !$scope.focus;
+        };
 
         $scope.myFilter = function (item) {
             if(item.office.title && $scope.officesList.office.title)
