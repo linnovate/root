@@ -335,7 +335,8 @@
                         vertical-align: middle;
                         float:none;
                         display: inline-block;
-
+                        @media screen and (max-width: $small-resolution) {
+                            margin: 43px auto 4px auto;                        }
                     }
 
                     .item-name {
