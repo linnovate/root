@@ -17,7 +17,9 @@
     "busboy": "^0.2.14",
     "mkdirp": "^0.5.1",
     "nodemailer-smtp-transport": "^1.1.0",
-    "q": "^1.5.1"
+    "q": "^1.5.1",
+    "winston": "^2.4.0",
+    "winston-daily-rotate-file": "^1.7.2"
   },
   "license": "MIT"
 }

@@ -11,6 +11,7 @@ var Folder = require('../models/folder');
 var ObjectId = require('mongoose').Types.ObjectId;
 var _ = require('lodash');
 var config = require('meanio').loadConfig();
+var logger = require('../services/logger')
 
 
 
@@ -192,7 +193,7 @@ exports.signOnDocx = function(req,res,next){
   .populate('signBy')
   .exec(function(err,data){
     if(err){
-
+      logger.log('error', '%s signOnDocx, %s', req.user.name, 'Document.find()', {error: err.message});
     }else{
       doc = data[0];
       var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
@@ -245,6 +246,7 @@ exports.signOnDocx = function(req,res,next){
       },function(error,resp,body){
         if(error){
           res.send(error);
+          logger.log('error', '%s signOnDocx, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/signOnDocx"+"'", {error: error.stack});
         }else{
           var set = {'spPath':body.path,
                      'signBy':signature};
@@ -257,9 +259,11 @@ exports.signOnDocx = function(req,res,next){
             doc1.save(function(err,result){
               if(err){
                 res.send(err);
+                logger.log('error', '%s signOnDocx, %s', req.user.name, 'doc.save()', {error: err.message});
               }
               else{
                 res.send(set);
+                logger.log('info', '%s signOnDocx, %s', req.user.name, 'success' );
               }
             });
           });
@@ -376,6 +380,7 @@ exports.addSerialTitle = function(req,res,next){
       if (err) {
         // req.locals.error = err;
         // req.status(400);
+        logger.log('error', '%s addSerialTitle, %s', req.user.name, 'Document.find()', {error: err.message});
       }   
       else { 
         doc.creator = data[0].creator;
@@ -464,6 +469,7 @@ exports.addSerialTitle = function(req,res,next){
         },function(error,resp,body){
           if(error){
             res.send(error);
+            logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
           }
           else{
             var set = {'serial':body.serial,'spPath':body.path};
@@ -476,9 +482,11 @@ exports.addSerialTitle = function(req,res,next){
               doc.save(function(err,result){
                 if(err){
                   res.send(err);
+                  logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.save()', {error: err.message});
                 }
                 else{
                   res.send(set);
+                  logger.log('info', '%s addSerialTitle, %s', req.user.name, 'success' );
                 }
               });
             });
@@ -572,6 +580,7 @@ exports.addSerialTitle = function(req,res,next){
     },function(error,resp,body){
       if(error){
         res.send(error);
+        logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
       }
       else{
         var set = {'serial':body.serial,'spPath':body.path};
@@ -584,9 +593,11 @@ exports.addSerialTitle = function(req,res,next){
           doc.save(function(err,result){
             if(err){
               res.send(err);
+              logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.save()', {error: err.message});
             }
             else{
               res.send(set);
+              logger.log('info', '%s addSerialTitle, %s', req.user.name, 'success' );
             }
           });
         });
@@ -601,9 +612,11 @@ exports.deleteDocumentFile = function(req,res,next){
   Document.update({'_id':id},{$unset:{path:1,spPath:1, serial:1, signBy:1}},function(error,result){
     if(error){
       res.send(error);
+      logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'doc.update()', {error: error.message});
     }
     else{
       res.send('ok');
+      logger.log('info', '%s deleteDocumentFile, %s', req.user.name, 'success' );
     }
   });
 };
