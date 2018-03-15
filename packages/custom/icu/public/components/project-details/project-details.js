@@ -108,6 +108,18 @@ angular.module('mean.icu.ui.projectdetails', [])
             if (project.assign === undefined || project.assign === null) {
                 delete project['assign'];
             }
+            else {
+                // check the assignee is not a watcher already
+                let filtered = project.watchers.filter(watcher => {
+                    return watcher._id == project.assign
+                });
+
+                // add assignee as watcher
+                if(filtered.length == 0) {                    
+                    project.watchers.push(project.assign);  
+                }                              
+            }
+
 
             ProjectsService.update(project).then(function(result) {
                 if (context.entityName === 'project') {

@@ -448,6 +448,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.update = function (discussion, type) {
             let me = $scope.me;
             
+
             $scope.updateDatesString();
             DiscussionsService.update(discussion);
             switch (type) {
@@ -477,6 +478,19 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     break;
                 
                 case 'assign':
+                    if (discussion.assign !== undefined || discussion.assign !== null) {
+
+                        let filtered = discussion.watchers.filter(watcher => {
+                            // check the assignee is not a watcher already
+                            return watcher == discussion.assign
+                        });
+        
+                        // add assignee as watcher
+                        if(filtered.length == 0) {       
+                            discussion.watchers.push(discussion.assign);  
+                        }                                      
+                    }
+                    
                     DiscussionsService.updateAssign(discussion, backupEntity).then(function(result) {
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];

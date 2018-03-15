@@ -40,7 +40,20 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                     data = {
                         frequentUser: task.assign
                     }
+
+                    // check the assignee is not a watcher already
+                    let filtered = task.watchers.filter(watcher => {
+                        return watcher._id == task.assign && watcher != null
+                    });
+    
+                    // add assignee as watcher
+                    if(filtered.length == 0) {
+                        task.watchers.push(task.assign);
+                    }                                                  
                 }
+
+                
+                
                 if (task.__state === creatingStatuses.NotCreated) {
                     task.__state = creatingStatuses.Creating;
                     task.parent = $scope.parent;

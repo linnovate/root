@@ -121,6 +121,15 @@ var DocumentSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User',
     unique: true 
+  }],
+  permissions: [{
+    _id:false,
+    id: { type: Schema.ObjectId, ref: 'User' },    
+    level: {
+      type: String,
+      enum: ['viewer', 'commenter', 'editor'],
+      default: 'viewer'
+    }
   }]
 });
 

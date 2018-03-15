@@ -60,6 +60,15 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  permissions: [{
+    _id:false,
+    id: { type: Schema.ObjectId, ref: 'User' },    
+    level: {
+      type: String,
+      enum: ['viewer', 'commenter', 'editor'],
+      default: 'viewer'
+    }
+  }],
   assign: {
     type: Schema.ObjectId,
     ref: 'User'

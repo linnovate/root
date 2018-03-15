@@ -1,8 +1,11 @@
 'use strict';
 
 var _ = require('lodash');
+
 var q = require('q');
 var orderController = require('../controllers/order.js');
+
+var permissions = require('../controllers/permissions.js');
 
 var mongoose = require('mongoose');
 var ObjectId = mongoose.Types.ObjectId;
@@ -186,7 +189,6 @@ module.exports = function(entityName, options) {
 
     return query.then(function(results) {
       if (!results.length) {
-        // console.log('2222222')
         // throw new Error('Entity not found');
         return {};
       }
@@ -195,6 +197,16 @@ module.exports = function(entityName, options) {
   }
 
   function create(entity, user, acl) {
+    console.log("CRUD CREATE!!!!!!!!!!!!!!!!") ;
+
+    var allowed = permissions.createContent(user,{}, entity) ;    
+    allowed.then(function(value) {
+//      console.log("CRUD RESOLVE") ;
+      console.log(value);
+    }).catch(function(error){
+      console.log(error);
+    });;
+
     var deffered = q.defer();
     if (!entity.circles) entity.circles = {};
     circlesAcl.sign('mongoose', entity.sources, entity.circles, acl, function(error, circles) {
@@ -205,6 +217,8 @@ module.exports = function(entityName, options) {
         entity.created = new Date();
         entity.updated = new Date();
         entity.creator = user.user._id;
+        entity.permissions = [{"id":String(user.user._id),"level":"editor"}];
+        console.log(JSON.stringify(entity)) ;
         deffered.resolve(new Model(entity).save(user).then(function(e) {
           orderController.addOrder(e, entity, Model);
           return Model.populate(e, options.includes);
@@ -215,8 +229,33 @@ module.exports = function(entityName, options) {
     return deffered.promise;
   }
 
+
+  function throwError(err) {
+    var deffered = q.defer();
+    deffered.reject(err);
+    return deffered.promise;
+
+    // let p = new Promise() ;
+    // return p.reject(new error("blaba")) ;
+  }
+
   function update(oldE, newE, user, acl) {
+
+//    check permsArray changes     
+    var allowed = permissions.updatePermsArray(user,oldE, newE) ;
+    if(!allowed) {
+      return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
+    }
+
+    var allowed2 = permissions.updateContent(user,oldE, newE) ;    
+    if(!allowed2) {
+      return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateContent) ;
+    }
+
+  
+
     var entityWithDefaults = _.defaults(newE, options.defaults);
+    console.log(JSON.stringify(entityWithDefaults));
 
     oldE = _.extend(oldE, entityWithDefaults);
     if (!oldE.circles) oldE.circles = {};
