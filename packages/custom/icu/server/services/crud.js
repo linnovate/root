@@ -197,34 +197,40 @@ module.exports = function(entityName, options) {
   }
 
   function create(entity, user, acl) {
-    console.log("CRUD CREATE!!!!!!!!!!!!!!!!") ;
+    console.log("CRUD CREATE") ;
+    var deffered = q.defer();
 
+    // check update permissions
     var allowed = permissions.createContent(user,{}, entity) ;    
     allowed.then(function(value) {
-//      console.log("CRUD RESOLVE") ;
       console.log(value);
-    }).catch(function(error){
-      console.log(error);
-    });;
-
-    var deffered = q.defer();
-    if (!entity.circles) entity.circles = {};
-    circlesAcl.sign('mongoose', entity.sources, entity.circles, acl, function(error, circles) {
-      if (error) deffered.reject(error);
-      else {
-        entity.circles = circles;
-        if (entity.watchers instanceof Array && !entity.watchers.length) entity.watchers = [user.user._id];
-        entity.created = new Date();
-        entity.updated = new Date();
-        entity.creator = user.user._id;
-        entity.permissions = [{"id":String(user.user._id),"level":"editor"}];
-        console.log(JSON.stringify(entity)) ;
-        deffered.resolve(new Model(entity).save(user).then(function(e) {
-          orderController.addOrder(e, entity, Model);
-          return Model.populate(e, options.includes);
-        }));all
-      }
-    });
+    })
+    .then(function(value) {
+      // continue crud    
+      if (!entity.circles) entity.circles = {};
+      circlesAcl.sign('mongoose', entity.sources, entity.circles, acl, function(error, circles) {
+        if (error) deffered.reject(error);
+        else {
+          entity.circles = circles;
+          if (entity.watchers instanceof Array && !entity.watchers.length) entity.watchers = [user.user._id];
+          entity.created = new Date();
+          entity.updated = new Date();
+          entity.creator = user.user._id;
+          entity.permissions = [{"id":String(user.user._id),"level":"editor"}];
+          console.log(JSON.stringify(entity)) ;
+          deffered.resolve(new Model(entity).save(user).then(function(e) {
+            orderController.addOrder(e, entity, Model);
+            return Model.populate(e, options.includes);
+          }));all
+        }
+      });
+  }).catch(function(error){
+    console.log("CRUD RESOLVE") ;
+    console.log(error);
+    deffered.reject(error);
+//    return throwError(permissions.permError.denied + ":" + permissions.permError.allowCreateContent) ;
+//    throw new Error('something bad happened');
+  });
 
     return deffered.promise;
   }

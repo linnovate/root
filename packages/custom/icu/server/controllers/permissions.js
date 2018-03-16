@@ -36,7 +36,8 @@ exports.permError =
   denied: "permission denied",
   allowUpdateWatcher: "update permissions for user",
   allowAssign: "assignee update",
-  allowUpdateContent: "content update"
+  allowUpdateContent: "content update",
+  allowCreateContent: "content create"
 } ;
 
 /*
@@ -160,31 +161,33 @@ exports.updateContent = function(user, oldDoc, newDoc) {
 
 exports.createContent = function(user, oldDoc, newDoc) {
   console.log("createContent") ;
-
+  var deffered = q.defer();
+  
   console.log(JSON.stringify(newDoc)) ;
   if (newDoc.type == 'comment') {
     
     var Model = entityNameMap[newDoc.issue].mainModel;    
-    var deffered = q.defer();
     
-      return Model.findOne({'_id': oldDoc.issueId},function(err,doc){
+      Model.findOne({'_id': oldDoc.issueId},function(err,doc){
       console.log("doc") ;
       console.log(doc) ;
       let newPerms = Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
       
       if(!exports.allowUpdateContent(user, newPerms, {})) {
         console.log("updated comments - not allowed");
-        deffered.reject("err");
+        deffered.reject(exports.permError.denied + ":" + exports.permError.allowCreateContent);
         return deffered.promise;
-//        return false ;
       }  
       console.log("updated comments - allowed");      
-      return true ;  
-    }); 
-    
-  return deffered.promise;        
+      deffered.resolve("OK") ;  
+      return deffered.promise;        
+    })
+    return deffered.promise;            
   }
-  
+  else {
+    deffered.resolve("OK") ;  
+    return deffered.promise;        
+  }
 }
 
 
