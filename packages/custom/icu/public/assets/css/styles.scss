@@ -2,10 +2,11 @@ $fa-font-path: '../lib/font-awesome/fonts';
 $open-sans-path: '../lib/open-sans/fonts';
 
 body {
+    overflow: hidden;
     direction: ltr;
     font-family: 'openSansHebrew';
     /*rtl:remove*/
-    font-family: 'Open Sans'
+    //font-family: 'Open Sans'
 }
 
 @font-face {
@@ -80,7 +81,6 @@ table {
     width: calc(100% - #{$sidepane-width});
     display: flex;
     justify-content: flex-start;
-    min-width: 1303px;
 
     &.wide {
         margin-left: 0;
@@ -102,8 +102,11 @@ table {
     height: 25px;
 }
 [icu-members-footer] {
-    position: static;
+    position: fixed;
     bottom: 0;
+    width: 100%;
+    background-color: $cream;
+    border-top: 1px solid $light-grey1;
 }
 input:disabled, textarea:disabled {
     cursor: not-allowed;
