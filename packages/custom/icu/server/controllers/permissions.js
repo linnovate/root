@@ -159,6 +159,10 @@ exports.updateContent = function(user, oldDoc, newDoc) {
   return true ;
 }
 
+
+/* createContent
+   returns a deffered promise: resolved / err
+*/
 exports.createContent = function(user, oldDoc, newDoc) {
   console.log("createContent") ;
   var deffered = q.defer();
