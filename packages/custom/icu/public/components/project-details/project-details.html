@@ -49,7 +49,7 @@
                             <span>{{ 'unrecycleProject' | i18next }}</span>
                         </a>
                     </li>
-                            
+
                     <!-- <li>
                         <a href="#" icu-open-modal entity-name="project" show-modal="tasks.length" delete-fn="deleteProject(project)">
                             <i class="fa fa-2x fa-times-circle"></i>
@@ -74,6 +74,7 @@
                  strip-br="true"
                  ng-keydown="onEnter($event)"
                  ng-model="project.title"
+                 ng-bind-html="project.title | i18next"
                  ng-change="updateCurrentProject()"
                  medium-editor>
 
