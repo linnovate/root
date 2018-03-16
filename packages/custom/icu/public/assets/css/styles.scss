@@ -105,3 +105,6 @@ table {
     position: static;
     bottom: 0;
 }
+input:disabled, textarea:disabled {
+    cursor: not-allowed;
+}
