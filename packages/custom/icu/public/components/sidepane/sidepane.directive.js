@@ -395,7 +395,7 @@ directive('icuSidepane', function() {
         else {
             $scope.isRecycled = true;
             if ($location.path().split('/')[2]!=='')
-              $location.search('recycled', 'true');
+              $state.go('main.search', { 'query':'___', recycled: true});
             else $state.go('main.search', { 'query':'___', recycled: true});
         }
         
