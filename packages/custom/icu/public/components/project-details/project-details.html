@@ -1,12 +1,12 @@
 <div class="project-details">
-    <div class="permission" ng-if="project && !project._id">
+    <div class="permission" ng-if="project && !project._id && !permsToSee">
        <div class="perIcon">
     </div>
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
     </div>
-    <div class="page-content" ng-if="project._id">
-        <div class="summary">
+    <div class="page-content" ng-if="project._id && permsToSee">
+        <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
             <div class="favorite">
                 <button ng-class="{ 'orange': project.star }" ng-click="star(project)">
@@ -96,8 +96,9 @@
             </div>
         </div>
         <!-- <button icu-comp-modal entity="project" entity-name="project" type="button" ng-mouseover="showTooltip()" class="compBtn"></button> -->
-        <div class="description">
-            <div class="title"
+        <div class="description" ng-class="{ 'disabled' : !havePermissions('description')}">
+            <div
+                 class="title"
                  contenteditable="true"
                  tabindex="1"
                  ng-attr-autofocus="{{shouldAutofocus || undefined}}"
@@ -109,7 +110,8 @@
 
             </div>
 
-            <div class="text"
+            <div
+                 class="text"
                  contenteditable="true"
                  tabindex="2"
                  strip-br="true"
@@ -120,7 +122,9 @@
 
             <div class="tags">
                 <ul class="list">
-                    <li ng-show="!project.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
+                    <li ng-show="!project.tags.length && !tagInputVisible"
+                        class="placeholder"
+                        ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
                     <li class="tag-item" ng-repeat="tag in project.tags">
                         <span>{{tag}}</span>
                         <button ng-click="removeTag(tag)">
@@ -239,7 +243,7 @@
             </div>
 
         </div>
-        <div class="tabs">
+        <div class="tabs" ng-class="{ 'disabled' : !havePermissions('tabs')}">
             <div class="switcher">
                 <button class="tab three"
                         data-ui-sref-active="active"
@@ -258,7 +262,13 @@
                 </button>
             </div>
         </div>
-        <div class="tab-content" data-ui-view="tab"></div>
+        <div class="tab-content"
+             ng-class="{ 'disabled' : !havePermissions('tab-content')}"
+             data-ui-view="tab"></div>
     </div>
-    <div ng-if="project._id" icu-members-footer entity="project" users="people"></div>
+    <div ng-if="project._id"
+         ng-class="{ 'disabled' : !havePermissions('watchers')}"
+         icu-members-footer
+         entity="project"
+         users="people"></div>
 </div>
