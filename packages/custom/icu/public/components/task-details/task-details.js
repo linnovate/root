@@ -8,6 +8,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                   $state,
                                                   TasksService,
                                                   ActivitiesService,
+                                                  PermissionsService,
                                                   context,
                                                   $stateParams,
                                                   $rootScope,
@@ -328,11 +329,11 @@ angular.module('mean.icu.ui.taskdetails', [])
                     return watcher._id == task.assign
                 });
 
-                if(filtered.length == 0) {                    
-                    task.watchers.push(task.assign);  
-                }                              
+                if(filtered.length == 0) {
+                    task.watchers.push(task.assign);
+                }
             }
-            
+
             TasksService.update(task).then(function(result) {
                 if (context.entityName === 'project') {
                     var projId = result.project ? result.project._id : undefined;
@@ -353,7 +354,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
 
         };
-        
+
         //END Made By OHAD
 
         // Nevo
@@ -567,6 +568,14 @@ angular.module('mean.icu.ui.taskdetails', [])
             })
         }
         $scope.delayedUpdate = _.debounce($scope.update, 2000);
+
+        $scope.havePermissions = function(type){
+            return PermissionsService.havePermissions(entity, type);
+        };
+
+        $scope.permsToSee = function(){
+            return PermissionsService.canSee(entity);
+        };
 
         // if ($scope.task &&
         //         ($state.current.name === 'main.tasks.byentity.details' ||

@@ -108,6 +108,16 @@ table {
     background-color: $cream;
     border-top: 1px solid $light-grey1;
 }
-input:disabled, textarea:disabled {
+
+.disabled {
+    pointer-events: none;
+}
+
+.disabled:after {
     cursor: not-allowed;
+    content: '';
+    position: absolute;
+    width: 100%; height: 100%;
+    top: 0; left: 0;
+    pointer-events: auto;
 }

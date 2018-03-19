@@ -12,6 +12,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       $state,
                                                       ProjectsService,
                                                       ActivitiesService,
+                                                      PermissionsService,
                                                       EntityService,
                                                       $stateParams,
                                                       me
@@ -27,8 +28,10 @@ angular.module('mean.icu.ui.projectdetails', [])
         }
         $scope.tasks = tasks.data || tasks;
         $scope.projects = projects.data || projects;
+        $scope.project = entity || context.entity;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.tags = tags;
+        $scope.addSubProjects = false;
 
         $scope.tagInputVisible = false;
 
@@ -115,9 +118,9 @@ angular.module('mean.icu.ui.projectdetails', [])
                 });
 
                 // add assignee as watcher
-                if(filtered.length == 0) {                    
-                    project.watchers.push(project.assign);  
-                }                              
+                if(filtered.length == 0) {
+                    project.watchers.push(project.assign);
+                }
             }
 
 
@@ -228,7 +231,7 @@ angular.module('mean.icu.ui.projectdetails', [])
             document.getElementById('past').style.display = 'none';
         };
 
-         $scope.getUnusedTags = function() {
+        $scope.getUnusedTags = function() {
 
             return $scope.tags.filter(function(x) { return $scope.project.tags.indexOf(x) < 0 })
         };
@@ -245,6 +248,14 @@ angular.module('mean.icu.ui.projectdetails', [])
         	}
 
             $scope.tagInputVisible = false;
+        };
+
+        $scope.havePermissions = function(type){
+            return PermissionsService.havePermissions(entity, type);
+        };
+
+        $scope.permsToSee = function(){
+            return PermissionsService.canSee(entity);
         };
 
         $scope.removeTag = function(tag) {
