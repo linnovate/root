@@ -148,6 +148,28 @@ var buildSearchResponse = exports.buildSearchResponse = function(type, obj,userI
   	groups["officedocument"]=finalResults2;
   }
 
+  if(groups.attachment!=undefined && groups.attachment!=null){
+  	var finalResults2=[];
+  	for(var i=0;i<groups.attachment.length;i++){
+  		var attachment = groups.attachment[i];
+  		if(attachment.creator==userId || inArray(userId,attachment.watchers)!=-1){
+  			finalResults2.push(attachment);
+  		}
+  	}
+  	groups["attachment"]=finalResults2;
+  }
+
+  if(groups.update!=undefined && groups.update!=null){
+  	var finalResults2=[];
+  	for(var i=0;i<groups.update.length;i++){
+  		var update = groups.update[i];
+  		if(update.creator==userId){
+  			finalResults2.push(update);
+  		}
+  	}
+  	groups["update"]=finalResults2;
+  }
+
 
   return groups;
 }
