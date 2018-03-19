@@ -122,8 +122,6 @@ exports.getByEntity = function(req, res, next) {
     return next();
   }
 
-console.log("bla");
-
   var entities = {
     offices: 'office',
     users: 'assign',

@@ -25,6 +25,7 @@ var mongoose = require('mongoose'),
   elasticsearch = require('./elasticsearch.js');
 
 var Order = require('../models/order')
+var logger = require('../services/logger')
 
 Object.keys(officeController).forEach(function (methodName) {
   if (methodName !== 'destroy') {
@@ -178,6 +179,7 @@ function updateAllTemplates(officeId, watcher, action) {
                 'json': json
               }, function (error, resp, body) {
                 if (error) {
+                  logger.log('error', '%s updateAllTemplates, %s', req.user.name, ' request', {error: error.stack});
                   reject(error);
                 }
                 else {
@@ -253,6 +255,7 @@ exports.update = function (req, res, next) {
 
 exports.getByEntity = function (req, res, next) {
   if (req.locals.error) {
+    logger.log('error', '%s getByEntity, %s', req.user.name, ' req.locals.error', {error: req.locals.error});
     return next();
   }
 
@@ -291,6 +294,7 @@ exports.getByEntity = function (req, res, next) {
 
     query.exec(function (err, offices) {
       if (err) {
+        logger.log('error', '%s getByEntity, %s', req.user.name, ' query.exec()', {error: err.message});
         req.locals.error = {
           message: 'Can\'t get offices'
         };
@@ -361,6 +365,7 @@ exports.getByDiscussion = function (req, res, next) {
 
   Query.exec(function (err, offices) {
     if (err) {
+      logger.log('error', '%s getByDiscussion, %s', req.user.name, ' query.exec()', {error: err.message});
       req.locals.error = {
         message: 'Can\'t get offices'
       };

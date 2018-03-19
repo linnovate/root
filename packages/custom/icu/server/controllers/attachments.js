@@ -17,6 +17,8 @@ var attachment = crud('attachments', options);
 var Task = require('../models/task'),
   Attachment = require('../models/attachment');
 
+var logger = require('../services/logger')  
+
 
 Object.keys(attachment).forEach(function (methodName) {
   exports[methodName] = attachment[methodName];
@@ -40,6 +42,7 @@ exports.getByEntity = function (req, res, next) {
     entityId: req.params.id
   }, function (err, data) {
     if (err) {
+      logger.log('error', '%s getByEntity, %s', req.user.name, ' Attachment.find', {error: err.message});
       req.locals.error = err;
     } else {
       req.locals.result = data
@@ -153,6 +156,7 @@ exports.upload = function (req, res, next) {
 
   busboy.on('finish', function () {
     if (!hasFile) {
+      logger.log('error', '%s upload, %s', req.user.name, ' busboy.on(finish)', {error: 'No file was attached'});
       req.locals.error = {
         message: 'No file was attached'
       };
@@ -168,12 +172,12 @@ exports.deleteFile = function (req, res) {
   Attachment.find({ _id: req.params.id },
     function (err, file) {
       if (err) {
-        console.log(err)
+        logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.find()', {error: err.message});
       } else {
         Attachment.count({path:file[0]._doc.path},function(err,c){
           Attachment.remove({ _id: req.params.id }, function (err) {
             if (err) {
-              console.log(err)
+              logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.remove()', {error: err.message});
             } else {
               if(!err && c<=1){
                 var strUrl = file[0]._doc.path;
@@ -181,17 +185,18 @@ exports.deleteFile = function (req, res) {
                 var pathFile = '.' + strUrl.substring(index);
                 fs.stat(pathFile, function (err, stats) {
                   if (err) {
-                    console.log(JSON.stringify(err))
+                    logger.log('error', '%s deleteFile, %s', req.user.name, ' fs.stat()', {error: err.message});
                   } else {
                     if (stats.isFile()) {
                       fs.unlink(pathFile, function (err) {
                         if (err) {
-                          console.log(JSON.stringify(err));
+                          logger.log('error', '%s deleteFile, %s', req.user.name, ' fs.unlink()', {error: err.message});
                         } else {
                           Attachment.remove({ _id: req.params.id }, function (err) {
                             if (err) {
-                              console.log(err)
+                              logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.remove()', {error: err.message});
                             } else {
+                              logger.log('info', '%s deleteFile, %s', req.user.name, ' Delete file success');
                                res.sendStatus(200);
                             };
                           });

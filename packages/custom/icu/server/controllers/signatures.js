@@ -6,6 +6,7 @@ exports.createSignature = function(req,res,next){
     signature.save(function(err,result){
         if(err){
             res.status(500).send(err);
+            logger.log('error', '%s createSignature, %s', req.user.name, ' signature.save()', {error: err.message});
         }
         else{
             res.status(200).send(result);

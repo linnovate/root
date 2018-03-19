@@ -144,20 +144,17 @@ exports.uploadEmpty = function(req,res,next){
         'watchers':perm,
         'fileType':'docx'
       };
-      console.log("===UPLOAD EMPTY JSON===");
-      console.dir(json);
       request({
         'url':config.SPHelper.uri+"/api/uploadEmpty",
         'method':'POST',
         'json':json
       },function(error,resp,body){
         if(error){
-          logger.log('error', '%s uploadEmpty, %s', req.user.name, ' request', {error: error.message});
+          logger.log('error', '%s uploadEmpty, %s', req.user.name, ' request', {error: error.stack});
           res.send(error);
         }
         else{
-          console.log('Return value:');
-          console.dir(body);
+          
           var fileName = body.path.substring(body.path.lastIndexOf('/')+1,body.path.length);
           var fileType = body.path.substring(body.path.lastIndexOf('.')+1,body.path.length);
           var set = {'spPath':body.path,'serial':body.serial,'documentType':fileType,'title':fileName}
@@ -200,6 +197,7 @@ exports.signOnDocx = function(req,res,next){
     if(err){
       logger.log('error', '%s signOnDocx, %s', req.user.name, 'Document.find()', {error: err.message});
     }else{
+
       doc = data[0];
       var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
       var spPath = doc.spPath?doc.spPath:"spPath";
@@ -253,6 +251,7 @@ exports.signOnDocx = function(req,res,next){
           res.send(error);
           logger.log('error', '%s signOnDocx, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/signOnDocx"+"'", {error: error.stack});
         }else{
+          
           var set = {'spPath':body.path,
                      'signBy':signature};
           Document.findOne({
@@ -340,6 +339,11 @@ exports.addSerialTitle = function(req,res,next){
           telOffice = "noTel";
         }
         var spPath = doc.spPath;
+        if(spPath==undefined){
+          logger.log('error', '%s uploadEmpty, %s', req.user.name, ' doc.spPath', {error: "spPath is undefined"});
+          res.send('error');
+          return;
+        }
         var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
         var coreOptions = {
           "siteUrl":config.SPHelper.SPSiteUrl
@@ -460,6 +464,11 @@ exports.addSerialTitle = function(req,res,next){
       telOffice = "noTel";
     }
     var spPath = doc.spPath;
+    if(spPath==undefined){
+      logger.log('error', '%s uploadEmpty, %s', req.user.name, ' doc.spPath', {error: "spPath is undefined"});
+      res.send('error');
+      return;
+    }
     var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
     var coreOptions = {
       "siteUrl":config.SPHelper.SPSiteUrl
@@ -656,11 +665,13 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
                   var set = {'path':template.path,'title':template.title,'documentType':template.templateType};
                   Document.update({'_id':officeDocument._id},{$set:set},function(error,result){
                     if(error){
-                      logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'Document.update()', {error: error.message});
+                      logger.log('error', '%s uploadDocumentsFromTemplate, %s', req.user.name,'Document.update()', {error: error.message});
 
                       res.send(error);
                     }
                     else{
+                      logger.log('info', '%s uploadDocumentsFromTemplate, %s', req.user.name, 'success without sharepoint' );
+
                       res.send(set);
                     }
                   });
@@ -670,10 +681,12 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
                   var set = {'spPath':body.path,'path':template.path,'title':template.title,'documentType':template.templateType};
                   Document.update({'_id':officeDocument._id},{$set:set},function(error,result){
                     if(error){
-                      logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'Document.update()', {error: error.message});
+                      logger.log('error', '%s uploadDocumentsFromTemplate, %s', req.user.name,'Document.update()', {error: error.message});
                       res.send(error);
                     }
                     else{
+                      logger.log('info', '%s uploadDocumentsFromTemplate, %s', req.user.name, 'success with sharepoint' );
+
                       res.send(set);
                     }
                   });
@@ -685,7 +698,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
       res.send('error');
     }
 }).catch(function(err){
-  logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'getUsers()', {error: error.message});
+  logger.log('error', '%s uploadDocumentsFromTemplate, %s', req.user.name,'getUsers()', {error: error.message});
   res.send('error');
 
 });
@@ -695,10 +708,12 @@ else{
     var set = {'path':template.path,'title':template.title,'documentType':template.templateType};
         Document.update({'_id':officeDocument._id},{$set:set},function(error,result){
             if(error){
-              logger.log('error', '%s deleteDocumentFile, %s', req.user.name,'Document.update()', {error: error.message});
+              logger.log('error', '%s uploadDocumentsFromTemplate, %s', req.user.name,'Document.update()', {error: error.message});
                 res.send(error);
             }
             else{
+              logger.log('info', '%s uploadDocumentsFromTemplate, %s', req.user.name, 'success without sharepoint' );
+
               res.send(set);
           }
         });
@@ -793,6 +808,8 @@ exports.getAll = function (req, res, next) {
       }   
       else {
         req.locals.result = data
+        logger.log('info', '%s getAll, %s,', req.user.name, 'get all document success' );
+
         res.send(data);
       } 
   });
@@ -812,6 +829,8 @@ exports.getById = function (req, res, next) {
       req.locals.error = err;
       res.status(400);
     } else {
+      logger.log('info', '%s getById, %s', req.user.name, 'success' );
+
       req.locals.result = data
       res.send(data);
     }
@@ -830,6 +849,8 @@ exports.getByUserId = function (req, res, next) {
       req.locals.error = err;
       req.status(400);
     } else {
+      logger.log('info', '%s getByUserId, %s', req.user.name, 'success' );
+
       req.locals.result = data
       res.send(data);
     }
@@ -861,6 +882,8 @@ exports.getByFolder = function (req, res, next) {
       req.status(400);
     }   
     else {
+      logger.log('info', '%s getByFolder, %s', req.user.name, 'success' );
+
       req.locals.result = data
       res.send(data);
     } 
@@ -1115,6 +1138,10 @@ exports.getByPath = function (req, res, next) {
         message: 'Entity not found'
       };
     }
+    if(!error && attachment){
+      logger.log('info', '%s getByPath, %s', req.user.name, 'success' );
+
+    }
     next();
   })
 };
@@ -1258,6 +1285,8 @@ exports.uploadFileToDocument = function(req,res,next){
                             res.send(error);
                           }
                           else{
+                            logger.log('info', '%s uploadFileToDocument, %s', req.user.name, 'success without Sharepoint' );
+
                             res.send(set);
                           }
                         });
@@ -1284,6 +1313,8 @@ exports.uploadFileToDocument = function(req,res,next){
                             res.send(error);
                           }
                           else{
+                            logger.log('info', '%s uploadFileToDocument, %s', req.user.name, 'success with Sharepoint' );
+
                             res.send(set);
                           }
                         });
@@ -1347,6 +1378,8 @@ exports.create = function(req,res,next){
         res.send(error);
       }
       else{
+        logger.log('info', '%s create, %s', req.user.name, 'success without folder' );
+
         res.send(result);
       }
     });
@@ -1388,6 +1421,7 @@ exports.create = function(req,res,next){
             res.send(error);
           }
           else{
+            logger.log('info', '%s create, %s', req.user.name, 'success with folder' );
             res.send(result);
           }
         });
@@ -1407,8 +1441,6 @@ exports.deleteDocument = function (req, res) {
   Document.find({ _id: req.params.id }, function (err, file) {
     if (err) {
       logger.log('error', '%s deleteDocument, %s', req.user.name,' Document.find', {error: err.message});
-
-      console.log(err);
     }
     else {
       var spPath = file[0]._doc.spPath;
@@ -1445,6 +1477,12 @@ exports.deleteDocument = function (req, res) {
           logger.log('error', '%s deleteDocument, %s', req.user.name,' request', {error: error.message});
 
         }
+        else{
+          logger.log('info', '%s deleteDocument, %s', req.user.name, 'success with SP' );
+
+          res.sendStatus(200);
+
+        }
      //   var creator = folderName;
      //   if (creator == user) {
       //  }
@@ -1457,10 +1495,10 @@ exports.deleteDocument = function (req, res) {
     Document.remove({ _id: req.params.id }, function (err) {
       if (err) {
         logger.log('error', '%s deleteDocument, %s', req.user.name,' Document.remove', {error: err.message});
-
-        console.log(err);
       }
       else {
+        logger.log('info', '%s deleteDocument, %s', req.user.name, 'success without SP' );
+
         res.sendStatus(200);
       }
     });
@@ -1510,6 +1548,10 @@ exports.update2 = function (req, res, next) {
           logger.log('error', '%s update2, %s', req.user.name,' Document.update', {error: err.message});
 
         }
+
+        else{
+          logger.log('info', '%s update2, %s', req.user.name, 'DB update success' );
+
         if (documents != null && documents != undefined && (documents.length > 0)) {
           var watchReq = [];
           for (var i = 0; i < watchArray.length; i++) {
@@ -1547,6 +1589,8 @@ exports.update2 = function (req, res, next) {
                   res.send('error');
                 }
                 else {
+                  logger.log('info', '%s update2, %s', req.user.name, 'success with SP' );
+
                   res.send('OK');
                 }
               });
@@ -1561,6 +1605,9 @@ exports.update2 = function (req, res, next) {
 
           });
         }
+      }
+
+
       });
     next();
   }).catch(function(err){
@@ -1642,6 +1689,10 @@ exports.update = function (req, res, next) {
                     logger.log('error', '%s update, %s', req.user.name,' request', {error: error.message});
 
                   }
+                  else{
+                    logger.log('info', '%s update, %s', req.user.name, 'success with SP' );
+
+                  }
               });
             }).catch(function(err){
               logger.log('error', '%s update, %s', req.user.name,' getUsers', {error: err.message});
@@ -1693,6 +1744,10 @@ exports.update = function (req, res, next) {
                 logger.log('error', '%s update, %s', req.user.name,' request', {error: error.message});
 
               }
+              else{
+                logger.log('info', '%s update, %s', req.user.name, 'success with SP' );
+
+              }
               });
 
           }).catch(function(err){
@@ -1730,6 +1785,8 @@ exports.update = function (req, res, next) {
 
               res.send(err);
             }else{
+              logger.log('info', '%s update, %s', req.user.name, 'DB update success' );
+
               res.send(result);
             }
           });
@@ -1811,6 +1868,14 @@ exports.sign = function (req, res, next) {
                 'method': 'POST',
                 'json': json
               }, function (error, resp, body) {
+                if(error){
+                  logger.log('error', '%s sign, %s', req.user.name,' request', {error: error.message});
+
+                }
+                else{
+                  logger.log('info', '%s sign, %s', req.user.name, 'success with SP' );
+
+                }
 
 
 
@@ -1836,6 +1901,8 @@ exports.signNew = function (req, res, next) {
     _id: req.locals.data.body.entityId
   }).exec(function (err, entity) {
     if (err) {
+      logger.log('error', '%s signNew, %s', req.user.name,' query', {error: error.message});
+
       req.locals.error = err;
     }
     if (!entity) {
@@ -1866,6 +1933,8 @@ exports.signNew = function (req, res, next) {
     _id: req.locals.data.body.entityId
   }).exec(function (err, entity) {
     if (err) {
+      logger.log('error', '%s signNew, %s', req.user.name,' query', {error: error.message});
+
       req.locals.error = err;
     }
     if (!entity) {
@@ -1893,10 +1962,14 @@ exports.receiveDocument = function(req,res,next){
     if(error){
         //TBD
 //      res.send(error);
+logger.log('error', '%s receiveDocument, %s', req.user.name,'  Document.update', {error: error.message});
+
         console.log("error updating sender user read") ;
 
     }
     else{
+      logger.log('info', '%s receiveDocument, %s', req.user.name, 'success' );
+
         //TBD
 //      res.send('ok');
       console.log("success updating sender user read") ;
@@ -1906,9 +1979,13 @@ exports.receiveDocument = function(req,res,next){
   //    console.log("updating doc status to viewed") ;  
   Document.update({'_id':id},{$set:{viewed: true}},function(error,result){
     if(error){
+      logger.log('error', '%s receiveDocument, %s', req.user.name,'  Document.update', {error: error.message});
+
       res.send(error);
     }
     else{
+      logger.log('info', '%s receiveDocument, %s', req.user.name, 'success' );
+
       res.send('ok');
     }
   });
@@ -1923,9 +2000,13 @@ exports.distributedDocument = function(req,res,next){
   Document.update({'_id':id},{$set:{status:"viewed"}},function(error,result){
 //    console.log("updating doc status to viewed") ;  
     if(error){
+      logger.log('error', '%s distributedDocument, %s', req.user.name,'  Document.update', {error: error.message});
+
       res.send(error);
     }
     else{
+      logger.log('info', '%s distributedDocument, %s', req.user.name, 'success' );
+
       res.send('ok');
     }
   });
@@ -1945,9 +2026,13 @@ exports.readByDocument = function(req,res,next){
     '_id': { $in: readbyToId }
     }, function(err, docs){
       if(err){
+        logger.log('error', '%s readByDocument, %s', req.user.name,'   User.find', {error: err.message});
+
         res.send(error);
       }
       else{
+        logger.log('info', '%s readByDocument, %s', req.user.name, 'success' );
+
         res.send(docs);
       }
       });
@@ -1968,9 +2053,13 @@ exports.sentToDocument = function(req,res,next){
     '_id': { $in: sentToId }
     }, function(err, docs){
       if(err){
+        logger.log('error', '%s sentToDocument, %s', req.user.name,'   User.find', {error: err.message});
+
         res.send(error);
       }
       else{
+        logger.log('info', '%s readByDocument, %s', req.user.name, 'success' );
+
         res.send(docs);
       }
       });
@@ -2023,6 +2112,8 @@ exports.sendDocument = function (req, res, next) {
       var doc2 = new Document(doc);
       doc2.save(function(error,result){
         if(error||!result){
+          logger.log('error', '%s sendDocument, %s', req.user.name,'    doc2.save', {error: err.message});
+
             console.log("error sending document");
             console.log(error);
             console.log(result);
@@ -2051,11 +2142,14 @@ exports.sendDocument = function (req, res, next) {
                   });
                   attachment.save(function(error,result2){
                     if(error||!result2){
+                      logger.log('error', '%s sendDocument, %s', req.user.name,'    attachment.save', {error: "error"});
+
                         console.log("error sending document");
                         console.log(error);
                         console.log(result2);
                     }
                     else{
+                      logger.log('info', '%s sendDocument, %s', req.user.name, 'success' );
 
                     }
                   });
@@ -2099,6 +2193,8 @@ exports.sendDocument = function (req, res, next) {
     }
     Document.update({'_id':officeDocument._id},{$set:sendingForm},function(error,result){
       if(error||!result){
+        logger.log('error', '%s sendDocument, %s', req.user.name,'    Document.update', {error: "error"});
+
         res.send(error);
       }
       else{
@@ -2124,6 +2220,14 @@ exports.sendDocument = function (req, res, next) {
               "method":'POST',
               "json":json
             }, function(error,resp,body){
+              if(error){
+                logger.log('error', '%s sendDocument, %s', req.user.name,'    request', {error: error.message});
+
+              }
+              else{
+                logger.log('info', '%s sendDocument, %s', req.user.name, 'success' );
+
+              }
             res.send(sendingForm); 
             }
             );
