@@ -137,6 +137,12 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
             };
 
+            $scope.editorProperties = {
+                'PromoteToEditor': '',
+                'DemoteToViewer': '',
+                'PromoteToEditor': '',
+            };
+
             $scope.addMember = function(member) {
                 $scope.showSelect = false;
                 if (member.type) {

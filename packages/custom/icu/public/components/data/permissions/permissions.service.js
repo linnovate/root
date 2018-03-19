@@ -8,8 +8,16 @@ angular.module('mean.icu.data.permissionsservice', [])
         var commenterPerms = {
             'summary' : false,
             'description' : false,
-            'tabs' : false,
+            'tabs' : true,
             'tab-content' : true,
+            'watchers' : false,
+        };
+
+        var viewerPerms = {
+            'summary' : false,
+            'description' : false,
+            'tabs' : true,
+            'tab-content' : false,
             'watchers' : false,
         };
 
@@ -43,7 +51,7 @@ angular.module('mean.icu.data.permissionsservice', [])
                             break;
                         case 'commenter': have_perm = commenterPerms[type];
                             break;
-                        case 'viewer': have_perm = false;
+                        case 'viewer': have_perm = viewerPerms[type];
                             break;
                     }
                 }
