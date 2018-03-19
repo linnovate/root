@@ -35,8 +35,20 @@ function recycleGetBin(req, res, next) {
   });
 }
 
+function searchAll(req, res, next) {
+  var entityType = req.params.entity || req.locals.data.entityName;
+  let recycledPromise = entityService.searchAll(entityType) ;
+  
+  recycledPromise.then(function(result) {    
+    req.locals.result = result; 
+    res.send(result) ;
+//    next() ;
+  });
+}
+
 module.exports = {
   recycleEntity: recycleEntity,
   recycleRestoreEntity: recycleRestoreEntity,
-  recycleGetBin: recycleGetBin
+  recycleGetBin: recycleGetBin,
+  searchAll: searchAll
 };

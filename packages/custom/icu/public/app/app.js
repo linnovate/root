@@ -1483,6 +1483,7 @@ angular.module('mean.icu').config([
                 url: '/search/:query',
                 params: {
                     dateUpdated: 'active',
+                    recycled:  null
                 },
                 views: {
                     'middlepane@main': {
@@ -1495,7 +1496,11 @@ angular.module('mean.icu').config([
                     }
                 },
                 resolve: {
-                    results: function (SearchService, $stateParams) {
+                    results: function (EntityService,SearchService, $stateParams, $location) {
+                        let unmerged;
+                        if ($stateParams.recycled == true)  {
+                            $location.search('recycled', 'true');
+                        }
                         if ($stateParams.query && $stateParams.query.length) {
                             return SearchService.find($stateParams.query);
                         } else {
@@ -1509,12 +1514,12 @@ angular.module('mean.icu').config([
                                 return {};
                             }
                         }
-                    },
+                     },
                     tasks: function (results) {
                         return _(results).filter(function (r) {
                             return r._type === 'task';
                         });
-                    },
+                    },              
                     term: function ($stateParams) {
                         return $stateParams.query;
                     }

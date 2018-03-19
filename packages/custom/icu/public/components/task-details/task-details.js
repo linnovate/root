@@ -58,7 +58,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         var backupEntity = JSON.parse(JSON.stringify($scope.task));
 
         $scope.people = people.data || people;
-        if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+        if ($scope.people.length && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
             var newPeople = {
                 name: 'no select'
             };
