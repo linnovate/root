@@ -11,7 +11,7 @@
             <div class="title"><b>{{document.name}}<span> | {{document.size | bytes }}</span></b></div>
             <!-- <div class="time">{{document.created | date:'medium'}}</div> -->
             <span class="txt">Uploaded by <span class="txt attCreator">{{document.attUser}}</span>, </span>
-            <span class="txt attCreated">{{document.created | date : 'h:mma MMM d, yyyy'}}</span>            
+            <span class="txt attCreated">{{document.created | date : 'h:mma MMM d, yyyy'}}</span>
             <div id="AllDocumentIcons">
                 <!-- <button class="DocumentIconsLine" id="Document-icon-revert">
                     <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-revert1.png" src="/icu/assets/img/icon-revert1.png" tooltips tooltip-side="left" tooltip-template="{{'revert' | i18next}}">
@@ -21,7 +21,7 @@
                 </button> -->
                 <button class="DocumentIconsLine" id="Document-icon-view" icu-open-modal="attachment" entity-name="document-preview" show-modal="true" modal-name="document-preview" data="document">
                         <!-- preview -->
-                        <img tooltip-side="left" tooltip-side="left" tooltips tooltip-template="{{'preview' |  i18next}}" 
+                        <img tooltip-side="left" tooltip-side="left" tooltips tooltip-template="{{'preview' |  i18next}}"
                         class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-view.svg" src="/icu/assets/img/icon-view.svg">
                 </button>
                 <!-- <button class="DocumentIconsLine" id="Document-icon-edit">
@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div class="add-update" ng-show="stateParams.id">
+    <div class="add-update" ng-show="stateParams.id" ng-class="{ 'disabled' : !havePermissions('watchers')}">
         <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save()">
             <textarea ctrlenter="save()" ng-model="activity.description" ng-focus="expandUpdate()" ng-blur="minimizeUpdate()" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
 

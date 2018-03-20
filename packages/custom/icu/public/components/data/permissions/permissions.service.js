@@ -5,11 +5,27 @@ angular.module('mean.icu.data.permissionsservice', [])
         var EntityPrefix = '/permissions';
         var me = UsersService.getMe().$$state.value;
 
+        var editorPerms = {
+            'summary' : true,
+            'description' : true,
+            'tabs' : true,
+            'tab-content' : true,
+            'watchers' : true,
+        };
+
         var commenterPerms = {
             'summary' : false,
             'description' : false,
-            'tabs' : false,
+            'tabs' : true,
             'tab-content' : true,
+            'watchers' : false,
+        };
+
+        var viewerPerms = {
+            'summary' : false,
+            'description' : false,
+            'tabs' : true,
+            'tab-content' : false,
             'watchers' : false,
         };
 
@@ -39,11 +55,11 @@ angular.module('mean.icu.data.permissionsservice', [])
             for(var prop in entity.permissions){
                 if(entity.permissions[prop].id === me._id){
                     switch (entity.permissions[prop].level){
-                        case 'editor': have_perm =  true;
+                        case 'editor': have_perm =  editorPerms[type];
                             break;
                         case 'commenter': have_perm = commenterPerms[type];
                             break;
-                        case 'viewer': have_perm = false;
+                        case 'viewer': have_perm = viewerPerms[type];
                             break;
                     }
                 }

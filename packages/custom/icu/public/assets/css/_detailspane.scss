@@ -269,6 +269,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 .description {
     overflow: auto;
     margin: 3px 28px 0;
+    position: relative;
+    overflow-x: hidden;
     &::-webkit-scrollbar {
         width: 5px;
     }
@@ -311,6 +313,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     height: 57px;
     border-bottom: 3px solid $light-grey1;
     background-color: #F6F6F6;
+    position: relative;
 
     .favorite, .deletebtn, .due, .status, .tags, .color, .location , .HI , .send, .receive {
         height: $panel-height;
@@ -477,7 +480,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         float: left;
 
         @media screen and (max-width: $small-resolution) {
-            width: 200px;
+            width: 90px;
 
         }
 
@@ -1337,6 +1340,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     height: $switcher-height;
     margin: 0 30px;
     border-bottom: 1px solid $light-grey1;
+    position: relative;
 
     .tab {
         @include button;
@@ -1366,6 +1370,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     padding: 10px 0;
     height: calc(100% - 30% - 55px - 40px - 40px);
     overflow: auto;
+    position: relative;
 }
 }
 
