@@ -22,12 +22,13 @@ Elasticsearch.register(function(app, auth, database) {
 
           var host = esConfig.host;
           var port = esConfig.port;
+          var hosts = esConfig.hosts;
           var log = esConfig.log ? esConfig.log : 'trace';
 
           Elasticsearch.settings({host:host,port:port,log:log});
 
           Elasticsearch.client = new elasticsearch.Client({
-              host: host + ':' + port,
+              hosts: hosts,
               log: log
           });
       });

@@ -95,7 +95,8 @@ module.exports = {
     log: 'trace',
     keepAlive: false,
     sniffOnConnectionFault:true,
-    maxRetries:50
+    maxRetries:50,
+    hosts: ['localhost:9200'] // Add all master nodes of the elastic cluster to the array
   },
 //   elasticsearch: {
 //     host: 'http://192.168.245.152',
