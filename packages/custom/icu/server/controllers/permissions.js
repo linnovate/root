@@ -45,7 +45,7 @@ exports.permError =
     return: the index in which the value exist, or null otherwise.
 */
 exports.searchIdIndex = function(idVal, arr) {
-  console.log("searchIdIndex");
+  // console.log("searchIdIndex");
   // console.log(JSON.stringify(arr));
   // console.log(JSON.stringify(idVal));
   // console.log("searchIdIndex<<<");
@@ -159,22 +159,29 @@ exports.updateContent = function(user, oldDoc, newDoc) {
   return true ;
 }
 
+exports.syncPermsArray = function(user, doc) { 
+  // console.log("syncPermsArray >>>>") ;
+  // console.log(doc) ;
+
+  return true ;
+}
+
 
 /* createContent
    returns a deffered promise: resolved / err
 */
 exports.createContent = function(user, oldDoc, newDoc) {
-  console.log("createContent") ;
-  var deffered = q.defer();
-  
+  console.log("permissions createContent") ;
   console.log(JSON.stringify(newDoc)) ;
+  let deffered = q.defer();
+  
   if (newDoc.type == 'comment') {
     
-    var Model = entityNameMap[newDoc.issue].mainModel;    
+    let Model = entityNameMap[newDoc.issue].mainModel;    
     
-      Model.findOne({'_id': oldDoc.issueId},function(err,doc){
-      console.log("doc") ;
-      console.log(doc) ;
+    Model.findOne({'_id': oldDoc.issueId},function(err,doc){
+      // console.log("doc") ;
+      // console.log(doc) ;
       let newPerms = Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
       
       if(!exports.allowUpdateContent(user, newPerms, {})) {
@@ -188,10 +195,53 @@ exports.createContent = function(user, oldDoc, newDoc) {
     })
     return deffered.promise;            
   }
+  if(newDoc.type == 'assign' && newDoc.issue == 'officeDocuments') {
+    console.log("assign:");      
+    console.log(JSON.stringify(newDoc));      
+  }
+  if(newDoc.type == 'updateWatcher' && newDoc.issue == 'officeDocuments') {
+    // this piece of code is designed to UPDATE permissions for new officeDoc watchers.
+    let Model = entityNameMap['officeDocument'].mainModel;        
+    Model.findOne({'_id': newDoc.issueId},function(err,doc){
+      // console.log("doc") ;
+      // console.log(doc) ;
+      let newPerms = Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
+      console.log(newPerms) ;
+
+      
+      let watcherAdded = String(newDoc.userObj._id) ;      
+      // console.log("updateWatcher:"); 
+      // console.log(watcherAdded);
+
+      let permLevel = String(watcherAdded) == String(newDoc.assign) ? 'commenter' : 'viewer' ;
+      let watcherAddedPerms = {id:String(watcherAdded),level:permLevel} ; // default watcher perms      
+
+      newPerms.push(watcherAddedPerms);
+      // console.log("updated perms array:");
+      // console.log(JSON.stringify(newPerms));
+      // console.log("--------------------");
+      doc.permissions = newPerms ;  
+      // console.log(JSON.stringify(doc));      
+      
+      doc.save(function(err,result){
+//         todo        
+//         if(err){
+//         }
+//         else{          
+//         }
+//         return deffered.promise;
+      });
+      deffered.resolve(newDoc) ;  
+      return deffered.promise;        
+    })
+    return deffered.promise;        
+  }
   else {
     deffered.resolve("OK") ;  
     return deffered.promise;        
   }
+  deffered.resolve("OK") ;  
+  return deffered.promise;        
 }
 
 
@@ -214,16 +264,16 @@ function cleanArray(actual) {
 exports.updatePermsArray = function(user, oldDoc, newDoc) {
   console.log("updatePermsArray") ;
   console.log("// check if the added watcher is the assignee:") ;
-      console.log(JSON.stringify(newDoc)) ;
+  console.log(JSON.stringify(newDoc)) ;
       
 
-  let oldWatchers = oldDoc.watchers.map(function (item) {
+  let oldWatchers = oldDoc.watchers instanceof Array ? oldDoc.watchers.map(function (item) {
     return String(item._doc._id) ;
-  }) ;
+  }) : [];
 
-  let newWatchers = newDoc.watchers.map(function (item) {
+  let newWatchers = oldDoc.watchers instanceof Array ? newDoc.watchers.map(function (item) {
     return String(item);
-  }) ;
+  }) : [] ;
 
   newWatchers = cleanArray(newWatchers) ;
 

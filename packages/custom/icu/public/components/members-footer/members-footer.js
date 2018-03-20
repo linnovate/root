@@ -26,6 +26,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                 $scope.me = me;
             });
 
+            console.log("permissions: " + JSON.stringify($scope.entity.permissions,null,2)) ;
             var groupTypes = config.circles.footer;
 
             var getWatchersGroups = function() {
@@ -95,16 +96,23 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
 
                 if(context.main=="officeDocuments"){
-                    var a = [];
+                    let a = [];
                     entity.watchers.forEach(function(watcher){
-                        a.push(watcher._id);
+                        if(watcher instanceof Object) {
+                            a.push(String(watcher._id)) ;
+                        }
+                        else {
+                            a.push(String(watcher)) ;
+                        }
                     });
+
                     var json = {
                         'name':'watchers',
                         'newVal':a
                     }
-                    service.update(entity,json, action, member._id);
-                    //$state.reload();
+                    entity.watchers = a;
+                    service.update(entity,json, action, member._id);                    
+                    $state.reload();
                 }
                 else{
                     service.update(entity, data, action, member._id);
