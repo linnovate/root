@@ -7,7 +7,8 @@ var smtpTransport = require('nodemailer-smtp-transport');
 var EmailTemplate = require('../../../mail-templates/node_modules/email-templates').EmailTemplate;
 var icalToolkit = require('ical-toolkit');
 var path = require('path');
-var URL = "http://localhost:3002"
+var URL = "http://localhost:3002";
+var logger = require('./logger')
 
 // node modules for creating PDF files
 var officegen = require('officegen');
@@ -50,23 +51,23 @@ return new Promise(function (fulfill, reject){
   var path = 'files/notes/'+discussionId+".docx";
   var out = fs.createWriteStream (path);
     out.on ('error', function (err) {
-    console.log (err);
-    reject("error");
+    logger.log('error', '%s writeDocxToFile, %s', req.user.name, ' fs.createWriteStream', {error: err.message});
+    reject(err);
   });
     docx.generate ( out, {
       'finalize': function ( written ) {
           console.log ( 'Finish to create a docx file.\nTotal bytes created: ' + written + '\n' );
           exec('lowriter --headless --convert-to pdf ' + path, function (err, stout, sterr){
           if(err){
-            console.log('error in lowriter');
-            reject("error");
+            logger.log('error', '%s writeDocxToFile, %s', req.user.name, ' convert-to pdf', {error: err.message});
+            reject(err);
             return;
           }
           else{
-            console.log("not error in lowriter");
             exec('mv ' + discussionId + '.pdf' + ' ' + 'files/notes/'+discussionId + '.pdf' , function (err, stout, sterr){
             if (err) {
-              reject("error");
+              logger.log('error', '%s writeDocxToFile, %s', req.user.name, ' save pdf file', {error: err.message});
+              reject(err);
             } 
             else {          
               fulfill("success");
@@ -76,8 +77,8 @@ return new Promise(function (fulfill, reject){
           });
     },
       'error': function ( err ) {
-          console.log ( err );
-          reject("error");
+          logger.log('error', '%s writeDocxToFile, %s', req.user.name, ' docx.generate', {error: err.message});
+          reject(err);
       }
   });
 });
@@ -93,10 +94,16 @@ function addTasks(docx,tasks,discussionId,tasksNum){
             fulfill('success');
           }
           else{
+            logger.log('error', '%s addTasks, %s', req.user.name, ' addTasksToDocx', {error: "Unknown Error"});
+
             reject('error');
           }
         }
-      );
+      ).catch(function(err){
+        logger.log('error', '%s addTasks, %s', req.user.name, ' addTasksToDocx', {error: err.message});
+        reject(err);
+
+      });
     }
     else{
     var assigns = new Array(tasks.length);
@@ -106,8 +113,8 @@ function addTasks(docx,tasks,discussionId,tasksNum){
       _id: tasks[i].assign
       }).exec(function (err, user) {
         if(err){
-          reject("error");
-          console.log("ERROR");
+          logger.log('error', '%s addTasks, %s', req.user.name, ' User.findOne', {error: err.message});
+          reject(err);
           return;
         }
         else{
@@ -127,10 +134,14 @@ function addTasks(docx,tasks,discussionId,tasksNum){
                   fulfill('success');
                 }
                 else{
-                  reject('error');
+                  logger.log('error', '%s addTasks, %s', req.user.name, ' addTasksToDocx', {error: "Unknown Error"});
+                  reject("error");
                 }
               }
-            );
+            ).catch(function(err){
+              logger.log('error', '%s addTasks, %s', req.user.name, ' addTasksToDocx', {error: err.message});
+              reject(err);
+            });
           }
         }
     });
@@ -152,10 +163,12 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
         fulfill('success');
       }
       else{
+        logger.log('error', '%s addTasksToDocx, %s', req.user.name, ' writeDocxToFile', {error: 'Unknown Error'});
+
         reject('error');
       }
       });
-      return;
+
     }
     for(var i = 0 ; i < tasksNum ; i++){
       var pObj = docx.createP ({align: 'right' });
@@ -244,8 +257,14 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
       fulfill('success');
     }
     else{
+      logger.log('error', '%s addTasksToDocx, %s', req.user.name, ' writeDocxToFile', {error: 'Unknown Error'});
+
       reject('error');
     }
+    }).catch(function(err){
+      logger.log('error', '%s addTasksToDocx, %s', req.user.name, ' writeDocxToFile', {error: err.message});
+      reject(err);
+
     });
   });
 }
@@ -257,7 +276,7 @@ function createPDF(discussion , tasks){
     console.log ( 'Finish to create a docx file.\nTotal bytes created: ' + written + '\n' );
     });
     docx.on ( 'error', function ( err ) {
-      console.log ( err );
+      logger.log('error', '%s createPDF, %s', req.user.name, ' docx (officegen)', {error: err.message});
     });
 
     //Today's date
@@ -400,8 +419,12 @@ if(discussion.watchers&&discussion.watchers.length>0){
         fulfill('success');
       }
       else{
+        logger.log('error', '%s createPDF, %s', req.user.name, ' addTasks', {error: "Unknown Error"});
         reject('error');
       }
+    }).catch(function(err){
+      logger.log('error', '%s createPDF, %s', req.user.name, ' addTasks', {error: err.message});
+        reject(err);
     });
 
 });
@@ -538,6 +561,11 @@ exports.send = function(type, data) {
 
   data.attendees.join(', ');
   exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
+    if(error){
+      logger.log('error', '%s send, %s', req.user.name, ' pwd', {error: error.message});
+    }
+    
+
     rootPath = stdout;
     if(data.projects){
       data.projects.forEach(function(p){
@@ -576,6 +604,9 @@ exports.send = function(type, data) {
 
     return Q.all(promises);
   });
+  }).catch(function(err){
+    logger.log('error', '%s send, %s', req.user.name, ' createPDF', {error: err.message});
+
   });
   }); //Creating the PDF file, and receiving its path
 
@@ -606,6 +637,9 @@ exports.send = function(type, data) {
     });
 
     return Q.all(promises);
+  }).catch(function(err){
+    logger.log('error', '%s send, %s', req.user.name, ' render', {error: 'Unknown Error'});
+
   });
 };
 
@@ -662,7 +696,11 @@ exports.sendMyTasksOfTodaySummary = function(type, data) {
   var content = builder.toString();
   var buffer = new Buffer(content);
 
-  exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
+  exec("pwd | tr -d '\n'", function(error, stdout, stderr) {
+    if(error){
+      logger.log('error', '%s sendMyTasksOfTodaySummary, %s', req.user.name, ' pwd', {error: error.message});
+
+    } 
     rootPath = stdout;
       render(type, data).then(function(results) {
     var promises = emails.map(function(recipient) {
@@ -679,6 +717,9 @@ exports.sendMyTasksOfTodaySummary = function(type, data) {
     });
 
     return Q.all(promises);
+  }).catch(function(err){
+    logger.log('error', '%s sendMyTasksOfTodaySummary, %s', req.user.name, ' render', {error: "Unknown Error"});
+
   });
   });
 
@@ -698,6 +739,9 @@ exports.sendMyTasksOfTodaySummary = function(type, data) {
     });
 
     return Q.all(promises);
+  }).catch(function(err){
+    logger.log('error', '%s sendMyTasksOfTodaySummary, %s', req.user.name, ' render', {error: "Unknown Error"});
+
   });
 };
 
@@ -756,6 +800,10 @@ exports.sendMyTasksOfNextWeekSummary = function(type, data) {
   var buffer = new Buffer(content);
 
   exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
+    if(error){
+      logger.log('error', '%s sendMyTasksOfNextWeekSummary, %s', req.user.name, ' pwd', {error: error.message});
+
+    }
     rootPath = stdout;
       render(type, data).then(function(results) {
     var promises = emails.map(function(recipient) {
@@ -772,6 +820,9 @@ exports.sendMyTasksOfNextWeekSummary = function(type, data) {
     });
 
     return Q.all(promises);
+  }).catch(function(err){
+    logger.log('error', '%s sendMyTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: err.message});
+
   });
   });
 
@@ -791,6 +842,9 @@ exports.sendMyTasksOfNextWeekSummary = function(type, data) {
     });
 
     return Q.all(promises);
+  }).catch(function(err){
+    logger.log('error', '%s sendMyTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: err.message});
+
   });
 };
 
@@ -847,6 +901,10 @@ exports.sendGivenTasksOfNextWeekSummary = function(type, data) {
   var buffer = new Buffer(content);
 
   exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
+    if(error){
+      logger.log('error', '%s sendGivenTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: error.message});
+
+    }
     rootPath = stdout;
       render(type, data).then(function(results) {
     var promises = emails.map(function(recipient) {
@@ -863,7 +921,10 @@ exports.sendGivenTasksOfNextWeekSummary = function(type, data) {
     });
 
     return Q.all(promises);
-  });
+  }).catch(function(err){
+    logger.log('error', '%s sendGivenTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: err.message});
+
+  });;
   });
 
 
@@ -882,6 +943,9 @@ exports.sendGivenTasksOfNextWeekSummary = function(type, data) {
     });
 
     return Q.all(promises);
+  }).catch(function(err){
+    logger.log('error', '%s sendGivenTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: err.message});
+
   });
 };
 
@@ -910,5 +974,8 @@ exports.system = function(data) {
     });
 
     return Q.all(promises);
-  });
+  }).catch(function(err){
+    logger.log('error', '%s system, %s', req.user.name, ' render', {error: err.message});
+
+  });;
 };
