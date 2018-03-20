@@ -196,17 +196,53 @@ module.exports = function(entityName, options) {
     });
   }
 
+
+  function throwError(err) {
+    let deffered = q.defer();
+    deffered.reject(err);
+    return deffered.promise;
+    // or
+    // let p = new Promise() ;
+    // return p.reject(new error("blaba")) ;
+  }
+
+
   function create(entity, user, acl) {
     console.log("CRUD CREATE") ;
-    var deffered = q.defer();
+
+    //    check permsArray changes     
+    let allowed1 = permissions.syncPermsArray(user,entity) ;
+    if(!allowed1) {
+      return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
+    }
+
+    let deffered = q.defer();
 
     // check update permissions
-    var allowed = permissions.createContent(user,{}, entity) ;    
-    allowed.then(function(value) {
-      console.log(value);
+    let allowed2 = permissions.createContent(user,{}, entity) ;    
+    allowed2.then(function(entity) {      
+      // in case we are not allowed - catch!
+
+      // possibly handle other permission situations for next then, or reject/throw. 
+      // console.log("allowed then:");
+      // console.log(JSON.stringify(entity)) ;
+
+      // deffered.resolve(entity) ;
+      // return deffered.promise;
     })
     .then(function(value) {
-      // continue crud    
+      // console.log("allowed then then:");
+      // console.log(JSON.stringify(entity)) ;      
+
+      // RE-HACK - if this is document update - don't do anything
+      if(entity.officeDocuments=="officeDocuments" && entity.issueId) {
+        // officeDocs hacked crud - so that update operations are by create.
+        // we override this behaviour in permissions for watchers addition.
+        console.log("officeDocuments return without create....");
+        deffered.resolve(entity) ;
+        return deffered.promise;
+      }
+      // resume normal crud operation
       if (!entity.circles) entity.circles = {};
       circlesAcl.sign('mongoose', entity.sources, entity.circles, acl, function(error, circles) {
         if (error) deffered.reject(error);
@@ -216,7 +252,7 @@ module.exports = function(entityName, options) {
           entity.created = new Date();
           entity.updated = new Date();
           entity.creator = user.user._id;
-          entity.permissions = [{"id":String(user.user._id),"level":"editor"}];
+          entity.permissions = [{"id":String(user.user._id),"level":"editor"}];   
           console.log(JSON.stringify(entity)) ;
           deffered.resolve(new Model(entity).save(user).then(function(e) {
             orderController.addOrder(e, entity, Model);
@@ -225,29 +261,22 @@ module.exports = function(entityName, options) {
         }
       });
   }).catch(function(error){
-    console.log("CRUD RESOLVE") ;
+    console.log("CRUD CATCH ERROR") ;
+    console.trace() ;
     console.log(error);
     deffered.reject(error);
-//    return throwError(permissions.permError.denied + ":" + permissions.permError.allowCreateContent) ;
-//    throw new Error('something bad happened');
   });
 
-    return deffered.promise;
+  return deffered.promise;
   }
 
-
-  function throwError(err) {
-    var deffered = q.defer();
-    deffered.reject(err);
-    return deffered.promise;
-
-    // let p = new Promise() ;
-    // return p.reject(new error("blaba")) ;
-  }
 
   function update(oldE, newE, user, acl) {
 
 //    check permsArray changes     
+    console.log("CRUD UPDATE:") ;
+    console.log(JSON.stringify(oldE)) ;
+    console.log(JSON.stringify(newE)) ;
     var allowed = permissions.updatePermsArray(user,oldE, newE) ;
     if(!allowed) {
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;

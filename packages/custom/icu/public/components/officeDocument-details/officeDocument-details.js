@@ -398,6 +398,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 'newVal':officeDocument.assign
             };
 
+            
             if (officeDocument.assign !== undefined || officeDocument.assign !== null) {
                 // check the assignee is not a watcher already
                 let filtered = officeDocument.watchers.filter(watcher => {
@@ -405,8 +406,10 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 });
 
                 // add assignee as watcher
-                if(filtered.length == 0) {                    
+                if(filtered.length == 0) {
+                    console.log("officeDocument updateAssign updating:")
                     officeDocument.watchers.push(officeDocument.assign);  
+                    console.log(officeDocument.watchers) ;
                 }                              
             }
 
