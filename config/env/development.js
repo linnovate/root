@@ -95,8 +95,7 @@ module.exports = {
     log: 'trace',
     keepAlive: false,
     sniffOnConnectionFault:true,
-    maxRetries:50,
-    hosts: ['localhost:9200'] // Add all master nodes of the elastic cluster to the array
+    maxRetries:50
   },
 //   elasticsearch: {
 //     host: 'http://192.168.245.152',
@@ -139,6 +138,6 @@ module.exports = {
     libraryName:"libraryName",
     isWorking:false
   },
-  usersDomain:"@domain"
-
+  usersDomain:"@domain",
+  omerElastic: ['localhost:9200', 'localhost:9201', 'localhost:9202'] // Add all master nodes of the elastic cluster to the array
 };
