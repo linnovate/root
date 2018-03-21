@@ -61,6 +61,9 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                     return TasksService.create(task).then(function(result) {
                         task.__state = creatingStatuses.Created;
 
+                        TasksService.getById(task.parent).then(function(parentTask) {
+                            task.watchers = parentTask.watchers ;
+                        }) ;
                         $scope.tasks.push(_(newTask).clone());
 
                         return task;

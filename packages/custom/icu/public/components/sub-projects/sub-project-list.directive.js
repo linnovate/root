@@ -59,6 +59,11 @@ angular.module('mean.icu.ui.subprojectslistdirective', [])
                     return ProjectsService.create(project).then(function(result) {
                         project.__state = creatingStatuses.Created;
 
+                        ProjectsService.getById(project.parent).then(function(parentProj) {
+                            project.watchers = parentProj.watchers ;
+                        }) ;
+
+
                         $scope.projects.push(_(newProject).clone());
 
                         return project;

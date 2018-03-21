@@ -349,17 +349,18 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
 
   // watcher added
   let watcherAdded = leftIntersect(newWatchers,oldWatchers) ;
-
   if(watcherAdded.length > 0) {
     // check if the added watcher is the assignee:      
-    console.log("ASSIGNEE:") ;
-    console.log(JSON.stringify(newDoc.assign)) ;
-    let permLevel = String(watcherAdded[0]) == String(newDoc.assign) ? 'commenter' : 'viewer' ;
-    console.log("LEVEL:") ;
-    console.log(permLevel) ; 
-        
-    let watcherAddedPerms = {id:String(watcherAdded[0]),level:permLevel} ; // default watcher perms
-    newPerms.push(watcherAddedPerms);
+    // console.log("ASSIGNEE:") ;
+    // console.log(JSON.stringify(newDoc.assign)) ;
+    watcherAdded.forEach(function(watcher) {
+      let permLevel = String(watcher) == String(newDoc.assign) ? 'commenter' : 'viewer' ;
+      
+      // console.log("LEVEL:") ;
+      // console.log(permLevel) ;           
+      let watcherAddedPerms = {id:String(watcher),level:permLevel} ; // default watcher perms
+      newPerms.push(watcherAddedPerms);
+    })
   }                        
   // console.log("old-->");
   // console.log(JSON.stringify(oldWatchers));
