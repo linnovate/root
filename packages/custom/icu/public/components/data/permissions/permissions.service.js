@@ -39,6 +39,12 @@ angular.module('mean.icu.data.permissionsservice', [])
             return perms;
         }
 
+        function haveEditorPermissions(entity, user){
+            var member = user || me;
+            var user_permission = _.find(entity.permissions, {'id': member._id});
+            return user_permission.level == 'editor';
+        }
+
         function permissions(entity, type) {
             var qs = querystring.encode({
                 user: me,
@@ -74,5 +80,6 @@ angular.module('mean.icu.data.permissionsservice', [])
         return {
             canSee: permissionsToSee,
             havePermissions: permissions,
+            haveEditorPerms: haveEditorPermissions,
         };
     });

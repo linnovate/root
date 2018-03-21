@@ -575,6 +575,10 @@ angular.module('mean.icu.ui.taskdetails', [])
             return (PermissionsService.havePermissions(entity, type) && !$scope.isRecycled);
         };
 
+        $scope.haveEditiorsPermissions = function(){
+            return PermissionsService.haveEditorPerms(entity);
+        };
+
         $scope.permsToSee = function(){
             return PermissionsService.canSee(entity);
         };
