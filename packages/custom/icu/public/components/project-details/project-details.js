@@ -49,6 +49,8 @@ angular.module('mean.icu.ui.projectdetails', [])
             }
         }
 
+        $scope.isRecycled = $scope.project.hasOwnProperty('recycled');
+
         ProjectsService.getStarred().then(function (starred) {
 
             // Chack if HI room created and so needs to show HI.png
@@ -251,7 +253,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.havePermissions = function(type){
-            return PermissionsService.havePermissions(entity, type);
+            return (PermissionsService.havePermissions(entity, type) && !$scope.isRecycled);
         };
 
         $scope.permsToSee = function(){
