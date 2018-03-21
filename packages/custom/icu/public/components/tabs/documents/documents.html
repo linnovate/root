@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div class="add-update" ng-show="stateParams.id" ng-class="{ 'disabled' : !havePermissions('watchers')}">
+    <div class="add-update" ng-show="stateParams.id" ng-class="{ 'disabled' : !havePermissions('tab-content')}">
         <form name="addupdateform" novalidate class="add-update-form" data-ng-submit="save()">
             <textarea ctrlenter="save()" ng-model="activity.description" ng-focus="expandUpdate()" ng-blur="minimizeUpdate()" required placeholder="{{ 'typeUpdateHere' | i18next }}"></textarea>
 
