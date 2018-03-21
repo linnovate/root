@@ -42,6 +42,8 @@ angular.module('mean.icu.ui.taskdetails', [])
             'color': 'rgb(0, 151, 167)'
         });
 
+        $scope.isRecycled = $scope.task.hasOwnProperty('recycled');
+
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         if ($scope.task._id) {
             TasksService.getStarred().then(function(starred) {
@@ -565,12 +567,12 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.deleteTemplate = function(id, index) {
             TasksService.deleteTemplate(id).then(function(result) {
                 $scope.template.splice(index, 1);
-            })
-        }
+            });
+        };
         $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
         $scope.havePermissions = function(type){
-            return PermissionsService.havePermissions(entity, type);
+            return (PermissionsService.havePermissions(entity, type) && !$scope.isRecycled);
         };
 
         $scope.permsToSee = function(){

@@ -208,9 +208,13 @@
         </div>
         <div class="tab-content"
              ng-class="{ 'disabled' : !havePermissions('tab-content')}"
-             data-ui-view="tab"></div>
+             data-ui-view="tab">
+        </div>
     </div>
     <div ng-if="discussion._id"
          ng-class="{ 'disabled' : !havePermissions('watchers')}"
-         icu-members-footer entity="discussion" users="people"></div>
+         icu-members-footer
+         entity="discussion"
+         users="people">
+    </div>
 </div>
