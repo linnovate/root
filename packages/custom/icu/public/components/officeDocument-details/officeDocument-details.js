@@ -405,8 +405,15 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     return watcher._id == officeDocument.assign
                 });
 
+
+                let index = officeDocument.watchers.findIndex(function(watcher) {
+                    console.log("watcher", watcher) ;
+                    return watcher === officeDocument.assign ;
+                }) ;
+                
+
                 // add assignee as watcher
-                if(filtered.length == 0) {
+                if(filtered.length == 0 && index === -1) {
                     console.log("officeDocument updateAssign updating:")
                     officeDocument.watchers.push(officeDocument.assign);  
                     console.log(officeDocument.watchers) ;
