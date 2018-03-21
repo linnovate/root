@@ -1821,93 +1821,9 @@ exports.update = function (req, res, next) {
     Document.findOne({'_id':req.params.id},function(err,docToUpdate){
       docToUpdate['' + req.body.name]=req.body.newVal;
       docToUpdate['id']=docToUpdate._id;
-      
-      if(req.body.name=='assign') {
-        console.log("***************JSON.stringify(docToUpdate)*********************")  ;
-        console.log("***************before*********************")  ;
-        console.log(JSON.stringify(docToUpdate))  ;
-        // docToUpdate['permissions'] = [{"id": req.user._id, "level":"commenter"}];
-
-        
-        // push assignee permissions
-        console.log(JSON.stringify(docToUpdate.assign))  ;
-        var exist = permissions.searchIdIndex(String(docToUpdate.assign),docToUpdate['permissions']) ;     
-        if(exist == null) {
-          console.log("updating") ;      
-          var tmp = docToUpdate['permissions'].slice() ;
-          tmp.push({"id":String(docToUpdate.assign),"level":"commenter"});
-          docToUpdate['permissions'] = tmp ;
-
-
-          // we need to add assignee as watcher if the assignee is not a watcher already
-          var tmp2 = docToUpdate['watchers'] ;
-          tmp2.push(String(docToUpdate.assign))          
-          docToUpdate['watchers'] = tmp2 ;
-          console.log("***************after*********************") ;
-          console.log(JSON.stringify(docToUpdate));
-        }
-        // var existsWatcher = docToUpdate['watchers'].filter(function(item) {
-
-        //   item == docToUpdate.assign ;
-        // }) ;
-        // if(existsWatcher.length == 0) {
-        //   console.log("adding as watcher:") ;  
-        //   console.log(docToUpdate.assign) ;  
-
-        //   docToUpdate['watchers'].push(docToUpdate.assign) ;
-        //   console.log("***************watchers add*********************") ;
-        //   console.log(JSON.stringify(docToUpdate));
-        // }
-      }
-
-
 
       if (req.body.watchers) {
-        // console.log("req.body.watchers *******************************") ;      
-        // docToUpdate['watchers'] = req.body.watchers;
-
-
-        // docToUpdate['watchers'].forEach(function(watcher) {
-        //   console.log("updating permissions according to watchers:") ;      
-        //   console.log(watcher) ;
-
-        //   var permExists = docToUpdate['permissions'].map(function(perm) {
-        //     perm.id == watcher ;
-        //   }) ;
-        //   if(permExists.length == 0) {
-        //     console.log("found update for permissions...") ;
-        //     var tmp5 = docToUpdate['permissions'].slice() ;
-        //     tmp5.push({"id":String(docToUpdate.assign),"level":"commenter"});
-        //     docToUpdate['permissions'] = tmp5 ;
-        //   }
-        // }) ;
-
-
-
-
-        // rm excess permission as according to watchers
-        // docToUpdate['permissions'].forEach(function(perm) {
-        //   console.log("updating permissions according to watchers:") ;      
-        //   console.log(perm) ;
-        //   var watcherExists = docToUpdate['watchers'].map(function(watcher) {
-        //     console.log("watcher:") ;                  
-        //     console.log(watcher) ;
-        //       perm.id == item ;
-        //   }) ;
-
-        //   if(permissionExists.length == 0) {            
-        //     //remove excess permission
-        //     //docToUpdate['permissions']
-
-        //   }
-
-        //   tmp3.push({"id":String(docToUpdate.assign),"level":"commenter"});
-        //   docToUpdate['permissions'] = tmp ;
-        // }) ;
-        console.log("pushing doc update::::") ;
-        console.log(JSON.stringify(req.body.watchers)) ;
         docToUpdate['watchers'] = req.body.watchers;
-
       }
       docToUpdate.save(function(err,result){
         if(err){
