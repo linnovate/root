@@ -808,7 +808,7 @@ exports.getAll = function (req, res, next) {
       }   
       else {
         req.locals.result = data
-        logger.log('info', '%s getAll, %s,', req.user.name, 'get all document success' );
+       // logger.log('info', '%s getAll, %s,', req.user.name, 'get all document success' );
 
         res.send(data);
       } 
