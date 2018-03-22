@@ -56,27 +56,50 @@ function recycleEntity(entityType, id) {
 
 }
 
-
 function recycleRestoreEntity(entityType, id) {    
-        var Model = entityNameMap[entityType].mainModel;
-        var name = entityNameMap[entityType].name;
-        var promise = 
-          Model.findOne({
-            _id: id
-        }).exec(function (error, entity) {
-          entity.recycled = null
-          delete entity.recycled;
-          entity.save(function(err) {
-            console.log(err)
-            if (err) {
-              console.log(err);
-            }
-             else elasticsearch.save(entity, name);
-
-          });
-        });
-       return promise ;    
+  var Model = entityNameMap[entityType].mainModel;
+  var name = entityNameMap[entityType].name;
+  let promise = Model.findOneAndUpdate(
+    { _id: id },
+    { $unset : { recycled : ""}},
+    {new: true}, function(err, doc){
+      if(err){
+      }  
+      console.log("entity unrecycled")
+    })
+    .then(function(err) {
+    if (err) {
+      console.log(err);
+    }
+     else elasticsearch.save(entity, name);
+  });
+  return promise ;
 }
+
+// function recycleRestoreEntity(entityType, id) {    
+//         var Model = entityNameMap[entityType].mainModel;
+//         var name = entityNameMap[entityType].name;
+//         var promise = 
+//           Model.findOne({
+//             _id: id
+//         }).exec(function (error, entity) {
+//           entity.recycled = null
+//           delete entity.recycled;
+//           entity.update({ _id: id }, { $unset : { recycled : ""} })
+//           .then(function(err) {
+//             console.log("unrecycle entity.update")
+//             console.log(err)
+//             if (err) {
+//               console.log(err);
+//             }
+//              else elasticsearch.save(entity, name);
+
+//           });
+
+//         });
+//        return promise ;    
+// }
+
 
 function recycleGetBin(entityType) {  
   var request = [];
