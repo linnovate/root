@@ -41,8 +41,8 @@ angular.module('mean.icu.data.permissionsservice', [])
 
         function haveEditorPermissions(entity, user){
             var member = user || me;
-            var user_permission = _.find(entity.permissions, {'id': member._id});
-            return user_permission.level == 'editor';
+            var userPermission = _.find(entity.permissions, {'id': member._id});
+            return userPermission.level == 'editor';
         }
 
         function permissions(entity, type) {
@@ -56,21 +56,18 @@ angular.module('mean.icu.data.permissionsservice', [])
             }
 
             //untill permissions backend route isn't complete
-            var have_perm = false;
+            var havePerm = false;
 
-            for(var prop in entity.permissions){
-                if(entity.permissions[prop].id === me._id){
-                    switch (entity.permissions[prop].level){
-                        case 'editor': have_perm =  editorPerms[type];
-                            break;
-                        case 'commenter': have_perm = commenterPerms[type];
-                            break;
-                        case 'viewer': have_perm = viewerPerms[type];
-                            break;
-                    }
-                }
+            var currentUserPermissions = (_.find(entity.permissions, {'id':me._id})).level;
+            switch (currentUserPermissions){
+                case 'editor': havePerm =  editorPerms[type];
+                    break;
+                case 'commenter': havePerm = commenterPerms[type];
+                    break;
+                case 'viewer': havePerm = viewerPerms[type];
+                    break;
             }
-            return have_perm;
+            return havePerm;
             // return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
             //     WarningsService.setWarning(result.headers().warning);
             //     return result.data;
