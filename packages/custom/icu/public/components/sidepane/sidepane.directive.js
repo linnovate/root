@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
-    function controller($scope, $state, $stateParams, $filter, $location, $rootScope,
+    function controller($scope, $state, $stateParams,SettingServices, $filter, $location, $rootScope,
         context, SearchService, EntityService,
         NotifyingService, TasksService
     ){
@@ -44,7 +44,6 @@ directive('icuSidepane', function() {
             disabled: !EntityService.isActiveStatusAvailable()
         };
         /*---*/
-        
         $scope.isCurrentState = function(item) {
             
             if ((context.main === 'templateDocs') && (item.display !== undefined) && (item.display[1] === 'templateDocs'))
@@ -274,7 +273,7 @@ directive('icuSidepane', function() {
         return i.name;
     });
     
-    $scope.filterSearchByType = function() {
+    $scope.filterSearchByType = function(flag) {
         $scope.flag = false;
         if  ($stateParams.recycled == true){
             $stateParams.recycled = null;
@@ -304,7 +303,24 @@ directive('icuSidepane', function() {
         }
         for (let i=0; i< results.length; i++) {
             if (results[i]._type === $scope.filteringData.issue || $scope.filteringData.issue === 'all') {
-                filteredByType.push(results[i])
+                if ($rootScope.status) {
+                    if ($rootScope.status == 'active' ){
+                        let activeList = SettingServices.getActiveStatusList();
+                        if(activeList.indexOf(results[i].status)>-1){
+                            filteredByType.push(results[i])
+                          }
+                    }
+                    else if ($rootScope.status == 'nonactive' ){
+                        let archiveList = SettingServices.getNonActiveStatusList();
+                        if(archiveList.indexOf(results[i].status)>-1){
+                            filteredByType.push(results[i])
+                          }
+                    }
+                  else if(results[i].status == $rootScope.status){
+                    filteredByType.push(results[i])
+                  }
+                }
+                else filteredByType.push(results[i])
             }
             index = issuesOrder.indexOf(results[i]._type);
             if($stateParams.query == ''){
@@ -315,7 +331,9 @@ directive('icuSidepane', function() {
         }
         SearchService.filteringResults = filteredByType;
         
-        getEntitiesAndWatchers(filteredByType)
+        getEntitiesAndWatchers(filteredByType);
+        if (!flag && $rootScope.status )
+          $rootScope.$emit('changeStatus');
     };
     
     let getTruth = function(obj) { // return truth value in a single object
@@ -373,12 +391,24 @@ directive('icuSidepane', function() {
         },
         dateFormat: 'd.m.yy'
     };
+    function arrayUnique(array) {
+        var a = array.concat();
+        for(var i=0; i<a.length; ++i) {
+            for(var j=i+1; j<a.length; ++j) {
+                if(a[i] === a[j])
+                    a.splice(j--, 1);
+            }
+        }
     
+        return a;
+    }
+
+   
     
-    
-    $scope.filterActive = function () {
-        EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
-        $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
+     $scope.filterActive = function(type) {
+         $scope.activeToggle.field = type;
+         EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
+         $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
     };
     
     $scope.toggleRecycle = function () {

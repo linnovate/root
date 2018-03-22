@@ -1,9 +1,13 @@
+
 'use strict';
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context, $stateParams, $window,NotifyingService,TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
-
+    function controller($scope, $state, context,SettingServices, $rootScope, $stateParams,$location, $window,NotifyingService,TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
+        $scope.statusList = SettingServices.getStatusList();
+        let activeList = SettingServices.getActiveStatusList();
+        let archiveList = SettingServices.getNonActiveStatusList();
+       
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
             $scope.context = context;
             $scope.folders = folders;
@@ -13,6 +17,54 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.officeDocuments = officeDocuments;
             $scope.people = people;
         });
+        $rootScope.$on('changeStatus',function(){
+          $scope.AllStatus = $scope.statusList[$scope.filteringData.issue]
+        });
+
+        function arrayUnique(array) {
+            var a = array.concat();
+            for(var i=0; i<a.length; ++i) {
+                for(var j=i+1; j<a.length; ++j) {
+                    if(a[i] === a[j])
+                        a.splice(j--, 1);
+                }
+            }
+        
+            return a;
+        }
+        $scope.currentType = 'All';
+
+        $scope.isActive = function(type, status){
+         if (status !== 'active' && status !== 'nonactive' && status == type)
+           return true;
+         else  if (status !== 'active' && status !== 'nonactive' && status !== type)
+         return false;
+           else {
+            if($scope.currentType == 'All')
+            return false;
+          if($scope.currentType == 'active'){
+              if (activeList.indexOf(type) >-1)
+                return true
+          }
+          if($scope.currentType == 'nonactive'){
+            if (archiveList.indexOf(type) >-1)
+              return true
+          } 
+         }
+         
+          return false;
+        }
+       
+        $scope.AllStatus = [];
+
+        $scope.showM = function(type){
+            $scope.currentType = type;
+            if (type == 'empty')
+              $scope.AllStatus = [];
+            else if ($location.search().type)
+              $scope.AllStatus = $scope.statusList[$scope.filteringData.issue]
+            else $scope.AllStatus =  arrayUnique(activeList.concat(archiveList));
+        }
 
         NotifyingService.subscribe('editionData', function () {
             TasksService.getAll(0,2500,'created').then(function (data) {
@@ -88,6 +140,12 @@ angular.module('mean.icu.ui.displayby', [])
             }
 
         };
+
+        $scope.clearSearchType = function(){
+
+            $location.search('type', null);
+            $window.location.reload();
+        }
 
         $scope.getLinkUrl = function(){
             return $state.href('main.' + $scope.activeTab.state ,{'officeDocuments':undefined});
