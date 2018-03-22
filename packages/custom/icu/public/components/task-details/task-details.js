@@ -580,7 +580,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
 
         $scope.permsToSee = function(){
-            return PermissionsService.canSee(entity);
+            return PermissionsService.haveAnyPerms(entity);
         };
 
         // if ($scope.task &&

@@ -131,7 +131,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.permsToSee = function(){
-            return PermissionsService.canSee(entity);
+            return PermissionsService.haveAnyPerms(entity);
         };
 
         $scope.schedule = function (discussion) {
@@ -461,8 +461,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.update = function (discussion, type) {
-            let me = $scope.me;
-
 
             $scope.updateDatesString();
             DiscussionsService.update(discussion);

@@ -116,7 +116,7 @@ angular.module('mean.icu.ui.projectdetails', [])
             else {
                 // check the assignee is not a watcher already
                 let filtered = project.watchers.filter(watcher => {
-                    return watcher._id == project.assign
+                    return watcher._id == project.assign;
                 });
 
                 // add assignee as watcher
@@ -261,7 +261,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.permsToSee = function(){
-            return PermissionsService.canSee(entity);
+            return PermissionsService.haveAnyPerms(entity);
         };
 
         $scope.removeTag = function(tag) {
