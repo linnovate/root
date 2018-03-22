@@ -66,8 +66,6 @@ angular.module('mean.icu.ui.displayby', [])
             else $scope.AllStatus =  arrayUnique(activeList.concat(archiveList));
         }
 
-        $scope.people = UsersService.getPeople();
-
         NotifyingService.subscribe('editionData', function () {
             TasksService.getAll(0,2500,'created').then(function (data) {
                 $scope.tasks = data.data || data;
@@ -94,7 +92,7 @@ angular.module('mean.icu.ui.displayby', [])
             });
 
             UsersService.getAll(0,2500,'created').then(function (data) {
-                //$scope.people = data.data || data;
+                $scope.people = data.data || data;
             });
             $scope.createLists();
         }, $scope);
