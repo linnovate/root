@@ -41,6 +41,16 @@ angular.module('mean.icu.ui.subprojectslistdirective', [])
                     data = {
                         frequentUser: project.assign
                     }
+
+                    // check the assignee is not a watcher already
+                    let filtered = project.watchers.filter(watcher => {
+                        return watcher._id == project.assign && watcher != null
+                    });
+    
+                    // add assignee as watcher
+                    if(filtered.length == 0) {
+                        project.watchers.push(project.assign);
+                    }                                                                      
                 }
                 if (project.__state === creatingStatuses.NotCreated) {
                     project.__state = creatingStatuses.Creating;
@@ -48,6 +58,11 @@ angular.module('mean.icu.ui.subprojectslistdirective', [])
 
                     return ProjectsService.create(project).then(function(result) {
                         project.__state = creatingStatuses.Created;
+
+                        ProjectsService.getById(project.parent).then(function(parentProj) {
+                            project.watchers = parentProj.watchers ;
+                        }) ;
+
 
                         $scope.projects.push(_(newProject).clone());
 

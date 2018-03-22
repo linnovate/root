@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('ProjectsService', function(ApiUri, $http, NotifyingService, PaginationService, MeanSocket, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/projects';
     var data, selected;
 
@@ -135,6 +135,7 @@ angular.module('mean.icu.data.projectsservice', [])
                     }
                 });
             }
+            if (result.data && result.data.subProjects)
             for (var i = 0; i < result.data.subProjects.length; i++) {
                 if(result.data.subProjects[i].due) {
                     result.data.subProjects[i].due = new Date(result.data.subProjects[i].due);

@@ -8,6 +8,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                   $state,
                                                   TasksService,
                                                   ActivitiesService,
+                                                  PermissionsService,
                                                   context,
                                                   $stateParams,
                                                   $rootScope,
@@ -40,6 +41,8 @@ angular.module('mean.icu.ui.taskdetails', [])
             'class': 'create-new',
             'color': 'rgb(0, 151, 167)'
         });
+
+        $scope.isRecycled = $scope.task.hasOwnProperty('recycled');
 
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         if ($scope.task._id) {
@@ -308,13 +311,29 @@ angular.module('mean.icu.ui.taskdetails', [])
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
             task.status = $scope.statuses[1];
-
             if (context.entityName === 'discussion') {
                 task.discussion = context.entityId;
             }
 
             if (task.assign === undefined || task.assign === null) {
                 delete task['assign'];
+            }
+            else {
+                // var data = {
+                //     name: task.assign.name,
+                //     type: 'user',
+                //     action: 'added',
+                //     frequentUser: task.assign._id
+                // }
+
+                // check the assignee is not a watcher already
+                let filtered = task.watchers.filter(watcher => {
+                    return watcher._id == task.assign
+                });
+
+                if(filtered.length == 0) {
+                    task.watchers.push(task.assign);
+                }
             }
 
             TasksService.update(task).then(function(result) {
@@ -337,6 +356,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
 
         };
+
         //END Made By OHAD
 
         // Nevo
@@ -547,9 +567,21 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.deleteTemplate = function(id, index) {
             TasksService.deleteTemplate(id).then(function(result) {
                 $scope.template.splice(index, 1);
-            })
-        }
+            });
+        };
         $scope.delayedUpdate = _.debounce($scope.update, 2000);
+
+        $scope.havePermissions = function(type){
+            return (PermissionsService.havePermissions(entity, type) && !$scope.isRecycled);
+        };
+
+        $scope.haveEditiorsPermissions = function(){
+            return PermissionsService.haveEditorPerms(entity);
+        };
+
+        $scope.permsToSee = function(){
+            return PermissionsService.canSee(entity);
+        };
 
         // if ($scope.task &&
         //         ($state.current.name === 'main.tasks.byentity.details' ||

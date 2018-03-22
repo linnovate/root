@@ -4,9 +4,16 @@ angular.module('mean.icu.data.usersservice', [])
     .service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state, $cookies, $window, NotifyingService, WarningsService) {
     var EntityPrefix = '/users';
     var me = null;
+    var people = null;
+
+
+    function getPeople() {
+        return people;
+    }
 
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function(result) {
+            people = result.data;
             return result.data;
         });
     }
@@ -75,6 +82,7 @@ angular.module('mean.icu.data.usersservice', [])
         return $http.put('/api/users/' + user._id, user).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             me = result.data;
+            getAll();
             return result.data;
         });
     }
@@ -133,6 +141,7 @@ angular.module('mean.icu.data.usersservice', [])
         }).success(function(data) {
             me.profile.avatar = data.avatar;
             NotifyingService.notify('editionData');
+            getAll();
         });
     }
 
@@ -170,6 +179,7 @@ angular.module('mean.icu.data.usersservice', [])
         register: register,
         resetAvatar: resetAvatar,
         update: update,
+        getPeople: getPeople,
         updateAvatar: updateAvatar,
         onIdentity: onIdentity,
         loginToHi: loginToHi,

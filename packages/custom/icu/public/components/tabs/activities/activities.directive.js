@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function() {
-        function controller($scope, UsersService, DocumentsService, ActivitiesService, $stateParams, $state, $timeout, context, $http, FilesService) {
+        function controller($scope, UsersService, DocumentsService,PermissionsService, ActivitiesService, $stateParams, $state, $timeout, context, $http, FilesService) {
             $scope.isLoading = true;
             $scope.activity = {
                 description: ''
@@ -10,9 +10,14 @@ angular.module('mean.icu.ui.tabs')
 
             ActivitiesService.issue = $scope.entityName;
             ActivitiesService.issueId=$stateParams.id || $stateParams.entityId;
-            
+
             $scope.context = context;
-            $scope.stateParams = $stateParams
+            $scope.stateParams = $stateParams;
+
+            $scope.havePermissions = function(type){
+                //TODO: Fix after release: remove this if check and disable directive usage in tasks.my.activities without entity
+                if($scope.entity)return (PermissionsService.havePermissions($scope.entity, type) && $scope.isRecycled);
+            };
 
             $scope.details = $scope.context.entityName !== 'my' ? {
                 create: [{
@@ -135,12 +140,12 @@ angular.module('mean.icu.ui.tabs')
                     type: 'text',
                     value: 'updateDue'
                 }, {
-                    type: 'nbsp'    
+                    type: 'nbsp'
                 }, {
                     type: 'prev-date',
                     value: 'prev'
                 }, {
-                    type: 'nbsp'    
+                    type: 'nbsp'
                 }, {
                     type: 'to'
                 }, {
@@ -157,12 +162,12 @@ angular.module('mean.icu.ui.tabs')
                     type: 'text',
                     value: 'updateCreated'
                 }, {
-                    type: 'nbsp'    
+                    type: 'nbsp'
                 }, {
                     type: 'prev-date',
                     value: 'prev'
                 }, {
-                    type: 'nbsp'    
+                    type: 'nbsp'
                 }, {
                     type: 'to'
                 }, {
@@ -179,12 +184,12 @@ angular.module('mean.icu.ui.tabs')
                     type: 'text',
                     value: 'updateStartDue'
                 }, {
-                    type: 'nbsp'    
+                    type: 'nbsp'
                 }, {
                     type: 'prev-date',
                     value: 'prev'
                 }, {
-                    type: 'nbsp'    
+                    type: 'nbsp'
                 }, {
                     type: 'to'
                 }, {
@@ -201,12 +206,12 @@ angular.module('mean.icu.ui.tabs')
                     type: 'text',
                     value: 'updateEndDue'
                 }, {
-                    type: 'nbsp'    
+                    type: 'nbsp'
                 }, {
                     type: 'prev-date',
                     value: 'prev'
                 }, {
-                    type: 'nbsp'    
+                    type: 'nbsp'
                 }, {
                     type: 'to'
                 }, {
@@ -223,7 +228,7 @@ angular.module('mean.icu.ui.tabs')
                     type: 'text',
                     value: 'updateStatus'
                 }, {
-                    type: 'nbsp'    
+                    type: 'nbsp'
                 }, {
                     type: 'prev-string',
                     value: 'prev'
@@ -260,7 +265,7 @@ angular.module('mean.icu.ui.tabs')
                     type: 'deepObject',
                     value: ['userObj', 'lastname'],
                     klass: "user-name"
-                }],                
+                }],
                 updateColor: [{
                     type: 'text',
                     value: 'updateColor'
@@ -272,7 +277,7 @@ angular.module('mean.icu.ui.tabs')
                     type: 'deepObject',
                     value: ['userObj', 'lastname'],
                     klass: "user-name"
-                }], 
+                }],
                 updateLocation: [{
                     type: 'text',
                     value: 'updateLocation'

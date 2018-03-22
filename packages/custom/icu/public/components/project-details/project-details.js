@@ -12,6 +12,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                                                       $state,
                                                       ProjectsService,
                                                       ActivitiesService,
+                                                      PermissionsService,
                                                       EntityService,
                                                       $stateParams,
                                                       me
@@ -27,8 +28,10 @@ angular.module('mean.icu.ui.projectdetails', [])
         }
         $scope.tasks = tasks.data || tasks;
         $scope.projects = projects.data || projects;
+        $scope.project = entity || context.entity;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.tags = tags;
+        $scope.addSubProjects = false;
 
         $scope.tagInputVisible = false;
 
@@ -45,6 +48,8 @@ angular.module('mean.icu.ui.projectdetails', [])
                 $scope.people[i].job = $scope.people[i].name;
             }
         }
+
+        $scope.isRecycled = $scope.project.hasOwnProperty('recycled');
 
         ProjectsService.getStarred().then(function (starred) {
 
@@ -108,6 +113,18 @@ angular.module('mean.icu.ui.projectdetails', [])
             if (project.assign === undefined || project.assign === null) {
                 delete project['assign'];
             }
+            else {
+                // check the assignee is not a watcher already
+                let filtered = project.watchers.filter(watcher => {
+                    return watcher._id == project.assign
+                });
+
+                // add assignee as watcher
+                if(filtered.length == 0) {
+                    project.watchers.push(project.assign);
+                }
+            }
+
 
             ProjectsService.update(project).then(function(result) {
                 if (context.entityName === 'project') {
@@ -148,14 +165,75 @@ angular.module('mean.icu.ui.projectdetails', [])
             buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
         };
 
+        //due start
+        if ($scope.project.due) $scope.project.due = new Date($scope.project.due);
+
         $scope.dueOptions = {
-            onSelect: function () {
-                $scope.update($scope.project, 'due');
+            onSelect: function() {
+                $scope.updateDue($scope.project);
+            },
+            onClose: function() {
+                if ($scope.checkDate()){
+                    document.getElementById('ui-datepicker-div').style.display = 'block';
+                    $scope.open();
+                }else{
+                    document.getElementById('ui-datepicker-div').style.display = 'none';
+                    $scope.open();
+                }
             },
             dateFormat: 'd.m.yy'
         };
 
-         $scope.getUnusedTags = function() {
+        $scope.checkDate = function() {
+            var d = new Date();
+            d.setHours(0,0,0,0);
+            if (d > $scope.project.due) {
+                return true;
+            }
+            return false;
+        };
+
+        $scope.open = function() {
+            if ($scope.checkDate()) {
+                document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
+                document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
+            } else {
+                document.getElementById('past').style.display = 'none';
+            }
+        };
+
+        $scope.updateDue = function(project) {
+
+            if (context.entityName === 'discussion') {
+                project.discussion = context.entityId;
+            }
+
+            ProjectsService.updateDue(project, backupEntity).then(function(result) {
+                backupEntity = JSON.parse(JSON.stringify($scope.project));
+                ActivitiesService.data.push(result);
+            });
+
+            ProjectsService.update(project).then(function(result) {
+                if (context.entityName === 'project') {
+                    var projId = result.project ? result.project._id : undefined;
+                    if (projId !== context.entityId) {
+                        $state.go('main.projects.byentity', {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {
+                            reload: true
+                        });
+                    }
+                }
+            });
+        };
+        // end due
+
+        $scope.closeOldDateNotification = function(){
+            document.getElementById('past').style.display = 'none';
+        };
+
+        $scope.getUnusedTags = function() {
 
             return $scope.tags.filter(function(x) { return $scope.project.tags.indexOf(x) < 0 })
         };
@@ -172,6 +250,18 @@ angular.module('mean.icu.ui.projectdetails', [])
         	}
 
             $scope.tagInputVisible = false;
+        };
+
+        $scope.havePermissions = function(type){
+            return (PermissionsService.havePermissions(entity, type) && !$scope.isRecycled);
+        };
+
+        $scope.haveEditiorsPermissions = function(){
+            return PermissionsService.haveEditorPerms(entity);
+        };
+
+        $scope.permsToSee = function(){
+            return PermissionsService.canSee(entity);
         };
 
         $scope.removeTag = function(tag) {

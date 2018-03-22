@@ -1,12 +1,12 @@
 <div class="task-details">
-    <div class="permission" ng-if="task && !task._id">
+    <div class="permission" ng-if="task && !task._id && !permsToSee">
         <div class="perIcon">
         </div>
         <div class="perTitle">{{ 'perTitle' | i18next }}</div>
         <div class="perMsg">{{ 'perMsg' | i18next }}</div>
     </div>
-    <div class="page-content" ng-if="task._id">
-        <div class="summary">
+    <div class="page-content" ng-if="task._id && permsToSee">
+        <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
             <div class="favorite">
                 <button ng-class="{ 'orange': task.star }" ng-click="star(task)">
@@ -63,13 +63,14 @@
                     </ui-select>
                 </div>
             </div>
-            <div class="dropdown dropdown-container" uib-dropdown>
+            <div class="dropdown dropdown-container" uib-dropdown
+                 ng-class="{ 'enabled' : haveEditiorsPermissions()}">
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
                     <li>
-                        <a href="#" ng-if="!task.recycled" ng-click="recycle(task)">
+                        <a href="#" ng-if="task.recycled" ng-click="recycle(task)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span>{{ 'recycleTask' | i18next }}</span>
                         </a>
@@ -122,7 +123,7 @@
                 {{currentContext.entity.title}}
             </div>
         </div>
-        <div class="description">
+        <div class="description" ng-class="{ 'disabled' : !havePermissions('description')}">
             <!-- uib-popover-template="dynamicPopover.templateUrl" -->
             <div class="title" contenteditable="true" ng-attr-autofocus="{{shouldAutofocus || undefined}}" tabindex="1" strip-br="true"
                  ng-model="task.title" medium-editor>
@@ -255,7 +256,7 @@
 
 
 
-        <div class="tabs">
+        <div class="tabs" ng-class="{ 'disabled' : !havePermissions('tabs')}">
             <div class="switcher">
                 <button class="tab" data-ui-sref-active="active" data-ui-sref=".activities">
                     {{ 'updates' | i18next }}
@@ -265,7 +266,17 @@
                 </button>
             </div>
         </div>
-        <div class="tab-content" data-ui-view="tab"></div>
+        <div class="tab-content"
+             data-ui-view="tab"
+             ng-class="{ 'disabled' : !havePermissions('tab-content')}"
+        >
+        </div>
     </div>
-    <div ng-if="task._id"  icu-members-footer entity="task" users="people" me="me"></div>
+    <div ng-if="task._id"
+         ng-class="{ 'disabled' : !havePermissions('watchers')}"
+         icu-members-footer
+         entity="task"
+         users="people"
+         me="me">
+    </div>
 </div>

@@ -12,7 +12,7 @@
 
     <button type="button" class="closeBtn" aria-hidden="true" ng-click="cancel()">&times;</button>
     <h3 class="modal-title" ng-if='entity.type != "Document"'>
-        {{ currentUser.username | i18next }}{{ entity.type | i18next }}
+        {{ currentUser.name | i18next }}{{ entity.type | i18next }}
     </h3>
     <div class="tabs">
         <ul>
@@ -34,9 +34,9 @@
         <div class="data">
             <div class="info">
                 <label for="name">{{'Full name' | i18next}}</label>
-                <input id="name" ng-change="updateUserInfo()"  type="text" ng-model="currentUser.username" required>
+                <input id="name" ng-change="updateUserInfo()"  type="text" ng-model="currentUser.name" ng-model-options="{ debounce: 1000 }" required>
                 <label for="email">{{'Email Address' | i18next}}</label>
-                <input id="email" ng-change="updateUserInfo()"  type="text" ng-model="currentUser.email" required>
+                <input id="email" ng-change="updateUserInfo()"  type="text" ng-model="currentUser.email" ng-model-options="{ debounce: 1000 }" required>
 
                     <span class="title panel-title changePass">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
