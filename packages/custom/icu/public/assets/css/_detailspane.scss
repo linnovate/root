@@ -435,7 +435,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         width: 120px;
         margin-left: 10px;
         padding-top: 13px;
-        float: left;    
+        float: left;
         border-right: 1px solid #e1e1e1;
     }
 
@@ -445,20 +445,20 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 
     .att-user:hover {
-        box-shadow: none !important; 
+        box-shadow: none !important;
     }
 
     .att-size, .att {
         color: #bdbcbc ;
         height: 100% ;
-        box-shadow: 0 none;        
+        box-shadow: 0 none;
     }
 
     .att {
         width: 40px;
         background-color: transparent;
         border: none;
-        float: right; 
+        float: right;
     }
 
     .user {
@@ -466,7 +466,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         height: $panel-height;
         position: relative;
         float: left;
-        
+
 
         &:hover{
             box-shadow: 0 0 0 2px #FFB435;
@@ -934,7 +934,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     .attachment .attCreator {
         color: #FFA000 ;
     }
-    
+
 
     .attachment .att-link-wrapper {
         display: block;
@@ -942,14 +942,14 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         margin-bottom: 20px;
     }
 
-    .attachment .att-link {        
+    .attachment .att-link {
         font-size: 22px;
         color: #FFA000;
         text-decoration: none;
         font-weight: 700;
     }
 
-    .attachment .att-link-icon {                
+    .attachment .att-link-icon {
         float: left;
         margin-right: 10px;
     }
@@ -967,7 +967,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         transform: translate(-50%, 0);
         height: 80px;
         width: $icon-width;
-        @include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');        
+        @include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');
     }
 
 
@@ -1360,6 +1360,23 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
    padding: 0 10px;
 
    $avatar-margin: 12px;
+    overflow: auto;
+
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: white;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    }
 
    .delete-wrapper {
     position: relative;
