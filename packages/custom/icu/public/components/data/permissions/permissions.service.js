@@ -1,9 +1,31 @@
 'use strict';
 
 angular.module('mean.icu.data.permissionsservice', [])
-    .service('PermissionsService', function(ApiUri, $http, NotifyingService,UsersService,DiscussionsService, TasksService, ProjectsService, PaginationService, MeanSocket, $rootScope, WarningsService, ActivitiesService) {
+    .service('PermissionsService', function(ApiUri, $http, $stateParams, $rootScope,
+                                            NotifyingService,OfficesService,UsersService,DiscussionsService,
+                                            TasksService, ProjectsService, PaginationService, MeanSocket,
+                                            WarningsService, ActivitiesService, FoldersService, OfficeDocumentsService,
+                                            TemplateDocsService
+    ) {
         var EntityPrefix = '/permissions';
         var me = UsersService.getMe().$$state.value;
+
+        var serviceMap = {
+            task: TasksService,
+            tasks: TasksService,
+            project: ProjectsService,
+            projects: ProjectsService,
+            discussion: DiscussionsService,
+            discussions: DiscussionsService,
+            office: OfficesService,
+            offices: OfficesService,
+            folder: FoldersService,
+            folders: FoldersService,
+            officeDocument: OfficeDocumentsService,
+            officeDocuments: OfficeDocumentsService,
+            templateDoc: TemplateDocsService,
+            templateDocs: TemplateDocsService,
+        };
 
         var editorPerms = {
             'summary' : true,
@@ -29,20 +51,14 @@ angular.module('mean.icu.data.permissionsservice', [])
             'watchers' : false,
         };
 
-        function permissionsToSee(entity, user) {
-            var perms = false;
-            for (var prop in entity) {
-                if (prop === (user._id || me._id)) {
-                    perms = true;
-                }
-            }
+        function haveAnyPerms(entity, user) {
+            user = user || me;
+            var perms = !!_.find(entity.permissions, {'id': getUserId(user)});
             return perms;
         }
 
         function getPermissionStatus(user, entity) {
-            if(!user)return false;
-            var usersPerms = _.find(entity.permissions, {'id': user._id});
-            if(!usersPerms)return false;
+            var usersPerms = _.find(entity.permissions, {'id': getUserId(user)});
             switch (usersPerms.level) {
                 case 'editor':
                     user.premissionStatus = 'editor';
@@ -55,6 +71,37 @@ angular.module('mean.icu.data.permissionsservice', [])
                     break;
             }
             return user;
+        }
+
+        function getUserId(user){
+            var userId = (typeof(user) == 'string') ? user : user._id;
+            return userId;
+        }
+
+        function haveEditorsPerms(entity, user){
+            user = user || me;
+            var havePerms = (_.find(entity.permissions, {'id': getUserId(user)}).level === 'editor');
+            return havePerms;
+        }
+
+        function changeUsersPermissions(entity, user, perms, context){
+            if(!haveEditorsPerms(entity)){
+                return false;
+            }
+
+            var userId = getUserId(user);
+            if(haveAnyPerms(entity, user)){
+                _.find(entity.permissions, {'id': userId}).level = perms;
+            } else {
+                var newPerms = {
+                    'id': userId,
+                    'level': perms,
+                };
+                entity.permissions.push(newPerms);
+            }
+            var serviceName = serviceMap[$stateParams.id ? context.main : context.entityName];
+            serviceName.update(entity);
+            return entity;
         }
 
         function updateEntity(entity, context) {
@@ -141,28 +188,30 @@ angular.module('mean.icu.data.permissionsservice', [])
             }
 
             //untill permissions backend route isn't complete
-            var have_perm = false;
+            var havePerm = false;
 
-            var usersPerms = _.find(entity.permissions, {'id': member._id});
+            var usersPerms = _.find(entity.permissions, {'id': getUserId(member)});
             switch (usersPerms.level) {
-                case 'editor': have_perm = editorPerms[type];
+                case 'editor': havePerm = editorPerms[type];
                     break;
-                case 'commenter': have_perm = commenterPerms[type];
+                case 'commenter': havePerm = commenterPerms[type];
                     break;
-                case 'viewer': have_perm = viewerPerms[type];
+                case 'viewer': havePerm = viewerPerms[type];
                     break;
             }
-            return have_perm;
+            return havePerm;
             // return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
             //     WarningsService.setWarning(result.headers().warning);
             //     return result.data;
             // }, function(err) {return err})
             //     .then(function (perms) {return perms});
         }
+
         return {
-            canSee: permissionsToSee,
+            haveAnyPerms: haveAnyPerms,
             havePermissions: permissions,
             getPermissionStatus: getPermissionStatus,
             updateEntityPermission: updateEntityPermission,
+            changeUsersPermissions: changeUsersPermissions,
         };
     });

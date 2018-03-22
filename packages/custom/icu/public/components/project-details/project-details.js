@@ -255,7 +255,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.permsToSee = function(){
-            return PermissionsService.canSee(entity);
+            return PermissionsService.haveAnyPerms(entity);
         };
 
         $scope.removeTag = function(tag) {

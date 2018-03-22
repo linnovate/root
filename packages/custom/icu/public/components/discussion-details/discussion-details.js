@@ -125,7 +125,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.permsToSee = function(){
-            return PermissionsService.canSee(entity);
+            return PermissionsService.haveAnyPerms(entity);
         };
 
         $scope.schedule = function (discussion) {

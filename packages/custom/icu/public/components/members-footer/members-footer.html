@@ -1,5 +1,7 @@
 <div class="footer">
-    <div class="delete-wrapper" data-ng-repeat="member in entity.watchers.concat(watchersGroups) track by $index" ng-if="entity.watchers.length || watchersGroups.length">
+    <div class="delete-wrapper"
+         data-ng-repeat="member in entity.watchers.concat(watchersGroups) track by $index"
+         ng-if="entity.watchers.length || watchersGroups.length">
         <!--<div ng-show="member._id !== me._id" class="delete" ng-click="deleteMember(member)"><i class="fa fa-close"></i></div>-->
         <div class="btn-group dropup">
             <div icu-avatar user="member" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
@@ -9,8 +11,8 @@
                 <h6 class="dropdown-header name">{{member.username}}</h6>
                 <h6 class="dropdown-header status">{{userPermissionStatus(member).premissionStatus}}</h6>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" ng-click="updateEntity(entity, entityType, context)">{{'promoteToEditor' | i18next}}</a>
-                <a class="dropdown-item" href="#" ng-click="addMember(entity, entityType, context)">{{'demoteToViewer' | i18next}}</a>
+                <a class="dropdown-item" href="#" ng-click="setEditor(entity, member)">{{'promoteToEditor' | i18next}}</a>
+                <a class="dropdown-item" href="#" ng-click="setViewer(entity, member)">{{'demoteToViewer' | i18next}}</a>
                 <a class="dropdown-item" href="#" ng-click="deleteMember(member)">{{'remove' | i18next}}</a>
             </div>
         </div>

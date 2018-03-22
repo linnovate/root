@@ -23,12 +23,25 @@ angular.module('mean.icu.ui.membersfooter', [])
             $scope.hideAddButton = context.main=="templateDocs" ? false:true;
             $scope.me = UsersService.getMe().$$state.value;
             $scope.userPermissionStatus = function(member){
-                return PermissionsService.getPermissionStatus(member, $scope.entity);
+                if(member)return PermissionsService.getPermissionStatus(member, $scope.entity);
             };
 
             $scope.updateEntity = function(){
                 return PermissionsService.updateEntityPermission($scope.entity, context);
             };
+
+            $scope.setEditor = function(entity, user){
+                return changePerms(entity, user, 'editor');
+            };
+
+            $scope.setViewer = function(entity, user){
+                return changePerms(entity, user, 'viewer');
+            };
+
+            function changePerms(entity, member, newPerms){
+                $scope.entity = PermissionsService.changeUsersPermissions(entity, member, newPerms, context);
+                $state.reload();
+            }
 
             var groupTypes = config.circles.footer;
 
