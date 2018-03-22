@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.tabs')
             $scope.stateParams = $stateParams;
 
             $scope.havePermissions = function(type){
-                return (PermissionsService.havePermissions($scope.entity, type) && $scope.isRecycled);
+                if($scope.entity)return (PermissionsService.havePermissions($scope.entity, type) && $scope.isRecycled);
             };
 
             $scope.details = $scope.context.entityName !== 'my' ? {
