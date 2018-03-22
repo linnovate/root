@@ -1415,6 +1415,50 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             border: 2px solid white;
         }
     }
+       .btn {
+           padding: 0;
+       }
+       .dropdown-item {
+           display: block;
+           width: 100%;
+           padding: 3px 1.5rem;
+           clear: both;
+           font-weight: 400;
+           color: #292b2c;
+           text-align: inherit;
+           white-space: nowrap;
+           background: 0 0;
+           border: 0;
+           &:hover {
+               color: #1d1e1f;
+               text-decoration: none;
+               background-color: #f7f7f9;
+           }
+       }
+       .dropdown-divider {
+           height: 1px;
+           margin: .5rem 0;
+           overflow: hidden;
+           background-color: #eceeef;
+       }
+       .dropdown-header {
+           margin-bottom: 0;
+           color: #636c72;
+           white-space: nowrap;
+           &.name {
+               font-weight: Bold;
+               font-size: 14px;
+               line-height: 19px;
+               color: black;
+           }
+           &.status {
+               margin-top: 0;
+               font-weight: Bold;
+               line-height: 16px;
+               font-size: 12px;
+               color:#BDBDBB;
+           }
+       }
 
     .numberOfPeople {
      display: block;
