@@ -263,13 +263,13 @@
             </div>
         </div>
         <div class="tab-content"
-
-             data-ui-view="tab"></div>
+             data-ui-view="tab">
+        </div>
     </div>
-    <div ng-if="project._id"
-         icu-tabs-tasks
-         ng-class="{ 'disabled' : !havePermissions('watchers')}"
+    <div
+        ng-if="project._id"
          icu-members-footer
          entity="project"
-         users="people"></div>
+         users="people">
+    </div>
 </div>

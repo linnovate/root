@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.membersfooter', [])
     .directive('icuMembersFooter', function() {
-        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService, UsersService, ActivitiesService,TasksService,ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService, OfficesService) {
+        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService,PermissionsService, UsersService, ActivitiesService,TasksService,ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService, OfficesService) {
 
             var serviceMap = {
                 task: 'TasksService',
@@ -21,10 +21,14 @@ angular.module('mean.icu.ui.membersfooter', [])
                 templateDocs: 'TemplateDocsService',
             };
             $scope.hideAddButton = context.main=="templateDocs" ? false:true;
-            $scope.me = {};
-            UsersService.getMe().then(function(me) {
-                $scope.me = me;
-            });
+            $scope.me = UsersService.getMe().$$state.value;
+            $scope.userPermissionStatus = function(member){
+                return PermissionsService.getPermissionStatus(member, $scope.entity);
+            };
+
+            $scope.updateEntity = function(){
+                return PermissionsService.updateEntityPermission($scope.entity, context);
+            };
 
             var groupTypes = config.circles.footer;
 
@@ -137,10 +141,14 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
             };
 
-            $scope.editorProperties = {
-                'PromoteToEditor': '',
-                'DemoteToViewer': '',
-                'PromoteToEditor': '',
+            $scope.changeUserPermStatus = function(entity, member, status){
+                entity.permission.each(function(permission){
+                    if(permission.id === member){
+                        permission.level = status;
+                    }
+                });
+                PermissionsService.updateEntityPermission(entity, context);
+                return entity;
             };
 
             $scope.addMember = function(member) {
@@ -160,7 +168,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     if($scope.entity.subProjects){
                         $scope.entity.subProjects.forEach((subProject)=>{
                             subProject.watchers.push(member);
-                        })
+                        });
                     }
                 }
 

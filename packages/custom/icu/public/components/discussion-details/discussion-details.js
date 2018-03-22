@@ -455,8 +455,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.update = function (discussion, type) {
-            let me = $scope.me;
-
 
             $scope.updateDatesString();
             DiscussionsService.update(discussion);
