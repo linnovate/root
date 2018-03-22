@@ -62,7 +62,8 @@
             <div class="color">
                 <div icu-colorpicker ng-model="project.color"></div>
             </div>
-            <div class="dropdown dropdown-container" uib-dropdown>
+            <div class="dropdown dropdown-container" uib-dropdown
+                 ng-class="{ 'enabled' : haveEditiorsPermissions()}">
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
                 </div>
