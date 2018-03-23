@@ -209,6 +209,7 @@ angular.module('mean.icu.data.permissionsservice', [])
         return {
             haveAnyPerms: haveAnyPerms,
             havePermissions: permissions,
+            haveEditorsPerms: haveEditorsPerms,
             getPermissionStatus: getPermissionStatus,
             updateEntityPermission: updateEntityPermission,
             changeUsersPermissions: changeUsersPermissions,

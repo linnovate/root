@@ -257,7 +257,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.haveEditiorsPermissions = function(){
-            return PermissionsService.haveEditorPerms(entity);
+            return PermissionsService.haveEditorsPerms(entity);
         };
 
         $scope.permsToSee = function(){
