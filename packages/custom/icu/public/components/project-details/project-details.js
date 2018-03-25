@@ -356,6 +356,18 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         };
 
+
+        $scope.updateStatusForApproval = function(entity) {
+            let context = {
+                action:"updated",
+                name:  "status",
+                type:  "project"
+            }
+            entity.status = "waiting-approval" ;
+            $scope.update(entity, context) ;
+        }
+
+
         $scope.update = function (project, context) {
             ProjectsService.update(project, context).then(function(res) {
                 if (ProjectsService.selected && res._id === ProjectsService.selected._id) {

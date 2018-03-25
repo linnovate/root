@@ -123,21 +123,6 @@ angular.module('mean.icu.ui.membersfooter', [])
 
             };
 
-            $scope.test = function() {
-                $scope.entity.permissions.forEach(function(e)  {
-                    console.log("e",e) ; 
-                    e.level = 'editor' ;
-                    console.log("e2",e) ; 
-                })
-                $scope.entity.status = "waiting-approval" ; 
-                console.log("entity",$scope.entity) ; 
-                var serviceName = serviceMap[$stateParams.id ? context.main : context.entityName];
-                var service = $injector.get(serviceName);
-                service.update($scope.entity);
-                $state.reload();
-
-            }
-
             $scope.showSelect = false;
             var groups = [], allowed;
 
