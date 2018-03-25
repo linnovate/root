@@ -787,9 +787,15 @@ exports.uploadEmptyDocument = function (req, res, next) {
 * req.params.id will consist mongoDB _id of the user
 */
 exports.getAll = function (req, res, next) {
+  var start=0,limit=25,sort="created";
+  if(req.query){
+    start = parseInt(req.query.start);
+    limit = parseInt(req.query.limit);
+    sort = req.query.sort;
+  }
   Document.find({
     $or: [{ watchers: { $in: [req.user._id] } }, { assign: req.user._id }]
-  }).populate('folder')
+  }).sort({sort:1}).skip(start).limit(limit).populate('folder')
   .populate('creator')
   .populate('updater')
   .populate('sender')

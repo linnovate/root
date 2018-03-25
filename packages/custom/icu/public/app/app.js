@@ -918,9 +918,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return TasksService.getStarred();
                         } else {
-                            if (typeof TasksService.data !== 'undefined') {
-                                $stateParams.limit = TasksService.data.length;
-                            }
+                           // if (typeof TasksService.data !== 'undefined') {
+                            //    $stateParams.limit = TasksService.data.length;
+                           // }
                             return TasksService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -970,9 +970,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return TasksService.getStarredByassign();
                         } else {
-                            if (typeof TasksService.data !== 'undefined') {
-                                $stateParams.limit = TasksService.data.length;
-                            }
+                          //  if (typeof TasksService.data !== 'undefined') {
+                          //      $stateParams.limit = TasksService.data.length;
+                          //  }
                             return TasksService.getMyTasks($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -1063,9 +1063,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return ProjectsService.getStarred();
                         } else {
-                            if (typeof ProjectsService.data !== 'undefined') {
-                                $stateParams.limit = ProjectsService.data.length;
-                            }
+                        //    if (typeof ProjectsService.data !== 'undefined') {
+                        //        $stateParams.limit = ProjectsService.data.length;
+                        //    }
                             return ProjectsService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -1133,9 +1133,9 @@ angular.module('mean.icu').config([
                             if ($stateParams.starred) {
                                 return OfficeDocumentsService.getStarred();
                             } else {
-                                if (typeof OfficeDocumentsService.data !== 'undefined') {
-                                    $stateParams.limit = OfficeDocumentsService.data.length;
-                                }
+                        //        if (typeof OfficeDocumentsService.data !== 'undefined') {
+                         //           $stateParams.limit = OfficeDocumentsService.data.length;
+                        //        }
                                 localStorage.removeItem("type");
                                 return OfficeDocumentsService.getAll($stateParams.start,
                                     $stateParams.limit,
@@ -1206,9 +1206,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return DiscussionsService.getStarred();
                         } else {
-                            if (typeof DiscussionsService.data !== 'undefined') {
-                                $stateParams.limit = DiscussionsService.data.length;
-                            }
+                      //      if (typeof DiscussionsService.data !== 'undefined') {
+                      //          $stateParams.limit = DiscussionsService.data.length;
+                       //     }
                             return DiscussionsService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -1270,9 +1270,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return OfficesService.getStarred();
                         } else {
-                            if (typeof OfficesService.data !== 'undefined') {
-                                $stateParams.limit = OfficesService.data.length;
-                            }
+                       //     if (typeof OfficesService.data !== 'undefined') {
+                       //         $stateParams.limit = OfficesService.data.length;
+                       //     }
                             return OfficesService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -1336,9 +1336,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return TemplateDocsService.getStarred();
                         } else {
-                            if (typeof TemplateDocsService.data !== 'undefined') {
-                                $stateParams.limit = TemplateDocsService.data.length;
-                            }
+                     //       if (typeof TemplateDocsService.data !== 'undefined') {
+                     //           $stateParams.limit = TemplateDocsService.data.length;
+                     //       }
                             return TemplateDocsService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
@@ -1399,9 +1399,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return FoldersService.getStarred();
                         } else {
-                            if (typeof FoldersService.data !== 'undefined') {
-                                $stateParams.limit = FoldersService.data.length;
-                            }
+                     //       if (typeof FoldersService.data !== 'undefined') {
+                     //           $stateParams.limit = FoldersService.data.length;
+                     //       }
                             return FoldersService.getAll($stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
