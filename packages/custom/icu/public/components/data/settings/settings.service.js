@@ -30,7 +30,6 @@ angular.module('mean.icu.data.settingsservice', [])
     let configNonActiveStatus = config.activeStatus && config.activeStatus.nonActiveStatus ? config.activeStatus.nonActiveStatus : null ;
 
     function getActiveStatuses(type) {
-//        console.log(type) ;
         configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList.Typed(type) ;
         let nonActiveStatus = new Set(Object.values(configNonActiveStatus)) ;
         let typeStatusLowerCase =  statusList.Typed(type).map(element => element.toLowerCase());
@@ -38,7 +37,6 @@ angular.module('mean.icu.data.settingsservice', [])
         
         let difference = new Set(
             [...typeStatuses].filter(x => !nonActiveStatus.has(x)));
-//        console.log("getActiveStatuses - difference",difference) ;
         return Array.from(difference) ;
     }
 
@@ -49,7 +47,6 @@ angular.module('mean.icu.data.settingsservice', [])
         let typeStatuses = new Set(typeStatusLowerCase) ;
         let intersection = new Set(
             [...typeStatuses].filter(x => nonActiveStatus.has(x)));
-//        console.log("intersection",Array.from(intersection)) ;
         return Array.from(intersection) ;
     }
 
@@ -66,16 +63,13 @@ angular.module('mean.icu.data.settingsservice', [])
             default:
             case 'active':
                 arr = getActiveStatuses(type).find(element => typeStatusLowerCase == element) ;
-//                console.log("getIsActiveStatus active statuses", arr) ;
                 return arr ? true : false ;
                 break ;
             case 'nonactive':            
                 arr = getNonActiveStatuses(type).find(element => typeStatusLowerCase == element) ;
-//                console.log("getIsActiveStatus nonactive statuses", arr) ;
                 return arr ? true : false ;
                 break ;
             case 'all': 
-//                console.log("getIsActiveStatus ALL") ;
                 return true;
         }
     }

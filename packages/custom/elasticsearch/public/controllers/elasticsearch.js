@@ -8,7 +8,6 @@ angular.module('mean.elasticsearch').controller('ElasticsearchController', ['$sc
 
 
         this.runQuery = function() {
-            console.log($scope.elasticsearch);
 
             switch ($scope.elasticsearch.operation) {
                 case 'Search':

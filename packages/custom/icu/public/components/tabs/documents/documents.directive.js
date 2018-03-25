@@ -27,7 +27,6 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.save = function() {
-                console.log('activity', $scope.activity, 'context', context);
                 if (_.isEmpty($scope.attachments) && _.isEmpty($scope.activity.description)) return;
                 $scope.activity.issue = $scope.entityName;
                 $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
@@ -64,15 +63,12 @@ angular.module('mean.icu.ui.tabs')
                             entity: $scope.entityName,
                             entityId: $stateParams.id || $stateParams.entityId
                         };
-                        console.log('if data', data);
-                        console.log('if file', file);
 
                         result.attachments = [];
 
                         for (var index = 0; index < file.length; index++) {
 
                             DocumentsService.saveAttachments(data, file[index]).success(function(attachment) {
-                                console.log('[attachment]', [attachment]);
                                 
                                 result.attachments[result.attachments.length] = attachment;
                                 AttachmentsService.getAttachmentUser(attachment.creator._id).then(user => {
@@ -85,7 +81,6 @@ angular.module('mean.icu.ui.tabs')
                             });
                         }
                     }
-                    // console.log('result', result);
                     clearForm();
                 });
             };

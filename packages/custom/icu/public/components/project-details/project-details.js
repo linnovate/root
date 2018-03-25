@@ -173,7 +173,6 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.recycle = function(entity) {
-            console.log("$scope.recycle") ;
             EntityService.recycle('projects', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
                 clonedEntity.status = "Recycled" // just for activity status
@@ -189,7 +188,6 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.recycleRestore = function(entity) {
-            console.log("$scope.recycleRestore") ;
             EntityService.recycleRestore('projects', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
                 clonedEntity.status = "un-deleted" // just for activity status

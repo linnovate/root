@@ -167,7 +167,6 @@ angular.module('mean.icu').controller('IcuController',
     $scope.currentContext = context;
 
     $rootScope.$on('$stateChangeError', function () {
-        // console.log(arguments);
     });
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
@@ -185,7 +184,6 @@ angular.module('mean.icu').controller('IcuController',
         }
       }
 
-        // console.log(arguments);
     });
 });
 

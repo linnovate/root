@@ -77,9 +77,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             
             //Check if there is space, if there is, add '\' before it
             if (str.indexOf(' ') >= 0)
-            {
-                console.log('space');
-                
+            {                
                 var temp1 = str.split(' ');
                 var temp2 = temp1[0];
                 
@@ -110,8 +108,6 @@ module.exports = function(MeanUser, app, auth, database, passport) {
             var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
             var arr2 = arr1[7].split("." + req.body.attachmentType);
     
-        console.log('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf');
-        console.log('lowriter --headless --convert-to pdf ' + config.root + '/' + realpath);
         
             // Make the convert from it's origin type to pdf
             exec('sudo lowriter --headless --convert-to pdf ' + config.root + '/' + realpath, function (err, stout, sterr){
@@ -133,9 +129,6 @@ module.exports = function(MeanUser, app, auth, database, passport) {
         });
         
     }
-    else{
-        console.log("OhAd waS HEre");
-    };
         
     });
 
@@ -157,7 +150,6 @@ module.exports = function(MeanUser, app, auth, database, passport) {
           //Check if there is space, if there is, add '\' before it
           if (str.indexOf(' ') >= 0)
           {
-              console.log('space');
               
               var temp1 = str.split(' ');
               var temp2 = temp1[0];
@@ -181,8 +173,6 @@ module.exports = function(MeanUser, app, auth, database, passport) {
           var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
           var arr2 = arr1[7].split("." + req.body.documentType);
   
-      console.log('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf');
-      console.log('lowriter --headless --convert-to pdf ' + config.root + realpath);
       
           // Make the convert from it's origin type to pdf
           exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
@@ -204,9 +194,6 @@ module.exports = function(MeanUser, app, auth, database, passport) {
       });
       
   }
-  else{
-      console.log("OhAd waS HEre");
-  };
       
   });
 
@@ -229,7 +216,6 @@ module.exports = function(MeanUser, app, auth, database, passport) {
         //Check if there is space, if there is, add '\' before it
         if (str.indexOf(' ') >= 0)
         {
-            console.log('space');
             
             var temp1 = str.split(' ');
             var temp2 = temp1[0];
@@ -255,9 +241,6 @@ module.exports = function(MeanUser, app, auth, database, passport) {
         var arr1 = str.split("/");
         var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
         var arr2 = arr1[7].split("." + req.body.templateType);
-
-    console.log('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf');
-    console.log('lowriter --headless --convert-to pdf ' + config.root + realpath);
     
         // Make the convert from it's origin type to pdf
         exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
@@ -279,9 +262,6 @@ module.exports = function(MeanUser, app, auth, database, passport) {
     });
     
 }
-else{
-    console.log("OhAd waS HEre");
-};
     
 });
 

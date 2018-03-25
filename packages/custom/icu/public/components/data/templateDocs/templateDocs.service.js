@@ -24,7 +24,6 @@ angular.module('mean.icu.data.templatedocsservice', [])
             }
             return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
-//                console.log($rootScope.warning, '$rootScope.warning')
                 return result.data;
             }, function(err) {return err}).then(function (some) {
                 var data = some.content ? some : [];
@@ -34,8 +33,6 @@ angular.module('mean.icu.data.templatedocsservice', [])
 
         function getTemplatesByFolder(folder){
             return $http.post(ApiUri + EntityPrefix+"/getByOfficeId",{'folder':folder}).then(function (result) {
-                console.log("Data from getTEmplatesBYoffice");
-                console.dir(result);
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
             });

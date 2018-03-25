@@ -3,12 +3,10 @@ function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filte
     $scope.path = "" ;
 
     $scope.getPath = function () { 
-//        console.log("$scope.getPath",$scope.path) ;  
         return $scope.path ;
     }
 
     $scope.getAttachment = function () {  
-        //        console.log("$scope.getPath",$scope.path) ;  
                 return attachment ;
     }
     $scope.attachment = attachment ;
@@ -33,7 +31,6 @@ function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filte
         
         attachment.documentType = attachment.attachmentType ? attachment.attachmentType : attachment.documentType ;
          var resPath = myTest(attachment) ;
-//         console.log("resPath",resPath) ;
          return resPath ;
     }
 
@@ -50,7 +47,6 @@ function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filte
             var arr = document1.path.split("." + document1.documentType);
             var ToHref = arr[0] + ".pdf";
             // Check if convert file exists allready
-            // console.log("ToHref", ToHref);
             $http({
                 url: ToHref.replace('/files/', '/api/files/'),
                 method: 'HEAD'
@@ -69,7 +65,6 @@ function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filte
         }
         // Format is NOT needed to view as pdf
         else {
-            console.log("// Format is NOT needed to view as pdf") ;
             $scope.path = document1.path + '?view=true' ;
         }
     }

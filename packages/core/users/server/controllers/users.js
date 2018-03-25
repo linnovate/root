@@ -96,7 +96,6 @@ exports.create = function(req, res, next) {
 
   var errors = req.validationErrors();
   if (errors) {
-    console.log(JSON.stringify(errors))
     return res.status(400).send(errors);
   }
 
@@ -106,7 +105,6 @@ exports.create = function(req, res, next) {
   user.uid = uuidv1();
   user.save(function(err) {
     if (err) {
-      console.log(err)
       switch (err.code) {
         case 11000:
         case 11001:
@@ -145,7 +143,6 @@ exports.create = function(req, res, next) {
 };
 
 exports.getJwt = function(req, res) {
-  console.log(req.user)
   var payload = req.user;
   payload.redirect = req.body.redirect;
   var escaped = JSON.stringify(payload);

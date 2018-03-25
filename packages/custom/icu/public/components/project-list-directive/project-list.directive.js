@@ -245,7 +245,6 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
                     $scope.projects[index].__autocomplete = false;
                     if ($element.find('td.name')[index+1]) {
-                        console.log('find');
                         $element.find('td.name')[index+1].focus();
                     }
                     else {

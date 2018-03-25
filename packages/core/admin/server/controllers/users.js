@@ -22,7 +22,6 @@ exports.create = function(req, res, next) {
     req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
     var errors = req.validationErrors();
-    console.log(errors);
     if (errors) {
         return res.status(400).send(errors);
     }

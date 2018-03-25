@@ -10,9 +10,7 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         var filteringResults = SearchService.filteringResults.map(function(e) {
             let filterDate = new Date(SearchService.filteringByUpdated) ;
             let entityDate = new Date(e.updated) ;
-//          console.log(filterDate, entityDate) ; 
             let res =  entityDate > filterDate ? true : false ; // true if time1 is later
-//          console.log(res) ;
             return res ? e.id : -1 ;
         });
 

@@ -38,9 +38,7 @@ angular.module('mean.icu.ui.tasklistFilter', [])
 		switch(filterValue) {
 			default:
 			out = 	entities.filter(function(entity) {
-//						console.log("filterByActiveStatus:::", entity, filterValue,type.entity,entity.status)
 						var entityActiveValue = EntityService.getEntityActivityStatus(filterValue,type.entity,entity.status)
-//						console.log("display entity?", entityActiveValue) ;
 						return entityActiveValue ;
 					});
 		}

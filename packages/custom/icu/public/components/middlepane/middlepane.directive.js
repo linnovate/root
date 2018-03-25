@@ -14,7 +14,6 @@ angular.module('mean.icu.ui.middlepane', [])
 
 function SearchController($scope, $state, $stateParams, context, NotifyingService, TasksService, $timeout, SearchService, $document, $location) {
     $scope.$on('$stateChangeSuccess', function ($event, toState) {
-//        console.log("stateChangeSuccess", $location.path())  ;
         // if ($location.path().split("/").pop() == "recycled") {
         //     $scope.term = "recycled" ;            
         // }

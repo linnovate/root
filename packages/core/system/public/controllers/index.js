@@ -51,7 +51,6 @@ angular.module('mean.system').controller('IndexController', ['$scope', 'Global',
       }
     }, function (currentSlide, previousSlide) {
       if (currentSlide !== previousSlide) {
-        console.log('currentSlide:', currentSlide);
       }
     });
   }

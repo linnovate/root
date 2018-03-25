@@ -10,14 +10,10 @@ angular.module('mean.icu.data.attachmentsservice', [])
     }    
 
     function previewWindow(document1) {
-        console.dir(document1);
         if(document1.spPath){
             var spSite = document1.spPath.substring(0,document1.spPath.indexOf('ICU')+3);
-            console.log("SPSITE:");
-            console.log(spSite);
+
             var uri = spSite+"/_layouts/15/WopiFrame.aspx?sourcedoc="+document1.spPath+"&action=default";
-            console.log("URI:");
-            console.log(uri);
              window.open(uri,'_blank');
         }
         else{
@@ -30,9 +26,6 @@ angular.module('mean.icu.data.attachmentsservice', [])
             (document1.documentType == "pptx")) {
             var arr = document1.path.split("." + document1.documentType);
             var ToHref = arr[0] + ".pdf";
-            // Check if convert file exists allready
-            console.log("ToHref");
-            console.log(ToHref);
             $http({
                 url: ToHref.replace('/files/', '/api/files/'),
                 method: 'HEAD'
@@ -58,14 +51,11 @@ angular.module('mean.icu.data.attachmentsservice', [])
 
 
     function previewTab(document1) {
-        console.dir(document1);
         if(document1.spPath){
             var spSite = document1.spPath.substring(0,document1.spPath.indexOf('ICU')+3);
-            console.log("SPSITE:");
-            console.log(spSite);
+
             var uri = spSite+"/_layouts/15/WopiFrame.aspx?sourcedoc="+document1.spPath+"&action=default";
-            console.log("URI:");
-            console.log(uri);
+
             window.open(uri,'_blank');
         }
         else{
@@ -79,8 +69,6 @@ angular.module('mean.icu.data.attachmentsservice', [])
             var arr = document1.path.split("." + document1.documentType);
             var ToHref = arr[0] + ".pdf";
             // Check if convert file exists allready
-            console.log("ToHref");
-            console.log(ToHref);
             $http({
                 url: ToHref.replace('/files/', '/api/files/'),
                 method: 'HEAD'

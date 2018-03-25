@@ -68,7 +68,6 @@ angular.module('mean.icu.ui.modalcompartmentalization', [])
 
                 }, function() {
                     c19n();
-                    console.log('Modal dismissed');
                 });
             }
         };
