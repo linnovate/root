@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.officedocumentlistdirective', [])
-    .directive('icuOfficeDocumentList', function ($state, $uiViewScroll, $timeout, $stateParams, context, LayoutService) {
+    .directive('icuOfficeDocumentList', function ($state, $uiViewScroll, OfficeDocumentsService,$timeout, $stateParams, context, LayoutService) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -9,7 +9,6 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
         };
 
         function controller($scope, OfficeDocumentsService, orderService, dragularService, $element, $interval, $window) {
-
             $scope.currentTaskId = function (id) {
                 $scope.taskId = id;
             };
@@ -131,7 +130,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                         officeDocument.PartTitle = officeDocument.PartTitle.split("...")[0] + officeDocument.title.substring(officeDocument.PartTitle.split("...")[0].length,officeDocument.title.length);
                         officeDocument.IsTitle = !officeDocument.IsTitle;
                     }
-                    officeDocument.title = officeDocument.PartTitle;
+                    officeDocument.title = officeDocument.PartTitle;OfficeDocumentsService
                     return OfficeDocumentsService.update(officeDocument);
                 }
             };
@@ -343,13 +342,40 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 $scope.isLoading = false;
             }, 0);
 
+            $scope.loadMore2 = function() {
+                var LIMIT = 25 ;
+
+                if (!$scope.isLoading) {
+                    //$scope.isLoading = true;
+                    var start = $scope.officeDocuments.length;
+                    var sort = $scope.order.field;//$scope.sorting?$scope.sorting:"created";
+                    OfficeDocumentsService.getAll(start , LIMIT , sort).then(function(docs){
+                        docs.forEach(function(d){
+                            if (d.title.length > 20)
+                            {
+                                d.PartTitle = d.title.substring(0,20) + "...";
+                            }
+                            else
+                            {
+                                d.PartTitle = d.title;
+                            }
+                            $scope.officeDocuments.push(d);
+                        });
+                        //$scope.isLoading = false;
+                    });
+
+
+                }
+            };
+           
+
             $scope.loadMore = function() {
                 if (!$scope.isLoading && $scope.loadNext) {
                     $scope.isLoading = true;
                     $scope.loadNext().then(function(officeDocuments) {
 
                         _(officeDocuments.data).each(function(p) {
-                            p.__state = creatingStatuses.Created;
+                            p.__state = creatinggeStatuses.Created;
                             p.PartTitle = p.title;
                             if (p.title.length > 20)
                             {

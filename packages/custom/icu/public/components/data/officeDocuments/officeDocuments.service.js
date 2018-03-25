@@ -4,8 +4,12 @@ angular.module('mean.icu.data.officedocumentsservice', [])
     .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService, ActivitiesService) {
         var EntityPrefix = '/officeDocuments';
 
-          function getAll() {
-            return $http.get(ApiUri + EntityPrefix).then(function (result) {
+          function getAll(start , limit , sort) {
+              var query = "/?start=0&limit=25&sort=created";
+              if(start&&limit&&sort){
+                query = "/?start="+start+"&limit="+limit+"&sort="+sort;
+              }
+            return $http.get(ApiUri + EntityPrefix+query).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 // result.data = [{
                 //             created: new Date,
