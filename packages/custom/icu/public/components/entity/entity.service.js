@@ -21,7 +21,6 @@ angular.module('mean.icu.ui.entity', [])
         
         if (entityType == null) return Promise.resolve(null) ; 
         return $http.get(ApiUri + '/' + entityType + '/' + id).then(function (result) {
-            console.log("entityType",result.data) ;
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
@@ -60,20 +59,16 @@ angular.module('mean.icu.ui.entity', [])
 
 
     function recycle(type,id) {
-        console.log('calling entityService recycle', type, id);
         return $http.patch(ApiUri + '/' + type +  '/' + id + '/recycle').then(function (result) {
             
-            console.log("recycle returned:" ,result) ;
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function recycleRestore(type,id) {
-        console.log('calling entityService recycle', type, id);
         return $http.patch(ApiUri + '/' + type +  '/' + id + '/recycle_restore').then(function (result) {
             
-            console.log("recycle returned:" ,result) ;
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });

@@ -68,7 +68,6 @@ angular.module('mean.icu.ui.rows', [])
         link: link,
         transclude: true,
         templateUrl: function (tElement, tAttrs) {
-            console.log(tAttrs);
             if (tAttrs.type.indexOf('search') === -1) {
 	            return templates[tAttrs.type];
 	        } else {

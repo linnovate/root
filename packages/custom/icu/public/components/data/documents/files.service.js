@@ -36,9 +36,7 @@ angular.module('mean.icu.data.filesservice', [])
                 }
 
                 try {
-                    console.log(filename);
                     // Try using msSaveBlob if supported
-                    console.log("Trying saveBlob method ...");
                     var blob = new Blob([data], {
                         type: contentType
                     });
@@ -50,7 +48,6 @@ angular.module('mean.icu.data.filesservice', [])
                         if (saveBlob === undefined) throw "Not supported";
                         saveBlob(blob, filename);
                     }
-                    console.log("saveBlob succeeded");
                     success = true;
                 } catch (ex) {
                     console.log("saveBlob method failed with the following exception:");
@@ -68,7 +65,6 @@ angular.module('mean.icu.data.filesservice', [])
                             // Try to simulate a click
                             try {
                                 // Prepare a blob URL
-                                console.log("Trying download link method with simulated click ...");
                                 var blob = new Blob([data], {
                                     type: contentType
                                 });
@@ -82,7 +78,6 @@ angular.module('mean.icu.data.filesservice', [])
                                 var event = document.createEvent('MouseEvents');
                                 event.initMouseEvent('click', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
                                 link.dispatchEvent(event);
-                                console.log("Download link method with simulated click succeeded");
                                 success = true;
 
                             } catch (ex) {
@@ -96,13 +91,11 @@ angular.module('mean.icu.data.filesservice', [])
                             try {
                                 // Prepare a blob URL
                                 // Use application/octet-stream when using window.location to force download
-                                console.log("Trying download link method with window.location ...");
                                 var blob = new Blob([data], {
                                     type: octetStreamMime
                                 });
                                 var url = urlCreator.createObjectURL(blob);
                                 window.location = url;
-                                console.log("Download link method with window.location succeeded");
                                 success = true;
                             } catch (ex) {
                                 console.log("Download link method with window.location failed with the following exception:");
@@ -115,7 +108,6 @@ angular.module('mean.icu.data.filesservice', [])
 
                 if (!success) {
                     // Fallback to window.open method
-                    console.log("No methods worked for saving the arraybuffer, using last resort window.open");
                     window.open(httpPath, '_blank', '');
                 }
                 /******************/
@@ -123,8 +115,6 @@ angular.module('mean.icu.data.filesservice', [])
 
             }).error(function(data, status) {
                 
-                console.log("Request failed with status: " + status);
-
                 // Unauthorized page
                 //window.open('/404', '_self', '');
                 window.open('/401', '_self', '');

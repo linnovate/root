@@ -30,7 +30,6 @@ module.exports = function(Admin, app, auth, database) {
 	    //var modules = mean.exportable_modules_list;
 	    //res.jsonp(modules);
 	    //for (var index in mean.resolved) {
-		 //   //console.log(mean.resolved);
 		 //   if (mean.resolved[index].result) console.log(mean.resolved[index].result.loadedmodule);
 	    //}
     });

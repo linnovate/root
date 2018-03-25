@@ -612,22 +612,18 @@ angular.module('mean.icu.ui.tabs')
                             entity: $scope.entityName,
                             entityId: $stateParams.id || $stateParams.entityId
                         };
-                        console.log('if data', data);
-                        console.log('if file', file);
 
                         result.attachments = [];
 
                         for (var index = 0; index < file.length; index++) {
 
                             DocumentsService.saveAttachments(data, file[index]).success(function(attachment) {
-                                console.log('[attachment]', [attachment]);
 
                                 result.attachments[result.attachments.length] = attachment;
                             });
                         }
                     }
                     //clearForm();
-                    console.log('result', result);
                     $scope.activities.push(result);
                     clearForm();
                 });

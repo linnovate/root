@@ -44,7 +44,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         }
 
         $scope.Sign = function () {
-            console.log($scope.selectedSignature)
         }
 
         $scope.tags = ['tag'];
@@ -149,8 +148,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         }
 
         $scope.sendDocument = function(document1){
-            console.log("HEY");
-            console.dir(document1);
+
         }
 
         $scope.uploadEmpty = function(document1){
@@ -160,14 +158,11 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         }
 
         $scope.view = function(document1) {
-            console.dir(document1);
             if(document1.spPath){
                 var spSite = document1.spPath.substring(0,document1.spPath.indexOf('ICU')+3);
-                console.log("SPSITE:");
-                console.log(spSite);
+
                 var uri = spSite+"/_layouts/15/WopiFrame.aspx?sourcedoc="+document1.spPath+"&action=default";
-                console.log("URI:");
-                console.log(uri);
+
                  window.open(uri,'_blank');
             }
             else{
@@ -181,8 +176,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 var arr = document1.path.split("." + document1.documentType);
                 var ToHref = arr[0] + ".pdf";
                 // Check if convert file exists allready
-                console.log("ToHref");
-                console.log(ToHref);
+
                 $http({
                     url: ToHref.replace('/files/', '/api/files/'),
                     method: 'HEAD'
@@ -347,7 +341,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         };
 
         $scope.recycle = function(entity) {            
-            console.log("$scope.recycle") ;
             EntityService.recycle('officeDocuments', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
                 clonedEntity.status = "Recycled" // just for activity status
@@ -363,7 +356,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         };
 
         $scope.recycleRestore = function(entity) {
-            console.log("$scope.recycleRestore") ;
             EntityService.recycleRestore('officeDocuments', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
                 clonedEntity.status = "un-deleted" // just for activity status

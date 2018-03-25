@@ -17,7 +17,6 @@ angular.module('mean.icu.ui.searchlist', [])
         for(var i = 0;i<$scope.results.length;i++){
             $scope.results[i].id = $scope.results[i].id ? $scope.results[i].id:$scope.results[i]._id;
         }
-        console.log($scope.results)
     }
 
     return {

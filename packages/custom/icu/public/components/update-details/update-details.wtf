@@ -43,8 +43,6 @@ angular.module('mean.icu.ui.attachmentdetailszbb', [])
         };
           
         $scope.viewAttachment = function (document1) { 
-                        console.log("vvvvvvvvvvvvvvv") ;
-                        console.error("EEEEEEEEEEEEEEEe") ;
                         return(document1.path + '?view=true') ;      
 
                         }

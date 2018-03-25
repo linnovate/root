@@ -10,21 +10,17 @@ angular.module('mean.mean-socket').controller('MeanSocketController', ['$scope',
 		};
 	
 		$scope.socketAfterSend = function(message) {
-            console.log("message0");
-            console.log(message);
+
 			$scope.message = {};
 		};
 
 		$scope.socketAfterJoin = function(channel, messages) {
-            console.log("message1");
-            console.log(message);
+
 			$scope.activeChannel = channel;
 			$scope.messages = messages;
 		};
 
 		$scope.socketAfterGet = function(message) {
-            console.log("message2");
-            console.log(message);
             
             NotificationsService.addLastnotification(message);  
             

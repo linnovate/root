@@ -11,7 +11,6 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
     function controller($scope, DiscussionsService, orderService, dragularService, $element, $interval, $window) {
 
             $scope.getDate = function(discussion) {
-                // console.log('ddddddddddd', discussion);
                 // $scope.discussionContext = context.entity;
 				discussion.firstStr = '';
             	discussion.secondStr = '';

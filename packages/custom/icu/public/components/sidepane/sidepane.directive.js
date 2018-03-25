@@ -346,13 +346,11 @@ directive('icuSidepane', function() {
 
         $scope.updatedOptions = {
             onClose: (value/*, picker, $element*/) => {
-//                        console.log("on close", value, picker, $element) ;
                 let splut = value.split('.');
                 let valueChanged = new Date(splut[2],splut[1] -1 ,splut[0]) ;
                 $scope.updatedDate = new Date(value) ;
                 document.getElementById('ui-datepicker-div').style.display = 'block';
                 SearchService.filteringByUpdated = valueChanged;
-//                        console.log("SearchService.filteringByUpdated", SearchService.filteringByUpdated)
                 $state.go('main.search', { dateUpdated: value }) ;
             },
             dateFormat: 'd.m.yy'
@@ -366,7 +364,6 @@ directive('icuSidepane', function() {
         };
 
         $scope.toggleRecycle = function () {
-            console.log("toggleRecycle...") ;
             $scope.recycled = $location.path().split("/").pop() === "recycled";
 
             $scope.recycled = !$scope.recycled ;

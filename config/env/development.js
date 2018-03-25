@@ -138,6 +138,6 @@ module.exports = {
     libraryName:"libraryName",
     isWorking:false
   },
-  usersDomain:"@domain"
-
+  usersDomain:"@domain",
+  omerElastic: ['localhost:9200', 'localhost:9201', 'localhost:9202'] // Add all master nodes of the elastic cluster to the array
 };

@@ -28,8 +28,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             });
 
             function buildModal() {
-                // console.log("scope.modalName");
-                // console.log(scope.modalName);
+
                 if(scope.modalName == 'receive' && scope.entityName == "officeDocument") { 
                     var modalInstance = $uibModal.open({
                         animation: true,
@@ -133,9 +132,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
 
                 modalInstance.result.then(function () {
                     scope.deleteFn();
-                }, function () {
-                    console.log('Modal dismissed');
-                });
+                }, function () {});
             }
         };
 
@@ -187,7 +184,6 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocu
         var elem = document.getElementById("message");
         alertify.parent(elem);
         alertify.logPosition("bottom right");
-        console.log(sendingForm)
      
         if(sendingForm.classification == undefined || 
             sendingForm.doneBy == undefined ||
@@ -196,8 +192,6 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocu
         }else{
 
             OfficeDocumentsService.sendDocument(sendingForm, $scope.officeDocument).then(function(result){
-                console.log("===RETURNED===");
-                console.dir(result);
                 // Object.keys(result).forEach(function(key){
                     //    $scope.officeDocument[key]=result[key];
                 // });
@@ -217,17 +211,13 @@ function controllerDocument($scope, $state,$uibModalInstance, $filter,officeDocu
 
 
 function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, people, OfficeDocumentsService) {
-    console.log("dragCtrl") ;
     $scope.officeDocument = officeDocument;
     $scope.dragOptions = {
         start: function(e) {
-//          console.log("STARTING");
         },
         drag: function(e) {
-//          console.log("DRAGGING");
         },
         stop: function(e) {
-//          console.log("STOPPING");
         },
         receive: function(e) {
             // $scope.receiveStatus = "received" ;
@@ -272,7 +262,6 @@ function distributedCtrl($scope, $state,$uibModalInstance, $filter, officeDocume
 
     $scope.officeDocument = officeDocument;
     $scope.ok = function (sendingForm) {
-            // console.log($scope.receiveStatus);            
             $scope.cancel();            
     };    
     $scope.cancel = function () {

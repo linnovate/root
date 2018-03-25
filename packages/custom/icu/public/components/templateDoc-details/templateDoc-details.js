@@ -141,7 +141,6 @@ angular.module('mean.icu.ui.templateDocdetails', [])
 
 
         $scope.view = function(document1) {
-            console.dir(document1);
             if(document1.spPath){
                 var spSite = document1.spPath.substring(0,document1.spPath.indexOf('ICU')+3);
                 var uri = spSite+"/_layouts/15/WopiFrame.aspx?sourcedoc="+document1.spPath+"&action=default";

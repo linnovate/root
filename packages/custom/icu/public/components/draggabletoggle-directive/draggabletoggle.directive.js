@@ -72,9 +72,7 @@ angular.module('mean.icu.ui.draggabletoggle', [])
 
       // Move element, within container if provided
       function setPosition(e) {
-//          console.log("container", container) ;
-          console.log("e", e) ;
-          console.log("x", x) ;
+
           if (x > 160) { 
             // too far right
             x = 160 ;

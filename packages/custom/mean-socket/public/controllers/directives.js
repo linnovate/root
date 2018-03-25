@@ -4,7 +4,6 @@ angular.module('mean.mean-socket').directive('meanSocket', function(Global, Mean
     var UsersServicefunc = UsersService;
     
     // UsersServicefunc.getById("5709f2109c69002024f1acf1").then(function(discussion) { 
-    //     console.log(discussion.name) 
     // });
 	return {
 		restrict: 'A',
@@ -109,7 +108,6 @@ angular.module('mean.mean-socket').directive('useMeanSocket', function(Global, M
 
 			scope.listenChannel = function listenChannel(channel) {
 				MeanSocket.on('user:channel:joined:' + channel, function user(user) {
-					console.log('user:joined', channel);
 					// scope.meanSocketAfterGet({
 					// 	message: user
 					// });

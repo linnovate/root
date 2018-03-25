@@ -2,6 +2,7 @@
 
 var mean = require('meanio');
 var esConfig = mean.loadConfig().elasticsearch;
+var omerConfig = mean.loadConfig().omerElastic;
 var Module = mean.Module;
 var elasticsearch = require('elasticsearch');
 
@@ -22,12 +23,18 @@ Elasticsearch.register(function(app, auth, database) {
 
           var host = esConfig.host;
           var port = esConfig.port;
+
           var log = esConfig.log ? esConfig.log : 'trace';
 
           Elasticsearch.settings({host:host,port:port,log:log});
+          
+          var hosts = [];
+          for(var i = 0;i < Object.keys(omerConfig).length; ++i){
+            hosts.push(omerConfig[i]);
+          }
 
           Elasticsearch.client = new elasticsearch.Client({
-              host: host + ':' + port,
+              hosts: hosts,
               log: log
           });
       });

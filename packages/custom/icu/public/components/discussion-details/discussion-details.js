@@ -400,7 +400,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
 
         $scope.recycle = function(entity) {            
-            console.log("$scope.recycle") ;
             EntityService.recycle('discussions', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
                 clonedEntity.status = "Recycled" // just for activity status
@@ -416,7 +415,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
         $scope.recycleRestore = function(entity) {
-            console.log("$scope.recycleRestore") ;
             EntityService.recycleRestore('discussions', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
                 clonedEntity.status = "un-deleted" // just for activity status
@@ -521,7 +519,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
             nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
             oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
             if (nText != oText && oText) {
-                console.log(nVal, oVal)
                 if (activeDescriptionTimeout) {
                     clearTimeout(activeDescriptionTimeout)
                 }
