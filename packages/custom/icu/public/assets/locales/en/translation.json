@@ -207,6 +207,7 @@
     "usernameCannotBeMoreThan20Characters": "Username cannot be more than 20 characters",
     "versions": "Versions",
     "view": "View",
+    "viewer": "Viewer",
     "visibleTo":"visible to:",
     "connectECONNREFUSED": "connect ECONNREFUSED",
     "watchedTasks": "WATCHED TASKS",
