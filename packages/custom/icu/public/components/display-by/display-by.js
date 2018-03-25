@@ -3,11 +3,11 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context,SettingServices, $rootScope, $stateParams,$location, $window,NotifyingService,TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
+    function controller($scope, $state, context,SettingServices, $rootScope, $stateParams,$location, $window,NotifyingService,UsersService, TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
         $scope.statusList = SettingServices.getStatusList();
         let activeList = SettingServices.getActiveStatusList();
         let archiveList = SettingServices.getNonActiveStatusList();
-       
+
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
             $scope.context = context;
             $scope.folders = folders;
@@ -29,7 +29,7 @@ angular.module('mean.icu.ui.displayby', [])
                         a.splice(j--, 1);
                 }
             }
-        
+
             return a;
         }
         $scope.currentType = 'All';
@@ -49,12 +49,12 @@ angular.module('mean.icu.ui.displayby', [])
           if($scope.currentType == 'nonactive'){
             if (archiveList.indexOf(type) >-1)
               return true
-          } 
+          }
          }
-         
+
           return false;
         }
-       
+
         $scope.AllStatus = [];
 
         $scope.showM = function(type){
