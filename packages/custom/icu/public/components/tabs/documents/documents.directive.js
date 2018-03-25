@@ -2,12 +2,12 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsDocuments', function () {
-        function controller($scope, $http, DocumentsService, context, ActivitiesService, $stateParams, UsersService, AttachmentsService) {
-            
+        function controller($scope, $http, DocumentsService, context, ActivitiesService, $stateParams, UsersService, AttachmentsService, PermissionsService) {
+
             ActivitiesService.issueId=$stateParams.id || $stateParams.entityId;
-            
+
             $scope.stateParams = $stateParams;
-            
+
             ActivitiesService.issue = $scope.entityName;
             $scope.context = context;
             $scope.isOpen = {};
@@ -24,6 +24,11 @@ angular.module('mean.icu.ui.tabs')
                 $scope.activity = {
                     description: ''
                 };
+            };
+
+            $scope.havePermissions = function(type){
+                //TODO: Fix after release: remove this if check and disable directive usage in tasks.my.activities without entity
+                if($scope.entity)return (PermissionsService.havePermissions($scope.entity, type) && !$scope.isRecycled);
             };
 
             $scope.save = function() {
@@ -73,15 +78,15 @@ angular.module('mean.icu.ui.tabs')
 
                             DocumentsService.saveAttachments(data, file[index]).success(function(attachment) {
                                 console.log('[attachment]', [attachment]);
-                                
+
                                 result.attachments[result.attachments.length] = attachment;
                                 AttachmentsService.getAttachmentUser(attachment.creator._id).then(user => {
-                                    
+
                                     attachment.attUser = user.name ;
                                     $scope.documents.push(attachment);
                                 }
-                                )                        
-                                
+                                )
+
                             });
                         }
                     }
@@ -96,7 +101,7 @@ angular.module('mean.icu.ui.tabs')
             };
             $scope.view = function (document1) {
 
-                // Check if need to view as pdf   
+                // Check if need to view as pdf
                 if ((document1.attachmentType == "docx") ||
                     (document1.attachmentType == "doc") ||
                     (document1.attachmentType == "xlsx") ||
