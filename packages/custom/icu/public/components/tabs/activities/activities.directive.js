@@ -14,9 +14,11 @@ angular.module('mean.icu.ui.tabs')
             $scope.context = context;
             $scope.stateParams = $stateParams;
 
+            if($scope.entity)$scope.isRecycled = $scope.entity.hasOwnProperty('recycled');
+
             $scope.havePermissions = function(type){
                 //TODO: Fix after release: remove this if check and disable directive usage in tasks.my.activities without entity
-                if($scope.entity)return (PermissionsService.havePermissions($scope.entity, type) && $scope.isRecycled);
+                if($scope.entity)return (PermissionsService.havePermissions($scope.entity, type) && !$scope.isRecycled);
             };
 
             $scope.details = $scope.context.entityName !== 'my' ? {
