@@ -473,6 +473,17 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
+        
+        $scope.updateStatusForApproval = function(entity) {
+            let context = {
+                action:"updated",
+                name:  "status",
+                type:  "project"
+            }
+            entity.status = "waiting-approval" ;
+            $scope.update(entity, context) ;
+        }
+
 
         $scope.update = function (officeDocument, context) {
             

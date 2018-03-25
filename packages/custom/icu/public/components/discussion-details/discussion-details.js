@@ -460,6 +460,19 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         };
 
+
+        $scope.updateStatusForApproval = function(entity) {
+            let context = {
+                action:"updated",
+                name:  "status",
+                type:  "project"
+            }
+            entity.status = "waiting-approval" ;
+            $scope.update(entity, 'status') ;
+        }
+
+
+
         $scope.update = function (discussion, type) {
 
             $scope.updateDatesString();

@@ -96,6 +96,11 @@
                 </button>
             </div>
         </div>
+        <div class="approval" ng-if="project.status!='waiting-approval' && project.assign && project.assign._id == me._id"">
+            <button class="add approval" id="approval" ng-click="updateStatusForApproval(project)">{{'updateStatusForApproval' | i18next }}
+            </button>
+        </div>
+
         <!-- <button icu-comp-modal entity="project" entity-name="project" type="button" ng-mouseover="showTooltip()" class="compBtn"></button> -->
         <div class="description" ng-class="{ 'disabled' : !havePermissions('description')}">
             <div

@@ -20,7 +20,7 @@ var DocumentSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ['new', 'in-progress', 'received', 'done','sent'],
+    enum: ['new', 'in-progress', 'received', 'waiting-approval', 'done', 'sent'],
     default: 'new'
   },
   path: {

@@ -53,7 +53,7 @@ var DiscussionSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'scheduled', 'done', 'canceled', 'archived'],
+    enum: ['new', 'scheduled', 'waiting-approval',  'done', 'canceled', 'archived'],
     default: 'new'
   },
   tags: [String],

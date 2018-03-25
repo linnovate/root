@@ -161,12 +161,10 @@
             <p class="classification" ng-if="officeDocument.classification">{{'classification' | i18next }}: {{officeDocument.classification| i18next}} </p>
             <p ng-if="officeDocument.serial">{{'simochin' | i18next }}: {{officeDocument.serial}} </p>
         </div>
-        <!-- <div class="rowSimochin">
-        <div class='folder-title' ng-style="{'background-color': '#' + officeDocument.folder.color}">
-            <p class="folder-name">{{officeDocument.folder.title}}</p>
-        </div> >
-        <button class="simochin" >{{'simochin' | i18next }}</button>
-    </div-->
+        <div class="approval" ng-if="officeDocument.status!='waiting-approval' && officeDocument.assign && officeDocument.assign._id == me._id">
+            <button class="add approval" id="approval" ng-click="updateStatusForApproval(officeDocument)">{{'updateStatusForApproval' | i18next }}
+            </button>
+        </div>        
         <div class="description">
             <div class="title"  contenteditable="true" tabindex="1"  strip-br="true" medium-editor
                 ng-keydown="onEnter($event)" ng-model="officeDocument.title" ng-change="updateCurrentOfficeDocument()">
