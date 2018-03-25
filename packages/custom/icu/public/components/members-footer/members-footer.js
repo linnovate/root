@@ -22,16 +22,17 @@ angular.module('mean.icu.ui.membersfooter', [])
             };
             $scope.hideAddButton = context.main=="templateDocs" ? false:true;
             $scope.me = UsersService.getMe().$$state.value;
+
             $scope.userPermissionStatus = function(member){
                 if(member)return PermissionsService.getPermissionStatus(member, $scope.entity);
             };
 
-            $scope.updateEntity = function(){
-                return PermissionsService.updateEntityPermission($scope.entity, context);
-            };
-
             $scope.setEditor = function(entity, user){
                 return changePerms(entity, user, 'editor');
+            };
+
+            $scope.setCommenter = function(entity, user){
+                return changePerms(entity, user, 'commenter');
             };
 
             $scope.setViewer = function(entity, user){
@@ -128,7 +129,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                         'newVal':a
                     }
                     entity.watchers = a;
-                    service.update(entity,json, action, member._id);                    
+                    service.update(entity,json, action, member._id);
                     $state.reload();
                 }
                 else{

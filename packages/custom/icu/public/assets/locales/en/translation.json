@@ -246,6 +246,7 @@
     "allTemplateDocs": "All TemplateDocs",
 
     "settings": "settings",
+    "setAsCommenter": "Set as commenter",
     "selectOffice": "Select office",
     "selectFolder": "Select folder",
     "deleteTemplateDoc": "Delete TemplateDoc",

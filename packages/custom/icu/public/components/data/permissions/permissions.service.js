@@ -58,19 +58,25 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function getPermissionStatus(user, entity) {
+            var status = null;
+
             var usersPerms = _.find(entity.permissions, {'id': getUserId(user)});
-            switch (usersPerms.level) {
-                case 'editor':
-                    user.premissionStatus = 'editor';
-                    break;
-                case 'commenter':
-                    user.premissionStatus = 'commenter';
-                    break;
-                case 'viewer':
-                    user.premissionStatus = 'viewer';
-                    break;
+
+            if(usersPerms){
+                switch (usersPerms.level) {
+                    case 'editor':
+                        status = 'editor';
+                        break;
+                    case 'commenter':
+                        status = 'commenter';
+                        break;
+                    case 'viewer':
+                        status = 'viewer';
+                        break;
+                }
+                return status;
             }
-            return user;
+            return false;
         }
 
         function getUserId(user){
