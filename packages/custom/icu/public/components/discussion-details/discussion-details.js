@@ -491,8 +491,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     break;
 
                 case 'assign':
-                    if (discussion.assign !== undefined || discussion.assign !== null) {
-
+                    if (discussion.assign != null) {
                         let filtered = discussion.watchers.filter(watcher => {
                             // check the assignee is not a watcher already
                             return watcher == discussion.assign

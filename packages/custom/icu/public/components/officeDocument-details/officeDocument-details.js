@@ -399,7 +399,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             };
 
             
-            if (officeDocument.assign !== undefined || officeDocument.assign !== null) {
+            if (officeDocument.assign != null) {
                 // check the assignee is not a watcher already
                 let filtered = officeDocument.watchers.filter(watcher => {
                     return watcher._id == officeDocument.assign
