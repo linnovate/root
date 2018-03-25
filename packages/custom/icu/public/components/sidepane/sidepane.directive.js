@@ -36,7 +36,11 @@ directive('icuSidepane', function() {
         lastMonth.setDate(lastMonth.getMonth() -1 ) ;
         $scope.updatedDate = lastMonth ;
         SearchService.filteringByUpdated = $scope.updatedDate;
-        
+
+        //duedate
+        $scope.dueDate = new Date();
+        SearchService.filteringByDueDate = $scope.dueDate;
+
         // activeToggle
         $scope.activeToggleList = EntityService.activeToggleList;
         $scope.activeToggle = {
@@ -319,6 +323,7 @@ directive('icuSidepane', function() {
                   else if(results[i].status == $rootScope.status){
                     filteredByType.push(results[i])
                   }
+
                 }
                 else filteredByType.push(results[i])
             }
@@ -391,6 +396,21 @@ directive('icuSidepane', function() {
         },
         dateFormat: 'd.m.yy'
     };
+
+    $scope.updateDueDate = {
+        onClose: (value/*, picker, $element*/) => {
+            //                        console.log("on close", value, picker, $element) ;
+            let splut = value.split('.');
+            let valueChanged = new Date(splut[2],splut[1] -1 ,splut[0]) ;
+            $scope.dueDate = new Date(value) ;
+            document.getElementById('ui-datepicker-div').style.display = 'block';
+            SearchService.filteringByDueDate = valueChanged;
+            console.log("SearchService.filteringByDueDate", SearchService.filteringByDueDate)
+            $state.go('main.search', { dueDate: value }) ;
+        },
+        dateFormat: 'd.m.yy'
+    };
+
     function arrayUnique(array) {
         var a = array.concat();
         for(var i=0; i<a.length; ++i) {
@@ -406,6 +426,7 @@ directive('icuSidepane', function() {
    
     
      $scope.filterActive = function(type) {
+         console.log('ttttttt',type)
          $scope.activeToggle.field = type;
          EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
          $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });

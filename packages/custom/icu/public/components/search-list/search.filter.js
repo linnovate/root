@@ -18,11 +18,25 @@ angular.module('mean.icu.ui.searchlistfilter', [])
 
         }
         SearchService.filteringResults = arr;
+        console.log('wwwwwwwwwwww',SearchService.filteringByDueDate)
         var filteringResults = SearchService.filteringResults.map(function(e) {
+            console.log('rivka aifa',e)
             let filterDate = new Date(SearchService.filteringByUpdated) ;
-            let entityDate = new Date(e.updated) ;
-//          console.log(filterDate, entityDate) ; 
-            let res =  entityDate > filterDate ? true : false ; // true if time1 is later
+            let filterDueDate = new Date(SearchService.filteringByDueDate);
+            let entityDate = new Date(e.updated);
+            let entityDueDate = new Date();
+            if (e.due) {
+                entityDueDate = new Date(e.due)
+                console.log('ooooooooooooooo',entityDueDate ,filterDueDate) ; 
+            }
+              
+             let res = false ; // true if time1 is later
+             if (e.due)
+               if (entityDueDate < filterDueDate && entityDate > filterDate)
+                 res = true;
+                else res = false;
+              else if (entityDate > filterDate)
+               res = true;
 //          console.log(res) ;
             return res ? e.id : -1 ;
         });

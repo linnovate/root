@@ -44,12 +44,12 @@ angular.module('mean.icu.ui.displayby', [])
             return false;
           if($scope.currentType == 'active'){
               if (activeList.indexOf(type) >-1)
-                return true
+                return true;
           }
           if($scope.currentType == 'nonactive'){
             if (archiveList.indexOf(type) >-1)
-              return true
-          }
+              return true;
+          } 
          }
 
           return false;
@@ -65,6 +65,8 @@ angular.module('mean.icu.ui.displayby', [])
               $scope.AllStatus = $scope.statusList[$scope.filteringData.issue]
             else $scope.AllStatus =  arrayUnique(activeList.concat(archiveList));
         }
+
+        $scope.typeClicked = false;
 
         NotifyingService.subscribe('editionData', function () {
             TasksService.getAll(0,2500,'created').then(function (data) {
