@@ -20,7 +20,6 @@ exports.createFromSocket = function(data, cb) {
     message.type = data.type;
 
     message.save(function(err) {
-        if (err) console.log(err);
         Message.findOne({
             _id: message._id
         }).populate('user', 'name username').exec(function(err, message) {
@@ -40,7 +39,6 @@ exports.getAllForSocket = function(channel, cb) {
 
 exports.getListOfChannels = function(cb) {
     Message.distinct('channel', {}, function(err, channels) {
-        console.log('channels', channels);
         return cb(channels);
     });
 };

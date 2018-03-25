@@ -4,8 +4,7 @@ var mongoose = require('mongoose'),
 var crud = require('../controllers/crud.js');
 
 exports.create = function (req, res, next) {
-  console.log('come in to webhook create method')
-  console.log(JSON.stringify(req.body))
+
   if (req.locals.error) {
     return next();
   }

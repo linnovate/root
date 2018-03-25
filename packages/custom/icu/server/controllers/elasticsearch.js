@@ -54,7 +54,6 @@ function inArray(elm,array){
 
 var buildSearchResponse = exports.buildSearchResponse = function(type, obj,userId) {
 
-  console.yon('inbuild response');
   var groups = {};
   if (type === 'aggs') {
     obj.forEach(function(i) {
@@ -71,7 +70,6 @@ var buildSearchResponse = exports.buildSearchResponse = function(type, obj,userI
     })
   }
 
-  console.yon(groups);
   if(groups.task!=undefined && groups.task!=null){
   	var finalResults1=[];
   	for(var i=0;i<groups.task.length;i++){
@@ -232,10 +230,6 @@ exports.search = function(req, res, next) {
     body: query
   };
 
-  console.log("****************************************************");
-  console.log(JSON.stringify(options));
-  console.log("****************************************************");
-
   mean.elasticsearch.search(options, function(err, result) {
     console.log("****************************************************result");
     if (result && result.hits) console.dir(result.hits.hits);
@@ -243,15 +237,9 @@ exports.search = function(req, res, next) {
     if(err) {
       system.sendMessage({service: 'elasticsearch', message: result});
     }
-    console.log(err)
-    console.log(result)
     utils.checkAndHandleError(err, 'Failed to find entities', next);
 
-
-    console.yon(req.query);
-
     if (req.query.term) {
-      console.log('yes term')
       if (!result.aggregations) {
         console.log('result.aggregations=' + result.aggregations);
         return next(new Error('Can\'t find ' + req.query.term));

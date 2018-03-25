@@ -172,7 +172,6 @@ function updateAllTemplates(officeId, watcher, action) {
                 'creators': creators,
                 'zero': zero
               };
-              console.log("HI");
               request({
                 'url': config.SPHelper.uri + "/api/share",
                 'method': 'POST',
@@ -198,11 +197,6 @@ exports.update = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
-  console.log('************************************watcher action********************************************')
-  console.log(req.body)
-  console.log(JSON.stringify(req.body));
-  console.log(req.body.watcherAction);
-  console.log(req.body.watcherId);
   if (req.body.watcherAction) {
     if (req.body.watcherAction == 'added') {
       Folder.update(

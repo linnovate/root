@@ -52,7 +52,6 @@ function recycleGetBin(entityType) {
       request.push(new Promise(function (resolve, error) {
         Model.find({recycled: { $exists: true }}).exec(function (err, entities) {            
           if (err) {
-            console.log("recycleGetBin err")
             error('error');
           }
 
@@ -70,7 +69,6 @@ function recycleGetBin(entityType) {
   Promise.all(request).then(function (result) {
     fulfill(result);
   }).catch(function (reason) {
-    console.log("recycleGetBin promise all reject") ;
     reject('reject');
   });
 });

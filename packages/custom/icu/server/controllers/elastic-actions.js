@@ -108,13 +108,9 @@ function indexCollectionElastic(collectionName,nodes,elastic) {
 function insertOffsetToIndexKue(schema)  {
     var limit = 100;
     var offset = 0;
-    console.log('******************schema' + schema);
     var Collection = db.collection(schema);
-    console.log('-------------------------------------------');
-    console.log('Index Collection Elastic : ' + schema);
     Collection.count(function (err, count)  {
         var countItem = count;
-        console.log('countItem in mongoDB: ' + countItem);
         for (offset = 0 ;offset < countItem;)  {
             queue.create('index', {schema: schema, offset: offset}).priority('high').removeOnComplete(true).save();
             offset = limit + offset;
@@ -134,8 +130,6 @@ function indexJob(data, done) {
 
     Collection.find().limit(limit).skip(offset).toArray(function (err, nodes) {
         if(!err)  {
-            console.log("nodes1");
-            console.log(nodes);
             
             indexCollectionElastic(collectionName,nodes,elasticObj).then(function (res) {
                 elasticsearchCount = res.length + elasticsearchCount;
@@ -158,19 +152,15 @@ function indexCollectionFromMongotoElastic(collectionName,elastic,callback){
 queue.on('job complete', function(){
     queue.inactiveCount(function(err, count) {
         if(count < 1) {
-            console.log('Complete index ', elasticsearchCount);
-            console.log('-------------------------------------------');
             elasticsearchCount = 0;
         }
     });
 });
 
 queue.on('failed attempt', function(errorMessage, doneAttempts){
-    console.log('Job failed');
 });
 
 queue.on('failed', function(errorMessage){
-    console.log('Job failed');
 });
 
 queue.process('index', function(job, done){
@@ -495,7 +485,6 @@ function indexJobUserPublishedFields(data, done) {
                 });
 
             });
-            console.log('indexJobUserPublishedFields',users.length);
             done();
         }
         else  {
@@ -515,7 +504,6 @@ exports.setUserPublishedFields = function(req, res)  {
     var countItem;
     CollectionUser.count(function (err, count)  {
         countItem = count;
-        console.log('countItem in mongoDB: ',countItem);
         for (offset = 0 ;offset < countItem;)  {
             queue.create('userPublishedFields', {offset: offset}).priority('high').removeOnComplete(true).save();
             offset = limit + offset;

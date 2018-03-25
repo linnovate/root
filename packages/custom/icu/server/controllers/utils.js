@@ -10,6 +10,5 @@ exports.checkAndHandleError = function (err, defaultMessage, next) {
 };
 
 exports.errorHandler = function (err, req, res, next) {
-  console.log(err);
   next(err);
 };

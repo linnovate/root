@@ -179,7 +179,6 @@ exports.getByEntity = function(req, res, next) {
       //      },
       //       {$sort: {'tasks.order':1 }}      
       //  ]).exec(function(err, tasks) {
-      //    console.log(tasks);
       //  });
       // query.exec(function(err, tasks) {
       //       tasks.forEach(function(element){

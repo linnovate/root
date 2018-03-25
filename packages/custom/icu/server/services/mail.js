@@ -56,7 +56,6 @@ return new Promise(function (fulfill, reject){
   });
     docx.generate ( out, {
       'finalize': function ( written ) {
-          console.log ( 'Finish to create a docx file.\nTotal bytes created: ' + written + '\n' );
           exec('lowriter --headless --convert-to pdf ' + path, function (err, stout, sterr){
           if(err){
             logger.log('error', '%s writeDocxToFile, %s', req.user.name, ' convert-to pdf', {error: err.message});
@@ -273,7 +272,6 @@ function createPDF(discussion , tasks){
   return new Promise(function (fulfill, reject){
     var docx = officegen('docx');
     docx.on ( 'finalize', function ( written ) {
-    console.log ( 'Finish to create a docx file.\nTotal bytes created: ' + written + '\n' );
     });
     docx.on ( 'error', function ( err ) {
       logger.log('error', '%s createPDF, %s', req.user.name, ' docx (officegen)', {error: err.message});

@@ -114,7 +114,6 @@ exports.upload = function (req, res, next) {
         var pathFor = "./files" + arr[1];
         var stats = fs.statSync(pathFor);
         //var stats = fs.statSync("." + saveTo.substring(saveTo.indexOf('/files')));
-        console.log(pathFor + 'test path')
 
         var fileSizeInBytes = stats["size"];
         //Convert the file size to megabytes (optional)

@@ -45,25 +45,19 @@ module.exports = function(MeanSocket, io) {
 
 
     io.on('connection', function(socket) {
-
-        console.log('Chat - user connected');
         
         //Made By OHAD
         socket.emit('user joined', {success: true});
         
         socket.on('user joined token', function(data) {
-            console.log("data");
-            console.log(JSON.stringify(data));
             sockets._new(data, socket);
         });
         //END Made By OHAD
 
         socket.on('disconnect', function() {
-            console.log('Chat - user disconnected');
         });
 
         socket.on('user:joined', function(user) {
-            console.log(user.name + ' joined the room');
             var message = user.name + ' joined the room';
             io.emit('user:joined', {
                 message: message,
@@ -73,20 +67,15 @@ module.exports = function(MeanSocket, io) {
         });
 
         socket.on('message:send', function(message) {
-            console.log('message: ' + message);
-            console.log(JSON.stringify(message));
-            // var messageKey = 'message:' + message.name;
-            // console.log('Storing key: ' + messageKey);
 
-            console.log('storing to set: messages:' + message.channel);
+            // var messageKey = 'message:' + message.name;
+
             
             
             //CHECK
             
             //Emit back any messages that havent expired yet.
             getMessages(message.channel).then(function(data) {
-                console.log('got messages');
-                console.log(data);
                 //socket.emit('messages:channel:' + channelInfo.channel, data);
             });
             
@@ -96,16 +85,11 @@ module.exports = function(MeanSocket, io) {
             MeanSocket.settings(function(err, settings) {
                 require(settings.settings.funcPage)[settings.settings.getMessageFunc](message, function(cb) {
                     io.emit('message:channel:' + message.channel, cb);
-                    console.log('emited: ' + cb);
                 });
             });
         });
 
         socket.on('channel:join', function(channelInfo) {
-            console.log('Channel joined - ', channelInfo.channel);
-            console.log(channelInfo);
-            console.log('Added to channels: ', channelInfo.channel);
-            console.log('messages:' + channelInfo.channel);
 
             // socket.emit('messages:channel:' + channelInfo.channel, )
 
@@ -134,8 +118,6 @@ module.exports = function(MeanSocket, io) {
 
             //Emit back any messages that havent expired yet.
             getMessages(channelInfo.channel).then(function(data) {
-                console.log('got messages');
-                // console.log(data);
                 socket.emit('messages:channel:' + channelInfo.channel, data);
             });
         });

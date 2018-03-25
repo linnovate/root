@@ -902,7 +902,6 @@ exports.upload = function (req, res, next) {
   });
   var hasFile = false;
   busboy.on('file', function (fieldname, file, filename) {
-    console.log("I got a file  "+filename);
     var port = config.https && config.https.port ? config.https.port : config.http.port;
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
@@ -915,7 +914,6 @@ exports.upload = function (req, res, next) {
         var arr = hostFileLocation.split("/files");
         var pathFor = "./files" + arr[1];
         var stats = fs.statSync(pathFor);
-        console.log(pathFor + 'test path')
         var fileSizeInBytes = stats["size"];
         req.locals.data.body.size = fileSizeInBytes;
       });
@@ -1157,7 +1155,6 @@ exports.uploadFileToDocument = function(req,res,next){
   });
   var hasFile = false;
   busboy.on('file', function (fieldname, file, filename) {
-    console.log("I got a file  "+filename);
     var port = config.https && config.https.port ? config.https.port : config.http.port;
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
@@ -1167,7 +1164,6 @@ exports.uploadFileToDocument = function(req,res,next){
         var arr = hostFileLocation.split("/files");
         var pathFor = "./files" + arr[1];
         var stats = fs.statSync(pathFor);
-        console.log(pathFor + 'test path')
         var fileSizeInBytes = stats["size"];
         req.locals.data.body.size = fileSizeInBytes;
       });
@@ -1955,28 +1951,18 @@ exports.signNew = function (req, res, next) {
 
 // update user document received.
 exports.receiveDocument = function(req,res,next){
-//  console.log("receiveDocument ***************" ) ;  
   officeDocument  = req.body.officeDocument  ;
   var id = req.params.id;  
   Document.update({'_id':officeDocument.ref },{$push:{readBy: {date: Date.now(), user: req.user._id }}},function(error,result){
     if(error){
         //TBD
-//      res.send(error);
-logger.log('error', '%s receiveDocument, %s', req.user.name,'  Document.update', {error: error.message});
-
-        console.log("error updating sender user read") ;
-
+      logger.log('error', '%s receiveDocument, %s', req.user.name,'  Document.update', {error: error.message});
     }
     else{
       logger.log('info', '%s receiveDocument, %s', req.user.name, 'success' );
-
-        //TBD
-//      res.send('ok');
-      console.log("success updating sender user read") ;
     }
   });
 
-  //    console.log("updating doc status to viewed") ;  
   Document.update({'_id':id},{$set:{viewed: true}},function(error,result){
     if(error){
       logger.log('error', '%s receiveDocument, %s', req.user.name,'  Document.update', {error: error.message});
@@ -1994,11 +1980,9 @@ logger.log('error', '%s receiveDocument, %s', req.user.name,'  Document.update',
 
 // update user document distributed == viewed.
 exports.distributedDocument = function(req,res,next){
-//  console.log("distributedDocument ***************" ) ;  
   officeDocument  = req.body.officeDocument  ;
   var id = req.params.id;  
   Document.update({'_id':id},{$set:{status:"viewed"}},function(error,result){
-//    console.log("updating doc status to viewed") ;  
     if(error){
       logger.log('error', '%s distributedDocument, %s', req.user.name,'  Document.update', {error: error.message});
 
@@ -2020,7 +2004,6 @@ exports.readByDocument = function(req,res,next){
   readBy.forEach(function(element) {
     readbyToId.push(new mongoose.Types.ObjectId(element.user)) ;
   });
-  console.log( JSON.stringify(readbyToId )) ;  
   var id = req.params.id;  
   User.find({
     '_id': { $in: readbyToId }
@@ -2047,7 +2030,6 @@ exports.sentToDocument = function(req,res,next){
   sentTo.forEach(function(element) {
     sentToId.push(new mongoose.Types.ObjectId(element.user)) ;
   });
-  console.log( JSON.stringify(sentToId)) ;  
   var id = req.params.id;  
   User.find({
     '_id': { $in: sentToId }
@@ -2113,13 +2095,8 @@ exports.sendDocument = function (req, res, next) {
       doc2.save(function(error,result){
         if(error||!result){
           logger.log('error', '%s sendDocument, %s', req.user.name,'    doc2.save', {error: err.message});
-
-            console.log("error sending document");
-            console.log(error);
-            console.log(result);
         }
         else{
-//          console.log("success sending document")  
             if(sendingForm['sendWithAttachments']){
 
               Attachment.find({entityId:officeDocument._id}).then(function (attachments) {
@@ -2143,10 +2120,6 @@ exports.sendDocument = function (req, res, next) {
                   attachment.save(function(error,result2){
                     if(error||!result2){
                       logger.log('error', '%s sendDocument, %s', req.user.name,'    attachment.save', {error: "error"});
-
-                        console.log("error sending document");
-                        console.log(error);
-                        console.log(result2);
                     }
                     else{
                       logger.log('info', '%s sendDocument, %s', req.user.name, 'success' );
@@ -2155,9 +2128,7 @@ exports.sendDocument = function (req, res, next) {
                   });
                 })
 
-              })
-              console.log("sendWithAttachments") 
-              
+              })              
             }
         }
         
@@ -2259,7 +2230,6 @@ var copyFile = function (file, dir2) {
         readStream.on('data', function(buffer){
           //bytesCopied+= buffer.length
           //var porcentage = ((bytesCopied/filesize)*100).toFixed(2)
-          //console.log(porcentage+'%') // run once with this and later with this line commented
         })
         readStream.on('end', function(){
           console.timeEnd('copying')

@@ -24,7 +24,6 @@ function sendMail(mailOptions) {
   var transport = nodemailer.createTransport(options);
 
   transport.sendMail(mailOptions, function (err, response) {
-    console.log(err, response);
     if (err) return err;
     return response;
   });
@@ -50,12 +49,6 @@ exports.sendEx = function (type, data) {
   var template = new EmailTemplate(templateDir);
 
   template.render(data, function (err, results) {
-    if (err) {
-      console.log(err.message);
-      console.log(err.stack);
-    } else {
-      console.log(results.html);
-    }
     //add discussion owner
     data.discussion.watchers.push(data.discussion.assign);
 

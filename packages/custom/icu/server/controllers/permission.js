@@ -1,7 +1,5 @@
 exports.echo = function (req, res, next) {
   'use strict';
-
-  console.log('general permissions');
   next();
 };
 

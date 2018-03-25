@@ -5,7 +5,6 @@ var client = new elasticsearch.Client({
 	host: 'localhost:9200',
 	log: 'trace'
 });
-console.log('hi');
 class Actions {
 	constructor() { //class constructor
 	}
