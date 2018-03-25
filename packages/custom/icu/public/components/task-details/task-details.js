@@ -308,6 +308,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         }
 
+
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
             task.status = $scope.statuses[1];
@@ -384,6 +385,14 @@ angular.module('mean.icu.ui.taskdetails', [])
                 }
             });
         }
+
+        
+        $scope.updateStatusForApproval = function(entity) {
+            entity.status = "waiting-approval" ;
+            $scope.updateStatus(entity) ;
+            
+        }
+
 
         $scope.updateStatus = function(task) {
 

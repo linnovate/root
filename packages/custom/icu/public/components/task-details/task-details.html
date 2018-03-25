@@ -123,6 +123,10 @@
                 {{currentContext.entity.title}}
             </div>
         </div>
+        <div class="approval" ng-if="task.status!='waiting-approval' && task.assign && task.assign._id == me._id">
+            <button class="add approval" id="approval" ng-click="updateStatusForApproval(task)">{{'updateStatusForApproval' | i18next }}
+            </button>
+        </div>
         <div class="description" ng-class="{ 'disabled' : !havePermissions('description')}">
             <!-- uib-popover-template="dynamicPopover.templateUrl" -->
             <div class="title" contenteditable="true" ng-attr-autofocus="{{shouldAutofocus || undefined}}" tabindex="1" strip-br="true"

@@ -121,6 +121,7 @@
             &.canceled{color: #ef5350;}
             &.completed{color: #598527;}
             &.archived{color: #ab47bc;}
+            &.waiting-approval{color: #ab47bc;}            
             &.received{color: #37afef;}
             &.sent{color: #359123;}
 
@@ -189,6 +190,7 @@
             &.canceled{color: #ef5350;}
             &.completed{color: #598527;}
             &.archived{color: #ab47bc;}
+            &.waiting-approval{color: #ab47bc;}            
             &.received{color: #37afef;}
             &.sent{color: #359123;}
         }
