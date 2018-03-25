@@ -237,7 +237,7 @@
 	"settings": "הגדרות",
 	"setAsCommenter": "הגדר כמגיב",
 	"demoteToViewer": "הגדר כצופה",
-    "promoteToEditor": "הגדר כעורך",
+	"promoteToEditor": "הגדר כעורך",	
 	"selectOffice": "בחר לשכה",
 	"selectFolder": "בחר תיק",
 	"deleteTemplateDoc": "מחק תבנית מסמך",
