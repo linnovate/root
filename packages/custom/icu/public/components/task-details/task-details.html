@@ -70,13 +70,13 @@
                 </div>
                 <ul class="dropdown-menu menu-items" role="menu">
                     <li>
-                        <a href="#" ng-if="task.recycled" ng-click="recycle(task)">
+                        <a href="#" ng-if="!isRecycled" ng-click="recycle(task)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span>{{ 'recycleTask' | i18next }}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" ng-if="task.recycled" ng-click="recycleRestore(task)">
+                        <a href="#" ng-if="isRecycled" ng-click="recycleRestore(task)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span>{{ 'unrecycleTask' | i18next }}</span>
                         </a>
