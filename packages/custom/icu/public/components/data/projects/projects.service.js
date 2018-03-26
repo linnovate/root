@@ -238,6 +238,24 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
+    
+    function updateDue(project, prev) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'project',
+                issueId: project.id,
+                type: 'updateDue',
+                TaskDue: project.due,
+                prev: prev.due
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+
+    }
+
+
     function updateStatus(project, prev) {
         return ActivitiesService.create({
             data: {
@@ -307,6 +325,7 @@ angular.module('mean.icu.data.projectsservice', [])
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
         updateWatcher: updateWatcher,
+        updateDue: updateDue,
         updateStatus: updateStatus,
         updateColor: updateColor,
         updateTitle: updateTitle

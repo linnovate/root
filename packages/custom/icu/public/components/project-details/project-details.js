@@ -208,7 +208,8 @@ angular.module('mean.icu.ui.projectdetails', [])
                 project.discussion = context.entityId;
             }
 
-            ProjectsService.updateDue(project, backupEntity).then(function(result) {
+            
+            ProjectsService.updateDue(project, backupEntity).then(function(result) {            
                 backupEntity = JSON.parse(JSON.stringify($scope.project));
                 ActivitiesService.data.push(result);
             });
