@@ -96,7 +96,7 @@
                 </button>
             </div>
         </div>
-        <div class="approval" ng-if="project.status!='waiting-approval' && project.assign && project.assign._id == me._id"">
+        <div class="approval" ng-if="project.status!='waiting-approval' && project.assign && project.assign._id == me._id && !isRecycled">
             <button class="add approval" id="approval" ng-click="updateStatusForApproval(project)">{{'updateStatusForApproval' | i18next }}
             </button>
         </div>

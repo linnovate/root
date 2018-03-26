@@ -123,7 +123,7 @@
                 {{currentContext.entity.title}}
             </div>
         </div>
-        <div class="approval" ng-if="task.status!='waiting-approval' && task.assign && task.assign._id == me._id">
+        <div class="approval" ng-if="task.status!='waiting-approval' && task.assign && task.assign._id == me._id && !isRecycled">
             <button class="add approval" id="approval" ng-click="updateStatusForApproval(task)">{{'updateStatusForApproval' | i18next }}
             </button>
         </div>
