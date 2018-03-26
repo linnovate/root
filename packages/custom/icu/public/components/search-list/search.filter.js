@@ -20,10 +20,24 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         SearchService.filteringResults = arr;
         var filteringResults = SearchService.filteringResults.map(function(e) {
             let filterDate = new Date(SearchService.filteringByUpdated) ;
-            let entityDate = new Date(e.updated) ;
-//          console.log(filterDate, entityDate) ; 
-            let res =  entityDate > filterDate ? true : false ; // true if time1 is later
-//          console.log(res) ;
+            let filterDueDate = new Date(SearchService.filteringByDueDate);
+            let entityDate = new Date(e.updated);
+            let entityDueDate = new Date();
+            if (SearchService.filteringByDueDate && e.due) {
+                entityDueDate = new Date(e.due)
+            }
+            let res = false; 
+            if (e._type == 'officeDocument')
+              e.due = e.created;
+            if (SearchService.filteringByDueDate  && e.due){
+                if (entityDueDate > filterDueDate && entityDate > filterDate) {
+                  res = true;
+                }
+                else res = false;
+            }
+              
+            else if (entityDate > filterDate)
+               res = true;
             return res ? e.id : -1 ;
         });
 

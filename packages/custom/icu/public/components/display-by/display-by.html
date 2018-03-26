@@ -49,6 +49,14 @@
                 <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate"
                        ng-class='{"updatedAt":checkDate()}'>
             </div>
+            <div class="filterDueDate" ng-if="filteringData.issue !== 'all'">
+                <div class="subtitle">{{'dueDate' | i18next}}</div>
+                <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
+                       ng-class='{"updatedAt":checkDate()}'>
+                       <!-- <input ng-if="filteringData.issue === 'discussion'" id="startDate" ng-click="open()" ui-date="startDueOptions" 
+                       ng-model="discussion.startDate" ng-class='{"oldDate":!checkDate()}'> -->
+
+            </div>
 
             <div ng-if="filteringData.projects.length">
                 <div class="subtitle">{{'linkedTo' | i18next}}{{'project' | i18next}}</div>
