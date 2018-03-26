@@ -35,13 +35,13 @@
                         <span class="status" ng-click="$root.status = field.value;filterSearchByType();showM(field.value,0);">{{field.title | i18next}}</span>
                     </li>
                 </ul>
-                <div class="show-more" ng-show="!AllStatus.length" ng-click="showM('All');filterActive('All');">SHOW MORE</div>
+                <div class="show-more" ng-show="!AllStatus.length" ng-click="showM('All');filterActive('All');">{{'more' | i18next}}</div>
                 <ul ng-show="AllStatus.length">
                         <li ng-repeat="field in AllStatus | orderBy:field">
                             <span class="all-status" ng-class="{'bold':isActive(field,$root.status)}" ng-click="$root.status = field;filterSearchByType(true)">{{field | i18next}}</span>
                         </li>
                     </ul>
-                    <div class="show-more" ng-show="AllStatus.length && currentType == 'All'" ng-click="showM('empty');$root.status = null;">SHOW LESS</div>
+                    <div class="show-more" ng-show="AllStatus.length && currentType == 'All'" ng-click="showM('empty');$root.status = null;">{{'less' | i18next}}</div>
                  </div>
             </div>
             <div class="filterUpdated">
