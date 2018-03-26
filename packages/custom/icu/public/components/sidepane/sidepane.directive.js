@@ -37,9 +37,8 @@ directive('icuSidepane', function() {
         $scope.updatedDate = lastMonth ;
         SearchService.filteringByUpdated = $scope.updatedDate;
 
-        //duedate
-        $scope.dueDate = new Date();
-        SearchService.filteringByDueDate = $scope.dueDate;
+     
+        
 
         // activeToggle
         $scope.activeToggleList = EntityService.activeToggleList;
@@ -405,8 +404,8 @@ directive('icuSidepane', function() {
             $scope.dueDate = new Date(value) ;
             document.getElementById('ui-datepicker-div').style.display = 'block';
             SearchService.filteringByDueDate = valueChanged;
-            console.log("SearchService.filteringByDueDate", SearchService.filteringByDueDate)
-            $state.go('main.search', { dueDate: value }) ;
+            SearchService.filteringByUpdated = SearchService.filteringByUpdated;
+            $state.go('main.search', { dateUpdated: value }) ;
         },
         dateFormat: 'd.m.yy'
     };
