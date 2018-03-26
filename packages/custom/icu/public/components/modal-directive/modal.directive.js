@@ -263,17 +263,17 @@ function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, peo
     };
 }
 
-function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, people, UsersService, OfficeDocumentsService) {
+function userCtrl($scope, $state, $i18next, $uibModalInstance, $filter,officeDocument, people, UsersService, OfficeDocumentsService) {
 
     $scope.officeDocument = officeDocument;
     $scope.people = people;
     $scope.currentUser = UsersService.getMe().$$state.value;
     $scope.tabs = [
         {
-            title: 'General',
+            title: 'general',
         },
         {
-            title: 'Notifications',
+            title: 'notifications',
         }
         // ,{
         //     title: 'Components',
@@ -283,12 +283,14 @@ function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, peop
     $scope.setActiveTab = function(tab){
         $scope.activeTab = tab;
     };
+
     $scope.isActive = function (tab){
         if($scope.activeTab.title == tab.title){
-            return 'activeTab'
+            return 'activeTab';
         }
         return '';
     };
+
     $scope.filters = [
         {
             title: 'Home Screen Filter',
@@ -301,7 +303,7 @@ function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, peop
 
     $scope.updateUserInfo = function () {
         UsersService.update($scope.currentUser);
-    }
+    };
 
     $scope.uploadAvatar = function(files) {
         if (files.length) {
@@ -325,34 +327,34 @@ function userCtrl($scope, $state,$uibModalInstance, $filter,officeDocument, peop
     $scope.notifications = [
         {
             title: 'IWantToGetMailEveryWeekAboutMyTasks',
-            hint: 'this hint will help you to understand',
+            hint: 'aListOfNewTasksAssignedToMe',
             options: [
-                'yes',
-                'no',
+                $filter('i18next')('yes'),
+                $filter('i18next')('no'),
             ],
-            model: $scope.currentUser.GetMailEveryWeekAboutMyTasks,
+            model: $filter('i18next')($scope.currentUser.GetMailEveryWeekAboutMyTasks),
             name: 'GetMailEveryWeekAboutMyTasks',
         },
         {
             title: 'IWantToGetMailEveryWeekAboutGivenTasks',
-            hint: 'this hint will help you to understand',
+            hint: 'updates on tasks related to me',
             options: [
-                'yes',
-                'no',
+                $filter('i18next')('yes'),
+                $filter('i18next')('no'),
             ],
-            model: $scope.currentUser.GetMailEveryWeekAboutGivenTasks,
+            model: $filter('i18next')($scope.currentUser.GetMailEveryWeekAboutGivenTasks),
             name: 'GetMailEveryWeekAboutGivenTasks',
         },
         {
             title: 'IWantToGetMailEveryDayAboutMyTasks',
-            hint: 'this hint will help you to understand',
+            hint: 'updates on tasks assigned to me',
             options: [
-                'yes',
-                'no',
+                $filter('i18next')('yes'),
+                $filter('i18next')('no'),
             ],
-            model: $scope.currentUser.GetMailEveryDayAboutMyTasks,
+            model: $filter('i18next')($scope.currentUser.GetMailEveryDayAboutMyTasks),
             name: 'GetMailEveryDayAboutMyTasks',
-        },
+        }
     ];
 
     $scope.updateNotificationSettings = function(notification, option){
