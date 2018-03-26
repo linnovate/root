@@ -238,7 +238,7 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
-
+    
     function updateDue(project, prev) {
         return ActivitiesService.create({
             data: {

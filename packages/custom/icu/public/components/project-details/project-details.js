@@ -209,7 +209,7 @@ angular.module('mean.icu.ui.projectdetails', [])
             }
 
             
-            ProjectsService.updateDue(project, backupEntity).then(function(result) {
+            ProjectsService.updateDue(project, backupEntity).then(function(result) {            
                 backupEntity = JSON.parse(JSON.stringify($scope.project));
                 ActivitiesService.data.push(result);
             });
