@@ -4,7 +4,10 @@ module.exports = {
  db: (process.env.MONGODB_URI || 'mongodb://localhost/icu-dev'),
   debug: true,
   logging: {
-    format: 'tiny'
+    format: 'tiny',
+    options: {skip:function(req,res){
+      return res.statusCode < 400 ;
+    }}
   },
   //  aggregate: 'whatever that is not false, because boolean false value turns aggregation off', //false
   aggregate: false,
