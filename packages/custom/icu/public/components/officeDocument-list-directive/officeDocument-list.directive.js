@@ -170,7 +170,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                             entityId: context.entityId,
                             nameFocused: false,
                             officeDocuments:$scope.officeDocuments
-                        },{'reload':true});
+                        });
                     }else{
 
                         $state.go($scope.detailsState+'.activities', {
@@ -178,7 +178,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                             entity: context.entityName,
                             entityId: context.entityId,
                             nameFocused: false
-                        },{'reload':true});
+                        });
                 }
                 });
             }
