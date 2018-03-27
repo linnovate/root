@@ -254,14 +254,19 @@
                                 line-height: 19px;
                                 margin-bottom: 12px;
                             }
+                            .bold {
+                                font-weight: bold;
+                            }
                             .picInfo {
                                 display: flex;
                                 .changePic {
                                     margin-right: 20px;
+                                    margin-top:20px;
                                     .avatar {
                                         border-radius: 50%;
                                         width:115px;
                                         height:115px;
+                                        position: relative;
                                         span {
                                             &.name {
                                                 top: 50%;
@@ -274,9 +279,40 @@
 
                                             }
                                         }
+                                        .changingNotify {
+                                            animation: showing 3s linear infinite;
+                                            opacity: 0;
+                                            position: absolute;
+                                            width: 100%;
+                                            height: 100%;
+                                            top: 0;
+                                            text-align: center;
+                                            border-radius: 50%;
+                                            transition: 1s;
+                                            z-index: 3;
+                                            &:hover {
+                                                opacity: 1;
+                                            }
+                                            .notifyTitle {
+                                                width: 100%;
+                                                display: block;
+                                                position: absolute;
+                                                top: 37%;
+                                                left: 50%;
+                                                transform: translate(-50%);
+                                                z-index: 4;
+                                            }
+                                        }
+
                                         .image {
                                             width: 100%;
+                                            height: 100%;
                                             border-radius: 50%;
+                                            top: 50%;
+                                            left: 50%;
+                                            transform: translate(-50%, -50%);
+                                            position: absolute;
+                                            z-index: 1;
                                         }
                                     }
                                 }
@@ -944,5 +980,17 @@ $icon-padding: 19px;
 }
 .myCarousel .carousel-indicators li.active .carousel-progress-bar{
   opacity:1;
+}
+
+@keyframes showing {
+    25% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
 }
 

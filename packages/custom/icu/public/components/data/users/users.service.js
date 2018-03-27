@@ -146,7 +146,7 @@ angular.module('mean.icu.data.usersservice', [])
     }
 
     function resetAvatar(){
-        return me.profile.avatar = data.avatar;
+        return delete me.profile.avatar;
     }
 
     function onIdentity(response) {
