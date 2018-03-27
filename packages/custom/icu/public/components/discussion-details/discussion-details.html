@@ -11,7 +11,7 @@
                 <button ng-class="{ 'orange': discussion.star }" ng-click="star(discussion)">
                     <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
                 </button>
-            </div>            
+            </div>
 
             <div class="user">
                 <div class="no-assignee" ng-if="!discussion.assign">
@@ -159,7 +159,7 @@
             </div>
         </div>
 
-        <div class="tags">
+        <div class="tags" ng-class="{ 'disabled' : !havePermissions('tags')}">
             <ul class="list">
                 <li ng-show="!discussion.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
                 <li class="tag-item" ng-repeat="tag in discussion.tags">
@@ -187,7 +187,7 @@
             </div>
         </div>
 
-        <div class="tabs" ng-class="{ 'disabled' : !havePermissions('tabs')}">
+        <div class="tabs" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}">
             <div class="switcher">
                 <button class="tab"
                         ng-class="{two: main == 'tasks', three: main != 'tasks'}"

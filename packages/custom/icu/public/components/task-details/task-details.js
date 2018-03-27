@@ -386,11 +386,11 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         }
 
-        
+
         $scope.updateStatusForApproval = function(entity) {
             entity.status = "waiting-approval" ;
             $scope.updateStatus(entity) ;
-            
+
         }
 
 
@@ -580,8 +580,10 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
         $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
-        $scope.havePermissions = function(type){
-            return (PermissionsService.havePermissions(entity, type) && !$scope.isRecycled);
+        $scope.enableRecycled = true;
+        $scope.havePermissions = function(type, enableRecycled){
+            enableRecycled = enableRecycled || !$scope.isRecycled;
+            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
         };
 
         $scope.haveEditiorsPermissions = function(){

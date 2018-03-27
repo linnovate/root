@@ -208,8 +208,8 @@ angular.module('mean.icu.ui.projectdetails', [])
                 project.discussion = context.entityId;
             }
 
-            
-            ProjectsService.updateDue(project, backupEntity).then(function(result) {            
+
+            ProjectsService.updateDue(project, backupEntity).then(function(result) {
                 backupEntity = JSON.parse(JSON.stringify($scope.project));
                 ActivitiesService.data.push(result);
             });
@@ -253,8 +253,10 @@ angular.module('mean.icu.ui.projectdetails', [])
             $scope.tagInputVisible = false;
         };
 
-        $scope.havePermissions = function(type){
-            return (PermissionsService.havePermissions(entity, type) && !$scope.isRecycled);
+        $scope.enableRecycled = true;
+        $scope.havePermissions = function(type, enableRecycled){
+            enableRecycled = enableRecycled || !$scope.isRecycled;
+            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
         };
 
         $scope.haveEditiorsPermissions = function(){

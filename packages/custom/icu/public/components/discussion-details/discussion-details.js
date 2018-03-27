@@ -45,8 +45,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
             $scope.discussion.endTime = new Date($scope.discussion.endTime);
         }
 
-        $scope.isRecycled = $scope.discussion.hasOwnProperty('recycled');
-
         $(document).ready(function() {
              $scope.updateDatesString();
             $('uib-timepicker').datepicker();
@@ -122,8 +120,12 @@ angular.module('mean.icu.ui.discussiondetails', [])
             $scope.showDue = false;
         };
 
-        $scope.havePermissions = function(type){
-            return (PermissionsService.havePermissions(entity, type) && !$scope.isRecycled);
+        $scope.isRecycled = $scope.discussion.hasOwnProperty('recycled');
+
+        $scope.enableRecycled = true;
+        $scope.havePermissions = function(type, enableRecycled){
+            enableRecycled = enableRecycled || !$scope.isRecycled;
+            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
         };
 
         $scope.haveEditiorsPermissions = function(){
