@@ -23,6 +23,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             $scope.officeDocument = context.entity || entity;
         }
 
+        $scope.shouldAutofocus = !$stateParams.nameFocused;
+
         $scope.getSignatures = function () {
             if($scope.officeDocument.folder && $scope.officeDocument.folder.office && $scope.officeDocument.path){
                 SignaturesService.getByOfficeId( $scope.officeDocument.folder.office._id || $scope.officeDocument.folder.office)

@@ -166,7 +166,7 @@
             </button>
         </div>        
         <div class="description">
-            <div class="title"  contenteditable="true" tabindex="1"  strip-br="true" medium-editor
+            <div class="title" ng-attr-autofocus="{{shouldAutofocus || undefined}}" contenteditable="true" tabindex="1"  strip-br="true" medium-editor
                 ng-keydown="onEnter($event)" ng-model="officeDocument.title" ng-change="updateCurrentOfficeDocument()">
 
             </div>
