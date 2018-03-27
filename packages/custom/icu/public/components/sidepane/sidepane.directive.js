@@ -30,16 +30,29 @@ directive('icuSidepane', function() {
         $scope.removeFilterValue = function() {
             TasksService.filterValue = false;
         };
+
         
         // updatedDate
         let lastMonth = new Date();
+        let nextMonth = new Date();
         lastMonth.setDate(lastMonth.getMonth() -1 ) ;
-        $scope.updatedDate = lastMonth ;
+        nextMonth.setDate(lastMonth.getMonth() +1 ) ;
+        $scope.updatedDate = lastMonth;
+        $scope.dueDate = lastMonth;
         SearchService.filteringByUpdated = $scope.updatedDate;
+        SearchService.filteringByDueDate = $scope.dueDate;
+        $scope.datePicker = {};
+        $scope.datePicker.date = {startDate: lastMonth, endDate: nextMonth};
+        SearchService.filterDateOption = $scope.datePicker.date;
 
-     
-        
-
+        $scope.dateoptions = {
+            eventHandlers: {
+                'apply.daterangepicker': function (ev, picker) {
+                    SearchService.filterDateOption = $scope.datePicker.date;
+                }
+            },
+            opens : "top"
+        };
         // activeToggle
         $scope.activeToggleList = EntityService.activeToggleList;
         $scope.activeToggle = {
@@ -517,6 +530,9 @@ return {
         filteringData: '=',
         resetFilter: '=',
         getEntitiesAndWatchers: '=',
+        updatedDate: '=',
+        datePicker: '=',
+        dueDate: '='
     }
 };
 });

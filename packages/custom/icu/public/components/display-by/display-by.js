@@ -3,11 +3,11 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context,SettingServices, $rootScope, $stateParams,$location, $window,NotifyingService,UsersService, TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
+    function controller($scope, $state, context,SettingServices,SearchService, $rootScope, $stateParams,$location, $window,NotifyingService,UsersService, TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
         $scope.statusList = SettingServices.getStatusList();
         let activeList = SettingServices.getActiveStatusList();
         let archiveList = SettingServices.getNonActiveStatusList();
-
+       
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
             $scope.context = context;
             $scope.folders = folders;
@@ -33,6 +33,26 @@ angular.module('mean.icu.ui.displayby', [])
             return a;
         }
         $scope.currentType = 'All';
+
+        $scope.clearDateRange = function(){
+            SearchService.filterDateOption = null;
+            $scope.datePicker.date = {startDate: null, endDate: null};
+        }
+
+        $scope.clearDueDate = function(){
+          $scope.dueDate = null;
+          SearchService.filteringByDueDate = null;
+        }
+
+        $scope.clearUpdatedDate = function(){
+            $scope.updatedDate = null;
+            SearchService.filteringByUpdated = null;
+          }
+
+          $scope.clearRecycled = function(){
+              $location.search('recycled',null);
+              $window.location.reload();
+          }
 
         $scope.isActive = function(type, status){
          if (status !== 'active' && status !== 'nonactive' && status == type)
