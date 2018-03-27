@@ -21,9 +21,9 @@ function recycleRestoreEntity(req, res, next) {
     res.sendStatus(200);  
   } 
   recycledPromise.then(function(result) {    
-    res.sendStatus(200); 
-    next() ;
+    res.sendStatus(200);     
   });
+  next() ;
 }
 
 function recycleGetBin(req, res, next) {
