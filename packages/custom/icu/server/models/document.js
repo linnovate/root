@@ -120,7 +120,6 @@ var DocumentSchema = new Schema({
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User',
-    unique: true 
   }],
   permissions: [{
     _id:false,
