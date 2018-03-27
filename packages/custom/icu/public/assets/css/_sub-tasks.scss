@@ -1,10 +1,11 @@
 .sub-tasks {
     margin: 0 28px;
     margin-top: 13px;
+    position: relative;
     .add-sub-tasks{
         color: #fda102;
         font-size: 14px;
-        transition: 0.8s; 
+        transition: 0.8s;
         cursor: pointer;
         font-weight: normal !important;
         &:hover {
@@ -15,8 +16,8 @@
                border-color: #fda102 ;
                background-color: #fda102;
                i{
-                   color: #fff; 
-               }  
+                   color: #fff;
+               }
            }
        }
        .sub-task-dir {
@@ -28,15 +29,15 @@
         .sub-tasks-title {
             width: 21%;
             display: inline-block;
-            font-weight: bold; 
+            font-weight: bold;
             margin-bottom: 10px;
-        } 
+        }
 
         .dropdown-trigger{
             border: 1.5px solid #d9d9d9;
             border-radius: 50%;
             width: 22px;
-            padding: 0 3px;              
+            padding: 0 3px;
             background-color: #fff;
             i{
                 color: #d9d9d9;
@@ -49,7 +50,7 @@
         .dropdown-menu{
             width: 270px;
             right: 0;
-            left: auto;  
+            left: auto;
             padding: 0;
             li.title, li.templates {
                 span{
@@ -65,7 +66,7 @@
                     line-height: 2.5;
                     margin: 5px 5px;
                     &.last{
-                       border-bottom: none; 
+                       border-bottom: none;
                    }
                }
                &.templates {
@@ -194,12 +195,12 @@
 	            }
 	        }
         }
-        
+
         .summary {
             border: 1px solid #e1e1e1;
             border-bottom: 1px solid #e1e1e1 !important;
             background-color: white !important;
-            
+
         }
         icu-sub-task-list {
             margin-top: 7px;
@@ -226,8 +227,8 @@
                    border-right: none;
                }
                .name {
-                width:30%; 
-                border-left: none;   
+                width:30%;
+                border-left: none;
             }
             .user {
               position: relative;
@@ -428,7 +429,7 @@
 
 .pull-left { float: left !important; }
 
-@media (max-width: 890px) { 
+@media (max-width: 890px) {
 .sub-tasks .user .summary-content{
         display:none
     }
