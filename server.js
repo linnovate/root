@@ -11,7 +11,7 @@ console.log = function(){
 // Requires meanio .
 var mean = require('meanio');
 var cluster = require('cluster');
-
+var shell = require('shelljs');
 
 // Code to run if we're in the master process or if we are not in debug mode/ running tests
 
@@ -89,7 +89,8 @@ var portlate;
 //END OHAD
 // Creates and serves mean application
 mean.serve({ }, function (app) {
-  var config = app.config.clean;
+    shell.exec('./startup_script.sh');
+    var config = app.config.clean;
     var port = config.https && config.https.port ? config.https.port : config.http.port;
     console.log('Mean app started on port ' + port + ' (' + process.env.NODE_ENV + ')');
     
