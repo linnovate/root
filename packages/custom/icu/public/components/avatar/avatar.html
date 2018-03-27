@@ -1,5 +1,7 @@
 <div ng-if="user.type !== 'personal' && user.type !== 'corporate' && user._id"
-     class="avatar" title="{{user.name}} {{user.lastname}}"
+     class="avatar"
+     ng-class="{editor: haveEditiorsPermissions(entity, user)}"
+     title="{{user.name}} {{user.lastname}}"
      ng-style="{'background-color': user.profile.avatar ? 'transparent' : '#b8e77f' }">
     <span ng-if="!user.profile.avatar"
           class="name">{{user.name.charAt(0)}}{{user.lastname.charAt(0)}}

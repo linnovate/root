@@ -22,6 +22,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     ) {
         $scope.testString = 'testString';
         $scope.task = entity || context.entity;
+        $scope.entity = entity || context.entity;
         $scope.addSubTasks = false;
         $scope.me = me;
         $scope.imgUrl = '?' + Date.now();
@@ -587,11 +588,11 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
 
         $scope.haveEditiorsPermissions = function(){
-            return PermissionsService.haveEditorsPerms(entity);
+            return PermissionsService.haveEditorsPerms($scope.entity);
         };
 
         $scope.permsToSee = function(){
-            return PermissionsService.haveAnyPerms(entity);
+            return PermissionsService.haveAnyPerms($scope.entity);
         };
 
         // if ($scope.task &&
