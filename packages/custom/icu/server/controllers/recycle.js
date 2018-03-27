@@ -17,11 +17,13 @@ function recycleRestoreEntity(req, res, next) {
   var entityType = req.params.entity || req.locals.data.entityName;
   var entityId = req.params.id ;
   let recycledPromise =  entityService.recycleRestoreEntity(entityType,req.params.id) ;
-  
+  if(!recycledPromise) {
+    res.sendStatus(200);  
+  } 
   recycledPromise.then(function(result) {    
-    res.sendStatus(200); 
-    next() ;
+    res.sendStatus(200);     
   });
+  next() ;
 }
 
 function recycleGetBin(req, res, next) {

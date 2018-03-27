@@ -40,6 +40,7 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('js', '../lib/jquery-ui/jquery-ui.js');
     ICU.aggregateAsset('js', '../lib/angular-ui-date/src/date.js');
     ICU.aggregateAsset('js', '../lib/moment/moment.js');
+    
     ICU.aggregateAsset('js', '../lib/ng-file-upload/ng-file-upload.min.js');
     ICU.aggregateAsset('js', '../lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js');
     ICU.aggregateAsset('js', '../lib/querystring/querystring.min.js');
@@ -56,6 +57,10 @@ ICU.register(function (app, auth, database,swagger) {
 
     ICU.aggregateAsset('js', '../lib/d3/d3.min.js', {weight: 0});
     ICU.aggregateAsset('js', './eventDrops.js', {weight: 1});
+    ICU.aggregateAsset('js', './daterangepicker.js', {weight: 3});
+    ICU.aggregateAsset('js', './angular-daterangepicker.js', {weight: 4});
+
+    
     ICU.aggregateAsset('js', './Toggles.js', {weight: 2});
 
 
@@ -162,6 +167,7 @@ ICU.register(function (app, auth, database,swagger) {
         '720kb.tooltips',
         'mean.icu.ui.draggabletoggle',
         'mean.icu.ui.notify',
+        'daterangepicker'
     ]);
 
 
@@ -183,7 +189,6 @@ console.yon = function(data, inspect) {
     console.log(data);
 
 }
-
     /**
      //Uncomment to use. Requires meanio@0.3.7 or above
      // Save settings with callback

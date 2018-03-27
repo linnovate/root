@@ -126,7 +126,7 @@
                  options="{{options}}">
             </div>
 
-            <div class="tags">
+            <div class="tags" ng-class="{ 'disabled' : !havePermissions('tags')}">
                 <ul class="list">
                     <li ng-show="!project.tags.length && !tagInputVisible"
                         class="placeholder"
@@ -157,7 +157,7 @@
             </div>
 
             <div class="sub-projects" data-ui-view="subprojects"></div>
-            <div class="sub-projects">
+            <div class="sub-projects"  ng-class="{ 'disabled' : !havePermissions('subs')}">
 
                 <div class="wrap-title">
                     <div class="sub-projects-title" ng-show="addSubProjects || project.subProjects[0]._id">
@@ -249,7 +249,7 @@
             </div>
 
         </div>
-        <div class="tabs" ng-class="{ 'disabled' : !havePermissions('tabs')}">
+        <div class="tabs" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}">
             <div class="switcher">
                 <button class="tab three"
                         data-ui-sref-active="active"

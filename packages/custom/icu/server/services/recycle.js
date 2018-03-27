@@ -62,17 +62,13 @@ function recycleRestoreEntity(entityType, id) {
   let promise = Model.findOneAndUpdate(
     { _id: id },
     { $unset : { recycled : ""}},
-    {new: true}, function(err, doc){
+    {new: true}, function(err, entity){
       if(err){
+        console.log(err);
       }  
       console.log("entity unrecycled")
-    })
-    .then(function(err) {
-    if (err) {
-      console.log(err);
-    }
-     else elasticsearch.save(entity, name);
-  });
+      elasticsearch.save(entity, name);
+    });
   return promise ;
 }
 
