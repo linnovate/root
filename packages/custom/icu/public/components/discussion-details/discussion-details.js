@@ -24,6 +24,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         {
             $scope.discussion = context.entity || entity;
         }
+        $scope.entity = entity || context.entity;
         $scope.tasks = tasks.data || tasks;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.people = people.data || people;
@@ -125,15 +126,15 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.enableRecycled = true;
         $scope.havePermissions = function(type, enableRecycled){
             enableRecycled = enableRecycled || !$scope.isRecycled;
-            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+            return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
         };
 
         $scope.haveEditiorsPermissions = function(){
-            return PermissionsService.haveEditorsPerms(entity);
+            return PermissionsService.haveEditorsPerms($scope.entity);
         };
 
         $scope.permsToSee = function(){
-            return PermissionsService.haveAnyPerms(entity);
+            return PermissionsService.haveAnyPerms($scope.entity);
         };
 
         $scope.schedule = function (discussion) {

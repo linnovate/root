@@ -23,7 +23,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         {
             $scope.officeDocument = context.entity || entity;
         }
-
+        $scope.entity = entity || context.entity;
         $scope.getSignatures = function () {
             if($scope.officeDocument.folder && $scope.officeDocument.folder.office && $scope.officeDocument.path){
                 SignaturesService.getByOfficeId( $scope.officeDocument.folder.office._id || $scope.officeDocument.folder.office)
@@ -31,7 +31,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                         if(result.length > 0){
                         $scope.signatures = result;
                         }
-                })
+                });
             }
         }
 
@@ -92,15 +92,15 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
         $scope.statuses = ['new', 'in-progress', 'received', 'sent', 'done'];
 
-        $scope.isRecycled = entity.hasOwnProperty('recycled');
+        $scope.isRecycled = $scope.entity.hasOwnProperty('recycled');
         $scope.enableRecycled = true;
         $scope.havePermissions = function(type, enableRecycled){
             enableRecycled = enableRecycled || !$scope.isRecycled;
-            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+            return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
         };
 
         $scope.haveEditiorsPermissions = function(){
-            return PermissionsService.haveEditorsPerms(entity);
+            return PermissionsService.haveEditorsPerms($scope.entity);
         };
 
         $scope.$watch('officeDocument.title', function(nVal, oVal) {

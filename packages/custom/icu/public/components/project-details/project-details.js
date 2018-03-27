@@ -29,6 +29,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.tasks = tasks.data || tasks;
         $scope.projects = projects.data || projects;
         $scope.project = entity || context.entity;
+        $scope.entity = entity || context.entity;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.tags = tags;
         $scope.addSubProjects = false;
@@ -256,15 +257,15 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.enableRecycled = true;
         $scope.havePermissions = function(type, enableRecycled){
             enableRecycled = enableRecycled || !$scope.isRecycled;
-            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+            return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
         };
 
         $scope.haveEditiorsPermissions = function(){
-            return PermissionsService.haveEditorsPerms(entity);
+            return PermissionsService.haveEditorsPerms($scope.entity);
         };
 
         $scope.permsToSee = function(){
-            return PermissionsService.haveAnyPerms(entity);
+            return PermissionsService.haveAnyPerms($scope.entity);
         };
 
         $scope.removeTag = function(tag) {
