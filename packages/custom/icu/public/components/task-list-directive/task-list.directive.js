@@ -143,8 +143,12 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
             }
 
             function concatAllTasks() {
-                var allTasks = $scope.tasks.concat($scope.subTasks);
-                return allTasks;
+              // Change form Array.concat to Array.forEach
+              // to fix binding of $scope.tasks
+              $scope.subTasks && $scope.subTasks.forEach(function(item) {
+                $scope.tasks.push(item);
+              });
+              return $scope.tasks;
             }
 
             $scope.createOrUpdate = function (task) {
