@@ -1,6 +1,6 @@
 <div class="modal-header" id="modalUser">
     <div class="avatar" title="{{currentUser.name}} {{currentUser.lastname}}"
-         ng-style="{'background-color': user.profile.avatar ? 'transparent' : '#b8e77f' }">
+         ng-style="{'background-color': currentUser.profile.avatar ? 'transparent' : '#b8e77f' }">
     <span ng-if="!currentUser.profile.avatar"
           class="name">{{currentUser.name.charAt(0)}}{{currentUser.lastname.charAt(0)}}
     </span>
@@ -72,14 +72,19 @@
             </div>
             <hr/>
             <div class="changeAvatar">
-                <span class="profPicture">{{'profilePicture' | i18next}}</span>
+                <span class="profPicture bold">{{'profilePicture' | i18next}}</span>
                 <div class="picInfo">
                     <div class="changePic">
                         <div class="avatar" title="{{currentUser.name}} {{currentUser.lastname}}"
-                             ng-style="{'background-color': user.profile.avatar ? 'transparent' : '#b8e77f' }">
+                             ng-style="{'background-color': currentUser.profile.avatar ? 'transparent' : '#b8e77f' }">
                         <span ng-if="!currentUser.profile.avatar"
                               class="name">{{currentUser.name.charAt(0)}}{{currentUser.lastname.charAt(0)}}
                         </span>
+
+                            <div style="background-color: {{notification.color}}" ng-show="showAnimation" class="changingNotify">
+                                <span class="notifyTitle">{{notification.title | i18next}}</span>
+                            </div>
+
                             <img ng-if="currentUser.profile.avatar"
                                  class="image"
                                  ng-src="{{currentUser.profile.avatar + imgUrl}}"
@@ -90,7 +95,7 @@
                         <span class="filename">{{currentUser.profile.avatar.split('avatar/')[1]}}</span>
                         <div class="actions">
                             <button class="replace" ngf-select ngf-change="uploadAvatar($files)">{{'replace' | i18next}}</button>
-                            <button class="reset" ng-click="resetAvatar()">{{'reset' | i18next}}</button>
+                            <button class="reset bold" ng-click="showNotification('reset');resetAvatar()">{{'reset' | i18next}}</button>
                         </div>
                     </div>
                 </div>
