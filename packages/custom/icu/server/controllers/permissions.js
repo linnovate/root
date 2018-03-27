@@ -111,7 +111,16 @@ function isDifferentArray(arr1, arr2) {
 */
 exports.updateContent = function(user, oldDoc, newDoc) {
 
-  //  console.log("updateContent") ;
+  console.log("updateContent" ) ;
+
+  
+  if(oldDoc.profile) {
+    // hack the type of content to update is user 
+    // since it has a profile...
+    // since we do not have user update permission always return true
+    return true ;
+  }
+  
   let newPerms = Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
 
   // is user allowed to update content?    
