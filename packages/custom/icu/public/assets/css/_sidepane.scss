@@ -65,7 +65,7 @@
 
             }
         }
-        .filterUpdated, .filterDueDate  {
+        .filterUpdated, .filterDueDate  {            
             padding-bottom: 52px;
             border-bottom: 1px solid #444F53;
             .placeholder {
@@ -81,6 +81,9 @@
                 width: 100%;
                 margin: 10px 20px;
                 padding-left: 6px;
+                &.active {
+                    color: #FFA000;
+                }
             }
 
             input {
