@@ -38,9 +38,9 @@ angular.module('mean.icu.ui.searchlistfilter', [])
             else if (SearchService.filterDateOption && e.startDate){
                 let entityStartDate = new Date(e.startDate);
                 let entityEndDate = new Date(e.endDate);
-                let filterStart = new Date(SearchService.filterDateOption.startDate._d);
-                let filterEnd = new Date(SearchService.filterDateOption.endDate._d);
-                if (entityStartDate < filterStart && entityEndDate > filterEnd && entityDate > filterDate) {
+                let filterStart = new Date(SearchService.filterDateOption.startDate._d || SearchService.filterDateOption.startDate);
+                let filterEnd = new Date(SearchService.filterDateOption.endDate._d || SearchService.filterDateOption.endDate);
+                if (entityStartDate >= filterStart && entityEndDate <= filterEnd && entityDate > filterDate) {
                     res = true;
                   }
                   else res = false;

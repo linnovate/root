@@ -34,9 +34,13 @@ directive('icuSidepane', function() {
         
         // updatedDate
         let lastMonth = new Date();
-        let nextMonth = new Date();
         lastMonth.setDate(lastMonth.getMonth() -1 ) ;
-        nextMonth.setDate(lastMonth.getMonth() +1 ) ;
+        var now = new Date();
+        if (now.getMonth() == 11) {
+            var nextMonth = new Date(now.getFullYear() + 1, 0, 1);
+        } else {
+            var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        }
         $scope.updatedDate = lastMonth;
         $scope.dueDate = lastMonth;
         SearchService.filteringByUpdated = $scope.updatedDate;
