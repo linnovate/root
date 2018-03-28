@@ -40,6 +40,15 @@ var TemplateDocSchema = new Schema({
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User'
+  }],
+  permissions: [{
+    _id:false,
+    id: { type: Schema.ObjectId, ref: 'User' },
+    level: {
+      type: String,
+      enum: ['viewer', 'commenter', 'editor'],
+      default: 'viewer'
+    }
   }]
 },{collection: 'template_docs'});
 

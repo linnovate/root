@@ -6,6 +6,11 @@ var TaskModel = require('../models/task.js');
 var ProjectModel = require('../models/project.js');
 var DiscussionModel = require('../models/discussion.js');
 var OfficeDocumentsModel = require('../models/document.js');
+var OfficeModel = require('../models/office.js');
+var FolderModel = require('../models/folder.js');
+var TemplateDocsModel = require('../models/templateDoc.js');
+
+
 
 var _ = require('lodash') ;
 var entityNameMap = {
@@ -34,6 +39,19 @@ var entityNameMap = {
 //      archiveModel: OfficeDocumentsArchiveModel,
     name: 'officeDocument'
   },
+  'offices': {
+    mainModel: OfficeModel,
+    name: 'Office'
+  },
+  'folders': {
+    mainModel: FolderModel,
+    name: 'Folder'
+  },
+  'templateDocs': {
+    mainModel: TemplateDocsModel,
+    name: 'TemplateDoc'
+  }
+  
 };
 
 exports.permError = 

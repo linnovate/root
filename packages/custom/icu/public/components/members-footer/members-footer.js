@@ -24,7 +24,7 @@ angular.module('mean.icu.ui.membersfooter', [])
             $scope.me = UsersService.getMe().$$state.value;
 
             $scope.userPermissionStatus = function(member){
-                if(member)return PermissionsService.getPermissionStatus(member, $scope.entity);
+                if(member) return PermissionsService.getPermissionStatus(member, $scope.entity) || "";
             };
 
             $scope.setEditor = function(entity, user){
