@@ -59,7 +59,8 @@ exports.createNew = function (req, res, next) {
     'assign': req.user._id,
     'size': 0,
     'circles': undefined,
-    'watchers': [req.user._id]
+    'watchers': [req.user._id],
+    'permissions':[{"id":req.user._id,"level":"editor"}]
   };
   var obj = new TemplateDoc(template);
   obj.save(function (error, result) {
