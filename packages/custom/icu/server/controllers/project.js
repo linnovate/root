@@ -5,6 +5,7 @@ require('../models/project');
 var options = {
   includes: 'assign watchers subProjects',
   defaults: {
+    assign: undefined,
     watchers: []
   }
 };
