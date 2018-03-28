@@ -139,14 +139,20 @@ angular.module('mean.icu.data.usersservice', [])
             url: '/api/avatar',
             file: file
         }).success(function(data) {
+            if(!me.profile){
+                me.profile = {};
+                me.profile.avatar = null;
+            }
             me.profile.avatar = data.avatar;
             NotifyingService.notify('editionData');
+            update(me);
             getAll();
         });
     }
 
     function resetAvatar(){
-        return delete me.profile.avatar;
+        // check to see if the user has an avatar to reset it
+        if(me.profile)return delete me.profile.avatar;
     }
 
     function onIdentity(response) {

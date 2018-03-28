@@ -349,8 +349,10 @@ function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,
                 .success(function(data) {
                     $scope.avatar = data.avatar;
                     $scope.hash = Math.random();
-                    $scope.currentUser.profile.avatar = data.avatar;
                     updatePage();
+                })
+                .error(function() {
+                    $scope.showNotification('error');
                 });
         }
     };
