@@ -52,8 +52,7 @@ var FolderSchema = new Schema({
   //should we maybe have finer grain control on this
   watchers: [{
     type: Schema.ObjectId,
-    ref: 'User',
-    unique: true
+    ref: 'User'
   }],
   parent: {
   	type: Schema.ObjectId,

@@ -159,10 +159,17 @@ exports.createContent = function(user, oldDoc, newDoc) {
   console.log(JSON.stringify(oldDoc)) ;
   let deffered = q.defer();
 
-  if (newDoc.issue == 'update') {    // creating an update message
+  if(!newDoc || !newDoc.issue || entityNameMap[newDoc.issue]) {
+    // this is not one of the entity create cases.
+    deffered.resolve("OK") ;  
+    return deffered.promise ;    
+  }
+  if (newDoc.issue == 'update') {    
+    // creating an update message
     deffered.resolve("OK") ;  
     return deffered.promise;        
   }
+
   if (newDoc.type == 'comment' || newDoc.type == 'document') {    
     let Model = entityNameMap[newDoc.issue].mainModel;    
 
