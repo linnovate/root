@@ -107,6 +107,9 @@ table {
     width: 100%;
     background-color: $cream;
     border-top: 1px solid $light-grey1;
+    .editor {
+        box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #00AEEF;
+    }
 }
 
 .disabled {

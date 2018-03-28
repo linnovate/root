@@ -74,7 +74,7 @@
             <div class="filterUpdated">
                 <div class="subtitle">{{'deletedItems' | i18next}}</div>
                 <div class="clear" ng-click="clearRecycled()">{{'clear' | i18next}}</div>
-                <div class="recycle" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>
+                <div class="recycle" ng-class="{active: recycled}" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>            
             </button>
             </div>
 

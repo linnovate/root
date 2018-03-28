@@ -450,20 +450,21 @@ directive('icuSidepane', function() {
     
     $scope.toggleRecycle = function () {
         console.log("toggleRecycle...") ;
-        $scope.recycled = $location.path().indexOf("recycled") >-1 ;
+
+        if($location.search().recycled) {
+            $scope.recycled =  false;
+        }
+        else {        
+            $scope.recycled = !$scope.recycled ;
+        }
         
-        $scope.recycled = !$scope.recycled ;
-        
-        $scope.recycledClass =  $scope.recycled ? "recycled" : '';
         if($scope.recycled === false) {
             $scope.isRecycled = false;
             $state.go('main.search', {reload: true});
         }
         else {
             $scope.isRecycled = true;
-            if ($location.path().split('/')[2]!=='')
-              $state.go('main.search', { 'query':'___', recycled: true});
-            else $state.go('main.search', { 'query':'___', recycled: true});
+            $state.go('main.search', { 'query':'___', recycled: true});
         }
         
         

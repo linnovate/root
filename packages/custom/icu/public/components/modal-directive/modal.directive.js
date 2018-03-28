@@ -263,7 +263,7 @@ function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, peo
     };
 }
 
-function userCtrl($scope, $state, $i18next, $uibModalInstance, $filter,officeDocument, people, UsersService, OfficeDocumentsService) {
+function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,officeDocument, people, UsersService, OfficeDocumentsService) {
 
     $scope.officeDocument = officeDocument;
     $scope.people = people;
@@ -291,6 +291,30 @@ function userCtrl($scope, $state, $i18next, $uibModalInstance, $filter,officeDoc
         return '';
     };
 
+    $scope.notification = null;
+
+    $scope.showAnimation = false;
+    $scope.showNotification = function(type){
+        $scope.notification = $scope.onChangeNotifications[type];
+        $scope.showAnimation = true;
+        $timeout(function() {$scope.showAnimation = false;}, 3000);
+    };
+
+    $scope.onChangeNotifications = {
+        'success': {
+            title: 'Success',
+            color: '#68E98B',
+        },
+        'reset': {
+            title: 'ProfilePictureWasReset',
+            color: '#CD3F94',
+        },
+        'error': {
+            title: 'CouldNotChangeProfilePicture',
+            color: '#C04D31',
+        }
+    };
+
     $scope.filters = [
         {
             title: 'Home Screen Filter',
@@ -305,9 +329,22 @@ function userCtrl($scope, $state, $i18next, $uibModalInstance, $filter,officeDoc
         UsersService.update($scope.currentUser);
     };
 
+    function validFormat(file){
+        var fileFormat = file.name.split('.')[1];
+        var validFormats = ['jpg', 'jpeg', 'svg', 'gif', 'png', 'bmp'];
+        if(validFormats.indexOf(fileFormat) > -1){
+            return true;
+        }
+        return false;
+    }
+
     $scope.uploadAvatar = function(files) {
         if (files.length) {
             var file = files[0];
+            if(!validFormat(file)){
+                $scope.showNotification('error');
+                return;
+            }
             UsersService.updateAvatar(file)
                 .success(function(data) {
                     $scope.avatar = data.avatar;
@@ -318,9 +355,10 @@ function userCtrl($scope, $state, $i18next, $uibModalInstance, $filter,officeDoc
         }
     };
 
-    $scope.resetAvatar = function () {
+    $scope.resetAvatar = function (user) {
         // $scope.currentUser.profile.avatar = '';
         UsersService.resetAvatar();
+
         updatePage();
     };
 
