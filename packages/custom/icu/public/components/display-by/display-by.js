@@ -5,8 +5,8 @@ angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
     function controller($scope, $state, context,SettingServices,SearchService, $rootScope, $stateParams,$location, $window,NotifyingService,UsersService, TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
         $scope.statusList = SettingServices.getStatusList();
-        let activeList = SettingServices.getActiveStatusList();
-        let archiveList = SettingServices.getNonActiveStatusList();
+        $scope.activeList = SettingServices.getActiveStatusList();
+        $scope.archiveList = SettingServices.getNonActiveStatusList();
        
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
             $scope.context = context;
@@ -53,37 +53,77 @@ angular.module('mean.icu.ui.displayby', [])
               $location.search('recycled',null);
               $window.location.reload();
           }
+          $scope.tmpStatus = [];
+
+          $scope.statusListCahnge = function(type){
+            var index;
+            if($scope.currentType == 'active'){
+                if ($scope.activeList.indexOf(type) < 0)
+                $scope.activeList.push(type);
+                  else {
+                      index = $scope.activeList.indexOf(type);
+                      $scope.activeList.splice(index , 1);
+                  }
+              
+            }
+            else if($scope.currentType == 'nonactive'){
+                // archiveList.push(type);
+                if ($scope.archiveList.indexOf(type) < 0)
+                $scope.archiveList.push(type);
+                else {
+                   index = $scope.archiveList.indexOf(type);
+                   $scope.archiveList.splice(index , 1);
+                }
+               
+            }
+            else {
+                $scope.currentType = 'All';
+                if ($scope.tmpStatus.indexOf(type) < 0)
+                  $scope.tmpStatus.push(type);
+                else {
+                   index = $scope.tmpStatus.indexOf(type);
+                   $scope.tmpStatus.splice(index , 1);
+                }
+               
+            }
+        }
 
         $scope.isActive = function(type, status){
-         if (status !== 'active' && status !== 'nonactive' && status == type)
-           return true;
-         else  if (status !== 'active' && status !== 'nonactive' && status !== type)
-         return false;
-           else {
-            if($scope.currentType == 'All')
-            return false;
-          if($scope.currentType == 'active'){
-              if (activeList.indexOf(type) >-1)
+            if ( status !== 'active' && status !== 'nonactive' && $scope.tmpStatus.length && $scope.tmpStatus.indexOf(type)> -1)
                 return true;
-          }
-          if($scope.currentType == 'nonactive'){
-            if (archiveList.indexOf(type) >-1)
-              return true;
-          } 
-         }
+            if (status !== 'active' && status !== 'nonactive' && status == type)
+            return true;
+            else  if (status !== 'active' && status !== 'nonactive' && status !== type)
+            return false;
+            else {
+                if($scope.currentType == 'All')
+                return false;
+            if($scope.currentType == 'active'){
+                if ($scope.activeList.indexOf(type) >-1)
+                    return true;
+            }
+            if($scope.currentType == 'nonactive'){
+                if ($scope.archiveList.indexOf(type) >-1)
+                return true;
+            } 
+            }
 
-          return false;
+            return false;
         }
 
         $scope.AllStatus = [];
 
         $scope.showM = function(type){
             $scope.currentType = type;
-            if (type == 'empty')
+            if (type == 'empty'){
               $scope.AllStatus = [];
+              $scope.activeList = SettingServices.getActiveStatusList();
+              $scope.archiveList = SettingServices.getNonActiveStatusList();
+            }
             else if ($location.search().type)
               $scope.AllStatus = $scope.statusList[$scope.filteringData.issue]
-            else $scope.AllStatus =  arrayUnique(activeList.concat(archiveList));
+            else $scope.AllStatus =  arrayUnique($scope.activeList.concat($scope.archiveList));
+            $scope.tmpStatus = [];
         }
 
         $scope.typeClicked = false;

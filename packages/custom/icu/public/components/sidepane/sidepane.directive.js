@@ -325,13 +325,13 @@ directive('icuSidepane', function() {
             if (results[i]._type === $scope.filteringData.issue || $scope.filteringData.issue === 'all') {
                 if ($rootScope.status) {
                     if ($rootScope.status == 'active' ){
-                        let activeList = SettingServices.getActiveStatusList();
+                        let activeList = $scope.activeList;
                         if(activeList.indexOf(results[i].status)>-1){
                             filteredByType.push(results[i])
                           }
                     }
                     else if ($rootScope.status == 'nonactive' ){
-                        let archiveList = SettingServices.getNonActiveStatusList();
+                        let archiveList = $scope.archiveList;
                         if(archiveList.indexOf(results[i].status)>-1){
                             filteredByType.push(results[i])
                           }
@@ -536,7 +536,10 @@ return {
         getEntitiesAndWatchers: '=',
         updatedDate: '=',
         datePicker: '=',
-        dueDate: '='
+        dueDate: '=',
+        tmpStatus: '=',
+        activeList: '=',
+        archiveList: '='
     }
 };
 });
