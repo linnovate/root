@@ -155,12 +155,13 @@ exports.syncPermsArray = function(user, doc) {
 exports.createContent = function(user, oldDoc, newDoc) {
   console.log("permissions createContent") ;
   console.log(JSON.stringify(newDoc)) ;
+  console.log(JSON.stringify(oldDoc)) ;
   let deffered = q.defer();
   
   if (newDoc.type == 'comment') {    
     let Model = entityNameMap[newDoc.issue].mainModel;    
 
-    Model.findOne({'_id': oldDoc.issueId},function(err,doc){
+    Model.findOne({'_id': newDoc.issueId},function(err,doc){
       console.log("doc") ;
       console.log(doc) ;
       let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];      
