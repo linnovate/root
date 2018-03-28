@@ -126,7 +126,7 @@ exports.updateContent = function(user, oldDoc, newDoc) {
     return true ;
   }
   
-  let newPerms = doc && Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
+  let newPerms = newDoc && Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
 
   // is user allowed to update content?    
   if(!exports.allowUpdateContent(user, newPerms, {})) {
@@ -161,8 +161,8 @@ exports.createContent = function(user, oldDoc, newDoc) {
     let Model = entityNameMap[newDoc.issue].mainModel;    
 
     Model.findOne({'_id': oldDoc.issueId},function(err,doc){
-      // console.log("doc") ;
-      // console.log(doc) ;
+      console.log("doc") ;
+      console.log(doc) ;
       let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];      
       if(!exports.allowUpdateContent(user, newPerms, {})) {
         console.log("updated comments - not allowed");
@@ -346,7 +346,7 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
     return true ; // not different (users not added or removed), noop.
   }
 
-  let newPerms = doc && Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
+  let newPerms = newDoc && Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
   
   // is user allowed to update Perms?    
   // console.log("newPerms:") ;
