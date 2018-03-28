@@ -61,6 +61,7 @@ angular.module('mean.icu.data.permissionsservice', [])
         };
 
         function haveAnyPerms(entity, user) {
+            if(!entity.permissions)entity.permissions = [];
             user = user || me;
             var perms = !!_.find(entity.permissions, {'id': getUserId(user)});
             return perms;
@@ -94,9 +95,14 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function haveEditorsPerms(entity, user){
-            user = user || me;
-            var havePerms = (_.find(entity.permissions, {'id': getUserId(user)}).level === 'editor');
-            return havePerms;
+                user = user || me;
+                haveAnyPerms(entity, user);
+
+                var havePerms = false;
+                if(entity.permissions.length !== 0) {
+                    havePerms = (_.find(entity.permissions, {'id': getUserId(user)}).level === 'editor');
+                }
+                return havePerms;
         }
 
         function changeUsersPermissions(entity, user, perms, context){
@@ -192,6 +198,7 @@ angular.module('mean.icu.data.permissionsservice', [])
 
         function permissions(entity, type, user) {
             var member = user || me;
+            haveAnyPerms(entity, member);
 
             var qs = querystring.encode({
                 user: me,
@@ -205,14 +212,17 @@ angular.module('mean.icu.data.permissionsservice', [])
             //untill permissions backend route isn't complete
             var havePerm = false;
 
-            var usersPerms = _.find(entity.permissions, {'id': getUserId(member)});
-            switch (usersPerms.level) {
-                case 'editor': havePerm = editorPerms[type];
-                    break;
-                case 'commenter': havePerm = commenterPerms[type];
-                    break;
-                case 'viewer': havePerm = viewerPerms[type];
-                    break;
+            if(entity.permissions.length !== 0){
+                var usersPerms = _.find(entity.permissions, {'id': getUserId(member)});
+
+                switch (usersPerms.level) {
+                    case 'editor': havePerm = editorPerms[type];
+                        break;
+                    case 'commenter': havePerm = commenterPerms[type];
+                        break;
+                    case 'viewer': havePerm = viewerPerms[type];
+                        break;
+                }
             }
             return havePerm;
             // return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
