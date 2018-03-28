@@ -151,8 +151,7 @@ angular.module('mean.icu.data.usersservice', [])
     }
 
     function resetAvatar(){
-        // check to see if the user has an avatar to reset it
-        if(me.profile)return delete me.profile.avatar;
+        return delete me.profile.avatar;
     }
 
     function onIdentity(response) {

@@ -358,10 +358,12 @@ function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,
     };
 
     $scope.resetAvatar = function (user) {
-        // $scope.currentUser.profile.avatar = '';
-        UsersService.resetAvatar();
-
-        updatePage();
+        // check to see if the user has an avatar to reset it
+        if($scope.currentUser.profile && $scope.currentUser.profile.avatar){
+            UsersService.resetAvatar();
+            updatePage();
+            $scope.showNotification('reset');
+        }
     };
 
     $scope.notifications = [
