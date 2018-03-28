@@ -139,8 +139,13 @@ angular.module('mean.icu.data.usersservice', [])
             url: '/api/avatar',
             file: file
         }).success(function(data) {
+            if(!me.profile){
+                me.profile = {};
+                me.profile.avatar = null;
+            }
             me.profile.avatar = data.avatar;
             NotifyingService.notify('editionData');
+            update(me);
             getAll();
         });
     }
