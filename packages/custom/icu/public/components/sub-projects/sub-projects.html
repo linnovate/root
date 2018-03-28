@@ -1,0 +1,14 @@
+<div class="sub-project-list">
+	<div ng-show="!addSubProjects" class="add-sub-projects" ng-click="addSubProjects = !addSubProjects">{{'Add subProjects' | i18next}}</div>
+	<div class="sub-tasks-title">{{'sub Projects' | i18next}}</div>
+	<div icu-sub-task-list
+		class="entity-list-container"
+		ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+		autocomplete="autocomplete",
+		projects="subprojects"
+		load-next="loadNext"
+		load-prev="loadPrev"
+		draw-arrow="true"
+		order="sorting">
+	</div>
+</div>

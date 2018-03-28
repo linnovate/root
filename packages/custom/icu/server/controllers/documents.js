@@ -11,7 +11,7 @@ var Folder = require('../models/folder');
 var ObjectId = require('mongoose').Types.ObjectId;
 var _ = require('lodash');
 var config = require('meanio').loadConfig();
-var logger = require('../services/logger')
+var permissions = require('../controllers/permissions.js');
 
 
 
@@ -1346,6 +1346,7 @@ exports.uploadFileToDocument = function(req,res,next){
 
 
 exports.create = function(req,res,next){
+  console.log("exports.create") ;
   var folder = req.body.folder;//contains folder Id
   if(!folder){
     var doc = {
@@ -1368,6 +1369,7 @@ exports.create = function(req,res,next){
       'circles':[],
       'relatedDocuments':[],//important
       'watchers':[req.user._id],//important
+      'permissions':[{"id":req.user._id,"level":"editor"}],
       'doneBy':[],
       'forNotice':[],
       'documentType':''  
@@ -1413,6 +1415,7 @@ exports.create = function(req,res,next){
           'circles':[],
           'relatedDocuments':[],//important
           'watchers':folderObj.watchers,//important
+          'permissions':[{"id":req.user._id,"level":"editor"}],
           'documentType':'',     
         };
         var obj = new Document(doc);
@@ -1623,6 +1626,7 @@ exports.update2 = function (req, res, next) {
 
 
 exports.update = function (req, res, next) {
+  console.log("document exports.update>>>>>>>>>")
   var docToUpdate;
   if(req.body.name){
     if(req.body.name=='watchers' || req.body.watchers){
@@ -1771,6 +1775,7 @@ exports.update = function (req, res, next) {
       }
       docToUpdate['' + req.body.name]=req.body.newVal;
       docToUpdate['id']=docToUpdate._id;
+
       if (req.body.watchers) {
         docToUpdate['watchers'] = req.body.watchers;
       }

@@ -22,7 +22,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
             };
             if(($scope.order != null) && ($scope.order.field == "custom")){
                 var timer,
-                    container = $('.containerVertical'), 
+                    container = $('.containerVertical'),
                     scroll = $('.list-table'),
                     box = $('middlepane-container'),
                     topBar = $('.filters'),
@@ -52,7 +52,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                          entity: context.entityName,
                          entityId: context.entityId
                      }, { reload: false });
-                    
+
                     orderService.setOrder(e, elindex, dropindex, $scope.tasks.length - 1);
                 });
 
@@ -86,6 +86,10 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
             $scope.context = context;
             $scope.isLoading = true;
 
+            $scope.subTasks = getAllSubTasks();
+
+            $scope.tasks = concatAllTasks();
+
             _($scope.tasks).each(function (t) {
                 t.__state = creatingStatuses.Created;
                 if (t.title.length > 20) {
@@ -106,7 +110,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                 } else {
                     delete newTask.assign;
                     if (context.entityName === 'task') {
-                        // newTask.parent = context.entity._id;    
+                        // newTask.parent = context.entity._id;
                         $scope.tasks.push(_(newTask).clone());
                     } else
                         $scope.tasks.push(_(newTask).clone());
@@ -122,6 +126,29 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                 $scope.detailsState = 'main.tasks.byparent.details';
             } else {
                 $scope.detailsState = 'main.tasks.byentity.details';
+            }
+
+            function getAllSubTasks() {
+                var subTasks = [];
+                $scope.tasks.forEach(function (item) {
+                    if (item.subTasks && (item.subTasks.length > 0)) {
+                        return subTasks = subTasks.concat(
+                            item.subTasks.filter(function (subTask) {
+                                return (subTask !== 'undefined');
+                            })
+                        )
+                    }
+                });
+                return subTasks;
+            }
+
+            function concatAllTasks() {
+              // Change form Array.concat to Array.forEach
+              // to fix binding of $scope.tasks
+              $scope.subTasks && $scope.subTasks.forEach(function(item) {
+                $scope.tasks.push(item);
+              });
+              return $scope.tasks;
             }
 
             $scope.createOrUpdate = function (task) {
@@ -241,7 +268,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                 }
 
                 LayoutService.clicked();
-                
+
             };
 
             $scope.isCurrentState = function (id) {

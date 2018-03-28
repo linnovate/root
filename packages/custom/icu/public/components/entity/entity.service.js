@@ -80,6 +80,12 @@ angular.module('mean.icu.ui.entity', [])
             return result.data;
         });
     }
+    function getSearchAll(type) {
+    	return $http.get(ApiUri  + '/get_search_all').then(function (result) {
+    		WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
 
 
     return {
@@ -92,7 +98,8 @@ angular.module('mean.icu.ui.entity', [])
         activeToggleList: activeToggleList,   
         recycle: recycle,  
         recycleRestore: recycleRestore,   
-        getRecycleBin: getRecycleBin
+        getRecycleBin: getRecycleBin,
+        getSearchAll: getSearchAll
         
     };
 }) ;

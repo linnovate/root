@@ -1,9 +1,13 @@
+
 'use strict';
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context, $stateParams, $window,OfficeDocumentsService) {
-
+    function controller($scope, $state, context,SettingServices,SearchService, $rootScope, $stateParams,$location, $window,NotifyingService,UsersService, TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
+        $scope.statusList = SettingServices.getStatusList();
+        $scope.activeList = SettingServices.getActiveStatusList();
+        $scope.archiveList = SettingServices.getNonActiveStatusList();
+       
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
             $scope.context = context;
             $scope.folders = folders;
@@ -13,37 +17,179 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.officeDocuments = officeDocuments;
             $scope.people = people;
         });
+        $rootScope.$on('changeStatus',function(){
+          $scope.AllStatus = $scope.statusList[$scope.filteringData.issue]
+        });
 
-        $scope.projectsList = [];
-        $scope.projects.forEach(function(project) {
-                   if(project.title)
-                     $scope.projectsList.push(project);
+        function arrayUnique(array) {
+            var a = array.concat();
+            for(var i=0; i<a.length; ++i) {
+                for(var j=i+1; j<a.length; ++j) {
+                    if(a[i] === a[j])
+                        a.splice(j--, 1);
+                }
+            }
+
+            return a;
+        }
+        $scope.currentType = 'All';
+
+        $scope.clearDateRange = function(){
+            SearchService.filterDateOption = null;
+            $scope.datePicker.date = {startDate: null, endDate: null};
+        }
+
+        $scope.clearDueDate = function(){
+          $scope.dueDate = null;
+          SearchService.filteringByDueDate = null;
+        }
+
+        $scope.clearUpdatedDate = function(){
+            $scope.updatedDate = null;
+            SearchService.filteringByUpdated = null;
+          }
+
+          $scope.clearRecycled = function(){
+              $location.search('recycled',null);
+              $window.location.reload();
+          }
+          $scope.tmpStatus = [];
+
+          $scope.statusListCahnge = function(type){
+            var index;
+            if($scope.currentType == 'active'){
+                if ($scope.activeList.indexOf(type) < 0)
+                $scope.activeList.push(type);
+                  else {
+                      index = $scope.activeList.indexOf(type);
+                      $scope.activeList.splice(index , 1);
+                  }
+              
+            }
+            else if($scope.currentType == 'nonactive'){
+                // archiveList.push(type);
+                if ($scope.archiveList.indexOf(type) < 0)
+                $scope.archiveList.push(type);
+                else {
+                   index = $scope.archiveList.indexOf(type);
+                   $scope.archiveList.splice(index , 1);
+                }
+               
+            }
+            else {
+                $scope.currentType = 'All';
+                if ($scope.tmpStatus.indexOf(type) < 0)
+                  $scope.tmpStatus.push(type);
+                else {
+                   index = $scope.tmpStatus.indexOf(type);
+                   $scope.tmpStatus.splice(index , 1);
+                }
+               
+            }
+        }
+
+        $scope.isActive = function(type, status){
+            if ( status !== 'active' && status !== 'nonactive' && $scope.tmpStatus.length && $scope.tmpStatus.indexOf(type)> -1)
+                return true;
+            if (status !== 'active' && status !== 'nonactive' && status == type)
+            return true;
+            else  if (status !== 'active' && status !== 'nonactive' && status !== type)
+            return false;
+            else {
+                if($scope.currentType == 'All')
+                return false;
+            if($scope.currentType == 'active'){
+                if ($scope.activeList.indexOf(type) >-1)
+                    return true;
+            }
+            if($scope.currentType == 'nonactive'){
+                if ($scope.archiveList.indexOf(type) >-1)
+                return true;
+            } 
+            }
+
+            return false;
+        }
+
+        $scope.AllStatus = [];
+
+        $scope.showM = function(type){
+            $scope.currentType = type;
+            if (type == 'empty'){
+              $scope.AllStatus = [];
+              $scope.activeList = SettingServices.getActiveStatusList();
+              $scope.archiveList = SettingServices.getNonActiveStatusList();
+            }
+            else if ($location.search().type)
+              $scope.AllStatus = $scope.statusList[$scope.filteringData.issue]
+            else $scope.AllStatus =  arrayUnique($scope.activeList.concat($scope.archiveList));
+            $scope.tmpStatus = [];
+        }
+
+        $scope.typeClicked = false;
+
+        NotifyingService.subscribe('editionData', function () {
+            TasksService.getAll(0,2500,'created').then(function (data) {
+                $scope.tasks = data.data || data;
+            });
+
+            ProjectsService.getAll(0,2500,'created').then(function (data) {
+                $scope.projects = data.data || data;
+            });
+
+            DiscussionsService.getAll(0,2500,'created').then(function (data) {
+                $scope.discussions = data.data || data;
+            });
+
+            OfficeDocumentsService.getAll(0,2500,'created').then(function (data) {
+                $scope.documents = data.data || data;
+            });
+
+            OfficesService.getAll(0,2500,'created').then(function (data) {
+                $scope.offices = data.data || data;
+            });
+
+            TemplateDocsService.getAll(0,2500,'created').then(function (data) {
+                $scope.templateDocs = data.data || data;
+            });
+
+            UsersService.getAll(0,2500,'created').then(function (data) {
+                $scope.people = data.data || data;
+            });
+            $scope.createLists();
+        }, $scope);
+
+        $scope.createLists = function(){
+            $scope.projectsList = [];
+            $scope.projects.forEach(function(project) {
+                       if(project.title)
+                         $scope.projectsList.push(project);
+                    });
+
+            $scope.officesList = [];
+            $scope.offices.forEach(function(office) {
+                if(office.title)
+                    $scope.officesList.push(office);
                 });
 
-        $scope.officesList = [];
-        $scope.offices.forEach(function(office) {
-            if(office.title)
-                $scope.officesList.push(office);
-            });
+            $scope.foldersList = [];
+            $scope.folders.forEach(function(folder) {
+                if(folder.title)
+                    $scope.foldersList.push(folder);
+                });
 
-        $scope.foldersList = [];
-        $scope.folders.forEach(function(folder) {
-            if(folder.title)
-                $scope.foldersList.push(folder);
-            });
+            $scope.officeDocumentsList = [];
+            $scope.officeDocuments.forEach(function(officeDocument) {
+                if(officeDocument.title)
+                   $scope.officeDocumentsList.push(officeDocument);
+                });
 
-        $scope.officeDocumentsList = [];
-        $scope.officeDocuments.forEach(function(officeDocument) {
-            if(officeDocument.title)
-               $scope.officeDocumentsList.push(officeDocument);
-            });
-
-        $scope.officesList.reverse();
-
-        if($scope.officesList.length > 0)
-        {
-            $scope.officesList.office = $scope.officesList[0];
-        }
+            if($scope.officesList.length > 0)
+            {
+                $scope.officesList.office = $scope.officesList[0];
+            }
+        };
+        $scope.createLists();
 
         $scope.focus = false;
         $scope.changeFocus = function(){
@@ -61,6 +207,12 @@ angular.module('mean.icu.ui.displayby', [])
             }
 
         };
+
+        $scope.clearSearchType = function(){
+
+            $location.search('type', null);
+            $window.location.reload();
+        }
 
         $scope.getLinkUrl = function(){
             return $state.href('main.' + $scope.activeTab.state ,{'officeDocuments':undefined});
@@ -100,9 +252,9 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.typeSelected = '';
 
         $scope.singularItemName = {
-            discussions: "discussion",
-            projects: "project",
             tasks: "task",
+            projects: "project",
+            discussions: "discussion",
             officeDocuments: "officeDocument",
             offices: "office",
             folders: "folder",
@@ -110,9 +262,9 @@ angular.module('mean.icu.ui.displayby', [])
         };
 
         $scope.allItems = {
+            tasks: $scope.tasks,
             projects: $scope.projects,
             discussions: $scope.discussions,
-            tasks: $scope.tasks,
             officeDocuments: $scope.officeDocuments,
             offices: $scope.offices,
             folders: $scope.folders

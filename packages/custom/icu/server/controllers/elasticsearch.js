@@ -54,14 +54,17 @@ function inArray(elm,array){
 
 var buildSearchResponse = exports.buildSearchResponse = function(type, obj,userId) {
 
+  console.yon('inbuild response');
+  console.log(type)
   var groups = {};
   if (type === 'aggs') {
     obj.forEach(function(i) {
-      groups[i.key] =
-        i.top.hits.hits.map(function(j) {
-          return Object.assign(j._source,j.highlight);
-        });
-    });
+      if (i.key != 'update')
+        groups[i.key] =
+          i.top.hits.hits.map(function(j) {
+            return Object.assign(j._source,j.highlight);
+          });
+      });
   } else {
     obj.map(function(i) {
       if (!groups.hasOwnProperty(i._index))
@@ -177,7 +180,50 @@ exports.search = function(req, res, next) {
   if (!req.query.term) {
     return;
   }
-
+  var query;
+  if (req.query.term === '___') {
+    var queryInQuery = {
+      "query": {
+        "match_all": {}
+    }
+  }
+    var query = {
+      "highlight" : {
+        "pre_tags" : ["<bold>"],
+        "post_tags" : ["</bold>"],
+        "fields" : {
+            "title" : {},
+            "color": {},
+            "name": {},
+            "tags": {},
+            "description": {},
+            "file.filename": {},
+            "serial":{}
+        }
+      },  
+  
+    aggs: {
+      group_by_index: {
+        terms: {
+          field: '_index'
+        },
+        aggs: {
+          top: {
+            top_hits: {              
+              "highlight": {
+                "fields": {
+                   "title": {}
+                }
+              },
+              "size" : 100,
+            }
+          }
+        }
+      }
+    }
+    }
+  }
+  else {
   var query = {
     "highlight" : {
       "pre_tags" : ["<bold>"],
@@ -220,6 +266,10 @@ exports.search = function(req, res, next) {
       }
     }
   };
+  }
+
+  
+ 
 
 
   var options = {
@@ -244,9 +294,9 @@ exports.search = function(req, res, next) {
         console.log('result.aggregations=' + result.aggregations);
         return next(new Error('Can\'t find ' + req.query.term));
       }
-      res.send(buildSearchResponse('aggs', result.aggregations.group_by_index.buckets,userId))
+       res.send(buildSearchResponse('aggs', result.aggregations.group_by_index.buckets,userId))
     } else {
-      res.send(buildSearchResponse('simple', result.hits.hits,userId))
+     res.send(buildSearchResponse('simple', result.hits.hits,userId))
     }
   })
 };

@@ -19,7 +19,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
         function controller($scope, TasksService, UsersService) {
             UsersService.getAll().then(function(people) {
                 $scope.people = people;
-            })
+            });
 
             $scope.isLoading = true;
             _($scope.tasks).each(function(t) {
@@ -40,7 +40,20 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                     data = {
                         frequentUser: task.assign
                     }
+
+                    // check the assignee is not a watcher already
+                    let filtered = task.watchers.filter(watcher => {
+                        return watcher._id == task.assign && watcher != null
+                    });
+    
+                    // add assignee as watcher
+                    if(filtered.length == 0) {
+                        task.watchers.push(task.assign);
+                    }                                                  
                 }
+
+                
+                
                 if (task.__state === creatingStatuses.NotCreated) {
                     task.__state = creatingStatuses.Creating;
                     task.parent = $scope.parent;
@@ -48,6 +61,9 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                     return TasksService.create(task).then(function(result) {
                         task.__state = creatingStatuses.Created;
 
+                        TasksService.getById(task.parent).then(function(parentTask) {
+                            task.watchers = parentTask.watchers ;
+                        }) ;
                         $scope.tasks.push(_(newTask).clone());
 
                         return task;

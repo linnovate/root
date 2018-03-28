@@ -9,7 +9,7 @@
              ng-class="{'isNew': task.isNew == true,'notNew':task.isNew == false}",
              ng-mouseover="task.showDelete = true",
              ng-mouseleave="deleteShowDlt(task)",
-             data="{ task: task,
+             data="{    task: task,
                         index: $index,
                         drawArrow: drawArrow,
                         updateCb: debouncedUpdate,
@@ -29,7 +29,7 @@
                         statuses: statuses,
                         checkDate: checkDate,
                         open: open}"
-            type="subtasks"> 
+            type="subtasks">
                 <td>{{ $index }}<td>
             </tr>
         </tbody>

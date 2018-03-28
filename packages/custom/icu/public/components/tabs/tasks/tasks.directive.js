@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tabs')
-    .directive('icuTabsTasks', function ($state, $filter, TasksService) {
+    .directive('icuTabsTasks', function ($state, $filter, TasksService, PermissionsService) {
         function controller($scope) {
             $scope.sorting = {
                 field: 'created',
@@ -30,6 +30,13 @@ angular.module('mean.icu.ui.tabs')
                     //and array of params
                     return result + task.title;
                 }
+            };
+
+            if($scope.entity)$scope.isRecycled = $scope.entity.hasOwnProperty('recycled');
+
+            $scope.havePermissions = function(type){
+                //TODO: Fix after release: remove this if check and disable directive usage in tasks.my.activities without entity
+                if($scope.entity)return (PermissionsService.havePermissions($scope.entity, type) && !$scope.isRecycled);
             };
 
             function sort() {

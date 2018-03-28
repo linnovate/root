@@ -215,14 +215,14 @@ exports.getByEntity = function(req, res, next) {
       //              foreignField: 'ref',
       //              as: 'tasks'}
       //      },
-      //       {$sort: {'tasks.order':1 }}      
+      //       {$sort: {'tasks.order':1 }}
       //  ]).exec(function(err, tasks) {
       //    console.log(tasks);
       //  });
       // query.exec(function(err, tasks) {
       //       tasks.forEach(function(element){
       //           Order.find({ref:element._id},function(doc){
-                  
+
       //           })
       //       })
       //     })
@@ -248,7 +248,7 @@ exports.getByEntity = function(req, res, next) {
                 if(JSON.stringify(tasksTemp[index]._id) === JSON.stringify(element.ref)){
                     temp[element.order - 1] = tasks[index];
                 }
-                
+
               }
             });
              tasks = temp;

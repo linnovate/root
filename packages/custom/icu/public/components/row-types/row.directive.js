@@ -32,6 +32,7 @@ angular.module('mean.icu.ui.rows', [])
         'search-officedocument': '/icu/components/row-types/search-officeDocument-row.html',
         'search-templateDoc': '/icu/components/row-types/search-templateDoc-row.html',
         'subtasks': '/icu/components/row-types/sub-tasks-row.html',
+        'subprojects': '/icu/components/row-types/sub-projects-row.html',
     };
 
     function compileTemplate($scope, $element, template) {

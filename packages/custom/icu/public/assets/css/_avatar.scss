@@ -23,4 +23,8 @@ div[icu-avatar] .avatar {
     	background: #1e70b5 url("/icu/assets/img/icon-group.svg") no-repeat center center;
     }
 
+    &.editor {
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #00AEEF;
+    }
 }

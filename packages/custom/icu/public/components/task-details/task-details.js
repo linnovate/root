@@ -8,6 +8,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                                                   $state,
                                                   TasksService,
                                                   ActivitiesService,
+                                                  PermissionsService,
                                                   context,
                                                   $stateParams,
                                                   $rootScope,
@@ -21,6 +22,7 @@ angular.module('mean.icu.ui.taskdetails', [])
     ) {
         $scope.testString = 'testString';
         $scope.task = entity || context.entity;
+        $scope.entity = entity || context.entity;
         $scope.addSubTasks = false;
         $scope.me = me;
         $scope.imgUrl = '?' + Date.now();
@@ -41,6 +43,8 @@ angular.module('mean.icu.ui.taskdetails', [])
             'color': 'rgb(0, 151, 167)'
         });
 
+        $scope.isRecycled = $scope.task.hasOwnProperty('recycled');
+
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         if ($scope.task._id) {
             TasksService.getStarred().then(function(starred) {
@@ -58,7 +62,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         var backupEntity = JSON.parse(JSON.stringify($scope.task));
 
         $scope.people = people.data || people;
-        if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+        if ($scope.people.length && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
             var newPeople = {
                 name: 'no select'
             };
@@ -215,7 +219,7 @@ angular.module('mean.icu.ui.taskdetails', [])
 
         $scope.closeOldDateNotification = function(){
             document.getElementById('past').style.display = 'none';
-        }
+        };
 
         function navigateToDetails(task) {
             $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
@@ -304,16 +308,33 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         }
 
+
         //Made By OHAD
         $scope.updateAndNotify = function(task) {
             task.status = $scope.statuses[1];
-
             if (context.entityName === 'discussion') {
                 task.discussion = context.entityId;
             }
 
             if (task.assign === undefined || task.assign === null) {
                 delete task['assign'];
+            }
+            else {
+                // var data = {
+                //     name: task.assign.name,
+                //     type: 'user',
+                //     action: 'added',
+                //     frequentUser: task.assign._id
+                // }
+
+                // check the assignee is not a watcher already
+                let filtered = task.watchers.filter(watcher => {
+                    return watcher._id == task.assign
+                });
+
+                if(filtered.length == 0) {
+                    task.watchers.push(task.assign);
+                }
             }
 
             TasksService.update(task).then(function(result) {
@@ -336,6 +357,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
 
         };
+
         //END Made By OHAD
 
         // Nevo
@@ -363,6 +385,14 @@ angular.module('mean.icu.ui.taskdetails', [])
                 }
             });
         }
+
+
+        $scope.updateStatusForApproval = function(entity) {
+            entity.status = "waiting-approval" ;
+            $scope.updateStatus(entity) ;
+
+        }
+
 
         $scope.updateStatus = function(task) {
 
@@ -509,7 +539,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                     }, 3000);
                     $scope.template.push(result);
                 });
-            } 
+            }
         };
 
         $scope.setFocusToTagSelect = function() {
@@ -546,9 +576,23 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.deleteTemplate = function(id, index) {
             TasksService.deleteTemplate(id).then(function(result) {
                 $scope.template.splice(index, 1);
-            })
-        }
+            });
+        };
         $scope.delayedUpdate = _.debounce($scope.update, 2000);
+
+        $scope.enableRecycled = true;
+        $scope.havePermissions = function(type, enableRecycled){
+            enableRecycled = enableRecycled || !$scope.isRecycled;
+            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+        };
+
+        $scope.haveEditiorsPermissions = function(){
+            return PermissionsService.haveEditorsPerms($scope.entity);
+        };
+
+        $scope.permsToSee = function(){
+            return PermissionsService.haveAnyPerms($scope.entity);
+        };
 
         // if ($scope.task &&
         //         ($state.current.name === 'main.tasks.byentity.details' ||

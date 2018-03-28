@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.foldersservice', [])
-.service('FoldersService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('FoldersService', function(ApiUri, $http, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/folders';
     var data, selected;
 
@@ -59,6 +59,7 @@ angular.module('mean.icu.data.foldersservice', [])
         return $http.post(ApiUri + EntityPrefix, folder).then(function(result) {
 
         	WarningsService.setWarning(result.headers().warning);
+            NotifyingService.notify('createdElement');
             return result.data;
         });
     }
@@ -140,7 +141,7 @@ angular.module('mean.icu.data.foldersservice', [])
                 issue: 'folder',
                 issueId: folder.id,
                 type: type || 'updateWatcher',
-                userObj: watcher                
+                userObj: watcher
             },
             context: {}
         }).then(function(result) {

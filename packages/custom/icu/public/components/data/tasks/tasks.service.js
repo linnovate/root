@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.tasksservice', [])
-.service('TasksService', function (ApiUri, $http, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
+.service('TasksService', function (ApiUri, $http, NotifyingService, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
     var EntityPrefix = '/tasks';
     var filterValue = false;
     var data, tabData, IsNew;
@@ -75,10 +75,12 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function create(task) {
-        return $http.post(ApiUri + EntityPrefix, task).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
-            return result.data;
-        });
+        return $http.post(ApiUri + EntityPrefix, task)
+            .then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                NotifyingService.notify('editionData');
+                return result.data;
+            });
     }
 
     function update(task, data) {
@@ -95,6 +97,7 @@ angular.module('mean.icu.data.tasksservice', [])
                 }
             }
             if (subTask) result.data.subTasks.push(subTask);
+            NotifyingService.notify('editionData');
             return result.data;
         });
     }
@@ -117,6 +120,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
+            NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
@@ -187,6 +191,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function deleteTemplate(id){
         return $http.delete(ApiUri + '/templates/' + id).then(function (result) {
+            NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
@@ -198,7 +203,7 @@ angular.module('mean.icu.data.tasksservice', [])
                 issue: 'task',
                 issueId: task.id,
                 type: type || 'updateWatcher',
-                userObj: watcher                
+                userObj: watcher
             },
             context: {}
         }).then(function(result) {
@@ -236,7 +241,7 @@ angular.module('mean.icu.data.tasksservice', [])
         });
 
     }
-        
+
     function assign(task, me, prev) {
         if (task.assign) {
             var message = {};

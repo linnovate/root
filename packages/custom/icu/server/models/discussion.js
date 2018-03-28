@@ -53,7 +53,7 @@ var DiscussionSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'scheduled', 'done', 'canceled', 'archived'],
+    enum: ['new', 'scheduled', 'waiting-approval',  'done', 'canceled', 'archived'],
     default: 'new'
   },
   tags: [String],
@@ -76,6 +76,15 @@ var DiscussionSchema = new Schema({
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User'
+  }],
+  permissions: [{
+    _id:false,
+    id: { type: Schema.ObjectId, ref: 'User' },    
+    level: {
+      type: String,
+      enum: ['viewer', 'commenter', 'editor'],
+      default: 'viewer'
+    }
   }],
   project: {
     type: Schema.ObjectId,

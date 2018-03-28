@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.officesservice', [])
-.service('OfficesService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('OfficesService', function(ApiUri, $http, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/offices';
     var data, selected;
 
@@ -57,8 +57,8 @@ angular.module('mean.icu.data.officesservice', [])
 
     function create(office) {
         return $http.post(ApiUri + EntityPrefix, office).then(function(result) {
-
         	WarningsService.setWarning(result.headers().warning);
+            NotifyingService.notify('editionData');
             return result.data;
         });
     }
@@ -96,6 +96,7 @@ angular.module('mean.icu.data.officesservice', [])
 
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+            NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
@@ -132,7 +133,7 @@ angular.module('mean.icu.data.officesservice', [])
                 issue: 'office',
                 issueId: office.id,
                 type: type || 'updateWatcher',
-                userObj: watcher                
+                userObj: watcher
             },
             context: {}
         }).then(function(result) {

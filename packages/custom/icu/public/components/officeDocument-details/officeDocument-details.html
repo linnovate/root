@@ -6,7 +6,7 @@
         <div class="perMsg">{{ 'perMsg' | i18next }}</div>
     </div>
     <div class="page-content" ng-if="officeDocument._id">
-        <div class="summary">
+        <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
             <div class="favorite">
                 <button ng-class="{ 'orange': officeDocument.star }" ng-click="star(officeDocument)">
@@ -30,13 +30,13 @@
                             <span class="summary-content">{{user.job}}</span>
                         </ui-select-choices>
                     </ui-select>
-                    
+
                 </div>
                 <div class="send-by" ng-if="officeDocument.status != 'new'" >
                     <div class="sender">
                         <div icu-avatar user=officeDocument.sender></div>
                         <b><span  class="summary-content">{{officeDocument.sender.name}} {{officeDocument.sender.lastname?officeDocument.sender.lastname:""}}</span></b>
-                    </div>    
+                    </div>
                     <div class="sending-as" ng-if="officeDocument.sendingAs">
                         <span tooltips tooltip-template="
                         {{officeDocument.sender.name}} {{officeDocument.sender.lastname?officeDocument.sender.lastname:''}}
@@ -77,16 +77,17 @@
                 <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" send="true" data="officeDocument" send-fn="sendDocument(officeDocument)"
                     class="sendBtn">{{ 'send' | i18next }}</button>
             </div>
-            
+
             <div class="receive" ng-if="officeDocument.status == 'sent'">
                     <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" modal-name="distributed" send="false" sent="true" data="officeDocument" send-fn="distributedDocument(officeDocument)"
                         class="sendBtn">{{ 'distributed' | i18next }}</button>
-            </div>    
+            </div>
             <div class="receive" ng-if="officeDocument.status == 'received' && officeDocument.viewed != true">
                 <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" modal-name="receive" send="false" receive="true" data="officeDocument" send-fn="receiveDocument(officeDocument)"
                     class="sendBtn">{{ 'receive' | i18next }}</button>
             </div>
-            <div class="dropdown dropdown-container" uib-dropdown>
+            <div class="dropdown dropdown-container" uib-dropdown
+                 ng-class="{ 'enabled' : haveEditiorsPermissions()}">
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
                 </div>
@@ -96,13 +97,13 @@
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span>{{ 'recycleOfficeDocument' | i18next }}</span>
                         </a>
-                    </li>                            
+                    </li>
                     <li>
                         <a href="#" ng-if="officeDocument.recycled" ng-click="recycleRestore(officeDocument)">
                             <i class="fa fa-2x fa-times-circle"></i>
                             <span>{{ 'unrecycleOfficeDocument' | i18next }}</span>
                         </a>
-                    </li>                            
+                    </li>
                     <!-- <li>
                         <a href="#" ng-click="deleteOfficeDocument(officeDocument)">
                                     <i class="fa fa-2x fa-times-circle"></i>
@@ -147,28 +148,26 @@
                         </ui-select-choices>
                     </ui-select>
                 </div>
-            </div>        
+            </div>
             <div class="parent" ng-if="officeDocument.parent">
                 {{currentContext.entity.title}}
             </div>
         </div>
-        <button ng-if="!officeDocument.serial && !settingSerial" ng-click="addSerialTitle(officeDocument)" class="simochin" >{{'simochin' | i18next }}</button>
-        
-        
-        
-        <div class="info">
-                <div ng-if="settingSerial" class="loader1"></div>  
+        <button ng-class="{ 'disabled' : !havePermissions('info')}" ng-if="!officeDocument.serial && !settingSerial" ng-click="addSerialTitle(officeDocument)" class="simochin" >{{'simochin' | i18next }}</button>
+
+
+
+        <div class="info" ng-class="{ 'disabled' : !havePermissions('info')}">
+                <div ng-if="settingSerial" class="loader1"></div>
             <p class="classification" ng-if="officeDocument.classification">{{'classification' | i18next }}: {{officeDocument.classification| i18next}} </p>
             <p ng-if="officeDocument.serial">{{'simochin' | i18next }}: {{officeDocument.serial}} </p>
         </div>
-        <!-- <div class="rowSimochin">
-        <div class='folder-title' ng-style="{'background-color': '#' + officeDocument.folder.color}">
-            <p class="folder-name">{{officeDocument.folder.title}}</p>
-        </div> >
-        <button class="simochin" >{{'simochin' | i18next }}</button>
-    </div-->
-        <div class="description">
-            <div class="title"  contenteditable="true" tabindex="1"  strip-br="true" medium-editor
+        <div class="approval" ng-if="officeDocument.status!='waiting-approval' && officeDocument.assign && officeDocument.assign._id == me._id && !isRecycled">
+            <button class="add approval" id="approval" ng-click="updateStatusForApproval(officeDocument)">{{'updateStatusForApproval' | i18next }}
+            </button>
+        </div>
+        <div class="description" ng-class="{ 'disabled' : !havePermissions('description')}">
+            <div class="title" ng-attr-autofocus="{{shouldAutofocus || undefined}}" contenteditable="true" tabindex="1"  strip-br="true" medium-editor
                 ng-keydown="onEnter($event)" ng-model="officeDocument.title" ng-change="updateCurrentOfficeDocument()">
 
             </div>
@@ -212,19 +211,16 @@
                             <div ng-if="officeDocument.path||officeDocument.spPath" class="document" >
                                     <!-- <a href="{{officeDocument.path}}" target="window"> -->
                                          <a ng-click="view(officeDocument)" target="window">
-                                                 <div class="icon {{officeDocument.documentType}}"></div>       
+                                                 <div class="icon {{officeDocument.documentType}}"></div>
                                                  <div id="documentTitle">{{officeDocument.title}}</div>
                                          </a>
                                          <button ng-click="deleteDocumentFile(officeDocument)">X</button>
-                            </div> 
+                            </div>
                     </div>
                 </div>
 
-
-
-                  
             </div>
-            <div class="tags">
+            <div class="tags" ng-class="{ 'disabled' : !havePermissions('tags')}">
                 <ul class="list">
                     <li ng-show="!officeDocument.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
                     <li class="tag-item" ng-repeat="tag in officeDocument.tags">
@@ -252,21 +248,21 @@
                 </div>
             </div>
             <div   class="membersInfo" ng-if="officeDocument.status != 'new'">
-                
+
                  <p class="doneBy" ng-if="officeDocument.doneBy"><b>{{'doneBy' | i18next }}: </b>
                      <span ng-repeat="doneBy in officeDocument.doneBy">{{doneBy.name}}
                              <span ng-if="$index != officeDocument.doneBy.length-1">,</span>
-                         </span> 
-                     
+                         </span>
+
                  </p>
                  <p class="forNotice" ng-if="officeDocument.forNotice"><b>{{'forNotice' | i18next }}: </b>
-                     <span ng-repeat="forNotice in officeDocument.forNotice">{{forNotice.name}} 
+                     <span ng-repeat="forNotice in officeDocument.forNotice">{{forNotice.name}}
                          <span ng-if="$index != officeDocument.forNotice.length-1">,</span>
-                     </span> 
+                     </span>
                  </p>
          </div>
         </div>
-        <div class="tabs">
+        <div class="tabs" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}">
             <div class="switcher">
                 <button class="tab three" data-ui-sref-active="active" data-ui-sref=".activities">
                     {{ 'updates' | i18next }}
@@ -276,8 +272,15 @@
                 </button>
             </div>
         </div>
-        <div class="tab-content" data-ui-view="tab"></div>
+        <div class="tab-content"
+             ng-class="{ 'disabled' : !havePermissions('tab-content')}"
+             data-ui-view="tab"></div>
     </div>
     <!-- <div ng-if="officeDocument._id" ng-model="officeDocument.watchers" icu-members-footer entity="officeDocuments" users="people"></div> -->
-    <div ng-if="officeDocument._id" icu-members-footer entity="officeDocument" users="people" me="me"></div>
+    <div ng-if="officeDocument._id"
+         ng-class="{ 'disabled' : !havePermissions('watchers')}"
+         icu-members-footer
+         entity="officeDocument"
+         users="people"
+         me="me"></div>
 </div>
