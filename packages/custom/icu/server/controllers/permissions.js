@@ -24,6 +24,11 @@ var entityNameMap = {
 //      archiveModel: DiscussionArchiveModel,
     name: 'discussion'
   },
+  'officeDocuments':{
+    mainModel: OfficeDocumentsModel,
+//      archiveModel: OfficeDocumentsArchiveModel,
+    name: 'officeDocument'
+  },
   'officeDocument': {
     mainModel: OfficeDocumentsModel,
 //      archiveModel: OfficeDocumentsArchiveModel,
@@ -121,7 +126,7 @@ exports.updateContent = function(user, oldDoc, newDoc) {
     return true ;
   }
   
-  let newPerms = Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
+  let newPerms = doc && Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
 
   // is user allowed to update content?    
   if(!exports.allowUpdateContent(user, newPerms, {})) {
@@ -148,8 +153,8 @@ exports.syncPermsArray = function(user, doc) {
    returns a deffered promise: resolved / err
 */
 exports.createContent = function(user, oldDoc, newDoc) {
-  // console.log("permissions createContent") ;
-  // console.log(JSON.stringify(newDoc)) ;
+  console.log("permissions createContent") ;
+  console.log(JSON.stringify(newDoc)) ;
   let deffered = q.defer();
   
   if (newDoc.type == 'comment') {    
@@ -158,7 +163,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
     Model.findOne({'_id': oldDoc.issueId},function(err,doc){
       // console.log("doc") ;
       // console.log(doc) ;
-      let newPerms = Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];      
+      let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];      
       if(!exports.allowUpdateContent(user, newPerms, {})) {
         console.log("updated comments - not allowed");
         deffered.reject(exports.permError.denied + ":" + exports.permError.allowCreateContent);
@@ -227,7 +232,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
     Model.findOne({'_id': newDoc.issueId},function(err,doc){
       // console.log("doc") ;
       // console.log(doc) ;
-      let newPerms = Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
+      let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
       console.log(newPerms) ;
 
       
@@ -266,7 +271,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
     Model.findOne({'_id': newDoc.issueId},function(err,doc){
       console.log("doc");
       console.log(doc) ;
-      let newPerms = Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
+      let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
       console.log(newPerms) ;
       let watcherRemoved = String(newUid);      
       let exist = exports.searchIdIndex(String(watcherRemoved),newPerms) ;
@@ -341,7 +346,7 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
     return true ; // not different (users not added or removed), noop.
   }
 
-  let newPerms = Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
+  let newPerms = doc && Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
   
   // is user allowed to update Perms?    
   // console.log("newPerms:") ;
