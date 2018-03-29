@@ -4,9 +4,16 @@ angular.module('mean.icu.data.usersservice', [])
     .service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state, $cookies, $window, NotifyingService, WarningsService) {
     var EntityPrefix = '/users';
     var me = null;
+    var people = null;
+
+
+    function getPeople() {
+        return people;
+    }
 
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function(result) {
+            people = result.data;
             return result.data;
         });
     }
@@ -75,6 +82,7 @@ angular.module('mean.icu.data.usersservice', [])
         return $http.put('/api/users/' + user._id, user).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             me = result.data;
+            getAll();
             return result.data;
         });
     }
@@ -118,6 +126,7 @@ angular.module('mean.icu.data.usersservice', [])
     function register(credentials) {
         return $http.post('/api/register', credentials).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
+            NotifyingService.notify('editionData');
             localStorage.setItem('JWT', result.data.token);
             return result;
         }, function(err) {
@@ -130,8 +139,19 @@ angular.module('mean.icu.data.usersservice', [])
             url: '/api/avatar',
             file: file
         }).success(function(data) {
+            if(!me.profile){
+                me.profile = {};
+                me.profile.avatar = null;
+            }
             me.profile.avatar = data.avatar;
+            NotifyingService.notify('editionData');
+            update(me);
+            getAll();
         });
+    }
+
+    function resetAvatar(){
+        return delete me.profile.avatar;
     }
 
     function onIdentity(response) {
@@ -139,7 +159,7 @@ angular.module('mean.icu.data.usersservice', [])
         $rootScope.$emit('loggedin');
         $state.go('main.tasks');
 
-    };
+    }
 
     function loginToHi(username, password) {
         return $http.post('/api/hi/login', {
@@ -150,7 +170,7 @@ angular.module('mean.icu.data.usersservice', [])
         }, function(err) {
             return err;
         });
-    };
+    }
 
     return {
         getAll: getAll,
@@ -162,7 +182,9 @@ angular.module('mean.icu.data.usersservice', [])
         saml: saml,
         logout: logout,
         register: register,
+        resetAvatar: resetAvatar,
         update: update,
+        getPeople: getPeople,
         updateAvatar: updateAvatar,
         onIdentity: onIdentity,
         loginToHi: loginToHi,

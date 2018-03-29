@@ -3,8 +3,9 @@
 require('../models/project');
 
 var options = {
-  includes: 'assign watchers',
+  includes: 'assign watchers subProjects',
   defaults: {
+    assign: undefined,
     watchers: []
   }
 };
@@ -12,22 +13,65 @@ var options = {
 exports.defaultOptions = options;
 
 var crud = require('../controllers/crud.js');
-var projectController = crud('projects', options);
+var task = crud('tasks', options);
+var project = crud('projects', options);
 
 var mongoose = require('mongoose'),
   Project = mongoose.model('Project'),
+  projectModel = require('../models/project'),
   Task = mongoose.model('Task'),
   User = mongoose.model('User'),
   _ = require('lodash'),
+    Discussion = require('./discussion.js'),
+    discussion = require('../models/discussion'),
   elasticsearch = require('./elasticsearch.js');
 
 var Order = require('../models/order')
 
-Object.keys(projectController).forEach(function(methodName) {
+Object.keys(project).forEach(function(methodName) {
   if (methodName !== 'destroy') {
-    exports[methodName] = projectController[methodName];
+    exports[methodName] = project[methodName];
   }
 });
+
+exports.create = function(req, res, next) {
+    if (req.locals.error) {
+        return next();
+    }
+    req.body.discussions = [];
+    if (req.body.discussion) {
+        req.body.discussions = [req.body.discussion];
+        req.body.tags = [];
+        discussion.findById(req.body.discussion, function (err, discussion) {
+            if (discussion && discussion.project) {
+                req.body.project = discussion.project
+            }
+            project.create(req, res, next);
+        })
+    } else project.create(req, res, next);
+};
+
+exports.update = function(req, res, next) {
+    if (req.locals.error) {
+        return next();
+    }
+    if (req.body.discussion) {
+        var alreadyAdded = _(req.locals.result.discussions).any(function(d) {
+            return d.toString() === req.body.discussion;
+        });
+
+        if (!alreadyAdded) {
+            req.body.discussions = req.locals.result.discussions;
+            req.body.discussions.push(req.body.discussion);
+        }
+    }
+
+    if (req.body.subProjects && req.body.subProjects.length && !req.body.subProjects[req.body.subProjects.length - 1]._id) {
+        req.body.subProjects.pop();
+    }
+
+    project.update(req, res, next);
+};
 
 exports.destroy = function(req, res, next) {
   if (req.locals.error) {
@@ -84,7 +128,7 @@ exports.destroy = function(req, res, next) {
       }).exec();
     });
 
-    projectController.destroy(req, res, next);
+    project.destroy(req, res, next);
 
   });
 };
@@ -130,7 +174,7 @@ exports.getByEntity = function(req, res, next) {
     starredOnly = true;
   }
   var query = req.acl.mongoQuery('Project');
-  
+
   query.find(entityQuery);
 
   query.populate(options.includes);
@@ -165,7 +209,7 @@ exports.getByEntity = function(req, res, next) {
                 if(JSON.stringify(projectTemp[index]._id) === JSON.stringify(element.ref)){
                     temp[element.order - 1] = projects[index];
                 }
-                
+
               }
             });
              projects = temp;
@@ -174,17 +218,100 @@ exports.getByEntity = function(req, res, next) {
         })
       }
       else{
-       
+
         req.locals.result = projects;
          next();
       }
       }
     });
-    
   });
+};
 
+exports.getSubProjects = function(req, res, next) {
+    if (req.locals.error) {
+        return next();
+    }
+
+    var query = req.acl.mongoQuery('Project');
+    query.findOne({
+        '_id': req.params.id,
+        tType: {$ne: 'template'}
+    }, {
+        subProjects: 1
+    })
+        .populate('subProjects')
+        .deepPopulate('subProjects.subProjects subProjects.watchers')
+        .exec(function(err, project) {
+            if (err) {
+                req.locals.error = err;
+            } else {
+                if (project) {
+                    req.locals.result = project.subProjects;
+                }
+            }
+            next();
+        });
+}
+
+exports.updateParent = function(req, res, next) {
+    if (req.locals.error || !req.body.parent) {
+        return next();
+    }
+    var data = {
+        $push: {
+            subProjects: req.locals.result._id
+        }
+    };
+    projectModel.findOneAndUpdate({
+        '_id': req.body.parent
+    }, data, function(err, project) {
+        if (err) {
+            req.locals.error = err;
+        }
+        next();
+    });
 
 };
+
+exports.removeSubProject = function(req, res, next) {
+    if (req.locals.error) {
+        return next();
+    }
+    projectModel.findOne({
+        "_id": req.params.id,
+        tType: {$ne: 'template'}
+    }, function(err, subProject) {
+        if (err) {
+            req.locals.error = err;
+        } else {
+            projectModel.update({
+                '_id': subProject.parent,
+                tType: {$ne: 'template'}
+            }, {
+                $pull: {
+                    'subProjects': subProject._id
+                }
+            }, function(err, project) {
+                if (err) {
+                    req.locals.error = err;
+                }
+                next();
+            });
+        }
+    });
+};
+
+exports.populateSubProjects = function(req, res, next) {
+    projectModel.populate(req.locals.result, {
+        path: 'subProjects.watchers',
+        model: 'User'
+    }, function(err, projects) {
+        if (err) {
+            req.locals.error = err;
+        } else req.locals.result = projects;
+        next();
+    })
+}
 
 exports.getByDiscussion = function(req, res, next) {
   if (req.locals.error) {
@@ -209,7 +336,7 @@ exports.getByDiscussion = function(req, res, next) {
     };
     starredOnly = true;
   }
-  var Query = Task.find(entityQuery, {
+  var Query = Project.find(entityQuery, {
     project: 1,
     _id: 0
   });

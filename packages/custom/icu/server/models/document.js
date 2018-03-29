@@ -20,7 +20,7 @@ var DocumentSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ['new', 'in-progress', 'received', 'done','sent'],
+    enum: ['new', 'in-progress', 'received', 'waiting-approval', 'done', 'sent'],
     default: 'new'
   },
   path: {
@@ -120,7 +120,15 @@ var DocumentSchema = new Schema({
   watchers: [{
     type: Schema.ObjectId,
     ref: 'User',
-    unique: true 
+  }],
+  permissions: [{
+    _id:false,
+    id: { type: Schema.ObjectId, ref: 'User' },    
+    level: {
+      type: String,
+      enum: ['viewer', 'commenter', 'editor'],
+      default: 'viewer'
+    }
   }]
 });
 

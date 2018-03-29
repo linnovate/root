@@ -8,6 +8,7 @@
         <div class="subtitle typeList" ng-click="filteringData.issue='all';resetFilter();filterSearchByType();">
             {{'showResultsOf' | i18next}}:
         </div>
+        <div class="clear" ng-click="clearSearchType()">{{'clear' | i18next}}</div>
         <ul class="issue">
             <li ng-repeat="issue in issues"
                 ng-click="filteringData.issue = issue.name;filterSearchByType();resetFilter();">
@@ -22,29 +23,60 @@
             {{'filterResultsBy' | i18next }}:
             <button ng-click="resetFilter()">{{'reset' | i18next}}</button>
         </div> -->
-
-        <div class="filterUpdated">
-            <div class="subtitle">{{'updatedAfter' | i18next}}</div>
-            <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate"
-                   ng-class='{"updatedAt":checkDate()}'>
-        </div>
+      
+     
 
         <div class="filterActive">
             <div class="subtitle">{{'filterByActiveStatus' | i18next}}</div>
+            <div class="clear" ng-click="showM('empty');filterActive('All');$root.status = null;filterSearchByType(true);">{{'clear' | i18next}}</div>
             <div class="select-wrapper select-wrapper-active-status">
-                <div tooltips tooltip-template="{{'filter by activity status' | i18next}}">
-                    <ui-select ng-disabled="activeToggle.disabled" ng-model="activeToggle.field"
-                               on-select="filterActive()" search-enabled="false">
-                        <ui-select-match>
-                            <button class="tasks active-status">{{$select.selected.title | i18next }}</button>
-                        </ui-select-match>
-                        <ui-select-choices class="sorting" repeat="field.value as field in activeToggleList">
-                            {{field.title | i18next}}
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
+                 <ul ng-class="{'main-status':AllStatus.length}">
+                    <li ng-repeat="field in activeToggleList" ng-if='field.title!="All"'>
+                        <span class="status" ng-click="$root.status = field.value;filterSearchByType();showM(field.value,0);">{{field.title | i18next}}</span>
+                    </li>
+                </ul>
+                <div class="show-more" ng-show="!AllStatus.length" ng-click="$root.status = field;showM('All');filterActive('All');">{{'more' | i18next}}</div>
+                <ul ng-show="AllStatus.length">
+                        <li ng-repeat="field in AllStatus track by $index | orderBy:field">
+                            <!-- <span class="all-status" ng-class="{'bold':isActive(field,$root.status)}" ng-click="$root.status = field;filterSearchByType(true)">{{field | i18next}}</span> -->
+                          <span class="all-status" ng-class="{'bold':isActive(field,$root.status)}" ng-click="statusListCahnge(field);filterSearchByType(true)">{{field | i18next}}</span>
+                        </li>
+                    </ul>
+                    <div class="show-more" ng-show="AllStatus.length && currentType == 'All'" ng-click="showM('empty');$root.status = null;">{{'less' | i18next}}</div>
+                 </div>
+            </div>
+           
+            <div class="filterDueDate" ng-if="filteringData.issue == 'task' || filteringData.issue == 'project'">
+                <div class="subtitle">{{'dueDate' | i18next}}</div>
+                <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
+                <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
+                       ng-class='{"updatedAt":checkDate()}'>
+            </div>
+            <div class="filterDueDate" ng-if="filteringData.issue == 'officeDocument'">
+                <div class="subtitle">{{'creation' | i18next}}</div>
+                <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
+                <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
+                       ng-class='{"updatedAt":checkDate()}'>
+            </div>
+            <div class="filterDueDate" ng-if="filteringData.issue == 'discussion'">
+                <div class="subtitle">{{'executionDate' | i18next}}</div>
+                <div class="clear" ng-click="clearDateRange()">{{'clear' | i18next}}</div>
+               <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date"
+                 options="dateoptions" />
+            </div>
+            <div class="filterUpdated">
+                <div class="subtitle">{{'updatedAfter' | i18next}}</div>
+                <div class="clear" ng-click="clearUpdatedDate()">{{'clear' | i18next}}</div>
+               <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate"
+                       ng-class='{"updatedAt":checkDate()}'>
             </div>
 
+            <div class="filterUpdated">
+                <div class="subtitle">{{'deletedItems' | i18next}}</div>
+                <div class="clear" ng-click="clearRecycled()">{{'clear' | i18next}}</div>
+                <div class="recycle" ng-class="{active: recycled}" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>            
+            </button>
+            </div>
 
             <div ng-if="filteringData.projects.length">
                 <div class="subtitle">{{'linkedTo' | i18next}}{{'project' | i18next}}</div>
@@ -415,11 +447,6 @@
     </div>
     <div class="sidefilters" ng-if="activeTab.name == 'search'">
         <hr/>
-        <div class="filterRecycled">
-            <button ng-click="toggleRecycle()" ng-class="{ 'recycled': recycled }" class="btn">
-                {{'showDeletedItems' | i18next}}
-            </button>
-        </div>
     </div>
     </div>
 

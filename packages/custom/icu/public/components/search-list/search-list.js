@@ -3,7 +3,6 @@
 angular.module('mean.icu.ui.searchlist')
 .controller('SearchListController', function ($scope, results, term, UsersService,$stateParams) {
 	$scope.results = results;
-
 	for (let i = 0; i< $scope.results.length; i++) {
 		// if ($scope.results[i].project)
 		// 	$scope.results[i].projectObj = $scope.$parent.projects.find(function(e) {

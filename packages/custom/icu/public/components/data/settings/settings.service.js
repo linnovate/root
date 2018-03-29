@@ -3,6 +3,8 @@
 angular.module('mean.icu.data.settingsservice', [])
 .service('SettingServices', function($http, WarningsService) {
     
+
+
     function getAll() {
         return $http.get('/api/admin/moduleSettings/icu').then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
@@ -11,11 +13,22 @@ angular.module('mean.icu.data.settingsservice', [])
     }
 
     let statusList = {
-        task: ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'],
-        project: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
-        discussion: ['new', 'scheduled', 'done', 'canceled', 'archived'],
-        officedocument: ['new', 'in-progress', 'received', 'done','sent']
+        task: ['new', 'assigned', 'in-progress', 'waiting-approval', 'review', 'rejected', 'done'],
+        project: ['new', 'in-progress', 'canceled', 'waiting-approval', 'completed', 'archived'],
+        discussion: ['new', 'scheduled', 'done', 'canceled', 'waiting-approval', 'archived'],
+        officedocument: ['new', 'in-progress', 'received', 'done', 'waiting-approval','sent']
     }
+
+    function getStatusList (){
+        return statusList;
+    }
+    function getActiveStatusList (){
+        return ['new', 'assigned', 'in-progress', 'review'];
+    }
+    function getNonActiveStatusList (){
+        return ['rejected', 'done', 'archived','canceled','completed'];
+    }
+
 
     statusList.Typed = function(type) {
         if(type == "all") {
@@ -79,6 +92,9 @@ angular.module('mean.icu.data.settingsservice', [])
         getActiveStatuses: getActiveStatuses,
         getNonActiveStatuses: getNonActiveStatuses,
         getIsActiveStatus: getIsActiveStatus,
-        activeStatusConfigured: activeStatusConfigured
+        activeStatusConfigured: activeStatusConfigured,
+        getStatusList: getStatusList,
+        getActiveStatusList: getActiveStatusList,
+        getNonActiveStatusList: getNonActiveStatusList
     };
 });

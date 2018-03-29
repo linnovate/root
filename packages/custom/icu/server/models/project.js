@@ -15,7 +15,7 @@ var ProjectSchema = new Schema({
   },
   recycled: {
     type: Date,
-  },  
+  },
   title: {
     type: String
   },
@@ -45,8 +45,11 @@ var ProjectSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
+    enum: ['new', 'in-progress', 'canceled', 'waiting-approval', 'completed', 'archived'],
     default: 'new'
+  },
+  due: {
+    type: Date
   },
   tags: [String],
   description: {
@@ -57,6 +60,19 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   }],
+  permissions: [{
+    _id:false,
+    id: { type: Schema.ObjectId, ref: 'User' },    
+    level: {
+      type: String,
+      enum: ['viewer', 'commenter', 'editor'],
+      default: 'viewer'
+    }
+  }],
+  assign: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
   room: {
     type: String
   },
@@ -68,6 +84,18 @@ var ProjectSchema = new Schema({
   circles: {
     type: Schema.Types.Mixed
   },
+  subProjects: [{
+    type: Schema.ObjectId,
+    ref: 'Project'
+  }],
+  tType: {
+    type: String
+  },
+  templateId: {
+    type: Schema.ObjectId,
+    ref: 'Project'
+  },
+  customData: {},
   WantRoom: {
     type: Boolean,
     default: false
@@ -120,5 +148,8 @@ ProjectSchema.pre('remove', function(next) {
 });
 
 ProjectSchema.plugin(archive, 'project');
+
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
+ProjectSchema.plugin(deepPopulate, {});
 
 module.exports = mongoose.model('Project', ProjectSchema);

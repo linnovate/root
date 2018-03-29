@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('ProjectsService', function(ApiUri, $http, NotifyingService, PaginationService, MeanSocket, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/projects';
     var data, selected;
 
@@ -17,6 +17,7 @@ angular.module('mean.icu.data.projectsservice', [])
         }
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
+            //console.log($rootScope.warning, '$rootScope.warning')
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
@@ -55,12 +56,51 @@ angular.module('mean.icu.data.projectsservice', [])
         }
     }
 
-    function create(project) {
-        return $http.post(ApiUri + EntityPrefix, project).then(function(result) {
+    function assign(project, me, prev) {
+        if (project.assign) {
+            var message = {};
+            message.content = project.title || '-';
+            MeanSocket.emit('message:send', {
+                message: message,
+                user: me,
+                channel: project.assign,
+                id: project.id,
+                entity: 'task',
+                type: 'assign'
+            });
 
-        	WarningsService.setWarning(result.headers().warning);
+            var activityType = prev.assign ? 'assign' : 'assignNew';
+        } else {
+            var activityType = 'unassign';
+        }
+        return ActivitiesService.create({
+            data: {
+                issue: 'project',
+                issueId: project.id,
+                type: activityType,
+                userObj: project.assign,
+                prev: prev.assign ? prev.assign.name : ''
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+    }
+
+    function getSubProjects(projectId) {
+        return $http.get(ApiUri + EntityPrefix + '/subprojects/' + projectId).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
+    }
+
+    function create(project) {
+        return $http.post(ApiUri + EntityPrefix, project)
+            .then(function(result) {
+                WarningsService.setWarning(result.headers().warning);
+                NotifyingService.notify('editionData');
+                return result.data;
+            });
     }
 
 
@@ -75,6 +115,12 @@ angular.module('mean.icu.data.projectsservice', [])
 
         return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
+            if (project.subProjects
+                && project.subProjects.length
+                && project.subProjects[project.subProjects.length-1]
+                && !project.subProjects[project.subProjects.length-1]._id) {
+                var subProject = project.subProjects[project.subProjects.length-1];
+            }
             if(TasksService.data) {
                 TasksService.data.forEach(function(task) {
                     if (task.project && task.project._id === project._id) {
@@ -89,12 +135,21 @@ angular.module('mean.icu.data.projectsservice', [])
                     }
                 });
             }
+            if (result.data && result.data.subProjects)
+            for (var i = 0; i < result.data.subProjects.length; i++) {
+                if(result.data.subProjects[i].due) {
+                    result.data.subProjects[i].due = new Date(result.data.subProjects[i].due);
+                }
+            }
+            if (subProject) result.data.subProjects.push(subProject);
+            NotifyingService.notify('editionData');
             return result.data;
         });
     }
 
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+            NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
@@ -125,6 +180,42 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
+    function getSubProjects(projectId) {
+        return $http.get(ApiUri + EntityPrefix + '/subprojects/' + projectId).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function getTemplate(projectId) {
+        return $http.get(ApiUri + '/templates' ).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function saveTemplate(id, name){
+        return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function template2subProjects(templateId, data){
+        return $http.post(ApiUri  + '/templates/' + templateId + '/toSubProjects', data).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
+    function deleteTemplate(id){
+        return $http.delete(ApiUri + '/templates/' + id).then(function (result) {
+            NotifyingService.notify('editionData');
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
+
     function getTags() {
         return $http.get(ApiUri + EntityPrefix + '/tags').then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
@@ -139,13 +230,31 @@ angular.module('mean.icu.data.projectsservice', [])
                 issue: 'project',
                 issueId: project.id,
                 type: type || 'updateWatcher',
-                userObj: watcher                
+                userObj: watcher
             },
             context: {}
         }).then(function(result) {
             return result;
         });
     }
+
+    
+    function updateDue(project, prev) {
+        return ActivitiesService.create({
+            data: {
+                issue: 'project',
+                issueId: project.id,
+                type: 'updateDue',
+                TaskDue: project.due,
+                prev: prev.due
+            },
+            context: {}
+        }).then(function(result) {
+            return result;
+        });
+
+    }
+
 
     function updateStatus(project, prev) {
         return ActivitiesService.create({
@@ -196,11 +305,17 @@ angular.module('mean.icu.data.projectsservice', [])
 
 
     return {
+        assign: assign,
         getAll: getAll,
         getById: getById,
         getByDiscussionId: getByEntityId('discussions'),
         getByUserId: getByEntityId('users'),
         getTags: getTags,
+        getSubProjects: getSubProjects,
+        getTemplate: getTemplate,
+        saveTemplate: saveTemplate,
+        template2subProjects: template2subProjects,
+        deleteTemplate: deleteTemplate,
         create: create,
         update: update,
         remove: remove,
@@ -210,6 +325,7 @@ angular.module('mean.icu.data.projectsservice', [])
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
         updateWatcher: updateWatcher,
+        updateDue: updateDue,
         updateStatus: updateStatus,
         updateColor: updateColor,
         updateTitle: updateTitle

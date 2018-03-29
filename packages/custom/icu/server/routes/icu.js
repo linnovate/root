@@ -92,7 +92,8 @@ module.exports = function(Icu, app) {
   .patch(recycle.recycleRestoreEntity);
   app.route('/api/:entity(all|tasks|discussions|projects|offices|folders|officeDocuments)/get_recycle_bin')
   .get(recycle.recycleGetBin);
-
+  app.route('/api/get_search_all')
+  .get(recycle.searchAll);
   //star & get starred list
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/star')
     .patch(star.toggleStar);
@@ -100,26 +101,29 @@ module.exports = function(Icu, app) {
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
   app.route('/api/:entity(tasks|discussions|projects|offices|folders)/starred/:type(byAssign)')
     .get(pagination.parseParams, star.getStarred, pagination.formResponse);
-  //Create HI Room if the user wish  
+  //Create HI Room if the user wish
   app.route('/api/:entity(tasks|discussions|projects)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
     .post(project.read, notification.createRoom);
     //.post(project.read);
 
-  //Create HI Room if the user wish  
+  //Create HI Room if the user wish
   app.route('/api/:entity(offices)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
     //.post(project.read, notification.createRoom);
     .post(office.read)
 
-  //Create HI Room if the user wish  
+  //Create HI Room if the user wish
   app.route('/api/:entity(folders)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
     //.post(project.read, notification.createRoom);
     .post(folder.read)
 
-  app.route('/api/projects*').all(entity('projects'));
+    app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
   //.all(auth.requiresLogin, permission.echo)
-  .post(project.create, updates.created)
-    .get(pagination.parseParams, project.all, star.isStarred, pagination.formResponse);
+  .post(project.create, project.updateParent, notification.sendNotification, updates.created)
+    .get(pagination.parseParams, project.all, project.populateSubProjects, star.isStarred, pagination.formResponse);
+
+
+
   app.route('/api/projects/:id([0-9a-fA-F]{24})')
     .get(project.read, star.isStarred)
   //.put(project.read, project.update, star.isStarred)
@@ -191,6 +195,9 @@ module.exports = function(Icu, app) {
   // 	.post(task.addSubTasks)
   app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
   	.get(task.getSubTasks)
+
+  app.route('/api/projects/subprojects/:id([0-9a-fA-F]{24})')
+    .get(project.getSubProjects);
 
   app.route('/api/tasks/MyTasksOfNextWeekSummary')
     .post(task.read, task.MyTasksOfNextWeekSummary);
@@ -384,7 +391,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/officeDocuments/sentToDocument/:id([0-9a-fA-F]{24})')
   .post(documents.sentToDocument);
-  
+
    app.route('/api/officeTemplates/createNew')
    .post(templateDocs.createNew);
 
@@ -392,9 +399,9 @@ module.exports = function(Icu, app) {
    app.route('/api/signatures/create')
    .post(signatures.createSignature);
   app.route('/api/signatures/getByOfficeId/:id([0-9a-fA-F]{24})')
-  .get(signatures.getByOffice);   
+  .get(signatures.getByOffice);
   app.route('/api/signatures/:id([0-9a-fA-F]{24})')
-  .delete(signatures.removeSignature);   
+  .delete(signatures.removeSignature);
 
    app.route('/api/officeTemplates')
    //.post(templateDocs.upload)
@@ -403,7 +410,7 @@ module.exports = function(Icu, app) {
    .post(templateDocs.getByOfficeId)
 
    app.route('/api/officeTemplates*').all(entity('templateDocs'));
-  
+
 
    app.route('/api/officeDocuments/uploadDocumentFromTemplate')
   .post(documents.uploadDocumentsFromTemplate);
@@ -415,7 +422,7 @@ module.exports = function(Icu, app) {
   .post(templateDocs.update2)
   .delete(templateDocs.deleteTemplate);
    //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
-   
+
    app.route(/^((?!\/hi\/).)*$/).all(response);
    app.route(/^((?!\/hi\/).)*$/).all(error);
    //app.use(utils.errorHandler);

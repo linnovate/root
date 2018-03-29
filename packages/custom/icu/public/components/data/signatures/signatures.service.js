@@ -15,6 +15,7 @@ angular.module('mean.icu.data.signaturesservice', [])
     function create(signature) {
         return $http.post(ApiUri + EntityPrefix+'/create', signature).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
+            NotifyingService.notify('createdElement');
             return result.data;
         });
     }

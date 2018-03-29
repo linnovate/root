@@ -24,7 +24,7 @@ var mongoose = require('mongoose'),
 exports.authCallbackSaml = function(req, res) {
   var ip = req.ip;
   var payload = req.user;
-  var escaped = JSON.stringify(payload);      
+  var escaped = JSON.stringify(payload);
   escaped = encodeURI(escaped);
   // We are sending the payload inside the token
   var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
@@ -46,7 +46,7 @@ exports.authCallbackSaml = function(req, res) {
  */
 exports.authCallback = function(req, res) {
   var payload = req.user;
-  var escaped = JSON.stringify(payload);      
+  var escaped = JSON.stringify(payload);
   escaped = encodeURI(escaped);
   // We are sending the payload inside the token
   var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
@@ -187,41 +187,41 @@ exports.user = function(req, res, next, id) {
  * Resets the password
  */
 
-exports.resetpassword = function(req, res, next) {
-  User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: {
-      $gt: Date.now()
-    }
-  }, function(err, user) {
-    if (err) {
-      return res.status(400).json({
-        msg: err
-      });
-    }
-    if (!user) {
-      return res.status(400).json({
-        msg: 'Token invalid or expired'
-      });
-    }
-    req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
-    req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-    var errors = req.validationErrors();
-    if (errors) {
-      return res.status(400).send(errors);
-    }
-    user.password = req.body.password;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
-    user.save(function(err) {
-      req.logIn(user, function(err) {
-        if (err) return next(err);
-        return res.send({
-          user: user
-        });
-      });
+exports.resetpassword = function (req, res, next) {
+    User.findOne({
+        id: req.body.email,
+    }, function (err, user) {
+        if (user == null) {
+            return res.status(400).json({
+                msg: 'Token invalid or expired'
+            });
+        } else {
+            if (user.authenticate(req.body.password)) {   // if entered password is valid
+                if (err) {
+                    return res.status(400).json({
+                        msg: err
+                    });
+                }
+                req.assert('password', 'Passwords do not match').equals(req.body.password);
+                req.assert('newpassword', 'Password must be between 8-20 characters long').len(8, 20);
+                var errors = req.validationErrors();
+                if (errors) {
+                    return res.status(400).send(errors);
+                }
+                user.password = req.body.newpassword;
+                user.resetPasswordToken = undefined;
+                user.resetPasswordExpires = undefined;
+                user.save(function (err) {
+                    req.logIn(user, function (err) {
+                        if (err) return next(err);
+                        return res.send({
+                            user: user
+                        });
+                    });
+                });
+            }
+        }
     });
-  });
 };
 
 /**

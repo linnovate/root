@@ -1,6 +1,6 @@
 .panes-wrapper {
         transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
-    
+
     .list-table {
         table {
             @include table;
@@ -27,20 +27,22 @@
                         }
 
                     }
-                    
+
                     &:not(.active):hover {
                         background-color: #E1F2F8;
                         transition: 0.8s;
                     }
 
-                
+
 
                     .id {
                         text-align: left;
                         width: 40px;
                         padding-left:8px;
                         display: inline-block;
-
+                        @media screen and (max-width: $small-resolution) {
+                            display:none;
+                        }
                     }
                 }
             }
@@ -65,7 +67,7 @@
     .panes-wrapper {
         margin-left: 0;
         width: 100%;
-        
+
     }
     .sidepane, .middlepane {
         display: none !important;
@@ -119,9 +121,10 @@
             &.canceled{color: #ef5350;}
             &.completed{color: #598527;}
             &.archived{color: #ab47bc;}
+            &.waiting-approval{color: #ab47bc;}            
             &.received{color: #37afef;}
             &.sent{color: #359123;}
-            
+
         }
       .more-info {
           display: block !important;
@@ -187,17 +190,18 @@
             &.canceled{color: #ef5350;}
             &.completed{color: #598527;}
             &.archived{color: #ab47bc;}
+            &.waiting-approval{color: #ab47bc;}            
             &.received{color: #37afef;}
             &.sent{color: #359123;}
         }
         .project {
-            padding: 3px 13px !important;                                                                                                              
+            padding: 3px 13px !important;
         }
         .office {
-            padding: 3px 13px !important;                                                                                                              
+            padding: 3px 13px !important;
         }
         .folder {
-            padding: 3px 13px !important;                                                                                                              
+            padding: 3px 13px !important;
         }
         .tag {
             @include tag(14px);
@@ -213,7 +217,7 @@
             display: flex;
             flex-direction: column;
         }
-                     
+
     }
     .subTasks {
         flex-direction: column;

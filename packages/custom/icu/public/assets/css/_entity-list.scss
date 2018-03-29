@@ -13,7 +13,7 @@
 
         .list-table {
             height: 100%;
-            overflow: auto;
+            overflow-x: hi;
               &::-webkit-scrollbar {
                 width: 5px;
             }
@@ -88,6 +88,9 @@
                     &.move{
                         width: 15px;
                         color: $grey1;
+                        @media screen and (max-width: $small-resolution) {
+                            display:none;
+                        }
                     }
 
                     &.arrow {
@@ -96,6 +99,11 @@
                         text-align: center;
                          padding-right:40px;
                          margin-left: 27px;
+                        @media screen and (max-width: $small-resolution) {
+                            margin-left: 0;
+                            padding-right:20px;
+                            margin-right: 5px;
+                        }
                     }
 
                     &.name {
@@ -108,6 +116,11 @@
                         &:before {
                             font-weight: normal;
                             font-style: italic;
+                        }
+                        @media screen and (max-width: $small-resolution) {
+                            margin-right: 5px;
+                            width: 13.3vw;
+                            word-wrap: break-word;
                         }
 
                         margin-left: 10px;
@@ -122,6 +135,10 @@
                         display: inline-block;
                         // margin-left: 10px;
                         line-height: initial;
+
+                        @media screen and (max-width: $small-resolution) {
+                        width: 8.8vw;
+                    }
                         span {
                             padding: 3px 13px;
                             position: relative;
@@ -175,9 +192,14 @@
                             &.canceled{color: #ef5350;}
                             &.completed{color: #598527;}
                             &.archived{color: #ab47bc;}
+                            &.waiting-approval{color: #ab47bc;}
                             &.scheduled{color: #0054a6;}
                             &.received{color: #37afef;}
                             &.sent{color: #359123;}
+                        @media screen and (max-width: $small-resolution) {
+                            text-align: center;
+                            margin-left: 0;
+                        }
                     }
 
                    	&.due {
@@ -185,6 +207,9 @@
                         display: inline-block;
                         width: 80px;
                         margin-left: 10px;
+                        @media screen and (max-width: $small-resolution) {
+                            display:none;
+                        }
                     }
 
                     .tag {
@@ -359,6 +384,7 @@
                             &.canceled{color: #ef5350;}
                             &.completed{color: #598527;}
                             &.archived{color: #ab47bc;}
+                            &.waiting-approval{color: #ab47bc;}                            
                             &.scheduled{color: #0054a6;}
                             &.received{color: #37afef;}
                             &.sent{color: #359123;}
@@ -551,6 +577,7 @@
                             &.canceled{color: #ef5350;}
                             &.completed{color: #598527;}
                             &.archived{color: #ab47bc;}
+                            &.waiting-approval{color: #ab47bc;}                            
                             &.scheduled{color: #0054a6;}
                             &.received{color: #37afef;}
                             &.sent{color: #359123;}

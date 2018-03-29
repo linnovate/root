@@ -10,7 +10,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
                                                          $timeout,
                                                          people,
                                                          DiscussionsService,
-                                                         ActivitiesService, 
+                                                         PermissionsService,
+                                                         ActivitiesService,
                                                          EntityService,
                                                          $stateParams) {
         $scope.isLoading = true;
@@ -23,6 +24,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         {
             $scope.discussion = context.entity || entity;
         }
+        $scope.entity = entity || context.entity;
         $scope.tasks = tasks.data || tasks;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.people = people.data || people;
@@ -42,7 +44,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         }
         if($scope.discussion.endTime){
             $scope.discussion.endTime = new Date($scope.discussion.endTime);
-        }       
+        }
 
         $(document).ready(function() {
              $scope.updateDatesString();
@@ -55,14 +57,14 @@ angular.module('mean.icu.ui.discussiondetails', [])
             }
     });
 
-        $(document).click(function(event) { 
+        $(document).click(function(event) {
             if( (!$(event.target).closest('.dueDiv').length) && (!$(event.target).closest('.due').length)) {
                 if($scope.fade){
                     $scope.dueClicked();
                 }
         }
-    });   
-        
+    });
+
         if($scope.people[Object.keys($scope.people).length-1].name !== 'no select'){
             var newPeople = {
                 name: 'no select'
@@ -74,8 +76,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
             if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job==null)){
                 $scope.people[i].job = $scope.people[i].name;
             }
-        }     
-        
+        }
+
         DiscussionsService.getStarred().then(function(starred) {
             $scope.discussion.star = _(starred).any(function(s) {
                 return s._id === $scope.discussion._id;
@@ -117,6 +119,22 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
         $scope.dueBlur = function () {
             $scope.showDue = false;
+        };
+
+        $scope.isRecycled = $scope.discussion.hasOwnProperty('recycled');
+
+        $scope.enableRecycled = true;
+        $scope.havePermissions = function(type, enableRecycled){
+            enableRecycled = enableRecycled || !$scope.isRecycled;
+            return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
+        };
+
+        $scope.haveEditiorsPermissions = function(){
+            return PermissionsService.haveEditorsPerms($scope.entity);
+        };
+
+        $scope.permsToSee = function(){
+            return PermissionsService.haveAnyPerms($scope.entity);
         };
 
         $scope.schedule = function (discussion) {
@@ -167,7 +185,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
 
-        
+
         /**
   #firstStr{
         margin-left:-20px;
@@ -236,7 +254,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
             }
         }
         };
-       
+
         $scope.startDueOptions = {
             onSelect: function () {
                 $scope.update($scope.discussion, 'due');
@@ -245,7 +263,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
             onClose: function() {
                 if (!$scope.checkDate()){
                     document.getElementById('ui-datepicker-div').style.display = 'block';
-                    $scope.open();    
+                    $scope.open();
                 }else{
                     document.getElementById('ui-datepicker-div').style.display = 'none';
                     $scope.open();
@@ -276,7 +294,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.checkDate = function() {
             var d = new Date()
             d.setHours(0,0,0,0);
-             if (d > $scope.discussion.startDate || d > $scope.discussion.endDate || 
+             if (d > $scope.discussion.startDate || d > $scope.discussion.endDate ||
                 $scope.discussion.endDate < $scope.discussion.startDate) {
                 return false;
             }
@@ -290,7 +308,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
             if($scope.discussion.startDate && $scope.discussion.allDay){
                     return false;
                 }
-                else if($scope.discussion.startDate && $scope.discussion.startTime && 
+                else if($scope.discussion.startDate && $scope.discussion.startTime &&
                     $scope.discussion.endDate && $scope.discussion.endTime){
                     return false;
                 }
@@ -315,7 +333,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 document.getElementById('before').style.display = 'none';
                 document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
                 document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
-            } 
+            }
             else if($scope.discussion.endDate < $scope.discussion.startDate){
                 document.getElementById('past').style.display = 'none';
                 document.getElementById('before').style.display = document.getElementById('ui-datepicker-div').style.display;
@@ -332,7 +350,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 $('.dueDiv').fadeIn(1000);
             }
             else{
-               $('.dueDiv').fadeOut(1000); 
+               $('.dueDiv').fadeOut(1000);
             }
             $scope.fade = !$scope.fade;
         };
@@ -399,14 +417,15 @@ angular.module('mean.icu.ui.discussiondetails', [])
         };
 
 
-        $scope.recycle = function(entity) {            
+        $scope.recycle = function(entity) {
+            console.log("$scope.recycle") ;
             EntityService.recycle('discussions', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
                 clonedEntity.status = "Recycled" // just for activity status
-                DiscussionsService.updateStatus(clonedEntity, entity).then(function(result) {                    
+                DiscussionsService.updateStatus(clonedEntity, entity).then(function(result) {
                     ActivitiesService.data.push(result);
                 });
-    
+
                 $state.go('main.discussions.all', {
                     entity: 'all'
                 }, {reload: true});
@@ -432,7 +451,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
             });
         };
-        
+
 
         $scope.deleteDiscussion = function (discussion) {
             DiscussionsService.remove(discussion._id).then(function () {
@@ -441,11 +460,23 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     entity: 'all'
                 }, {reload: true});
             });
-        };    
+        };
+
+
+        $scope.updateStatusForApproval = function(entity) {
+            let context = {
+                action:"updated",
+                name:  "status",
+                type:  "project"
+            }
+            entity.status = "waiting-approval" ;
+            $scope.update(entity, 'status') ;
+        }
+
+
 
         $scope.update = function (discussion, type) {
-            let me = $scope.me;
-            
+
             $scope.updateDatesString();
             DiscussionsService.update(discussion);
             switch (type) {
@@ -473,8 +504,20 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         ActivitiesService.data.push(result);
                     });
                     break;
-                
+
                 case 'assign':
+                    if (discussion.assign != null) {
+                        let filtered = discussion.watchers.filter(watcher => {
+                            // check the assignee is not a watcher already
+                            return watcher == discussion.assign
+                        });
+
+                        // add assignee as watcher
+                        if(filtered.length == 0) {
+                            discussion.watchers.push(discussion.assign);
+                        }
+                    }
+
                     DiscussionsService.updateAssign(discussion, backupEntity).then(function(result) {
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
@@ -489,7 +532,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         ActivitiesService.data.push(result);
                     });
                     break;
-            }            
+            }
         };
 
         var activeLocationTimeout;
@@ -497,7 +540,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
             if (activeLocationTimeout) {
                 clearTimeout(activeLocationTimeout)
             }
-            activeLocationTimeout = setTimeout(function(){ 
+            activeLocationTimeout = setTimeout(function(){
                 $scope.update(discussion, 'location')
             }, 2000);
         }
@@ -508,7 +551,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 if (activeTitleTimeout) {
                     clearTimeout(activeTitleTimeout)
                 }
-                activeTitleTimeout = setTimeout(function(){ 
+                activeTitleTimeout = setTimeout(function(){
                     $scope.update($scope.discussion, 'title')
                 }, 2000);
             }
@@ -522,7 +565,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 if (activeDescriptionTimeout) {
                     clearTimeout(activeDescriptionTimeout)
                 }
-                activeDescriptionTimeout = setTimeout(function(){ 
+                activeDescriptionTimeout = setTimeout(function(){
                     $scope.update($scope.discussion, 'description')
                 }, 2000);
             }

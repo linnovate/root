@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.loadPrev = projects.prev;
         $scope.print = function() {
             $window.print()
-        }
+        };
 
         $scope.starred = $stateParams.starred;
 
@@ -23,7 +23,7 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.activeToggleList = EntityService.activeToggleList;
         $scope.activeToggle = {
                 field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
-                disabled: !EntityService.isActiveStatusAvailable() 
+                disabled: !EntityService.isActiveStatusAvailable()
         };
         /*---*/
 
@@ -40,7 +40,7 @@ angular.module('mean.icu.ui.projectlist', [])
             if($scope.sorting.field != "custom"){
                 $scope.sorting.isReverse = !$scope.sorting.isReverse;
             }
-            
+
             /*Made By OHAD - Needed for reversing sort*/
             $state.go($state.current.name, { sort: $scope.sorting.field });
         };
@@ -57,9 +57,9 @@ angular.module('mean.icu.ui.projectlist', [])
         //         $state.go($state.current.name, { sort: $scope.sorting.field });
         //     }
         // });
-        
-        
-       
+
+
+
 
         $scope.sortingList = [
             {
@@ -83,7 +83,7 @@ angular.module('mean.icu.ui.projectlist', [])
 
         function navigateToDetails(project) {
             if(!project) return ;
-            
+
             $scope.detailsState = context.entityName === 'all' ?
                 'main.projects.all.details' : 'main.projects.byentity.details';
 
@@ -100,14 +100,14 @@ angular.module('mean.icu.ui.projectlist', [])
 
         $scope.filterActive = function () {
             EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
-            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
+            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
         };
-        
+
         let possibleNavigate = $scope.projects.filter(function(t) {
-            return t.recycled == null ; 
+            return t.recycled == null ;
         })
-    
-        if (possibleNavigate.length) {            
+
+        if (possibleNavigate.length) {
             if ($state.current.name === 'main.projects.all' ||
                 $state.current.name === 'main.projects.byentity') {
                 navigateToDetails(possibleNavigate[0]);

@@ -1,15 +1,33 @@
 .sidepane {
     box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
     width: $sidepane-width;
+    height: 100vh;
     left: 0;
     top: 0;
     background-color: $dark-grey;
     min-width: $sidepane-width;
+    .show-more {
+        color: #FFA000;
+        font-size: 12px;
+    }
+    min-width: $min-sidepane-width;
+
+    @media screen and (max-width: $small-resolution) {
+        max-width:274px;
+        width: 100%;
+        min-width: $min-sidepane-width;
+    }
+
     .sidefilters {
         .filterActive {
+            padding-bottom: 20px;
+            border-bottom: 1px solid #444F53;
             width: 100% ;
             display: inline-block;
-            width: 200px;
+            // width: 200px;
+            // ul {
+            //     margin-bottom: 0 !important;
+            // }
         }
 
         .filterRecycled {
@@ -22,16 +40,13 @@
                 box-shadow: 0px 0px 0px 2px #FFB435;
                 transition: 0.8s;
             }
+            
 
             button {
                 color: wheat ;
                 appearance: none;
-                border: none;
                 float: left;
-                margin-left: 30px;
-                margin-bottom: 10px;
                 cursor: pointer;
-                outline: none;
                 background-position: left center;
 
                 background-color: transparent;
@@ -50,8 +65,9 @@
 
             }
         }
-
-        .filterUpdated,  {
+        .filterUpdated, .filterDueDate  {            
+            padding-bottom: 52px;
+            border-bottom: 1px solid #444F53;
             .placeholder {
                 position: absolute;
                 top: 50%;
@@ -59,6 +75,15 @@
                 color: $light-grey-placeholder;
                 margin-right: 5px;
                 //padding-left: 5px;
+            }
+            .recycle {
+                float: left;
+                width: 100%;
+                margin: 10px 20px;
+                padding-left: 6px;
+                &.active {
+                    color: #FFA000;
+                }
             }
 
             input {
@@ -110,11 +135,26 @@
             background-color: white;
             border: 1px solid #c3bfbf;
         }
-
+        
         .select-wrapper {
             float: left;
             width: 100%;
             margin:10px 20px;
+            padding-left: 6px;
+            .status {
+                font-size: 16px;
+                font-weight: bold;
+                color: #DFF2F9;
+                // padding: 20px 0;
+            }
+            .bold {
+                color: #FFA000; 
+                
+            }
+            .all-status {
+                font-size: 16px;
+                font-weight: normal;
+            }
 
             tooltip {
                 display: block;
@@ -141,6 +181,11 @@
                         display: none;
                     }
                 }
+            }
+            .main-status {
+                padding-bottom: 20px;
+                border-bottom: 1px solid #444F53;
+                width: 79%;
             }
         }
 
@@ -179,10 +224,10 @@
 
 
     header {
-        display: table-cell;
+        display: block;
         vertical-align: middle;
         height: $header-height;
-        width: $sidepane-width;
+        width: 100%;
         background-color: $dark-grey;
         color: white;
         font-size: 23px;
@@ -198,17 +243,23 @@
         .header-button
         {
             width:85px;
-            height: 55px;
+            height: 54px;
             float:left;
+
+            @media screen and (max-width: $small-resolution) {
+                width:40px;
+            }
+
             .hide-butt
             {
-                background-color: #141D20;
-                background-repeat: no-repeat;
-                height: 55px;
+                height: 54px;
                 width: 55px;
                 border:none;
-                background-repeat: no-repeat;
-                background-position: center center;
+                background: #141D20 no-repeat center center;
+
+                @media screen and (max-width: $small-resolution) {
+                    width:40px;
+                }
             }
         }
         .sidepane-title
@@ -236,9 +287,17 @@
     }
     nav {
         width: 85px;
+        min-width:40px;
         color: white;
         overflow: hidden;
         height: calc(100% - 60px);
+
+        @media screen and (max-width: $small-resolution) {
+            max-width: calc(100% - 240px);
+            width: 100%;
+            min-width: 40px;
+        }
+
         &::-webkit-scrollbar {
             width: 5px;
         }
@@ -290,7 +349,7 @@
             }
             & > li {
                 cursor: pointer;
-                width: 85px;
+                width: 100%;
                 border-bottom: 1px solid $border;
                 &.active {
                     background-color: #313C40;
@@ -308,7 +367,7 @@
 
                 .menu-item {
                     height: 115px;
-                    width: 85px;
+                    width: 100%;
                     .icon {
                         width: 100%;
                         height: 28px;
@@ -317,7 +376,8 @@
                         vertical-align: middle;
                         float:none;
                         display: inline-block;
-
+                        @media screen and (max-width: $small-resolution) {
+                            margin: 43px auto 4px auto;                        }
                     }
 
                     .item-name {
@@ -327,6 +387,11 @@
                         position: relative;
                         margin: 2px auto 0 auto;
                         display: inline-block;
+
+                        @media screen and (max-width: $small-resolution) {
+                            display: none;
+                        }
+
                         span {
                             line-height: 18px;
                             font-size: 13px;
@@ -389,9 +454,12 @@
         }
     }
     .submenu {
-        height: 100vmin;
+        // height: 100vmin;
         width:calc(100% - 86px);
+        height: 100%;
+        width:240px;
         background-color: $grey;
+        overflow-x: auto;
     }
     .searchPane {
         height: auto;
@@ -406,6 +474,8 @@
         }
 
         .subtitle {
+            width: 82%;
+            display: inline-block;
             padding-left: 25px;
             margin-top: 19px;
             margin-bottom: 6px;
@@ -415,8 +485,14 @@
                 cursor: pointer;
             }
         }
+        .clear {
+            display: inline-block;
+            font-size: 11px;
+        }
         .issue {
             line-height: 26px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #444F53;
             input {
                 margin-left: 5px;
                 &[type=radio] {
