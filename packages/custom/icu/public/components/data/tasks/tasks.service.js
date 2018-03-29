@@ -317,6 +317,25 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function excel() {
+        var qs = querystring.encode({
+            start: 0,
+            limit: 0,
+            sort: "created"
+        });
+
+        if (qs.length) {
+            qs = '?' + qs;
+        }
+        return $http.get(ApiUri + EntityPrefix + '/excel' + qs).then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        }, function(err) {return err}).then(function (some) {
+            var data = some.content ? some : [];
+            return PaginationService.processResponse(data);
+        });
+    }
+
     return {
         getAll: getAll,
         getTags: getTags,
@@ -353,6 +372,7 @@ angular.module('mean.icu.data.tasksservice', [])
         updateEntity: updateEntity,
         updateTitle: updateTitle,
         MyTasksOfNextWeekSummary: MyTasksOfNextWeekSummary,
-        GivenTasksOfNextWeekSummary: GivenTasksOfNextWeekSummary
+        GivenTasksOfNextWeekSummary: GivenTasksOfNextWeekSummary,
+        excel: excel
     };
 });

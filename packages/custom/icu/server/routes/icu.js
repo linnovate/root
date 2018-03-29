@@ -68,6 +68,7 @@ module.exports = function(Icu, app) {
   app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
+  app.use('/api/Excelfiles', express.static(config.attachmentDir));
 
 
   //update socket - OHAD
@@ -196,6 +197,9 @@ module.exports = function(Icu, app) {
 
   app.route('/api/tasks/GivenTasksOfNextWeekSummary')
     .post(task.read, task.GivenTasksOfNextWeekSummary);
+
+  app.route('/api/tasks/excel')
+    .get(pagination.parseParams, task.all, task.excel);
 
 // app.route('/api/:entity(discussions|projects|offices|users|folders)/:id([0-9a-fA-F]{24})/folders')
 //     .get(pagination.parseParams, folder.getByEntity, pagination.formResponse);

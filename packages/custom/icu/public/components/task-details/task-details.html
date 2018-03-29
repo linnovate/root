@@ -142,7 +142,7 @@
                     </li>
                     <li class="new-tag-input" ng-show="tagInputVisible" >
                         <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" autofocus=true on-select="addTag(newTag)"
-                                   select-on-blur test tag-on-blur="true">
+                                    test tag-on-blur="true">
                             <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
                             <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
                                 {{tag}}

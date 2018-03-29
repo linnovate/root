@@ -3,6 +3,7 @@
 var _ = require('lodash');
 // var q = require('q');
 var async = require('async');
+var config = require('meanio').loadConfig();
 
 var options = {
   includes: 'assign watchers project subTasks discussions',
@@ -897,6 +898,132 @@ function GivenTasksOfNextWeekSummary(user) {
 	        //next();
     });
 
+  };
+
+
+exports.excel = function(req, res, next) {
+
+var path = '/notes';
+
+var UserModel = require('../models/user.js');
+
+console.log("exal-------------------------");
+// Require library
+var excel = require('excel4node');
+
+// Create a new instance of a Workbook class
+var workbook = new excel.Workbook();
+
+// Add Worksheets to the workbook
+var worksheet = workbook.addWorksheet('Sheet 1');
+
+// Create a reusable style
+var style = workbook.createStyle({
+  alignment: {
+    horizontal: 'distributed'
+  },
+  font: {
+    color: '000000',
+    size: 12
+  },
+  umberFormat: 'dd-mm-yyyy'
+});
+
+// Create a reusable style
+var styleHead = workbook.createStyle({
+  alignment: {
+    horizontal: 'distributed'
+  },
+  font: {
+    color: '#FF0800',
+    size: 16
+  },
+  umberFormat: 'dd-mm-yyyy'
+});
+
+worksheet.cell(1,1).string('כותרת').style(styleHead);
+worksheet.cell(1,2).string('תג"ב').style(styleHead);
+worksheet.cell(1,3).string('סטטוס').style(styleHead);
+worksheet.cell(1,4).string('אחראי').style(styleHead);
+worksheet.cell(1,5).string('משתתפים').style(styleHead);
+worksheet.cell(1,6).string('תיאור').style(styleHead);
+worksheet.cell(1,7).string('יוצר המשימה').style(styleHead);
+
+
+var numOfRow = 2;
+var assignArray = [];
+assignArray[0] = "";
+var IndexOfassignArray = 1;
+var creatorArray = [];
+creatorArray[0] = "";
+var IndexOfcreatorArray = 1;
+var toWrite = "";
+
+for (var index = 0; index < req.locals.result.length; index++) {
+  
+  if (req.locals.result[index]._doc.title) {
+    worksheet.cell(numOfRow,1).string(req.locals.result[index]._doc.title).style(style);
+  }
+
+  if (req.locals.result[index]._doc.due) {
+    worksheet.cell(numOfRow,2).date(req.locals.result[index]._doc.due).style(style);
+  }
+
+  if (req.locals.result[index]._doc.status) {
+    worksheet.cell(numOfRow,3).string(req.locals.result[index]._doc.status).style(style);
+  }
+
+  if (req.locals.result[index]._doc.assign) {
+    var query = UserModel.findOne({
+      _id: req.locals.result[index]._doc.assign._doc._id
+    });
+    assignArray[assignArray.length] = numOfRow;
+    query.then(function(user) {
+      //worksheet.cell(numOfRow,4).string(user._doc.name).style(style);
+      worksheet.cell(assignArray[IndexOfassignArray],4).string(user._doc.name).style(style);
+      workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
+      IndexOfassignArray++;
+    });
+
+  }
+
+  if (req.locals.result[index]._doc.watchers.length > 1) {
+    for (var numOfWatchers = 0;
+         numOfWatchers < req.locals.result[index]._doc.watchers.length;
+         numOfWatchers++) {
+
+        toWrite = toWrite + "," + req.locals.result[index]._doc.watchers[numOfWatchers]._doc.name;
+    }
+
+    worksheet.cell(numOfRow,5).string(toWrite).style(style);
+    toWrite = "";
+  }
+
+  if (req.locals.result[index]._doc.description) {
+    worksheet.cell(numOfRow,6).string(req.locals.result[index]._doc.description).style(style);
+  }
+
+  if (req.locals.result[index]._doc.creator) {
+    var query = UserModel.findOne({
+      _id: req.locals.result[index]._doc.creator
+    });
+    creatorArray[creatorArray.length] = numOfRow;
+    query.then(function(user) {
+      //worksheet.cell(numOfRow,7).string(req.locals.result[index]._doc.creator).style(style);
+      worksheet.cell(creatorArray[IndexOfcreatorArray],7).string(user._doc.name).style(style);
+      workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
+      IndexOfcreatorArray++;
+    });
+  }
+
+  numOfRow++;
+}
+
+
+
+workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
+
+    next();
   };
 
 exports.byAssign = byAssign;

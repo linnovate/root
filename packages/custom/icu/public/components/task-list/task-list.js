@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tasklist', [])
-.controller('TaskListController', function ($scope, $window, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams,EntityService) {
+.controller('TaskListController', function ($scope, $window, $state, tasks, DiscussionsService,TasksService, ProjectsService, context,$timeout, $filter, $stateParams,EntityService, UsersService) {
 	$scope.tasks = tasks.data || tasks;
 	$scope.loadNext = tasks.next;
 	$scope.loadPrev = tasks.prev;
@@ -275,6 +275,15 @@ angular.module('mean.icu.ui.tasklist', [])
 
 	$scope.print = function() {
 		$window.print()
+	}
+	
+	$scope.excel = function() {
+		TasksService.excel();
+		var me;
+		UsersService.getMe().then(function (me1) {
+            me = me1;
+			window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
+        });	
 	}
 
 	let possibleNavigate = $scope.tasks.filter(function(t) {
