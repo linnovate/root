@@ -12,7 +12,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var _ = require('lodash');
 var config = require('meanio').loadConfig();
 var permissions = require('../controllers/permissions.js');
-
+var logger = require('../services/logger');
 
 
 var options = {
