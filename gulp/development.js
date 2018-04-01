@@ -18,7 +18,7 @@ var gulp = require('gulp'),
   gutil = require('gulp-util'),
   plugins = gulpLoadPlugins(),
   paths = {
-    js: ['*.js', 'test/**/*.js', '!test/coverage/**', '!bower_components/**', '!packages/**/node_modules/**', '!packages/contrib/**/*.js', '!packages/contrib/**/node_modules/**', '!packages/core/**/*.js', '!packages/core/public/assets/lib/**/*.js'],
+    js: ['*.js', 'packages/*/*/public/**/*.js', 'test/**/*.js', '!test/coverage/**', '!bower_components/**', '!packages/**/node_modules/**', '!packages/contrib/**/*.js', '!packages/contrib/**/node_modules/**', '!packages/core/**/*.js', '!packages/core/public/assets/lib/**/*.js'],
     public: ['packages/*/*/public/**/*.*', '!**/test/**', '!**/*.sass', '!**/*.less', 'node_modules/babel-polyfill/dist/polyfill.min.js'],
     bower: ['bower_components/**/*.*'],
     babel: [
@@ -119,6 +119,63 @@ gulp.task('devServe', ['env:development'], function () {
     nodeArgs: ['--debug']
   });
 });
+
+// can start server like this
+function server() {  
+  console.log("Staring server...")
+  var success = 'Mean app started on port 3002';
+  var fail = 'Mean app failed to start';
+  var exited = 'Mean app exited';
+
+  var child_process = require('child_process');
+  var server = child_process.spawn('node', ['server'], {
+    stdio: [0,'pipe',0]
+  });
+
+
+  // indicate whether server is running
+  server.stdout.on('data', function(data) {
+    data = data.toString();
+      console.log(data)
+  })
+
+  server.on('exit', function(code) {
+    console.log(fail);
+    console.log("code: ", code)
+    process.exit(code)
+  })
+
+
+  // kill the server on exit
+  function onExit() {
+    console.log(exited)
+    server.kill()
+  }
+  process.on('exit', onExit)
+  process.on('beforeExit', onExit)
+  process.on('uncaughtException', onExit)
+  return server ;
+} 
+
+
+gulp.task('quick', function() {
+  runSequence(
+    ['devServe','quickWatch']
+  );
+});
+
+gulp.task('quickWatch', function () {
+  gulp.watch(paths.html).on('change', plugins.livereload.changed);
+  gulp.watch(paths.js, ['babel']).on('change', plugins.livereload.changed);
+  plugins.livereload.listen({interval: 500});
+});
+
+
+gulp.task('quickServe',function() {
+server() ;
+}) 
+
+
 
 gulp.task('watch', function () {
   // gulp.watch(paths.js, ['jshint']).on('change', plugins.livereload.changed);
