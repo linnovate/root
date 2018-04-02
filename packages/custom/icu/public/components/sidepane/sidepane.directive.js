@@ -466,13 +466,14 @@ directive('icuSidepane', function() {
             $scope.isRecycled = true;
             $state.go('main.search', { 'query':'___', recycled: true});
         }
-        
-        
-        
-        
-        
     };
-    
+
+    $scope.turnOffRecycle = function () {
+        $scope.recycled = false;
+        $scope.isRecycled = false;
+        $state.go('main.search', {reload: true});
+    };
+
     $scope.clearResults = function(){
         SearchService.clearResults();
         $scope.issues = $scope.issues.map(function(issue){
