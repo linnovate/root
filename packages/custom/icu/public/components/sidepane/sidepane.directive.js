@@ -34,7 +34,7 @@ directive('icuSidepane', function() {
 
         // updatedDate
         let lastMonth = new Date();
-        lastMonth.setMonth(lastMonth.getMonth() -1 ) ;
+        lastMonth.setMonth(lastMonth.getMonth() - 1) ;
         var now = new Date();
         if (now.getMonth() == 11) {
             var nextMonth = new Date(now.getFullYear() + 1, 0, 1);
