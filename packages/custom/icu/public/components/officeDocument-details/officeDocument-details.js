@@ -365,7 +365,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go('main.officeDocuments.all', {
+                var state = $state.current.name;
+                $state.go(state, {
                     entity: 'all'
                 }, {reload: true});
 
@@ -381,7 +382,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                var state = 'main.officeDocuments.all' ;
+                var state = $state.current.name;
                 $state.go(state, {
                     entity: context.entityName,
                     entityId: context.entityId
