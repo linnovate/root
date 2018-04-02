@@ -49,11 +49,7 @@ angular.module('mean.icu.ui.displayby', [])
             SearchService.filteringByUpdated = null;
           }
 
-          $scope.clearRecycled = function(){
-              $location.search('recycled',null);
-              $window.location.reload();
-          }
-          $scope.tmpStatus = [];
+        $scope.tmpStatus = [];
 
           $scope.statusListCahnge = function(type){
             var index;
@@ -64,7 +60,7 @@ angular.module('mean.icu.ui.displayby', [])
                       index = $scope.activeList.indexOf(type);
                       $scope.activeList.splice(index , 1);
                   }
-              
+
             }
             else if($scope.currentType == 'nonactive'){
                 // archiveList.push(type);
@@ -74,7 +70,7 @@ angular.module('mean.icu.ui.displayby', [])
                    index = $scope.archiveList.indexOf(type);
                    $scope.archiveList.splice(index , 1);
                 }
-               
+
             }
             else {
                 $scope.currentType = 'All';
@@ -84,7 +80,7 @@ angular.module('mean.icu.ui.displayby', [])
                    index = $scope.tmpStatus.indexOf(type);
                    $scope.tmpStatus.splice(index , 1);
                 }
-               
+
             }
         }
 
