@@ -2,9 +2,9 @@
     <div id="searchNav" class="searchPane sidefilters"
          ng-if="activeTab.name === 'search'"
          ng-init="filterSearchByType();resetFilter();">
-        <div class="search">{{'search' | i18next}}
-            <span class="close-search" ng-click="closeSearch()">x</span>
-        </div>
+        <!--<div class="search">{{'search' | i18next}}-->
+            <!--<span class="close-search" ng-click="closeSearch()">x</span>-->
+        <!--</div>-->
         <div class="subtitle typeList" ng-click="filteringData.issue='all';resetFilter();filterSearchByType();">
             {{'showResultsOf' | i18next}}:
         </div>
@@ -75,7 +75,6 @@
                 <div class="subtitle">{{'deletedItems' | i18next}}</div>
                 <div class="clear" ng-click="turnOffRecycle()">{{'clear' | i18next}}</div>
                 <div class="recycle" ng-class="{active: recycled}" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>            
-            </button>
             </div>
 
             <div ng-if="filteringData.projects.length">
@@ -166,27 +165,29 @@
                 </ul>
             </div>
 
-            <div class="subtitle">{{'watchersInThe' | i18next}}</div>
-            <ul>
-                <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
-                    <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
-                    {{w.name}}-->
-                    <div class="filteringElement watcher"
-                         ng-class="{active: filteringData.selectedWatchers[w._id]}"
-                         ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
-                        <div icu-avatar user="w"></div>
-                        <span>{{w.name}}</span>
-                    </div>
-                </li>
-                <li ng-if="filteringData.watchers.length > displayLimit['watchers']"
-                    ng-click="showMore(filteringData.watchers.length, 'watchers')"
-                    class="more">{{ 'more' | i18next }}
-                </li>
-                <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3"
-                    ng-click="collapse('watchers')"
-                    class="more">{{ 'less' | i18next }}
-                </li>
-            </ul>
+            <div class="watchers-wrapper">
+                <div class="subtitle">{{'watchersInThe' | i18next}}</div>
+                <ul>
+                    <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
+                        <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
+                        {{w.name}}-->
+                        <div class="filteringElement watcher"
+                             ng-class="{active: filteringData.selectedWatchers[w._id]}"
+                             ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
+                            <div icu-avatar user="w"></div>
+                            <span>{{w.name}}</span>
+                        </div>
+                    </li>
+                    <li ng-if="filteringData.watchers.length > displayLimit['watchers']"
+                        ng-click="showMore(filteringData.watchers.length, 'watchers')"
+                        class="more">{{ 'more' | i18next }}
+                    </li>
+                    <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3"
+                        ng-click="collapse('watchers')"
+                        class="more">{{ 'less' | i18next }}
+                    </li>
+                </ul>
+            </div>
 
         </div>
     </div>
@@ -446,7 +447,7 @@
         </ul>
     </div>
     <div class="sidefilters" ng-if="activeTab.name == 'search'">
-        <hr/>
+        <!--<hr/>-->
     </div>
     </div>
 
