@@ -197,6 +197,9 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function permissions(entity, type, user) {
+            if(Array.isArray(entity)){
+                entity = entity[0];
+            }
             var member = user || me;
             haveAnyPerms(entity, member);
 
@@ -223,6 +226,9 @@ angular.module('mean.icu.data.permissionsservice', [])
                     case 'viewer': havePerm = viewerPerms[type];
                         break;
                 }
+            }
+            if(!havePerm){
+                console.log('asd');
             }
             return havePerm;
             // return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
