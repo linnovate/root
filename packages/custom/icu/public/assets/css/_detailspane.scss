@@ -269,7 +269,6 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 .description {
     overflow: auto;
     margin: 3px 28px 0;
-    position: relative;
     overflow-x: hidden;
     &::-webkit-scrollbar {
         width: 5px;
@@ -1069,14 +1068,13 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 
     .tags {
-        position: relative;
         border-bottom: 1px solid $light-grey1;
         border-top: 1px solid $light-grey1;
         background: 0 center url('/icu/assets/img/tags.png') no-repeat;
         display: table;
         width: 100%;
         min-height: 35px;
-        position: relative;
+        position: static;
 
         & > * {
             display: table-cell;
