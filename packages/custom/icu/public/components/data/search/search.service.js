@@ -5,7 +5,8 @@ angular.module('mean.icu.data.searchservice', [])
 
 	var builtInSearchArray = false;
     var filteringData = [];
-    var results = []
+    var results = [];
+    var query = '';
     var filteringResults = [];
     let filteringByUpdated = null ;
 
@@ -24,18 +25,26 @@ angular.module('mean.icu.data.searchservice', [])
             // TODO: the following map should be refactored + removed.
             _this.results.map(function(d) {
                 d._type == "officedocument" ? d._type="officeDocument" : d._type ;
-                d.title = Array.isArray(d.title) ? [d.title] : [d.title]; // this resolves bug https://github.com/linnovate/root/issues/625 
+                d.title = Array.isArray(d.title) ? [d.title] : [d.title]; // this resolves bug https://github.com/linnovate/root/issues/625
                 return d ;
             })
             return results;
         });
     }
 
-        function clearResults(){
-            this.filteringData = [];
-            this.results = []
-            this.filteringResults = [];
-        }
+    function refreshQuery(term){
+        query = term;
+    }
+
+    function getQuery(){
+        return query;
+    }
+
+    function clearResults(){
+        this.filteringData = [];
+        this.results = [];
+        this.filteringResults = [];
+    }
 
     return {
         find: find,
@@ -44,6 +53,9 @@ angular.module('mean.icu.data.searchservice', [])
         filteringResults: filteringResults,
         filteringByUpdated: filteringByUpdated,
         clearResults: clearResults,
+        query: query,
+        getQuery: getQuery,
+        refreshQuery: refreshQuery,
     };
 });
 

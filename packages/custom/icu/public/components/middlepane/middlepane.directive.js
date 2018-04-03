@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.middlepane', [])
 function SearchController($scope, $state, $stateParams, context, NotifyingService, TasksService, $timeout, SearchService, $document, $location) {
     $scope.$on('$stateChangeSuccess', function ($event, toState) {
         // if ($location.path().split("/").pop() == "recycled") {
-        //     $scope.term = "recycled" ;            
+        //     $scope.term = "recycled" ;
         // }
         // else {
         //     if($scope.term == "recycled") {
@@ -63,6 +63,10 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
         } else {
             //$state.go('main.tasks.all');
         }
+    };
+
+    $scope.refreshQuery = function(term){
+        SearchService.refreshQuery(term);
     };
 
     $scope.builtInSearch = function(funcName) {
