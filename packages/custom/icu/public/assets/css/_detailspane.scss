@@ -2,7 +2,7 @@ $page-height: 100vh;
 $content-height: calc(#{$page-height} - 2 * #{$header-height});
 $description-height: 30%;
 $switcher-height: 40px;
-$panel-height: 54px; //$header-height - 5px;
+$panel-height: 53px; //$header-height - 5px;
 $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 37px);
 
 .detailspane {
@@ -503,10 +503,28 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 
     .user {
-        width: calc((100% - #{$panel-height}) * 0.25);
+        width: 210px; //calc((100% - #{$panel-height}) * 0.25);
         height: $panel-height;
         position: relative;
         float: left;
+        //display: flex;
+        //align-items: center;
+        //
+        .ui-select-container.ui-select-bootstrap {
+          padding-top: 0;
+          .ui-select-match-text {
+            height: $panel-height;
+            overflow: hidden;
+            max-width: 100%;
+          }
+          .ui-select-toggle {
+            height: $panel-height;
+          }
+          input {
+            height: $panel-height;
+            border-radius: 0;
+          }
+        }
 
         @media screen and (max-width: $small-resolution) {
             width: 90px;
@@ -549,7 +567,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             background-color: $green;
             border-radius: 15px;
             display: inline-block;
-            margin: 0 10px;
+            margin: 0 10px 0 15px;
             float: left;
             font-size: 20px;
             line-height: 25px;
@@ -809,7 +827,9 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     font-weight: bold;
     font-size: 13px;
     display: flex;
+    align-items: center;
     .ui-select-container.ui-select-bootstrap {
+      padding-top: 0;
         .ui-select-match .ui-select-toggle {
             //float: right;
             //overflow: hidden ;
