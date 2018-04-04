@@ -298,13 +298,14 @@ angular.module('mean.icu.ui.taskdetails', [])
             var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
             TasksService.getWatchedTasks().then(function(result){
                 TasksService.watchedTasksArray = result;
-                $state.go(state, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
-                    reload: true
-                });
+                $state.reload()
 
+                // $state.go(state, {
+                //     entity: context.entityName,
+                //     entityId: context.entityId
+                // }, {
+                //     reload: true
+                // });
             });
         }
 
@@ -421,8 +422,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                     }
                 }
             });
-
-        }
+        };
 
         $scope.updateDue = function(task) {
 
