@@ -314,6 +314,10 @@ angular.module('mean.icu.ui.projectdetails', [])
             }
         };
 
+        $scope.refreshList = function(){
+            $scope.$broadcast('refreshList',$scope.context);
+        };
+
         $scope.recycle = function(entity) {
             EntityService.recycle('projects', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
@@ -348,7 +352,6 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         };
 
-
         $scope.deleteProject = function (project) {
             ProjectsService.remove(project._id).then(function () {
 
@@ -357,7 +360,6 @@ angular.module('mean.icu.ui.projectdetails', [])
                 }, {reload: true});
             });
         };
-
 
         $scope.updateStatusForApproval = function(entity) {
             let context = {

@@ -350,6 +350,10 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
+        $scope.refreshList = function(){
+            $scope.$broadcast('refreshList',$scope.context);
+        };
+
         $scope.recycle = function(entity) {
             console.log("$scope.recycle") ;
             EntityService.recycle('officeDocuments', entity._id).then(function() {
@@ -361,8 +365,9 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
                 $state.go('main.officeDocuments.all', {
                     entity: 'all'
-                }, {reload: true});
-
+                }, {
+                    reload: true
+                });
             });
         };
 

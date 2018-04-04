@@ -416,6 +416,9 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         };
 
+        $scope.refreshList = function(){
+            $scope.$broadcast('refreshList',$scope.context);
+        };
 
         $scope.recycle = function(entity) {
             console.log("$scope.recycle") ;
@@ -426,10 +429,17 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go('main.discussions.all', {
-                    entity: 'all'
-                }, {reload: true});
-
+                $state.go($state.current.name, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
+                // $state.go('main.discussions.all', {
+                //     entity: 'all'
+                // }, {
+                //     reload: true
+                // });
             });
         };
 
@@ -441,14 +451,19 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                var state = 'main.discussions.all' ;
-                $state.go(state, {
+                $state.go($state.current.name, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {
                     reload: true
                 });
-
+                // var state = 'main.discussions.all' ;
+                // $state.go(state, {
+                //     entity: context.entityName,
+                //     entityId: context.entityId
+                // }, {
+                //     reload: true
+                // });
             });
         };
 
