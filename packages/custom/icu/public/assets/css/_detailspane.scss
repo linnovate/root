@@ -2,7 +2,7 @@ $page-height: 100vh;
 $content-height: calc(#{$page-height} - 2 * #{$header-height});
 $description-height: 30%;
 $switcher-height: 40px;
-$panel-height: $header-height - 5px;
+$panel-height: 54px; //$header-height - 5px;
 $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 37px);
 
 .detailspane {
@@ -339,8 +339,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
 
 .summary {
-    height: 57px;
-    border-bottom: 3px solid $light-grey1;
+    height: 54px;
+    border-bottom: 1px solid $light-grey1;
     background-color: #F6F6F6;
     position: relative;
 
@@ -581,7 +581,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
     }
 
-    .due,  {
+    .due  {
+        width: 132px;
+        display: flex;
+        align-items: center;
         .placeholder {
             position: absolute;
             top: 50%;
@@ -591,15 +594,29 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
 
         input {
-            appearance: none;
+            //appearance: none;
             border: none;
-            float: right;
-            width: calc(100% - 10px);
-            margin-left: 10px;
-            padding: 17px 0 17px 25px;
+            //float: right;
+            width: 100%;
+            margin-left: 15px;
+            padding: 17px 0 17px 29px;
             cursor: pointer;
             outline: none;
             background: url('/icu/assets/img/calendar.png') no-repeat scroll left center;
+            &::placeholder {
+                opacity: 1;
+                color: $light-grey-placeholder;
+            }
+            &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                color: $light-grey-placeholder;
+            }
+
+            &::-ms-input-placeholder { /* Microsoft Edge */
+                color: $light-grey-placeholder;
+            }
+            &:focus {
+              outline: none;
+            }
         }
     }
 
@@ -786,58 +803,62 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 }
 
 .status {
-   border-right: 1px solid $light-grey1;
-   width: 120px;
-   padding-left: 7px;
-   .ui-select-container.ui-select-bootstrap {
-    .ui-select-match .ui-select-toggle {
-        float: right;
-        overflow: hidden ;
-        width: calc(100% - 10px);
-        height: auto;
-        position: absolute;
-        right: 50%;
-        transform: translateX(50%) translateY(15%);
-        i.caret {
-            display: none;
+   //border-right: 1px solid $light-grey1;
+   //width: 120px;
+    padding-left: 15px;
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    .ui-select-container.ui-select-bootstrap {
+        .ui-select-match .ui-select-toggle {
+            //float: right;
+            //overflow: hidden ;
+            //width: calc(100% - 10px);
+            //height: auto;
+            //position: absolute;
+            //right: 50%;
+            //transform: translateX(50%) translateY(15%);
+            i.caret {
+                display: none;
+            }
+            height: auto;
         }
-    }
-    i{
-        -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-        mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-        width: 15px;
-        height: 17px;
-        display: inline-block;
-        margin-right: 3px;
-    }
-    i.new {background-color: #ff4081; }
-    i.assigned{background-color: #2979ff;}
-    i.in-progress{background-color: #f69679;}
-    i.review{background-color: #8dc63f;}
-    i.rejected{background-color: #ef5350;}
-    i.done{background-color: #757575;}
-    i.canceled{background-color: #ef5350;}
-    i.completed{background-color: #598527;}
-    i.archived{background-color: #ab47bc;}
-    i.waiting-approval{background-color: #ab47bc;}
-    i.scheduled{background-color: #0054a6;}
-    i.received{background-color: #37afef;}
-    i.sent{background-color: #359123;}
+        i {
+            -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+            mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+            width: 15px;
+            height: 17px;
+            display: inline-block;
+            margin-right: 13px;
+        }
+        i.new {background-color: #ff4081; }
+        i.assigned{background-color: #2979ff;}
+        i.in-progress{background-color: #f69679;}
+        i.review{background-color: #8dc63f;}
+        i.rejected{background-color: #ef5350;}
+        i.done{background-color: #757575;}
+        i.canceled{background-color: #ef5350;}
+        i.completed{background-color: #598527;}
+        i.archived{background-color: #ab47bc;}
+        i.waiting-approval{background-color: #ab47bc;}
+        i.scheduled{background-color: #0054a6;}
+        i.received{background-color: #37afef;}
+        i.sent{background-color: #359123;}
 
-    .new{color: #ff4081; }
-    .assigned{color: #2979ff;}
-    .in-progress{color: #f69679;}
-    .review{color: #8dc63f;}
-    .rejected{color: #ef5350;}
-    .done{color: #757575;}
-    .canceled{color: #ef5350;}
-    .waiting-approval{color: #ab47bc;}
-    .completed{color: #598527;}
-    .archived{color: #ab47bc;}
-    .scheduled{color: #0054a6;}
-    .received{color: #37afef;}
-    .sent{color: #359123;}
-}
+        .new{color: #ff4081; }
+        .assigned{color: #2979ff;}
+        .in-progress{color: #f69679;}
+        .review{color: #8dc63f;}
+        .rejected{color: #ef5350;}
+        .done{color: #757575;}
+        .canceled{color: #ef5350;}
+        .waiting-approval{color: #ab47bc;}
+        .completed{color: #598527;}
+        .archived{color: #ab47bc;}
+        .scheduled{color: #0054a6;}
+        .received{color: #37afef;}
+        .sent{color: #359123;}
+    }
 }
 
 .tags {
@@ -932,6 +953,12 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     height: $panel-height;
     max-width: $panel-height;
     float: right;
+    width: 34px;
+    border-left: 1px solid lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 
     .dropdown-trigger {
         padding: 15px 25px;

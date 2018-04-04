@@ -1,7 +1,7 @@
-<td  class="move" style="width: 15px;cursor:move;">
-    <i ng-if="data.task._id" class="fa fa-ellipsis-v"></i>
-    <i ng-if="data.task._id" class="fa fa-ellipsis-v"></i>
-</td>
+<!--<td  class="move" style="width: 15px;cursor:move;">-->
+    <!--<i ng-if="data.task._id" class="fa fa-ellipsis-v"></i>-->
+    <!--<i ng-if="data.task._id" class="fa fa-ellipsis-v"></i>-->
+<!--</td>-->
 <td class="id" ng-if="data.task._id">{{data.index + 1}}</td>
 <td class="name"
     ng-attr-colspan="{{data.task._id ? undefined : 5}}"
@@ -13,7 +13,7 @@
     ng-change="data.searchCb(data.task) || data.updateCb(data.task)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-blur="data.hideAutoCompleteCb(data.task)"
-    ng-model="data.task.PartTitle">
+    ng-model="data.task.title">
 </td>
 <td class="project">
     <span class="tag project"
@@ -25,5 +25,6 @@
 <td ng-if="data.task._id" class="status col-sm-2"  ng-class="data.task.status">{{data.task.status | i18next }}</td>
 <td ng-if="data.task._id" class="due">{{data.task.due | date: 'dd.MM.yyyy'}}</td>
 <td class="arrow" ng-if="data.task._id">
-   <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+   <!--<i ng-if="data.drawArrow" class="fa chevron-right"></i>-->
+    <div ng-if="data.drawArrow" class="row-arrow"></div>
 </td>
