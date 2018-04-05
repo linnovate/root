@@ -40,17 +40,6 @@ angular.module('mean.icu.ui.searchlist')
         finalRes();
     });
 
-    $scope.$on('bindEntity', function (ev, entity) {
-
-        $scope.results[$scope.results.findIndex(theSameObj)] = entity;
-
-        function theSameObj(element, index, array) {
-            if(element.id == entity._id){
-                return true;
-            }
-        }
-    });
-
     function getResults() {
         if ($stateParams.recycled == true) {
             $location.search('recycled', 'true');

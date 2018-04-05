@@ -558,6 +558,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
+                        refreshList();
                     });
                     break;
             }

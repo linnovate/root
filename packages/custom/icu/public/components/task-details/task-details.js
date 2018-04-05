@@ -314,11 +314,6 @@ angular.module('mean.icu.ui.taskdetails', [])
         function refreshList(){
             $rootScope.$broadcast('refreshList');
         }
-        $scope.bindEntity = function(){
-            if($state.current.name.indexOf('search') != -1){
-                $rootScope.$broadcast('bindEntity', $scope.entity);
-            }
-        };
 
         var refreshView = function() {
             var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
@@ -543,7 +538,6 @@ angular.module('mean.icu.ui.taskdetails', [])
                     });
                 }
             });
-            // $scope.bindEntity();
         };
 
         $scope.newTemplate = {

@@ -545,6 +545,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
+                        refreshList();
                     });
                     break;
             }

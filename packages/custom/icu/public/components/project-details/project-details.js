@@ -434,12 +434,9 @@ angular.module('mean.icu.ui.projectdetails', [])
                             backupEntity = JSON.parse(JSON.stringify($scope.project));
                             ActivitiesService.data = ActivitiesService.data || [];
                             ActivitiesService.data.push(result);
+                            refreshList();
                         });
                         break;
-                }
-
-                if($state.current.name.indexOf('search') != -1) {
-                    refreshList();
                 }
             });
         };
