@@ -21,7 +21,7 @@ angular.module('mean.icu.ui.searchlist')
 		// 		return e._id == $scope.results[i].office
 		// 	})
 	}
-    finalRes($scope);
+    finalRes();
 
 	$scope.inObjArray = function(id,array){
 		array.forEach(function(w){
@@ -37,7 +37,18 @@ angular.module('mean.icu.ui.searchlist')
             .then((result)=>{
                 $scope.results = result;
             });
-        finalRes($scope);
+        finalRes();
+    });
+
+    $scope.$on('bindEntity', function (ev, entity) {
+
+        $scope.results[$scope.results.findIndex(theSameObj)] = entity;
+
+        function theSameObj(element, index, array) {
+            if(element.id == entity._id){
+                return true;
+            }
+        }
     });
 
     function getResults() {
@@ -59,7 +70,7 @@ angular.module('mean.icu.ui.searchlist')
         }
     }
 
-    function finalRes($scope){
+    function finalRes(){
         UsersService.getMe().then(function(me){
             let id = me._id;
             let finalResults = [];
