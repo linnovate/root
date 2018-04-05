@@ -2,6 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', [])
     .controller('ProjectDetailsController', function ($scope,
+                                                      $rootScope,
                                                       entity,
                                                       tasks,
                                                       people,
@@ -326,10 +327,22 @@ angular.module('mean.icu.ui.projectdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go('main.projects.all', {
-                    entity: 'all'
-                }, {reload: true});
-
+                refreshList();
+                if($state.current.name.indexOf('search') != -1){
+                    $state.go($state.current.name, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true,
+                        query: $stateParams.query
+                    });
+                } else {
+                    $state.go('main.projects.all', {
+                        entity: 'all',
+                    }, {
+                        reload: true
+                    });
+                }
             });
         };
 
@@ -341,16 +354,29 @@ angular.module('mean.icu.ui.projectdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                var state = 'main.projects.all' ;
-                $state.go(state, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
-                    reload: true
-                });
-
+                refreshList();
+                if($state.current.name.indexOf('search') != -1){
+                    $state.go($state.current.name, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true,
+                    });
+                } else {
+                    var state = 'main.projects.all';
+                    $state.go(state, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true
+                    });
+                }
             });
         };
+
+        function refreshList(){
+            $rootScope.$broadcast('refreshList');
+        }
 
         $scope.deleteProject = function (project) {
             ProjectsService.remove(project._id).then(function () {

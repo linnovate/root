@@ -2,6 +2,7 @@
 
 angular.module('mean.icu.ui.discussiondetails', [])
     .controller('DiscussionDetailsController', function ($scope,
+                                                         $rootScope,
                                                          entity,
                                                          tasks,
                                                          context,
@@ -429,17 +430,22 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go($state.current.name, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
-                    reload: true
-                });
-                // $state.go('main.discussions.all', {
-                //     entity: 'all'
-                // }, {
-                //     reload: true
-                // });
+                refreshList();
+                if($state.current.name.indexOf('search') != -1){
+                    $state.go($state.current.name, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true,
+                        query: $stateParams.query
+                    });
+                } else {
+                    $state.go('main.discussions.all', {
+                        entity: 'all'
+                    }, {
+                        reload: true
+                    });
+                }
             });
         };
 
@@ -451,22 +457,29 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go($state.current.name, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
-                    reload: true
-                });
-                // var state = 'main.discussions.all' ;
-                // $state.go(state, {
-                //     entity: context.entityName,
-                //     entityId: context.entityId
-                // }, {
-                //     reload: true
-                // });
+                refreshList();
+                if($state.current.name.indexOf('search') != -1){
+                    $state.go($state.current.name, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true
+                    });
+                } else {
+                    var state = 'main.discussions.all' ;
+                    $state.go(state, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true
+                    });
+                }
             });
         };
 
+        function refreshList(){
+            $rootScope.$broadcast('refreshList');
+        }
 
         $scope.deleteDiscussion = function (discussion) {
             DiscussionsService.remove(discussion._id).then(function () {

@@ -241,8 +241,14 @@ angular.module('mean.icu.ui.taskdetails', [])
                 });
 
                 refreshList();
-                if(~$state.current.name.indexOf('search')){
-                    $state.reload();
+                if($state.current.name.indexOf('search') != -1){
+                    $state.go($state.current.name, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true,
+                        query: $stateParams.query
+                    });
                 } else {
                     var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
                     $state.go(state, {
@@ -264,9 +270,13 @@ angular.module('mean.icu.ui.taskdetails', [])
                 });
 
                 refreshList();
-                var state = 'main.tasks.all';
-                if(~$state.current.name.indexOf('search')){
-                    $state.reload();
+                if($state.current.name.indexOf('search') != -1){
+                    $state.go($state.current.name, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true
+                    });
                 } else {
                     var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
                     $state.go(state, {
