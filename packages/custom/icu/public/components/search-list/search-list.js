@@ -33,31 +33,38 @@ angular.module('mean.icu.ui.searchlist')
 	};
 
     $scope.$on('refreshList', function (ev) {
+        getResults()
+            .then((result)=>{
+                $scope.results = result;
+            });
+        finalRes($scope);
+    });
+
+    function getResults() {
         if ($stateParams.recycled == true) {
             $location.search('recycled', 'true');
         }
         if ($stateParams.query && $stateParams.query.length) {
-            $scope.results = SearchService.find($stateParams.query);
+            return SearchService.find($stateParams.query);
         } else {
             if (SearchService.builtInSearchArray) {
                 var data = SearchService.builtInSearchArray.map(function (d) {
                     d._type = 'task';
                     return d;
                 });
-                $scope.results = data;
+                return data;
             } else {
-                $scope.results = {};
+                return {};
             }
         }
-        finalRes($scope);
-    });
+    }
 
     function finalRes($scope){
         UsersService.getMe().then(function(me){
             let id = me._id;
             let finalResults = [];
-            for(let i=0;i<results.length;i++){
-                let task = results[i];
+            for(let i=0; i < $scope.results.length; i++){
+                let task = $scope.results[i];
                 if(task.creator === id || task.assign === id || $.inArray(id, task.watchers)!==-1 || $scope.inObjArray(id,task.watchers)){
                     finalResults.push(task);
                 }

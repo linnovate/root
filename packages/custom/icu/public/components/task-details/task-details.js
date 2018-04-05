@@ -507,7 +507,8 @@ angular.module('mean.icu.ui.taskdetails', [])
                         ActivitiesService.data.push(result);
                     });
                 }
-                if (context.entityName === 'project') {
+                var isSearchState = $state.current.name.indexOf('search') != -1;
+                if (context.entityName === 'project' && !isSearchState) {
                     var projId = result.project ? result.project._id : undefined;
                     if (!projId) {
                         $state.go('main.tasks.all.details', {
@@ -516,7 +517,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                         }, {
                             reload: true
                         });
-                    } else {
+                    } else if(!isSearchState){
                         if (projId !== context.entityId || type === 'project') {
                             $state.go('main.tasks.byentity.details', {
                                 entity: context.entityName,
@@ -533,13 +534,10 @@ angular.module('mean.icu.ui.taskdetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.task));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
+                        refreshList();
                     });
                 }
             });
-
-            if($state.current.name.indexOf('search') != -1) {
-                refreshList();
-            }
         };
 
         $scope.newTemplate = {
