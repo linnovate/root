@@ -548,6 +548,10 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     });
                     break;
             }
+
+            if($state.current.name.indexOf('search') != -1) {
+                refreshList();
+            }
         };
 
         $scope.updateStatus = function(officeDoc){
@@ -558,8 +562,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             };
 
             $scope.update($scope.officeDocument, context);
-
-        };
+            };
 
         $scope.updateCurrentOfficeDocument = function(){
             $scope.officeDocument.PartTitle = $scope.officeDocument.title;

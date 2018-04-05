@@ -437,6 +437,10 @@ angular.module('mean.icu.ui.projectdetails', [])
                         });
                         break;
                 }
+
+                if($state.current.name.indexOf('search') != -1) {
+                    refreshList();
+                }
             });
         };
 

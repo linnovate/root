@@ -561,6 +561,10 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     });
                     break;
             }
+
+            if($state.current.name.indexOf('search') != -1) {
+                refreshList();
+            }
         };
 
         var activeLocationTimeout;

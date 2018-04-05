@@ -289,10 +289,6 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         };
 
-        function refreshList(){
-            $rootScope.$broadcast('refreshList');
-        }
-
         $scope.unsetProject = function(event, task) {
             event.stopPropagation();
             delete task.project;
@@ -315,6 +311,9 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
         };
 
+        function refreshList(){
+            $rootScope.$broadcast('refreshList');
+        }
 
         var refreshView = function() {
             var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
@@ -428,23 +427,22 @@ angular.module('mean.icu.ui.taskdetails', [])
             });
 
             TasksService.update(task).then(function(result) {
-                refreshView() ;
-
-                // not sure what this next code is for.
-                if (context.entityName === 'project') {
-                    var projId = result.project ? result.project._id : undefined;
-                    if (projId !== context.entityId) {
-                        $state.go('main.tasks.byentity', {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {
-                            reload: true
-                        });
-                    }
-                }
+                // refreshView() ;
+                refreshList();
+                                // not sure what this next code is for.
+                // if (context.entityName === 'project') {
+                //     var projId = result.project ? result.project._id : undefined;
+                //     if (projId !== context.entityId) {
+                //         $state.go('main.tasks.byentity', {
+                //             entity: context.entityName,
+                //             entityId: context.entityId
+                //         }, {
+                //             reload: true
+                //         });
+                //     }
+                // }
             });
-
-        }
+        };
 
         $scope.updateDue = function(task) {
 
@@ -538,6 +536,10 @@ angular.module('mean.icu.ui.taskdetails', [])
                     });
                 }
             });
+
+            if($state.current.name.indexOf('search') != -1) {
+                refreshList();
+            }
         };
 
         $scope.newTemplate = {
