@@ -61,9 +61,11 @@
 
     table {
         /*table-layout: fixed;*/
-
+        display: flex;
         tbody {
+            width: 100%;
             tr {
+                display: flex;
                 padding-right: 15px;
                 &.new-task {
                     td {
@@ -134,7 +136,10 @@
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         cursor: text;
-                        flex-grow: 2;
+                        flex:1;
+                        overflow: hidden;
+                        display: block;
+                        line-height: 51px;
                         &:before {
                             font-weight: normal;
                             font-style: italic;
@@ -154,18 +159,25 @@
                         //width: 5.8vw;
                         font-weight: 400;
                         font-size: 13px;
-                        display: inline-block;
-                        // margin-left: 10px;
+                        //display: inline-block;
+                        margin-left: 14px;
                         line-height: initial;
 
                         @media screen and (max-width: $small-resolution) {
-                        width: 8.8vw;
-                    }
+                            width: 8.8vw;
+                        }
                         span {
                             padding: 3px 13px;
                             position: relative;
                             top: 50%;
                             left: 0;
+                        }
+                        span.tag {
+                            padding: 3px 13px;
+                            position: relative;
+                            top: 0;
+                            left: 0;
+                            transform: none;
                         }
                     }
 
