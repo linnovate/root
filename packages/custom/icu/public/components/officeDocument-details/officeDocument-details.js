@@ -97,11 +97,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         $scope.enableRecycled = true;
         $scope.havePermissions = function(type, enableRecycled){
             enableRecycled = enableRecycled || !$scope.isRecycled;
-            var gav = (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
-            if(!PermissionsService.havePermissions($scope.entity, type)){
-                console.log('NONON');
-            }
-            return gav;
+            return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
         };
 
         $scope.haveEditiorsPermissions = function(){

@@ -227,9 +227,6 @@ angular.module('mean.icu.data.permissionsservice', [])
                         break;
                 }
             }
-            if(!havePerm){
-                console.log('asd');
-            }
             return havePerm;
             // return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
             //     WarningsService.setWarning(result.headers().warning);
