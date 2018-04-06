@@ -37,8 +37,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
         $scope.getSignatures();
         $scope.signBy = $scope.officeDocument.signBy;
-
         $scope.selectedSignature;
+        var currentState = $state.current.name;
 
         $scope.SignatureSelected = function (signature) {
             $scope.selectedSignature = signature;
@@ -365,8 +365,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                var state = $state.current.name;
-                $state.go(state, {
+                $state.go(currentState, {
                     entity: 'all'
                 }, {reload: true});
 
@@ -382,8 +381,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                var state = $state.current.name;
-                $state.go(state, {
+                $state.go(currentState, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {

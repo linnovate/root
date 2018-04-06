@@ -42,7 +42,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             'class': 'create-new',
             'color': 'rgb(0, 151, 167)'
         });
-
+        var currentState = $state.current.name;
         $scope.isRecycled = $scope.task.hasOwnProperty('recycled');
 
         $scope.shouldAutofocus = !$stateParams.nameFocused;
@@ -241,9 +241,7 @@ angular.module('mean.icu.ui.taskdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                // var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-                var state = $state.current.name;
-                $state.go(state, {
+                $state.go(currentState, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {
