@@ -8,7 +8,7 @@ directive('icuSidepane', function() {
     ){
         $scope.context = context;
         $scope.recycled = $location.path().split("/").pop() === "recycled";
-        
+
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
         $scope.projects = $scope.projects.data || $scope.projects;
@@ -19,28 +19,35 @@ directive('icuSidepane', function() {
         $scope.people = $scope.people.data || $scope.people;
         $scope.toggleVisibility = function(toggledItem) {
             let prev = toggledItem.open;
-            
+
             $scope.items.forEach(function(i) {
                 i.open = false;
             });
-            
+
             toggledItem.open = !prev;
         };
-        
+
         $scope.removeFilterValue = function() {
             TasksService.filterValue = false;
         };
 
-        
+
         // updatedDate
-        let lastMonth = new Date();
-        lastMonth.setDate(lastMonth.getMonth() -1 ) ;
         var now = new Date();
-        if (now.getMonth() == 11) {
-            var nextMonth = new Date(now.getFullYear() + 1, 0, 1);
+        var lastMonth = null;
+        var nextMonth = null;
+
+        if (now.getMonth() == 0) {
+            lastMonth = new Date(now.getFullYear() - 1, 11, now.getDay());
+            nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        } else if (now.getMonth() == 11){
+            lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDay()) ;
+            nextMonth = new Date(now.getFullYear() + 1, 0, 1);
         } else {
-            var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDay()) ;
+            nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
         }
+
         $scope.updatedDate = lastMonth;
         $scope.dueDate = lastMonth;
         SearchService.filteringByUpdated = $scope.updatedDate;
@@ -65,7 +72,7 @@ directive('icuSidepane', function() {
         };
         /*---*/
         $scope.isCurrentState = function(item) {
-            
+
             if ((context.main === 'templateDocs') && (item.display !== undefined) && (item.display[1] === 'templateDocs'))
             {
                 return true;
@@ -74,7 +81,7 @@ directive('icuSidepane', function() {
             {
                 return true;
             }
-            
+
             if (item.state.includes("."))
             {
                 return item.state.split(".")[0] === context.main;
@@ -83,14 +90,14 @@ directive('icuSidepane', function() {
             {
                 return item.state === context.main;
             }
-            
+
             //return item.state === context.main;
         };
-        
+
         $scope.GoToMyTasks = function() {
             $state.go('main.tasks.byassign');
         };
-        
+
         $scope.items = [{
             name: 'search',
             icon: '/icu/assets/img/search-nav.svg',
@@ -138,7 +145,7 @@ directive('icuSidepane', function() {
         //     open: false
         // }
     ];
-    
+
     $scope.setActive = function(item){
         $scope.$broadcast('sidepan', item,
         $scope.context, $scope.folders,
@@ -147,7 +154,7 @@ directive('icuSidepane', function() {
         $scope.people);
         return $scope.activeTab = item;
     };
-    
+
     $scope.getActiveTab = function () {
         var items = $scope.items;
         items.forEach(function (item) {
@@ -163,17 +170,17 @@ directive('icuSidepane', function() {
             })
         }
     };
-    
+
     $scope.setCurrentState = function(state){
         $scope.currentState = state;
     };
-    
+
     $scope.savedTab = $stateParams.activeTab;
-    
+
     NotifyingService.subscribe('activeSearch', function () {
         $scope.activeTab = $scope.items[0];
     }, $scope);
-    
+
     $scope.menuColorStyles = [
         'pinkTab',
         'blueTab',
@@ -183,7 +190,7 @@ directive('icuSidepane', function() {
         'darkBlueTab',
         'redTab',
     ];
-    
+
     $scope.getNavColor = function(item, index){
         if(!$scope.activeTab){
             $scope.getActiveTab();
@@ -199,9 +206,9 @@ directive('icuSidepane', function() {
             }
         }
     };
-    
+
     /********************************** search **********************************/
-    
+
     $scope.issues = [
         {label:'tasks', value: false, name: 'task', length: 0},
         {label:'projects', value: false, name: 'project', length: 0},
@@ -211,7 +218,7 @@ directive('icuSidepane', function() {
         {label:'Attachments', value: false, name: 'attachment', length: 0},
         {label:'documents', value: false, name: 'officeDocument', length: 0}
     ];
-    
+
     $scope.filteringData = {
         issue: $location.$$search && $location.$$search.type ? $location.$$search.type : 'all',
         selectedEntities: {
@@ -228,7 +235,7 @@ directive('icuSidepane', function() {
         offices: [],
         watchers: []
     };
-    
+
     $scope.displayLimit = {
         projects : 4,
         discussions : 4,
@@ -246,7 +253,7 @@ directive('icuSidepane', function() {
             people: 2,
         }
     };
-    
+
     let getEntitiesAndWatchers = function(filteredByType) {
         for (let i=0; i< filteredByType.length; i++) {
             if (filteredByType[i].project)
@@ -262,7 +269,7 @@ directive('icuSidepane', function() {
             if (filteredByType[i].watchers && filteredByType[i].watchers.length)
             $scope.filteringData.watchers = $scope.filteringData.watchers.concat(filteredByType[i].watchers)
         }
-        
+
         $scope.filteringData.projects = $scope.projects.filter(function(e) {
             return $scope.filteringData.projects.indexOf(e._id) > -1;
         });
@@ -275,24 +282,24 @@ directive('icuSidepane', function() {
         $scope.filteringData.offices = $scope.offices.filter(function(e) {
             return $scope.filteringData.offices.indexOf(e._id) > -1;
         });
-        
+
         $scope.filteringData.attachments = $scope.attachments.filter(function(e) {
             return $scope.filteringData.offices.indexOf(e._id) > -1;
         });
-        
+
         $scope.filteringData.watchers = $scope.people.filter(function(e) {
             return $scope.filteringData.watchers.indexOf(e._id) > -1;
         });
-        
+
         SearchService.filteringData = $scope.filteringData;
     };
-    
+
     $state.current.reloadOnSearch = false;
-    
+
     let issuesOrder = $scope.issues.map(function(i) {
         return i.name;
     });
-    
+
     $scope.filterSearchByType = function(flag) {
         $scope.flag = false;
         if  ($stateParams.recycled == true){
@@ -317,7 +324,7 @@ directive('icuSidepane', function() {
         let results = SearchService.results;
         if (!results || !results.length) return ;
         let filteredByType = [], index;
-        
+
         for (let i = 0; i < $scope.issues.length; i++) {
             $scope.issues[i].length = 0;
         }
@@ -351,12 +358,12 @@ directive('icuSidepane', function() {
             }
         }
         SearchService.filteringResults = filteredByType;
-        
+
         getEntitiesAndWatchers(filteredByType);
         if (!flag && $rootScope.status )
           $rootScope.$emit('changeStatus');
     };
-    
+
     let getTruth = function(obj) { // return truth value in a single object
         let arr = [];
         for (let key in obj) {
@@ -366,7 +373,7 @@ directive('icuSidepane', function() {
         }
         return arr;
     };
-    
+
     $scope.filterSearchByEntity = function() {
         let filteringResults = SearchService.filteringResults;
         let projects = getTruth($scope.filteringData.selectedEntities.projects);
@@ -386,7 +393,7 @@ directive('icuSidepane', function() {
         }
         SearchService.filteringResults = filteredByEntity;
     };
-    
+
     $scope.filterSearchByWatcher = function() {
         let filteringResults = SearchService.filteringResults;
         let watchers = getTruth($scope.filteringData.selectedWatchers);
@@ -398,7 +405,7 @@ directive('icuSidepane', function() {
         }
         SearchService.filteringResults = filteredByWatchers;
     };
-    
+
     $scope.updatedOptions = {
         onClose: (value/*, picker, $element*/) => {
             //                        console.log("on close", value, picker, $element) ;
@@ -435,29 +442,29 @@ directive('icuSidepane', function() {
                     a.splice(j--, 1);
             }
         }
-    
+
         return a;
     }
 
-   
-    
+
+
      $scope.filterActive = function(type) {
          console.log('ttttttt',type)
          $scope.activeToggle.field = type;
          EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
          $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
     };
-    
+
     $scope.toggleRecycle = function () {
         console.log("toggleRecycle...") ;
 
         if($location.search().recycled) {
             $scope.recycled =  false;
         }
-        else {        
+        else {
             $scope.recycled = !$scope.recycled ;
         }
-        
+
         if($scope.recycled === false) {
             $scope.isRecycled = false;
             $state.go('main.search', {reload: true});
@@ -468,12 +475,6 @@ directive('icuSidepane', function() {
         }
     };
 
-    $scope.turnOffRecycle = function () {
-        $scope.recycled = false;
-        $scope.isRecycled = false;
-        $state.go('main.search', {reload: true});
-    };
-
     $scope.clearResults = function(){
         SearchService.clearResults();
         $scope.issues = $scope.issues.map(function(issue){
@@ -482,13 +483,13 @@ directive('icuSidepane', function() {
         });
         return $scope.issues;
     };
-    
+
     $scope.filterSearch = function() {
         $scope.filterSearchByType();
         $scope.filterSearchByEntity();
         $scope.filterSearchByWatcher();
     };
-    
+
     $scope.resetFilter = function() {
         $scope.filteringData.selectedEntities = {
             projects: {},
@@ -499,17 +500,17 @@ directive('icuSidepane', function() {
         };
         $scope.filteringData.selectedWatchers = {};
     };
-    
+
     $scope.closeSearch = function(){
         $state.go('main.tasks')
     };
-    
+
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
         if (toState.name.indexOf('search') > -1) {
             $scope.filterSearch();
         }
     });
-    
+
 }
 
 return {

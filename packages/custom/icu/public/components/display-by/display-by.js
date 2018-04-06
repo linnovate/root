@@ -7,7 +7,7 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.statusList = SettingServices.getStatusList();
         $scope.activeList = SettingServices.getActiveStatusList();
         $scope.archiveList = SettingServices.getNonActiveStatusList();
-       
+
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
             $scope.context = context;
             $scope.folders = folders;
@@ -47,7 +47,20 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.clearUpdatedDate = function(){
             $scope.updatedDate = null;
             SearchService.filteringByUpdated = null;
-          }
+        };
+
+        //clearing default date filter
+        $scope.clearDateRange();
+        $scope.clearDueDate();
+        $scope.clearUpdatedDate();
+
+        $scope.turnOffRecycle = function () {
+            var query = SearchService.getQuery();
+            $scope.recycled = false;
+            $scope.isRecycled = false;
+            // $state.go('main.search', {reload: true});
+            $state.go('main.search', {reload: true, query: query});
+        };
 
         $scope.tmpStatus = [];
 
@@ -101,7 +114,7 @@ angular.module('mean.icu.ui.displayby', [])
             if($scope.currentType == 'nonactive'){
                 if ($scope.archiveList.indexOf(type) >-1)
                 return true;
-            } 
+            }
             }
 
             return false;
