@@ -2,6 +2,7 @@
 
 angular.module('mean.icu.ui.discussiondetails', [])
     .controller('DiscussionDetailsController', function ($scope,
+                                                         $rootScope,
                                                          entity,
                                                          tasks,
                                                          context,
@@ -416,6 +417,9 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         };
 
+        $scope.refreshList = function(){
+            $scope.$broadcast('refreshList',$scope.context);
+        };
 
         $scope.recycle = function(entity) {
             console.log("$scope.recycle") ;
@@ -426,10 +430,22 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go('main.discussions.all', {
-                    entity: 'all'
-                }, {reload: true});
-
+                refreshList();
+                if($state.current.name.indexOf('search') != -1){
+                    $state.go($state.current.name, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true,
+                        query: $stateParams.query
+                    });
+                } else {
+                    $state.go('main.discussions.all', {
+                        entity: 'all'
+                    }, {
+                        reload: true
+                    });
+                }
             });
         };
 
@@ -441,17 +457,21 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                var state = 'main.discussions.all' ;
+                refreshList();
+
+                var state = $state.current.name.indexOf('search') !== -1 ? $state.current.name : 'main.discussions.all';
                 $state.go(state, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {
                     reload: true
                 });
-
             });
         };
 
+        function refreshList(){
+            $rootScope.$broadcast('refreshList');
+        }
 
         $scope.deleteDiscussion = function (discussion) {
             DiscussionsService.remove(discussion._id).then(function () {
@@ -530,8 +550,13 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
+                        refreshList();
                     });
                     break;
+            }
+
+            if($state.current.name.indexOf('search') != -1) {
+                refreshList();
             }
         };
 
