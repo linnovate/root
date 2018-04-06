@@ -47,7 +47,7 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
 
     $scope.clearSearch = function () {
         $scope.term = '';
-        $scope.search();
+        search();
     };
 
     // $scope.focusSearch = function () {
@@ -56,18 +56,18 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
     // };
 
 
-    $scope.search = function (term) {
+    function search(term) {
         SearchService.builtInSearchArray = false;
         if (term && term.length) {
             $state.go('main.search', {query: term});
         } else {
             //$state.go('main.tasks.all');
         }
-    };
+    }
 
-    $scope.refreshQuery = function(term){
+    function refreshQuery(term){
         SearchService.refreshQuery(term);
-    };
+    }
 
     $scope.builtInSearch = function(funcName) {
         $document.on("click", onDocumentClick);
@@ -77,9 +77,15 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
     	});
     };
 
-    $scope.activeSearchNav = function(){
+    function activeSearchNav(){
         NotifyingService.notify('activeSearch');
     }
+
+    $scope.startSearch = function(term){
+        search(term);
+        activeSearchNav();
+        refreshQuery(term);
+    };
 
     // $scope.blur = function(){
     // 	$timeout(function() {

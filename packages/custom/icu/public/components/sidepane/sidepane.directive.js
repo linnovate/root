@@ -34,18 +34,20 @@ directive('icuSidepane', function() {
 
         // updatedDate
         var now = new Date();
+        var lastMonth = null;
+        var nextMonth = null;
 
         if (now.getMonth() == 0) {
-            var lastMonth = new Date(now.getFullYear() - 1, 11, now.getDay());
+            lastMonth = new Date(now.getFullYear() - 1, 11, now.getDay());
+            nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        } else if (now.getMonth() == 11){
+            lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDay()) ;
+            nextMonth = new Date(now.getFullYear() + 1, 0, 1);
         } else {
-            var lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDay()) ;
+            lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDay()) ;
+            nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
         }
 
-        if (now.getMonth() == 11) {
-            var nextMonth = new Date(now.getFullYear() + 1, 0, 1);
-        } else {
-            var nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-        }
         $scope.updatedDate = lastMonth;
         $scope.dueDate = lastMonth;
         SearchService.filteringByUpdated = $scope.updatedDate;
