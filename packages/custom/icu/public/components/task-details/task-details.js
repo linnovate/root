@@ -270,22 +270,15 @@ angular.module('mean.icu.ui.taskdetails', [])
                 });
 
                 refreshList();
-                if($state.current.name.indexOf('search') != -1){
-                    $state.go($state.current.name, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true
-                    });
-                } else {
-                    var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-                    $state.go(state, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true
-                    });
-                }
+
+                var state = $state.current.name.indexOf('search') !== -1 ? $state.current.name :
+                    context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
             });
         };
 

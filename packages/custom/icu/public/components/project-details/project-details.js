@@ -353,24 +353,15 @@ angular.module('mean.icu.ui.projectdetails', [])
                 ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {
                     ActivitiesService.data.push(result);
                 });
-
                 refreshList();
-                if($state.current.name.indexOf('search') != -1){
-                    $state.go($state.current.name, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true,
-                    });
-                } else {
-                    var state = 'main.projects.all';
-                    $state.go(state, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true
-                    });
-                }
+
+                var state = $state.current.name.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
             });
         };
 

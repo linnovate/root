@@ -6,22 +6,22 @@ angular.module('mean.icu.ui.searchlist')
 	for (let i = 0; i< $scope.results.length; i++) {
 		// if ($scope.results[i].project)
 		// 	$scope.results[i].projectObj = $scope.$parent.projects.find(function(e) {
-		// 		return e._id == $scope.results[i].project
+		// 		return e._id === $scope.results[i].project
 		// 	})
 		/*if ($scope.results[i].discussions && $scope.results[i].discussions.length)
 			$scope.results[i].discussionObj = $scope.$parent.discussions.find(function(e) {
-				return e._id == $scope.results[i].discussions[0]
+				return e._id === $scope.results[i].discussions[0]
 			})
 		if ($scope.results[i].folder)
 			$scope.results[i].folderObj = $scope.$parent.folders.find(function(e) {
-				return e._id == $scope.results[i].folder
+				return e._id === $scope.results[i].folder
 			})*/
 		// if ($scope.results[i].office)
 		// 	$scope.results[i].officeObj = $scope.$parent.offices.find(function(e) {
-		// 		return e._id == $scope.results[i].office
+		// 		return e._id === $scope.results[i].office
 		// 	})
 	}
-    finalRes();
+    filterFinalRes();
 
 	$scope.inObjArray = function(id,array){
 		array.forEach(function(w){
@@ -37,20 +37,20 @@ angular.module('mean.icu.ui.searchlist')
             .then((result)=>{
                 $scope.results = result;
             });
-        finalRes();
+        filterFinalRes();
     });
 
     function getResults() {
-        if ($stateParams.recycled == true) {
+        if ($stateParams.recycled === true) {
             $location.search('recycled', 'true');
         }
         if ($stateParams.query && $stateParams.query.length) {
             return SearchService.find($stateParams.query);
         } else {
             if (SearchService.builtInSearchArray) {
-                var data = SearchService.builtInSearchArray.map(function (d) {
-                    d._type = 'task';
-                    return d;
+                var data = SearchService.builtInSearchArray.map(function (dat) {
+                    dat._type = 'task';
+                    return dat;
                 });
                 return data;
             } else {
@@ -59,7 +59,7 @@ angular.module('mean.icu.ui.searchlist')
         }
     }
 
-    function finalRes(){
+    function filterFinalRes(){
         UsersService.getMe().then(function(me){
             let id = me._id;
             let finalResults = [];
@@ -71,7 +71,7 @@ angular.module('mean.icu.ui.searchlist')
             }
             $scope.term = term;
             $scope.results = finalResults;
-            $scope.length = $scope.results.length;
+            $scope.resultsLength = $scope.results.length;
         });
     }
 
