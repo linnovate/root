@@ -18,11 +18,13 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments")))
         {
             $scope.officeDocument = entity || context.entity;
-        }
-        else
-        {
+        } else {
             $scope.officeDocument = context.entity || entity;
         }
+        if(Array.isArray($scope.officeDocument)){
+            $scope.officeDocument = $scope.officeDocument[0];
+        }
+
         $scope.entity = entity || context.entity;
         $scope.getSignatures = function () {
             if($scope.officeDocument.folder && $scope.officeDocument.folder.office && $scope.officeDocument.path){
