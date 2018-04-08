@@ -32,6 +32,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.CanceledMailSend = false;
         $scope.fade = false;
         $scope.tags = tags;
+        var currentState = $state.current.name;
+
 
         if($scope.discussion.startDate){
             $scope.discussion.startDate = new Date($scope.discussion.startDate);
@@ -109,7 +111,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
             DiscussionsService.summary(discussion).then(function (result) {
                 discussion.status = result.status;
-                var index = $state.current.name.indexOf('main.search');
+                var index = currentState.indexOf('main.search');
                 $state.reload(index === 0 ? 'main.search' : 'main.tasks.byentity');
             });
         };
@@ -426,7 +428,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go('main.discussions.all', {
+                $state.go(currentState, {
                     entity: 'all'
                 }, {reload: true});
 
@@ -441,8 +443,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                var state = 'main.discussions.all' ;
-                $state.go(state, {
+                $state.go(currentState, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {

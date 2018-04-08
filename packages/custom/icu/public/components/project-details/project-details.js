@@ -35,6 +35,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.addSubProjects = false;
 
         $scope.tagInputVisible = false;
+        var currentState = $state.current.name;
 
         $scope.people = people.data || people;
         if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
@@ -322,7 +323,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go('main.projects.all', {
+                $state.go(currentState, {
                     entity: 'all'
                 }, {reload: true});
 
@@ -337,8 +338,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                var state = 'main.projects.all' ;
-                $state.go(state, {
+                $state.go(currentState, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {

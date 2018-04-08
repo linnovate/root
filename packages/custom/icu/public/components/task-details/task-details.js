@@ -42,7 +42,7 @@ angular.module('mean.icu.ui.taskdetails', [])
             'class': 'create-new',
             'color': 'rgb(0, 151, 167)'
         });
-
+        var currentState = $state.current.name;
         $scope.isRecycled = $scope.task.hasOwnProperty('recycled');
 
         $scope.shouldAutofocus = !$stateParams.nameFocused;
@@ -235,13 +235,12 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.recycle = function(entity) {
             EntityService.recycle('tasks', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "deleted" // just for activity status
+                clonedEntity.status = "deleted"; // just for activity status
                 TasksService.updateStatus(clonedEntity, entity).then(function(result) {
                     ActivitiesService.data.push(result);
                 });
 
-                var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-                $state.go(state, {
+                $state.go(currentState, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {
@@ -254,7 +253,7 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.recycleRestore = function(entity) {
             EntityService.recycleRestore('tasks', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "un-deleted" // just for activity status
+                clonedEntity.status = "un-deleted"; // just for activity status
                 TasksService.updateStatus(clonedEntity, entity).then(function(result) {
                     ActivitiesService.data.push(result);
                 });
