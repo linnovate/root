@@ -331,24 +331,28 @@ directive('icuSidepane', function() {
         for (let i=0; i< results.length; i++) {
             if (results[i]._type === $scope.filteringData.issue || $scope.filteringData.issue === 'all') {
                 if ($rootScope.status) {
-                    if ($rootScope.status == 'active' ){
+                    if ($rootScope.status == 'all' ){
+                        if ($scope.userFilterList.indexOf(results[i].status) > -1) {
+                            filteredByType.push(results[i]);
+                        }
+                    }
+                    else if ($rootScope.status == 'active' ){
                         let activeList = $scope.activeList;
                         if(activeList.indexOf(results[i].status)>-1){
-                            filteredByType.push(results[i])
+                            filteredByType.push(results[i]);
                           }
                     }
                     else if ($rootScope.status == 'nonactive' ){
                         let archiveList = $scope.archiveList;
                         if(archiveList.indexOf(results[i].status)>-1){
-                            filteredByType.push(results[i])
+                            filteredByType.push(results[i]);
                           }
                     }
-                  else if(results[i].status == $rootScope.status){
-                    filteredByType.push(results[i])
-                  }
-
+                    else if(results[i].status == $rootScope.status){
+                        filteredByType.push(results[i]);
+                    }
                 }
-                else filteredByType.push(results[i])
+                else filteredByType.push(results[i]);
             }
             index = issuesOrder.indexOf(results[i]._type);
             if($stateParams.query == ''){
@@ -368,7 +372,7 @@ directive('icuSidepane', function() {
         let arr = [];
         for (let key in obj) {
             if (obj[key]) {
-                arr.push(key)
+                arr.push(key);
             }
         }
         return arr;
@@ -445,8 +449,6 @@ directive('icuSidepane', function() {
 
         return a;
     }
-
-
 
      $scope.filterActive = function(type) {
          console.log('ttttttt',type)
@@ -541,6 +543,7 @@ return {
         datePicker: '=',
         dueDate: '=',
         tmpStatus: '=',
+        statusList: '=',
         activeList: '=',
         archiveList: '='
     }
