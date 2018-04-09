@@ -3,7 +3,7 @@ version: '3'
 services:
   root-app:
     build: .
-    image: root-app
+    #image: root-app
     # image: localhost:5000/root-app
     #restart: always
     ports:
@@ -15,7 +15,8 @@ services:
     volumes:
         - ./packages:/usr/src/app/packages
         - ./config:/usr/src/app/config
-        - ./node_modules:/usr/src/app/node_modules
+        - ./tools:/usr/src/app/tools
+      #  - ./node_modules:/usr/src/app/node_modules
         # - ./files:/usr/src/app/files
     command: "gulp development"
   root-db:
