@@ -19,7 +19,7 @@ services:
         # - ./files:/usr/src/app/files
     command: "gulp development"
   root-db:
-    image: mongo
+    image: mongo:3.6.3
     expose:
       - "27017"
   root-elastic:
