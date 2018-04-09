@@ -36,6 +36,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.addSubProjects = false;
 
         $scope.tagInputVisible = false;
+        var currentState = $state.current.name;
 
         $scope.people = people.data || people;
         if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
@@ -315,10 +316,6 @@ angular.module('mean.icu.ui.projectdetails', [])
             }
         };
 
-        $scope.refreshList = function(){
-            $scope.$broadcast('refreshList',$scope.context);
-        };
-
         $scope.recycle = function(entity) {
             EntityService.recycle('projects', entity._id).then(function() {
                 let clonedEntity = JSON.parse(JSON.stringify(entity));
@@ -328,8 +325,8 @@ angular.module('mean.icu.ui.projectdetails', [])
                 });
 
                 refreshList();
-                if($state.current.name.indexOf('search') != -1){
-                    $state.go($state.current.name, {
+                if(currentState.indexOf('search') != -1){
+                    $state.go(currentState, {
                         entity: context.entityName,
                         entityId: context.entityId
                     }, {
@@ -355,7 +352,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                 });
                 refreshList();
 
-                var state = $state.current.name.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
+                var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
                 $state.go(state, {
                     entity: context.entityName,
                     entityId: context.entityId

@@ -5,7 +5,8 @@ angular.module('mean.icu.data.searchservice', [])
 
 	var builtInSearchArray = false;
     var filteringData = [];
-    var results = []
+    var results = [];
+    var query = '';
     var filteringResults = [];
     let filteringByUpdated = null ;
 
@@ -31,11 +32,19 @@ angular.module('mean.icu.data.searchservice', [])
         });
     }
 
-        function clearResults(){
-            this.filteringData = [];
-            this.results = [];
-            this.filteringResults = [];
-        }
+    function refreshQuery(term){
+        query = term;
+    }
+
+    function getQuery(){
+        return query;
+    }
+
+    function clearResults(){
+        this.filteringData = [];
+        this.results = [];
+        this.filteringResults = [];
+    }
 
     return {
         find: find,
@@ -44,6 +53,9 @@ angular.module('mean.icu.data.searchservice', [])
         filteringResults: filteringResults,
         filteringByUpdated: filteringByUpdated,
         clearResults: clearResults,
+        query: query,
+        getQuery: getQuery,
+        refreshQuery: refreshQuery,
     };
 });
 

@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.middlepane', [])
 function SearchController($scope, $state, $stateParams, context, NotifyingService, TasksService, $timeout, SearchService, $document, $location) {
     $scope.$on('$stateChangeSuccess', function ($event, toState) {
         // if ($location.path().split("/").pop() == "recycled") {
-        //     $scope.term = "recycled" ;            
+        //     $scope.term = "recycled" ;
         // }
         // else {
         //     if($scope.term == "recycled") {
@@ -47,7 +47,7 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
 
     $scope.clearSearch = function () {
         $scope.term = '';
-        $scope.search();
+        search();
     };
 
     // $scope.focusSearch = function () {
@@ -56,14 +56,18 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
     // };
 
 
-    $scope.search = function (term) {
+    function search(term) {
         SearchService.builtInSearchArray = false;
         if (term && term.length) {
             $state.go('main.search', {query: term});
         } else {
             //$state.go('main.tasks.all');
         }
-    };
+    }
+
+    function refreshQuery(term){
+        SearchService.refreshQuery(term);
+    }
 
     $scope.builtInSearch = function(funcName) {
         $document.on("click", onDocumentClick);
@@ -73,9 +77,15 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
     	});
     };
 
-    $scope.activeSearchNav = function(){
+    function activeSearchNav(){
         NotifyingService.notify('activeSearch');
     }
+
+    $scope.startSearch = function(term){
+        search(term);
+        activeSearchNav();
+        refreshQuery(term);
+    };
 
     // $scope.blur = function(){
     // 	$timeout(function() {

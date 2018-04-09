@@ -197,6 +197,9 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function permissions(entity, type, user) {
+            if(Array.isArray(entity)){
+                entity = entity[0];
+            }
             var member = user || me;
             haveAnyPerms(entity, member);
 

@@ -18,11 +18,13 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments")))
         {
             $scope.officeDocument = entity || context.entity;
-        }
-        else
-        {
+        } else {
             $scope.officeDocument = context.entity || entity;
         }
+        if(Array.isArray($scope.officeDocument)){
+            $scope.officeDocument = $scope.officeDocument[0];
+        }
+
         $scope.entity = entity || context.entity;
         $scope.getSignatures = function () {
             if($scope.officeDocument.folder && $scope.officeDocument.folder.office && $scope.officeDocument.path){
@@ -37,8 +39,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
         $scope.getSignatures();
         $scope.signBy = $scope.officeDocument.signBy;
-
         $scope.selectedSignature;
+        var currentState = $state.current.name;
 
         $scope.SignatureSelected = function (signature) {
             $scope.selectedSignature = signature;
@@ -350,10 +352,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         };
 
-        $scope.refreshList = function(){
-            $scope.$broadcast('refreshList',$scope.context);
-        };
-
         $scope.recycle = function(entity) {
             console.log("$scope.recycle") ;
             EntityService.recycle('officeDocuments', entity._id).then(function() {
@@ -365,8 +363,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
 
 
                 refreshList();
-                if($state.current.name.indexOf('search') != -1){
-                    $state.go($state.current.name, {
+                if(currentState.indexOf('search') != -1){
+                    $state.go(currentState, {
                         entity: context.entityName,
                         entityId: context.entityId
                     }, {
@@ -392,8 +390,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 });
 
                 refreshList();
-                if($state.current.name.indexOf('search') != -1){
-                    $state.go($state.current.name, {
+                if(currentState.indexOf('search') != -1){
+                    $state.go(currentState, {
                         entity: context.entityName,
                         entityId: context.entityId
                     }, {
@@ -550,7 +548,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     break;
             }
 
-            if($state.current.name.indexOf('search') != -1) {
+            if(currentState.indexOf('search') != -1) {
                 refreshList();
             }
         };

@@ -33,6 +33,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.CanceledMailSend = false;
         $scope.fade = false;
         $scope.tags = tags;
+        var currentState = $state.current.name;
+
 
         if($scope.discussion.startDate){
             $scope.discussion.startDate = new Date($scope.discussion.startDate);
@@ -110,7 +112,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
             DiscussionsService.summary(discussion).then(function (result) {
                 discussion.status = result.status;
-                var index = $state.current.name.indexOf('main.search');
+                var index = currentState.indexOf('main.search');
                 $state.reload(index === 0 ? 'main.search' : 'main.tasks.byentity');
             });
         };
@@ -417,10 +419,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         };
 
-        $scope.refreshList = function(){
-            $scope.$broadcast('refreshList',$scope.context);
-        };
-
         $scope.recycle = function(entity) {
             console.log("$scope.recycle") ;
             EntityService.recycle('discussions', entity._id).then(function() {
@@ -431,8 +429,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
                 });
 
                 refreshList();
-                if($state.current.name.indexOf('search') != -1){
-                    $state.go($state.current.name, {
+                if(currentState.indexOf('search') != -1){
+                    $state.go(currentState, {
                         entity: context.entityName,
                         entityId: context.entityId
                     }, {
@@ -459,7 +457,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
                 refreshList();
 
-                var state = $state.current.name.indexOf('search') !== -1 ? $state.current.name : 'main.discussions.all';
+                var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.discussions.all';
                 $state.go(state, {
                     entity: context.entityName,
                     entityId: context.entityId
@@ -555,7 +553,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     break;
             }
 
-            if($state.current.name.indexOf('search') != -1) {
+            if(currentState.indexOf('search') != -1) {
                 refreshList();
             }
         };
