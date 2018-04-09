@@ -32,6 +32,14 @@ angular.module('mean.icu.data.searchservice', [])
         });
     }
 
+    function setFilteringResults(filteringRes){
+        filteringResults = filteringRes;
+    }
+
+    function getFilteringResults(filteringRes){
+        return filteringResults;
+    }
+
     function refreshQuery(term){
         query = term;
     }
@@ -51,6 +59,8 @@ angular.module('mean.icu.data.searchservice', [])
         builtInSearchArray: builtInSearchArray,
         filteringData: filteringData,
         filteringResults: filteringResults,
+        setFilteringResults: setFilteringResults,
+        getFilteringResults: getFilteringResults,
         filteringByUpdated: filteringByUpdated,
         clearResults: clearResults,
         query: query,

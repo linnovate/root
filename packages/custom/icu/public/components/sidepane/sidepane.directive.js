@@ -320,7 +320,7 @@ directive('icuSidepane', function() {
               $location.search('type', $scope.filteringData.issue);
         }
         if ($scope.isRecycled)
-          $location.search('recycled','true')
+          $location.search('recycled','true');
         let results = SearchService.results;
         if (!results || !results.length) return ;
         let filteredByType = [], index;
@@ -361,6 +361,7 @@ directive('icuSidepane', function() {
                 $scope.issues[index].length++;
             }
         }
+        SearchService.setFilteringResults(filteredByType);
         SearchService.filteringResults = filteredByType;
 
         getEntitiesAndWatchers(filteredByType);

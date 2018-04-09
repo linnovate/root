@@ -16,7 +16,7 @@ Date.prototype.getWeek = function()
 }
 
 angular.module('mean.icu.ui.tasklistFilter', [])
-.filter('filterRecycled', function (EntityService,$state) {	
+.filter('filterRecycled', function (EntityService,$state) {
 	return function(entities) {
 		if($state.current.name === "main.search.recycled") return entities ;
 		if (!entities || !(entities instanceof Array)) return entities;
@@ -38,12 +38,13 @@ angular.module('mean.icu.ui.tasklistFilter', [])
 		switch(filterValue) {
 			default:
 			out = 	entities.filter(function(entity) {
-						var entityActiveValue = EntityService.getEntityActivityStatus(filterValue,type.entity,entity.status)
+						var entityActiveValue = EntityService.getEntityActivityStatus(filterValue,type.entity,entity.status);
 						return entityActiveValue ;
 					});
 		}
+		console.log(out);
 		return out;
-	}
+	};
 })
 .filter('filterByOptions', function (TasksService) {
 	return function(tasks) {

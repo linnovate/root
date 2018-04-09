@@ -31,11 +31,6 @@ angular.module('mean.icu.ui.searchlist')
 		return false;
 	};
 
-
-
-
-
-
     UsersService.getMe().then(function(me){
     	let id = me._id;
     	let finalResults = [];
