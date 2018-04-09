@@ -236,12 +236,10 @@ angular.module('mean.icu.ui.displayby', [])
         },{
             name:  'received',
             color:'37afef'
-        }
-        //,{
-        //    name:  'in-progress',
-        //    color:'757575'
-        //}
-        ,{
+        },{
+            name:  'in-progress',
+            color:'f69679'
+         },{
             name:  'sent',
             color:'359123'
         },{
