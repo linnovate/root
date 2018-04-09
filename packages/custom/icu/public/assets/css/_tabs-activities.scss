@@ -8,18 +8,21 @@ $activityListDefaultMaxH: 80px;
         height: 100%;
         overflow-y: hidden;
         position: relative;
+        .avatar {
+            @include circle(24px);
 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+            background-color: $green;
+            text-transform: uppercase;
+        }
         .title, .add-update {
             position: relative;
-            .avatar {
-                @include circle(17px);
 
-                float: left;
-                margin: 10px;
-                background-color: $green;
-            }
         }
-
 
         .activities-list {
 
@@ -58,24 +61,36 @@ $activityListDefaultMaxH: 80px;
             }
 
             .activity {
-                margin-bottom: 5px;
-                min-height: 60px;
+                margin-bottom: 35px;
+                //min-height: 60px;
+                display: flex;
             }
-
+            .activity-content {
+                margin-left: 13px;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
             .title {
                 font-size: 14px;
+                font-weight: bold;
                 margin-bottom: 10px;
+                //display: flex;
+                //align-items: center;
+                //justify-content: space-between;
                 .user-name {
                     font-weight: 700;
                     // line-height: 14px;
                 }
 
                 .text {
-                    padding-top: 16px;
-                    display: flex;
-                    flex-wrap: wrap;
+                    margin: 0;
+                    //padding-top: 16px;
+                    display: inline;
+                    //flex-wrap: wrap;
+                    //align-items: center;
                     .activity-details {
-                        font-weight: 100;
+                       // font-weight: 100;
                         & > span {
                             font-size: 0;
                             & > span {
@@ -83,16 +98,20 @@ $activityListDefaultMaxH: 80px;
                         }
                         }
                     }
-                    .activity-date {
-                        color: $light-grey-placeholder;
-                        font-size: x-small;
-                        margin-left: 6px;
-                    }
+                }
+                .activity-date {
+                    color: $light-grey-placeholder;
+                    font-size: 12px;
+                    line-height: 20px;
+                    margin: 0 13px 0 7px;
+                    font-weight: normal;
+                    display: inline;
+                    float: right;
                 }
             }
 
             .description {
-                margin: 0 53px;
+                margin: 0;
                 color: $light-grey4;
             }
 
@@ -131,13 +150,17 @@ $activityListDefaultMaxH: 80px;
             max-height: 210px;
             overflow: auto;
             width: 100%;
-            margin-top: 12px;
-
+            display: flex;
+            margin-top: 9px;
+            .add-update-form {
+                width: 100%;
+                margin: 0 15px;
+            }
             textarea {
                 padding: 5px 9px;
-                width: calc(100% - 60px);
                 height: 125px;
-                margin: 10px 0;
+                margin: 0;
+                width: 100%;
                 transition: height 0.4s;
                 border-color: #C8C8C6;
                 &::-webkit-input-placeholder {
@@ -147,8 +170,6 @@ $activityListDefaultMaxH: 80px;
             }
 
             .action-buttons {
-                margin-left: 50px;
-
                 .attachment {
                     @include circle(16px);
                     @include button;
