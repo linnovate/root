@@ -361,10 +361,23 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go(currentState, {
-                    entity: 'all'
-                }, {reload: true});
 
+                refreshList();
+                if(currentState.indexOf('search') != -1){
+                    $state.go(currentState, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true,
+                        query: $stateParams.query
+                    });
+                } else {
+                    $state.go('main.officeDocuments.all', {
+                        entity: 'all'
+                    }, {
+                        reload: true
+                    });
+                }
             });
         };
 
@@ -376,17 +389,30 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go(currentState, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
-                    reload: true
-                });
-
+                refreshList();
+                if(currentState.indexOf('search') != -1){
+                    $state.go(currentState, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true,
+                        query: $stateParams.query
+                    });
+                } else {
+                    var state = 'main.officeDocuments.all' ;
+                    $state.go(state, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true
+                    });
+                }
             });
         };
 
-
+        function refreshList(){
+            $rootScope.$broadcast('refreshList');
+        }
 
         $scope.deleteDocumentFile = function(officeDocument){
             OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function(){
@@ -517,8 +543,13 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
+                        refreshList();
                     });
                     break;
+            }
+
+            if(currentState.indexOf('search') != -1) {
+                refreshList();
             }
         };
 
@@ -530,8 +561,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             };
 
             $scope.update($scope.officeDocument, context);
-
-        };
+            };
 
         $scope.updateCurrentOfficeDocument = function(){
             $scope.officeDocument.PartTitle = $scope.officeDocument.title;
