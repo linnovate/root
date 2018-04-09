@@ -12,9 +12,10 @@
     ng-model="data.task.title">
 </td>
 <td class="user" ng-if="data.task._id">
-<!--     <div class="no-assignee" ng-if="!data.task.assign">
-        <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
-    </div> -->
+    <div class="no-assignee" ng-if="!data.task.assign">
+        <!--<div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>-->
+        <div class="avatar-placeholder"></div>
+    </div>
     <!--<ui-select ng-model="task.assign" on-select="update(task)">-->
     <ui-select append-to-body="true" ng-model="data.task.assign" on-select="data.updateCb(data.task, 'assign')" >
         <ui-select-match>
@@ -50,8 +51,8 @@
 </td>
 
 <td class="arrow" ng-if="data.task._id" ng-click="data.changeState(data.task)">
-    <i  class="fa chevron-right"></i>
+    <div class="row-arrow"></div>
 </td> 
 <td class="delete">
- <img src="/icu/assets/img/X.png"  ng-if="data.task._id && data.task.showDelete" ng-click="data.delete(data.task)">
+ <img src="/icu/assets/img/X.png" ng-if="data.task._id && data.task.showDelete" ng-click="data.delete(data.task)">
 </td>

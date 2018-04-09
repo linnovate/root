@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.searchlist', [])
 .directive('icuSearchList', function (LayoutService) {
-    function controller($scope, $state, SearchService) {
+    function controller($rootScope, $scope, $state, SearchService) {
 
         SearchService.builtInSearchArray = false;
 
@@ -13,7 +13,9 @@ angular.module('mean.icu.ui.searchlist', [])
         }
         $scope.rowClicked = function() {
             LayoutService.clicked();
-        }
+        };
+
+
         for(var i = 0;i<$scope.results.length;i++){
             $scope.results[i].id = $scope.results[i].id ? $scope.results[i].id:$scope.results[i]._id;
         }
