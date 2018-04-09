@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.searchlist')
-.controller('SearchListController', function ($rootScope, $scope, $stateParams, $location, results, term, SearchService, UsersService) {
+.controller('SearchListController', function ($rootScope, $scope, $stateParams, $location, $timeout, results, term, SearchService, UsersService) {
 	$scope.results = results;
 	for (let i = 0; i< $scope.results.length; i++) {
 		// if ($scope.results[i].project)
@@ -33,31 +33,11 @@ angular.module('mean.icu.ui.searchlist')
 	};
 
     $scope.$on('refreshList', function (ev) {
-        getResults()
-            .then((result)=>{
-                $scope.results = result;
-            });
-        filterFinalRes();
+        SearchService.find(term).then(function(res){
+            $scope.results = res;
+            filterFinalRes();
+        });
     });
-
-    function getResults() {
-        if ($stateParams.recycled === true) {
-            $location.search('recycled', 'true');
-        }
-        if ($stateParams.query && $stateParams.query.length) {
-            return SearchService.find($stateParams.query);
-        } else {
-            if (SearchService.builtInSearchArray) {
-                var data = SearchService.builtInSearchArray.map(function (dat) {
-                    dat._type = 'task';
-                    return dat;
-                });
-                return data;
-            } else {
-                return {};
-            }
-        }
-    }
 
     function filterFinalRes(){
         UsersService.getMe().then(function(me){

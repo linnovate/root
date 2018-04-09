@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.searchservice', [])
-.service('SearchService', function($http, ApiUri, WarningsService) {
+.service('SearchService', function($http, $stateParams, ApiUri, WarningsService) {
 
 	var builtInSearchArray = false;
     var filteringData = [];
@@ -27,7 +27,7 @@ angular.module('mean.icu.data.searchservice', [])
                 d._type == "officedocument" ? d._type="officeDocument" : d._type ;
                 d.title = Array.isArray(d.title) ? [d.title] : [d.title]; // this resolves bug https://github.com/linnovate/root/issues/625
                 return d ;
-            })
+            });
             return results;
         });
     }
