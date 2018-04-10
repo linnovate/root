@@ -12,6 +12,10 @@
         font-weight: bold;
         line-height: 14px;
     }
+    .active {
+        color: $orange;
+        font-weight: bold;
+    }
     min-width: $min-sidepane-width;
 
     @media screen and (max-width: $small-resolution) {
@@ -45,7 +49,7 @@
                 box-shadow: 0px 0px 0px 2px #FFB435;
                 transition: 0.8s;
             }
-            
+
 
             button {
                 color: wheat ;
@@ -70,7 +74,7 @@
 
             }
         }
-        .filterUpdated, .filterDueDate  {            
+        .filterUpdated, .filterDueDate  {
             padding-bottom: 20px;
             border-bottom: 1px solid #444F53;
             .placeholder {
@@ -156,7 +160,7 @@
             background-color: white;
             border: 1px solid #c3bfbf;
         }
-        
+
         .select-wrapper {
             float: left;
             width: 100%;
@@ -169,14 +173,13 @@
                 // padding: 20px 0;
             }
             .bold {
-                color: #FFA000; 
-                
+                color: #FFA000;
+
             }
             .all-status {
                 font-size: 13px;
                 line-height: 29px;
                 font-weight: bold;
-                color: #DFF2F9;
             }
 
             tooltip {

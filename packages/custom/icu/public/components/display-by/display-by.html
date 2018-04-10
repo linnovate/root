@@ -42,7 +42,7 @@
                         <li ng-repeat="field in AllStatus track by $index | orderBy:field">
                             <!-- <span class="all-status" ng-class="{'bold':isActive(field,$root.status)}" ng-click="$root.status = field;filterSearchByType(true)">{{field | i18next}}</span> -->
                           <span class="all-status"
-                                ng-class="{'bold':isActive(field,$root.status)}"
+                                ng-class="{'active':isActive(field,$root.status)}"
                                 ng-click="statusListCahnge(field);filterSearchByType(true)">
                               {{field | i18next}}
                           </span>
@@ -82,7 +82,7 @@
             <div class="filterUpdated">
                 <div class="subtitle">{{'deletedItems' | i18next}}</div>
                 <div class="clear" ng-click="turnOffRecycle()">{{'clear' | i18next}}</div>
-                <div class="recycle" ng-class="{active: recycled}" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>            
+                <div class="recycle" ng-class="{active: recycled}" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>
             </div>
 
             <div ng-if="filteringData.projects.length">
