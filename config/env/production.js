@@ -32,6 +32,25 @@ module.exports = {
   logging: {
     format: 'combined'
   },
+  elasticsearch: { //from dev
+    host: (process.env.ELASTICSEARCH_IP || 'localhost'),
+    port: 9200,
+    log: 'trace',
+    keepAlive: false,
+    sniffOnConnectionFault:true,
+    maxRetries:50
+  },
+  omerElastic: ['localhost:9200', 'localhost:9201', 'localhost:9202'], // Add all master nodes of the elastic cluster to the array
+  saml: { // from dev
+    strategy : {
+      options :{
+        samlOptions: ''
+      }
+    },
+    clientID: 'DEFAULT_APP_ID',
+    clientSecret: 'APP_SECRET',
+    callbackURL: 'http://localhost/metadata.xml/callback'
+  },
   facebook: {
     clientID: 'APP_ID',
     clientSecret: 'APP_SECRET',
@@ -65,6 +84,13 @@ module.exports = {
       pass: 'PASSWORD'
     }
   },
-  secret: 'SOME_TOKEN_SECRET'
+  secret: 'SOME_TOKEN_SECRET',
+  circles: { // from dev
+    // uri: 'http://192.116.82.36:2230'
+    uri: 'http://localhost:3005'
+  },
+  api: { // from dev
+    uri: 'http://192.168.245.152:3003'
+  },
 };
 

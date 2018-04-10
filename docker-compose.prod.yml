@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  root-app:
+    build: .
+    image: root-app
+    restart: always
+    ports:
+      - "3100:3100"
+#      - "5858:5858"      
+#    volumes:
+#         - ./files:/usr/src/app/files
+    command: "gulp prod"
+  root-db:
+    image: mongo:3.6.3
+    expose:
+      - "27017"
+  root-elastic:
+    image: elasticsearch
+    expose:
+      - "9200"
