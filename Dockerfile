@@ -8,8 +8,8 @@ COPY . /usr/src/app/
 RUN chown -R node:node /usr/src/app
 USER node:node
 RUN echo '{}' > $HOME/.mean
-RUN npm install
-RUN bower install
+#RUN npm install
+#RUN bower install
 ENV PORT 3100
 ENV MONGODB_URI mongodb://root-db/icu
 ENV ELASTICSEARCH_IP root-elastic
