@@ -8,7 +8,7 @@
     <div class="page-content" ng-if="project._id && permsToSee">
         <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
-            <div class="favorite">
+            <div class="favorite"lass="title>
                 <button ng-class="{ 'orange': project.star }" ng-click="star(project)">
                     <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
                 </button>
@@ -111,10 +111,8 @@
                  strip-br="true"
                  ng-keydown="onEnter($event)"
                  ng-model="project.title"
-                 ng-bind-html="project.title | i18next"
                  ng-change="updateCurrentProject()"
                  medium-editor>
-
             </div>
 
             <div
