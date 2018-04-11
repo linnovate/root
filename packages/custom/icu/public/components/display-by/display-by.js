@@ -38,12 +38,12 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.clearDateRange = function(){
             SearchService.filterDateOption = null;
             $scope.datePicker.date = {startDate: null, endDate: null};
-        }
+        };
 
         $scope.clearDueDate = function(){
           $scope.dueDate = null;
           SearchService.filteringByDueDate = null;
-        }
+        };
 
         $scope.clearUpdatedDate = function(){
             $scope.updatedDate = null;

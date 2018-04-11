@@ -42,7 +42,6 @@ angular.module('mean.icu.ui.tasklistFilter', [])
 						return entityActiveValue ;
 					});
 		}
-		console.log(out);
 		return out;
 	};
 })
