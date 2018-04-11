@@ -177,7 +177,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
   console.log(JSON.stringify(oldDoc)) ;
   let deffered = q.defer();
 
-  if(!newDoc || !newDoc.issue || entityNameMap[newDoc.issue]) {
+  if(!newDoc || !newDoc.issue || !entityNameMap[newDoc.issue]) {
     // this is not one of the entity create cases.
     deffered.resolve("OK") ;  
     return deffered.promise ;    
