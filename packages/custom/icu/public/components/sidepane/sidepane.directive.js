@@ -98,7 +98,7 @@ directive('icuSidepane', function() {
             $state.go('main.tasks.byassign');
         };
 
-        $scope.useFunc = function(item){
+        $scope.usePriviteItemFunction = function(item){
             if(item.func)item.func();
         };
 
