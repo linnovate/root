@@ -13,31 +13,29 @@ Elasticsearch.register(function(app, auth, database) {
   Elasticsearch.routes(app, auth, database);
 
   Elasticsearch.connect = function() {
-      delete Elasticsearch.client;
+    delete Elasticsearch.client;
 
-      Elasticsearch.settings(function(err, config) {
+    Elasticsearch.settings(function(err, config) {
 
-          if (err) {
-              return console.log('error retrieving Elasticsearch settings');
-          }
+        if (err) {
+            return console.log('error retrieving Elasticsearch settings');
+        }
 
-          var host = esConfig.host;
-          var port = esConfig.port;
+        var log = esConfig.log ? esConfig.log : 'trace';
+        
+        var hosts = [];
+        for(var i = 0;i < Object.keys(esConfig.hosts).length; ++i){
+          hosts.push(esConfig.hosts[i]);
+        }
 
-          var log = esConfig.log ? esConfig.log : 'trace';
-
-          Elasticsearch.settings({host:host,port:port,log:log});
-          
-          var hosts = [];
-          for(var i = 0;i < Object.keys(omerConfig).length; ++i){
-            hosts.push(omerConfig[i]);
-          }
-
-          Elasticsearch.client = new elasticsearch.Client({
-              hosts: hosts,
-              log: log
-          });
-      });
+        Elasticsearch.client = new elasticsearch.Client({
+            hosts: hosts,
+            log: log,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            keepAlive: esConfig.keepAlive,
+            sniffOnConnectionFault: esConfig.sniffOnConnectionFault,
+            maxRetries: esConfig.maxRetries
+        });
+    });
   };
 
   Elasticsearch.connect();
