@@ -18,8 +18,8 @@
 <td class="project">
     <span class="tag project"
           title="{{data.task.project.title}}"
-          ng-style="{'background-color': '#' + data.task.project.color, 'color': 'white'}">
-        {{data.task.project.title}}
+          ng-style="{'background-color': '#' + data.task.project.color, 'color': 'white'}"
+          ng-bind-html="data.task.project.title">
     </span>
 </td>
 <td ng-if="data.task._id" class="status col-sm-2"  ng-class="data.task.status">{{data.task.status | i18next }}</td>

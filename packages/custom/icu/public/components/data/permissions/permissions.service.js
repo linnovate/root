@@ -100,7 +100,10 @@ angular.module('mean.icu.data.permissionsservice', [])
 
                 var havePerms = false;
                 if(entity.permissions.length !== 0) {
-                    havePerms = (_.find(entity.permissions, {'id': getUserId(user)}).level === 'editor');
+                    var usersPerms = _.find(entity.permissions, {'id': getUserId(user)});
+                    if(usersPerms){
+                        havePerms = usersPerms.level === 'editor';
+                    }
                 }
                 return havePerms;
         }
