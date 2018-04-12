@@ -118,6 +118,37 @@ directive('icuSidepane', function() {
             $scope.turnOffRecycle();
         };
 
+        $scope.createLists = function(){
+            $scope.projectsList = [];
+            $scope.projects.forEach(function(project) {
+                if(project.title)
+                    $scope.projectsList.push(project);
+            });
+
+            $scope.officesList = [];
+            $scope.offices.forEach(function(office) {
+                if(office.title)
+                    $scope.officesList.push(office);
+            });
+
+            $scope.foldersList = [];
+            $scope.folders.forEach(function(folder) {
+                if(folder.title)
+                    $scope.foldersList.push(folder);
+            });
+
+            $scope.officeDocumentsList = [];
+            $scope.officeDocuments.forEach(function(officeDocument) {
+                if(officeDocument.title)
+                    $scope.officeDocumentsList.push(officeDocument);
+            });
+
+            if($scope.officesList.length > 0)
+            {
+                $scope.officesList.office = $scope.officesList[0];
+            }
+        };
+
         $scope.items = [{
             name: 'search',
             icon: '/icu/assets/img/search-nav.svg',
@@ -149,7 +180,8 @@ directive('icuSidepane', function() {
             icon: '/icu/assets/img/icon-document.svg',
             state: 'officeDocuments.all',
             display: ['folders'],//['new', 'received', 'inProgress'],
-            open: $scope.isCurrentState({state: 'officeDocuments'})
+            open: $scope.isCurrentState({state: 'officeDocuments'}),
+            func: $scope.createLists,
         },
         {
             name: 'settings',

@@ -6,7 +6,7 @@
 <td class="name"
     ng-attr-colspan="{{data.task._id ? undefined : 5}}"
     title="{{data.task.title}}"
-    ng-attr-contenteditable="{{!data.displayOnly}}"
+    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.task))}}"
     placeholder="{{'createNewTask' | i18next}}"
     strip-br="true"
     ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"

@@ -3,6 +3,7 @@
     title="{{data.project.title}}"
     ng-attr-colspan="{{data.project._id ? undefined : 6}}"
     ng-attr-contenteditable="{{!data.displayOnly}}"
+    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.project))}}"
     placeholder="{{'createNewProject' | i18next}}"
     strip-br="true"
     ng-attr-tabindex="{{ data.project._id ? undefined : '3'}}"
