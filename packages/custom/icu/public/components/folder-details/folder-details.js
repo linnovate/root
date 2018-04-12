@@ -1,20 +1,19 @@
-'use strict';
-
 angular.module('mean.icu.ui.folderdetails', [])
     .controller('FolderDetailsController', function ($scope,
-                                                      entity,
-                                                      tasks,
-                                                      people,
-                                                      folders,
-                                                      offices,
-                                                      tags,
-                                                      $timeout,
-                                                      context,
-                                                      $state,
-                                                      FoldersService,
-                                                      $stateParams,
-                                                      OfficesService, 
-                                                      ActivitiesService) {
+                                                     entity,
+                                                     tasks,
+                                                     people,
+                                                     folders,
+                                                     offices,
+                                                     tags,
+                                                     $timeout,
+                                                     context,
+                                                     $state,
+                                                     FoldersService,
+                                                     PermissionsService,
+                                                     $stateParams,
+                                                     OfficesService,
+                                                     ActivitiesService) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("folders")))
         {
             $scope.folder = entity || context.entity;
@@ -23,6 +22,7 @@ angular.module('mean.icu.ui.folderdetails', [])
         {
             $scope.folder = context.entity || entity;
         }
+        $scope.entity = entity || context.entity;
         $scope.tasks = tasks.data || tasks;
         $scope.folders = folders.data || folders;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
@@ -159,15 +159,15 @@ angular.module('mean.icu.ui.folderdetails', [])
         };
 
         $scope.addTagClicked=function(){
-        	$scope.setFocusToTagSelect();
-        	$scope.tagInputVisible=true;
+            $scope.setFocusToTagSelect();
+            $scope.tagInputVisible=true;
         }
 
         $scope.addTag = function(tag) {
-        	if(tag!=undefined && $.inArray(tag,$scope.folder.tags)==-1){
-        		$scope.folder.tags.push(tag);
-            	$scope.update($scope.folder);
-        	}
+            if(tag!=undefined && $.inArray(tag,$scope.folder.tags)==-1){
+                $scope.folder.tags.push(tag);
+                $scope.update($scope.folder);
+            }
 
             $scope.tagInputVisible = false;
         };
@@ -259,30 +259,30 @@ angular.module('mean.icu.ui.folderdetails', [])
                     //     }
                     // }
                 }
-                    switch (context.name) {
-                        case 'status':
-                            FoldersService.updateStatus(folder, backupEntity).then(function(result) {
-                                backupEntity = JSON.parse(JSON.stringify($scope.folder));
-                                ActivitiesService.data = ActivitiesService.data || [] ;
-                                ActivitiesService.data.push(result);
-                            });
-                            break;
-                    
-                        case 'color':
-                            FoldersService.updateColor(folder).then(function(result) {
-                                ActivitiesService.data = ActivitiesService.data || [] ;
-                                ActivitiesService.data.push(result);
-                            });
-                            break;   
-                        case 'title':
-                        case 'description':
-                            FoldersService.updateTitle(folder, backupEntity, context.name).then(function(result) {
-                                backupEntity = JSON.parse(JSON.stringify($scope.folder));
-                                ActivitiesService.data = ActivitiesService.data || [];
-                                ActivitiesService.data.push(result);
-                            });
-                            break; 
-                    }
+                switch (context.name) {
+                    case 'status':
+                        FoldersService.updateStatus(folder, backupEntity).then(function(result) {
+                            backupEntity = JSON.parse(JSON.stringify($scope.folder));
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                        });
+                        break;
+
+                    case 'color':
+                        FoldersService.updateColor(folder).then(function(result) {
+                            ActivitiesService.data = ActivitiesService.data || [] ;
+                            ActivitiesService.data.push(result);
+                        });
+                        break;
+                    case 'title':
+                    case 'description':
+                        FoldersService.updateTitle(folder, backupEntity, context.name).then(function(result) {
+                            backupEntity = JSON.parse(JSON.stringify($scope.folder));
+                            ActivitiesService.data = ActivitiesService.data || [];
+                            ActivitiesService.data.push(result);
+                        });
+                        break;
+                }
             });
         };
 
@@ -330,25 +330,25 @@ angular.module('mean.icu.ui.folderdetails', [])
                 });
                 folder.PartTitle = folder.title;
                 //if (context.entityName === 'office') {
-                    var officeId = result.office ? result.office._id : undefined;
-                    if (!officeId) {
-                        $state.go('main.folders.all.details', {
-                            entity: 'folder',
+                var officeId = result.office ? result.office._id : undefined;
+                if (!officeId) {
+                    $state.go('main.folders.all.details', {
+                        entity: 'folder',
+                        id: folder._id
+                    }, {
+                        reload: true
+                    });
+                } else {
+                    if (officeId !== context.entityId || type === 'office') {
+                        $state.go('main.folders.byentity.details', {
+                            entity: context.entityName,
+                            entityId: officeId,
                             id: folder._id
                         }, {
                             reload: true
                         });
-                    } else {
-                        if (officeId !== context.entityId || type === 'office') {
-                            $state.go('main.folders.byentity.details', {
-                                entity: context.entityName,
-                                entityId: officeId,
-                                id: folder._id
-                            }, {
-                                reload: true
-                            });
-                        }
                     }
+                }
                 //}
             });
         };
@@ -360,10 +360,26 @@ angular.module('mean.icu.ui.folderdetails', [])
 
         $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
+        $scope.enableRecycled = true;
+        $scope.havePermissions = function(type, enableRecycled){
+            enableRecycled = enableRecycled || !$scope.isRecycled;
+            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+        };
+
+        $scope.haveEditiorsPermissions = function(){
+            return PermissionsService.haveEditorsPerms($scope.entity);
+        };
+
+        $scope.permsToSee = function(){
+            return PermissionsService.haveAnyPerms($scope.entity);
+        };
+
         if ($scope.folder &&
             ($state.current.name === 'main.folders.all.details' ||
-            $state.current.name === 'main.search.folder' ||
-            $state.current.name === 'main.folders.byentity.details')) {
+                $state.current.name === 'main.search.folder' ||
+                $state.current.name === 'main.folders.byentity.details')) {
             $state.go('.activities');
         }
     });
+
+'use strict';

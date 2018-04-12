@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.templateDocdetails', [])
                                                       context,
                                                       $state,
                                                       TemplateDocsService,
+                                                      PermissionsService,
                                                       $stateParams) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("templateDocs")))
         {
@@ -19,11 +20,12 @@ angular.module('mean.icu.ui.templateDocdetails', [])
         {
             $scope.templateDoc = context.entity || entity;
         }
+        $scope.entity = entity || context.entity;
         $scope.tasks = tasks.data || tasks;
         $scope.folders = folders.data || folders;
         $scope.templateDocs = templateDocs.data || templateDocs;
         $scope.shouldAutofocus = !$stateParams.nameFocused;
-/** 
+/**
         TemplateDocsService.getStarred().then(function (starred) {
 
             // Chack if HI room created and so needs to show HI.png
@@ -44,6 +46,20 @@ angular.module('mean.icu.ui.templateDocdetails', [])
                 entityId: context.entityId
             });
         }
+
+        $scope.enableRecycled = true;
+        $scope.havePermissions = function(type, enableRecycled){
+            enableRecycled = enableRecycled || !$scope.isRecycled;
+            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+        };
+
+        $scope.haveEditiorsPermissions = function(){
+            return PermissionsService.haveEditorsPerms($scope.entity);
+        };
+
+        $scope.permsToSee = function(){
+            return PermissionsService.haveAnyPerms($scope.entity);
+        };
 
         $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
 
@@ -136,7 +152,7 @@ angular.module('mean.icu.ui.templateDocdetails', [])
                 }, {reload: true});
             });
         };
-                
+
 
 
 
@@ -243,7 +259,7 @@ angular.module('mean.icu.ui.templateDocdetails', [])
             };
             TemplateDocsService.updateTemplateDoc(templateDoc._id,json);
         };
-/** 
+/**
         $scope.update = function (templateDoc, context) {
             TemplateDocsService.update(templateDocId, context).then(function(res) {
                 if (TemplateDocsService.selected && res._id === TemplateDocsService.selected._id) {
