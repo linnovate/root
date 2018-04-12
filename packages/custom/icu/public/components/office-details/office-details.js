@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.officedetails', [])
                                                       context,
                                                       $state,
                                                       OfficesService,
+                                                      PermissionsService,
                                                       $stateParams,
                                                       ActivitiesService) {
         if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("offices")))
@@ -20,6 +21,7 @@ angular.module('mean.icu.ui.officedetails', [])
         {
             $scope.office = context.entity || entity;
         }
+        $scope.entity = entity || context.entity;
         $scope.tasks = tasks.data || tasks;
         $scope.folders = folders.data || folders;
         $scope.offices = offices.data || offices;
@@ -47,6 +49,20 @@ angular.module('mean.icu.ui.officedetails', [])
                 entityId: context.entityId
             });
         }
+
+        $scope.enableRecycled = true;
+        $scope.havePermissions = function(type, enableRecycled){
+            enableRecycled = enableRecycled || !$scope.isRecycled;
+            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+        };
+
+        $scope.haveEditiorsPermissions = function(){
+            return PermissionsService.haveEditorsPerms($scope.entity);
+        };
+
+        $scope.permsToSee = function(){
+            return PermissionsService.haveAnyPerms($scope.entity);
+        };
 
         $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
 
@@ -200,11 +216,11 @@ angular.module('mean.icu.ui.officedetails', [])
                                 backupEntity = JSON.parse(JSON.stringify($scope.office));
                                 // ActivitiesService.data = ActivitiesService.data || [];
                                 // ActivitiesService.data.push(result);
-    
+
                             });
-                        break; 
+                        break;
                 }
-                
+
             });
         };
 
