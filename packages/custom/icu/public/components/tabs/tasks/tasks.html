@@ -1,5 +1,5 @@
 <div class="tasks" ng-class="{ 'disabled' : !havePermissions('tab-content')}">
-    <div class="action-bar">
+    <div class="action-bar" ng-class="{ 'disabled' : !havePermissions('tags.manageTasks')}">
         <button class="orange-btn"
                 ng-click="manageTasks()">
             {{ 'manageTasks' | i18next}}
