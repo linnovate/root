@@ -58,6 +58,11 @@ angular.module('mean.icu.ui.rows', [])
                 $scope.me = me;
         });
 
+        $scope.recycled = function(entity){
+            if(entity.hasOwnProperty('recycled'))return true;
+            return false;
+        };
+
         $scope.havePermissions = function(entity, type){
             return PermissionsService.havePermissions(entity, type);
         };
