@@ -288,10 +288,12 @@ angular.module('mean.icu.ui.projectdetails', [])
 
             $state.go($scope.detailsState, {
                 id: project._id,
-                entity: $scope.currentContext.entityName,
-                entityId: $scope.currentContext.entityId,
+                entity: context.entityName,
+                entityId: context.entityId,
                 starred: $stateParams.starred
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         }
 
         $scope.star = function (project) {
