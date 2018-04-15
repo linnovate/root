@@ -6,7 +6,7 @@
 <td class="name"
     ng-attr-colspan="{{data.folder._id ? undefined : 5}}"
     title="{{data.folder.title}}"
-    ng-attr-contenteditable="{{!data.displayOnly}}"
+    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.folder)) && !recycled(data.project)}}"
     placeholder="{{'createNewFolder' | i18next}}"
     strip-br="true"
     ng-attr-tabindex="{{ data.folder._id ? undefined : '3'}}"
