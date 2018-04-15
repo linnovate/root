@@ -77,7 +77,7 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         }
 
-        $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
+        $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'completed', 'archived'];
 
         $scope.$watch('project.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {
