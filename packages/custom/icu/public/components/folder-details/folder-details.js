@@ -154,15 +154,19 @@ angular.module('mean.icu.ui.folderdetails', [])
             dateFormat: 'd.m.yy'
         };
 
-        $scope.getUnusedTags = function() {
+        function getUnusedTags() {
+            if(!$scope.tags || !$scope.tags.length)return [];
+            return $scope.tags.filter(function(x) {
+                return $scope.folder.tags.indexOf(x) < 0;
+            });
+        }
 
-            return $scope.tags.filter(function(x) { return $scope.folder.tags.indexOf(x) < 0 })
-        };
+        $scope.unUsedTags = getUnusedTags();
 
         $scope.addTagClicked=function(){
             $scope.setFocusToTagSelect();
             $scope.tagInputVisible=true;
-        }
+        };
 
         $scope.addTag = function(tag) {
             if(tag!=undefined && $.inArray(tag,$scope.folder.tags)==-1){
