@@ -409,7 +409,7 @@
         <div ng-if="folders.length !== 0" tooltips tooltip-template="{{'selectOffice' | i18next}}">
 
             <ui-select ng-model="officesList.office" on-select="changeOrder()" theme="bootstrap">
-                <ui-select-match placeholder="{{'chooseOffice' | i18next}}">
+                <ui-select-match placeholder="{{'selectOffice' | i18next}}">
                     {{$select.selected.title}}
                 </ui-select-match>
                 <ui-select-choices repeat="office in officesList | filter: $select.search">
