@@ -8,7 +8,7 @@
     <div class="page-content" ng-if="project._id && permsToSee">
         <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
-            <div class="favorite"lass="title>
+            <div class="favorite" class="title">
                 <button ng-class="{ 'orange': project.star }" ng-click="star(project)">
                     <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
                 </button>

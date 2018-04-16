@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.signaturesservice', [])
-.service('SignaturesService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('SignaturesService', function(ApiUri, $http, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService,NotifyingService) {
     var EntityPrefix = '/signatures';
     var data, selected;
 

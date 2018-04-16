@@ -41,7 +41,6 @@ angular.module('mean.icu.ui.membersfooter', [])
 
             function changePerms(entity, member, newPerms){
                 $scope.entity = PermissionsService.changeUsersPermissions(entity, member, newPerms, context);
-                $state.reload();
             }
 
             console.log("permissions: " + JSON.stringify($scope.entity.permissions,null,2)) ;

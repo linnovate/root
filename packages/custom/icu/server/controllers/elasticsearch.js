@@ -5,8 +5,16 @@ var mean = require('meanio'),
   system = require('./system');
 
 exports.save = function(doc, docType, room, title) {
+  // console.log("exports.save") ;
   var newDoc = JSON.parse(JSON.stringify(doc));
   delete newDoc._id;
+  // console.log("JSON.stringify(doc)") ;
+  // console.log(JSON.stringify(doc)) ;
+  let creator = ( doc.creator._id || doc.creator ) ; // comes both ways
+  newDoc.creator =  JSON.parse(JSON.stringify(creator));   
+  // console.log("JSON.stringify(newdoc)");
+  // console.log(JSON.stringify(newDoc)) ;
+  // delete newDoc.watchers ; // the mapping of watchers is irrelevant - and needs to be recreated/refactored as a list of uids.
   mean.elasticsearch.index({
     index: docType,
     type: docType,

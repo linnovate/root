@@ -45,7 +45,7 @@ var ProjectSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'in-progress', 'canceled', 'waiting-approval', 'completed', 'archived'],
+    enum: ['new', 'assigned', 'in-progress', 'canceled', 'waiting-approval', 'completed', 'archived'],
     default: 'new'
   },
   due: {
