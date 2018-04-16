@@ -104,19 +104,19 @@ angular.module('mean.icu.ui.officedocumentlist', [])
             return t.recycled == null ; 
         })
     
-        if (possibleNavigate.length) {            
+        if (possibleNavigate.length) {
             if ($state.current.name === 'main.officeDocuments.all' ||
                 $state.current.name === 'main.officeDocuments.byentity' ||
                 $state.current.name === 'main.officeDocuments.all.details.activities'||
                 $state.current.name === 'main.officeDocuments.byentity.details.activities') {
                 var date = new Date();
                 var lastIndex = possibleNavigate.length-1;
-                var diff = date.getTime()-possibleNavigate[lastIndex].created.getTime();
-                if(possibleNavigate[lastIndex].title=="" 
-                &&  diff<=2500){
+                var docDate = new Date(possibleNavigate[lastIndex].created);
+                var diff = date.getTime() - docDate.getTime();
+                if(possibleNavigate[lastIndex].title=='' && diff <= 2500) {
                     navigateToDetails(possibleNavigate[lastIndex]);
                 }
-                else{
+                else {
                     navigateToDetails(possibleNavigate[0]);
                 }                    
             }
