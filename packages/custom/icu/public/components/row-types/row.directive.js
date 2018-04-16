@@ -59,7 +59,7 @@ angular.module('mean.icu.ui.rows', [])
         });
 
         $scope.recycled = function(entity){
-            if(entity.hasOwnProperty('recycled'))return true;
+            if(entity && entity.hasOwnProperty('recycled'))return true;
             return false;
         };
 
