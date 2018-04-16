@@ -5,7 +5,6 @@ angular.module('mean.icu.ui.folderdetails', [])
                                                      people,
                                                      folders,
                                                      offices,
-                                                     tags,
                                                      $timeout,
                                                      context,
                                                      $state,
@@ -34,7 +33,9 @@ angular.module('mean.icu.ui.folderdetails', [])
             'class': 'create-new',
             'color': 'rgb(0, 151, 167)'
         });
-        $scope.tags = tags;
+        FoldersService.getTags().then(result=>{
+            $scope.tags = result;
+        });
 
         $scope.tagInputVisible = false;
 
@@ -362,8 +363,10 @@ angular.module('mean.icu.ui.folderdetails', [])
 
         $scope.enableRecycled = true;
         $scope.havePermissions = function(type, enableRecycled){
-            enableRecycled = enableRecycled || !$scope.isRecycled;
-            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+            if(entity){
+                enableRecycled = enableRecycled || !$scope.isRecycled;
+                return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+            }
         };
 
         $scope.haveEditiorsPermissions = function(){

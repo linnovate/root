@@ -2,8 +2,8 @@
 
 angular.module('mean.icu.ui.officeDocumentdetails', [])
     .controller('OfficeDocumentDetailsController', function ($scope,
-                                                      entity,
                                                       $rootScope,
+                                                      entity,
                                                       tasks,
                                                       people,
                                                       officeDocuments,

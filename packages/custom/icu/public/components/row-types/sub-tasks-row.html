@@ -2,7 +2,7 @@
 <td class="name"
     title="{{data.task.title}}"
     ng-attr-colspan="{{data.task._id ? undefined : 6}}"
-    ng-attr-contenteditable="{{!data.displayOnly}}"
+    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.task)) && !recycled(data.task)}}"
     placeholder="{{'createNewTask' | i18next}}"
     strip-br="true"
     ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
@@ -46,13 +46,13 @@
     <input ng-click="data.open(data.task)" ui-date="data.dueOptions(data.task)" ng-model="data.task.due" placeholder="{{ 'deadline' | i18next }}" ng-class='{"oldDate":data.checkDate(data.task)}'>
     <div id="past{{data.task._id}}" class="past">
         {{'This Deadline is in the past!' | i18next }}
-        <div id="close" ng-click="data.closeOldDateNotification(data.task)">x</div>    
+        <div id="close" ng-click="data.closeOldDateNotification(data.task)">x</div>
     </div>
 </td>
 
 <td class="arrow" ng-if="data.task._id" ng-click="data.changeState(data.task)">
     <div class="row-arrow"></div>
-</td> 
+</td>
 <td class="delete">
  <img src="/icu/assets/img/X.png" ng-if="data.task._id && data.task.showDelete" ng-click="data.delete(data.task)">
 </td>

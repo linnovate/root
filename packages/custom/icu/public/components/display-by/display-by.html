@@ -412,8 +412,8 @@
                 <ui-select-match placeholder="{{'chooseOffice' | i18next}}">
                     {{$select.selected.title}}
                 </ui-select-match>
-                <ui-select-choices ng-show="focus" repeat="office in officesList | filter: $select.search">
-                    <div>{{office.title | i18next | uppercase}}</div>
+                <ui-select-choices repeat="office in officesList | filter: $select.search">
+                    <div ng-bind-html="office.title | i18next | uppercase"></div>
                 </ui-select-choices>
             </ui-select>
 
@@ -427,8 +427,8 @@
                     data-ng-click="switchTo('folder', folder._id)"
                     ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)"
                 >
-                    <a href class="Names-In-List-On-Side">
-                        {{folder.title}}
+                    <a href class="Names-In-List-On-Side"
+                       ng-bind-html="folder.title">
                     </a>
                     <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
                 </li>

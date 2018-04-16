@@ -166,36 +166,6 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.createLists();
         }, $scope);
 
-        $scope.createLists = function(){
-            $scope.projectsList = [];
-            $scope.projects.forEach(function(project) {
-                       if(project.title)
-                         $scope.projectsList.push(project);
-                    });
-
-            $scope.officesList = [];
-            $scope.offices.forEach(function(office) {
-                if(office.title)
-                    $scope.officesList.push(office);
-                });
-
-            $scope.foldersList = [];
-            $scope.folders.forEach(function(folder) {
-                if(folder.title)
-                    $scope.foldersList.push(folder);
-                });
-
-            $scope.officeDocumentsList = [];
-            $scope.officeDocuments.forEach(function(officeDocument) {
-                if(officeDocument.title)
-                   $scope.officeDocumentsList.push(officeDocument);
-                });
-
-            if($scope.officesList.length > 0)
-            {
-                $scope.officesList.office = $scope.officesList[0];
-            }
-        };
         $scope.createLists();
 
         $scope.focus = false;
