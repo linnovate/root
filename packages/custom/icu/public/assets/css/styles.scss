@@ -74,7 +74,9 @@ table {
     // float: left;
 // }
 .icu-data {
-    display: flex;
+  display: flex;
+  height: 100%;
+  overflow: hidden;
 }
 .panes-wrapper {
     // margin-left: $sidepane-width;

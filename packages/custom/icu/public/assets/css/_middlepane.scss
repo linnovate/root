@@ -41,7 +41,9 @@
 
     height: 100%;
     background-color: $cream;
-    // float: left;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     position: relative;
     transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
 
@@ -157,7 +159,8 @@
     }
 
     .middlepane-container {
-        height: calc(100% - 60px);
+        height: 100%;
+        overflow: hidden;
     }
 
     .header-wrap {
@@ -355,5 +358,6 @@
 
     .full-height {
         height: 100%;
+        overflow: hidden;
     }
 }

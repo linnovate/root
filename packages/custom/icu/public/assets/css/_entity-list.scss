@@ -1,16 +1,19 @@
 .task-list, .discussion-list, .project-list, .sub-task-list, .folder-list, .officeDocument-list, .templateDoc-list, .office-list {
 
     height: 100%;
-
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     .entity-list-container {
-        &.big {
-            height: calc(100% - 150px);
-        }
-
-        &.small {
-            height: calc(100% - 150px);
-        }
-
+        //&.big {
+        //    height: calc(100% - 150px);
+        //}
+        //
+        //&.small {
+        //    height: calc(100% - 150px);
+        //}
+        height: 100%;
+        overflow-y: auto;
         .list-table {
             height: 100%;
             overflow-x: hi;
@@ -80,6 +83,13 @@
                         &.name {
                             padding-left: 10px;
                         }
+                    }
+                    &.sticky {
+                        position: absolute;
+                        left: 0;
+                        bottom:0;
+                        background: #fff;
+                        width: 100%;
                     }
                 }
 
