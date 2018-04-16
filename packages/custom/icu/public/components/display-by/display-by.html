@@ -28,7 +28,7 @@
 
         <div class="filterActive">
             <div class="subtitle">{{'filterByActiveStatus' | i18next}}</div>
-            <div class="clear" ng-cliui-select-matchck="showM('empty');filterActive('All');$root.status = null;filterSearchByType(true);">{{'clear' | i18next}}</div>
+            <div class="clear" ng-click="showM('empty');filterActive('All');$root.status = null;filterSearchByType(true);">{{'clear' | i18next}}</div>
             <div class="select-wrapper select-wrapper-active-status">
                  <ul ng-class="{'main-status':AllStatus.length}">
                     <li ng-repeat="field in activeToggleList" ng-if='field.title!="All"'>
