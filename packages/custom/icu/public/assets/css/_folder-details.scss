@@ -11,6 +11,10 @@
                     width: calc((100% - 60px) / 3);
                 }
             }
+        } 
+        .dropdown-menu {
+            left: 0;
+            right: auto;
         }
     }
 }
