@@ -127,7 +127,9 @@ angular.module('mean.icu.data.permissionsservice', [])
                 entity.permissions.push(newPerms);
             }
             var serviceName = serviceMap[$stateParams.id ? context.main : context.entityName];
-            serviceName.update(entity);
+            var clonedEntity = JSON.parse(JSON.stringify(entity));
+
+            serviceName.update(clonedEntity);
             return entity;
         }
 
