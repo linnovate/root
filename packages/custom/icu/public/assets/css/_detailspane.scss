@@ -19,6 +19,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     top: 0;
     right: 0;
 
+    @media screen and (max-width: $small-resolution) {
+        min-width:$detailspane-width;
+    }
+
     textarea {
         resize: none;
     }
