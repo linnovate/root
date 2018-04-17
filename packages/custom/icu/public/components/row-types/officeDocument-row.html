@@ -20,8 +20,8 @@
 <td class="folder">
     <span class="tag folder"
           title="{{data.officeDocument.folder.title}}"
-          ng-style="{'background-color': '#' + data.officeDocument.folder.color, 'color': 'white'}">
-        {{data.officeDocument.folder.title}}
+          ng-style="{'background-color': '#' + data.officeDocument.folder.color, 'color': 'white'}"
+          ng-bind-html="data.officeDocument.folder.title">        
     </span>
 </td>
 
