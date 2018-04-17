@@ -23,6 +23,14 @@ angular.module('mean.icu.ui.membersfooter', [])
             $scope.hideAddButton = context.main=="templateDocs" ? false:true;
             $scope.me = UsersService.getMe().$$state.value;
 
+            UsersService.getAll().then(users=>{
+                for(var i = 0; i < $scope.entity.watchers.length; i++){
+                    if(typeof $scope.entity.watchers[i] === 'string'){
+                        $scope.entity.watchers[i] = _.find(users, { '_id': $scope.entity.watchers[i]});
+                    }
+                }
+            });
+
             function changePerms(member, newPerms){
                 $scope.entity = PermissionsService.changeUsersPermissions($scope.entity, member, newPerms, context);
             }
