@@ -35,7 +35,6 @@
 }
 
 .middlepane {
-    max-width: calc(100% - #{$detailspane-width});
     width:100%;
     min-width: 430px;
 
