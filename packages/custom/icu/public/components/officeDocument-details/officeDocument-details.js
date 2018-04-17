@@ -336,11 +336,12 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 entityId: $scope.currentContext.entityId,
                 starred: $stateParams.starred
             }, {reload: true});
+            
         }
 
         $scope.star = function (officeDocument) {
             OfficeDocumentsService.star(officeDocument).then(function () {
-                navigateToDetails(officeDocument);
+//                navigateToDetails(officeDocument);
             });
         };
 
