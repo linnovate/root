@@ -84,7 +84,7 @@
             </div>
             <div class="receive" ng-if="officeDocument.status == 'received' && officeDocument.viewed != true">
                 <button icu-open-modal entity-name="officeDocument" people="people" show-modal="true" modal-name="receive" send="false" receive="true" data="officeDocument" send-fn="receiveDocument(officeDocument)"
-                    class="sendBtn">{{ 'receive' | i18next }}</button>
+                    class="sendBtn" ng-class="{ 'enabled' : !isRecycled}">{{ 'receive' | i18next }}</button>
             </div>
             <div class="dropdown dropdown-container" uib-dropdown
                  ng-class="{ 'enabled' : haveEditiorsPermissions()}">
