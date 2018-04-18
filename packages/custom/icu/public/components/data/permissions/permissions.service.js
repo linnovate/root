@@ -126,10 +126,22 @@ angular.module('mean.icu.data.permissionsservice', [])
                 };
                 entity.permissions.push(newPerms);
             }
-            var serviceName = serviceMap[$stateParams.id ? context.main : context.entityName];
+            var typeOfService = $stateParams.id ? context.main : context.entityName ;
+            var serviceName = serviceMap[typeOfService];
             var clonedEntity = JSON.parse(JSON.stringify(entity));
+            console.log("changeUsersPermissions", serviceName, clonedEntity)
+            console.log(typeOfService) ;
+            
+            
+            if(typeOfService == 'officeDocuments') {
+                // Artium - see bug in documents:
+                // adding 2 watchers one after the other - the permissions array give only 2 items in perms array.
+                serviceName.updateWatcherPerms(clonedEntity, user, user, 'updateWatcherPerms') ;
+            }
+            else {
+                serviceName.update(clonedEntity);
+            }
 
-            serviceName.update(clonedEntity);
             return entity;
         }
 

@@ -46,6 +46,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
          }
 
         function update(officeDocument) {
+            console.log("OfficeDocumentsService.update")
             return $http.put(ApiUri + EntityPrefix + '/' + officeDocument._id, officeDocument).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
@@ -150,6 +151,13 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function update(entity, data) {	
+            return $http.post(ApiUri + EntityPrefix + "/" +entity._id, data).then(function (result) {	
+                WarningsService.setWarning(result.headers().warning);	
+                return result.data;	
+            });	
+        }
+
         function uploadFileToDocument(data,file){
             return Upload.upload({
                 url: '/api/officeDocuments/uploadFileToDocument',
@@ -186,12 +194,30 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         }
 
         function updateWatcher(officeDocument, me, watcher, type) {
+            console.log("OfficeDocumentsService.updateWatcher", officeDocument, me, watcher, type)
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: type || 'updateWatcher',
                     userObj: watcher
+                },
+                context: {}
+            }).then(function(result) {
+                return result;
+            });
+        }
+
+        function updateWatcherPerms(officeDocument, me, watcher, type) {
+            console.log("OfficeDocumentsService.updateWatcherPerms", officeDocument, me, watcher, type)
+
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocuments',
+                    issueId: officeDocument._id,
+                    type: 'updateWatcherPerms',
+                    userObj: watcher,
+                    permissions: officeDocument.permissions
                 },
                 context: {}
             }).then(function(result) {
@@ -365,6 +391,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             uploadFileToDocument:uploadFileToDocument,
             update:update,
             updateWatcher: updateWatcher,
+            updateWatcherPerms: updateWatcherPerms,
             updateStatus: updateStatus,
             updateDue: updateDue,
             uploadDocumentFromTemplate:uploadDocumentFromTemplate,
