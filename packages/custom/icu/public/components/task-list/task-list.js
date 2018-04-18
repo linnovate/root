@@ -12,17 +12,17 @@ angular.module('mean.icu.ui.tasklist', [])
 	$scope.activeToggleList = EntityService.activeToggleList;
 	$scope.activeToggle = {
 			 field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
-			 disabled: !EntityService.isActiveStatusAvailable() 
+			 disabled: !EntityService.isActiveStatusAvailable()
 	};
 	/*---*/
-		
+
 	if ($scope.tasks.length > 0 && !$scope.tasks[$scope.tasks.length - 1].id) {
 		$scope.tasks = [$scope.tasks[0]];
 	}
 	$scope.getFilter = function() {
 		var a = TasksService.filterValue;
 		switch(a) {
-			case 'today': 
+			case 'today':
 				return 'tasksDueToday';
 			case 'week':
 				return 'tasksDueThisWeek';
@@ -97,7 +97,7 @@ angular.module('mean.icu.ui.tasklist', [])
 				}
 			}
 
-            
+
 			}
 		}
 		else {
@@ -214,7 +214,7 @@ angular.module('mean.icu.ui.tasklist', [])
 		/*Made By OHAD - Needed for reversing sort*/
 		$state.go($state.current.name, { sort: $scope.sorting.field });
 	};
-	
+
 
 	$scope.sorting = {
 		field: $stateParams.sort || 'created',
@@ -270,31 +270,37 @@ angular.module('mean.icu.ui.tasklist', [])
 
 	$scope.filterActive = function () {
 		EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
-		$state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
+		$state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
 	};
 
 	$scope.print = function() {
 		$window.print()
 	}
-	
+
 	$scope.excel = function() {
 		TasksService.excel();
 		var me;
 		UsersService.getMe().then(function (me1) {
             me = me1;
 			window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
-        });	
+        });
 	}
 
+
+    if(typeof $scope.tasks == 'object' && !Array.isArray($scope.tasks)){
+        var clone = JSON.parse(JSON.stringify($scope.tasks));
+        $scope.tasks = [];
+        $scope.tasks.push(clone);
+    }
 	let possibleNavigate = $scope.tasks.filter(function(t) {
-		return t.recycled == null ; 
+		return t.recycled == null ;
 	})
 
 	if (possibleNavigate.length) {
 		if ($state.current.name === 'main.tasks.all' ||
 			$state.current.name === 'main.tasks.byentity') {
 			// navigate to first task on details
-			
+
 			navigateToDetails(possibleNavigate[0]);
 	}
 	} else if (
