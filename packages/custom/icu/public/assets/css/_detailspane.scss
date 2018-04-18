@@ -344,7 +344,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     border-bottom: 1px solid $light-grey1;
     background-color: #F6F6F6;
     position: relative;
-    z-index: 2;
+    z-index: 3;
 
     .favorite, .deletebtn, .due, .status, .tags, .color, .location , .HI , .send, .receive {
         height: $panel-height;
@@ -1130,7 +1130,9 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             display: table-cell;
             vertical-align: middle;
         }
-
+        .button {
+            width: 30px;
+        }
         .list {
             padding: 5px 25px;
 
@@ -1685,6 +1687,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     margin: 0 22px 0;
     position: relative;
     display: inline-block;
+    z-index: 2;
     .tag-wrap {
         transition: 0.3s;
     }
