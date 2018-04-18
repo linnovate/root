@@ -1,6 +1,6 @@
 .sub-projects {
-    margin: 0 28px;
-    margin-top: 13px;
+    margin: 13px 20px 0;
+    position: relative;
     .add-sub-projects{
         color: #fda102;
         font-size: 14px;
@@ -10,16 +10,17 @@
         &:hover {
             text-decoration: underline;
         }
-        }.open{
-            div.dropdown-trigger{
-               border-color: #fda102 ;
-               background-color: #fda102;
-               i{
-                   color: #fff;
-               }
+    }
+    .open{
+        div.dropdown-trigger{
+           border-color: #fda102 ;
+           background-color: #fda102;
+           i{
+               color: #fff;
            }
-       }
-       .sub-project-dir {
+        }
+    }
+    .sub-project-dir {
         max-height: 247px;
         overflow: auto;
     }
@@ -204,74 +205,95 @@
         icu-sub-project-list {
             margin-top: 7px;
         }
-        table tr {
-            position: relative;
-        }
-        /*table tr:hover{
-                .delete{
-                    display: inline-block;
+        table {
+            display: flex;
+            tbody {
+                width: 100%;
+                tr {
+                    position: relative;
                 }
-                }*/
-                table tbody {
-                    border: 1px solid #e1e1e1;
-                    td {
-                        border-top: 1px solid #e1e1e1;
-                        img{
-                            margin-top: 100%;
-                        }
+            }
+        }
+            table tbody {
+                border: 1px solid #e1e1e1;
+            }
+            .id {
+                display: none;
+            }
+           .name {
+               cursor: text;
+               flex: 1;
+               white-space: nowrap;
+               overflow: hidden;
+               text-overflow: ellipsis;
+               line-height: 50px;
+               padding-left: 13px;
+               p {
+                   flex: 1;
+                   white-space: nowrap;
+                   overflow: hidden;
+                   text-overflow: ellipsis;
+               }
+           }
+            .user {
+                position: relative;
+                width: 140px;
+                margin-left: 10px;
+                height: 51px;
+                .no-assignee {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 51px;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    .avatar-placeholder {
+                        background: url(/icu/assets/img/icon-people.png) no-repeat center center;
+                        height: 24px;
+                        width: 24px;
+                        border-radius: 50%;
+                        padding: 0;
+                        border: 1px solid $light-grey-placeholder;
                     }
                 }
-                .id {
-                   width: 8%;
-                   border-right: none;
-               }
-               .name {
-                width:30%;
-                border-left: none;
-            }
-            .user {
-              position: relative;
-              width: 18%;
-              .no-assignee {
-                position: absolute;
-                transform: translateY(-65%);
-                top: 31px;
-                width: calc(100% - 10px);
-                margin-left: 10px;
-
-                .avatar-placeholder {
-                    background: url(/icu/assets/img/user.png) no-repeat scroll;
-                    height: 26px;
-                    padding: 5px 0 5px 35px;
-                    color: $light-grey-placeholder;
-                    display: table;
-                    width: 100%;
-                    background-position: left;
-                }
-
-            }
             .ui-select-placeholder {
                 position: absolute;
                 left: 50%;
-                transform: translateX(-50%) translateY(-65%);
-                top: 50%;
             }
             .ui-select-bootstrap .ui-select-toggle {
                 padding-right: 0;
                 padding-left: 0;
-                padding-top: 4px;
+                height: 51px;
+                border: none;
+                box-shadow: none;
+                display: flex;
+                align-items: center;
             }
             .pull-left {
                 float: left !important;
             }
-
+            .ui-select-container {
+                .ui-select-match {
+                    .ui-select-match-text {
+                        height: auto;
+                        margin: 0;
+                        width: 100%;
+                        .summary-content {
+                            width: 100%;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        }
+                    }
+                }
+            }
             .avatar {
                 height: 26px;
                 width: 26px;
                 background-color: $green;
                 border-radius: 15px;
                 display: inline-block;
-                margin: 0 10px;
+                margin: 0 20px 0 0;
                 float: left;
                 font-size: 20px;
                 line-height: 25px;
@@ -285,20 +307,30 @@
             }
         }
         .status {
-          width: 18%;
-          padding-left: 7px;
-          .ui-select-container.ui-select-bootstrap {
-            .ui-select-match .ui-select-toggle {
-                float: right;
-                width: calc(100% - 10px);
-        /*height: 30px;
-        position: absolute;
-        right: 50%;*/
-        /*transform: translateX(50%) translateY(15%);*/
-        i.caret {
-            display: none;
-        }
-    }
+            width: 115px;
+            margin-left: 10px;
+            .ui-select-container.ui-select-bootstrap {
+                .ui-select-match .ui-select-toggle {
+                    //float: right;
+                    //width: calc(100% - 10px);
+                    border: none;
+                    box-shadow: none;
+                    height: auto;
+                    /*height: 30px;
+                    position: absolute;
+                    right: 50%;*/
+                    /*transform: translateX(50%) translateY(15%);*/
+                    i.caret {
+                        display: none;
+                    }
+                    .ui-select-match-text {
+                        display: flex;
+                        align-items: center;
+                        i {
+                            margin-right: 9px;
+                        }
+                    }
+                }
     i{
         -webkit-mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
         mask: url(/icu/assets/img/icon-flag.svg) no-repeat;
@@ -334,7 +366,10 @@
 }
 }
 .due {
-    width: 18%;
+    width: 80px;
+    margin-left: 15px;
+    font-weight: normal;
+    font-size: 13px;
 
     #close {
         float: right !important;
@@ -364,12 +399,8 @@
         float: right;
         width: calc(100% - 10px);
         margin-left: 10px;
-        padding: 17px 0;
-        padding-left: 25px;
-        background: url(/icu/assets/img/calendar.png) no-repeat scroll;
         cursor: pointer;
         outline: none;
-        background-position: left center;
     }
     .past {position: absolute;
         top: 341px;
@@ -401,19 +432,27 @@
     }
 }
 .arrow {
-    width: 22%;
-    padding-left: 10px;
-
+    width: 30px;
+    margin-left: 10px;
+    border-left: 1px solid #E1E1E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    .row-arrow {
+        width: 16px;
+        height: 16px;
+        background: url('/icu/assets/img/table-row-arrow.png') no-repeat center center;
+    }
 }
 .delete {
- width: 25px;
- height: 55px;
- /*position: absolute;*/
- right: 3%;
- border: none;
- img {
-    margin: 70% 0;
-}
+    width: 25px;
+    height: 55px;
+    right: 3%;
+    border: none;
+    img {
+        margin: 70% 0;
+    }
 }
 .isNew {
     background-color: #E1F2F8;
