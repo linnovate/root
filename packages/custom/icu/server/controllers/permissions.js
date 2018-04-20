@@ -258,6 +258,32 @@ exports.createContent = function(user, oldDoc, newDoc) {
     return deffered.promise;                
   }
 
+  if(newDoc.type == 'updateWatcherPerms' && newDoc.issue == 'officeDocuments') {
+    console.log("HAPPY HAPPY updateWatcherPerms") ;
+    let Model = entityNameMap['officeDocument'].mainModel;
+    Model.findOne({'_id': newDoc.issueId},function(err,doc){
+      let oldPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
+      if(!exports.allowUpdateWatcher(user, oldPerms)) {
+        console.log("updated perms array - not allowed");
+        deffered.reject() ;
+        return deffered.promise ;
+      }  
+
+      console.log("newDoc permissions???") ;
+      console.log(JSON.stringify(newDoc.permissions)) ;
+      doc.permissions = newDoc.permissions ;
+      doc.save(function(err,result){
+        if(err){
+          deffered.reject() ;
+        }
+        else { 
+          deffered.resolve(doc) ;
+        }
+      });
+    })
+    return deffered.promise ;        
+  }
+
   if(newDoc.type == 'updateWatcher' && newDoc.issue == 'officeDocuments') {
     // this piece of code is designed to UPDATE watchers/permissions for new officeDoc watchers.
     let newUid = newDoc.userObj._id ? newDoc.userObj._id : newDoc.userObj ;
@@ -283,15 +309,13 @@ exports.createContent = function(user, oldDoc, newDoc) {
       // console.log(JSON.stringify(doc));      
       
       doc.save(function(err,result){
-//         todo        
-//         if(err){
-//         }
-//         else{          
-//         }
-//         return deffered.promise;
+        if(err){
+          deffered.reject() ;
+        }
+        else { 
+          deffered.resolve(newDoc) ;
+        }
       });
-      deffered.resolve(newDoc) ;  
-      return deffered.promise;        
     })
     return deffered.promise;        
   }
@@ -312,7 +336,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
       // console.log(JSON.stringify(doc['permissions']));
       // console.log("--------------------");
 
-      if(exist == null) {
+      if(exist == null) { 
         // cannot find removed watcher - this shouldnt happen
         deffered.reject(exports.permError.system) ;  
         return deffered.promise;
@@ -323,15 +347,13 @@ exports.createContent = function(user, oldDoc, newDoc) {
       // console.log(JSON.stringify(doc['permissions']));
       // console.log("--------------------");
       doc.save(function(err,result){
-//         todo        
-//         if(err){
-//         }
-//         else{          
-//         }
-//         return deffered.promise;
+        if(err){
+          deffered.reject() ;
+        }
+        else { 
+          deffered.resolve(newDoc) ;
+        }
       });
-      deffered.resolve(newDoc) ;  
-      return deffered.promise;        
     })
     return deffered.promise;        
   }
