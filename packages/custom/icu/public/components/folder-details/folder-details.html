@@ -104,7 +104,6 @@
                  ng-model="folder.description"
                  options="{{options}}">
             </div>
-        </div>
             <div class="tags"
                  ng-class="{ 'disabled' : !havePermissions('tags')}">
                 <ul class="list">
@@ -117,7 +116,7 @@
                     </li>
                     <li class="new-tag-input" ng-show="tagInputVisible" >
                         <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" autofocus=true on-select="addTag(newTag)"
-                        test tag-on-blur="true">
+                                   test tag-on-blur="true">
                             <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
                             <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
                                 {{tag}}
@@ -133,6 +132,7 @@
                     </button>
                 </div>
             </div>
+        </div>
         <div class="tabs"
              ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}">
         <div class="switcher">
