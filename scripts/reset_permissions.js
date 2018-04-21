@@ -20,8 +20,8 @@ const entityNames = [
     'templates',
     'offices',
     'folders',
-    'officeDocuments',
-    'templateDocs'
+    'documents',
+    'template_docs'
 ];
 
 
