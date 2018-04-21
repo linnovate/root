@@ -6,7 +6,6 @@
 <td class="name"
     ng-attr-colspan="{{data.discussion._id ? undefined : 2}}"
     title="{{data.discussion.title}}"
-    ng-attr-contenteditable="{{!data.displayOnly}}"
     ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.discussion)) && !recycled(data.discussion)}}"
     placeholder="{{'createNewDiscussion' | i18next}}"
     strip-br="true"
