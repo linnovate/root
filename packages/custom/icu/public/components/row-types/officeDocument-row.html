@@ -12,8 +12,8 @@
     ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.officeDocument)) && !recycled(data.officeDocument)}}"
     strip-br="true"
     ng-change="data.searchCb(data.officeDocument.title) || data.updateCb(data.officeDocument)"
-    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-model="data.officeDocument.title"  
+    ng-keydown="data.focusAutoCompleteCb($event, data.officeDocument) || data.onEnterCb($event, data.index)"
+    ng-model="data.officeDocument.title"
     ng-blur="data.hideAutoCompleteCb(data.officeDocument)">
 </td>
 
@@ -21,7 +21,7 @@
     <span class="tag folder"
           title="{{data.officeDocument.folder.title}}"
           ng-style="{'background-color': '#' + data.officeDocument.folder.color, 'color': 'white'}"
-          ng-bind-html="data.officeDocument.folder.title">        
+          ng-bind-html="data.officeDocument.folder.title">
     </span>
 </td>
 
