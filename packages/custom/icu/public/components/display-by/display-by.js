@@ -7,7 +7,8 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.statusList = SettingServices.getStatusList();
         $scope.activeList = SettingServices.getActiveStatusList();
         $scope.archiveList = SettingServices.getNonActiveStatusList();
-       
+        $scope.userFilterList = SettingServices.getUserFilter();
+
         $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
             $scope.context = context;
             $scope.folders = folders;
@@ -18,7 +19,7 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.people = people;
         });
         $rootScope.$on('changeStatus',function(){
-          $scope.AllStatus = $scope.statusList[$scope.filteringData.issue]
+          $scope.AllStatus = $scope.statusList[$scope.filteringData.issue];
         });
 
         function arrayUnique(array) {
@@ -37,23 +38,32 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.clearDateRange = function(){
             SearchService.filterDateOption = null;
             $scope.datePicker.date = {startDate: null, endDate: null};
-        }
+        };
 
         $scope.clearDueDate = function(){
           $scope.dueDate = null;
           SearchService.filteringByDueDate = null;
-        }
+        };
 
         $scope.clearUpdatedDate = function(){
             $scope.updatedDate = null;
             SearchService.filteringByUpdated = null;
-          }
+        };
 
-          $scope.clearRecycled = function(){
-              $location.search('recycled',null);
-              $window.location.reload();
-          }
-          $scope.tmpStatus = [];
+        //clearing default date filter
+        $scope.clearDateRange();
+        $scope.clearDueDate();
+        $scope.clearUpdatedDate();
+
+        $scope.turnOffRecycle = function () {
+            var query = SearchService.getQuery();
+            $scope.recycled = false;
+            $scope.isRecycled = false;
+            // $state.go('main.search', {reload: true});
+            $state.go('main.search', {reload: true, query: query});
+        };
+
+        $scope.tmpStatus = [];
 
           $scope.statusListCahnge = function(type){
             var index;
@@ -64,7 +74,6 @@ angular.module('mean.icu.ui.displayby', [])
                       index = $scope.activeList.indexOf(type);
                       $scope.activeList.splice(index , 1);
                   }
-              
             }
             else if($scope.currentType == 'nonactive'){
                 // archiveList.push(type);
@@ -74,40 +83,37 @@ angular.module('mean.icu.ui.displayby', [])
                    index = $scope.archiveList.indexOf(type);
                    $scope.archiveList.splice(index , 1);
                 }
-               
             }
             else {
-                $scope.currentType = 'All';
-                if ($scope.tmpStatus.indexOf(type) < 0)
-                  $scope.tmpStatus.push(type);
+                $scope.currentType = 'all';
+                if ($scope.userFilterList.indexOf(type) < 0)
+                    $scope.userFilterList.push(type);
                 else {
-                   index = $scope.tmpStatus.indexOf(type);
-                   $scope.tmpStatus.splice(index , 1);
+                   index = $scope.userFilterList.indexOf(type);
+                    $scope.userFilterList.splice(index , 1);
                 }
-               
             }
-        }
+        };
 
         $scope.isActive = function(type, status){
             if ( status !== 'active' && status !== 'nonactive' && $scope.tmpStatus.length && $scope.tmpStatus.indexOf(type)> -1)
                 return true;
             if (status !== 'active' && status !== 'nonactive' && status == type)
-            return true;
-            else  if (status !== 'active' && status !== 'nonactive' && status !== type)
-            return false;
-            else {
-                if($scope.currentType == 'All')
-                return false;
-            if($scope.currentType == 'active'){
-                if ($scope.activeList.indexOf(type) >-1)
-                    return true;
-            }
-            if($scope.currentType == 'nonactive'){
-                if ($scope.archiveList.indexOf(type) >-1)
                 return true;
-            } 
+            else {
+                if($scope.currentType == 'all') {
+                    if ($scope.userFilterList.indexOf(type) > -1)
+                        return true;
+                }
+                if($scope.currentType == 'active'){
+                    if ($scope.activeList.indexOf(type) >-1)
+                        return true;
+                }
+                if($scope.currentType == 'nonactive'){
+                    if ($scope.archiveList.indexOf(type) >-1)
+                    return true;
+                }
             }
-
             return false;
         }
 
@@ -119,9 +125,10 @@ angular.module('mean.icu.ui.displayby', [])
               $scope.AllStatus = [];
               $scope.activeList = SettingServices.getActiveStatusList();
               $scope.archiveList = SettingServices.getNonActiveStatusList();
+              $scope.userFilterList = SettingServices.getUserFilter();
             }
             else if ($location.search().type)
-              $scope.AllStatus = $scope.statusList[$scope.filteringData.issue]
+              $scope.AllStatus = $scope.statusList[$scope.filteringData.issue];
             else $scope.AllStatus =  arrayUnique($scope.activeList.concat($scope.archiveList));
             $scope.tmpStatus = [];
         }
@@ -159,36 +166,6 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.createLists();
         }, $scope);
 
-        $scope.createLists = function(){
-            $scope.projectsList = [];
-            $scope.projects.forEach(function(project) {
-                       if(project.title)
-                         $scope.projectsList.push(project);
-                    });
-
-            $scope.officesList = [];
-            $scope.offices.forEach(function(office) {
-                if(office.title)
-                    $scope.officesList.push(office);
-                });
-
-            $scope.foldersList = [];
-            $scope.folders.forEach(function(folder) {
-                if(folder.title)
-                    $scope.foldersList.push(folder);
-                });
-
-            $scope.officeDocumentsList = [];
-            $scope.officeDocuments.forEach(function(officeDocument) {
-                if(officeDocument.title)
-                   $scope.officeDocumentsList.push(officeDocument);
-                });
-
-            if($scope.officesList.length > 0)
-            {
-                $scope.officesList.office = $scope.officesList[0];
-            }
-        };
         $scope.createLists();
 
         $scope.focus = false;

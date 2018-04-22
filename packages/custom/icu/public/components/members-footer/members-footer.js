@@ -23,26 +23,33 @@ angular.module('mean.icu.ui.membersfooter', [])
             $scope.hideAddButton = context.main=="templateDocs" ? false:true;
             $scope.me = UsersService.getMe().$$state.value;
 
+            UsersService.getAll().then(users=>{
+                for(var i = 0; i < $scope.entity.watchers.length; i++){
+                    if(typeof $scope.entity.watchers[i] === 'string'){
+                        $scope.entity.watchers[i] = _.find(users, { '_id': $scope.entity.watchers[i]});
+                    }
+                }
+            });
+
+            function changePerms(member, newPerms){
+                $scope.entity = PermissionsService.changeUsersPermissions($scope.entity, member, newPerms, context);
+            }
+
             $scope.userPermissionStatus = function(member){
                 if(member) return PermissionsService.getPermissionStatus(member, $scope.entity) || "";
             };
 
-            $scope.setEditor = function(entity, user){
-                return changePerms(entity, user, 'editor');
+            $scope.setEditor = function(user){
+                return changePerms(user, 'editor');
             };
 
-            $scope.setCommenter = function(entity, user){
-                return changePerms(entity, user, 'commenter');
+            $scope.setCommenter = function(user){
+                return changePerms(user, 'commenter');
             };
 
-            $scope.setViewer = function(entity, user){
-                return changePerms(entity, user, 'viewer');
+            $scope.setViewer = function(user){
+                return changePerms(user, 'viewer');
             };
-
-            function changePerms(entity, member, newPerms){
-                $scope.entity = PermissionsService.changeUsersPermissions(entity, member, newPerms, context);
-                $state.reload();
-            }
 
             console.log("permissions: " + JSON.stringify($scope.entity.permissions,null,2)) ;
             var groupTypes = config.circles.footer;
@@ -161,16 +168,6 @@ angular.module('mean.icu.ui.membersfooter', [])
                 if ($scope.showSelect) {
                     $scope.animate = false;
                 }
-            };
-
-            $scope.changeUserPermStatus = function(entity, member, status){
-                entity.permission.each(function(permission){
-                    if(permission.id === member){
-                        permission.level = status;
-                    }
-                });
-                PermissionsService.updateEntityPermission(entity, context);
-                return entity;
             };
 
             $scope.addMember = function(member) {

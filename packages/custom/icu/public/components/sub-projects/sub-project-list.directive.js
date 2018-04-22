@@ -37,6 +37,8 @@ angular.module('mean.icu.ui.subprojectslistdirective', [])
             $scope.createOrUpdate = function(project, field) {
                 var data;
                 project.color = '0097A7';
+                var backupEntity = JSON.parse(JSON.stringify(project));
+
                 if (field === 'assign') {
                     data = {
                         frequentUser: project.assign
@@ -50,7 +52,9 @@ angular.module('mean.icu.ui.subprojectslistdirective', [])
                     // add assignee as watcher
                     if(filtered.length == 0) {
                         project.watchers.push(project.assign);
-                    }                                                                      
+                    }
+                    
+                    project.status = $scope.statuses[1];
                 }
                 if (project.__state === creatingStatuses.NotCreated) {
                     project.__state = creatingStatuses.Creating;
@@ -71,7 +75,7 @@ angular.module('mean.icu.ui.subprojectslistdirective', [])
                 } else if (project.__state === creatingStatuses.Created) {
                     if (field === 'assign') {
                         UsersService.getMe().then(function(me) {
-                            ProjectsService.assign(project, me);
+                            ProjectsService.assign(project, me, backupEntity);
                         });
                     }
                     return ProjectsService.update(project, data);

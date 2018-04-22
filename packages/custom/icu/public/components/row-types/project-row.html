@@ -6,13 +6,12 @@
 <td class="name"
     ng-attr-colspan="{{data.project._id ? undefined : 2}}"
     title="{{data.project.title}}"
-    ng-attr-contenteditable="{{!data.displayOnly}}"
+    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.project)) && !recycled(data.project)}}"
     placeholder="{{'createNewProject' | i18next}}"
     strip-br="true"
     ng-change="data.searchCb(data.project.title) || data.updateCb(data.project)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-model="data.project.PartTitle"
-    ng-bind-html="data.project.PartTitle | i18next"
     ng-blur="data.hideAutoCompleteCb(data.project)"
 >
 </td>

@@ -2,6 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', [])
     .controller('ProjectDetailsController', function ($scope,
+                                                      $rootScope,
                                                       entity,
                                                       tasks,
                                                       people,
@@ -35,6 +36,7 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.addSubProjects = false;
 
         $scope.tagInputVisible = false;
+        var currentState = $state.current.name;
 
         $scope.people = people.data || people;
         if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
@@ -75,7 +77,7 @@ angular.module('mean.icu.ui.projectdetails', [])
             });
         }
 
-        $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
+        $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'completed', 'archived'];
 
         $scope.$watch('project.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {
@@ -286,10 +288,12 @@ angular.module('mean.icu.ui.projectdetails', [])
 
             $state.go($scope.detailsState, {
                 id: project._id,
-                entity: $scope.currentContext.entityName,
-                entityId: $scope.currentContext.entityId,
+                entity: context.entityName,
+                entityId: context.entityId,
                 starred: $stateParams.starred
-            }, {reload: true});
+            }, {
+                reload: true
+            });
         }
 
         $scope.star = function (project) {
@@ -322,10 +326,22 @@ angular.module('mean.icu.ui.projectdetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go('main.projects.all', {
-                    entity: 'all'
-                }, {reload: true});
-
+                refreshList();
+                if(currentState.indexOf('search') != -1){
+                    $state.go(currentState, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true,
+                        query: $stateParams.query
+                    });
+                } else {
+                    $state.go('main.projects.all', {
+                        entity: 'all',
+                    }, {
+                        reload: true
+                    });
+                }
             });
         };
 
@@ -336,18 +352,21 @@ angular.module('mean.icu.ui.projectdetails', [])
                 ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {
                     ActivitiesService.data.push(result);
                 });
+                refreshList();
 
-                var state = 'main.projects.all' ;
+                var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
                 $state.go(state, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {
                     reload: true
                 });
-
             });
         };
 
+        function refreshList(){
+            $rootScope.$broadcast('refreshList');
+        }
 
         $scope.deleteProject = function (project) {
             ProjectsService.remove(project._id).then(function () {
@@ -357,7 +376,6 @@ angular.module('mean.icu.ui.projectdetails', [])
                 }, {reload: true});
             });
         };
-
 
         $scope.updateStatusForApproval = function(entity) {
             let context = {
@@ -406,6 +424,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                             backupEntity = JSON.parse(JSON.stringify($scope.project));
                             ActivitiesService.data = ActivitiesService.data || [];
                             ActivitiesService.data.push(result);
+                            refreshList();
                         });
                         break;
                 }

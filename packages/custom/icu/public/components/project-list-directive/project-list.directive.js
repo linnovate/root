@@ -173,7 +173,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                 });
 
                 $scope.createOrUpdate($scope.projects[currentProject + 1]).then(function(project) {
-                    $state.go($scope.detailsState, {
+                    $state.go($state.current.name, {
                         id: project._id,
                         entity: context.entityName,
                         entityId: context.entityId

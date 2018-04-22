@@ -1,14 +1,22 @@
 .sidepane {
     box-shadow: inset -6px 0px 2px 0px rgba(50, 50, 50, 0.75);
     width: $sidepane-width;
-    height: 100vh;
+    //height: 100vh;
     left: 0;
     top: 0;
     background-color: $dark-grey;
     min-width: $sidepane-width;
+    display: flex;
+    flex-direction: column;
     .show-more {
         color: #FFA000;
-        font-size: 12px;
+        font-size: 10px;
+        font-weight: bold;
+        line-height: 14px;
+    }
+    .active {
+        color: $orange;
+        font-weight: bold;
     }
     min-width: $min-sidepane-width;
 
@@ -19,6 +27,9 @@
     }
 
     .sidefilters {
+        .filter-section {
+            padding: 20px;
+        }
         .filterActive {
             padding-bottom: 20px;
             border-bottom: 1px solid #444F53;
@@ -40,7 +51,7 @@
                 box-shadow: 0px 0px 0px 2px #FFB435;
                 transition: 0.8s;
             }
-            
+
 
             button {
                 color: wheat ;
@@ -65,8 +76,8 @@
 
             }
         }
-        .filterUpdated, .filterDueDate  {            
-            padding-bottom: 52px;
+        .filterUpdated, .filterDueDate  {
+            padding-bottom: 20px;
             border-bottom: 1px solid #444F53;
             .placeholder {
                 position: absolute;
@@ -77,10 +88,12 @@
                 //padding-left: 5px;
             }
             .recycle {
-                float: left;
+                font-size: 13px;
+                line-height: 29px;
+                color: #DFF2F9;
+                //float: left;
                 width: 100%;
-                margin: 10px 20px;
-                padding-left: 6px;
+                margin: 10px 20px 0 20px;
                 &.active {
                     color: #FFA000;
                 }
@@ -88,17 +101,31 @@
 
             input {
                 color: wheat;
-                appearance: none;
+                //appearance: none;
                 border: none;
-                float: left;
-                width: calc(100% - 10px);
-                margin-left: 30px;
-                margin-bottom: 10px;
-                padding-left: 25px;
-                background: url(/icu/assets/img/calendar.png) no-repeat scroll;
-                cursor: pointer;
+                //float: left;
+                margin-left: 19px;
+                margin-right: 17px;
+                margin-bottom: 3px;
+                padding-left: 11px;
+                padding-right: 32px;
+                //cursor: pointer;
                 outline: none;
-                background-position: left center;
+                height: 42px;
+                font-size: 12px;
+                font-weight: bold;
+                background: #1F2629 url(/icu/assets/img/date-dropdown-icon.png) no-repeat right 13px center;
+                width: calc(100% - 36px);
+                //background-position: left center;
+
+            }
+        }
+
+        .watchers-wrapper {
+            padding-bottom: 18px;
+            border-bottom: 1px solid #444F53;
+            ul {
+                margin-bottom: 0;
             }
         }
 
@@ -135,25 +162,26 @@
             background-color: white;
             border: 1px solid #c3bfbf;
         }
-        
+
         .select-wrapper {
             float: left;
             width: 100%;
-            margin:10px 20px;
-            padding-left: 6px;
+            margin:10px 20px 0 20px;
             .status {
-                font-size: 16px;
+                font-size: 13px;
+                line-height: 29px;
                 font-weight: bold;
                 color: #DFF2F9;
                 // padding: 20px 0;
             }
             .bold {
-                color: #FFA000; 
-                
+                color: #FFA000;
+
             }
             .all-status {
-                font-size: 16px;
-                font-weight: normal;
+                font-size: 13px;
+                line-height: 29px;
+                font-weight: bold;
             }
 
             tooltip {
@@ -281,7 +309,7 @@
         }
     }
     .sideMenu {
-        height: calc(100% - 56px);
+        height: 100%;
         display: flex;
         flex-direction:row;
     }
@@ -290,7 +318,8 @@
         min-width:40px;
         color: white;
         overflow: hidden;
-        height: calc(100% - 60px);
+        height: 100%;
+       // overflow-y: auto;
 
         @media screen and (max-width: $small-resolution) {
             max-width: calc(100% - 240px);
@@ -387,6 +416,7 @@
                         position: relative;
                         margin: 2px auto 0 auto;
                         display: inline-block;
+                        text-transform: capitalize;
 
                         @media screen and (max-width: $small-resolution) {
                             display: none;
@@ -457,9 +487,12 @@
         // height: 100vmin;
         width:calc(100% - 86px);
         height: 100%;
-        width:240px;
+        width:234px;
         background-color: $grey;
         overflow-x: auto;
+        section {
+            height: 100%;
+        }
     }
     .searchPane {
         height: auto;
@@ -474,23 +507,32 @@
         }
 
         .subtitle {
-            width: 82%;
+            width: 180px;
             display: inline-block;
-            padding-left: 25px;
+            padding-left: 20px;
             margin-top: 19px;
             margin-bottom: 6px;
-            font-size: 17px;
+            font-size: 12px;
+            text-transform: uppercase;
+            line-height: 16px;
             font-weight: bold;
+            volor: #fff;
             &.typeList {
                 cursor: pointer;
             }
         }
         .clear {
             display: inline-block;
-            font-size: 11px;
+            float: right;
+            margin-top: 19px;
+            line-height: 16px;
+            margin-right: 20px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #b8b8b8;
         }
         .issue {
-            line-height: 26px;
+            line-height: 29px;
             padding-bottom: 20px;
             border-bottom: 1px solid #444F53;
             input {
@@ -500,7 +542,7 @@
                 }
             }
             span {
-                margin-left: 6px;
+
             }
         }
         .filterBy {
@@ -592,6 +634,7 @@
         .icon {
             display: inline-block;
             vertical-align: middle;
+            margin-right: 7px;
         }
         .icon-task {
             background: url('/icu/assets/img/task-white.svg') no-repeat center center;
@@ -630,7 +673,6 @@
         .icon-folder {
             background: url('/icu/assets/img/folder-grey.png') no-repeat center center;
             height: 15px;
-            width: 20px;
             background-size: 17px 14px;
         }
         .icon-office {
@@ -644,7 +686,7 @@
 .animate-hide {
     // left: -100%;
     opacity: 1;
-    display: block !important;
+  //  display: block !important;
     position: relative;
     transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
     // z-index: 999;

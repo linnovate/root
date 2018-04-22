@@ -36,6 +36,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
 
             $scope.createOrUpdate = function(task, field) {
                 var data;
+                var backupEntity = JSON.parse(JSON.stringify(task));
                 if (field === 'assign') {
                     data = {
                         frequentUser: task.assign
@@ -49,7 +50,10 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                     // add assignee as watcher
                     if(filtered.length == 0) {
                         task.watchers.push(task.assign);
-                    }                                                  
+                    }
+
+                    // set status assigned
+                    task.status = $scope.statuses[1];
                 }
 
                 
@@ -71,7 +75,8 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
                 } else if (task.__state === creatingStatuses.Created) {
                     if (field === 'assign') {
                         UsersService.getMe().then(function(me) {
-                            TasksService.assign(task, me);
+                            
+                            TasksService.assign(task, me, backupEntity);
                         });
                     }
                     return TasksService.update(task, data);

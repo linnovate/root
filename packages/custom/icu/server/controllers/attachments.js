@@ -17,7 +17,7 @@ var attachment = crud('attachments', options);
 var Task = require('../models/task'),
   Attachment = require('../models/attachment');
 
-var logger = require('../services/logger')  
+var logger = require('../services/logger')
 
 
 Object.keys(attachment).forEach(function (methodName) {
@@ -53,12 +53,12 @@ exports.getByEntity = function (req, res, next) {
 
   // var query = {
   //     "query": {
-  //       "filtered" : { 
+  //       "filtered" : {
   //          "filter" : {
   //             "bool" : {
   //               "must" : [
-  //                  { "term" : {"entity" : entity}}, 
-  //                  { "term" : {"entityId" : req.params.id}} 
+  //                  { "term" : {"entity" : entity}},
+  //                  { "term" : {"entityId" : req.params.id}}
   //               ]
 
   //            }
@@ -99,17 +99,17 @@ exports.upload = function (req, res, next) {
 
   var hasFile = false;
 
-  busboy.on('file', function (fieldname, file, filename) {    
+  busboy.on('file', function (fieldname, file, filename) {
     var port = config.https && config.https.port ? config.https.port : config.http.port;
     var portStr = ":" + port ;
     portStr = config.isPortNeeded ? portStr : '' ;
-    
+
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
     var hostFileLocation = config.host + portStr + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
 
     mkdirp(path.join(config.attachmentDir, d), function () {
-      file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {        
+      file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
         var arr = hostFileLocation.split("/files");
         var pathFor = "./files" + arr[1];
         var stats = fs.statSync(pathFor);
@@ -118,7 +118,7 @@ exports.upload = function (req, res, next) {
         var fileSizeInBytes = stats["size"];
         //Convert the file size to megabytes (optional)
         //var fileSizeInMegabytes = fileSizeInBytes;
-        
+
         req.locals.data.body.size = fileSizeInBytes;
 
       });
@@ -139,12 +139,12 @@ exports.upload = function (req, res, next) {
       // var fileSizeInMegabytes = fileSizeInBytes / 1000000.0;
 
       // req.locals.data.body.size = fileSizeInMegabytes;
-     
+
       req.locals.data.body.size = file._readableState.length;
-      
+
       hasFile = true;
 
-      //});    
+      //});
     });
 
   });
@@ -208,13 +208,13 @@ exports.deleteFile = function (req, res) {
               else{
                 res.sendStatus(200);
               }
-               
+
 
             };
           });
-          
+
         });
-      
+
       }
     });
     return res;
@@ -247,14 +247,14 @@ exports.getMyTasks = function (req, res, next) {
   MyTasks(req).then(function (data) {
     /*var query = {
 		    "query": {
-		      "filtered" : { 
+		      "filtered" : {
 		         "filter" : {
 		            "bool" : {
 		              "must" : [
-		                 { "term" : {"entity" : 'task'}}, 
-		                 { "terms" : {"entityId" : data}} 
+		                 { "term" : {"entity" : 'task'}},
+		                 { "terms" : {"entityId" : data}}
 		              ]
-		        
+
 		           }
 		         }
 		      }
@@ -323,13 +323,13 @@ exports.getByPath = function (req, res, next) {
         else{
           next();
         }
-        
+
       });
     }
     else{
       next();
     }
-    
+
   });
 };
 

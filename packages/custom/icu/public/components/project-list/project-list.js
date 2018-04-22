@@ -13,6 +13,11 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.projects = projects.data || projects;
         $scope.loadNext = projects.next;
         $scope.loadPrev = projects.prev;
+
+        ProjectsService.getById($state.params.entityId).then(result=>{
+            $scope.parentName = result.title;
+        });
+
         $scope.print = function() {
             $window.print()
         };
@@ -30,6 +35,10 @@ angular.module('mean.icu.ui.projectlist', [])
         if ($scope.projects.length > 0 && !$scope.projects[$scope.projects.length - 1].id) {
 		    $scope.projects = [$scope.projects[0]];
 	    }
+
+        $scope.goToParent = function() {
+            $state.go('main.projects.'+$scope.parentState+'.details',{entity:$scope.parentEntity,entityId:$scope.parentEntityId,id:$scope.parentId})
+        };
 
         $scope.isCurrentState = function (id) {
             return $state.current.name.indexOf('main.projects.byentity') === 0 &&
@@ -79,7 +88,7 @@ angular.module('mean.icu.ui.projectlist', [])
                 title: 'custom',
                 value: 'custom'
             });
-        };
+        }
 
         function navigateToDetails(project) {
             if(!project) return ;

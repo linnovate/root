@@ -2,8 +2,8 @@
 
 angular.module('mean.icu.data.settingsservice', [])
 .service('SettingServices', function($http, WarningsService) {
-    
 
+    // var userFilter = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done', 'archived','canceled','completed'];
 
     function getAll() {
         return $http.get('/api/admin/moduleSettings/icu').then(function(result) {
@@ -14,7 +14,7 @@ angular.module('mean.icu.data.settingsservice', [])
 
     let statusList = {
         task: ['new', 'assigned', 'in-progress', 'waiting-approval', 'review', 'rejected', 'done'],
-        project: ['new', 'in-progress', 'canceled', 'waiting-approval', 'completed', 'archived'],
+        project: ['new', 'assigned','in-progress', 'canceled', 'waiting-approval', 'completed', 'archived'],
         discussion: ['new', 'scheduled', 'done', 'canceled', 'waiting-approval', 'archived'],
         officedocument: ['new', 'in-progress', 'received', 'done', 'waiting-approval','sent']
     }
@@ -28,12 +28,15 @@ angular.module('mean.icu.data.settingsservice', [])
     function getNonActiveStatusList (){
         return ['rejected', 'done', 'archived','canceled','completed'];
     }
+    function getUserFilter (){
+        return ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done', 'archived','canceled','completed'];
+    }
 
 
     statusList.Typed = function(type) {
         if(type == "all") {
             // someone (search) is asking for a mixed list of all the statuses to check for activity...
-            let merged = new Set([...this["task"], ...this["project"], ...this["discussion"], ...this["officedocument"]]) ;            
+            let merged = new Set([...this["task"], ...this["project"], ...this["discussion"], ...this["officedocument"]]) ;
             return Array.from(merged) ;
         }
         return this[type]  ;
@@ -47,16 +50,16 @@ angular.module('mean.icu.data.settingsservice', [])
         let nonActiveStatus = new Set(Object.values(configNonActiveStatus)) ;
         let typeStatusLowerCase =  statusList.Typed(type).map(element => element.toLowerCase());
         let typeStatuses = new Set(typeStatusLowerCase) ;
-        
+
         let difference = new Set(
             [...typeStatuses].filter(x => !nonActiveStatus.has(x)));
         return Array.from(difference) ;
     }
 
     function getNonActiveStatuses(type) {
-        configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList.Typed(type) ;     
+        configNonActiveStatus = configNonActiveStatus ? configNonActiveStatus : statusList.Typed(type) ;
         let nonActiveStatus = new Set(Object.values(configNonActiveStatus)) ;
-        let typeStatusLowerCase =  statusList.Typed(type).map(element => element.toLowerCase());        
+        let typeStatusLowerCase =  statusList.Typed(type).map(element => element.toLowerCase());
         let typeStatuses = new Set(typeStatusLowerCase) ;
         let intersection = new Set(
             [...typeStatuses].filter(x => nonActiveStatus.has(x)));
@@ -70,7 +73,7 @@ angular.module('mean.icu.data.settingsservice', [])
             return true ;
         }
 
-        let typeStatusLowerCase =  status.toLowerCase(); 
+        let typeStatusLowerCase =  status.toLowerCase();
         let arr = [] ;
         switch (filter) {
             default:
@@ -78,11 +81,11 @@ angular.module('mean.icu.data.settingsservice', [])
                 arr = getActiveStatuses(type).find(element => typeStatusLowerCase == element) ;
                 return arr ? true : false ;
                 break ;
-            case 'nonactive':            
+            case 'nonactive':
                 arr = getNonActiveStatuses(type).find(element => typeStatusLowerCase == element) ;
                 return arr ? true : false ;
                 break ;
-            case 'all': 
+            case 'all':
                 return true;
         }
     }
@@ -95,6 +98,7 @@ angular.module('mean.icu.data.settingsservice', [])
         activeStatusConfigured: activeStatusConfigured,
         getStatusList: getStatusList,
         getActiveStatusList: getActiveStatusList,
-        getNonActiveStatusList: getNonActiveStatusList
+        getNonActiveStatusList: getNonActiveStatusList,
+        getUserFilter: getUserFilter
     };
 });

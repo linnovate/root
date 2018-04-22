@@ -2,7 +2,7 @@
 <td class="name"
     title="{{data.project.title}}"
     ng-attr-colspan="{{data.project._id ? undefined : 6}}"
-    ng-attr-contenteditable="{{!data.displayOnly}}"
+    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.project)) && !recycled(data.project)}}"
     placeholder="{{'createNewProject' | i18next}}"
     strip-br="true"
     ng-attr-tabindex="{{ data.project._id ? undefined : '3'}}"
@@ -12,11 +12,10 @@
     ng-model="data.project.title">
 </td>
 <td class="user" ng-if="data.project._id">
-<!--     <div class="no-assignee" ng-if="!data.project.assign">
-        <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
-    </div> -->
-    <!--<ui-select ng-model="project.assign" on-select="update(project)">-->
-    <ui-select append-to-body="true" ng-model="data.project.assign" on-select="data.updateCb(data.project, 'assign')" >
+    <div class="no-assignee" ng-if="!data.task.assign">
+        <div class="avatar-placeholder"></div>
+    </div>
+    <ui-select append-to-body="true" ng-model="data.task.assign" on-select="data.updateCb(data.task, 'assign')" >
         <ui-select-match>
             <div icu-avatar user="$select.selected"></div>
             <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
@@ -52,7 +51,7 @@
 </td>
 
 <td class="arrow" ng-if="data.project._id" ng-click="data.changeState(data.project)">
-    <i  class="fa chevron-right"></i>
+    <div class="row-arrow"></div>
 </td>
 <td class="delete">
  <img src="/icu/assets/img/X.png"  ng-if="data.project._id && data.project.showDelete" ng-click="data.delete(data.project)">

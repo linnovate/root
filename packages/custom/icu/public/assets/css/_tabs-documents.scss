@@ -63,9 +63,9 @@
 
             textarea {
                 padding: 5px 9px;
-                width: calc(100% - 60px);
+                //width: calc(100% - 60px);
                 min-height: 125px;
-                width: 527px;
+                width: 100%;
                 margin: 10px 0;
                 transition: height 0.4s;
                 border-color: #C8C8C6;
@@ -77,7 +77,7 @@
             }
 
             .action-buttons {
-                margin-left: 50px;
+                //margin-left: 50px;
 
                 .attachment {
                     @include circle(16px);
@@ -109,7 +109,7 @@
                     line-height: 26px;
                     float: right;
                     width: 83px;
-                    height: 32px;
+                    //height: 32px;
                     border-radius: 32px;
 
                     &:hover{

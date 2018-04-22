@@ -1,12 +1,12 @@
 <div class="folder-details">
-    <div class="permission" ng-if="folder && !folder._id">
+    <div class="permission" ng-if="folder && !folder._id && !permsToSee">
        <div class="perIcon">
     </div>
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
     </div>
-    <div class="page-content" ng-if="folder._id">
-        <div class="summary">
+    <div class="page-content" ng-if="folder._id && permsToSee">
+        <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
             <div class="favorite">
                 <button ng-class="{ 'orange': folder.star }" ng-click="star(folder)">
@@ -32,7 +32,8 @@
             <div class="color">
                 <div icu-colorpicker ng-model="folder.color"></div>
             </div>
-            <div class="dropdown dropdown-container" uib-dropdown>
+            <div class="dropdown dropdown-container" uib-dropdown
+                 ng-class="{ 'enabled' : haveEditiorsPermissions()}">
                 <div class="dropdown-trigger" uib-dropdown-toggle>
                     <i class="fa fa-chevron-down"></i>
                 </div>
@@ -54,7 +55,9 @@
         </div>
      <!--   <button icu-comp-modal entity="folder" entity-name="folder" type="button" ng-mouseover="showTooltip()" class="compBtn"></button> -->
         <div class="summary wrap-pro">
-            <div class="tags" ng-if="!folder.parent">
+            <div class="tags"
+                 ng-class="{ 'disabled' : !havePermissions('tags')}"
+                 ng-if="!folder.parent">
                 <div class="tag-wrap">
                     <ui-select ng-model="folder.office" select-on-blur on-select="updateOffice(folder, 'office',officeName)" ng-keyup="updateOfficeName($select.selected.title)" ng-mouseleave="removeCreateNew">
                         <ui-select-match placeholder="{{$select.selected.title || 'selectOffice' | i18next}}">
@@ -79,8 +82,9 @@
                 {{currentContext.entity.title}}
             </div>
         </div>
-        <div class="description">
-            <div class="title"
+        <div class="description"
+             ng-class="{ 'disabled' : !havePermissions('description')}">
+        <div class="title"
                  contenteditable="true"
                  tabindex="1"
                  ng-attr-autofocus="{{shouldAutofocus || undefined}}"
@@ -100,8 +104,8 @@
                  ng-model="folder.description"
                  options="{{options}}">
             </div>
-        </div>
-            <div class="tags">
+            <div class="tags"
+                 ng-class="{ 'disabled' : !havePermissions('tags')}">
                 <ul class="list">
                     <li ng-show="!folder.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
                     <li class="tag-item" ng-repeat="tag in folder.tags">
@@ -112,7 +116,7 @@
                     </li>
                     <li class="new-tag-input" ng-show="tagInputVisible" >
                         <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" autofocus=true on-select="addTag(newTag)"
-                        test tag-on-blur="true">
+                                   test tag-on-blur="true">
                             <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
                             <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
                                 {{tag}}
@@ -128,8 +132,10 @@
                     </button>
                 </div>
             </div>
-        <div class="tabs">
-            <div class="switcher">
+        </div>
+        <div class="tabs"
+             ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}">
+        <div class="switcher">
                 <button class="tab two"
                         data-ui-sref-active="active"
                         data-ui-sref=".activities">
@@ -142,7 +148,14 @@
                 </button>
             </div>
         </div>
-        <div class="tab-content" data-ui-view="tab"></div>
+        <div class="tab-content"
+             data-ui-view="tab"
+             ng-class="{ 'disabled' : !havePermissions('tab-content')}">
+        </div>
     </div>
-    <div ng-if="folder._id" icu-members-footer entity="folder" users="people"></div>
+    <div ng-if="folder._id"
+         ng-class="{ 'disabled' : !havePermissions('watchers')}"
+         icu-members-footer
+         entity="folder"
+         users="people"></div>
 </div>

@@ -2,6 +2,7 @@
 
 angular.module('mean.icu.ui.discussiondetails', [])
     .controller('DiscussionDetailsController', function ($scope,
+                                                         $rootScope,
                                                          entity,
                                                          tasks,
                                                          context,
@@ -32,6 +33,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.CanceledMailSend = false;
         $scope.fade = false;
         $scope.tags = tags;
+        var currentState = $state.current.name;
+
 
         if($scope.discussion.startDate){
             $scope.discussion.startDate = new Date($scope.discussion.startDate);
@@ -109,7 +112,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
 
             DiscussionsService.summary(discussion).then(function (result) {
                 discussion.status = result.status;
-                var index = $state.current.name.indexOf('main.search');
+                var index = currentState.indexOf('main.search');
                 $state.reload(index === 0 ? 'main.search' : 'main.tasks.byentity');
             });
         };
@@ -416,7 +419,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
             });
         };
 
-
         $scope.recycle = function(entity) {
             console.log("$scope.recycle") ;
             EntityService.recycle('discussions', entity._id).then(function() {
@@ -426,10 +428,22 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                $state.go('main.discussions.all', {
-                    entity: 'all'
-                }, {reload: true});
-
+                refreshList();
+                if(currentState.indexOf('search') != -1){
+                    $state.go(currentState, {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true,
+                        query: $stateParams.query
+                    });
+                } else {
+                    $state.go('main.discussions.all', {
+                        entity: 'all'
+                    }, {
+                        reload: true
+                    });
+                }
             });
         };
 
@@ -441,17 +455,21 @@ angular.module('mean.icu.ui.discussiondetails', [])
                     ActivitiesService.data.push(result);
                 });
 
-                var state = 'main.discussions.all' ;
+                refreshList();
+
+                var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.discussions.all';
                 $state.go(state, {
                     entity: context.entityName,
                     entityId: context.entityId
                 }, {
                     reload: true
                 });
-
             });
         };
 
+        function refreshList(){
+            $rootScope.$broadcast('refreshList');
+        }
 
         $scope.deleteDiscussion = function (discussion) {
             DiscussionsService.remove(discussion._id).then(function () {
@@ -530,8 +548,13 @@ angular.module('mean.icu.ui.discussiondetails', [])
                         backupEntity = JSON.parse(JSON.stringify($scope.discussion));
                         ActivitiesService.data = ActivitiesService.data || [];
                         ActivitiesService.data.push(result);
+                        refreshList();
                     });
                     break;
+            }
+
+            if(currentState.indexOf('search') != -1) {
+                refreshList();
             }
         };
 

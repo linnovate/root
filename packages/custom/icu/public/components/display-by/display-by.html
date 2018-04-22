@@ -2,13 +2,13 @@
     <div id="searchNav" class="searchPane sidefilters"
          ng-if="activeTab.name === 'search'"
          ng-init="filterSearchByType();resetFilter();">
-        <div class="search">{{'search' | i18next}}
-            <span class="close-search" ng-click="closeSearch()">x</span>
-        </div>
+        <!--<div class="search">{{'search' | i18next}}-->
+            <!--<span class="close-search" ng-click="closeSearch()">x</span>-->
+        <!--</div>-->
         <div class="subtitle typeList" ng-click="filteringData.issue='all';resetFilter();filterSearchByType();">
             {{'showResultsOf' | i18next}}:
         </div>
-        <div class="clear" ng-click="clearSearchType()">{{'clear' | i18next}}</div>
+        <div class="clear" ng-click="filteringData.issue='all';resetFilter();filterSearchByType()">{{'clear' | i18next}}</div>
         <ul class="issue">
             <li ng-repeat="issue in issues"
                 ng-click="filteringData.issue = issue.name;filterSearchByType();resetFilter();">
@@ -23,8 +23,8 @@
             {{'filterResultsBy' | i18next }}:
             <button ng-click="resetFilter()">{{'reset' | i18next}}</button>
         </div> -->
-      
-     
+
+
 
         <div class="filterActive">
             <div class="subtitle">{{'filterByActiveStatus' | i18next}}</div>
@@ -35,17 +35,25 @@
                         <span class="status" ng-click="$root.status = field.value;filterSearchByType();showM(field.value,0);">{{field.title | i18next}}</span>
                     </li>
                 </ul>
-                <div class="show-more" ng-show="!AllStatus.length" ng-click="$root.status = field;showM('All');filterActive('All');">{{'more' | i18next}}</div>
+                <div class="show-more" ng-show="!AllStatus.length" ng-click="$root.status = 'all';filterSearchByType();showM('all')">
+                    {{'more' | i18next}}
+                </div>
                 <ul ng-show="AllStatus.length">
                         <li ng-repeat="field in AllStatus track by $index | orderBy:field">
                             <!-- <span class="all-status" ng-class="{'bold':isActive(field,$root.status)}" ng-click="$root.status = field;filterSearchByType(true)">{{field | i18next}}</span> -->
-                          <span class="all-status" ng-class="{'bold':isActive(field,$root.status)}" ng-click="statusListCahnge(field);filterSearchByType(true)">{{field | i18next}}</span>
+                          <span class="all-status"
+                                ng-class="{'active':isActive(field,$root.status)}"
+                                ng-click="statusListCahnge(field);filterSearchByType(true)">
+                              {{field | i18next}}
+                          </span>
                         </li>
                     </ul>
-                    <div class="show-more" ng-show="AllStatus.length && currentType == 'All'" ng-click="showM('empty');$root.status = null;">{{'less' | i18next}}</div>
+                    <div class="show-more" ng-show="AllStatus.length && currentType == 'All'" ng-click="showM('empty');$root.status = null;">
+                        {{'less' | i18next}}
+                    </div>
                  </div>
             </div>
-           
+
             <div class="filterDueDate" ng-if="filteringData.issue == 'task' || filteringData.issue == 'project'">
                 <div class="subtitle">{{'dueDate' | i18next}}</div>
                 <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
@@ -73,9 +81,8 @@
 
             <div class="filterUpdated">
                 <div class="subtitle">{{'deletedItems' | i18next}}</div>
-                <div class="clear" ng-click="clearRecycled()">{{'clear' | i18next}}</div>
-                <div class="recycle" ng-class="{active: recycled}" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>            
-            </button>
+                <div class="clear" ng-click="turnOffRecycle()">{{'clear' | i18next}}</div>
+                <div class="recycle" ng-class="{active: recycled}" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>
             </div>
 
             <div ng-if="filteringData.projects.length">
@@ -166,27 +173,29 @@
                 </ul>
             </div>
 
-            <div class="subtitle">{{'watchersInThe' | i18next}}</div>
-            <ul>
-                <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
-                    <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
-                    {{w.name}}-->
-                    <div class="filteringElement watcher"
-                         ng-class="{active: filteringData.selectedWatchers[w._id]}"
-                         ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
-                        <div icu-avatar user="w"></div>
-                        <span>{{w.name}}</span>
-                    </div>
-                </li>
-                <li ng-if="filteringData.watchers.length > displayLimit['watchers']"
-                    ng-click="showMore(filteringData.watchers.length, 'watchers')"
-                    class="more">{{ 'more' | i18next }}
-                </li>
-                <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3"
-                    ng-click="collapse('watchers')"
-                    class="more">{{ 'less' | i18next }}
-                </li>
-            </ul>
+            <div class="watchers-wrapper">
+                <div class="subtitle">{{'watchersInThe' | i18next}}</div>
+                <ul>
+                    <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
+                        <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
+                        {{w.name}}-->
+                        <div class="filteringElement watcher"
+                             ng-class="{active: filteringData.selectedWatchers[w._id]}"
+                             ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
+                            <div icu-avatar user="w"></div>
+                            <span>{{w.name}}</span>
+                        </div>
+                    </li>
+                    <li ng-if="filteringData.watchers.length > displayLimit['watchers']"
+                        ng-click="showMore(filteringData.watchers.length, 'watchers')"
+                        class="more">{{ 'more' | i18next }}
+                    </li>
+                    <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3"
+                        ng-click="collapse('watchers')"
+                        class="more">{{ 'less' | i18next }}
+                    </li>
+                </ul>
+            </div>
 
         </div>
     </div>
@@ -400,11 +409,11 @@
         <div ng-if="folders.length !== 0" tooltips tooltip-template="{{'selectOffice' | i18next}}">
 
             <ui-select ng-model="officesList.office" on-select="changeOrder()" theme="bootstrap">
-                <ui-select-match placeholder="{{'chooseOffice' | i18next}}">
+                <ui-select-match placeholder="{{'selectOffice' | i18next}}">
                     {{$select.selected.title}}
                 </ui-select-match>
-                <ui-select-choices ng-show="focus" repeat="office in officesList | filter: $select.search">
-                    <div>{{office.title | i18next | uppercase}}</div>
+                <ui-select-choices repeat="office in officesList | filter: $select.search">
+                    <div ng-bind-html="office.title | i18next | uppercase"></div>
                 </ui-select-choices>
             </ui-select>
 
@@ -418,8 +427,8 @@
                     data-ng-click="switchTo('folder', folder._id)"
                     ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)"
                 >
-                    <a href class="Names-In-List-On-Side">
-                        {{folder.title}}
+                    <a href class="Names-In-List-On-Side"
+                       ng-bind-html="folder.title">
                     </a>
                     <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
                 </li>
@@ -446,7 +455,7 @@
         </ul>
     </div>
     <div class="sidefilters" ng-if="activeTab.name == 'search'">
-        <hr/>
+        <!--<hr/>-->
     </div>
     </div>
 

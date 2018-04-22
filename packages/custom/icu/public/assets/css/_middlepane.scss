@@ -35,13 +35,14 @@
 }
 
 .middlepane {
-    max-width: calc(100% - #{$detailspane-width});
     width:100%;
     min-width: 430px;
 
     height: 100%;
     background-color: $cream;
-    // float: left;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     position: relative;
     transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
 
@@ -105,7 +106,7 @@
             position: relative;
             float: left;
             margin-top: 1px;
-            width: calc(100% - #{$header-height} - #{$header-height});
+            width: 100%;
 
             .close-icon {
                 position: absolute;
@@ -120,20 +121,22 @@
             input {
                 border: none;
                 background-color: white;
-                padding-left: 69px;
+                padding-left: 57px;
                 width: 100%;
-                font-size: 15px;
+                font-size: 13px;
+                line-height: 18px;
                 height: $header-height - 2;
                 font-style: italic;
+                padding-top: 4px;
+                &:focus {
+                    outline: none;
+                }
             }
 
             img {
                 position: absolute;
-                left: 33px;
+                left: 25px;
                 top: 18px;
-                transform: translate(0, -50%);
-                -webkit-transform: scaleX(-1);
-                transform: scaleX(-1);
             }
 			.build-in-search {
 				position: absolute;
@@ -155,7 +158,8 @@
     }
 
     .middlepane-container {
-        height: calc(100% - 60px);
+        height: 100%;
+        overflow: hidden;
     }
 
     .header-wrap {
@@ -353,5 +357,6 @@
 
     .full-height {
         height: 100%;
+        overflow: hidden;
     }
 }

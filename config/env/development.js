@@ -87,29 +87,20 @@ module.exports = {
     api: {
       uri: 'http://192.168.245.152:3003'
     },
-//   elasticsearch: {
-//     host: 'http://192.168.245.255',
-//     port: 9200,
-//     log: 'trace'
-//     },
+
   elasticsearch: {
-    host: (process.env.ELASTICSEARCH_IP || 'localhost'),
+    hosts: [
+      (process.env.ELASTICSEARCH_IP || 'localhost') + ':9200',
+      (process.env.ELASTICSEARCH_IP || 'localhost') + ':9201',
+      (process.env.ELASTICSEARCH_IP || 'localhost') + ':9205',
+    ],
     port: 9200,
     log: 'trace',
     keepAlive: false,
     sniffOnConnectionFault:true,
     maxRetries:50
   },
-//   elasticsearch: {
-//     host: 'http://192.168.245.152',
-//     port: 3003,
-//     log: 'trace'
-//   },
-//   elasticsearch: {
-//     host: 'http://192.168.245.152',
-//     port: 9300,
-//     log: 'trace'
-//   },
+
   letschat: {
     owner: '562334ccea168c4f323a1be8'
   },
@@ -142,5 +133,4 @@ module.exports = {
     isWorking:false
   },
   usersDomain:"@domain",
-  omerElastic: ['localhost:9200', 'localhost:9201', 'localhost:9202'] // Add all master nodes of the elastic cluster to the array
 };

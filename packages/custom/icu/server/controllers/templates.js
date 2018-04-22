@@ -238,8 +238,10 @@ exports.toSubTasks = function(req, res, next) {
             req.locals.result = [];
             for (var t in templates) {
               templates[t].t.save(function(err, subtask) {
-                addUpdate(subtask._id, req.user, 'copy');
-                cloneAttachments(subtask.templateId, subtask._id , req.user._id, subtask.watchers, subtask.circles);
+                if(typeof subtask != "undefined") { // TBD - need to check why we have empties
+                  addUpdate(subtask._id, req.user, 'copy');                 
+                  cloneAttachments(subtask.templateId, subtask._id , req.user._id, subtask.watchers, subtask.circles);
+                }
               });
               if (templates[t].t.parent && templates[t].t.parent.toString() === req.body.taskId.toString()) {
                 req.locals.result.push(templates[t].t);

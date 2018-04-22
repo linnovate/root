@@ -28,12 +28,12 @@
                 ng-click="setActive(item); removeFilterValue();setCurrentState(item.state);clearResults()">
                 <div class="menu-item nav-item {{getNavColor(item, $index)}}"
                      data-ui-sref="{{'main.' + item.state}}"
-                     ng-click="toggleVisibility(item)">
+                     ng-click="toggleVisibility(item);initMenuItem(item)">
                     <div class="icon">
                         <img ng-src="{{item.icon}}"/>
                     </div>
                     <div class="item-name align-items-center">
-                        <span>{{item.name.toLowerCase() | i18next | uppercase}}</span>
+                        <span>{{item.name.toLowerCase() | i18next}}</span>
                     </div>
                 </div>
             </li>

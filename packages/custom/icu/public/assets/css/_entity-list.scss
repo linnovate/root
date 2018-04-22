@@ -1,16 +1,19 @@
 .task-list, .discussion-list, .project-list, .sub-task-list, .folder-list, .officeDocument-list, .templateDoc-list, .office-list {
 
     height: 100%;
-
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     .entity-list-container {
-        &.big {
-            height: calc(100% - 150px);
-        }
-
-        &.small {
-            height: calc(100% - 150px);
-        }
-
+        //&.big {
+        //    height: calc(100% - 150px);
+        //}
+        //
+        //&.small {
+        //    height: calc(100% - 150px);
+        //}
+        height: 100%;
+        overflow-y: auto;
         .list-table {
             height: 100%;
             overflow-x: hi;
@@ -61,28 +64,53 @@
 
     table {
         /*table-layout: fixed;*/
-
+        display: flex;
         tbody {
+            width: 100%;
             tr {
+                display: flex;
+                padding-right: 15px;
                 &.new-task {
                     td {
                         padding: 10px 15px;
                     }
                 }
+                &.empty {
+                    [contenteditable][colspan]:empty:not(:focus):before {
+                        padding-left: 0;
+                    }
+                    td {
+                        &.name {
+                            padding-left: 10px;
+                        }
+                    }
+                    &.sticky {
+                        position: absolute;
+                        left: 0;
+                        bottom:0;
+                        background: #fff;
+                        width: 100%;
+                    }
+                }
 
                 td {
                     overflow: hidden;
-                    padding-top: 5px;
+                    //padding-top: 5px;
                     outline: none;
+                    display: flex;
+                    align-items: center;
                     line-height: 40px;
+                    color: #1A1A1A;
                     &:focus {
                       outline: none;
                     }
 
                     &.id {
-                        width: 55px;
-                        color: $grey1;
-                        border-left: 5px;
+                        //width: 55px;
+                        font-size: 13px;
+                        font-weight: normal;
+                        color: #1A1A1A;
+                        //border-left: 5px;
                     }
 
                     &.move{
@@ -94,56 +122,72 @@
                     }
 
                     &.arrow {
-                        width: 14px;
-                        overflow: visible;
-                        text-align: center;
-                         padding-right:40px;
-                         margin-left: 27px;
-                        @media screen and (max-width: $small-resolution) {
-                            margin-left: 0;
-                            padding-right:20px;
-                            margin-right: 5px;
+                        //width: 14px;
+                        //overflow: visible;
+                        //text-align: center;
+                        // padding-right:40px;
+                        margin: 0 0 0 18px;
+                        //@media screen and (max-width: $small-resolution) {
+                        //    margin-left: 0;
+                        //    padding-right:20px;
+                        //    margin-right: 5px;
+                        //}
+                        .row-arrow {
+                            width: 16px;
+                            height: 16px;
+                            background: url('/icu/assets/img/table-row-arrow.png') no-repeat center center;
                         }
                     }
 
                     &.name {
                         // width: 120px;
-                        width: 8.3vw;
-                        display: inline-block;
+                        //width: 8.3vw;
+                        //display: inline-block;
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         cursor: text;
+                        flex:1;
+                        overflow: hidden;
+                        display: block;
+                        line-height: 50px;
                         &:before {
                             font-weight: normal;
                             font-style: italic;
                         }
                         @media screen and (max-width: $small-resolution) {
                             margin-right: 5px;
-                            width: 13.3vw;
+                            //width: 13.3vw;
                             word-wrap: break-word;
                         }
 
-                        margin-left: 10px;
+                        padding-left: 25px;
                     }
 
                     &.project {
                         text-align: center;
-                        // width: 85px;
-                        width: 5.8vw;
+                        width: 104px;
+                        //width: 5.8vw;
                         font-weight: 400;
                         font-size: 13px;
-                        display: inline-block;
-                        // margin-left: 10px;
+                        //display: inline-block;
+                        margin-left: 14px;
                         line-height: initial;
 
                         @media screen and (max-width: $small-resolution) {
-                        width: 8.8vw;
-                    }
+                            width: 8.8vw;
+                        }
                         span {
                             padding: 3px 13px;
                             position: relative;
                             top: 50%;
                             left: 0;
+                        }
+                        span.tag {
+                            padding: 3px 13px;
+                            position: relative;
+                            top: 0;
+                            left: 0;
+                            transform: none;
                         }
                     }
 
@@ -159,6 +203,7 @@
                             position: relative;
                             top: 50%;
                             left: 0;
+                            transform: none;
                         }
                     }
 
@@ -173,14 +218,16 @@
                             position: relative;
                             top: 50%;
                             left: 0;
+                            transform: none;                            
                         }
                     }
 
                     &.status {
-                        width: calc(10% - 65px);
-                        display: inline-block;
-                        width: 100px;
-                        margin-left: 10px;
+                        //width: calc(10% - 65px);
+                        //display: inline-block;
+                        width: 110px;
+                        font-weight: normal;
+                        margin-left: 37px;
                         padding-right: 0;
                         padding-left: 0;
                             &.new{color: #ff4081;}
@@ -203,10 +250,13 @@
                     }
 
                    	&.due {
-                     	width: calc(19% - 65px);
-                        display: inline-block;
-                        width: 80px;
-                        margin-left: 10px;
+                     	//width: calc(19% - 65px);
+                        //display: inline-block;
+                        width: 67px;
+                        margin-left: 13px;
+                        font-size: 13px;
+                        font-weight: normal;
+                        color: #1A1A1A;
                         @media screen and (max-width: $small-resolution) {
                             display:none;
                         }
@@ -225,6 +275,12 @@
                 }
 
                 &.active {
+                    background-color: #E3F3F5 !important;
+                    border-bottom: 1px solid #31B9EB;
+                    td {
+                        color: #1A1A1A;
+                        background-color: #E3F3F5;
+                    }
                     td.arrow .delete-icon {
                         display: block;
                     }
@@ -314,9 +370,9 @@
                     }
 
                     &.id {
-                        width: 55px;
+                       // width: 55px;
                         color: $grey1;
-                        border-left: 5px;
+                       // border-left: 5px;
                     }
 
                     &.move{
@@ -497,9 +553,9 @@
                     }
 
                     &.id {
-                        width: 55px;
+                        //width: 55px;
                         color: $grey1;
-                        border-left: 5px;
+                       // border-left: 5px;
                     }
 
                     &.move{
