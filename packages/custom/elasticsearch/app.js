@@ -2,7 +2,6 @@
 
 var mean = require('meanio');
 var esConfig = mean.loadConfig().elasticsearch;
-var omerConfig = mean.loadConfig().omerElastic;
 var Module = mean.Module;
 var elasticsearch = require('elasticsearch');
 
