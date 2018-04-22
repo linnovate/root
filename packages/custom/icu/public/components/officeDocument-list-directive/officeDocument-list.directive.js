@@ -14,7 +14,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             };
             if($scope.order.field == "custom"){
                 var timer,
-                    container = $('.containerVertical'), 
+                    container = $('.containerVertical'),
                     scroll = $('.list-table'),
                     box = $('middlepane-container'),
                     topBar = $('.filters'),
@@ -44,7 +44,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                          entity: context.entityName,
                          entityId: context.entityId
                      }, { reload: false });
-                    
+
                     orderService.setOrder(e, elindex, dropindex, $scope.officeDocuments.length - 1);
                 });
                 // $scope.$on('dragularrelease', function (e, el) {
@@ -108,29 +108,29 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 if (context.entityName !== 'all') {
                     officeDocument[context.entityName] = context.entity;
                 }
-//
-                // if (officeDocument.__state === creatingStatuses.NotCreated) {
-                //     officeDocument.__state = creatingStatuses.Creating;
 
-                //     return OfficeDocumentsService.create(officeDocument).then(function(result) {
-                //         officeDocument.__state = creatingStatuses.Created;
+                if (officeDocument.__state === creatingStatuses.NotCreated) {
+                    officeDocument.__state = creatingStatuses.Creating;
 
-                //         $scope.officeDocuments.push(_(newOfficeDocument).clone());
+                    return OfficeDocumentsService.createDocument(officeDocument).then(function(result) {
+                        Object.assign(officeDocument, result);
+                        officeDocument.__state = creatingStatuses.Created;
 
-                //         OfficeDocumentsService.data.push(officeDocument);
+                        $scope.officeDocuments.push(_(newOfficeDocument).clone());
+                        OfficeDocumentsService.data.push(officeDocument);
 
-                //         return officeDocument;
-                //     });
-                // } else
-                //
+                        return officeDocument;
+                    });
+                } else
+
                  if (officeDocument.__state === creatingStatuses.Created) {
 
                     if (!officeDocument.IsTitle)
                     {
-                        officeDocument.PartTitle = officeDocument.PartTitle.split("...")[0] + officeDocument.title.substring(officeDocument.PartTitle.split("...")[0].length,officeDocument.title.length);
+                        officeDocument.title = officeDocument.title.split("...")[0] + officeDocument.title.substring(officeDocument.title.split("...")[0].length,officeDocument.title.length);
                         officeDocument.IsTitle = !officeDocument.IsTitle;
                     }
-                    officeDocument.title = officeDocument.PartTitle;OfficeDocumentsService
+                    officeDocument.title = officeDocument.title;OfficeDocumentsService
                     return OfficeDocumentsService.update(officeDocument);
                 }
             };
@@ -138,8 +138,8 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             $scope.debouncedUpdate = _.debounce($scope.createOrUpdate, 300);
 
             $scope.searchResults = [];
-            
-            
+
+
 
             $scope.create = function(){
                 var data = {};
@@ -155,13 +155,13 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                             $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
                                 return officeDocument.status =='new' &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
                             });
-            
+
                         }else{
-                            
+
                             $scope.officeDocuments = $scope.officeDocuments.filter(function(officeDocument){
                                 return officeDocument.status == 'new' ;
                             });
-            
+
                         }
                         $state.go($scope.detailsState+'.activities', {
                             id: result._id,
@@ -212,9 +212,17 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 });
             };
 
-            $scope.select = function(selectedTask) {
+            $scope.select = function(document) {
+                var clone = JSON.parse(JSON.stringify(newOfficeDocument));
+                var index = _.find($scope.officeDocuments, clone);
+
+                if($scope.officeDocuments.length == 2){
+                    $scope.officeDocuments.splice(index, 1);
+                    $scope.officeDocuments.push(clone);
+                }
+
                 var currentOfficeDocument = _($scope.officeDocuments).findIndex(function(p) {
-                    return p.id === $state.params.id;
+                    return p._id === document._id;
                 });
 
                 $scope.createOrUpdate($scope.officeDocuments[currentOfficeDocument + 1]).then(function(officeDocument) {
@@ -303,7 +311,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 }
             };
 
-            $scope.focusAutoComplete = function($event) {
+            $scope.focusAutoComplete = function($event, document) {
                 angular.element($event.target).css('box-shadow', 'none')
                 if ($event.keyCode === 38) {
                     if ($scope.selectedSuggestion > 0) {
@@ -317,7 +325,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                     $event.preventDefault();
                 } else if ($event.keyCode === 13) {
                     var sr = $scope.searchResults[$scope.selectedSuggestion];
-                    $scope.select(sr);
+                    $scope.select(document);
                 }
 
 
@@ -366,7 +374,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
 
                 }
             };
-           
+
 
             $scope.loadMore = function() {
                 if (!$scope.isLoading && $scope.loadNext) {
