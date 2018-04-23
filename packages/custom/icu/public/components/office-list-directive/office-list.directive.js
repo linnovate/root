@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.officelistdirective', [])
             };
             if($scope.order.field == "custom"){
                 var timer,
-                    container = $('.containerVertical'), 
+                    container = $('.containerVertical'),
                     scroll = $('.list-table'),
                     box = $('middlepane-container'),
                     topBar = $('.filters'),
@@ -45,7 +45,7 @@ angular.module('mean.icu.ui.officelistdirective', [])
                          entity: context.entityName,
                          entityId: context.entityId
                      }, { reload: false });
-                    
+
                     orderService.setOrder(e, elindex, dropindex, $scope.offices.length - 1);
                 });
                 // $scope.$on('dragularrelease', function (e, el) {
@@ -126,6 +126,7 @@ angular.module('mean.icu.ui.officelistdirective', [])
 
                     if (!office.IsTitle)
                     {
+                        if(typeof office.PartTitle === 'undefined')office.PartTitle = office.title;
                         office.PartTitle = office.PartTitle.split("...")[0] + office.title.substring(office.PartTitle.split("...")[0].length,office.title.length);
                         office.IsTitle = !office.IsTitle;
                     }

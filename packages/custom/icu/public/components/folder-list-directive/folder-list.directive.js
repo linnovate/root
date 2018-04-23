@@ -14,7 +14,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
             };
             if(($scope.order != null) && ($scope.order.field == "custom")){
                 var timer,
-                    container = $('.containerVertical'), 
+                    container = $('.containerVertical'),
                     scroll = $('.list-table'),
                     box = $('middlepane-container'),
                     topBar = $('.filters'),
@@ -44,7 +44,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                          entity: context.entityName,
                          entityId: context.entityId
                      }, { reload: false });
-                    
+
                     orderService.setOrder(e, elindex, dropindex, $scope.folders.length - 1);
                 });
 
@@ -106,7 +106,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                 } else {
                     delete newFolder.assign;
                     if (context.entityName === 'folder') {
-                        // newFolder.parent = context.entity._id;    
+                        // newFolder.parent = context.entity._id;
                         $scope.folders.push(_(newFolder).clone());
                     } else
                         $scope.folders.push(_(newFolder).clone());
@@ -151,6 +151,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                 } else if (folder.__state === creatingStatuses.Created) {
 
                     if (!folder.IsTitle) {
+                        if(typeof folder.PartTitle === 'undefined')folder.PartTitle = folder.title;
                         folder.PartTitle = folder.PartTitle.split("...")[0] + folder.title.substring(folder.PartTitle.split("...")[0].length, folder.title.length);
                         folder.IsTitle = !folder.IsTitle;
                     }
@@ -255,7 +256,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                 }
 
                 LayoutService.clicked();
-                
+
             };
 
             $scope.isCurrentState = function (id) {
