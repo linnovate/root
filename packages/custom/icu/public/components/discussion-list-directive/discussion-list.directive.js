@@ -60,7 +60,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             };
             if($scope.order.field == "custom"){
                 var timer,
-                    container = $('.containerVertical'), 
+                    container = $('.containerVertical'),
                     scroll = $('.list-table'),
                     box = $('middlepane-container'),
                     topBar = $('.filters'),
@@ -90,7 +90,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
                          entity: context.entityName,
                          entityId: context.entityId
                      }, { reload: false });
-                    
+
                     orderService.setOrder(e, elindex, dropindex);
                 });
                 // $scope.$on('dragularrelease', function (e, el) {
@@ -169,7 +169,7 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
             if (context.entityName !== 'all') {
                 discussion[context.entityName] = context.entity;
             }
-            
+
             if (discussion.__state === creatingStatuses.NotCreated) {
                 discussion.__state = creatingStatuses.Creating;
 
@@ -187,9 +187,10 @@ angular.module('mean.icu.ui.discussionlistdirective', [])
                     return discussion;
                 });
             } else if (discussion.__state === creatingStatuses.Created) {
-                
+
                 if (!discussion.IsTitle)
                 {
+                    if(typeof discussion.PartTitle === 'undefined')discussion.PartTitle = discussion.title;
                     discussion.PartTitle = discussion.PartTitle.split("...")[0] + discussion.title.substring(discussion.PartTitle.split("...")[0].length,discussion.title.length);
                     discussion.IsTitle = !discussion.IsTitle;
                 }
