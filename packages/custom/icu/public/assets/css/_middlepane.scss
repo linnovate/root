@@ -267,6 +267,13 @@
             width: 26px;
             font-size: 13px;
 
+            tooltip {
+                &:hover {
+                    height: 24px;
+                    padding-top: 2px;
+                }
+            }
+
             &.orange {
                 color: $orange;
             }
