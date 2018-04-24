@@ -171,6 +171,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                 } else if (task.__state === creatingStatuses.Created) {
 
                     if (!task.IsTitle) {
+                        if(typeof task.PartTitle === 'undefined')task.PartTitle = task.title;
                         task.PartTitle = task.PartTitle.split("...")[0] + task.title.substring(task.PartTitle.split("...")[0].length, task.title.length);
                         task.IsTitle = !task.IsTitle;
                     }
