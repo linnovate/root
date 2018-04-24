@@ -127,6 +127,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
 
                     if (!officeDocument.IsTitle)
                     {
+                        if(typeof officeDocument.PartTitle === 'undefined')officeDocument.PartTitle = officeDocument.title;
                         officeDocument.title = officeDocument.title.split("...")[0] + officeDocument.title.substring(officeDocument.title.split("...")[0].length,officeDocument.title.length);
                         officeDocument.IsTitle = !officeDocument.IsTitle;
                     }

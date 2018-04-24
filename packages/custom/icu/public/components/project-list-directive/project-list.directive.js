@@ -125,6 +125,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
                     if (!project.IsTitle)
                     {
+                        if(typeof project.PartTitle === 'undefined')project.PartTitle = project.title;
                         project.PartTitle = project.PartTitle.split("...")[0] + project.title.substring(project.PartTitle.split("...")[0].length,project.title.length);
                         project.IsTitle = !project.IsTitle;
                     }
