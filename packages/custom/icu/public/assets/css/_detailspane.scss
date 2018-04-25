@@ -961,6 +961,11 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 display: none;
             }
 
+            span {
+                display: block;
+                transform: translateY(50%);
+            }
+
             &:hover {
                 padding-right: 25px;
                 transition: 0.3s;
