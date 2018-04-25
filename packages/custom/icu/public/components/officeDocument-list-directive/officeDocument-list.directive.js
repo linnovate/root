@@ -80,15 +80,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
 
             _($scope.officeDocuments).each(function(p) {
                 p.__state = creatingStatuses.Created;
-                if (p.title.length > 20)
-                {
-                    p.PartTitle = p.title.substring(0,20) + "...";
-                }
-                else
-                {
-                    p.PartTitle = p.title;
-                }
-                p.IsTitle = false;
+                p.PartTitle = p.title;
             });
 
             var newOfficeDocument = {
@@ -121,17 +113,10 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
 
                         return officeDocument;
                     });
-                } else
+                } else if (officeDocument.__state === creatingStatuses.Created) {
 
-                 if (officeDocument.__state === creatingStatuses.Created) {
+                     officeDocument.title = officeDocument.PartTitle;
 
-                    if (!officeDocument.IsTitle)
-                    {
-                        if(typeof officeDocument.PartTitle === 'undefined')officeDocument.PartTitle = officeDocument.title;
-                        officeDocument.title = officeDocument.title.split("...")[0] + officeDocument.title.substring(officeDocument.title.split("...")[0].length,officeDocument.title.length);
-                        officeDocument.IsTitle = !officeDocument.IsTitle;
-                    }
-                    officeDocument.title = officeDocument.title;OfficeDocumentsService
                     return OfficeDocumentsService.update(officeDocument);
                 }
             };
@@ -246,8 +231,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                     return;
                 }
 
-                var nameFocused = angular.element($event.target).hasClass('name');
-
+                var nameFocused = angular.element($event.target).hasClass('name') || angular.element($event.target).parent().hasClass('name');
                 officeDocument.PartTitle = officeDocument.title;
 
                 if (officeDocument.__state === creatingStatuses.NotCreated) {
@@ -287,25 +271,16 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             };
 
             $scope.onEnter = function($event, index) {
-                // if ($event.keyCode === 13) {
-                //     $event.preventDefault();
-
-                //     $scope.projects[index].__autocomplete = false;
-
-                //     if ($scope.projects.length - 2 === index) {
-                //         $element.find('td.name:nth-child(1)')[0].focus();
-                //     }
-                // }
                 if ($event.keyCode === 13 || $event.keyCode === 9) {
                     $event.preventDefault();
 
                     $scope.officeDocuments[index].__autocomplete = false;
-                    if ($element.find('td.name')[index+1]) {
-                        $element.find('td.name')[index+1].focus();
+                    if ($element.find('td.name')[index + 1]) {
+                        $element.find('td.name')[index + 1].focus();
                     }
                     else {
                         $timeout(function() {
-                            $element.find('td.name')[index+1].focus();
+                            $element.find('td.name')[index + 1].focus();
                         }, 500);
                     }
 
@@ -334,10 +309,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
 
             $scope.hideAutoComplete = function(task) {
 
-                if (task.title.length > 20)
-                {
-                    task.PartTitle = task.title.substring(0,20) + "...";
-                }
+                task.PartTitle = task.title;
 
                 task.__autocomplete = false;
                 $scope.searchResults.length = 0;
@@ -359,14 +331,8 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                     var sort = $scope.order.field;//$scope.sorting?$scope.sorting:"created";
                     OfficeDocumentsService.getAll(start , LIMIT , sort).then(function(docs){
                         docs.forEach(function(d){
-                            if (d.title.length > 20)
-                            {
-                                d.PartTitle = d.title.substring(0,20) + "...";
-                            }
-                            else
-                            {
-                                d.PartTitle = d.title;
-                            }
+                            d.PartTitle = d.title;
+
                             $scope.officeDocuments.push(d);
                         });
                         //$scope.isLoading = false;
@@ -383,17 +349,8 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                     $scope.loadNext().then(function(officeDocuments) {
 
                         _(officeDocuments.data).each(function(p) {
-                            p.__state = creatinggeStatuses.Created;
+                            p.__state = creatingStatuses.Created;
                             p.PartTitle = p.title;
-                            if (p.title.length > 20)
-                            {
-                                p.PartTitle = p.title.substring(0,20) + "...";
-                            }
-                            else
-                            {
-                                p.PartTitle = p.title;
-                            }
-                            p.IsTitle = false;
                         });
 
                         var offset = $scope.displayOnly ? 0 : 1;

@@ -53,7 +53,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         $scope.tags = ['tag'];
         $scope.tasks = tasks.data || tasks;
         $scope.officeDocuments = officeDocuments.data || officeDocuments;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
+        $scope.shouldAutofocus = true;
         $scope.tagInputVisible = false;
         //$scope.officeDocument.created = new Date($scope.officeDocument.created);
         OfficeDocumentsService.getStarred().then(function (starred) {
@@ -336,7 +336,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
                 entityId: $scope.currentContext.entityId,
                 starred: $stateParams.starred
             }, {reload: true});
-            
+
         }
 
         $scope.star = function (officeDocument) {

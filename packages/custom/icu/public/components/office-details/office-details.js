@@ -25,7 +25,7 @@ angular.module('mean.icu.ui.officedetails', [])
         $scope.tasks = tasks.data || tasks;
         $scope.folders = folders.data || folders;
         $scope.offices = offices.data || offices;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
+        $scope.shouldAutofocus = $stateParams.nameFocused;
 
         OfficesService.getStarred().then(function (starred) {
 

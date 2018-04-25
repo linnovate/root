@@ -9,10 +9,11 @@
     ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.project)) && !recycled(data.project)}}"
     placeholder="{{'createNewProject' | i18next}}"
     strip-br="true"
-    ng-change="data.searchCb(data.project.title) || data.updateCb(data.project)"
+    ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
+    ng-change="data.searchCb(data.project) || data.updateCb(data.project)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-model="data.project.PartTitle"
     ng-blur="data.hideAutoCompleteCb(data.project)"
+    ng-model="data.project.PartTitle"
 >
 </td>
 <td class="status col-sm-2" ng-class="data.project.status">{{data.project.status | i18next }}</td>

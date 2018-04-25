@@ -80,15 +80,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
             _($scope.projects).each(function(p) {
                 p.__state = creatingStatuses.Created;
-                if (p.title.length > 20)
-                {
-                    p.PartTitle = p.title.substring(0,20) + "...";
-                }
-                else
-                {
-                    p.PartTitle = p.title;
-                }
-                p.IsTitle = false;
+                p.PartTitle = p.title;
             });
 
             var newProject = {
@@ -232,15 +224,6 @@ angular.module('mean.icu.ui.projectlistdirective', [])
             };
 
             $scope.onEnter = function($event, index) {
-                // if ($event.keyCode === 13) {
-                //     $event.preventDefault();
-
-                //     $scope.projects[index].__autocomplete = false;
-
-                //     if ($scope.projects.length - 2 === index) {
-                //         $element.find('td.name:nth-child(1)')[0].focus();
-                //     }
-                // }
                 if ($event.keyCode === 13 || $event.keyCode === 9) {
                     $event.preventDefault();
 
@@ -279,10 +262,7 @@ angular.module('mean.icu.ui.projectlistdirective', [])
 
             $scope.hideAutoComplete = function(task) {
 
-                if (task.title.length > 20)
-                {
-                    task.PartTitle = task.title.substring(0,20) + "...";
-                }
+                task.PartTitle = task.title
 
                 task.__autocomplete = false;
                 $scope.searchResults.length = 0;
@@ -303,15 +283,6 @@ angular.module('mean.icu.ui.projectlistdirective', [])
                         _(projects.data).each(function(p) {
                             p.__state = creatingStatuses.Created;
                             p.PartTitle = p.title;
-                            if (p.title.length > 20)
-                            {
-                                p.PartTitle = p.title.substring(0,20) + "...";
-                            }
-                            else
-                            {
-                                p.PartTitle = p.title;
-                            }
-                            p.IsTitle = false;
                         });
 
                         var offset = $scope.displayOnly ? 0 : 1;

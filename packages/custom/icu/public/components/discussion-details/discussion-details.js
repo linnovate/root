@@ -27,7 +27,7 @@ angular.module('mean.icu.ui.discussiondetails', [])
         }
         $scope.entity = entity || context.entity;
         $scope.tasks = tasks.data || tasks;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
+        $scope.shouldAutofocus = $stateParams.nameFocused;
         $scope.people = people.data || people;
         $scope.main = context.main;
         $scope.CanceledMailSend = false;

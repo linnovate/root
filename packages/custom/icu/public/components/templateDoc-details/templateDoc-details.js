@@ -24,7 +24,7 @@ angular.module('mean.icu.ui.templateDocdetails', [])
         $scope.tasks = tasks.data || tasks;
         $scope.folders = folders.data || folders;
         $scope.templateDocs = templateDocs.data || templateDocs;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
+        $scope.shouldAutofocus = $stateParams.nameFocused;
 /**
         TemplateDocsService.getStarred().then(function (starred) {
 

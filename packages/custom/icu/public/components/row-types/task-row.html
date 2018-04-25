@@ -1,7 +1,3 @@
-<!--<td  class="move" style="width: 15px;cursor:move;">-->
-    <!--<i ng-if="data.task._id" class="fa fa-ellipsis-v"></i>-->
-    <!--<i ng-if="data.task._id" class="fa fa-ellipsis-v"></i>-->
-<!--</td>-->
 <td class="id" ng-if="data.task._id">{{data.index + 1}}</td>
 <td class="name"
     ng-attr-colspan="{{data.task._id ? undefined : 5}}"
@@ -13,7 +9,8 @@
     ng-change="data.searchCb(data.task) || data.updateCb(data.task)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-blur="data.hideAutoCompleteCb(data.task)"
-    ng-model="data.task.title">
+    ng-model="data.task.PartTitle"
+>
 </td>
 <td class="project">
     <span class="tag project"

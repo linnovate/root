@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
             };
             if($scope.order.field == "custom"){
                 var timer,
-                    container = $('.containerVertical'), 
+                    container = $('.containerVertical'),
                     scroll = $('.list-table'),
                     box = $('middlepane-container'),
                     topBar = $('.filters'),
@@ -45,7 +45,7 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
                          entity: context.entityName,
                          entityId: context.entityId
                      }, { reload: false });
-                    
+
                     orderService.setOrder(e, elindex, dropindex, $scope.templateDocs.length - 1);
                 });
                 // $scope.$on('dragularrelease', function (e, el) {
@@ -104,7 +104,7 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
 
             $scope.detailsState = context.entityName === 'all' ? 'main.templateDocs.all.details' : 'main.templateDocs.byentity.details';
 
-         
+
             $scope.createOrUpdate = function(templateDoc) {
 
                 if (context.entityName !== 'all') {
@@ -198,7 +198,7 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
                     return;
                 }
 
-                var nameFocused = angular.element($event.target).hasClass('name');
+                var nameFocused = angular.element($event.target).hasClass('name') || angular.element($event.target).parent().hasClass('name');
 
                 templateDoc.PartTitle = templateDoc.title;
 
