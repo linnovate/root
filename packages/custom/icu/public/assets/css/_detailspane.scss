@@ -648,15 +648,12 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         }
 
         input {
-            //appearance: none;
             border: none;
-            //float: right;
             width: 100%;
-            margin-left: 15px;
-            padding: 17px 0 17px 29px;
+            padding: 17px 0 17px 42px;
             cursor: pointer;
             outline: none;
-            background: url('/icu/assets/img/calendar.png') no-repeat scroll left center;
+            background: url(/icu/assets/img/calendar.png) no-repeat scroll 11% 50%;
             &::placeholder {
                 opacity: 1;
                 color: $light-grey-placeholder;
