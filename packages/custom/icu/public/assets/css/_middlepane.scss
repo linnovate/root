@@ -369,8 +369,19 @@
     .templateDoc-list table tbody tr td.name,
     .office-list table tbody tr td.name {
         p {
-            text-overflow: ellipsis;
+            //text-overflow: ellipsis;
             overflow: hidden;
         }
+    }
+
+    .noFocusLTR {
+        text-overflow: ellipsis;
+        text-align: left;
+        direction: rtl;
+    }
+    .noFocusRTL {
+        text-overflow: ellipsis;
+        text-align: right;
+        direction: ltr;
     }
 }

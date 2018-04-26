@@ -12,7 +12,10 @@
     ng-change="data.searchCb(data.office.title) || data.updateCb(data.office)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-model="data.office.PartTitle"
-    ng-blur="data.hideAutoCompleteCb(data.office)">
+    ng-blur="data.hideAutoCompleteCb(data.office); focus=false"
+    ng-focus="focus=true"
+    ng-class="{'noFocusLTR':leftDirection,'noFocusRTL':rightDirection}"
+>
 </td>
 <!--<td class="status col-sm-2" ng-class="data.office.status">{{data.office.status | i18next }}</td>-->
 <td class="status col-sm-2" ng-class="data.office.status">{{}}</td>

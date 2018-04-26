@@ -9,7 +9,7 @@
     Add folder of the details of the type (in the right side). Like "/icu/packages/custom/icu/public/components/task-details"
 */
 angular.module('mean.icu.ui.rows', [])
-.directive('icuListRow', function($compile, $http, $templateRequest, UsersService, PermissionsService) {
+.directive('icuListRow', function($compile, $http, $templateRequest, $i18next, UsersService, PermissionsService) {
     var templates = {
         people: '/icu/components/row-types/people-row.html',
         task: '/icu/components/row-types/task-row.html',
@@ -74,7 +74,11 @@ angular.module('mean.icu.ui.rows', [])
         $scope.permsToSee = function(entity){
             return PermissionsService.haveAnyPerms(entity);
         };
+        $scope.focus = false;
 
+        var lang = $i18next.options.lng;
+        $scope.leftDirection = $scope.focus===false && lang ==='en';
+        $scope.rightDirection =  $scope.focus===false && lang ==='he';
     }
 
 

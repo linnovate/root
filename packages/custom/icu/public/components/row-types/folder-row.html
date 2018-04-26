@@ -12,8 +12,11 @@
     ng-attr-tabindex="{{ data.folder._id ? undefined : '3'}}"
     ng-change="data.searchCb(data.folder) || data.updateCb(data.folder)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-blur="data.hideAutoCompleteCb(data.folder)"
-    ng-model="data.folder.PartTitle">
+    ng-blur="data.hideAutoCompleteCb(data.folder); focus=false"
+    ng-model="data.folder.PartTitle"
+    ng-focus="focus=true"
+    ng-class="{'noFocusLTR':leftDirection,'noFocusRTL':rightDirection}"
+>
 </td>
 <td class="office">
     <span class="tag office"

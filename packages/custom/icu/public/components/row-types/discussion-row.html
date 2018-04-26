@@ -12,8 +12,10 @@
     ng-attr-tabindex="{{ data.discussion._id ? undefined : '3'}}"
     ng-change="data.searchCb(data.discussion) || data.updateCb(data.discussion)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-blur="data.hideAutoCompleteCb(data.discussion)"
+    ng-blur="data.hideAutoCompleteCb(data.discussion); focus=false"
     ng-model="data.discussion.PartTitle"
+    ng-focus="focus=true"
+    ng-class="{'noFocusLTR':leftDirection,'noFocusRTL':rightDirection}"
 >
 </td>
 <td class="status col-sm-2" ng-class="data.discussion.status">{{data.discussion.status | i18next}}</td>

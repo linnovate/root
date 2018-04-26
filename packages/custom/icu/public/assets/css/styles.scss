@@ -678,6 +678,11 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
       .ranges, .calendar {
         float: left;
       }
+        .noFocus {
+            text-overflow: ellipsis;
+            text-align: left;
+            direction: rtl;
+        }
     }
     &.rtl {
       direction: rtl;
@@ -717,6 +722,11 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
         text-align: right;
         float: right;
       }
+        .noFocus {
+            text-overflow: ellipsis;
+            text-align: left;
+            direction: ltr;
+        }
     }
   }
 }

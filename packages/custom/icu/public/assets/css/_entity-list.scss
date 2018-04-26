@@ -140,16 +140,15 @@
                     }
 
                     &.name {
-                        // width: 120px;
-                        //width: 8.3vw;
-                        //display: inline-block;
-                        text-overflow: ellipsis;
+                        position: relative;
                         white-space: nowrap;
                         cursor: text;
                         flex:1;
                         overflow: hidden;
                         display: block;
                         line-height: 50px;
+                        padding-right: 5px;
+                        margin-right: 5px;
                         &:before {
                             font-weight: normal;
                             font-style: italic;
@@ -160,7 +159,8 @@
                             word-wrap: break-word;
                         }
 
-                        padding-left: 25px;
+                        padding-left: 0;
+                        margin-left: 25px;
                     }
 
                     &.project {
@@ -218,7 +218,7 @@
                             position: relative;
                             top: 50%;
                             left: 0;
-                            transform: none;                            
+                            transform: none;
                         }
                     }
 
@@ -440,7 +440,7 @@
                             &.canceled{color: #ef5350;}
                             &.completed{color: #598527;}
                             &.archived{color: #ab47bc;}
-                            &.waiting-approval{color: #ab47bc;}                            
+                            &.waiting-approval{color: #ab47bc;}
                             &.scheduled{color: #0054a6;}
                             &.received{color: #37afef;}
                             &.sent{color: #359123;}
@@ -633,7 +633,7 @@
                             &.canceled{color: #ef5350;}
                             &.completed{color: #598527;}
                             &.archived{color: #ab47bc;}
-                            &.waiting-approval{color: #ab47bc;}                            
+                            &.waiting-approval{color: #ab47bc;}
                             &.scheduled{color: #0054a6;}
                             &.received{color: #37afef;}
                             &.sent{color: #359123;}
