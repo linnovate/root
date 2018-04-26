@@ -1,6 +1,5 @@
 'use strict';
 
-
 var _ = require('lodash');
 var config = require('../config/env/all.js');
 var languages = config.languages;
