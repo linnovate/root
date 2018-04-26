@@ -18,6 +18,7 @@ var mean = require('meanio'),
 
 module.exports = function(app, db) {app.set('showStackError', true);
 test = "dsfdfg"
+console(1
   // Prettify HTML
   app.locals.pretty = true;
 
