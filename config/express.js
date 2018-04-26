@@ -16,10 +16,8 @@ var mean = require('meanio'),
   config = mean.loadConfig();
   dfgdfg
 
-module.exports = function(app, db) {
-
-  app.set('showStackError', true);
-
+module.exports = function(app, db) {app.set('showStackError', true);
+test = "dsfdfg"
   // Prettify HTML
   app.locals.pretty = true;
 
