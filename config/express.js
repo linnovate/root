@@ -14,7 +14,7 @@ var mean = require('meanio'),
   modRewrite = require('connect-modrewrite'),
   seo = require('mean-seo'),
   config = mean.loadConfig();
-  
+  dfgdfg
 
 module.exports = function(app, db) {
 
