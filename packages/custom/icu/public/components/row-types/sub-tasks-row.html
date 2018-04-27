@@ -8,10 +8,10 @@
     ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
     ng-change="data.updateCb(data.task)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-blur="data.hideAutoCompleteCb(data.task); focus=false"
     ng-model="data.task.title"
-    ng-focus="focus=true"
-    ng-class="{'noFocusLTR':leftDirection,'noFocusRTL':rightDirection}"
+    ng-blur="bluring(data.task); data.hideAutoCompleteCb(data.task)"
+    ng-focus="focusing(data.task)"
+    ng-class="{'noFocusLTR':leftDirection(data.task),'noFocusRTL':rightDirection(data.task)}"
 >
 </td>
 <td class="user" ng-if="data.task._id">

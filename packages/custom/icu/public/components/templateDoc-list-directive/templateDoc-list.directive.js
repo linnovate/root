@@ -81,15 +81,7 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
 
             _($scope.templateDocs).each(function(p) {
                 p.__state = creatingStatuses.Created;
-                if (p.title.length > 20)
-                {
-                    p.PartTitle = p.title.substring(0,20) + "...";
-                }
-                else
-                {
-                    p.PartTitle = p.title;
-                }
-                p.IsTitle = false;
+                p.PartTitle = p.title;
             });
 
             var newTemplateDoc = {
@@ -125,11 +117,6 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
                     });
                 } else if (templateDoc.__state === creatingStatuses.Created) {
 
-                    if (!templateDoc.IsTitle)
-                    {
-                        templateDoc.PartTitle = templateDoc.PartTitle.split("...")[0] + templateDoc.title.substring(templateDoc.PartTitle.split("...")[0].length,templateDoc.title.length);
-                        templateDoc.IsTitle = !templateDoc.IsTitle;
-                    }
                     templateDoc.title = templateDoc.PartTitle;
                     var json = {
                         'name':'title',
@@ -284,10 +271,7 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
 
             $scope.hideAutoComplete = function(task) {
 
-                if (task.title.length > 20)
-                {
-                    task.PartTitle = task.title.substring(0,20) + "...";
-                }
+                task.PartTitle = task.title
 
                 task.__autocomplete = false;
                 $scope.searchResults.length = 0;
@@ -308,15 +292,6 @@ angular.module('mean.icu.ui.templateDoclistdirective', [])
                         _(templateDocs.data).each(function(p) {
                             p.__state = creatingStatuses.Created;
                             p.PartTitle = p.title;
-                            if (p.title.length > 20)
-                            {
-                                p.PartTitle = p.title.substring(0,20) + "...";
-                            }
-                            else
-                            {
-                                p.PartTitle = p.title;
-                            }
-                            p.IsTitle = false;
                         });
 
                         var offset = $scope.displayOnly ? 0 : 1;

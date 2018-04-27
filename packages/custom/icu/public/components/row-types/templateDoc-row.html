@@ -11,10 +11,10 @@
     strip-br="true"
     ng-change="data.searchCb(data.templateDoc.title) || data.updateCb(data.templateDoc)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-blur="data.hideAutoCompleteCb(data.templateDoc); focus=false"
     ng-model="data.templateDoc.PartTitle"
-    ng-focus="focus=true"
-    ng-class="{'noFocusLTR':leftDirection,'noFocusRTL':rightDirection}"
+    ng-blur="bluring(data.templateDoc); data.hideAutoCompleteCb(data.templateDoc)"
+    ng-focus="focusing(data.templateDoc)"
+    ng-class="{'noFocusLTR':leftDirection(data.templateDoc),'noFocusRTL':rightDirection(data.templateDoc)}"
 >
 </td>
 <!--<td class="status col-sm-2" ng-class="data.templateDoc.status">{{data.templateDoc.status | i18next }}</td>-->

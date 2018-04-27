@@ -378,10 +378,20 @@
         text-overflow: ellipsis;
         text-align: left;
         direction: rtl;
+        p {
+            text-overflow: ellipsis;
+            text-align: left;
+            direction: rtl;
+        }
     }
     .noFocusRTL {
         text-overflow: ellipsis;
         text-align: right;
         direction: ltr;
+        p {
+            text-overflow: ellipsis;
+            text-align: right;
+            direction: ltr;
+        }
     }
 }

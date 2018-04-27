@@ -74,11 +74,21 @@ angular.module('mean.icu.ui.rows', [])
         $scope.permsToSee = function(entity){
             return PermissionsService.haveAnyPerms(entity);
         };
-        $scope.focus = false;
 
         var lang = $i18next.options.lng;
-        $scope.leftDirection = $scope.focus===false && lang ==='en';
-        $scope.rightDirection =  $scope.focus===false && lang ==='he';
+        $scope.leftDirection = function(entity){
+            return !entity.focus && lang ==='en';
+        };
+        $scope.rightDirection =  function(entity){
+            return !entity.focus && lang ==='he';
+        };
+
+        $scope.focusing = function(entity){
+            entity.focus = true;
+        };
+        $scope.bluring = function(entity){
+            entity.focus = false;
+        };
     }
 
 
