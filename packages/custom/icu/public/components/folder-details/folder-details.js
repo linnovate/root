@@ -24,7 +24,6 @@ angular.module('mean.icu.ui.folderdetails', [])
         $scope.entity = entity || context.entity;
         $scope.tasks = tasks.data || tasks;
         $scope.folders = folders.data || folders;
-        $scope.shouldAutofocus = $stateParams.nameFocused;
         $scope.offices = offices.data || offices;
         $scope.officeName = '';
         $scope.offices.push({
@@ -376,6 +375,8 @@ angular.module('mean.icu.ui.folderdetails', [])
         $scope.haveEditiorsPermissions = function(){
             return PermissionsService.haveEditorsPerms($scope.entity);
         };
+
+        $scope.shouldAutofocus = $stateParams.nameFocused && $scope.haveEditiorsPermissions();
 
         $scope.permsToSee = function(){
             return PermissionsService.haveAnyPerms($scope.entity);

@@ -45,7 +45,6 @@ angular.module('mean.icu.ui.taskdetails', [])
         var currentState = $state.current.name;
         $scope.isRecycled = $scope.task.hasOwnProperty('recycled');
 
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
         if ($scope.task._id) {
             TasksService.getStarred().then(function(starred) {
                 $scope.task.star = _(starred).any(function(s) {
@@ -608,6 +607,8 @@ angular.module('mean.icu.ui.taskdetails', [])
         $scope.permsToSee = function(){
             return PermissionsService.haveAnyPerms($scope.entity);
         };
+
+        $scope.shouldAutofocus = !$stateParams.nameFocused && $scope.haveEditiorsPermissions();
 
         // if ($scope.task &&
         //         ($state.current.name === 'main.tasks.byentity.details' ||

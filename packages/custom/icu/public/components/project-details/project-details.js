@@ -31,7 +31,6 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.projects = projects.data || projects;
         $scope.project = entity || context.entity;
         $scope.entity = entity || context.entity;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.tags = tags;
         $scope.addSubProjects = false;
 
@@ -269,6 +268,8 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.permsToSee = function(){
             return PermissionsService.haveAnyPerms($scope.entity);
         };
+
+        $scope.shouldAutofocus = !$stateParams.nameFocused && $scope.haveEditiorsPermissions;
 
         $scope.removeTag = function(tag) {
             $scope.project.tags = _($scope.project.tags).without(tag);

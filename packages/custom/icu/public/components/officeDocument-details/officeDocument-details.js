@@ -53,7 +53,6 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         $scope.tags = ['tag'];
         $scope.tasks = tasks.data || tasks;
         $scope.officeDocuments = officeDocuments.data || officeDocuments;
-        $scope.shouldAutofocus = $stateParams.nameFocused;;
         $scope.tagInputVisible = false;
         //$scope.officeDocument.created = new Date($scope.officeDocument.created);
         OfficeDocumentsService.getStarred().then(function (starred) {
@@ -104,6 +103,8 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         $scope.haveEditiorsPermissions = function(){
             return PermissionsService.haveEditorsPerms($scope.entity);
         };
+
+        $scope.shouldAutofocus = $stateParams.nameFocused && $scope.haveEditiorsPermissions();
 
         $scope.$watch('officeDocument.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {
