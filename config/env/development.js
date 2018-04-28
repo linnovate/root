@@ -91,8 +91,6 @@ module.exports = {
   elasticsearch: {
     hosts: [
       (process.env.ELASTICSEARCH_IP || 'localhost') + ':9200',
-      (process.env.ELASTICSEARCH_IP || 'localhost') + ':9201',
-      (process.env.ELASTICSEARCH_IP || 'localhost') + ':9205',
     ],
     port: 9200,
     log: 'trace',
