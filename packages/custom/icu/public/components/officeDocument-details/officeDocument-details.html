@@ -133,7 +133,7 @@
                     ng-keyup="updateFolderName($select.selected.title)" ng-mouseleave="removeCreateNew">
                     <ui-select-match placeholder="{{$select.selected.title || 'selectFolder' | i18next}}">
                             <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}"
-                            ng-bind-html="$select.selected.title">                                
+                            ng-bind-html="$select.selected.title">
                                 <div class="delete" ng-click="unsetFolder($event, templateDoc)">
                                     <img src="/icu/assets/img/X.png"></img>
                                 </div>
@@ -226,7 +226,7 @@
                     <li class="tag-item" ng-repeat="tag in officeDocument.tags">
                         <span>{{tag}}</span>
                         <button ng-click="removeTag(tag)">
-                    <i class="fa fa-times"></i>
+                    <i class="tag-close"></i>
                 </button>
                     </li>
                     <li class="new-tag-input" ng-show="tagInputVisible">

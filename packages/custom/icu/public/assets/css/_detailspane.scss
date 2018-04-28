@@ -354,7 +354,6 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     position: relative;
 
     button {
-        appearance: none;
         background-color: transparent;
         border: none;
         background: #2AB541;
@@ -1190,21 +1189,19 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 font-size: 12px;
                 padding: 0 5px;
                 background-color: white;
-                border: 1px solid $light-grey1;
+                border: 1px solid $light-grey6;
 
-                &:hover {
-                    background-color: $light-grey1;
-                    border: 1px solid;
+                button {
+                    background-size: 100%;
+                    width: 10px;
+                    height: 10px;
+                    background: url('/icu/assets/img/icon x.png') 100% no-repeat;
+                    display: inline-block;
 
-                    button {
-                        display: inline-block;
-                        background-color: inherit;
-                    }
                 }
 
                 button {
                     @include button;
-                    display: none;
                     color: $light-grey1;
                     line-height: 12px;
 
@@ -1347,28 +1344,17 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                 background-color: white;
                 border: 1px solid $light-grey1;
 
-                &:hover {
-                    background-color: $light-grey1;
-                    border: 1px solid;
-
-                    button {
-                        display: inline-block;
-                        background-color: inherit;
-                    }
-                }
-
                 button {
                     @include button;
-                    display: none;
                     color: $light-grey1;
                     line-height: 12px;
-
+                    height: 15px;
+                    width: 15px;
+                    background: url('/icu/assets/img/icon x.png')100% center;
                     i {
                         background-color: $dark-grey;
                         line-height: 12px;
                         border-radius: 6px;
-                        width: 13px;
-                        height: 12px;
                     }
                 }
             }
