@@ -68,6 +68,7 @@ angular.module('mean.icu.ui.rows', [])
         };
 
         $scope.haveEditiorsPermissions = function(entity){
+            if(!entity.permissions)return true;
             return PermissionsService.haveEditorsPerms(entity);
         };
 
