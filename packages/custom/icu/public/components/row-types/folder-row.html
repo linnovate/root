@@ -15,7 +15,7 @@
     ng-model="data.folder.PartTitle"
     ng-blur="bluring(data.folder, $event); data.hideAutoCompleteCb(data.folder)"
     ng-focus="focusing(data.folder)"
-    ng-class="{'noFocusLTR':leftDirection(data.folder),'noFocusRTL':rightDirection(data.folder)}"
+    ng-class="{'noFocus':isBlurred(data.folder)}"
 >
 </td>
 <td class="office">

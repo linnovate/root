@@ -15,7 +15,7 @@
     ng-model="data.project.PartTitle"
     ng-blur="bluring(data.project, $event); data.hideAutoCompleteCb(data.project)"
     ng-focus="focusing(data.project)"
-    ng-class="{'noFocusLTR':leftDirection(data.project),'noFocusRTL':rightDirection(data.project)}"
+    ng-class="{'noFocus':isBlurred(data.project)}"
 >
 </td>
 <td class="status col-sm-2" ng-class="data.project.status">{{data.project.status | i18next }}</td>

@@ -11,7 +11,7 @@
     ng-model="data.task.PartTitle"
     ng-blur="bluring(data.task, $event); data.hideAutoCompleteCb(data.task)"
     ng-focus="focusing(data.task)"
-    ng-class="{'noFocusLTR':leftDirection(data.task),'noFocusRTL':rightDirection(data.task)}"
+    ng-class="{'noFocus':isBlurred(data.task)}"
 >
 </td>
 <td class="project">

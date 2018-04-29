@@ -374,13 +374,7 @@
         }
     }
 
-    .noFocusLTR {
-        text-overflow: ellipsis #{"/*rtl:ignore*/"};
-        p {
-            text-overflow: ellipsis #{"/*rtl:ignore*/"};
-        }
-    }
-    .noFocusRTL {
+    .noFocus {
         text-overflow: ellipsis #{"/*rtl:ignore*/"};
         p {
             text-overflow: ellipsis #{"/*rtl:ignore*/"};

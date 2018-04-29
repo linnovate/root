@@ -14,7 +14,7 @@
     ng-model="data.office.PartTitle"
     ng-blur="bluring(data.office, $event); data.hideAutoCompleteCb(data.office)"
     ng-focus="focusing(data.office)"
-    ng-class="{'noFocusLTR':leftDirection(data.office),'noFocusRTL':rightDirection(data.office)}"
+    ng-class="{'noFocus':isBlurred(data.office)}"
 >
 </td>
 <!--<td class="status col-sm-2" ng-class="data.office.status">{{data.office.status | i18next }}</td>-->

@@ -16,7 +16,7 @@
     ng-model="data.officeDocument.PartTitle"
     ng-blur="bluring(data.officeDocument, $event); data.hideAutoCompleteCb(data.officeDocument)"
     ng-focus="focusing(data.officeDocument)"
-    ng-class="{'noFocusLTR':leftDirection(data.officeDocument),'noFocusRTL':rightDirection(data.officeDocument)}"
+    ng-class="{'noFocus':isBlurred(data.officeDocument)}"
 >
 </td>
 
