@@ -13,7 +13,7 @@
     ng-change="data.searchCb(data.discussion) || data.updateCb(data.discussion)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-model="data.discussion.PartTitle"
-    ng-blur="bluring(data.discussion); data.hideAutoCompleteCb(data.discussion)"
+    ng-blur="bluring(data.discussion, $event); data.hideAutoCompleteCb(data.discussion)"
     ng-focus="focusing(data.discussion)"
     ng-class="{'noFocusLTR':leftDirection(data.discussion),'noFocusRTL':rightDirection(data.discussion)}"
 >

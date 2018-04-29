@@ -14,7 +14,7 @@
     ng-change="data.searchCb(data.officeDocument) || data.updateCb(data.officeDocument)"
     ng-keydown="data.focusAutoCompleteCb($event, data.officeDocument) || data.onEnterCb($event, data.index)"
     ng-model="data.officeDocument.PartTitle"
-    ng-blur="bluring(data.officeDocument); data.hideAutoCompleteCb(data.officeDocument)"
+    ng-blur="bluring(data.officeDocument, $event); data.hideAutoCompleteCb(data.officeDocument)"
     ng-focus="focusing(data.officeDocument)"
     ng-class="{'noFocusLTR':leftDirection(data.officeDocument),'noFocusRTL':rightDirection(data.officeDocument)}"
 >

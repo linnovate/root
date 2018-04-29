@@ -376,22 +376,14 @@
 
     .noFocusLTR {
         text-overflow: ellipsis #{"/*rtl:ignore*/"};
-        text-align: left #{"/*rtl:ignore*/"};
-        direction: rtl #{"/*rtl:ignore*/"};
         p {
             text-overflow: ellipsis #{"/*rtl:ignore*/"};
-            text-align: left #{"/*rtl:ignore*/"};
-            direction: rtl #{"/*rtl:ignore*/"};
         }
     }
     .noFocusRTL {
         text-overflow: ellipsis #{"/*rtl:ignore*/"};
-        text-align: right #{"/*rtl:ignore*/"};
-        direction: ltr #{"/*rtl:ignore*/"};
         p {
             text-overflow: ellipsis #{"/*rtl:ignore*/"};
-            text-align: right #{"/*rtl:ignore*/"};
-            direction: ltr #{"/*rtl:ignore*/"};
         }
     }
 }

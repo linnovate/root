@@ -87,8 +87,13 @@ angular.module('mean.icu.ui.rows', [])
         $scope.focusing = function(entity){
             entity.focus = true;
         };
-        $scope.bluring = function(entity){
+        $scope.bluring = function(entity, $event){
             entity.focus = false;
+            if($event.target.children.length == 0){
+                $event.target.scrollLeft = 0;
+            } else {
+                $event.target.firstChild.scrollLeft = 0;
+            }
         };
     }
 

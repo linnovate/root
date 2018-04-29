@@ -12,7 +12,7 @@
     ng-change="data.searchCb(data.templateDoc.title) || data.updateCb(data.templateDoc)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-model="data.templateDoc.PartTitle"
-    ng-blur="bluring(data.templateDoc); data.hideAutoCompleteCb(data.templateDoc)"
+    ng-blur="bluring(data.templateDoc, $event); data.hideAutoCompleteCb(data.templateDoc)"
     ng-focus="focusing(data.templateDoc)"
     ng-class="{'noFocusLTR':leftDirection(data.templateDoc),'noFocusRTL':rightDirection(data.templateDoc)}"
 >
