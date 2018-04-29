@@ -148,7 +148,9 @@
                         display: block;
                         line-height: 50px;
                         padding-right: 5px;
+                        padding-left: 0;
                         margin-right: 5px;
+                        margin-left: 25px;
                         &:before {
                             font-weight: normal;
                             font-style: italic;
@@ -158,9 +160,6 @@
                             //width: 13.3vw;
                             word-wrap: break-word;
                         }
-
-                        padding-left: 0;
-                        margin-left: 25px;
                     }
 
                     &.project {
@@ -388,7 +387,6 @@
                     }
 
                     &.name {
-                        text-overflow: ellipsis;
                         white-space: nowrap;
                         cursor: text;
                         &:before {
