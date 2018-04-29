@@ -104,7 +104,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             return PermissionsService.haveEditorsPerms($scope.entity);
         };
 
-        $scope.shouldAutofocus = $stateParams.nameFocused && $scope.haveEditiorsPermissions();
+        $scope.shouldAutofocus = !$stateParams.nameFocused && $scope.haveEditiorsPermissions();
 
         $scope.$watch('officeDocument.title', function(nVal, oVal) {
             if (nVal !== oVal && oVal) {

@@ -117,7 +117,8 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
 
                      officeDocument.title = officeDocument.PartTitle;
 
-                    return OfficeDocumentsService.update(officeDocument);
+                    // return OfficeDocumentsService.update(officeDocument);
+                    return OfficeDocumentsService.updateDocument(officeDocument);
                 }
             };
 
