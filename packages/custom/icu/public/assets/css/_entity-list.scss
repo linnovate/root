@@ -569,7 +569,6 @@
                     }
 
                     &.name {
-                        text-overflow: ellipsis;
                         white-space: nowrap;
                         cursor: text;
                         &:before {
@@ -578,6 +577,7 @@
                         }
 
                         padding-left: 7px;
+                        padding-bottom: 0;
                     }
 
                     &.project {
