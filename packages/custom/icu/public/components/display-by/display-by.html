@@ -258,8 +258,7 @@
                 data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
                 data-ng-click="switchTo('project', project._id)"
                 ng-if="project._id && project.title">
-                <a href class="Names-In-List-On-Side">
-                    {{project.title}}
+                <a href class="Names-In-List-On-Side" ng-bind-html="project.title">
                 </a>
                 <div class="tag-color" ng-style="{'background-color': '#' + project.color}"></div>
             </li>
@@ -287,8 +286,7 @@
             <li data-ng-repeat="discussion in discussions | filterRecycled | limitTo:displayLimit['discussions']"
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
-                <a href class="Names-In-List-On-Side">
-                    {{discussion.title || discussion.name}}
+                <a href class="Names-In-List-On-Side" ng-bind-html="discussion.title || discussion.name">
                 </a>
             </li>
             <li ng-if="discussions.length > displayLimit['discussions']"

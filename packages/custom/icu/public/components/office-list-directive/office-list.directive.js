@@ -81,15 +81,7 @@ angular.module('mean.icu.ui.officelistdirective', [])
 
             _($scope.offices).each(function(p) {
                 p.__state = creatingStatuses.Created;
-                if (p.title.length > 20)
-                {
-                    p.PartTitle = p.title.substring(0,20) + "...";
-                }
-                else
-                {
-                    p.PartTitle = p.title;
-                }
-                p.IsTitle = false;
+                p.PartTitle = p.title;
             });
 
             var newOffice = {
@@ -124,12 +116,6 @@ angular.module('mean.icu.ui.officelistdirective', [])
                     });
                 } else if (office.__state === creatingStatuses.Created) {
 
-                    if (!office.IsTitle)
-                    {
-                        if(typeof office.PartTitle === 'undefined')office.PartTitle = office.title;
-                        office.PartTitle = office.PartTitle.split("...")[0] + office.title.substring(office.PartTitle.split("...")[0].length,office.title.length);
-                        office.IsTitle = !office.IsTitle;
-                    }
                     office.title = office.PartTitle;
                     return OfficesService.update(office);
                 }
@@ -194,7 +180,7 @@ angular.module('mean.icu.ui.officelistdirective', [])
                     return;
                 }
 
-                var nameFocused = angular.element($event.target).hasClass('name');
+                var nameFocused = angular.element($event.target).hasClass('name') || angular.element($event.target).parent().hasClass('name');
 
                 office.PartTitle = office.title;
 
@@ -280,10 +266,7 @@ angular.module('mean.icu.ui.officelistdirective', [])
 
             $scope.hideAutoComplete = function(task) {
 
-                if (task.title.length > 20)
-                {
-                    task.PartTitle = task.title.substring(0,20) + "...";
-                }
+                task.PartTitle = task.title
 
                 task.__autocomplete = false;
                 $scope.searchResults.length = 0;
@@ -304,15 +287,6 @@ angular.module('mean.icu.ui.officelistdirective', [])
                         _(offices.data).each(function(p) {
                             p.__state = creatingStatuses.Created;
                             p.PartTitle = p.title;
-                            if (p.title.length > 20)
-                            {
-                                p.PartTitle = p.title.substring(0,20) + "...";
-                            }
-                            else
-                            {
-                                p.PartTitle = p.title;
-                            }
-                            p.IsTitle = false;
                         });
 
                         var offset = $scope.displayOnly ? 0 : 1;

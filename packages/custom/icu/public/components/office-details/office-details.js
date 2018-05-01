@@ -25,7 +25,6 @@ angular.module('mean.icu.ui.officedetails', [])
         $scope.tasks = tasks.data || tasks;
         $scope.folders = folders.data || folders;
         $scope.offices = offices.data || offices;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
 
         OfficesService.getStarred().then(function (starred) {
 
@@ -59,6 +58,8 @@ angular.module('mean.icu.ui.officedetails', [])
         $scope.haveEditiorsPermissions = function(){
             return PermissionsService.haveEditorsPerms($scope.entity);
         };
+
+        $scope.shouldAutofocus = $stateParams.nameFocused && $scope.haveEditiorsPermissions();
 
         $scope.permsToSee = function(){
             return PermissionsService.haveAnyPerms($scope.entity);

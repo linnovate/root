@@ -92,13 +92,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
 
             _($scope.tasks).each(function (t) {
                 t.__state = creatingStatuses.Created;
-                if (t.title.length > 20) {
-                    t.PartTitle = t.title.substring(0, 20) + "...";
-                }
-                else {
-                    t.PartTitle = t.title;
-                }
-                t.IsTitle = false;
+                t.PartTitle = t.title;
             });
 
             if (!$scope.displayOnly) {
@@ -170,11 +164,6 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                     });
                 } else if (task.__state === creatingStatuses.Created) {
 
-                    if (!task.IsTitle) {
-                        if(typeof task.PartTitle === 'undefined')task.PartTitle = task.title;
-                        task.PartTitle = task.PartTitle.split("...")[0] + task.title.substring(task.PartTitle.split("...")[0].length, task.title.length);
-                        task.IsTitle = !task.IsTitle;
-                    }
                     task.title = task.PartTitle;
 
                     return TasksService.update(task);
@@ -291,6 +280,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                     $event.preventDefault();
 
                     $scope.tasks[index].__autocomplete = false;
+
                     if ($element.find('td.name')[index + 1]) {
                         $element.find('td.name')[index + 1].focus();
                     }
@@ -325,9 +315,7 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
 
             $scope.hideAutoComplete = function (task) {
 
-                if (task.title.length > 20) {
-                    task.PartTitle = task.title.substring(0, 20) + "...";
-                }
+                task.PartTitle = task.title;
 
                 task.__autocomplete = false;
                 $scope.searchResults.length = 0;
@@ -345,18 +333,9 @@ angular.module('mean.icu.ui.tasklistdirective', ['dragularModule'])
                     $scope.isLoading = true;
                     $scope.loadNext().then(function (tasks) {
 
-                     _(tasks.data).each(function(t) {
-                        t.__state = creatingStatuses.Created;
-                        t.PartTitle = t.title;
-                        if (t.title.length > 20)
-                        {
-                            t.PartTitle = t.title.substring(0,20) + "...";
-                        }
-                        else
-                        {
+                        _(tasks.data).each(function(t) {
+                            t.__state = creatingStatuses.Created;
                             t.PartTitle = t.title;
-                        }
-                        t.IsTitle = false;
                         });
 
                         var offset = $scope.displayOnly ? 0 : 1;

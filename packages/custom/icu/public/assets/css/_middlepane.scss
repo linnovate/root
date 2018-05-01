@@ -359,4 +359,25 @@
         height: 100%;
         overflow: hidden;
     }
+
+    .task-list table tbody tr td.name,
+    .discussion-list table tbody tr td.name,
+    .project-list table tbody tr td.name,
+    .sub-task-list table tbody tr td.name,
+    .folder-list table tbody tr td.name,
+    .officeDocument-list table tbody tr td.name,
+    .templateDoc-list table tbody tr td.name,
+    .office-list table tbody tr td.name {
+        p {
+            //text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+
+    .noFocus {
+        text-overflow: ellipsis #{"/*rtl:ignore*/"};
+        p {
+            text-overflow: ellipsis #{"/*rtl:ignore*/"};
+        }
+    }
 }

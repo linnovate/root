@@ -27,7 +27,6 @@ angular.module('mean.icu.ui.discussiondetails', [])
         }
         $scope.entity = entity || context.entity;
         $scope.tasks = tasks.data || tasks;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.people = people.data || people;
         $scope.main = context.main;
         $scope.CanceledMailSend = false;
@@ -135,6 +134,8 @@ angular.module('mean.icu.ui.discussiondetails', [])
         $scope.haveEditiorsPermissions = function(){
             return PermissionsService.haveEditorsPerms($scope.entity);
         };
+
+        $scope.shouldAutofocus = $stateParams.nameFocused && $scope.haveEditiorsPermissions();
 
         $scope.permsToSee = function(){
             return PermissionsService.haveAnyPerms($scope.entity);

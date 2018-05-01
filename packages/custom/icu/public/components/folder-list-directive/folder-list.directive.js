@@ -88,13 +88,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
 
             _($scope.folders).each(function (t) {
                 t.__state = creatingStatuses.Created;
-                if (t.title.length > 20) {
-                    t.PartTitle = t.title.substring(0, 20) + "...";
-                }
-                else {
-                    t.PartTitle = t.title;
-                }
-                t.IsTitle = false;
+                t.PartTitle = t.title;
             });
 
             if (!$scope.displayOnly) {
@@ -150,11 +144,6 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                     });
                 } else if (folder.__state === creatingStatuses.Created) {
 
-                    if (!folder.IsTitle) {
-                        if(typeof folder.PartTitle === 'undefined')folder.PartTitle = folder.title;
-                        folder.PartTitle = folder.PartTitle.split("...")[0] + folder.title.substring(folder.PartTitle.split("...")[0].length, folder.title.length);
-                        folder.IsTitle = !folder.IsTitle;
-                    }
                     folder.title = folder.PartTitle;
                     if (folder.office) {
                         folder.watchers = folder.watchers.concat(folder.office.watchers);
@@ -234,7 +223,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                     return;
                 }
 
-                var nameFocused = angular.element($event.target).hasClass('name');
+                var nameFocused = angular.element($event.target).hasClass('name') || angular.element($event.target).parent().hasClass('name');
                 folder.PartTitle = folder.title;
 
                 if (folder.__state === creatingStatuses.NotCreated) {
@@ -312,9 +301,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
 
             $scope.hideAutoComplete = function (folder) {
 
-                if (folder.title.length > 20) {
-                    folder.PartTitle = folder.title.substring(0, 20) + "...";
-                }
+                folder.PartTitle = folder.title
 
                 folder.__autocomplete = false;
                 $scope.searchResults.length = 0;
@@ -335,16 +322,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                      _(folders.data).each(function(t) {
                         t.__state = creatingStatuses.Created;
                         t.PartTitle = t.title;
-                        if (t.title.length > 20)
-                        {
-                            t.PartTitle = t.title.substring(0,20) + "...";
-                        }
-                        else
-                        {
-                            t.PartTitle = t.title;
-                        }
-                        t.IsTitle = false;
-                        });
+                     });
 
                         var offset = $scope.displayOnly ? 0 : 1;
 

@@ -8,8 +8,9 @@
     ng-attr-tabindex="{{ data.project._id ? undefined : '3'}}"
     ng-change="data.updateCb(data.project)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+    ng-model="data.project.title"
     ng-blur="data.hideAutoCompleteCb(data.project)"
-    ng-model="data.project.title">
+>
 </td>
 <td class="user" ng-if="data.project._id">
     <div class="no-assignee" ng-if="!data.task.assign">
