@@ -488,7 +488,12 @@
         width:calc(100% - 86px);
         width:234px;
         background-color: $grey;
-        overflow-x: auto;
+        
+        > .display-by {
+            overflow-x: auto;
+            height: 100%;
+        }
+        
         section {
             height: 100%;
         }
