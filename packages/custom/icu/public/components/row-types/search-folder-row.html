@@ -5,8 +5,8 @@
 <td class="office">
     <span class="tag office"
           title="{{data.result.officeObj.title}}"
-          ng-style="color={'background-color': '#' + data.result.officeObj.color}">
-        {{data.result.officeObj.title}}
+          ng-style="color={'background-color': '#' + data.result.officeObj.color}"
+          ng-bind-html="data.result.officeObj.title">
     </span>
 </td>
 <td class="arrow"><i class="fa chevron-right"></i></td>
