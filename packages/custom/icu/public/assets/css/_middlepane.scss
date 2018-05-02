@@ -166,7 +166,7 @@
         height: 103px;
         border-bottom: 1px solid #e1e1e1;
         background-color: white;
-        // padding: 38px 23px 27px 23px;
+        pointer-events: none;
         cursor: pointer;
         &.active {
             background-color: $grey;
