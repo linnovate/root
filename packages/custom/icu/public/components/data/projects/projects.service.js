@@ -32,6 +32,39 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
+    function removeFromParent(entity){
+        return new Promise(function(resolve) {
+            if(entity.parent){
+                getById(entity.parent)
+                    .then(parent=>{
+                        var index = parent.subProjects.findIndex(sub=>{
+                            return sub._id === entity._id;
+                        });
+                        parent.subProjects.splice(index, 1);
+                        update(parent);
+                        return resolve();
+                    })
+            } else {
+                return resolve();
+            }
+        });
+    }
+
+    function addToParent(entity){
+        return new Promise(function(resolve) {
+            if(entity.parent){
+                getById(entity.parent)
+                    .then(parent=>{
+                        parent.subProjects.push(entity);
+                        update(parent);
+                        return resolve();
+                    })
+            } else {
+                return resolve();
+            }
+        });
+    }
+
     function getByEntityId(entity) {
         return function(id, start, limit, sort, starred) {
             var qs = querystring.encode({
@@ -238,7 +271,7 @@ angular.module('mean.icu.data.projectsservice', [])
         });
     }
 
-    
+
     function updateDue(project, prev) {
         return ActivitiesService.create({
             data: {
@@ -306,6 +339,7 @@ angular.module('mean.icu.data.projectsservice', [])
 
     return {
         assign: assign,
+        addToParent: addToParent,
         getAll: getAll,
         getById: getById,
         getByDiscussionId: getByEntityId('discussions'),
@@ -319,6 +353,7 @@ angular.module('mean.icu.data.projectsservice', [])
         create: create,
         update: update,
         remove: remove,
+        removeFromParent: removeFromParent,
         star: star,
         getStarred: getStarred,
         data: data,

@@ -320,40 +320,45 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.recycle = function(entity) {
-            EntityService.recycle('projects', entity._id).then(function() {
-                let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "Recycled" // just for activity status
-                ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {
-                    ActivitiesService.data.push(result);
-                });
+            ProjectsService.removeFromParent(entity)
+                .then(()=> {
+                    EntityService.recycle('projects', entity._id).then(function () {
+                        let clonedEntity = JSON.parse(JSON.stringify(entity));
+                        clonedEntity.status = "Recycled" // just for activity status
+                        ProjectsService.updateStatus(clonedEntity, entity).then(function (result) {
+                            ActivitiesService.data.push(result);
+                        });
 
-                refreshList();
-                if(currentState.indexOf('search') !== -1){
-                    $state.go(currentState, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true,
-                        query: $stateParams.query
+                        refreshList();
+                        if (currentState.indexOf('search') !== -1) {
+                            $state.go(currentState, {
+                                entity: context.entityName,
+                                entityId: context.entityId
+                            }, {
+                                reload: true,
+                                query: $stateParams.query
+                            });
+                        } else {
+                            $state.go('main.projects.all', {
+                                entity: 'all',
+                            }, {
+                                reload: true
+                            });
+                        }
                     });
-                } else {
-                    $state.go('main.projects.all', {
-                        entity: 'all',
-                    }, {
-                        reload: true
-                    });
-                }
-            });
+                })
         };
 
         $scope.recycleRestore = function(entity) {
-            EntityService.recycleRestore('projects', entity._id).then(function() {
-                let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "un-deleted" // just for activity status
-                ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {
-                    ActivitiesService.data.push(result);
-                });
-                refreshList();
+            ProjectsService.addToParent(entity)
+                .then(()=> {
+                    EntityService.recycleRestore('projects', entity._id).then(function () {
+                        let clonedEntity = JSON.parse(JSON.stringify(entity));
+                        clonedEntity.status = "un-deleted"; // just for activity status
+                        ProjectsService.updateStatus(clonedEntity, entity).then(function (result) {
+                            ActivitiesService.data.push(result);
+                        });
+                        refreshList();
 
                 var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
                 $state.go(state, {

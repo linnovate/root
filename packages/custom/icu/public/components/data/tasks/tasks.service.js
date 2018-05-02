@@ -43,6 +43,39 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function removeFromParent(entity){
+        return new Promise(function(resolve) {
+            if(entity.parent){
+                getById(entity.parent)
+                    .then(parent=>{
+                        var index = parent.subTasks.findIndex(sub=>{
+                            return sub._id === entity._id;
+                        });
+                        parent.subTasks.splice(index, 1);
+                        update(parent);
+                        return resolve();
+                    })
+            } else {
+                return resolve();
+            }
+        });
+    }
+
+    function addToParent(entity){
+        return new Promise(function(resolve) {
+            if(entity.parent){
+                getById(entity.parent)
+                    .then(parent=>{
+                        parent.subTasks.push(entity);
+                        update(parent);
+                        return resolve();
+                    })
+            } else {
+                return resolve();
+            }
+        });
+    }
+
     function getByEntityId(entity) {
         return function(id, start, limit, sort, starred) {
             var qs = querystring.encode({
@@ -342,6 +375,8 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     return {
+        addToParent: addToParent,
+        removeFromParent: removeFromParent,
         getAll: getAll,
         getTags: getTags,
         getById: getById,
