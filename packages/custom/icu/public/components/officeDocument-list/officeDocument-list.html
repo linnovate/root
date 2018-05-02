@@ -8,7 +8,7 @@
                     })">
         <header class="title">
             {{'officeDocumentsFrom' | i18next}}{{currentContext.entityName | i18next}}
-            <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+            "<span ng-bind-html="currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name"></span>"
         </header>
     </div>
 

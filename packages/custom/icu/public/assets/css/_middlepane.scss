@@ -182,6 +182,11 @@
             line-height: 26px;
             span {
                 font-weight: 700;
+                
+                * {
+					display: inline;
+                }
+
                 &.project {
                     border-radius: 14px;
                     font-weight: normal;

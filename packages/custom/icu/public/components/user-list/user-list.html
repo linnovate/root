@@ -1,6 +1,7 @@
 <div class="user-list">
     <header class="title">
-        {{ 'peopleFrom' | i18next }}{{currentContext.entityName}} <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+        {{ 'peopleFrom' | i18next }}{{currentContext.entityName}}
+        "<span ng-bind-html="currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name"></span>"
     </header>
     <div class="filters">
         <button class="favorites"><i class="fa fa-star"></i></button>
