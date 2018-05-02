@@ -330,7 +330,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                         });
 
                         refreshList();
-                        if (currentState.indexOf('search') != -1) {
+                        if (currentState.indexOf('search') !== -1) {
                             $state.go(currentState, {
                                 entity: context.entityName,
                                 entityId: context.entityId
@@ -360,15 +360,14 @@ angular.module('mean.icu.ui.projectdetails', [])
                         });
                         refreshList();
 
-                        var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
-                        $state.go(state, {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {
-                            reload: true
-                        });
-                    });
-                })
+                var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
+                $state.go(state, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true
+                });
+            });
         };
 
         function refreshList(){
