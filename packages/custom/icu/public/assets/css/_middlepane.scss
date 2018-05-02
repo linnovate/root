@@ -158,8 +158,8 @@
     }
 
     .middlepane-container {
-        height: 100%;
-        overflow: hidden;
+//         overflow: hidden;
+		flex-grow: 1;
     }
 
     .header-wrap {
