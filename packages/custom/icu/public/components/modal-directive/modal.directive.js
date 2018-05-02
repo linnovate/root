@@ -421,7 +421,7 @@ function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,
 
     function updatePage(){
         UsersService.update($scope.currentUser).then(function() {
-            $state.go('main.tasks', null, { reload: true });
+            $state.go($state.current.name, null, { reload: true });
         });
     }
 }

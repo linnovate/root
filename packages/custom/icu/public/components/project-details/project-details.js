@@ -328,7 +328,7 @@ angular.module('mean.icu.ui.projectdetails', [])
                 });
 
                 refreshList();
-                if(currentState.indexOf('search') != -1){
+                if(currentState.indexOf('search') !== -1){
                     $state.go(currentState, {
                         entity: context.entityName,
                         entityId: context.entityId
