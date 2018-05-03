@@ -287,7 +287,7 @@
         ul{
             list-style: none;
             padding-left: 0;
-            max-height: 90px;
+            max-height: 105px;
             li {
                 display: flex;
                 justify-content: space-between;
@@ -317,6 +317,7 @@
                 }
                 &.ui-select-choices-group {
                     display:list-item;
+                    width:100%;
                 }
             }
         }
