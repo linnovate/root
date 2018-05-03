@@ -43,7 +43,7 @@
                     <ui-select ng-model="templateDoc.office" select-on-blur on-select="updateOffice(templateDoc,$select.selected._id)" ng-keyup="updateOfficeName($select.selected.title)" ng-mouseleave="removeCreateNew">
                         <ui-select-match placeholder="{{$select.selected.title || 'selectOffice' | i18next}}">
                             <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
-                                {{$select.selected.title}}
+                                <span ng-bind-html="$select.selected.title"></span>
                                 <div class="delete" ng-click="unsetOffice($event, templateDoc)">
                                     <img src="/icu/assets/img/X.png"></img>
                                 </div>

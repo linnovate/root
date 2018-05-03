@@ -232,53 +232,59 @@ angular.module('mean.icu.ui.taskdetails', [])
         };
 
         $scope.recycle = function(entity) {
-            EntityService.recycle('tasks', entity._id).then(function() {
-                let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "deleted"; // just for activity status
-                TasksService.updateStatus(clonedEntity, entity).then(function(result) {
-                    ActivitiesService.data.push(result);
-                });
+            TasksService.removeFromParent(entity)
+                .then(()=>{
+                    EntityService.recycle('tasks', entity._id).then(function() {
+                        let clonedEntity = JSON.parse(JSON.stringify(entity));
+                        clonedEntity.status = "deleted"; // just for activity status
+                        TasksService.updateStatus(clonedEntity, entity).then(function(result) {
+                            ActivitiesService.data.push(result);
+                        });
 
-                refreshList();
-                if(currentState.indexOf('search') != -1){
-                    $state.go(currentState, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true,
-                        query: $stateParams.query
+                        refreshList();
+                        if(currentState.indexOf('search') != -1){
+                            $state.go(currentState, {
+                                entity: context.entityName,
+                                entityId: context.entityId
+                            }, {
+                                reload: true,
+                                query: $stateParams.query
+                            });
+                        } else {
+                            var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
+                            $state.go(state, {
+                                entity: context.entityName,
+                                entityId: context.entityId
+                            }, {
+                                reload: true
+                            });
+                        }
                     });
-                } else {
-                    var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-                    $state.go(state, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true
-                    });
-                }
-            });
+                })
         };
 
         $scope.recycleRestore = function(entity) {
-            EntityService.recycleRestore('tasks', entity._id).then(function() {
-                let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "un-deleted"; // just for activity status
-                TasksService.updateStatus(clonedEntity, entity).then(function(result) {
-                    ActivitiesService.data.push(result);
-                });
+            TasksService.addToParent(entity)
+                .then(()=> {
+                    EntityService.recycleRestore('tasks', entity._id).then(function () {
+                        let clonedEntity = JSON.parse(JSON.stringify(entity));
+                        clonedEntity.status = "un-deleted"; // just for activity status
+                        TasksService.updateStatus(clonedEntity, entity).then(function (result) {
+                            ActivitiesService.data.push(result);
+                        });
 
-                refreshList();
+                        refreshList();
 
-                var state = currentState.indexOf('search') !== -1 ? $state.current.name :
-                    context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-                $state.go(state, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
-                    reload: true
-                });
-            });
+                        var state = currentState.indexOf('search') !== -1 ? $state.current.name :
+                            context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
+                        $state.go(state, {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {
+                            reload: true
+                        });
+                    });
+                })
         };
 
         $scope.unsetProject = function(event, task) {
