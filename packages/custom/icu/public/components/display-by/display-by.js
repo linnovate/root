@@ -40,6 +40,10 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.datePicker.date = {startDate: null, endDate: null};
         };
 
+        $scope.removeTags = function(text){
+            return text ? String(text).replace(/<[^>]+>/gm, '') : '';
+        };
+
         $scope.clearDueDate = function(){
           $scope.dueDate = null;
           SearchService.filteringByDueDate = null;
@@ -205,6 +209,10 @@ angular.module('mean.icu.ui.displayby', [])
 
             /*Made By OHAD - Needed for reversing sort*/
             //$state.go($state.current.name, { sort: $scope.officesList.office.title });
+        };
+
+        $scope.goToParentState = function(){
+
         };
 
         $scope.typesList = [{

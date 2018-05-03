@@ -36,9 +36,9 @@
         <div>
             <span class="tag office"
                 title="{{folder.office.title}}"
-                ng-style="{'background-color': '#' + folder.office.color, 'color': 'white'}">
-                {{folder.office.title}}
-            </span> 
+                ng-style="{'background-color': '#' + folder.office.color, 'color': 'white'}"
+                  ng-bind-html="folder.office.title">
+            </span>
         </div>
         <div class="status" ng-class="folder.status">
             {{folder.status | i18next }}

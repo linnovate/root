@@ -406,32 +406,29 @@
         <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}
         <div ng-if="folders.length !== 0" tooltips tooltip-template="{{'selectOffice' | i18next}}">
 
-            <ui-select ng-model="officesList.office" on-select="changeOrder()" theme="bootstrap">
+            <ui-select ng-model="officesList.office" on-select="changeOrder();goToParentState()" theme="bootstrap">
                 <ui-select-match placeholder="{{'selectOffice' | i18next}}">
-                    {{$select.selected.title}}
+                    {{removeTags($select.selected.title)}}
                 </ui-select-match>
                 <ui-select-choices repeat="office in officesList | filter: $select.search">
                     <div ng-bind-html="office.title | i18next | uppercase"></div>
                 </ui-select-choices>
             </ui-select>
 
-
-
-
-        <div ng-if="foldersList.length !== 0">
-            <ul>
-                <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100"
-                    data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
-                    data-ng-click="switchTo('folder', folder._id)"
-                    ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)"
-                >
-                    <a href class="Names-In-List-On-Side"
-                       ng-bind-html="folder.title">
-                    </a>
-                    <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
-                </li>
-            </ul>
-        </div>
+            <div ng-if="foldersList.length !== 0">
+                <ul>
+                    <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100"
+                        data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
+                        data-ng-click="switchTo('folder', folder._id)"
+                        ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)"
+                    >
+                        <a href class="Names-In-List-On-Side"
+                           ng-bind-html="folder.title">
+                        </a>
+                        <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
+                    </li>
+                </ul>
+            </div>
         </div>
         </p>
         <ul ng-if="!visible.folder && foldersList.length !== 0">
