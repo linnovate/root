@@ -484,10 +484,21 @@
         }
     }
     .submenu {
-        height: 93.9vh;
+        height: 100%;
         width:234px;
         background-color: $grey;
         overflow-x: auto;
+
+        position: absolute;
+        top: 55px;
+        left: 85px;
+        right: 0;
+        bottom: 0;
+
+        @media screen and (max-width: $small-resolution) {
+            left: 40px;
+        }
+
         section {
             height: 100%;
         }
