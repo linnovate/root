@@ -1,12 +1,9 @@
 <div class="header-wrap"
-     ng-if="currentContext.entityName !== 'all'"
-     ng-class="{ 'active': isCurrentEntityState(currentContext.entityId) }"
-     ui-sref="main.{{currentContext.main}}.byentity.activities({
-                entity: currentContext.entityName,
-                entityId: currentContext.entityId
-                })">
+ ng-if="currentContext.entityName !== 'all'"
+ ng-class="{ 'active': isCurrentEntityState(currentContext.entityId) }"
+>
     <header class="title">
         {{ entityName + 'From' | i18next}}{{currentContext.entityName | i18next}}
-        <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span>
+        <span ng-bind-html="currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name"></span>
     </header>
 </div>

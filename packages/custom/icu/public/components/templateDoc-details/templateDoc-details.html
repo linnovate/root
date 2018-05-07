@@ -65,7 +65,7 @@
         </div>
         <div class="description"
              ng-class="{ 'disabled' : !havePermissions('description')}">
-            <div class="title" contenteditable="true" tabindex="1" ng-attr-autofocus="{{shouldAutofocus || undefined}}" strip-br="true"
+            <div class="title" contenteditable="true" tabindex="1" strip-br="true"
                 ng-model="templateDoc.title" ng-change="updateTitle(templateDoc,templateDoc.title)" medium-editor>
 
             </div>
