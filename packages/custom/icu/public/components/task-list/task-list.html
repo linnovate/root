@@ -40,7 +40,7 @@
                 <!-- {{ 'tasksFrom' | i18next }}{{ currentContext.entityName | i18next }} -->
                 {{ 'tasksFrom' | i18next }}{{ currentContext.entityName | i18next }}
                 <!--   <span>"{{currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name}}"</span> -->
-                <span ng-bind-html="getProjName()"></span>
+                "<span ng-bind-html="getProjName()"></span>"
             </header>
             <div class="discussion-info" ng-if="discussionContext">
                 <div>
