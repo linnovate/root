@@ -514,9 +514,21 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         height: $panel-height;
         position: relative;
         float: left;
-        //display: flex;
-        //align-items: center;
-        //
+
+        ul {
+            /*rtl:begin:ignore*/
+            left: auto ;
+            right: 0;
+            /*rtl:end:ignore*/
+
+            /*rtl:begin:remove*/
+            right: auto ;
+            left: 0;
+            /*rtl:end:remove*/
+
+            width: auto;
+        }
+
         .ui-select-container.ui-select-bootstrap {
           padding-top: 0;
           .ui-select-match-text {

@@ -51,21 +51,21 @@ return new Promise(function (fulfill, reject){
   var path = 'files/notes/'+discussionId+".docx";
   var out = fs.createWriteStream (path);
     out.on ('error', function (err) {
-    logger.log('error', '%s writeDocxToFile, %s', req.user.name, ' fs.createWriteStream', {error: err.message});
+    logger.log('error', 'writeDocxToFile, %s', ' fs.createWriteStream', {error: err.message});
     reject(err);
   });
     docx.generate ( out, {
       'finalize': function ( written ) {
           exec('lowriter --headless --convert-to pdf ' + path, function (err, stout, sterr){
           if(err){
-            logger.log('error', '%s writeDocxToFile, %s', req.user.name, ' convert-to pdf', {error: err.message});
+            logger.log('error', 'writeDocxToFile, %s', ' convert-to pdf', {error: err.message});
             reject(err);
             return;
           }
           else{
             exec('mv ' + discussionId + '.pdf' + ' ' + 'files/notes/'+discussionId + '.pdf' , function (err, stout, sterr){
             if (err) {
-              logger.log('error', '%s writeDocxToFile, %s', req.user.name, ' save pdf file', {error: err.message});
+              logger.log('error', 'writeDocxToFile, %s', ' save pdf file', {error: err.message});
               reject(err);
             } 
             else {          
@@ -76,7 +76,7 @@ return new Promise(function (fulfill, reject){
           });
     },
       'error': function ( err ) {
-          logger.log('error', '%s writeDocxToFile, %s', req.user.name, ' docx.generate', {error: err.message});
+          logger.log('error', 'writeDocxToFile, %s', ' docx.generate', {error: err.message});
           reject(err);
       }
   });
@@ -93,13 +93,13 @@ function addTasks(docx,tasks,discussionId,tasksNum){
             fulfill('success');
           }
           else{
-            logger.log('error', '%s addTasks, %s', req.user.name, ' addTasksToDocx', {error: "Unknown Error"});
+            logger.log('error', 'addTasks, %s', ' addTasksToDocx', {error: "Unknown Error"});
 
             reject('error');
           }
         }
       ).catch(function(err){
-        logger.log('error', '%s addTasks, %s', req.user.name, ' addTasksToDocx', {error: err.message});
+        logger.log('error', 'addTasks, %s', ' addTasksToDocx', {error: err.message});
         reject(err);
 
       });
@@ -112,7 +112,7 @@ function addTasks(docx,tasks,discussionId,tasksNum){
       _id: tasks[i].assign
       }).exec(function (err, user) {
         if(err){
-          logger.log('error', '%s addTasks, %s', req.user.name, ' User.findOne', {error: err.message});
+          logger.log('error', 'addTasks, %s', ' User.findOne', {error: err.message});
           reject(err);
           return;
         }
@@ -133,12 +133,12 @@ function addTasks(docx,tasks,discussionId,tasksNum){
                   fulfill('success');
                 }
                 else{
-                  logger.log('error', '%s addTasks, %s', req.user.name, ' addTasksToDocx', {error: "Unknown Error"});
+                  logger.log('error', 'addTasks, %s', ' addTasksToDocx', {error: "Unknown Error"});
                   reject("error");
                 }
               }
             ).catch(function(err){
-              logger.log('error', '%s addTasks, %s', req.user.name, ' addTasksToDocx', {error: err.message});
+              logger.log('error', 'addTasks, %s', ' addTasksToDocx', {error: err.message});
               reject(err);
             });
           }
@@ -162,7 +162,7 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
         fulfill('success');
       }
       else{
-        logger.log('error', '%s addTasksToDocx, %s', req.user.name, ' writeDocxToFile', {error: 'Unknown Error'});
+        logger.log('error', 'addTasksToDocx, %s', ' writeDocxToFile', {error: 'Unknown Error'});
 
         reject('error');
       }
@@ -256,12 +256,12 @@ function addTasksToDocx(docx,tasks,assigns,discussionId,tasksNum){
       fulfill('success');
     }
     else{
-      logger.log('error', '%s addTasksToDocx, %s', req.user.name, ' writeDocxToFile', {error: 'Unknown Error'});
+      logger.log('error', 'addTasksToDocx, %s', ' writeDocxToFile', {error: 'Unknown Error'});
 
       reject('error');
     }
     }).catch(function(err){
-      logger.log('error', '%s addTasksToDocx, %s', req.user.name, ' writeDocxToFile', {error: err.message});
+      logger.log('error', 'addTasksToDocx, %s', ' writeDocxToFile', {error: err.message});
       reject(err);
 
     });
@@ -274,7 +274,7 @@ function createPDF(discussion , tasks){
     docx.on ( 'finalize', function ( written ) {
     });
     docx.on ( 'error', function ( err ) {
-      logger.log('error', '%s createPDF, %s', req.user.name, ' docx (officegen)', {error: err.message});
+      logger.log('error', 'createPDF, %s', ' docx (officegen)', {error: err.message});
     });
 
     //Today's date
@@ -417,11 +417,11 @@ if(discussion.watchers&&discussion.watchers.length>0){
         fulfill('success');
       }
       else{
-        logger.log('error', '%s createPDF, %s', req.user.name, ' addTasks', {error: "Unknown Error"});
+        logger.log('error', 'createPDF, %s', ' addTasks', {error: "Unknown Error"});
         reject('error');
       }
     }).catch(function(err){
-      logger.log('error', '%s createPDF, %s', req.user.name, ' addTasks', {error: err.message});
+      logger.log('error', 'createPDF, %s', ' addTasks', {error: err.message});
         reject(err);
     });
 
@@ -560,7 +560,7 @@ exports.send = function(type, data) {
   data.attendees.join(', ');
   exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
     if(error){
-      logger.log('error', '%s send, %s', req.user.name, ' pwd', {error: error.message});
+      logger.log('error', 'send, %s', ' pwd', {error: error.message});
     }
     
 
@@ -603,7 +603,7 @@ exports.send = function(type, data) {
     return Q.all(promises);
   });
   }).catch(function(err){
-    logger.log('error', '%s send, %s', req.user.name, ' createPDF', {error: err.message});
+    logger.log('error', 'send, %s', ' createPDF', {error: err.message});
 
   });
   }); //Creating the PDF file, and receiving its path
@@ -636,7 +636,7 @@ exports.send = function(type, data) {
 
     return Q.all(promises);
   }).catch(function(err){
-    logger.log('error', '%s send, %s', req.user.name, ' render', {error: 'Unknown Error'});
+    logger.log('error', ' send, %s', ' render', {error: 'Unknown Error'});
 
   });
 };
@@ -696,7 +696,7 @@ exports.sendMyTasksOfTodaySummary = function(type, data) {
 
   exec("pwd | tr -d '\n'", function(error, stdout, stderr) {
     if(error){
-      logger.log('error', '%s sendMyTasksOfTodaySummary, %s', req.user.name, ' pwd', {error: error.message});
+      logger.log('error', 'sendMyTasksOfTodaySummary, %s', ' pwd', {error: error.message});
 
     } 
     rootPath = stdout;
@@ -716,7 +716,7 @@ exports.sendMyTasksOfTodaySummary = function(type, data) {
 
     return Q.all(promises);
   }).catch(function(err){
-    logger.log('error', '%s sendMyTasksOfTodaySummary, %s', req.user.name, ' render', {error: "Unknown Error"});
+    logger.log('error', 'sendMyTasksOfTodaySummary, %s', ' render', {error: "Unknown Error"});
 
   });
   });
@@ -738,7 +738,7 @@ exports.sendMyTasksOfTodaySummary = function(type, data) {
 
     return Q.all(promises);
   }).catch(function(err){
-    logger.log('error', '%s sendMyTasksOfTodaySummary, %s', req.user.name, ' render', {error: "Unknown Error"});
+    logger.log('error', 'sendMyTasksOfTodaySummary, %s', ' render', {error: "Unknown Error"});
 
   });
 };
@@ -799,7 +799,7 @@ exports.sendMyTasksOfNextWeekSummary = function(type, data) {
 
   exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
     if(error){
-      logger.log('error', '%s sendMyTasksOfNextWeekSummary, %s', req.user.name, ' pwd', {error: error.message});
+      logger.log('error', 'sendMyTasksOfNextWeekSummary, %s', ' pwd', {error: error.message});
 
     }
     rootPath = stdout;
@@ -819,7 +819,7 @@ exports.sendMyTasksOfNextWeekSummary = function(type, data) {
 
     return Q.all(promises);
   }).catch(function(err){
-    logger.log('error', '%s sendMyTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: err.message});
+    logger.log('error', 'sendMyTasksOfNextWeekSummary, %s', ' render', {error: err.message});
 
   });
   });
@@ -841,7 +841,7 @@ exports.sendMyTasksOfNextWeekSummary = function(type, data) {
 
     return Q.all(promises);
   }).catch(function(err){
-    logger.log('error', '%s sendMyTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: err.message});
+    logger.log('error', 'sendMyTasksOfNextWeekSummary, %s', ' render', {error: err.message});
 
   });
 };
@@ -900,7 +900,7 @@ exports.sendGivenTasksOfNextWeekSummary = function(type, data) {
 
   exec("pwd | tr -d '\n'", function(error, stdout, stderr) { 
     if(error){
-      logger.log('error', '%s sendGivenTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: error.message});
+      logger.log('error', 'sendGivenTasksOfNextWeekSummary, %s', ' render', {error: error.message});
 
     }
     rootPath = stdout;
@@ -920,7 +920,7 @@ exports.sendGivenTasksOfNextWeekSummary = function(type, data) {
 
     return Q.all(promises);
   }).catch(function(err){
-    logger.log('error', '%s sendGivenTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: err.message});
+    logger.log('error', 'sendGivenTasksOfNextWeekSummary, %s', ' render', {error: err.message});
 
   });;
   });
@@ -942,7 +942,7 @@ exports.sendGivenTasksOfNextWeekSummary = function(type, data) {
 
     return Q.all(promises);
   }).catch(function(err){
-    logger.log('error', '%s sendGivenTasksOfNextWeekSummary, %s', req.user.name, ' render', {error: err.message});
+    logger.log('error', 'sendGivenTasksOfNextWeekSummary, %s', ' render', {error: err.message});
 
   });
 };
@@ -973,7 +973,7 @@ exports.system = function(data) {
 
     return Q.all(promises);
   }).catch(function(err){
-    logger.log('error', '%s system, %s', req.user.name, ' render', {error: err.message});
+    logger.log('error', 'system, %s', ' render', {error: err.message});
 
   });;
 };

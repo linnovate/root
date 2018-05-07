@@ -485,15 +485,20 @@
         }
     }
     .submenu {
-        width:calc(100% - 86px);
         width:234px;
         background-color: $grey;
-        
-        > .display-by {
-            overflow-x: auto;
-            height: 100%;
+        overflow-x: auto;
+
+        position: absolute;
+        top: 55px;
+        left: 85px;
+        right: 0;
+        bottom: 0;
+
+        @media screen and (max-width: $small-resolution) {
+            left: 40px;
         }
-        
+
         section {
             height: 100%;
         }
@@ -520,7 +525,7 @@
             text-transform: uppercase;
             line-height: 16px;
             font-weight: bold;
-            volor: #fff;
+            color: #fff;
             &.typeList {
                 cursor: pointer;
             }

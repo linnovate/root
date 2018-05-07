@@ -21,28 +21,26 @@
 </div>-->
 <icu-open-modal/>
 
-<div class="sideMenu">
-    <nav>
-        <ul ng-init="getActiveTab()">
-            <li data-ng-repeat="item in items"
-                ng-click="setActive(item); removeFilterValue();setCurrentState(item.state);clearResults()">
-                <div class="menu-item nav-item {{getNavColor(item, $index)}}"
-                     data-ui-sref="{{'main.' + item.state}}"
-                     ng-click="toggleVisibility(item);initMenuItem(item)">
-                    <div class="icon">
-                        <img ng-src="{{item.icon}}"/>
-                    </div>
-                    <div class="item-name align-items-center">
-                        <span>{{item.name.toLowerCase() | i18next}}</span>
-                    </div>
+<nav>
+    <ul ng-init="getActiveTab()">
+        <li data-ng-repeat="item in items"
+            ng-click="setActive(item); removeFilterValue();setCurrentState(item.state);clearResults()">
+            <div class="menu-item nav-item {{getNavColor(item, $index)}}"
+                 data-ui-sref="{{'main.' + item.state}}"
+                 ng-click="toggleVisibility(item);initMenuItem(item)">
+                <div class="icon">
+                    <img ng-src="{{item.icon}}"/>
                 </div>
-            </li>
-        </ul>
-    </nav>
-    <div class="submenu">
-        <div class="display-by"
-             icu-display-by="activeTab.display"
-        >
-        </div>
+                <div class="item-name align-items-center">
+                    <span>{{item.name.toLowerCase() | i18next}}</span>
+                </div>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="submenu">
+    <div class="display-by"
+         icu-display-by="activeTab.display"
+    >
     </div>
 </div>
