@@ -46,14 +46,22 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         if ($state.current.name == `main.${$scope.$parent.entityName}.all.details.activities`) {
             $state.go(`main.${$scope.$parent.entityName}.all`);
         }
+    } 
+
+   if (context.entityName === 'all') {
+        $scope.detailsState = `main.${$scope.$parent.entityName}.all.details`;
+    } else if (context.entityName === 'my') {
+        $scope.detailsState = `main.${$scope.$parent.entityName}.byassign.details`;
+    } else if (context.entityName === 'task') {
+        $scope.detailsState = `main.${$scope.$parent.entityName}.byparent.details`;
+    } else {
+        $scope.detailsState = `main.${$scope.$parent.entityName}.byentity.details`;
     }
-
-    $scope.detailsState = context.entityName === 'all' ? `main.${$scope.$parent.entityName}.all.details` : `main.${$scope.$parent.entityName}.byentity.details`;
-
+    
     var isScrolled = false;
 
     $scope.isCurrentState = function(id) {
-        var isActive = ($state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity.details`) === 0 || $state.current.name.indexOf(`main.${$scope.$parent.entityName}.all.details`) === 0) && $state.params.id === id;
+        var isActive = ($state.current.name.indexOf(`main.${$scope.$parent.entityName}.byparent.details`) === 0 || $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity.details`) === 0 || $state.current.name.indexOf(`main.${$scope.$parent.entityName}.all.details`) === 0) && $state.params.id === id;
         if (isActive && !isScrolled) {
             //$uiViewScroll($element.find('[data-id="' + $stateParams.id + '"]'));
             isScrolled = true;
