@@ -8,6 +8,16 @@
 	}
 	.ui-select-bootstrap > .ui-select-choices {
 		//width: auto;
+
+        /*rtl:begin:ignore*/
+        left: auto ;
+        right: 0;
+        /*rtl:end:ignore*/
+
+        /*rtl:begin:remove*/
+        right: auto ;
+        left: 0;
+        /*rtl:end:remove*/
 	}
 }
 ul.dropdown-menu {
