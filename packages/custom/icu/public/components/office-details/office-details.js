@@ -59,7 +59,7 @@ angular.module('mean.icu.ui.officedetails', [])
             return PermissionsService.haveEditorsPerms($scope.entity);
         };
 
-        $scope.shouldAutofocus = $stateParams.nameFocused && $scope.haveEditiorsPermissions();
+        $scope.shouldAutofocus = !$stateParams.nameFocused && $scope.haveEditiorsPermissions();
 
         $scope.permsToSee = function(){
             return PermissionsService.haveAnyPerms($scope.entity);
