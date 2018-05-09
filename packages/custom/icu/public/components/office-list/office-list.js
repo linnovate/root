@@ -1,101 +1,58 @@
 'use strict';
 
-angular.module('mean.icu.ui.officelist', [])
-    .controller('OfficeListController', function ($scope,
-                                                   $state,
-                                                   offices,
-                                                   OfficesService,
-                                                   context,
-                                                   $filter,
-                                                   $stateParams) {
-        $scope.offices = offices.data || offices;
-        $scope.loadNext = offices.next;
-        $scope.loadPrev = offices.prev;
+function OfficeListController($scope, $state, offices, OfficesService, context, $stateParams, EntityService) {
 
-        $scope.starred = $stateParams.starred;
-        if ($scope.offices.length > 0 && !$scope.offices[$scope.offices.length - 1].id) {
- 		    $scope.offices = [$scope.offices[0]];
- 	    }
+    $scope.items = offices.data || offices;
 
-        $scope.isCurrentState = function (id) {
-            return $state.current.name.indexOf('main.offices.byentity') === 0 &&
-                $state.current.name.indexOf('details') === -1;
+    $scope.entityName = 'offices';
+    $scope.entityRowTpl = '/icu/components/office-list/office-row.html';
+
+    var creatingStatuses = {
+        NotCreated: 0,
+        Creating: 1,
+        Created: 2
+    };
+
+    $scope.update = function(item) {
+        return OfficesService.update(item.title);
+    }
+
+    $scope.create = function(item) {
+        var newItem = {
+            title: '',
+            color: '0097A7',
+            watchers: [],
+            __state: creatingStatuses.NotCreated,
+            __autocomplete: true
         };
+        return OfficesService.create(newItem).then(function(result) {
+            $scope.items.push(result);
+            OfficesService.data.push(result);
+            return result;
+        });
+    }
 
-        $scope.changeOrder = function () {
-            if($scope.sorting.field != "custom"){
-                $scope.sorting.isReverse = !$scope.sorting.isReverse;
-            }
-            
-            /*Made By OHAD - Needed for reversing sort*/
-            $state.go($state.current.name, { sort: $scope.sorting.field });
-        };
+    //     $scope.search = function(item) {
+    //         return OfficesService.search(term).then(function(searchResults) {
+    //             _(searchResults).each(function(sr) {
+    //                 var alreadyAdded = _($scope.items).any(function(p) {
+    //                     return p._id === sr._id;
+    //                 });
 
-        $scope.sorting = {
-            field: $stateParams.sort || 'created',
-            isReverse: false
-        };
+    //                 if (!alreadyAdded) {
+    //                     return $scope.searchResults.push(sr);
+    //                 }
+    //             });
+    //             $scope.selectedSuggestion = 0;
+    //         });
+    //     }
 
+    $scope.loadMore = function(start, LIMIT, sort) {
+        return OfficesService.getAll(start, LIMIT, sort).then(function(docs) {
+            $scope.items.concat(docs);
+            return $scope.items;
+        });
+    }
+}
 
-
-        // $scope.$watch('sorting.field', function(newValue, oldValue) {
-        //     if (newValue && newValue !== oldValue) {
-        //         $state.go($state.current.name, { sort: $scope.sorting.field });
-        //     }
-        // });
-        
-        
-       
-
-        $scope.sortingList = [
-            {
-                title: 'title',
-                value: 'title'
-            }, {
-                title: 'status',
-                value: 'status'
-            }, {
-                title: 'created',
-                value: 'created'
-            }
-        ];
-
-         if(context.entityName != "all"){
-            $scope.sortingList.push({
-                title: 'custom',
-                value: 'custom'
-            });
-        };
-
-        function navigateToDetails(office) {
-            $scope.detailsState = context.entityName === 'all' ?
-                'main.offices.all.details' : 'main.offices.byentity.details';
-
-            $state.go($scope.detailsState, {
-                id: office._id,
-                entity: $scope.currentContext.entityName,
-                entityId: $scope.currentContext.entityId,
-            });
-        }
-
-        $scope.toggleStarred = function () {
-            $state.go($state.current.name, { starred: !$stateParams.starred });
-        };
-        
-        if ($scope.offices.length) {
-            if ($state.current.name === 'main.offices.all' ||
-                $state.current.name === 'main.offices.byentity') {
-                navigateToDetails($scope.offices[0]);
-            }
-        }
-        else {
-            if ($state.current.name === 'main.offices.all') {
-                return;
-            }
-            if (
-                $state.current.name !== 'main.offices.byentity.activities' &&
-                $state.current.name !== 'main.offices.byentity.details.activities') {
-                $state.go('.activities');
-            }
-        }
-    });
+angular.module('mean.icu.ui.officelist', []).controller('OfficeListController', OfficeListController);

@@ -1,4 +1,4 @@
-.task-list, .discussion-list, .project-list, .sub-task-list, .folder-list, .officeDocument-list, .templateDoc-list, .office-list {
+.entity-list, .sub-task-list, .folder-list, .templateDoc-list, .office-list {
 
     height: 100%;
     overflow: hidden;
@@ -103,6 +103,12 @@
                     color: #1A1A1A;
                     &:focus {
                       outline: none;
+                    }
+
+                    &.create-new-item {
+                        color: rgba(0, 0, 0, 0.29);
+                        margin-left: 2em;
+                        padding: 0 4em 0 1em;
                     }
 
                     &.id {

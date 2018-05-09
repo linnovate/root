@@ -1,0 +1,53 @@
+<td class="id">{{$index + 1}}</td>
+<td class="name"
+    title="{{item.title}}"
+    ng-attr-contenteditable="{{(!displayOnly && haveEditiorsPermissions(item)) && !recycled(item)}}"
+    strip-br="true"
+    tabindex="0"
+    ng-model="item.title"
+    ng-change="onChange(item.title)"
+    ng-keydown="onKeydown($event, $index)"
+></td>
+
+<td class="user">
+    <ui-select append-to-body="true" ng-model="item.assign" on-select="updateCb(item, 'assign')" >
+        <ui-select-match>
+            <div icu-avatar user="$select.selected"></div>
+            <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
+        </ui-select-match>
+        <ui-select-choices ng-init="str=user.job?'job':'name'" repeat="user._id as user in people | filter: { {{str}} : $select.search } | filterByFrequentUsers: me">
+            <div icu-avatar user="user"></div>
+            <span class="summary-content">{{user.job?user.job:user.name}}</span>
+        </ui-select-choices>
+    </ui-select>
+
+</td>
+<td class="status">
+    <ui-select ng-model="item.status" on-select="updateCb(item)" >
+        <ui-select-match>
+            <i class='{{$select.selected}}'></i>
+            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+        </ui-select-match>
+        <ui-select-choices class="selectStatus" repeat="status as status in statuses | filter: $select.search">
+            <i class='{{status}}'></i>
+            <span class='{{status}}'>{{status | i18next}}</span>
+        </ui-select-choices>
+    </ui-select>
+
+</td>
+<td class="due" ng-init="initDue(item)">
+    <input ng-click="open(item)" ui-date="dueOptions(item)"
+           ng-model="item.due" placeholder="{{ 'deadline' | i18next }}"
+           ng-class='{"oldDate":checkDate(item)}'>
+    <div id="past{{item._id}}" class="past">
+        {{'This Deadline is in the past!' | i18next }}
+        <div id="close" ng-click="closeOldDateNotification(item)">x</div>
+    </div>
+</td>
+
+<td class="arrow" ng-click="changeState(item)">
+    <i  class="fa chevron-right"></i>
+</td>
+<td class="delete">
+ <img src="/icu/assets/img/X.png"  ng-if="item._id && item.showDelete" ng-click="delete(item)">
+</td>

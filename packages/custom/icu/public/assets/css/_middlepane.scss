@@ -166,8 +166,6 @@
         height: 103px;
         border-bottom: 1px solid #e1e1e1;
         background-color: white;
-        // padding: 38px 23px 27px 23px;
-        cursor: pointer;
         &.active {
             background-color: $grey;
             color: white;
@@ -182,6 +180,15 @@
             line-height: 26px;
             span {
                 font-weight: 700;
+				
+				&:not(:empty):before, &:not(:empty):after {
+					content: '\"';
+				}
+
+                * {
+					display: inline;
+                }
+
                 &.project {
                     border-radius: 14px;
                     font-weight: normal;

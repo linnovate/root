@@ -1,0 +1,12 @@
+<div class="entity-list" ng-controller="EntityListController">
+
+    <div ng-include="'/icu/components/entity-list/regions/header.html'"></div>
+
+    <div ng-include="'/icu/components/entity-list/regions/filters.html'"></div>
+
+    <div 
+        ng-include="'/icu/components/entity-list/regions/list.html'"
+        ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+    ></div>
+
+</div>

@@ -67,8 +67,8 @@ angular.module('mean.icu').config([
                     officeDocuments:undefined
                 },
                 views: {
-                    'middlepane@main': {
-                        templateUrl: '/icu/components/' + main + '-list/' + main + '-list.html',
+                    'middlepane@main': { 
+                        templateUrl: '/icu/components/entity-list/entity-list.html',
                         controller: capitalizedMain + 'ListController'
                     },
                     'detailspane@main': {
@@ -90,7 +90,7 @@ angular.module('mean.icu').config([
         var getListView = function (entity, resolve) {
             var view = {
                 'middlepane@main': {
-                    templateUrl: '/icu/components/' + entity + '-list/' + entity + '-list.html',
+                    templateUrl: '/icu/components/entity-list/entity-list.html',
                     controller: capitalize(entity) + 'ListController'
                 },
                 'detailspane@main': {
@@ -957,7 +957,7 @@ angular.module('mean.icu').config([
                 },
                 views: {
                     'middlepane@main': {
-                        templateUrl: '/icu/components/task-list/task-list.html',
+                        templateUrl: '/icu/components/entity-list/entity-list.html',
                         controller: 'TaskListController'
                     },
                     'detailspane@main': {
@@ -999,7 +999,7 @@ angular.module('mean.icu').config([
                 },
                 views: {
                     'middlepane@main': {
-                        templateUrl: '/icu/components/task-list/task-list.html',
+                        templateUrl: '/icu/components/entity-list/entity-list.html',
                         controller: 'TaskListController'
                     },
                     'detailspane@main': {
@@ -1101,7 +1101,7 @@ angular.module('mean.icu').config([
                 },
                 views: {
                     'middlepane@main': {
-                        templateUrl: '/icu/components/project-list/project-list.html',
+                        templateUrl: '/icu/components/entity-list/entity-list.html',
                         controller: 'ProjectListController'
                     },
                     'detailspane@main': {
