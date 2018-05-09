@@ -44,4 +44,4 @@ module.exports = function(entityName, options) {
     created: created,
     updated: updated
   };
-}
+};

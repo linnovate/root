@@ -12,6 +12,7 @@
     "_": true,
     "$": true
   },
+  
   "rules": {
 
     // Possible Errors
@@ -48,13 +49,13 @@
     "no-undef": "error",
 
     // Variables
-    "no-unused-vars": [ "error", { "args": "none" } ],
+    "no-unused-vars": [ "warning", { "args": "none" } ],
 
     // Stylistic Issues
     "array-bracket-newline": "error",
     "array-bracket-spacing": "error",
     "block-spacing": "error",
-    "brace-style": "error",
+    "brace-style": ["error", "stroustrup"],
     "comma-spacing": "error",
     "computed-property-spacing": "error",
     "eol-last": "error",
@@ -72,7 +73,7 @@
     "linebreak-style": "error",
     "lines-between-class-members": "error",
     "max-depth": ["error", 4],
-    "max-len": ["error", 100, {
+    "max-len": ["error", 1000, {
       "tabWidth": 2,
       "ignoreStrings": true,
       "ignoreRegExpLiterals": true

@@ -14,8 +14,8 @@ var TemplateDocSchema = new Schema({
   path: {
     type: String
   },
-  spPath:{
-    type:String
+  spPath: {
+    type: String
   },
   description: {
     type: String
@@ -25,7 +25,7 @@ var TemplateDocSchema = new Schema({
   },
   office: {
     type: Schema.Types.ObjectId,
-    ref:'Office'
+    ref: 'Office'
   },
   assign: {
     type: Schema.ObjectId,
@@ -37,20 +37,24 @@ var TemplateDocSchema = new Schema({
   circles: {
     type: Schema.Types.Mixed
   },
-  watchers: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }],
-  permissions: [{
-    _id:false,
-    id: { type: Schema.ObjectId, ref: 'User' },
-    level: {
-      type: String,
-      enum: ['viewer', 'commenter', 'editor'],
-      default: 'viewer'
+  watchers: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User'
     }
-  }]
-},{collection: 'template_docs'});
+  ],
+  permissions: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      level: {
+        type: String,
+        enum: ['viewer', 'commenter', 'editor'],
+        default: 'viewer'
+      }
+    }
+  ]
+}, {collection: 'template_docs'});
 
 
 
@@ -71,7 +75,7 @@ TemplateDocSchema.path('name').validate(function (name) {
 
 /**
  * Statics
- 
+
 TemplateDocSchema.statics.load = function (id, cb) {
   this.findOne({
     _id: id

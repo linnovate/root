@@ -41,20 +41,24 @@ var TaskSchema = new Schema({
     type: Date
   },
   //should we maybe have finer grain control on this
-  watchers: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }],
-
-  permissions: [{
-    _id:false,
-    id: { type: Schema.ObjectId, ref: 'User' },    
-    level: {
-      type: String,
-      enum: ['viewer', 'commenter', 'editor'],
-      default: 'viewer'
+  watchers: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User'
     }
-  }],
+  ],
+
+  permissions: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      level: {
+        type: String,
+        enum: ['viewer', 'commenter', 'editor'],
+        default: 'viewer'
+      }
+    }
+  ],
 
   assign: {
     type: Schema.ObjectId,
@@ -63,27 +67,31 @@ var TaskSchema = new Schema({
   description: {
     type: String
   },
-  discussions: [{
-    type: Schema.ObjectId,
-    ref: 'Discussion'
-  }],
+  discussions: [
+    {
+      type: Schema.ObjectId,
+      ref: 'Discussion'
+    }
+  ],
   sources: [String],
   circles: {
     type: Schema.Types.Mixed
   },
-  subTasks: [{
-    type: Schema.ObjectId,
-    ref: 'Task'
-  }],
+  subTasks: [
+    {
+      type: Schema.ObjectId,
+      ref: 'Task'
+    }
+  ],
   parent: {
-  	type: Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: 'Task'
   },
   tType: {
     type: String
   },
   templateId: {
-  	type: Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: 'Task'
   },
   customData: {}
@@ -137,7 +145,7 @@ TaskSchema.post('save', function(req, next) {
   var task = this;
 
   TaskSchema.statics.project(this.project, function(err, project) {
-    if (err) {
+    if(err) {
       return err;
     }
 
@@ -150,7 +158,7 @@ TaskSchema.post('save', function(req, next) {
 TaskSchema.pre('remove', function(next) {
   var task = this;
   TaskSchema.statics.project(this.project, function(err, project) {
-    if (err) {
+    if(err) {
       return err;
     }
     elasticsearch.delete(task, 'task', project.room, next);

@@ -1,11 +1,11 @@
 var mongoose = require('mongoose'),
-    User = mongoose.model('User');
+  User = mongoose.model('User');
 
 var crud = require('../controllers/crud.js');
 
-exports.create = function (req, res, next) {
+exports.create = function(req, res, next) {
 
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
   req.body.watchers = [req.user];
@@ -22,7 +22,7 @@ exports.create = function (req, res, next) {
       watchers: [],
       circles: {}
     },
-  }
+  };
   var entity = crud(req.body.entity.toLowerCase() + 's', options);
   entity.create(req, res, next);
 };

@@ -4,7 +4,7 @@ var querystring = require('querystring');
 var _ = require('lodash');
 
 function parseParams(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
 
@@ -13,9 +13,10 @@ function parseParams(req, res, next) {
   //value of type, if there is no needed
   //query params
   var type;
-  if (req.query.id && req.query.limit) {
+  if(req.query.id && req.query.limit) {
     type = 'id';
-  } else if (req.query.start && req.query.limit) {
+  }
+  else if(req.query.start && req.query.limit) {
     type = 'page';
   }
 
@@ -30,12 +31,12 @@ function parseParams(req, res, next) {
 }
 
 function formResponse(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
 
   var pagination = req.locals.data.pagination;
-  if (pagination && pagination.type) {
+  if(pagination && pagination.type) {
     var page = {
       count: pagination.count,
       content: req.locals.result
@@ -46,13 +47,13 @@ function formResponse(req, res, next) {
     var prevParams, nextParams;
     var prevUrl, nextUrl;
 
-    if (pagination.type === 'page') {
+    if(pagination.type === 'page') {
       var hasPrev = pagination.start - pagination.limit > -pagination.count;
       var prevLimit = 0;
 
-      if (hasPrev) {
+      if(hasPrev) {
         var prevStart = pagination.start - pagination.limit;
-        if (prevStart < 0) {
+        if(prevStart < 0) {
           prevLimit = prevStart;
           prevStart = 0;
         }
@@ -66,7 +67,7 @@ function formResponse(req, res, next) {
       }
 
       var hasNext = pagination.start + pagination.limit < pagination.count;
-      if (hasNext) {
+      if(hasNext) {
         var nextStart = pagination.start + pagination.limit;
 
         nextParams = _(pagination).omit('type', 'count').value();

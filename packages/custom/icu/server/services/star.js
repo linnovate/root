@@ -19,33 +19,33 @@ var folderOptions = require('../controllers/folder.js').defaultOptions;
 var officeDocumentOptions = require('../controllers/documents.js').defaultOptions;
 
 var entityNameMap = {
-  'tasks': {
+  tasks: {
     model: TaskModel,
     options: taskOptions
   },
-  'projects': {
+  projects: {
     model: ProjectModel,
     options: projectOptions
   },
-  'discussions': {
+  discussions: {
     model: DiscussionModel,
     options: discussionOptions
   },
-  'updates': {
+  updates: {
     model: UpdateModel,
     options: {
       includes: []
     }
   },
-  'offices': {
+  offices: {
     model: OfficeModel,
     options: officeOptions
   },
-  'folders': {
+  folders: {
     model: FolderModel,
     options: folderOptions
   },
-  'officeDocuments': {
+  officeDocuments: {
     model: OfficeDocumentsModel,
     options: officeDocumentOptions
   }
@@ -62,25 +62,28 @@ module.exports = function(entityName, options) {
       var profileProperty = 'profile.' + starredEntities;
       var hasNoProfile = !user.profile || !user.profile[starredEntities];
 
-      if (hasNoProfile && (value === 'toggle' || value === 'star')) {
+      if(hasNoProfile && (value === 'toggle' || value === 'star')) {
         query = {};
         query[profileProperty] = [id];
-      } else if (!hasNoProfile) {
+      }
+      else if(!hasNoProfile) {
         var starFound = user.profile[starredEntities].indexOf(id) > -1;
-        if (starFound && (value === 'toggle' || value === 'unstar')) {
-          query = { $pull: {} };
+        if(starFound && (value === 'toggle' || value === 'unstar')) {
+          query = {$pull: {}};
           query.$pull[profileProperty] = id;
-        } else if (!starFound && (value === 'toggle' || value === 'star')) {
-          query = { $push: {} };
+        }
+        else if(!starFound && (value === 'toggle' || value === 'star')) {
+          query = {$push: {}};
           query.$push[profileProperty] = id;
 
           starred = true;
         }
       }
 
-      if (!query) {
+      if(!query) {
         return starred;
-      } else {
+      }
+      else {
         return user.update(query).then(function() {
           return starred;
         });
@@ -94,9 +97,10 @@ module.exports = function(entityName, options) {
     });
     return query.then(function(user) {
       var starredEntities = 'starred' + _.capitalize(entityName);
-      if (!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
+      if(!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
         return [];
-      } else {
+      }
+      else {
         return user.profile[starredEntities];
       }
     });
@@ -104,7 +108,7 @@ module.exports = function(entityName, options) {
 
 
   function getStarred() {
-    if(entityName.assing){
+    if(entityName.assing) {
       var assign = entityName.assing;
       entityName = entityName.name;
     }
@@ -115,23 +119,24 @@ module.exports = function(entityName, options) {
       _id: options.user._id
     });
     return query.then(function(user) {
-      if (!user) return [];
+      if(!user) return [];
 
       var starredEntities = 'starred' + _.capitalize(entityName);
 
-      if (!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
+      if(!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
         return [];
-      } else {
-	      var tmp = {
-	        '_id': {
-	          $in: user.profile[starredEntities]
-	        },
-	      }
+      }
+      else {
+        var tmp = {
+          _id: {
+            $in: user.profile[starredEntities]
+          },
+        };
 
-	      if (assign) {
-	        tmp['assign'] = user._id
-	        tmp['status'] = {$nin: ['rejected', 'done']}
-	      }
+        if(assign) {
+          tmp['assign'] = user._id;
+          tmp['status'] = {$nin: ['rejected', 'done']};
+        }
         return Model.find(
           tmp
         // {
@@ -147,7 +152,7 @@ module.exports = function(entityName, options) {
 
   function isStarred(data) {
     return getStarred().then(function(starred) {
-      if (!_.isArray(data)) {
+      if(!_.isArray(data)) {
         data = [data];
       }
 

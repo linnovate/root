@@ -50,21 +50,25 @@ var FolderSchema = new Schema({
     type: String
   },
   //should we maybe have finer grain control on this
-  watchers: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }],
-  permissions: [{
-    _id:false,
-    id: { type: Schema.ObjectId, ref: 'User' },    
-    level: {
-      type: String,
-      enum: ['viewer', 'commenter', 'editor'],
-      default: 'viewer'
+  watchers: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User'
     }
-  }],  
+  ],
+  permissions: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      level: {
+        type: String,
+        enum: ['viewer', 'commenter', 'editor'],
+        default: 'viewer'
+      }
+    }
+  ],
   parent: {
-  	type: Schema.ObjectId,
+    type: Schema.ObjectId,
     ref: 'Folder'
   },
   room: {
@@ -128,7 +132,7 @@ var elasticsearch = require('../controllers/elasticsearch');
 FolderSchema.post('save', function(req, next) {
   var task = this;
   FolderSchema.statics.office(this.office, function(err, office) {
-    if (err) {
+    if(err) {
       return err;
     }
 
@@ -141,7 +145,7 @@ FolderSchema.post('save', function(req, next) {
 FolderSchema.pre('remove', function(next) {
   var task = this;
   FolderSchema.statics.office(this.office, function(err, office) {
-    if (err) {
+    if(err) {
       return err;
     }
     elasticsearch.delete(task, 'task', office.room, next);
@@ -152,7 +156,7 @@ FolderSchema.pre('remove', function(next) {
 /**
  * middleware
  */
-var elasticsearch = require('../controllers/elasticsearch');
+
 
 FolderSchema.post('save', function(req, next) {
   elasticsearch.save(this, 'folder', this.room);
