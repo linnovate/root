@@ -49,7 +49,7 @@
     "no-undef": "error",
 
     // Variables
-    "no-unused-vars": [ "warning", { "args": "none" } ],
+    "no-unused-vars": [ "error", { "args": "none" } ],
 
     // Stylistic Issues
     "array-bracket-newline": "error",
