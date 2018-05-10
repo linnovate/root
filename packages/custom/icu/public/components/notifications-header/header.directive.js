@@ -177,19 +177,9 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 var params = {};
                 var state = 'main.projects.all.details.activities';
 
-                if ($stateParams.entity === 'discussion' && $stateParams.entityId) {
-                    project['discussion'] = $stateParams.entityId;
-                    state = 'main.projects.byentity.details.activities';
-                    params.entity = 'discussion';
-                    params.entityId = $stateParams.entityId;
-                } else {
                     if (context.main === 'discussions' && $stateParams.id) {
                         project['discussion'] = $stateParams.id;
-                        state = 'main.projects.byentity.details.activities';
-                        params.entity = 'discussion';
-                        params.entityId = $stateParams.id;
                     }
-                }
 
                 ProjectsService.create(project).then(function(result) {
                     $scope.projects.push(result);
@@ -245,7 +235,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     $state.go(state, params, {
                         reload: true
                     });
-              
+
                 });
         }
     }
