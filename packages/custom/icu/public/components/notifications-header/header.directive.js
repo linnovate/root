@@ -177,9 +177,6 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 var params = {};
                 var state = 'main.projects.all.details.activities';
 
-                    if (context.main === 'discussions' && $stateParams.id) {
-                        project['discussion'] = $stateParams.id;
-                    }
 
                 ProjectsService.create(project).then(function(result) {
                     $scope.projects.push(result);
