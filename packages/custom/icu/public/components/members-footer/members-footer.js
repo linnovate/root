@@ -137,7 +137,6 @@ angular.module('mean.icu.ui.membersfooter', [])
                     }
                     entity.watchers = a;
                     service.update(entity,json, action, member._id);
-                    $state.reload();
                 }
                 else{
                     service.update(entity, data, action, member._id);
