@@ -47,26 +47,34 @@
         <ul class="dropdown-menu menu-items" role="menu">
             <li>
                 <a href ng-click="createTask()">
-                <img ng-src="/icu/assets/img/icon-task.svg">
+                    <div class="imageBlock">
+                        <img ng-src="/icu/assets/img/icon-task-black.svg">
+                    </div>
                     <span>{{ 'task' | i18next }}</span>
                 </a>
             </li>
             <li>
                 <a href ng-click="createProject()">
-                 <img class="icon-projects" ng-src="/icu/assets/img/icon-project.svg">
+                <div class="imageBlock">
+                     <img class="icon-projects" ng-src="/icu/assets/img/icon-project.svg">
+                 </div>
                  <span>{{ 'project' | i18next }}</span>
                 </a>
             </li>
             <li>
                 <a href ng-click="createDiscussion()">
-              <img ng-src="/icu/assets/img/icon-discussiont.svg">
-                     <span>{{ 'discussion' | i18next }}</span>
+                    <div class="imageBlock">
+                        <img ng-src="/icu/assets/img/icon-discussion-black.svg">
+                    </div>
+                    <span>{{ 'discussion' | i18next }}</span>
                 </a>
             </li>
             <li>
                 <a href ng-click="createOfficeDocument()">
-              <img ng-src="/icu/assets/img/document-grey.svg">
-                     <span>{{ 'document' | i18next }}</span>
+                    <div class="imageBlock">
+                        <img ng-src="/icu/assets/img/document-black.svg">
+                    </div>
+                    <span>{{ 'document' | i18next }}</span>
                 </a>
             </li>
         </ul>

@@ -1,6 +1,6 @@
 <div class="footer">
     <div class="delete-wrapper"
-         data-ng-repeat="member in entity.watchers.concat(watchersGroups) track by $index"
+         data-ng-repeat="member in entity.watchers.concat(watchersGroups || []) track by $index"
          ng-if="entity.watchers.length || watchersGroups.length">
         <!--<div ng-show="member._id !== me._id" class="delete" ng-click="deleteMember(member)"><i class="fa fa-close"></i></div>-->
         <div class="btn-group dropup">
