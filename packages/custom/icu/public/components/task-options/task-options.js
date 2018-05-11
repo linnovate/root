@@ -52,10 +52,12 @@ angular.module('mean.icu.ui.taskoptions', [])
 		TasksService.filterValue = filterValue;
 		if(filterValue=='watched'){
 			TasksService.getWatchedTasks().then(function(result){
-				TasksService.watchedTasksArray = result;
+				TasksService.watchedTasksArray = result.filter(entity=>{
+				    return !entity.hasOwnProperty('recycled');
+                });
 			});
-        };
-		};
+        }
+    };
 
 	if ($state.current.name === 'main.tasks.byassign') {
 		$state.go('.activities');

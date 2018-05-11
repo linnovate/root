@@ -9,10 +9,14 @@
     ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.discussion)) && !recycled(data.discussion)}}"
     placeholder="{{'createNewDiscussion' | i18next}}"
     strip-br="true"
-    ng-change="data.searchCb(data.discussion.title) || data.updateCb(data.discussion)"
+    ng-attr-tabindex="{{ data.discussion._id ? undefined : '3'}}"
+    ng-change="data.searchCb(data.discussion) || data.updateCb(data.discussion)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-model="data.discussion.PartTitle"
-    ng-blur="data.hideAutoCompleteCb(data.discussion)">
+    ng-blur="bluring(data.discussion, $event); data.hideAutoCompleteCb(data.discussion)"
+    ng-focus="focusing(data.discussion)"
+    ng-class="{'noFocus':isBlurred(data.discussion)}"
+>
 </td>
 <td class="status col-sm-2" ng-class="data.discussion.status">{{data.discussion.status | i18next}}</td>
 <td class="due">{{data.discussion.startDate | date: 'dd.MM.yyyy'}}</td>

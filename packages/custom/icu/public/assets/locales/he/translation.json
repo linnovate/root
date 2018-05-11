@@ -234,7 +234,7 @@
 	"sort by": "מיונים",
 	"filter by activity status": "סינון לפי סטטוס",
 	"Active": "פעיל",
-    "Archived": "מאורכב",
+    "Archived": "לא פעיל",
     "All": "הכל",
     "assignee": "אחראי",
     "create new": "צור חדש",

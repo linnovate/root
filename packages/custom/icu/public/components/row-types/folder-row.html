@@ -12,14 +12,17 @@
     ng-attr-tabindex="{{ data.folder._id ? undefined : '3'}}"
     ng-change="data.searchCb(data.folder) || data.updateCb(data.folder)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-blur="data.hideAutoCompleteCb(data.folder)"
-    ng-model="data.folder.PartTitle">
+    ng-model="data.folder.PartTitle"
+    ng-blur="bluring(data.folder, $event); data.hideAutoCompleteCb(data.folder)"
+    ng-focus="focusing(data.folder)"
+    ng-class="{'noFocus':isBlurred(data.folder)}"
+>
 </td>
 <td class="office">
     <span class="tag office"
           title="{{data.folder.office.title}}"
-          ng-style="{'background-color': '#' + data.folder.office.color, 'color': 'white'}">
-        {{data.folder.office.title}}
+          ng-style="{'background-color': '#' + data.folder.office.color, 'color': 'white'}"
+          ng-bind-html="data.folder.office.title">
     </span>
 </td>
 <td ng-if="data.folder._id" class="status col-sm-2"  ng-class="data.folder.status">{{data.folder.status | i18next }}</td>

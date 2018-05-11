@@ -9,7 +9,7 @@
     Add folder of the details of the type (in the right side). Like "/icu/packages/custom/icu/public/components/task-details"
 */
 angular.module('mean.icu.ui.rows', [])
-.directive('icuListRow', function($compile, $http, $templateRequest, UsersService, PermissionsService) {
+.directive('icuListRow', function($compile, $http, $templateRequest, $i18next, UsersService, PermissionsService) {
     var templates = {
         people: '/icu/components/row-types/people-row.html',
         task: '/icu/components/row-types/task-row.html',
@@ -68,6 +68,7 @@ angular.module('mean.icu.ui.rows', [])
         };
 
         $scope.haveEditiorsPermissions = function(entity){
+            if(!entity.permissions)return true;
             return PermissionsService.haveEditorsPerms(entity);
         };
 
@@ -75,6 +76,32 @@ angular.module('mean.icu.ui.rows', [])
             return PermissionsService.haveAnyPerms(entity);
         };
 
+
+        var lang = $i18next.options.lng;
+
+        $scope.isBlurred = function(entity){
+            return !entity.focus;
+
+        };
+
+        $scope.focusing = function(entity){
+            entity.focus = true;
+        };
+        $scope.bluring = function(entity, $event){
+            entity.focus = false;
+            var scrollLeft = function(element){
+                element.scrollLeft = 0;
+            };
+            var scrollRight = function(element){
+                element.scrollLeft += $event.target.scrollWidth - $event.target.scrollLeft;
+            };
+
+            if(lang === 'en'){
+                $event.target.children.length === 0 ? scrollLeft($event.target) : scrollLeft($event.target.firstChild);
+            } else if(lang === 'he') {
+                $event.target.children.length === 0 ? scrollRight($event.target) : scrollRight($event.target.firstChild);
+            }
+        };
     }
 
 

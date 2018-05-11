@@ -1,5 +1,10 @@
 .project-details {
     .page-content {
+        .summary {
+            .color {
+                width: 55px;
+            }
+        }
         .tabs {
             .tab {
                 width: calc((100% - 60px) / 2);
@@ -14,6 +19,6 @@
         }
     }
     .ui-select-bootstrap > .ui-select-choices {
-        width: auto;
+        //width: auto;
     }
 }

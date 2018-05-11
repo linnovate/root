@@ -137,6 +137,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         }
 
         function updateDocument(id, data) {
+              if(typeof id === 'object')id = id._id;
             return $http.post(ApiUri + EntityPrefix + "/" +id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
@@ -151,11 +152,11 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function update(entity, data) {	
-            return $http.post(ApiUri + EntityPrefix + "/" +entity._id, data).then(function (result) {	
-                WarningsService.setWarning(result.headers().warning);	
-                return result.data;	
-            });	
+        function update(entity, data) {
+            return $http.post(ApiUri + EntityPrefix + "/" +entity._id, data).then(function (result) {
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
         }
 
         function uploadFileToDocument(data,file){

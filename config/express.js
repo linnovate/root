@@ -15,10 +15,7 @@ var mean = require('meanio'),
   seo = require('mean-seo'),
   config = mean.loadConfig();
 
-module.exports = function(app, db) {
-
-  app.set('showStackError', true);
-
+module.exports = function(app, db) {app.set('showStackError', true);
   // Prettify HTML
   app.locals.pretty = true;
 

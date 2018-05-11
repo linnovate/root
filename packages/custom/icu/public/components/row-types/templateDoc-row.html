@@ -12,7 +12,10 @@
     ng-change="data.searchCb(data.templateDoc.title) || data.updateCb(data.templateDoc)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-model="data.templateDoc.PartTitle"
-    ng-blur="data.hideAutoCompleteCb(data.templateDoc)">
+    ng-blur="bluring(data.templateDoc, $event); data.hideAutoCompleteCb(data.templateDoc)"
+    ng-focus="focusing(data.templateDoc)"
+    ng-class="{'noFocus':isBlurred(data.templateDoc)}"
+>
 </td>
 <!--<td class="status col-sm-2" ng-class="data.templateDoc.status">{{data.templateDoc.status | i18next }}</td>-->
 <td class="status col-sm-2" ng-class="data.templateDoc.status">{{}}</td>

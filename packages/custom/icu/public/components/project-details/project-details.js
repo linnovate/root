@@ -31,7 +31,6 @@ angular.module('mean.icu.ui.projectdetails', [])
         $scope.projects = projects.data || projects;
         $scope.project = entity || context.entity;
         $scope.entity = entity || context.entity;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.tags = tags;
         $scope.addSubProjects = false;
 
@@ -270,6 +269,8 @@ angular.module('mean.icu.ui.projectdetails', [])
             return PermissionsService.haveAnyPerms($scope.entity);
         };
 
+        $scope.shouldAutofocus = !$stateParams.nameFocused && $scope.haveEditiorsPermissions;
+
         $scope.removeTag = function(tag) {
             $scope.project.tags = _($scope.project.tags).without(tag);
             $scope.update($scope.project);
@@ -319,49 +320,55 @@ angular.module('mean.icu.ui.projectdetails', [])
         };
 
         $scope.recycle = function(entity) {
-            EntityService.recycle('projects', entity._id).then(function() {
-                let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "Recycled" // just for activity status
-                ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {
-                    ActivitiesService.data.push(result);
-                });
+            ProjectsService.removeFromParent(entity)
+                .then(()=> {
+                    EntityService.recycle('projects', entity._id).then(function () {
+                        let clonedEntity = JSON.parse(JSON.stringify(entity));
+                        clonedEntity.status = "Recycled" // just for activity status
+                        ProjectsService.updateStatus(clonedEntity, entity).then(function (result) {
+                            ActivitiesService.data.push(result);
+                        });
 
-                refreshList();
-                if(currentState.indexOf('search') != -1){
-                    $state.go(currentState, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true,
-                        query: $stateParams.query
+                        refreshList();
+                        if (currentState.indexOf('search') !== -1) {
+                            $state.go(currentState, {
+                                entity: context.entityName,
+                                entityId: context.entityId
+                            }, {
+                                reload: true,
+                                query: $stateParams.query
+                            });
+                        } else {
+                            $state.go('main.projects.all', {
+                                entity: 'all',
+                            }, {
+                                reload: true
+                            });
+                        }
                     });
-                } else {
-                    $state.go('main.projects.all', {
-                        entity: 'all',
-                    }, {
-                        reload: true
-                    });
-                }
-            });
+                })
         };
 
         $scope.recycleRestore = function(entity) {
-            EntityService.recycleRestore('projects', entity._id).then(function() {
-                let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "un-deleted" // just for activity status
-                ProjectsService.updateStatus(clonedEntity, entity).then(function(result) {
-                    ActivitiesService.data.push(result);
-                });
-                refreshList();
+            ProjectsService.addToParent(entity)
+                .then(()=> {
+                    EntityService.recycleRestore('projects', entity._id).then(function () {
+                        let clonedEntity = JSON.parse(JSON.stringify(entity));
+                        clonedEntity.status = "un-deleted"; // just for activity status
+                        ProjectsService.updateStatus(clonedEntity, entity).then(function (result) {
+                            ActivitiesService.data.push(result);
+                        });
+                        refreshList();
 
-                var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
-                $state.go(state, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
-                    reload: true
-                });
-            });
+                        var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
+                        $state.go(state, {
+                            entity: context.entityName,
+                            entityId: context.entityId
+                        }, {
+                            reload: true
+                        });
+                    });
+                })
         };
 
         function refreshList(){
