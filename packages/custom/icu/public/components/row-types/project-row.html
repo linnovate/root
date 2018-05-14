@@ -1,8 +1,4 @@
-<td class="move" style="cursor:move">
-    <i ng-if="data.project._id" class="fa fa-ellipsis-v"></i>
-    <i ng-if="data.project._id" class="fa fa-ellipsis-v"></i>
-</td>
-<td class="id" ng-if="data.project._id">{{data.index + 1}}</td>
+<td class="id">{{ data.project._id ? data.index + 1 : ''}}</td>
 <td class="name"
     title="{{data.project.title}}"
     ng-attr-colspan="{{data.project._id ? undefined : 2}}"
@@ -18,7 +14,9 @@
     ng-class="{'noFocus':isBlurred(data.project)}"
 >
 </td>
-<td class="status col-sm-2" ng-class="data.project.status">{{data.project.status | i18next }}</td>
+<td class="status col-sm-2" ng-class="data.project.status">
+    {{ (data.project._id ? data.project.status  : '') | i18next }}
+</td>
 <td class="arrow">
     <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

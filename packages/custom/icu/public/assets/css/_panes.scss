@@ -38,9 +38,10 @@
 
                     .id {
                         text-align: left;
-                        //width: 40px;
                         margin-left:10px;
-                        //display: inline-block;
+                        min-width: 20px;
+
+
                         @media screen and (max-width: $small-resolution) {
                             display:none;
                         }
@@ -122,7 +123,7 @@
             &.canceled{color: #ef5350;}
             &.completed{color: #598527;}
             &.archived{color: #ab47bc;}
-            &.waiting-approval{color: #ab47bc;}            
+            &.waiting-approval{color: #ab47bc;}
             &.received{color: #37afef;}
             &.sent{color: #359123;}
 
@@ -191,7 +192,7 @@
             &.canceled{color: #ef5350;}
             &.completed{color: #598527;}
             &.archived{color: #ab47bc;}
-            &.waiting-approval{color: #ab47bc;}            
+            &.waiting-approval{color: #ab47bc;}
             &.received{color: #37afef;}
             &.sent{color: #359123;}
         }

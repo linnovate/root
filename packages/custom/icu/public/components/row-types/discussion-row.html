@@ -1,8 +1,4 @@
-<td  class="move" style="cursor:move">
-    <i ng-if="data.discussion._id" class="fa fa-ellipsis-v"></i>
-    <i ng-if="data.discussion._id" class="fa fa-ellipsis-v"></i>
-</td>
-<td class="id" ng-if="data.discussion._id">{{data.index + 1}}</td>
+<td class="id">{{ data.discussion._id ? data.index + 1 : ''}}</td>
 <td class="name"
     ng-attr-colspan="{{data.discussion._id ? undefined : 2}}"
     title="{{data.discussion.title}}"
@@ -18,8 +14,12 @@
     ng-class="{'noFocus':isBlurred(data.discussion)}"
 >
 </td>
-<td class="status col-sm-2" ng-class="data.discussion.status">{{data.discussion.status | i18next}}</td>
-<td class="due">{{data.discussion.startDate | date: 'dd.MM.yyyy'}}</td>
+<td class="status col-sm-2" ng-class="data.discussion.status">
+    {{ (data.discussion._id ? data.discussion.status  : '') | i18next }}
+</td>
+<td class="due">
+    {{ (data.discussion._id ? data.discussion.startDate  : '') | date: 'dd.MM.yyyy' }}
+</td>
 <td class="arrow">
     <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

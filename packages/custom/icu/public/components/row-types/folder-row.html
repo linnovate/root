@@ -1,8 +1,4 @@
-<td  class="move" style="width: 15px;">
-    <i ng-if="data.folder._id" class="fa fa-ellipsis-v"></i>
-    <i ng-if="data.folder._id" class="fa fa-ellipsis-v"></i>
-</td>
-<td class="id" ng-if="data.folder._id">{{data.index + 1}}</td>
+<td class="id">{{ data.folder._id ? data.index + 1 : ''}}</td>
 <td class="name"
     ng-attr-colspan="{{data.folder._id ? undefined : 5}}"
     title="{{data.folder.title}}"
@@ -25,8 +21,12 @@
           ng-bind-html="data.folder.office.title">
     </span>
 </td>
-<td ng-if="data.folder._id" class="status col-sm-2"  ng-class="data.folder.status">{{data.folder.status | i18next }}</td>
-<td ng-if="data.folder._id" class="due">{{data.folder.due | date: 'dd.MM.yyyy'}}</td>
+<td ng-if="data.folder._id" class="status col-sm-2"  ng-class="data.folder.status">
+    {{ (data.folder._id ? data.task.status  : '') | i18next }}
+</td>
+<td ng-if="data.folder._id" class="due">
+    {{ (data.folder._id ? data.folder.due  : '') | date: 'dd.MM.yyyy' }}
+</td>
 <td class="arrow" ng-if="data.folder._id">
    <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>
