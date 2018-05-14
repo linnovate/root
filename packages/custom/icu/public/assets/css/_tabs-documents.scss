@@ -132,7 +132,6 @@
   #DocumentLine:hover >  #DocumentTextLine{
     font-family: Open Sans;
     font-style: normal;
-    // font-weight: bold;
     line-height: normal;
     font-size: 14px;
     color: #000000;
@@ -141,22 +140,17 @@
     display: inline-block; }
   #AllDocumentIcons{
     display: none;
-    // position: relative;
     right: 0;
     vertical-align: middle;
   }
   .DocumentIconsLine{
-    // border: 1px solid #7F9098;
-    // border-radius: 4px;
     width: 30px;
     height: 30px;
-    // background-color:#313C40;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     text-align: inherit;
     background: none;
     border: none;
         &:hover{
-            // background-color:white;
             filter: invert(75%);
         }
     }

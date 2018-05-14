@@ -1,8 +1,6 @@
-<td class="move">
-    <i ng-if="data.officeDocument._id" class="fa fa-ellipsis-v"></i>
-    <i ng-if="data.officeDocument._id" class="fa fa-ellipsis-v"></i>
+<td class="id">
+    {{ data.officeDocument._id ? data.index + 1 : ''}}
 </td>
-<td class="id" ng-if="data.officeDocument._id">{{data.index + 1}}</td>
 
 <td class="name"
     ng-click="!data.officeDocument._id && data.create()"
@@ -28,7 +26,9 @@
     </span>
 </td>
 
-<td class="status col-sm-2" ng-class="data.officeDocument.status">{{data.officeDocument.status | i18next }}</td>
+<td class="status col-sm-2" ng-class="data.officeDocument.status">
+    {{ (data.officeDocument._id ? data.task.status  : '') | i18next }}
+</td>
 <td class="arrow">
     <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

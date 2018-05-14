@@ -42,7 +42,7 @@
     background-color: $cream;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
     position: relative;
     transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
 
@@ -182,7 +182,7 @@
             line-height: 26px;
             span {
                 font-weight: 700;
-                
+
                 * {
                   display: inline;
                 }
