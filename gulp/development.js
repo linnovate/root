@@ -19,31 +19,20 @@ var gulp = require('gulp'),
   plugins = gulpLoadPlugins(),
   paths = {
     js: ['*.js', 'packages/*/*/public/**/*.js', 'test/**/*.js', '!test/coverage/**', '!bower_components/**', '!packages/**/node_modules/**', '!packages/contrib/**/*.js', '!packages/contrib/**/node_modules/**', '!packages/core/**/*.js', '!packages/core/public/assets/lib/**/*.js'],
-    public: ['packages/*/*/public/**/*.*', '!**/test/**', '!**/*.scss', '!**/*.less', 'node_modules/babel-polyfill/dist/polyfill.min.js'],
+    public: ['packages/*/*/public/**/*.*', '!**/test/**', '!**/*.sass', '!**/*.less', 'node_modules/babel-polyfill/dist/polyfill.min.js'],
     bower: ['bower_components/**/*.*'],
     babel: [
-      'packages/**/public/**/*.js',
-      '!packages/**/bower_components/**',
-      '!packages/**/assets/**',
-      '!packages/**/node_modules/**',
-      '!packages/contrib/**/*.js',
-      '!packages/core/**/*.js',
-      '!packages/**/socket.io.js',
+      'packages/*/*/public/**/*.js',
+      '!**/test/**',
+      '!**/bower_components/**',
+      '!**/node_modules/**',
+      '!**/assets/**',
+      '!**/socket.io.js',
     ],
-
-//     babel: [
-//       'packages/*/*/public/**/*.js',
-//       '!packages/**/node_modules/**',
-//       '!packages/contrib/**',
-//       '!packages/core/**',
-//       '!packages/**/bower_components/**',
-//       '!packages/**/assets/**',
-//       '!**/socket.io.js',
-//     ],
-    html: ['packages/**/public/**/*.html', 'packages/**/server/views/**'],
-    css:  ['!bower_components/**', 'packages/**/public/**/*.css', '!packages/contrib/**/public/**/css/*.css', '!packages/core/**/public/**/css/*.css'],
+    html: ['packages/**/public/**/views/**', 'packages/**/server/views/**'],
+    css: ['!bower_components/**', 'packages/**/public/**/css/*.css', '!packages/contrib/**/public/**/css/*.css', '!packages/core/**/public/**/css/*.css'],
     less: ['packages/*/*/public/**/less/**/*.less', '!**/lib/**'],
-    sass: ['packages/**/public/**/*.scss']
+    sass: ['packages/*/*/public/**/css/*.scss']
   };
 
 function fixPath() {
@@ -188,11 +177,11 @@ server() ;
 
 
 
-gulp.task('development:watch', function () {
+gulp.task('watch', function () {
   // gulp.watch(paths.js, ['jshint']).on('change', plugins.livereload.changed);
   gulp.watch(paths.html).on('change', plugins.livereload.changed);
   // gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
-//   gulp.watch(paths.less, ['less']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.less, ['less']).on('change', plugins.livereload.changed);
   gulp.watch(paths.babel, ['babel']).on('change', plugins.livereload.changed);
   gulp.watch(paths.sass, ['sass']).on('change', plugins.livereload.changed);
   gulp.watch(paths.css, ['dist:css']).on('change', plugins.livereload.changed);
@@ -216,11 +205,10 @@ function count(taskName, message) {
 gulp.task('development', function(callback) {
   runSequence(
     'clean',
-    'sass',
-    'dist:css',
+    ['less', 'sass'],
     ['dist:public', 'dist:bower'],
     'babel',
-    ['devServe', 'development:watch'],
+    ['devServe', 'watch'],
     callback
   );
 });
