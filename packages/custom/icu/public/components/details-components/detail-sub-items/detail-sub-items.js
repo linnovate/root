@@ -19,7 +19,7 @@ function detailSubItems() {
     restrict: 'E'
   };
 
-  function link(scope, element, attrs) {
+  function link($scope, element, attrs) {
     
     $scope.saveTemplate = function() {
       $scope.isopen = false;
