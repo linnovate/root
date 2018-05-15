@@ -16,7 +16,6 @@
         overflow-y: auto;
         .list-table {
             height: 100%;
-            overflow-x: hi;
               &::-webkit-scrollbar {
                 width: 5px;
             }
@@ -99,11 +98,9 @@
                     }
 
                     &.id {
-                        //width: 55px;
                         font-size: 13px;
                         font-weight: normal;
                         color: #1A1A1A;
-                        //border-left: 5px;
                     }
 
                     &.move{
@@ -154,9 +151,6 @@
                         margin-left: 14px;
                         line-height: initial;
 
-                        @media screen and (max-width: $small-resolution) {
-                            width: 8.8vw;
-                        }
                         @media screen and (max-width: 1585px) {
                             width: 80px;
                         }
@@ -337,7 +331,6 @@
     }
 
     table {
-        /*table-layout: fixed;*/
 
         tbody {
             tr {
@@ -356,9 +349,7 @@
                     }
 
                     &.id {
-                       // width: 55px;
                         color: $grey1;
-                       // border-left: 5px;
                     }
 
                     &.move{
@@ -520,7 +511,6 @@
     }
 
     table {
-        /*table-layout: fixed;*/
 
         tbody {
             tr {
@@ -539,9 +529,7 @@
                     }
 
                     &.id {
-                        //width: 55px;
                         color: $grey1;
-                       // border-left: 5px;
                     }
 
                     &.move{
