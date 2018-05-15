@@ -1,8 +1,3 @@
-/*.chevron-right {
-    position: relative;
-    background: #fff;
-    border: 4px solid #000;
-}*/
 .chevron-right:after, .chevron-right:before {
     border: solid transparent;
     content: " ";
@@ -64,7 +59,6 @@
             background-repeat: no-repeat;
             background-position: center center;
             margin-left: 6px;
-            //background: url('/icu/assets/img/menu.png') no-repeat center center;
 
             .menu-icon {
                 padding-left: 5px;
@@ -158,7 +152,6 @@
     }
 
     .middlepane-container {
-//         overflow: hidden;
 		flex-grow: 1;
     }
 
