@@ -157,6 +157,9 @@
                         @media screen and (max-width: $small-resolution) {
                             width: 8.8vw;
                         }
+                        @media screen and (max-width: 1585px) {
+                            width: 80px;
+                        }
                         span {
                             padding: 3px 13px;
                             position: relative;
@@ -225,6 +228,9 @@
                             text-align: center;
                             margin-left: 0;
                         }
+                        @media screen and (max-width: 1585px) {
+                            width: 80px;
+                        }
                     }
 
                    	&.due {
@@ -236,6 +242,9 @@
                         color: #1A1A1A;
                         @media screen and (max-width: $small-resolution) {
                             display:none;
+                        }
+                        @media screen and (max-width: 1585px) {
+                            width: 80px;
                         }
                     }
 
