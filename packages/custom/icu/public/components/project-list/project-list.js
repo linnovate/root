@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.projectlist', [])
     .controller('ProjectListController', function ($scope,
-                                                    $window,
+                                                   $window,
                                                    $state,
                                                    projects,
                                                    ProjectsService,
@@ -14,9 +14,11 @@ angular.module('mean.icu.ui.projectlist', [])
         $scope.loadNext = projects.next;
         $scope.loadPrev = projects.prev;
 
-        ProjectsService.getById($state.params.entityId).then(result=>{
-            $scope.parentName = result.title;
-        });
+        if($state.params.entityId){
+            ProjectsService.getById($state.params.entityId).then(result=>{
+                $scope.parentName = result.title;
+            });
+        }
 
         $scope.print = function() {
             $window.print()

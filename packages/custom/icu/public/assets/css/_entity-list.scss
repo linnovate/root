@@ -5,15 +5,8 @@
     display: flex;
     flex-direction: column;
     .entity-list-container {
-        //&.big {
-        //    height: calc(100% - 150px);
-        //}
-        //
-        //&.small {
-        //    height: calc(100% - 150px);
-        //}
         height: 100%;
-        overflow-y: auto;
+        overflow-y: scroll;
         .list-table {
             height: 100%;
               &::-webkit-scrollbar {
