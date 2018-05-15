@@ -123,14 +123,13 @@
                     </li> -->
                 </ul>
             </div>
-
-            <div class="actions"
-                 ng-if="statusesActionsMap[discussion.status]">
-                    <button ng-disabled="disableButton()"
-                        ng-click="statusesActionsMap[discussion.status].method(discussion)">
-                    {{statusesActionsMap[discussion.status].label | i18next}}
-                </button>
-            </div>
+        </div>
+        <div class="actions"
+             ng-if="statusesActionsMap[discussion.status]">
+            <button ng-disabled="disableButton()"
+                    ng-click="statusesActionsMap[discussion.status].method(discussion)">
+                {{statusesActionsMap[discussion.status].label | i18next}}
+            </button>
         </div>
         <div class="approval" ng-if="discussion.status!='waiting-approval' && discussion.assign && discussion.assign._id == me._id && !isRecycled">
                 <button class="add approval" id="approval" ng-click="updateStatusForApproval(discussion)">{{'updateStatusForApproval' | i18next }}

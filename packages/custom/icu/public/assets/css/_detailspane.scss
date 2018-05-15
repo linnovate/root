@@ -1046,9 +1046,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
  }
 
 .approval {
-    width: 168px;
+    $butt-width: 168px;
+    width: $butt-width;
     height: 40px;
-    float: right;
+    left: calc(100% - #{$butt-width});
     clear: both ;
     margin-right: 5px;
     margin-top: 5px;
