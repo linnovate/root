@@ -6,7 +6,7 @@
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
   </div>
-  
+
   <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
     <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
@@ -40,7 +40,7 @@
   <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
 
   <div class="sub-items-section">
-    
+
     <detail-templater
       templates="template"
       on-save="saveTemplate"
@@ -49,7 +49,7 @@
       item="item" users="people" me="me"
       ng-class="{ 'disabled' : !item.subTasks[0]._id}"
     ></detail-templater>
-    
+
     <icu-sub-task-list
       class="icu-sub-task-list entity-list-container"
       ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
@@ -62,15 +62,15 @@
     ></iicu-sub-task-list>
 
   </div>
-              
+
   <detail-tabs tabs="['activities','documents']" item="item" entityName="task" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
 
   <icu-members-footer
     ng-if="item._id"
-    ng-class="{ 'disabled' : !havePermissions('watchers')}" 
+    ng-class="{ 'disabled' : !havePermissions('watchers')}"
     entity="item"
     users="people"
     me="me"
   ></icu-members-footer>
-  
+
 </div>

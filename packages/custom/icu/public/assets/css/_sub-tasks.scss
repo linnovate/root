@@ -361,15 +361,9 @@
     margin-left: 10px;
     .ui-select-container.ui-select-bootstrap {
       .ui-select-match .ui-select-toggle {
-        //float: right;
-        //width: calc(100% - 10px);
         border: none;
         box-shadow: none;
         height: auto;
-        /*height: 30px;
-        position: absolute;
-        right: 50%;*/
-        /*transform: translateX(50%) translateY(15%);*/
         i.caret {
           display: none;
         }
@@ -496,12 +490,8 @@
       float: right;
       width: calc(100% - 10px);
       margin-left: 10px;
-      //padding: 17px 0;
-      //padding-left: 25px;
-      //background: url(/icu/assets/img/calendar.png) no-repeat scroll;
       cursor: pointer;
       outline: none;
-      //background-position: left center;
     }
     .past {
       position: absolute;
