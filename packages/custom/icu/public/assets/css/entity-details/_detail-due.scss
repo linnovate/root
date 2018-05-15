@@ -1,0 +1,71 @@
+.detail-due  {
+    width: 132px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    .placeholder {
+        pointer-events: none;
+        position: absolute;
+        top: 50%;
+        transform: translateX(80%) translateY(-50%);
+        color: $light-grey-placeholder;
+        margin-right:5px;
+    }
+
+    input {
+        //appearance: none;
+        border: none;
+        //float: right;
+        width: 100%;
+        margin-left: 15px;
+        padding: 17px 0 17px 29px;
+        cursor: pointer;
+        outline: none;
+        background: url('/icu/assets/img/calendar.png') no-repeat scroll left center;
+        &::placeholder {
+            opacity: 1;
+            color: $light-grey-placeholder;
+        }
+        &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: $light-grey-placeholder;
+        }
+
+        &::-ms-input-placeholder { /* Microsoft Edge */
+            color: $light-grey-placeholder;
+        }
+        &:focus {
+          outline: none;
+        }
+    }
+}
+
+.detail-due #past, .detail-due #before {
+  position: absolute;
+    top: 361px;
+    background-color: #EBE9DE;
+    border-radius: 6px;
+    border: 1px solid #cbc7bd;
+    width: 262px;
+    z-index: 1;
+    display: none;
+    text-align: left;
+    padding: 4px 7px;
+    font-style: italic;
+    margin-left:150px;
+    margin-top:-225px;
+    &:before {
+        content: '!';
+        background-color: #EA5858;
+        border-radius: 15px;
+        border: none;
+        margin-right: 4px;
+        float: left;
+        color: #EBE9DE;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        font-weight: bold;
+        font-style: normal;
+    }
+}

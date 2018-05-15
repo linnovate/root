@@ -1,0 +1,11 @@
+
+.detail-color {
+    position: relative;
+    min-width: 100px;
+    border-right: 1px solid $light-grey1;
+    z-index: 4;
+    height: 100%;
+    .colorpicker {
+        @include center;
+    }
+}
