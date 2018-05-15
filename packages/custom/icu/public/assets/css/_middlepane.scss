@@ -37,10 +37,11 @@
     background-color: $cream;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
     position: relative;
     transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
 
+    overflow-y: hidden;
+    overflow-x: visible;
 
     &.wide {
         width: 100%;
@@ -153,6 +154,8 @@
 
     .middlepane-container {
 		flex-grow: 1;
+        overflow-y: hidden;
+        height: 100%;
     }
 
     .header-wrap {

@@ -87,6 +87,7 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
         refreshQuery(term);
     };
 
+
     // $scope.blur = function(){
     // 	$timeout(function() {
     // 		$scope.click = false;
