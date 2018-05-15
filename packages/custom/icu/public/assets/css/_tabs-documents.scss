@@ -149,8 +149,10 @@
     text-align: inherit;
     background: none;
     border: none;
-        &:hover{
-            filter: invert(75%);
+        img {
+            &:hover{
+                filter: opacity(.5) drop-shadow(0 0 0 #FFA000) saturate(5);
+            }
         }
     }
   #Document-icon-revert{
