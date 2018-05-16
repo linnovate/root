@@ -1,7 +1,6 @@
 .task-list, .discussion-list, .project-list, .sub-task-list, .folder-list, .officeDocument-list, .templateDoc-list, .office-list {
 
     height: 100%;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     .entity-list-container {
