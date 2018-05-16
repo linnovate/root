@@ -13,7 +13,6 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     background-color: $cream;
 
     overflow-x: visible;
-    //overflow-y: hidden;
     height: 100vh;
 
     border-left: 1px solid #C8C8C6;
@@ -21,7 +20,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     right: 0;
 
     @media screen and (max-width: $small-resolution) {
-        min-width:$detailspane-width;
+        max-width: $detailspane-width;
     }
 
     textarea {
@@ -1057,7 +1056,6 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     position: relative;
 
     button {
-        background-color: transparent;
         border: none;
         background: #2AB541;
         box-shadow: inset 0px -4px 0px rgba(0, 0, 0, 0.2);

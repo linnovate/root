@@ -40,7 +40,7 @@
     position: relative;
     transition: all cubic-bezier(0.95, 0.96, 0.95, 0.94) 0.3s;
 
-    overflow-y: hidden;
+    //overflow-y: hidden;
     overflow-x: visible;
 
     &.wide {
@@ -226,9 +226,14 @@
     }
 
     .filters {
-        padding: 7px 5px;
+        padding: 0;
         background-color: white;
-        height: 43px;
+        height: 44px;
+        border-bottom: 1px solid #E3E3E3;
+
+        >div {
+            height: 100%;
+        }
 
         .ui-select-container .ui-select-choices-row .ui-select-choices-row-inner {
 		    display: flex;
@@ -237,6 +242,7 @@
 
         .left-wrapper {
             float: left;
+            height: 100%;
 
              tooltip{
                  display: block;
@@ -249,6 +255,7 @@
         }
         .print-wrapper {
             float: right;
+            padding: 0 8px;
         }
 
         .right-wrapper {
@@ -259,14 +266,17 @@
             @include ellipse(13px);
             @include button;
 
-            margin: 0 5px;
+            //margin: 0 5px;
             background-color: white;
             border: 1px solid #c3bfbf;
         }
 
         .favorites {
-            width: 26px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
             font-size: 13px;
+            margin-top: 5px;
 
             tooltip {
                 &:hover {
@@ -291,11 +301,12 @@
             tooltip{
                 display: block;
                 position: relative;
+                padding: 5px 8px 7px;
             }
             tip{
                 position: absolute;
                 top: -15px;
-                left: inherit;
+                //left: inherit;
                 right: -40%;
             }
 
@@ -317,12 +328,19 @@
             }
         }
 
+        .sortByStar {
+            display: inline-block;
+            border-right: 1px solid #E3E3E3;
+            padding: 0 14px;
+            height: 100%;
+        }
+
         .tasks {
             width: 92px;
-            height: 26px;
+            height: 32px;
+            border-radius: 30px;
             padding-left: 0;
-            background: url('/icu/assets/img/status.png') no-repeat 15% center;
-            background-position: left 10% center;
+            background: url(/icu/assets/img/status.png) no-repeat left 10% center;
 
             &:hover{
                  box-shadow: 0px 0px 0px 2px #FFB435;

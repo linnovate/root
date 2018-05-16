@@ -85,13 +85,11 @@
                 transform: translateX(80%) translateY(-50%);
                 color: $light-grey-placeholder;
                 margin-right: 5px;
-                //padding-left: 5px;
             }
             .recycle {
                 font-size: 13px;
-                line-height: 29px;
+                line-height: 18px;
                 color: #DFF2F9;
-                //float: left;
                 width: 100%;
                 margin: 10px 20px 0 20px;
                 &.active {
@@ -101,22 +99,18 @@
 
             input {
                 color: wheat;
-                //appearance: none;
                 border: none;
-                //float: left;
                 margin-left: 19px;
                 margin-right: 17px;
                 margin-bottom: 3px;
                 padding-left: 11px;
                 padding-right: 32px;
-                //cursor: pointer;
                 outline: none;
                 height: 42px;
                 font-size: 12px;
                 font-weight: bold;
                 background: #1F2629 url(/icu/assets/img/date-dropdown-icon.png) no-repeat right 13px center;
                 width: calc(100% - 36px);
-                //background-position: left center;
 
             }
         }
