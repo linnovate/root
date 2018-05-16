@@ -13,9 +13,13 @@
 
     <div class="filters">
         <div class="left-wrapper">
-            <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
-                <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
-            </button>
+
+            <div class="sortByStar">
+                <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
+                    <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
+                </button>
+            </div>
+
             <div class="select-wrapper">
                 <div tooltips tooltip-template="{{'sort by' | i18next}}">
                     <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
