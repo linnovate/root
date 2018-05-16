@@ -179,6 +179,10 @@
             padding: 42px 23px 0;
             width: 100%;
             line-height: 26px;
+            * {
+            	display: initial;
+            	margin-right: 5px;
+            }
             span {
                 font-weight: 700;
                 
