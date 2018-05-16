@@ -154,8 +154,7 @@
 
     .middlepane-container {
 		flex-grow: 1;
-        overflow-y: hidden;
-        height: 100%;
+        height: calc(100% - 55px);
     }
 
     .header-wrap {
@@ -387,7 +386,7 @@
 
     .full-height {
         height: 100%;
-        overflow: hidden;
+        //overflow: hidden;
     }
 
     .task-list table tbody tr td.name,
