@@ -224,3 +224,14 @@ gulp.task('development', function(callback) {
     callback
   );
 });
+
+gulp.task('development:lite', function(callback) {
+  runSequence(
+    'clean',
+    ['less', 'sass'],
+    ['dist:public', 'dist:bower'],
+    'babel',
+    ['devServe'],
+    callback
+  );
+});
