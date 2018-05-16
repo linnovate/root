@@ -74,11 +74,13 @@ table {
   overflow: hidden;
 }
 .panes-wrapper {
-    // margin-left: $sidepane-width;
     width: calc(100% - #{$sidepane-width});
     display: flex;
     justify-content: flex-start;
-    overflow: hidden;
+
+    @media screen and (max-width: $small-resolution) {
+        width: calc(100% - #{$min-sidepane-width});
+    }
 
     &.wide {
         margin-left: 0;
