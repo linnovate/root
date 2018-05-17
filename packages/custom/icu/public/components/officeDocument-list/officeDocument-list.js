@@ -18,29 +18,49 @@ angular.module('mean.icu.ui.officedocumentlist', [])
             $window.print()
         }
 
-        $scope.starred = $stateParams.starred;
-        
-        // activeToggle
-        $scope.activeToggleList = EntityService.activeToggleList;
-        $scope.activeToggle = {
-                field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
-                disabled: !EntityService.isActiveStatusAvailable() 
-        };
-        /*---*/
+    $scope.starred = $stateParams.starred;
 
-        $scope.isCurrentState = function (id) {
-            return $state.current.name.indexOf('main.officeDocuments.byentity') === 0 &&
-                $state.current.name.indexOf('details') === -1;
-        };
+    $scope.sorting = {
+        field: $stateParams.sort || 'created',
+        order: 1
+    };
 
-        $scope.changeOrder = function () {
-            if ($scope.sorting.field != "custom") {
-                $scope.sorting.isReverse = !$scope.sorting.isReverse;
-            }
 
-            /*Made By OHAD - Needed for reversing sort*/
-            $state.go($state.current.name, { sort: $scope.sorting.field });
-        };
+    // activeToggle
+    $scope.activeToggleList = EntityService.activeToggleList;
+    var activeToggle;
+    if(EntityService.getActiveStatusFilterValue()&&EntityService.getActiveStatusFilterValue()!="default" ){
+        activeToggle = EntityService.getActiveStatusFilterValue();
+    }
+    else{
+        activeToggle ="active"; 
+    }
+    $scope.activeToggle = {
+        field: !EntityService.isActiveStatusAvailable() ? 'all' : activeToggle || 'active',
+        disabled: !EntityService.isActiveStatusAvailable()
+    };
+    /*---*/
+
+    $scope.isCurrentState = function (id) {
+        return $state.current.name.indexOf('main.officeDocuments.byentity') === 0 && $state.current.name.indexOf('details') === -1;
+    };
+
+    $scope.changeOrder = function () {
+        if($scope.sorting.field == EntityService.getSortFilterValue().field){
+            $scope.sorting.order = -1*EntityService.getSortFilterValue().order;
+        }
+          EntityService.setSortFilterValue({field:$scope.sorting.field,order:$scope.sorting.order});
+          OfficeDocumentsService.getAll(0,25,$scope.sorting.field,
+                                             $scope.sorting.order,
+                                             $scope.activeToggle.field,
+                                            EntityService.getEntityFolderValue().id).then(function (docs) {
+             $scope.officeDocuments = docs;
+             $state.go($state.current.name, { sort: $scope.sorting.field,  activeToggle: $scope.activeToggle.field, officeDocuments: $scope.officeDocuments });
+        });
+      };
+    //     if ($scope.sorting.field != "custom") {
+    //         $scope.sorting.isReverse = !$scope.sorting.isReverse;
+    //     }
 
         $scope.sorting = {
             field: $stateParams.sort || 'created',
@@ -95,10 +115,14 @@ angular.module('mean.icu.ui.officedocumentlist', [])
             $state.go($state.current.name, { starred: !$stateParams.starred });
         };
 
-        $scope.filterActive = function () {
-            EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
-            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
-        };
+    $scope.filterActive = function () {
+        EntityService.setActiveStatusFilterValue($scope.activeToggle.field);
+        OfficeDocumentsService.getAll(0,25,$scope.sorting.field, $scope.sorting.order, $scope.activeToggle.field, EntityService.getEntityFolderValue().id).then(function (docs) {
+            $scope.officeDocuments = docs;
+             $state.go($state.current.name, { activeToggle: $scope.activeToggle.field, officeDocuments: $scope.officeDocuments });
+        });
+       
+    };
 
         let possibleNavigate = $scope.officeDocuments.filter(function(t) {
             return t.recycled == null ; 

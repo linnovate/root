@@ -328,10 +328,10 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
 
                         if (folders.data.length) {
                             var index = $scope.folders.length - offset;
-                            $scope.folders.pop();
+                        //    $scope.folders.pop();
                             var args = [index, 0].concat(folders.data);
                             [].splice.apply($scope.folders, args);
-                            $scope.folders.push(_(newFolder).clone());
+                          //  $scope.folders.push(_(newFolder).clone());
                         }
 
                         $scope.loadNext = folders.next;

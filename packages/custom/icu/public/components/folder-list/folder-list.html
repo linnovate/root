@@ -49,7 +49,7 @@
                         <ui-select-match>
                             <button class="tasks">{{$select.selected.title | i18next}}</button>
                         </ui-select-match>
-                        <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
+                        <ui-select-choices class="sorting" repeat="field.value as field in sortingList | filter: $select.search">
                             {{field.title | i18next}}
                         </ui-select-choices>
                     </ui-select>

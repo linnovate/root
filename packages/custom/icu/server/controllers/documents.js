@@ -13,7 +13,7 @@ var _ = require('lodash');
 var config = require('meanio').loadConfig();
 var permissions = require('../controllers/permissions.js');
 var logger = require('../services/logger');
-
+var serials = require('../controllers/serials.js');
 
 var options = {
   includes: 'assign watchers',
@@ -277,6 +277,21 @@ exports.signOnDocx = function(req,res,next){
   });
   };
 
+  function getSerial(){
+    return new Promise(function(fulfill,reject){
+          serials.popFromAvailableSerials().then(function(serial){
+            fulfill(serial);
+          }).catch(function(code){
+            serials.incrementSeq().then(function(serial){
+              fulfill(serial);
+            }).catch(function(code){
+              reject(-1);
+            });
+          });
+
+  })
+  }
+
 
 
 
@@ -371,7 +386,8 @@ exports.addSerialTitle = function(req,res,next){
             'UserId':watcher.username.toLowerCase()
           });
         });
-      
+
+      getSerial().then(function(ser){
         var json = {
           'siteUrl':config.SPHelper.SPSiteUrl,
           'fileUrl':spPath,
@@ -383,8 +399,10 @@ exports.addSerialTitle = function(req,res,next){
           'creds':creds,
           'fileOptions':fileOptions,
           'permissions':users,
-          'isTemplate':false
+          'isTemplate':false,
+          'serial':ser
         };
+		
       
         request({
           'url':config.SPHelper.uri+"/api/addSerialTitle",
@@ -392,11 +410,14 @@ exports.addSerialTitle = function(req,res,next){
           'json':json
         },function(error,resp,body){
           if(error){
-           
-            logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
-            res.send(error);
+            serials.pushToAvailableSerials(ser).then(function(){
+              logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
+              res.send(error);
+          });
+
           }
           else{
+            if(body.serial == ser){
             var set = {'serial':body.serial,'spPath':body.path};
             Document.findOne({
               '_id':req.body._id
@@ -422,9 +443,22 @@ exports.addSerialTitle = function(req,res,next){
 
             }
             });
+          }
+          else{
+            serials.pushToAvailableSerials(ser).then(function(){
+              //logger.log('error', '%s addSerialTitle, %s', req.user.name, 'body.serials == ser');
+                  res.status(500).send();
+          });
             
       } 
+          }
     })
+
+      }).catch(function(err){
+        //logger.log('error', '%s addSerialTitle, %s', req.user.name,'getSerial', {error: err.message});
+        res.status(500).send();
+      });
+
   }
 })
   }
@@ -496,7 +530,8 @@ exports.addSerialTitle = function(req,res,next){
         'UserId':watcher.username.toLowerCase()
       });
     });
-  
+    
+    getSerial().then(function(ser){
     var json = {
       'siteUrl':config.SPHelper.SPSiteUrl,
       'fileUrl':spPath,
@@ -508,7 +543,8 @@ exports.addSerialTitle = function(req,res,next){
       'creds':creds,
       'fileOptions':fileOptions,
       'permissions':users,
-      'isTemplate':false
+      'isTemplate':false,
+      'serial':ser
     };
   
     request({
@@ -516,12 +552,15 @@ exports.addSerialTitle = function(req,res,next){
       'method':'POST',
       'json':json
     },function(error,resp,body){
-      if(error){
-        logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
-        res.send(error);
-        
-      }
+          if(error){
+            serials.pushToAvailableSerials(ser).then(function(){
+              logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
+              res.send(error);
+          });
+
+          }
       else{
+        if(body.serial == ser){
         var set = {'serial':body.serial,'spPath':body.path};
         Document.findOne({
           '_id':req.body._id
@@ -549,8 +588,20 @@ exports.addSerialTitle = function(req,res,next){
 
         }
         });
+        }
+        else{
+            serials.pushToAvailableSerials(ser).then(function(){
+              logger.log('error', '%s addSerialTitle, %s', req.user.name, 'body.serials == ser');
+                  res.status(500).send();
+          });
+            
+      } 
+
       }
     });
+
+    });
+
   }
 
 };
@@ -787,15 +838,68 @@ exports.uploadEmptyDocument = function (req, res, next) {
 * req.params.id will consist mongoDB _id of the user
 */
 exports.getAll = function (req, res, next) {
-  var start=0,limit=25,sort="created";
+  var start=0,limit=25,sort="created",obj={'created':1};
+  var qu = [
+        {$or: [{ watchers: { $in: [req.user._id] } }, { assign: req.user._id }]} 
+    ]
+    qu.push({recycled: {$exists:false}})
   if(req.query){
     start = parseInt(req.query.start);
     limit = parseInt(req.query.limit);
     sort = req.query.sort;
+    sortOrder = parseInt(req.query.sortOrder);
+    obj ={};
+    obj[sort]=sortOrder;
   }
+
+  if(req.query.status){
+    switch (req.query.status){
+      case 'all':
+      console.log("all");
+        break;
+      case 'active':
+        qu.push({status:{$ne:"done"}});
+        console.log("active");
+        break;
+      case 'default':
+        qu.push({status:{$ne:"done"}});
+        console.log("active");
+        break;
+      case 'nonactive':
+        qu.push({status:"done"})
+        console.log("unactive");
+        break ;  
+      case 'new':
+        qu.push({status:"new"})
+        console.log("new");
+        break ;  
+      case 'done':
+        qu.push({status:"done"})
+        console.log("done");
+        break ;  
+      case 'received':
+        qu.push({status:"received"})
+        console.log("received");
+        break ;  
+      case 'in-progress':
+        qu.push({status:"in-progress"})
+        console.log("in-progress");
+        break ;
+      case 'sent':
+        qu.push({status:"sent"})
+        console.log("sent");
+        break ;  
+
+    }
+  }
+if(req.query.folderId){
+   qu.push({folder: req.query.folderId})
+}
+ //console.dir(status)
   Document.find({
-    $or: [{ watchers: { $in: [req.user._id] } }, { assign: req.user._id }]
-  }).sort({sort:1}).skip(start).limit(limit).populate('folder')
+    $and:qu
+    
+  }).sort(obj).skip(start).limit(limit).populate('folder')
   .populate('creator')
   .populate('updater')
   .populate('sender')
@@ -809,11 +913,11 @@ exports.getAll = function (req, res, next) {
   .exec(function(err,data){
       if (err) {
         logger.log('error', '%s getAll, %s', req.user.name,'Document.find', {error: err.message});
-        req.locals.error = err;
-        req.status(400);
+        res.locals.error = err;
+        res.status(400);
       }   
       else {
-        req.locals.result = data
+        res.locals.status = req.query.status
        // logger.log('info', '%s getAll, %s,', req.user.name, 'get all document success' );
 
         res.send(data);
@@ -837,10 +941,24 @@ exports.getById = function (req, res, next) {
     } else {
       logger.log('info', '%s getById, %s', req.user.name, 'success' );
 
+
+          if(data instanceof Array && data.length == 1){
+              data = data[0];
+          } 
       req.locals.result = data
       res.send(data);
     }
-  });
+  }).populate("folder")
+  .populate('creator')
+  .populate('updater')
+  .populate('sender')
+  .populate('sendingAs')
+  .populate('assign')
+  .populate('relatedDocuments')
+  .populate('forNotice')
+  .populate('watchers')
+  .populate('doneBy')
+  .populate('signBy');
 }
 
 /**
@@ -1006,10 +1124,12 @@ exports.upload = function (req, res, next) {
                     'method':'POST',
                     'json':json
                   },function(error,resp,body){
-                   // if(error){
-                   //   res.send(error);
-                   // }
-                    //else{
+                    if(error || !body){
+                     res.status(500).send();
+                    }
+                    else{
+                      console.log("\n\n\n\n\n\n I GOT BODY!!!");
+                      console.dir(body);
                       //var path = body.path;
                       var path = 'Path path path hahaha';
                       var doc = {
@@ -1042,7 +1162,7 @@ exports.upload = function (req, res, next) {
                           res.send(result);
                         }
                       });
-                   // }
+                    }
                   });
                 }
                 else{
@@ -1074,10 +1194,12 @@ exports.upload = function (req, res, next) {
           'method':'POST',
           'json':json
         },function(error,resp,body){
-           // if(error){
-           //   res.send(error);
-           // }
-           // else{
+            if(error || !body){
+                      console.log("\n\n\n\n\n\n I GOT RESP!!!");
+                      console.dir(resp);
+                     res.status(500).send();
+              }
+            else{
            //   var path = body.path;
            var path=req.locals.data.body.originalPath;
               var doc = {
@@ -1110,7 +1232,7 @@ exports.upload = function (req, res, next) {
                   res.send(result);
                 }
               });
-           // }
+            }
           });
         }
       });
@@ -1270,7 +1392,7 @@ exports.uploadFileToDocument = function(req,res,next){
                     'method':'POST',
                     'json':json
                   },function(error,resp,body){
-                    if(error){
+                    if(error||!body){;
                       logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'request', {error: error.message});
 
                       var path = req.locals.data.body.originalPath;

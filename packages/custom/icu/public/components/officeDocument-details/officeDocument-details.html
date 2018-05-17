@@ -191,12 +191,12 @@
                 {{signBy.rank}}
                 {{signBy.role}}
                 {{signBy.unit}}</div>
-            <div class="row-buttons">
-                <button class="create" ng-if="(!officeDocument.path && !officeDocument.spPath && !uploading)" icu-open-modal entity-name="officeDocument" show-modal="true" modal-name="template" data="officeDocument" >{{ 'createFromTemplate' | i18next }} </button>
+            <div class="row-buttons" id="clickToView">
+                <button class="create" ng-if="(!officeDocument.path && !officeDocument.spPath && !officeDocument.mmhpath && !uploading)" icu-open-modal entity-name="officeDocument" show-modal="true" modal-name="template" data="officeDocument" >{{ 'createFromTemplate' | i18next }} </button>
                 <button ngf-select
                         ngf-change="upload($files)"
                         ngf-multiple="true"
-                        class="choose" ng-if="(!officeDocument.path && !officeDocument.spPath && !uploading)">{{ 'chooseFile' | i18next }}
+                        class="choose" ng-if="(!officeDocument.path && !officeDocument.spPath && !officeDocument.mmhpath && !uploading)">{{ 'chooseFile' | i18next }}
                 </button>
 
                 <div class="progress" ng-if="uploading">
@@ -207,15 +207,16 @@
                   </div>
 
                 <div style="overflow:inherit" class="tab-content">
-                    <div class="documents">
-                            <div ng-if="officeDocument.path||officeDocument.spPath" class="document" >
+                    <div class="documents" >
+                            <div ng-if="officeDocument.path||officeDocument.spPath|| officeDocument.mmhpath" class="document" >
+                            <div ></div>
                                     <!-- <a href="{{officeDocument.path}}" target="window"> -->
                                          <a ng-click="view(officeDocument)" target="window">
                                                  <div class="icon {{officeDocument.documentType}}"></div>
                                                  <div id="documentTitle">{{officeDocument.title}}</div>
                                          </a>
-                                         <button ng-click="deleteDocumentFile(officeDocument)">X</button>
-                            </div>
+                                         <button ng-if="officeDocument.status != 'done'" ng-click="deleteDocumentFile(officeDocument)">X</button>
+                            </div> 
                     </div>
                 </div>
 

@@ -52,7 +52,8 @@ var FolderSchema = new Schema({
   //should we maybe have finer grain control on this
   watchers: [{
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    unique:true
   }],
   permissions: [{
     _id:false,

@@ -30,7 +30,7 @@ var config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 var order = require('../controllers/order');
 var express = require('express');
-
+var ftp = require('../services/ftp.js');
 
 //update mapping - OHAD
 //var mean = require('meanio');
@@ -108,13 +108,13 @@ module.exports = function(Icu, app) {
 
   //Create HI Room if the user wish
   app.route('/api/:entity(offices)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
-    //.post(project.read, notification.createRoom);
-    .post(office.read)
+    .post(office.read, notification.createRoom);
+    //.post(office.read)
 
   //Create HI Room if the user wish
   app.route('/api/:entity(folders)/:id([0-9a-fA-F]{24})/WantToCreateRoom')
-    //.post(project.read, notification.createRoom);
-    .post(folder.read)
+    .post(folder.read, notification.createRoom);
+  //  .post(folder.read)
 
     app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
@@ -422,6 +422,17 @@ module.exports = function(Icu, app) {
   .post(templateDocs.update2)
   .delete(templateDocs.deleteTemplate);
    //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
+   
+    app.route('/api/ftp/:url')
+    .all(ftp.getFileFromFtp);
+
+   app.route('/consul/status').get(function(req,res){
+   	res.json({name:"ICU"});
+   });
+
+   app.route('/consul/RUOK').get(function(req,res){
+   	res.status(204).send();
+   });
 
    app.route(/^((?!\/hi\/).)*$/).all(response);
    app.route(/^((?!\/hi\/).)*$/).all(error);

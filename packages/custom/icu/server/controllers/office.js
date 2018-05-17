@@ -178,7 +178,7 @@ function updateAllTemplates(officeId, watcher, action) {
                 'json': json
               }, function (error, resp, body) {
                 if (error) {
-                  logger.log('error', '%s updateAllTemplates, %s', req.user.name, ' request', {error: error.stack});
+                  logger.log('error', 'updateAllTemplates, %s',  ' request', {error: error.stack});
                   reject(error);
                 }
                 else {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.officedocumentlistdirective', [])
-    .directive('icuOfficeDocumentList', function ($state, $uiViewScroll, OfficeDocumentsService,$timeout, $stateParams, context, LayoutService) {
+    .directive('icuOfficeDocumentList', function ($state, $uiViewScroll, OfficeDocumentsService,$timeout, $stateParams, context, LayoutService,EntityService) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
@@ -75,13 +75,21 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 }
         };
 
-            $scope.context = context;
-            $scope.isLoading = true;
+        $scope.context = context;
+        $scope.isLoading = true;
+        var sortFilter = EntityService.getSortFilterValue();
+        $scope.order1 = {"field":sortFilter.field,"order":sortFilter.order};
+        $scope.order1.order = $scope.order1.order==1?false:true;
 
-            _($scope.officeDocuments).each(function(p) {
-                p.__state = creatingStatuses.Created;
+        _($scope.officeDocuments).each(function (p) {
+            p.__state = creatingStatuses.Created;
+            if (p.title.length > 20) {
+                p.PartTitle = p.title.substring(0, 20) + "...";
+            } else {
                 p.PartTitle = p.title;
-            });
+            }
+            p.IsTitle = false;
+        });
 
             var newOfficeDocument = {
                 title: '',
@@ -101,26 +109,30 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                     officeDocument[context.entityName] = context.entity;
                 }
 
-                if (officeDocument.__state === creatingStatuses.NotCreated) {
-                    officeDocument.__state = creatingStatuses.Creating;
+            //    if (officeDocument.__state === creatingStatuses.NotCreated) {
+            //        officeDocument.__state = creatingStatuses.Creating;
 
-                    return OfficeDocumentsService.createDocument(officeDocument).then(function(result) {
-                        Object.assign(officeDocument, result);
-                        officeDocument.__state = creatingStatuses.Created;
+            //     return OfficeDocumentsService.create(officeDocument).then(function(result) {
+            //         officeDocument.__state = creatingStatuses.Created;
 
-                        $scope.officeDocuments.push(_(newOfficeDocument).clone());
-                        OfficeDocumentsService.data.push(officeDocument);
+            //         $scope.officeDocuments.push(_(newOfficeDocument).clone());
 
-                        return officeDocument;
-                    });
-                } else if (officeDocument.__state === creatingStatuses.Created) {
+            //         OfficeDocumentsService.data.push(officeDocument);
 
-                     officeDocument.title = officeDocument.PartTitle;
+            //         return officeDocument;
+            //     });
+            // } else
+            //
+            if (officeDocument.__state === creatingStatuses.Created) {
 
-                    // return OfficeDocumentsService.update(officeDocument);
-                    return OfficeDocumentsService.updateDocument(officeDocument);
+                if (!officeDocument.IsTitle) {
+                    officeDocument.PartTitle = officeDocument.PartTitle.split("...")[0] + officeDocument.title.substring(officeDocument.PartTitle.split("...")[0].length, officeDocument.title.length);
+                    officeDocument.IsTitle = !officeDocument.IsTitle;
                 }
-            };
+                officeDocument.title = officeDocument.PartTitle;
+                return OfficeDocumentsService.update(officeDocument);
+            }
+        };
 
             $scope.debouncedUpdate = _.debounce($scope.createOrUpdate, 300);
 
@@ -326,22 +338,32 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             $scope.loadMore2 = function() {
                 var LIMIT = 25 ;
 
-                if (!$scope.isLoading) {
-                    //$scope.isLoading = true;
-                    var start = $scope.officeDocuments.length;
-                    var sort = $scope.order.field;//$scope.sorting?$scope.sorting:"created";
-                    OfficeDocumentsService.getAll(start , LIMIT , sort).then(function(docs){
-                        docs.forEach(function(d){
+            if (!$scope.isLoading) {
+                //$scope.isLoading = true;
+                var start = $scope.officeDocuments.length;
+                var sort = $scope.order.field; //$scope.sorting?$scope.sorting:"created";
+                OfficeDocumentsService.getAll(start, LIMIT,
+                                              EntityService.getSortFilterValue().field,
+                                              EntityService.getSortFilterValue().order, 
+                                              EntityService.getActiveStatusFilterValue(),
+                                              EntityService.getEntityFolderValue().id).then(function (docs) {
+                    docs.forEach(function (d) {
+                        if (d.title.length > 20) {
+                            d.PartTitle = d.title.substring(0, 20) + "...";
+                        } else {
                             d.PartTitle = d.title;
-
+                        }
+                      //  if(EntityService.getSortFilterValue().order == -1){
+                      //      $scope.officeDocuments.unshift(d);
+                       // }else{
                             $scope.officeDocuments.push(d);
-                        });
-                        //$scope.isLoading = false;
+                       // } 
                     });
 
-
-                }
-            };
+                    //$scope.isLoading = false;
+                });
+            }
+        };
 
 
             $scope.loadMore = function() {
@@ -371,18 +393,20 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             };
         }
 
-        return {
-            restrict: 'A',
-            templateUrl: '/icu/components/officeDocument-list-directive/officeDocument-list.directive.template.html',
-            scope: {
-                loadNext: '=',
-                loadPrev: '=',
-                officeDocuments: '=',
-                drawArrow: '=',
-                order: '=',
-                displayOnly: '='
-            },
-            link: link,
-            controller: controller
-        };
-    });
+    return {
+        restrict: 'A',
+        templateUrl: '/icu/components/officeDocument-list-directive/officeDocument-list.directive.template.html',
+        scope: {
+            loadNext: '=',
+            loadPrev: '=',
+            officeDocuments: '=',
+            drawArrow: '=',
+            order: '=',
+            displayOnly: '=',
+            activeToggle: '=',
+            zbb:'='
+        },
+        link: link,
+        controller: controller
+    };
+});

@@ -53,6 +53,7 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
         $scope.tags = ['tag'];
         $scope.tasks = tasks.data || tasks;
         $scope.officeDocuments = officeDocuments.data || officeDocuments;
+        $scope.shouldAutofocus = !$stateParams.nameFocused;
         $scope.tagInputVisible = false;
         //$scope.officeDocument.created = new Date($scope.officeDocument.created);
         OfficeDocumentsService.getStarred().then(function (starred) {
@@ -171,22 +172,28 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             });
         }
 
-        $scope.view = function(document1) {
-            if(document1.spPath){
-                var spSite = document1.spPath.substring(0,document1.spPath.indexOf('ICU')+3);
+    $scope.view = function (document1) {
+       // console.dir(document1);
 
-                var uri = spSite+"/_layouts/15/WopiFrame.aspx?sourcedoc="+document1.spPath+"&action=default";
+        if(document1.mmhpath){
+            var mmhPath = document1.mmhpath.replace(/\//g,'%2f');
+            OfficeDocumentsService.getFileFtp(mmhPath).then(function(result){
+                if(result.status==404){
+                    //var elem = document.getElementById("clickToView");
+                   // alertify.parent(elem);
+                    alertify.logPosition("top left");
+                    alertify.error("הקובץ לא קיים!");
+                }
+            });
 
-                 window.open(uri,'_blank');
-            }
-            else{
+        
+        }else if (document1.spPath) {
+            var spSite = document1.spPath.substring(0, document1.spPath.indexOf('ICU') + 3);
+            var uri = spSite + "/_layouts/15/WopiFrame.aspx?sourcedoc=" + document1.spPath + "&action=default";
+            window.open(uri, '_blank');
+        } else {
             // Check if need to view as pdf
-            if ((document1.documentType == "docx") ||
-                (document1.documentType == "doc") ||
-                (document1.documentType == "xlsx") ||
-                (document1.documentType == "xls") ||
-                (document1.documentType == "ppt") ||
-                (document1.documentType == "pptx")) {
+            if (document1.documentType == "docx" || document1.documentType == "doc" || document1.documentType == "xlsx" || document1.documentType == "xls" || document1.documentType == "ppt" || document1.documentType == "pptx") {
                 var arr = document1.path.split("." + document1.documentType);
                 var ToHref = arr[0] + ".pdf";
                 // Check if convert file exists allready
