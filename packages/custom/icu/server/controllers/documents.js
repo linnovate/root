@@ -848,8 +848,8 @@ exports.getAll = function (req, res, next) {
     limit = parseInt(req.query.limit);
     sort = req.query.sort;
     sortOrder = parseInt(req.query.sortOrder);
-    obj ={};
-    obj[sort]=sortOrder;
+    obj = {};
+    obj[sort] = sortOrder || 1;
   }
 
   if(req.query.status){
