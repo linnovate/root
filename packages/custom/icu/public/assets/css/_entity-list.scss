@@ -16,7 +16,7 @@
         overflow-y: auto;
         .list-table {
             height: 100%;
-            overflow-x: hi;
+            overflow: auto;
               &::-webkit-scrollbar {
                 width: 5px;
             }
