@@ -9,7 +9,6 @@ function ProjectListController($scope,
                                $filter,
                                $stateParams,
                                EntityService) {
-
     $scope.projects = projects.data || projects;
     $scope.loadNext = projects.next;
     $scope.loadPrev = projects.prev;
@@ -17,10 +16,11 @@ function ProjectListController($scope,
     $scope.entityName = 'projects';
     $scope.entityRowTpl = '/icu/components/project-list/project-row.html';
 
-
-    ProjectsService.getById($state.params.entityId).then(result=>{
-        $scope.parentName = result.title;
-    });
+    if($state.params.entityId){
+        ProjectsService.getById($state.params.entityId).then(result=>{
+            $scope.parentName = result.title;
+        });
+    }
 
     $scope.print = function() {
         $window.print()
@@ -49,7 +49,11 @@ function ProjectListController($scope,
             $state.current.name.indexOf('details') === -1;
     };
 
+    $scope.reverse = true;
+
     $scope.changeOrder = function () {
+        $scope.reverse = !$scope.reverse;
+
         if($scope.sorting.field != "custom"){
             $scope.sorting.isReverse = !$scope.sorting.isReverse;
         }
@@ -58,31 +62,16 @@ function ProjectListController($scope,
         $state.go($state.current.name, { sort: $scope.sorting.field });
     };
 
-    $scope.update = function(item) {
-        return ProjectsService.update(item.title);
-    }
-
-    $scope.create = function(item) {
-
-        var newItem = {
-            title: '',
-            color: '0097A7',
-            watchers: [],
-            __state: creatingStatuses.NotCreated,
-            __autocomplete: true
-        };
-
-        return ProjectsService.create(newItem).then(function(result) {
-            $scope.items.push(result);
-            ProjectsService.data.push(result);
-            return result;
-        });
-    };
-
     $scope.sorting = {
         field: $stateParams.sort || 'created',
         isReverse: false
     };
+
+    // $scope.$watch('sorting.field', function(newValue, oldValue) {
+    //     if (newValue && newValue !== oldValue) {
+    //         $state.go($state.current.name, { sort: $scope.sorting.field });
+    //     }
+    // });
 
     $scope.sortingList = [
         {
@@ -146,30 +135,6 @@ function ProjectListController($scope,
             $state.go('.activities');
         }
     }
-    $scope.loadMore = function(start, LIMIT, sort) {
-        if (!$scope.isLoading && $scope.loadNext) {
-            $scope.isLoading = true;
-            $scope.loadNext().then(function(items) {
-
-                _(items.data).each(function(p) {
-                    p.__state = creatingStatuses.Created;
-                });
-
-                var offset = $scope.displayOnly ? 0 : 1;
-
-                if (items.data.length) {
-                    var index = $scope.items.length - offset;
-                    var args = [index, 0].concat(items.data);
-
-                    [].splice.apply($scope.items, args);
-                }
-
-                $scope.loadNext = items.next;
-                $scope.loadPrev = items.prev;
-                $scope.isLoading = false;
-            });
-        }
-    }
-}
+};
 
 angular.module('mean.icu.ui.projectlist', []).controller('ProjectListController', ProjectListController);

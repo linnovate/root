@@ -47,6 +47,13 @@
         width: 100%;
     }
 
+    .rotate {
+        &:after {
+            transition: .5s;
+            transform: rotate(180deg);
+        }
+    }
+
     .header {
         height: $header-height;
         border-bottom: 1px solid $light-grey1;
@@ -343,12 +350,47 @@
             height: 32px;
             border-radius: 30px;
             padding-left: 0;
-            background: url(/icu/assets/img/status.png) no-repeat left 10% center;
 
             &:hover{
                  box-shadow: 0px 0px 0px 2px #FFB435;
                  transition: 0.8s;
             }
+        }
+
+        .button-left-part {
+            width: 31px;
+            height: 32px;
+            float: left;
+            border: 1px solid #c3bfbf;
+            border-radius: 30px 0 0 30px;
+            outline: none;
+            background-color: white;
+
+            &:after {
+                content: "";
+                transition: .5s;
+                height: 100%;
+                display: block;
+                background: url(/icu/assets/img/icon-arrow-up.png) no-repeat center;
+            }
+
+            &:hover {
+                border-right: 1px solid #c3bfbf;
+                box-shadow: 0 0 0 2px #FFB435;
+                transition: 0.8s;
+                z-index: 2;
+                position: relative;
+            }
+        }
+
+        .button-right-part {
+            width: 119px;
+            text-align: left;
+            border-left: none;
+            border-radius: 0 30px 30px 0;
+            outline: none;
+            padding-left: 14px;
+            background: white url(/icu/assets/img/date-dropdown-icon-black.png) no-repeat calc(100% - 14px) center;
         }
 
         .active-status {
@@ -408,5 +450,9 @@
         p {
             text-overflow: ellipsis #{"/*rtl:ignore*/"};
         }
+    }
+
+    .inline-block {
+        display: inline-block;
     }
 }

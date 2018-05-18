@@ -1,14 +1,26 @@
 'use strict';
 
-function DiscussionListController($scope, $state, discussions, DiscussionsService, context, $stateParams, EntityService) {
+function DiscussionListController($scope,
+                                  $window,
+                                  $state,
+                                  discussions,
+                                  DiscussionsService,
+                                  context,
+                                  $filter
+                                  $stateParams,
+                                  EntityService) {
 
     $scope.items = discussions.data || discussions;
+    $scope.discussions = discussions.data || discussions;
     $scope.loadNext = discussions.next;
     $scope.loadPrev = discussions.prev;
+    $scope.print = function() {
+        $window.print()
+    }
 
     $scope.entityName = 'discussions';
     $scope.entityRowTpl = '/icu/components/discussion-list/discussion-row.html';
-    
+
     var creatingStatuses = {
         NotCreated: 0,
         Creating: 1,
@@ -34,20 +46,37 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
         });
     }
 
-//     $scope.search = function(item) {
-//         return DiscussionsService.search(term).then(function(searchResults) {
-//             _(searchResults).each(function(sr) {
-//                 var alreadyAdded = _($scope.items).any(function(p) {
-//                     return p._id === sr._id;
-//                 });
+    $scope.starred = $stateParams.starred;
+    if ($scope.discussions.length > 0 && !$scope.discussions[$scope.discussions.length - 1].id) {
+        $scope.discussions = [$scope.discussions[0]];
+    }
 
-//                 if (!alreadyAdded) {
-//                     return $scope.searchResults.push(sr);
-//                 }
-//             });
-//             $scope.selectedSuggestion = 0;
-//         });
-//     }
+    // activeToggle
+    $scope.activeToggleList = EntityService.activeToggleList;
+    $scope.activeToggle = {
+            field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
+            disabled: !EntityService.isActiveStatusAvailable()
+    };
+    /*---*/
+
+
+    $scope.isCurrentState = function() {
+        return $state.current.name.indexOf('main.discussions.byentity') === 0 &&
+            $state.current.name.indexOf('details') === -1;
+    };
+
+    $scope.reverse = true;
+
+    $scope.changeOrder = function () {
+        $scope.reverse = !$scope.reverse;
+
+        if($scope.sorting.field != "custom"){
+           $scope.sorting.isReverse = !$scope.sorting.isReverse;
+        }
+
+        /*Made By OHAD - Needed for reversing sort*/
+        $state.go($state.current.name, { sort: $scope.sorting.field });
+    };
 
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {
@@ -111,12 +140,7 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
                 }
             }
         }
-
     }
-
-//     _($scope.items).each(function(d) {
-//         d.__state = creatingStatuses.Created;
-//     });
 
     $scope.detailsState = context.entityName === 'all' ? 'main.discussions.all.details' : 'main.discussions.byentity.details';
 
@@ -133,6 +157,81 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
             });
         }
     }
-}
+
+    $scope.sorting  = {
+        field: $stateParams.sort || 'created',
+        isReverse: false
+    };
+
+    // $scope.$watch('sorting.field', function(newValue, oldValue) {
+    //     if (newValue && newValue !== oldValue) {
+    //         $state.go($state.current.name, { sort: $scope.sorting.field });
+    //     }
+    // });
+
+    $scope.sortingList = [
+        {
+            title: 'due',
+            value: 'due'
+        }, {
+            title: 'title',
+            value: 'title'
+        }, {
+            title: 'status',
+            value: 'status'
+        }, {
+            title: 'created',
+            value: 'created'
+        }
+    ];
+
+    if(context.entityName != "all"){
+        $scope.sortingList.push({
+            title: 'custom',
+            value: 'custom'
+        });
+    };
+
+    function navigateToDetails(discussion) {
+        if(!discussion) return ;
+
+        $scope.detailsState = context.entityName === 'all' ?
+            'main.discussions.all.details' : 'main.discussions.byentity.details';
+
+        $state.go($scope.detailsState, {
+            id: discussion._id,
+            entity: $scope.currentContext.entityName,
+            entityId: $scope.currentContext.entityId
+        });
+    }
+
+    $scope.toggleStarred = function () {
+        $state.go($state.current.name, { starred: !$stateParams.starred });
+    };
+
+    $scope.filterActive = function () {
+        EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
+        $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
+    };
+
+    let possibleNavigate = $scope.discussions.filter(function(t) {
+        return t.recycled == null ;
+    })
+
+    if (possibleNavigate.length) {
+        if ($state.current.name === 'main.discussions.all' ||
+            $state.current.name === 'main.discussions.byentity') {
+            navigateToDetails(possibleNavigate[0]);
+        }
+    } else {
+        if ($state.current.name === 'main.discussions.all') {
+            return;
+        }
+        if ($state.current.name !== 'main.discussions.byentity.activities' &&
+            $state.current.name !== 'main.discussions.byentity.details.activities') {
+            $state.go('.activities');
+        }
+    }
+};
 
 angular.module('mean.icu.ui.discussionlist', []).controller('DiscussionListController', DiscussionListController);
