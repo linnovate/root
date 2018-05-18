@@ -21,12 +21,12 @@ angular.module('mean.icu.ui.discussionlist', [])
         if ($scope.discussions.length > 0 && !$scope.discussions[$scope.discussions.length - 1].id) {
 		    $scope.discussions = [$scope.discussions[0]];
         }
-        
+
         // activeToggle
         $scope.activeToggleList = EntityService.activeToggleList;
         $scope.activeToggle = {
                 field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
-                disabled: !EntityService.isActiveStatusAvailable() 
+                disabled: !EntityService.isActiveStatusAvailable()
         };
         /*---*/
 
@@ -36,7 +36,11 @@ angular.module('mean.icu.ui.discussionlist', [])
                 $state.current.name.indexOf('details') === -1;
         };
 
+        $scope.reverse = true;
+
         $scope.changeOrder = function () {
+            $scope.reverse = !$scope.reverse;
+
             if($scope.sorting.field != "custom"){
                $scope.sorting.isReverse = !$scope.sorting.isReverse;
             }
@@ -98,13 +102,13 @@ angular.module('mean.icu.ui.discussionlist', [])
 
         $scope.filterActive = function () {
             EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
-            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });		
-        };    
+            $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
+        };
 
         let possibleNavigate = $scope.discussions.filter(function(t) {
-            return t.recycled == null ; 
+            return t.recycled == null ;
         })
-            
+
         if (possibleNavigate.length) {
             if ($state.current.name === 'main.discussions.all' ||
                 $state.current.name === 'main.discussions.byentity') {

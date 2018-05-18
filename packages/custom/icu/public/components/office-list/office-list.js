@@ -22,11 +22,15 @@ angular.module('mean.icu.ui.officelist', [])
                 $state.current.name.indexOf('details') === -1;
         };
 
+        $scope.reverse = true;
+
         $scope.changeOrder = function () {
+            $scope.reverse = !$scope.reverse;
+
             if($scope.sorting.field != "custom"){
                 $scope.sorting.isReverse = !$scope.sorting.isReverse;
             }
-            
+
             /*Made By OHAD - Needed for reversing sort*/
             $state.go($state.current.name, { sort: $scope.sorting.field });
         };
@@ -43,9 +47,9 @@ angular.module('mean.icu.ui.officelist', [])
         //         $state.go($state.current.name, { sort: $scope.sorting.field });
         //     }
         // });
-        
-        
-       
+
+
+
 
         $scope.sortingList = [
             {
@@ -81,7 +85,7 @@ angular.module('mean.icu.ui.officelist', [])
         $scope.toggleStarred = function () {
             $state.go($state.current.name, { starred: !$stateParams.starred });
         };
-        
+
         if ($scope.offices.length) {
             if ($state.current.name === 'main.offices.all' ||
                 $state.current.name === 'main.offices.byentity') {

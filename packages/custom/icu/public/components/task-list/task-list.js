@@ -206,7 +206,11 @@ angular.module('mean.icu.ui.tasklist', [])
 		}
 	}
 
+    $scope.reverse = true;
+
 	$scope.changeOrder = function () {
+        $scope.reverse = !$scope.reverse;
+
 		if($scope.sorting.field != "custom"){
 			$scope.sorting.isReverse = !$scope.sorting.isReverse;
 		}

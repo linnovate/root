@@ -2,7 +2,7 @@
     <div ng-show="isLoading" class="loader"></div>
     <table class="offices" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody class='containerVertical'>
-            <tr data-ng-repeat="office in offices | orderBy:order.field:order.isReverse"
+            <tr data-ng-repeat="office in offices | sortBy:order.field:order.isReverse"
                 data-ng-class="{ 'active': isCurrentState(office._id) }"
                 ng-click="initialize($event, office)"
                 ng-mousedown="currentTaskId(office._id)"

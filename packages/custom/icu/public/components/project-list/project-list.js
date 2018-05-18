@@ -47,7 +47,11 @@ angular.module('mean.icu.ui.projectlist', [])
                 $state.current.name.indexOf('details') === -1;
         };
 
+        $scope.reverse = true;
+
         $scope.changeOrder = function () {
+            $scope.reverse = !$scope.reverse;
+
             if($scope.sorting.field != "custom"){
                 $scope.sorting.isReverse = !$scope.sorting.isReverse;
             }
@@ -61,16 +65,11 @@ angular.module('mean.icu.ui.projectlist', [])
             isReverse: false
         };
 
-
-
         // $scope.$watch('sorting.field', function(newValue, oldValue) {
         //     if (newValue && newValue !== oldValue) {
         //         $state.go($state.current.name, { sort: $scope.sorting.field });
         //     }
         // });
-
-
-
 
         $scope.sortingList = [
             {

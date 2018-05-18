@@ -50,11 +50,15 @@ angular.module('mean.icu.ui.folderlist', [])
 		return ids.indexOf($state.current.name) !== -1;
 	};
 
+        $scope.reverse = true;
+
         $scope.changeOrder = function () {
+            $scope.reverse = !$scope.reverse;
+
             if($scope.sorting.field != "custom"){
                 $scope.sorting.isReverse = !$scope.sorting.isReverse;
             }
-            
+
             /*Made By OHAD - Needed for reversing sort*/
             $state.go($state.current.name, { sort: $scope.sorting.field });
         };
@@ -71,9 +75,9 @@ angular.module('mean.icu.ui.folderlist', [])
         //         $state.go($state.current.name, { sort: $scope.sorting.field });
         //     }
         // });
-        
-        
-       
+
+
+
 
         $scope.sortingList = [
             {
@@ -109,7 +113,7 @@ angular.module('mean.icu.ui.folderlist', [])
         $scope.toggleStarred = function () {
             $state.go($state.current.name, { starred: !$stateParams.starred });
         };
-        
+
         if ($scope.folders.length) {
             if ($state.current.name === 'main.folders.all' ||
                 $state.current.name === 'main.folders.byentity') {

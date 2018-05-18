@@ -22,11 +22,15 @@ angular.module('mean.icu.ui.templateDoclist', [])
                 $state.current.name.indexOf('details') === -1;
         };
 
+        $scope.reverse = true;
+
         $scope.changeOrder = function () {
+            $scope.reverse = !$scope.reverse;
+
             if($scope.sorting.field != "custom"){
                 $scope.sorting.isReverse = !$scope.sorting.isReverse;
             }
-            
+
             /*Made By OHAD - Needed for reversing sort*/
             $state.go($state.current.name, { sort: $scope.sorting.field });
         };
@@ -43,9 +47,9 @@ angular.module('mean.icu.ui.templateDoclist', [])
         //         $state.go($state.current.name, { sort: $scope.sorting.field });
         //     }
         // });
-        
-        
-       
+
+
+
 
         $scope.sortingList = [
             {
@@ -81,7 +85,7 @@ angular.module('mean.icu.ui.templateDoclist', [])
         $scope.toggleStarred = function () {
             $state.go($state.current.name, { starred: !$stateParams.starred });
         };
-        
+
         if ($scope.templateDocs.length) {
             if ($state.current.name === 'main.templateDocs.all' ||
                 $state.current.name === 'main.templateDocs.byentity') {
