@@ -29,7 +29,7 @@
                 <button class="button-left-part" ng-click="changeOrder()" ng-class="{'rotate' : reverse}"></button>
                 <ui-select class="inline-block" ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
                     <ui-select-match>
-                        <button class="button-right-part tasks">{{$select.selected.title | i18next}}</button>
+                        <button class="button-right-part tasks"><span class="bold">{{'status' | i18next}}: </span>{{$select.selected.title | i18next}}</button>
                     </ui-select-match>
                     <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
                         {{field.title | i18next}}
