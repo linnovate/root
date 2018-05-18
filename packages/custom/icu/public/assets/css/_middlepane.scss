@@ -54,6 +54,10 @@
         }
     }
 
+    .bold {
+        font-weight: bold;
+    }
+
     .header {
         height: $header-height;
         border-bottom: 1px solid $light-grey1;
@@ -394,7 +398,10 @@
         }
 
         .active-status {
-            width: 100px;
+            width: 150px;
+            text-align: left;
+            padding-left: 15px;
+            background: white url(/icu/assets/img/date-dropdown-icon-black.png) no-repeat calc(100% - 14px) center;
         }
 
         .list, .calendar {
