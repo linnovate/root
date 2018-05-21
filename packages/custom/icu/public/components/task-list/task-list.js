@@ -319,15 +319,14 @@ function TaskListController($scope,
 	}, {
 		title: 'created',
 		value: 'created'
-	}
-	];
+	}];
 
 	if(context.entityName != "all"){
-            $scope.sortingList.push({
-                title: 'custom',
-                value: 'custom'
-            });
-        };
+        $scope.sortingList.push({
+            title: 'custom',
+            value: 'custom'
+        });
+    };
 
 	function navigateToDetails(task) {
 		if(!task) return ;
