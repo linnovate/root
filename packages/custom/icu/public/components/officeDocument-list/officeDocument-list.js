@@ -62,10 +62,10 @@ angular.module('mean.icu.ui.officedocumentlist', [])
     //         $scope.sorting.isReverse = !$scope.sorting.isReverse;
     //     }
 
-        $scope.sorting = {
-            field: $stateParams.sort || 'created',
-            isReverse: false
-        };
+        // $scope.sorting = {
+        //     field: $stateParams.sort || 'created',
+        //     isReverse: false
+        // };
 
 
 

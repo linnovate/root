@@ -339,7 +339,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 var LIMIT = 25 ;
 
             if (!$scope.isLoading) {
-                //$scope.isLoading = true;
+                $scope.isLoading = true;
                 var start = $scope.officeDocuments.length;
                 var sort = $scope.order.field; //$scope.sorting?$scope.sorting:"created";
                 OfficeDocumentsService.getAll(start, LIMIT,
@@ -356,11 +356,12 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                       //  if(EntityService.getSortFilterValue().order == -1){
                       //      $scope.officeDocuments.unshift(d);
                        // }else{
+
                             $scope.officeDocuments.push(d);
                        // } 
                     });
 
-                    //$scope.isLoading = false;
+                    $scope.isLoading = false;
                 });
             }
         };
