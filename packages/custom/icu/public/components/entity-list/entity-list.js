@@ -1,10 +1,10 @@
 'use strict';
 
-/** 
+/**
  * @desc order directive that is specific to the order module at a company named Acme
  * @example <div acme-order-calendar-range></div>
  */
-   
+
 function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, PermissionsService) {
 
     // ============================================================= //
@@ -36,17 +36,24 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             var date = new Date();
             var lastIndex = possibleNavigate.length - 1;
             var diff = date.getTime() - new Date(possibleNavigate[lastIndex].created).getTime();
-            if (possibleNavigate[lastIndex].title == "" && diff <= 2500) {
+            if (possibleNavigate[lastIndex].title === "" && diff <= 2500) {
                 navigateToDetails(possibleNavigate[lastIndex]);
             } else {
                 navigateToDetails(possibleNavigate[0]);
             }
         }
     } else {
-        if ($state.current.name == `main.${$scope.$parent.entityName}.all.details.activities`) {
+        if ($state.current.name === `main.${$scope.$parent.entityName}.all.details.activities`) {
             $state.go(`main.${$scope.$parent.entityName}.all`);
         }
-    } 
+    }
+
+    if(context.entityName !== "all"){
+        $scope.sortingList.push({
+            title: 'custom',
+            value: 'custom'
+        });
+    };
 
    if (context.entityName === 'all') {
         $scope.detailsState = `main.${$scope.$parent.entityName}.all.details`;
@@ -57,7 +64,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     } else {
         $scope.detailsState = `main.${$scope.$parent.entityName}.byentity.details`;
     }
-    
+
     var isScrolled = false;
 
     $scope.isCurrentState = function(id) {
@@ -67,18 +74,18 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             isScrolled = true;
         }
         return isActive;
-    } 
-  
+    };
+
     // ============================================================= //
     // ========================== filters ========================== //
     // ============================================================= //
 
     $scope.print = function() {
-        $window.print()
-    }
+        $window.print();
+    };
 
     $scope.starred = $stateParams.starred;
-  
+
     $scope.activeToggleList = EntityService.activeToggleList;
     $scope.activeToggle = {
         field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'active',
@@ -86,7 +93,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.changeOrder = function() {
-        if ($scope.sorting.field != "custom") {
+        if ($scope.sorting.field !== "custom") {
             $scope.sorting.isReverse = !$scope.sorting.isReverse;
         }
 
@@ -94,7 +101,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $state.go($state.current.name, {
             sort: $scope.sorting.field
         });
-    }
+    };
 
     $scope.sorting = {
         field: $stateParams.sort || 'created',
@@ -112,7 +119,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         value: 'created'
     }];
 
-    if (context.entityName != "all") {
+    if (context.entityName !== "all") {
         $scope.sortingList.push({
             title: 'custom',
             value: 'custom'
@@ -123,24 +130,18 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $state.go($state.current.name, {
             starred: !$stateParams.starred
         });
-    }
+    };
 
     $scope.filterActive = function() {
         EntityService.activeStatusFilterValue = $scope.activeToggle.field;
         $state.go($state.current.name, {
             activeToggle: $scope.activeToggle.field
         });
-    }
- 
+    };
+
     // ============================================================= //
     // =========================== list ============================ //
     // ============================================================= //
-
-    var creatingStatuses = {
-        NotCreated: 0,
-        Creating: 1,
-        Created: 2
-    }
 
     $scope.context = context;
     $scope.isLoading = true;
@@ -160,7 +161,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         });
 
         LayoutService.clicked();
-    }
+    };
 
     $scope.onChange = function(item) {
 
@@ -168,12 +169,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             item[context.entityName] = context.entity;
         }
 
-        //if (item.__state === creatingStatuses.Created) {
         return $scope.$parent.update(item);
-        //}
     }
 
-    //     $scope.searchResults = []; 
+    //     $scope.searchResults = [];
 
     $scope.onCreate = function() {
         $scope.$parent.create().then((result)=>{
@@ -271,7 +270,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             $scope.$parent.loadMore(start, LIMIT, sort);
         }
     }
-  
+
     // ============================================================= //
     // ======================== Permissions ======================== //
     // ============================================================= //

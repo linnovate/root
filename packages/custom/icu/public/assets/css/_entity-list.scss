@@ -3,6 +3,14 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    .big {
+        height: calc(100% - 44px);
+
+        .list-table {
+            height: 100%;
+            overflow-y: scroll;
+        }
+    }
     .entity-list-container {
         height: 100%;
         overflow-y: scroll;

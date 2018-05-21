@@ -15,9 +15,12 @@
             </div>
         </div>
 
-        <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
-            <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
-        </button>
+        <div class="sortByStar">
+            <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
+                <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
+            </button>
+        </div>
+
     </div>
 
     <div class="print-wrapper">
@@ -27,7 +30,7 @@
     </div>
     <div class="select-wrapper">
         <div tooltips tooltip-template="{{'sort by' | i18next}}">
-            <button class="button-left-part" ng-click="changeOrder()" ng-class="{'rotate' : reverse}"></button>
+            <button class="button-left-part" ng-click="changeOrder()" ng-class="{'rotate' : sorting.isReverse}"></button>
             <ui-select class="inline-block"  ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
                 <ui-select-match>
                     <button class="button-right-part tasks">{{$select.selected.title | i18next}}</button>
