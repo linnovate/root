@@ -558,7 +558,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             .placeholder {
                 position: absolute;
                 top: 50%;
-                transform: translateX(80%) translateY(-50%);
+                transform: translateY(-50%);
                 color: $light-grey-placeholder;
                 margin-right:5px;
             }
@@ -591,7 +591,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             .placeholder {
                 position: absolute;
                 top: 50%;
-                transform: translateX(80%) translateY(-50%);
+                transform: translateX(50%) translateY(-50%);
                 color: $light-grey-placeholder;
                 padding-left: 5px;
             }
