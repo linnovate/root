@@ -8,7 +8,6 @@ function TaskListController($scope,
                             TasksService,
                             ProjectsService,
                             context,
-                            $timeout,
                             $filter,
                             $stateParams,
                             EntityService,
@@ -388,4 +387,6 @@ function TaskListController($scope,
 				) {
 		$state.go('.activities');
 	}
-});
+};
+
+angular.module('mean.icu.ui.tasklist', []).controller('TaskListController', TaskListController);

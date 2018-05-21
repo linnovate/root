@@ -1,14 +1,17 @@
 'use strict';
 
-angular.module('mean.icu.ui.folderlist', [])
-    .controller('FolderListController', function ($scope,
-                                                   $state,
-                                                   folders,
-                                                   FoldersService,
-                                                   context,
-                                                   $filter,
-                                                   $stateParams,
-                                                   OfficesService) {
+function FolderListController($scope,
+                              $window,
+                              $state,
+                              discussions,
+                              DiscussionsService,
+                              context,
+                              $filter,
+                              folders,
+                              FoldersService,
+                              $stateParams,
+                              OfficesService,
+                              EntityService) {
     $scope.items = folders.data || folders;
     $scope.folders = folders.data || folders;
 
