@@ -6,7 +6,7 @@ function DiscussionListController($scope,
                                   discussions,
                                   DiscussionsService,
                                   context,
-                                  $filter
+                                  $filter,
                                   $stateParams,
                                   EntityService) {
 

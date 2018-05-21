@@ -5,96 +5,96 @@
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
     </div>
-    <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
+        <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
-        <div class="favorite" class="title">
-            <button ng-class="{ 'orange': project.star }" ng-click="star(project)">
-                <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
-            </button>
-        </div>
-
-        <div class="user">
-            <div class="no-assignee" ng-if="!project.assign">
-                <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
+            <div class="favorite" class="title">
+                <button ng-class="{ 'orange': project.star }" ng-click="star(project)">
+                    <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
+                </button>
             </div>
-            <!--<ui-select ng-model="project.assign" on-select="update(project)">-->
-            <div tooltips tooltip-template="{{'assignee' | i18next}}">
-                <ui-select ng-model="project.assign" on-select="updateAndNotify(project)">
-                    <ui-select-match>
-                        <div icu-avatar user="$select.selected"></div>
-                        <span ng-if="$select.selected._id" class="summary-content">
+
+            <div class="user">
+                <div class="no-assignee" ng-if="!project.assign">
+                    <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
+                </div>
+                <!--<ui-select ng-model="project.assign" on-select="update(project)">-->
+                <div tooltips tooltip-template="{{'assignee' | i18next}}">
+                    <ui-select ng-model="project.assign" on-select="updateAndNotify(project)">
+                        <ui-select-match>
+                            <div icu-avatar user="$select.selected"></div>
+                            <span ng-if="$select.selected._id" class="summary-content">
                                 {{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}
                             </span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search } | filterByFrequentUsers: me">
-                        <div icu-avatar user="user"></div>
-                        <span class="summary-content">{{user.job}}</span>
-                    </ui-select-choices>
-                </ui-select>
+                        </ui-select-match>
+                        <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search } | filterByFrequentUsers: me">
+                            <div icu-avatar user="user"></div>
+                            <span class="summary-content">{{user.job}}</span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+            <div class="due">
+                <div class="placeholder" ng-if="!project.due">{{ 'dueDate' | i18next }}</div>
+                <input ng-click="open()" ui-date="dueOptions" ng-model="project.due" ng-class='{"oldDate":checkDate()}'>
+            </div>
+            <div id="past">
+                {{'This Deadline is in the past!' | i18next }}
+                <div id="close" ng-click="closeOldDateNotification()">x</div>
+            </div>
+
+            <div class="status">
+                <div tooltips tooltip-template="{{'status' | i18next}}">
+                    <ui-select ng-model="project.status" on-select="update(project, {name: 'status'})">
+                        <ui-select-match>
+                            <i class='{{$select.selected}}'></i>
+                            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
+                            <i class='{{status}}'></i>
+                            <span class='{{status}}'>{{status | i18next}}</span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+            <div class="color">
+                <div icu-colorpicker ng-model="project.color"></div>
+            </div>
+            <div class="dropdown dropdown-container" uib-dropdown
+                 ng-class="{ 'enabled' : haveEditiorsPermissions()}">
+                <div class="dropdown-trigger" uib-dropdown-toggle>
+                    <i class="fa fa-chevron-down"></i>
+                </div>
+                <ul class="dropdown-menu menu-items" role="menu">
+                    <li>
+                        <a href="#" ng-if="!project.recycled" icu-open-modal entity-name="project" show-modal="tasks.length" delete-fn="recycle(project)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span>{{ 'recycleProject' | i18next }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" ng-if="project.recycled" ng-click="recycleRestore(project)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span>{{ 'unrecycleProject' | i18next }}</span>
+                        </a>
+                    </li>
+
+                    <!-- <li>
+                        <a href="#" icu-open-modal entity-name="project" show-modal="tasks.length" delete-fn="deleteProject(project)">
+                            <i class="fa fa-2x fa-times-circle"></i>
+                            <span>{{ 'deleteProject' | i18next }}</span>
+                        </a>
+                    </li> -->
+                </ul>
+            </div>
+
+            <div class="HI">
+                <button ng-class="{ 'orange': project.star }" ng-click="WantToCreateRoom(project)">
+                    <i id="HI"></i>
+                </button>
             </div>
         </div>
-
-        <div class="due">
-            <div class="placeholder" ng-if="!project.due">{{ 'dueDate' | i18next }}</div>
-            <input ng-click="open()" ui-date="dueOptions" ng-model="project.due" ng-class='{"oldDate":checkDate()}'>
-        </div>
-        <div id="past">
-            {{'This Deadline is in the past!' | i18next }}
-            <div id="close" ng-click="closeOldDateNotification()">x</div>
-        </div>
-
-        <div class="status">
-            <div tooltips tooltip-template="{{'status' | i18next}}">
-                <ui-select ng-model="project.status" on-select="update(project, {name: 'status'})">
-                    <ui-select-match>
-                        <i class='{{$select.selected}}'></i>
-                        <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="status as status in statuses | filter: $select.search">
-                        <i class='{{status}}'></i>
-                        <span class='{{status}}'>{{status | i18next}}</span>
-                    </ui-select-choices>
-                </ui-select>
-            </div>
-        </div>
-
-        <div class="color">
-            <div icu-colorpicker ng-model="project.color"></div>
-        </div>
-        <div class="dropdown dropdown-container" uib-dropdown
-             ng-class="{ 'enabled' : haveEditiorsPermissions()}">
-            <div class="dropdown-trigger" uib-dropdown-toggle>
-                <i class="fa fa-chevron-down"></i>
-            </div>
-            <ul class="dropdown-menu menu-items" role="menu">
-                <li>
-                    <a href="#" ng-if="!project.recycled" icu-open-modal entity-name="project" show-modal="tasks.length" delete-fn="recycle(project)">
-                        <i class="fa fa-2x fa-times-circle"></i>
-                        <span>{{ 'recycleProject' | i18next }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" ng-if="project.recycled" ng-click="recycleRestore(project)">
-                        <i class="fa fa-2x fa-times-circle"></i>
-                        <span>{{ 'unrecycleProject' | i18next }}</span>
-                    </a>
-                </li>
-
-                <!-- <li>
-                    <a href="#" icu-open-modal entity-name="project" show-modal="tasks.length" delete-fn="deleteProject(project)">
-                        <i class="fa fa-2x fa-times-circle"></i>
-                        <span>{{ 'deleteProject' | i18next }}</span>
-                    </a>
-                </li> -->
-            </ul>
-        </div>
-
-        <div class="HI">
-            <button ng-class="{ 'orange': project.star }" ng-click="WantToCreateRoom(project)">
-                <i id="HI"></i>
-            </button>
-        </div>
-    </div>
     <div class="page-content" ng-if="project._id && permsToSee">
         <div class="approval" ng-if="project.status!='waiting-approval' && project.assign && project.assign._id == me._id && !isRecycled">
             <button class="add approval" id="approval" ng-click="updateStatusForApproval(project)">{{'updateStatusForApproval' | i18next }}
