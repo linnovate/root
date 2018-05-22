@@ -514,15 +514,15 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 
 
             .avatar {
-                height: 26px;
-                width: 26px;
+                height: 32px;
+                width: 32px;
                 background-color: $green;
-                border-radius: 15px;
+                border-radius: 50%;
                 display: inline-block;
-                margin: 0 10px 0 15px;
+                margin: 0 10px 0 0;
                 float: left;
                 font-size: 20px;
-                line-height: 25px;
+                line-height: 32px;
             }
             .summary-content {
                 display: inline-block;
@@ -758,6 +758,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
                     .ui-select-choices-row-inner {
                         display: flex;
                         align-items: center;
+                        height: 47px;
+                        padding-left: 12px;
                     }
                 }
             }
