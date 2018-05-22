@@ -82,7 +82,6 @@
     "gulp-concat": "^2.6.1",
     "gulp-csslint": "^1.0.0",
     "gulp-cssmin": "latest",
-    "gulp-jshint": "latest",
     "gulp-less": "latest",
     "gulp-livereload": "latest",
     "gulp-load-plugins": "latest",
