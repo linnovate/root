@@ -76,9 +76,6 @@ angular.module('mean.icu.ui.rows', [])
             return PermissionsService.haveAnyPerms(entity);
         };
 
-
-        var lang = $i18next.options.lng;
-
         $scope.isBlurred = function(entity){
             return !entity.focus;
 
@@ -96,9 +93,9 @@ angular.module('mean.icu.ui.rows', [])
                 element.scrollLeft += $event.target.scrollWidth - $event.target.scrollLeft;
             };
 
-            if(lang === 'en'){
+            if(config.direction === 'ltr'){
                 $event.target.children.length === 0 ? scrollLeft($event.target) : scrollLeft($event.target.firstChild);
-            } else if(lang === 'he') {
+            } else {
                 $event.target.children.length === 0 ? scrollRight($event.target) : scrollRight($event.target.firstChild);
             }
         };
