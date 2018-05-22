@@ -1,8 +1,23 @@
 .project-details {
     .page-content {
         .summary {
+            .user {
+                width: 150px;
+            }
             .color {
                 width: 55px;
+                .select-box {
+                    width: 43px;
+                }
+                .arrow {
+                    margin: 0 5px;
+                }
+            }
+            .due {
+                width: 110px;
+            }
+            .status {
+                width: 130px;
             }
         }
         .tabs {
