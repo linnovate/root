@@ -3,7 +3,7 @@
     <div ng-init="entityType = {entity: 'project'};" />
     <table class="projects" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody class='containerVertical'>
-            <tr data-ng-repeat="project in projects | filterRecycled | filterByActiveStatus:entityType | sortBy:order.field:order.isReverse"
+            <tr data-ng-repeat="project in projects | filterRecycled | filterByActiveStatus:entityType | orderBy:order.field:order.isReverse"
                 data-ng-class="{ 'active': isCurrentState(project._id) }"
                 ng-click="initialize($event, project)"
                 ng-mousedown="currentTaskId(project._id)"

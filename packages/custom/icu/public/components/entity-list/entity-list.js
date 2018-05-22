@@ -36,24 +36,17 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             var date = new Date();
             var lastIndex = possibleNavigate.length - 1;
             var diff = date.getTime() - new Date(possibleNavigate[lastIndex].created).getTime();
-            if (possibleNavigate[lastIndex].title === "" && diff <= 2500) {
+            if (possibleNavigate[lastIndex].title == "" && diff <= 2500) {
                 navigateToDetails(possibleNavigate[lastIndex]);
             } else {
                 navigateToDetails(possibleNavigate[0]);
             }
         }
     } else {
-        if ($state.current.name === `main.${$scope.$parent.entityName}.all.details.activities`) {
+        if ($state.current.name == `main.${$scope.$parent.entityName}.all.details.activities`) {
             $state.go(`main.${$scope.$parent.entityName}.all`);
         }
     }
-
-    if(context.entityName !== "all"){
-        $scope.sortingList.push({
-            title: 'custom',
-            value: 'custom'
-        });
-    };
 
    if (context.entityName === 'all') {
         $scope.detailsState = `main.${$scope.$parent.entityName}.all.details`;
@@ -81,7 +74,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ============================================================= //
 
     $scope.print = function() {
-        $window.print();
+        $window.print()
     };
 
     $scope.starred = $stateParams.starred;
@@ -93,7 +86,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.changeOrder = function() {
-        if ($scope.sorting.field !== "custom") {
+        if ($scope.sorting.field != "custom") {
             $scope.sorting.isReverse = !$scope.sorting.isReverse;
         }
 
@@ -119,7 +112,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         value: 'created'
     }];
 
-    if (context.entityName !== "all") {
+    if (context.entityName != "all") {
         $scope.sortingList.push({
             title: 'custom',
             value: 'custom'
@@ -142,6 +135,12 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ============================================================= //
     // =========================== list ============================ //
     // ============================================================= //
+
+    var creatingStatuses = {
+        NotCreated: 0,
+        Creating: 1,
+        Created: 2
+    }
 
     $scope.context = context;
     $scope.isLoading = true;
@@ -169,10 +168,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             item[context.entityName] = context.entity;
         }
 
+        //if (item.__state === creatingStatuses.Created) {
         return $scope.$parent.update(item);
-    }
-
-    //     $scope.searchResults = [];
+        //}
+    };
 
     $scope.onCreate = function() {
         $scope.$parent.create().then((result)=>{
@@ -199,28 +198,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
         }
         );
-
-    }
-
-    //     $scope.search = function(item) {
-    //         if (context.entityName !== 'discussion') {
-    //             return;
-    //         }
-
-    //         if (!item.__autocomplete) {
-    //             return;
-    //         }
-
-    //         var term = item.title;
-    //         if (!term) {
-    //             return;
-    //         }
-
-    //         $scope.searchResults.length = 0;
-    //         $scope.selectedSuggestion = 0;
-
-    //         return $scope.$parent.update(item);
-    //     }
+    };
 
     // ============================================================= //
     // ======================= item function ======================= //
@@ -269,7 +247,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             //$scope.order.field;
             $scope.$parent.loadMore(start, LIMIT, sort);
         }
-    }
+    };
 
     // ============================================================= //
     // ======================== Permissions ======================== //

@@ -92,25 +92,8 @@ angular.module('mean.icu.ui.tasklistFilter', [])
 		}
 		return out;
 	}
-})
-    .filter('sortBy', function () {
-        return function (tasks, sortingType, reversed) {
+});
 
-            function compareDue(firstEntity, secondEntity) {
-                var firstDate = firstEntity[sortingType] ? firstEntity[sortingType].valueOf() : 0;
-                var secondDate = secondEntity[sortingType] ? secondEntity[sortingType].valueOf() : 0;
 
-                if (sortingType){
-                    return firstDate > secondDate;
-                }
-                return firstDate < secondDate;
-            }
 
-            var clone = tasks.pop();
-            tasks.sort(compareDue);
-            if(reversed)tasks.reverse();
-            tasks.push(clone);
 
-            return tasks;
-        };
-    });
