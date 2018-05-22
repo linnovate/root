@@ -96,10 +96,10 @@ angular.module('mean.icu.ui.rows', [])
                 element.scrollLeft += $event.target.scrollWidth - $event.target.scrollLeft;
             };
 
-            if(lang === 'en'){
-                $event.target.children.length === 0 ? scrollLeft($event.target) : scrollLeft($event.target.firstChild);
-            } else if(lang === 'he') {
+            if(lang === 'he') {
                 $event.target.children.length === 0 ? scrollRight($event.target) : scrollRight($event.target.firstChild);
+            } else {
+                $event.target.children.length === 0 ? scrollLeft($event.target) : scrollLeft($event.target.firstChild);
             }
         };
     }

@@ -5,7 +5,6 @@
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
     </div>
-    <div class="page-content" ng-if="project._id && permsToSee">
         <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
             <div class="favorite" class="title">
@@ -96,6 +95,7 @@
                 </button>
             </div>
         </div>
+    <div class="page-content" ng-if="project._id && permsToSee">
         <div class="approval" ng-if="project.status!='waiting-approval' && project.assign && project.assign._id == me._id && !isRecycled">
             <button class="add approval" id="approval" ng-click="updateStatusForApproval(project)">{{'updateStatusForApproval' | i18next }}
             </button>

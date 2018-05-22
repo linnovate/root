@@ -1,21 +1,22 @@
-.entity-list, .sub-task-list, .folder-list, .templateDoc-list, .office-list {
+.entity-list, .task-list, .sub-task-list, .folder-list, .templateDoc-list, .office-list {
 
     height: 100%;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
-    .entity-list-container {
-        //&.big {
-        //    height: calc(100% - 150px);
-        //}
-        //
-        //&.small {
-        //    height: calc(100% - 150px);
-        //}
-        height: 100%;
-        overflow-y: auto;
+    .big {
+        height: calc(100% - 44px);
+
         .list-table {
             height: 100%;
+            overflow-y: scroll;
+        }
+    }
+    .entity-list-container {
+        height: 100%;
+        overflow-y: scroll;
+        .list-table {
+            height: 100%;
+            overflow-x: hi;
               &::-webkit-scrollbar {
                 width: 5px;
             }
@@ -136,9 +137,9 @@
                         display: block;
                         line-height: 50px;
                         padding-right: 5px;
-                        padding-left: 0;
                         margin-right: 5px;
                         margin-left: 25px;
+                        padding-left: 10px;
                         &:before {
                             font-weight: normal;
                             font-style: italic;
@@ -157,6 +158,9 @@
                         margin-left: 14px;
                         line-height: initial;
 
+                        @media screen and (max-width: 1585px) {
+                            width: 80px;
+                        }
                         @media screen and (max-width: 1585px) {
                             width: 80px;
                         }
@@ -228,6 +232,9 @@
                             text-align: center;
                             margin-left: 0;
                         }
+                        @media screen and (max-width: 1585px) {
+                            width: 80px;
+                        }
                     }
 
                    	&.due {
@@ -239,6 +246,9 @@
                         color: #1A1A1A;
                         @media screen and (max-width: $small-resolution) {
                             display:none;
+                        }
+                        @media screen and (max-width: 1585px) {
+                            width: 80px;
                         }
                     }
 
@@ -659,6 +669,10 @@
 
 .gu-transit {
     opacity: 0.2;
+}
+
+.list-table {
+
 }
 
 .list-table-print {
