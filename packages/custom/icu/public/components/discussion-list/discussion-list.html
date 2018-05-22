@@ -18,7 +18,7 @@
                     <div tooltips tooltip-template="{{'filter by activity status' | i18next}}">
                         <ui-select ng-disabled="activeToggle.disabled" ng-model="activeToggle.field" on-select="filterActive()" search-enabled="false">
                             <ui-select-match>
-                                <button class="tasks active-status"><span class="bold">{{'status' | i18next}}: </span>{{$select.selected.title | i18next }}</button>
+                                <button class="tasks active-status">{{$select.selected.title | i18next }}</button>
                             </ui-select-match>
                             <ui-select-choices class="sorting" repeat="field.value as field in activeToggleList">
                                 {{field.title | i18next}}
@@ -26,29 +26,26 @@
                         </ui-select>
                     </div>
             </div>
-            <div class="sortByStar">
-                <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
-                    <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
-                </button>
+            <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
+                <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
+            </button>
+            <div class="select-wrapper">
+                <div tooltips tooltip-template="{{'sort by' | i18next}}">
+                    <ui-select ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
+                        <ui-select-match>
+                            <button class="tasks">{{$select.selected.title | i18next}}</button>
+                        </ui-select-match>
+                        <ui-select-choices class="sorting" repeat="field.value as field in sortingList | filter: $select.search">
+                            {{field.title | i18next}}
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
         </div>
         <div class="print-wrapper">
             <button ng-click="print()" ng-class="{ 'orange': starred }" class="favorites">
                 <i class="fa fa-print"></i>
             </button>
-        </div>
-        <div class="select-wrapper">
-            <div tooltips tooltip-template="{{'sort by' | i18next}}">
-                <button class="button-left-part" ng-click="changeOrder()" ng-class="{'rotate' : reverse}"></button>
-                <ui-select class="inline-block"  ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
-                    <ui-select-match>
-                        <button class="button-right-part tasks">{{$select.selected.title | i18next}}</button>
-                    </ui-select-match>
-                    <ui-select-choices class="sorting" repeat="field.value as field in sortingList | filter: $select.search">
-                        {{field.title | i18next}}
-                    </ui-select-choices>
-                </ui-select>
-            </div>
         </div>
 
     </div>
