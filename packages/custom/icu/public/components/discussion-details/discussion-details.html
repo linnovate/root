@@ -37,10 +37,10 @@
             <div ng-click="dueClicked()" class="due">
                 <div class="placeholder">
                     <div id="firstStr" ng-if="!discussion.startDate">{{'deadline' | i18next}}</div>
-                    <div id="firstStr" ng-if="discussion.startDate && discussion.startTime" style="transform: translateX(50%);">{{firstStr | i18next}}</div>
+                    <div id="firstStr" ng-if="discussion.startDate && discussion.startTime">{{firstStr | i18next}}</div>
                     <div id="firstStr" ng-if="discussion.startDate && !discussion.startTime">{{firstStr | i18next}}</div>
                     <div id="secondStr" ng-if="!discussion.endDate">{{secondStr | i18next}}</div>
-                    <div id="secondStr" ng-if="discussion.endDate && discussion.endTime" style="transform: translateX(50%);">{{secondStr | i18next}}</div>
+                    <div id="secondStr" ng-if="discussion.endDate && discussion.endTime">{{secondStr | i18next}}</div>
                     <div id="secondStr" ng-if="discussion.endDate && !discussion.endTime">{{secondStr | i18next}}</div>
 
 
