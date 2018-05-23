@@ -25,7 +25,7 @@
 
   }
 }
-.sub-tasks {
+.sub-items-section {
   margin: 0 20px;
   margin-top: 13px;
   position: relative;
@@ -52,8 +52,7 @@
     max-height: 247px;
     overflow: auto;
   }
-  .wrap-title {
-    width: 100%;
+
     .sub-tasks-title {
       width: 21%;
       display: inline-block;
@@ -222,7 +221,6 @@
         }
       }
     }
-  }
 
   .summary {
     border: 1px solid #e1e1e1;

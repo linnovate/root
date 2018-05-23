@@ -156,7 +156,7 @@ angular.module('mean.icu').config([
 
             return {
                 url: urlPrefix + '/:id',
-                views: {
+                views: { 
                     'detailspane@main': {
                         templateUrl: '/icu/components/project-details/project-details.html',
                         controller: 'ProjectDetailsController'
@@ -490,10 +490,10 @@ angular.module('mean.icu').config([
                 url: '/' + tab,
                 views: {
                     tab: {
-                        templateUrl: function ($stateParams) {
-                            var entity = $stateParams.id ? main : $stateParams.entity;
-                            return '/icu/components/' + entity + '-details/tabs/' + tab + '/' + tab + '.html';
-                        },
+//                         templateUrl: function ($stateParams) {
+//                             var entity = $stateParams.id ? main : $stateParams.entity;
+//                             return '/icu/components/' + entity + '-details/tabs/' + tab + '/' + tab + '.html';
+//                         },
                         controllerProvider: function ($stateParams) {
                             var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
                             return entity + capitalizedTab + 'Controller';

@@ -320,7 +320,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', [])
 
 
         return {
-            restrict: 'A',
+            restrict: 'EA',
             templateUrl: '/icu/components/sub-tasks/sub-task-list.directive.template.html',
             scope: {
                 tasks: '=',

@@ -299,7 +299,7 @@ angular.module('mean.icu.ui.membersfooter', [])
         }
 
         return {
-            restrict: 'A',
+            restrict: 'EA',
             scope: {
                 entity: '=',
                 users: '=',

@@ -82,13 +82,18 @@ ul.dropdown-menu {
     margin:10px 0 0 10px;
 }
 
-.row-buttons{
+.officeDocument-details .row-buttons{
     border-bottom: 1px solid $light-grey1;
     border-top: 1px solid $light-grey1;
-    display: table;
-
-    width: 100%;
-    min-height: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0px 16px;
+    padding-top: 10px;
+     > * {
+      margin-right: 5px;
+      margin-bottom: 10px;
+    }
 
     .create, .choose {
         margin-right: 10px !important;
@@ -101,7 +106,7 @@ ul.dropdown-menu {
         font-weight: 700;
         padding-left: 5px;
         padding-right: 5px;
-        margin-top: 10px;
+//         margin-top: 10px;
         &:hover{
             background-color: #4C5D63;
             transition: 0.8s;

@@ -1,0 +1,60 @@
+
+detail-menu {
+  flex-grow: 1;
+}
+
+.detail-menu {
+    height: $panel-height;
+    max-width: $panel-height;
+    float: right;
+    width: 34px;
+    border-left: 1px solid lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    .dropdown-trigger {
+        width: 53px;
+        height: 53px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .dropdown-menu {
+        left: inherit;
+        right: 0;
+    }
+
+    .menu-items {
+        li {
+            position: relative;
+
+            a {
+                height: 30px;
+                line-height: 28px;
+                padding: 0 20px 0 10px;
+                display: flex;
+                align-items: center;
+
+                i {
+                    float: left;
+                    font-size: 1.4em;
+                    &.flag {
+                        -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                        mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                        width: 15px;
+                        height: 17px;
+                        margin-right: 3px;
+                        background-color: #333;
+                    }
+                }
+                span {
+                    padding: 0 10px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,29 @@
+<div class="detail-tags">
+
+  <ul class="detail-tags-items">
+
+    <li ng-show="!value.length && !tagInputVisible" class="detail-tags-placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
+    
+    <li class="detail-tags-item" ng-repeat="tag in value">
+      <span>{{tag}}</span>
+      <button class="detail-tags-item-remove" ng-click="removeTag(tag)">
+        <i class="fa fa-times"></i>
+      </button>
+    </li>
+
+    <li class="detail-tags-input" ng-show="tagInputVisible">
+      <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" on-select="addTag(newTag)" test>
+        <ui-select-match placeholder="{{ 'selectTags' | i18next }}">{{$item}}</ui-select-match>
+        <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">{{tag}}</ui-select-choices>
+      </ui-select>
+    </li>
+  </ul>
+
+  <button class="detail-tags-add-btn" ng-click="addTagClicked()" ng-show="!tagInputVisible">
+    <div tooltips tooltip-template="add tag" tooltip-side="left">
+      <i class="fa fa-plus"></i>
+    </div>
+  </button>
+  
+</div>
+</div>

@@ -1,160 +1,46 @@
-<div class="folder-details">
-    <div class="permission" ng-if="folder && !folder._id && !permsToSee">
-       <div class="perIcon">
-    </div>
+
+<div class="entity-details" ng-if="item._id">
+
+  <div class="permission" ng-if="item && !item._id && !permsToSee">
+    <div class="perIcon"></div>
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
-    </div>
-    <div class="page-content" ng-if="folder._id && permsToSee">
-        <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
+  </div>
+  
+  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
-            <div class="favorite">
-                <button ng-class="{ 'orange': folder.star }" ng-click="star(folder)">
-                    <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
-                </button>
-            </div>
+    <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
 
-            <div class="status">
-                <div tooltips tooltip-template="{{'status' | i18next}}">
-                    <ui-select ng-model="folder.status" on-select="update(folder, {name: 'status'})">
-                        <ui-select-match>
-                            <i class='{{$select.selected}}'></i>
-                            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
-                            <i class='{{status}}'></i>
-                            <span class='{{status}}'>{{status | i18next}}</span>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
+    <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
 
-            <div class="color">
-                <div icu-colorpicker ng-model="folder.color"></div>
-            </div>
-            <div class="dropdown dropdown-container" uib-dropdown
-                 ng-class="{ 'enabled' : haveEditiorsPermissions()}">
-                <div class="dropdown-trigger" uib-dropdown-toggle>
-                    <i class="fa fa-chevron-down"></i>
-                </div>
-                <ul class="dropdown-menu menu-items" role="menu">
-                    <li>
-                        <a href="#" icu-open-modal entity-name="folder" show-modal="tasks.length" delete-fn="deleteFolder(folder)">
-                            <i class="fa fa-2x fa-times-circle"></i>
-                            <span>{{ 'deleteFolder' | i18next }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+    <detail-color value="item.color" on-change="onColor"></detail-color>
+    
+    <detail-hi value="item.star" on-click="onWantToCreateRoom()"></detail-hi>
 
-            <div class="HI">
-                <button ng-class="{ 'orange': folder.star }" ng-click="WantToCreateRoom(folder)">
-                    <i id="HI"></i>
-                </button>
-            </div>
-        </div>
-     <!--   <button icu-comp-modal entity="folder" entity-name="folder" type="button" ng-mouseover="showTooltip()" class="compBtn"></button> -->
-        <div class="summary wrap-pro">
-            <div class="tags"
-                 ng-class="{ 'disabled' : !havePermissions('tags')}"
-                 ng-if="!folder.parent">
-                <div class="tag-wrap">
-                    <ui-select ng-model="folder.office" select-on-blur on-select="updateOffice(folder, 'office',officeName)" ng-keyup="updateOfficeName($select.selected.title)" ng-mouseleave="removeCreateNew">
-                        <ui-select-match placeholder="{{$select.selected.title || 'selectOffice' | i18next}}">
-                            <div class="tag" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}">
-                                <span ng-bind-html="$select.selected.title"></span>
-                                <div class="delete" ng-click="unsetOffice($event, folder)">
-                                    <img src="/icu/assets/img/X.png"></img>
-                                </div>
-                            </div>
-                        </ui-select-match>
-                        <ui-select-choices repeat="office in offices | filter:$select.search">
-                            <div class="line" ng-show="office.title" ng-class="{ 'create new': office.class}">
-                                <div ng-show="office.class" ng-bind-html="office.title | searchfilter:$select.search"  class="title"></div>
-                                <div ng-show="office.class && officeName"  class="create-new">{{ 'createNew' | i18next }}</div>
-                                <span ng-show="!office.class" ng-bind-html="office.title | searchfilter:$select.search"  class="title"></span>
-                            </div>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-            <div class="parent" ng-if="folder.parent">
-                {{currentContext.entity.title}}
-            </div>
-        </div>
-        <div class="description"
-             ng-class="{ 'disabled' : !havePermissions('description')}">
-        <div class="title"
-                 contenteditable="true"
-                 tabindex="1"
-                 strip-br="true"
-                 ng-keydown="onEnter($event)"
-                 ng-model="folder.title"
-                 ng-change="updateCurrentFolder()"
-                 medium-editor>
+    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
 
-            </div>
+  </div>
 
-            <div class="text"
-                 contenteditable="true"
-                 tabindex="2"
-                 strip-br="true"
-                 medium-editor
-                 ng-model="folder.description"
-                 options="{{options}}">
-            </div>
-            <div class="tags"
-                 ng-class="{ 'disabled' : !havePermissions('tags')}">
-                <ul class="list">
-                    <li ng-show="!folder.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
-                    <li class="tag-item" ng-repeat="tag in folder.tags">
-                        <span>{{tag}}</span>
-                        <button ng-click="removeTag(tag)">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </li>
-                    <li class="new-tag-input" ng-show="tagInputVisible" >
-                        <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" autofocus=true on-select="addTag(newTag)"
-                                   test tag-on-blur="true">
-                            <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
-                            <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
-                                {{tag}}
-                            </ui-select-choices>
-                        </ui-select>
-                    </li>
-                </ul>
-                <div class="button">
-                    <button class="new-tag-icon" ng-click="addTagClicked()" ng-show="!tagInputVisible" >
-                        <div tooltips tooltip-template="add tag" tooltip-side="left">
-                            <i class="fa fa-plus" ></i>
-                        </div>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="tabs"
-             ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}">
-        <div class="switcher">
-                <button class="tab two"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".activities">
-                    {{ 'updates' | i18next }}
-                </button>
-                <button class="tab two"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".documents">
-                    {{ 'documents' | i18next }}
-                </button>
-            </div>
-        </div>
-        <div class="tab-content"
-             data-ui-view="tab"
-             ng-class="{ 'disabled' : !havePermissions('tab-content')}">
-        </div>
-    </div>
-    <div ng-if="folder._id"
-         ng-class="{ 'disabled' : !havePermissions('watchers')}"
-         icu-members-footer
-         entity="folder"
-         users="people"></div>
+  <detail-category value="item.office" items="offices" on-create="newCategory" on-change="onCategory" ng-if="!item.parent" ></detail-category>
+
+  <div class="parent" ng-if="item.parent">
+      {{currentContext.entity.title}}
+  </div>
+        
+  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="1" strip-br="true" ng-keydown="onEnter($event)" ng-model="item.title" ng-change="updateCurrentFolder()" medium-editor></div>
+
+  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="item.description" options="{{editorOptions}}"></div>
+
+  <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
+
+  <detail-tabs tabs="['activities','documents']" item="item" entityName="folder" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
+
+  <icu-members-footer
+    ng-if="item._id"
+    ng-class="{ 'disabled' : !havePermissions('watchers')}" 
+    entity="item"
+    users="people"
+    me="me"
+  ></icu-members-footer>
+  
 </div>

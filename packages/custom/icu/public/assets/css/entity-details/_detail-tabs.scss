@@ -1,0 +1,43 @@
+.detail-tabs {
+    height: $switcher-height;
+    margin: 0 18px;
+    border-bottom: 1px solid $light-grey1;
+    position: relative;
+
+  .detail-tabs-switcher >* {
+    flex-grow: 1;
+  }
+  .detail-tabs-switcher {
+    display: flex;
+  }
+
+    .tab {
+        @include button;
+        padding: 0;
+        margin: 0;
+        background-color: transparent;
+        height: 38px;
+        font-size: 16px;
+        font-weight: 400;
+
+        &.active {
+            border-bottom: 5px solid $orange;
+            color: $orange;
+            font-weight: bold;
+        }
+
+        &:hover {
+            color: $orange;
+            transition: 0.8s;
+
+        }
+    }
+}
+
+.tab-content {
+    margin: 0 25px;
+    padding: 10px 0;
+    height: calc(100% - 30% - 55px - 40px - 40px);
+    overflow: auto;
+    position: relative;
+}

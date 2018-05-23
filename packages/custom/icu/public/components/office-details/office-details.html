@@ -1,135 +1,54 @@
-<div class="office-details">
-    <div class="permission" ng-if="office && !office._id && !permsToSee">
-       <div class="perIcon">
-    </div>
+
+<div class="entity-details" ng-if="item._id && permsToSee">
+
+  <div class="permission" ng-if="item && !item._id && !permsToSee">
+    <div class="perIcon"></div>
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
-    </div>
-    <div class="page-content" ng-if="office._id && permsToSee">
-        <div class="summary"  ng-class="{ 'disabled' : !havePermissions('summary')}">
+  </div>
+  
+  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
-            <div class="favorite">
-                <button ng-class="{ 'orange': office.star }" ng-click="star(office)">
-                    <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
-                </button>
-            </div>
-<!--
-            <div class="status">
-                <div tooltips tooltip-template="{{'status' | i18next}}">
-                    <ui-select ng-model="office.status" on-select="update(office)">
-                        <ui-select-match>
-                            <i class='{{$select.selected}}'></i>
-                            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
-                            <i class='{{status}}'></i>
-                            <span class='{{status}}'>{{status | i18next}}</span>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>-->
+    <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
 
-            <div class="color">
-                <div icu-colorpicker ng-model="office.color"></div>
-            </div>
-            <div class="dropdown dropdown-container" uib-dropdown
-                 ng-class="{ 'enabled' : haveEditiorsPermissions()}">
-                <div class="dropdown-trigger" uib-dropdown-toggle>
-                    <i class="fa fa-chevron-down"></i>
-                </div>
-                <ul class="dropdown-menu menu-items" role="menu">
-                    <li>
-                        <a href="#" icu-open-modal entity-name="office" show-modal="tasks.length" delete-fn="deleteOffice(office)">
-                            <i class="fa fa-2x fa-times-circle"></i>
-                            <span>{{ 'deleteOffice' | i18next }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+    <detail-color value="item.color" on-change="onColor"></detail-color>
 
-            <div class="HI">
-                <button ng-class="{ 'orange': office.star }" ng-click="WantToCreateRoom(office)">
-                    <i id="HI"></i>
-                </button>
-            </div>
-        </div>
-       <!-- <button icu-comp-modal entity="office" entity-name="office" type="button" ng-mouseover="showTooltip()" class="compBtn"></button> -->
-        <div class="description"
-             ng-class="{ 'disabled' : !havePermissions('description')}">
-            <div class="title"
-                 contenteditable="true"
-                 tabindex="1"
-                 strip-br="true"
-                 ng-keydown="onEnter($event)"
-                 ng-model="office.title"
-                 ng-change="updateCurrentOffice()"
-                 medium-editor>
+    <detail-hi value="item.star" on-click="onWantToCreateRoom()"></detail-hi>
 
-            </div>
-
-            <div class="text"
-                 contenteditable="true"
-                 tabindex="2"
-                 strip-br="true"
-                 medium-editor
-                 ng-model="office.description"
-                 options="{{options}}">
-            </div>
-
-       <label>{{ 'unit' | i18next }}</label>
-       <div class="text officeDetails"
-       contenteditable="true"
-       tabindex="2"
-       strip-br="true"
-       ng-model="office.unit"
-       options="{{options}}"
-       medium-editor>
+    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
 
   </div>
 
+  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="1" strip-br="true" ng-keydown="onEnter($event)" ng-model="item.title" ng-change="updateCurrentProject()" medium-editor></div>
+
+  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="item.description" options="{{editorOptions}}"></div>
+       
+  <label>{{ 'unit' | i18next }}</label>
+  <div class="text officeDetails"
+   contenteditable="true"
+   tabindex="2"
+   strip-br="true"
+   ng-model="office.unit"
+   options="{{editorOptions}}"
+   medium-editor></div>
+
   <label>{{ 'tel' | i18next }}</label>
   <div class="text officeDetails"
-  contenteditable="true"
-  tabindex="2"
-  strip-br="true"
-  ng-model="office.tel"
-  options="{{options}}"
-  medium-editor>
+    contenteditable="true"
+    tabindex="2"
+    strip-br="true"
+    ng-model="office.tel"
+    options="{{editorOptions}}"
+    medium-editor></div>
 
-</div>
-        </div>
-        <div class="tabs"
-             ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}">
-        <div class="switcher">
-                <button class="tab four"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".activities">
-                    {{ 'updates' | i18next }}
-                </button>
-                <button class="tab four"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".folders">
-                    {{ 'folders' | i18next }}
-                </button>
-                <button class="tab four"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".documents">
-                    {{ 'documents' | i18next }}
-                </button>
-                <button class="tab four"
-                data-ui-sref-active="active"
-                data-ui-sref=".signatures">
-            {{ 'signatures' | i18next }}
-        </button>
-            </div>
-        </div>
-        <div class="tab-content" data-ui-view="tab"
-             ng-class="{ 'disabled' : !havePermissions('tab-content')}">
-        </div>
-    </div>
-    <div ng-if="office._id"
-         ng-class="{ 'disabled' : !havePermissions('watchers')}"
-         icu-members-footer
-         entity="office"
-         users="people"></div>
+  <detail-tabs tabs="['activities','documents','folders', 'signatures']" item="item" entityName="office" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
+
+  <icu-members-footer
+    ng-if="item._id"
+    ng-class="{ 'disabled' : !havePermissions('watchers')}" 
+    entity="item"
+    users="people"
+    me="me"
+  ></icu-members-footer>
+  
 </div>

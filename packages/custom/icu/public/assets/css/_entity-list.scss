@@ -1,4 +1,4 @@
-.entity-list, .sub-task-list, .folder-list, .templateDoc-list, .office-list {
+.entity-list, .sub-task-list {
 
     height: 100%;
     overflow: hidden;
@@ -16,7 +16,8 @@
         overflow-y: auto;
         .list-table {
             height: 100%;
-              &::-webkit-scrollbar {
+            
+            &::-webkit-scrollbar {
                 width: 5px;
             }
 

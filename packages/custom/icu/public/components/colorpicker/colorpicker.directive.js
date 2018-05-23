@@ -38,6 +38,7 @@ angular.module('mean.icu.ui.colorpicker', [])
             $scope.selectColor = function (color) {
                 $scope.currentColor = color;
                 $scope.isOpen = false;
+                $scope.onSelect && $scope.onSelect(color);
                 ngModelCtrl.$setViewValue(color);
             };
         }
