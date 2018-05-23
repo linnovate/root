@@ -321,8 +321,7 @@
             width: 92px;
             height: 26px;
             padding-left: 0;
-            background: url('/icu/assets/img/status.png') no-repeat 15% center;
-            background-position: left 10% center;
+            background: url('/icu/assets/img/status.png') no-repeat left 10% center;
 
             &:hover{
                  box-shadow: 0px 0px 0px 2px #FFB435;
@@ -347,8 +346,7 @@
             border-top-left-radius: 13px;
             border-bottom-left-radius: 13px;
             border-color: $dark-grey;
-            background: url('/icu/assets/img/list.png') no-repeat center center;
-            background-color: $dark-grey;
+            background: $dark-grey url('/icu/assets/img/list.png') no-repeat center center;
         }
 
         .calendar {
@@ -377,7 +375,6 @@
     .templateDoc-list table tbody tr td.name,
     .office-list table tbody tr td.name {
         p {
-            //text-overflow: ellipsis;
             overflow: hidden;
         }
     }
