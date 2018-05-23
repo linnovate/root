@@ -1,0 +1,76 @@
+
+<div class="entity-details" ng-if="item._id && permsToSee">
+
+  <div class="permission" ng-if="item && !item._id && !permsToSee">
+    <div class="perIcon"></div>
+    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
+    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+  </div>
+  
+  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
+
+    <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
+
+    <detail-assign value="item.assign" me="me" list="people" on-change="onAssign"></detail-assign>
+
+    <detail-due value="item.due" on-change="updateDue"></detail-due>
+
+    <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
+
+    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
+
+  </div>
+
+  <div class="detail-buttons">
+    <button class="detail-button approval" ng-click="updateStatusForApproval()" ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled">
+      {{'updateStatusForApproval' | i18next }}
+    </button>
+  </div>
+
+  <detail-category value="item.project" items="projects" on-create="newCategory" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent" ></detail-category>
+
+  <div class="parent" ng-if="item.parent">
+    {{currentContext.entity.title}}
+  </div>
+
+  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="1" strip-br="true" ng-keydown="onEnter($event)" ng-model="item.title" ng-change="updateCurrentProject()" medium-editor></div>
+
+  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="item.description" options="{{editorOptions}}"></div>
+
+  <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
+
+  <div class="sub-items-section">
+    
+    <detail-templater
+      templates="template"
+      on-save="saveTemplate"
+      on-delete="deleteTemplate"
+      on-implement="implementTemplate"
+      item="item" users="people" me="me"
+      ng-class="{ 'disabled' : !item.subTasks[0]._id}"
+    ></detail-templater>
+    
+    <icu-sub-task-list
+      class="icu-sub-task-list entity-list-container"
+      ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+      tasks="item.subTasks"
+      load-next="loadNext"
+      load-prev="loadPrev"
+      draw-arrow="true"
+      order="sorting"
+      parent="{{item._id}}"
+    ></iicu-sub-task-list>
+
+  </div>
+              
+  <detail-tabs tabs="['activities','documents']" item="item" entityName="task" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
+
+  <icu-members-footer
+    ng-if="item._id"
+    ng-class="{ 'disabled' : !havePermissions('watchers')}" 
+    entity="item"
+    users="people"
+    me="me"
+  ></icu-members-footer>
+  
+</div>

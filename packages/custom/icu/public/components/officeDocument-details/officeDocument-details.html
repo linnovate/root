@@ -1,0 +1,113 @@
+<div class="entity-details" ng-if="item._id">
+  <div class="permission" ng-if="item && !item._id">
+    <div class="perIcon"></div>
+    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
+    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+  </div>
+  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
+
+    <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
+
+    <detail-assign value="item.assign" me="me" list="people" on-change="onAssign"></detail-assign>
+
+    <detail-due value="item.due" on-change="updateDue"></detail-due>
+
+    <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
+
+    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
+
+  </div>
+
+  <div class="detail-buttons">  
+    <button class="detail-button send" ng-if="item.status == 'new'" icu-open-modal entity-name="item" people="people" show-modal="true" send="true" data="item" send-fn="sendDocument(item)" class="sendBtn">{{ 'send' | i18next }}</button>
+    <button class="detail-button receive" ng-if="item.status == 'sent'" icu-open-modal entity-name="item" people="people" show-modal="true" modal-name="distributed" send="false" sent="true" data="item" send-fn="distributedDocument(item)" class="sendBtn">{{ 'distributed' | i18next }}</button>
+    <button class="detail-button receive" ng-if="item.status == 'received' && item.viewed != true" icu-open-modal entity-name="item" people="people" show-modal="true" modal-name="receive" send="false" receive="true" data="item" send-fn="receiveDocument(item)" class="sendBtn" ng-class="{ 'enabled' : !isRecycled}">{{ 'receive' | i18next }}</button>
+    <button ng-class="{ 'disabled' : !havePermissions('info')}" ng-if="!item.serial && !settingSerial" ng-click="addSerialTitle(item)" class="simochin">{{'simochin' | i18next }}</button>
+    <button class="detail-button approval" ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled" ng-click="updateStatusForApproval(item)">{{'updateStatusForApproval' | i18next }}</button>
+  </div>
+
+  <div class="info" ng-class="{ 'disabled' : !havePermissions('info')}">
+    <div ng-if="settingSerial" class="loader1"></div>
+    <p class="classification" ng-if="item.classification">{{'classification' | i18next }}: {{item.classification| i18next}} </p>
+    <p ng-if="item.serial">{{'simochin' | i18next }}: {{item.serial}} </p>
+  </div>
+
+  <detail-category value="item.folder" items="folders" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent"></detail-category>
+
+  <div class="parent" ng-if="item.parent">{{currentContext.entity.title}}</div>
+  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="1" strip-br="true" ng-keydown="onEnter($event)" ng-model="item.title" ng-change="updateCurrentProject()" medium-editor></div>
+  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="item.description" options="{{editorOptions}}"></div>
+  
+  <select ng-if="signatures && !signBy" class="select-sig" ng-model="selectedSignature" ng-change="SignatureSelected(selectedSignature)">
+    <option value="" selected>{{'selectSignature' | i18next }}</option>
+    <option ng-repeat="signature in signatures" value="{{signature}}">{{signature.fullName}},
+        {{signature.rank}},
+        {{signature.role}},
+        {{signature.unit}}
+    </option>
+  </select>
+
+  <div ng-if="signatory" class="loader3"></div>
+
+  <button class="sig" ng-if="signatures && !signatory && !signBy && selectedSignature" ng-click="signOnDocx(item)">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+  </button>
+  
+  <div ng-if="signBy">
+    {{'signBy' | i18next }}:
+    {{signBy.fullName}}
+    {{signBy.rank}}
+    {{signBy.role}}
+    {{signBy.unit}}
+  </div>
+
+  <div class="row-buttons">
+    <button class="create" ng-if="(!item.path && !item.spPath && !uploading)" icu-open-modal entity-name="item" show-modal="true" modal-name="template" data="item">{{ 'createFromTemplate' | i18next }} </button>
+    <button ngf-select ngf-change="upload($files)" ngf-multiple="true" class="choose" ng-if="(!item.path && !item.spPath && !uploading)">{{ 'chooseFile' | i18next }}</button>
+    <div class="progress" ng-if="uploading">
+      <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" ng-style="{width:progressPercentage+'%'}">{{progressPercentage}}%</div>
+    </div>
+
+    <div style="overflow:inherit" class="tab-content">
+      <div class="documents">
+        <div ng-if="item.path||item.spPath" class="document">
+          <a ng-click="view(item)" target="window">
+            <div class="icon {{item.documentType}}"></div>
+            <div id="documentTitle">{{item.title}}</div>
+          </a>
+          <button ng-click="deleteDocumentFile(item)">X</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
+  
+  <div class="membersInfo" ng-if="item.status != 'new'">
+    <p class="doneBy" ng-if="item.doneBy">
+      <b>{{'doneBy' | i18next }}: </b>
+      <span ng-repeat="doneBy in item.doneBy">
+        {{doneBy.name}}
+                         <span ng-if="$index != item.doneBy.length-1">,</span>
+      </span>
+    </p>
+    <p class="forNotice" ng-if="item.forNotice">
+      <b>{{'forNotice' | i18next }}: </b>
+      <span ng-repeat="forNotice in item.forNotice">
+        {{forNotice.name}}
+                     <span ng-if="$index != item.forNotice.length-1">,</span>
+      </span>
+    </p>
+  </div>
+  
+  <detail-tabs tabs="['activities','documents']" item="item" entityName="officeDocument" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
+  
+  <icu-members-footer
+    ng-if="item._id"
+    ng-class="{ 'disabled' : !havePermissions('watchers')}" 
+    entity="item"
+    users="people"
+    me="me"
+  ></icu-members-footer>
+
+</div>
