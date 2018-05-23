@@ -15,12 +15,12 @@ var mongoose = require('mongoose'),
 /**
  * Find profile by user id
  */
-exports.profile = function (req, res, next) {
+exports.profile = function(req, res, next) {
   User.findOne({
     _id: req.user._id
-  }).exec(function (err, user) {
-    if (err) return next(err);
-    if (!user) return next(new Error('Failed to load user'));
+  }).exec(function(err, user) {
+    if(err) return next(err);
+    if(!user) return next(new Error('Failed to load user'));
     req.profile = user.profile;
     next();
   });
@@ -29,25 +29,26 @@ exports.profile = function (req, res, next) {
 
 exports.updateMember = function(req, res, next) {
   next();
-  if (!req.body.frequentUser) return;
+  if(!req.body.frequentUser) return;
   var profile = req.profile || {};
   var member = req.body.frequentUser;
   var frequent = profile.frequentUsers || {};
   //profile.frequentUsers = profile.frequentUsers || {};
-  if (frequent[member]) {
-    frequent[member] ++;
-  } else frequent[member] = 1;
+  if(frequent[member]) {
+    frequent[member]++;
+  }
+  else frequent[member] = 1;
   profile = _.extend(profile, {frequentUsers: frequent});
   var id = req.user._id;
-  User.update({_id: id}, {$set: {profile: profile}}, function (err) {
+  User.update({_id: id}, {$set: {profile: profile}}, function(err) {
     utils.checkAndHandleError(err, 'Cannot update the profile', next);
   });
-}
+};
 
 /**
  * Update user profile
  */
-exports.update = function (req, res, next) {
+exports.update = function(req, res, next) {
   req.profile = req.profile || {};
   var profile = _.extend(req.profile, req.body);
 
@@ -55,7 +56,7 @@ exports.update = function (req, res, next) {
   user.profile = profile;
   var id = user._id;
   delete user._id;
-  User.update({_id: id}, user, function (err) {
+  User.update({_id: id}, user, function(err) {
     utils.checkAndHandleError(err, 'Cannot update the profile', next);
     res.json(user.profile);
   });
@@ -64,12 +65,12 @@ exports.update = function (req, res, next) {
 /**
  * Update user avatar
  */
-exports.uploadAvatar = function (req, res, next) {
+exports.uploadAvatar = function(req, res, next) {
   var busboy = new Busboy({
     headers: req.headers
   });
 
-  busboy.on('file', function (fieldname, file, filename, encoding, mimetype) {
+  busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
     var saveTo = config.root + '/packages/core/users/public/assets/img/avatar/' + req.user._id + '.' + path.basename(filename.split('.').slice(-1)[0]).toLowerCase();
 
     file.pipe(fs.createWriteStream(saveTo));
@@ -77,8 +78,8 @@ exports.uploadAvatar = function (req, res, next) {
     req.file = true;
   });
 
-  busboy.on('finish', function () {
-    if (req.file)
+  busboy.on('finish', function() {
+    if(req.file)
       next();
     else
       utils.checkAndHandleError('Didn\'t find any avatar to upload', 'Didn\'t find any avatar to upload', next);

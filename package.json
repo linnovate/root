@@ -109,6 +109,7 @@
     "karma-script-launcher": "latest",
     "mean-seo": "latest",
     "mocha": "latest",
+    "mongo-express": "^0.46.1",
     "require-dir": "latest",
     "requirejs": "latest",
     "run-sequence": "^2.2.1",

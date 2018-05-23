@@ -7,13 +7,13 @@ var am = {};
 
 am.archiveModels = {};
 
-am.archiveCollectionName = function (collectionName) {
+am.archiveCollectionName = function(collectionName) {
   return collectionName + '_archive';
 };
 
-am.ArchiveModel = function (collectionName) {
+am.ArchiveModel = function(collectionName) {
 
-  if (!(collectionName in am.archiveModels)) {
+  if(!(collectionName in am.archiveModels)) {
     var schema = new Schema({
       t: {//time
         type: Date,
@@ -47,14 +47,14 @@ am.ArchiveModel = function (collectionName) {
 module.exports = function archivePlugin(schema, collectionName) {
 
   // Clear all archive collection from Schema
-  schema.statics.archiveModel = function () {
+  schema.statics.archiveModel = function() {
     return am.ArchiveModel(am.archiveCollectionName(collectionName));
   };
 
   // Clear all archive documents from archive collection
-  schema.statics.clearArchive = function (callback) {
+  schema.statics.clearArchive = function(callback) {
     var Archive = am.ArchiveModel(am.archiveCollectionName(collectionName));
-    Archive.remove({}, function (err) {
+    Archive.remove({}, function(err) {
       callback(err);
     });
   };
@@ -62,7 +62,7 @@ module.exports = function archivePlugin(schema, collectionName) {
   am.ArchiveModel(am.archiveCollectionName(collectionName));
 
   // Create a copy when insert or update
-  schema.pre('save', function (next, req, callback) {
+  schema.pre('save', function(next, req, callback) {
     var c = this.toObject();
     c.__v = undefined;
 
@@ -78,7 +78,7 @@ module.exports = function archivePlugin(schema, collectionName) {
   });
 
   // Create a copy when remove
-  schema.pre('remove', function (next, req, callback) {
+  schema.pre('remove', function(next, req, callback) {
     var c = this.toObject();
     c.__v = undefined;
 

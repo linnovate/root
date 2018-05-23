@@ -23,16 +23,16 @@ var mongoose = require('mongoose'),
   _ = require('lodash'),
   elasticsearch = require('./elasticsearch.js');
 
-var Order = require('../models/order')
+var Order = require('../models/order');
 
 Object.keys(folderController).forEach(function(methodName) {
-  if (methodName !== 'destroy') {
+  if(methodName !== 'destroy') {
     exports[methodName] = folderController[methodName];
   }
 });
 
 exports.destroy = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
 
@@ -92,24 +92,25 @@ exports.destroy = function(req, res, next) {
 };
 
 exports.update = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
-  if (req.body.watcherAction) {
-    if (req.body.watcherAction == 'added') {
+  if(req.body.watcherAction) {
+    if(req.body.watcherAction == 'added') {
       Document.update(
         {
           folder: req.body._id
         }, {
-          $push: { watchers: req.body.watcherId }
-      }, {multi: true}).exec();
-    } else {
+          $push: {watchers: req.body.watcherId}
+        }, {multi: true}).exec();
+    }
+    else {
       Document.update(
         {
           folder: req.body._id
         }, {
-          $pull: { watchers: req.body.watcherId }
-      }, {multi: true}).exec();
+          $pull: {watchers: req.body.watcherId}
+        }, {multi: true}).exec();
     }
   }
 
@@ -118,35 +119,37 @@ exports.update = function(req, res, next) {
 
 exports.getByEntity = function(req, res, next) {
 
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
 
   var entities = {
-    offices: 'office',
-    users: 'assign',
-    discussions: 'discussions',
-    tags: 'tags'
-  },
+      offices: 'office',
+      users: 'assign',
+      discussions: 'discussions',
+      tags: 'tags'
+    },
     entityQuery = {
       tType: {
         $ne: 'template'
       },
-      $or: [{
-        parent: null
-      }, {
-        parent: {
-          $exists: false
+      $or: [
+        {
+          parent: null
+        }, {
+          parent: {
+            $exists: false
+          }
         }
-      }]
+      ]
     };
-  entityQuery[entities[req.params.entity]] = (req.params.id instanceof Array) ? {
+  entityQuery[entities[req.params.entity]] = req.params.id instanceof Array ? {
     $in: req.params.id
   } : req.params.id;
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if (ids && ids.length) {
+  if(ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
@@ -162,65 +165,64 @@ exports.getByEntity = function(req, res, next) {
 
 
     var pagination = req.locals.data.pagination;
-    if (pagination && pagination.type && pagination.type === 'page') {
+    if(pagination && pagination.type && pagination.type === 'page') {
       query.sort(pagination.sort)
         .skip(pagination.start)
         .limit(pagination.limit);
     }
     //if(pagination.sort == "custom"){
-      // Task.aggregate([
-      //   {$unwind: '$ref'},
-      //    {
-      //      $lookup:{
-      //              from: 'Ordertasks',
-      //              localField: '_id',
-      //              foreignField: 'ref',
-      //              as: 'tasks'}
-      //      },
-      //       {$sort: {'tasks.order':1 }}      
-      //  ]).exec(function(err, tasks) {
-      //  });
-      // query.exec(function(err, tasks) {
-      //       tasks.forEach(function(element){
-      //           Order.find({ref:element._id},function(doc){
-                  
-      //           })
-      //       })
-      //     })
-      //}
+    // Task.aggregate([
+    //   {$unwind: '$ref'},
+    //    {
+    //      $lookup:{
+    //              from: 'Ordertasks',
+    //              localField: '_id',
+    //              foreignField: 'ref',
+    //              as: 'tasks'}
+    //      },
+    //       {$sort: {'tasks.order':1 }}
+    //  ]).exec(function(err, tasks) {
+    //  });
+    // query.exec(function(err, tasks) {
+    //       tasks.forEach(function(element){
+    //           Order.find({ref:element._id},function(doc){
+
+    //           })
+    //       })
+    //     })
+    //}
     query.exec(function(err, folders) {
-      if (err) {
+      if(err) {
         req.locals.error = {
           message: 'Can\'t get tags'
         };
-      } else {
-        if (starredOnly) {
-          folders.forEach(function(folder) {
-            folder.star = true;
-          });
-        }
       }
-      if(pagination.sort == "custom"){
-        var temp = new Array(tasks.length) ;
+      else if(starredOnly) {
+        folders.forEach(function(folder) {
+          folder.star = true;
+        });
+      }
+      if(pagination.sort == 'custom') {
+        var temp = new Array(tasks.length);
         var tasksTemp = tasks;
-        Order.find({name: "Task", project:tasks[0].project}, function(err, data){
-            data.forEach(function(element) {
-              for (var index = 0; index < tasksTemp.length; index++) {
-                if(JSON.stringify(tasksTemp[index]._id) === JSON.stringify(element.ref)){
-                    temp[element.order - 1] = tasks[index];
-                }
-                
+        Order.find({name: 'Task', project: tasks[0].project}, function(err, data) {
+          data.forEach(function(element) {
+            for(var index = 0; index < tasksTemp.length; index++) {
+              if(JSON.stringify(tasksTemp[index]._id) === JSON.stringify(element.ref)) {
+                temp[element.order - 1] = tasks[index];
               }
-            });
-             tasks = temp;
-            req.locals.result = tasks;
-            next();
-        })
-      }
-      else{
-      req.locals.result = folders;
 
-      next();
+            }
+          });
+          tasks = temp;
+          req.locals.result = tasks;
+          next();
+        });
+      }
+      else {
+        req.locals.result = folders;
+
+        next();
       }
     });
   });
@@ -251,7 +253,7 @@ exports.getByEntity = function(req, res, next) {
 //     starredOnly = true;
 //   }
 //   var query = req.acl.mongoQuery('Folder');
-  
+
 //   query.find(entityQuery);
 
 //   query.populate(options.includes);
@@ -286,7 +288,7 @@ exports.getByEntity = function(req, res, next) {
 //                 if(JSON.stringify(folderTemp[index]._id) === JSON.stringify(element.ref)){
 //                     temp[element.order - 1] = folders[index];
 //                 }
-                
+
 //               }
 //             });
 //              folders = temp;
@@ -295,29 +297,30 @@ exports.getByEntity = function(req, res, next) {
 //         })
 //       }
 //       else{
-       
+
 //         req.locals.result = folders;
 //          next();
 //       }
 //       }
 //     });
-    
+
 //   });
 
 
 // };
 
 exports.tagsList = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
   var query = req.acl.mongoQuery('Folder');
   query.distinct('tags', function(error, tags) {
-    if (error) {
+    if(error) {
       req.locals.error = {
         message: 'Can\'t get tags'
       };
-    } else {
+    }
+    else {
       req.locals.result = tags || [];
     }
 
@@ -326,11 +329,11 @@ exports.tagsList = function(req, res, next) {
 };
 
 exports.getByDiscussion = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
 
-  if (req.params.entity !== 'discussions') return next();
+  if(req.params.entity !== 'discussions') return next();
 
   var entityQuery = {
     discussions: req.params.id,
@@ -342,7 +345,7 @@ exports.getByDiscussion = function(req, res, next) {
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if (ids && ids.length) {
+  if(ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
@@ -355,17 +358,18 @@ exports.getByDiscussion = function(req, res, next) {
   Query.populate('folder');
 
   Query.exec(function(err, folders) {
-    if (err) {
+    if(err) {
       req.locals.error = {
         message: 'Can\'t get folders'
       };
-    } else {
+    }
+    else {
       folders = _.uniq(folders, 'folder._id');
       folders = _.map(folders, function(item) {
         return item.folder;
       });
 
-      if (starredOnly) {
+      if(starredOnly) {
         folders.forEach(function(folder) {
           folder.star = true;
         });

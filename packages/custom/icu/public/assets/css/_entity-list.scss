@@ -16,8 +16,8 @@
         overflow-y: auto;
         .list-table {
             height: 100%;
-
-              &::-webkit-scrollbar {
+            
+            &::-webkit-scrollbar {
                 width: 5px;
             }
 
@@ -63,7 +63,6 @@
     }
 
     table {
-        /*table-layout: fixed;*/
         display: flex;
         tbody {
             width: 100%;
@@ -79,11 +78,6 @@
                     [contenteditable][colspan]:empty:not(:focus):before {
                         padding-left: 0;
                     }
-                    td {
-                        &.name {
-                            padding-left: 10px;
-                        }
-                    }
                     &.sticky {
                         position: absolute;
                         left: 0;
@@ -95,7 +89,6 @@
 
                 td {
                     overflow: hidden;
-                    //padding-top: 5px;
                     outline: none;
                     display: flex;
                     align-items: center;
@@ -112,11 +105,9 @@
                     }
 
                     &.id {
-                        //width: 55px;
                         font-size: 13px;
                         font-weight: normal;
                         color: #1A1A1A;
-                        //border-left: 5px;
                     }
 
                     &.move{
@@ -128,16 +119,8 @@
                     }
 
                     &.arrow {
-                        //width: 14px;
-                        //overflow: visible;
-                        //text-align: center;
-                        // padding-right:40px;
                         margin: 0 0 0 18px;
-                        //@media screen and (max-width: $small-resolution) {
-                        //    margin-left: 0;
-                        //    padding-right:20px;
-                        //    margin-right: 5px;
-                        //}
+                        width: 16px;
                         .row-arrow {
                             width: 16px;
                             height: 16px;
@@ -163,23 +146,20 @@
                         }
                         @media screen and (max-width: $small-resolution) {
                             margin-right: 5px;
-                            //width: 13.3vw;
                             word-wrap: break-word;
                         }
                     }
 
                     &.project {
                         text-align: center;
-                        width: 104px;
-                        //width: 5.8vw;
+                        width: 150px;
                         font-weight: 400;
                         font-size: 13px;
-                        //display: inline-block;
                         margin-left: 14px;
                         line-height: initial;
 
-                        @media screen and (max-width: $small-resolution) {
-                            width: 8.8vw;
+                        @media screen and (max-width: 1585px) {
+                            width: 80px;
                         }
                         span {
                             padding: 3px 13px;
@@ -193,16 +173,13 @@
                             top: 0;
                             left: 0;
                             transform: none;
+                            width:100%;
                         }
                     }
 
                     &.office {
                         width: 9.6vw;
                         line-height: 18px;
-                    //     text-align: center;
-                    //     width: 22%;
-                    //     font-weight: 400;
-                    //     font-size: 13px;
                         span {
                             padding: 3px 13px;
                             position: relative;
@@ -214,11 +191,12 @@
 
                     &.folder {
                         text-align: center;
-                        width: 22%;
+                        width: 150px;
                         font-weight: 400;
                         font-size: 13px;
                         line-height: 18px;
                         span {
+                            width: 100%;
                             padding: 3px 13px;
                             position: relative;
                             top: 50%;
@@ -228,11 +206,10 @@
                     }
 
                     &.status {
-                        //width: calc(10% - 65px);
-                        //display: inline-block;
-                        width: 110px;
+                        display: block;
+                        text-align: center;
+                        width: 150px;
                         font-weight: normal;
-                        margin-left: 37px;
                         padding-right: 0;
                         padding-left: 0;
                             &.new{color: #ff4081;}
@@ -255,10 +232,9 @@
                     }
 
                    	&.due {
-                     	//width: calc(19% - 65px);
-                        //display: inline-block;
-                        width: 67px;
-                        margin-left: 13px;
+                        width: 150px;
+                        text-align: center;
+                        display: block;
                         font-size: 13px;
                         font-weight: normal;
                         color: #1A1A1A;
@@ -356,7 +332,6 @@
     }
 
     table {
-        /*table-layout: fixed;*/
 
         tbody {
             tr {
@@ -375,9 +350,7 @@
                     }
 
                     &.id {
-                       // width: 55px;
                         color: $grey1;
-                       // border-left: 5px;
                     }
 
                     &.move{
@@ -401,6 +374,7 @@
                         }
 
                         padding-left: 7px;
+                        padding-top: 0;
                     }
 
                     &.project {
@@ -538,7 +512,6 @@
     }
 
     table {
-        /*table-layout: fixed;*/
 
         tbody {
             tr {
@@ -557,9 +530,7 @@
                     }
 
                     &.id {
-                        //width: 55px;
                         color: $grey1;
-                       // border-left: 5px;
                     }
 
                     &.move{
@@ -583,7 +554,7 @@
                         }
 
                         padding-left: 7px;
-                        padding-bottom: 0;
+                        padding-top: 0;
                     }
 
                     &.project {

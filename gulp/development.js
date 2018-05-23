@@ -131,6 +131,20 @@ gulp.task('devServe', ['env:development'], function () {
   });
 });
 
+
+gulp.task('mongoExpress', function () { 
+  console.log("Staring mongoExpress... http://localhost:3017/")
+
+  var child_process = require('child_process');
+  process.chdir('node_modules/mongo-express');
+  
+  var server = child_process.spawn('node', ['app.js','-a', '-U', 'mongodb://localhost:27017', '--port', '3017'], {
+    stdio: [0,'pipe',0]
+  });
+});
+
+
+
 // can start server like this
 function server() {  
   console.log("Staring server...")

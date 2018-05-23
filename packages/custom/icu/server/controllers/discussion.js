@@ -23,16 +23,16 @@ var utils = require('./utils'),
   mailService = require('../services/mail'),
   elasticsearch = require('./elasticsearch.js');
 
-  var Order = require('../models/order');
+var Order = require('../models/order');
 
 Object.keys(discussionController).forEach(function(methodName) {
-  if (methodName !== 'destroy') {
+  if(methodName !== 'destroy') {
     exports[methodName] = discussionController[methodName];
   }
 });
 
 exports.destroy = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
 
@@ -96,28 +96,28 @@ exports.destroy = function(req, res, next) {
 };
 
 exports.schedule = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     next();
   }
 
   var discussion = req.locals.result;
 
-  if (!((discussion.startDate&&discussion.allDay)||(discussion.startDate && discussion.endDate
-    && discussion.startTime && discussion.endTime))) {
+  if(!(discussion.startDate && discussion.allDay || discussion.startDate && discussion.endDate
+    && discussion.startTime && discussion.endTime)) {
     req.locals.error = {
       message: 'problem with dates'
     };
     return next();
   }
 
-  if (!discussion.assign) {
+  if(!discussion.assign) {
     req.locals.error = {
       message: 'Assignee cannot be empty'
     };
     return next();
   }
 
-  if (!discussion.location) {
+  if(!discussion.location) {
     req.locals.error = {
       message: 'location cannot be empty'
     };
@@ -125,7 +125,7 @@ exports.schedule = function(req, res, next) {
   }
 
   var allowedStatuses = ['new', 'scheduled', 'cancelled'];
-  if (allowedStatuses.indexOf(discussion.status) === -1) {
+  if(allowedStatuses.indexOf(discussion.status) === -1) {
     req.locals.error = {
       message: 'Cannot be scheduled for this status'
     };
@@ -140,48 +140,50 @@ exports.schedule = function(req, res, next) {
       return _.contains(task.tags, 'Agenda');
     });
 
-    var options = [{
+    var options = [
+      {
         path: 'watchers',
         model: 'User',
         select: 'name email'
-    }, {
+      }, {
         path: 'assign',
         model: 'User',
         select: 'name email'
-    }, {
+      }, {
         path: 'creator',
         model: 'User',
         select: 'name email'
-    }, {
+      }, {
         path: 'members',
         model: 'User',
         select: 'name email'
-    }];
+      }
+    ];
 
-	Discussion.populate(discussion, options, function(err, doc) {
-        if (err || !doc) return next();
-        mailService.send('discussionSchedule', {
-	      discussion: doc,
-	      agendaTasks: groupedTasks['true'] || [],
-	      additionalTasks: groupedTasks['false'] || []
-	    }).then(function() {
-	      req.locals.data.body = discussion;
-	      req.locals.data.body.status = 'scheduled';
-	      next();
-	    });
+    Discussion.populate(discussion, options, function(err, doc) {
+      if(err || !doc) return next();
+      mailService.send('discussionSchedule', {
+        discussion: doc,
+        agendaTasks: groupedTasks['true'] || [],
+        additionalTasks: groupedTasks['false'] || []
+      }).then(function() {
+        req.locals.data.body = discussion;
+        req.locals.data.body.status = 'scheduled';
+        next();
+      });
     });
   });
 };
 
 exports.summary = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     next();
   }
 
   var discussion = req.locals.result;
 
   var allowedStatuses = ['scheduled'];
-  if (allowedStatuses.indexOf(discussion.status) === -1) {
+  if(allowedStatuses.indexOf(discussion.status) === -1) {
     utils.checkAndHandleError(true, 'Cannot send summary for this status', next);
     req.locals.error = {
       message: 'Cannot send summary for this status'
@@ -206,75 +208,71 @@ exports.summary = function(req, res, next) {
         return !task.project;
       });
 
-      var options = [{
-        path: 'watchers',
-        model: 'User',
-        select: 'name email'
-    }, {
-        path: 'assign',
-        model: 'User',
-        select: 'name email'
-    }, {
-        path: 'creator',
-        model: 'User',
-        select: 'name email'
-    }, {
-        path: 'members',
-        model: 'User',
-        select: 'name email'
-    }];
+      var options = [
+        {
+          path: 'watchers',
+          model: 'User',
+          select: 'name email'
+        }, {
+          path: 'assign',
+          model: 'User',
+          select: 'name email'
+        }, {
+          path: 'creator',
+          model: 'User',
+          select: 'name email'
+        }, {
+          path: 'members',
+          model: 'User',
+          select: 'name email'
+        }
+      ];
 
-	Discussion.populate(discussion, options, function(err, doc) {
-        if (err || !doc) return next();
-	      mailService.send('discussionSummary', {
-	        discussion: discussion,
-	        projects: projects,
-	        additionalTasks: additionalTasks
-	      }).then(function() {
-	        var taskIds = _.reduce(tasks, function(memo, task) {
-	          var containsAgenda = !_.any(task.discussions, function(d) {
-	            return d.id !== discussion.id && (d.status === 'new' || d.status === 'scheduled');
-	          });
+      Discussion.populate(discussion, options, function(err, doc) {
+        if(err || !doc) return next();
+        mailService.send('discussionSummary', {
+          discussion: discussion,
+          projects: projects,
+          additionalTasks: additionalTasks
+        }).then(function() {
+          var taskIds = _.reduce(tasks, function(memo, task) {
+            var containsAgenda = !_.any(task.discussions, function(d) {
+              return d.id !== discussion.id && (d.status === 'new' || d.status === 'scheduled');
+            });
 
-	          var shouldRemoveTag = task.tags.indexOf('Agenda') !== -1 && containsAgenda;
+            var shouldRemoveTag = task.tags.indexOf('Agenda') !== -1 && containsAgenda;
 
-	          if (shouldRemoveTag) {
-	            memo.push(task._id);
-	          }
+            if(shouldRemoveTag) {
+              memo.push(task._id);
+            }
 
-	          return memo;
-	        }, []);
+            return memo;
+          }, []);
 
-	        Task.update({
-	          _id: {
-	            $in: taskIds
-	          }
-	        }, {
-	          $pull: {
-	            tags: 'Agenda'
-	          }
-	        }, {
-	          multi: true
-	        }).exec();
+          Task.update({
+            _id: {
+              $in: taskIds
+            }
+          }, {$pull: {tags: 'Agenda'}}, {multi: true}).exec();
 
-	        req.locals.data.body = discussion;
-	        req.locals.data.body.status = 'done';
-	        next();
-	      });
+          req.locals.data.body = discussion;
+          req.locals.data.body.status = 'done';
+          next();
+        });
 
-	    });
+      });
     });
 };
 
 exports.cancele = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     next();
   }
 
   var discussion = req.locals.result;
 
   var allowedStatuses = ['canceled'];
-  if (allowedStatuses.indexOf(discussion.status) === -1) {
+  if(allowedStatuses.indexOf(discussion.status) === -1) {
     utils.checkAndHandleError(true, 'Cannot send cancele for this status', next);
     req.locals.error = {
       message: 'Cannot send cancele for this status'
@@ -298,77 +296,74 @@ exports.cancele = function(req, res, next) {
         return !task.project;
       });
 
-      var options = [{
-        path: 'watchers',
-        model: 'User',
-        select: 'name email'
-    }, {
-        path: 'assign',
-        model: 'User',
-        select: 'name email'
-    }, {
-        path: 'creator',
-        model: 'User',
-        select: 'name email'
-    }, {
-        path: 'members',
-        model: 'User',
-        select: 'name email'
-    }];
+      var options = [
+        {
+          path: 'watchers',
+          model: 'User',
+          select: 'name email'
+        }, {
+          path: 'assign',
+          model: 'User',
+          select: 'name email'
+        }, {
+          path: 'creator',
+          model: 'User',
+          select: 'name email'
+        }, {
+          path: 'members',
+          model: 'User',
+          select: 'name email'
+        }
+      ];
 
-	Discussion.populate(discussion, options, function(err, doc) {
-        if (err || !doc) return next();
-	      mailService.send('discussionCancele', {
-	        discussion: discussion,
-	        projects: projects,
-	        additionalTasks: additionalTasks
-	      }).then(function() {
-	        var taskIds = _.reduce(tasks, function(memo, task) {
-	          var containsAgenda = !_.any(task.discussions, function(d) {
-	            return d.id !== discussion.id && (d.status === 'new' || d.status === 'canceled');
-	          });
+      Discussion.populate(discussion, options, function(err, doc) {
+        if(err || !doc) return next();
+        mailService.send('discussionCancele', {
+          discussion: discussion,
+          projects: projects,
+          additionalTasks: additionalTasks
+        }).then(function() {
+          var taskIds = _.reduce(tasks, function(memo, task) {
+            var containsAgenda = !_.any(task.discussions, function(d) {
+              return d.id !== discussion.id && (d.status === 'new' || d.status === 'canceled');
+            });
 
-	          var shouldRemoveTag = task.tags.indexOf('Agenda') !== -1 && containsAgenda;
+            var shouldRemoveTag = task.tags.indexOf('Agenda') !== -1 && containsAgenda;
 
-	          if (shouldRemoveTag) {
-	            memo.push(task._id);
-	          }
+            if(shouldRemoveTag) {
+              memo.push(task._id);
+            }
 
-	          return memo;
-	        }, []);
+            return memo;
+          }, []);
 
-	        Task.update({
-	          _id: {
-	            $in: taskIds
-	          }
-	        }, {
-	          $pull: {
-	            tags: 'Agenda'
-	          }
-	        }, {
-	          multi: true
-	        }).exec();
+          Task.update({
+            _id: {
+              $in: taskIds
+            }
+          }, {$pull: {tags: 'Agenda'}}, {multi: true}).exec();
 
-	        req.locals.data.body = discussion;
-	        req.locals.data.body.status = 'canceled';
-	        next();
-	      });
+          req.locals.data.body = discussion;
+          req.locals.data.body.status = 'canceled';
+          next();
+        });
 
-	    });
+      });
     });
 };
 
 exports.tagsList = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
   var query = req.acl.mongoQuery('Discussion');
   query.distinct('tags', function(error, tags) {
-    if (error) {
+    if(error) {
       req.locals.error = {
         message: 'Can\'t get tags'
       };
-    } else {
+    }
+    else {
       req.locals.result = tags || [];
     }
 
@@ -377,21 +372,21 @@ exports.tagsList = function(req, res, next) {
 };
 
 exports.getByEntity = function(req, res, next) {
-  if (req.locals.error) {
+  if(req.locals.error) {
     return next();
   }
 
   var entities = {
-    users: 'creator',
-    _id: '_id',
-    projects: 'project'
-  },
+      users: 'creator',
+      _id: '_id',
+      projects: 'project'
+    },
     entityQuery = {};
 
   entityQuery[entities[req.params.entity]] = req.params.id;
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if (ids && ids.length) {
+  if(ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
@@ -407,45 +402,46 @@ exports.getByEntity = function(req, res, next) {
     req.locals.data.pagination.count = c;
 
     var pagination = req.locals.data.pagination;
-    if (pagination && pagination.type && pagination.type === 'page') {
+    if(pagination && pagination.type && pagination.type === 'page') {
       query.sort(pagination.sort)
         .skip(pagination.start)
         .limit(pagination.limit);
     }
 
     query.exec(function(err, discussions) {
-      if (err) {
+      if(err) {
         req.locals.error = {
           message: 'Can\'t get discussions'
         };
-      } else {
-        if (starredOnly) {
+      }
+      else {
+        if(starredOnly) {
           discussions.forEach(function(discussion) {
             discussion.star = true;
           });
         }
-              if(pagination.sort == "custom"){
-        var temp = new Array(discussions.length) ;
-        var discussionTemp = discussions;
-        Order.find({name: "Discussion", project:discussions[0].project}, function(err, data){
+        if(pagination.sort == 'custom') {
+          var temp = new Array(discussions.length);
+          var discussionTemp = discussions;
+          Order.find({name: 'Discussion', project: discussions[0].project}, function(err, data) {
             data.forEach(function(element) {
-              for (var index = 0; index < discussionTemp.length; index++) {
-                if(JSON.stringify(discussionTemp[index]._id) === JSON.stringify(element.ref)){
-                    temp[element.order - 1] = discussions[index];
+              for(var index = 0; index < discussionTemp.length; index++) {
+                if(JSON.stringify(discussionTemp[index]._id) === JSON.stringify(element.ref)) {
+                  temp[element.order - 1] = discussions[index];
                 }
-                
+
               }
             });
-             discussions = temp;
+            discussions = temp;
             req.locals.result = discussions;
             next();
-        })
-      }
-      else{
+          });
+        }
+        else {
 
-        req.locals.result = discussions;
-        next();
-      }
+          req.locals.result = discussions;
+          next();
+        }
       }
     });
 
@@ -454,8 +450,8 @@ exports.getByEntity = function(req, res, next) {
 
 exports.getByProject = function(req, res, next) {
   var entities = {
-    projects: 'project'
-  },
+      projects: 'project'
+    },
     entityQuery = {
       discussions: {
         $not: {
@@ -466,7 +462,7 @@ exports.getByProject = function(req, res, next) {
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if (ids && ids.length) {
+  if(ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
@@ -481,18 +477,19 @@ exports.getByProject = function(req, res, next) {
   Query.populate('discussions');
 
   var pagination = req.locals.data.pagination;
-  if (pagination && pagination.type && pagination.type === 'page') {
+  if(pagination && pagination.type && pagination.type === 'page') {
     Query.sort(pagination.sort)
       .skip(pagination.start)
       .limit(pagination.limit);
   }
 
   Query.exec(function(err, discussions) {
-    if (err) {
+    if(err) {
       req.locals.error = {
         message: 'Can\'t get projects'
       };
-    } else {
+    }
+    else {
       //remove duplicates
       discussions = _.reduce(discussions, function(flattened, other) {
         return flattened.concat(other.discussions);
@@ -500,7 +497,7 @@ exports.getByProject = function(req, res, next) {
 
       discussions = _.uniq(discussions, '_id');
 
-      if (starredOnly) {
+      if(starredOnly) {
         discussions.forEach(function(discussion) {
           discussion.star = true;
         });

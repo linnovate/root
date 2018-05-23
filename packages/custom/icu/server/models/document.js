@@ -13,7 +13,7 @@ var DocumentSchema = new Schema({
   },
   recycled: {
     type: Date,
-  },  
+  },
   title: {
     type: String
   },
@@ -26,24 +26,24 @@ var DocumentSchema = new Schema({
   path: {
     type: String
   },
-  spPath:{
-    type:String
+  spPath: {
+    type: String
   },
   description: {
     type: String,
   },
-  serial:{ //Simuchin
-    type:String
+  serial: { //Simuchin
+    type: String
   },
-  signBy:{
+  signBy: {
     type: Schema.ObjectId,
     ref: 'Signature'
   },
-  folder:{
+  folder: {
     type: Schema.ObjectId,
     ref: 'Folder'
   },
-  id:{
+  id: {
     type: Schema.ObjectId
   },
   creator: {
@@ -63,12 +63,12 @@ var DocumentSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
-  assign:{
+  assign: {
     type: Schema.ObjectId,
     ref: 'User'
   },
   classification: {
-    type:String
+    type: String
   },
   size: {
     type: Number
@@ -76,60 +76,76 @@ var DocumentSchema = new Schema({
   circles: {
     type: Schema.Types.Mixed
   },
-  relatedDocuments: [{
-    type: Schema.ObjectId,
-    ref: 'Document'
-  }],
-  tags:[{
-    type:String,
-    default:"new"
-  }],
-  documentType:{
-    type:String
+  relatedDocuments: [
+    {
+      type: Schema.ObjectId,
+      ref: 'Document'
+    }
+  ],
+  tags: [
+    {
+      type: String,
+      default: 'new'
+    }
+  ],
+  documentType: {
+    type: String
   },
-  forNotice: [{
-    type: Schema.ObjectId,
-    ref: 'User',
-    default:[]
-  }],
-  doneBy: [{
-    type: Schema.ObjectId,
-    ref: 'User',
-    default:[]
-  }],
+  forNotice: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User',
+      default: []
+    }
+  ],
+  doneBy: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User',
+      default: []
+    }
+  ],
   ref: {
     type: Schema.ObjectId
   },
-  sentTo: [{    
-    date: Date,
-    user: {
+  sentTo: [
+    {
+      date: Date,
+      user: {
         type: Schema.ObjectId,
         ref: 'User',
-//        unique: true,
+      //        unique: true,
       }
-    }],    
-  readBy: [{
-    date: Date,
-    user: {
-        type: Schema.ObjectId,
-        ref: 'User',
-//        unique: true,
-      }
-  }],
-  viewed: Boolean,  
-  watchers: [{
-    type: Schema.ObjectId,
-    ref: 'User',
-  }],
-  permissions: [{
-    _id:false,
-    id: { type: Schema.ObjectId, ref: 'User' },    
-    level: {
-      type: String,
-      enum: ['viewer', 'commenter', 'editor'],
-      default: 'viewer'
     }
-  }]
+  ],
+  readBy: [
+    {
+      date: Date,
+      user: {
+        type: Schema.ObjectId,
+        ref: 'User',
+      //        unique: true,
+      }
+    }
+  ],
+  viewed: Boolean,
+  watchers: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User',
+    }
+  ],
+  permissions: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      level: {
+        type: String,
+        enum: ['viewer', 'commenter', 'editor'],
+        default: 'viewer'
+      }
+    }
+  ]
 });
 
 var starVirtual = DocumentSchema.virtual('star');
@@ -144,7 +160,7 @@ starVirtual.set(function(value) {
  * Validations
  */
 
- /** 
+/**
 DocumentSchema.path('title').validate(function (title) {
   return !!title;
 }, 'Name cannot be blank');
@@ -152,50 +168,50 @@ DocumentSchema.path('title').validate(function (title) {
 /**
  * Statics
  */
-DocumentSchema.statics.load = function (id, cb) {
+DocumentSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
   }).populate('creator', 'name username').exec(cb);
 };
-DocumentSchema.statics.task = function (id, cb) {
+DocumentSchema.statics.task = function(id, cb) {
   require('./task');
   var Task = mongoose.model('Task');
-  Task.findById(id).populate('project').exec(function (err, task) {
+  Task.findById(id).populate('project').exec(function(err, task) {
     var result = {title: task.title};
-    if (task.project) {
+    if(task.project) {
       result.room = task.project.room;
     }
     cb(err, result);
   });
 };
-DocumentSchema.statics.project = function (id, cb) {
+DocumentSchema.statics.project = function(id, cb) {
   require('./project');
   var Project = mongoose.model('Project');
-  Project.findById(id, function (err, project) {
+  Project.findById(id, function(err, project) {
     cb(err, {room: project.room, title: project.title});
   });
 };
 
-DocumentSchema.statics.discussion = function (id, cb) {
+DocumentSchema.statics.discussion = function(id, cb) {
   require('./discussion');
   var Discussion = mongoose.model('Discussion');
-  Discussion.findById(id, function (err, discussion) {
+  Discussion.findById(id, function(err, discussion) {
     cb(err, {room: discussion.room, title: discussion.title});
   });
 };
 
-DocumentSchema.statics.office = function (id, cb) {
+DocumentSchema.statics.office = function(id, cb) {
   require('./office');
   var Office = mongoose.model('Office');
-  Office.findById(id, function (err, office) {
+  Office.findById(id, function(err, office) {
     cb(err, {room: office.room, title: office.title});
   });
 };
 
-DocumentSchema.statics.folder = function (id, cb) {
+DocumentSchema.statics.folder = function(id, cb) {
   require('./folder');
   var Folder = mongoose.model('Folder');
-  Folder.findById(id, function (err, folder) {
+  Folder.findById(id, function(err, folder) {
     cb(err, {room: folder.room, title: folder.title});
   });
 };
@@ -203,7 +219,7 @@ DocumentSchema.statics.folder = function (id, cb) {
 var elasticsearch = require('../controllers/elasticsearch');
 
 
-DocumentSchema.post('save', function (req, next) {
+DocumentSchema.post('save', function(req, next) {
   var document = this;
   // DocumentSchema.statics.folder(document.folder._id, function (err, result) {
   //   if (err) {
@@ -223,7 +239,7 @@ DocumentSchema.post('save', function (req, next) {
 //   next();
 // });
 
-DocumentSchema.pre('remove', function (next) {
+DocumentSchema.pre('remove', function(next) {
   elasticsearch.delete(this, 'officedocument', this.room, next);
   next();
 });

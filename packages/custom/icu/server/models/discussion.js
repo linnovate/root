@@ -13,7 +13,7 @@ var DiscussionSchema = new Schema({
   },
   recycled: {
     type: Date,
-  },  
+  },
   title: {
     type: String
     //required: true
@@ -43,7 +43,7 @@ var DiscussionSchema = new Schema({
     type: Date
   },
   allDay: {
-    type:Boolean
+    type: Boolean
   },
   active: {
     type: Boolean
@@ -68,24 +68,30 @@ var DiscussionSchema = new Schema({
    Should eg membership/watchers be separate and and stored in user or in the model itself of the issue etc
 
    */
-  members: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }],
-  //should we maybe have finer grain control on this
-  watchers: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }],
-  permissions: [{
-    _id:false,
-    id: { type: Schema.ObjectId, ref: 'User' },    
-    level: {
-      type: String,
-      enum: ['viewer', 'commenter', 'editor'],
-      default: 'viewer'
+  members: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User'
     }
-  }],
+  ],
+  //should we maybe have finer grain control on this
+  watchers: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User'
+    }
+  ],
+  permissions: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      level: {
+        type: String,
+        enum: ['viewer', 'commenter', 'editor'],
+        default: 'viewer'
+      }
+    }
+  ],
   project: {
     type: Schema.ObjectId,
     ref: 'Project'
@@ -103,13 +109,13 @@ starVirtual.get(function() {
 starVirtual.set(function(value) {
   this._star = value;
 });
-DiscussionSchema.set('toJSON', { virtuals: true });
-DiscussionSchema.set('toObject', { virtuals: true });
+DiscussionSchema.set('toJSON', {virtuals: true});
+DiscussionSchema.set('toObject', {virtuals: true});
 
 /**
  * Statics
  */
-DiscussionSchema.statics.load = function (id, cb) {
+DiscussionSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
   }).populate('creator', 'name username').exec(cb);
@@ -119,11 +125,11 @@ DiscussionSchema.statics.load = function (id, cb) {
  */
 var elasticsearch = require('../controllers/elasticsearch');
 
-DiscussionSchema.post('save', function () {
+DiscussionSchema.post('save', function() {
   elasticsearch.save(this, 'discussion');
 });
-DiscussionSchema.pre('remove', function (next) {
-   elasticsearch.delete(this, 'discussion', null, next);
+DiscussionSchema.pre('remove', function(next) {
+  elasticsearch.delete(this, 'discussion', null, next);
   next();
 });
 

@@ -1,10 +1,10 @@
 var winston = require('winston');
 require('winston-daily-rotate-file');
-var os = require("os");
+var os = require('os');
 
 var logDir = 'log';
 
-var logger = new (winston.Logger)({
+var logger = new winston.Logger({
   rewriters: [
     (level, msg, meta) => {
       meta.server = os.hostname();
@@ -12,9 +12,9 @@ var logger = new (winston.Logger)({
     }
   ],
   transports: [
-    new (winston.transports.Console)({}),
-    new (winston.transports.DailyRotateFile)({
-      name:'info',
+    new winston.transports.Console({}),
+    new winston.transports.DailyRotateFile({
+      name: 'info',
       filename: `${logDir}/-results.log`,
       datePattern: 'yyyy-MM-dd',
       prepend: true,
@@ -29,7 +29,7 @@ var logger = new (winston.Logger)({
 });
 
 logger.add(winston.transports.DailyRotateFile, {
-  name:'error',
+  name: 'error',
   filename: `${logDir}/-error.log`,
   datePattern: 'yyyy-MM-dd',
   prepend: true,
@@ -39,5 +39,5 @@ logger.add(winston.transports.DailyRotateFile, {
   maxFiles: 20,
   prettyPrint: false,
   // colorize: true
-})
+});
 module.exports = logger;
