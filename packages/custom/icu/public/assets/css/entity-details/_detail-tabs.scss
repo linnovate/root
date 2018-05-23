@@ -4,12 +4,12 @@
     border-bottom: 1px solid $light-grey1;
     position: relative;
 
-.switcher >* {
-  flex-grow: 1;
-}
-.switcher {
-  display: flex;
-}
+  .detail-tabs-switcher >* {
+    flex-grow: 1;
+  }
+  .detail-tabs-switcher {
+    display: flex;
+  }
 
     .tab {
         @include button;

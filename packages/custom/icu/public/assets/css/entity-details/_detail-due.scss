@@ -37,11 +37,26 @@
           outline: none;
         }
     }
+    
+    #close {
+        float: right !important;
+        margin: 0;
+        display: inline-block;
+        padding: 2px 5px;
+        background: #ccc;
+    }
+
+    #close:hover {
+        float: right !important;
+        display: inline-block;
+        padding: 2px 5px;
+        color: #fff;
+    }
 }
 
+.discussion-due #past, .discussion-due #before,
 .detail-due #past, .detail-due #before {
   position: absolute;
-    top: 361px;
     background-color: #EBE9DE;
     border-radius: 6px;
     border: 1px solid #cbc7bd;
@@ -51,8 +66,6 @@
     text-align: left;
     padding: 4px 7px;
     font-style: italic;
-    margin-left:150px;
-    margin-top:-225px;
     &:before {
         content: '!';
         background-color: #EA5858;
@@ -67,5 +80,52 @@
         line-height: 20px;
         font-weight: bold;
         font-style: normal;
+    }
+}
+
+
+.discussion-due {
+
+    &.dueDiv{
+        position: fixed;
+        width : 160px;
+        height : 370px;
+        z-index : 999;
+//         margin-left : 260px;
+//         margin-top : 54px;
+// display:block !important;
+        background-color: $light-grey-placeholder;
+    }
+
+    .dateTitle{
+        margin-left:30px;
+    }
+
+    #startDate{
+        width:140px;
+        margin-left:7px;
+        margin-top:7px;
+    }
+
+    #endDate{
+        width:140px;
+        margin-left:7px;
+        margin-top:3px;
+    }
+
+    #startTime{
+        margin-top:-10px;
+        margin-left:10px;
+    }
+    #endTime{
+        margin-top:-10px;
+        margin-left:10px;
+    }
+    #allDay{
+        margin-left:64px;
+        margin-top:-10px;
+    }
+    #allDayTitle{
+        margin-left:49px;
     }
 }

@@ -6,7 +6,7 @@
  */
 angular.module('mean.icu.ui.detailsComponents').directive('detailTags', detailTags);
 
-function detailTags() {
+function detailTags($timeout) {
 
   return {
     scope: {
@@ -24,15 +24,15 @@ function detailTags() {
     $scope.value = $scope.value || [];
 
     $scope.getUnusedTags = function() {
-      return $scope.list.filter(x => $scope.value.indexOf(x) < 0)
+      return ($scope.list || []).filter(x => $scope.value.indexOf(x) < 0)
     }
 
     $scope.addTagClicked = function() {
       $scope.tagInputVisible = true;
       var element = angular.element('#addTag > input.ui-select-focusser')[0];
-//       $timeout(function() {
+      $timeout(function() {
         element.focus();
-//       }, 0);
+      }, 0);
     }
 
     $scope.addTag = function(tag) {

@@ -1,6 +1,6 @@
 @mixin ui-select {
     .ui-select-container {
-        padding-top: 15px;
+        padding-top: 0;
         background-color: transparent;
 
         .ui-select-match {
@@ -10,7 +10,7 @@
 
             .ui-select-match-text {
                 float: left !important;
-                color: #00AEEF;
+                color: #00aeef;
                 display: flex;
                 align-items: center;
                 margin-top: 0;
@@ -41,132 +41,137 @@
         }
         .ui-select-choices-row {
             .ui-select-choices-row-inner {
-               display: flex;
-               align-items: center;
-           }
-       }
-   }
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
 }
 
-
 detail-tags {
-  display: block;
+    display: block;
 }
 
 .detail-tags {
-  border-bottom: 1px solid $light-grey1;
-  border-top: 1px solid $light-grey1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 35px;
-  position: static;
+    border-bottom: 1px solid #e1e1e1;
+    border-top: 1px solid #e1e1e1;
+    background: 0 center url(/icu/assets/img/tags.png) no-repeat;
+    display: flex;
+    align-items: center;
+    min-height: 35px;
+    position: static;
+    justify-content: space-between;
+    margin: 0px 20px 10px 20px;
+    clear: both;
 
-        .list {
-            padding: 5px 25px;
+    .detail-tags-placeholder {
+        color: $light-grey-placeholder;
+        padding-left: 10px;
+    }
 
-            .placeholder {
-                color: $light-grey-placeholder;
-                padding-left: 10px;
+    .detail-tags-items {
+        padding-left: 20px;
+        margin: 0;
+        list-style: none;
+    }
+
+    .detail-tags-item {
+        list-style: none;
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+        margin-left: 10px;
+        margin-top: 3px;
+        font-size: 12px;
+        padding: 0 5px;
+        background-color: white;
+        border: 1px solid $light-grey1;
+
+        .detail-tags-item-remove {
+            
+            background-color: inherit;
+            @include button;
+            display: none;
+            color: $light-grey1;
+            line-height: 12px;
+
+            i {
+                background-color: $dark-grey;
+                line-height: 12px;
+                border-radius: 6px;
+                width: 13px;
+                height: 12px;
             }
+        }
 
-            li {
-                list-style: none;
+        &:hover {
+            background-color: $light-grey1;
+            border: 1px solid;
+            .detail-tags-item-remove {
                 display: inline-block;
             }
-
-            .tag-item {
-                display: inline-block;
-                cursor: pointer;
-
-                margin-left: 10px;
-                margin-top: 3px;
-                font-size: 12px;
-                padding: 0 5px;
-                background-color: white;
-                border: 1px solid $light-grey1;
-
-                &:hover {
-                    background-color: $light-grey1;
-                    border: 1px solid;
-
-                    button {
-                        display: inline-block;
-                        background-color: inherit;
-                    }
-                }
-
-                button {
-                    @include button;
-                    display: none;
-                    color: $light-grey1;
-                    line-height: 12px;
-
-                    i {
-                        background-color: $dark-grey;
-                        line-height: 12px;
-                        border-radius: 6px;
-                        width: 13px;
-                        height: 12px;
-                    }
-                }
-            }
         }
+    }
 
-        .new-tag-input {
-            line-height: 28px;
-            height: 28px;
-//             float: left;
-            margin: 0 10px;
+    .detail-tags-input {
+      display: inline-block;
+      margin-left: 10px;
+      margin-top: 3px;
+      vertical-align: middle;
+    }
+
+    .detail-tags-add-btn {
+        border-radius: 15px;
+        border: none;
+        padding: 0;
+        outline: none;
+        margin: 0;
+        color: white;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        top: auto;
+        left: auto;
+        background: url("/icu/assets/img/new_lable.png") $orange no-repeat
+            center;
+        .fa {
+            display: none;
         }
-
-        .new-tag-icon {
-//             @include tag(15px);
-//             @include button;
-            border-radius: 15px;
-            border: none;
-            padding: 0;
-            outline: none;
-            margin: 0;
-            float: right;
-            color: white;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            top: auto;
-            left: auto;
-            background: url("/icu/assets/img/new_lable.png") $orange no-repeat center;
-            .fa {
-             display: none;
-         }
-         div{
+        div {
             width: 30px;
             height: 30px;
         }
-        &:hover{
-            background-color: #FFB435;
+        &:hover {
+            background-color: #ffb435;
             transition: 0.8s;
         }
-
     }
 
     .ui-select-container {
+        background-color: transparent;
         appearance: none;
         background-color: $cream;
         border: none;
-        float: right;
         box-shadow: none;
-
         .ui-select-match {
+            box-shadow: none;
+            background-color: transparent;
+            outline: none;
             display: inline-block;
-            width: 150px;
-            height: 24px;
 
+            .ui-select-toggle {
+                background-color: transparent;
+                border: none;
+                box-shadow: none;
+                padding-left: 0;
+
+                i.caret {
+                    display: none;
+                }
+            }
             .btn {
                 border-radius: 0;
                 font-size: 12px;
-                line-height: 0.9;
-
                 .ui-select-placeholder {
                     float: left !important;
                 }
@@ -176,13 +181,14 @@ detail-tags {
                 background-color: transparent;
                 box-shadow: none;
             }
-
-            i.caret {
-                display: none;
-            }
         }
 
-        .ui-select-choices {
+        .ui-select-search {
+            box-shadow: none;
+            border-color: $light-grey1;
+        }
+
+         .ui-select-choices {
             width: 150px;
             min-width: 150px;
             border-radius: 0;
@@ -201,93 +207,24 @@ detail-tags {
             height: 24px;
             display: inline-block;
         }
+
+        .ui-select-choices-row.active {
+            .ui-select-choices-row-inner {
+                background-color: #f5f5f5;
+                color: $dark-grey;
+            }
+        }
+        .ui-select-choices-row {
+            .ui-select-choices-row-inner {
+               display: flex;
+               align-items: center;
+               padding: 7px 13px;
+           }
+       }
+   }
+
+    .ui-select-container.open {
+        padding-top: 0 !important;
     }
+
 }
-
-.detail-tags {
-//     position: relative;
-//     width: calc((100% - 47px) * 0.25);
-    @include ui-select;
-    .tag-wrap {
-        width: 100%;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        .ui-select-match-text {
-            width: 100%;
-        }
-        .ui-select-container.open {
-            padding-top: 0 !important;
-        }
-
-        .ui-select-choices-row  {
-            a { padding: 0 20px;}
-        }
-
-        .text-muted {
-            color: $light-grey-placeholder;
-            float: left;
-        }
-
-        .tag {
-            transition: 0.3s;
-            @include tag(14px);
-            width: initial;
-            padding: 3px 13px;
-            color: white;
-            position: relative;
-            margin: 20px 0 0;
-            max-width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            display: inline-table;
-            float: left;
-            left: auto;
-
-            .delete {
-                display: none;
-            }
-
-            &:hover {
-                padding-right: 25px;
-                transition: 0.3s;
-
-                .delete {
-                    @include circle(6.5px);
-                    display: block;
-                    margin: 0;
-                    position: absolute;
-                    top: 8px;
-                    right: 8px;
-                    color: white;
-                    font-size: 12px;
-                    line-height: 12px;
-                    text-align: center;
-                    cursor: pointer;
-                }
-            }
-        }
-
-        .line {
-            height: 30px;
-            padding-top: 5px;
-
-            .title {
-                float: left;
-            }
-
-            .add-btn-wrap {
-                float: right;
-
-                .add-btn {
-                    @include tag(9px);
-                    background-color: $orange;
-                    padding: 0 3px;
-                    color: white;
-                }
-            }
-        }
-
-    }
-}
-

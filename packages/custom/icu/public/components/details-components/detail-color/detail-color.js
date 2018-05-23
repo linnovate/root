@@ -20,17 +20,19 @@ function detailColor() {
   };
 
   function link($scope, element, attrs) {
-    $scope.$watch('value', function (nVal, oVal) {
-        if (nVal !== oVal) {
-            var context = {
-                name: 'color',
-                oldVal: oVal,
-                newVal: nVal,
-                action: 'changed'
-            };
-            $scope.onChange(context);
-        }
-    });
+    let oldVal = $scope.value;
+    $scope.onSelect = function(value) {
+      if (value !== oldVal) {
+          var context = {
+              name: 'color',
+              oldVal: oldVal,
+              newVal: value,
+              action: 'changed'
+          };
+          oldVal = value;
+          $scope.onChange(context);
+      }
+    }
 
   }
 }

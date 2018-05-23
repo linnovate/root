@@ -136,6 +136,9 @@
     .summary-content {
         display: inline-block;
         line-height: 26px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        padding-right: 5px;
     }
 }
 

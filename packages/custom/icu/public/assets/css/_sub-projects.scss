@@ -1,4 +1,4 @@
-.sub-projects {
+.sub-items-section {
     margin: 13px 20px 0;
     position: relative;
     .add-sub-projects{
@@ -24,8 +24,7 @@
         max-height: 247px;
         overflow: auto;
     }
-    .wrap-title {
-        width: 100%;
+
         .sub-projects-title {
             width: 21%;
             display: inline-block;
@@ -194,8 +193,7 @@
 	        		}
 	            }
 	        }
-        }
-
+   
         .summary {
             border: 1px solid #e1e1e1;
             border-bottom: 1px solid #e1e1e1 !important;

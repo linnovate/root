@@ -11,7 +11,6 @@ function detailMenu() {
   return {
     scope: {
       items: "=",
-      onClick: "="
     }, 
     link: link,
     templateUrl: '/icu/components/details-components/detail-menu/detail-menu.html',

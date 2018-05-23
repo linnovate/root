@@ -1,0 +1,69 @@
+<div class="entity-details" ng-if="item._id && permsToSee">
+
+  <div class="permission" ng-if="item && !item._id && !permsToSee">
+    <div class="perIcon"></div>
+    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
+    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+  </div>
+  
+  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
+
+    <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
+
+    <detail-assign value="item.assign" me="me" list="people" on-change="onAssign"></detail-assign>
+    
+    <discussion-due item="item" on-change="onDateDue"></discussion-due>
+
+    <div class="location">
+       <div class="placeholder" ng-if="!item.location">{{ 'location' | i18next }}</div>
+       <input type="text"  ng-model="item.location" ng-change="updateLocation(item)">
+    </div>
+
+    <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
+
+    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
+
+  </div>
+
+  <div class="detail-buttons">
+    <button class="detail-button approval" ng-click="updateStatusForApproval()" ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled">
+      {{'updateStatusForApproval' | i18next }}
+    </button>   
+    <button class="detail-button" ng-click="statusesActionsMap[item.status].method(item)" ng-disabled="disableButton()" ng-if="statusesActionsMap[item.status]">
+      {{statusesActionsMap[item.status].label | i18next}}
+    </button>
+  </div>
+
+  <div class="detail-title"
+       ng-class="{ 'disabled' : !havePermissions('description')}" 
+       contenteditable="true"
+       tabindex="1"
+       strip-br="true"
+       ng-keydown="onEnter($event)"
+       ng-model="item.title"
+       ng-change="updateCurrentDiscussion()"
+       medium-editor>
+  </div>
+
+  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" 
+       contenteditable="true"
+       tabindex="2"
+       strip-br="true"
+       medium-editor
+       ng-model="item.description"
+       options="{{editorOptions}}">
+  </div>
+
+  <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
+
+  <detail-tabs tabs="['activities','documents','tasks']" item="item" entityName="discussion" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
+
+  <icu-members-footer
+    ng-if="item._id"
+    ng-class="{ 'disabled' : !havePermissions('watchers')}" 
+    entity="item"
+    users="people"
+    me="me"
+  ></icu-members-footer>
+
+</div>

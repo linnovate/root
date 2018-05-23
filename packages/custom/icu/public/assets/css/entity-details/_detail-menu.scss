@@ -1,4 +1,8 @@
 
+detail-menu {
+  flex-grow: 1;
+}
+
 .detail-menu {
     height: $panel-height;
     max-width: $panel-height;
@@ -11,9 +15,12 @@
     cursor: pointer;
 
     .dropdown-trigger {
-        padding: 15px 25px;
-        height: $panel-height;
+        width: 53px;
+        height: 53px;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .dropdown-menu {

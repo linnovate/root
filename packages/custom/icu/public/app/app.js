@@ -494,10 +494,10 @@ angular.module('mean.icu').config([
 //                             var entity = $stateParams.id ? main : $stateParams.entity;
 //                             return '/icu/components/' + entity + '-details/tabs/' + tab + '/' + tab + '.html';
 //                         },
-//                         controllerProvider: function ($stateParams) {
-//                             var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
-//                             return entity + capitalizedTab + 'Controller';
-//                         }
+                        controllerProvider: function ($stateParams) {
+                            var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
+                            return entity + capitalizedTab + 'Controller';
+                        }
                     }
                 },
                 resolve: resolve

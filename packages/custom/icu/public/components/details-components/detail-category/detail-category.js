@@ -12,8 +12,9 @@ function detailCategory() {
     scope: {
       value: "=",
       items: "=",
-      onChange: "="
-    }, 
+      onChange: "=",
+      onCreate: "=",
+    },
     link: link,
     templateUrl: '/icu/components/details-components/detail-category/detail-category.html',
     restrict: 'E'
@@ -21,6 +22,45 @@ function detailCategory() {
 
   function link($scope, element, attrs) {
 
+    if (!$scope.items)
+      $scope.items = [];
+
+    $scope.items.push({
+      'status': 'default',
+      'title': '',
+      'class': 'create-new',
+      'color': 'rgb(0, 151, 167)'
+    });
+
+    $scope.setSelectText = function(value) {
+      $scope.selectText = $('.ui-select-search.ng-valid-parse').val();
+    }
+
+    $scope.removeSelectText = function() {
+      $scope.selectText = '';
+    }
+
+    $scope.$watch('selectText', function(newValue, oldValue) {
+      $scope.items[$scope.items.length - 1].title = newValue;
+    });
+
+    $scope.onSelectChange = function(value) {
+      $scope.value = value;
+      $scope.onChange(value);
+    }
+
+    $scope.create = function() {
+      $scope.onCreate($scope.selectText);
+      $scope.selectText = null;
+    }
 
   }
 }
+
+angular.module('mean.icu.ui.detailsComponents').filter('searchfilter', function() {
+  return function(input, query) {
+    var r = RegExp('(' + query + ')');
+    if (input !== undefined)
+      return input.replace(r, '<span class="super-class">$1</span>');
+  }
+});

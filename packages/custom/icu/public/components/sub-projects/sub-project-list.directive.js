@@ -322,7 +322,7 @@ angular.module('mean.icu.ui.subprojectslistdirective', [])
 
 
         return {
-            restrict: 'A',
+            restrict: 'EA',
             templateUrl: '/icu/components/sub-projects/sub-project-list.directive.template.html',
             scope: {
                 project: '=',
