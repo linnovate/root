@@ -1,671 +1,431 @@
 'use strict';
 
-angular.module('mean.icu.ui.taskdetails', [])
-    .controller('TaskDetailsController', function($scope,
-                                                  entity,
-                                                  tags,
-                                                  projects,
-                                                  $state,
-                                                  TasksService,
-                                                  ActivitiesService,
-                                                  PermissionsService,
-                                                  context,
-                                                  $stateParams,
-                                                  $rootScope,
-                                                  MeanSocket,
-                                                  UsersService,
-                                                  people,
-                                                  $timeout,
-                                                  ProjectsService,
-                                                  EntityService,
-                                                  me //,subtasks
-    ) {
-        $scope.testString = 'testString';
-        $scope.task = entity || context.entity;
-        $scope.entity = entity || context.entity;
-        $scope.addSubTasks = false;
-        $scope.me = me;
-        $scope.imgUrl = '?' + Date.now();
-        /*test for sub-task*/
-        // $scope.addSubTasks = false;
-        // $scope.test = [];
-        // $scope.test.push($scope.task)
-        /*     $scope.test.push($scope.task)
-         */
-        /*end test for sub-task*/
-        $scope.tags = tags;
-        $scope.projects = projects.data || projects;
-        $scope.projName = '';
-        $scope.projects.push({
-            'status': 'default',
-            'title': $scope.projName,
-            'class': 'create-new',
-            'color': 'rgb(0, 151, 167)'
-        });
-        var currentState = $state.current.name;
-        $scope.isRecycled = $scope.task.hasOwnProperty('recycled');
-
-        if ($scope.task._id) {
-            TasksService.getStarred().then(function(starred) {
-                $scope.task.star = _(starred).any(function(s) {
-                    return s._id === $scope.task._id;
-                });
-            });
-
-            TasksService.getTemplate().then(function(template) {
-                $scope.template = template;
-            });
-        }
-
-        // backup for previous changes - for updates
-        var backupEntity = JSON.parse(JSON.stringify($scope.task));
-
-        $scope.people = people.data || people;
-        if ($scope.people.length && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
-            var newPeople = {
-                name: 'no select'
-            };
-
-            $scope.people.push(_(newPeople).clone());
-        }
-        for(var i =0 ; i<$scope.people.length;i++){
-            if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job==null)){
-                $scope.people[i].job = $scope.people[i].name;
-            }
-        }
-
-        if (!$scope.task) {
-            $state.go('main.tasks.byentity', {
-                entity: context.entityName,
-                entityId: context.entityId
-            });
-        }
-
-        $scope.updateProjName = function(x, y) {
-            $scope.projName = $('.ui-select-search.ng-valid-parse').val()
-        }
-
-        $scope.removeCreateNew = function() {
-            $scope.projName = '';
-        }
-
-        $scope.$watch('projName', function(newValue, oldValue) {
-            var index = _.findIndex($scope.projects, function(p) {
-                return p.title == oldValue;
-            });
-            $scope.projects[index].title = $scope.projName;
-        });
-
-        $scope.createProject = function(projName, cb) {
-            var project = {
-                color: '0097A7',
-                title: projName,
-                watchers: [],
-            };
-
-            ProjectsService.create(project).then(function(result) {
-                $scope.projects.push(result);
-                $scope.projName = '';
-                cb(result);
-                /*        $scope.update(result,'project')
-                 */
-            });
-
-        };
-
-        $scope.statusType = function() {
-            alert('statusType');
-        };
-
-        if (!$scope.task) {
-            $state.go('main.tasks.byentity', {
-                entity: context.entityName,
-                entityId: context.entityId
-            });
-        }
-
-        $scope.tagInputVisible = false;
-
-        $scope.statuses = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'];
-        $rootScope.$broadcast('updateNotification', {
-            taskId: $stateParams.id
-        });
-        $scope.getUnusedTags = function() {
-            // return _.chain($scope.tags).reject(function(t) {
-            //     return $scope.task.tags.indexOf(t.term) >= 0;
-            // }).sortBy(function(a, b) {
-            //     return b.count - a.count;
-            // }).pluck('term').value();
-
-            return $scope.tags.filter(function(x) { return $scope.task.tags.indexOf(x) < 0 })
-        };
-
-        $scope.$watch('task.title', function(nVal, oVal) {
-            if (nVal !== oVal && oVal) {
-                $scope.task.PartTitle = $scope.task.title;
-                $scope.delayedUpdate($scope.task, 'title');
-            }
-        });
-
-        var nText, oText;
-        $scope.$watch('task.description', function(nVal, oVal) {
-            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-            if (nText != oText && oText) {
-                $scope.delayedUpdate($scope.task, 'description');
-            }
-        });
-
-        $scope.addTagClicked=function(){
-            $scope.setFocusToTagSelect();
-            $scope.tagInputVisible=true;
-        }
-
-        $scope.addTag = function(tag) {
-            if(tag!=undefined && $.inArray(tag,$scope.task.tags)==-1){
-                $scope.task.tags.push(tag);
-                $scope.update($scope.task);
-            }
-
-            $scope.tagInputVisible = false;
-        };
-
-        $scope.removeTag = function(tag) {
-            $scope.task.tags = _($scope.task.tags).without(tag);
-            $scope.update($scope.task);
-        };
-
-        $scope.options = {
-            theme: 'bootstrap',
-            buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
-        };
-
-        if ($scope.task.due) $scope.task.due = new Date($scope.task.due);
-
-        $scope.dueOptions = {
-            onSelect: function() {
-                $scope.updateDue($scope.task);
-            },
-            onClose: function() {
-                if ($scope.checkDate()){
-                    document.getElementById('ui-datepicker-div').style.display = 'block';
-                    $scope.open();
-                }else{
-                    document.getElementById('ui-datepicker-div').style.display = 'none';
-                    $scope.open();
-                }
-            },
-            dateFormat: 'd.m.yy'
-        };
-
-        $scope.checkDate = function() {
-            var d = new Date()
-            d.setHours(0,0,0,0);
-            if (d > $scope.task.due) {
-                return true;
-            }
-            return false;
-        };
-
-        $scope.open = function() {
-            if ($scope.checkDate()) {
-                document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
-                document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
-            } else {
-                document.getElementById('past').style.display = 'none';
-            }
-        };
-
-        $scope.closeOldDateNotification = function(){
-            document.getElementById('past').style.display = 'none';
-        };
-
-        function navigateToDetails(task) {
-            $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
-            $state.reload('main.tasks');
-        }
-
-        $scope.star = function(task) {
-            TasksService.star(task).then(function() {
-                navigateToDetails(task);
-            });
-        };
-
-        $scope.recycle = function(entity) {
-            TasksService.removeFromParent(entity)
-                .then(()=>{
-                    EntityService.recycle('tasks', entity._id).then(function() {
-                        let clonedEntity = JSON.parse(JSON.stringify(entity));
-                        clonedEntity.status = "deleted"; // just for activity status
-                        TasksService.updateStatus(clonedEntity, entity).then(function(result) {
-                            ActivitiesService.data.push(result);
-                        });
-
-                        refreshList();
-                        if(currentState.indexOf('search') != -1){
-                            $state.go(currentState, {
-                                entity: context.entityName,
-                                entityId: context.entityId
-                            }, {
-                                reload: true,
-                                query: $stateParams.query
-                            });
-                        } else {
-                            var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-                            $state.go(state, {
-                                entity: context.entityName,
-                                entityId: context.entityId
-                            }, {
-                                reload: true
-                            });
-                        }
-                    });
-                })
-        };
-
-        $scope.recycleRestore = function(entity) {
-            TasksService.addToParent(entity)
-                .then(()=> {
-                    EntityService.recycleRestore('tasks', entity._id).then(function () {
-                        let clonedEntity = JSON.parse(JSON.stringify(entity));
-                        clonedEntity.status = "un-deleted"; // just for activity status
-                        TasksService.updateStatus(clonedEntity, entity).then(function (result) {
-                            ActivitiesService.data.push(result);
-                        });
-
-                        refreshList();
-
-                        var state = currentState.indexOf('search') !== -1 ? $state.current.name :
-                            context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-                        $state.go(state, {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {
-                            reload: true
-                        });
-                    });
-                })
-        };
-
-        $scope.unsetProject = function(event, task) {
-            event.stopPropagation();
-            delete task.project;
-            $scope.update(task);
-        };
-
-        $scope.deleteTask = function(task) {
-            TasksService.remove(task._id).then(function() {
-                var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-                TasksService.getWatchedTasks().then(function(result){
-                    TasksService.watchedTasksArray = result;
-                    $state.go(state, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true
-                    });
-
-                });
-            });
-        };
-
-        function refreshList(){
-            $rootScope.$broadcast('refreshList');
-        }
-
-        var refreshView = function() {
-            var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-            TasksService.getWatchedTasks().then(function(result){
-                TasksService.watchedTasksArray = result;
-                $state.go(state, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
-                    reload: true
-                });
-
-            });
-        }
-
-
-        //Made By OHAD
-        $scope.updateAndNotify = function(task) {
-            task.status = $scope.statuses[1];
-            if (context.entityName === 'discussion') {
-                task.discussion = context.entityId;
-            }
-
-            if (task.assign === undefined || task.assign === null) {
-                delete task['assign'];
-            }
-            else {
-                // var data = {
-                //     name: task.assign.name,
-                //     type: 'user',
-                //     action: 'added',
-                //     frequentUser: task.assign._id
-                // }
-
-                // check the assignee is not a watcher already
-                let filtered = task.watchers.filter(watcher => {
-                    return watcher._id == task.assign
-                });
-
-                if(filtered.length == 0) {
-                    task.watchers.push(task.assign);
-                }
-            }
-
-            TasksService.update(task).then(function(result) {
-                if (context.entityName === 'project') {
-                    var projId = result.project ? result.project._id : undefined;
-                    if (projId !== context.entityId) {
-                        $state.go('main.tasks.byentity', {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {
-                            reload: true
-                        });
-                    }
-                }
-
-                TasksService.assign(task, me, backupEntity).then(function(res) {
-                    backupEntity = JSON.parse(JSON.stringify(result));
-                    ActivitiesService.data.push(res);
-                });
-            });
-
-        };
-
-        //END Made By OHAD
-
-        // Nevo
-        $scope.updateWatcher = function(task) {
-
-            if (context.entityName === 'discussion') {
-                task.discussion = context.entityId;
-            }
-
-            TasksService.updateStatus(task, me).then(function(result) {
-                ActivitiesService.data.push(result);
-            });
-
-            TasksService.update(task).then(function(result) {
-                if (context.entityName === 'project') {
-                    var projId = result.project ? result.project._id : undefined;
-                    if (projId !== context.entityId) {
-                        $state.go('main.tasks.byentity', {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {
-                            reload: true
-                        });
-                    }
-                }
-            });
-        }
-
-
-        $scope.updateStatusForApproval = function(entity) {
-            entity.status = "waiting-approval" ;
-            $scope.updateStatus(entity) ;
-
-        }
-
-
-        $scope.updateStatus = function(task) {
-
-            if (context.entityName === 'discussion') {
-                task.discussion = context.entityId;
-            }
-
-            TasksService.updateStatus(task, backupEntity).then(function(result) {
-                backupEntity = JSON.parse(JSON.stringify($scope.task));
-                ActivitiesService.data.push(result);
-            });
-
-            TasksService.update(task).then(function(result) {
-                // refreshView() ;
-                refreshList();
-                                // not sure what this next code is for.
-                // if (context.entityName === 'project') {
-                //     var projId = result.project ? result.project._id : undefined;
-                //     if (projId !== context.entityId) {
-                //         $state.go('main.tasks.byentity', {
-                //             entity: context.entityName,
-                //             entityId: context.entityId
-                //         }, {
-                //             reload: true
-                //         });
-                //     }
-                // }
-            });
-        };
-
-        $scope.updateDue = function(task) {
-
-            if (context.entityName === 'discussion') {
-                task.discussion = context.entityId;
-            }
-
-            TasksService.updateDue(task, backupEntity).then(function(result) {
-                backupEntity = JSON.parse(JSON.stringify($scope.task));
-                ActivitiesService.data.push(result);
-            });
-
-            TasksService.update(task).then(function(result) {
-                if (context.entityName === 'project') {
-                    var projId = result.project ? result.project._id : undefined;
-                    if (projId !== context.entityId) {
-                        $state.go('main.tasks.byentity', {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {
-                            reload: true
-                        });
-                    }
-                }
-            });
-
-        };
-
-        $scope.update = function(task, type, proj) {
-            if (proj && proj !== '') {
-                $scope.createProject(proj, function(result) {
-                    task.project = result;
-                    TasksService.update(task).then(function(result) {
-                        TasksService.updateEntity(task, backupEntity).then(function(result) {
-                            backupEntity = JSON.parse(JSON.stringify($scope.task));
-                            ActivitiesService.data.push(result);
-                        });
-
-                        if (context.entityName === 'project') {
-                            var projId = result.project ? result.project._id : undefined;
-                            if (projId !== context.entityId || type === 'project') {
-                                $state.go('main.tasks.byentity.details', {
-                                    entity: context.entityName,
-                                    entityId: projId,
-                                    id: task._id
-                                }, {
-                                    reload: true
-                                });
-                            }
-                        }
-                    });
-                });
-            }
-            if (context.entityName === 'discussion') {
-                task.discussion = context.entityId;
-            }
-            TasksService.update(task).then(function(result) {
-                task.PartTitle = task.title;
-                if (type === 'project') {
-                    TasksService.updateEntity(task, backupEntity).then(function(result) {
-                        backupEntity = JSON.parse(JSON.stringify($scope.task));
-                        ActivitiesService.data.push(result);
-                    });
-                }
-                var isSearchState = currentState.indexOf('search') != -1;
-                if (context.entityName === 'project' && !isSearchState) {
-                    var projId = result.project ? result.project._id : undefined;
-                    if (!projId) {
-                        $state.go('main.tasks.all.details', {
-                            entity: 'task',
-                            id: task._id
-                        }, {
-                            reload: true
-                        });
-                    } else if(!isSearchState){
-                        if (projId !== context.entityId || type === 'project') {
-                            $state.go('main.tasks.byentity.details', {
-                                entity: context.entityName,
-                                entityId: projId,
-                                id: task._id
-                            }, {
-                                reload: true
-                            });
-                        }
-                    }
-                }
-                if (type === 'title' || type === 'description') {
-                    TasksService.updateTitle(task, backupEntity, type).then(function(result) {
-                        backupEntity = JSON.parse(JSON.stringify($scope.task));
-                        ActivitiesService.data = ActivitiesService.data || [];
-                        ActivitiesService.data.push(result);
-                        refreshList();
-                    });
-                }
-            });
-        };
-
-        $scope.newTemplate = {
-            'name': '',
-            'watcher': me
-        };
-
-        $scope.saveTemplate = function() {
-            $scope.isopen = false;
-            $scope.newTemplate.frequentUser = $scope.newTemplate.watcher;
-            if ($scope.task.subTasks[0]._id) {
-                TasksService.saveTemplate($stateParams.id, $scope.newTemplate).then(function(result) {
-                    $scope.showMsgSavedTpl = true;
-                    $scope.newTemplate.name = '';
-                    var element = angular.element('.sub-tasks .fa-chevron-down')[0];
-                    $timeout(function() {
-                        element.click();
-                    }, 0);
-                    $timeout(function() {
-                        $scope.showMsgSavedTpl = false;
-                    }, 3000);
-                    $scope.template.push(result);
-                });
-            }
-        };
-
-        $scope.setFocusToTagSelect = function() {
-            var element = angular.element('#addTag > input.ui-select-focusser')[0];
-            $timeout(function() {
-                element.focus();
-            }, 0);
-        };
-
-
-        function deleteClass(tasks) {
-            for (var i = tasks.length - 1; i >= 0; i--) {
-                tasks[i].isNew = false;
-            }
-        }
-        $scope.template2subTasks = function(templateId) {
-            $scope.isopen = false;
-            TasksService.template2subTasks(templateId, {
-                'taskId': $stateParams.id
-            }).then(function(result) {
-                for (var i = result.length - 1; i >= 0; i--) {
-                    result[i].isNew = true;
-                }
-
-                $timeout(function() {
-                    deleteClass(result);
-                }, 5000);
-                var tmp = $scope.task.subTasks.pop()
-                $scope.task.subTasks = $scope.task.subTasks.concat(result);
-                $scope.task.subTasks.push(tmp);
-            });
-        };
-
-        $scope.deleteTemplate = function(id, index) {
-            TasksService.deleteTemplate(id).then(function(result) {
-                $scope.template.splice(index, 1);
-            });
-        };
-        $scope.delayedUpdate = _.debounce($scope.update, 2000);
-
-        $scope.enableRecycled = true;
-        $scope.havePermissions = function(type, enableRecycled){
-            enableRecycled = enableRecycled || !$scope.isRecycled;
-            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
-        };
-
-        $scope.haveEditiorsPermissions = function(){
-            return PermissionsService.haveEditorsPerms($scope.entity);
-        };
-
-        $scope.permsToSee = function(){
-            return PermissionsService.haveAnyPerms($scope.entity);
-        };
-
-        $scope.shouldAutofocus = !$stateParams.nameFocused && $scope.haveEditiorsPermissions();
-
-        // if ($scope.task &&
-        //         ($state.current.name === 'main.tasks.byentity.details' ||
-        //         $state.current.name === 'main.search.task' ||
-        //         $state.current.name === 'main.tasks.all.details' ||
-        //         $state.current.name === 'main.tasks.byassign.details')) {
-        //     $state.go('.subtasks');
-        // }
-        if ($scope.task &&
-            ($state.current.name === 'main.tasks.byentity.details' ||
-                $state.current.name === 'main.search.task' ||
-                $state.current.name === 'main.tasks.all.details' ||
-                $state.current.name === 'main.tasks.byassign.details')) {
-            $state.go('.activities');
-        }
-    })
-    .directive('selectOnBlur', function($timeout) {
-        return {
-            require: 'uiSelect',
-            link: function(scope, elm, attrs, ctrl) {
-                elm.on('blur', 'input.ui-select-search', function(e) {
-                    var ngModelName = attrs.id;
-                    if(ngModelName == "addTag"){
-                        ctrl.select();
-                        ctrl.ngModel.$setViewValue(undefined);
-                        scope.tagInputVisible=false;
-                    }
-                });
-
-                elm.on('blur', 'input.ui-select-focusser', function(e, g) {
-                    $timeout(function() {
-                        if (!e.target.hasAttribute('disabled')) {
-                            scope.tagInputVisible = false;
-                        }
-                    }, 5);
-                });
-
-            }
-        };
-    }).directive('test',function(){
-    return{
-        scope:true,
-        require:'ngModel',
-        link: function($scope,$elm,$attrs,ngModel){
-            ngModel.$setViewValue('hi');
-        }
+angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
+
+function TaskDetailsController($scope, entity, tags, projects, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
+
+  // ==================================================== init ==================================================== //
+
+  $scope.item = entity || context.entity;
+  $scope.entity = entity || context.entity;
+
+  if (!$scope.item) {
+    $state.go('main.tasks.byentity', {
+      entity: context.entityName,
+      entityId: context.entityId
+    });
+  } else if ($scope.item && ($state.current.name === 'main.tasks.byentity.details' || $state.current.name === 'main.search.task' || $state.current.name === 'main.tasks.all.details' || $state.current.name === 'main.tasks.byassign.details')) {
+    $state.go('.activities');
+  }
+
+  $scope.editorOptions = {
+    theme: 'bootstrap',
+    buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
+  };
+  $scope.statuses = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'];
+
+  $scope.me = me;
+  $scope.tags = tags;
+  $scope.projects = projects.data || projects;
+  $scope.projName = '';
+  $scope.projects.push({
+    'status': 'default',
+    'title': $scope.projName,
+    'class': 'create-new',
+    'color': 'rgb(0, 151, 167)'
+  });
+
+  var currentState = $state.current.name;
+
+  // backup for previous changes - for updates
+  var backupEntity = JSON.parse(JSON.stringify($scope.item));
+
+  $scope.people = people.data || people;
+  if ($scope.people.length && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+    var newPeople = {
+      name: 'no select'
+    };
+    $scope.people.push(_(newPeople).clone());
+  }
+  for (var i = 0; i < $scope.people.length; i++) {
+    if ($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job == null)) {
+      $scope.people[i].job = $scope.people[i].name;
     }
-}).filter('searchfilter', function() {
-    return function(input, query) {
-        var r = RegExp('(' + query + ')');
-        if (input !== undefined)
-            return input.replace(r, '<span class="super-class">$1</span>');
+  }
+
+  $rootScope.$broadcast('updateNotification', {
+    taskId: $stateParams.id
+  });
+
+  if ($scope.item._id) {
+    TasksService.getStarred().then(function(starred) {
+      $scope.item.star = _(starred).any(function(s) {
+        return s._id === $scope.item._id;
+      });
+    });
+
+    TasksService.getTemplate().then(function(template) {
+      $scope.template = template;
+    });
+  }
+
+  // ==================================================== onChanges ==================================================== //
+
+  function navigateToDetails() {
+    $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
+    $state.reload('main.tasks');
+  }
+
+  $scope.onStar = function(value) {
+    TasksService.star($scope.item).then(function() {
+      navigateToDetails($scope.item);
+      // "$scope.item.star" will be change in 'ProjectsService.star' function
+    });
+  }
+
+  $scope.onAssign = function(value) {
+    $scope.item.assign = value;
+    $scope.updateAndNotify($scope.item);
+  }
+
+  $scope.onDateDue = function(value) {
+    $scope.item.due = value;
+    if (context.entityName === 'discussion') {
+      $scope.item.discussion = context.entityId;
     }
-});
+
+    TasksService.updateDue($scope.item, backupEntity).then(function(result) {
+      backupEntity = JSON.parse(JSON.stringify($scope.item));
+      ActivitiesService.data.push(result);
+    });
+
+    TasksService.update($scope.item).then(function(result) {
+      if (context.entityName === 'project') {
+        var projId = result.project ? result.project._id : undefined;
+        if (projId !== context.entityId) {
+          $state.go('main.tasks.byentity', {
+            entity: context.entityName,
+            entityId: context.entityId
+          }, {
+            reload: true
+          });
+        }
+      }
+    });
+  }
+
+  $scope.onStatus = function(value) {
+    $scope.item.status = value;
+
+    if (context.entityName === 'discussion') {
+      $scope.item.discussion = context.entityId;
+    }
+
+    TasksService.updateStatus($scope.item, backupEntity).then(function(result) {
+      backupEntity = JSON.parse(JSON.stringify($scope.item));
+      ActivitiesService.data.push(result);
+    });
+
+    TasksService.update($scope.item).then(function(result) {
+      refreshList();
+    });
+  }
+
+  $scope.onTags = function(value) {
+    $scope.item.tags = value;
+    $scope.update($scope.item);
+  }
+
+  // ==================================================== Menu events ==================================================== //
+
+  $scope.recycle = function() {
+    TasksService.removeFromParent($scope.item).then(()=>{
+      EntityService.recycle('tasks', $scope.item._id).then(function() {
+        let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+        clonedEntity.status = "deleted";
+        // just for activity status
+        TasksService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+          ActivitiesService.data.push(result);
+        });
+
+        refreshList();
+        if (currentState.indexOf('search') != -1) {
+          $state.go(currentState, {
+            entity: context.entityName,
+            entityId: context.entityId
+          }, {
+            reload: true,
+            query: $stateParams.query
+          });
+        } else {
+          var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
+          $state.go(state, {
+            entity: context.entityName,
+            entityId: context.entityId
+          }, {
+            reload: true
+          });
+        }
+      });
+    }
+    )
+  }
+
+  $scope.recycleRestore = function(entity) {
+    TasksService.addToParent(entity).then(()=>{
+      EntityService.recycleRestore('tasks', entity._id).then(function() {
+        let clonedEntity = JSON.parse(JSON.stringify(entity));
+        clonedEntity.status = "un-deleted";
+        // just for activity status
+        TasksService.updateStatus(clonedEntity, entity).then(function(result) {
+          ActivitiesService.data.push(result);
+        });
+
+        refreshList();
+
+        var state = currentState.indexOf('search') !== -1 ? $state.current.name : context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
+        $state.go(state, {
+          entity: context.entityName,
+          entityId: context.entityId
+        }, {
+          reload: true
+        });
+      });
+    }
+    )
+  }
+
+  $scope.menuItems = [{
+    label: 'recycleTask',
+    icon: 'times-circle',
+    display: !$scope.item.hasOwnProperty('recycled'),
+    action: $scope.recycle,
+  }, {
+    label: 'unrecycleTask',
+    icon: 'times-circle',
+    display: $scope.item.hasOwnProperty('recycled'),
+    action: $scope.recycleRestore,
+  }];
+
+  // ==================================================== Buttons ==================================================== //
+
+  $scope.updateStatusForApproval = function() {
+    $scope.onStatus("waiting-approval");
+  }
+
+  // ==================================================== Category ==================================================== //
+
+  $scope.onCategory = function(value) {
+    $scope.item.project = value;
+    $scope.update($scope.item, 'project');
+  }
+  
+  $scope.newCategory = function(value) {
+    var project = {
+      color: '0097A7',
+      title: value,
+      watchers: [],
+    };
+    return ProjectsService.create(project).then(function(result) {
+      $scope.projects.push(result);
+      return result;
+    });
+
+  }
+
+  // ==================================================== Template ==================================================== //
+
+  $scope.saveTemplate = function(newTemplate) {
+    return TasksService.saveTemplate($stateParams.id, newTemplate)
+  }
+
+  $scope.deleteTemplate = function(id) {
+    return TasksService.deleteTemplate(id)
+  }
+
+  $scope.implementTemplate = function(id) {
+    return TasksService.template2subTasks(id, {
+      'taskId': $stateParams.id
+    }).then(function(result) {
+      for (var i = result.length - 1; i >= 0; i--) {
+        result[i].isNew = true;
+      }
+      $timeout(function() {
+        for (var i = result.length - 1; i >= 0; i--) {
+          result[i].isNew = false;
+        }
+      }, 5000);
+      var tmp = $scope.item.subTasks.pop()
+      $scope.item.subTasks = $scope.item.subTasks.concat(result);
+      $scope.item.subTasks.push(tmp);
+    });
+  }
+
+  // ==================================================== $watch: title / desc ==================================================== //
+
+  $scope.$watch('task.title', function(nVal, oVal) {
+    if (nVal !== oVal && oVal) {
+      $scope.delayedUpdate($scope.item, 'title');
+    }
+  });
+
+  var nText, oText;
+  $scope.$watch('task.description', function(nVal, oVal) {
+    nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+    oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+    if (nText != oText && oText) {
+      $scope.delayedUpdate($scope.item, 'description');
+    }
+  });
+
+  function refreshList() {
+    $rootScope.$broadcast('refreshList');
+  }
+
+  var refreshView = function() {
+    var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
+    TasksService.getWatchedTasks().then(function(result) {
+      TasksService.watchedTasksArray = result;
+      $state.go(state, {
+        entity: context.entityName,
+        entityId: context.entityId
+      }, {
+        reload: true
+      });
+
+    });
+  }
+
+  // ==================================================== Update  ==================================================== //
+
+  //Made By OHAD
+  $scope.updateAndNotify = function(item) {
+    item.status = $scope.statuses[1];
+    if (context.entityName === 'discussion') {
+      item.discussion = context.entityId;
+    }
+
+    if (item.assign === undefined || item.assign === null) {
+      delete item['assign'];
+    } else {
+      // check the assignee is not a watcher already
+      let filtered = item.watchers.filter(watcher=>{
+        return watcher._id == item.assign
+      }
+      );
+
+      if (filtered.length == 0) {
+        item.watchers.push(item.assign);
+      }
+    }
+
+    TasksService.update(item).then(function(result) {
+      if (context.entityName === 'project') {
+        var projId = result.project ? result.project._id : undefined;
+        if (projId !== context.entityId) {
+          $state.go('main.tasks.byentity', {
+            entity: context.entityName,
+            entityId: context.entityId
+          }, {
+            reload: true
+          });
+        }
+      }
+
+      TasksService.assign(item, me, backupEntity).then(function(res) {
+        backupEntity = JSON.parse(JSON.stringify(result));
+        ActivitiesService.data.push(res);
+      });
+    });
+
+  }
+
+  $scope.update = function(item, type, proj) {
+    if (proj && proj !== '') {
+      $scope.createProject(proj, function(result) {
+        item.project = result;
+        TasksService.update(item).then(function(result) {
+          TasksService.updateEntity(item, backupEntity).then(function(result) {
+            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            ActivitiesService.data.push(result);
+          });
+
+          if (context.entityName === 'project') {
+            var projId = result.project ? result.project._id : undefined;
+            if (projId !== context.entityId || type === 'project') {
+              $state.go('main.tasks.byentity.details', {
+                entity: context.entityName,
+                entityId: projId,
+                id: item._id
+              }, {
+                reload: true
+              });
+            }
+          }
+        });
+      });
+    }
+    if (context.entityName === 'discussion') {
+      item.discussion = context.entityId;
+    }
+    TasksService.update(item).then(function(result) {
+      if (type === 'project') {
+        TasksService.updateEntity(item, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data.push(result);
+        });
+      }
+      var isSearchState = currentState.indexOf('search') != -1;
+      if (context.entityName === 'project' && !isSearchState) {
+        var projId = result.project ? result.project._id : undefined;
+        if (!projId) {
+          $state.go('main.tasks.all.details', {
+            entity: 'task',
+            id: item._id
+          }, {
+            reload: true
+          });
+        } else if (!isSearchState) {
+          if (projId !== context.entityId || type === 'project') {
+            $state.go('main.tasks.byentity.details', {
+              entity: context.entityName,
+              entityId: projId,
+              id: item._id
+            }, {
+              reload: true
+            });
+          }
+        }
+      }
+      if (type === 'title' || type === 'description') {
+        TasksService.updateTitle(item, backupEntity, type).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+          refreshList();
+        });
+      }
+    });
+  }
+
+  $scope.delayedUpdate = _.debounce($scope.update, 2000);
+
+  // ==================================================== havePermissions ==================================================== //
+
+  $scope.enableRecycled = true;
+  $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+
+  $scope.havePermissions = function(type, enableRecycled) {
+    enableRecycled = enableRecycled || !$scope.isRecycled;
+    return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+  }
+
+  $scope.haveEditiorsPermissions = function() {
+    return PermissionsService.haveEditorsPerms($scope.entity);
+  }
+
+  $scope.permsToSee = function() {
+    return PermissionsService.haveAnyPerms($scope.entity);
+  }
+
+}

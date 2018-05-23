@@ -1,0 +1,13 @@
+<div class="detail-tabs">
+  <div class="detail-tabs-switcher">
+    <button ng-repeat="tab in tabs" class="tab three" ng-click="onClickTab(tab)" ng-class="{'active': tab == selection}">{{ tab | i18next }}</button>
+  </div>
+</div>
+
+<div class="tab-content" data-ui-view="tab" ng-switch on="selection">
+  <div ng-switch-when="activities" icu-tabs-activities activities="activities" entity="item" entity-name="entityName"></div>
+  <div ng-switch-when="documents" icu-tabs-documents documents="documents" entity="item" entity-name="entityName"></div>
+  <div ng-switch-when="tasks" icu-tabs-tasks tasks="tasks" entity="item" entity-name="entityName"></div>
+  <div ng-switch-when="folders" icu-tabs-folders folders="folders" entity="item" entity-name="entityName"></div>
+  <div ng-switch-when="signatures" icu-tabs-signatures signatures="signatures" entity="item" entity-name="entityName"></div>
+</div>

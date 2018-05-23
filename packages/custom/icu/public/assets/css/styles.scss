@@ -13,7 +13,7 @@ body {
   font-weight: normal;
   font-style: normal; }
 
-@import '../lib/font-awesome/scss/font-awesome';
+@import '../lib/font-awesome/scss/font-awesome.scss';
 @import '../lib/open-sans/scss/open-sans.scss';
 @import 'variables';
 @import 'mixins/table';
@@ -37,6 +37,7 @@ body {
 @import 'user-details';
 @import 'entity-list';
 @import 'task-details';
+@import './entity-details/entity-details';
 @import 'discussion-details';
 @import 'tabs-activities';
 @import 'tabs-documents';

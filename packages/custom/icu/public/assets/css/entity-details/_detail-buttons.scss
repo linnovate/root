@@ -1,0 +1,47 @@
+
+.detail-button {
+    width: 168px;
+    height: 40px;
+    float: right;
+    clear: both ;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    position: relative;
+
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    background-color: #fda102;
+    box-shadow: 0 3px 0 0 #ff6400;
+    border-radius: 60px;
+    font-size: 14px;
+    line-height: 18px;
+    color: #FFFFFF;
+    &:focus {
+        outline: none;
+    }
+    &.approval {
+        background: #2AB541;
+        box-shadow: inset 0px -4px 0px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.detail-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0px 16px 0px 16px;
+    float: right;
+    max-width: 50%;
+    justify-content: flex-end;
+    &:after {
+        contnet: '';
+        display: table;
+    }
+    > * {
+        margin-right: 5px;
+        margin-bottom: 10px;
+    }
+
+}

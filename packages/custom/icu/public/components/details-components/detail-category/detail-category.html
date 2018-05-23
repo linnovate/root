@@ -1,0 +1,20 @@
+<ui-select 
+  class="detail-category"
+  ng-model="value"
+  on-select="onSelectChange($item)"
+  on-remove="onSelectChange($item)"
+  ng-keyup="setSelectText($select.selected.title)"
+  ng-mouseleave="removeSelectText"
+>
+  <ui-select-match allow-clear placeholder="{{$select.selected.title || 'selectProject' | i18next}}">
+    <div class="detail-category-value" ng-bind-html="$select.selected.title" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}"></div>
+  </ui-select-match>
+
+  <ui-select-choices repeat="item in items | filter:$select.search">
+    <div class="detail-category-row" ng-show="item.title" ng-class="{ 'create new': item.class}">
+      <div ng-bind-html="item.title | searchfilter:$select.search" class="detail-category-row-title"></div>
+      <div ng-click="create()" ng-show="item.class && create" class="detail-category-create-btn">{{ 'createNew' | i18next }}</div>
+    </div>
+  </ui-select-choices>
+
+</ui-select>
