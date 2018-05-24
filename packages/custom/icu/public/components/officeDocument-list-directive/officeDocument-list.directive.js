@@ -8,7 +8,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
             Created: 2
         };
 
-        function controller($scope, OfficeDocumentsService, orderService, dragularService, $element, $interval, $window) {
+        function controller($scope, OfficeDocumentsService, FoldersService, orderService, dragularService, $element, $interval, $window) {
             $scope.currentTaskId = function (id) {
                 $scope.taskId = id;
             };
@@ -344,7 +344,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                 var sort = $scope.order.field; //$scope.sorting?$scope.sorting:"created";
                 OfficeDocumentsService.getAll(start, LIMIT,
                                               EntityService.getSortFilterValue().field,
-                                              EntityService.getSortFilterValue().order, 
+                                              EntityService.getSortFilterValue().order,
                                               EntityService.getActiveStatusFilterValue(),
                                               EntityService.getEntityFolderValue().id).then(function (docs) {
                     docs.forEach(function (d) {
@@ -358,7 +358,7 @@ angular.module('mean.icu.ui.officedocumentlistdirective', [])
                        // }else{
 
                             $scope.officeDocuments.push(d);
-                       // } 
+                       // }
                     });
 
                     $scope.isLoading = false;

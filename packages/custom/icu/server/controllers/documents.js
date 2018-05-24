@@ -30,7 +30,7 @@ function getDocuments(entity, id) {
       'entityId': id
     }, function (err, docs) {
       if (err) {
-        
+
         reject(err);
       }
       else {
@@ -154,7 +154,7 @@ exports.uploadEmpty = function(req,res,next){
           res.send(error);
         }
         else{
-          
+
           var fileName = body.path.substring(body.path.lastIndexOf('/')+1,body.path.length);
           var fileType = body.path.substring(body.path.lastIndexOf('.')+1,body.path.length);
           var set = {'spPath':body.path,'serial':body.serial,'documentType':fileType,'title':fileName}
@@ -199,7 +199,7 @@ exports.signOnDocx = function(req,res,next){
     }else{
 
       doc = data[0];
-      var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase(); 
+      var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
       var spPath = doc.spPath?doc.spPath:"spPath";
       var fileName = spPath.substring(spPath.lastIndexOf('/')+1,spPath.length);
       fileName=fileName?fileName:"hi";
@@ -230,7 +230,7 @@ exports.signOnDocx = function(req,res,next){
           'UserId':watcher.username.toLowerCase()
         });
       });
-    
+
       var json = {
         'siteUrl':config.SPHelper.SPSiteUrl,
         'fileUrl':spPath,
@@ -251,7 +251,7 @@ exports.signOnDocx = function(req,res,next){
           res.send(error);
           logger.log('error', '%s signOnDocx, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/signOnDocx"+"'", {error: error.stack});
         }else{
-          
+
           var set = {'spPath':body.path,
                      'signBy':signature};
           Document.findOne({
@@ -315,8 +315,8 @@ exports.addSerialTitle = function(req,res,next){
         // req.locals.error = err;
         // req.status(400);
         logger.log('error', '%s addSerialTitle, %s', req.user.name, 'Document.find()', {error: err.message});
-      }   
-      else { 
+      }
+      else {
         doc.creator = data[0].creator;
         doc.watchers = data[0].watchers;
         var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
@@ -331,14 +331,14 @@ exports.addSerialTitle = function(req,res,next){
             else{
               telOffice = "noTel";
             }
-      
+
             if(req.body.folder.office.unit){
               unitOffice = req.body.folder.office.unit;
             }
             else{
               unitOffice = "noUnit";
             }
-      
+
           }
           else{
             docOffice = "noOffice";
@@ -402,8 +402,8 @@ exports.addSerialTitle = function(req,res,next){
           'isTemplate':false,
           'serial':ser
         };
-		
-      
+
+
         request({
           'url':config.SPHelper.uri+"/api/addSerialTitle",
           'method':'POST',
@@ -449,8 +449,8 @@ exports.addSerialTitle = function(req,res,next){
               //logger.log('error', '%s addSerialTitle, %s', req.user.name, 'body.serials == ser');
                   res.status(500).send();
           });
-            
-      } 
+
+      }
           }
     })
 
@@ -475,14 +475,14 @@ exports.addSerialTitle = function(req,res,next){
         else{
           telOffice = "noTel";
         }
-  
+
         if(req.body.folder.office.unit){
           unitOffice = req.body.folder.office.unit;
         }
         else{
           unitOffice = "noUnit";
         }
-  
+
       }
       else{
         docOffice = "noOffice";
@@ -530,7 +530,7 @@ exports.addSerialTitle = function(req,res,next){
         'UserId':watcher.username.toLowerCase()
       });
     });
-    
+
     getSerial().then(function(ser){
     var json = {
       'siteUrl':config.SPHelper.SPSiteUrl,
@@ -546,7 +546,7 @@ exports.addSerialTitle = function(req,res,next){
       'isTemplate':false,
       'serial':ser
     };
-  
+
     request({
       'url':config.SPHelper.uri+"/api/addSerialTitle",
       'method':'POST',
@@ -575,7 +575,7 @@ exports.addSerialTitle = function(req,res,next){
           doc['id'] = req.body._id;
           doc.save(function(err,result){
             if(err){
-              
+
               logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.save()', {error: err.message});
               res.send(err);
             }
@@ -594,8 +594,8 @@ exports.addSerialTitle = function(req,res,next){
               logger.log('error', '%s addSerialTitle, %s', req.user.name, 'body.serials == ser');
                   res.status(500).send();
           });
-            
-      } 
+
+      }
 
       }
     });
@@ -692,7 +692,7 @@ exports.uploadDocumentsFromTemplate = function(req,res,next){
             'UserId':officeDocument.assign
           });
       }
-     
+
       getUsers(users).then(function(result){
           if(result=='success'){
               var json = {
@@ -840,7 +840,7 @@ exports.uploadEmptyDocument = function (req, res, next) {
 exports.getAll = function (req, res, next) {
   var start=0,limit=25,sort="created",obj={'created':1};
   var qu = [
-        {$or: [{ watchers: { $in: [req.user._id] } }, { assign: req.user._id }]} 
+        {$or: [{ watchers: { $in: [req.user._id] } }, { assign: req.user._id }]}
     ]
     qu.push({recycled: {$exists:false}})
   if(req.query){
@@ -868,19 +868,19 @@ exports.getAll = function (req, res, next) {
       case 'nonactive':
         qu.push({status:"done"})
         console.log("unactive");
-        break ;  
+        break ;
       case 'new':
         qu.push({status:"new"})
         console.log("new");
-        break ;  
+        break ;
       case 'done':
         qu.push({status:"done"})
         console.log("done");
-        break ;  
+        break ;
       case 'received':
         qu.push({status:"received"})
         console.log("received");
-        break ;  
+        break ;
       case 'in-progress':
         qu.push({status:"in-progress"})
         console.log("in-progress");
@@ -888,7 +888,7 @@ exports.getAll = function (req, res, next) {
       case 'sent':
         qu.push({status:"sent"})
         console.log("sent");
-        break ;  
+        break ;
 
     }
   }
@@ -898,7 +898,7 @@ if(req.query.folderId){
  //console.dir(status)
   Document.find({
     $and:qu
-    
+
   }).sort(obj).skip(start).limit(limit).populate('folder')
   .populate('creator')
   .populate('updater')
@@ -915,13 +915,13 @@ if(req.query.folderId){
         logger.log('error', '%s getAll, %s', req.user.name,'Document.find', {error: err.message});
         res.locals.error = err;
         res.status(400);
-      }   
+      }
       else {
         res.locals.status = req.query.status
        // logger.log('info', '%s getAll, %s,', req.user.name, 'get all document success' );
 
         res.send(data);
-      } 
+      }
   });
 };
 
@@ -944,7 +944,7 @@ exports.getById = function (req, res, next) {
 
           if(data instanceof Array && data.length == 1){
               data = data[0];
-          } 
+          }
       req.locals.result = data
       res.send(data);
     }
@@ -1004,13 +1004,13 @@ exports.getByFolder = function (req, res, next) {
 
       req.locals.error = err;
       req.status(400);
-    }   
+    }
     else {
       logger.log('info', '%s getByFolder, %s', req.user.name, 'success' );
 
       req.locals.result = data
       res.send(data);
-    } 
+    }
 });
 };
 
@@ -1151,7 +1151,7 @@ exports.upload = function (req, res, next) {
                         'circles':[],
                         'relatedDocuments':[],//important
                         'watchers':folder.watchers,//important
-                        'documentType':fileName.substring(fileName.indexOf('.')+1,fileName.length),     
+                        'documentType':fileName.substring(fileName.indexOf('.')+1,fileName.length),
                       };
                       var obj = new Document(doc);
                       obj.save(function(error,result){
@@ -1221,7 +1221,7 @@ exports.upload = function (req, res, next) {
                 'circles':[],
                 'relatedDocuments':[],//important
                 'watchers':[req.user._id],//important
-                'documentType':fileName.substring(fileName.indexOf('.')+1,fileName.length),     
+                'documentType':fileName.substring(fileName.indexOf('.')+1,fileName.length),
               };
               var obj = new Document(doc);
               obj.save(function(error,result){
@@ -1310,7 +1310,7 @@ exports.uploadFileToDocument = function(req,res,next){
 
   busboy.on('finish', function () {
     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
-    
+
     var username = req.user.username;
     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
     var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
@@ -1469,8 +1469,8 @@ exports.uploadFileToDocument = function(req,res,next){
 
 exports.create = function(req,res,next){
   console.log("exports.create") ;
-  var folder = req.body.folder;//contains folder Id
-  if(!folder){
+  var folderId = req.body.folder;//contains folder Id
+  if(!folderId){
     var doc = {
       'created': new Date(),
       'updated':new Date(),
@@ -1494,7 +1494,7 @@ exports.create = function(req,res,next){
       'permissions':[{"id":req.user._id,"level":"editor"}],
       'doneBy':[],
       'forNotice':[],
-      'documentType':''  
+      'documentType':''
     };
     var obj = new Document(doc);
     obj.save(function(error,result){
@@ -1511,7 +1511,7 @@ exports.create = function(req,res,next){
     });
   }
   else{
-    Folder.findOne({'_id':folder}).exec(function(err,folderObj){
+    Folder.findOne({'_id':folderId}).exec(function(err,folderObj){
       if(err){
         logger.log('error', '%s create, %s', req.user.name,' Folder.findOne', {error: err.message});
 
@@ -1526,7 +1526,7 @@ exports.create = function(req,res,next){
           'path':undefined,
           'description':'', //important
           'serial':'',
-          'folder':new ObjectId(folder),
+          'folder':new ObjectId(folderId),
           'creator':new ObjectId(req.user._id),
           'updater':new ObjectId(req.user._id),
           'sender':new ObjectId(req.user._id),
@@ -1538,7 +1538,7 @@ exports.create = function(req,res,next){
           'relatedDocuments':[],//important
           'watchers':folderObj.watchers,//important
           'permissions':[{"id":req.user._id,"level":"editor"}],
-          'documentType':'',     
+          'documentType':'',
         };
         var obj = new Document(doc);
         obj.save(function(error,result){
@@ -1549,6 +1549,7 @@ exports.create = function(req,res,next){
           }
           else{
             logger.log('info', '%s create, %s', req.user.name, 'success with folder' );
+            result.folder = folderObj;
             res.send(result);
           }
         });
@@ -1630,7 +1631,7 @@ exports.deleteDocument = function (req, res) {
       }
     });
   });
-  
+
 }
 
 /**
@@ -1789,8 +1790,8 @@ exports.update = function (req, res, next) {
               'Role':2,
               'UserId':doc.assign.toString(),
             }];
-          }  
-          
+          }
+
           getUsers(creator).then(function(){
             getUsers(watchersReq).then(function(){
               getUsers(oldWatchersReq).then(function(){
@@ -1835,7 +1836,7 @@ exports.update = function (req, res, next) {
             logger.log('error', '%s update, %s', req.user.name,' getUsers', {error: err.message});
 
           })
-   
+
         }
     });
     }
@@ -1919,7 +1920,7 @@ exports.update = function (req, res, next) {
               res.send(result);
             }
           });
-          
+
         }
       });
 
@@ -2085,7 +2086,7 @@ exports.signNew = function (req, res, next) {
 // update user document received.
 exports.receiveDocument = function(req,res,next){
   officeDocument  = req.body.officeDocument  ;
-  var id = req.params.id;  
+  var id = req.params.id;
   Document.update({'_id':officeDocument.ref },{$push:{readBy: {date: Date.now(), user: req.user._id }}},function(error,result){
     if(error){
         //TBD
@@ -2114,7 +2115,7 @@ exports.receiveDocument = function(req,res,next){
 // update user document distributed == viewed.
 exports.distributedDocument = function(req,res,next){
   officeDocument  = req.body.officeDocument  ;
-  var id = req.params.id;  
+  var id = req.params.id;
   Document.update({'_id':id},{$set:{status:"viewed"}},function(error,result){
     if(error){
       logger.log('error', '%s distributedDocument, %s', req.user.name,'  Document.update', {error: error.message});
@@ -2137,7 +2138,7 @@ exports.readByDocument = function(req,res,next){
   readBy.forEach(function(element) {
     readbyToId.push(new mongoose.Types.ObjectId(element.user)) ;
   });
-  var id = req.params.id;  
+  var id = req.params.id;
   User.find({
     '_id': { $in: readbyToId }
     }, function(err, docs){
@@ -2163,7 +2164,7 @@ exports.sentToDocument = function(req,res,next){
   sentTo.forEach(function(element) {
     sentToId.push(new mongoose.Types.ObjectId(element.user)) ;
   });
-  var id = req.params.id;  
+  var id = req.params.id;
   User.find({
     '_id': { $in: sentToId }
     }, function(err, docs){
@@ -2196,9 +2197,9 @@ exports.sendDocument = function (req, res, next) {
   officeDocument.watchers.forEach(function(w){
     watchers.push(w._id);
   });
-  watchers=_.union(watchers,watchers);  
+  watchers=_.union(watchers,watchers);
   //watchers.filter(n => n).filter(n => true) ;
-  watchers = watchers.filter(function(e){return e}); 
+  watchers = watchers.filter(function(e){return e});
   sendingForm['status']='sent';
   watchers.forEach(function(watcher){
     var watcher = watcher._id?watcher._id:watcher;
@@ -2235,7 +2236,7 @@ exports.sendDocument = function (req, res, next) {
               Attachment.find({entityId:officeDocument._id}).then(function (attachments) {
                 attachments.forEach(function (oldAttachment) {
 
-                 
+
                   var attachment = new Attachment({
                     "entity" : "officeDocuments",
                     "entityId" : result._doc._id,
@@ -2261,10 +2262,10 @@ exports.sendDocument = function (req, res, next) {
                   });
                 })
 
-              })              
+              })
             }
         }
-        
+
       });
     }
 
@@ -2284,7 +2285,7 @@ exports.sendDocument = function (req, res, next) {
 
     // update the original document with who it was sent to + date.
     sentTo = [] ;
-    watchers.forEach(function(watcher){      
+    watchers.forEach(function(watcher){
       watcher!=sendingForm.sender ? sentTo.push({date: Date.now(), user: watcher}) : '';
     });
     if (sentTo.length) {
@@ -2293,7 +2294,7 @@ exports.sendDocument = function (req, res, next) {
       sendingForm.doneBy = req.body.sendingForm.doneBy
       sendingForm.forNotice = req.body.sendingForm.forNotice
       sendingForm.classification = req.body.sendingForm.classification
-    
+
     }
     Document.update({'_id':officeDocument._id},{$set:sendingForm},function(error,result){
       if(error||!result){
@@ -2332,23 +2333,23 @@ exports.sendDocument = function (req, res, next) {
                 logger.log('info', '%s sendDocument, %s', req.user.name, 'success' );
 
               }
-            res.send(sendingForm); 
+            res.send(sendingForm);
             }
             );
           });
-        });      
-      }    
+        });
+      }
   });
 });
 }
 
 var copyFile = function (file, dir2) {
-  
+
        //gets file name and adds it to dir2
       // var f = path.basename(file);
       // var source = fs.createReadStream(file);
       // var dest = fs.createWriteStream(path.resolve("http://localhost:3002/files/2018/01/22/", f));
-  
+
       // source.pipe(dest);
       // source.on('end', function() { console.log('Succesfully copied'); });
       // source.on('error', function(err) { console.log(err); });
@@ -2357,9 +2358,9 @@ var copyFile = function (file, dir2) {
       fs.stat(file, function(err, stat){
         // var filesize = stat.size
         // var bytesCopied = 0
-      
+
         var readStream = fs.createReadStream(file)
-      
+
         readStream.on('data', function(buffer){
           //bytesCopied+= buffer.length
           //var porcentage = ((bytesCopied/filesize)*100).toFixed(2)
