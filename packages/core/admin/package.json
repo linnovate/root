@@ -19,8 +19,7 @@
     "postinstall": "bower install"
   },
   "dependencies": {
-    "mean-health": "^0.1.7",
-    "request": "^2.83.0"
+    "request": "^2.87.0"
   },
   "license": "MIT",
   "_id": "mean-admin@0.0.3",
