@@ -1,12 +1,15 @@
 'use strict';
 
-angular.module('mean.icu.ui.entity', []).service('EntityService', function (ApiUri, $http, PaginationService, WarningsService, ActivitiesService, MeanSocket, SettingServices) {
+angular.module('mean.icu.ui.entity', []).service('EntityService', function (ApiUri, $http, $stateParams, PaginationService, WarningsService, ActivitiesService, MeanSocket, SettingServices) {
     var activeStatusFilterValue = "default";
     var SortFilterValue = {
                              field:"created",
                              order: 1
                           };
     var entityFolderValue = {}
+    if($stateParams.entity == "folder"){
+        entityFolderValue = $stateParams.entityId;
+    }
 
     var entityTypes = ['projects', 'tasks', 'discussions', 'updates', 'offices', 'folders', 'officeDocuments'];
 
@@ -49,12 +52,12 @@ angular.module('mean.icu.ui.entity', []).service('EntityService', function (ApiU
     }
 
     function setEntityFolderValue(_entity, _id) {
-       entityTypes.entity = _entity;
-       entityTypes.id = _id;
+        entityFolderValue.entity = _entity;
+        entityFolderValue.id = _id;
     }
 
     function getEntityFolderValue() {
-        return entityTypes;
+        return entityFolderValue;
     }
 
     var activeToggleList = [{
