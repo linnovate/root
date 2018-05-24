@@ -500,7 +500,7 @@
         }
 
         section {
-            height: 100%;
+            height: calc(100vh - 55px);
         }
     }
     .searchPane {
