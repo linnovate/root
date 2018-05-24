@@ -1902,6 +1902,12 @@ exports.update = function (req, res, next) {
       if (req.body.watchers) {
         docToUpdate['watchers'] = req.body.watchers;
       }
+
+      var allowed2 = permissions.updateContent(req , docToUpdate   , docToUpdate) ;    
+      if(!allowed2) {
+        return res.send(permissions.permError.denied + ":" + permissions.permError.allowUpdateContent) ;
+      }
+
       docToUpdate.save(function(err,result){
         if(err){
           logger.log('error', '%s update, %s', req.user.name,' docToUpdate.save', {error: err.message});
