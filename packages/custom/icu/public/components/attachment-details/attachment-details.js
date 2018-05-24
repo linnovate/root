@@ -32,7 +32,7 @@ angular.module('mean.icu.ui.attachmentdetails', [])
 
         
 
-        $scope.attLinkToEntity = '/' + attachment.entity + 's/all/' + attachment.entityId + '/documents';
+        $scope.attLinkToEntity = '/' + attachment.entity + '/all/' + attachment.entityId + '/documents';
 
 
         $scope.$watchGroup(['update.description', 'update.title'], function (nVal, oVal) {

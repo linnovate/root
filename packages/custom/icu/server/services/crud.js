@@ -213,6 +213,7 @@ module.exports = function(entityName, options) {
     //    check permsArray changes     
     let allowed1 = permissions.syncPermsArray(user,entity) ;
     if(!allowed1) {
+      // console.log("CRUD NOT ALLOWED") ;
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
     }
 
@@ -221,16 +222,16 @@ module.exports = function(entityName, options) {
     // check update permissions
     let allowed2 = permissions.createContent(user,{}, entity) ;    
     allowed2.then(function(entity) {      
-      // in case we are not allowed - catch!
+      // in case we are not allowed - catch below!
 
       // possibly handle other permission situations for next then, or reject/throw. 
-      // console.log("allowed then:");
-      // console.log(JSON.stringify(entity)) ;
+      // console.log(JSON.stringify(allowed2)) ;
 
       // deffered.resolve(entity) ;
       // return deffered.promise;
     })
     .then(function(value) {
+//      console.log("CRUD ALLOWED") ;
       // console.log("allowed then then:");
       // console.log(JSON.stringify(entity)) ;      
 
@@ -261,7 +262,7 @@ module.exports = function(entityName, options) {
         }
       });
   }).catch(function(error){
-    console.log("CRUD CATCH ERROR") ;
+    console.log("CRUD CATCH ERROR (Reject Deferred)") ;
     console.trace() ;
     console.log(error);
     deffered.reject(error);

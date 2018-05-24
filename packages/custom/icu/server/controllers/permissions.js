@@ -146,9 +146,10 @@ exports.updateContent = function(user, oldDoc, newDoc) {
   }
   
   let newPerms = newDoc && Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
+  let oldPerms = oldDoc && Array.isArray(oldDoc['permissions']) ? oldDoc['permissions'].slice() : [];
 
   // is user allowed to update content?    
-  if(!exports.allowUpdateContent(user, newPerms, {})) {
+  if(!exports.allowUpdateContent(user, oldPerms, {})) {
     console.log("updated content - not allowed");
     return false ;
   }
@@ -173,8 +174,8 @@ exports.syncPermsArray = function(user, doc) {
 */
 exports.createContent = function(user, oldDoc, newDoc) {
   console.log("permissions createContent") ;
-  console.log(JSON.stringify(newDoc)) ;
-  console.log(JSON.stringify(oldDoc)) ;
+  // console.log(JSON.stringify(newDoc)) ;
+  // console.log(JSON.stringify(oldDoc)) ;
   let deffered = q.defer();
 
   if(!newDoc || !newDoc.issue || !entityNameMap[newDoc.issue]) {
@@ -200,7 +201,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
         deffered.reject(exports.permError.denied + ":" + exports.permError.allowUpdateUpdates);
         return deffered.promise;
       }  
-      console.log("updates - allowed");      
+      // console.log("updates - allowed");      
       deffered.resolve("OK") ;  
       return deffered.promise;        
     })
@@ -259,7 +260,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
   }
 
   if(newDoc.type == 'updateWatcherPerms' && newDoc.issue == 'officeDocuments') {
-    console.log("HAPPY HAPPY updateWatcherPerms") ;
+    console.log("updateWatcherPerms") ;
     let Model = entityNameMap['officeDocument'].mainModel;
     Model.findOne({'_id': newDoc.issueId},function(err,doc){
       let oldPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
@@ -269,8 +270,8 @@ exports.createContent = function(user, oldDoc, newDoc) {
         return deffered.promise ;
       }  
 
-      console.log("newDoc permissions???") ;
-      console.log(JSON.stringify(newDoc.permissions)) ;
+      // console.log("newDoc permissions") ;
+      // console.log(JSON.stringify(newDoc.permissions)) ;
       doc.permissions = newDoc.permissions ;
       doc.save(function(err,result){
         if(err){
@@ -371,11 +372,13 @@ exports.createContent = function(user, oldDoc, newDoc) {
       deffered.reject(exports.permError.denied + ":" + exports.permError.allowCreateContent);
       return deffered.promise;
     }  
-    console.log("update content - allowed");      
-    deffered.resolve("OK") ;  
-    return deffered.promise;        
+    else {
+      // console.log("update content - allowed");      
+      deffered.resolve("OK") ;  
+      return deffered.promise;        
+    }
   })
-  deffered.resolve("OK") ;  
+//  deffered.resolve("OK") ;  
   return deffered.promise;        
 }
 
@@ -485,7 +488,7 @@ exports.allowUpdateWatcher = function(user, perms) {
   let uid =  String(user.user._id);
   let index = exports.searchIdIndex(String(uid),perms) ;
   if(index != null && perms[index].level == "editor") {
-    console.log("permissions 'update watcher' true");
+    // console.log("permissions 'update watcher' true");
     return true ;
   }
   console.log("permissions 'update watcher' false");
@@ -514,8 +517,13 @@ exports.allowUpdateWatcherLevel = function(user, perms) {
 */
 exports.allowUpdateContent = function(user, perms, field) {
   let uid =  String(user.user._id);
-  console.log("perms:") ;
-  console.log(JSON.stringify(perms)) ;
+  if(!perms) {
+    return false ;
+  }
+
+  // console.log("perms:") ;
+  // console.log(JSON.stringify(perms)) ;
+
   let index = exports.searchIdIndex(String(uid),perms) ;
   let allowed = [] ;
   let permsAllowed = ["editor"] ;
@@ -539,8 +547,8 @@ exports.allowUpdateContent = function(user, perms, field) {
 */
 exports.allowUpdateUpdates = function(user, perms, field) {
   let uid =  String(user.user._id);
-  console.log("perms:") ;
-  console.log(JSON.stringify(perms)) ;
+  // console.log("perms:") ;
+  // console.log(JSON.stringify(perms)) ;
   let index = exports.searchIdIndex(String(uid),perms) ;
   let allowed = [] ;
   let permsAllowed = ["editor", "commenter"] ;
