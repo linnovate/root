@@ -29,13 +29,6 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
   $scope.tasks = tasks.data || tasks;
   $scope.items = folders.data || folders;
   $scope.offices = offices.data || offices;
-  $scope.officeName = '';
-  $scope.offices.push({
-    'status': 'default',
-    'title': $scope.officeName,
-    'class': 'create-new',
-    'color': 'rgb(0, 151, 167)'
-  });
 
   // backup for previous changes - for updates
   var backupEntity = JSON.parse(JSON.stringify($scope.item));
@@ -177,7 +170,7 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
 
   // ==================================================== $watch: title / desc ==================================================== //
 
-  $scope.$watch('folder.title', function(nVal, oVal) {
+  $scope.$watch('item.title', function(nVal, oVal) {
     if (nVal !== oVal) {
       var context = {
         name: 'title',
@@ -191,7 +184,7 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
   });
 
   var nText, oText;
-  $scope.$watch('folder.description', function(nVal, oVal) {
+  $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     if (nText != oText && oText) {

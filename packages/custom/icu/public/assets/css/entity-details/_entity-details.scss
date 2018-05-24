@@ -11,7 +11,7 @@
 @import 'detail-category';
 @import 'detail-buttons';
 @import 'detail-tabs';
-
+@import 'detail-templater';
 
 
 
@@ -72,59 +72,3 @@
     }
  
 }
-
-
-.entity-details .location  {
-    .placeholder {
-        position: absolute;
-        top: 50%;
-        transform: translateX(80%) translateY(-50%);
-        color: $light-grey-placeholder;
-        padding-left: 5px;
-    }
-
-    input {
-        appearance: none;
-        border: none;
-        float: right;
-        width: calc(100% - 10px);
-        margin-left: 11px;
-        padding: 17px 0 17px 25px;
-        cursor: pointer;
-        outline: none;
-        background: url('/icu/assets/img/house.png') no-repeat scroll left center;
-    }
-}
-
-
-.entity-details .row-buttons {
-    border-bottom: 1px solid $light-grey1;
-    border-top: 1px solid $light-grey1;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    margin: 0px 16px  10px 16px;
-    padding-top: 10px;
-     > * {
-      margin-right: 5px;
-      margin-bottom: 10px;
-    }
-
-    .create, .choose {
-        margin-right: 10px !important;
-        @include ellipse(12px);
-        @include button;
-        background-color: #323d41;
-        box-shadow: 0 3px 0 0 #101314;
-        color: white;
-        font-size: 13px;
-        font-weight: 700;
-        padding-left: 5px;
-        padding-right: 5px;
-        &:hover{
-            background-color: #4C5D63;
-            transition: 0.8s;
-        }   
-    }
-}
-

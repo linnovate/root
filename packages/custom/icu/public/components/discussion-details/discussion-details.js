@@ -262,7 +262,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   // ==================================================== $watch: title / desc ==================================================== //
 
   var activeTitleTimeout;
-  $scope.$watch('discussion.title', function(nVal, oVal) {
+  $scope.$watch('item.title', function(nVal, oVal) {
     if (nVal !== oVal && oVal) {
       if (activeTitleTimeout) {
         clearTimeout(activeTitleTimeout)
@@ -274,7 +274,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   });
 
   var activeDescriptionTimeout, nText, oText;
-  $scope.$watch('discussion.description', function(nVal, oVal) {
+  $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     if (nText != oText && oText) {

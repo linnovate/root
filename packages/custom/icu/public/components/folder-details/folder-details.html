@@ -1,5 +1,5 @@
 
-<div class="entity-details" ng-if="item._id">
+<div class="entity-details folder-details" ng-if="item._id">
 
   <div class="permission" ng-if="item && !item._id && !permsToSee">
     <div class="perIcon"></div>
@@ -21,7 +21,7 @@
 
   </div>
 
-  <detail-category value="item.office" items="offices" on-create="newCategory" on-change="onCategory" ng-if="!item.parent" ></detail-category>
+  <detail-category placeholder="'selectOffice' | i18next" value="item.office" items="offices" on-create="newCategory" on-change="onCategory" ng-if="!item.parent" ></detail-category>
 
   <div class="parent" ng-if="item.parent">
       {{currentContext.entity.title}}

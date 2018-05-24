@@ -1,5 +1,5 @@
 
-<div class="entity-details" ng-if="item._id && permsToSee">
+<div class="entity-details task-details" ng-if="item._id && permsToSee">
 
   <div class="permission" ng-if="item && !item._id && !permsToSee">
     <div class="perIcon"></div>
@@ -27,7 +27,7 @@
     </button>
   </div>
 
-  <detail-category value="item.project" items="projects" on-create="newCategory" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent" ></detail-category>
+  <detail-category placeholder="'selectProject' | i18next" value="item.project" items="projects" on-create="newCategory" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent" ></detail-category>
 
   <div class="parent" ng-if="item.parent">
     {{currentContext.entity.title}}
@@ -53,6 +53,7 @@
     <icu-sub-task-list
       class="icu-sub-task-list entity-list-container"
       ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
+      task="item"
       tasks="item.subTasks"
       load-next="loadNext"
       load-prev="loadPrev"

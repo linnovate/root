@@ -3,11 +3,6 @@
 angular.module('mean.icu.ui.taskoptions', [])
 .controller('TaskOptionsController', function ($scope, $state, tasks, TasksService) {
 
-	//TasksService.getMyTasksStatistics().then(function(data) {
-//		$scope.statistics = _.object(_.pluck(data, 'key'), _.pluck(data, 'value'));
-//	});
-
-
 	$scope.countTasksForTodayOrWeek = function(forToday){
 		if(forToday){
 			var date = new Date().getThisDay();

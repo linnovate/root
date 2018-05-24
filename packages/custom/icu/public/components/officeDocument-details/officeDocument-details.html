@@ -1,4 +1,4 @@
-<div class="entity-details" ng-if="item._id">
+<div class="entity-details officeDocument-details" ng-if="item._id">
   <div class="permission" ng-if="item && !item._id">
     <div class="perIcon"></div>
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
@@ -22,7 +22,7 @@
     <button class="detail-button send" ng-if="item.status == 'new'" icu-open-modal entity-name="item" people="people" show-modal="true" send="true" data="item" send-fn="sendDocument(item)" class="sendBtn">{{ 'send' | i18next }}</button>
     <button class="detail-button receive" ng-if="item.status == 'sent'" icu-open-modal entity-name="item" people="people" show-modal="true" modal-name="distributed" send="false" sent="true" data="item" send-fn="distributedDocument(item)" class="sendBtn">{{ 'distributed' | i18next }}</button>
     <button class="detail-button receive" ng-if="item.status == 'received' && item.viewed != true" icu-open-modal entity-name="item" people="people" show-modal="true" modal-name="receive" send="false" receive="true" data="item" send-fn="receiveDocument(item)" class="sendBtn" ng-class="{ 'enabled' : !isRecycled}">{{ 'receive' | i18next }}</button>
-    <button ng-class="{ 'disabled' : !havePermissions('info')}" ng-if="!item.serial && !settingSerial" ng-click="addSerialTitle(item)" class="simochin">{{'simochin' | i18next }}</button>
+    <button class="detail-button simochin" ng-class="{ 'disabled' : !havePermissions('info')}" ng-if="!item.serial && !settingSerial" ng-click="addSerialTitle(item)">{{'simochin' | i18next }}</button>
     <button class="detail-button approval" ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled" ng-click="updateStatusForApproval(item)">{{'updateStatusForApproval' | i18next }}</button>
   </div>
 
@@ -32,7 +32,7 @@
     <p ng-if="item.serial">{{'simochin' | i18next }}: {{item.serial}} </p>
   </div>
 
-  <detail-category value="item.folder" items="folders" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent"></detail-category>
+  <detail-category placeholder="'selectFolder' | i18next" value="item.folder" items="folders" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent"></detail-category>
 
   <div class="parent" ng-if="item.parent">{{currentContext.entity.title}}</div>
   <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="1" strip-br="true" ng-keydown="onEnter($event)" ng-model="item.title" ng-change="updateCurrentProject()" medium-editor></div>

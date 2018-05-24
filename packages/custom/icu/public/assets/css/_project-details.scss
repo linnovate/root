@@ -1,19 +1,2 @@
 .project-details {
-    .page-content {
-        .tabs {
-            .tab {
-                width: calc((100% - 60px) / 2);
-
-                &.two {
-                    width: calc((100% - 60px) / 2);
-                }
-                &.three {
-                    width: calc((100% - 60px) / 3);
-                }
-            }
-        }
-    }
-    .ui-select-bootstrap > .ui-select-choices {
-        width: auto;
-    }
 }

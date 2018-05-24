@@ -10,6 +10,7 @@ function detailCategory() {
 
   return {
     scope: {
+      placeholder: "=",
       value: "=",
       items: "=",
       onChange: "=",

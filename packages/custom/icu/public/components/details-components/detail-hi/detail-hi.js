@@ -20,7 +20,10 @@ function detailHi() {
   };
 
   function link($scope, element, attrs) {
-
+    if ($scope.value == false) {
+      $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
+    }
+    
     $scope.click = function () {
       if ($scope.value == false) {
         $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');

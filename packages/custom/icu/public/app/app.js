@@ -118,10 +118,10 @@ angular.module('mean.icu').config([
                         templateUrl: '/icu/components/task-details/task-details.html',
                         controller: 'TaskDetailsController'
                     },
-                    'subtasks@main': {
-                        templateUrl: '/icu/components/sub-tasks/sub-tasks.html',
-                        controller: 'SubTasksController'
-                    }
+//                     'subtasks@main': {
+//                         templateUrl: '/icu/components/sub-tasks/sub-tasks.html',
+//                         controller: 'SubTasksController'
+//                     }
                 },
                 params: {
                     nameFocused: false
@@ -161,10 +161,10 @@ angular.module('mean.icu').config([
                         templateUrl: '/icu/components/project-details/project-details.html',
                         controller: 'ProjectDetailsController'
                     },
-                    'subProjects@main': {
-                        templateUrl: '/icu/components/sub-projects/sub-projects.html',
-                        controller: 'SubProjectsController'
-                    }
+//                     'subProjects@main': {
+//                         templateUrl: '/icu/components/sub-projects/sub-projects.html',
+//                         controller: 'SubProjectsController'
+//                     }
                 },
                 params: {
                     nameFocused: false
@@ -508,10 +508,10 @@ angular.module('mean.icu').config([
             return {
                 url: '/subtasks',
                 views: {
-                    subtasks: {
-                        templateUrl: '/icu/components/sub-tasks/sub-tasks.html',
-                        controller: 'SubTasksController'
-                    }
+//                     subtasks: {
+//                         templateUrl: '/icu/components/sub-tasks/sub-tasks.html',
+//                         controller: 'SubTasksController'
+//                     }
                 },
                 resolve: {
                     subtasks: function (TasksService) {
@@ -541,9 +541,9 @@ angular.module('mean.icu').config([
                 url: '/' + tab,
                 views: {
                     tab: {
-                        templateUrl: function ($stateParams) {
-                            return '/icu/components/task-details/tabs/' + tab + '/' + tab + '.html';
-                        },
+//                         templateUrl: function ($stateParams) {
+//                             return '/icu/components/task-details/tabs/' + tab + '/' + tab + '.html';
+//                         },
                         controllerProvider: function ($stateParams) {
                             return 'Task' + capitalizedTab + 'Controller';
                         }
@@ -789,7 +789,7 @@ angular.module('mean.icu').config([
                 url: '/projects',
                 views: {
                     tab: {
-                        templateUrl: '/icu/components/user-details/tabs/projects/projects.html',
+//                         templateUrl: '/icu/components/user-details/tabs/projects/projects.html',
                         controller: 'UserProjectsController',
                         resolve: {
                             userProjects: function (ProjectsService, $stateParams) {
@@ -817,7 +817,7 @@ angular.module('mean.icu').config([
                 url: '/offices',
                 views: {
                     tab: {
-                        templateUrl: '/icu/components/user-details/tabs/offices/offices.html',
+//                         templateUrl: '/icu/components/user-details/tabs/offices/offices.html',
                         controller: 'UserOfficesController',
                         resolve: {
                             userOffices: function (OfficesService, $stateParams) {

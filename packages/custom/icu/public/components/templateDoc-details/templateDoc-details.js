@@ -65,7 +65,7 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
 
   // ==================================================== $watch: title / desc ==================================================== //
 
-  $scope.$watchGroup(['templateDoc.description', 'templateDoc.title'], function(nVal, oVal, scope) {
+  $scope.$watchGroup(['item.description', 'item.title'], function(nVal, oVal, scope) {
     if (nVal !== oVal && oVal) {
       var newContext;
       if (nVal[1] !== oVal[1]) {

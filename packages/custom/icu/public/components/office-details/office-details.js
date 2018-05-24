@@ -100,7 +100,7 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
 
   // ==================================================== $watch: title / desc ==================================================== //
 
-  $scope.$watch('office.title', function(nVal, oVal) {
+  $scope.$watch('item.title', function(nVal, oVal) {
     if (nVal !== oVal && oVal) {
       var newContext = {
         name: 'title',
@@ -113,7 +113,7 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
   });
 
   var nText, oText;
-  $scope.$watch('office.description', function(nVal, oVal) {
+  $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     if (nText != oText && oText) {

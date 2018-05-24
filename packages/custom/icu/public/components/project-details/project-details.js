@@ -53,12 +53,6 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
   }
 
   ProjectsService.getStarred().then(function(starred) {
-
-    // Chack if HI room created and so needs to show HI.png
-    if ($scope.item.WantRoom == true) {
-      $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
-    }
-
     $scope.item.star = _(starred).any(function(s) {
       return s._id === $scope.item._id;
     });

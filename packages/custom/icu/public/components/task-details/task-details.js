@@ -27,13 +27,6 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
   $scope.me = me;
   $scope.tags = tags;
   $scope.projects = projects.data || projects;
-  $scope.projName = '';
-  $scope.projects.push({
-    'status': 'default',
-    'title': $scope.projName,
-    'class': 'create-new',
-    'color': 'rgb(0, 151, 167)'
-  });
 
   var currentState = $state.current.name;
 
@@ -263,14 +256,14 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   // ==================================================== $watch: title / desc ==================================================== //
 
-  $scope.$watch('task.title', function(nVal, oVal) {
+  $scope.$watch('item.title', function(nVal, oVal) {
     if (nVal !== oVal && oVal) {
       $scope.delayedUpdate($scope.item, 'title');
     }
   });
 
   var nText, oText;
-  $scope.$watch('task.description', function(nVal, oVal) {
+  $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     if (nText != oText && oText) {
