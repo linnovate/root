@@ -512,6 +512,7 @@ directive('icuSidepane', function() {
     };
 
     $scope.toggleRecycle = function () {
+        var query = SearchService.getQuery();
         console.log("toggleRecycle...") ;
 
         if($location.search().recycled) {
@@ -523,11 +524,11 @@ directive('icuSidepane', function() {
 
         if($scope.recycled === false) {
             $scope.isRecycled = false;
-            $state.go('main.search', {reload: true});
+            $state.go('main.search', {reload: true,  query: query});
         }
         else {
             $scope.isRecycled = true;
-            $state.go('main.search', { 'query':'___', recycled: true});
+            $state.go('main.search', {recycled: true, 'query':'___'});
         }
     };
 
