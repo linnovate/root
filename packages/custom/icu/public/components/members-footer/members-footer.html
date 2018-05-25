@@ -6,10 +6,10 @@
             <div icu-avatar
                  user="member"
                  entity="entity"
-                 class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+                 ng-class="{'dropdown-toggle': !member.selfTest}"
+                 class="btn btn-secondary" ng-click="selfTest(member)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
                 <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu" ng-hide="selfTest(member)">
+            <div class="dropdown-menu" ng-hide="member.selfTest">
                 <h6 class="dropdown-header name">{{member.username}}</h6>
                 <h6 class="dropdown-header status">{{userPermissionStatus(member) | i18next}}</h6>
                 <div class="dropdown-divider"></div>
