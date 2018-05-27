@@ -73,6 +73,11 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
             };
 
+            $scope.selfTest = function(member){
+                member.selfTest = $scope.me._id === member._id;
+                return member;
+            };
+
             var getNotAssigned = function() {
                 var arr1 = _.filter($scope.users, function(u) {
                     return u._id;
