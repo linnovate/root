@@ -56,7 +56,7 @@
 
   <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
 
-  <detail-tabs tabs="['activities','documents','tasks']" item="item" entityName="discussion" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
+  <detail-tabs tabs="['activities','documents','tasks']" item="item" entity-name="discussion" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
 
   <icu-members-footer
     ng-if="item._id"

@@ -1,3 +1,3 @@
-'use strict'; 
+'use strict';  
 
-angular.module('mean.icu.ui.detailsComponents', []); 
+angular.module('mean.icu.ui.detailsComponents', []);  
