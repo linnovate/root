@@ -15,7 +15,7 @@ function OfficeListController($scope, $state, offices, OfficesService, context, 
 
     $scope.update = function(item) {
         return OfficesService.update(item.title);
-    }
+    };
 
     $scope.create = function(item) {
         var newItem = {
@@ -30,22 +30,7 @@ function OfficeListController($scope, $state, offices, OfficesService, context, 
             OfficesService.data.push(result);
             return result;
         });
-    }
-
-    //     $scope.search = function(item) {
-    //         return OfficesService.search(term).then(function(searchResults) {
-    //             _(searchResults).each(function(sr) {
-    //                 var alreadyAdded = _($scope.items).any(function(p) {
-    //                     return p._id === sr._id;
-    //                 });
-
-    //                 if (!alreadyAdded) {
-    //                     return $scope.searchResults.push(sr);
-    //                 }
-    //             });
-    //             $scope.selectedSuggestion = 0;
-    //         });
-    //     }
+    };
 
     $scope.loadMore = function(start, LIMIT, sort) {
         return OfficesService.getAll(start, LIMIT, sort).then(function(docs) {

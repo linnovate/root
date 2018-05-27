@@ -5,13 +5,13 @@
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
   </div>
-  
+
   <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
     <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
 
     <detail-assign value="item.assign" me="me" list="people" on-change="onAssign"></detail-assign>
-    
+
     <discussion-due item="item" on-change="onDateDue"></discussion-due>
 
     <div class="location">
@@ -28,14 +28,14 @@
   <div class="detail-buttons">
     <button class="detail-button approval" ng-click="updateStatusForApproval()" ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled">
       {{'updateStatusForApproval' | i18next }}
-    </button>   
+    </button>
     <button class="detail-button" ng-click="statusesActionsMap[item.status].method(item)" ng-disabled="disableButton()" ng-if="statusesActionsMap[item.status]">
       {{statusesActionsMap[item.status].label | i18next}}
     </button>
   </div>
 
   <div class="detail-title"
-       ng-class="{ 'disabled' : !havePermissions('description')}" 
+       ng-class="{ 'disabled' : !havePermissions('description')}"
        contenteditable="true"
        tabindex="1"
        strip-br="true"
@@ -45,7 +45,7 @@
        medium-editor>
   </div>
 
-  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" 
+  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}"
        contenteditable="true"
        tabindex="2"
        strip-br="true"
@@ -60,7 +60,7 @@
 
   <icu-members-footer
     ng-if="item._id"
-    ng-class="{ 'disabled' : !havePermissions('watchers')}" 
+    ng-class="{ 'disabled' : !havePermissions('watchers')}"
     entity="item"
     users="people"
     me="me"

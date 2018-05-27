@@ -3,7 +3,7 @@
 function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDocumentsService, context, $stateParams, EntityService) {
 
     $scope.items = officeDocuments.data || officeDocuments;
-    
+
     $scope.entityName = 'officeDocuments';
     $scope.entityRowTpl = '/icu/components/officeDocument-list/officeDocument-row.html';
 

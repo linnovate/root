@@ -63,7 +63,6 @@
 
             textarea {
                 padding: 5px 9px;
-                //width: calc(100% - 60px);
                 min-height: 125px;
                 width: 100%;
                 margin: 10px 0;
@@ -150,8 +149,10 @@
     text-align: inherit;
     background: none;
     border: none;
-        &:hover{
-            filter: invert(75%);
+        img {
+            &:hover{
+                filter: opacity(.5) drop-shadow(0 0 0 #FFA000) saturate(5);
+            }
         }
     }
   #Document-icon-revert{

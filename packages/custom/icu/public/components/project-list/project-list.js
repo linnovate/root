@@ -5,10 +5,10 @@ function ProjectListController($scope, $state, projects, ProjectsService, contex
     $scope.items = projects.data || projects;
     $scope.loadNext = projects.next;
     $scope.loadPrev = projects.prev;
-    
+
     $scope.entityName = 'projects';
     $scope.entityRowTpl = '/icu/components/project-list/project-row.html';
-    
+
     var creatingStatuses = {
         NotCreated: 0,
         Creating: 1,
@@ -34,22 +34,8 @@ function ProjectListController($scope, $state, projects, ProjectsService, contex
             ProjectsService.data.push(result);
             return result;
         });
-    }
+    };
 
-//     $scope.search = function(item) {
-//         return ProjectsService.search(term).then(function(searchResults) {
-//             _(searchResults).each(function(sr) {
-//                 var alreadyAdded = _($scope.items).any(function(p) {
-//                     return p._id === sr._id;
-//                 });
-
-//                 if (!alreadyAdded) {
-//                     return $scope.searchResults.push(sr);
-//                 }
-//             });
-//             $scope.selectedSuggestion = 0;
-//         });
-//     }
 
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {
