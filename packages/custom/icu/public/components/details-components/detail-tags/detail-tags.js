@@ -29,24 +29,29 @@ function detailTags($timeout) {
 
     $scope.addTagClicked = function() {
       $scope.tagInputVisible = true;
-      var element = angular.element('#addTag > input.ui-select-focusser')[0];
       $timeout(function() {
-        element.focus();
+        var element = angular.element('#addTag .ui-select-toggle')[0];
+        element.click();
       }, 0);
     }
 
     $scope.addTag = function(tag) {
-      if (tag != undefined && $.inArray(tag, $scope.value) == -1) {
-        $scope.value.push(tag);
-        $scope.onChange($scope.value);
-      }
+      $scope.value.push(tag);
+      $scope.onChange($scope.value);
+//       $scope.newTag = null;
       $scope.tagInputVisible = false;
     }
     
     $scope.removeTag = function(tag) {
       $scope.value = _($scope.value).without(tag);
+//       $scope.newTag = null;
       $scope.onChange($scope.value);
     }
+    
+    $scope.onOpenClose = function(isOpen) {
+      $scope.tagInputVisible = !isOpen;
+    }
+    
 
-  }
+  } 
 }

@@ -12,11 +12,15 @@
 @import 'detail-buttons';
 @import 'detail-tabs';
 @import 'detail-templater';
-
+@import 'detail-members';
 
 
 
 /* -------------------------------- header-bar  -------------------------------- */
+
+.entity-details {
+  margin-bottom: 35px;
+}
 
 .entity-details-header-bar {
   display: flex;

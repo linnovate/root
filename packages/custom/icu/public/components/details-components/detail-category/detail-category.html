@@ -4,7 +4,6 @@
   on-select="onSelectChange($item)"
   on-remove="onSelectChange($item)"
   ng-keyup="setSelectText($select.selected.title)"
-  ng-mouseleave="removeSelectText"
 >
   <ui-select-match allow-clear placeholder="{{$select.selected.title || placeholder }}">
     <div class="detail-category-value" ng-bind-html="$select.selected.title" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}"></div>

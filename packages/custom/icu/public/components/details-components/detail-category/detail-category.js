@@ -37,10 +37,6 @@ function detailCategory() {
       $scope.selectText = $('.ui-select-search.ng-valid-parse').val();
     }
 
-    $scope.removeSelectText = function() {
-      $scope.selectText = '';
-    }
-
     $scope.$watch('selectText', function(newValue, oldValue) {
       $scope.items[$scope.items.length - 1].title = newValue;
     });
