@@ -7,6 +7,12 @@ angular.module('mean.icu.ui.taskoptions', [])
 //		$scope.statistics = _.object(_.pluck(data, 'key'), _.pluck(data, 'value'));
 //	});
 
+	$scope.filterRecycled = function(data) {
+		return data.filter(entity => {			
+			return !entity.hasOwnProperty('recycled');
+		});
+	}
+	
 
 	$scope.countTasksForTodayOrWeek = function(forToday){
 		if(forToday){
@@ -16,7 +22,9 @@ angular.module('mean.icu.ui.taskoptions', [])
 			var date = new Date().getWeek();
 		}
 		var count = 0;
-		tasks.forEach(function(task) {
+		var data = $scope.filterRecycled(tasks) ;
+		console.log("countTasksForTodayOrWeek",data) ;
+		data.forEach(function(task) {
 			var due = new Date(task.due);
 			if (due >= date[0] && due <= date[1]) {
 				count++;
@@ -28,7 +36,8 @@ angular.module('mean.icu.ui.taskoptions', [])
 	$scope.countOverDueTasks = function(){
 		var date = new Date().getThisDay();
 		var count=0;
-		tasks.forEach(function(task) {
+		var data = $scope.filterRecycled(tasks) ;
+		data.forEach(function(task) {
 			var due = new Date(task.due);
 			if (due < date[0]) {
 				count++;
@@ -42,24 +51,25 @@ angular.module('mean.icu.ui.taskoptions', [])
 	$scope.statistics.tasksDueWeek = $scope.countTasksForTodayOrWeek(false);
 	$scope.statistics.overDueTasks = $scope.countOverDueTasks();
 	TasksService.getWatchedTasks().then(function(data) {
-		$scope.statistics.WatchedTasks = data.length;
+		data = $scope.filterRecycled(data) ;
+		$scope.statistics.WatchedTasks = data.length ;
 	});
-
 
 
 
 	$scope.filterTasks = function(filterValue) {
 		TasksService.filterValue = filterValue;
+		console.log("filterValue",filterValue) ;
 		if(filterValue=='watched'){
 			TasksService.getWatchedTasks().then(function(result){
-				TasksService.watchedTasksArray = result.filter(entity=>{
-				    return !entity.hasOwnProperty('recycled');
-                });
+				TasksService.watchedTasksArray = $scope.filterRecycled(result) ;
 			});
-        }
+		}
     };
 
 	if ($state.current.name === 'main.tasks.byassign') {
 		$state.go('.activities');
 	}
+
+
 });
