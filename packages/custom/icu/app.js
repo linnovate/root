@@ -127,7 +127,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.attachmentdetails',
         'mean.icu.ui.attachmentfilter',
         'mean.icu.ui.notificationsheader',
-        'mean.icu.ui.membersfooter',
+        'mean.icu.ui.membersfooter', 
         'mean.icu.ui.tabs',
         'mean.icu.ui.rows',
         'mean.icu.ui.changecontent',

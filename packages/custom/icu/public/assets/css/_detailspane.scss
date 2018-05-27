@@ -10,18 +10,26 @@ $tab-content-height: calc(
 .detailspane {
     width: $detailspane-width;
     min-width: $min-detailspane-width;
-    border-left: 1px solid #c8c8c6;
+    border-left: 1px solid #C8C8C6;
     background-color: $cream;
 
-    overflow: scroll;
+    overflow-x: visible;
     height: 100vh;
 
-    border-left: 1px solid #c8c8c6;
+    border-left: 1px solid #C8C8C6;
     top: 0;
     right: 0;
 
     @media screen and (max-width: $small-resolution) {
         min-width: $detailspane-width;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .fa.fa-plus {
+        display: none;
     }
 
     .header {
@@ -36,8 +44,7 @@ $tab-content-height: calc(
             height: $header-height;
             margin-left: 25px;
             position: relative;
-            background: url("/icu/assets/img/notifications.png") no-repeat left
-                center;
+            background: url('/icu/assets/img/notifications.png') no-repeat left center;
 
             .indicator {
                 position: relative;
@@ -232,45 +239,1498 @@ $tab-content-height: calc(
             width: 55px;
             height: $header-height;
 
-            .menu-items {
-                &.dropdown-menu {
-                    border-radius: 0;
-                    left: -105px;
-                    box-shadow: none;
-                    text-align: left;
+        .menu-items {
+            &.dropdown-menu {
+                border-radius: 0;
+                left: -174px;
+                text-align: left;
+                width: 224px;
+                li {
+                    height: 55px;
+                    a {
+                        width: 100%;
+                        height: 100%;
+                        padding: 0;
+                        span {
+                            font-size: 16px;
+                            font-weight: bold;
+                            position: relative;
+                            left: 19px;
+                            top: 22%;
+                        }
+                        div {
+                            &.imageBlock {
+                                width: 32px;
+                                height:100%;
+                                padding-left: 14px;
+                                float: left;
+                                img {
+                                    transform: translateY(37%);
+                                    margin: 0 auto;
+                                    display: block;
+                                    height: 25px;
+                                    width: 23px;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    .page-content {
-        margin-bottom: 35px;
+}
 
-/*        .compBtn {
-            &.c19n {
-                background: #fba004 url("/icu/assets/img/icon-lock.svg")
-                    no-repeat center center;
+    .summary {
+        height: 54px;
+        border-bottom: 1px solid $light-grey1;
+        background-color: #F6F6F6;
+        position: relative;
+        z-index: 3;
+
+        .favorite, .deletebtn, .due, .status, .tags, .color, .location , .HI , .send, .receive {
+            height: $panel-height;
+            float: left;
+            position: relative;
+
+            &:hover{
+                box-shadow: 0 0 0 2px #FFB435;
+                transition: 0.8s;
             }
-            background: #e1e1e1 url("/icu/assets/img/icon-lock.svg") no-repeat
-                center center;
-            width: 22px;
-            height: 22px;
-            border-radius: 15px;
+        }
+
+
+
+        #close {
+            float: right !important;
+            margin: 0;
+            display: inline-block;
+            padding: 2px 5px;
+            background: #ccc;
+        }
+
+        #close:hover {
+            float: right !important;
+            display: inline-block;
+            padding: 2px 5px;
+            color: #fff;
+        }
+
+        #past,#before {position: absolute;
+            top: 361px;
+            background-color: #EBE9DE;
+            border-radius: 6px;
+            border: 1px solid #cbc7bd;
+            width: 262px;
+            z-index: 1;
+            display: none;
+            text-align: left;
+            padding: 4px 7px;
+            font-style: italic;
+            margin-left:150px;
+            margin-top:-225px;
+            &:before {
+                content: '!';
+                background-color: #EA5858;
+                border-radius: 15px;
+                border: none;
+                margin-right: 4px;
+                float: left;
+                color: #EBE9DE;
+                width: 20px;
+                height: 20px;
+                text-align: center;
+                line-height: 20px;
+                font-weight: bold;
+                font-style: normal;
+            }
+        }
+
+        .dueDiv{
+            position: fixed;
+            width : 160px;
+            height : 370px;
+            z-index : 999;
+            margin-left : 260px;
+            margin-top : 54px;
+            background-color: $light-grey-placeholder;
+        }
+
+        .dateTitle{
+            margin-left:30px;
+        }
+
+        #startDate{
+            width:140px;
+            margin-left:7px;
+            margin-top:7px;
+        }
+
+        #endDate{
+            width:140px;
+            margin-left:7px;
+            margin-top:3px;
+        }
+
+        #startTime{
+            margin-top:-10px;
+            margin-left:10px;
+        }
+        #endTime{
+            margin-top:-10px;
+            margin-left:10px;
+        }
+        #allDay{
+            margin-left:64px;
+            margin-top:-10px;
+        }
+        #allDayTitle{
+            margin-left:49px;
+        }
+
+
+
+
+
+
+        .favorite, .user, .deletebtn, .due, .location , .HI, .send, .receive {
+            border-right: 1px solid $light-grey1;
+        }
+
+        .location{
+            border-left: 1px solid $light-grey1;
+        }
+
+
+
+        .color {
+            width: 100px;
+            border-right: 1px solid $light-grey1;
+            z-index: 4;
+            .colorpicker {
+                @include center;
+            }
+        }
+
+        .att-icon {
+            -webkit-filter: contrast(0);
+            filter: contrast(0);
+        }
+
+        .att-size {
+            width: 120px;
+            margin-left: 10px;
+            padding-top: 13px;
+            float: left;
+            border-right: 1px solid #e1e1e1;
+        }
+
+        .att-user {
+            color: gray;
+            padding-top: 15px;
+        }
+
+        .att-user:hover {
+            box-shadow: none !important;
+        }
+
+        .att-size, .att {
+            color: #bdbcbc ;
+            height: 100% ;
+            box-shadow: 0 none;
+        }
+
+        .att {
+            width: 40px;
+            background-color: transparent;
             border: none;
-            position: absolute;
-            right: 1%;
-            margin: 13px 30px;
-            outline: none;
-            tooltip {
+            float: right;
+        }
+
+        .user {
+            width: 160px; //calc((100% - #{$panel-height}) * 0.25);
+            height: $panel-height;
+            position: relative;
+            float: left;
+
+            ul {
+                /*rtl:begin:ignore*/
+                left: auto ;
+                right: 0;
+                /*rtl:end:ignore*/
+
+                /*rtl:begin:remove*/
+                right: auto ;
+                left: 0;
+                /*rtl:end:remove*/
+
+                width: auto;
+            }
+
+            .ui-select-container.ui-select-bootstrap {
+                padding-top: 0;
+                .ui-select-match-text {
+                    height: $panel-height;
+                    overflow: hidden;
+                    max-width: 100%;
+                }
+                .ui-select-toggle {
+                    height: $panel-height;
+                }
+                input {
+                    height: $panel-height;
+                    border-radius: 0;
+                }
+            }
+
+            @media screen and (max-width: $small-resolution) {
+                width: 140px;
+
+            }
+
+            &:hover{
+                box-shadow: 0 0 0 2px #FFB435;
+                transition: 0.8s;
+            }
+
+            .no-assignee {
                 position: absolute;
+                transform: translateY(-65%);
+                top: 31px;
+                width: calc(100% - 10px);
+                margin-left: 10px;
+
+                .avatar-placeholder {
+                    height: 26px;
+                    padding: 5px 0 5px 35px;
+                    color: $light-grey-placeholder;
+                    display: table;
+                    width: 100%;
+                    background: url('/icu/assets/img/user.png') no-repeat scroll left;
+                }
+
+            }
+            .ui-select-placeholder {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%) translateY(-65%);
+                top: 50%;
+            }
+
+
+            .avatar {
+                height: 32px;
+                width: 32px;
+                background-color: $green;
+                border-radius: 50%;
+                display: inline-block;
+                margin: 0 10px 0 0;
+                float: left;
+                font-size: 20px;
+                line-height: 32px;
+            }
+            .summary-content {
+                display: inline-block;
+                line-height: 26px;
+            }
+        }
+
+        .deletebtn, .due, .status, .tags, .location,{
+            position: relative;
+            width: calc((100% - #{$panel-height}) * 0.19);
+
+            @media screen and (max-width: $small-resolution) {
+                width: calc((100% - 100px) * 0.25);
+
+            }
+
+            .summary-content {
+                position: absolute;
+                top: 50%;
+                transform: translate(0, -50%);
+                left: 40px;
+
+                .tag {
+                    padding-right: 7px;
+                }
+            }
+        }
+
+        .due  {
+            width: 132px;
+            display: flex;
+            align-items: center;
+            .placeholder {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                color: $light-grey-placeholder;
+                margin-right:5px;
+            }
+
+            input {
+                border: none;
+                width: 100%;
+                padding: 17px 0 17px 42px;
+                cursor: pointer;
+                outline: none;
+                background: url(/icu/assets/img/calendar.png) no-repeat scroll 11% 50%;
+                &::placeholder {
+                    opacity: 1;
+                    color: $light-grey-placeholder;
+                }
+                &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+                    color: $light-grey-placeholder;
+                }
+
+                &::-ms-input-placeholder { /* Microsoft Edge */
+                    color: $light-grey-placeholder;
+                }
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+
+        .location  {
+            .placeholder {
+                position: absolute;
+                top: 50%;
+                transform: translateX(50%) translateY(-50%);
+                color: $light-grey-placeholder;
+                padding-left: 5px;
+            }
+
+            input {
+                appearance: none;
+                border: none;
+                float: right;
+                width: calc(100% - 10px);
+                margin-left: 11px;
+                padding: 17px 0 17px 25px;
+                cursor: pointer;
+                outline: none;
+                background: url('/icu/assets/img/house.png') no-repeat scroll left center;
+            }
+        }
+
+        .deletebtn {
+            width: 47px;
+            font-size: 1.4em;
+
+            button {
+                background: transparent url('/icu/assets/img/delete.png') no-repeat center;
+                border: none;
                 width: 100%;
                 height: 100%;
-                top: 0;
-                left: 0;
             }
-        }*/
+
+        }
+
+
+
+        .favorite {
+            width: 47px;
+            font-size: 1.4em;
+
+            button {
+                appearance: none;
+                background-color: transparent;
+                border: none;
+                width: 100%;
+                height: 100%;
+                &:focus {
+                    outline: none;
+                }
+                &:hover {
+                    i {
+                        transform: rotate(360deg);
+                        transition: 1.5s;
+                    }
+                }
+
+                tip{
+                    width: 80%;
+                    font-size: 14px;
+                }
+
+            }
+
+            .orange {
+                color: $orange;
+            }
+            &:focus {
+                outline: none;
+            }
+
+        }
+
+        .HI {
+            width: 47px;
+            font-size: 1.4em;
+
+            button {
+                appearance: none;
+                background-color: transparent;
+                border: none;
+                width: 100%;
+                height: 100%;
+                &:focus {
+                    outline: none;
+                }
+                &:hover {
+                    i {
+                        transform: rotate(360deg);
+                        transition: 1.5s;
+                    }
+                }
+
+                i {
+                    appearance: none;
+                    border: none;
+                    float: right;
+                    width: calc(100% - 10px);
+                    margin-left: 11px;
+                    padding: 17px 0 17px 35px;
+                    cursor: pointer;
+                    outline: none;
+                    background: url('/icu/assets/img/HiGrey.png') no-repeat scroll left center;
+                    background-size: 35px 35px;
+                }
+                i:visited{
+                    background: url(/icu/assets/img/Hi.png) no-repeat scroll;
+                    background-size: 35px 35px;
+                }
+
+                tip{
+                    width: 80%;
+                    font-size: 14px;
+                }
+
+            }
+
+            .orange {
+                color: $orange;
+            }
+            &:focus {
+                outline: none;
+            }
+
+        }
+
+        @mixin ui-select {
+            .ui-select-container {
+                padding-top: 15px;
+                background-color: transparent;
+
+                .ui-select-match {
+                    box-shadow: none;
+                    background-color: transparent;
+                    outline: none;
+
+                    .ui-select-match-text {
+                        float: left !important;
+                        color: #00AEEF;
+                        display: flex;
+                        align-items: center;
+                        margin-top: 0;
+                    }
+
+                    .ui-select-toggle {
+                        background-color: transparent;
+                        border: none;
+                        box-shadow: none;
+                        padding: 0;
+
+                        i.caret {
+                            display: none;
+                        }
+                    }
+                }
+
+                .ui-select-search {
+                    box-shadow: none;
+                    border-color: $light-grey1;
+                }
+
+                .ui-select-choices-row.active {
+                    .ui-select-choices-row-inner {
+                        background-color: #f5f5f5;
+                        color: $dark-grey;
+                    }
+                }
+                .ui-select-choices-row {
+                    .ui-select-choices-row-inner {
+                        display: flex;
+                        align-items: center;
+                        height: 47px;
+                        padding-left: 12px;
+                    }
+                }
+            }
+        }
+
+        .user, .tags, .status {
+            position: relative;
+            @include ui-select;
+        }
+
+        .status {
+            padding-left: 15px;
+            font-weight: bold;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            .ui-select-container.ui-select-bootstrap {
+                padding-top: 0;
+                .ui-select-match .ui-select-toggle {
+                    i.caret {
+                        display: none;
+                    }
+                    height: auto;
+                }
+                i {
+                    -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                    mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                    width: 15px;
+                    height: 17px;
+                    display: inline-block;
+                    margin-right: 13px;
+                }
+                i.new {background-color: #ff4081; }
+                i.assigned{background-color: #2979ff;}
+                i.in-progress{background-color: #f69679;}
+                i.review{background-color: #8dc63f;}
+                i.rejected{background-color: #ef5350;}
+                i.done{background-color: #757575;}
+                i.canceled{background-color: #ef5350;}
+                i.completed{background-color: #598527;}
+                i.archived{background-color: #ab47bc;}
+                i.waiting-approval{background-color: #ab47bc;}
+                i.scheduled{background-color: #0054a6;}
+                i.received{background-color: #37afef;}
+                i.sent{background-color: #359123;}
+
+                .new{color: #ff4081; }
+                .assigned{color: #2979ff;}
+                .in-progress{color: #f69679;}
+                .review{color: #8dc63f;}
+                .rejected{color: #ef5350;}
+                .done{color: #757575;}
+                .canceled{color: #ef5350;}
+                .waiting-approval{color: #ab47bc;}
+                .completed{color: #598527;}
+                .archived{color: #ab47bc;}
+                .scheduled{color: #0054a6;}
+                .received{color: #37afef;}
+                .sent{color: #359123;}
+            }
+        }
+
+        .tags {
+            position: relative;
+            width: calc((100% - 47px) * 0.25);
+
+            .tag-wrap {
+                width: 100%;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                .ui-select-match-text {
+                    width: 100%;
+                }
+                .ui-select-container.open {
+                    padding-top: 0 !important;
+                }
+
+                .ui-select-choices-row  {
+                    a { padding: 0 20px;}
+                }
+
+                .text-muted {
+                    color: $light-grey-placeholder;
+                    float: left;
+                }
+
+                .tag {
+                    transition: 0.3s;
+                    @include tag(14px);
+                    width: initial;
+                    padding: 3px 13px;
+                    color: white;
+                    position: relative;
+                    margin: 20px 0 0;
+                    max-width: 100%;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    display: inline-table;
+                    float: left;
+                    left: auto;
+
+                    .delete {
+                        display: none;
+                    }
+
+                    span {
+                        display: block;
+                        transform: translateY(50%);
+                    }
+
+                    &:hover {
+                        padding-right: 25px;
+                        transition: 0.3s;
+
+                        .delete {
+                            @include circle(6.5px);
+                            display: block;
+                            margin: 0;
+                            position: absolute;
+                            top: 8px;
+                            right: 8px;
+                            color: white;
+                            font-size: 12px;
+                            line-height: 12px;
+                            text-align: center;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                .line {
+                    height: 30px;
+                    padding-top: 5px;
+
+                    .title {
+                        float: left;
+                    }
+
+                    .add-btn-wrap {
+                        float: right;
+
+                        .add-btn {
+                            @include tag(9px);
+                            background-color: $orange;
+                            padding: 0 3px;
+                            color: white;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        .dropdown-container {
+            height: $panel-height;
+            max-width: $panel-height;
+            float: right;
+            width: 34px;
+            border-left: 1px solid lightgray;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            .dropdown-trigger {
+                padding: 15px 25px;
+                height: $panel-height;
+                cursor: pointer;
+            }
+
+            .dropdown-menu {
+                left: inherit;
+                right: 0;
+            }
+
+            .menu-items {
+                li {
+                    position: relative;
+
+                    a {
+                        height: 30px;
+                        line-height: 28px;
+                        padding: 0 20px 0 10px;
+                        display: flex;
+                        align-items: center;
+
+                        i {
+                            float: left;
+                            font-size: 1.4em;
+                            &.flag {
+                                -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                                mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                                width: 15px;
+                                height: 17px;
+                                margin-right: 3px;
+                                background-color: #333;
+                            }
+                        }
+                        span {
+                            padding: 0 10px;
+                        }
+                    }
+                }
+            }
+        }
     }
 
+
+    .page-content {
+        overflow: scroll;
+        height: 100%;
+
+    .compBtn {
+        &.c19n{
+          background: #fba004 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+      }
+      background: #E1E1E1 url("/icu/assets/img/icon-lock.svg") no-repeat center center;
+      width: 22px;
+      height: 22px;
+      border-radius: 15px;
+      border: none;
+      position: absolute;
+      right: 1%;
+      margin: 13px 30px;
+      outline: none;
+      tooltip{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+}
+.description {
+    position: relative;
+    overflow: auto;
+    margin: 3px 28px 0;
+    overflow-x: hidden;
+    z-index: 1;
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: white;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    }
+
+
+
+    .text {
+        color: $light-grey4;
+    }
+
+    input.title {
+        font-size: 30px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .tag {
+        @include tag(10px);
+    }
+}
+
+ .send , .receive{
+    padding: 0.5%;
+    width: 100px
+ }
+
+.approval {
+    $butt-width: 168px;
+    width: $butt-width;
+    height: 40px;
+    left: calc(100% - #{$butt-width});
+    clear: both ;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    position: relative;
+
+    button {
+        background-color: transparent;
+        border: none;
+        background: #2AB541;
+        box-shadow: inset 0px -4px 0px rgba(0, 0, 0, 0.2);
+        border-radius: 60px;
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        line-height: 18px;
+        color: #FFFFFF;
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.description {
+    $icon-width: 60px;
+    $icon-padding: 19px;
+    max-height: 715px;
+
+    .attachment .attName {
+        margin-top: 30px;
+        color: #444F53 ;
+        font-size: 23px;
+        padding: 0 0 8px 0;
+        font-weight: 700;
+        outline: none;
+    }
+
+    .attachment .attCreator {
+        color: #FFA000 ;
+    }
+
+
+    .attachment .att-link-wrapper {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .attachment .att-link {
+        font-size: 22px;
+        color: #FFA000;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .attachment .att-link-icon {
+        float: left;
+        margin-right: 10px;
+    }
+
+    .attachment .attCreator {
+        font-weight: 700;
+        color: #fda102
+    }
+
+    .attachment .icon {
+        position: relative;
+        float: left ;
+        top: 0;
+        left: 20px;
+        transform: translate(-50%, 0);
+        height: 80px;
+        width: $icon-width;
+        @include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');
+    }
+
+
+    .title {
+        font-size: 23px;
+        padding: 0 0 8px 0;
+        font-weight: 700;
+        outline: none;
+
+        &.medium-editor-placeholder {
+            &:not(:focus):before {
+                position: inherit;
+                color: $light-grey-placeholder;
+            }
+
+            &:after {
+                content: none;
+            }
+        }
+    }
+
+    .text {
+        min-height: 50px;
+        padding-left: 3px;
+        outline: none;
+
+        &.medium-editor-placeholder {
+            &:not(:focus):before {
+                position: inherit;
+                color: $light-grey-placeholder;
+            }
+
+            position: inherit;
+
+            &:after {
+                content: none;
+            }
+        }
+
+    }
+
+    .tags {
+        border-bottom: 1px solid $light-grey1;
+        border-top: 1px solid $light-grey1;
+        background: 0 center url('/icu/assets/img/tags.png') no-repeat;
+        display: table;
+        width: 100%;
+        min-height: 35px;
+        position: static;
+
+        & > * {
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .button {
+            width: 30px;
+        }
+        .list {
+            padding: 5px 25px;
+
+            .placeholder {
+                color: $light-grey-placeholder;
+                padding-left: 10px;
+            }
+
+            li {
+                list-style: none;
+                display: inline-block;
+            }
+
+            .tag-item {
+                display: inline-block;
+                cursor: pointer;
+
+                margin-left: 10px;
+                margin-top: 3px;
+                font-size: 12px;
+                padding: 0 5px;
+                background-color: white;
+                border: 1px solid $light-grey1;
+
+                &:hover {
+                    background-color: $light-grey1;
+                    border: 1px solid;
+                }
+
+                button {
+                    background-size: 100%;
+                    width: 10px;
+                    height: 10px;
+                    background: url('/icu/assets/img/icon x.png') 100% no-repeat;
+                    display: inline-block;
+
+                }
+
+                button {
+                    @include button;
+                    color: $light-grey1;
+                    line-height: 12px;
+
+                    i {
+                        background-color: $dark-grey;
+                        line-height: 12px;
+                        border-radius: 6px;
+                        width: 13px;
+                        height: 12px;
+                    }
+                }
+            }
+        }
+
+        .new-tag-input {
+            line-height: 28px;
+            height: 28px;
+            float: left;
+            margin: 0 10px;
+        }
+
+        .new-tag-icon {
+            @include tag(15px);
+            @include button;
+
+            margin: 0;
+            float: right;
+            color: white;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            top: auto;
+            left: auto;
+            background: url("/icu/assets/img/new_lable.png") $orange no-repeat center;
+            .fa {
+             display: none;
+         }
+         div{
+            width: 30px;
+            height: 30px;
+        }
+        &:hover{
+            background-color: #FFB435;
+            transition: 0.8s;
+        }
+
+    }
+
+    .ui-select-container {
+        appearance: none;
+        background-color: $cream;
+        border: none;
+        float: right;
+        box-shadow: none;
+
+        .ui-select-match {
+            display: inline-block;
+            width: 150px;
+            height: 24px;
+
+            .btn {
+                border-radius: 0;
+                font-size: 12px;
+                line-height: 0.9;
+
+                .ui-select-placeholder {
+                    float: left !important;
+                }
+            }
+
+            &.btn-default-focus {
+                background-color: transparent;
+                box-shadow: none;
+            }
+
+            i.caret {
+                display: none;
+            }
+        }
+
+        .ui-select-choices {
+            width: 150px;
+            min-width: 150px;
+            border-radius: 0;
+            margin-top: -2px;
+        }
+
+        input {
+            border-radius: 0;
+            font-size: 12px;
+            line-height: 0.9;
+            width: 150px;
+            box-shadow: none;
+        }
+
+        .form-control {
+            height: 24px;
+            display: inline-block;
+        }
+    }
+}
+}
+
+   .tags {
+       position: relative;
+        border-bottom: 1px solid $light-grey1;
+        border-top: 1px solid $light-grey1;
+        background: 0 center url('/icu/assets/img/tags.png') no-repeat;
+        display: table;
+
+        width: 100%;
+        min-height: 35px;
+
+        & > * {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .list {
+            padding: 5px 25px;
+
+            .placeholder {
+                color: $light-grey-placeholder;
+                padding-left: 10px;
+            }
+
+            li {
+                list-style: none;
+                display: inline-block;
+            }
+
+            .tag-item {
+                display: inline-block;
+                cursor: pointer;
+
+                margin-left: 10px;
+                margin-top: 3px;
+                font-size: 12px;
+                padding: 0 5px;
+                background-color: white;
+                border: 1px solid $light-grey1;
+
+                &:hover {
+                    background-color: $light-grey1;
+                    border: 1px solid;
+
+                    button {
+                        display: inline-block;
+                        background-color: inherit;
+                    }
+                }
+
+                button {
+                    @include button;
+                    color: $light-grey1;
+                    line-height: 12px;
+                    height: 15px;
+                    width: 15px;
+                    background: url('/icu/assets/img/icon x.png')100% center;
+                    i {
+                        background-color: $dark-grey;
+                        line-height: 12px;
+                        border-radius: 6px;
+                        width: 13px;
+                        height: 12px;
+                    }
+                }
+            }
+        }
+
+        .new-tag-input {
+            line-height: 28px;
+            height: 28px;
+            float: left;
+            margin: 0 10px;
+        }
+
+        .new-tag-icon {
+            @include tag(15px);
+            @include button;
+
+            margin: 0;
+            float: right;
+            color: white;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            background: url('/icu/assets/img/new_lable.png') $orange no-repeat center;
+            .fa {
+             display: none;
+         }
+         div{
+            width: 30px;
+            height: 30px;
+        }
+        &:hover{
+            background-color: #FFB435;
+            transition: 0.8s;
+        }
+
+    }
+
+    .ui-select-container {
+        appearance: none;
+        background-color: $cream;
+        border: none;
+
+        box-shadow: none;
+
+        .ui-select-match {
+            display: inline-block;
+            width: 150px;
+            height: 24px;
+
+            .btn {
+                border-radius: 0;
+                font-size: 12px;
+                line-height: 0.9;
+
+                .ui-select-placeholder {
+                    float: left !important;
+                }
+            }
+
+            &.btn-default-focus {
+                background-color: transparent;
+                box-shadow: none;
+            }
+
+            i.caret {
+                display: none;
+            }
+        }
+
+        .ui-select-choices {
+            width: 150px;
+            min-width: 150px;
+            border-radius: 0;
+            margin-top: -2px;
+        }
+
+        input {
+            border-radius: 0;
+            font-size: 12px;
+            line-height: 0.9;
+            width: 150px;
+            box-shadow: none;
+        }
+
+        .form-control {
+            height: 24px;
+            display: inline-block;
+        }
+    }
+}
+
+.tabs {
+    height: $switcher-height;
+    margin: 0 18px;
+    border-bottom: 1px solid $light-grey1;
+    position: relative;
+
+    .tab {
+        @include button;
+        padding: 0;
+        margin: 0;
+        background-color: transparent;
+        height: 38px;
+        font-size: 16px;
+        font-weight: 400;
+
+        &.active {
+            border-bottom: 5px solid $orange;
+            color: $orange;
+            font-weight: bold;
+        }
+
+        &:hover {
+            color: $orange;
+            transition: 0.8s;
+
+        }
+    }
+}
+
+.tab-content {
+    margin: 0 25px;
+    padding: 10px 0;
+    height: calc(100% - 20% - 55px - 40px - 40px);
+    overflow: auto;
+    position: relative;
+}
+}
+
+    .footer {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        flex-direction: row;
+        height: $header-height;
+        padding: 0 10px;
+
+        $avatar-margin: 12px;
+
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: white;
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .delete-wrapper {
+            position: relative;
+            width: 45px;
+            height: 45px;
+            float: left;
+            margin-left: 5px;
+
+            &:hover {
+                .delete {
+                    display: block;
+                    position: absolute;
+                    width: 19px;
+                    height: 19px;
+                    background-color: grey;
+                    border-radius: 10px;
+                    border: 2px solid white;
+                    top: 3px;
+                    color: white;
+                    text-align: center;
+                    cursor: pointer;
+                    i {
+                        position: absolute;
+                        left: 2px;
+                    }
+                }
+
+                .avatar {
+                    border: 2px solid white;
+                }
+            }
+            .btn {
+                padding: 0;
+            }
+            .dropdown-item {
+                display: block;
+                width: 100%;
+                padding: 3px 1.5rem;
+                clear: both;
+                font-weight: 400;
+                color: #292b2c;
+                text-align: inherit;
+                white-space: nowrap;
+                background: 0 0;
+                border: 0;
+                &:hover {
+                    color: #1d1e1f;
+                    text-decoration: none;
+                    background-color: #f7f7f9;
+                }
+            }
+            .dropdown-divider {
+                height: 1px;
+                margin: 0.5rem 0;
+                overflow: hidden;
+                background-color: #eceeef;
+            }
+            .dropdown-header {
+                margin-bottom: 0;
+                color: #636c72;
+                white-space: nowrap;
+                &.name {
+                    font-weight: Bold;
+                    font-size: 14px;
+                    line-height: 19px;
+                    color: black;
+                }
+                &.status {
+                    margin-top: 0;
+                    font-weight: Bold;
+                    line-height: 16px;
+                    font-size: 12px;
+                    color: #bdbdbb;
+                }
+            }
+
+            .numberOfPeople {
+                display: block;
+                position: absolute;
+                width: 28px;
+                height: 28px;
+                background-color: #303b3f;
+                border-radius: 15px;
+                border: 2px solid white;
+                top: 0;
+                color: white;
+                text-align: center;
+                right: -8px;
+                font-size: 10px;
+                font-weight: bold;
+                line-height: 20px;
+            }
+
+            .delete {
+                display: none;
+            }
+
+            .avatar {
+                background-color: $green;
+                float: left;
+
+                &.avatar-group {
+                    background-color: #1e70b5;
+                }
+            }
+        }
+
+        .left-notification {
+            float: left;
+        }
+
+        .right-notification {
+            float: right;
+        }
+
+        .left-notification,
+        .right-notification {
+            color: $light-grey-placeholder;
+            margin-top: $header-height/3;
+        }
+
+        .new-member-input {
+            float: left;
+            margin-top: $avatar-margin;
+            width: 23%;
+            margin-left: 10px;
+
+            .ui-select-bootstrap .ui-select-choices-row > a {
+                line-height: 35px;
+                padding: 2px 7px;
+            }
+
+            .avatar {
+                float: left;
+                margin: 0 7px 0 0;
+            }
+
+            &.second,
+            &.third {
+                margin-left: 0;
+                input:first-child {
+                    display: none;
+                }
+            }
+        }
+
+        .add-member-container {
+            max-height: 45px;
+            flex-grow: 0.3;
+            -webkit-transition: 3s;
+            -moz-transition: 3s;
+            -ms-transition: 3s;
+            -o-transition: 3s;
+            transition: 3s;
+
+            tip {
+                font-size: 18px;
+            }
+
+            .add {
+                @include circle(17px);
+                @include button;
+
+                padding: 0;
+                margin: $avatar-margin - 1 $avatar-margin;
+                color: white;
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: $orange;
+
+                i:before {
+                    display: none;
+                }
+                i {
+                    width: 34px;
+                    display: block;
+                    height: 34px;
+                    background: url("/icu/assets/img/new_lable.png") no-repeat
+                        center;
+                    transition: 0.9s;
+                }
+
+                &:hover {
+                    background-color: #ffb435;
+                    i {
+                        transform: rotate(90deg);
+                    }
+                }
+            }
+        }
+    }
     .summary.wrap-pro {
         border-bottom: none;
         background: transparent;
