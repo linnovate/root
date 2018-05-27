@@ -282,7 +282,8 @@ angular.module('mean.icu.ui.tasklist', [])
 		var me;
 		UsersService.getMe().then(function (me1) {
             me = me1;
-			window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
+			//window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
+			window.open(window.baseUrl + 'api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
         });
 	}
 

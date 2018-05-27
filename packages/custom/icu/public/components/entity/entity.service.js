@@ -8,7 +8,7 @@ angular.module('mean.icu.ui.entity', []).service('EntityService', function (ApiU
                           };
     var entityFolderValue = {}
     if($stateParams.entity == "folder"){
-        entityFolderValue = $stateParams.entityId;
+        entityFolderValue.id = $stateParams.entityId;
     }
 
     var entityTypes = ['projects', 'tasks', 'discussions', 'updates', 'offices', 'folders', 'officeDocuments'];
