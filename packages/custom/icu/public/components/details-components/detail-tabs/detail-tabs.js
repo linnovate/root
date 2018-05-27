@@ -11,7 +11,7 @@ function detailTabs($state) {
   return {
     scope: {
       tabs: "=",
-      entityName: "=",
+      entityName: "@",
       item: "=",
       onClick: "="
     },
