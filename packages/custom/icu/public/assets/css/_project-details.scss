@@ -1,4 +1,10 @@
 .project-details {
+    height: 100%;
+    .summary {
+        .color {
+            width: 55px;
+        }
+    }
     .page-content {
         .tabs {
             .tab {
@@ -12,8 +18,5 @@
                 }
             }
         }
-    }
-    .ui-select-bootstrap > .ui-select-choices {
-        width: auto;
     }
 }

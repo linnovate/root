@@ -8,7 +8,7 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
 
     $scope.entityName = 'discussions';
     $scope.entityRowTpl = '/icu/components/discussion-list/discussion-row.html';
-    
+
     var creatingStatuses = {
         NotCreated: 0,
         Creating: 1,
@@ -17,7 +17,7 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
 
     $scope.update = function(item) {
         return DiscussionsService.update(item.title);
-    }
+    };
 
     $scope.create = function(item) {
         var newItem = {
@@ -32,22 +32,7 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
             DiscussionsService.data.push(result);
             return result;
         });
-    }
-
-//     $scope.search = function(item) {
-//         return DiscussionsService.search(term).then(function(searchResults) {
-//             _(searchResults).each(function(sr) {
-//                 var alreadyAdded = _($scope.items).any(function(p) {
-//                     return p._id === sr._id;
-//                 });
-
-//                 if (!alreadyAdded) {
-//                     return $scope.searchResults.push(sr);
-//                 }
-//             });
-//             $scope.selectedSuggestion = 0;
-//         });
-//     }
+    };
 
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {
@@ -72,7 +57,7 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
                 $scope.isLoading = false;
             });
         }
-    }
+    };
 
     $scope.getDate = function(discussion) {
         // $scope.discussionContext = context.entity;
@@ -112,11 +97,7 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
             }
         }
 
-    }
-
-//     _($scope.items).each(function(d) {
-//         d.__state = creatingStatuses.Created;
-//     });
+    };
 
     $scope.detailsState = context.entityName === 'all' ? 'main.discussions.all.details' : 'main.discussions.byentity.details';
 

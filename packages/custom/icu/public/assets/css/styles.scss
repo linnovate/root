@@ -68,20 +68,19 @@ table {
         box-shadow:inset 0px 0px 0px 2px gray;
     }
 }
-// .datapane {
-    // width: calc(100% - 269px);
-    // float: left;
-// }
 .icu-data {
   display: flex;
   height: 100%;
   overflow: hidden;
 }
 .panes-wrapper {
-    // margin-left: $sidepane-width;
     width: calc(100% - #{$sidepane-width});
     display: flex;
     justify-content: flex-start;
+
+    @media screen and (max-width: $small-resolution) {
+        width: calc(100% - #{$min-sidepane-width});
+    }
 
     &.wide {
         margin-left: 0;
@@ -111,6 +110,9 @@ table {
     .editor {
         box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #00AEEF;
     }
+}
+[data-ui-view="detailspane"] {
+    height: calc(100% - 110px);
 }
 
 .disabled {

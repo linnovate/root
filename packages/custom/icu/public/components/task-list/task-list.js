@@ -48,21 +48,6 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
         });
     }
 
-    //     $scope.search = function(item) {
-    //         return TasksService.search(term).then(function(searchResults) {
-    //             _(searchResults).each(function(sr) {
-    //                 var alreadyAdded = _($scope.items).any(function(p) {
-    //                     return p._id === sr._id;
-    //                 });
-
-    //                 if (!alreadyAdded) {
-    //                     return $scope.searchResults.push(sr);
-    //                 }
-    //             });
-    //             $scope.selectedSuggestion = 0;
-    //         });
-    //     }
-
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {
             $scope.isLoading = true;
@@ -180,50 +165,7 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
         }
     }
 
-//     $timeout(function() {
-        init();
-//     }, 500);
-
-//     $scope.goToParent = function() {
-//         $state.go('main.tasks.' + $scope.parentState + '.details', {
-//             entity: $scope.parentEntity,
-//             entityId: $scope.parentEntityId,
-//             id: $scope.parentId
-//         })
-//     }
-
-//     $scope.getProjStatus = function() {
-//         var entityType = $scope.currentContext.entityName;
-//         if ($scope.currentContext != undefined && $scope.currentContext.entity != undefined && $scope.currentContext.entity.status != undefined) {
-//             return $scope.currentContext.entity.status;
-//         } else if ($scope.currentContext != undefined && $scope.currentContext.entity != undefined && $scope.currentContext.entity.status != undefined) {
-//             return $scope.currentContext.entity.status;
-//         } else {
-//             if (entityType == "discussion" && DiscussionsService.currentDiscussionName != undefined) {
-//                 return DiscussionsService.currentDiscussionName;
-//             } else if (ProjectsService.currentProjectName != undefined) {
-//                 return ProjectsService.currentProjectName;
-//             } else {
-//                 var tasks = $scope.tasks;
-//                 if (tasks.length == 1) {
-//                     $state.go('401');
-//                     return "you dont have permission";
-//                 } else {
-//                     var task = tasks[0];
-//                     var result;
-//                     if (task.project != undefined) {
-//                         result = task.project.title
-//                     } else if (task.discussions != undefined && task.discussions.title != undefined) {
-//                         result = task.discussions[0].title;
-//                     } else {
-//                         result = "you dont have permission";
-//                     }
-//                     return result;
-//                 }
-//             }
-
-//         }
-//     }
+    init();
 
     $scope.getProjName = function() {
         var entityType = $scope.currentContext.entityName;
@@ -256,7 +198,7 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
             }
 
         }
-    }
+    };
 
     $scope.subEntity = $scope.getProjName();
 
