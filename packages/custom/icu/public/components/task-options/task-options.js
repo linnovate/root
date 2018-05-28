@@ -50,6 +50,7 @@ angular.module('mean.icu.ui.taskoptions', [])
 				TasksService.watchedTasksArray = result.filter(entity=>{
 				    return !entity.hasOwnProperty('recycled');
                 });
+                tasks = TasksService.watchedTasksArray
 			});
         }
     };
