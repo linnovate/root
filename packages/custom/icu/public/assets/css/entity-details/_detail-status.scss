@@ -31,6 +31,7 @@
         .ui-select-search {
             box-shadow: none;
             border-color: $light-grey1;
+            min-width: 95px;
         }
 
         .ui-select-choices-row.active {
