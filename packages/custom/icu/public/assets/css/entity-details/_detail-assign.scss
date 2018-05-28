@@ -2,7 +2,7 @@
     .ui-select-container {
         padding-top: 15px;
         background-color: transparent;
- 
+
         .ui-select-match {
             box-shadow: none;
             background-color: transparent;
@@ -52,7 +52,7 @@
 .detail-assign {
   position: relative;
   @include ui-select;
-    width: 160px;
+    width: 150px;
     height: $panel-height;
     position: relative;
     float: left;

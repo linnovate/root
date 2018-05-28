@@ -1,5 +1,5 @@
 .detail-due  {
-    width: 132px;
+    width: 105px;
     display: flex;
     align-items: center;
     position: relative;
@@ -7,9 +7,8 @@
         pointer-events: none;
         position: absolute;
         top: 50%;
-        transform: translateX(80%) translateY(-50%);
+        transform: translateX(60%) translateY(-50%);
         color: $light-grey-placeholder;
-        margin-right:5px;
     }
 
     input {
@@ -17,7 +16,7 @@
         border: none;
         //float: right;
         width: 100%;
-        margin-left: 15px;
+        margin-left: 10px;
         padding: 17px 0 17px 29px;
         cursor: pointer;
         outline: none;
@@ -37,7 +36,7 @@
           outline: none;
         }
     }
-    
+
     #close {
         float: right !important;
         margin: 0;

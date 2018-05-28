@@ -1,11 +1,11 @@
 .discussion-details {
- 
+
     .location {
         position: relative;
         .placeholder {
             position: absolute;
             top: 50%;
-            transform: translateX(80%) translateY(-50%);
+            transform: translateX(60%) translateY(-50%);
             color: $light-grey-placeholder;
             padding-left: 5px;
         }
@@ -14,7 +14,7 @@
             appearance: none;
             border: none;
             float: right;
-            width: calc(100% - 10px);
+            width: 100px;
             margin-left: 11px;
             padding: 17px 0 17px 25px;
             cursor: pointer;
