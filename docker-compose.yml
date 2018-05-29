@@ -12,12 +12,6 @@ services:
     links:
       - root-db
       - root-elastic
-    volumes:
-        - ./packages:/usr/src/app/packages
-        - ./config:/usr/src/app/config
-        - ./tools:/usr/src/app/tools
-      #  - ./node_modules:/usr/src/app/node_modules
-        # - ./files:/usr/src/app/files
     command: "gulp development"
   root-db:
     image: mongo:3.6.3
