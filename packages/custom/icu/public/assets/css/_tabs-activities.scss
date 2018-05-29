@@ -59,7 +59,6 @@ $activityListDefaultMaxH: 80px;
 
             .activity {
                 margin-bottom: 35px;
-                //min-height: 60px;
                 display: flex;
             }
             .activity-content {
@@ -72,22 +71,14 @@ $activityListDefaultMaxH: 80px;
                 font-size: 14px;
                 font-weight: bold;
                 margin-bottom: 10px;
-                //display: flex;
-                //align-items: center;
-                //justify-content: space-between;
                 .user-name {
                     font-weight: 700;
-                    // line-height: 14px;
                 }
 
                 .text {
                     margin: 0;
-                    //padding-top: 16px;
                     display: inline;
-                    //flex-wrap: wrap;
-                    //align-items: center;
                     .activity-details {
-                       // font-weight: 100;
                         & > span {
                             font-size: 0;
                             & > span {

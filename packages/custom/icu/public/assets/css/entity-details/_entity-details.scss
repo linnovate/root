@@ -18,15 +18,10 @@
 
 /* -------------------------------- header-bar  -------------------------------- */
 
-.entity-details {
-  margin-bottom: 35px;
-}
-
 .entity-details-header-bar {
   display: flex;
   flex-wrap: wrap;
   border-bottom: 1px solid #e1e1e1;
-  margin-bottom: 1em;
   > * {
 //     flex-grow: 1;
     display: block;
@@ -74,5 +69,5 @@
             content: none;
         }
     }
- 
+
 }

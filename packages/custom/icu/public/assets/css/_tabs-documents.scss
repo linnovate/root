@@ -1,8 +1,8 @@
 .tab-content {
     .documents {
-        height: calc(100% - 10px);
-        overflow: auto;
-
+        .document-list {
+            max-height: 260px;
+        }
         .document, .document-shifted {
             border-bottom: 1px solid $light-grey1;
             height: 65px;
