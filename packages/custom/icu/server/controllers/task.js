@@ -906,6 +906,15 @@ exports.excel = function(req, res, next) {
 var path = '/notes';
 
 var UserModel = require('../models/user.js');
+var UpdateModel = require('../models/update');
+
+var q = require('q');
+var options1 = {
+  includes: 'issueId'
+};
+var options2 = {
+  includes: 'creator'
+};
 
 console.log("exal-------------------------");
 // Require library
@@ -948,6 +957,10 @@ worksheet.cell(1,4).string('אחראי').style(styleHead);
 worksheet.cell(1,5).string('משתתפים').style(styleHead);
 worksheet.cell(1,6).string('תיאור').style(styleHead);
 worksheet.cell(1,7).string('יוצר המשימה').style(styleHead);
+worksheet.cell(1,8).string('שם דיון').style(styleHead);
+worksheet.cell(1,9).string('שם פרוייקט').style(styleHead);
+worksheet.cell(1,10).string('עדכונים').style(styleHead);
+worksheet.cell(1,11).string('תגיות').style(styleHead);
 
 
 var numOfRow = 2;
@@ -1016,9 +1029,59 @@ for (var index = 0; index < req.locals.result.length; index++) {
     });
   }
 
+  if (req.locals.result[index].discussions.length != 0) {
+      worksheet.cell(numOfRow,8).string(req.locals.result[index].discussions[0]._doc.title).style(style);
+  }
+
+  if (req.locals.result[index].project) {
+    worksheet.cell(numOfRow,9).string(req.locals.result[index].project._doc.title).style(style);
+  }
+
+
+
+  var query = UpdateModel.find({
+    issueId: req.locals.result[index]._id,
+    type: "comment"
+  });
+
+  query.populate(options1.includes, null, 'Task').populate(options2.includes, null, 'User').exec(function (err, updates) {
+    if(updates.length != 0)
+    {
+      var arrOfID = [];
+      for (var index2 = 0; index2 < req.locals.result.length; index2++) {
+        arrOfID[index2] = req.locals.result[index2]._id.toString();
+      }
+
+      var updatesToWrite = "";
+      for (var index1 = 0; index1 < updates.length; index1++)
+      {
+        var exists = arrOfID.indexOf(updates[index1].issueId._id.toString());
+        if (exists != -1)
+        {
+          var month = updates[index1].created.getMonth() + 1;
+          var day = updates[index1].created.getDate() + 1;
+          var dateCreated = day + "." + month + "." + updates[index1].created.getFullYear();
+          updatesToWrite = dateCreated + ",   " +  updates[index1].description + "  :" + updates[index1].creator.name + ", \n " + updatesToWrite;
+        }
+      }
+
+      worksheet.cell(exists + 2,10).string(updatesToWrite).style(style);
+      workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
+    }
+    
+  });;
+
+  if (req.locals.result[index]._doc.tags.length != 0) {
+      var tagsToWrite = "";
+      for (var index1 = 0; index1 < req.locals.result[index]._doc.tags.length; index1++)
+      {
+        tagsToWrite = tagsToWrite + ", " + req.locals.result[index]._doc.tags[index1];
+      }
+      worksheet.cell(numOfRow,11).string(tagsToWrite).style(style);
+    }
+
   numOfRow++;
 }
-
 
 
 workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
