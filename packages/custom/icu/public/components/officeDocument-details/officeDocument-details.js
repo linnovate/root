@@ -160,7 +160,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         oldVal: $scope.item.tags,
         newVal:  value,
         action: 'changed'
-    };          
+    };
     $scope.update($scope.item, context);
   }
 
@@ -169,7 +169,9 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
       'name': 'folder',
       'newVal': value && value._id,
     };
-    $scope.item.watchers = $scope.item.folder.watchers.concat($scope.item.watchers);
+    if(!$scope.item.folder){
+        $scope.item.watchers = $scope.item.folder.watchers.concat($scope.item.watchers);
+    }
     $scope.item.watchers = _.map(_.groupBy($scope.item.watchers, function(doc) {
       return doc._id || doc;
     }), function(grouped) {
@@ -374,7 +376,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
       officeDocument.spPath = undefined;
       $scope.signatures = undefined;
     });
-  } 
+  }
 
   $scope.updateStatusForApproval = function(entity) {
     let context = {
