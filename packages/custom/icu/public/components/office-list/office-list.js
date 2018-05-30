@@ -14,7 +14,7 @@ function OfficeListController($scope, $state, offices, OfficesService, context, 
     };
 
     $scope.update = function(item) {
-        return OfficesService.update(item.title);
+        return OfficesService.update(item);
     };
 
     $scope.create = function(item) {

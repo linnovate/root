@@ -14,7 +14,7 @@ function FolderListController($scope, $state, folders, FoldersService, context, 
     };
 
     $scope.update = function(item) {
-        return FoldersService.update(item.title);
+        return FoldersService.update(item);
     };
 
     $scope.create = function(item) {

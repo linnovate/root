@@ -8,7 +8,7 @@ function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDoc
     $scope.entityRowTpl = '/icu/components/officeDocument-list/officeDocument-row.html';
 
     $scope.update = function(item) {
-        return OfficeDocumentsService.update(item.title);
+        return OfficeDocumentsService.update(item);
     }
 
     $scope.create = function(items) {

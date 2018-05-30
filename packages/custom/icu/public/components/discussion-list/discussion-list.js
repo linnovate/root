@@ -16,7 +16,7 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
     };
 
     $scope.update = function(item) {
-        return DiscussionsService.update(item.title);
+        return DiscussionsService.update(item);
     };
 
     $scope.create = function(item) {

@@ -16,7 +16,7 @@ function ProjectListController($scope, $state, projects, ProjectsService, contex
     }
 
     $scope.update = function(item) {
-        return ProjectsService.update(item.title);
+        return ProjectsService.update(item);
     }
 
     $scope.create = function(item) {

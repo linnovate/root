@@ -30,7 +30,7 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
     };
 
     $scope.update = function(item) {
-        return TasksService.update(item.title);
+        return TasksService.update(item);
     }
 
     $scope.create = function(item) {
