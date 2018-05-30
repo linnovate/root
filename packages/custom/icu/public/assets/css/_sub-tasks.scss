@@ -26,9 +26,8 @@
   }
 }
 .sub-items-section {
-  margin: 0 20px;
-  margin-top: 13px;
-  position: relative;
+    margin: 13px 20px 0;
+    position: relative;
   .add-sub-tasks {
     color: #fda102;
     font-size: 14px;
@@ -239,46 +238,12 @@
         position: relative;
       }
     }
-
-
   }
-  /*table tr:hover{
-          .delete{
-              display: inline-block;
-          }
-          }*/
   table tbody {
     border: 1px solid #e1e1e1;
-    td {
-      //border-top: 1px solid #e1e1e1;
-      //img{
-      //    margin-top: 100%;
-      //}
-    }
   }
   .id {
-    //width: 8%;
-    //border-right: none;
     display: none;
-  }
-  td.name {
-    cursor: text;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    p {
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    padding-left: 13px;
-    //span.name {
-    //  cursor: default;
-    //  padding: 0;
-    //}
   }
   .user {
     position: relative;
@@ -287,7 +252,6 @@
     height: 51px;
     .no-assignee {
       position: absolute;
-     // transform: translateY(-65%);
       top: 0;
       left: 0;
       height: 51px;
@@ -306,8 +270,6 @@
     .ui-select-placeholder {
       position: absolute;
       left: 10px;
-    //  transform: translateX(-50%) translateY(-65%);
-     // top: 50%;
     }
     .ui-select-bootstrap .ui-select-toggle {
       padding-right: 0;
@@ -539,7 +501,6 @@
   .delete {
     width: 25px;
     height: 55px;
-    /*position: absolute;*/
     right: 3%;
     border: none;
     img {
@@ -555,16 +516,35 @@
   }
 
 }
+.sub-entity {
+    position: relative;
+    max-height: 205px;
+    overflow-y: scroll;
 
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: white;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+    }
+}
 .pull-left {
   float: left !important;
 }
 
 @media (max-width: 890px) {
-  .sub-tasks .user .summary-content {
+  .sub-entity .user .summary-content {
     display: none
   }
-  .sub-tasks .user a .summary-content {
+  .sub-entity .user a .summary-content {
     display: block;
   }
 }

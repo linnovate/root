@@ -12,7 +12,7 @@ function detailTemplater($timeout) {
  return {
     scope:{
       templates: '=',
-      item: "=", 
+      item: "=",
       onSave: '=',
       onDelete: '=',
       onImplement: '=',
@@ -36,7 +36,7 @@ function detailTemplater($timeout) {
       $scope.onSave($scope.newTemplate).then(result => {
         $scope.showMsgSavedTpl = true;
         $scope.newTemplate.name = '';
-        var element = angular.element('.sub-projects .fa-chevron-down')[0];
+        var element = angular.element('.sub-entity .fa-chevron-down')[0];
 //         $timeout(function() {
 //           element.click();
 //         }, 0);

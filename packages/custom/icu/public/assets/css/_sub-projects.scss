@@ -218,19 +218,6 @@
             .id {
                 display: none;
             }
-           .name {
-               cursor: text;
-               flex: 1;
-               white-space: nowrap;
-               overflow: hidden;
-               text-overflow: ellipsis;
-               p {
-                   flex: 1;
-                   white-space: nowrap;
-                   overflow: hidden;
-                   text-overflow: ellipsis;
-               }
-           }
             .user {
                 position: relative;
                 width: 140px;
@@ -457,10 +444,10 @@
 .pull-left { float: left !important; }
 
 @media (max-width: 890px) {
-.sub-projects .user .summary-content{
+.sub-entity .user .summary-content{
         display:none
     }
-   .sub-projects .user a .summary-content{
+   .sub-entity .user a .summary-content{
         display:block;
     }
  }

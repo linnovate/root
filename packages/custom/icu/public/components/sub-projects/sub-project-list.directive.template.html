@@ -8,7 +8,7 @@
     {{ 'addSubProject' | i18next }}
 </div>
 
-<div class="list-table sub-projects" ng-show="addSubProjects || project.subProjects[0].id" >
+<div class="list-table sub-entity" ng-show="addSubProjects || project.subProjects[0].id" >
     <div ng-show="isLoading" class="loader"></div>
     <table class="projects" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody>
@@ -19,7 +19,7 @@
              ng-class="{'isNew': project.isNew == true,'notNew':project.isNew == false}",
              ng-mouseover="project.showDelete = true",
              ng-mouseleave="deleteShowDlt(project)",
-             data="{ 
+             data="{
                         project: project,
                         index: $index,
                         drawArrow: drawArrow,

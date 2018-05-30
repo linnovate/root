@@ -1,4 +1,4 @@
-.entity-list, .sub-task-list {
+.entity-list, .sub-task-list, .sub-project-list {
 
     height: 100%;
     display: flex;
@@ -305,4 +305,22 @@
 
 .list-table-print {
     display: none;
+}
+
+.sub-items-section {
+    .name {
+        cursor: text;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-left: 13px;
+        line-height: 50px;
+        p {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
 }
