@@ -267,16 +267,18 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 100%;
-    line-height: 50px;
-    padding-left: 13px;
-
-      p {
+    p {
       flex: 1;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    padding-left: 13px;
+    //span.name {
+    //  cursor: default;
+    //  padding: 0;
+    //}
   }
   .user {
     position: relative;
