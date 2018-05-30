@@ -82,7 +82,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                     });
                 }
 
-                else if(scope.send && scope.entityName == "officeDocument"){
+                else if(scope.modalName == 'send' && scope.entityName == "officeDocument"){
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'lg',
