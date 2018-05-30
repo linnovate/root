@@ -1,6 +1,8 @@
 .task-details {
+    overflow-y: scroll;
     height: 100%;
-	.page-content {
+    padding-bottom: $footer-height;
+    .page-content {
 		.tabs {
 			.tab {
 				width: calc((100% - 5px) / 2);
@@ -29,4 +31,4 @@ ul.dropdown-menu {
     width: 100%;
     position: absolute;
     top: -25%;
-}   
+}

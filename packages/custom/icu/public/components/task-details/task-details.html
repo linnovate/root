@@ -1,13 +1,4 @@
-
-<div class="entity-details task-details" ng-if="item._id && permsToSee">
-
-  <div class="permission" ng-if="item && !item._id && !permsToSee">
-    <div class="perIcon"></div>
-    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
-    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
-  </div>
-
-  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
+<div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
     <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
 
@@ -19,6 +10,13 @@
 
     <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
 
+</div>
+<div class="entity-details task-details" ng-if="item._id && permsToSee">
+
+  <div class="permission" ng-if="item && !item._id && !permsToSee">
+    <div class="perIcon"></div>
+    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
+    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
   </div>
 
   <div class="detail-buttons">

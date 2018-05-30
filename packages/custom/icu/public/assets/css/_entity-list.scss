@@ -1,4 +1,4 @@
-.entity-list, .sub-task-list {
+.entity-list, .sub-task-list, .sub-project-list {
 
     height: 100%;
     display: flex;
@@ -16,22 +16,6 @@
         overflow-y: hidden;
         .list-table {
             height: 100%;
-
-            &::-webkit-scrollbar {
-                width: 5px;
-            }
-
-            &::-webkit-scrollbar-track {
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-                border-radius: 10px;
-            }
-
-            &::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                background-color: white;
-                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-            }
-
         }
 
     }
@@ -305,4 +289,22 @@
 
 .list-table-print {
     display: none;
+}
+
+.sub-items-section {
+    .name {
+        cursor: text;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-left: 13px;
+        line-height: 50px;
+        p {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
 }
