@@ -61,10 +61,6 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('js', './angular-daterangepicker.js', {weight: 4});
 
     
-    ICU.aggregateAsset('js', './Toggles.js', {weight: 2});
-
-
-    
     ICU.angularDependencies([
         'ngAlertify',
         'jm.i18next',

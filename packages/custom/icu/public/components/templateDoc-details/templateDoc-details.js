@@ -38,7 +38,7 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
     $scope.item.office = value;
     var json ={
         'name':'office',
-        'newVal':value._id,
+        'newVal': value && value._id,
     };
     TemplateDocsService.updateTemplateDoc($scope.item, json);
   }
