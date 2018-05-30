@@ -47,7 +47,6 @@
       on-delete="deleteTemplate"
       on-implement="implementTemplate"
       item="item" users="people" me="me"
-      ng-class="{ 'disabled' : !item.subTasks[0]._id}"
     ></detail-templater>
 
     <icu-sub-task-list
@@ -60,7 +59,7 @@
       draw-arrow="true"
       order="sorting"
       parent="{{item._id}}"
-    ></iicu-sub-task-list>
+    ></icu-sub-task-list>
 
   </div>
 
