@@ -88,7 +88,6 @@
     "gulp-uglify": "latest",
     "gulp-util": "latest",
     "karma": "latest",
-    "mean-seo": "latest",
     "mocha": "latest",
     "mongo-express": "^0.46.1",
     "require-dir": "latest",

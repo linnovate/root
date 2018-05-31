@@ -12,7 +12,6 @@ var mean = require('meanio'),
   helpers = require('view-helpers'),
   flash = require('connect-flash'),
   modRewrite = require('connect-modrewrite'),
-  seo = require('mean-seo'),
   config = mean.loadConfig();
 
 module.exports = function(app, db) {app.set('showStackError', true);
@@ -60,5 +59,4 @@ module.exports = function(app, db) {app.set('showStackError', true);
 
   ]));
 
-  app.use(seo());
 };
