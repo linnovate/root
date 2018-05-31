@@ -1,23 +1,22 @@
 version: '3'
 
 services:
-  root-app:
-    build: .
-    #image: root-app
-    # image: localhost:5000/root-app
-    #restart: always
+  app:
+    image: node:8
+    working_dir: /usr/src/app
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      PORT: 3000
+      MONGODB_URI: mongodb://mongo/icu-dev
     ports:
-      - "3100:3100"
-#      - "5858:5858"      
-    links:
-      - root-db
-      - root-elastic
-    command: "gulp development"
-  root-db:
+      - "3100:3000"
+    command: "npm run dev"
+    user: $UID
+
+  mongo:
     image: mongo:3.6.3
-    expose:
-      - "27017"
-  root-elastic:
+
+  elastic:
     image: elasticsearch
-    expose:
-      - "9200"
+

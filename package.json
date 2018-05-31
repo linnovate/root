@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "node server",
-    "startdev": "nodemon server",
+    "dev": "gulp development",
     "test": "export NODE_ENV=test && gulp test",
     "postinstall": "node tools/scripts/postinstall.js && gulp sass"
   },
