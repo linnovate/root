@@ -51,12 +51,16 @@
         </ui-select>
 
     </div>
-    <div class="showMore btn-group dropup"
-         ng-if="showMore">
-        <button type="button" class="counter btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <div uib-dropdown class="showMore"
+         ng-if="showMore"
+         is-open="isDropdownwatchersOpen">
+        <button type="button"
+                class="counter btn btn-secondary dropdown-toggle"
+                uib-dropdown-toggle
+                ng-click="toggled()">
             +{{otherWatchers.length}}
         </button>
-        <div class="dropdown-menu">
+        <ul class="otherWatchers" uib-dropdown-menu role="menu" aria-labelledby="single-button">
             <div class="delete-wrapper"
                  data-ng-repeat="member in otherWatchers track by $index"
                  ng-if="entity.watchers.length || watchersGroups.length">
@@ -83,7 +87,7 @@
                 </div>
                 <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
             </div>
-        </div>
+        </ul>
     </div>
     <div class="add-member-container" ng-if="hideAddButton">
         <button class="add" id="addMember" ng-click="triggerSelect()" ng-class="{transition: animate}">

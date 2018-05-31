@@ -1528,9 +1528,9 @@ $tab-content-height: calc(
             margin: 12px auto;
             padding: 0;
         }
-        .dropdown-menu {
-            right: 0;
-            transform: translateX(-90%);
+        .otherWatchers {
+            transform: translate(-95%, -100%);
+            top: 0;
             width: 500px;
             max-height: 130px;
         }
