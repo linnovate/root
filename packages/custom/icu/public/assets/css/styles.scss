@@ -103,8 +103,15 @@ table {
     height: 25px;
 }
 
-[data-ui-view="detailspane"] {
-    height: calc(100% - 110px);
+[icu-members-footer] {
+    position: fixed;
+    bottom: 0;
+    width: $min-detailspane-width;
+    background-color: $cream;
+    border-top: 1px solid $light-grey1;
+    .editor {
+        box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #00AEEF;
+    }
 }
 
 .disabled {

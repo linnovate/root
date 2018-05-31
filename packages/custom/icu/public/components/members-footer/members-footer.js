@@ -33,6 +33,7 @@ angular.module('mean.icu.ui.membersfooter', [])
 
             function changePerms(member, newPerms){
                 $scope.entity = PermissionsService.changeUsersPermissions($scope.entity, member, newPerms, context);
+                $scope.showMoreWatchers();
             }
 
             $scope.userPermissionStatus = function(member){
@@ -170,6 +171,32 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
             };
 
+            $scope.otherWatchers = [];
+
+            $scope.showMoreWatchers = function(){
+                let list = $(".watchersList"),
+                    watcherWidth = 46,
+                    watchers = $scope.entity.watchers.concat($scope.watchersGroups),
+                    moreWatchers = 0,
+                    lastIndex;
+
+                for(let i = 0; i < watchers.length ; i++){
+                    let elementPosition = (i + 1) * watcherWidth;
+
+                    if(list.width() < elementPosition){
+                        if(lastIndex < i || !lastIndex){
+                            lastIndex = i;
+                        }
+                        moreWatchers++;
+                    }
+                    if(i === watchers.length - 1){
+                        $scope.otherWatchers = watchers.slice(lastIndex, watchers.length + 1);
+                        $scope.showMore = moreWatchers > 0;
+                        $scope.moreWatchers = moreWatchers;
+                    }
+                }
+            };
+
             $scope.addMember = function(member) {
                 $scope.showSelect = false;
                 if (member.type) {
@@ -295,6 +322,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                         });
                         break ;
                 }
+                $scope.showMoreWatchers();
             };
         }
 
