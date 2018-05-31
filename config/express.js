@@ -9,6 +9,7 @@ var mean = require('meanio'),
   morgan = require('morgan'),
   consolidate = require('consolidate'),
   express = require('express'),
+  bodyParser = require('body-parser'),
   helpers = require('view-helpers'),
   flash = require('connect-flash'),
   modRewrite = require('connect-modrewrite'),
@@ -58,5 +59,7 @@ module.exports = function(app, db) {app.set('showStackError', true);
     '^/files/.* / [L]'
 
   ]));
+
+  app.use(bodyParser.json())
 
 };
