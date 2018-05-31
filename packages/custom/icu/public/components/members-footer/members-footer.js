@@ -174,25 +174,20 @@ angular.module('mean.icu.ui.membersfooter', [])
             $scope.otherWatchers = [];
 
             $scope.showMoreWatchers = function(){
-                let list = $(".watchersList"),
-                    watcherWidth = 46,
+                let listWidth = $(".watchersList").width(),
+                    watcherWidth = 45,
                     watchers = $scope.entity.watchers.concat($scope.watchersGroups),
-                    moreWatchers = 0,
-                    lastIndex;
+                    lastIndex = 0;
 
                 for(let i = 0; i < watchers.length ; i++){
                     let elementPosition = (i + 1) * watcherWidth;
 
-                    if(list.width() < elementPosition){
-                        if(lastIndex < i || !lastIndex){
-                            lastIndex = i;
-                        }
-                        moreWatchers++;
+                    if(listWidth < elementPosition){
+                        lastIndex = i - 1;
                     }
                     if(i === watchers.length - 1){
-                        $scope.otherWatchers = watchers.slice(lastIndex, watchers.length + 1);
-                        $scope.showMore = moreWatchers > 0;
-                        $scope.moreWatchers = moreWatchers;
+                        $scope.otherWatchers = _.compact(watchers.slice(lastIndex, watchers.length + 1) || []);
+                        $scope.showMore = $scope.otherWatchers.length > 0;
                     }
                 }
             };
