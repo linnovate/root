@@ -66,7 +66,6 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "bower": "latest",
-    "chalk": "latest",
     "connect-modrewrite": "latest",
     "del": "latest",
     "eslint": "^4.19.1",
@@ -88,13 +87,11 @@
     "gulp-sass": "3.1.0",
     "gulp-uglify": "latest",
     "gulp-util": "latest",
-    "jshint-stylish": "latest",
     "karma": "latest",
     "mean-seo": "latest",
     "mocha": "latest",
     "mongo-express": "^0.46.1",
     "require-dir": "latest",
-    "run-sequence": "^2.2.1",
-    "through": "latest"
+    "run-sequence": "^2.2.1"
   }
 }
