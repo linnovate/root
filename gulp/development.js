@@ -10,7 +10,7 @@ const language = languages.find(function(language) {
 
 const paths = {
   public: [
-    'packages/*/*/public/**/*.!(md|scss)',
+    'packages/*/*/public/**/*.!(md|scss|less)',
     'node_modules/babel-polyfill/dist/polyfill.min.js'
   ],
   bower: 'bower_components/**/*.*',
@@ -25,7 +25,7 @@ const paths = {
 
 function distPath() {
   return plugins.rename(function (path) {
-    path.dirname = path.dirname.replace(/(core|custom|public)\/?/g, '');
+    path.dirname = path.dirname.replace(/(core|custom)\//, '').replace('/public', '');
   });
 }
 
