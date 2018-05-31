@@ -104,12 +104,15 @@ table {
 [icu-members-footer] {
     position: fixed;
     bottom: 0;
-    width: 100%;
+    width: $min-detailspane-width;
     background-color: $cream;
     border-top: 1px solid $light-grey1;
     .editor {
         box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #00AEEF;
     }
+    //@media screen and (max-width: $small-resolution) {
+    //    width: $min-detailspane-width;
+    //}
 }
 
 .disabled {

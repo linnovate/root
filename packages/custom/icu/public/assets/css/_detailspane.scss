@@ -1506,12 +1506,43 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
     }
 
+    .watchersList {
+        width: calc(100% - 100px);
+        height: 100%;
+    }
+
+    .showMore {
+        width: 45px;
+        height: 100%;
+        cursor: pointer;
+
+        .counter {
+            width: 34px;
+            height: 34px;
+            background-color: #00AEEF;
+            border-radius: 50%;
+            color: white;
+            font-weight: bold;
+            line-height: 34px;
+            margin: 12px auto;
+            padding: 0;
+        }
+        .dropdown-menu {
+            right: 0;
+            transform: translateX(-90%);
+            width: 500px;
+            max-height: 130px;
+        }
+    }
+
+
    .delete-wrapper {
        position: relative;
        width: 45px;
        height: 45px;
        float: left;
        margin-left: 5px;
+       margin-bottom: 15px;
 
     &:hover {
 
@@ -1628,10 +1659,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 }
 
 .new-member-input {
-    float: left;
     margin-top: $avatar-margin;
-    width: 23%;
-    margin-left: 10px;
+    position: absolute;
+    width: 200px;
+    right: 40px;
 
     .ui-select-bootstrap .ui-select-choices-row > a {
         line-height: 35px;
@@ -1652,8 +1683,10 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
 }
 
     .add-member-container {
-        max-height: 45px;
-        flex-grow: 0.3;
+        width: 40px;
+        right: 0;
+        position: absolute;
+
         -webkit-transition: 3s;
         -moz-transition: 3s;
         -ms-transition: 3s;
