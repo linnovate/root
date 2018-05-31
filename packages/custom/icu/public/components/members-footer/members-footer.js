@@ -264,6 +264,12 @@ angular.module('mean.icu.ui.membersfooter', [])
 
             };
 
+            $scope.isDropdownwatchersOpen = false;
+
+            $scope.toggled = function() {
+                $scope.isDropdownwatchersOpen = !$scope.isDropdownwatchersOpen;
+            };
+
             $scope.deleteMember = function(member) {
                 if (member.type) {
                     $scope.entity.circles[member.type] = _.reject($scope.entity.circles[member.type], function(mem) {
