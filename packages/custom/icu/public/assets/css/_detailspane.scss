@@ -1524,7 +1524,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
             color: white;
             font-weight: bold;
             line-height: 34px;
-            margin: 12px auto;
+            margin: 12px 5px;
             padding: 0;
         }
         .otherWatchers {
@@ -1541,7 +1541,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
        width: 45px;
        height: 45px;
        float: left;
-       margin-left: 5px;
+       padding-left: 5px;
        margin-bottom: 15px;
 
     &:hover {
@@ -1663,6 +1663,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     position: absolute;
     width: 200px;
     right: 40px;
+    z-index: 2;
 
     .ui-select-bootstrap .ui-select-choices-row > a {
         line-height: 35px;
