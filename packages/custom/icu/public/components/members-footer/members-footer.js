@@ -173,21 +173,37 @@ angular.module('mean.icu.ui.membersfooter', [])
 
             $scope.otherWatchers = [];
 
-            $scope.showMoreWatchers = function(){
+            function idArrayToObjects(array){
+                for(let i = 0; i < array.length; i++){
+                    if(typeof array[i] === 'string'){
+                        UsersService.getById(array[i]).then(user=>{
+                            array[i] = user;
+                        });
+                    }
+                }
+            }
+
+            $scope.showMoreWatchers = function() {
                 let listWidth = $(".watchersList").width(),
                     watcherWidth = 45,
-                    watchers = $scope.entity.watchers.concat($scope.watchersGroups),
+                    watchers = _.compact($scope.entity.watchers.concat($scope.watchersGroups)),
                     lastIndex = 0;
 
-                for(let i = 0; i < watchers.length ; i++){
+                for (let i = 0; i < watchers.length; i++) {
                     let elementPosition = (i + 1) * watcherWidth;
+                    let isVisible = listWidth > elementPosition;
+                    let isLast = i === watchers.length - 1;
 
-                    if(listWidth < elementPosition){
-                        lastIndex = i - 1;
+                    if(isVisible){
+                        lastIndex = i;
+                        $scope.showMore = false;
+                        $scope.otherWatchers = [];
                     }
-                    if(i === watchers.length - 1){
-                        $scope.otherWatchers = _.compact(watchers.slice(lastIndex, watchers.length + 1) || []);
+
+                    if(isLast){
+                        $scope.otherWatchers = watchers.slice(lastIndex, watchers.length - 1);
                         $scope.showMore = $scope.otherWatchers.length > 0;
+                        idArrayToObjects($scope.otherWatchers);
                     }
                 }
             };

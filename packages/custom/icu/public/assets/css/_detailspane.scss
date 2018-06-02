@@ -1525,7 +1525,7 @@ $tab-content-height: calc(
             color: white;
             font-weight: bold;
             line-height: 34px;
-            margin: 12px auto;
+            margin: 12px 5px;
             padding: 0;
         }
         .otherWatchers {
@@ -1542,7 +1542,7 @@ $tab-content-height: calc(
        width: 45px;
        height: 45px;
        float: left;
-       margin-left: 5px;
+       padding-left: 5px;
        margin-bottom: 15px;
 
     &:hover {
@@ -1664,6 +1664,7 @@ $tab-content-height: calc(
     position: absolute;
     width: 200px;
     right: 40px;
+    z-index: 2;
 
     .ui-select-bootstrap .ui-select-choices-row > a {
         line-height: 35px;
