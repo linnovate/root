@@ -1507,7 +1507,7 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
     }
 
     .watchersList {
-        width: calc(100% - 100px);
+        width: calc(100% - 60px);
         height: 100%;
     }
 
@@ -1515,6 +1515,8 @@ $tab-content-height: calc(100% - #{$description-height} - #{$switcher-height} - 
         width: 45px;
         height: 100%;
         cursor: pointer;
+        position: absolute;
+        right: 64px;
 
         .counter {
             position: relative;
