@@ -62,7 +62,7 @@
         </button>
         <ul class="otherWatchers" uib-dropdown-menu role="menu" aria-labelledby="single-button">
             <div class="delete-wrapper"
-                 data-ng-repeat="member in otherWatchers track by $index"
+                 data-ng-repeat="member in entity.watchers.concat(watchersGroups) track by $index"
                  ng-if="entity.watchers.length || watchersGroups.length">
                 <div class="btn-group dropup">
                     <div icu-avatar
