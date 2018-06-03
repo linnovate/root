@@ -1544,9 +1544,9 @@ $tab-content-height: calc(
             }
         }
         .watchersContainer {
-            transform: translate(-100%, -60%);
+            transform: translate(calc(-100% + 5px), calc(-60% + 6px));
             top: 0;
-            width: 460px;
+            width: 465px;
             max-height: 195px;
             height: 130px;
 
