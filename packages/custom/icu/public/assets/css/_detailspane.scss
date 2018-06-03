@@ -1529,10 +1529,12 @@ $tab-content-height: calc(
             padding: 0;
         }
         .otherWatchers {
-            transform: translate(-89%, -100%);
+            //transform: translate(-89%, -100%);
+            transform: translate(-100%, -60%);
             top: 0;
-            width: 510px;
-            max-height: 130px;
+            width: 460px;
+            max-height: 195px;
+            height: 130px;
         }
     }
 
@@ -1662,8 +1664,8 @@ $tab-content-height: calc(
 .new-member-input {
     margin-top: $avatar-margin;
     position: absolute;
-    width: 200px;
-    right: 40px;
+    width: calc(100% - 130px);
+    right: 65px;
     z-index: 2;
 
     .ui-select-bootstrap .ui-select-choices-row > a {
@@ -1687,6 +1689,7 @@ $tab-content-height: calc(
     .add-member-container {
         width: 40px;
         right: 0;
+        transform: translateX(-50%);
         position: absolute;
 
         -webkit-transition: 3s;
