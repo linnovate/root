@@ -56,6 +56,7 @@
          is-open="isDropdownwatchersOpen">
         <button type="button"
                 class="counter btn btn-secondary dropdown-toggle"
+                ng-class="{'closeDropdown': isDropdownwatchersOpen}"
                 uib-dropdown-toggle
                 ng-click="toggled()">
             +{{otherWatchers.length}}
@@ -85,7 +86,10 @@
                         <a class="dropdown-item" href="#" ng-click="deleteMember(member)">{{'remove' | i18next}}</a>
                     </div>
                 </div>
-                <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
+                <div class="numberOfPeople"
+                     ng-if="member.users.length">
+                    {{member.users.length > 99 ? '+99' : member.users.length}}
+                </div>
             </div>
         </ul>
     </div>
