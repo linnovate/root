@@ -202,7 +202,7 @@ angular.module('mean.icu.ui.membersfooter', [])
 
                     if(isLast){
                         $scope.otherWatchers = watchers.slice(lastIndex, watchers.length - 1);
-                        $scope.showMore = $scope.otherWatchers.length > 0;
+                        $scope.showMore = $scope.otherWatchers.length > 1;
                         idArrayToObjects($scope.otherWatchers);
                     }
                 }
