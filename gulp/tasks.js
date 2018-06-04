@@ -21,7 +21,7 @@ const paths = {
     'packages/*/*/server/views/**'
   ],
   css:  'packages/custom/*/public/assets/{css,lib/**}/*.css',
-  sass: 'packages/custom/icu/public/assets/css/*.scss'
+  sass: 'packages/custom/icu/public/assets/css/**/*.scss'
 };
 
 function distPath() {
