@@ -174,6 +174,43 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
             };
 
+            $scope.otherWatchers = [];
+
+            function idArrayToObjects(array){
+                for(let i = 0; i < array.length; i++){
+                    if(typeof array[i] === 'string'){
+                        UsersService.getById(array[i]).then(user=>{
+                            array[i] = user;
+                        });
+                    }
+                }
+            }
+
+            $scope.showMoreWatchers = function() {
+                let listWidth = $(".watchersList").width(),
+                    watcherWidth = 45,
+                    watchers = _.compact($scope.entity.watchers.concat($scope.watchersGroups)),
+                    lastIndex = 0;
+
+                for (let i = 0; i < watchers.length; i++) {
+                    let elementPosition = (i + 1) * watcherWidth;
+                    let isVisible = listWidth > elementPosition;
+                    let isLast = i === watchers.length - 1;
+
+                    if(isVisible){
+                        lastIndex = i;
+                        $scope.showMore = false;
+                        $scope.otherWatchers = [];
+                    }
+
+                    if(isLast){
+                        $scope.otherWatchers = watchers.slice(lastIndex, watchers.length - 1);
+                        $scope.showMore = $scope.otherWatchers.length > 1;
+                        idArrayToObjects($scope.otherWatchers);
+                    }
+                }
+            };
+
             $scope.addMember = function(member) {
                 $scope.showSelect = false;
                 if (member.type) {
@@ -242,6 +279,12 @@ angular.module('mean.icu.ui.membersfooter', [])
 
             };
 
+            $scope.isDropdownwatchersOpen = false;
+
+            $scope.toggled = function() {
+                $scope.isDropdownwatchersOpen = !$scope.isDropdownwatchersOpen;
+            };
+
             $scope.deleteMember = function(member) {
                 if (member.type) {
                     $scope.entity.circles[member.type] = _.reject($scope.entity.circles[member.type], function(mem) {
@@ -299,6 +342,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                         });
                         break ;
                 }
+                $scope.showMoreWatchers();
             };
         }
 
