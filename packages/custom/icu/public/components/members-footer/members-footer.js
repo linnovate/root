@@ -33,7 +33,6 @@ angular.module('mean.icu.ui.membersfooter', [])
 
             function changePerms(member, newPerms){
                 $scope.entity = PermissionsService.changeUsersPermissions($scope.entity, member, newPerms, context);
-                $scope.showMoreWatchers();
             }
 
             $scope.userPermissionStatus = function(member){
