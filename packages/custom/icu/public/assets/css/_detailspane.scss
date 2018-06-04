@@ -13,7 +13,7 @@ $tab-content-height: calc(
     border-left: 1px solid #C8C8C6;
     background-color: $cream;
 
-    overflow: scroll;
+    overflow-x: visible;
     height: 100vh;
 
     border-left: 1px solid #C8C8C6;
@@ -21,14 +21,14 @@ $tab-content-height: calc(
     right: 0;
 
     @media screen and (max-width: $small-resolution) {
-        min-width:$detailspane-width;
+        max-width: $min-detailspane-width;
     }
 
     textarea {
         resize: none;
     }
 
-    .fa.fa-plus{
+    .fa.fa-plus {
         display: none;
     }
 
@@ -247,8 +247,9 @@ $tab-content-height: calc(
 
 }
 
-.page-content {
-    margin-bottom: 35px;
+    .page-content {
+        overflow: scroll;
+        height: 100%;
 
     .compBtn {
         &.c19n{

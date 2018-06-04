@@ -11,7 +11,7 @@
     <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
 
 </div>
-<div class="entity-details task-details" ng-if="item._id && permsToSee">
+<div class="entity-details task-details scroll" ng-if="item._id && permsToSee">
 
   <div class="permission" ng-if="item && !item._id && !permsToSee">
     <div class="perIcon"></div>

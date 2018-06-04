@@ -103,17 +103,6 @@ table {
     height: 25px;
 }
 
-[icu-members-footer] {
-    position: fixed;
-    bottom: 0;
-    width: $min-detailspane-width;
-    background-color: $cream;
-    border-top: 1px solid $light-grey1;
-    .editor {
-        box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #00AEEF;
-    }
-}
-
 .disabled {
     pointer-events: none;
 }
@@ -722,7 +711,7 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
 }
 
 .scroll {
-    overflow-y: scroll;
+    overflow-y: auto;
 
     &::-webkit-scrollbar {
         width: 5px;
