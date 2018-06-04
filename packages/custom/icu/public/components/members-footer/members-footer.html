@@ -34,12 +34,11 @@
     </div>
 
     <div class="new-member-input" ng-if="showSelect">
-        <ui-select ng-model="member" theme="bootstrap">
-            <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}"
-                             on-select="addMember(member)" autofocus>
+        <ui-select ng-model="member" theme="bootstrap" on-select="addMember(member)">
+            <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}" autofocus>
                 {{$select.selected.name}}
             </ui-select-match>
-            <ui-select-choices ng-click="addMember(member)" repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
+            <ui-select-choices repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
                 <!--<div ng-bind-html="user.job | highlight: $select.search"></div>-->
                 <div icu-avatar
                      user="user"
