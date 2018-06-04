@@ -2,6 +2,7 @@
 
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
+const runSequence = require('run-sequence');
 
 const { languages, currentLanguage } = require('../config/env/all.js');
 const language = languages.find(function(language) {
@@ -48,6 +49,7 @@ gulp.task('dist:public', function() {
 
 gulp.task('dist:css', function() {
   return gulp.src(paths.css)
+    .pipe(process.env.NODE_ENV === 'production' ? plugins.cssmin(): plugins.util.noop())
     .pipe(distPath())
     .pipe(gulp.dest('dist/'));
 });
@@ -66,6 +68,7 @@ gulp.task('babel', function () {
         }
       }]]
     }))
+    .pipe(process.env.NODE_ENV === 'production' ? plugins.babelMinify(): plugins.util.noop())
     .pipe(distPath())
     .pipe(gulp.dest('dist/'));
 });
@@ -87,3 +90,12 @@ gulp.task('watch', function () {
   gulp.watch(paths.css, ['dist:css']).on('change', plugins.livereload.changed);
   plugins.livereload.listen({interval: 500});
 });
+
+gulp.task('build', function(callback) {
+  runSequence(
+    'clean',
+    'sass',
+    ['dist:css', 'dist:public', 'dist:bower', 'babel'],
+    callback
+  );
+})

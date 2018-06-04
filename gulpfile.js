@@ -3,18 +3,22 @@
 const gulp = require('gulp');
 const runSequence = require('run-sequence');
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
 require('require-dir')('./gulp');
 
 gulp.task('default', ['development']);
 
 gulp.task('development', function(callback) {
-  process.env.NODE_ENV = 'development';
   runSequence(
-    'clean',
+    'build',
     'watch',
-    'sass',
-    ['dist:css', 'dist:public', 'dist:bower', 'babel'],
     'devServe',
     callback
   );
+});
+
+gulp.task('production', function(callback) {
+  process.env.NODE_ENV = 'production';
+  gulp.start('build')
 });
