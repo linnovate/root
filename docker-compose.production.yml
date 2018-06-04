@@ -2,27 +2,20 @@ version: '3'
 
 services:
   app:
-    image: node:8
-    working_dir: /usr/src/app
-    volumes:
-      - ./:/usr/src/app
+    build: ./
+    image: root
     environment:
       PORT: 3000
       MONGODB_URI: mongodb://mongo/icu-dev
       ELASTICSEARCH_IP: elasticsearch
     ports:
       - 3000:3000
-    command: node server
     depends_on:
       - mongo
       - elasticsearch
 
   mongo:
     image: mongo:3.6
-    ports:
-      - 27017:27017
 
   elasticsearch:
     image: elasticsearch:5.6
-    ports:
-      - 9200:9200

@@ -11,8 +11,8 @@
     "url": "https://github.com/linnovate/mean.git"
   },
   "scripts": {
-    "start": "node server",
-    "dev": "gulp development",
+    "start": "gulp development",
+    "build": "gulp build",
     "test": "export NODE_ENV=test && gulp test",
     "postinstall": "node scripts/postinstall.js && gulp sass"
   },

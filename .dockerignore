@@ -1,2 +1,8 @@
-node_modules
-bower_components
+node_modules/
+bower_components/
+.bower-cache/
+.bower-registry/
+.bower-tmp/
+public/assets/lib/
+dist/
+packages/custom/icu/public/assets/css/styles.css
