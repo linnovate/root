@@ -35,12 +35,11 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   // ==================================================== onChanges ==================================================== //
 
   $scope.onCategory = function(value) {
-    $scope.item.office = value;
     var json ={
         'name':'office',
         'newVal': value && value._id,
     };
-    TemplateDocsService.updateTemplateDoc($scope.item, json);
+    TemplateDocsService.updateTemplateDoc($scope.item._id, json);
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -75,16 +74,30 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
           newVal: nVal[1],
           action: 'renamed'
         };
+        $scope.delayedUpdateTitle($scope.item, newContext);
       } else {
         newContext = {
           name: 'description',
           oldVal: oVal[0],
           newVal: nVal[0]
         };
+
+        $scope.delayedUpdateDesc($scope.item, newContext);
       }
-      $scope.delayedUpdate($scope.item, newContext);
     }
   });
+
+
+  $scope.updateTitle = function(item, newContext) {
+    TemplateDocsService.updateTemplateDoc(item._id, newContext);
+  }
+
+  $scope.updateDescription = function(item, newContext) {
+    TemplateDocsService.updateTemplateDoc(item._id, newContext);
+  }
+  
+  $scope.delayedUpdateTitle = _.debounce($scope.updateTitle, 500);
+  $scope.delayedUpdateDesc= _.debounce($scope.updateDescription, 500);
 
   // ==================================================== Update ==================================================== //
 
@@ -137,27 +150,6 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
     }
   }
 
-  $scope.updateTitle = function(templateDoc, title) {
-    var json = {
-      'name': 'title',
-      'newVal': title
-    };
-    TemplateDocsService.updateTemplateDoc(templateDoc._id, json);
-  }
-
-  $scope.updateDescription = function(templateDoc, desc) {
-    var json = {
-      'name': 'description',
-      'newVal': desc
-    };
-    TemplateDocsService.updateTemplateDoc(templateDoc._id, json);
-  }
-
-  $scope.updateCurrentTemplateDoc = function() {
-    TemplateDocsService.currentTemplateDocName = $scope.item.title;
-  }
-
-  $scope.delayedUpdate = _.debounce($scope.update, 500);
 
   // ==================================================== havePermissions ==================================================== //
 

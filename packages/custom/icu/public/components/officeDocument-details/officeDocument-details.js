@@ -165,13 +165,14 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   }
 
   $scope.onCategory = function(value) {
+    let folderId = value && value._id || undefined;
     var json = {
       'name': 'folder',
-      'newVal': value && value._id,
+      'newVal': folderId,
     };
-    if(!$scope.item.folder){
-        $scope.item.watchers = $scope.item.folder.watchers.concat($scope.item.watchers);
-    }
+//     if (!$scope.item.folder) {
+//       $scope.item.watchers = $scope.item.folder.watchers.concat($scope.item.watchers);
+//     }
     $scope.item.watchers = _.map(_.groupBy($scope.item.watchers, function(doc) {
       return doc._id || doc;
     }), function(grouped) {

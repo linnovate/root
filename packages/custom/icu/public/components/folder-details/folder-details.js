@@ -118,6 +118,12 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
   // ==================================================== Category ==================================================== //
 
   $scope.onCategory = function(value) {
+    if (!value) {
+      delete  $scope.item.office;
+      $scope.update($scope.item);
+      return;
+    }
+    
     $scope.item.office = value;
 
     $scope.item.watchers = $scope.item.watchers.concat($scope.item.office.watchers);
