@@ -416,7 +416,7 @@
             </ui-select>
 
             <div ng-if="foldersList.length !== 0">
-                <ul>
+                <ul class="foldersList scroll">
                     <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100"
                         data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
                         data-ng-click="switchTo('folder', folder._id)"
