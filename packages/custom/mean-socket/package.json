@@ -11,7 +11,7 @@
     "npm": "1.4.x"
   },
   "dependencies": {
-    "moment": "^2.22.1",
+    "moment": "^2.22.2",
     "q": "^1.5.1",
     "socket.io": "^1.7.4"
   },

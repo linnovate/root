@@ -1,4 +1,5 @@
 'use strict';
+
 angular.module('mean.icu').config([
     '$meanStateProvider',
     function ($meanStateProvider) {
