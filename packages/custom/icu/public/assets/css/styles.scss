@@ -103,10 +103,6 @@ table {
     height: 25px;
 }
 
-[data-ui-view="detailspane"] {
-    height: calc(100% - 110px);
-}
-
 .disabled {
     pointer-events: none;
 }
@@ -715,7 +711,7 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
 }
 
 .scroll {
-    overflow-y: scroll;
+    overflow-y: auto;
 
     &::-webkit-scrollbar {
         width: 5px;

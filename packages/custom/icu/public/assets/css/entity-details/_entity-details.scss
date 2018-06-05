@@ -14,7 +14,12 @@
 @import 'detail-templater';
 @import 'detail-members';
 
+/* -------------------------------- entity-details  -------------------------------- */
 
+.entity-details {
+    height: calc(100% - #{$header-height});
+    overflow-y: hidden;
+}
 
 /* -------------------------------- header-bar  -------------------------------- */
 

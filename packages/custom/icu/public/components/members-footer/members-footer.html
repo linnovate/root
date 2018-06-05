@@ -1,26 +1,32 @@
 <div class="footer">
-    <div class="delete-wrapper"
-         data-ng-repeat="member in entity.watchers.concat(watchersGroups) track by $index"
-         ng-if="entity.watchers.length || watchersGroups.length">
-        <!--<div ng-show="member._id !== me._id" class="delete" ng-click="deleteMember(member)"><i class="fa fa-close"></i></div>-->
-        <div class="btn-group dropup">
-            <div icu-avatar
-                 user="member"
-                 entity="entity"
-                 class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu">
-                <h6 class="dropdown-header name">{{member.username}}</h6>
-                <h6 class="dropdown-header status">{{userPermissionStatus(member) | i18next}}</h6>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" ng-click="setEditor(member)">{{'promoteToEditor' | i18next}}</a>
-                <a class="dropdown-item" href="#" ng-click="setCommenter(member)">{{'setAsCommenter' | i18next}}</a>
-                <a class="dropdown-item" href="#" ng-click="setViewer(member)">{{'demoteToViewer' | i18next}}</a>
-                <a class="dropdown-item" href="#" ng-click="deleteMember(member)">{{'remove' | i18next}}</a>
+    <div class="watchersList">
+        <div class="delete-wrapper"
+             data-ng-repeat="member in entity.watchers.concat(watchersGroups) track by $index"
+             ng-if="entity.watchers.length || watchersGroups.length"
+             ng-init="showMoreWatchers()">
+            <div class="btn-group dropup">
+                <div icu-avatar
+                     user="member"
+                     entity="entity"
+                     ng-class="{'dropdown-toggle': !member.selfTest}"
+                     class="btn btn-secondary"
+                     ng-click="selfTest(member)"
+                     data-toggle="dropdown"
+                     aria-haspopup="true"
+                     aria-expanded="false"></div>
+                    <span class="sr-only">Toggle Dropdown</span>
+                <div class="dropdown-menu" ng-hide="member.selfTest">
+                    <h6 class="dropdown-header name">{{member.username}}</h6>
+                    <h6 class="dropdown-header status">{{userPermissionStatus(member) | i18next}}</h6>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" ng-click="setEditor(member)">{{'promoteToEditor' | i18next}}</a>
+                    <a class="dropdown-item" href="#" ng-click="setCommenter(member)">{{'setAsCommenter' | i18next}}</a>
+                    <a class="dropdown-item" href="#" ng-click="setViewer(member)">{{'demoteToViewer' | i18next}}</a>
+                    <a class="dropdown-item" href="#" ng-click="deleteMember(member)">{{'remove' | i18next}}</a>
+                </div>
             </div>
+            <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
         </div>
-        <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
     </div>
 
     <div ng-if="!entity.watchers.length && !watchersGroups.length" class="left-notification" ng-click="triggerSelect()">
@@ -28,12 +34,11 @@
     </div>
 
     <div class="new-member-input" ng-if="showSelect">
-        <ui-select ng-model="member" theme="bootstrap">
-            <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}"
-                             on-select="addMember(member)" autofocus>
+        <ui-select ng-model="member" theme="bootstrap" on-select="addMember(member)">
+            <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}" autofocus>
                 {{$select.selected.name}}
             </ui-select-match>
-            <ui-select-choices ng-click="addMember(member)" repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
+            <ui-select-choices class="scroll" repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
                 <!--<div ng-bind-html="user.job | highlight: $select.search"></div>-->
                 <div icu-avatar
                      user="user"
@@ -45,11 +50,53 @@
         </ui-select>
 
     </div>
-
+    <div uib-dropdown class="showMore"
+         ng-if="showMore"
+         is-open="isDropdownwatchersOpen">
+        <button type="button"
+                class="counter btn btn-secondary dropdown-toggle"
+                ng-class="{'closeDropdown': isDropdownwatchersOpen}"
+                uib-dropdown-toggle
+                ng-click="toggled()">
+            +{{otherWatchers.length}}
+        </button>
+        <div class="watchersContainer" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+            <div class="otherWatchers">
+                <div class="delete-wrapper"
+                     data-ng-repeat="member in entity.watchers.concat(watchersGroups) track by $index"
+                     ng-if="entity.watchers.length || watchersGroups.length">
+                    <div class="btn-group dropup">
+                        <div icu-avatar
+                             user="member"
+                             entity="entity"
+                             ng-class="{'dropdown-toggle': !member.selfTest}"
+                             class="btn-secondary"
+                             ng-click="selfTest(member)"
+                             data-toggle="dropdown"
+                             aria-haspopup="true"
+                             aria-expanded="false"></div>
+                        <span class="sr-only">Toggle Dropdown</span>
+                        <div class="dropdown-menu" ng-hide="member.selfTest">
+                            <h6 class="dropdown-header name">{{member.username}}</h6>
+                            <h6 class="dropdown-header status">{{userPermissionStatus(member) | i18next}}</h6>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" ng-click="setEditor(member)">{{'promoteToEditor' | i18next}}</a>
+                            <a class="dropdown-item" href="#" ng-click="setCommenter(member)">{{'setAsCommenter' | i18next}}</a>
+                            <a class="dropdown-item" href="#" ng-click="setViewer(member)">{{'demoteToViewer' | i18next}}</a>
+                            <a class="dropdown-item" href="#" ng-click="deleteMember(member)">{{'remove' | i18next}}</a>
+                        </div>
+                    </div>
+                    <div class="numberOfPeople"
+                         ng-if="member.users.length">
+                        {{member.users.length > 99 ? '+99' : member.users.length}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="add-member-container" ng-if="hideAddButton">
         <button class="add" id="addMember" ng-click="triggerSelect()" ng-class="{transition: animate}">
             <i tooltips tooltip-template="{{'add watcher' | i18next }}" tooltip-side='left' class="fa fa-plus"></i>
         </button>
     </div>
-    <!--box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #00AEEF;-->
 </div>
