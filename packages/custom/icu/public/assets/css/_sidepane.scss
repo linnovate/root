@@ -488,6 +488,10 @@
         right: 0;
         bottom: 0;
 
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
         @media screen and (max-width: $small-resolution) {
             left: 40px;
         }
