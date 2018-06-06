@@ -8,6 +8,7 @@ RUN npm install -g npm@latest
 
 RUN chown -R node:node /usr/src/app
 USER node:node
+
 RUN npm install
 RUN npm run build
 
