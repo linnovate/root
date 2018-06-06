@@ -13,5 +13,7 @@ RUN npm install
 RUN npm run build
 
 ENV PORT 3000
+ENV MONGODB_URI mongodb://root-db/icu
+ENV ELASTICSEARCH_IP root-elastic
 
 CMD ["node", "server"]

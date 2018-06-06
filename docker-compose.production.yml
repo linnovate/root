@@ -6,7 +6,7 @@ services:
     image: root
     environment:
       PORT: 3000
-      MONGODB_URI: mongodb://mongo/icu-dev
+      MONGODB_URI: mongodb://mongo/icu
       ELASTICSEARCH_IP: elasticsearch
     ports:
       - 3000:3000
@@ -16,6 +16,8 @@ services:
 
   mongo:
     image: mongo:3.6
+    volumes:
+      - ./data/db:/data/db
 
   elasticsearch:
     image: elasticsearch:5.6

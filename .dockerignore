@@ -5,4 +5,5 @@ bower_components/
 .bower-tmp/
 public/assets/lib/
 dist/
+data/
 packages/custom/icu/public/assets/css/styles.css
