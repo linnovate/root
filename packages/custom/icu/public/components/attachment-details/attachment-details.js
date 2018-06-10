@@ -29,7 +29,7 @@ function AttachmentDetailsController($scope, $http, entity, tasks, context, $sta
   $scope.attLinkToEntityName;
   EntityService.getByEntityId(attachment.entity, attachment.entityId).then(res=>$scope.attLinkToEntityName = res);
 
-  $scope.attLinkToEntity = '/' + attachment.entity + 's/all/' + attachment.entityId + '/documents';
+  $scope.attLinkToEntity = '/' + attachment.entity + '/all/' + attachment.entityId + '/documents';
 
   $scope.$watchGroup(['item.description', 'item.title'], function(nVal, oVal) {
     if (nVal !== oVal && oVal) {

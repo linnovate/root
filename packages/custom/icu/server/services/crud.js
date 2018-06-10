@@ -45,56 +45,56 @@ var TemplateDocsArchiveModel = mongoose.model('templateDoc_archive');
 
 
 var entityNameMap = {
-  tasks: {
+  'tasks': {
     mainModel: TaskModel,
     archiveModel: TaskArchiveModel,
     name: 'Task'
   },
-  projects: {
+  'projects': {
     mainModel: ProjectModel,
     archiveModel: ProjectArchiveModel,
     name: 'Project'
   },
-  discussions: {
+  'discussions': {
     mainModel: DiscussionModel,
     archiveModel: DiscussionArchiveModel,
     name: 'Discussion'
   },
-  updates: {
+  'updates': {
     mainModel: UpdateModel,
     archiveModel: UpdateArchiveModel,
     name: 'Update'
   },
-  users: {
+  'users': {
     mainModel: UserModel,
     name: 'User'
   },
-  attachments: {
+  'attachments': {
     mainModel: AttachementModel,
     archiveModel: AttachementArchiveModel,
     name: 'Attachement'
   },
-  templates: {
+  'templates': {
     mainModel: TaskModel,
     archiveModel: TaskArchiveModel,
     name: 'Task'
   },
-  offices: {
+  'offices': {
     mainModel: OfficeModel,
     archiveModel: OfficeArchiveModel,
     name: 'Office'
   },
-  folders: {
+  'folders': {
     mainModel: FolderModel,
     archiveModel: FolderArchiveModel,
     name: 'Folder'
   },
-  officeDocuments: {
+  'officeDocuments': {
     mainModel: OfficeDocumentsModel,
     archiveModel: OfficeDocumentsArchiveModel,
     name: 'Document'
   },
-  templateDocs: {
+  'templateDocs': {
     mainModel: TemplateDocsModel,
     archiveModel: TemplateDocsArchiveModel,
     name: 'TemplateDoc'
@@ -111,13 +111,13 @@ var defaults = {
 
 module.exports = function(entityName, options) {
   var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders', 'officeDocuments', 'templateDocs'];
-  if(findByUser.indexOf(entityName) > -1)
+  if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;
 
   var Model = entityNameMap[entityName].mainModel;
   var ArchiveModel = entityNameMap[entityName].archiveModel;
 
-  if(_.isEmpty(options)) {
+  if (_.isEmpty(options)) {
     options = {};
   }
 
@@ -131,17 +131,16 @@ module.exports = function(entityName, options) {
 
     var query;
 
-    if(currentUser) {
+    if (currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
       countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);
-    }
-    else {
+    } else {
       query = Model.find(options.conditions);
       countQuery = Model.find(options.conditions).count();
     }
 
-    if(pagination && pagination.type) {
-      if(pagination.type === 'page') {
+    if (pagination && pagination.type) {
+      if (pagination.type === 'page') {
         query.find(options.conditions)
           .sort(pagination.sort)
           .skip(pagination.start)
@@ -159,8 +158,7 @@ module.exports = function(entityName, options) {
 
         deffered.resolve(mergedPromise);
       }
-    }
-    else {
+    } else {
       query.find(options.conditions);
       query.populate(options.includes);
       query.hint({
@@ -175,10 +173,9 @@ module.exports = function(entityName, options) {
 
   function read(id, user, acl) {
     var query;
-    if(currentUser) {
+    if (currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
-    }
-    else {
+    } else {
       query = Model.find();
 
     }
@@ -191,7 +188,7 @@ module.exports = function(entityName, options) {
     query.populate(options.includes);
 
     return query.then(function(results) {
-      if(!results.length) {
+      if (!results.length) {
         // throw new Error('Entity not found');
         return {};
       }
@@ -211,96 +208,98 @@ module.exports = function(entityName, options) {
 
 
   function create(entity, user, acl) {
-    console.log('CRUD CREATE');
+    console.log("CRUD CREATE") ;
 
-    //    check permsArray changes
-    let allowed1 = permissions.syncPermsArray(user, entity);
+    //    check permsArray changes     
+    let allowed1 = permissions.syncPermsArray(user,entity) ;
     if(!allowed1) {
-      return throwError(permissions.permError.denied + ':' + permissions.permError.allowUpdateWatcher);
+      // console.log("CRUD NOT ALLOWED") ;
+      return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
     }
 
     let deffered = q.defer();
-
     // check update permissions
-    let allowed2 = permissions.createContent(user, {}, entity);
-    allowed2.then(function(entity) {
-      // in case we are not allowed - catch!
+    let allowed2 = permissions.createContent(user,{}, entity) ;    
+    allowed2.then(function(entity) {      
+      // in case we are not allowed - catch below!
 
-      // possibly handle other permission situations for next then, or reject/throw.
-      // console.log("allowed then:");
-      // console.log(JSON.stringify(entity)) ;
+      // possibly handle other permission situations for next then, or reject/throw. 
+      // console.log(JSON.stringify(allowed2)) ;
 
       // deffered.resolve(entity) ;
       // return deffered.promise;
-    })
-      .then(function(value) {
-      // console.log("allowed then then:");
-      // console.log(JSON.stringify(entity)) ;
+    }).then(function(value) {
+      let model = Model(entity) ;    
+      return permissions.cloneParentPermission(entity.parent,entityNameMap[model.collection.collectionName].name.toLowerCase()) ;
+    }).then(function(clonedPerms) {
 
+      // console.log("CRUD ALLOWED") ;
       // RE-HACK - if this is document update - don't do anything
-        if(entity.officeDocuments == 'officeDocuments' && entity.issueId) {
+      if(entity.officeDocuments=="officeDocuments" && entity.issueId) {
         // officeDocs hacked crud - so that update operations are by create.
         // we override this behaviour in permissions for watchers addition.
-          console.log('officeDocuments return without create....');
-          deffered.resolve(entity);
-          return deffered.promise;
-        }
-        // resume normal crud operation
-        if(!entity.circles) entity.circles = {};
-        circlesAcl.sign('mongoose', entity.sources, entity.circles, acl, function(error, circles) {
-          if(error) deffered.reject(error);
-          else {
-            entity.circles = circles;
-            if(entity.watchers instanceof Array && !entity.watchers.length) entity.watchers = [user.user._id];
-            entity.created = new Date();
-            entity.updated = new Date();
-            entity.creator = user.user._id;
-            entity.permissions = [{id: String(user.user._id), level: 'editor'}];
-            console.log(JSON.stringify(entity));
-            deffered.resolve(new Model(entity).save(user).then(function(e) {
-              orderController.addOrder(e, entity, Model);
-              return Model.populate(e, options.includes);
-            })); all;
+        // console.log("officeDocuments return without create....");
+        deffered.resolve(entity) ;
+        return deffered.promise;
+      }
+      // resume normal crud operation
+      if (!entity.circles) entity.circles = {};
+      circlesAcl.sign('mongoose', entity.sources, entity.circles, acl, function(error, circles) {
+        if (error) deffered.reject(error);
+        else {
+          entity.circles = circles;
+          if (entity.watchers instanceof Array && !entity.watchers.length) {
+            entity.watchers = [user.user._id];
           }
-        });
-      }).catch(function(error) {
-        console.log('CRUD CATCH ERROR');
-        console.trace();
-        console.log(error);
-        deffered.reject(error);
+          if(clonedPerms.watchers) {
+            entity.watchers = clonedPerms.watchers ;
+          }
+          entity.created = new Date();
+          entity.updated = new Date();
+          entity.creator = user.user._id;
+          entity.permissions = (clonedPerms.permissions || [{id: String(user.user._id), level: 'editor'}]);
+          deffered.resolve(new Model(entity).save(user).then(function(e) {
+            orderController.addOrder(e, entity, Model);
+            return Model.populate(e, options.includes);
+          }));all
+        }
       });
+  }).catch(function(error){
+    console.log("CRUD CATCH ERROR (Reject Deferred)") ;
+    console.trace() ;
+    console.log(error);
+    deffered.reject(error);
+  });
 
-    return deffered.promise;
+  return deffered.promise;
   }
 
 
   function update(oldE, newE, user, acl) {
 
-    //    check permsArray changes
-    console.log('CRUD UPDATE:');
-    console.log(JSON.stringify(oldE));
-    console.log(JSON.stringify(newE));
-    var allowed = permissions.updatePermsArray(user, oldE, newE);
+//    check permsArray changes     
+    console.log("CRUD UPDATE:") ;
+    // console.log(JSON.stringify(oldE)) ;
+    // console.log(JSON.stringify(newE)) ;
+    var allowed = permissions.updatePermsArray(user,oldE, newE) ;
     if(!allowed) {
-      return throwError(permissions.permError.denied + ':' + permissions.permError.allowUpdateWatcher);
+      return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
     }
 
-    var allowed2 = permissions.updateContent(user, oldE, newE);
+    var allowed2 = permissions.updateContent(user,oldE, newE) ;    
     if(!allowed2) {
-      return throwError(permissions.permError.denied + ':' + permissions.permError.allowUpdateContent);
+      return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateContent) ;
     }
-
-
 
     var entityWithDefaults = _.defaults(newE, options.defaults);
     console.log(JSON.stringify(entityWithDefaults));
 
     oldE = _.extend(oldE, entityWithDefaults);
-    if(!oldE.circles) oldE.circles = {};
+    if (!oldE.circles) oldE.circles = {};
     var deffered = q.defer();
 
     circlesAcl.sign('mongoose', oldE.sources, oldE.circles, acl, function(error, circles) {
-      if(error) deffered.reject(error);
+      if (error) deffered.reject(error);
       else {
         oldE.updated = new Date();
         oldE.updater = user.user._id;
@@ -318,12 +317,12 @@ module.exports = function(entityName, options) {
 
   function destroy(entity, user) {
     options.entity = entity;
-    return entity.remove(user, function(err) {
-      if(!err) {
+    return entity.remove(user, function(err){
+      if(!err){
         orderController.deleteOrder(options.entity, Model);
       }
     });
-  }
+    }
 
   function readHistory(id) {
     var Query = ArchiveModel.find({
@@ -343,7 +342,7 @@ module.exports = function(entityName, options) {
     destroy: destroy
   };
 
-  if(ArchiveModel) {
+  if (ArchiveModel) {
     methods.readHistory = readHistory;
   }
 
