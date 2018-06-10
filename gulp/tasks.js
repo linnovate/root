@@ -95,7 +95,8 @@ gulp.task('build', function(callback) {
   runSequence(
     'clean',
     'sass',
-    ['dist:css', 'dist:public', 'dist:bower', 'babel'],
+    ['dist:css', 'dist:public', 'dist:bower'],
+    'babel',
     callback
   );
-})
+});
