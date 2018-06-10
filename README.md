@@ -1,16 +1,6 @@
 # Root
 
 ## Install
-
-Run:
-
-```bash
-git clone git@github.com:linnovate/root.git
-cd root
-docker-compose up
-```
-
-### Prerequisites
-
-- **Docker , docker-compose** , node 4.x
-- test
+1. clone repo
+2. run:npm run build
+3. run by npm start or pm2

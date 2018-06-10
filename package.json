@@ -12,6 +12,7 @@
   },
   "scripts": {
     "start": "node server",
+    "build":"npm i && npm run postinstall && gulp build",
     "startdev": "nodemon server",
     "test": "export NODE_ENV=test && gulp test",
     "postinstall": "node tools/scripts/postinstall.js && gulp sass"
