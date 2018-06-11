@@ -665,8 +665,8 @@ exports.update2 = function(req, res, next) {
     }
   }
   else {
-    TemplateDoc.update({ _id: req.params.id }, json).then(function (res) {
-      if (res.nModified === 0) {
+    TemplateDoc.update({ _id: req.params.id }, json).then(function (result) {
+      if (result.nModified === 0) {
         var message = `object with id: ${req.params.id} not found`;
         logger.log(message);
         res.status(404).send({ error: message });
