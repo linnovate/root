@@ -13,14 +13,6 @@ function TemplateDocListController($scope, $state, templateDocs, TemplateDocsSer
         Created: 2
     };
 
-    $scope.update = function(item) {
-        var json = {
-            'name': 'title',
-            'newVal': item.title
-        };
-        return TemplateDocsService.updateTemplateDoc(item._id, json);
-    }
-
     $scope.create = function(item) {
         var newItem = {
             title: '',

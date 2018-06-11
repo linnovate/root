@@ -162,17 +162,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         LayoutService.clicked();
     };
 
-    $scope.onChange = function(item) {
-
-        if (context.entityName !== 'all') {
-            item[context.entityName] = context.entity;
-        }
-
-        //if (item.__state === creatingStatuses.Created) {
-        return $scope.$parent.update(item);
-        //}
-    };
-
     $scope.onCreate = function() {
         $scope.$parent.create().then((result)=>{
             //             if (localStorage.getItem('type') == 'new') {
