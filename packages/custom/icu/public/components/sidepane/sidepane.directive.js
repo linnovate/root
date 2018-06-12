@@ -99,7 +99,11 @@ directive('icuSidepane', function() {
         };
 
         $scope.initMenuItem = function(item){
-            if(item.func)item.func();
+          $scope.setActive(item);
+          $scope.removeFilterValue();
+          $scope.setCurrentState(item.state);
+
+          if(item.func)item.func();
         };
 
         $scope.clearAllFilters = function(){
@@ -116,6 +120,13 @@ directive('icuSidepane', function() {
             $scope.clearDateRange();
 
             $scope.turnOffRecycle();
+        };
+
+        $scope.checkForSearchState = function(){
+          if($state.current.name.indexOf('search') === -1){
+            $scope.clearAllFilters();
+            $scope.clearResults();
+          }
         };
 
         $scope.createLists = function(){
@@ -155,7 +166,7 @@ directive('icuSidepane', function() {
             state: 'search',
             display: ['projects', 'discussions', 'people'],
             open: $scope.isCurrentState({state: 'tasks'}),
-            func: $scope.clearAllFilters,
+            func: $scope.checkForSearchState,
         }, {
             name: 'tasks',
             icon: '/icu/assets/img/task.png',

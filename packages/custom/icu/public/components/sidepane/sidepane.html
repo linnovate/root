@@ -23,8 +23,7 @@
 
 <nav>
     <ul ng-init="getActiveTab()">
-        <li data-ng-repeat="item in items"
-            ng-click="setActive(item); removeFilterValue();setCurrentState(item.state);clearResults()">
+        <li data-ng-repeat="item in items">
             <div class="menu-item nav-item {{getNavColor(item, $index)}}"
                  data-ui-sref="{{'main.' + item.state}}"
                  ng-click="toggleVisibility(item);initMenuItem(item)">
