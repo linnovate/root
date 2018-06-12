@@ -1417,6 +1417,7 @@ exports.create = function(req, res, next) {
           documentType: '',
         };
         var obj = new Document(doc);
+        obj.folder = folderObj;
         obj.save(function(error, result) {
           if(error) {
             logger.log('error', '%s create, %s', req.user.name, ' obj.save', {error: error.message});
