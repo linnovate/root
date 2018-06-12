@@ -80,8 +80,24 @@
 }
 
 @media print {
-  body * {
-    visibility: hidden;
+  html {
+    height: auto;
+    body {
+      height: auto;
+      overflow: visible !important;
+    }
+    section {
+      height: auto;
+      overflow: visible;
+    }
+  }
+  .animate-hide {
+      display: none;
+  }
+
+  .icu-data {
+    overflow: visible !important;
+    height: auto !important;
   }
   .panes-wrapper {
       margin-left: 0 !important;
