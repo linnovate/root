@@ -130,6 +130,15 @@
                             margin-right: 5px;
                             word-wrap: break-word;
                         }
+                        span, a, i, u, p, blockquote {
+                            margin: 0 !important;
+                            padding: 0 !important;
+                            border-left: none !important;
+                            font-size: inherit !important;
+                            font-style: normal !important;
+                            font-weight: normal !important;
+                            text-decoration: none !important;
+                        }
                     }
 
                     &.project {
