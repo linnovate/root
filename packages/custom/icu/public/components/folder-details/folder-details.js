@@ -18,7 +18,7 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
       entityId: context.entityId
     });
   }
-  
+
   $scope.options = {
     theme: 'bootstrap',
     buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
@@ -98,7 +98,7 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
   // ==================================================== Menu events ==================================================== //
 
   $scope.deleteFolder = function(folder) {
-    FoldersService.remove(folder._id).then(function() {
+    FoldersService.remove($scope.item._id).then(function() {
 
       $state.go('main.folders.all', {
         entity: 'all'
@@ -123,7 +123,7 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
       $scope.update($scope.item);
       return;
     }
-    
+
     $scope.item.office = value;
 
     $scope.item.watchers = $scope.item.watchers.concat($scope.item.office.watchers);
