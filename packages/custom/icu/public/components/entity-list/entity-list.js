@@ -163,11 +163,11 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.onCreate = function() {
-        let parentsFolder;
-        if($state.current.name.indexOf("officeDocuments.byentity") !== -1){
-            parentsFolder = $state.current.params.entityId;
+        let parent;
+        if($state.current.name.indexOf("byentity") !== -1){
+            parent = $state.current.params.entityId;
         }
-        $scope.$parent.create(parentsFolder).then((result)=>{
+        $scope.$parent.create(parent).then((result)=>{
             //             if (localStorage.getItem('type') == 'new') {
             //                 $state.go($scope.detailsState + '.activities', {
             //                     id: result._id,
