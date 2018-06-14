@@ -3,7 +3,7 @@
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, $stateParams,SettingServices, $filter, $location, $rootScope,
-        context, SearchService, EntityService,
+        context, SearchService, EntityService, OfficesService, OfficeDocumentsService, FoldersService,
         NotifyingService, TasksService
     ){
         $scope.context = context;
@@ -130,34 +130,45 @@ directive('icuSidepane', function() {
         };
 
         $scope.createLists = function(){
-            $scope.projectsList = [];
-            $scope.projects.forEach(function(project) {
-                if(project.title)
-                    $scope.projectsList.push(project);
+            return new Promise((resolve) => {
+                $scope.projectsList = [];
+                $scope.projects.forEach(function(project) {
+                    if(project.title)
+                        $scope.projectsList.push(project);
+                });
+                resolve();
+            }).then(() => {
+                $scope.officesList = [];
+                return OfficesService.getAll(0, 0, 'created').then(offices => {
+                    $scope.offices = offices.data || offices;
+                    $scope.offices.forEach(function (office) {
+                        if (office.title)
+                            $scope.officesList.push(office);
+                    });
+                });
+            }).then(() => {
+                $scope.foldersList = [];
+                return FoldersService.getAll(0, 0, 'created').then(folders => {
+                    $scope.folders = folders.data || folders;
+                    $scope.folders.forEach(function (folder) {
+                        if (folder.title)
+                            $scope.foldersList.push(folder);
+                    });
+                });
+            }).then(() => {
+                $scope.officeDocumentsList = [];
+                return OfficeDocumentsService.getAll(0, 0, 'created').then(officeDocuments => {
+                    $scope.officeDocuments = officeDocuments;
+                    $scope.officeDocuments.forEach(function (officeDocument) {
+                        if (officeDocument.title)
+                            $scope.officeDocumentsList.push(officeDocument);
+                    });
+                });
+            }).then(() => {
+                if ($scope.officesList.length > 0) {
+                    $scope.officesList.office = $scope.officesList[0];
+                }
             });
-
-            $scope.officesList = [];
-            $scope.offices.forEach(function(office) {
-                if(office.title)
-                    $scope.officesList.push(office);
-            });
-
-            $scope.foldersList = [];
-            $scope.folders.forEach(function(folder) {
-                if(folder.title)
-                    $scope.foldersList.push(folder);
-            });
-
-            $scope.officeDocumentsList = [];
-            $scope.officeDocuments.forEach(function(officeDocument) {
-                if(officeDocument.title)
-                    $scope.officeDocumentsList.push(officeDocument);
-            });
-
-            if($scope.officesList.length > 0)
-            {
-                $scope.officesList.office = $scope.officesList[0];
-            }
         };
 
         $scope.items = [{
