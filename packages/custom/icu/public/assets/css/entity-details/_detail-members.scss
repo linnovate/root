@@ -4,9 +4,6 @@ icu-members-footer {
     width: $min-detailspane-width;
     background-color: $cream;
     border-top: 1px solid $light-grey1;
-    .editor {
-        box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #00AEEF;
-    }
 
     .footer {
         display: -webkit-box;
@@ -42,10 +39,6 @@ icu-members-footer {
                         position: absolute;
                         left: 2px;
                     }
-                }
-
-                .avatar {
-                    border: 2px solid white;
                 }
             }
             .btn {
@@ -112,15 +105,6 @@ icu-members-footer {
 
             .delete {
                 display: none;
-            }
-
-            .avatar {
-                background-color: $green;
-                float: left;
-
-                &.avatar-group {
-                    background-color: #1e70b5;
-                }
             }
         }
 

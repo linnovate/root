@@ -97,18 +97,36 @@ angular.module('mean.icu.data.permissionsservice', [])
             return userId;
         }
 
+        function getUserPerms(entity, user){
+            return _.find(entity.permissions, {'id': getUserId(user)});
+        }
+
         function haveEditorsPerms(entity, user){
                 user = user || me;
                 haveAnyPerms(entity, user);
 
                 var havePerms = false;
                 if(entity.permissions.length !== 0) {
-                    var usersPerms = _.find(entity.permissions, {'id': getUserId(user)});
+                    var usersPerms = getUserPerms(entity, user);
                     if(usersPerms){
                         havePerms = usersPerms.level === 'editor';
                     }
                 }
                 return havePerms;
+        }
+
+        function haveCommenterPerms(entity, user){
+            user = user || me;
+            haveAnyPerms(entity, user);
+
+            var havePerms = false;
+            if(entity.permissions.length !== 0) {
+                var usersPerms = getUserPerms(entity, user);
+                if(usersPerms){
+                    havePerms = usersPerms.level === 'commenter';
+                }
+            }
+            return havePerms;
         }
 
         function changeUsersPermissions(entity, user, perms, context){
@@ -131,8 +149,8 @@ angular.module('mean.icu.data.permissionsservice', [])
             var clonedEntity = JSON.parse(JSON.stringify(entity));
             console.log("changeUsersPermissions", serviceName, clonedEntity)
             console.log(typeOfService) ;
-            
-            
+
+
             if(typeOfService == 'officeDocuments') {
                 // Artium - see bug in documents:
                 // adding 2 watchers one after the other - the permissions array give only 2 items in perms array.
@@ -255,9 +273,11 @@ angular.module('mean.icu.data.permissionsservice', [])
             //     .then(function (perms) {return perms});
         }
         return {
+            getUserPerms: getUserPerms,
             haveAnyPerms: haveAnyPerms,
             havePermissions: permissions,
             haveEditorsPerms: haveEditorsPerms,
+            haveCommenterPerms: haveCommenterPerms,
             getPermissionStatus: getPermissionStatus,
             updateEntityPermission: updateEntityPermission,
             changeUsersPermissions: changeUsersPermissions,
