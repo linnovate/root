@@ -52,7 +52,7 @@
 .detail-assign {
   position: relative;
   @include ui-select;
-    width: 150px;
+    width: 110px;
     height: $panel-height;
     position: relative;
     float: left;
@@ -85,10 +85,6 @@
         height: $panel-height;
         border-radius: 0;
       }
-    }
-
-    @media screen and (max-width: $small-resolution) {
-        width: 110px;
     }
 
     &:hover{
