@@ -17,7 +17,7 @@ function FolderListController($scope, $state, folders, FoldersService, context, 
         return FoldersService.update(item);
     };
 
-    $scope.create = function(item) {
+    $scope.create = function(parent) {
         var newItem = {
             title: '',
             color: '0097A7',
@@ -25,6 +25,7 @@ function FolderListController($scope, $state, folders, FoldersService, context, 
             __state: creatingStatuses.NotCreated,
             __autocomplete: true
         };
+        if(parent)newItem.office = parent;
         return FoldersService.create(newItem).then(function(result) {
             $scope.items.push(result);
             FoldersService.data.push(result);
