@@ -38,7 +38,7 @@ exports.render = function(req, res) {
 							"index" : false
 						};
 						json[ip] = userData;
-						jsonfile.wrtieFile(file , json , function(err){ });
+						jsonfile.writeFile(file , json , function(err){ });
 					}
 				}
 			});
