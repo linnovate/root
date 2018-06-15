@@ -20,6 +20,7 @@ body {
 @import 'mixins/tag';
 @import 'mixins/circle';
 @import 'mixins/button';
+@import 'mixins/scroll';
 @import 'mixins/center';
 @import 'mixins/center-left';
 @import 'mixins/file-icon-sprites';
@@ -713,20 +714,7 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
 .scroll {
     overflow-y: auto;
 
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    &::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background-color: white;
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-    }
+    @include scroll;
 }
 
 @media (min-width: 730px) {
