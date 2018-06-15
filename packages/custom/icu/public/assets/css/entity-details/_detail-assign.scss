@@ -50,14 +50,13 @@
 
 
 .detail-assign {
-  position: relative;
-  @include ui-select;
+    position: relative;
+    @include ui-select;
     width: 110px;
     height: $panel-height;
-    position: relative;
     float: left;
 
-    ul {
+    ul, .ui-select-dropdown, .dropdown-menu {
         /*rtl:begin:ignore*/
         left: auto ;
         right: 0;
@@ -68,7 +67,26 @@
         left: 0;
         /*rtl:end:remove*/
 
-        width: auto;
+        width: 250px;
+
+        &>div {
+            height: 57px;
+        }
+
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        &::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            background-color: white;
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        }
     }
 
     .ui-select-container.ui-select-bootstrap {

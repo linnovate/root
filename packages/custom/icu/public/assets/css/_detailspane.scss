@@ -830,8 +830,9 @@ $tab-content-height: calc(
         }
         .ui-select-choices-row {
             .ui-select-choices-row-inner {
-               display: flex;
-               align-items: center;
+                display: flex;
+                align-items: center;
+                padding: 3px 6px;
            }
        }
    }
