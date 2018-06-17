@@ -218,6 +218,22 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             //              $scope.select(sr);
         }
     }
+    $scope.focusing = function(entity){
+        entity.focus = true;
+    };
+    $scope.bluring = function(entity, $event){
+        entity.focus = false;
+
+        var scrollLeft = function(element){
+            element.scrollLeft = 0;
+        };
+        var scrollRight = function(element){
+            element.scrollLeft += $event.target.scrollWidth - $event.target.scrollLeft;
+        };
+
+        let usingFunction = config.direction === 'rtl' ? scrollRight : scrollLeft;
+        usingFunction($event.target);
+    };
 
     //     $scope.onBlur = function(item) {
     //         item.__autocomplete = false;
