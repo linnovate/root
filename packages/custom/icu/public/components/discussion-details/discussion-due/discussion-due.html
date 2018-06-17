@@ -1,10 +1,10 @@
 <div class="detail-due discussion-due" ng-click="dueClicked()">
   <div class="placeholder">
     <div id="firstStr" ng-if="!item.startDate">{{'deadline' | i18next}}</div>
-    <div id="firstStr" ng-if="item.startDate && item.startTime" style="transform: translateX(50%);">{{firstStr | i18next}}</div>
+    <div id="firstStr" ng-if="item.startDate && item.startTime">{{firstStr | i18next}}</div>
     <div id="firstStr" ng-if="item.startDate && !item.startTime">{{firstStr | i18next}}</div>
     <div id="secondStr" ng-if="!item.endDate">{{secondStr | i18next}}</div>
-    <div id="secondStr" ng-if="item.endDate && item.endTime" style="transform: translateX(50%);">{{secondStr | i18next}}</div>
+    <div id="secondStr" ng-if="item.endDate && item.endTime">{{secondStr | i18next}}</div>
     <div id="secondStr" ng-if="item.endDate && !item.endTime">{{secondStr | i18next}}</div>
   </div>
   <input />

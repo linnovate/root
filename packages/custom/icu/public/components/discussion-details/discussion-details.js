@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.discussiondetails', []).controller('DiscussionDetailsController', DiscussionDetailsController);
 
-function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, DiscussionsService, PermissionsService, ActivitiesService, EntityService, $stateParams) {
+function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, DiscussionsService, PermissionsService, ActivitiesService, EntityService, UsersService, $stateParams) {
 
   // ==================================================== init ==================================================== //
 
@@ -10,8 +10,8 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     $scope.item = entity || context.entity;
   } else {
     $scope.item = context.entity || entity;
-  } 
- 
+  }
+
   if ($scope.item && ($state.current.name === 'main.tasks.byentity.details' || $state.current.name === 'main.search.discussion' || $state.current.name === 'main.discussions.all.details' || $state.current.name === 'main.discussions.byentity.details')) {
     $state.go('.activities');
   }
@@ -35,9 +35,10 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   $scope.main = context.main;
   $scope.CanceledMailSend = false;
   $scope.tags = tags;
+  $scope.me = UsersService.getMe().$$state.value;
 
   var currentState = $state.current.name;
-  
+
   // backup for previous changes - for updates
   var backupEntity = JSON.parse(JSON.stringify($scope.item));
 
@@ -114,7 +115,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   $scope.onDateDue = function(item, type) {
     $scope.update(item, type);
   }
-  
+
   // ==================================================== Menu events ==================================================== //
 
   $scope.recycle = function() {
@@ -169,7 +170,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   function refreshList() {
     $rootScope.$broadcast('refreshList');
   }
-  
+
   $scope.menuItems = [{
       label: 'recycleDiscussion',
       icon: 'times-circle',
@@ -181,7 +182,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
       display: $scope.item.hasOwnProperty('recycled'),
       action: $scope.recycleRestore,
   }];
-  
+
   // ==================================================== Buttons ==================================================== //
 
   $scope.updateStatusForApproval = function(entity) {
@@ -258,7 +259,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     done: archiveAction,
     canceled: canceleAction
   };
-  
+
   // ==================================================== $watch: title / desc ==================================================== //
 
   var activeTitleTimeout;
@@ -354,12 +355,53 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     }
   }
 
+    $scope.updateAndNotify = function(item) {
+        item.status = $scope.statuses[1];
+        if (context.entityName === 'discussion') {
+            item.discussion = context.entityId;
+        }
+
+        if (item.assign === undefined || item.assign === null) {
+            delete item['assign'];
+        } else {
+            // check the assignee is not a watcher already
+            let filtered = item.watchers.filter(watcher=>{
+                    return watcher._id == item.assign
+                }
+            );
+
+            if (filtered.length == 0) {
+                item.watchers.push(item.assign);
+            }
+        }
+
+        DiscussionsService.update(item).then(function(result) {
+            if (context.entityName === 'project') {
+                var projId = result.project ? result.project._id : undefined;
+                if (projId !== context.entityId) {
+                    $state.go('main.discussions.byentity', {
+                        entity: context.entityName,
+                        entityId: context.entityId
+                    }, {
+                        reload: true
+                    });
+                }
+            }
+
+            DiscussionsService.updateAssign(item, $scope.me, backupEntity).then(function(res) {
+                backupEntity = JSON.parse(JSON.stringify(result));
+                ActivitiesService.data.push(res);
+            });
+        });
+
+    };
+
   $scope.updateCurrentDiscussion = function() {
     DiscussionsService.currentDiscussionName = $scope.item.title;
   }
 
   $scope.delayedUpdate = _.debounce($scope.update, 500);
-  
+
   // ==================================================== havePermissions ==================================================== //
 
   $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
