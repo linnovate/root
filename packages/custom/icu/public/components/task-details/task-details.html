@@ -37,7 +37,7 @@
 
   <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
 
-  <div class="sub-items-section">
+  <div class="sub-items-section" ng-class="{ 'disabled' : !havePermissions('subs')}">
 
     <detail-templater
       templates="template"

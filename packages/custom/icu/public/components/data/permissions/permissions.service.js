@@ -97,22 +97,34 @@ angular.module('mean.icu.data.permissionsservice', [])
             return userId;
         }
 
-        function haveEditorsPerms(entity, user){
-                user = user || me;
-                haveAnyPerms(entity, user);
+        function getUserPerms(entity, user){
+            user = user || me;
+            return _.find(entity.permissions, {'id': getUserId(user)});
+        }
 
-                var havePerms = false;
-                if(entity.permissions.length !== 0) {
-                    var usersPerms = _.find(entity.permissions, {'id': getUserId(user)});
-                    if(usersPerms){
-                        havePerms = usersPerms.level === 'editor';
-                    }
+        function haveEditorsPerms(entity, user){
+            haveAnyPerms(entity, user);
+            let userPerms = getUserPerms(entity, user);
+
+            return userPerms && userPerms.level === 'editor';
+        }
+
+        function haveCommenterPerms(entity, user){
+            user = user || me;
+            haveAnyPerms(entity, user);
+
+            var havePerms = false;
+            if(entity.permissions.length !== 0) {
+                var usersPerms = getUserPerms(entity, user);
+                if(usersPerms){
+                    havePerms = usersPerms.level === 'commenter';
                 }
-                return havePerms;
+            }
+            return havePerms;
         }
 
         function changeUsersPermissions(entity, user, perms, context){
-            if(!haveEditorsPerms(entity)){
+            if(getUserPerms(entity) === 'editor'){
                 return false;
             }
 
@@ -131,8 +143,8 @@ angular.module('mean.icu.data.permissionsservice', [])
             var clonedEntity = JSON.parse(JSON.stringify(entity));
             console.log("changeUsersPermissions", serviceName, clonedEntity)
             console.log(typeOfService) ;
-            
-            
+
+
             if(typeOfService == 'officeDocuments') {
                 // Artium - see bug in documents:
                 // adding 2 watchers one after the other - the permissions array give only 2 items in perms array.
@@ -255,9 +267,11 @@ angular.module('mean.icu.data.permissionsservice', [])
             //     .then(function (perms) {return perms});
         }
         return {
+            getUserPerms: getUserPerms,
             haveAnyPerms: haveAnyPerms,
             havePermissions: permissions,
             haveEditorsPerms: haveEditorsPerms,
+            haveCommenterPerms: haveCommenterPerms,
             getPermissionStatus: getPermissionStatus,
             updateEntityPermission: updateEntityPermission,
             changeUsersPermissions: changeUsersPermissions,

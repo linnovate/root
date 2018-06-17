@@ -1564,10 +1564,6 @@ $tab-content-height: calc(
                 left: 2px;
             }
         }
-
-        .avatar {
-            border: 2px solid white;
-        }
     }
        .btn {
            padding: 0;
@@ -1634,16 +1630,6 @@ $tab-content-height: calc(
  .delete {
     display: none;
 }
-
-.avatar {
-    background-color: $green;
-    float: left;
-
-    &.avatar-group {
-       background-color: #1e70b5;
-   }
-}
-
 }
 
 .left-notification {
