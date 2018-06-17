@@ -5,6 +5,7 @@
   }
   .ui-select-choices {
     width: auto;
+      @include scroll;
     .ui-select-choices-row {
       &.active {
         a {

@@ -5,7 +5,7 @@
         }
         .document, .document-shifted {
             border-bottom: 1px solid $light-grey1;
-            height: 65px;
+            height: 81px;
             overflow: visible;
             padding: 12px 10px 0 0;
             position: relative;
@@ -134,6 +134,7 @@
     line-height: normal;
     font-size: 14px;
     color: #000000;
+    max-width: 350px;
    }
   #DocumentLine:hover  #AllDocumentIcons{
     display: inline-block; }

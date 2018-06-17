@@ -278,22 +278,7 @@ $tab-content-height: calc(
     margin: 3px 28px 0;
     overflow-x: hidden;
     z-index: 1;
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    &::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background-color: white;
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-    }
-
-
+    @include scroll;
 
     .text {
         color: $light-grey4;
@@ -830,8 +815,9 @@ $tab-content-height: calc(
         }
         .ui-select-choices-row {
             .ui-select-choices-row-inner {
-               display: flex;
-               align-items: center;
+                display: flex;
+                align-items: center;
+                padding: 3px 6px;
            }
        }
    }
@@ -1493,20 +1479,7 @@ $tab-content-height: calc(
 
    $avatar-margin: 12px;
 
-    &::-webkit-scrollbar {
-        width: 5px;
-    }
-
-    &::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background-color: white;
-        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
-    }
+    @include scroll;
 
     .watchersList {
         width: calc(100% - 60px);

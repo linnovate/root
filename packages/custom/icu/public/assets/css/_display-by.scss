@@ -79,7 +79,7 @@
                 }
 
                 a {
-                    padding-bottom: 11px;
+                    margin-bottom: 11px;
                     font-size: 13px;
                     max-width: 165px;
                     line-height: 18px;
@@ -108,7 +108,7 @@
 
                         position: absolute;
                         top: 50%;
-                        margin-top: -6px;
+                        //margin-top: -6px;
                         transform: translateY(-50%);
                         -webkit-transform: translateY(-50%);
                     }

@@ -50,14 +50,13 @@
 
 
 .detail-assign {
-  position: relative;
-  @include ui-select;
+    position: relative;
+    @include ui-select;
     width: 110px;
     height: $panel-height;
-    position: relative;
     float: left;
 
-    ul {
+    ul, .ui-select-dropdown, .dropdown-menu {
         /*rtl:begin:ignore*/
         left: auto ;
         right: 0;
@@ -68,7 +67,13 @@
         left: 0;
         /*rtl:end:remove*/
 
-        width: auto;
+        width: 250px;
+
+        &>div {
+            height: 57px;
+        }
+
+        @include scroll;
     }
 
     .ui-select-container.ui-select-bootstrap {

@@ -309,7 +309,8 @@
         <ul ng-if="visible.user">
             <li ng-if="user.name !== 'no select'"
                 data-ng-repeat="user in people | limitTo: displayLimit['people']"
-                data-ng-click="switchTo('user', user._id)">
+                data-ng-click="switchTo('user', user._id)"
+                data-ng-class="{'selected': context.entityName === 'user' && context.entityId === user._id}">
                 <a href data-ng-link="main.users.details({id: user._id})">
                     <div icu-avatar user="user"></div>
                     <span class="name">{{user.name}}</span>
