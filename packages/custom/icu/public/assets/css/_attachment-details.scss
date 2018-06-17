@@ -7,6 +7,12 @@ $tab-content-height: calc(
     100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 37px
 );
 
+.attachment {
+    padding-left: 16px;
+    height: calc(100% - 55px);
+    overflow-y: hidden;
+}
+
 .attachment-details {
 
         .att-icon {
@@ -16,16 +22,21 @@ $tab-content-height: calc(
 
         .att-size {
             width: 120px;
-            margin-left: 10px;
-            padding-top: 13px;
+            margin-left: 13px;
+            padding-top: 10px;
             padding-bottom: 7px;
             float: left;
             border-right: 1px solid #e1e1e1;
         }
 
+    .att-menu-item {
+        margin-top: 10px;
+        margin-left: 13px;
+    }
+
         .att-user {
             color: gray;
-            padding-top: 15px;
+            padding: 15px 15px 0 15px;
         }
 
         .att-user:hover {
@@ -34,7 +45,6 @@ $tab-content-height: calc(
 
         .att-size, .att {
             color: #bdbcbc ;
-//             height: 100% ;
             box-shadow: 0 none;
 
         }
@@ -46,11 +56,19 @@ $tab-content-height: calc(
             float: right;
         }
 
+    .att-creator-button {
+        background-color: #0097a7;
+        transition: 0.3s;
+        border-radius: 22px;
+        padding: 0 13px;
+        color: white;
+        margin: 14px 0 0;
+    }
+
         .user {
-//             width: 160px; //calc((100% - #{$panel-height}) * 0.25);
-//             height: $panel-height;
             position: relative;
             float: left;
+            display: inline-flex;
 
             ul {
                 /*rtl:begin:ignore*/
@@ -94,21 +112,21 @@ $tab-content-height: calc(
                 }
 
             }
-          
+
             .avatar {
-                height: 32px;
-                width: 32px;
-                background-color: $green;
-                border-radius: 50%;
-                display: inline-block;
-                margin: 0 10px 0 0;
                 float: left;
+                width: 24px;
+                height: 24px;
                 font-size: 20px;
-                line-height: 32px;
+                line-height: 24px;
+                border-radius: 50%;
+                margin: 0 10px 0 0;
+                display: inline-block;
+                background-color: $green;
             }
             .summary-content {
                 display: inline-block;
-                line-height: 26px;
+                font-weight: bold;
             }
         }
 
@@ -131,9 +149,9 @@ $tab-content-height: calc(
         margin-top: 10px;
         margin-bottom: 20px;
     }
- 
+
     .attachment .att-link {
-        font-size: 22px;
+        font-size: 16px;
         color: #FFA000;
         text-decoration: none;
         font-weight: 700;
