@@ -7,6 +7,9 @@
     ng-model="item.title"
     ng-change="onChange(item)"
     ng-keydown="onKeydown($event, $index)"
+    ng-blur="bluring(item, $event)"
+    ng-focus="focusing(item)"
+    ng-class="{'noFocus':!item.focus}"
 ></td>
 <td class="office">
     <span class="tag office"

@@ -232,7 +232,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         };
 
         let usingFunction = config.direction === 'rtl' ? scrollRight : scrollLeft;
-        $event.target.children.length === 0 ? usingFunction($event.target) : usingFunction($event.target.firstChild);
+        usingFunction($event.target);
     };
 
     //     $scope.onBlur = function(item) {
