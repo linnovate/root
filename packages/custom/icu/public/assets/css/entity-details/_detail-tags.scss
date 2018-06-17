@@ -1,6 +1,7 @@
 
 detail-tags {
     display: block;
+    position: relative;
 }
 
 .detail-tags {
@@ -39,7 +40,7 @@ detail-tags {
         border: 1px solid $light-grey1;
 
         .detail-tags-item-remove {
-            
+
             background-color: inherit;
             @include button;
             display: none;

@@ -98,21 +98,15 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function getUserPerms(entity, user){
+            user = user || me;
             return _.find(entity.permissions, {'id': getUserId(user)});
         }
 
         function haveEditorsPerms(entity, user){
-                user = user || me;
-                haveAnyPerms(entity, user);
+            haveAnyPerms(entity, user);
+            let userPerms = getUserPerms(entity, user);
 
-                var havePerms = false;
-                if(entity.permissions.length !== 0) {
-                    var usersPerms = getUserPerms(entity, user);
-                    if(usersPerms){
-                        havePerms = usersPerms.level === 'editor';
-                    }
-                }
-                return havePerms;
+            return userPerms && userPerms.level === 'editor';
         }
 
         function haveCommenterPerms(entity, user){
@@ -130,7 +124,7 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function changeUsersPermissions(entity, user, perms, context){
-            if(!haveEditorsPerms(entity)){
+            if(getUserPerms(entity) === 'editor'){
                 return false;
             }
 
