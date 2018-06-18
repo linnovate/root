@@ -1,4 +1,8 @@
 @mixin ui-select {
+    /*rtl:begin:ignore*/
+    direction: ltr;
+    /*rtl:end:ignore*/
+
     .ui-select-container {
         padding-top: 15px;
         background-color: transparent;
