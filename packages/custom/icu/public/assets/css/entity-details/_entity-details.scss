@@ -19,6 +19,7 @@
 .entity-details {
     height: calc(100% - #{$header-height});
     overflow-y: hidden;
+    padding-bottom: $footer-height;
 }
 
 /* -------------------------------- header-bar  -------------------------------- */
