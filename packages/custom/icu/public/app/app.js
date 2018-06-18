@@ -68,7 +68,7 @@ angular.module('mean.icu').config([
                     officeDocuments:undefined
                 },
                 views: {
-                    'middlepane@main': { 
+                    'middlepane@main': {
                         templateUrl: '/icu/components/entity-list/entity-list.html',
                         controller: capitalizedMain + 'ListController'
                     },
@@ -157,7 +157,7 @@ angular.module('mean.icu').config([
 
             return {
                 url: urlPrefix + '/:id',
-                views: { 
+                views: {
                     'detailspane@main': {
                         templateUrl: '/icu/components/project-details/project-details.html',
                         controller: 'ProjectDetailsController'
@@ -1126,6 +1126,7 @@ angular.module('mean.icu').config([
             .state('main.projects.byparent.activities.modal', getDetailspaneModal())
             .state('main.projects.byparent.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.byparent.details', getProjectDetailsState())
+            .state('main.projects.byparent.details.tasks', getDetailsTabState('project', 'tasks'))
             .state('main.projects.byparent.details.activities', getDetailsTabState('project', 'activities'))
             .state('main.projects.byparent.details.activities.modal', getDetailspaneModal())
             .state('main.projects.byparent.details.documents', getDetailsTabState('project', 'documents'))
@@ -1517,7 +1518,7 @@ angular.module('mean.icu').config([
                         return _(results).filter(function (r) {
                             return r._type === 'task';
                         });
-                    },              
+                    },
                     term: function ($stateParams) {
                         return $stateParams.query;
                     }
