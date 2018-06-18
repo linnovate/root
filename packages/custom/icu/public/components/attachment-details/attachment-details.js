@@ -2,8 +2,8 @@
 
 angular.module('mean.icu.ui.attachmentdetails', []).controller('AttachmentDetailsController', AttachmentDetailsController);
 
-function AttachmentDetailsController($scope, $http, entity, tasks, context, $state, AttachmentsService, DocumentsService, UsersService, EntityService, $stateParams) {
- 
+function AttachmentDetailsController($scope, $http, entity, tasks, context, $state, AttachmentsService, DocumentsService, UsersService, EntityService, TasksService, $stateParams) {
+
   // ==================================================== init ==================================================== //
 
   if ($scope.update && $state.current.name === 'main.search.update') {
@@ -30,6 +30,12 @@ function AttachmentDetailsController($scope, $http, entity, tasks, context, $sta
   EntityService.getByEntityId(attachment.entity, attachment.entityId).then(res=>$scope.attLinkToEntityName = res);
 
   $scope.attLinkToEntity = '/' + attachment.entity + '/all/' + attachment.entityId + '/documents';
+
+  if($scope.item.entity === 'task'){
+      TasksService.getById($scope.item.entityId).then(task=>{
+          $scope.item.project = task.project;
+      });
+  }
 
   $scope.$watchGroup(['item.description', 'item.title'], function(nVal, oVal) {
     if (nVal !== oVal && oVal) {
@@ -58,7 +64,7 @@ function AttachmentDetailsController($scope, $http, entity, tasks, context, $sta
 //       $state.reload();
 //     });
 //   }
-  
+
 //   $scope.menuItems = [{
 //     label: 'deleteAttachment',
 //     icon: 'times-circle',

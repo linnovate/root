@@ -12,19 +12,19 @@
         {{ item.size | bytes}}
     </div>
 
-    <button icu-open-modal="item" entity-name="document-preview" show-modal="true" modal-name="document-preview" data="item" 
-    class="DocumentIconsLine att">
+    <button icu-open-modal="item" entity-name="document-preview" show-modal="true" modal-name="document-preview" data="item"
+    class="DocumentIconsLine att att-menu-item">
             <!-- preview dialog -->
             <img class="att-icon" src="/icu/assets/img/icon-view.svg">
     </button>
 
-    <button id="{{item.path}}" ng-click="previewTab(item)" title="" 
-    class="DocumentIconsLine att">
+    <button id="{{item.path}}" ng-click="previewTab(item)" title=""
+    class="DocumentIconsLine att att-menu-item">
             <!-- preview new tab -->
             <img class="att-icon" src="/icu/assets/img/icon-view.svg" tooltips tooltip-template="{{'view' |  i18next}}">
     </button>
 
-    <button class="DocumentIconsLine att">
+    <button class="DocumentIconsLine att att-menu-item">
             <!-- download -->
             <a href="{{item.path}}" target="_blank">
                 <img tooltips tooltip-template="{{'download' |  i18next}}" class="att-icon" ng-src="/icu/assets/img/icon-download.png" src="/icu/assets/img/icon-download.svg">
@@ -32,17 +32,18 @@
     </button>
 
     <detail-menu items="menuItems"></detail-menu>
-  
+
   </div>
 
-  <div class="attachment">
-    <span class="att-link-wrapper">
+  <div class="attachment scroll">
+      <span ng-if="item.project" class="summary-content btn att-creator-button">{{item.project.title}}</span>
+      <span class="att-link-wrapper">
         <img class="att-link-icon" src="/icu/assets/img/icon-enter-arrow.svg">
         <a class="att-link" href="{{attLinkToEntity}}" ng-bind-html="attLinkToEntityName.title"></a>
     </span>
     <div class="icon {{item.attachmentType}}"></div>
     <span class="txt attName">{{item.name}}</span><br />
-    <span class="txt">Uploaded by <span class="txt attCreator">{{attUser.name}} {{attUser.lastname ? attUser.lastname:""}}</span>, </span><span class="txt attCreated">{{attCreated | date : 'h:mma MMM d, yyyy'}}</span> 
+    <span class="txt">Uploaded by <span class="txt attCreator">{{attUser.name}} {{attUser.lastname ? attUser.lastname:""}}</span>, </span><span class="txt attCreated">{{attCreated | date : 'h:mma MMM d, yyyy'}}</span>
   </div>
-    
+
 </div>
