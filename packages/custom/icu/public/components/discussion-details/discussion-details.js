@@ -356,7 +356,6 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
     $scope.updateAndNotify = function(item) {
-        item.status = $scope.statuses[1];
         if (context.entityName === 'discussion') {
             item.discussion = context.entityId;
         }
