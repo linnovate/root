@@ -40,6 +40,7 @@
             </ui-select-match>
             <ui-select-choices class="scroll" repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
                 <!--<div ng-bind-html="user.job | highlight: $select.search"></div>-->
+
                 <div icu-avatar
                      user="user"
                      entity="entity"

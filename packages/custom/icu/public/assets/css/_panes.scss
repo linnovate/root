@@ -100,15 +100,30 @@
     height: auto !important;
   }
   .panes-wrapper {
-      margin-left: 0 !important;
       width: 100% !important;
-  }
-  .middlepane * {
-    visibility: visible;
+      margin-left: 0 !important;
   }
   .middlepane {
-    visibility: visible;
-    width: 100% !important;
+      height: auto;
+      width: 100% !important;
+      overflow: visible !important;
+
+      .full-height {
+          height: auto !important;
+          overflow: visible !important;
+      }
+
+      .task-list {
+          overflow: visible;
+          height: auto !important;
+
+          .entity-list-container {
+              height: auto !important;
+          }
+      }
+      .middlepane-container {
+          height: auto !important;
+      }
   }
   .middlepane .filters {
       display: none;

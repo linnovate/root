@@ -90,8 +90,6 @@ directive('icuSidepane', function() {
             {
                 return item.state === context.main;
             }
-
-            //return item.state === context.main;
         };
 
         $scope.GoToMyTasks = function() {
@@ -104,6 +102,13 @@ directive('icuSidepane', function() {
           $scope.setCurrentState(item.state);
 
           if(item.func)item.func();
+        };
+
+        $scope.checkForSearchState = function(){
+            if($state.current.name.indexOf('search') === -1){
+                $scope.clearAllFilters();
+                $scope.clearResults()
+            }
         };
 
         $scope.clearAllFilters = function(){
@@ -534,6 +539,7 @@ directive('icuSidepane', function() {
     };
 
     $scope.toggleRecycle = function () {
+        var query = SearchService.getQuery();
         console.log("toggleRecycle...") ;
 
         if($location.search().recycled) {
@@ -545,11 +551,11 @@ directive('icuSidepane', function() {
 
         if($scope.recycled === false) {
             $scope.isRecycled = false;
-            $state.go('main.search', {reload: true});
+            $state.go('main.search', {reload: true,  query: query});
         }
         else {
             $scope.isRecycled = true;
-            $state.go('main.search', { 'query':'___', recycled: true});
+            $state.go('main.search', {recycled: true, 'query':'___'});
         }
     };
 

@@ -4,29 +4,35 @@ angular.module('mean.icu.data.officedocumentsservice', [])
     .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService, NotifyingService, ActivitiesService) {
         var EntityPrefix = '/officeDocuments';
 
-          function getAll(start , limit , sort) {
-              var query = "/?start=0&limit=25&sort=created";
-              if(start&&limit&&sort){
-                query = "/?start="+start+"&limit="+limit+"&sort="+sort;
-              }
-            return $http.get(ApiUri + EntityPrefix+query).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
-                // result.data = [{
-                //             created: new Date,
-                //             updated: new Date,
-                //             _id: "hgjg",
-                //             title: "sraya",
-                //             path: "/gfdgdgf/dfgdfhg",
-                //             description: "hello world",
-                //             documentType: "pptx",
-                //             entity: "project",
-                //             entityId: "fff",
-                //             creator: "avraham",
-                //             status: "new"
-                //                }]
-                result.data.forEach(function(officeDocument){
-                      officeDocument.created = new Date(officeDocument.created);
-                });
+    function getAll(start, limit, sort, sortOrder, status, folderId) {
+         var query = "/?start=0&limit=25&sort=created";
+        if (start && limit && sort) {
+            query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort;
+        }
+        if(status){
+            query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status;
+        }
+        if(folderId){
+            query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status + "&folderId="+ folderId;
+        }
+        return $http.get(ApiUri + EntityPrefix + query).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            // result.data = [{
+            //             created: new Date,
+            //             updated: new Date,
+            //             _id: "hgjg",
+            //             title: "sraya",
+            //             path: "/gfdgdgf/dfgdfhg",
+            //             description: "hello world",
+            //             documentType: "pptx",
+            //             entity: "project",
+            //             entityId: "fff",
+            //             creator: "avraham",
+            //             status: "new"
+            //                }]
+            result.data.forEach(function (officeDocument) {
+                officeDocument.created = new Date(officeDocument.created);
+            });
 
                 return result.data;
             });
@@ -74,6 +80,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function getById(id) {
             return $http.get(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
+                result.data.created = new Date(result.data.created);
                 return result.data;
             });
         }
@@ -136,13 +143,48 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateDocument(id, data) {
-              if(typeof id === 'object')id = id._id;
-            return $http.post(ApiUri + EntityPrefix + "/" +id, data).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            });
-        }
+
+
+
+
+    function download(data,fileName){
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.setAttribute('style','display:none');
+        var blob = new Blob([new Uint8Array(data)]);
+        var url = window.URL.createObjectURL(blob);
+        a.href=url;
+        a.download=fileName;
+        a.click();
+        setTimeout(function(){
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        },0);
+
+
+    }
+
+    function getFileFtp(url) {
+        return $http({method:'GET',url:ApiUri + "/ftp/" + url}).then(function(response){
+            var json =response.data;
+            var fileContent=json.fileContent.data;
+            var fileName = json.fileName;
+            download(fileContent,fileName);
+            return response;
+        },function(errorResponse){
+              console.dir("ERROR RESPOSE");
+            console.dir(errorResponse);
+            return errorResponse;
+        });
+    }
+
+
+    function updateDocument(id, data) {
+        return $http.post(ApiUri + EntityPrefix + "/" + id, data).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
 
         function createDocument(data) {
             return $http.post(ApiUri + EntityPrefix + "/create" , data).then(function (result) {
@@ -402,6 +444,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             updateTitle: updateTitle,
             uploadEmpty:uploadEmpty,
             deleteDocumentFile:deleteDocumentFile,
-            signOnDocx:signOnDocx
+            signOnDocx:signOnDocx,
+            getFileFtp:getFileFtp
         };
     });

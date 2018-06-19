@@ -30,7 +30,7 @@ var config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 var order = require('../controllers/order');
 var express = require('express');
-
+var ftp = require('../services/ftp.js');
 
 //update mapping - OHAD
 //var mean = require('meanio');

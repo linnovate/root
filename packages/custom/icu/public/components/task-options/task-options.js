@@ -60,4 +60,6 @@ angular.module('mean.icu.ui.taskoptions', [])
 	if ($state.current.name === 'main.tasks.byassign') {
 		$state.go('.activities');
 	}
+
+
 });

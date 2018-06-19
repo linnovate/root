@@ -1,25 +1,24 @@
 'use strict';
 
-angular.module('mean.icu.ui.entity', [])
-.service('EntityService', function (ApiUri, $http, PaginationService, WarningsService, ActivitiesService, MeanSocket, SettingServices) {
+angular.module('mean.icu.ui.entity', []).service('EntityService', function (ApiUri, $http, $stateParams, PaginationService, WarningsService, ActivitiesService, MeanSocket, SettingServices) {
+    var activeStatusFilterValue = "default";
+    var SortFilterValue = {
+                             field:"created",
+                             order: 1
+                          };
+    var entityFolderValue = {}
+    if($stateParams.entity == "folder"){
+        entityFolderValue.id = $stateParams.entityId;
+    }
 
-    var activeStatusFilterValue = "default" ;
+    var entityTypes = ['projects', 'tasks', 'discussions', 'updates', 'offices', 'folders', 'officeDocuments'];
 
-    let entityTypes = [
-        'projects',
-        'tasks',
-        'discussions',
-        'updates',
-        'offices',
-        'folders',
-        'officeDocuments'
-    ]      
-    
+    function getByEntityId(type, id) {
+        var entityType = entityTypes.find(function (elem) {
+            return elem.includes(type);
+        });
 
-    function getByEntityId(type,id) {
-        let entityType = entityTypes.find(elem => elem.includes(type)) ;
-        
-        if (entityType == null) return Promise.resolve(null) ; 
+        if (entityType == null) return Promise.resolve(null);
         return $http.get(ApiUri + '/' + entityType + '/' + id).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
@@ -39,23 +38,38 @@ angular.module('mean.icu.ui.entity', [])
         activeStatusFilterValue = _activeStatusFilterValue ;
     }
 
-    function getEntityActivityStatus(filterValue,entityType,entityStatus) {
-        return SettingServices.getIsActiveStatus(filterValue,entityType,entityStatus)  ;
+
+    function setSortFilterValue(_sortFilterValue) {
+       SortFilterValue = _sortFilterValue
     }
 
-    var activeToggleList = [
-		{
-			title: 'Active',
-			value: 'active'
-		}, {
-			title: 'Archived',
-			value: 'nonactive'
-		},
-		{
-			title: 'All',
-			value: 'all'
-		}
-	];
+    function getSortFilterValue() {
+        return SortFilterValue;
+    }
+
+    function getEntityActivityStatus(filterValue, entityType, entityStatus) {
+        return SettingServices.getIsActiveStatus(filterValue, entityType, entityStatus);
+    }
+
+    function setEntityFolderValue(_entity, _id) {
+        entityFolderValue.entity = _entity;
+        entityFolderValue.id = _id;
+    }
+
+    function getEntityFolderValue() {
+        return entityFolderValue;
+    }
+
+    var activeToggleList = [{
+        title: 'Active',
+        value: 'active'
+    }, {
+        title: 'Archived',
+        value: 'nonactive'
+    }, {
+        title: 'All',
+        value: 'all'
+    }];
 
 
     function recycle(type,id) {
@@ -93,13 +107,16 @@ angular.module('mean.icu.ui.entity', [])
         isActiveStatusAvailable, isActiveStatusAvailable,
         getActiveStatusFilterValue: getActiveStatusFilterValue,
         setActiveStatusFilterValue: setActiveStatusFilterValue,
+        getSortFilterValue: getSortFilterValue,
+        setSortFilterValue: setSortFilterValue,
         activeStatusFilterValue: activeStatusFilterValue,
         getEntityActivityStatus: getEntityActivityStatus,
-        activeToggleList: activeToggleList,   
-        recycle: recycle,  
-        recycleRestore: recycleRestore,   
-        getRecycleBin: getRecycleBin,
-        getSearchAll: getSearchAll
-        
+        activeToggleList: activeToggleList,
+        setEntityFolderValue: setEntityFolderValue,
+        getEntityFolderValue: getEntityFolderValue,
+        recycle: recycle,
+        recycleRestore: recycleRestore,
+        getRecycleBin: getRecycleBin
+
     };
 }) ;

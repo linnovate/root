@@ -164,7 +164,8 @@ module.exports = function(MeanUser, app, auth, database, passport) {
           }
           
           //###start_of_url 
-          var arr = str.split(config.host + ':' + config.http.port);
+          //var arr = str.split(config.host + ':' + config.http.port);
+          var arr = str.split(config.host);
           // !!! in case of https
           //var arr = str.split(config.host + ':' + config.https.port);
           // !!! in case of https
@@ -172,8 +173,8 @@ module.exports = function(MeanUser, app, auth, database, passport) {
           var arr1 = str.split("/");
           var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
           var arr2 = arr1[7].split("." + req.body.documentType);
+          
   
-      
           // Make the convert from it's origin type to pdf
           exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
           if (err) {

@@ -3,7 +3,7 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context,SettingServices,SearchService, $rootScope, $stateParams,$location, $window,NotifyingService,UsersService, TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
+    function controller($scope, $state, context,SettingServices,SearchService,EntityService, $rootScope, $stateParams,$location, $window,NotifyingService,UsersService, TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
         $scope.statusList = SettingServices.getStatusList();
         $scope.activeList = SettingServices.getActiveStatusList();
         $scope.archiveList = SettingServices.getNonActiveStatusList();
@@ -270,6 +270,7 @@ angular.module('mean.icu.ui.displayby', [])
         };
 
         $scope.reset = function(main){
+             EntityService.setEntityFolderValue(undefined, undefined);
             localStorage.removeItem("type");
             $scope.typeSelected = null;
         };
@@ -283,7 +284,8 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.typeSelected = localStorage.getItem("type");
         $scope.switchToType = function (type) {
-            OfficeDocumentsService.getAll().then(function(result){
+            EntityService.setActiveStatusFilterValue(type.name);
+            OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field, EntityService.getSortFilterValue().order,type.name).then(function (result) {
 
             $scope.officeDocuments=result;
 
@@ -352,17 +354,24 @@ angular.module('mean.icu.ui.displayby', [])
              },{reload: true});
          }*/
      };
-        $scope.switchTo = function(entityName, id) {
+        $scope.switchTo = function (entityName, id) {
+            EntityService.setEntityFolderValue(entityName, id);
+            OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field, 
+                                               EntityService.getSortFilterValue().order,
+                                               EntityService.getActiveStatusFilterValue(),
+                                               EntityService.getEntityFolderValue().id).then(function (result) {
 
+            $state.go('main.' + context.main + '.byentity', {
+                entity: entityName,
+                entityId: id,
+                officeDocuments: result
+            });
+        });
             // If we are switching between entities, then shrink the display limit again
             if (!$scope.visible[entityName]) {
                 $scope.displayLimit.reset();
             }
-            $state.go('main.' + context.main  +  '.byentity', {
-                entity: entityName,
-                entityId: id,
-                officeDocuments:undefined
-            });
+            
         };
 
         $scope.switchToAll = function (entityName, id) {

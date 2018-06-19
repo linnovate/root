@@ -8,7 +8,7 @@
                     })">
         <header class="title">
             {{'officeDocumentsFrom' | i18next}}{{currentContext.entityName | i18next}}
-            <span ng-bind-html="currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name"></span>
+            "<span ng-bind-html="currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name"></span>"
         </header>
     </div>
 
@@ -35,7 +35,7 @@
                         <ui-select-match>
                             <button class="tasks">{{$select.selected.title | i18next}}</button>
                         </ui-select-match>
-                        <ui-select-choices repeat="field.value as field in sortingList | filter: $select.search">
+                        <ui-select-choices class="sorting" repeat="field.value as field in sortingList | filter: $select.search">
                             {{field.title | i18next}}
                         </ui-select-choices>
                     </ui-select>
@@ -50,5 +50,7 @@
          load-next="loadNext"
          load-prev="loadPrev"
          draw-arrow="true"
-         order="sorting"></div>
+         order="sorting"
+         active-toggle="activeToggle"
+         zbb="zbb"></div>
 </div>
