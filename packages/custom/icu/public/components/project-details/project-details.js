@@ -30,7 +30,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
     buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
   };
   $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'completed', 'archived'];
-  
+
   $scope.me = me;
   $scope.tags = tags;
 
@@ -280,19 +280,19 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
     });
 
   }
-  
+
   function refreshList() {
     $rootScope.$broadcast('refreshList');
   }
 
   $scope.update = function(item, context) {
+    if (context.name === 'color') {
+        item.color = context.newVal;
+    }
     ProjectsService.update(item, context).then(function(res) {
       if (ProjectsService.selected && res._id === ProjectsService.selected._id) {
         if (context.name === 'title') {
           ProjectsService.selected.title = res.title;
-        }
-        if (context.name === 'color') {
-          ProjectsService.selected.color = res.color;
         }
       }
       switch (context.name) {
@@ -344,11 +344,11 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
 
   // ==================================================== Template ==================================================== //
 
-  $scope.saveTemplate = function(newTemplate) { 
+  $scope.saveTemplate = function(newTemplate) {
     return ProjectsService.saveTemplate($stateParams.id, newTemplate)
   }
 
-  $scope.deleteTemplate = function(id) { 
+  $scope.deleteTemplate = function(id) {
     return ProjectsService.deleteTemplate(id)
   }
 
