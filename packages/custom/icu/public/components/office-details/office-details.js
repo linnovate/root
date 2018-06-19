@@ -153,13 +153,13 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
   // ==================================================== Update ==================================================== //
 
   $scope.update = function(office, context) {
+      if (context.name === 'color') {
+          office.color = context.newVal;
+      }
     OfficesService.update(office, context).then(function(res) {
       if (OfficesService.selected && res._id === OfficesService.selected._id) {
         if (context.name === 'title') {
           OfficesService.selected.title = res.title;
-        }
-        if (context.name === 'color') {
-          OfficesService.selected.color = res.color;
         }
       }
       switch (context.name) {

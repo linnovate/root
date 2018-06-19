@@ -206,13 +206,13 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
   // ==================================================== Update ==================================================== //
 
   $scope.update = function(folder, context) {
+      if (context.name === 'color') {
+          folder.color = context.newVal;
+      }
     FoldersService.update(folder, context).then(function(res) {
       if (FoldersService.selected && res._id === FoldersService.selected._id) {
         if (context.name === 'title') {
           FoldersService.selected.title = res.title;
-        }
-        if (context.name === 'color') {
-          FoldersService.selected.color = res.color;
         }
       }
       switch (context.name) {
