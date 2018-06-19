@@ -95,7 +95,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     }
     activeLocationTimeout = setTimeout(function() {
       $scope.update(discussion, 'location')
-    }, 2000);
+    }, 500);
   }
 
   $scope.onStatus = function(value) {
@@ -356,7 +356,6 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
     $scope.updateAndNotify = function(item) {
-        item.status = $scope.statuses[1];
         if (context.entityName === 'discussion') {
             item.discussion = context.entityId;
         }
