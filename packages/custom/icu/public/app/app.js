@@ -68,7 +68,7 @@ angular.module('mean.icu').config([
                     officeDocuments:undefined
                 },
                 views: {
-                    'middlepane@main': {
+                    'middlepane@main': { 
                         templateUrl: '/icu/components/entity-list/entity-list.html',
                         controller: capitalizedMain + 'ListController'
                     },
@@ -157,7 +157,7 @@ angular.module('mean.icu').config([
 
             return {
                 url: urlPrefix + '/:id',
-                views: {
+                views: { 
                     'detailspane@main': {
                         templateUrl: '/icu/components/project-details/project-details.html',
                         controller: 'ProjectDetailsController'
@@ -1126,7 +1126,6 @@ angular.module('mean.icu').config([
             .state('main.projects.byparent.activities.modal', getDetailspaneModal())
             .state('main.projects.byparent.documents', getDetailsTabState('project', 'documents'))
             .state('main.projects.byparent.details', getProjectDetailsState())
-            .state('main.projects.byparent.details.tasks', getDetailsTabState('project', 'tasks'))
             .state('main.projects.byparent.details.activities', getDetailsTabState('project', 'activities'))
             .state('main.projects.byparent.details.activities.modal', getDetailspaneModal())
             .state('main.projects.byparent.details.documents', getDetailsTabState('project', 'documents'))
@@ -1177,234 +1176,364 @@ angular.module('mean.icu').config([
                         //        if (typeof OfficeDocumentsService.data !== 'undefined') {
                          //           $stateParams.limit = OfficeDocumentsService.data.length;
                         //        }
-                        var activeToggle = $stateParams.activeToggle?$stateParams.activeToggle:"active";
-                        localStorage.removeItem("type");
-                        return OfficeDocumentsService.getAll($stateParams.start, $stateParams.limit, $stateParams.sort,1, activeToggle);
-                    }
-                }
-            }
-            // firstTime: function($stateParams){
-            //     var docs = $stateParams.officeDocuments;
-            //     if(docs){
-            //         return false;
-            //     }else{
-            //         return true;
-            //     }
-            // }
-        }
-    }).state('main.officeDocuments.all.details', getOfficeDocumentDetailsState()).state('main.officeDocuments.all.details.activities', getDetailsTabState('officeDocument', 'activities')).state('main.officeDocuments.all.details.activities.modal', getDetailspaneModal()).state('main.officeDocuments.all.details.documents', getDetailsTabState('officeDocument', 'documents')).state('main.officeDocuments.all.details.tasks', getDetailsTabState('officeDocument', 'tasks')).state('main.officeDocuments.byentity', generateStateByEntity('officeDocument')).state('main.officeDocuments.byentity.activities', getDetailsTabState('officeDocument', 'activities')).state('main.officeDocuments.byentity.activities.modal', getDetailspaneModal()).state('main.officeDocuments.byentity.documents', getDetailsTabState('officeDocument', 'documents')).state('main.officeDocuments.byentity.tasks', getDetailsTabState('officeDocument', 'tasks')).state('main.officeDocuments.byentity.details', getOfficeDocumentDetailsState()).state('main.officeDocuments.byentity.details.activities', getDetailsTabState('officeDocument', 'activities')).state('main.officeDocuments.byentity.details.activities.modal', getDetailspaneModal()).state('main.officeDocuments.byentity.details.documents', getDetailsTabState('officeDocument', 'documents')).state('main.officeDocuments.byentity.details.tasks', getDetailsTabState('officeDocument', 'tasks')).state('main.discussions', {
-        url: '/discussions',
-        views: {
-            middlepane: {
-                //hack around the fact that state current name is initialized in controller only
-                template: '',
-                controller: function controller($state, projects, context) {
-                    if ($state.current.name === 'main.discussions') {
-                        if (projects.data.length) {
-                            $state.go('.byentity', {
-                                entity: context.entityName,
-                                entityId: context.entityId
-                            });
-                        } else {
-                            $state.go('.all');
+                                localStorage.removeItem("type");
+                                return OfficeDocumentsService.getAll($stateParams.start,
+                                    $stateParams.limit,
+                                    $stateParams.sort);
+                            }
                         }
-                    }
-                }
-            }
-        }
-    }).state('main.discussions.all', {
-        url: '/all',
-        params: {
-            starred: false,
-            start: 0,
-            limit: LIMIT,
-            sort: SORT
-        },
-        views: getListView('discussion'),
-        resolve: {
-            discussions: function discussions(DiscussionsService, $stateParams) {
-                if ($stateParams.starred) {
-                    return DiscussionsService.getStarred();
-                } else {
-                    //      if (typeof DiscussionsService.data !== 'undefined') {
-                    //          $stateParams.limit = DiscussionsService.data.length;
-                    //     }
-                    return DiscussionsService.getAll($stateParams.start, $stateParams.limit, $stateParams.sort);
-                }
-            }
-        }
-    }).state('main.discussions.all.details', getDiscussionDetailsState()).state('main.discussions.all.details.activities', getDetailsTabState('discussion', 'activities')).state('main.discussions.all.details.activities.modal', getDetailspaneModal()).state('main.discussions.all.details.documents', getDetailsTabState('discussion', 'documents')).state('main.discussions.all.details.tasks', getDetailsTabState('discussion', 'tasks')).state('main.discussions.byentity', generateStateByEntity('discussion')).state('main.discussions.byentity.activities', getDetailsTabState('discussion', 'activities')).state('main.discussions.byentity.activities.modal', getDetailspaneModal()).state('main.discussions.byentity.documents', getDetailsTabState('discussion', 'documents')).state('main.discussions.byentity.tasks', getDetailsTabState('discussion', 'tasks')).state('main.discussions.byentity.details', getDiscussionDetailsState()).state('main.discussions.byentity.details.activities', getDetailsTabState('discussion', 'activities')).state('main.discussions.byentity.details.activities.modal', getDetailspaneModal()).state('main.discussions.byentity.details.documents', getDetailsTabState('discussion', 'documents')).state('main.discussions.byentity.details.tasks', getDetailsTabState('discussion', 'tasks')).state('main.offices', {
-        url: '/offices',
-        views: {
-            middlepane: {
-                //hack around the fact that state current name is initialized in controller only
-                template: '',
-                controller: function controller($state, discussions, context) {
-                    if ($state.current.name === 'main.offices') {
-                        if (discussions.data.length) {
-                            $state.go('.byentity', {
-                                entity: context.entityName,
-                                entityId: context.entityId
-                            });
-                        } else {
-                            $state.go('.all');
-                        }
-                    }
-                }
-            }
-        }
-    }).state('main.offices.all', {
-        url: '/all',
-        params: {
-            starred: false,
-            start: 0,
-            limit: LIMIT,
-            sort: SORT
-        },
-        views: getListView('office'),
-        resolve: {
-            offices: function offices(OfficesService, $stateParams) {
-                if ($stateParams.starred) {
-                    return OfficesService.getStarred();
-                } else {
-                    //     if (typeof OfficesService.data !== 'undefined') {
-                    //         $stateParams.limit = OfficesService.data.length;
-                    //     }
-                    return OfficesService.getAll($stateParams.start, $stateParams.limit, $stateParams.sort);
-                }
-            }
-        }
-    }).state('main.offices.all.details', getOfficeDetailsState()).state('main.offices.all.details.activities', getDetailsTabState('office', 'activities')).state('main.offices.all.details.activities.modal', getDetailspaneModal()).state('main.offices.all.details.documents', getDetailsTabState('office', 'documents')).state('main.offices.all.details.folders', getDetailsTabState('office', 'folders')).state('main.offices.all.details.signatures', getDetailsTabState('office', 'signatures')).state('main.offices.byentity', generateStateByEntity('office')).state('main.offices.byentity.activities', getDetailsTabState('office', 'activities')).state('main.offices.byentity.activities.modal', getDetailspaneModal()).state('main.offices.byentity.documents', getDetailsTabState('office', 'documents')).state('main.offices.byentity.folders', getDetailsTabState('office', 'folders')).state('main.offices.byentity.signatures', getDetailsTabState('office', 'signatures')).state('main.offices.byentity.details', getOfficeDetailsState()).state('main.offices.byentity.details.activities', getDetailsTabState('office', 'activities')).state('main.offices.byentity.details.activities.modal', getDetailspaneModal()).state('main.offices.byentity.details.documents', getDetailsTabState('office', 'documents')).state('main.offices.byentity.details.folders', getDetailsTabState('office', 'folders')).state('main.offices.byentity.details.signatures', getDetailsTabState('office', 'signatures')).state('main.templateDocs', {
-        url: '/templateDocs',
-        views: {
-            middlepane: {
-                //hack around the fact that state current name is initialized in controller only
-                template: '',
-                controller: function controller($state, discussions, context) {
-                    if ($state.current.name === 'main.templateDocs') {
-                        if (discussions.data.length) {
-                            $state.go('.byentity', {
-                                entity: context.entityName,
-                                entityId: context.entityId
-                            });
-                        } else {
-                            $state.go('.all');
-                        }
-                    }
-                }
-            }
-        }
-    }).state('main.templateDocs.all', {
-        url: '/all',
-        params: {
-            starred: false,
-            start: 0,
-            limit: LIMIT,
-            sort: SORT
-        },
-        views: getListView('templateDoc'),
-        resolve: {
-            templateDocs: function templateDocs(TemplateDocsService, $stateParams) {
-                if ($stateParams.starred) {
-                    return TemplateDocsService.getStarred();
-                } else {
-                    //       if (typeof TemplateDocsService.data !== 'undefined') {
-                    //           $stateParams.limit = TemplateDocsService.data.length;
-                    //       }
-                    return TemplateDocsService.getAll($stateParams.start, $stateParams.limit, $stateParams.sort);
-                }
-            }
-        }
-    }).state('main.templateDocs.all.details', getTemplateDocDetailsState()).state('main.templateDocs.all.details.activities', getDetailsTabState('templateDoc', 'activities')).state('main.templateDocs.all.details.activities.modal', getDetailspaneModal()).state('main.templateDocs.all.details.documents', getDetailsTabState('templateDoc', 'documents')).state('main.templateDocs.all.details.folders', getDetailsTabState('templateDoc', 'folders')).state('main.templateDocs.byentity', generateStateByEntity('templateDoc')).state('main.templateDocs.byentity.activities', getDetailsTabState('templateDoc', 'activities')).state('main.templateDocs.byentity.activities.modal', getDetailspaneModal()).state('main.templateDocs.byentity.documents', getDetailsTabState('templateDoc', 'documents')).state('main.templateDocs.byentity.folders', getDetailsTabState('templateDoc', 'folders')).state('main.templateDocs.byentity.details', getTemplateDocDetailsState()).state('main.templateDocs.byentity.details.activities', getDetailsTabState('templateDoc', 'activities')).state('main.templateDocs.byentity.details.activities.modal', getDetailspaneModal()).state('main.templateDocs.byentity.details.documents', getDetailsTabState('templateDoc', 'documents')).state('main.templateDocs.byentity.details.folders', getDetailsTabState('templateDoc', 'folders')).state('main.folders', {
-        url: '/folders',
-        views: {
-            middlepane: {
-                //hack around the fact that state current name is initialized in controller only
-                template: '',
-                controller: function controller($state, discussions, context) {
-                    if ($state.current.name === 'main.folders') {
-                        if (discussions.data.length) {
-                            $state.go('.byentity', {
-                                entity: context.entityName,
-                                entityId: context.entityId
-                            });
-                        } else {
-                            $state.go('.all');
-                        }
-                    }
-                }
-            }
-        }
-    }).state('main.folders.all', {
-        url: '/all',
-        params: {
-            starred: false,
-            start: 0,
-            limit: LIMIT,
-            sort: SORT
-        },
-        views: getListView('folder'),
-        resolve: {
-            folders: function folders(FoldersService, $stateParams) {
-                if ($stateParams.starred) {
-                    return FoldersService.getStarred();
-                } else {
-                    //       if (typeof FoldersService.data !== 'undefined') {
-                    //           $stateParams.limit = FoldersService.data.length;
-                    //       }
-                    return FoldersService.getAll($stateParams.start, $stateParams.limit, $stateParams.sort);
-                }
-            }
-        }
-    }).state('main.folders.all.details', getFolderDetailsState()).state('main.folders.all.details.activities', getDetailsTabState('folder', 'activities')).state('main.folders.all.details.activities.modal', getDetailspaneModal()).state('main.folders.all.details.documents', getDetailsTabState('folder', 'documents')).state('main.folders.all.details.tasks', getDetailsTabState('folder', 'tasks')).state('main.folders.byentity', generateStateByEntity('folder')).state('main.folders.byentity.activities', getDetailsTabState('folder', 'activities')).state('main.folders.byentity.activities.modal', getDetailspaneModal()).state('main.folders.byentity.documents', getDetailsTabState('folder', 'documents')).state('main.folders.byentity.folders', getDetailsTabState('folder', 'folders')).state('main.folders.byentity.details', getFolderDetailsState()).state('main.folders.byentity.details.activities', getDetailsTabState('folder', 'activities')).state('main.folders.byentity.details.activities.modal', getDetailspaneModal()).state('main.folders.byentity.details.documents', getDetailsTabState('folder', 'documents')).state('main.folders.byentity.details.tasks', getDetailsTabState('folder', 'tasks')).state('main.adminSettings', {
-        url: '/adminSettings',
-        views: {
-            'mainpane@main': {
-                templateUrl: '/icu/components/admin/settings.html',
-                controller: 'adminSettingsController'
-            }
-        }
-    }).state('main.search', {
-        url: '/search/:query',
-        params: {
-            dateUpdated: 'active'
-        },
-        views: {
-            'middlepane@main': {
-                templateUrl: '/icu/components/search-list/search-list.html',
-                controller: 'SearchListController'
-            },
-            'detailspane@main': {
-                templateUrl: '/icu/components/search-list/no-results.html',
-                controller: 'SearchListController'
-            }
-        },
-        resolve: {
-            results: function results(SearchService, $stateParams) {
-                if ($stateParams.query && $stateParams.query.length) {
-                    return SearchService.find($stateParams.query);
-                } else {
-                    if (SearchService.builtInSearchArray) {
-                        var data = SearchService.builtInSearchArray.map(function (d) {
-                            d._type = 'task';
-                            return d;
-                        });
                     },
+                    // firstTime: function($stateParams){
+                    //     var docs = $stateParams.officeDocuments;
+                    //     if(docs){
+                    //         return false;
+                    //     }else{
+                    //         return true;
+                    //     }
+                    // }
+                }
+            })
+            .state('main.officeDocuments.all.details', getOfficeDocumentDetailsState())
+            .state('main.officeDocuments.all.details.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.officeDocuments.all.details.activities.modal', getDetailspaneModal())
+            .state('main.officeDocuments.all.details.documents', getDetailsTabState('officeDocument', 'documents'))
+            .state('main.officeDocuments.all.details.tasks', getDetailsTabState('officeDocument', 'tasks'))
+
+            .state('main.officeDocuments.byentity', generateStateByEntity('officeDocument'))
+            .state('main.officeDocuments.byentity.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.officeDocuments.byentity.activities.modal', getDetailspaneModal())
+            .state('main.officeDocuments.byentity.documents', getDetailsTabState('officeDocument', 'documents'))
+            .state('main.officeDocuments.byentity.tasks', getDetailsTabState('officeDocument', 'tasks'))
+
+            .state('main.officeDocuments.byentity.details', getOfficeDocumentDetailsState())
+            .state('main.officeDocuments.byentity.details.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.officeDocuments.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.officeDocuments.byentity.details.documents', getDetailsTabState('officeDocument', 'documents'))
+            .state('main.officeDocuments.byentity.details.tasks', getDetailsTabState('officeDocument', 'tasks'))
+
+            .state('main.discussions', {
+                url: '/discussions',
+                views: {
+                    middlepane: {
+                        //hack around the fact that state current name is initialized in controller only
+                        template: '',
+                        controller: function ($state, projects, context) {
+                            if ($state.current.name === 'main.discussions') {
+                                if (projects.data.length) {
+                                    $state.go('.byentity', {
+                                        entity: context.entityName,
+                                        entityId: context.entityId
+                                    });
+                                } else {
+                                    $state.go('.all');
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            .state('main.discussions.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('discussion'),
+                resolve: {
+                    discussions: function (DiscussionsService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return DiscussionsService.getStarred();
+                        } else {
+                      //      if (typeof DiscussionsService.data !== 'undefined') {
+                      //          $stateParams.limit = DiscussionsService.data.length;
+                       //     }
+                            return DiscussionsService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.discussions.all.details', getDiscussionDetailsState())
+            .state('main.discussions.all.details.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.all.details.activities.modal', getDetailspaneModal())
+            .state('main.discussions.all.details.documents', getDetailsTabState('discussion', 'documents'))
+            .state('main.discussions.all.details.tasks', getDetailsTabState('discussion', 'tasks'))
+
+            .state('main.discussions.byentity', generateStateByEntity('discussion'))
+            .state('main.discussions.byentity.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.byentity.activities.modal', getDetailspaneModal())
+            .state('main.discussions.byentity.documents', getDetailsTabState('discussion', 'documents'))
+            .state('main.discussions.byentity.tasks', getDetailsTabState('discussion', 'tasks'))
+
+            .state('main.discussions.byentity.details', getDiscussionDetailsState())
+            .state('main.discussions.byentity.details.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.discussions.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.discussions.byentity.details.documents', getDetailsTabState('discussion', 'documents'))
+            .state('main.discussions.byentity.details.tasks', getDetailsTabState('discussion', 'tasks'))
+
+
+            .state('main.offices', {
+                url: '/offices',
+                views: {
+                    middlepane: {
+                        //hack around the fact that state current name is initialized in controller only
+                        template: '',
+                        controller: function ($state, discussions, context) {
+                            if ($state.current.name === 'main.offices') {
+                                if (discussions.data.length) {
+                                    $state.go('.byentity', {
+                                        entity: context.entityName,
+                                        entityId: context.entityId
+                                    });
+                                } else {
+                                    $state.go('.all');
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            .state('main.offices.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('office'),
+                resolve: {
+                    offices: function (OfficesService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return OfficesService.getStarred();
+                        } else {
+                       //     if (typeof OfficesService.data !== 'undefined') {
+                       //         $stateParams.limit = OfficesService.data.length;
+                       //     }
+                            return OfficesService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.offices.all.details', getOfficeDetailsState())
+            .state('main.offices.all.details.activities', getDetailsTabState('office', 'activities'))
+            .state('main.offices.all.details.activities.modal', getDetailspaneModal())
+            .state('main.offices.all.details.documents', getDetailsTabState('office', 'documents'))
+            .state('main.offices.all.details.folders', getDetailsTabState('office', 'folders'))
+            .state('main.offices.all.details.signatures', getDetailsTabState('office', 'signatures'))
+
+            .state('main.offices.byentity', generateStateByEntity('office'))
+            .state('main.offices.byentity.activities', getDetailsTabState('office', 'activities'))
+            .state('main.offices.byentity.activities.modal', getDetailspaneModal())
+            .state('main.offices.byentity.documents', getDetailsTabState('office', 'documents'))
+            .state('main.offices.byentity.folders', getDetailsTabState('office', 'folders'))
+            .state('main.offices.byentity.signatures', getDetailsTabState('office', 'signatures'))
+
+            .state('main.offices.byentity.details', getOfficeDetailsState())
+            .state('main.offices.byentity.details.activities', getDetailsTabState('office', 'activities'))
+            .state('main.offices.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.offices.byentity.details.documents', getDetailsTabState('office', 'documents'))
+            .state('main.offices.byentity.details.folders', getDetailsTabState('office', 'folders'))
+            .state('main.offices.byentity.details.signatures', getDetailsTabState('office', 'signatures'))
+
+            .state('main.templateDocs', {
+                url: '/templateDocs',
+                views: {
+                    middlepane: {
+                        //hack around the fact that state current name is initialized in controller only
+                        template: '',
+                        controller: function ($state, discussions, context) {
+                            if ($state.current.name === 'main.templateDocs') {
+                                if (discussions.data.length) {
+                                    $state.go('.byentity', {
+                                        entity: context.entityName,
+                                        entityId: context.entityId
+                                    });
+                                } else {
+                                    $state.go('.all');
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            .state('main.templateDocs.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('templateDoc'),
+                resolve: {
+                    templateDocs: function (TemplateDocsService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return TemplateDocsService.getStarred();
+                        } else {
+                     //       if (typeof TemplateDocsService.data !== 'undefined') {
+                     //           $stateParams.limit = TemplateDocsService.data.length;
+                     //       }
+                            return TemplateDocsService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.templateDocs.all.details', getTemplateDocDetailsState())
+            .state('main.templateDocs.all.details.activities', getDetailsTabState('templateDoc', 'activities'))
+            .state('main.templateDocs.all.details.activities.modal', getDetailspaneModal())
+            .state('main.templateDocs.all.details.documents', getDetailsTabState('templateDoc', 'documents'))
+            .state('main.templateDocs.all.details.folders', getDetailsTabState('templateDoc', 'folders'))
+
+            .state('main.templateDocs.byentity', generateStateByEntity('templateDoc'))
+            .state('main.templateDocs.byentity.activities', getDetailsTabState('templateDoc', 'activities'))
+            .state('main.templateDocs.byentity.activities.modal', getDetailspaneModal())
+            .state('main.templateDocs.byentity.documents', getDetailsTabState('templateDoc', 'documents'))
+            .state('main.templateDocs.byentity.folders', getDetailsTabState('templateDoc', 'folders'))
+
+            .state('main.templateDocs.byentity.details', getTemplateDocDetailsState())
+            .state('main.templateDocs.byentity.details.activities', getDetailsTabState('templateDoc', 'activities'))
+            .state('main.templateDocs.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.templateDocs.byentity.details.documents', getDetailsTabState('templateDoc', 'documents'))
+            .state('main.templateDocs.byentity.details.folders', getDetailsTabState('templateDoc', 'folders'))
+
+            .state('main.folders', {
+                url: '/folders',
+                views: {
+                    middlepane: {
+                        //hack around the fact that state current name is initialized in controller only
+                        template: '',
+                        controller: function ($state, discussions, context) {
+                            if ($state.current.name === 'main.folders') {
+                                if (discussions.data.length) {
+                                    $state.go('.byentity', {
+                                        entity: context.entityName,
+                                        entityId: context.entityId
+                                    });
+                                } else {
+                                    $state.go('.all');
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            .state('main.folders.all', {
+                url: '/all',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('folder'),
+                resolve: {
+                    folders: function (FoldersService, $stateParams) {
+                        if ($stateParams.starred) {
+                            return FoldersService.getStarred();
+                        } else {
+                     //       if (typeof FoldersService.data !== 'undefined') {
+                     //           $stateParams.limit = FoldersService.data.length;
+                     //       }
+                            return FoldersService.getAll($stateParams.start,
+                                $stateParams.limit,
+                                $stateParams.sort);
+                        }
+                    }
+                }
+            })
+            .state('main.folders.all.details', getFolderDetailsState())
+            .state('main.folders.all.details.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.folders.all.details.activities.modal', getDetailspaneModal())
+            .state('main.folders.all.details.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.all.details.tasks', getDetailsTabState('folder', 'tasks'))
+
+            .state('main.folders.byentity', generateStateByEntity('folder'))
+            .state('main.folders.byentity.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.folders.byentity.activities.modal', getDetailspaneModal())
+            .state('main.folders.byentity.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.byentity.folders', getDetailsTabState('folder', 'folders'))
+
+            .state('main.folders.byentity.details', getFolderDetailsState())
+            .state('main.folders.byentity.details.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.folders.byentity.details.activities.modal', getDetailspaneModal())
+            .state('main.folders.byentity.details.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.byentity.details.tasks', getDetailsTabState('folder', 'tasks'))
+
+            .state('main.adminSettings', {
+                url: '/adminSettings',
+                views: {
+                    'mainpane@main': {
+                        templateUrl: '/icu/components/admin/settings.html',
+                        controller: 'adminSettingsController'
+                    }
+                }
+            })
+
+            .state('main.search', {
+                url: '/search/:query',
+                params: {
+                    dateUpdated: 'active',
+                    recycled:  null
+                },
+                views: {
+                    'middlepane@main': {
+                        templateUrl: '/icu/components/search-list/search-list.html',
+                        controller: 'SearchListController'
+                    },
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/search-list/no-results.html',
+                        controller: 'SearchListController'
+                    }
+                },
+                resolve: {
+                    results: function (EntityService,SearchService, $stateParams, $location) {
+                        let unmerged;
+                        if ($stateParams.recycled == true)  {
+                            $location.search('recycled', 'true');
+                        }
+                        if ($stateParams.query && $stateParams.query.length) {
+                            return SearchService.find($stateParams.query);
+                        } else {
+                            if (SearchService.builtInSearchArray) {
+                                var data = SearchService.builtInSearchArray.map(function (d) {
+                                    d._type = 'task';
+                                    return d;
+                                });
+                                return data;
+                            } else {
+                                return {};
+                            }
+                        }
+                     },
+                    tasks: function (results) {
+                        return _(results).filter(function (r) {
+                            return r._type === 'task';
+                        });
+                    },              
                     term: function ($stateParams) {
                         return $stateParams.query;
                     }
                 }
-            },
-            tasks: function tasks(results) {
-                return _(results).filter(function (r) {
-                    return r._type === 'task';
-                });
-            },
-            term: function term($stateParams) {
-                return $stateParams.query;
-            }
-        }
-    }).state('main.search.recycled', getRecycledEntities('recycled')).state('main.search.task', getTaskDetailsState('/task')).state('main.search.task.activities', getDetailsTabState('task', 'activities')).state('main.search.task.activities.modal', getDetailspaneModal()).state('main.search.task.documents', getDetailsTabState('task', 'documents')).state('main.search.project', getProjectDetailsState('/project')).state('main.search.project.activities', getDetailsTabState('project', 'activities')).state('main.search.project.activities.modal', getDetailspaneModal()).state('main.search.project.documents', getDetailsTabState('project', 'documents')).state('main.search.project.tasks', getDetailsTabState('project', 'tasks'))
+            })
+            .state('main.search.recycled', getRecycledEntities('recycled'))
+            .state('main.search.task', getTaskDetailsState('/task'))
+            .state('main.search.task.activities', getDetailsTabState('task', 'activities'))
+            .state('main.search.task.activities.modal', getDetailspaneModal())
+            .state('main.search.task.documents', getDetailsTabState('task', 'documents'))
+
+            .state('main.search.project', getProjectDetailsState('/project'))
+            .state('main.search.project.activities', getDetailsTabState('project', 'activities'))
+            .state('main.search.project.activities.modal', getDetailspaneModal())
+            .state('main.search.project.documents', getDetailsTabState('project', 'documents'))
+            .state('main.search.project.tasks', getDetailsTabState('project', 'tasks'))
 
             // .state('main.search.officeDocument', getOfficeDocumentDetailsState('/officeDocument'))
             //     .state('main.search.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))

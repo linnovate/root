@@ -13,7 +13,7 @@ var _ = require('lodash');
 var config = require('meanio').loadConfig();
 var permissions = require('../controllers/permissions.js');
 var logger = require('../services/logger');
-var serials = require('../controllers/serials.js');
+
 
 var options = {
   includes: 'assign watchers',
@@ -550,20 +550,8 @@ exports.addSerialTitle = function(req, res, next) {
 
           }
         });
-        }
-        else{
-            serials.pushToAvailableSerials(ser).then(function(){
-              logger.log('error', '%s addSerialTitle, %s', req.user.name, 'body.serials == ser');
-                  res.status(500).send();
-          });
-
-      }
-
       }
     });
-
-    });
-
   }
 
 };
@@ -805,55 +793,7 @@ exports.getAll = function(req, res, next) {
     start = parseInt(req.query.start);
     limit = parseInt(req.query.limit);
     sort = req.query.sort;
-    sortOrder = parseInt(req.query.sortOrder);
-    obj = {};
-    obj[sort] = sortOrder || 1;
   }
-
-  if(req.query.status){
-    switch (req.query.status){
-      case 'all':
-      console.log("all");
-        break;
-      case 'active':
-        qu.push({status:{$ne:"done"}});
-        console.log("active");
-        break;
-      case 'default':
-        qu.push({status:{$ne:"done"}});
-        console.log("active");
-        break;
-      case 'nonactive':
-        qu.push({status:"done"})
-        console.log("unactive");
-        break ;
-      case 'new':
-        qu.push({status:"new"})
-        console.log("new");
-        break ;
-      case 'done':
-        qu.push({status:"done"})
-        console.log("done");
-        break ;
-      case 'received':
-        qu.push({status:"received"})
-        console.log("received");
-        break ;
-      case 'in-progress':
-        qu.push({status:"in-progress"})
-        console.log("in-progress");
-        break ;
-      case 'sent':
-        qu.push({status:"sent"})
-        console.log("sent");
-        break ;
-
-    }
-  }
-if(req.query.folderId){
-   qu.push({folder: req.query.folderId})
-}
- //console.dir(status)
   Document.find({
     $or: [{watchers: {$in: [req.user._id]}}, {assign: req.user._id}]
   }).sort({sort: 1}).skip(start).limit(limit).populate('folder')
