@@ -1,8 +1,22 @@
 'use strict';
 
-function ProjectListController($scope, $state, projects, ProjectsService, context, $stateParams, EntityService) {
+function ProjectListController($scope, $state, $timeout, projects, ProjectsService, context, $stateParams, EntityService) {
 
     $scope.items = projects.data || projects;
+
+    var subProjects = [];
+    $scope.items.forEach(function (item) {
+        if (item.subProjects && item.subProjects.length > 0) {
+            return subProjects = subProjects.concat(item.subProjects.filter(function (subProject) {
+                return subProject !== 'undefined';
+            }));
+        }
+    });
+
+    subProjects && subProjects.forEach(function (item) {
+        $scope.items.push(item);
+    });
+
     $scope.loadNext = projects.next;
     $scope.loadPrev = projects.prev;
 
