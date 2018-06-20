@@ -68,8 +68,8 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
     $state.go($scope.detailsState, {
       id: discussion._id,
-      entity: $scope.currentContext.entityName,
-      entityId: $scope.currentContext.entityId,
+      entity: context.entityName,
+      entityId: context.entityId,
       starred: $stateParams.starred
     }, {
       reload: true

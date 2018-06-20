@@ -28,8 +28,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
             $state.go($scope.detailsState, {
                 id: item._id,
-                entity: $scope.currentContext.entityName,
-                entityId: $scope.currentContext.entityId,
+                entity: context.entityName,
+                entityId: context.entityId,
             });
         }
         if ($state.current.name === `main.${$scope.$parent.entityName}.all` || $state.current.name === `main.${$scope.$parent.entityName}.byentity` || $state.current.name === `main.${$scope.$parent.entityName}.all.details.activities` || $state.current.name === `main.${$scope.$parent.entityName}.byentity.details.activities`) {

@@ -52,8 +52,8 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
 
     $state.go($scope.detailsState, {
       id: folder._id,
-      entity: $scope.currentContext.entityName,
-      entityId: $scope.currentContext.entityId,
+      entity: context.entityName,
+      entityId: context.entityId,
       starred: $stateParams.starred
     }, {
       reload: true
