@@ -41,20 +41,20 @@ var Task = require('../models/task'),
 
 var Order = require('../models/order')
 
-Object.keys(task).forEach(function(methodName) {
+Object.keys(task).forEach(function (methodName) {
   if (methodName !== 'create' && methodName !== 'update') {
     exports[methodName] = task[methodName];
   }
 });
 
-Date.prototype.getThisDay = function() {
+Date.prototype.getThisDay = function () {
   var date = new Date();
   // return [date.setHours(0,0,0,0), date.setHours(23,59,59,999)];
   return [Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0),
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999)]
+  Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999)]
 }
 
-Date.prototype.getWeek = function() {
+Date.prototype.getWeek = function () {
   var today = new Date(this.setHours(0, 0, 0, 0));
   var date = today.getDate() - today.getDay();
 
@@ -63,11 +63,11 @@ Date.prototype.getWeek = function() {
   // EndDate.setHours(23,59,59,999);
   // return [StartDate, EndDate];
   return [Date.UTC(StartDate.getFullYear(), StartDate.getMonth(), StartDate.getDate(), 0, 0, 0, 0),
-    Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate(), 23, 59, 59, 999)]
+  Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate(), 23, 59, 59, 999)]
 }
 
 
-exports.create = function(req, res, next) {
+exports.create = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
@@ -84,12 +84,12 @@ exports.create = function(req, res, next) {
   } else task.create(req, res, next);
 };
 
-exports.update = function(req, res, next) {
+exports.update = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
   if (req.body.discussion) {
-    var alreadyAdded = _(req.locals.result.discussions).any(function(d) {
+    var alreadyAdded = _(req.locals.result.discussions).any(function (d) {
       return d.toString() === req.body.discussion;
     });
 
@@ -100,18 +100,18 @@ exports.update = function(req, res, next) {
   }
 
   if (req.body.subTasks && req.body.subTasks.length && !req.body.subTasks[req.body.subTasks.length - 1]._id) {
-  	req.body.subTasks.pop();
+    req.body.subTasks.pop();
   }
 
   task.update(req, res, next);
 };
 
-exports.tagsList = function(req, res, next) {
+exports.tagsList = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
   var query = req.acl.mongoQuery('Task');
-  query.distinct('tags', function(error, tags) {
+  query.distinct('tags', function (error, tags) {
     if (error) {
       req.locals.error = {
         message: 'Can\'t get tags'
@@ -155,7 +155,7 @@ exports.tagsList = function(req, res, next) {
   // });
 };
 
-exports.getByEntity = function(req, res, next) {
+exports.getByEntity = function (req, res, next) {
 
   if (req.locals.error) {
     return next();
@@ -196,7 +196,7 @@ exports.getByEntity = function(req, res, next) {
   query.find(entityQuery);
   query.populate(options.includes);
 
-  Task.find(entityQuery).count({}, function(err, c) {
+  Task.find(entityQuery).count({}, function (err, c) {
     req.locals.data.pagination.count = c;
 
 
@@ -207,60 +207,60 @@ exports.getByEntity = function(req, res, next) {
         .limit(pagination.limit);
     }
     //if(pagination.sort == "custom"){
-      // Task.aggregate([
-      //   {$unwind: '$ref'},
-      //    {
-      //      $lookup:{
-      //              from: 'Ordertasks',
-      //              localField: '_id',
-      //              foreignField: 'ref',
-      //              as: 'tasks'}
-      //      },
-      //       {$sort: {'tasks.order':1 }}
-      //  ]).exec(function(err, tasks) {
-      //    console.log(tasks);
-      //  });
-      // query.exec(function(err, tasks) {
-      //       tasks.forEach(function(element){
-      //           Order.find({ref:element._id},function(doc){
+    // Task.aggregate([
+    //   {$unwind: '$ref'},
+    //    {
+    //      $lookup:{
+    //              from: 'Ordertasks',
+    //              localField: '_id',
+    //              foreignField: 'ref',
+    //              as: 'tasks'}
+    //      },
+    //       {$sort: {'tasks.order':1 }}
+    //  ]).exec(function(err, tasks) {
+    //    console.log(tasks);
+    //  });
+    // query.exec(function(err, tasks) {
+    //       tasks.forEach(function(element){
+    //           Order.find({ref:element._id},function(doc){
 
-      //           })
-      //       })
-      //     })
-      //}
-    query.exec(function(err, tasks) {
+    //           })
+    //       })
+    //     })
+    //}
+    query.exec(function (err, tasks) {
       if (err) {
         req.locals.error = {
           message: 'Can\'t get tags'
         };
       } else {
         if (starredOnly) {
-          tasks.forEach(function(task) {
+          tasks.forEach(function (task) {
             task.star = true;
           });
         }
       }
-      if(pagination.sort == "custom"){
-        var temp = new Array(tasks.length) ;
+      if (pagination.sort == "custom") {
+        var temp = new Array(tasks.length);
         var tasksTemp = tasks;
-        Order.find({name: "Task", project:tasks[0].project}, function(err, data){
-            data.forEach(function(element) {
-              for (var index = 0; index < tasksTemp.length; index++) {
-                if(JSON.stringify(tasksTemp[index]._id) === JSON.stringify(element.ref)){
-                    temp[element.order - 1] = tasks[index];
-                }
-
+        Order.find({ name: "Task", project: tasks[0].project }, function (err, data) {
+          data.forEach(function (element) {
+            for (var index = 0; index < tasksTemp.length; index++) {
+              if (JSON.stringify(tasksTemp[index]._id) === JSON.stringify(element.ref)) {
+                temp[element.order - 1] = tasks[index];
               }
-            });
-             tasks = temp;
-            req.locals.result = tasks;
-            next();
+
+            }
+          });
+          tasks = temp;
+          req.locals.result = tasks;
+          next();
         })
       }
-      else{
-      req.locals.result = tasks;
+      else {
+        req.locals.result = tasks;
 
-      next();
+        next();
       }
     });
   });
@@ -268,7 +268,7 @@ exports.getByEntity = function(req, res, next) {
 
 };
 
-exports.getZombieTasks = function(req, res, next) {
+exports.getZombieTasks = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
@@ -281,11 +281,11 @@ exports.getZombieTasks = function(req, res, next) {
       $size: 0
     },
     currentUser: req.user,
-    tType: {$ne: 'template'}
+    tType: { $ne: 'template' }
   });
   Query.populate(options.includes);
 
-  Query.exec(function(err, tasks) {
+  Query.exec(function (err, tasks) {
     if (err) {
       req.locals.error = {
         message: 'Can\'t get zombie tasks'
@@ -298,51 +298,49 @@ exports.getZombieTasks = function(req, res, next) {
   });
 };
 
-var byAssign = function(req, res, next) {
-	if (req.locals.error) {
-    	return next();
-  	}
+var byAssign = function (req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
 
-    var query = req.acl.mongoQuery('Task');
-  	query.find({
-  		assign: req.user._id,
-  		status: {$nin: ['rejected', 'done']},
-  		tType: {$ne: 'template'}
-		})
-		.populate(options.includes)
-		.exec(function(err, tasks) {
-  		if (err) {
-	      req.locals.error = {
-	        message: 'Can\'t get my tasks'
-	      };
-	    } else {
-	      req.locals.result = tasks;
-	    }
+  var query = req.acl.mongoQuery('Task');
+  query.find({
+    assign: req.user._id,
+    status: { $nin: ['rejected', 'done'] },
+    tType: { $ne: 'template' }
+  })
+    .populate(options.includes)
+    .exec(function (err, tasks) {
+      if (err) {
+        req.locals.error = {
+          message: 'Can\'t get my tasks'
+        };
+      } else {
+        req.locals.result = tasks;
+      }
 
-	    next();
-	});
+      next();
+    });
 }
 
-
-
-  function getTasksDueTodayQuery(req, callback) {
-    var dates = new Date().getThisDay();
-    var query = {
-      "query": {
-        "bool": {
-          "must": [{
-            "range": {
-              "due": {
-                "gte": dates[0], //Date.parse(start),
-                "lte": dates[1] //Date.parse(end)
-              }
+function getTasksDueTodayQuery(req, callback) {
+  var dates = new Date().getThisDay();
+  var query = {
+    "query": {
+      "bool": {
+        "must": [{
+          "range": {
+            "due": {
+              "gte": dates[0], //Date.parse(start),
+              "lte": dates[1] //Date.parse(end)
             }
-          }, {
-            "term": {
-              "assign": req.user._id
-            }
-          }],
-          "must_not": [
+          }
+        }, {
+          "term": {
+            "assign": req.user._id
+          }
+        }],
+        "must_not": [
           {
             "terms": {
               "status": ['rejected', 'done'],
@@ -350,13 +348,13 @@ var byAssign = function(req, res, next) {
             }
           },
           {
-          	"term" :{"tType": 'template'}
+            "term": { "tType": 'template' }
           }]
-        }
       }
     }
-    tasksFromElastic(query, 'TasksDueToday', callback);
-  };
+  }
+  tasksFromElastic(query, 'TasksDueToday', callback);
+};
 
 
 
@@ -378,15 +376,15 @@ function getTasksDueWeekQuery(req, callback) {
           }
         }],
         "must_not": [
-        {
-          "terms": {
-            "status": ['rejected', 'done'] //,
-            // "execution" : "and"
-          }
-        },
-        {
-        	"term" :{"tType": 'template'}
-        }]
+          {
+            "terms": {
+              "status": ['rejected', 'done'] //,
+              // "execution" : "and"
+            }
+          },
+          {
+            "term": { "tType": 'template' }
+          }]
       }
     }
   }
@@ -411,15 +409,15 @@ function getOverDueTasksQuery(req, callback) {
           }
         }],
         "must_not": [
-        {
-          "terms": {
-            "status": ['rejected', 'done'] //,
-            //"execution" : "and"
-          }
-        },
-        {
-        	"term" :{"tType": 'template'}
-        }]
+          {
+            "terms": {
+              "status": ['rejected', 'done'] //,
+              //"execution" : "and"
+            }
+          },
+          {
+            "term": { "tType": 'template' }
+          }]
       }
     }
   }
@@ -436,19 +434,19 @@ function getWatchedTasksQuery(req, callback) {
           }
         },
         "must_not": [
-        {
-          "term": {
-            "assign": req.user._id
-          }
-        }, {
-          "terms": {
-            "status": ['rejected', 'done'] //,
-            //"execution" : "and"
-          }
-        },
-        {
-        	"term" :{"tType": 'template'}
-        }]
+          {
+            "term": {
+              "assign": req.user._id
+            }
+          }, {
+            "terms": {
+              "status": ['rejected', 'done'] //,
+              //"execution" : "and"
+            }
+          },
+          {
+            "term": { "tType": 'template' }
+          }]
       }
     }
   }
@@ -459,7 +457,7 @@ function tasksFromElastic(query, name, callback) {
   mean.elasticsearch.search({
     index: 'task',
     'body': query,
-  }, function(err, response) {
+  }, function (err, response) {
     if (err) {
       callback(err)
     } else {
@@ -481,26 +479,26 @@ function myTasksStatistics(req, res, next) {
   }
   async.parallel([
 
-    function(callback) {
+    function (callback) {
       getTasksDueTodayQuery(req, callback);
     },
-    function(callback) {
+    function (callback) {
       getTasksDueWeekQuery(req, callback);
     },
-    function(callback) {
+    function (callback) {
       getOverDueTasksQuery(req, callback);
     },
-    function(callback) {
+    function (callback) {
       getWatchedTasksQuery(req, callback);
     }
-  ], function(err, result) {
+  ], function (err, result) {
     req.locals.result = result;
     req.locals.error = err
     next();
   });
 }
 
-exports.getWatchedTasks = function(req, res, next) {
+exports.getWatchedTasks = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
@@ -512,13 +510,13 @@ exports.getWatchedTasks = function(req, res, next) {
     "status": {
       $nin: ['rejected', 'done']
     },
-    tType: {$ne: 'template'}
-  }, function(err, response) {
-  	var length = Object.keys(response).length;
+    tType: { $ne: 'template' }
+  }, function (err, response) {
+    var length = Object.keys(response).length;
     if (err) {
       req.locals.error = err;
     } else {
-    	res.send(length.toString());
+      res.send(length.toString());
       req.locals.result = response;
     }
     next();
@@ -526,7 +524,7 @@ exports.getWatchedTasks = function(req, res, next) {
 }
 
 
-exports.getWatchedTasksList = function(req, res, next) {
+exports.getWatchedTasksList = function (req, res, next) {
   //if (req.locals.error) {
   //  return next();
   //}
@@ -538,23 +536,23 @@ exports.getWatchedTasksList = function(req, res, next) {
     "status": {
       $nin: ['rejected', 'done']
     },
-    tType: {$ne: 'template'}
-  }, function(err, response) {
+    tType: { $ne: 'template' }
+  }, function (err, response) {
     if (err) {
       req.locals.error = err;
     } else {
-    	res.send(response);
-      	req.locals.result = response;
+      res.send(response);
+      req.locals.result = response;
     }
     //next();
   })
 }
 
 
-exports.getOverdueWatchedTasks = function(req, res, next) {
- // if (req.locals.error) {
- //   return next();
- // }
+exports.getOverdueWatchedTasks = function (req, res, next) {
+  // if (req.locals.error) {
+  //   return next();
+  // }
 
   var dates = new Date().getThisDay();
   Task.find({
@@ -568,19 +566,19 @@ exports.getOverdueWatchedTasks = function(req, res, next) {
     "due": {
       $lt: dates[0]
     },
-    tType: {$ne: 'template'}
-  }, function(err, response) {
+    tType: { $ne: 'template' }
+  }, function (err, response) {
     if (err) {
       req.locals.error = err;
     } else {
       req.locals.result = response;
       res.send(response);
     }
-  //  next();
+    //  next();
   })
 }
 
-exports.getSubTasks = function(req, res, next) {
+exports.getSubTasks = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
@@ -588,13 +586,13 @@ exports.getSubTasks = function(req, res, next) {
   var query = req.acl.mongoQuery('Task');
   query.findOne({
     '_id': req.params.id,
-    tType: {$ne: 'template'}
+    tType: { $ne: 'template' }
   }, {
-    subTasks: 1
-  })
+      subTasks: 1
+    })
     .populate('subTasks')
     .deepPopulate('subTasks.subTasks subTasks.watchers')
-    .exec(function(err, task) {
+    .exec(function (err, task) {
       if (err) {
         req.locals.error = err;
       } else {
@@ -606,7 +604,7 @@ exports.getSubTasks = function(req, res, next) {
     });
 }
 
-exports.updateParent = function(req, res, next) {
+exports.updateParent = function (req, res, next) {
   if (req.locals.error || !req.body.parent) {
     return next();
   }
@@ -617,8 +615,8 @@ exports.updateParent = function(req, res, next) {
   };
   Task.findOneAndUpdate({
     '_id': req.body.parent,
-    tType: {$ne: 'template'}
-  }, data, function(err, task) {
+    tType: { $ne: 'template' }
+  }, data, function (err, task) {
     if (err) {
       req.locals.error = err;
     }
@@ -627,39 +625,39 @@ exports.updateParent = function(req, res, next) {
 
 }
 
-exports.removeSubTask = function(req, res, next) {
+exports.removeSubTask = function (req, res, next) {
   if (req.locals.error) {
     return next();
   }
   Task.findOne({
     "_id": req.params.id,
-    tType: {$ne: 'template'}
-  }, function(err, subTask) {
+    tType: { $ne: 'template' }
+  }, function (err, subTask) {
     if (err) {
       req.locals.error = err;
     } else {
       Task.update({
         '_id': subTask.parent,
-        tType: {$ne: 'template'}
+        tType: { $ne: 'template' }
       }, {
-        $pull: {
-          'subTasks': subTask._id
-        }
-      }, function(err, task) {
-        if (err) {
-          req.locals.error = err;
-        }
-        next();
-      });
+          $pull: {
+            'subTasks': subTask._id
+          }
+        }, function (err, task) {
+          if (err) {
+            req.locals.error = err;
+          }
+          next();
+        });
     }
   });
 };
 
-exports.populateSubTasks = function(req, res, next) {
+exports.populateSubTasks = function (req, res, next) {
   Task.populate(req.locals.result, {
     path: 'subTasks.watchers',
     model: 'User'
-  }, function(err, tasks) {
+  }, function (err, tasks) {
     if (err) {
       req.locals.error = err;
     } else req.locals.result = tasks;
@@ -668,31 +666,31 @@ exports.populateSubTasks = function(req, res, next) {
 }
 
 
-exports.GetUsersWantGetMyTodayTasksMail = function() {
+exports.GetUsersWantGetMyTodayTasksMail = function () {
 
-var UserModel = require('../models/user.js');
+  var UserModel = require('../models/user.js');
 
   var query = UserModel.find({
     GetMailEveryDayAboutMyTasks: 'yes'
   })
-  .populate(options.includes)
-  .exec(function(err, users) {
-    if (err) {
-      console.log('Can\'t get users');
-    } else {
+    .populate(options.includes)
+    .exec(function (err, users) {
+      if (err) {
+        console.log('Can\'t get users');
+      } else {
 
-      users.forEach(function(user) {
-        MyTasksOfTodaySummary(user._doc);
-      });
+        users.forEach(function (user) {
+          MyTasksOfTodaySummary(user._doc);
+        });
 
-    }
-        //next();
-  });
+      }
+      //next();
+    });
 
 };
 
 //If we ever need to use as button in the UI == *AsButton*
-exports.MyTasksOfTodaySummary = function(req, res, next) {}
+exports.MyTasksOfTodaySummary = function (req, res, next) { }
 
 function MyTasksOfTodaySummary(user) {
 
@@ -704,73 +702,73 @@ function MyTasksOfTodaySummary(user) {
   var query = TaskModel.find({
     //*AsButton* assign: req.user._id,
     assign: user._id,
-    status: {$nin: ['rejected', 'done']},
-    tType: {$ne: 'template'}
+    status: { $nin: ['rejected', 'done'] },
+    tType: { $ne: 'template' }
   })
-  .populate(options.includes)
-  .exec(function(err, tasks) {
-    if (err) {
-      //*AsButton* req.locals.error = {
-      //   message: 'Can\'t get my tasks'
-      // };
-      console.log('Can\'t get my tasks');
-    } else {
-      //*AsButton* req.locals.result = tasks;
+    .populate(options.includes)
+    .exec(function (err, tasks) {
+      if (err) {
+        //*AsButton* req.locals.error = {
+        //   message: 'Can\'t get my tasks'
+        // };
+        console.log('Can\'t get my tasks');
+      } else {
+        //*AsButton* req.locals.result = tasks;
 
-      var curr = new Date();
-      curr.setHours(0,0,0,0);
-      var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+        var curr = new Date();
+        curr.setHours(0, 0, 0, 0);
+        var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
 
-      var TodayTasks = [];
+        var TodayTasks = [];
 
-      tasks.forEach(function(task) {
-        var due = new Date(task.due);
-        //if (due >= date[0] && due <= date[1]) {
-        if (due.getDay() == firstday.getDay()) {
-          task.due.setDate(task.due.getDate() + 1);
-          TodayTasks.push(task);
-        }
-      });
+        tasks.forEach(function (task) {
+          var due = new Date(task.due);
+          //if (due >= date[0] && due <= date[1]) {
+          if (due.getDay() == firstday.getDay()) {
+            task.due.setDate(task.due.getDate() + 1);
+            TodayTasks.push(task);
+          }
+        });
 
-      mailService.sendMyTasksOfTodaySummary('MyTasksOfTodaySummary', {
-        TodayTasks: TodayTasks,
-        //*AsButton* user: req.user
-        user: user
-      }).then(function() {
-        //next();
-      });
-    }
-        //next();
-  });
+        mailService.sendMyTasksOfTodaySummary('MyTasksOfTodaySummary', {
+          TodayTasks: TodayTasks,
+          //*AsButton* user: req.user
+          user: user
+        }).then(function () {
+          //next();
+        });
+      }
+      //next();
+    });
 
 };
 
 
-exports.GetUsersWantGetMyWeeklyTasksMail = function() {
+exports.GetUsersWantGetMyWeeklyTasksMail = function () {
 
-var UserModel = require('../models/user.js');
+  var UserModel = require('../models/user.js');
 
   var query = UserModel.find({
     GetMailEveryWeekAboutMyTasks: 'yes'
   })
-  .populate(options.includes)
-  .exec(function(err, users) {
-    if (err) {
-      console.log('Can\'t get users');
-    } else {
+    .populate(options.includes)
+    .exec(function (err, users) {
+      if (err) {
+        console.log('Can\'t get users');
+      } else {
 
-      users.forEach(function(user) {
-        MyTasksOfNextWeekSummary(user._doc);
-      });
+        users.forEach(function (user) {
+          MyTasksOfNextWeekSummary(user._doc);
+        });
 
-    }
-        //next();
-  });
+      }
+      //next();
+    });
 
 };
 
 //If we ever need to use as button in the UI == *AsButton*
-exports.MyTasksOfNextWeekSummary = function(req, res, next) {}
+exports.MyTasksOfNextWeekSummary = function (req, res, next) { }
 
 function MyTasksOfNextWeekSummary(user) {
 
@@ -782,105 +780,105 @@ function MyTasksOfNextWeekSummary(user) {
   var query = TaskModel.find({
     //*AsButton* assign: req.user._id,
     assign: user._id,
-    status: {$nin: ['rejected', 'done']},
-    tType: {$ne: 'template'}
+    status: { $nin: ['rejected', 'done'] },
+    tType: { $ne: 'template' }
   })
-  .populate(options.includes)
-  .exec(function(err, tasks) {
-    if (err) {
-      //*AsButton* req.locals.error = {
-      //   message: 'Can\'t get my tasks'
-      // };
-      console.log('Can\'t get my tasks');
-    } else {
-      //*AsButton* req.locals.result = tasks;
-
-      var curr = new Date();
-      curr.setHours(0,0,0,0);
-      var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-      var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay()+6));
-      lastday = new Date(lastday.setHours(23, 59, 59, 0))
-      var date = [firstday, lastday];
-
-      var WeekTasks = [];
-
-      tasks.forEach(function(task) {
-        var due = new Date(task.due);
-        if (due >= date[0] && due <= date[1]) {
-          task.due.setDate(task.due.getDate() + 1);
-          WeekTasks.push(task);
-        }
-      });
-
-      mailService.sendMyTasksOfNextWeekSummary('MyTasksOfNextWeekSummary', {
-        WeekTasks: WeekTasks,
-        //*AsButton* user: req.user
-        user: user
-      }).then(function() {
-        //next();
-      });
-    }
-        //next();
-  });
-
-};
-
-
-exports.GetUsersWantGetGivenWeeklyTasksMail = function() {
-
-var UserModel = require('../models/user.js');
-
-  var query = UserModel.find({
-    GetMailEveryWeekAboutGivenTasks: 'yes'
-  })
-  .populate(options.includes)
-  .exec(function(err, users) {
-    if (err) {
-      console.log('Can\'t get users');
-    } else {
-
-      users.forEach(function(user) {
-        GivenTasksOfNextWeekSummary(user._doc);
-      });
-    }
-        //next();
-  });
-
-};
-
-//If we ever need to use as button in the UI == *AsButton*
-exports.GivenTasksOfNextWeekSummary = function(req, res, next) {}
-
-function GivenTasksOfNextWeekSummary(user) {
-
-    //*AsButton* var query = req.acl.mongoQuery('Task');
-
-    var TaskModel = require('../models/task.js');
-
-    var query = TaskModel.find({
-  	//*AsButton* query.find({
-  		//creator: req.user._id,
-      creator: user._id,
-  		tType: {$ne: 'template'}
-		})
-		.populate(options.includes)
-		.exec(function(err, tasks) {
-  		if (err) {
-	      req.locals.error = {
-	        message: 'Can\'t get my tasks'
-	      };
-	    } else {
+    .populate(options.includes)
+    .exec(function (err, tasks) {
+      if (err) {
+        //*AsButton* req.locals.error = {
+        //   message: 'Can\'t get my tasks'
+        // };
+        console.log('Can\'t get my tasks');
+      } else {
+        //*AsButton* req.locals.result = tasks;
 
         var curr = new Date();
-        curr.setHours(0,0,0,0);
+        curr.setHours(0, 0, 0, 0);
         var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-        var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay()+6));
+        var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
         lastday = new Date(lastday.setHours(23, 59, 59, 0))
         var date = [firstday, lastday];
 
         var WeekTasks = [];
 
-        tasks.forEach(function(task) {
+        tasks.forEach(function (task) {
+          var due = new Date(task.due);
+          if (due >= date[0] && due <= date[1]) {
+            task.due.setDate(task.due.getDate() + 1);
+            WeekTasks.push(task);
+          }
+        });
+
+        mailService.sendMyTasksOfNextWeekSummary('MyTasksOfNextWeekSummary', {
+          WeekTasks: WeekTasks,
+          //*AsButton* user: req.user
+          user: user
+        }).then(function () {
+          //next();
+        });
+      }
+      //next();
+    });
+
+};
+
+
+exports.GetUsersWantGetGivenWeeklyTasksMail = function () {
+
+  var UserModel = require('../models/user.js');
+
+  var query = UserModel.find({
+    GetMailEveryWeekAboutGivenTasks: 'yes'
+  })
+    .populate(options.includes)
+    .exec(function (err, users) {
+      if (err) {
+        console.log('Can\'t get users');
+      } else {
+
+        users.forEach(function (user) {
+          GivenTasksOfNextWeekSummary(user._doc);
+        });
+      }
+      //next();
+    });
+
+};
+
+//If we ever need to use as button in the UI == *AsButton*
+exports.GivenTasksOfNextWeekSummary = function (req, res, next) { }
+
+function GivenTasksOfNextWeekSummary(user) {
+
+  //*AsButton* var query = req.acl.mongoQuery('Task');
+
+  var TaskModel = require('../models/task.js');
+
+  var query = TaskModel.find({
+    //*AsButton* query.find({
+    //creator: req.user._id,
+    creator: user._id,
+    tType: { $ne: 'template' }
+  })
+    .populate(options.includes)
+    .exec(function (err, tasks) {
+      if (err) {
+        req.locals.error = {
+          message: 'Can\'t get my tasks'
+        };
+      } else {
+
+        var curr = new Date();
+        curr.setHours(0, 0, 0, 0);
+        var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+        var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
+        lastday = new Date(lastday.setHours(23, 59, 59, 0))
+        var date = [firstday, lastday];
+
+        var WeekTasks = [];
+
+        tasks.forEach(function (task) {
           var due = new Date(task.due);
           if (due >= date[0] && due <= date[1]) {
             task.due.setDate(task.due.getDate() + 1);
@@ -889,205 +887,201 @@ function GivenTasksOfNextWeekSummary(user) {
         });
 
         mailService.sendGivenTasksOfNextWeekSummary('GivenTasksOfNextWeekSummary', {
-	        WeekTasks: WeekTasks,
+          WeekTasks: WeekTasks,
           user: user
-	      }).then(function() {
+        }).then(function () {
           //next();
-	      });
+        });
       }
-	        //next();
+      //next();
     });
 
+};
+
+
+exports.excel = function (req, res, next) {
+
+  var path = '/notes';
+
+  var UserModel = require('../models/user.js');
+  var UpdateModel = require('../models/update');
+
+  var q = require('q');
+  var options1 = {
+    includes: 'issueId'
+  };
+  var options2 = {
+    includes: 'creator'
   };
 
+  console.log("exal-------------------------");
+  // Require library
+  var excel = require('excel4node');
 
-exports.excel = function(req, res, next) {
+  // Create a new instance of a Workbook class
+  var workbook = new excel.Workbook();
 
-var path = '/notes';
+  // Add Worksheets to the workbook
+  var worksheet = workbook.addWorksheet('Sheet 1');
 
-var UserModel = require('../models/user.js');
-var UpdateModel = require('../models/update');
-
-var q = require('q');
-var options1 = {
-  includes: 'issueId'
-};
-var options2 = {
-  includes: 'creator'
-};
-
-console.log("exal-------------------------");
-// Require library
-var excel = require('excel4node');
-
-// Create a new instance of a Workbook class
-var workbook = new excel.Workbook();
-
-// Add Worksheets to the workbook
-var worksheet = workbook.addWorksheet('Sheet 1');
-
-// Create a reusable style
-var style = workbook.createStyle({
-  alignment: {
-    horizontal: 'distributed'
-  },
-  font: {
-    color: '000000',
-    size: 12
-  },
-  umberFormat: 'dd-mm-yyyy'
-});
-
-// Create a reusable style
-var styleHead = workbook.createStyle({
-  alignment: {
-    horizontal: 'distributed'
-  },
-  font: {
-    color: '#FF0800',
-    size: 16
-  },
-  umberFormat: 'dd-mm-yyyy'
-});
-
-worksheet.cell(1,1).string('כותרת').style(styleHead);
-worksheet.cell(1,2).string('תג"ב').style(styleHead);
-worksheet.cell(1,3).string('סטטוס').style(styleHead);
-worksheet.cell(1,4).string('אחראי').style(styleHead);
-worksheet.cell(1,5).string('משתתפים').style(styleHead);
-worksheet.cell(1,6).string('תיאור').style(styleHead);
-worksheet.cell(1,7).string('יוצר המשימה').style(styleHead);
-worksheet.cell(1,8).string('שם דיון').style(styleHead);
-worksheet.cell(1,9).string('שם פרוייקט').style(styleHead);
-worksheet.cell(1,10).string('עדכונים').style(styleHead);
-worksheet.cell(1,11).string('תגיות').style(styleHead);
-
-
-var numOfRow = 2;
-var assignArray = [];
-assignArray[0] = "";
-var IndexOfassignArray = 1;
-var creatorArray = [];
-creatorArray[0] = "";
-var IndexOfcreatorArray = 1;
-var toWrite = "";
-
-for (var index = 0; index < req.locals.result.length; index++) {
-  
-  if (req.locals.result[index]._doc.title) {
-    worksheet.cell(numOfRow,1).string(req.locals.result[index]._doc.title).style(style);
-  }
-
-  if (req.locals.result[index]._doc.due) {
-    worksheet.cell(numOfRow,2).date(req.locals.result[index]._doc.due).style(style);
-  }
-
-  if (req.locals.result[index]._doc.status) {
-    worksheet.cell(numOfRow,3).string(req.locals.result[index]._doc.status).style(style);
-  }
-
-  if (req.locals.result[index]._doc.assign) {
-    var query = UserModel.findOne({
-      _id: req.locals.result[index]._doc.assign._doc._id
-    });
-    assignArray[assignArray.length] = numOfRow;
-    query.then(function(user) {
-      //worksheet.cell(numOfRow,4).string(user._doc.name).style(style);
-      worksheet.cell(assignArray[IndexOfassignArray],4).string(user._doc.name).style(style);
-      workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
-      IndexOfassignArray++;
-    });
-
-  }
-
-  if (req.locals.result[index]._doc.watchers.length > 1) {
-    for (var numOfWatchers = 0;
-         numOfWatchers < req.locals.result[index]._doc.watchers.length;
-         numOfWatchers++) {
-
-        toWrite = toWrite + "," + req.locals.result[index]._doc.watchers[numOfWatchers]._doc.name;
-    }
-
-    worksheet.cell(numOfRow,5).string(toWrite).style(style);
-    toWrite = "";
-  }
-
-  if (req.locals.result[index]._doc.description) {
-    worksheet.cell(numOfRow,6).string(req.locals.result[index]._doc.description).style(style);
-  }
-
-  if (req.locals.result[index]._doc.creator) {
-    var query = UserModel.findOne({
-      _id: req.locals.result[index]._doc.creator
-    });
-    creatorArray[creatorArray.length] = numOfRow;
-    query.then(function(user) {
-      //worksheet.cell(numOfRow,7).string(req.locals.result[index]._doc.creator).style(style);
-      worksheet.cell(creatorArray[IndexOfcreatorArray],7).string(user._doc.name).style(style);
-      workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
-      IndexOfcreatorArray++;
-    });
-  }
-
-  if (req.locals.result[index].discussions.length != 0) {
-      worksheet.cell(numOfRow,8).string(req.locals.result[index].discussions[0]._doc.title).style(style);
-  }
-
-  if (req.locals.result[index].project) {
-    worksheet.cell(numOfRow,9).string(req.locals.result[index].project._doc.title).style(style);
-  }
-
-
-
-  var query = UpdateModel.find({
-    issueId: req.locals.result[index]._id,
-    type: "comment"
+  // Create a reusable style
+  var style = workbook.createStyle({
+    alignment: {
+      horizontal: 'distributed'
+    },
+    font: {
+      color: '000000',
+      size: 12
+    },
+    umberFormat: 'dd-mm-yyyy'
   });
 
-  query.populate(options1.includes, null, 'Task').populate(options2.includes, null, 'User').exec(function (err, updates) {
-    if(updates.length != 0)
-    {
-      var arrOfID = [];
-      for (var index2 = 0; index2 < req.locals.result.length; index2++) {
-        arrOfID[index2] = req.locals.result[index2]._id.toString();
-      }
+  // Create a reusable style
+  var styleHead = workbook.createStyle({
+    alignment: {
+      horizontal: 'distributed'
+    },
+    font: {
+      color: '#FF0800',
+      size: 16
+    },
+    umberFormat: 'dd-mm-yyyy'
+  });
 
-      var updatesToWrite = "";
-      for (var index1 = 0; index1 < updates.length; index1++)
-      {
-        var exists = arrOfID.indexOf(updates[index1].issueId._id.toString());
-        if (exists != -1)
-        {
-          var month = updates[index1].created.getMonth() + 1;
-          var day = updates[index1].created.getDate() + 1;
-          var dateCreated = day + "." + month + "." + updates[index1].created.getFullYear();
-          updatesToWrite = dateCreated + ",   " +  updates[index1].description + "  :" + updates[index1].creator.name + ", \n " + updatesToWrite;
-        }
-      }
+  worksheet.cell(1, 1).string('כותרת').style(styleHead);
+  worksheet.cell(1, 2).string('תג"ב').style(styleHead);
+  worksheet.cell(1, 3).string('סטטוס').style(styleHead);
+  worksheet.cell(1, 4).string('אחראי').style(styleHead);
+  worksheet.cell(1, 5).string('משתתפים').style(styleHead);
+  worksheet.cell(1, 6).string('תיאור').style(styleHead);
+  worksheet.cell(1, 7).string('יוצר המשימה').style(styleHead);
+  worksheet.cell(1, 8).string('שם דיון').style(styleHead);
+  worksheet.cell(1, 9).string('שם פרוייקט').style(styleHead);
+  worksheet.cell(1, 10).string('עדכונים').style(styleHead);
+  worksheet.cell(1, 11).string('תגיות').style(styleHead);
 
-      worksheet.cell(exists + 2,10).string(updatesToWrite).style(style);
-      workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
+
+  var numOfRow = 2;
+  var assignArray = [];
+  assignArray[0] = "";
+  var IndexOfassignArray = 1;
+  var creatorArray = [];
+  creatorArray[0] = "";
+  var IndexOfcreatorArray = 1;
+  var toWrite = "";
+
+  for (var index = 0; index < req.locals.result.length; index++) {
+
+    if (req.locals.result[index]._doc.title) {
+      worksheet.cell(numOfRow, 1).string(req.locals.result[index]._doc.title).style(style);
     }
-    
-  });;
 
-  if (req.locals.result[index]._doc.tags.length != 0) {
+    if (req.locals.result[index]._doc.due) {
+      worksheet.cell(numOfRow, 2).date(req.locals.result[index]._doc.due).style(style);
+    }
+
+    if (req.locals.result[index]._doc.status) {
+      worksheet.cell(numOfRow, 3).string(req.locals.result[index]._doc.status).style(style);
+    }
+
+    if (req.locals.result[index]._doc.assign) {
+      var query = UserModel.findOne({
+        _id: req.locals.result[index]._doc.assign._doc._id
+      });
+      assignArray[assignArray.length] = numOfRow;
+      query.then(function (user) {
+        //worksheet.cell(numOfRow,4).string(user._doc.name).style(style);
+        worksheet.cell(assignArray[IndexOfassignArray], 4).string(user._doc.name).style(style);
+        workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
+        IndexOfassignArray++;
+      });
+
+    }
+
+    if (req.locals.result[index]._doc.watchers.length > 1) {
+      for (var numOfWatchers = 0;
+        numOfWatchers < req.locals.result[index]._doc.watchers.length;
+        numOfWatchers++) {
+
+        toWrite = toWrite + "," + req.locals.result[index]._doc.watchers[numOfWatchers]._doc.name;
+      }
+
+      worksheet.cell(numOfRow, 5).string(toWrite).style(style);
+      toWrite = "";
+    }
+
+    if (req.locals.result[index]._doc.description) {
+      worksheet.cell(numOfRow, 6).string(req.locals.result[index]._doc.description).style(style);
+    }
+
+    if (req.locals.result[index]._doc.creator) {
+      var query = UserModel.findOne({
+        _id: req.locals.result[index]._doc.creator
+      });
+      creatorArray[creatorArray.length] = numOfRow;
+      query.then(function (user) {
+        //worksheet.cell(numOfRow,7).string(req.locals.result[index]._doc.creator).style(style);
+        worksheet.cell(creatorArray[IndexOfcreatorArray], 7).string(user._doc.name).style(style);
+        workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
+        IndexOfcreatorArray++;
+      });
+    }
+
+    if (req.locals.result[index].discussions.length != 0) {
+      worksheet.cell(numOfRow, 8).string(req.locals.result[index].discussions[0]._doc.title).style(style);
+    }
+
+    if (req.locals.result[index].project) {
+      worksheet.cell(numOfRow, 9).string(req.locals.result[index].project._doc.title).style(style);
+    }
+
+
+
+    var query = UpdateModel.find({
+      issueId: req.locals.result[index]._id,
+      type: "comment"
+    });
+
+    query.populate(options1.includes, null, 'Task').populate(options2.includes, null, 'User').exec(function (err, updates) {
+      if (updates.length != 0) {
+        var arrOfID = [];
+        for (var index2 = 0; index2 < req.locals.result.length; index2++) {
+          arrOfID[index2] = req.locals.result[index2]._id.toString();
+        }
+
+        var updatesToWrite = "";
+        for (var index1 = 0; index1 < updates.length; index1++) {
+          var exists = arrOfID.indexOf(updates[index1].issueId._id.toString());
+          if (exists != -1) {
+            var month = updates[index1].created.getMonth() + 1;
+            var day = updates[index1].created.getDate() + 1;
+            var dateCreated = day + "." + month + "." + updates[index1].created.getFullYear();
+            updatesToWrite = dateCreated + ",   " + updates[index1].description + "  :" + updates[index1].creator.name + ", \n " + updatesToWrite;
+          }
+        }
+
+        worksheet.cell(exists + 2, 10).string(updatesToWrite).style(style);
+        workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
+      }
+
+    });;
+
+    if (req.locals.result[index]._doc.tags.length != 0) {
       var tagsToWrite = "";
-      for (var index1 = 0; index1 < req.locals.result[index]._doc.tags.length; index1++)
-      {
+      for (var index1 = 0; index1 < req.locals.result[index]._doc.tags.length; index1++) {
         tagsToWrite = tagsToWrite + ", " + req.locals.result[index]._doc.tags[index1];
       }
-      worksheet.cell(numOfRow,11).string(tagsToWrite).style(style);
+      worksheet.cell(numOfRow, 11).string(tagsToWrite).style(style);
     }
 
-  numOfRow++;
-}
+    numOfRow++;
+  }
 
 
-workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
+  workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
 
-    next();
-  };
+  next();
+};
 
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;
