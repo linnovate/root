@@ -122,6 +122,8 @@
                         margin-right: 5px;
                         margin-left: 25px;
                         padding-left: 10px;
+                        @include disableTextStyles;
+
                         &:before {
                             font-weight: normal;
                             font-style: italic;
@@ -129,15 +131,6 @@
                         @media screen and (max-width: $small-resolution) {
                             margin-right: 5px;
                             word-wrap: break-word;
-                        }
-                        span, a, i, u, p, blockquote {
-                            margin: 0 !important;
-                            padding: 0 !important;
-                            border-left: none !important;
-                            font-size: inherit !important;
-                            font-style: normal !important;
-                            font-weight: normal !important;
-                            text-decoration: none !important;
                         }
                     }
 
