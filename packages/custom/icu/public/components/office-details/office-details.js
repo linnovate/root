@@ -50,8 +50,8 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
 
     $state.go($scope.detailsState, {
       id: office._id,
-      entity: $scope.currentContext.entityName,
-      entityId: $scope.currentContext.entityId,
+      entity: context.entityName,
+      entityId: context.entityId,
       starred: $stateParams.starred
     }, {
       reload: true
