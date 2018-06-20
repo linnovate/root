@@ -52,96 +52,93 @@
    }
 }
 
+detail-assign {
+    @include golden-hover;
 
-.detail-assign {
-    position: relative;
-    @include ui-select;
-    width: 110px;
-    height: $panel-height;
-    float: left;
-
-    ul, .ui-select-dropdown, .dropdown-menu {
-        /*rtl:begin:ignore*/
-        left: auto ;
-        right: 0;
-        /*rtl:end:ignore*/
-
-        /*rtl:begin:remove*/
-        right: auto ;
-        left: 0;
-        /*rtl:end:remove*/
-
-        width: 250px;
-
-        &>div {
-            height: 57px;
-        }
-
-        @include scroll;
-    }
-
-    .ui-select-container.ui-select-bootstrap {
-      padding-top: 0;
-      .ui-select-match-text {
+    .detail-assign {
+        position: relative;
+        @include ui-select;
+        width: 110px;
         height: $panel-height;
-        overflow: hidden;
-        max-width: 100%;
-      }
-      .ui-select-toggle {
-        height: $panel-height;
-      }
-      input {
-        height: $panel-height;
-        border-radius: 0;
-      }
-    }
-
-    &:hover{
-        box-shadow: 0 0 0 2px #FFB435;
-        transition: 0.8s;
-    }
-
-    .no-assignee {
-        position: absolute;
-        transform: translateY(-65%);
-        top: 31px;
-        width: calc(100% - 10px);
-        margin-left: 10px;
-
-        .avatar-placeholder {
-            height: 26px;
-            padding: 5px 0 5px 35px;
-            color: $light-grey-placeholder;
-            display: table;
-            width: 100%;
-            background: url('/icu/assets/img/user.png') no-repeat scroll left;
-        }
-
-    }
-    .ui-select-placeholder {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%) translateY(-65%);
-        top: 50%;
-    }
-
-
-    .avatar {
-        height: 26px;
-        width: 26px;
-        background-color: $green;
-        border-radius: 15px;
-        display: inline-block;
-        margin: 0 10px 0 15px;
         float: left;
-        font-size: 20px;
-    }
-    .summary-content {
-        display: inline-block;
-        line-height: 26px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        padding-right: 5px;
+
+        ul, .ui-select-dropdown, .dropdown-menu {
+            /*rtl:begin:ignore*/
+            left: auto;
+            right: 0;
+            /*rtl:end:ignore*/
+
+            /*rtl:begin:remove*/
+            right: auto;
+            left: 0;
+            /*rtl:end:remove*/
+
+            width: 250px;
+
+            & > div {
+                height: 57px;
+            }
+
+            @include scroll;
+        }
+
+        .ui-select-container.ui-select-bootstrap {
+            padding-top: 0;
+            .ui-select-match-text {
+                height: $panel-height;
+                overflow: hidden;
+                max-width: 100%;
+            }
+            .ui-select-toggle {
+                height: $panel-height;
+            }
+            input {
+                height: $panel-height;
+                border-radius: 0;
+            }
+        }
+
+        .no-assignee {
+            position: absolute;
+            transform: translateY(-65%);
+            top: 31px;
+            width: calc(100% - 10px);
+            margin-left: 10px;
+
+            .avatar-placeholder {
+                height: 26px;
+                padding: 5px 0 5px 35px;
+                color: $light-grey-placeholder;
+                display: table;
+                width: 100%;
+                background: url('/icu/assets/img/user.png') no-repeat scroll left;
+            }
+
+        }
+        .ui-select-placeholder {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(-65%);
+            top: 50%;
+        }
+
+        .avatar {
+            height: 26px;
+            width: 26px;
+            background-color: $green;
+            border-radius: 15px;
+            display: inline-block;
+            margin: 0 10px 0 15px;
+            float: left;
+            font-size: 20px;
+        }
+        .summary-content {
+            display: inline-block;
+            line-height: 26px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding-right: 5px;
+        }
     }
 }
 

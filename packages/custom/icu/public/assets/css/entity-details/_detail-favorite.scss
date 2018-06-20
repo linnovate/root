@@ -1,26 +1,31 @@
-.detail-favorite {
+detail-favorite {
+    @include golden-hover;
 
-      padding: 0 0.9em;
-      height: 100%;
-      font-size: 1.4em; 
-      appearance: none;
-      background-color: transparent;
-      border: none;
-      &:focus {
-          outline: none;
-      }
-      &:hover {
-       i {
-           transform: rotate(360deg);
-           transition: 1.5s;
-       }
-   }
+    .detail-favorite {
 
-   tip{
-      width: 80%;
-      font-size: 14px;
-    }
-  &.orange {
-        color: $orange;
+        padding: 0 0.9em;
+        height: 100%;
+        font-size: 1.4em;
+        appearance: none;
+        background-color: transparent;
+        border: none;
+
+        &:focus {
+            outline: none;
+        }
+        &:hover {
+            i {
+                transform: rotate(360deg);
+                transition: 1.5s;
+            }
+        }
+
+        tip{
+            width: 80%;
+            font-size: 14px;
+        }
+        &.orange {
+            color: $orange;
+        }
     }
 }

@@ -122,7 +122,7 @@
                         margin-right: 5px;
                         margin-left: 25px;
                         padding-left: 10px;
-                        @include disableTextStyles;
+                        @include disable-text-styles;
 
                         &:before {
                             font-weight: normal;

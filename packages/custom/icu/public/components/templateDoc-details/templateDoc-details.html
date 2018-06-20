@@ -6,13 +6,13 @@
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
   </div>
-  
+
   <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
     <detail-menu on-click-item="menuEventHandler" items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
 
   </div>
-    
+
   <detail-category placeholder="'selectOffice' | i18next" value="item.office" items="offices" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent" ></detail-category>
 
   <div class="parent" ng-if="templateDoc.parent">
@@ -23,7 +23,7 @@
 
   <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="item.description" options="{{editorOptions}}"></div>
 
-  <div class="row-buttons">
+  <div class="row-buttons" ng-class="{ 'disabled' : !havePermissions('description')}">
     <button ngf-select
             ngf-change="upload($files)"
             ngf-multiple="true"
@@ -46,10 +46,10 @@
 
   <icu-members-footer
     ng-if="item._id"
-    ng-class="{ 'disabled' : !havePermissions('watchers')}" 
+    ng-class="{ 'disabled' : !havePermissions('watchers')}"
     entity="item"
     users="people"
     me="me"
   ></icu-members-footer>
-  
+
 </div>
