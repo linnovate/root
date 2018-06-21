@@ -111,12 +111,12 @@
                     }
 
                     &.name {
+                        display: flex;
                         position: relative;
                         white-space: nowrap;
                         cursor: text;
                         flex:1;
                         overflow: hidden;
-                        display: block;
                         line-height: 50px;
                         padding-right: 5px;
                         margin-right: 5px;
