@@ -7,7 +7,9 @@ var mongoose = require('mongoose'),
 
 var TaskSchema = new Schema({
   customId: {
-    type: String
+    type: String,
+    unique: true,
+    dropDups: true
   },
   created: {
     type: Date,

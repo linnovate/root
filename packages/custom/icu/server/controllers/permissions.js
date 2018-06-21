@@ -137,7 +137,10 @@ exports.updateContent = function(user, oldDoc, newDoc) {
 
   console.log("updateContent" ) ;
 
-  
+
+  if(oldDoc.customId) {
+    return true;
+  }
   if(oldDoc.profile) {
     // hack the type of content to update is user 
     // since it has a profile...

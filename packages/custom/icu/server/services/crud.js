@@ -171,24 +171,25 @@ module.exports = function(entityName, options) {
     return deffered.promise;
   }
 
-  function read(id, user, acl) {
+
+  function read(id, user, acl, query1) {
     var query;
-    if (currentUser) {
+    if(currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
     } else {
       query = Model.find();
-
+    }
+    if(query1) {
+      query.find(query1);
+    } else {
+      query.where({
+        _id: id
+      });
     }
 
-    query.where({
-      _id: id
-    });
-    // query.where(options.conditions);
-
     query.populate(options.includes);
-
     return query.then(function(results) {
-      if (!results.length) {
+      if(!results.length) {
         // throw new Error('Entity not found');
         return {};
       }
