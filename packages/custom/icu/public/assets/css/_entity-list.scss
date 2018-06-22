@@ -10,7 +10,7 @@
         }
     }
     .entity-list-container {
-        height: 100%;
+        height: calc(100% - 44px);
         overflow-y: hidden;
         .list-table {
             height: 100%;
