@@ -1,8 +1,8 @@
 <div ng-if="user.type !== 'personal' && user.type !== 'corporate' && user._id"
      class="avatar {{getUserClass(entity, user)}}"
      title="{{user.name}} {{user.lastname}}">
-    <span ng-if="!user.profile.avatar"
-          class="name">{{user.name.charAt(0) | uppercase}}{{user.lastname.charAt(0) | uppercase}}
+    <span ng-if="!user.profile.avatar">
+        {{user.name.charAt(0) | uppercase}}{{user.lastname.charAt(0) | uppercase}}
     </span>
     <img ng-if="user.profile.avatar"
          class="image"

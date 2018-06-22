@@ -10,7 +10,7 @@ $tab-content-height: calc(
 .attachment {
     padding-left: 16px;
     height: calc(100% - 55px);
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 .attachment-details {

@@ -1,3 +1,31 @@
+.ui-select-container[ng-model="data.project.assign"] {
+    input {
+        height: 51px;
+        border-radius: 0;
+    }
+    .ui-select-choices {
+        width: auto;
+        @include scroll;
+        .ui-select-choices-row {
+            &.active {
+                a {
+                    background-color: #E3F3F5;
+                    color: #1A1A1A;
+                }
+            }
+            .ui-select-choices-row-inner {
+                display: flex;
+                align-items: center;
+                height: 47px;
+                padding: 4px 20px 5px 10px;
+                .avatar {
+                    margin: 0 9px 0 0;
+                }
+            }
+        }
+
+    }
+}
 .sub-items-section {
     margin: 13px 20px 0;
     position: relative;
