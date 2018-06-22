@@ -111,7 +111,7 @@
     {{signBy.unit}}
   </div>
 
-  <div class="row-buttons">
+  <div class="row-buttons" ng-class="{ 'disabled' : !havePermissions('description')}">
     <button class="create" ng-if="(!item.path && !item.spPath && !uploading)" icu-open-modal entity-name="item" show-modal="true" modal-name="template" data="item">{{ 'createFromTemplate' | i18next }} </button>
     <button ngf-select ngf-change="upload($files)" ngf-multiple="true" class="choose" ng-if="(!item.path && !item.spPath && !uploading)">{{ 'chooseFile' | i18next }}</button>
     <div class="progress" ng-if="uploading">

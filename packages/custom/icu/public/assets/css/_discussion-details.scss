@@ -2,6 +2,7 @@
 
     .location {
         position: relative;
+        @include golden-hover;
         .placeholder {
             position: absolute;
             top: 50%;

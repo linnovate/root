@@ -17,7 +17,8 @@ body {
 @import '../lib/open-sans/scss/open-sans.scss';
 @import 'variables';
 @import 'mixins/table';
-@import 'mixins/disableTextStyles';
+@import 'mixins/disable-text-styles';
+@import 'mixins/golden-hover';
 @import 'mixins/tag';
 @import 'mixins/circle';
 @import 'mixins/button';

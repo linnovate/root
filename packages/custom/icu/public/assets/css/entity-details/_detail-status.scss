@@ -48,61 +48,65 @@
        }
    }
 }
+detail-status {
+    @include golden-hover;
 
-.detail-status {
-    position: relative;
-    @include ui-select;
-    padding: 0 9px;
-    font-weight: bold;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    //max-width: 150px;
-    max-width: 134px;
-    min-width: 114px;
-    .ui-select-container.ui-select-bootstrap {
-      padding-top: 0;
-        .ui-select-match .ui-select-toggle {
-            i.caret {
-                display: none;
+    .detail-status {
+        position: relative;
+        padding: 0 9px;
+        font-weight: bold;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        height: 100%;
+        //max-width: 150px;
+        max-width: 134px;
+        min-width: 114px;
+        @include ui-select;
+
+        .ui-select-container.ui-select-bootstrap {
+          padding-top: 0;
+            .ui-select-match .ui-select-toggle {
+                i.caret {
+                    display: none;
+                }
+                height: auto;
             }
-            height: auto;
-        }
-        i {
-            -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-            mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-            width: 15px;
-            height: 17px;
-            display: inline-block;
-            margin-right: 13px;
-        }
-        i.new {background-color: #ff4081; }
-        i.assigned{background-color: #2979ff;}
-        i.in-progress{background-color: #f69679;}
-        i.review{background-color: #8dc63f;}
-        i.rejected{background-color: #ef5350;}
-        i.done{background-color: #757575;}
-        i.canceled{background-color: #ef5350;}
-        i.completed{background-color: #598527;}
-        i.archived{background-color: #ab47bc;}
-        i.waiting-approval{background-color: #ab47bc;}
-        i.scheduled{background-color: #0054a6;}
-        i.received{background-color: #37afef;}
-        i.sent{background-color: #359123;}
+            i {
+                -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                width: 15px;
+                height: 17px;
+                display: inline-block;
+                margin-right: 13px;
+            }
+            i.new {background-color: #ff4081; }
+            i.assigned{background-color: #2979ff;}
+            i.in-progress{background-color: #f69679;}
+            i.review{background-color: #8dc63f;}
+            i.rejected{background-color: #ef5350;}
+            i.done{background-color: #757575;}
+            i.canceled{background-color: #ef5350;}
+            i.completed{background-color: #598527;}
+            i.archived{background-color: #ab47bc;}
+            i.waiting-approval{background-color: #ab47bc;}
+            i.scheduled{background-color: #0054a6;}
+            i.received{background-color: #37afef;}
+            i.sent{background-color: #359123;}
 
-        .new{color: #ff4081; }
-        .assigned{color: #2979ff;}
-        .in-progress{color: #f69679;}
-        .review{color: #8dc63f;}
-        .rejected{color: #ef5350;}
-        .done{color: #757575;}
-        .canceled{color: #ef5350;}
-        .waiting-approval{color: #ab47bc;}
-        .completed{color: #598527;}
-        .archived{color: #ab47bc;}
-        .scheduled{color: #0054a6;}
-        .received{color: #37afef;}
-        .sent{color: #359123;}
+            .new{color: #ff4081; }
+            .assigned{color: #2979ff;}
+            .in-progress{color: #f69679;}
+            .review{color: #8dc63f;}
+            .rejected{color: #ef5350;}
+            .done{color: #757575;}
+            .canceled{color: #ef5350;}
+            .waiting-approval{color: #ab47bc;}
+            .completed{color: #598527;}
+            .archived{color: #ab47bc;}
+            .scheduled{color: #0054a6;}
+            .received{color: #37afef;}
+            .sent{color: #359123;}
+        }
     }
 }

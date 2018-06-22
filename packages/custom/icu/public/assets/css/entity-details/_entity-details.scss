@@ -28,6 +28,7 @@
   display: flex;
   flex-wrap: wrap;
   border-bottom: 1px solid #e1e1e1;
+  position: relative;
   > * {
 //     flex-grow: 1;
     display: block;
@@ -44,6 +45,7 @@
     font-size: 23px;
     margin: 10px 16px;
     outline: none;
+    position: relative;
 
     &.medium-editor-placeholder {
         &:not(:focus):before {
