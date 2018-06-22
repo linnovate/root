@@ -399,7 +399,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocuments',
-                    issueId: officeDocument.id,
+                    issueId: officeDocument._id,
                     type: activityType,
                     status: officeDocument[type],
                     prev: prev[type]
