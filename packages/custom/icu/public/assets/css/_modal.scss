@@ -676,6 +676,10 @@
 	}
 }
 
+.close {
+    float: right;
+}
+
 @mixin ui-select {
     .ui-select-container {
         //padding-top: 13px;
