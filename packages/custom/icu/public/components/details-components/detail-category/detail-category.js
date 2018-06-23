@@ -6,7 +6,7 @@
  */
 angular.module('mean.icu.ui.detailsComponents').directive('detailCategory', detailCategory);
 
-function detailCategory() {
+function detailCategory(ProjectsService) {
 
   return {
     scope: {
@@ -49,6 +49,13 @@ function detailCategory() {
     $scope.create = function() {
       $scope.onCreate($scope.selectText);
       $scope.selectText = null;
+    }
+
+    $scope.updateProjectsList = function () {
+        ProjectsService.getAll(0, 0, 'created')
+            .then(function (data) {
+                $scope.items = data.data || data;
+            })
     }
 
   }
