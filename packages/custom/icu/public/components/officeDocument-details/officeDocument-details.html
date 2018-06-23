@@ -110,7 +110,14 @@
   </div>
 
   <div class="row-buttons" ng-class="{ 'disabled' : !havePermissions('description')}">
-    <button class="create" ng-if="(!item.path && !item.spPath && !uploading)" icu-open-modal entity-name="item" show-modal="true" modal-name="template" data="item">{{ 'createFromTemplate' | i18next }} </button>
+    <button class="create"
+            ng-if="(!item.path && !item.spPath && !uploading)"
+            icu-open-modal
+            entity-name="officeDocument"
+            show-modal="true"
+            modal-name="template"
+            data="item">{{ 'createFromTemplate' | i18next }}
+    </button>
     <button ngf-select ngf-change="upload($files)" ngf-multiple="true" class="choose" ng-if="(!item.path && !item.spPath && !uploading)">{{ 'chooseFile' | i18next }}</button>
     <div class="progress" ng-if="uploading">
       <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" ng-style="{width:progressPercentage+'%'}">{{progressPercentage}}%</div>
