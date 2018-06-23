@@ -341,6 +341,7 @@ function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,
                 .success(function(data) {
                     $scope.avatar = data.avatar;
                     $scope.hash = Math.random();
+                    $scope.imgUrl = '?' + Date.now();
                     updatePage();
                 })
                 .error(function() {
