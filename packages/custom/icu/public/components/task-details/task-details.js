@@ -212,7 +212,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     $scope.item.project = value;
     $scope.update($scope.item, 'project');
   }
-  
+
   $scope.newCategory = function(value) {
     var project = {
       color: '0097A7',
@@ -411,14 +411,13 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
   $scope.havePermissions = function(type, enableRecycled) {
     enableRecycled = enableRecycled || !$scope.isRecycled;
     return (PermissionsService.havePermissions(entity, type) && enableRecycled);
-  }
+  };
 
   $scope.haveEditiorsPermissions = function() {
-    return PermissionsService.haveEditorsPerms($scope.entity);
-  }
+    return PermissionsService.haveEditorsPerms($scope.item);
+  };
 
   $scope.permsToSee = function() {
-    return PermissionsService.haveAnyPerms($scope.entity);
+    return PermissionsService.haveAnyPerms($scope.item);
   }
-
 }

@@ -6,7 +6,7 @@
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
   </div>
-  
+
   <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
     <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
@@ -19,12 +19,21 @@
 
   </div>
 
-  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="1" strip-br="true" ng-model="item.title" medium-editor></div>
+  <div class="detail-title"
+       ng-class="{ 'disabled' : !havePermissions('description')}">
+    <div class="item-title"
+         contenteditable="{{haveEditiorsPermissions()}}"
+         tabindex="1"
+         strip-br="true"
+         ng-model="item.title"
+         medium-editor>
+    </div>
+  </div>
 
   <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="item.description" options="{{editorOptions}}"></div>
-       
+
   <div class="detail-fields">
-  
+
     <label>{{ 'unit' | i18next }}</label>
     <div class="text officeDetails"
      contenteditable="true"
@@ -48,10 +57,10 @@
 
   <icu-members-footer
     ng-if="item._id"
-    ng-class="{ 'disabled' : !havePermissions('watchers')}" 
+    ng-class="{ 'disabled' : !havePermissions('watchers')}"
     entity="item"
     users="people"
     me="me"
   ></icu-members-footer>
-  
+
 </div>
