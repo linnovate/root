@@ -227,11 +227,6 @@ directive('icuSidepane', function() {
     ];
 
     $scope.setActive = function(item){
-        $scope.$broadcast('sidepan', item,
-        $scope.context, $scope.folders,
-        $scope.offices, $scope.projects,
-        $scope.discussions, $scope.officeDocuments,
-        $scope.people);
         return $scope.activeTab = item;
     };
 
@@ -277,11 +272,6 @@ directive('icuSidepane', function() {
         }
         for(let i = 0; i < $scope.items.length ; i++){
             if($scope.activeTab === item){
-                $scope.$broadcast('sidepan', item,
-                $scope.context, $scope.folders,
-                $scope.offices, $scope.projects,
-                $scope.discussions, $scope.officeDocuments,
-                $scope.people);
                 return $scope.menuColorStyles[index];
             }
         }
@@ -402,12 +392,14 @@ directive('icuSidepane', function() {
         if ($scope.isRecycled)
           $location.search('recycled','true');
         let results = SearchService.results;
+
+        for (let i = 0; i < $scope.issues.length; i++) {
+          $scope.issues[i].length = 0;
+        }
+
         if (!results || !results.length) return ;
         let filteredByType = [], index;
 
-        for (let i = 0; i < $scope.issues.length; i++) {
-            $scope.issues[i].length = 0;
-        }
         for (let i=0; i< results.length; i++) {
             if (results[i]._type === $scope.filteringData.issue || $scope.filteringData.issue === 'all') {
                 if ($rootScope.status) {
@@ -555,7 +547,7 @@ directive('icuSidepane', function() {
         }
         else {
             $scope.isRecycled = true;
-            $state.go('main.search', {recycled: true, 'query':'___'});
+            $state.go('main.search', {recycled: true, 'query':query});
         }
     };
 

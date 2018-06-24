@@ -43,7 +43,7 @@
                             <!-- <span class="all-status" ng-class="{'bold':isActive(field,$root.status)}" ng-click="$root.status = field;filterSearchByType(true)">{{field | i18next}}</span> -->
                           <span class="all-status"
                                 ng-class="{'active':isActive(field,$root.status)}"
-                                ng-click="statusListCahnge(field);filterSearchByType(true)">
+                                ng-click="statusListChange(field);filterSearchByType(true)">
                               {{field | i18next}}
                           </span>
                         </li>
@@ -89,8 +89,6 @@
                 <div class="subtitle">{{'linkedTo' | i18next}}{{'project' | i18next}}</div>
                 <ul>
                     <li ng-repeat="p in filteringData.projects | filterRecycled | limitTo: displayLimit['projects']">
-                        <!--<input type="checkbox" ng-model="filteringData.selectedEntities.projects[p._id]" ng-change="filterSearch()"/>-->
-                        <!--{{p.title}}-->
                         <div class="filteringElement"
                              ng-class="{active: filteringData.selectedEntities.projects[p._id]}"
                              ng-click="simulateCheckbox(filteringData.selectedEntities.projects, p._id);filterSearch()">
