@@ -9,15 +9,6 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.archiveList = SettingServices.getNonActiveStatusList();
         $scope.userFilterList = SettingServices.getUserFilter();
 
-        $scope.$on('sidepan', function (ev,item, context, folders,offices,projects,discussions,officeDocuments,people) {
-            $scope.context = context;
-            $scope.folders = folders;
-            $scope.offices = offices;
-            $scope.projects = projects;
-            $scope.discussions = discussions;
-            $scope.officeDocuments = officeDocuments;
-            $scope.people = people;
-        });
         $rootScope.$on('changeStatus',function(){
           $scope.AllStatus = $scope.statusList[$scope.filteringData.issue];
         });
@@ -63,13 +54,12 @@ angular.module('mean.icu.ui.displayby', [])
             var query = SearchService.getQuery();
             $scope.recycled = false;
             $scope.isRecycled = false;
-            // $state.go('main.search', {reload: true});
             $state.go('main.search', {reload: true, query: query});
         };
 
         $scope.tmpStatus = [];
 
-          $scope.statusListCahnge = function(type){
+          $scope.statusListChange = function(type){
             var index;
             if($scope.currentType == 'active'){
                 if ($scope.activeList.indexOf(type) < 0)
@@ -310,27 +300,6 @@ angular.module('mean.icu.ui.displayby', [])
          }, { reload: true });
             });
 
-         // var temp=[];
-         // debugger;
-         // $scope.officeDocuments.forEach(function(d){
-         //     temp.push(d);
-         // });
-         // temp = temp.filter(function(officeDocument){
-         //     if(context.entityName=='folder'){
-         //         return officeDocument.status == type.name &&officeDocument.folder&& officeDocument.folder._id==context.entityId ;
-         //     }
-         //     else{
-         //         return officeDocument.status == type.name;
-         //     }
-         // });
-         // if(temp.length==0){
-         //     $state.go('main.' + context.main + '.all', {'officeDocuments':undefined},{reload: true});
-         // }
-         // else{
-         //     $state.go($state.current,{'officeDocuments':temp});
-
-         // }
-
          /**
          var temp=[];
          $scope.officeDocuments.forEach(function(d){
@@ -356,7 +325,7 @@ angular.module('mean.icu.ui.displayby', [])
      };
         $scope.switchTo = function (entityName, id) {
             EntityService.setEntityFolderValue(entityName, id);
-            OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field, 
+            OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field,
                                                EntityService.getSortFilterValue().order,
                                                EntityService.getActiveStatusFilterValue(),
                                                EntityService.getEntityFolderValue().id).then(function (result) {
@@ -371,7 +340,7 @@ angular.module('mean.icu.ui.displayby', [])
             if (!$scope.visible[entityName]) {
                 $scope.displayLimit.reset();
             }
-            
+
         };
 
         $scope.switchToAll = function (entityName, id) {
