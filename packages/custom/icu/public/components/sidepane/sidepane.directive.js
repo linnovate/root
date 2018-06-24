@@ -104,13 +104,6 @@ directive('icuSidepane', function() {
           if(item.func)item.func();
         };
 
-        $scope.checkForSearchState = function(){
-            if($state.current.name.indexOf('search') === -1){
-                $scope.clearAllFilters();
-                $scope.clearResults()
-            }
-        };
-
         $scope.clearAllFilters = function(){
             $scope.filteringData.issue='all';
             $scope.resetFilter();
@@ -552,12 +545,14 @@ directive('icuSidepane', function() {
     };
 
     $scope.clearResults = function(){
-        SearchService.clearResults();
-        $scope.issues = $scope.issues.map(function(issue){
-            issue.length = 0;
-            return issue;
-        });
-        return $scope.issues;
+      SearchService.refreshQuery('');
+      SearchService.clearResults();
+
+      $scope.issues = $scope.issues.map(function(issue){
+        issue.length = 0;
+        return issue;
+      });
+      return $scope.issues;
     };
 
     $scope.filterSearch = function() {
