@@ -36,13 +36,13 @@
 
   <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}">
     <div class="item-title"
-      contenteditable="{{haveEditiorsPermissions()}}"
-      tabindex="1"
-      strip-br="true"
-      ng-keydown="onEnter($event)"
-      ng-model="item.title"
-      ng-change="updateCurrentDiscussion()"
-      medium-editor>
+       contenteditable="true"
+       tabindex="1"
+       strip-br="true"
+       ng-keydown="onEnter($event)"
+       ng-model="item.title"
+       ng-change="updateCurrentDiscussion()"
+       medium-editor>
     </div>
   </div>
 
