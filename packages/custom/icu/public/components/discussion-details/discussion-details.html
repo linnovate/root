@@ -34,8 +34,8 @@
     </button>
   </div>
 
-  <div class="detail-title"
-       ng-class="{ 'disabled' : !havePermissions('description')}"
+  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}">
+    <div class="item-title"
        contenteditable="true"
        tabindex="1"
        strip-br="true"
@@ -43,15 +43,16 @@
        ng-model="item.title"
        ng-change="updateCurrentDiscussion()"
        medium-editor>
+    </div>
   </div>
 
   <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}"
-       contenteditable="true"
-       tabindex="2"
-       strip-br="true"
-       medium-editor
-       ng-model="item.description"
-       options="{{editorOptions}}">
+     contenteditable="true"
+     tabindex="2"
+     strip-br="true"
+     medium-editor
+     ng-model="item.description"
+     options="{{editorOptions}}">
   </div>
 
   <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>

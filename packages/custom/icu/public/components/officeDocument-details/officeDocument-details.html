@@ -83,7 +83,18 @@
   <detail-category placeholder="'selectFolder' | i18next" value="item.folder" items="folders" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent"></detail-category>
 
   <div class="parent" ng-if="item.parent">{{currentContext.entity.title}}</div>
-  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="1" strip-br="true" ng-model="item.title" medium-editor></div>
+
+  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}">
+    <div
+       class="item-title"
+       contenteditable="true"
+       tabindex="1"
+       strip-br="true"
+       ng-model="item.title"
+       medium-editor>
+    </div>
+  </div>
+
   <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="item.description" options="{{editorOptions}}"></div>
 
   <select ng-if="signatures && !signBy" class="select-sig" ng-model="selectedSignature" ng-change="SignatureSelected(selectedSignature)">
