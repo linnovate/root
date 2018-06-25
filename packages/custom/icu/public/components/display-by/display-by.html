@@ -171,31 +171,34 @@
                 </ul>
             </div>
 
-            <div class="watchers-wrapper">
-                <div class="subtitle">{{'watchersInThe' | i18next}}</div>
-                <ul>
-                    <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
-                        <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
-                        {{w.name}}-->
-                        <div class="filteringElement watcher"
-                             ng-class="{active: filteringData.selectedWatchers[w._id]}"
-                             ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
-                            <div icu-avatar user="w"></div>
-                            <span>{{w.name}}</span>
-                        </div>
-                    </li>
-                    <li ng-if="filteringData.watchers.length > displayLimit['watchers']"
-                        ng-click="showMore(filteringData.watchers.length, 'watchers')"
-                        class="more">{{ 'more' | i18next }}
-                    </li>
-                    <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3"
-                        ng-click="collapse('watchers')"
-                        class="more">{{ 'less' | i18next }}
-                    </li>
-                </ul>
-            </div>
+        <!--*** *** *** section with watchers made unseen untill entity user will be thought out *** *** ***-->
 
-        </div>
+            <!--<div class="watchers-wrapper">-->
+                <!--<div class="subtitle">{{'watchersInThe' | i18next}}</div>-->
+                <!--<ul>-->
+                    <!--<li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">-->
+                        <!--&lt;!&ndash;<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>-->
+                        <!--{{w.name}}&ndash;&gt;-->
+                        <!--<div class="filteringElement watcher"-->
+                             <!--ng-class="{active: filteringData.selectedWatchers[w._id]}"-->
+                             <!--ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">-->
+                            <!--<div icu-avatar user="w"></div>-->
+                            <!--<span>{{w.name}}</span>-->
+                        <!--</div>-->
+                    <!--</li>-->
+                    <!--<li ng-if="filteringData.watchers.length > displayLimit['watchers']"-->
+                        <!--ng-click="showMore(filteringData.watchers.length, 'watchers')"-->
+                        <!--class="more">{{ 'more' | i18next }}-->
+                    <!--</li>-->
+                    <!--<li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3"-->
+                        <!--ng-click="collapse('watchers')"-->
+                        <!--class="more">{{ 'less' | i18next }}-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>-->
+        <!--*** *** *** end of watchers section comment *** *** ***-->
+
+    </div>
     </div>
     <div class="all" ng-if="context.main != 'folders' && activeTab.name !== 'search'">
         <p class="title my" ng-if="context.main === 'tasks'"
@@ -298,32 +301,35 @@
         </ul>
     </div>
 
-    <div class="list people"
-         ng-if="people
-                && activeTab.display.indexOf('people') !== -1
-                && activeTab.name !== 'search'">
-        <p ng-click="visible.user = !visible.user"
-           class="title">{{ 'tasksAssignedTo' | i18next }}</p>
-        <ul ng-if="visible.user">
-            <li ng-if="user.name !== 'no select'"
-                data-ng-repeat="user in people | limitTo: displayLimit['people']"
-                data-ng-click="switchTo('user', user._id)"
-                data-ng-class="{'selected': context.entityName === 'user' && context.entityId === user._id}">
-                <a href data-ng-link="main.users.details({id: user._id})">
-                    <div icu-avatar user="user"></div>
-                    <span class="name">{{user.name}}</span>
-                </a>
-            </li>
-            <li ng-if="people.length > displayLimit['people']"
-                ng-click="showMore(people.length, 'people')"
-                class="more">{{ 'more' | i18next }}
-            </li>
-            <li ng-if="people.length == displayLimit['people'] && displayLimit['people'] > 4"
-                ng-click="collapse('people')"
-                class="more">{{ 'less' | i18next }}
-            </li>
-        </ul>
-    </div>
+    <!--*** *** *** section with users made unseen untill entity user will be thought out *** *** ***-->
+    <!--<div class="list people"-->
+         <!--ng-if="people-->
+                <!--&& activeTab.display.indexOf('people') !== -1-->
+                <!--&& activeTab.name !== 'search'">-->
+        <!--<p ng-click="visible.user = !visible.user"-->
+           <!--class="title">{{ 'tasksAssignedTo' | i18next }}</p>-->
+        <!--<ul ng-if="visible.user">-->
+            <!--<li ng-if="user.name !== 'no select'"-->
+                <!--data-ng-repeat="user in people | limitTo: displayLimit['people']"-->
+                <!--data-ng-click="switchTo('user', user._id)"-->
+                <!--data-ng-class="{'selected': context.entityName === 'user' && context.entityId === user._id}">-->
+                <!--<a href data-ng-link="main.users.details({id: user._id})">-->
+                    <!--<div icu-avatar user="user"></div>-->
+                    <!--<span class="name">{{user.name}}</span>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li ng-if="people.length > displayLimit['people']"-->
+                <!--ng-click="showMore(people.length, 'people')"-->
+                <!--class="more">{{ 'more' | i18next }}-->
+            <!--</li>-->
+            <!--<li ng-if="people.length == displayLimit['people'] && displayLimit['people'] > 4"-->
+                <!--ng-click="collapse('people')"-->
+                <!--class="more">{{ 'less' | i18next }}-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
+    <!--*** *** *** end of user section comment *** *** ***-->
+
     <div class="list officeDocuments" ng-if="context.main == 'officeDocuments' && activeTab.name !== 'search'">
         <!-- <p ng-click="visible.officeDocument = !visible.officeDocument" class="title">{{ 'officeDocuments' | i18next }}</p>
         <ul ng-if="visible.officeDocument">
