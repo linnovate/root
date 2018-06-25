@@ -421,12 +421,9 @@ directive('icuSidepane', function() {
             }
             index = issuesOrder.indexOf(results[i]._type);
             if($stateParams.query == ''){
-                $scope.issues[index].length = 0;
+              $scope.issues[index].length = 0;
             } else {
-              if($scope.recycled){
-              } else {
-                identifyRecycled(results[i], $scope.issues[index]);
-              }
+              identifyRecycled(results[i], $scope.issues[index]);
             }
         }
         SearchService.setFilteringResults(filteredByType);
