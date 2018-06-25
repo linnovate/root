@@ -60,6 +60,11 @@
     .item-title {
         outline: none;
     }
+    .medium-editor-placeholder {
+        &:after {
+            left: 0;
+        }
+    }
 }
 
 .detail-desc {

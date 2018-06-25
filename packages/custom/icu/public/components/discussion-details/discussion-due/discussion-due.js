@@ -159,9 +159,6 @@ function DiscussionDue() {
         $("#startTime").css("orientation", "auto left");
       }
       $scope.allDayTitle = english ? "All day long" : "כל היום";
-      var margin = english ? "-15px" : "-35px";
-      var marginAllDay = english ? "-5px" : "-15px";
-      var marginFirst = english ? "-5px" : "-35px";
       $scope.firstStr = 'deadline';
       $scope.secondStr = '';
       if ($scope.item.startDate) {
@@ -170,17 +167,12 @@ function DiscussionDue() {
       }
       if ($scope.item.allDay) {
         $scope.secondStr = "All day long";
-        $("#secondStr").css("margin-left", marginAllDay);
-        $("#firstStr").css("margin-left", marginFirst);
       } else {
         if ($scope.item.startTime) {
           var ho = $scope.item.startTime.getHours().toString().length == 1 ? "0" + $scope.item.startTime.getHours().toString() : $scope.item.startTime.getHours().toString();
           var min = $scope.item.startTime.getMinutes().toString().length == 1 ? "0" + $scope.item.startTime.getMinutes().toString() : $scope.item.startTime.getMinutes().toString();
           startStr = ho + ":" + min;
           $scope.firstStr = $scope.item.startDate ? $scope.firstStr + " " + startStr : '';
-          if ($scope.item.startDate) {
-            $("#firstStr").css("margin-left", margin);
-          }
         }
         if ($scope.item.endDate) {
           if ($scope.firstStr != 'deadline') {
@@ -195,7 +187,6 @@ function DiscussionDue() {
             var min = $scope.item.endTime.getMinutes().toString().length == 1 ? "0" + $scope.item.endTime.getMinutes().toString() : $scope.item.endTime.getMinutes().toString();
             endStr = ho + ":" + min;
             $scope.secondStr = $scope.secondStr + " " + endStr;
-            $("#secondStr").css("margin-left", margin);
           }
         }
       }
