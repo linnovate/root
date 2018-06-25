@@ -423,7 +423,10 @@ directive('icuSidepane', function() {
             if($stateParams.query == ''){
                 $scope.issues[index].length = 0;
             } else {
-                $scope.issues[index].length++;
+              if($scope.recycled){
+              } else {
+                identifyRecycled(results[i], $scope.issues[index]);
+              }
             }
         }
         SearchService.setFilteringResults(filteredByType);
@@ -433,6 +436,14 @@ directive('icuSidepane', function() {
         if (!flag && $rootScope.status )
           $rootScope.$emit('changeStatus');
     };
+
+    function identifyRecycled(item, issue){
+      if($scope.recycled && item.recycled){
+        issue.length++
+      } else if(!$scope.recycled && !item.recycled){
+        issue.length++
+      }
+    }
 
     let getTruth = function(obj) { // return truth value in a single object
         let arr = [];
