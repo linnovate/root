@@ -1496,6 +1496,8 @@ angular.module('mean.icu').config([
                 resolve: {
                     results: function (EntityService,SearchService, $stateParams, $location) {
                         let query = $stateParams.query;
+                        $stateParams.recycled = $location.search().recycled;
+
                         if ($stateParams.recycled == true)  {
                             $location.search('recycled', 'true');
                         }

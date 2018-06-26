@@ -7,7 +7,7 @@ directive('icuSidepane', function() {
         NotifyingService, TasksService
     ){
         $scope.context = context;
-        $scope.recycled = $location.path().split("/").pop() === "recycled";
+        $scope.recycled = $stateParams.recycled;
 
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
@@ -537,9 +537,11 @@ directive('icuSidepane', function() {
 
         if($location.search().recycled) {
             $scope.recycled =  false;
+            $stateParams.recycled = false;
         }
         else {
-            $scope.recycled = !$scope.recycled ;
+            $scope.recycled = true;
+            $stateParams.recycled = true;
         }
 
         if($scope.recycled === false) {
