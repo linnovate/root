@@ -7,7 +7,7 @@ directive('icuSidepane', function() {
         NotifyingService, TasksService
     ){
         $scope.context = context;
-        $scope.recycled = $location.path().split("/").pop() === "recycled";
+        $scope.recycled = $stateParams.recycled;
 
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
@@ -421,9 +421,9 @@ directive('icuSidepane', function() {
             }
             index = issuesOrder.indexOf(results[i]._type);
             if($stateParams.query == ''){
-                $scope.issues[index].length = 0;
+              $scope.issues[index].length = 0;
             } else {
-                $scope.issues[index].length++;
+              identifyRecycled(results[i], $scope.issues[index]);
             }
         }
         SearchService.setFilteringResults(filteredByType);
@@ -433,6 +433,14 @@ directive('icuSidepane', function() {
         if (!flag && $rootScope.status )
           $rootScope.$emit('changeStatus');
     };
+
+    function identifyRecycled(item, issue){
+      if($scope.recycled && item.recycled){
+        issue.length++
+      } else if(!$scope.recycled && !item.recycled){
+        issue.length++
+      }
+    }
 
     let getTruth = function(obj) { // return truth value in a single object
         let arr = [];
@@ -529,9 +537,11 @@ directive('icuSidepane', function() {
 
         if($location.search().recycled) {
             $scope.recycled =  false;
+            $stateParams.recycled = false;
         }
         else {
-            $scope.recycled = !$scope.recycled ;
+            $scope.recycled = true;
+            $stateParams.recycled = true;
         }
 
         if($scope.recycled === false) {

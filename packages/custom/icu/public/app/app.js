@@ -68,7 +68,7 @@ angular.module('mean.icu').config([
                     officeDocuments:undefined
                 },
                 views: {
-                    'middlepane@main': { 
+                    'middlepane@main': {
                         templateUrl: '/icu/components/entity-list/entity-list.html',
                         controller: capitalizedMain + 'ListController'
                     },
@@ -157,7 +157,7 @@ angular.module('mean.icu').config([
 
             return {
                 url: urlPrefix + '/:id',
-                views: { 
+                views: {
                     'detailspane@main': {
                         templateUrl: '/icu/components/project-details/project-details.html',
                         controller: 'ProjectDetailsController'
@@ -1495,12 +1495,15 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     results: function (EntityService,SearchService, $stateParams, $location) {
-                        let unmerged;
+                        let query = $stateParams.query;
+                        $stateParams.recycled = $location.search().recycled;
+
                         if ($stateParams.recycled == true)  {
                             $location.search('recycled', 'true');
                         }
-                        if ($stateParams.query && $stateParams.query.length) {
-                            return SearchService.find($stateParams.query);
+                        if (query && query.length) {
+                            SearchService.refreshQuery(query);
+                            return SearchService.find(query);
                         } else {
                             if (SearchService.builtInSearchArray) {
                                 var data = SearchService.builtInSearchArray.map(function (d) {
@@ -1517,7 +1520,7 @@ angular.module('mean.icu').config([
                         return _(results).filter(function (r) {
                             return r._type === 'task';
                         });
-                    },              
+                    },
                     term: function ($stateParams) {
                         return $stateParams.query;
                     }
