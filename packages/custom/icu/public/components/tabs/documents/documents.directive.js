@@ -75,18 +75,17 @@ angular.module('mean.icu.ui.tabs')
 
                         for (var index = 0; index < file.length; index++) {
 
-                            DocumentsService.saveAttachments(data, file[index]).success(function(attachment) {
-                                console.log('[attachment]', [attachment]);
+                            DocumentsService.saveAttachments(data, file[index])
+                                .then(function(attachment) {
+                                    console.log('[attachment]', [attachment]);
 
-                                result.attachments[result.attachments.length] = attachment;
-                                AttachmentsService.getAttachmentUser(attachment.creator._id).then(user => {
-
-                                    attachment.attUser = user.name ;
-                                    $scope.documents.push(attachment);
-                                }
-                                )
-
-                            });
+                                    result.attachments[result.attachments.length] = attachment;
+                                    AttachmentsService.getAttachmentUser(attachment.creator._id)
+                                        .then(user => {
+                                            attachment.attUser = user.name ;
+                                            $scope.documents.push(attachment);
+                                        })
+                                });
                         }
                     }
                     clearForm();

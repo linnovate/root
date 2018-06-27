@@ -2,39 +2,39 @@ function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filte
 
     $scope.path = "" ;
 
-    $scope.getPath = function () { 
+    $scope.getPath = function () {
         return $scope.path ;
     }
 
-    $scope.getAttachment = function () {  
+    $scope.getAttachment = function () {
                 return attachment ;
     }
     $scope.attachment = attachment ;
 
     $scope.attName =  attachment.name ;
-    $scope.attCreated =  attachment.created ; 
+    $scope.attCreated =  attachment.created ;
     $scope.attSize =  attachment.size ;
-    $scope.attCreator = null ; 
-    UsersService.getById(attachment.creator).then(user => $scope.attCreator = user.name) ;
+    $scope.attCreator = null ;
+    UsersService.getById(attachment.creator)
+        .then(user => $scope.attCreator = user.name);
 
-    $scope.attPath =  attachment.path ;  
+    $scope.attPath =  attachment.path ;
     $scope.attPrint =  attachment.size ;
     $scope.attType =  attachment.attachmentType;
-                
+
     $scope.previewWindow = function(document) {
-        AttachmentsService.previewWindow(document) ;
-    }       
+        AttachmentsService.previewWindow(document);
+    }
 
 
-    $scope.previewAttachment = function () { 
+    $scope.previewAttachment = function () {
 
-        
         attachment.documentType = attachment.attachmentType ? attachment.attachmentType : attachment.documentType ;
          var resPath = myTest(attachment) ;
          return resPath ;
     }
 
-    $scope.previewAttachment() ; 
+    $scope.previewAttachment() ;
 
     function myTest(document1) {
         // Check if need to view as pdf
@@ -55,12 +55,13 @@ function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filte
                 $scope.path = ToHref + '?view=true' ;
             }).error(function() {
                 // Send to server
-                $.post('/officeDocsAppend.js', document1).done(function(document2) {
-                    // The convert is OK and now we open the pdf to the client in new window
-                    $scope.path = ToHref + '?view=true' ;
-                }).fail(function(xhr) {
-                    console.error(xhr.responseText);
-                });
+                $http.post('/officeDocsAppend.js', document1)
+                    .then(res => {
+                        // The convert is OK and now we open the pdf to the client in new window
+                        $scope.path = ToHref + '?view=true' ;
+                    }).catch(err => {
+                        console.error(err);
+                    });
             });
         }
         // Format is NOT needed to view as pdf
@@ -68,11 +69,11 @@ function controllerDocumentPreview($scope, $uibModalInstance, attachment, $filte
             $scope.path = document1.path + '?view=true' ;
         }
     }
-    
+
     $scope.ok = function (sendingForm) {
         $uibModalInstance.dismiss('cancel');
     };
-    
+
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
