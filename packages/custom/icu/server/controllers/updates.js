@@ -183,11 +183,8 @@ exports.signNew = function(req, res, next) {
   };
 
   var query = req.acl.mongoQuery(entities[req.body.data.issue]);
-  console.log('query: ', query);
-
   query.findOne({_id: req.body.data.issueId}).exec(function(err, entity) {
-      console.log('entity: ', entity);
-      if(err) {
+    if(err) {
       req.locals.error = err;
     }
     if(!entity) {
@@ -197,10 +194,7 @@ exports.signNew = function(req, res, next) {
       };
     }
     if(entity) {
-        console.log('entity.watchers: ', entity.watchers);
-        console.log('entity.circles: ', entity.circles);
-
-        req.locals.data.watchers = entity.watchers;
+      req.locals.data.watchers = entity.watchers;
       req.locals.data.circles = entity.circles;
     }
     next();

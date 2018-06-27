@@ -134,8 +134,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
 
 
     app.post('/officeDocsAppend.js' , function(req, res){
-        console.log('start');
-        console.log(req.body.documentType);
+
       var StartOFPath = config.root + '/';
       
       // Check the type of the file, and if needed to viewed as pdf
@@ -147,7 +146,6 @@ module.exports = function(MeanUser, app, auth, database, passport) {
          (req.body.documentType == "pptx"))
       {
           var str = req.body.path;
-          console.log('*****str: ', str);
 
           //Check if there is space, if there is, add '\' before it
           if (str.indexOf(' ') >= 0)
@@ -168,41 +166,26 @@ module.exports = function(MeanUser, app, auth, database, passport) {
           //###start_of_url 
           //var arr = str.split(config.host + ':' + config.http.port);
           var arr = str.split(config.host);
-          console.log('*****arr: ', arr);
-
           // !!! in case of https
           //var arr = str.split(config.host + ':' + config.https.port);
           // !!! in case of https
           var realpath = arr[1].replace('(', '\(').replace(')', '\)');
-          console.log('*****realpath: ', realpath);
-
           var arr1 = str.split("/");
-          console.log('*****arr1: ', arr1);
-
           var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
-          console.log('*****pathToFolder: ', pathToFolder);
-
-
           var arr2 = arr1[7].split("." + req.body.documentType);
-          console.log('*****arr2: ', arr2);
-
 
 
           // Make the convert from it's origin type to pdf
           exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
           if (err) {
-              console.log('*****arguments: ', arguments);
               res.send(500, arguments);
           } else {
-              console.log('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf');
+
               // Move the converted file to the path of the origin file
               exec('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf' , function (err, stout, sterr){
                   if (err) {
-                      console.log('*****arguments: ', arguments);
                       res.send(500, arguments);
                   } else {
-                      console.log('*****stout: ', stout);
-                      console.log('*****sterr: ', sterr);
 
                       res.send(stout);
                   }

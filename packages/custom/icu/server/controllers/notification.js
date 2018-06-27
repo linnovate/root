@@ -369,8 +369,6 @@ exports.sendUpdate = function(req, res, next) {
   if(req.locals.error) {
     return next();
   }
-    console.log('req.body.context.room: ', req.body.context.room);
-    console.log('req.body.data.issue: ', req.body.data.issue);
 
   if(req.body.context.room) {
     req.body.context.user = req.user.name;
@@ -414,28 +412,26 @@ exports.sendUpdate = function(req, res, next) {
       Task.findOne({
         _id: req.body.data.issueId
       }).populate('project').exec(function(error, task) {
-          console.log('task: ', task);
+        if(task.project) {
+          if(task.project.room) {
+            req.body.context.room = task.room;
+            req.body.context.user = req.user.name;
+            notifications.notify(['hi'], 'createMessage', {
+              message: bulidMassage(req.body.context),
+              roomId: req.body.context.room
+            }, function(error, result) {
+              if(error) {
+                req.hi = {
+                  error: error
+                };
 
-
-          if(task.project) {
-              if(task.project.room) {
-                req.body.context.room = task.room;
-                req.body.context.user = req.user.name;
-                notifications.notify(['hi'], 'createMessage', {
-                  message: bulidMassage(req.body.context),
-                  roomId: req.body.context.room
-                }, function(error, result) {
-                  if(error) {
-                    req.hi = {
-                      error: error
-                    };
-
-                  }
-                });
-              } else {
-                createRoomAndSendMessage(task.project, req, next);
               }
-            }
+            });
+          }
+          else {
+            createRoomAndSendMessage(task.project, req, next);
+          }
+        }
       });
     }
   }
