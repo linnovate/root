@@ -69,6 +69,11 @@ module.exports = function(Icu, app) {
   app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs|new|customData)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
+   //app.use('/api/files', express.static(config.attachmentDir));
+
+  //app.get('/files', attachments.getByPath, error, attachments.download);
+
+
   app.use('/api/Excelfiles', express.static(config.attachmentDir));
 
 

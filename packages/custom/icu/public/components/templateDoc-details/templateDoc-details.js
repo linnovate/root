@@ -1,41 +1,28 @@
 'use strict';
 
-angular.module('mean.icu.ui.templateDocdetails', [])
-    .controller('TemplateDocDetailsController', function ($scope,$http,
-                                                      entity,
-                                                      tasks,
-                                                      folders,
-                                                      people,
-                                                      templateDocs,
-                                                      context,
-                                                      $state,
-                                                      TemplateDocsService,
-                                                      PermissionsService,
-                                                      $stateParams) {
-        if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("templateDocs")))
-        {
-            $scope.templateDoc = entity || context.entity;
-        }
-        else
-        {
-            $scope.templateDoc = context.entity || entity;
-        }
-        $scope.entity = entity || context.entity;
-        $scope.tasks = tasks.data || tasks;
-        $scope.folders = folders.data || folders;
-        $scope.templateDocs = templateDocs.data || templateDocs;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
-/**
-        TemplateDocsService.getStarred().then(function (starred) {
-
-            // Chack if HI room created and so needs to show HI.png
-            if($scope.templateDoc.WantRoom == true)
-            {
-                $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
-            }
-
-            $scope.templateDoc.star = _(starred).any(function (s) {
-                return s._id === $scope.templateDoc._id;
+angular.module('mean.icu.ui.templateDocdetails', []).controller('TemplateDocDetailsController', function ($scope, $http, entity, tasks, folders, people, templateDocs, context, $state, TemplateDocsService, PermissionsService, $stateParams, OfficeDocumentsService) {
+    if ($state.$current.url.source.includes("search") || $state.$current.url.source.includes("templateDocs")) {
+        $scope.templateDoc = entity || context.entity;
+    } else {
+        $scope.templateDoc = context.entity || entity;
+    }
+    $scope.entity = entity || context.entity;
+    $scope.tasks = tasks.data || tasks;
+    $scope.folders = folders.data || folders;
+    $scope.templateDocs = templateDocs.data || templateDocs;
+    $scope.shouldAutofocus = !$stateParams.nameFocused;
+    /**
+            TemplateDocsService.getStarred().then(function (starred) {
+    
+                // Chack if HI room created and so needs to show HI.png
+                if($scope.templateDoc.WantRoom == true)
+                {
+                    $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
+                }
+    
+                $scope.templateDoc.star = _(starred).any(function (s) {
+                    return s._id === $scope.templateDoc._id;
+                });
             });
         });
         */
@@ -153,46 +140,48 @@ angular.module('mean.icu.ui.templateDocdetails', [])
             });
         };
 
-
-
-
-        $scope.view = function(document1) {
-            if(document1.spPath){
-                var spSite = document1.spPath.substring(0,document1.spPath.indexOf('ICU')+3);
-                var uri = spSite+"/_layouts/15/WopiFrame.aspx?sourcedoc="+document1.spPath+"&action=default";
-                 window.open(uri,'_blank');
-            }
-            else{
-            // Check if need to view as pdf
-            if ((document1.templateType == "docx") ||
-                (document1.templateType == "doc") ||
-                (document1.templateType == "xlsx") ||
-                (document1.templateType == "xls") ||
-                (document1.templateType == "ppt") ||
-                (document1.templateType== "pptx")) {
-                var arr = document1.path.split("." + document1.templateType);
-                var ToHref = arr[0] + ".pdf";
-                // Check if convert file exists allready
-                $http({
-                    url: ToHref.replace('/files/', '/api/files/'),
-                    method: 'HEAD'
-                }).success(function() {
-                    // There is allready the convert file
-                    window.open(ToHref + '?view=true')
-                }).error(function() {
-                    // Send to server
-                    $.post('/templateDocsAppend.js', document1).done(function(document2) {
-                        // The convert is OK and now we open the pdf to the client in new window
-                        window.open(ToHref + '?view=true');
-                    }).fail(function(xhr) {
-                        console.error(xhr.responseText);
-                    });
-                });
-            }
-            // Format is NOT needed to view as pdf
-            else {
-                window.open(document1.path + '?view=true');
-            }
+    $scope.view = function (document1) {
+        if (document1.spPath) {
+            var spSite = document1.spPath.substring(0, document1.spPath.indexOf('ICU') + 3);
+            var uri = spSite + "/_layouts/15/WopiFrame.aspx?sourcedoc=" + document1.spPath + "&action=default";
+            window.open(uri, '_blank');
+        } else {
+             console.log("PATH");
+            var path = document1.path;
+            path=path.substring(path.indexOf('/files'),path.length);
+            console.log(path);
+            path = path.replace(/\//g, '%2f');
+            OfficeDocumentsService.getFileFtp(path).then(function (result) {
+                if (result.status == 404) {
+                    alertify.logPosition("top left");
+                    alertify.error("הקובץ לא קיים!");
+                }
+            });
+            // // Check if need to view as pdf
+            // if (document1.templateType == "docx" || document1.templateType == "doc" || document1.templateType == "xlsx" || document1.templateType == "xls" || document1.templateType == "ppt" || document1.templateType == "pptx") {
+            //     var arr = document1.path.split("." + document1.templateType);
+            //     var ToHref = arr[0] + ".pdf";
+            //     // Check if convert file exists allready
+            //     $http({
+            //         url: ToHref.replace('/files/', '/api/files/'),
+            //         method: 'HEAD'
+            //     }).success(function () {
+            //         // There is allready the convert file
+            //         window.open(ToHref + '?view=true');
+            //     }).error(function () {
+            //         // Send to server
+            //         $.post('/templateDocsAppend.js', document1).done(function (document2) {
+            //             // The convert is OK and now we open the pdf to the client in new window
+            //             window.open(ToHref + '?view=true');
+            //         }).fail(function (xhr) {
+            //             console.error(xhr.responseText);
+            //         });
+            //     });
+            // }
+            // // Format is NOT needed to view as pdf
+            // else {
+            //         window.open(document1.path + '?view=true');
+            //     }
         }
         };
 

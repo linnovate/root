@@ -96,19 +96,64 @@ angular.module('mean.icu.data.documentsservice', [])
 	        });
 	    }
 
-        return {
-            delete:delete1,
-            getAll: getAll,
-            getById: getById,
-            getByTaskId: getByTaskId,
-            getByProjectId: getByProjectId,
-            getByDiscussionId: getByDiscussionId,
-            getByUserId: getByUserId,
-            saveAttachments: saveAttachments,
-            updateAttachment: updateAttachment,
-            getByTasks: getByTasks,
-            getByOfficeId: getByOfficeId,
-            getByFolderId: getByFolderId,
-            getByOfficeDocumentId: getByOfficeDocumentId
-        };
-    });
+    function download(data, fileName) {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.setAttribute('style', 'display:none');
+        var blob = new Blob([new Uint8Array(data)]);
+        var url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        setTimeout(function () {
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }, 0);
+    }
+
+    function getFileFtp(url) {
+        return $http({ method: 'GET', url: ApiUri + "/ftp/" + url }).then(function (response) {
+            var json = response.data;
+            var fileContent = json.fileContent.data;
+            var fileName = json.fileName;
+            download(fileContent, fileName);
+            return response;
+        }, function (errorResponse) {
+            console.dir("ERROR RESPOSE");
+            console.dir(errorResponse);
+            return errorResponse;
+        });
+    }
+
+    function viewFileLink(url,type) {
+        var uri = ApiUri + "/ftp/" + url;
+        return $http({ method: 'GET', url: ApiUri + "/ftp/" + url+"&docType="+type }).then(function (response) {
+            var json = response.data;
+            return json.pathForView;
+
+        }, function (errorResponse) {
+            console.dir("ERROR RESPOSE");
+            console.dir(errorResponse);
+            return errorResponse;
+        });
+    }
+
+    return {
+        delete: delete1,
+        getAll: getAll,
+        getById: getById,
+        getByTaskId: getByTaskId,
+        getByProjectId: getByProjectId,
+        getByDiscussionId: getByDiscussionId,
+        getByUserId: getByUserId,
+        saveAttachments: saveAttachments,
+        updateAttachment: updateAttachment,
+        getByTasks: getByTasks,
+        getByOfficeId: getByOfficeId,
+        getByFolderId: getByFolderId,
+        getByOfficeDocumentId: getByOfficeDocumentId,
+        download:download,
+        getFileFtp:getFileFtp,
+        viewFileLink:viewFileLink
+    };
+});

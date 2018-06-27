@@ -15,6 +15,7 @@ var permissions = require('../controllers/permissions.js');
 var logger = require('../services/logger');
 var serials = require('../controllers/serials.js');
 
+var ftp = require('../services/ftp');
 var options = {
   includes: 'assign watchers',
   defaults: { watchers: [] }
@@ -416,6 +417,13 @@ exports.addSerialTitle = function(req,res,next){
           });
 
           }
+          else if(!body){
+            serials.pushToAvailableSerials(ser).then(function(){
+              logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: "!body"});
+              res.send(error);
+          });
+
+          }
           else{
             if(body.serial == ser){
             var set = {'serial':body.serial,'spPath':body.path};
@@ -425,6 +433,10 @@ exports.addSerialTitle = function(req,res,next){
               if(error){
                 logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.find()', {error: error.message});
                 res.send(error);
+              }
+              else if(!doc){
+                logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.find()', {error: "!doc"});
+                res.send("error");
               }
               else{
               doc.serial = body.serial;
@@ -552,9 +564,13 @@ exports.addSerialTitle = function(req,res,next){
       'method':'POST',
       'json':json
     },function(error,resp,body){
-          if(error){
+          if(error||!body){
+            var message = "error";
+            if(error){
+              message = error.stack;
+            }
             serials.pushToAvailableSerials(ser).then(function(){
-              logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
+              logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: message});
               res.send(error);
           });
 
@@ -567,7 +583,11 @@ exports.addSerialTitle = function(req,res,next){
         },function(error,doc){
           if(error){
             logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.findOne()', {error: error.message});
-
+            res.send("Error");
+          }
+          else if(!doc){
+            logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.findOne()', {error: "!doc"});
+            res.send("Error");
           }
           else{
           doc.serial = body.serial;
@@ -1285,6 +1305,7 @@ exports.uploadFileToDocument = function(req,res,next){
   busboy.on('file', function (fieldname, file, filename) {
     var port = config.https && config.https.port ? config.https.port : config.http.port;
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+    req.locals.data.body.saveTo = saveTo;
     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
     mkdirp(path.join(config.attachmentDir, d), function () {
@@ -1309,6 +1330,7 @@ exports.uploadFileToDocument = function(req,res,next){
   });
 
   busboy.on('finish', function () {
+    ftp.uploadToFTP(req.locals.data.body.saveTo).then(function(){
     var user = req.user.email.substring(0,req.user.email.indexOf('@'));
 
     var username = req.user.username;
@@ -1316,6 +1338,7 @@ exports.uploadFileToDocument = function(req,res,next){
     var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
     req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+req.locals.data.body.name;
     var result = fs.readFile("."+path,function(err,result){
+        fs.unlink(req.locals.data.body.saveTo);
       if(err){
         logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'fs.readFile', {error: err.message});
 
@@ -1392,8 +1415,8 @@ exports.uploadFileToDocument = function(req,res,next){
                     'method':'POST',
                     'json':json
                   },function(error,resp,body){
-                    if(error||!body){;
-                      logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'request', {error: error.message});
+                    if(error||!body){
+                      logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'request', {error: "upload error"});
 
                       var path = req.locals.data.body.originalPath;
                       var fileType = path.substring(path.lastIndexOf('.')+1,path.length);
@@ -1456,6 +1479,7 @@ exports.uploadFileToDocument = function(req,res,next){
               }
             });
           });
+    });
         });
         return req.pipe(busboy);
       };

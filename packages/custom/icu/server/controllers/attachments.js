@@ -17,7 +17,8 @@ var attachment = crud('attachments', options);
 var Task = require('../models/task'),
   Attachment = require('../models/attachment');
 
-var logger = require('../services/logger')
+var logger = require('../services/logger');
+var ftp = require('../services/ftp');
 
 
 Object.keys(attachment).forEach(function (methodName) {
@@ -105,6 +106,7 @@ exports.upload = function (req, res, next) {
     portStr = config.isPortNeeded ? portStr : '' ;
 
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+    req.locals.data.body.saveTo = saveTo;
     var hostFileLocation = config.host + portStr + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
 
@@ -154,6 +156,31 @@ exports.upload = function (req, res, next) {
   });
 
   busboy.on('finish', function () {
+    var path = req.locals.data.body.saveTo;
+    ftp.uploadToFTP(path).then(function(){
+      try{
+        if(fs.existsSync(path)){
+        fs.unlinkSync(path);
+      }
+      }catch(err){
+        console.log(err)
+      }
+      
+    }).catch(function(){
+       try{
+      if(fs.existsSync(path)){
+         fs.unlinkSync(path);
+       }
+      }catch(err){
+        console.log(err)
+      }
+     
+        logger.log('error', '%s upload, %s', req.user.name, ' busboy.on(finish)', {error: 'No file was attached'});
+        req.locals.error = {
+          message: 'No file was attached'
+        };
+    });
+
     if (!hasFile) {
       logger.log('error', '%s upload, %s', req.user.name, ' busboy.on(finish)', {error: 'No file was attached'});
       req.locals.error = {
@@ -170,26 +197,49 @@ exports.upload = function (req, res, next) {
 exports.deleteFile = function (req, res) {
   Attachment.find({ _id: req.params.id },
     function (err, file) {
-      if (err) {
-        logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.find()', {error: err.message});
+      if (err||!file) {
+        logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.find()', {error: "error"});
+        res.status(500).send("error");
+
       } else {
+
+        if(file[0]&&file[0]._doc&&file[0]._doc.path){
         Attachment.count({path:file[0]._doc.path},function(err,c){
           Attachment.remove({ _id: req.params.id }, function (err) {
             if (err) {
               logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.remove()', {error: err.message});
+              res.status(500).send(err);
             } else {
               if(!err && c<=1){
                 var strUrl = file[0]._doc.path;
                 var index = strUrl.indexOf('/files');
-                var pathFile = '.' + strUrl.substring(index);
+                var pathFile = strUrl.substring(index);
+                var pathPDF = pathFile.replace('/files','/preview');
+                var flag = pathPDF.endsWith('.pdf');
+                pathPDF = pathPDF.substring(0,pathPDF.lastIndexOf('.'))+'.pdf';
+                ftp.archiveFileFromFtp(pathFile).then(function(){
+                  if(!flag){
+                    ftp.deleteFileFromFtp(pathPDF).then(function(){
+                      res.send("ok");
+
+                  }).catch(function(err){
+                    res.status(500).send(err);
+                  });
+                  }
+                  
+                }).catch(function(err){
+                  res.status(500).send(err);
+                });
+
+/**
                 fs.stat(pathFile, function (err, stats) {
                   if (err) {
                     logger.log('error', '%s deleteFile, %s', req.user.name, ' fs.stat()', {error: err.message});
                   } else {
                     if (stats.isFile()) {
-                      fs.unlink(pathFile, function (err) {
+                      fs.unlinkSync(pathFile, function (err) {
                         if (err) {
-                          logger.log('error', '%s deleteFile, %s', req.user.name, ' fs.unlink()', {error: err.message});
+                          logger.log('error', '%s deleteFile, %s', req.user.name, ' fs.unlinkSync()', {error: err.message});
                         } else {
                           Attachment.remove({ _id: req.params.id }, function (err) {
                             if (err) {
@@ -204,6 +254,10 @@ exports.deleteFile = function (req, res) {
                     }
                   }
                 });
+*/
+
+
+
               }
               else{
                 res.sendStatus(200);
@@ -214,6 +268,19 @@ exports.deleteFile = function (req, res) {
           });
 
         });
+
+
+}
+else{
+          res.status(500).send("error");
+
+}
+
+
+
+
+
+
 
       }
     });
@@ -297,7 +364,32 @@ exports.getByPath = function (req, res, next) {
     return next();
   }
   var query = req.acl.mongoQuery('Attachment');
-  var path = decodeURI(req.url).replace(/pdf$/, '');
+
+  var path = decodeURI(req.url).replace(/\.pdf$/, '');
+
+  path =path.replace('preview','files');
+  path = path.substring(path.lastIndexOf('/00')+3,path.length);
+  path = path.replace(/\_/g,'\/');
+              path = path.replace(/\ /g,'\\ ')
+              .replace(/\'/g,'\\\'')
+              .replace(/\"/g,'\\\"')
+              .replace(/\(/g,'\\\(')
+              .replace(/\)/g,'\\\)')
+              .replace(/\#/g,'\\\#')
+              .replace(/\&/g,'\\\&')
+              .replace(/\`/g,'\\\`')
+              .replace(/\~/g,'\\\~')
+              .replace(/\,/g,'\\\,')
+              .replace(/\%/g,'\\\%')
+              .replace(/\$/g,'\\\$')
+              .replace(/\./g,'\\\.')
+              .replace(/\;/g,'\\\;')
+              .replace(/\:/g,'\\\:')
+              .replace(/\//g,'\\\/')
+              .replace(/\_/g,'\\\_')
+              .replace(/\#/g,'\\\#')
+              .replace(/\!/g,'\\\!');
+
   var conditions = {
     path: new RegExp(path)
   };
@@ -333,6 +425,16 @@ exports.getByPath = function (req, res, next) {
   });
 };
 
+
+exports.download = function(req,res,next){
+var url = "files/"+req.url;
+ftp.getFromFTPByURL(url).then(function(data){
+  res.send(data);
+}).catch(function(){
+  res.status(500).send();
+});
+
+};
 
 
 exports.sign = function (req, res, next) {

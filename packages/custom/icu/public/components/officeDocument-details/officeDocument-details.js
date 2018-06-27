@@ -175,12 +175,10 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
     $scope.view = function (document1) {
        // console.dir(document1);
 
-        if(document1.mmhpath){
-            var mmhPath = document1.mmhpath.replace(/\//g,'%2f');
-            OfficeDocumentsService.getFileFtp(mmhPath).then(function(result){
-                if(result.status==404){
-                    //var elem = document.getElementById("clickToView");
-                   // alertify.parent(elem);
+        if (document1.mmhpath) {
+            var mmhPath = document1.mmhpath.replace(/\//g, '%2f');
+            OfficeDocumentsService.getFileFtp(mmhPath).then(function (result) {
+                if (result.status == 404) {
                     alertify.logPosition("top left");
                     alertify.error("הקובץ לא קיים!");
                 }
@@ -192,6 +190,20 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             var uri = spSite + "/_layouts/15/WopiFrame.aspx?sourcedoc=" + document1.spPath + "&action=default";
             window.open(uri, '_blank');
         } else {
+            console.log("PATH");
+            var path = document1.path;
+            path=path.substring(path.indexOf('/files'),path.length);
+            console.log(path);
+            path = path.replace(/\//g, '%2f');
+            OfficeDocumentsService.getFileFtp(path).then(function (result) {
+                if (result.status == 404) {
+                    alertify.logPosition("top left");
+                    alertify.error("הקובץ לא קיים!");
+                }
+            });
+
+            /**
+
             // Check if need to view as pdf
             if (document1.documentType == "docx" || document1.documentType == "doc" || document1.documentType == "xlsx" || document1.documentType == "xls" || document1.documentType == "ppt" || document1.documentType == "pptx") {
                 var arr = document1.path.split("." + document1.documentType);
@@ -216,10 +228,11 @@ angular.module('mean.icu.ui.officeDocumentdetails', [])
             }
             // Format is NOT needed to view as pdf
             else {
-                window.open(document1.path + '?view=true');
-            }
+                    window.open(document1.path + '?view=true');
+                }
+                */
         }
-        };
+    };
 
 
         $scope.getUnusedTags = function() {

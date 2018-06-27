@@ -10,7 +10,8 @@ var Update = require('../models/update');
 var ObjectId = require('mongoose').Types.ObjectId;
 var TemplateDoc = require('../models/templateDoc');
 var Office = require('../models/office');
-var logger = require('../services/logger')
+var logger = require('../services/logger');
+var ftp = require('../services/ftp');
 
 
 
@@ -292,6 +293,7 @@ exports.uploadTemplate = function (req, res, next) {
   busboy.on('file', function (fieldname, file, filename) {
     var port = config.https && config.https.port ? config.https.port : config.http.port;
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+    req.locals.data.body.saveTo = saveTo;
     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
     mkdirp(path.join(config.attachmentDir, d), function () {
@@ -322,12 +324,16 @@ exports.uploadTemplate = function (req, res, next) {
   });
 
   busboy.on('finish', function () {
+
+    ftp.uploadToFTP(req.locals.data.body.saveTo).then(function(){
+
     var user = req.user.email.substring(0, req.user.email.indexOf('@'));
     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"), req.locals.data.body.path.length);
     var fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
     req.locals.data.body.path = config.SPHelper.SPSiteUrl + "/" + config.SPHelper.libraryName + "/" + user + "/" + req.locals.data.body.name;
     var username = req.user.username;
     var result = fs.readFile("." + path, function (err, result) {
+      fs.unlink(req.locals.data.body.saveTo);
       if (err) {
         logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, ' busboy.on(finish)', { error: err.message });
         res.status(500).send({ error: err.message });
@@ -461,6 +467,11 @@ exports.uploadTemplate = function (req, res, next) {
         }
       });
     });
+
+
+
+    });
+
   });
   return req.pipe(busboy);
 };
