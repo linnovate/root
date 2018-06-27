@@ -171,7 +171,7 @@
                 </ul>
             </div>
 
-            <div class="watchers-wrapper">
+            <div class="watchers-wrapper" ng-hide="true">
                 <div class="subtitle">{{'watchersInThe' | i18next}}</div>
                 <ul>
                     <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
@@ -195,7 +195,7 @@
                 </ul>
             </div>
 
-        </div>
+    </div>
     </div>
     <div class="all" ng-if="context.main != 'folders' && activeTab.name !== 'search'">
         <p class="title my" ng-if="context.main === 'tasks'"
@@ -301,7 +301,8 @@
     <div class="list people"
          ng-if="people
                 && activeTab.display.indexOf('people') !== -1
-                && activeTab.name !== 'search'">
+                && activeTab.name !== 'search'"
+         ng-hide="true">
         <p ng-click="visible.user = !visible.user"
            class="title">{{ 'tasksAssignedTo' | i18next }}</p>
         <ul ng-if="visible.user">
@@ -324,6 +325,7 @@
             </li>
         </ul>
     </div>
+
     <div class="list officeDocuments" ng-if="context.main == 'officeDocuments' && activeTab.name !== 'search'">
         <!-- <p ng-click="visible.officeDocument = !visible.officeDocument" class="title">{{ 'officeDocuments' | i18next }}</p>
         <ul ng-if="visible.officeDocument">
