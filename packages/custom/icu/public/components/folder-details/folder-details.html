@@ -31,6 +31,7 @@
        ng-class="{ 'disabled' : !havePermissions('description')}">
     <div class="item-title"
          contenteditable="true"
+         data-placeholder="{{'typeYourText' | i18next}}"
          tabindex="1"
          strip-br="true"
          ng-keydown="onEnter($event)"
