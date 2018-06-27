@@ -591,7 +591,7 @@ angular.module('mean.icu.ui.tabs')
                 // $scope.activity.size = $scope.attachments[0].size;
 
                 var isRoomProject = $scope.entityName === 'project',
-                    isRoomFortask = $scope.entityName === 'task' && $scope.entity.project,
+                    isRoomFortask = $scope.entityName === 'task' && $scope.entity.project !== undefined,
                     context = {};
 
                 if (isRoomProject || isRoomFortask) { //for notification in hi
@@ -624,8 +624,8 @@ angular.module('mean.icu.ui.tabs')
 
                         for (var index = 0; index < file.length; index++) {
 
-                            DocumentsService.saveAttachments(data, file[index]).success(function(attachment) {
-
+                            DocumentsService.saveAttachments(data, file[index])
+                                .then(function(attachment) {
                                 result.attachments[result.attachments.length] = attachment;
                             });
                         }

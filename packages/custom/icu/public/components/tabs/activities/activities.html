@@ -39,14 +39,25 @@
                             <!-- <button id="{{attachment.path}}" ng-click="view(attachment)" title="" class="DocumentIconsLine-Update-icon-view">
                                 <img class="Icons-In-DocumentLineActivities" ng-src="/icu/assets/img/icon-view.png" src="/icu/assets/img/icon-view.png" tooltips tooltip-template="{{'view' |  i18next}}">
                             </button> -->
-                            <button class="DocumentIconsLine DocumentIconsLineActivities" id="Update-icon-edit"
-                                    icu-open-modal="attachment" entity-name="document-preview" show-modal="true" modal-name="document-preview" data="attachment">
+                            <button class="DocumentIconsLine DocumentIconsLineActivities"
+                                    id="Update-icon-edit"
+                                    icu-open-modal="attachment"
+                                    entity-name="document-preview"
+                                    show-modal="true"
+                                    modal-name="document-preview"
+                                    data="attachment"
+                            >
                                 <!-- preview -->
                                 <a href="#" class="Icons-In-DocumentLineActivities">
-                                    <img tooltips tooltip-template="{{'preview' |  i18next}}" class="Icons-In-DocumentLineActivities" ng-src="/icu/assets/img/icon-view.svg" src="/icu/assets/img/icon-view.svg">
+                                    <img tooltips tooltip-template="{{'preview' |  i18next}}"
+                                         class="Icons-In-DocumentLineActivities"
+                                         ng-src="/icu/assets/img/icon-view.svg"
+                                         src="/icu/assets/img/icon-view.svg"
+                                    >
                                 </a>
                             </button>
-                            <button class="DocumentIconsLine DocumentIconsLineActivities" id="Update-icon-download" >
+                            <button class="DocumentIconsLine DocumentIconsLineActivities"
+                                    id="Update-icon-download">
                                 <!-- download -->
                                 <a href="{{attachment.path}}" target="window">
                                     <img tooltips tooltip-template="{{'download' |  i18next}}" class="Icons-In-DocumentLineActivities" ng-src="/icu/assets/img/icon-download.svg" src="/icu/assets/img/icon-download.svg">

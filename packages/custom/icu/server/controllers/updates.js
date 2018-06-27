@@ -171,10 +171,23 @@ exports.getMyTasks = function(req, res, next) {
 };
 
 exports.signNew = function(req, res, next) {
-  var entities = {project: 'Project', task: 'Task', discussion: 'Discussion', office: 'Office', folder: 'Folder', officeDocument: 'Document', officeDocuments: 'Document', templateDoc: 'TemplateDoc'};
+  var entities = {
+      project: 'Project',
+      task: 'Task',
+      discussion: 'Discussion',
+      office: 'Office',
+      folder: 'Folder',
+      officeDocument: 'Document',
+      officeDocuments: 'Document',
+      templateDoc: 'TemplateDoc'
+  };
+
   var query = req.acl.mongoQuery(entities[req.body.data.issue]);
+  console.log('query: ', query);
+
   query.findOne({_id: req.body.data.issueId}).exec(function(err, entity) {
-    if(err) {
+      console.log('entity: ', entity);
+      if(err) {
       req.locals.error = err;
     }
     if(!entity) {
@@ -184,7 +197,10 @@ exports.signNew = function(req, res, next) {
       };
     }
     if(entity) {
-      req.locals.data.watchers = entity.watchers;
+        console.log('entity.watchers: ', entity.watchers);
+        console.log('entity.circles: ', entity.circles);
+
+        req.locals.data.watchers = entity.watchers;
       req.locals.data.circles = entity.circles;
     }
     next();
