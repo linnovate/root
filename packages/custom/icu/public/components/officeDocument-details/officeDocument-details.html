@@ -85,9 +85,9 @@
   <div class="parent" ng-if="item.parent">{{currentContext.entity.title}}</div>
 
   <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}">
-    <div
-       class="item-title"
+    <div class="item-title"
        contenteditable="true"
+       data-placeholder="{{'typeYourText' | i18next}}"
        tabindex="1"
        strip-br="true"
        ng-model="item.title"
