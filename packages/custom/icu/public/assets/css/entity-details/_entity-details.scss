@@ -50,15 +50,18 @@
     .item-title {
         outline: none;
         &.medium-editor-placeholder {
+            &:not(:focus):before {
+                position: inherit;
+                color: $light-grey-placeholder;
+            }
+
+            position: inherit;
+
             &:after {
-                left: 0;
-                color: #bdbcbc;
-                font-weight: bold;
-                font-style: normal;
+                content: none;
             }
         }
     }
-
 }
 
 .detail-desc {
@@ -79,5 +82,4 @@
             content: none;
         }
     }
-
 }
