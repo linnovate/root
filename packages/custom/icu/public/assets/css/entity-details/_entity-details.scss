@@ -47,22 +47,19 @@
     outline: none;
     position: relative;
 
-    &.medium-editor-placeholder {
-        &:not(:focus):before {
-            position: inherit;
-            color: $light-grey-placeholder;
-        }
-
-        &:after {
-            content: none;
-        }
-    }
     .item-title {
         outline: none;
-    }
-    .medium-editor-placeholder {
-        &:after {
-            left: 0;
+        &.medium-editor-placeholder {
+            &:not(:focus):before {
+                position: inherit;
+                color: $light-grey-placeholder;
+            }
+
+            position: inherit;
+
+            &:after {
+                content: none;
+            }
         }
     }
 }
@@ -85,5 +82,4 @@
             content: none;
         }
     }
-
 }
