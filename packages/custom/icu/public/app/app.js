@@ -1502,7 +1502,9 @@ angular.module('mean.icu').config([
                             $location.search('recycled', 'true');
                         }
                         if (query && query.length) {
-                            SearchService.refreshQuery(query);
+                            if(query !== '___'){
+                              SearchService.refreshQuery(query);
+                            }
                             return SearchService.find(query);
                         } else {
                             if (SearchService.builtInSearchArray) {
