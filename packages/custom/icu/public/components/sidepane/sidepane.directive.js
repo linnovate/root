@@ -550,7 +550,13 @@ directive('icuSidepane', function() {
         }
         else {
             $scope.isRecycled = true;
-            $state.go('main.search', {recycled: true, 'query': '___'});
+            let usedQuery;
+            if(query === ''){
+              usedQuery = '___';
+            } else {
+              usedQuery = query;
+            }
+            $state.go('main.search', {recycled: true, 'query': usedQuery});
         }
     };
 
