@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.folderdetails', []).controller('FolderDetailsController', FolderDetailsController);
 
-function FolderDetailsController($scope, entity, tasks, people, folders, offices, $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
+function FolderDetailsController($scope, entity, tasks, people, folders, tags,offices, $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
 
   // ==================================================== init ==================================================== //
 
@@ -29,6 +29,7 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
   $scope.tasks = tasks.data || tasks;
   $scope.items = folders.data || folders;
   $scope.offices = offices.data || offices;
+  $scope.item.tags = tags;
 
   // backup for previous changes - for updates
   var backupEntity = JSON.parse(JSON.stringify($scope.item));
@@ -97,7 +98,7 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;
-    $scope.update($scope.folder);
+    $scope.update($scope.item,context);
   }
 
   // ==================================================== Menu events ==================================================== //
