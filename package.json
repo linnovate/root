@@ -14,7 +14,9 @@
     "start": "gulp development",
     "build": "gulp build",
     "test": "export NODE_ENV=test && gulp test",
-    "postinstall": "node scripts/postinstall.js && gulp sass"
+    "postinstall": "node scripts/postinstall.js && gulp sass",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "assetmanager": "1.1.2",
@@ -52,14 +54,15 @@
     "passport-saml": "^0.31.0",
     "passport-twitter": "1.0.3",
     "pdfjs-dist": "^1.10.97",
-    "request": "2.55.0",
+    "request": "2.66.0",
     "root-notifications": "^1.0.2",
     "serve-favicon": "2.2.0",
     "shelljs": "0.4.0",
     "swig": "1.4.2",
     "uuid": "^3.1.0",
     "view-helpers": "0.1.5",
-    "ftp":"0.3.10"
+    "ftp": "0.3.10",
+    "snyk": "^1.88.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -93,5 +96,6 @@
     "mongo-express": "^0.46.1",
     "require-dir": "1.0.0",
     "run-sequence": "^2.2.1"
-  }
+  },
+  "snyk": true
 }
