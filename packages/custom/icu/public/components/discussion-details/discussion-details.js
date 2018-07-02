@@ -116,6 +116,11 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     $scope.update(item, type);
   }
 
+  $scope.onTags = function(value) {
+    $scope.item.tags = value;
+    $scope.update($scope.item);
+  }
+
   // ==================================================== Menu events ==================================================== //
 
   $scope.recycle = function() {
