@@ -1514,6 +1514,7 @@ angular.module('mean.icu').config([
                                 });
                                 return data;
                             } else {
+                                SearchService.results = SearchService.filteringResults = [];
                                 return {};
                             }
                         }
