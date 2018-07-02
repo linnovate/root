@@ -1,9 +1,12 @@
 'use strict';
 
 angular.module('mean.icu.data.boldedservice', [])
-  .service('BoldedService', function (ApiUri, $http) {
+  .service('BoldedService', function (ApiUri, $http, UsersService) {
     let EntityPrefix = '/bolded';
-    let me = UsersService.getMe().$$state.value;
+    let me;
+    UsersService.getMe().then(function(result) {
+        me = result;
+    });
 
     function boldedUpdate(entity, entityType, action){
       let boldedObject = {
@@ -22,12 +25,13 @@ angular.module('mean.icu.data.boldedservice', [])
 
     function addBolded(entity, user){
       user = user || me;
+      entity.bolded = entity.bolded || [];
 
       let newBolded = {
         id: user._id,
         bolded: false,
         lastViewed: Date.now()
-      }
+      };
       entity.bolded.push(newBolded);
 
       return entity;

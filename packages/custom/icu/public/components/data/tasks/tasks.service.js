@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.tasksservice', [])
-.service('TasksService', function (ApiUri, $http, NotifyingService, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
+.service('TasksService', function (ApiUri, $http, NotifyingService, BoldedService, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
     var EntityPrefix = '/tasks';
     var filterValue = false;
     var data, tabData, IsNew;
@@ -108,6 +108,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function create(task) {
+        task = BoldedService.addBolded(task);
         return $http.post(ApiUri + EntityPrefix, task)
             .then(function (result) {
                 WarningsService.setWarning(result.headers().warning);

@@ -95,8 +95,7 @@ module.exports = function(Icu, app) {
   //END Notification READ - OHAD
 
   app.route('/api/bolded')
-  //.all(auth.requiresLogin, permission.echo)
-    .post(office.create, updates.created)
+    .post(boldedService.boldUpdate);
 
   //recycle && recycleRestore
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/recycle')

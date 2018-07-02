@@ -2,40 +2,43 @@
 
 var _ = require('lodash');
 
-var task = require('../controllers/task');
-var project = require('../controllers/project');
-var discussion = require('../controllers/discussion');
-var office = require('../controllers/office');
-var folder = require('../controllers/folder');
-var documents = require('../controllers/documents');
-var users = require('../controllers/users');
+var task = require('../models/task');
+var project = require('../models/project');
+var discussion = require('../models/discussion');
+var office = require('../models/office');
+var folder = require('../models/folder');
+var document = require('../models/document');
+var user = require('../models/user');
 
 var entityNameMap = {
-  tasks: {
+  task: {
     controller: task,
   },
-  projects: {
+  project: {
     controller: project,
   },
-  discussions: {
+  discussion: {
     controller: discussion,
   },
-  offices: {
+  office: {
     controller: office,
   },
-  folders: {
+  folder: {
     controller: folder,
   },
-  officeDocuments: {
-    controller: documents,
+  officeDocument: {
+    controller: document,
   }
 };
 
 exports.boldUpdate = function(req, res, next){
   console.log('*********BOLDED_RUN*********');
-  let {entity_id, user_id, entity_type, action} = req.body.boldedObject;
+  console.log('**********req.body: ', req.body);
+  let {entity_id, user_id, entity_type, action} = req.body;
   let entityController = entityNameMap[entity_type].controller;
-  entityController
+    console.log('**********entityController: ', entityController);
+
+    entityController
     .findOne({
       _id: entity_id
     })
@@ -57,8 +60,7 @@ exports.boldUpdate = function(req, res, next){
           return true;
         }
       });
-
-      console.log('*********BOLDED_END*********');
-      next();
+        console.log('*********BOLDED_END*********');
+        res.status(200).send(entity);
     });
 };
