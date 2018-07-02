@@ -61,6 +61,13 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
       $scope.template = template;
     });
   }
+  boldedUpdate($scope.item, 'viewed');
+
+  function boldedUpdate(entity, action){
+    let entityType = 'task';
+
+    BoldedService.boldedUpdate(entity, entityType, action);
+  };
 
   // ==================================================== onChanges ==================================================== //
 
@@ -74,11 +81,13 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
+    boldedUpdate(item, 'update');
   }
 
   $scope.onAssign = function(value) {
     $scope.item.assign = value;
     $scope.updateAndNotify($scope.item);
+    boldedUpdate(item, 'update');
   }
 
   $scope.onDateDue = function(value) {
@@ -105,6 +114,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
         }
       }
     });
+    boldedUpdate(item, 'update');
   }
 
   $scope.onStatus = function(value) {
@@ -122,11 +132,13 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     TasksService.update($scope.item).then(function(result) {
       refreshList();
     });
+    boldedUpdate(item, 'update');
   }
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;
     $scope.update($scope.item);
+    boldedUpdate(item, 'update');
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -259,6 +271,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
   $scope.$watch('item.title', function(nVal, oVal) {
     if (nVal !== oVal && oVal) {
       $scope.delayedUpdate($scope.item, 'title');
+      boldedUpdate($scope.item, 'updated');
     }
   });
 
@@ -269,6 +282,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     if (nText != oText && oText) {
       $scope.delayedUpdate($scope.item, 'description');
     }
+    boldedUpdate($scope.item, 'updated');
   });
 
   function refreshList() {
@@ -311,6 +325,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
         item.watchers.push(item.assign);
       }
     }
+
 
     TasksService.update(item).then(function(result) {
       if (context.entityName === 'project') {

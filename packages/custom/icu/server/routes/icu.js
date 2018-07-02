@@ -32,6 +32,7 @@ var config = require('meanio').loadConfig(),
 var order = require('../controllers/order');
 var express = require('express');
 var ftp = require('../services/ftp.js');
+var boldedService = require('../services/bolded.js');
 
 //update mapping - OHAD
 //var mean = require('meanio');
@@ -92,6 +93,10 @@ module.exports = function(Icu, app) {
   app.route('/api/notification1/:id([0-9a-fA-F]{24})')
     .put(notification.updateDropDown);
   //END Notification READ - OHAD
+
+  app.route('/api/bolded')
+  //.all(auth.requiresLogin, permission.echo)
+    .post(office.create, updates.created)
 
   //recycle && recycleRestore
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/recycle')

@@ -2,7 +2,10 @@
 
 angular.module('mean.icu.ui.membersfooter', [])
     .directive('icuMembersFooter', function() {
-        function controller($scope, $state, $injector, context, $stateParams, $timeout, circlesService,PermissionsService, UsersService, ActivitiesService,TasksService,ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService, OfficesService) {
+        function controller($scope, $state, $injector, context, $stateParams, $timeout,
+                            circlesService,PermissionsService, UsersService, ActivitiesService,TasksService,
+                            ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService,
+                            OfficesService, BoldedService) {
 
             var serviceMap = {
                 task: 'TasksService',
@@ -232,6 +235,8 @@ angular.module('mean.icu.ui.membersfooter', [])
                     }
                 }
 
+                $scope.entity = BoldedService.addBolded($scope.entity, member);
+
                 update($scope.entity, member, 'added');
                 $scope.animate = true;
 
@@ -296,6 +301,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     });
                 }
 
+                BoldedService.removeBolded($scope.entity, member);
                 update($scope.entity, member, 'removed');
 
                 var task = $scope.entity ;

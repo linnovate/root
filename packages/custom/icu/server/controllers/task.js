@@ -335,7 +335,6 @@ var byAssign = function(req, res, next) {
 };
 
 
-
 function getTasksDueTodayQuery(req, callback) {
   var dates = new Date().getThisDay();
   var query = {
