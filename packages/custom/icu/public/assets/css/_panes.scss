@@ -38,9 +38,10 @@
 
                     .id {
                         text-align: left;
-                        //width: 40px;
                         margin-left:10px;
-                        //display: inline-block;
+                        min-width: 20px;
+
+
                         @media screen and (max-width: $small-resolution) {
                             display:none;
                         }
@@ -79,26 +80,24 @@
 }
 
 @media print {
-
   html {
+    height: auto;
+    body {
       height: auto;
-
-      body {
-          height: auto;
-          overflow: visible !important;
-      }
-      section {
-          height: auto;
-          overflow: visible;
-      }
-  }
-    .animate-hide {
-        display: none;
+      overflow: visible !important;
     }
+    section {
+      height: auto;
+      overflow: visible;
+    }
+  }
+  .animate-hide {
+      display: none;
+  }
 
   .icu-data {
-      overflow: visible !important;
-      height: auto !important;
+    overflow: visible !important;
+    height: auto !important;
   }
   .panes-wrapper {
       width: 100% !important;

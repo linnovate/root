@@ -1,8 +1,4 @@
-<td class="move">
-    <i ng-if="data.office._id" class="fa fa-ellipsis-v"></i>
-    <i ng-if="data.office._id" class="fa fa-ellipsis-v"></i>
-</td>
-<td class="id" ng-if="data.office._id">{{data.index + 1}}</td>
+<td class="id">{{ data.office._id ? data.index + 1 : ''}}</td>
 <td class="name"
     ng-attr-colspan="{{data.office._id ? undefined : 2}}"
     title="{{data.office.title}}"
@@ -17,8 +13,6 @@
     ng-class="{'noFocus':isBlurred(data.office)}"
 >
 </td>
-<!--<td class="status col-sm-2" ng-class="data.office.status">{{data.office.status | i18next }}</td>-->
-<td class="status col-sm-2" ng-class="data.office.status">{{}}</td>
 <td class="arrow">
     <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

@@ -48,9 +48,9 @@ module.exports = {
     callbackURL: 'http://localhost:3000/api/auth/github/callback'
   },
   google: {
-    clientID: '473899478840-cgjm7hpg57vg2tgr84run1vmqjdb39ad.apps.googleusercontent.com',
-    clientSecret: '1yWU9Qq87NNelytYTAZQsqp3',
-    callbackURL: 'http://root.hrm.demo.linnovate.net/api/auth/google/callback'
+    clientID: '1065843995383-l0f0a740nenvn4vk3id9nur2pdlu4ktf.apps.googleusercontent.com',
+    clientSecret: 'SmulksiTH_XZY519GgSEIocF',
+    callbackURL: 'http://root.projects.linnovate.net/api/auth/google/callback'
   },
   linkedin: {
     clientID: 'DEFAULT_API_KEY',

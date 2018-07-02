@@ -3,11 +3,11 @@
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, $stateParams,SettingServices, $filter, $location, $rootScope,
-        context, SearchService, EntityService,
+        context, SearchService, EntityService, OfficesService, OfficeDocumentsService, FoldersService,
         NotifyingService, TasksService
     ){
         $scope.context = context;
-        $scope.recycled = $location.path().split("/").pop() === "recycled";
+        $scope.recycled = $stateParams.recycled;
 
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
@@ -97,18 +97,11 @@ directive('icuSidepane', function() {
         };
 
         $scope.initMenuItem = function(item){
-            $scope.setActive(item);
-            $scope.removeFilterValue();
-            $scope.setCurrentState(item.state);
+          $scope.setActive(item);
+          $scope.removeFilterValue();
+          $scope.setCurrentState(item.state);
 
-            if(item.func)item.func();
-        };
-
-        $scope.checkForSearchState = function(){
-            if($state.current.name.indexOf('search') === -1){
-                $scope.clearAllFilters();
-                $scope.clearResults()
-            }
+          if(item.func)item.func();
         };
 
         $scope.clearAllFilters = function(){
@@ -127,35 +120,53 @@ directive('icuSidepane', function() {
             $scope.turnOffRecycle();
         };
 
+        $scope.checkForSearchState = function(){
+          if($state.current.name.indexOf('search') === -1){
+            $scope.clearAllFilters();
+            $scope.clearResults();
+          }
+        };
+
         $scope.createLists = function(){
-            $scope.projectsList = [];
-            $scope.projects.forEach(function(project) {
-                if(project.title)
-                    $scope.projectsList.push(project);
+            return new Promise((resolve) => {
+                $scope.projectsList = [];
+                $scope.projects.forEach(function(project) {
+                    if(project.title)
+                        $scope.projectsList.push(project);
+                });
+                resolve();
+            }).then(() => {
+                $scope.officesList = [];
+                return OfficesService.getAll(0, 0, 'created').then(offices => {
+                    $scope.offices = offices.data || offices;
+                    $scope.offices.forEach(function (office) {
+                        if (office.title)
+                            $scope.officesList.push(office);
+                    });
+                });
+            }).then(() => {
+                $scope.foldersList = [];
+                return FoldersService.getAll(0, 0, 'created').then(folders => {
+                    $scope.folders = folders.data || folders;
+                    $scope.folders.forEach(function (folder) {
+                        if (folder.title)
+                            $scope.foldersList.push(folder);
+                    });
+                });
+            }).then(() => {
+                $scope.officeDocumentsList = [];
+                return OfficeDocumentsService.getAll(0, 0, 'created').then(officeDocuments => {
+                    $scope.officeDocuments = officeDocuments;
+                    $scope.officeDocuments.forEach(function (officeDocument) {
+                        if (officeDocument.title)
+                            $scope.officeDocumentsList.push(officeDocument);
+                    });
+                });
+            }).then(() => {
+                if ($scope.officesList.length > 0) {
+                    $scope.officesList.office = $scope.officesList[0];
+                }
             });
-
-            $scope.officesList = [];
-            $scope.offices.forEach(function(office) {
-                if(office.title)
-                    $scope.officesList.push(office);
-            });
-
-            $scope.foldersList = [];
-            $scope.folders.forEach(function(folder) {
-                if(folder.title)
-                    $scope.foldersList.push(folder);
-            });
-
-            $scope.officeDocumentsList = [];
-            $scope.officeDocuments.forEach(function(officeDocument) {
-                if(officeDocument.title)
-                    $scope.officeDocumentsList.push(officeDocument);
-            });
-
-            if($scope.officesList.length > 0)
-            {
-                $scope.officesList.office = $scope.officesList[0];
-            }
         };
 
         $scope.items = [{
@@ -209,11 +220,6 @@ directive('icuSidepane', function() {
     ];
 
     $scope.setActive = function(item){
-        $scope.$broadcast('sidepan', item,
-        $scope.context, $scope.folders,
-        $scope.offices, $scope.projects,
-        $scope.discussions, $scope.officeDocuments,
-        $scope.people);
         return $scope.activeTab = item;
     };
 
@@ -259,11 +265,6 @@ directive('icuSidepane', function() {
         }
         for(let i = 0; i < $scope.items.length ; i++){
             if($scope.activeTab === item){
-                $scope.$broadcast('sidepan', item,
-                $scope.context, $scope.folders,
-                $scope.offices, $scope.projects,
-                $scope.discussions, $scope.officeDocuments,
-                $scope.people);
                 return $scope.menuColorStyles[index];
             }
         }
@@ -384,12 +385,14 @@ directive('icuSidepane', function() {
         if ($scope.isRecycled)
           $location.search('recycled','true');
         let results = SearchService.results;
+
+        for (let i = 0; i < $scope.issues.length; i++) {
+          $scope.issues[i].length = 0;
+        }
+
         if (!results || !results.length) return ;
         let filteredByType = [], index;
 
-        for (let i = 0; i < $scope.issues.length; i++) {
-            $scope.issues[i].length = 0;
-        }
         for (let i=0; i< results.length; i++) {
             if (results[i]._type === $scope.filteringData.issue || $scope.filteringData.issue === 'all') {
                 if ($rootScope.status) {
@@ -418,9 +421,9 @@ directive('icuSidepane', function() {
             }
             index = issuesOrder.indexOf(results[i]._type);
             if($stateParams.query == ''){
-                $scope.issues[index].length = 0;
+              $scope.issues[index].length = 0;
             } else {
-                $scope.issues[index].length++;
+              identifyRecycled(results[i], $scope.issues[index]);
             }
         }
         SearchService.setFilteringResults(filteredByType);
@@ -430,6 +433,14 @@ directive('icuSidepane', function() {
         if (!flag && $rootScope.status )
           $rootScope.$emit('changeStatus');
     };
+
+    function identifyRecycled(item, issue){
+      if($scope.recycled && item.recycled){
+        issue.length++
+      } else if(!$scope.recycled && !item.recycled){
+        issue.length++
+      }
+    }
 
     let getTruth = function(obj) { // return truth value in a single object
         let arr = [];
@@ -526,9 +537,11 @@ directive('icuSidepane', function() {
 
         if($location.search().recycled) {
             $scope.recycled =  false;
+            $stateParams.recycled = false;
         }
         else {
-            $scope.recycled = !$scope.recycled ;
+            $scope.recycled = true;
+            $stateParams.recycled = true;
         }
 
         if($scope.recycled === false) {
@@ -537,17 +550,19 @@ directive('icuSidepane', function() {
         }
         else {
             $scope.isRecycled = true;
-            $state.go('main.search', {recycled: true, 'query':'___'});
+            $state.go('main.search', {recycled: true, 'query':query});
         }
     };
 
     $scope.clearResults = function(){
-        SearchService.clearResults();
-        $scope.issues = $scope.issues.map(function(issue){
-            issue.length = 0;
-            return issue;
-        });
-        return $scope.issues;
+      SearchService.refreshQuery('');
+      SearchService.clearResults();
+
+      $scope.issues = $scope.issues.map(function(issue){
+        issue.length = 0;
+        return issue;
+      });
+      return $scope.issues;
     };
 
     $scope.filterSearch = function() {

@@ -1,509 +1,390 @@
 'use strict';
 
-angular.module('mean.icu.ui.projectdetails', [])
-    .controller('ProjectDetailsController', function ($scope,
-                                                      $rootScope,
-                                                      entity,
-                                                      tasks,
-                                                      people,
-                                                      projects,
-                                                      tags,
-                                                      $timeout,
-                                                      context,
-                                                      $state,
-                                                      ProjectsService,
-                                                      ActivitiesService,
-                                                      PermissionsService,
-                                                      EntityService,
-                                                      $stateParams,
-                                                      me
-    ) {
-        $scope.me = me;
-        if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("projects")))
-        {
-            $scope.project = entity || context.entity;
-        }
-        else
-        {
-            $scope.project = context.entity || entity;
-        }
-        $scope.tasks = tasks.data || tasks;
-        $scope.projects = projects.data || projects;
-        $scope.project = entity || context.entity;
-        $scope.entity = entity || context.entity;
-        $scope.tags = tags;
-        $scope.addSubProjects = false;
+angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-        $scope.tagInputVisible = false;
-        var currentState = $state.current.name;
+function ProjectDetailsController($scope, $rootScope, entity, tasks, people, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
 
-        $scope.people = people.data || people;
-        if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
-            var newPeople = {
-                name: 'no select'
-            };
+  // ==================================================== init ==================================================== //
 
-            $scope.people.push(_(newPeople).clone());
-        }
-        for(var i =0 ; i<$scope.people.length;i++){
-            if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job==null)){
-                $scope.people[i].job = $scope.people[i].name;
-            }
-        }
+  if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("projects"))) {
+    $scope.item = entity || context.entity;
+  } else {
+    $scope.item = context.entity || entity;
+  }
 
-        $scope.isRecycled = $scope.project.hasOwnProperty('recycled');
-
-        ProjectsService.getStarred().then(function (starred) {
-
-            // Chack if HI room created and so needs to show HI.png
-            if($scope.project.WantRoom == true)
-            {
-                $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
-            }
-
-            $scope.project.star = _(starred).any(function (s) {
-                return s._id === $scope.project._id;
-            });
-        });
-
-        // backup for previous changes - for updates
-        var backupEntity = JSON.parse(JSON.stringify($scope.project));
-
-        if (!$scope.project) {
-            $state.go('main.projects.byentity', {
-                entity: context.entityName,
-                entityId: context.entityId
-            });
-        }
-
-        $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'completed', 'archived'];
-
-        $scope.$watch('project.title', function(nVal, oVal) {
-            if (nVal !== oVal && oVal) {
-                var newContext = {
-                    name: 'title',
-                    oldVal: oVal,
-                    newVal: nVal,
-                    action: 'renamed'
-                };
-                $scope.delayedUpdate($scope.project, newContext);
-            }
-        });
-
-        var nText, oText;
-        $scope.$watch('project.description', function(nVal, oVal) {
-            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-            if (nText != oText && oText) {
-                var newContext = {
-                    name: 'description',
-                    oldVal: oVal,
-                    newVal: nVal,
-                    action: 'renamed'
-                };
-                $scope.delayedUpdate($scope.project, newContext);
-            }
-        });
-
-        $scope.updateAndNotify = function(project) {
-            project.status = $scope.statuses[1];
-
-            if (context.entityName === 'discussion') {
-                project.discussion = context.entityId;
-            }
-
-            if (project.assign === undefined || project.assign === null) {
-                delete project['assign'];
-            }
-            else {
-                // check the assignee is not a watcher already
-                let filtered = project.watchers.filter(watcher => {
-                    return watcher._id == project.assign;
-                });
-
-                // add assignee as watcher
-                if(filtered.length == 0) {
-                    project.watchers.push(project.assign);
-                }
-            }
-
-
-            ProjectsService.update(project).then(function(result) {
-                if (context.entityName === 'project') {
-                    var projId = result.project ? result.project._id : undefined;
-                    if (projId !== context.entityId) {
-                        $state.go('main.projects.byentity', {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {
-                            reload: true
-                        });
-                    }
-                }
-
-                ProjectsService.assign(project, me, backupEntity).then(function(res) {
-                    backupEntity = JSON.parse(JSON.stringify(result));
-                    ActivitiesService.data.push(res);
-                });
-            });
-
-        };
-
-        $scope.$watch('project.color', function (nVal, oVal) {
-            if (nVal !== oVal) {
-                var context = {
-                    name: 'color',
-                    oldVal: oVal,
-                    newVal: nVal,
-                    action: 'changed'
-                };
-                $scope.update($scope.project, context);
-            }
-        });
-
-
-        $scope.options = {
-            theme: 'bootstrap',
-            buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
-        };
-
-        //due start
-        if ($scope.project.due) $scope.project.due = new Date($scope.project.due);
-
-        $scope.dueOptions = {
-            onSelect: function() {
-                $scope.updateDue($scope.project);
-            },
-            onClose: function() {
-                if ($scope.checkDate()){
-                    document.getElementById('ui-datepicker-div').style.display = 'block';
-                    $scope.open();
-                }else{
-                    document.getElementById('ui-datepicker-div').style.display = 'none';
-                    $scope.open();
-                }
-            },
-            dateFormat: 'd.m.yy'
-        };
-
-        $scope.checkDate = function() {
-            var d = new Date();
-            d.setHours(0,0,0,0);
-            if (d > $scope.project.due) {
-                return true;
-            }
-            return false;
-        };
-
-        $scope.open = function() {
-            if ($scope.checkDate()) {
-                document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
-                document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
-            } else {
-                document.getElementById('past').style.display = 'none';
-            }
-        };
-
-        $scope.updateDue = function(project) {
-
-            if (context.entityName === 'discussion') {
-                project.discussion = context.entityId;
-            }
-
-
-            ProjectsService.updateDue(project, backupEntity).then(function(result) {
-                backupEntity = JSON.parse(JSON.stringify($scope.project));
-                ActivitiesService.data.push(result);
-            });
-
-            ProjectsService.update(project).then(function(result) {
-                if (context.entityName === 'project') {
-                    var projId = result.project ? result.project._id : undefined;
-                    if (projId !== context.entityId) {
-                        $state.go('main.projects.byentity', {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {
-                            reload: true
-                        });
-                    }
-                }
-            });
-        };
-        // end due
-
-        $scope.closeOldDateNotification = function(){
-            document.getElementById('past').style.display = 'none';
-        };
-
-        $scope.getUnusedTags = function() {
-
-            return $scope.tags.filter(function(x) { return $scope.project.tags.indexOf(x) < 0 })
-        };
-
-        $scope.addTagClicked=function(){
-        	$scope.setFocusToTagSelect();
-        	$scope.tagInputVisible=true;
-        }
-
-        $scope.addTag = function(tag) {
-        	if(tag!=undefined && $.inArray(tag,$scope.project.tags)==-1){
-        		$scope.project.tags.push(tag);
-            	$scope.update($scope.project);
-        	}
-
-            $scope.tagInputVisible = false;
-        };
-
-        $scope.enableRecycled = true;
-        $scope.havePermissions = function(type, enableRecycled){
-            enableRecycled = enableRecycled || !$scope.isRecycled;
-            return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
-        };
-
-        $scope.haveEditiorsPermissions = function(){
-            return PermissionsService.haveEditorsPerms($scope.entity);
-        };
-
-        $scope.permsToSee = function(){
-            return PermissionsService.haveAnyPerms($scope.entity);
-        };
-
-        $scope.shouldAutofocus = !$stateParams.nameFocused && $scope.haveEditiorsPermissions;
-
-        $scope.removeTag = function(tag) {
-            $scope.project.tags = _($scope.project.tags).without(tag);
-            $scope.update($scope.project);
-        };
-
-        $scope.setFocusToTagSelect = function() {
-            var element = angular.element('#addTag > input.ui-select-focusser')[0];
-            $timeout(function() {
-                element.focus();
-            }, 0);
-        };
-
-        function navigateToDetails(project) {
-            $scope.detailsState = context.entityName === 'all' ?
-                'main.projects.all.details' : 'main.projects.byentity.details';
-
-            $state.go($scope.detailsState, {
-                id: project._id,
-                entity: context.entityName,
-                entityId: context.entityId,
-                starred: $stateParams.starred
-            }, {
-                reload: true
-            });
-        }
-
-        $scope.star = function (project) {
-            ProjectsService.star(project).then(function () {
-                navigateToDetails(project);
-            });
-        };
-
-        $scope.WantToCreateRoom = function (project) {
-
-            if($scope.project.WantRoom == false)
-            {
-                $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
-
-                project.WantRoom = true;
-
-                $scope.update(project, context);
-
-                ProjectsService.WantToCreateRoom(project).then(function () {
-                    navigateToDetails(project);
-                });
-            }
-        };
-
-        $scope.recycle = function(entity) {
-            ProjectsService.removeFromParent(entity)
-                .then(()=> {
-                    EntityService.recycle('projects', entity._id).then(function () {
-                        let clonedEntity = JSON.parse(JSON.stringify(entity));
-                        clonedEntity.status = "Recycled" // just for activity status
-                        ProjectsService.updateStatus(clonedEntity, entity).then(function (result) {
-                            ActivitiesService.data.push(result);
-                        });
-
-                        refreshList();
-                        if (currentState.indexOf('search') !== -1) {
-                            $state.go(currentState, {
-                                entity: context.entityName,
-                                entityId: context.entityId
-                            }, {
-                                reload: true,
-                                query: $stateParams.query
-                            });
-                        } else {
-                            $state.go('main.projects.all', {
-                                entity: 'all',
-                            }, {
-                                reload: true
-                            });
-                        }
-                    });
-                })
-        };
-
-        $scope.recycleRestore = function(entity) {
-            ProjectsService.addToParent(entity)
-                .then(()=> {
-                    EntityService.recycleRestore('projects', entity._id).then(function () {
-                        let clonedEntity = JSON.parse(JSON.stringify(entity));
-                        clonedEntity.status = "un-deleted"; // just for activity status
-                        ProjectsService.updateStatus(clonedEntity, entity).then(function (result) {
-                            ActivitiesService.data.push(result);
-                        });
-                        refreshList();
-
-                        var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
-                        $state.go(state, {
-                            entity: context.entityName,
-                            entityId: context.entityId
-                        }, {
-                            reload: true
-                        });
-                    });
-                })
-        };
-
-        function refreshList(){
-            $rootScope.$broadcast('refreshList');
-        }
-
-        $scope.deleteProject = function (project) {
-            ProjectsService.remove(project._id).then(function () {
-
-                $state.go('main.projects.all', {
-                    entity: 'all'
-                }, {reload: true});
-            });
-        };
-
-        $scope.updateStatusForApproval = function(entity) {
-            let context = {
-                action:"updated",
-                name:  "status",
-                type:  "project"
-            }
-            entity.status = "waiting-approval" ;
-            $scope.update(entity, context) ;
-        }
-
-
-        $scope.update = function (project, context) {
-            ProjectsService.update(project, context).then(function(res) {
-                if (ProjectsService.selected && res._id === ProjectsService.selected._id) {
-                    if (context.name === 'title') {
-                        ProjectsService.selected.title = res.title;
-                    }
-                    if (context.name === 'color') {
-                        ProjectsService.selected.color = res.color;
-                    }
-                }
-                switch (context.name) {
-                    case 'status':
-                        if (context.entityName === 'discussion') {
-                            project.discussion = context.entityId;
-                        }
-
-                        ProjectsService.updateStatus(project, backupEntity).then(function(result) {
-                            backupEntity = JSON.parse(JSON.stringify($scope.project));
-                            ActivitiesService.data = ActivitiesService.data || [] ;
-                            ActivitiesService.data.push(result);
-                        });
-                        break;
-
-                    case 'color':
-                        ProjectsService.updateColor(project).then(function(result) {
-                            backupEntity = JSON.parse(JSON.stringify($scope.project));
-                            ActivitiesService.data = ActivitiesService.data || [] ;
-                            ActivitiesService.data.push(result);
-                        });
-                        break;
-                    case 'title':
-                    case 'description':
-                        ProjectsService.updateTitle(project, backupEntity, context.name).then(function(result) {
-                            backupEntity = JSON.parse(JSON.stringify($scope.project));
-                            ActivitiesService.data = ActivitiesService.data || [];
-                            ActivitiesService.data.push(result);
-                            refreshList();
-                        });
-                        break;
-                }
-            });
-        };
-
-        $scope.updateCurrentProject = function(){
-            $scope.project.PartTitle = $scope.project.title;
-            ProjectsService.currentProjectName = $scope.project.title;
-        }
-
-        $scope.saveTemplate = function () {
-            $scope.isopen = false;
-            $scope.newTemplate.frequentUser = $scope.newTemplate.watcher;
-            if ($scope.project.subProjects[0]._id) {
-                ProjectsService.saveTemplate($stateParams.id, $scope.newTemplate).then(function (result) {
-                    $scope.showMsgSavedTpl = true;
-                    $scope.newTemplate.name = '';
-                    var element = angular.element('.sub-projects .fa-chevron-down')[0];
-                    $timeout(function () {
-                        element.click();
-                    }, 0);
-                    $timeout(function () {
-                        $scope.showMsgSavedTpl = false;
-                    }, 3000);
-                    $scope.template.push(result);
-                });
-            }
-        };
-
-        $scope.setFocusToTagSelect = function () {
-            var element = angular.element('#addTag > input.ui-select-focusser')[0];
-            $timeout(function () {
-                element.focus();
-            }, 0);
-        };
-
-        function deleteClass(projects) {
-            for (var i = projects.length - 1; i >= 0; i--) {
-                projects[i].isNew = false;
-            }
-        }
-        $scope.template2subProjects = function (templateId) {
-            $scope.isopen = false;
-            ProjectsService.template2subProjects(templateId, {
-                'projectId': $stateParams.id
-            }).then(function (result) {
-                for (var i = result.length - 1; i >= 0; i--) {
-                    result[i].isNew = true;
-                }
-
-                $timeout(function () {
-                    deleteClass(result);
-                }, 5000);
-                var tmp = $scope.project.subProjects.pop();
-                $scope.project.subProjects = $scope.project.subProjects.concat(result);
-                $scope.project.subProjects.push(tmp);
-            });
-        };
-
-        $scope.deleteTemplate = function (id, index) {
-            ProjectsService.deleteTemplate(id).then(function (result) {
-                $scope.template.splice(index, 1);
-            });
-        };
-
-        $scope.delayedUpdate = _.debounce($scope.update, 2000);
-
-        if ($scope.project &&
-            ($state.current.name === 'main.projects.all.details' ||
-                $state.current.name === 'main.search.project' ||
-                $state.current.name === 'main.projects.byentity.details')) {
-            $state.go('.activities');
-        }
+  if (!$scope.item) {
+    $state.go('main.projects.byentity', {
+      entity: context.entityName,
+      entityId: context.entityId
     });
+  } else if ($scope.item && ($state.current.name === 'main.projects.all.details' || $state.current.name === 'main.search.project' || $state.current.name === 'main.projects.byentity.details')) {
+    $state.go('.activities');
+  }
+
+  $scope.entity = entity || context.entity;
+  $scope.tasks = tasks.data || tasks;
+  $scope.items = projects.data || projects;
+
+  $scope.editorOptions = {
+    theme: 'bootstrap',
+    buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
+  };
+  $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'completed', 'archived'];
+
+  $scope.me = me;
+  $scope.tags = tags;
+
+  var currentState = $state.current.name;
+
+  // backup for previous changes - for updates
+  var backupEntity = JSON.parse(JSON.stringify($scope.item));
+
+  $scope.people = people.data || people;
+  if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+    var newPeople = {
+      name: 'no select'
+    };
+    $scope.people.push(_(newPeople).clone());
+  }
+  for (var i = 0; i < $scope.people.length; i++) {
+    if ($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job == null)) {
+      $scope.people[i].job = $scope.people[i].name;
+    }
+  }
+
+  ProjectsService.getStarred().then(function(starred) {
+    $scope.item.star = _(starred).any(function(s) {
+      return s._id === $scope.item._id;
+    });
+  });
+
+  // ==================================================== onChanges ==================================================== //
+
+  function navigateToDetails(project) {
+    $scope.detailsState = context.entityName === 'all' ? 'main.projects.all.details' : 'main.projects.byentity.details';
+
+    $state.go($scope.detailsState, {
+      id: project._id,
+      entity: context.entityName,
+      entityId: context.entityId,
+      starred: $stateParams.starred
+    }, {
+      reload: true
+    });
+  }
+
+  $scope.onStar = function(value) {
+    ProjectsService.star($scope.item).then(function() {
+      navigateToDetails($scope.item);
+      // "$scope.item.star" will be change in 'ProjectsService.star' function
+    });
+  }
+
+  $scope.onAssign = function(value) {
+    $scope.item.assign = value;
+    $scope.updateAndNotify($scope.item);
+  }
+
+  $scope.onDateDue = function(value) {
+    $scope.item.due = value;
+    if (context.entityName === 'discussion') {
+      $scope.item.discussion = context.entityId;
+    }
+
+    ProjectsService.updateDue($scope.item, backupEntity).then(function(result) {
+      backupEntity = JSON.parse(JSON.stringify($scope.item));
+      ActivitiesService.data.push(result);
+    });
+
+    ProjectsService.update($scope.item).then(function(result) {
+      if (context.entityName === 'project') {
+        var projId = result.project ? result.project._id : undefined;
+        if (projId !== context.entityId) {
+          $state.go('main.projects.byentity', {
+            entity: context.entityName,
+            entityId: context.entityId
+          }, {
+            reload: true
+          });
+        }
+      }
+    });
+  }
+
+  $scope.onStatus = function(value) {
+    $scope.item.status = value;
+    $scope.update($scope.item, {
+      name: 'status'
+    })
+  }
+
+  $scope.onColor = function(value) {
+    $scope.update($scope.item, value);
+  }
+
+  $scope.onWantToCreateRoom = function() {
+    $scope.item.WantRoom = true;
+
+    $scope.update($scope.item, context);
+
+    ProjectsService.WantToCreateRoom($scope.item).then(function() {
+      navigateToDetails($scope.item);
+    });
+  }
+
+  $scope.onTags = function(value) {
+    $scope.item.tags = value;
+    $scope.update($scope.item);
+  }
+
+  // ==================================================== Menu events ==================================================== //
+
+  $scope.recycle = function() {
+    ProjectsService.removeFromParent($scope.item).then(()=>{
+      EntityService.recycle('projects', $scope.item._id).then(function() {
+        let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+        clonedEntity.status = "Recycled"
+        // just for activity status
+        ProjectsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+          ActivitiesService.data.push(result);
+        });
+
+        refreshList();
+        if (currentState.indexOf('search') !== -1) {
+          $state.go(currentState, {
+            entity: context.entityName,
+            entityId: context.entityId
+          }, {
+            reload: true,
+            query: $stateParams.query
+          });
+        } else {
+          $state.go('main.projects.all', {
+            entity: 'all',
+          }, {
+            reload: true
+          });
+        }
+      });
+    }
+    )
+  }
+
+  $scope.recycleRestore = function() {
+    ProjectsService.addToParent($scope.item).then(()=>{
+      EntityService.recycleRestore('projects', $scope.item._id).then(function() {
+        let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+        clonedEntity.status = "un-deleted";
+        // just for activity status
+        ProjectsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+          ActivitiesService.data.push(result);
+        });
+        refreshList();
+
+        var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
+        $state.go(state, {
+          entity: context.entityName,
+          entityId: context.entityId
+        }, {
+          reload: true
+        });
+      });
+    }
+    )
+  }
+
+  $scope.menuItems = [{
+      label: 'recycleProject',
+      icon: 'times-circle',
+      display: !$scope.item.hasOwnProperty('recycled'),
+      action: $scope.recycle,
+    }, {
+      label: 'unrecycleProject',
+      icon: 'times-circle',
+      display: $scope.item.hasOwnProperty('recycled'),
+      action: $scope.recycleRestore,
+  }];
+
+  // ==================================================== $watch: title / desc ==================================================== //
+
+  $scope.$watch('item.title', function(nVal, oVal) {
+    if (nVal !== oVal && oVal) {
+      var newContext = {
+        name: 'title',
+        oldVal: oVal,
+        newVal: nVal,
+        action: 'renamed'
+      };
+      $scope.delayedUpdate($scope.item, newContext);
+
+      ProjectsService.currentProjectName = $scope.item.title;
+    }
+  });
+
+  var nText, oText;
+  $scope.$watch('item.description', function(nVal, oVal) {
+    nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+    oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+    if (nText != oText && oText) {
+      var newContext = {
+        name: 'description',
+        oldVal: oVal,
+        newVal: nVal,
+        action: 'renamed'
+      };
+      $scope.delayedUpdate($scope.item, newContext);
+    }
+  });
+
+  // ==================================================== Update  ==================================================== //
+
+  $scope.updateAndNotify = function(project) {
+    project.status = $scope.statuses[1];
+
+    if (context.entityName === 'discussion') {
+      project.discussion = context.entityId;
+    }
+
+    if (project.assign === undefined || project.assign === null) {
+      delete project['assign'];
+    } else {
+      // check the assignee is not a watcher already
+      let filtered = project.watchers.filter(watcher=>{
+        return watcher._id == project.assign;
+      }
+      );
+
+      // add assignee as watcher
+      if (filtered.length == 0) {
+        project.watchers.push(project.assign);
+      }
+    }
+
+    ProjectsService.update(project).then(function(result) {
+      if (context.entityName === 'project') {
+        var projId = result.project ? result.project._id : undefined;
+        if (projId !== context.entityId) {
+          $state.go('main.projects.byentity', {
+            entity: context.entityName,
+            entityId: context.entityId
+          }, {
+            reload: true
+          });
+        }
+      }
+
+      ProjectsService.assign(project, me, backupEntity).then(function(res) {
+        backupEntity = JSON.parse(JSON.stringify(result));
+        ActivitiesService.data.push(res);
+      });
+    });
+
+  }
+
+  function refreshList() {
+    $rootScope.$broadcast('refreshList');
+  }
+
+  $scope.update = function(item, context) {
+    if (context.name === 'color') {
+        item.color = context.newVal;
+    }
+    ProjectsService.update(item, context).then(function(res) {
+      if (ProjectsService.selected && res._id === ProjectsService.selected._id) {
+        if (context.name === 'title') {
+          ProjectsService.selected.title = res.title;
+        }
+      }
+      switch (context.name) {
+      case 'status':
+        if (context.entityName === 'discussion') {
+          item.discussion = context.entityId;
+        }
+
+        ProjectsService.updateStatus(item, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+        break;
+
+      case 'color':
+        ProjectsService.updateColor(item).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+        break;
+      case 'title':
+      case 'description':
+        ProjectsService.updateTitle(item, backupEntity, context.name).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+          refreshList();
+        });
+        break;
+      }
+    });
+  }
+
+  $scope.delayedUpdate = _.debounce($scope.update, 2000);
+
+  // ==================================================== Buttons ==================================================== //
+
+  $scope.updateStatusForApproval = function() {
+    let context = {
+      action: "updated",
+      name: "status",
+      type: "project"
+    }
+    $scope.item.status = "waiting-approval";
+    $scope.update(entity, context);
+  }
+
+  // ==================================================== Template ==================================================== //
+
+  $scope.saveTemplate = function(newTemplate) {
+    return ProjectsService.saveTemplate($stateParams.id, newTemplate)
+  }
+
+  $scope.deleteTemplate = function(id) {
+    return ProjectsService.deleteTemplate(id)
+  }
+
+  $scope.implementTemplate = function(id) {
+    return ProjectsService.template2subProjects(id, {
+        'projectId': $stateParams.id
+    }).then(function(result) {
+        for (var i = result.length - 1; i >= 0; i--) {
+            result[i].isNew = true;
+        }
+        $timeout(function() {
+          for (var i = result.length - 1; i >= 0; i--) {
+            result[i].isNew = false;
+          }
+        }, 5000);
+        var tmp = $scope.item.subProjects.pop()
+        $scope.item.subProjects = $scope.item.subProjects.concat(result);
+        $scope.item.subProjects.push(tmp);
+    });
+  }
+  // ==================================================== havePermissions ==================================================== //
+
+  $scope.enableRecycled = true;
+  $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+
+  $scope.permsToSee = function() {
+    return PermissionsService.haveAnyPerms($scope.entity);
+  }
+
+  $scope.havePermissions = function(type, enableRecycled) {
+    enableRecycled = enableRecycled || !$scope.isRecycled;
+    return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
+  }
+
+  $scope.haveEditiorsPermissions = function() {
+    return PermissionsService.haveEditorsPerms($scope.entity);
+  }
+
+}

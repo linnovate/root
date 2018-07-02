@@ -1,0 +1,220 @@
+$page-height: 100vh;
+$content-height: calc(#{$page-height} - 2 * #{$header-height});
+$description-height: 30%;
+$switcher-height: 40px;
+$panel-height: 53px; //$header-height - 5px;
+$tab-content-height: calc(
+    100% - #{$description-height} - #{$switcher-height} - #{$panel-height} - 37px
+);
+
+.attachment {
+    padding-left: 16px;
+    height: calc(100% - 55px);
+    overflow: hidden;
+}
+
+.attachment-details {
+
+        .att-icon {
+            -webkit-filter: contrast(0);
+            filter: contrast(0);
+        }
+
+        .att-size {
+            width: 120px;
+            margin-left: 13px;
+            padding-top: 10px;
+            padding-bottom: 7px;
+            float: left;
+            border-right: 1px solid #e1e1e1;
+        }
+
+    .att-menu-item {
+        margin-top: 10px;
+        margin-left: 13px;
+    }
+
+        .att-user {
+            color: gray;
+            padding: 15px 15px 0 15px;
+        }
+
+        .att-user:hover {
+            box-shadow: none !important;
+        }
+
+        .att-size, .att {
+            color: #bdbcbc ;
+            box-shadow: 0 none;
+
+        }
+
+        .att {
+            width: 40px;
+            background-color: transparent;
+            border: none;
+            float: right;
+        }
+
+    .att-creator-button {
+        background-color: #0097a7;
+        transition: 0.3s;
+        border-radius: 22px;
+        padding: 0 13px;
+        color: white;
+        margin: 14px 0 0;
+    }
+
+        .user {
+            position: relative;
+            float: left;
+            display: inline-flex;
+
+            ul {
+                /*rtl:begin:ignore*/
+                left: auto ;
+                right: 0;
+                /*rtl:end:ignore*/
+
+                /*rtl:begin:remove*/
+                right: auto ;
+                left: 0;
+                /*rtl:end:remove*/
+
+                width: auto;
+            }
+
+
+            @media screen and (max-width: $small-resolution) {
+                width: 140px;
+
+            }
+
+            &:hover{
+                box-shadow: 0 0 0 2px #FFB435;
+                transition: 0.8s;
+            }
+
+            .no-assignee {
+                position: absolute;
+                transform: translateY(-65%);
+                top: 31px;
+                width: calc(100% - 10px);
+                margin-left: 10px;
+
+                .avatar-placeholder {
+                    height: 26px;
+                    padding: 5px 0 5px 35px;
+                    color: $light-grey-placeholder;
+                    display: table;
+                    width: 100%;
+                    background: url('/icu/assets/img/user.png') no-repeat scroll left;
+                }
+
+            }
+
+            .avatar {
+                float: left;
+                width: 24px;
+                height: 24px;
+                font-size: 20px;
+                line-height: 24px;
+                border-radius: 50%;
+                margin: 0 10px 0 0;
+                display: inline-block;
+                background-color: $green;
+            }
+            .summary-content {
+                display: inline-block;
+                font-weight: bold;
+            }
+        }
+
+    .attachment .attName {
+        margin-top: 30px;
+        color: #444F53 ;
+        font-size: 23px;
+        padding: 0 0 8px 0;
+        font-weight: 700;
+        outline: none;
+    }
+
+    .attachment .attCreator {
+        color: #FFA000 ;
+    }
+
+
+    .attachment .att-link-wrapper {
+        display: block;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    .attachment .att-link {
+        font-size: 16px;
+        color: #FFA000;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .attachment .att-link-icon {
+        float: left;
+        margin-right: 10px;
+    }
+
+    .attachment .attCreator {
+        font-weight: 700;
+        color: #fda102
+    }
+
+    .attachment .icon {
+        position: relative;
+        float: left ;
+        top: 0;
+        left: 20px;
+        height: 80px;
+        width: $icon-width;
+        margin-right: 30px;
+        @include sprite(-10px, $icon-width, $icon-padding, '/icu/assets/img/attachment-large.png');
+    }
+
+
+    .title {
+        font-size: 23px;
+        padding: 0 0 8px 0;
+        font-weight: 700;
+        outline: none;
+
+        &.medium-editor-placeholder {
+            &:not(:focus):before {
+                position: inherit;
+                color: $light-grey-placeholder;
+            }
+
+            &:after {
+                content: none;
+            }
+        }
+    }
+
+    .text {
+        min-height: 50px;
+        padding-left: 3px;
+        outline: none;
+
+        &.medium-editor-placeholder {
+            &:not(:focus):before {
+                position: inherit;
+                color: $light-grey-placeholder;
+            }
+
+            position: inherit;
+
+            &:after {
+                content: none;
+            }
+        }
+
+    }
+
+}

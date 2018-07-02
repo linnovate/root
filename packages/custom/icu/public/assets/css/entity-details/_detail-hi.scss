@@ -1,0 +1,42 @@
+.detail-hi {
+  font-size: 1.4em;
+  height: 100%;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  text-align: initial;
+  padding: 0 6px;
+  &:focus {
+      outline: none;
+  }
+  &:hover {
+     i {
+         transform: rotate(360deg);
+         transition: 1.5s;
+     }
+  }
+
+  i {
+    appearance: none;
+    border: none;
+    display: block;
+    width: 37px;
+    height: 40px;
+    cursor: pointer;
+    outline: none;
+    background: url(/icu/assets/img/HiGrey.png) no-repeat scroll center;
+    background-size: 100%;
+   }
+   i:visited{
+       background-image: url(/icu/assets/img/Hi.png);
+   }
+
+   tip{
+        width: 80%;
+        font-size: 14px;
+    }
+
+    &.orange {
+        color: $orange;
+    }
+}

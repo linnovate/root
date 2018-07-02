@@ -1,17 +1,17 @@
 'use strict';
 
-var dateFormat = function (date) {
-  return ('3:07 PM on July 16, 2015');
+var dateFormat = function(date) {
+  return '3:07 PM on July 16, 2015';
 };
 
 var curr = new Date();
-curr.setHours(0,0,0,0);
-var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay()+6));
-lastday = new Date(lastday.setHours(23, 59, 59, 0))
+curr.setHours(0, 0, 0, 0);
+//var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
+lastday = new Date(lastday.setHours(23, 59, 59, 0));
 
 module.exports = {
-  comment_email: function (user, text, from, task, icu, mailOptions) {
+  comment_email: function(user, text, from, task, icu, mailOptions) {
     mailOptions.html = [
       '<div style="display:block;margin:0 auto;max-width:580px;padding:12px 16px;background-color:orange">',
       '<div style="margin:0 auto;max-height:37px;max-width:122px;text-align: center;">ICU</div></div>',
@@ -123,7 +123,7 @@ module.exports = {
       // '</div>',
 
       '<h2>Tasks: </h2>',
-      '<ol><% WeekTasks.forEach(function(task) { %><li><a href="<%= uriRoot %>/tasks/all/<%= task._id %>"><%- task.title %></a>, ', 
+      '<ol><% WeekTasks.forEach(function(task) { %><li><a href="<%= uriRoot %>/tasks/all/<%= task._id %>"><%- task.title %></a>, ',
       '<%- task.due %>',
       '</li><% }); %></ol>',
     ].join('\n\n')

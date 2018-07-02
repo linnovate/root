@@ -40,7 +40,7 @@ var OfficeSchema = new Schema({
     type: String,
     required: true
   },
-    status: {
+  status: {
     type: String,
     enum: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
     default: 'new'
@@ -49,19 +49,23 @@ var OfficeSchema = new Schema({
     type: String
   },
   //should we maybe have finer grain control on this
-  watchers: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }],
-  permissions: [{
-    _id:false,
-    id: { type: Schema.ObjectId, ref: 'User' },    
-    level: {
-      type: String,
-      enum: ['viewer', 'commenter', 'editor'],
-      default: 'viewer'
+  watchers: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User'
     }
-  }],
+  ],
+  permissions: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      level: {
+        type: String,
+        enum: ['viewer', 'commenter', 'editor'],
+        default: 'viewer'
+      }
+    }
+  ],
   room: {
     type: String
   },
@@ -78,10 +82,10 @@ var OfficeSchema = new Schema({
     default: false
   },
   unit: {
-    type:String
+    type: String
   },
-  tel:{
-    type:String
+  tel: {
+    type: String
   }
 });
 

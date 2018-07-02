@@ -1,15 +1,12 @@
-<td class="move">
-    <i ng-if="data.templateDoc._id" class="fa fa-ellipsis-v"></i>
-    <i ng-if="data.templateDoc._id" class="fa fa-ellipsis-v"></i>
-</td>
 <td class="id" ng-if="data.templateDoc._id">{{data.index + 1}}</td>
 <td class="name"
-    ng-attr-colspan="{{data.templateDoc._id ? undefined : 2}}"
     title="{{data.templateDoc.title}}"
+    ng-attr-colspan="{{data.templateDoc._id ? undefined : 2}}"
+    ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
     ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.templateDoc)) && !recycled(data.templateDoc)}}"
     placeholder="{{'createNewTemplateDoc' | i18next}}"
     strip-br="true"
-    ng-change="data.searchCb(data.templateDoc.title) || data.updateCb(data.templateDoc)"
+    ng-change="data.searchCb(data.templateDoc) || data.updateCb(data.templateDoc)"
     ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
     ng-model="data.templateDoc.PartTitle"
     ng-blur="bluring(data.templateDoc, $event); data.hideAutoCompleteCb(data.templateDoc)"
@@ -17,8 +14,6 @@
     ng-class="{'noFocus':isBlurred(data.templateDoc)}"
 >
 </td>
-<!--<td class="status col-sm-2" ng-class="data.templateDoc.status">{{data.templateDoc.status | i18next }}</td>-->
-<td class="status col-sm-2" ng-class="data.templateDoc.status">{{}}</td>
 <td class="arrow">
     <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

@@ -17,9 +17,12 @@ body {
 @import '../lib/open-sans/scss/open-sans.scss';
 @import 'variables';
 @import 'mixins/table';
+@import 'mixins/disable-text-styles';
+@import 'mixins/golden-hover';
 @import 'mixins/tag';
 @import 'mixins/circle';
 @import 'mixins/button';
+@import 'mixins/scroll';
 @import 'mixins/center';
 @import 'mixins/center-left';
 @import 'mixins/file-icon-sprites';
@@ -37,6 +40,7 @@ body {
 @import 'user-details';
 @import 'entity-list';
 @import 'task-details';
+@import './entity-details/entity-details';
 @import 'discussion-details';
 @import 'tabs-activities';
 @import 'tabs-documents';
@@ -58,6 +62,7 @@ body {
 @import 'folder-details';
 @import 'officeDocument-details';
 @import 'templateDoc-details';
+@import 'attachment-details';
 @import 'admin-settings';
 
 
@@ -67,20 +72,19 @@ table {
         box-shadow:inset 0px 0px 0px 2px gray;
     }
 }
-// .datapane {
-    // width: calc(100% - 269px);
-    // float: left;
-// }
 .icu-data {
   display: flex;
   height: 100%;
   overflow: hidden;
 }
 .panes-wrapper {
-    // margin-left: $sidepane-width;
     width: calc(100% - #{$sidepane-width});
     display: flex;
     justify-content: flex-start;
+
+    @media screen and (max-width: $small-resolution) {
+        width: calc(100% - #{$min-sidepane-width});
+    }
 
     &.wide {
         margin-left: 0;
@@ -100,19 +104,6 @@ table {
 .icon-projects {
     width: 25px;
     height: 25px;
-}
-[icu-members-footer] {
-    position: fixed;
-    bottom: 0;
-    width: $min-detailspane-width;
-    background-color: $cream;
-    border-top: 1px solid $light-grey1;
-    .editor {
-        box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px #00AEEF;
-    }
-    //@media screen and (max-width: $small-resolution) {
-    //    width: $min-detailspane-width;
-    //}
 }
 
 .disabled {
@@ -720,6 +711,12 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
       }
     }
   }
+}
+
+.scroll {
+    overflow-y: auto;
+
+    @include scroll;
 }
 
 @media (min-width: 730px) {

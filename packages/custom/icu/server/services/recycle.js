@@ -2,7 +2,7 @@
 'use strict';
 
 var _ = require('lodash');
- var  mean = require('meanio');
+var  mean = require('meanio');
 
 var TaskModel = require('../models/task.js');
 var ProjectModel = require('../models/project.js');
@@ -12,70 +12,70 @@ var elasticsearch = require('../controllers/elasticsearch');
 
 
 var entityNameMap = {
-    'tasks': {
-      mainModel: TaskModel,
-//      archiveModel: TaskArchiveModel,
-      name: 'task'
-    },
-    'projects': {
-      mainModel: ProjectModel,
-//      archiveModel: ProjectArchiveModel,
-      name: 'project'
-    },
-    'discussions': {
-      mainModel: DiscussionModel,
-//      archiveModel: DiscussionArchiveModel,
-      name: 'discussion'
-    },
-    'officeDocuments': {
-      mainModel: OfficeDocumentsModel,
-//      archiveModel: OfficeDocumentsArchiveModel,
-      name: 'officeDocument'
-    },
+  tasks: {
+    mainModel: TaskModel,
+    //      archiveModel: TaskArchiveModel,
+    name: 'task'
+  },
+  projects: {
+    mainModel: ProjectModel,
+    //      archiveModel: ProjectArchiveModel,
+    name: 'project'
+  },
+  discussions: {
+    mainModel: DiscussionModel,
+    //      archiveModel: DiscussionArchiveModel,
+    name: 'discussion'
+  },
+  officeDocuments: {
+    mainModel: OfficeDocumentsModel,
+    //      archiveModel: OfficeDocumentsArchiveModel,
+    name: 'officeDocument'
+  },
 };
 
 function recycleEntity(entityType, id) {
-    var Model = entityNameMap[entityType].mainModel;
-    var name = entityNameMap[entityType].name;
-    // var promise = Model.update({'_id':id},{$set:{'recycled': Date.now()}}).exec();  
-    // elasticsearch.save(this, name);
-    // return promise ;  
-    var promise = 
+  var Model = entityNameMap[entityType].mainModel;
+  var name = entityNameMap[entityType].name;
+  // var promise = Model.update({'_id':id},{$set:{'recycled': Date.now()}}).exec();
+  // elasticsearch.save(this, name);
+  // return promise ;
+  var promise =
     Model.findOne({
       _id: id
-  }).exec(function (error, entity) {
-    entity.recycled = Date.now();
-    entity.save(function(err) {
-      if (err) {
-        console.log(err)
-      }
-      else  elasticsearch.save(entity, name);
+    }).exec(function(error, entity) {
+      entity.recycled = Date.now();
+      entity.save(function(err) {
+        if(err) {
+          console.log(err);
+        }
+        else  elasticsearch.save(entity, name);
+      });
     });
-  });
-  return promise ;  
+  return promise;
 
 }
 
-function recycleRestoreEntity(entityType, id) {    
+function recycleRestoreEntity(entityType, id) {
   var Model = entityNameMap[entityType].mainModel;
   var name = entityNameMap[entityType].name;
   let promise = Model.findOneAndUpdate(
-    { _id: id },
-    { $unset : { recycled : ""}},
-    {new: true}, function(err, entity){
-      if(err){
+    {_id: id},
+    {$unset: {recycled: ''}},
+    {new: true}, function(err, entity) {
+      if(err) {
         console.log(err);
-      }  
-      console.log("entity unrecycled")
+      }
+      console.log('entity unrecycled');
       elasticsearch.save(entity, name);
     });
-  return promise ;
+  return promise;
 }
 
-// function recycleRestoreEntity(entityType, id) {    
+// function recycleRestoreEntity(entityType, id) {
 //         var Model = entityNameMap[entityType].mainModel;
 //         var name = entityNameMap[entityType].name;
-//         var promise = 
+//         var promise =
 //           Model.findOne({
 //             _id: id
 //         }).exec(function (error, entity) {
@@ -93,48 +93,45 @@ function recycleRestoreEntity(entityType, id) {
 //           });
 
 //         });
-//        return promise ;    
+//        return promise ;
 // }
 
 
-function recycleGetBin(entityType) {  
+function recycleGetBin(entityType) {
   var request = [];
-  return new Promise(function (fulfill, reject) {
+  return new Promise(function(fulfill, reject) {
     for(let key in entityNameMap) {
-      let Model = entityNameMap[key].mainModel ;
-      request.push(new Promise(function (resolve, error) {
-        Model.find({'recycled':{$exists:true}}).exec(function (err, entities) {            
-          if (err) {
+      let Model = entityNameMap[key].mainModel;
+      request.push(new Promise(function(resolve, error) {
+        Model.find({recycled: {$exists: true}}).exec(function(err, entities) {
+          if(err) {
             error('error');
           }
-         
+
 
           // add type entity support for recycle bin
           let typedEntities = entities.map(function(entity) {
-            var json=JSON.stringify(entity);
+            var json = JSON.stringify(entity);
             let typedEntity = JSON.parse(json);
-            typedEntity['type'] = entityNameMap[key].name ;
-            return typedEntity ;
+            typedEntity['type'] = entityNameMap[key].name;
+            return typedEntity;
           });
-          resolve(typedEntities);            
+          resolve(typedEntities);
         });
       }));
-  }
-  Promise.all(request).then(function (result) {
-    fulfill(result);
-  }).catch(function (reason) {
-    reject('reject');
+    }
+    Promise.all(request).then(function(result) {
+      fulfill(result);
+    }).catch(function(reason) {
+      reject('reject');
+    });
   });
-});
 }
 
 
 
-
-    
 module.exports = {
-    recycleEntity: recycleEntity,
-    recycleRestoreEntity: recycleRestoreEntity,
-    recycleGetBin :recycleGetBin,
+  recycleEntity: recycleEntity,
+  recycleRestoreEntity: recycleRestoreEntity,
+  recycleGetBin: recycleGetBin,
 };
-      

@@ -16,6 +16,14 @@ var circlesLocations = function() {
 	return locations;
 };
 
+var getCurrentDirection = function(){
+	for(var prop in config.languages){
+		if(config.languages[prop].name === config.currentLanguage){
+			return config.languages[prop].direction;
+		}
+	}
+};
+
 exports.render = function(req, res) {
 		if(!req.isAuthenticated()){
 			var ip = req.ip;
@@ -38,7 +46,7 @@ exports.render = function(req, res) {
 							"index" : false
 						};
 						json[ip] = userData;
-						jsonfile.wrtieFile(file , json , function(err){ });
+						jsonfile.writeFile(file , json , function(err){ });
 					}
 				}
 			});
@@ -56,6 +64,7 @@ exports.render = function(req, res) {
 	res.render('index', {
 		config: {
 			'lng': config.currentLanguage,
+            'direction': getCurrentDirection(),
 			'activeProvider': config.activeProvider,
 			'host': config.host,
 			'socketPort': config.socketPort,

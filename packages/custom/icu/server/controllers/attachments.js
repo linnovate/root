@@ -18,35 +18,35 @@ var Task = require('../models/task'),
   Attachment = require('../models/attachment');
 
 var logger = require('../services/logger');
-var ftp = require('../services/ftp');
 
 
-Object.keys(attachment).forEach(function (methodName) {
+Object.keys(attachment).forEach(function(methodName) {
   exports[methodName] = attachment[methodName];
 });
 
-exports.getByEntity = function (req, res, next) {
+exports.getByEntity = function(req, res, next) {
 
   var entities = {
-    projects: 'project',
-    tasks: 'task',
-    discussions: 'discussion',
-    updates: 'update',
-    offices: 'office',
-    folders: 'folder',
-    officeDocuments: 'officeDocuments'
-  },
+      projects: 'project',
+      tasks: 'task',
+      discussions: 'discussion',
+      updates: 'update',
+      offices: 'office',
+      folders: 'folder',
+      officeDocuments: 'officeDocuments'
+    },
     entity = entities[req.params.entity];
 
   Attachment.find({
     entity: entity,
     entityId: req.params.id
-  }, function (err, data) {
-    if (err) {
+  }, function(err, data) {
+    if(err) {
       logger.log('error', '%s getByEntity, %s', req.user.name, ' Attachment.find', {error: err.message});
       req.locals.error = err;
-    } else {
-      req.locals.result = data
+    }
+    else {
+      req.locals.result = data;
     }
     next();
   });
@@ -81,14 +81,14 @@ exports.getByEntity = function (req, res, next) {
   //   });
 };
 
-var formatDate = function (date) {
+var formatDate = function(date) {
   var yyyy = date.getFullYear().toString();
   var mm = (date.getMonth() + 1).toString();
   var dd = date.getDate().toString();
   return yyyy + '/' + (mm[1] ? mm : '0' + mm[0]) + '/' + (dd[1] ? dd : '0' + dd[0]);
 };
 
-exports.upload = function (req, res, next) {
+exports.upload = function(req, res, next) {
   var d = formatDate(new Date());
 
   req.locals.data.attachments = [];
@@ -100,24 +100,24 @@ exports.upload = function (req, res, next) {
 
   var hasFile = false;
 
-  busboy.on('file', function (fieldname, file, filename) {
+  busboy.on('file', function(fieldname, file, filename) {
     var port = config.https && config.https.port ? config.https.port : config.http.port;
-    var portStr = ":" + port ;
-    portStr = config.isPortNeeded ? portStr : '' ;
+    var portStr = ':' + port;
+    portStr = config.isPortNeeded ? portStr : '';
 
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
     req.locals.data.body.saveTo = saveTo;
     var hostFileLocation = config.host + portStr + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
 
-    mkdirp(path.join(config.attachmentDir, d), function () {
-      file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
-        var arr = hostFileLocation.split("/files");
-        var pathFor = "./files" + arr[1];
+    mkdirp(path.join(config.attachmentDir, d), function() {
+      file.pipe(fs.createWriteStream(saveTo)).on('close', function(err) {
+        var arr = hostFileLocation.split('/files');
+        var pathFor = './files' + arr[1];
         var stats = fs.statSync(pathFor);
         //var stats = fs.statSync("." + saveTo.substring(saveTo.indexOf('/files')));
 
-        var fileSizeInBytes = stats["size"];
+        var fileSizeInBytes = stats['size'];
         //Convert the file size to megabytes (optional)
         //var fileSizeInMegabytes = fileSizeInBytes;
 
@@ -151,37 +151,12 @@ exports.upload = function (req, res, next) {
 
   });
 
-  busboy.on('field', function (fieldname, val) {
+  busboy.on('field', function(fieldname, val) {
     req.locals.data.body[fieldname] = val;
   });
 
-  busboy.on('finish', function () {
-    var path = req.locals.data.body.saveTo;
-    ftp.uploadToFTP(path).then(function(){
-      try{
-        if(fs.existsSync(path)){
-        fs.unlinkSync(path);
-      }
-      }catch(err){
-        console.log(err)
-      }
-      
-    }).catch(function(){
-       try{
-      if(fs.existsSync(path)){
-         fs.unlinkSync(path);
-       }
-      }catch(err){
-        console.log(err)
-      }
-     
-        logger.log('error', '%s upload, %s', req.user.name, ' busboy.on(finish)', {error: 'No file was attached'});
-        req.locals.error = {
-          message: 'No file was attached'
-        };
-    });
-
-    if (!hasFile) {
+  busboy.on('finish', function() {
+    if(!hasFile) {
       logger.log('error', '%s upload, %s', req.user.name, ' busboy.on(finish)', {error: 'No file was attached'});
       req.locals.error = {
         message: 'No file was attached'
@@ -194,77 +169,49 @@ exports.upload = function (req, res, next) {
   return req.pipe(busboy);
 };
 
-exports.deleteFile = function (req, res) {
-  Attachment.find({ _id: req.params.id },
-    function (err, file) {
-      if (err||!file) {
-        logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.find()', {error: "error"});
-        res.status(500).send("error");
-
-      } else {
-
-        if(file[0]&&file[0]._doc&&file[0]._doc.path){
-        Attachment.count({path:file[0]._doc.path},function(err,c){
-          Attachment.remove({ _id: req.params.id }, function (err) {
-            if (err) {
+exports.deleteFile = function(req, res) {
+  Attachment.find({_id: req.params.id},
+    function(err, file) {
+      if(err) {
+        logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.find()', {error: err.message});
+      }
+      else {
+        Attachment.count({path: file[0]._doc.path}, function(err, c) {
+          Attachment.remove({_id: req.params.id}, function(err) {
+            if(err) {
               logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.remove()', {error: err.message});
-              res.status(500).send(err);
-            } else {
-              if(!err && c<=1){
-                var strUrl = file[0]._doc.path;
-                var index = strUrl.indexOf('/files');
-                var pathFile = strUrl.substring(index);
-                var pathPDF = pathFile.replace('/files','/preview');
-                var flag = pathPDF.endsWith('.pdf');
-                pathPDF = pathPDF.substring(0,pathPDF.lastIndexOf('.'))+'.pdf';
-                ftp.archiveFileFromFtp(pathFile).then(function(){
-                  if(!flag){
-                    ftp.deleteFileFromFtp(pathPDF).then(function(){
-                      res.send("ok");
-
-                  }).catch(function(err){
-                    res.status(500).send(err);
-                  });
-                  }
-                  
-                }).catch(function(err){
-                  res.status(500).send(err);
-                });
-
-/**
-                fs.stat(pathFile, function (err, stats) {
-                  if (err) {
-                    logger.log('error', '%s deleteFile, %s', req.user.name, ' fs.stat()', {error: err.message});
-                  } else {
-                    if (stats.isFile()) {
-                      fs.unlinkSync(pathFile, function (err) {
-                        if (err) {
-                          logger.log('error', '%s deleteFile, %s', req.user.name, ' fs.unlinkSync()', {error: err.message});
-                        } else {
-                          Attachment.remove({ _id: req.params.id }, function (err) {
-                            if (err) {
-                              logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.remove()', {error: err.message});
-                            } else {
-                              logger.log('info', '%s deleteFile, %s', req.user.name, ' Delete file success');
-                               res.sendStatus(200);
-                            };
-                          });
-                        }
-                      })
+            }
+            else if(!err && c <= 1) {
+              var strUrl = file[0]._doc.path;
+              var index = strUrl.indexOf('/files');
+              var pathFile = '.' + strUrl.substring(index);
+              fs.stat(pathFile, function(err, stats) {
+                if(err) {
+                  logger.log('error', '%s deleteFile, %s', req.user.name, ' fs.stat()', {error: err.message});
+                }
+                else if(stats.isFile()) {
+                  fs.unlink(pathFile, function(err) {
+                    if(err) {
+                      logger.log('error', '%s deleteFile, %s', req.user.name, ' fs.unlink()', {error: err.message});
                     }
-                  }
-                });
-*/
-
-
-
-              }
-              else{
-                res.sendStatus(200);
-              }
-
-
-            };
+                    else {
+                      Attachment.remove({_id: req.params.id}, function(err) {
+                        if(err) {
+                          logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.remove()', {error: err.message});
+                        }
+                        else {
+                          logger.log('info', '%s deleteFile, %s', req.user.name, ' Delete file success');
+                          res.sendStatus(200);
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+            else {
+              res.sendStatus(200);
+            }
           });
 
         });
@@ -284,7 +231,7 @@ else{
 
       }
     });
-    return res;
+  return res;
 };
 
 
@@ -293,25 +240,26 @@ function MyTasks(req) {
 
   Task.find({
     assign: req.user._id
-  }, function (err, tasks) {
-    if (err) {
+  }, function(err, tasks) {
+    if(err) {
       deffered.reject(err);
-    } else {
-      deffered.resolve(tasks.map(function (t) {
-        return t._id
+    }
+    else {
+      deffered.resolve(tasks.map(function(t) {
+        return t._id;
       }));
     }
-  })
-  return deffered.promise
+  });
+  return deffered.promise;
 
 }
 
-exports.getMyTasks = function (req, res, next) {
+exports.getMyTasks = function(req, res, next) {
   // if (req.locals.error) {
   //    	return next();
   //  	}
 
-  MyTasks(req).then(function (data) {
+  MyTasks(req).then(function(data) {
     /*var query = {
 		    "query": {
 		      "filtered" : {
@@ -344,23 +292,24 @@ exports.getMyTasks = function (req, res, next) {
       entityId: {
         $in: data
       }
-    }, function (err, data) {
-      if (err) {
+    }, function(err, data) {
+      if(err) {
         req.locals.error = err;
-      } else {
-        req.locals.result = data
+      }
+      else {
+        req.locals.result = data;
       }
       next();
-    })
-  }, function (err) {
+    });
+  }, function(err) {
     req.locals.error = err;
     next();
-  })
+  });
 
-}
+};
 
-exports.getByPath = function (req, res, next) {
-  if (req.locals.error) {
+exports.getByPath = function(req, res, next) {
+  if(req.locals.error) {
     return next();
   }
   var query = req.acl.mongoQuery('Attachment');
@@ -393,32 +342,32 @@ exports.getByPath = function (req, res, next) {
   var conditions = {
     path: new RegExp(path)
   };
-  query.findOne(conditions).exec(function (err, attachment) {
-    if (err || !attachment ) {
+  query.findOne(conditions).exec(function(err, attachment) {
+    if(err || !attachment) {
       var query = req.acl.mongoQuery('Document');
-      query.findOne(conditions).exec(function (err, attachment) {
-        if (err || !attachment ) {
+      query.findOne(conditions).exec(function(err, attachment) {
+        if(err || !attachment) {
           var query = req.acl.mongoQuery('TemplateDoc');
-          query.findOne(conditions).exec(function (err, attachment) {
-          if (err || !attachment ) {
-            req.locals.error = {
-              status: 404,
-              message: 'Entity not found'
-            };
-            next();
-          }
-          else{
-            next();
-          }
-      });
+          query.findOne(conditions).exec(function(err, attachment) {
+            if(err || !attachment) {
+              req.locals.error = {
+                status: 404,
+                message: 'Entity not found'
+              };
+              next();
+            }
+            else {
+              next();
+            }
+          });
         }
-        else{
+        else {
           next();
         }
 
       });
     }
-    else{
+    else {
       next();
     }
 
@@ -437,7 +386,7 @@ ftp.getFromFTPByURL(url).then(function(data){
 };
 
 
-exports.sign = function (req, res, next) {
+exports.sign = function(req, res, next) {
   var watchArray = req.body.watchers;
   watchArray.push(req.body.assign);
   var entities = {
@@ -451,16 +400,16 @@ exports.sign = function (req, res, next) {
     entity: entities[req.locals.data.entityName],
     entityId: req.params.id
   }, {
-      circles: req.body.circles,
-      watchers: watchArray
-    }, {
-      multi: true
-    }, function (err, numAffected) {
-      next();
-    });
-}
+    circles: req.body.circles,
+    watchers: watchArray
+  }, {
+    multi: true
+  }, function(err, numAffected) {
+    next();
+  });
+};
 
-exports.signNew = function (req, res, next) {
+exports.signNew = function(req, res, next) {
   var entities = {
     project: 'Project',
     task: 'Task',
@@ -472,22 +421,22 @@ exports.signNew = function (req, res, next) {
   var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
   query.findOne({
     _id: req.locals.data.body.entityId
-  }).exec(function (err, entity) {
-    if (err) {
+  }).exec(function(err, entity) {
+    if(err) {
       req.locals.error = err;
     }
-    if (!entity) {
+    if(!entity) {
       req.locals.error = {
         status: 404,
         message: 'Entity not found'
       };
     }
-    if (entity) {
+    if(entity) {
       req.locals.data.body.watchers = entity.watchers;
       req.locals.data.body.watchers.push(entity.assign);
       req.locals.data.body.circles = entity.circles;
     }
     next();
-  })
-}
+  });
+};
 

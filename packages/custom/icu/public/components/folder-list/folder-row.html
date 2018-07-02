@@ -1,0 +1,25 @@
+<td class="id">{{$index + 1}}</td>
+<td class="name"
+    title="{{item.title}}"
+    ng-attr-contenteditable="{{(!displayOnly && haveEditiorsPermissions(item)) && !recycled(item)}}"
+    strip-br="true"
+    tabindex="0"
+    ng-model="item.title"
+    ng-change="onChange(item)"
+    ng-keydown="onKeydown($event, $index)"
+    ng-blur="bluring(item, $event)"
+    ng-focus="focusing(item)"
+    ng-class="{'noFocus':!item.focus}"
+></td>
+<td class="office">
+    <span class="tag office"
+          title="{{item.office.title}}"
+          ng-style="{'background-color': '#' + item.office.color, 'color': 'white'}"
+          ng-bind-html="item.office.title">
+    </span>
+</td>
+<td class="status col-sm-2"  ng-class="item.status">{{item.status | i18next }}</td>
+<td class="due">{{item.due | date: 'dd.MM.yyyy'}}</td>
+<td class="arrow">
+   <i ng-if="drawArrow" class="fa chevron-right"></i>
+</td>

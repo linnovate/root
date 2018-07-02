@@ -1,4 +1,5 @@
-var  _ = require('lodash');
+var mongoose = require('mongoose'),
+  User = mongoose.model('User');
 
 var crud = require('../controllers/crud.js');
 var crudService = require('../services/crud.js');

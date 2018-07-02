@@ -134,7 +134,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
 
 
     app.post('/officeDocsAppend.js' , function(req, res){
-      
+
       var StartOFPath = config.root + '/';
       
       // Check the type of the file, and if needed to viewed as pdf
@@ -146,7 +146,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
          (req.body.documentType == "pptx"))
       {
           var str = req.body.path;
-          
+
           //Check if there is space, if there is, add '\' before it
           if (str.indexOf(' ') >= 0)
           {
@@ -173,20 +173,20 @@ module.exports = function(MeanUser, app, auth, database, passport) {
           var arr1 = str.split("/");
           var pathToFolder = arr1[3] + '/' + arr1[4] + '/' + arr1[5] + '/' + arr1[6] + '/';
           var arr2 = arr1[7].split("." + req.body.documentType);
-          
-  
+
+
           // Make the convert from it's origin type to pdf
           exec('lowriter --headless --convert-to pdf ' + config.root + realpath, function (err, stout, sterr){
           if (err) {
               res.send(500, arguments);
           } else {
-              
+
               // Move the converted file to the path of the origin file
               exec('mv ' + StartOFPath + arr2[0] + '.pdf' + ' ' + StartOFPath + pathToFolder + arr2[0] + '.pdf' , function (err, stout, sterr){
                   if (err) {
                       res.send(500, arguments);
                   } else {
-                      
+
                       res.send(stout);
                   }
               });

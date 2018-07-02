@@ -1,633 +1,478 @@
 'use strict';
 
-angular.module('mean.icu.ui.officeDocumentdetails', [])
-    .controller('OfficeDocumentDetailsController', function ($scope,
-                                                      $rootScope,
-                                                      entity,
-                                                      tasks,
-                                                      people,
-                                                      officeDocuments,
-                                                      context,
-                                                      $state,
-                                                      OfficeDocumentsService,
-                                                      ActivitiesService,
-                                                      SignaturesService,
-                                                      EntityService,
-                                                      PermissionsService,
-                                                      $stateParams,
-                                                    $timeout,$http) {
-        if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments")))
-        {
-            $scope.officeDocument = entity || context.entity;
-        } else {
-            $scope.officeDocument = context.entity || entity;
-        }
-        if(Array.isArray($scope.officeDocument)){
-            $scope.officeDocument = $scope.officeDocument[0];
-        }
+angular.module('mean.icu.ui.officeDocumentdetails', []).controller('OfficeDocumentDetailsController', OfficeDocumentDetailsController);
 
-        $scope.entity = entity || context.entity;
-        $scope.getSignatures = function () {
-            if($scope.officeDocument.folder && $scope.officeDocument.folder.office && $scope.officeDocument.path){
-                SignaturesService.getByOfficeId( $scope.officeDocument.folder.office._id || $scope.officeDocument.folder.office)
-                    .then(function (result) {
-                        if(result.length > 0){
-                        $scope.signatures = result;
-                        }
-                });
-            }
-        }
+function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, $timeout, $http) {
 
-        $scope.getSignatures();
-        $scope.signBy = $scope.officeDocument.signBy;
-        $scope.selectedSignature;
-        var currentState = $state.current.name;
+  // ==================================================== init ==================================================== //
 
-        $scope.SignatureSelected = function (signature) {
-            $scope.selectedSignature = signature;
-        }
+  if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments"))) {
+    $scope.item = entity || context.entity;
+  } else {
+    $scope.item = context.entity || entity;
+  }
+  if (Array.isArray($scope.item)) {
+    $scope.item = $scope.item[0];
+  }
 
-        $scope.Sign = function () {
-        }
+  if (!$scope.item) {
+    $state.go('main.officeDocuments.byentity', {
+      entity: context.entityName,
+      entityId: context.entityId
+    });
+  } else if ($scope.item && ($state.current.name === 'main.officeDocuments.all.details' || $state.current.name === 'main.search.officeDocument' || $state.current.name === 'main.officeDocuments.byentity.details')) {
+    $state.go('.activities');
+  }
 
-        $scope.tags = ['tag'];
-        $scope.tasks = tasks.data || tasks;
-        $scope.officeDocuments = officeDocuments.data || officeDocuments;
-        $scope.shouldAutofocus = !$stateParams.nameFocused;
-        $scope.tagInputVisible = false;
-        //$scope.officeDocument.created = new Date($scope.officeDocument.created);
-        OfficeDocumentsService.getStarred().then(function (starred) {
+  $scope.editorOptions = {
+    theme: 'bootstrap',
+    buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
+  };
+  $scope.statuses = ['new', 'in-progress', 'received', 'sent', 'done'];
 
-            // // Chack if HI room created and so needs to show HI.png
-            // if($scope.officeDocument.WantRoom == true)
-            // {
-            //     $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
-            // }
+  $scope.entity = entity || context.entity;
+  $scope.tags = ['tag'];
+  $scope.tasks = tasks.data || tasks;
+  $scope.items = officeDocuments.data || officeDocuments;
 
-            $scope.officeDocument.star = _(starred).any(function (s) {
-                return s._id === $scope.officeDocument._id;
-            });
-        });
-       // backup for previous changes - for updates
-       var backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
+  var currentState = $state.current.name;
 
-        if (!$scope.officeDocument) {
-            $state.go('main.officeDocuments.byentity', {
-                entity: context.entityName,
-                entityId: context.entityId
-            });
-        }
+  // backup for previous changes - for updates
+  var backupEntity = JSON.parse(JSON.stringify($scope.item));
 
-        $scope.people = people.data || people;
-        if ($scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
-            var newPeople = {
-                name: 'no select'
-            };
-
-            $scope.people.push(_(newPeople).clone());
-        }
-         for(var i =0 ; i<$scope.people.length;i++){
-                    if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job==null)){
-                        $scope.people[i].job = $scope.people[i].name;
-                    }
-        }
-
-        $scope.statuses = ['new', 'in-progress', 'received', 'sent', 'done'];
-
-        $scope.isRecycled = $scope.entity.hasOwnProperty('recycled');
-        $scope.enableRecycled = true;
-        $scope.havePermissions = function(type, enableRecycled){
-            enableRecycled = enableRecycled || !$scope.isRecycled;
-            return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
-        };
-
-        $scope.haveEditiorsPermissions = function(){
-            return PermissionsService.haveEditorsPerms($scope.entity);
-        };
-
-        $scope.shouldAutofocus = !$stateParams.nameFocused && $scope.haveEditiorsPermissions();
-
-        $scope.$watch('officeDocument.title', function(nVal, oVal) {
-            if (nVal !== oVal && oVal) {
-                var newContext = {
-                    name: 'title',
-                    oldVal: oVal,
-                    newVal: nVal,
-                    action: 'renamed'
-                };
-                $scope.delayedUpdate($scope.officeDocument, newContext);
-            }
-        });
-
-        var nText, oText;
-        $scope.$watch('officeDocument.description', function(nVal, oVal) {
-            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-            if (nText != oText && oText) {
-                var newContext = {
-                    name: 'description',
-                    oldVal: oVal,
-                    newVal: nVal,
-                };
-                $scope.delayedUpdate($scope.officeDocument, newContext);
-            }
-        });
-
-        $scope.addSerialTitle = function(document1){
-            $scope.settingSerial = true;
-            OfficeDocumentsService.addSerialTitle(document1).then(function(result){
-                $scope.settingSerial = false;
-                if(result && result.spPath){
-                    document1.spPath = result.spPath;
-                }
-                if(result && result.serial){
-                    document1.serial = result.serial;
-                }
-            });
-        }
-
-        $scope.signatory = false;
-        $scope.signOnDocx = function(document1){
-            //if(document1.spPath){
-            $scope.signatory = true;
-            OfficeDocumentsService.signOnDocx(document1,$scope.selectedSignature).then(function(result){
-                if(result && result.spPath){
-                    document1.spPath = result.spPath;
-                    document1.signBy = result.signBy;
-                    $scope.signatory = false;
-                }
-                $scope.signatory = false;
-                $scope.signBy = JSON.parse($scope.selectedSignature);
-            });
-       // }
-        }
-
-        $scope.sendDocument = function(document1){
-
-        }
-
-        $scope.uploadEmpty = function(document1){
-            OfficeDocumentsService.uploadEmpty(document1).then(function(result){
-                $state.reload();
-            });
-        }
-
-    $scope.view = function (document1) {
-       // console.dir(document1);
-
-        if (document1.mmhpath) {
-            var mmhPath = document1.mmhpath.replace(/\//g, '%2f');
-            OfficeDocumentsService.getFileFtp(mmhPath).then(function (result) {
-                if (result.status == 404) {
-                    alertify.logPosition("top left");
-                    alertify.error("הקובץ לא קיים!");
-                }
-            });
-
-        
-        }else if (document1.spPath) {
-            var spSite = document1.spPath.substring(0, document1.spPath.indexOf('ICU') + 3);
-            var uri = spSite + "/_layouts/15/WopiFrame.aspx?sourcedoc=" + document1.spPath + "&action=default";
-            window.open(uri, '_blank');
-        } else {
-            console.log("PATH");
-            var path = document1.path;
-            path=path.substring(path.indexOf('/files'),path.length);
-            console.log(path);
-            path = path.replace(/\//g, '%2f');
-            OfficeDocumentsService.getFileFtp(path).then(function (result) {
-                if (result.status == 404) {
-                    alertify.logPosition("top left");
-                    alertify.error("הקובץ לא קיים!");
-                }
-            });
-
-            /**
-
-            // Check if need to view as pdf
-            if (document1.documentType == "docx" || document1.documentType == "doc" || document1.documentType == "xlsx" || document1.documentType == "xls" || document1.documentType == "ppt" || document1.documentType == "pptx") {
-                var arr = document1.path.split("." + document1.documentType);
-                var ToHref = arr[0] + ".pdf";
-                // Check if convert file exists allready
-
-                $http({
-                    url: ToHref.replace('/files/', '/api/files/'),
-                    method: 'HEAD'
-                }).success(function() {
-                    // There is allready the convert file
-                    window.open(ToHref + '?view=true')
-                }).error(function() {
-                    // Send to server
-                    $.post('/officeDocsAppend.js', document1).done(function(document2) {
-                        // The convert is OK and now we open the pdf to the client in new window
-                        window.open(ToHref + '?view=true');
-                    }).fail(function(xhr) {
-                        console.error(xhr.responseText);
-                    });
-                });
-            }
-            // Format is NOT needed to view as pdf
-            else {
-                    window.open(document1.path + '?view=true');
-                }
-                */
-        }
+  $scope.people = people.data || people;
+  if ($scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+    var newPeople = {
+      name: 'no select'
     };
 
+    $scope.people.push(_(newPeople).clone());
+  }
+  for (var i = 0; i < $scope.people.length; i++) {
+    if ($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job == null)) {
+      $scope.people[i].job = $scope.people[i].name;
+    }
+  }
 
-        $scope.getUnusedTags = function() {
-            // return _.chain($scope.tags).reject(function(t) {
-            //     return $scope.task.tags.indexOf(t.term) >= 0;
-            // }).sortBy(function(a, b) {
-            //     return b.count - a.count;
-            // }).pluck('term').value();
-
-            return $scope.tags.filter(function(x) { return $scope.officeDocument.tags.indexOf(x) < 0 })
-        };
-
-
-        $scope.upload = function(file) {
-            if(file.length>0){
-                $scope.uploading = true;
-            }
-            $scope.test = file;
-            var data = {
-                'id':$stateParams.id,
-                'folderId':$stateParams.entityId
-            };
-            if(file.length > 0){
-                OfficeDocumentsService.uploadFileToDocument(data, file).then(function(result){
-                    $scope.uploading = false;
-                    $scope.officeDocument.title = result.data.title;
-                    $scope.officeDocument.path = result.data.path;
-                    $scope.officeDocument.spPath = result.data.spPath;
-                    $scope.officeDocument.documentType = result.data.documentType;
-                    $scope.getSignatures();
-
-                },function (resp) {
-                    console.log('Error status: ' + resp.status);
-                }, function (evt) {
-                    $scope.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                });
-            }
-        };
-
-
-        $scope.addTagClicked=function(){
-        	$scope.setFocusToTagSelect();
-        	$scope.tagInputVisible=true;
+  $scope.getSignatures = function() {
+    if ($scope.item.folder && $scope.item.folder.office && $scope.item.path) {
+      SignaturesService.getByOfficeId($scope.item.folder.office._id || $scope.item.folder.office).then(function(result) {
+        if (result.length > 0) {
+          $scope.signatures = result;
         }
+      });
+    }
+  }
+  $scope.getSignatures();
 
-        $scope.addTag = function(tag) {
-        	if(tag!=undefined && $.inArray(tag,$scope.officeDocument.tags)==-1){
-                var array = [];
-                $scope.officeDocument.tags.forEach(function(t){
-                    array.push(t);
-                });
-                $scope.officeDocument.tags.push(tag);
-                var context = {
-                    name: 'tags',
-                    oldVal: array,
-                    newVal:  $scope.officeDocument.tags,
-                    action: 'changed'
-                };
-            	$scope.update($scope.officeDocument, context);
-        	}
+  $scope.signBy = $scope.item.signBy;
+  $scope.selectedSignature;
 
-            $scope.tagInputVisible = false;
-        };
+  $scope.SignatureSelected = function(signature) {
+    $scope.selectedSignature = signature;
+  }
 
-        $scope.removeTag = function(tag) {
-            var array = [];
-            $scope.officeDocument.tags.forEach(function(t){
-                array.push(t);
-            });
-            $scope.officeDocument.tags = _($scope.officeDocument.tags).without(tag);
+  $scope.Sign = function() {}
 
-            var context = {
-                name: 'tags',
-                oldVal: array,
-                newVal: $scope.officeDocument.tags,
-                action: 'changed'
-            };
-            $scope.update($scope.officeDocument, context);
-
-        };
-
-        $scope.setFocusToTagSelect = function() {
-            var element = angular.element('#addTag > input.ui-select-focusser')[0];
-            $timeout(function() {
-                element.focus();
-            }, 0);
-        };
-
-        $scope.$watch('officeDocument.color', function (nVal, oVal) {
-            if (nVal !== oVal) {
-                var context = {
-                    name: 'color',
-                    oldVal: oVal,
-                    newVal: nVal,
-                    action: 'changed'
-                };
-                $scope.update($scope.officeDocument, context);
-            }
-        });
-
-        $scope.people = people.data || people;
-
-        $scope.options = {
-            theme: 'bootstrap',
-            buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
-        };
-
-        $scope.dueOptions = {
-            onSelect: function () {
-                $scope.update($scope.officeDocument, {name: 'due'});
-            },
-            dateFormat: 'd.m.yy'
-        };
-
-        function navigateToDetails(officeDocument) {
-            $scope.detailsState = context.entityName === 'all' ?
-                'main.officeDocuments.all.details' : 'main.officeDocuments.byentity.details';
-
-            $state.go($scope.detailsState, {
-                id: officeDocument._id,
-                entity: $scope.currentContext.entityName,
-                entityId: $scope.currentContext.entityId,
-                starred: $stateParams.starred
-            }, {reload: true});
-
-        }
-
-        $scope.star = function (officeDocument) {
-            OfficeDocumentsService.star(officeDocument).then(function () {
-//                navigateToDetails(officeDocument);
-            });
-        };
-
-        $scope.deleteOfficeDocument = function (officeDocument) {
-            OfficeDocumentsService.delete(officeDocument._id).then(function () {
-
-                $state.go('main.officeDocuments.all', {
-                    entity: 'all'
-                }, {reload: true});
-            });
-        };
-
-        $scope.recycle = function(entity) {
-            console.log("$scope.recycle") ;
-            EntityService.recycle('officeDocuments', entity._id).then(function() {
-                let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "Recycled" // just for activity status
-                OfficeDocumentsService.updateStatus(clonedEntity, entity).then(function(result) {
-                    ActivitiesService.data.push(result);
-                });
-
-
-                refreshList();
-                if(currentState.indexOf('search') != -1){
-                    $state.go(currentState, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true,
-                        query: $stateParams.query
-                    });
-                } else {
-                    $state.go('main.officeDocuments.all', {
-                        entity: 'all'
-                    }, {
-                        reload: true
-                    });
-                }
-            });
-        };
-
-        $scope.recycleRestore = function(entity) {
-            EntityService.recycleRestore('officeDocuments', entity._id).then(function() {
-                let clonedEntity = JSON.parse(JSON.stringify(entity));
-                clonedEntity.status = "un-deleted" // just for activity status
-                OfficeDocumentsService.updateStatus(clonedEntity, entity).then(function(result) {
-                    ActivitiesService.data.push(result);
-                });
-
-                refreshList();
-                if(currentState.indexOf('search') != -1){
-                    $state.go(currentState, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true,
-                        query: $stateParams.query
-                    });
-                } else {
-                    var state = 'main.officeDocuments.all' ;
-                    $state.go(state, {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true
-                    });
-                }
-            });
-        };
-
-        function refreshList(){
-            $rootScope.$broadcast('refreshList');
-        }
-
-        $scope.deleteDocumentFile = function(officeDocument){
-            OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function(){
-                officeDocument.path = undefined;
-                officeDocument.spPath = undefined;
-                $scope.signatures = undefined;
-            });
-        };
-
-        $scope.updateAssign = function(officeDocument) {
-            var json = {
-                'name':'assign',
-                'newVal':officeDocument.assign
-            };
-
-
-            if (officeDocument.assign != null) {
-                // check the assignee is not a watcher already
-                let filtered = officeDocument.watchers.filter(watcher => {
-                    return watcher._id == officeDocument.assign
-                });
-
-
-                let index = officeDocument.watchers.findIndex(function(watcher) {
-                    console.log("watcher", watcher) ;
-                    return watcher === officeDocument.assign ;
-                }) ;
-
-
-                // add assignee as watcher
-                if(filtered.length == 0 && index === -1) {
-                    console.log("officeDocument updateAssign updating:")
-                    officeDocument.watchers.push(officeDocument.assign);
-                    console.log(officeDocument.watchers) ;
-                }
-            }
-
-            OfficeDocumentsService.updateDocument(officeDocument._id,json);
-            OfficeDocumentsService.updateAssign(officeDocument, backupEntity).then(function(result) {
-                backupEntity = JSON.parse(JSON.stringify(officeDocument));
-                ActivitiesService.data = ActivitiesService.data || [];
-                ActivitiesService.data.push(result);
-            });
-
-
-        };
-
-
-        $scope.updateFolderName = function(x, y) {
-            $scope.folderName = $('.ui-select-search.ng-valid-parse').val()
-        }
-
-        $scope.unsetFolder = function(event, folder) {
-            event.stopPropagation();
-            //delete $scope.officeDocument.folder;
-            $scope.updateFolder($scope.officeDocument,undefined);
-        };
-
-        $scope.removeCreateNew = function() {
-            $scope.folderName = '';
-        }
-
-
-        $scope.updateFolder = function(officeDocument,folderId) {
-            var json ={
-                'name':'folder',
-                'newVal':folderId,
-            };
-            officeDocument.watchers = officeDocument.folder.watchers.concat(officeDocument.watchers);
-            officeDocument.watchers = _.map(_.groupBy(officeDocument.watchers,function(doc){
-                return doc._id || doc;
-            }),function(grouped){
-                return grouped[0];
-            });
-            json.watchers = officeDocument.watchers;
-            OfficeDocumentsService.updateDocument(officeDocument._id,json).then(function(res) {
-                OfficeDocumentsService.updateEntity(officeDocument, backupEntity).then(function(result) {
-                    if(folderId == undefined){
-                        delete $scope.officeDocument.folder;
-                        $scope.signatures = undefined;
-                    }else{
-                        $scope.getSignatures();
-                    }
-                    backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
-                    ActivitiesService.data = ActivitiesService.data || [] ;
-                    ActivitiesService.data.push(result);
-                });
-            });
-        };
-
-
-        $scope.updateStatusForApproval = function(entity) {
-            let context = {
-                action:"updated",
-                name:  "status",
-                type:  "project"
-            }
-            entity.status = "waiting-approval" ;
-            $scope.update(entity, context) ;
-        }
-
-
-        $scope.update = function (officeDocument, context) {
-
-            OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {
-
-            });
-            ActivitiesService.data = ActivitiesService.data || [];
-            var me = $scope.me;
-            switch (context.name) {
-                case 'due':
-                    OfficeDocumentsService.updateDue(officeDocument, backupEntity).then(function(result) {
-                        backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
-                        ActivitiesService.data = ActivitiesService.data || [] ;
-                        ActivitiesService.data.push(result);
-                    });
-                    break;
-                case 'status':
-                    OfficeDocumentsService.updateStatus(officeDocument, backupEntity).then(function(result) {
-                        backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
-                        ActivitiesService.data = ActivitiesService.data || [] ;
-                        ActivitiesService.data.push(result);
-                    });
-                    break;
-                case 'title':
-                case 'description':
-                    OfficeDocumentsService.updateTitle(officeDocument, backupEntity, context.name).then(function(result) {
-                        backupEntity = JSON.parse(JSON.stringify($scope.officeDocument));
-                        ActivitiesService.data = ActivitiesService.data || [];
-                        ActivitiesService.data.push(result);
-                        refreshList();
-                    });
-                    break;
-            }
-
-            if(currentState.indexOf('search') != -1) {
-                refreshList();
-            }
-        };
-
-        $scope.updateStatus = function(officeDoc){
-            var context = {
-                "name":"status",
-                "newVal":$scope.officeDocument.status,
-                "oldVal":officeDoc.status
-            };
-
-            $scope.update($scope.officeDocument, context);
-            };
-
-        $scope.updateCurrentOfficeDocument = function(){
-            $scope.officeDocument.PartTitle = $scope.officeDocument.title;
-            OfficeDocumentsService.currentOfficeDocumentName = $scope.officeDocument.title;
-        }
-
-        $scope.delayedUpdate = _.debounce($scope.update, 2000);
-
-        if ($scope.officeDocument &&
-            ($state.current.name === 'main.officeDocuments.all.details' ||
-            $state.current.name === 'main.search.officeDocument' ||
-            $state.current.name === 'main.officeDocuments.byentity.details')) {
-            $state.go('.activities');
-        }
-    }).directive('selectOnBlur', function($timeout) {
-        return {
-            require: 'uiSelect',
-            link: function(scope, elm, attrs, ctrl) {
-                elm.on('blur', 'input.ui-select-search', function(e) {
-                	var ngModelName = attrs.id;
-                	if(ngModelName == "addTag"){
-                		ctrl.select();
-                		ctrl.ngModel.$setViewValue(undefined);
-                		scope.tagInputVisible=false;
-                	}
-                });
-
-                elm.on('blur', 'input.ui-select-focusser', function(e, g) {
-                    $timeout(function() {
-                        if (!e.target.hasAttribute('disabled')) {
-                            scope.tagInputVisible = false;
-                        }
-                    }, 5);
-                });
-
-            }
-        };
-    }).directive('test',function(){
-    	return{
-    		scope:true,
-    		require:'ngModel',
-    		link: function($scope,$elm,$attrs,ngModel){
-    			ngModel.$setViewValue('hi');
-    		}
-    	}
+  OfficeDocumentsService.getStarred().then(function(starred) {
+    $scope.item.star = _(starred).any(function(s) {
+      return s._id === $scope.item._id;
     });
+  });
+
+  // ==================================================== onChanges ==================================================== //
+
+  function navigateToDetails(officeDocument) {
+    $scope.detailsState = context.entityName === 'all' ? 'main.officeDocuments.all.details' : 'main.officeDocuments.byentity.details';
+
+    $state.go($scope.detailsState, {
+      id: officeDocument._id,
+      entity: context.entityName,
+      entityId: context.entityId,
+      starred: $stateParams.starred
+    }, {
+      reload: true
+    });
+  }
+
+  $scope.onStar = function(value) {
+    OfficeDocumentsService.star($scope.item).then(function() {
+      navigateToDetails($scope.item);
+      // "$scope.item.star" will be change in 'ProjectsService.star' function
+    });
+  }
+
+  $scope.onAssign = function(value) {
+    $scope.item.assign = value;
+    var json = {
+      'name': 'assign',
+      'newVal': $scope.item.assign
+    };
+
+    if ($scope.item.assign != null) {
+      // check the assignee is not a watcher already
+      let filtered = $scope.item.watchers.filter(watcher=>{
+        return watcher._id == $scope.item.assign
+      }
+      );
+
+      let index = $scope.item.watchers.findIndex(function(watcher) {
+        console.log("watcher", watcher);
+        return watcher === $scope.item.assign;
+      });
+
+      // add assignee as watcher
+      if (filtered.length == 0 && index === -1) {
+        console.log("officeDocument updateAssign updating:")
+        $scope.item.watchers.push($scope.item.assign);
+        console.log($scope.item.watchers);
+      }
+    }
+
+    OfficeDocumentsService.updateDocument($scope.item._id, json);
+    OfficeDocumentsService.updateAssign($scope.item, backupEntity).then(function(result) {
+      backupEntity = JSON.parse(JSON.stringify($scope.item));
+      ActivitiesService.data = ActivitiesService.data || [];
+      ActivitiesService.data.push(result);
+    });
+  }
+
+  $scope.onDateDue = function(value) {
+    $scope.item.due = value;
+    $scope.update($scope.officeDocument, {
+      name: 'due'
+    });
+  }
+
+  $scope.onStatus = function(value) {
+    $scope.item.status = value;
+    var context = {
+      "name": "status",
+      "newVal": $scope.item.status,
+      "oldVal": officeDoc.status
+    };
+    $scope.update($scope.item, context);
+  }
+
+  $scope.onTags = function(value) {
+    var context = {
+        name: 'tags',
+        oldVal: $scope.item.tags,
+        newVal:  value,
+        action: 'changed'
+    };
+    $scope.update($scope.item, context);
+  }
+
+  $scope.onCategory = function(value) {
+    let folderId = value && value._id || undefined;
+    var json = {
+      'name': 'folder',
+      'newVal': folderId,
+    };
+//     if (!$scope.item.folder) {
+//       $scope.item.watchers = $scope.item.folder.watchers.concat($scope.item.watchers);
+//     }
+    $scope.item.watchers = _.map(_.groupBy($scope.item.watchers, function(doc) {
+      return doc._id || doc;
+    }), function(grouped) {
+      return grouped[0];
+    });
+    json.watchers = $scope.item.watchers;
+    OfficeDocumentsService.updateDocument($scope.item._id, json).then(function(res) {
+      OfficeDocumentsService.updateEntity($scope.item, backupEntity).then(function(result) {
+        if (folderId == undefined) {
+          delete $scope.item.folder;
+          $scope.signatures = undefined;
+        } else {
+          $scope.getSignatures();
+        }
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+      });
+    });
+  }
+
+  // ==================================================== Menu events ==================================================== //
+
+  $scope.recycle = function() {
+    EntityService.recycle('officeDocuments', $scope.item._id).then(function() {
+      let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+      clonedEntity.status = "Recycled"
+      // just for activity status
+      OfficeDocumentsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+        ActivitiesService.data.push(result);
+      });
+
+      refreshList();
+      if (currentState.indexOf('search') != -1) {
+        $state.go(currentState, {
+          entity: context.entityName,
+          entityId: context.entityId
+        }, {
+          reload: true,
+          query: $stateParams.query
+        });
+      } else {
+        $state.go('main.officeDocuments.all', {
+          entity: 'all'
+        }, {
+          reload: true
+        });
+      }
+    });
+  }
+
+  $scope.recycleRestore = function() {
+    EntityService.recycleRestore('officeDocuments', $scope.item._id).then(function() {
+      let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+      clonedEntity.status = "un-deleted"
+      // just for activity status
+      OfficeDocumentsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+        ActivitiesService.data.push(result);
+      });
+
+      refreshList();
+      if (currentState.indexOf('search') != -1) {
+        $state.go(currentState, {
+          entity: context.entityName,
+          entityId: context.entityId
+        }, {
+          reload: true,
+          query: $stateParams.query
+        });
+      } else {
+        var state = 'main.officeDocuments.all';
+        $state.go(state, {
+          entity: context.entityName,
+          entityId: context.entityId
+        }, {
+          reload: true
+        });
+      }
+    });
+  }
+
+  function refreshList() {
+    $rootScope.$broadcast('refreshList');
+  }
+
+  $scope.menuItems = [{
+    label: 'recycleOfficeDocument',
+    icon: 'times-circle',
+    display: !$scope.item.hasOwnProperty('recycled'),
+    action: $scope.recycle,
+  }, {
+    label: 'unrecycleOfficeDocument',
+    icon: 'times-circle',
+    display: $scope.item.hasOwnProperty('recycled'),
+    action: $scope.recycleRestore,
+  }];
+
+  // ==================================================== Buttons ==================================================== //
+
+  $scope.addSerialTitle = function(document1) {
+    $scope.settingSerial = true;
+    OfficeDocumentsService.addSerialTitle(document1).then(function(result) {
+      $scope.settingSerial = false;
+      if (result && result.spPath) {
+        document1.spPath = result.spPath;
+      }
+      if (result && result.serial) {
+        document1.serial = result.serial;
+      }
+    });
+  }
+
+  $scope.signatory = false;
+  $scope.signOnDocx = function(document1) {
+    //if(document1.spPath){
+    $scope.signatory = true;
+    OfficeDocumentsService.signOnDocx(document1, $scope.selectedSignature).then(function(result) {
+      if (result && result.spPath) {
+        document1.spPath = result.spPath;
+        document1.signBy = result.signBy;
+        $scope.signatory = false;
+      }
+      $scope.signatory = false;
+      $scope.signBy = JSON.parse($scope.selectedSignature);
+    });
+    // }
+  }
+
+  $scope.sendDocument = function(document1) {}
+
+  $scope.uploadEmpty = function(document1) {
+    OfficeDocumentsService.uploadEmpty(document1).then(function(result) {
+      $state.reload();
+    });
+  }
+
+  $scope.view = function(document1) {
+    if (document1.spPath) {
+      var spSite = document1.spPath.substring(0, document1.spPath.indexOf('ICU') + 3);
+
+      var uri = spSite + "/_layouts/15/WopiFrame.aspx?sourcedoc=" + document1.spPath + "&action=default";
+
+      window.open(uri, '_blank');
+    } else {
+      // Check if need to view as pdf
+      if ((document1.documentType == "docx") || (document1.documentType == "doc") || (document1.documentType == "xlsx") || (document1.documentType == "xls") || (document1.documentType == "ppt") || (document1.documentType == "pptx")) {
+        var arr = document1.path.split("." + document1.documentType);
+        var ToHref = arr[0] + ".pdf";
+        // Check if convert file exists allready
+
+        $http({
+          url: ToHref.replace('/files/', '/api/files/'),
+          method: 'HEAD'
+        }).success(function() {
+          // There is allready the convert file
+          window.open(ToHref + '?view=true')
+        }).error(function() {
+          // Send to server
+          $.post('/officeDocsAppend.js', document1).done(function(document2) {
+            // The convert is OK and now we open the pdf to the client in new window
+            window.open(ToHref + '?view=true');
+          }).fail(function(xhr) {
+            console.error(xhr.responseText);
+          });
+        });
+      }// Format is NOT needed to view as pdf
+      else {
+        window.open(document1.path + '?view=true');
+      }
+    }
+  }
+
+  $scope.upload = function(file) {
+    if (file.length > 0) {
+      $scope.uploading = true;
+    }
+    $scope.test = file;
+    var data = {
+      'id': $stateParams.id,
+      'folderId': $stateParams.entityId
+    };
+    if (file.length > 0) {
+      OfficeDocumentsService.uploadFileToDocument(data, file).then(function(result) {
+        $scope.uploading = false;
+        $scope.item.title = result.data.title;
+        $scope.item.path = result.data.path;
+        $scope.item.spPath = result.data.spPath;
+        $scope.item.documentType = result.data.documentType;
+        $scope.getSignatures();
+
+      }, function(resp) {
+        console.log('Error status: ' + resp.status);
+      }, function(evt) {
+        $scope.progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      });
+    }
+  }
+
+  $scope.deleteDocumentFile = function(officeDocument) {
+    OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function() {
+      officeDocument.path = undefined;
+      officeDocument.spPath = undefined;
+      $scope.signatures = undefined;
+    });
+  }
+
+  $scope.updateStatusForApproval = function(entity) {
+    let context = {
+      action: "updated",
+      name: "status",
+      type: "project"
+    }
+    entity.status = "waiting-approval";
+    $scope.update(entity, context);
+  }
+
+  // ==================================================== $watch: title / desc ==================================================== //
+
+  $scope.$watch('item.title', function(nVal, oVal) {
+    if (nVal !== oVal && oVal) {
+      var newContext = {
+        name: 'title',
+        oldVal: oVal,
+        newVal: nVal,
+        action: 'renamed'
+      };
+      $scope.delayedUpdate($scope.item, newContext);
+    }
+  });
+
+  var nText, oText;
+  $scope.$watch('item.description', function(nVal, oVal) {
+    nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+    oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+    if (nText != oText && oText) {
+      var newContext = {
+        name: 'description',
+        oldVal: oVal,
+        newVal: nVal,
+      };
+      $scope.delayedUpdate($scope.item, newContext);
+    }
+  });
+
+  // ==================================================== Update ==================================================== //
+
+  $scope.update = function(officeDocument, context) {
+
+    OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {});
+    ActivitiesService.data = ActivitiesService.data || [];
+    var me = $scope.me;
+    switch (context.name) {
+    case 'due':
+      OfficeDocumentsService.updateDue(officeDocument, backupEntity).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+      });
+      break;
+    case 'status':
+      OfficeDocumentsService.updateStatus(officeDocument, backupEntity).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+      });
+      break;
+    case 'title':
+    case 'description':
+      OfficeDocumentsService.updateTitle(officeDocument, backupEntity, context.name).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+        refreshList();
+      });
+      break;
+    }
+
+    if (currentState.indexOf('search') != -1) {
+      refreshList();
+    }
+  }
+
+  $scope.updateCurrentOfficeDocument = function() {
+    OfficeDocumentsService.currentOfficeDocumentName = $scope.item.title;
+  }
+
+  $scope.delayedUpdate = _.debounce($scope.update, 2000);
+
+  // ==================================================== havePermissions ==================================================== //
+
+  $scope.isRecycled = $scope.entity.hasOwnProperty('recycled');
+  $scope.enableRecycled = true;
+
+  $scope.havePermissions = function(type, enableRecycled) {
+    enableRecycled = enableRecycled || !$scope.isRecycled;
+    return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
+  }
+
+  $scope.haveEditiorsPermissions = function() {
+    return PermissionsService.haveEditorsPerms($scope.entity);
+  }
+
+}

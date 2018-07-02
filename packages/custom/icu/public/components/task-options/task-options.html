@@ -1,4 +1,4 @@
-<div class="task-details task-options">
+<div class="task-details scroll task-options">
     <div class="page-content">
     	<div class="options">
     		<div ng-click="filterTasks('today')">
@@ -19,20 +19,7 @@
 	    	</div>
     	</div>
 
-    	<div class="tabs">
-            <div class="switcher">
-                <button class="tab"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".activities">
-                    {{ 'updates' | i18next }}
-                </button>
-                <button class="tab"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".documents">
-                    {{ 'documents' | i18next }}
-                </button>
-            </div>
-        </div>
-        <div class="tab-content" data-ui-view="tab"></div>
+		<detail-tabs tabs="['activities', 'documents']"></detail-tabs>
+
     </div>
 </div>

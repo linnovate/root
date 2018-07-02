@@ -56,19 +56,23 @@ var ProjectSchema = new Schema({
     type: String
   },
   //should we maybe have finer grain control on this
-  watchers: [{
-    type: Schema.ObjectId,
-    ref: 'User'
-  }],
-  permissions: [{
-    _id:false,
-    id: { type: Schema.ObjectId, ref: 'User' },    
-    level: {
-      type: String,
-      enum: ['viewer', 'commenter', 'editor'],
-      default: 'viewer'
+  watchers: [
+    {
+      type: Schema.ObjectId,
+      ref: 'User'
     }
-  }],
+  ],
+  permissions: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      level: {
+        type: String,
+        enum: ['viewer', 'commenter', 'editor'],
+        default: 'viewer'
+      }
+    }
+  ],
   assign: {
     type: Schema.ObjectId,
     ref: 'User'
@@ -84,10 +88,12 @@ var ProjectSchema = new Schema({
   circles: {
     type: Schema.Types.Mixed
   },
-  subProjects: [{
-    type: Schema.ObjectId,
-    ref: 'Project'
-  }],
+  subProjects: [
+    {
+      type: Schema.ObjectId,
+      ref: 'Project'
+    }
+  ],
   tType: {
     type: String
   },

@@ -1,0 +1,131 @@
+.detail-due {
+    width: 145px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    .placeholder {
+        width: 100%;
+        padding-left: 25px;
+        pointer-events: none;
+        position: absolute;
+        color: $light-grey-placeholder;
+    }
+
+    input {
+        border: none;
+        width: 100%;
+        margin-left: 5px;
+        padding: 17px 0 17px 29px;
+        cursor: pointer;
+        outline: none;
+        background: url('/icu/assets/img/calendar.png') no-repeat scroll left center;
+        &::placeholder {
+            opacity: 1;
+            color: $light-grey-placeholder;
+        }
+        &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color: $light-grey-placeholder;
+        }
+
+        &::-ms-input-placeholder { /* Microsoft Edge */
+            color: $light-grey-placeholder;
+        }
+        &:focus {
+          outline: none;
+        }
+    }
+
+    #close {
+        float: right !important;
+        margin: 0;
+        display: inline-block;
+        padding: 2px 5px;
+        background: #ccc;
+    }
+
+    #close:hover {
+        float: right !important;
+        display: inline-block;
+        padding: 2px 5px;
+        color: #fff;
+    }
+}
+
+.discussion-due #past, .discussion-due #before,
+.detail-due #past, .detail-due #before {
+  position: absolute;
+    background-color: #EBE9DE;
+    border-radius: 6px;
+    border: 1px solid #cbc7bd;
+    width: 262px;
+    z-index: 1;
+    display: none;
+    text-align: left;
+    padding: 4px 7px;
+    font-style: italic;
+    &:before {
+        content: '!';
+        background-color: #EA5858;
+        border-radius: 15px;
+        border: none;
+        margin-right: 4px;
+        float: left;
+        color: #EBE9DE;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        font-weight: bold;
+        font-style: normal;
+    }
+}
+
+discussion-due {
+    @include golden-hover;
+
+    .discussion-due {
+
+        &.dueDiv {
+            position: fixed;
+            width: 160px;
+            height: 370px;
+            z-index: 999;
+            //         margin-left : 260px;
+            //         margin-top : 54px;
+            // display:block !important;
+            background-color: $light-grey-placeholder;
+        }
+
+        .dateTitle {
+            margin-left: 30px;
+        }
+
+        #startDate {
+            width: 140px;
+            margin-left: 7px;
+            margin-top: 7px;
+        }
+
+        #endDate {
+            width: 140px;
+            margin-left: 7px;
+            margin-top: 3px;
+        }
+
+        #startTime {
+            margin-top: -10px;
+            margin-left: 10px;
+        }
+        #endTime {
+            margin-top: -10px;
+            margin-left: 10px;
+        }
+        #allDay {
+            margin-left: 64px;
+            margin-top: -10px;
+        }
+        #allDayTitle {
+            margin-left: 49px;
+        }
+    }
+}

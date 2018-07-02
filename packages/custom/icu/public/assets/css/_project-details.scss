@@ -1,39 +1,3 @@
 .project-details {
-    .page-content {
-        .summary {
-            .user {
-                width: 150px;
-            }
-            .color {
-                width: 55px;
-                .select-box {
-                    width: 43px;
-                }
-                .arrow {
-                    margin: 0 5px;
-                }
-            }
-            .due {
-                width: 110px;
-            }
-            .status {
-                width: 130px;
-            }
-        }
-        .tabs {
-            .tab {
-                width: calc((100% - 60px) / 2);
 
-                &.two {
-                    width: calc((100% - 60px) / 2);
-                }
-                &.three {
-                    width: calc((100% - 60px) / 3);
-                }
-            }
-        }
-    }
-    .ui-select-bootstrap > .ui-select-choices {
-        //width: auto;
-    }
 }

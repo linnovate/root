@@ -1,241 +1,210 @@
 'use strict';
 
-angular.module('mean.icu.ui.officedetails', [])
-    .controller('OfficeDetailsController', function ($scope,
-                                                      entity,
-                                                      tasks,
-                                                      folders,
-                                                      people,
-                                                      offices,
-                                                      context,
-                                                      $state,
-                                                      OfficesService,
-                                                      PermissionsService,
-                                                      $stateParams,
-                                                      ActivitiesService) {
-        if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("offices")))
-        {
-            $scope.office = entity || context.entity;
-        }
-        else
-        {
-            $scope.office = context.entity || entity;
-        }
-        $scope.entity = entity || context.entity;
-        $scope.tasks = tasks.data || tasks;
-        $scope.folders = folders.data || folders;
-        $scope.offices = offices.data || offices;
+angular.module('mean.icu.ui.officedetails', []).controller('OfficeDetailsController', OfficeDetailsController);
 
-        OfficesService.getStarred().then(function (starred) {
+function OfficeDetailsController($scope, entity, tasks, folders, people, offices, context, $state, OfficesService, PermissionsService, $stateParams, ActivitiesService) {
 
-            // Chack if HI room created and so needs to show HI.png
-            if($scope.office.WantRoom == true)
-            {
-                $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
-            }
+  // ==================================================== init ==================================================== //
 
-            $scope.office.star = _(starred).any(function (s) {
-                return s._id === $scope.office._id;
-            });
-        });
+  if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("offices"))) {
+    $scope.item = entity || context.entity;
+  } else {
+    $scope.item = context.entity || entity;
+  }
 
-        // backup for previous changes - for updates
-        var backupEntity = JSON.parse(JSON.stringify($scope.office));
-
-        if (!$scope.office) {
-            $state.go('main.offices.byentity', {
-                entity: context.entityName,
-                entityId: context.entityId
-            });
-        }
-
-        $scope.enableRecycled = true;
-        $scope.havePermissions = function(type, enableRecycled){
-            enableRecycled = enableRecycled || !$scope.isRecycled;
-            return (PermissionsService.havePermissions(entity, type) && enableRecycled);
-        };
-
-        $scope.haveEditiorsPermissions = function(){
-            return PermissionsService.haveEditorsPerms($scope.entity);
-        };
-
-        $scope.shouldAutofocus = !$stateParams.nameFocused && $scope.haveEditiorsPermissions();
-
-        $scope.permsToSee = function(){
-            return PermissionsService.haveAnyPerms($scope.entity);
-        };
-
-        $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
-
-        $scope.$watch('office.title', function(nVal, oVal) {
-            if (nVal !== oVal && oVal) {
-                var newContext = {
-                    name: 'title',
-                    oldVal: oVal,
-                    newVal: nVal,
-                    action: 'renamed'
-                };
-                $scope.delayedUpdate($scope.office, newContext);
-            }
-        });
-
-        var nText, oText;
-        $scope.$watch('office.description', function(nVal, oVal) {
-            nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-            oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-            if (nText != oText && oText) {
-                var newContext = {
-                    name: 'description',
-                    oldVal: oVal,
-                    newVal: nVal
-                };
-                $scope.delayedUpdate($scope.office, newContext);
-            }
-        });
-
-        $scope.$watch('office.color', function (nVal, oVal) {
-            if (nVal !== oVal) {
-                var context = {
-                    name: 'color',
-                    oldVal: oVal,
-                    newVal: nVal,
-                    action: 'changed'
-                };
-                $scope.update($scope.office, context);
-            }
-        });
-
-        $scope.$watch('office.tel', function (nVal, oVal) {
-            if (nVal !== oVal) {
-                var context = {
-                    name: 'tel',
-                    oldVal: oVal,
-                    newVal: nVal,
-                    action: 'changed'
-                };
-                $scope.delayedUpdate($scope.office, context);
-            }
-        });
-
-        $scope.$watch('office.unit', function (nVal, oVal) {
-            if (nVal !== oVal) {
-                var context = {
-                    name: 'unit',
-                    oldVal: oVal,
-                    newVal: nVal,
-                    action: 'changed'
-                };
-                $scope.delayedUpdate($scope.office, context);
-            }
-        });
-
-        $scope.people = people.data || people;
-
-        $scope.options = {
-            theme: 'bootstrap',
-            buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
-        };
-
-        $scope.dueOptions = {
-            onSelect: function () {
-                $scope.update($scope.office, 'due');
-            },
-            dateFormat: 'd.m.yy'
-        };
-
-        function navigateToDetails(office) {
-            $scope.detailsState = context.entityName === 'all' ?
-                'main.offices.all.details' : 'main.offices.byentity.details';
-
-            $state.go($scope.detailsState, {
-                id: office._id,
-                entity: $scope.currentContext.entityName,
-                entityId: $scope.currentContext.entityId,
-                starred: $stateParams.starred
-            }, {reload: true});
-        }
-
-        $scope.star = function (office) {
-            OfficesService.star(office).then(function () {
-                navigateToDetails(office);
-            });
-        };
-
-        $scope.WantToCreateRoom = function (office) {
-
-            if($scope.office.WantRoom == false)
-            {
-                $('#HI').css('background-image', 'url(/icu/assets/img/Hi.png)');
-
-                office.WantRoom = true;
-
-                $scope.update(office, context);
-
-                OfficesService.WantToCreateRoom(office).then(function () {
-                    navigateToDetails(office);
-                });
-            }
-        };
-
-        $scope.deleteOffice = function (office) {
-            OfficesService.remove(office._id).then(function () {
-
-                $state.go('main.offices.all', {
-                    entity: 'all'
-                }, {reload: true});
-            });
-        };
-
-        $scope.update = function (office, context) {
-            OfficesService.update(office, context).then(function(res) {
-                if (OfficesService.selected && res._id === OfficesService.selected._id) {
-                    if (context.name === 'title') {
-                        OfficesService.selected.title = res.title;
-                    }
-                    if (context.name === 'color') {
-                        OfficesService.selected.color = res.color;
-                    }
-                }
-
-                switch(context.name) {
-                    case 'color':
-                        OfficesService.updateColor(office).then(function(result) {
-                            ActivitiesService.data = ActivitiesService.data || [] ;
-                            ActivitiesService.data.push(result);
-                        });
-                    case 'title':
-                    case 'description':
-                        OfficesService.updateTitle(office, backupEntity, context.name).then(function(result) {
-                            backupEntity = JSON.parse(JSON.stringify($scope.office));
-                            ActivitiesService.data = ActivitiesService.data || [];
-                            ActivitiesService.data.push(result);
-
-                        });
-                        case 'tel':
-                        case 'unit':
-                            OfficesService.updateTitle(office, backupEntity, context.name).then(function(result) {
-                                backupEntity = JSON.parse(JSON.stringify($scope.office));
-                                // ActivitiesService.data = ActivitiesService.data || [];
-                                // ActivitiesService.data.push(result);
-
-                            });
-                        break;
-                }
-
-            });
-        };
-
-        $scope.updateCurrentOffice = function(){
-            $scope.office.PartTitle = $scope.office.title;
-            OfficesService.currentOfficeName = $scope.office.title;
-        }
-
-        $scope.delayedUpdate = _.debounce($scope.update, 2000);
-
-        if ($scope.office &&
-            ($state.current.name === 'main.offices.all.details' ||
-            $state.current.name === 'main.search.office' ||
-            $state.current.name === 'main.offices.byentity.details')) {
-            $state.go('.activities');
-        }
+  if (!$scope.item) {
+    $state.go('main.offices.byentity', {
+      entity: context.entityName,
+      entityId: context.entityId
     });
+  } else if ($scope.item && ($state.current.name === 'main.offices.all.details' || $state.current.name === 'main.search.office' || $state.current.name === 'main.offices.byentity.details')) {
+    $state.go('.activities');
+  }
+
+  $scope.editorOptions = {
+    theme: 'bootstrap',
+    buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
+  };
+  $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
+
+  $scope.entity = entity || context.entity;
+  $scope.tasks = tasks.data || tasks;
+  $scope.folders = folders.data || folders;
+  $scope.items = offices.data || offices;
+
+  // backup for previous changes - for updates
+  var backupEntity = JSON.parse(JSON.stringify($scope.item));
+
+  $scope.people = people.data || people;
+
+  OfficesService.getStarred().then(function(starred) {
+    $scope.item.star = _(starred).any(function(s) {
+      return s._id === $scope.item._id;
+    });
+  });
+
+  // ==================================================== onChanges ==================================================== //
+
+  function navigateToDetails(office) {
+    $scope.detailsState = context.entityName === 'all' ? 'main.offices.all.details' : 'main.offices.byentity.details';
+
+    $state.go($scope.detailsState, {
+      id: office._id,
+      entity: context.entityName,
+      entityId: context.entityId,
+      starred: $stateParams.starred
+    }, {
+      reload: true
+    });
+  }
+
+  $scope.onStar = function(value) {
+    OfficesService.star($scope.item).then(function() {
+      navigateToDetails($scope.item);
+      // "$scope.item.star" will be change in 'ProjectsService.star' function
+    });
+  }
+
+  $scope.onColor = function(value) {
+    $scope.update($scope.item, value);
+  }
+
+  $scope.onWantToCreateRoom = function() {
+    $scope.item.WantRoom = true;
+
+    $scope.update($scope.item, context);
+
+    OfficesService.WantToCreateRoom($scope.item).then(function() {
+      navigateToDetails($scope.item);
+    });
+  }
+
+  // ==================================================== Menu events ==================================================== //
+
+  $scope.deleteOffice = function() {
+    OfficesService.remove($scope.item._id).then(function() {
+      $state.go('main.offices.all', {
+        entity: 'all'
+      }, {
+        reload: true
+      });
+    });
+  }
+
+  $scope.menuItems = [{
+    label: 'deleteOffice',
+    icon: 'times-circle',
+    display: !$scope.item.hasOwnProperty('recycled'),
+    action: $scope.deleteOffice,
+  }];
+
+  // ==================================================== $watch: title / desc ==================================================== //
+
+  $scope.$watch('item.title', function(nVal, oVal) {
+    if (nVal !== oVal && oVal) {
+      var newContext = {
+        name: 'title',
+        oldVal: oVal,
+        newVal: nVal,
+        action: 'renamed'
+      };
+      $scope.delayedUpdate($scope.item, newContext);
+    }
+  });
+
+  var nText, oText;
+  $scope.$watch('item.description', function(nVal, oVal) {
+    nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+    oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
+    if (nText != oText && oText) {
+      var newContext = {
+        name: 'description',
+        oldVal: oVal,
+        newVal: nVal
+      };
+      $scope.delayedUpdate($scope.item, newContext);
+    }
+  });
+
+  $scope.$watch('office.tel', function(nVal, oVal) {
+    if (nVal !== oVal) {
+      var context = {
+        name: 'tel',
+        oldVal: oVal,
+        newVal: nVal,
+        action: 'changed'
+      };
+      $scope.delayedUpdate($scope.item, context);
+    }
+  });
+
+  $scope.$watch('office.unit', function(nVal, oVal) {
+    if (nVal !== oVal) {
+      var context = {
+        name: 'unit',
+        oldVal: oVal,
+        newVal: nVal,
+        action: 'changed'
+      };
+      $scope.delayedUpdate($scope.item, context);
+    }
+  });
+
+  // ==================================================== Update ==================================================== //
+
+  $scope.update = function(office, context) {
+      if (context.name === 'color') {
+          office.color = context.newVal;
+      }
+    OfficesService.update(office, context).then(function(res) {
+      if (OfficesService.selected && res._id === OfficesService.selected._id) {
+        if (context.name === 'title') {
+          OfficesService.selected.title = res.title;
+        }
+      }
+      switch (context.name) {
+      case 'color':
+        OfficesService.updateColor(office).then(function(result) {
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+      case 'title':
+      case 'description':
+        OfficesService.updateTitle(office, backupEntity, context.name).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+      case 'tel':
+      case 'unit':
+        OfficesService.updateTitle(office, backupEntity, context.name).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+        });
+        break;
+      }
+
+    });
+  }
+
+  $scope.updateCurrentOffice = function() {
+    OfficesService.currentOfficeName = $scope.item.title;
+  }
+
+  $scope.delayedUpdate = _.debounce($scope.update, 2000);
+
+  // ==================================================== havePermissions ==================================================== //
+
+  $scope.enableRecycled = true;
+  $scope.havePermissions = function(type, enableRecycled) {
+    enableRecycled = enableRecycled || !$scope.isRecycled;
+    return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+  }
+
+  $scope.haveEditiorsPermissions = function() {
+    return PermissionsService.haveEditorsPerms($scope.entity);
+  }
+
+  $scope.permsToSee = function() {
+    return PermissionsService.haveAnyPerms($scope.entity);
+  }
+}

@@ -1,0 +1,33 @@
+<div class="detail-due discussion-due" ng-click="dueClicked()">
+  <input />
+  <div class="placeholder">
+    <div id="firstStr" ng-if="!item.startDate">{{'deadline' | i18next}}</div>
+    <div id="firstStr" ng-if="item.startDate && item.startTime">{{firstStr | i18next}}</div>
+    <div id="firstStr" ng-if="item.startDate && !item.startTime">{{firstStr | i18next}}</div>
+    <div id="secondStr" ng-if="!item.endDate">{{secondStr | i18next}}</div>
+    <div id="secondStr" ng-if="item.endDate && item.endTime">{{secondStr | i18next}}</div>
+    <div id="secondStr" ng-if="item.endDate && !item.endTime">{{secondStr | i18next}}</div>
+  </div>
+
+  <div id="past">
+    {{'This Deadline is in the past!' | i18next }}
+    <div id="close" ng-click="closeOldDateNotification()">x</div>
+  </div>
+  <div id="before">
+    {{'Ending date is earlier than starting date' | i18next }}
+    <div id="close" ng-click="closeBeforeNotification()">x</div>
+  </div>
+
+</div>
+<div id="dueDiv" style="display:none" class="discussion-due dueDiv">
+  <div class="dateTitle" id="startDateTitle">{{'startDate' | i18next}}</div>
+  <input id="startDate" ng-click="open()" ui-date="startDueOptions" ng-model="item.startDate" ng-class='{"oldDate":!checkDate()}'>
+  <div ng-hide="item.allDay" class="dateTitle" id="startTimeTitle">{{'startTime' | i18next}}</div>
+  <div style="direction:ltr" ng-hide="item.allDay" id="startTime" uib-timepicker="timeOptions" ng-model="item.startTime" show-meridian="false" ng-change="update(item)"></div>
+  <div ng-hide="item.allDay" class="dateTitle" id="endDateTitle">{{'endDate' | i18next}}</div>
+  <input ng-hide="item.allDay" id="endDate" ng-click="open()" ui-date="endDueOptions" ng-model="item.endDate" ng-class='{"oldDate":!checkDate()}'>
+  <div ng-hide="item.allDay" class="dateTitle" id="endTimeTitle">{{'endTime' | i18next}}</div>
+  <div style="direction:ltr" ng-hide="item.allDay" id="endTime" ng-model="item.endTime" uib-timepicker="timeOptions" ng-model="item.endTime" show-meridian="false" ng-change="update(item)"></div>
+  <div id="allDayTitle">{{allDayTitle}}</div>
+  <input id="allDay" type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="item.allDay" ng-change="checkboxClick(item)">
+</div>

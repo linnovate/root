@@ -6,8 +6,18 @@ angular.module('mean.icu.ui.avatar', [])
         function controller($scope) {
             $scope.imgUrl = '?' + Date.now();
 
-            $scope.haveEditiorsPermissions = function (entity, user) {
-                if(entity)return PermissionsService.haveEditorsPerms(entity, user);
+            $scope.getUserClass = function (entity, user) {
+                if (entity) {
+                    let userPermissions = PermissionsService.getUserPerms(entity, user);
+                    switch (userPermissions && userPermissions.level) {
+                        case 'editor' :
+                            return 'editor';
+                        case 'commenter' :
+                            return 'commenter';
+                        default:
+                            return 'viewer';
+                    }
+                }
             };
         }
 

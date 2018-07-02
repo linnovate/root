@@ -1,0 +1,18 @@
+<div class="detail-assign">
+  <div class="no-assignee" ng-if="!value">
+    <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
+  </div>
+  <div tooltips tooltip-template="{{'assignee' | i18next}}">
+    <ui-select ng-model="value" on-select="onSelect(value)">
+      <ui-select-match>
+        <div icu-avatar user="$select.selected"></div>
+        <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}
+        </span>
+      </ui-select-match>
+      <ui-select-choices repeat="user._id as user in list | filter: { job: $select.search } | filterByFrequentUsers: me">
+        <div icu-avatar user="user"></div>
+        <span class="summary-content">{{user.job}}</span>
+      </ui-select-choices>
+    </ui-select>
+  </div>
+</div>

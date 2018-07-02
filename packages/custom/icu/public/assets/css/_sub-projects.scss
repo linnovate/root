@@ -5,6 +5,7 @@
     }
     .ui-select-choices {
         width: auto;
+        @include scroll;
         .ui-select-choices-row {
             &.active {
                 a {
@@ -25,7 +26,7 @@
 
     }
 }
-.sub-projects {
+.sub-items-section {
     margin: 13px 20px 0;
     position: relative;
     .add-sub-projects{
@@ -51,8 +52,7 @@
         max-height: 247px;
         overflow: auto;
     }
-    .wrap-title {
-        width: 100%;
+
         .sub-projects-title {
             width: 21%;
             display: inline-block;
@@ -221,7 +221,6 @@
 	        		}
 	            }
 	        }
-        }
 
         .summary {
             border: 1px solid #e1e1e1;
@@ -247,21 +246,6 @@
             .id {
                 display: none;
             }
-           td.name {
-               cursor: text;
-               flex: 1;
-               white-space: nowrap;
-               overflow: hidden;
-               text-overflow: ellipsis;
-               line-height: 50px;
-               padding-left: 13px;
-               p {
-                   flex: 1;
-                   white-space: nowrap;
-                   overflow: hidden;
-                   text-overflow: ellipsis;
-               }
-           }
             .user {
                 position: relative;
                 width: 140px;
@@ -338,15 +322,9 @@
             margin-left: 10px;
             .ui-select-container.ui-select-bootstrap {
                 .ui-select-match .ui-select-toggle {
-                    //float: right;
-                    //width: calc(100% - 10px);
                     border: none;
                     box-shadow: none;
                     height: auto;
-                    /*height: 30px;
-                    position: absolute;
-                    right: 50%;*/
-                    /*transform: translateX(50%) translateY(15%);*/
                     i.caret {
                         display: none;
                     }
@@ -434,7 +412,6 @@
         background-color: #EBE9DE;
         border-radius: 6px;
         border: 1px solid #cbc7bd;
-        padding: 1px;
         width: 262px;
         z-index: 1;
         display: none;
@@ -495,10 +472,10 @@
 .pull-left { float: left !important; }
 
 @media (max-width: 890px) {
-.sub-projects .user .summary-content{
+.sub-entity .user .summary-content{
         display:none
     }
-   .sub-projects .user a .summary-content{
+   .sub-entity .user a .summary-content{
         display:block;
     }
  }

@@ -486,13 +486,18 @@
         background: white url("/icu/assets/img/swipe-arrows.png") no-repeat center center;
         background-position-x: -10px;
         padding: 2px;
-        direction: rtl;
+        /*rtl:begin:ignore*/
+        direction: ltr;
+        /*rtl:end:ignore*/
     }
     #dragwidget {
         //	direction: rtl;
     }
     .dragshape {
         position: absolute;
+        /*rtl:begin:ignore*/
+        right: 0;
+        /*rtl:end:ignore*/
         width: 34px;
         height: 36px;
         -webkit-border-radius: 15px;
@@ -669,6 +674,10 @@
 	&.modal-body {
 		height: 350px;
 	}
+}
+
+.close {
+    float: right;
 }
 
 @mixin ui-select {

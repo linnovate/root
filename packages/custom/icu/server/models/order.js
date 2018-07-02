@@ -5,10 +5,10 @@ var mongoose = require('mongoose'),
   archive = require('./archive.js');
 
 var OrderTaskSchema = new Schema({
-  name:{
+  name: {
     type: String
   },
-   ref: {
+  ref: {
     type: Schema.ObjectId
   },
   project: {
@@ -17,10 +17,10 @@ var OrderTaskSchema = new Schema({
   discussion: {
     type: Schema.ObjectId
   },
-  order:{
-      type: Number
+  order: {
+    type: Number
   }
-})
+});
 
 /**
  * Statics

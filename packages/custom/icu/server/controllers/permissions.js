@@ -16,27 +16,22 @@ var _ = require('lodash') ;
 var entityNameMap = {
   'task': {
     mainModel: TaskModel,
-//      archiveModel: TaskArchiveModel,
     name: 'task'
   },
   'project': {
     mainModel: ProjectModel,
-//      archiveModel: ProjectArchiveModel,
     name: 'project'
   },
   'discussion': {
     mainModel: DiscussionModel,
-//      archiveModel: DiscussionArchiveModel,
     name: 'discussion'
   },
   'officeDocuments':{
     mainModel: OfficeDocumentsModel,
-//      archiveModel: OfficeDocumentsArchiveModel,
     name: 'officeDocument'
   },
   'officeDocument': {
     mainModel: OfficeDocumentsModel,
-//      archiveModel: OfficeDocumentsArchiveModel,
     name: 'officeDocument'
   },
   'offices': {
@@ -386,6 +381,35 @@ exports.createContent = function(user, oldDoc, newDoc) {
 }
 
 
+exports.cloneParentPermission = function(parentID,modelName) {
+  let deffered = q.defer();
+  if(!parentID || !modelName) {
+    // doesnt have a parent
+    deffered.resolve({ cloned: false }) ;
+    return deffered.promise;
+  }
+  let Model = entityNameMap[modelName].mainModel;
+  return Model.findOne({_id: parentID}, function(err, doc) {    
+    let clonedPerms = { cloned: true ,
+      permissions: doc.permissions ,
+      watchers: watchersFromPermissions(doc.permissions) 
+    }
+    deffered.resolve(clonedPerms) ;
+    return deffered.promise;
+  })
+}
+
+
+function watchersFromPermissions(permissions) {
+  let watchers = [] ;
+  if (permissions.length == 0) return null ;
+  permissions.forEach(function(perms) {
+    watchers.push(perms.id) ;
+  })  
+  return watchers ;
+}
+
+
 function cleanArray(actual) {
   var newArray = new Array();
   for (var i = 0; i < actual.length; i++) {
@@ -395,6 +419,7 @@ function cleanArray(actual) {
   }
   return newArray;
 }
+
 
 
 /*

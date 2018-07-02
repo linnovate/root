@@ -1,11 +1,11 @@
 .tab-content {
     .documents {
-        height: calc(100% - 10px);
-        overflow: auto;
-
+        .document-list {
+            max-height: 260px;
+        }
         .document, .document-shifted {
             border-bottom: 1px solid $light-grey1;
-            height: 65px;
+            height: 81px;
             overflow: visible;
             padding: 12px 10px 0 0;
             position: relative;
@@ -63,7 +63,6 @@
 
             textarea {
                 padding: 5px 9px;
-                //width: calc(100% - 60px);
                 min-height: 125px;
                 width: 100%;
                 margin: 10px 0;
@@ -132,32 +131,29 @@
   #DocumentLine:hover >  #DocumentTextLine{
     font-family: Open Sans;
     font-style: normal;
-    // font-weight: bold;
     line-height: normal;
     font-size: 14px;
     color: #000000;
+    max-width: 350px;
    }
   #DocumentLine:hover  #AllDocumentIcons{
     display: inline-block; }
   #AllDocumentIcons{
     display: none;
-    // position: relative;
     right: 0;
     vertical-align: middle;
   }
   .DocumentIconsLine{
-    // border: 1px solid #7F9098;
-    // border-radius: 4px;
     width: 30px;
     height: 30px;
-    // background-color:#313C40;
-    padding: 0px 0px 0px 0px;
+    padding: 0 0 0 0;
     text-align: inherit;
     background: none;
     border: none;
-        &:hover{
-            // background-color:white;
-            filter: invert(75%);
+        img {
+            &:hover{
+                filter: opacity(.5) drop-shadow(0 0 0 #FFA000) saturate(5);
+            }
         }
     }
   #Document-icon-revert{

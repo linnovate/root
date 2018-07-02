@@ -1,0 +1,12 @@
+@mixin disable-text-styles {
+  font-weight: normal;
+  a, b, p, i, u, blockquote, li, h1, h2, h3 {
+    margin: 0 !important;
+    padding: 0 !important;
+    border-left: none !important;
+    font-size: inherit !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    text-decoration: none !important;
+  }
+}

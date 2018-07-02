@@ -1,0 +1,41 @@
+
+.detail-button {
+  background-color: transparent;
+  border: none;
+  background-color: #fda102;
+  box-shadow: 0 3px 0 0 #ff6400;
+  border-radius: 60px;
+  font-size: 14px;
+  line-height: 18px;
+  color: #FFFFFF;
+  padding: 8px 20px;
+  min-width: 75px;
+    &:focus {
+        outline: none;
+    }
+    &.approval {
+        background: #2AB541;
+        box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.detail-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 0px 16px 0px 16px;
+    float: right;
+    max-width: 50%;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 1;
+    &:after {
+        contnet: '';
+        display: table;
+    }
+    > * {
+        margin-right: 5px;
+        margin-bottom: 10px;
+    }
+
+}

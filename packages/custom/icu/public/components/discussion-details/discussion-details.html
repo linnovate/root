@@ -1,225 +1,70 @@
-<div class="discussion-details">
-    <div class="permission" ng-if="discussion && !discussion._id && !permsToSee">
-    <div class="perIcon">
-    </div>
+<div class="entity-details discussion-details" ng-if="item._id && permsToSee">
+
+  <div class="permission" ng-if="item && !item._id && !permsToSee">
+    <div class="perIcon"></div>
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+  </div>
+
+  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
+
+    <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
+
+    <detail-assign value="item.assign" me="me" list="people" on-change="onAssign"></detail-assign>
+
+    <discussion-due item="item" on-change="onDateDue"></discussion-due>
+
+    <div class="location">
+       <div class="placeholder" ng-if="!item.location">{{ 'location' | i18next }}</div>
+       <input type="text"  ng-model="item.location" ng-change="updateLocation(item)">
     </div>
-    <div class="page-content" ng-if="discussion._id">
-        <div class="summary" ng-class="{ 'disabled' : !havePermissions('summary')}">
-            <div class="favorite">
-                <button ng-class="{ 'orange': discussion.star }" ng-click="star(discussion)">
-                    <i class="fa fa-star" tooltips tooltip-template="favorite"></i>
-                </button>
-            </div>
 
-            <div class="user">
-                <div class="no-assignee" ng-if="!discussion.assign">
-                    <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
-                </div>
-                <div tooltips tooltip-template="{{'assignee' | i18next}}">
-                    <ui-select ng-model="discussion.assign" on-select="update(discussion, 'assign')">
-                        <ui-select-match>
-                            <div icu-avatar user="$select.selected"></div>
-                            <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}</span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="user._id as user in people | filter: { job: $select.search }">
-                            <div icu-avatar user="user"></div>
-                            <span class="summary-content">{{user.job}}</span>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
+    <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
 
-            <!--<div uib-timepicker ng-model="mytime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div> -->
+    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
 
+  </div>
 
-            <div ng-click="dueClicked()" class="due">
-                <div class="placeholder">
-                    <div id="firstStr" ng-if="!discussion.startDate">{{'deadline' | i18next}}</div>
-                    <div id="firstStr" ng-if="discussion.startDate && discussion.startTime">{{firstStr | i18next}}</div>
-                    <div id="firstStr" ng-if="discussion.startDate && !discussion.startTime">{{firstStr | i18next}}</div>
-                    <div id="secondStr" ng-if="!discussion.endDate">{{secondStr | i18next}}</div>
-                    <div id="secondStr" ng-if="discussion.endDate && discussion.endTime">{{secondStr | i18next}}</div>
-                    <div id="secondStr" ng-if="discussion.endDate && !discussion.endTime">{{secondStr | i18next}}</div>
+  <div class="detail-buttons">
+    <button class="detail-button approval" ng-click="updateStatusForApproval()" ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled">
+      {{'updateStatusForApproval' | i18next }}
+    </button>
+    <button class="detail-button" ng-click="statusesActionsMap[item.status].method(item)" ng-disabled="disableButton()" ng-if="statusesActionsMap[item.status]">
+      {{statusesActionsMap[item.status].label | i18next}}
+    </button>
+  </div>
 
-
-                </div>
-               <!-- <div id="dueInfo" class="placeholder" ng-if="!discussion.due">{{'deadline' | i18next}}</div> -->
-               <input>
-            </div>
-
-
-            <div id="dueDiv" style="display:none" class="dueDiv">
-                <div class="dateTitle" id="startDateTitle">{{'startDate' | i18next}}</div>
-                <input id="startDate" ng-click="open()" ui-date="startDueOptions" ng-model="discussion.startDate" ng-class='{"oldDate":!checkDate()}'>
-                <div ng-hide="discussion.allDay" class="dateTitle" id="startTimeTitle">{{'startTime' | i18next}}</div>
-                <div style="direction:ltr" ng-hide="discussion.allDay" id="startTime" uib-timepicker="timeOptions" ng-model="discussion.startTime" show-meridian="false" ng-change="update(discussion)"></div>
-
-                <div ng-hide="discussion.allDay" class="dateTitle" id="endDateTitle">{{'endDate' | i18next}}</div>
-                <input ng-hide="discussion.allDay" id="endDate" ng-click="open()" ui-date="endDueOptions" ng-model="discussion.endDate" ng-class='{"oldDate":!checkDate()}'>
-                <div ng-hide="discussion.allDay" class="dateTitle" id="endTimeTitle">{{'endTime' | i18next}}</div>
-                <div style="direction:ltr" ng-hide="discussion.allDay" id="endTime" ng-model="discussion.endTime" uib-timepicker="timeOptions" ng-model="discussion.endTime" show-meridian="false" ng-change="update(discussion)"></div>
-                <div id="allDayTitle">{{allDayTitle}}</div>
-                <input id="allDay" type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="discussion.allDay" ng-change="checkboxClick(discussion)">
-
-            </div>
-
-
-            <div id="past">
-                {{'This Deadline is in the past!' | i18next }}
-                <div id="close" ng-click="closeOldDateNotification()">x</div>
-            </div>
-            <div id="before">
-                {{'Ending date is earlier than starting date' | i18next }}
-                <div id="close" ng-click="closeBeforeNotification()">x</div>
-            </div>
-
-            <div class="location">
-                <div class="placeholder" ng-if="!discussion.location">{{ 'location' | i18next }}</div>
-               <input type="text"  ng-model="discussion.location" ng-change="updateLocation(discussion)">
-            </div>
-
-            <div class="status">
-                <div tooltips tooltip-template="{{'status' | i18next}}">
-                    <ui-select ng-model="discussion.status" on-select="update(discussion, 'status')">
-                        <ui-select-match>
-                            <i class='{{$select.selected}}'></i>
-                            <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
-                        </ui-select-match>
-                        <ui-select-choices repeat="status as status in statuses | filter: $select.search">
-                            <i class='{{status}}'></i>
-                            <span class='{{status}}'>{{status | i18next}}</span>
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-
-
-
-            <div class="dropdown dropdown-container" uib-dropdown
-                 ng-class="{ 'enabled' : haveEditiorsPermissions()}">
-                <div class="dropdown-trigger" uib-dropdown-toggle>
-                    <i class="fa fa-chevron-down"></i>
-                </div>
-                <ul class="dropdown-menu menu-items" role="menu">
-                    <li>
-                        <a href="#" ng-if="!discussion.recycled" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="recycle(discussion)">
-                            <i class="fa fa-2x fa-times-circle"></i>
-                            <span id="deleteDiscussion" >{{ 'recycleDiscussion' | i18next}}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" ng-if="discussion.recycled" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="recycleRestore(discussion)">
-                            <i class="fa fa-2x fa-times-circle"></i>
-                            <span id="undeleteDiscussion" >{{ 'unrecycleDiscussion' | i18next}}</span>
-                        </a>
-                    </li>
-                    <!-- <li>
-                        <a href="#" icu-open-modal entity-name="discussion" show-modal="tasks.length" delete-fn="deleteDiscussion(discussion)">
-                            <i class="fa fa-2x fa-times-circle"></i>
-                            <span id="deleteDiscussion" >{{ 'deleteDiscussion' | i18next}}</span>
-                        </a>
-                    </li> -->
-                </ul>
-            </div>
-
-            <div class="actions"
-                 ng-if="statusesActionsMap[discussion.status]">
-                    <button ng-disabled="disableButton()"
-                        ng-click="statusesActionsMap[discussion.status].method(discussion)">
-                    {{statusesActionsMap[discussion.status].label | i18next}}
-                </button>
-            </div>
-        </div>
-        <div class="approval" ng-if="discussion.status!='waiting-approval' && discussion.assign && discussion.assign._id == me._id && !isRecycled">
-                <button class="add approval" id="approval" ng-click="updateStatusForApproval(discussion)">{{'updateStatusForApproval' | i18next }}
-                </button>
-        </div>
-        <!--<button icu-comp-modal entity="discussion" entity-name="discussion" type="button" class="compBtn"></button>-->
-        <div class="description" ng-class="{ 'disabled' : !havePermissions('description')}">
-            <div class="title"
-                 contenteditable="true"
-                 tabindex="1"
-                 ng-attr-autofocus="{{shouldAutofocus || undefined}}"
-                 strip-br="true"
-                 ng-keydown="onEnter($event)"
-                 ng-model="discussion.title"
-                 ng-change="updateCurrentDiscussion()"
-                 medium-editor>
-            </div>
-
-            <div class="text"
-                 contenteditable="true"
-                 tabindex="2"
-                 strip-br="true"
-                 medium-editor
-                 ng-model="discussion.description"
-                 options="{{options}}">
-            </div>
-
-            <div class="tags" ng-class="{ 'disabled' : !havePermissions('tags')}">
-                <ul class="list">
-                    <li ng-show="!discussion.tags.length && !tagInputVisible" class="placeholder" ng-click="addTagClicked()">{{ 'noLabels' | i18next }}</li>
-                    <li class="tag-item" ng-repeat="tag in discussion.tags">
-                        <span>{{tag}}</span>
-                        <button ng-click="removeTag(tag)">
-                            <i class="fa fa-times"></i>
-                        </button>
-                    </li>
-                    <li class="new-tag-input" ng-show="tagInputVisible" >
-                        <ui-select id="addTag" ng-model="newTag" tagging tagging-label="false" autofocus=true on-select="addTag(newTag)"
-                                   test tag-on-blur="true">
-                            <ui-select-match  placeholder="{{ 'selectTags' | i18next }}" class="pull-left">{{$item}}</ui-select-match>
-                            <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">
-                                {{tag}}
-                            </ui-select-choices>
-                        </ui-select>
-                    </li>
-                </ul>
-                <div class="button">
-                    <button class="new-tag-icon" ng-click="addTagClicked()" ng-show="!tagInputVisible" >
-                        <div tooltips tooltip-template="add tag" tooltip-side="left">
-                            <i class="fa fa-plus" ></i>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="tabs" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}">
-            <div class="switcher">
-                <button class="tab"
-                        ng-class="{two: main == 'tasks', three: main != 'tasks'}"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".activities">
-                    {{ 'updates' | i18next }}
-                </button>
-                <button class="tab"
-                        ng-class="{two: main == 'tasks', three: main != 'tasks'}"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".documents">
-                    {{ 'documents' | i18next}}
-                </button>
-                <button ng-if="main !== 'tasks'"
-                        class="tab"
-                        ng-class="{two: main == 'tasks', three: main != 'tasks'}"
-                        data-ui-sref-active="active"
-                        data-ui-sref=".tasks">
-                    {{ 'tasks' | i18next }}
-                </button>
-            </div>
-        </div>
-        <div class="tab-content"
-             ng-class="{ 'disabled' : !havePermissions('tab-content')}"
-             data-ui-view="tab">
-        </div>
+  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}">
+    <div class="item-title"
+       contenteditable="true"
+       tabindex="1"
+       strip-br="true"
+       ng-keydown="onEnter($event)"
+       ng-model="item.title"
+       ng-change="updateCurrentDiscussion()"
+       medium-editor>
     </div>
-    <div ng-if="discussion._id"
-         ng-class="{ 'disabled' : !havePermissions('watchers')}"
-         icu-members-footer
-         entity="discussion"
-         users="people">
-    </div>
+  </div>
+
+  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}"
+     contenteditable="true"
+     tabindex="2"
+     strip-br="true"
+     medium-editor
+     ng-model="item.description"
+     options="{{editorOptions}}">
+  </div>
+
+  <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
+
+  <detail-tabs tabs="['activities','documents','tasks']" item="item" entity-name="discussion" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
+
+  <icu-members-footer
+    ng-if="item._id"
+    ng-class="{ 'disabled' : !havePermissions('watchers')}"
+    entity="item"
+    users="people"
+    me="me"
+  ></icu-members-footer>
+
 </div>
