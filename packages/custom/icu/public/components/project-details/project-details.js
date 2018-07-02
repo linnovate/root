@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, tasks, people, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
+function ProjectDetailsController($scope, $rootScope, entity, people, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
 
   // ==================================================== init ==================================================== //
 
@@ -21,8 +21,6 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
     $state.go('.activities');
   }
 
-  $scope.entity = entity || context.entity;
-  $scope.tasks = tasks.data || tasks;
   $scope.items = projects.data || projects;
 
   $scope.editorOptions = {
@@ -285,17 +283,17 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
     $rootScope.$broadcast('refreshList');
   }
 
-  $scope.update = function(item, context) {
-    if (context.name === 'color') {
+  $scope.update = function(item, type) {
+    if (type === 'color') {
         item.color = context.newVal;
     }
     ProjectsService.update(item, context).then(function(res) {
       if (ProjectsService.selected && res._id === ProjectsService.selected._id) {
-        if (context.name === 'title') {
+        if (type === 'title') {
           ProjectsService.selected.title = res.title;
         }
       }
-      switch (context.name) {
+      switch (type) {
       case 'status':
         if (context.entityName === 'discussion') {
           item.discussion = context.entityId;
@@ -317,7 +315,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
         break;
       case 'title':
       case 'description':
-        ProjectsService.updateTitle(item, backupEntity, context.name).then(function(result) {
+        ProjectsService.updateTitle(item, backupEntity, type).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
