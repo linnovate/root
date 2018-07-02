@@ -106,7 +106,6 @@ exports.upload = function(req, res, next) {
     portStr = config.isPortNeeded ? portStr : '';
 
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
-    req.locals.data.body.saveTo = saveTo;
     var hostFileLocation = config.host + portStr + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
 
@@ -216,19 +215,6 @@ exports.deleteFile = function(req, res) {
 
         });
 
-
-}
-else{
-          res.status(500).send("error");
-
-}
-
-
-
-
-
-
-
       }
     });
   return res;
@@ -313,32 +299,7 @@ exports.getByPath = function(req, res, next) {
     return next();
   }
   var query = req.acl.mongoQuery('Attachment');
-
-  var path = decodeURI(req.url).replace(/\.pdf$/, '');
-
-  path =path.replace('preview','files');
-  path = path.substring(path.lastIndexOf('/00')+3,path.length);
-  path = path.replace(/\_/g,'\/');
-              path = path.replace(/\ /g,'\\ ')
-              .replace(/\'/g,'\\\'')
-              .replace(/\"/g,'\\\"')
-              .replace(/\(/g,'\\\(')
-              .replace(/\)/g,'\\\)')
-              .replace(/\#/g,'\\\#')
-              .replace(/\&/g,'\\\&')
-              .replace(/\`/g,'\\\`')
-              .replace(/\~/g,'\\\~')
-              .replace(/\,/g,'\\\,')
-              .replace(/\%/g,'\\\%')
-              .replace(/\$/g,'\\\$')
-              .replace(/\./g,'\\\.')
-              .replace(/\;/g,'\\\;')
-              .replace(/\:/g,'\\\:')
-              .replace(/\//g,'\\\/')
-              .replace(/\_/g,'\\\_')
-              .replace(/\#/g,'\\\#')
-              .replace(/\!/g,'\\\!');
-
+  var path = decodeURI(req.url).replace(/pdf$/, '');
   var conditions = {
     path: new RegExp(path)
   };
@@ -374,16 +335,6 @@ exports.getByPath = function(req, res, next) {
   });
 };
 
-
-exports.download = function(req,res,next){
-var url = "files/"+req.url;
-ftp.getFromFTPByURL(url).then(function(data){
-  res.send(data);
-}).catch(function(){
-  res.status(500).send();
-});
-
-};
 
 
 exports.sign = function(req, res, next) {
