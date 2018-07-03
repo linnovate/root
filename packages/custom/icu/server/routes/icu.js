@@ -131,7 +131,7 @@ module.exports = function(Icu, app) {
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
   //.all(auth.requiresLogin, permission.echo)
-    .post(project.create, project.updateParent, notification.sendNotification, updates.created)
+    .post(project.create, boldedService.syncBoldUsers, project.updateParent, notification.sendNotification, updates.created)
     .get(pagination.parseParams, project.all, project.populateSubProjects, star.isStarred, pagination.formResponse);
 
 
@@ -153,7 +153,7 @@ module.exports = function(Icu, app) {
   app.route('/api/offices*').all(entity('offices'));
   app.route('/api/offices')
   //.all(auth.requiresLogin, permission.echo)
-    .post(office.create, updates.created)
+    .post(office.create, boldedService.syncBoldUsers, updates.created)
     .get(pagination.parseParams, office.all, star.isStarred, pagination.formResponse);
   app.route('/api/offices/:id([0-9a-fA-F]{24})')
     .get(office.read, star.isStarred)
@@ -170,7 +170,7 @@ module.exports = function(Icu, app) {
   app.route('/api/folders*').all(entity('folders'));
   app.route('/api/folders')
   //.all(auth.requiresLogin, permission.echo)
-    .post(folder.create, updates.created)
+    .post(folder.create, boldedService.syncBoldUsers, updates.created)
     .get(pagination.parseParams, folder.all, star.isStarred, pagination.formResponse);
   app.route('/api/folders/:id([0-9a-fA-F]{24})')
     .get(folder.read, star.isStarred)
@@ -190,7 +190,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
-    .post(task.create, task.updateParent, notification.sendNotification, updates.created)
+    .post(task.create, boldedService.syncBoldUsers, boldedService.syncBoldUsers, task.updateParent, notification.sendNotification, updates.created)
     .get(pagination.parseParams, task.all, task.populateSubTasks, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
@@ -276,7 +276,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/discussions*').all(entity('discussions'));
   app.route('/api/discussions')
-    .post(discussion.create, updates.created)
+    .post(discussion.create, boldedService.syncBoldUsers, updates.created)
     .get(pagination.parseParams, discussion.all, star.isStarred, pagination.formResponse);
   app.route('/api/history/discussions/:id([0-9a-fA-F]{24})')
     .get(discussion.readHistory);

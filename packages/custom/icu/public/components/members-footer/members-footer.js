@@ -235,8 +235,6 @@ angular.module('mean.icu.ui.membersfooter', [])
                     }
                 }
 
-                $scope.entity = BoldedService.addBolded($scope.entity, member);
-
                 update($scope.entity, member, 'added');
                 $scope.animate = true;
 
@@ -301,7 +299,6 @@ angular.module('mean.icu.ui.membersfooter', [])
                     });
                 }
 
-                BoldedService.removeBolded($scope.entity, member);
                 update($scope.entity, member, 'removed');
 
                 var task = $scope.entity ;

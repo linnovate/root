@@ -34,7 +34,7 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
         Created: 2
     };
 
-    $scope.boldedForMe = function(entity){
+    $scope.getBoldedClass = function(entity){
         let bolded = entity.bolded.find((item)=>{
             return item.id === me._id;
         });

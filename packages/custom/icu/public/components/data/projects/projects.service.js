@@ -128,7 +128,6 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     function create(project) {
-      project = BoldedService.addBolded(project);
       return $http.post(ApiUri + EntityPrefix, project)
             .then(function(result) {
                 WarningsService.setWarning(result.headers().warning);

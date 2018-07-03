@@ -108,7 +108,6 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function create(task) {
-        task = BoldedService.addBolded(task);
         return $http.post(ApiUri + EntityPrefix, task)
             .then(function (result) {
                 WarningsService.setWarning(result.headers().warning);

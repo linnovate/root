@@ -15,7 +15,8 @@ angular.module('mean.icu.data.boldedservice', [])
         entity_type: entityType,
         action: action,
       };
-
+      // debugger;
+      console.log(boldedObject);
       return $http.post(ApiUri + EntityPrefix, boldedObject)
         .then(function (result) {
 
@@ -23,36 +24,7 @@ angular.module('mean.icu.data.boldedservice', [])
         });
     }
 
-    function addBolded(entity, user){
-      user = user || me;
-      entity.bolded = entity.bolded || [];
-
-      let newBolded = {
-        id: user._id,
-        bolded: false,
-        lastViewed: Date.now()
-      };
-      entity.bolded.push(newBolded);
-
-      return entity;
-    }
-
-    function removeBolded(entity, user){
-      let removedIndex;
-      entity.bolded.find((bolded, index)=>{
-        if(bolded.id === user._id){
-          removedIndex = index;
-          return true;
-        }
-      });
-
-      entity.bolded.splice(removedIndex, 1);
-      return entity;
-    }
-
     return {
       boldedUpdate: boldedUpdate,
-      addBolded: addBolded,
-      removeBolded: removeBolded,
     };
   });

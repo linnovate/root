@@ -34,12 +34,16 @@ function ProjectListController($scope, $state, $timeout, projects, ProjectsServi
         Created: 2
     }
 
-    $scope.boldedForMe = function(entity){
+    $scope.getBoldedClass = function(entity){
       let bolded = entity.bolded.find((item)=>{
         return item.id === me._id;
       });
 
-      return bolded.bolded;
+      if(bolded.bolded){
+        return 'bolded';
+      } else {
+        return 'bold-disabled';
+      }
     };
 
     $scope.update = function(item) {
