@@ -89,7 +89,13 @@ var entityNameMap = {
     archiveModel: FolderArchiveModel,
     name: 'Folder'
   },
+   // probably no needed
   'officeDocuments': {
+    mainModel: OfficeDocumentsModel,
+    archiveModel: OfficeDocumentsArchiveModel,
+    name: 'Document'
+  },
+  'documents': {
     mainModel: OfficeDocumentsModel,
     archiveModel: OfficeDocumentsArchiveModel,
     name: 'Document'
@@ -110,6 +116,7 @@ var defaults = {
 };
 
 module.exports = function(entityName, options) {
+//  console.log("entityName") ;console.log(entityName) ;
   var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders', 'officeDocuments', 'templateDocs'];
   if (findByUser.indexOf(entityName) > -1)
     var currentUser = true;

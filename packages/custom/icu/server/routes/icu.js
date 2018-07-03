@@ -19,6 +19,8 @@ var office = require('../controllers/office');
 var folder = require('../controllers/folder');
 var webHook = require('../controllers/webhook');
 var documents = require('../controllers/documents');
+var documentsCrud = require('../controllers/documents.crud');
+
 var templateDocs = require('../controllers/templateDocs');
 var signatures = require('../controllers/signatures');
 var authorization = require('../middlewares/auth.js');
@@ -366,11 +368,11 @@ module.exports = function(Icu, app) {
     .get(documents.getAll);
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
     .get(documents.getById)
-    .post(documents.update)
-    .put(documents.update, star.isStarred, attachments.sign)
+    .post(documentsCrud.update)
+    .put(documentsCrud.update, star.isStarred, attachments.sign)
     .delete(documents.deleteDocument);
   app.route('/api/officeDocuments/create')
-    .post(documents.create);
+    .post(documentsCrud.create);
   app.route('/api/officeDocuments/addSerialTitle')
     .post(documents.addSerialTitle);
 
