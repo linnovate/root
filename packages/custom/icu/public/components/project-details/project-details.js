@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, people, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
+function ProjectDetailsController($scope, $rootScope, entity, people, projects, tags, $timeout, context, $state, BoldedService, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
 
   // ==================================================== init ==================================================== //
 
@@ -56,6 +56,16 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
     });
   });
 
+  boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+    $scope.item.bolded = updatedItem.bolded;
+    $scope.update($scope.item);
+  });
+
+  function boldedUpdate(entity, action) {
+    let entityType = 'project';
+    return BoldedService.boldedUpdate(entity, entityType, action)
+  }
+
   // ==================================================== onChanges ==================================================== //
 
   function navigateToDetails(project) {
@@ -72,68 +82,82 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   }
 
   $scope.onStar = function(value) {
-    ProjectsService.star($scope.item).then(function() {
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      ProjectsService.star($scope.item).then(function() {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
+      });
     });
-  }
+  };
 
   $scope.onAssign = function(value) {
-    $scope.item.assign = value;
-    $scope.updateAndNotify($scope.item);
-  }
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+        $scope.item.assign = value;
+        $scope.updateAndNotify($scope.item);
+    })
+  };
 
   $scope.onDateDue = function(value) {
-    $scope.item.due = value;
-    if (context.entityName === 'discussion') {
-      $scope.item.discussion = context.entityId;
-    }
-
-    ProjectsService.updateDue($scope.item, backupEntity).then(function(result) {
-      backupEntity = JSON.parse(JSON.stringify($scope.item));
-      ActivitiesService.data.push(result);
-    });
-
-    ProjectsService.update($scope.item).then(function(result) {
-      if (context.entityName === 'project') {
-        var projId = result.project ? result.project._id : undefined;
-        if (projId !== context.entityId) {
-          $state.go('main.projects.byentity', {
-            entity: context.entityName,
-            entityId: context.entityId
-          }, {
-            reload: true
-          });
-        }
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.due = value;
+      if (context.entityName === 'discussion') {
+        $scope.item.discussion = context.entityId;
       }
-    });
-  }
+
+      ProjectsService.updateDue($scope.item, backupEntity).then(function (result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data.push(result);
+      });
+
+      ProjectsService.update($scope.item).then(function (result) {
+        if (context.entityName === 'project') {
+          var projId = result.project ? result.project._id : undefined;
+          if (projId !== context.entityId) {
+            $state.go('main.projects.byentity', {
+              entity: context.entityName,
+              entityId: context.entityId
+            }, {
+              reload: true
+            });
+          }
+        }
+      });
+    })
+  };
 
   $scope.onStatus = function(value) {
-    $scope.item.status = value;
-    $scope.update($scope.item, {
-      name: 'status'
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.status = value;
+      $scope.update($scope.item, {
+        name: 'status'
+      })
     })
-  }
+  };
 
   $scope.onColor = function(value) {
-    $scope.update($scope.item, value);
-  }
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.update($scope.item, value);
+    })
+  };
 
   $scope.onWantToCreateRoom = function() {
     $scope.item.WantRoom = true;
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
 
-    $scope.update($scope.item, context);
+      $scope.update($scope.item, context);
 
-    ProjectsService.WantToCreateRoom($scope.item).then(function() {
-      navigateToDetails($scope.item);
-    });
-  }
+      ProjectsService.WantToCreateRoom($scope.item).then(function () {
+        navigateToDetails($scope.item);
+      });
+    })
+  };
 
   $scope.onTags = function(value) {
-    $scope.item.tags = value;
-    $scope.update($scope.item);
-  }
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.tags = value;
+      $scope.update($scope.item);
+    })
+  };
 
   // ==================================================== Menu events ==================================================== //
 
@@ -213,9 +237,12 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
         newVal: nVal,
         action: 'renamed'
       };
-      $scope.delayedUpdate($scope.item, newContext);
+      boldedUpdate($scope.item, 'updated').then(updatedItem => {
+        $scope.item.bolded = updatedItem.bolded;
 
-      ProjectsService.currentProjectName = $scope.item.title;
+        $scope.delayedUpdate($scope.item, newContext);
+        ProjectsService.currentProjectName = $scope.item.title;
+      })
     }
   });
 
@@ -230,7 +257,10 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
         newVal: nVal,
         action: 'renamed'
       };
-      $scope.delayedUpdate($scope.item, newContext);
+      boldedUpdate($scope.item, 'updated').then(updatedItem => {
+        $scope.item.bolded = updatedItem.bolded;
+        $scope.delayedUpdate($scope.item, newContext);
+      })
     }
   });
 

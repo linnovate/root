@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, NotifyingService, PaginationService, MeanSocket, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('ProjectsService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, MeanSocket, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/projects';
     var data, selected;
 
@@ -128,7 +128,8 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     function create(project) {
-        return $http.post(ApiUri + EntityPrefix, project)
+      project = BoldedService.addBolded(project);
+      return $http.post(ApiUri + EntityPrefix, project)
             .then(function(result) {
                 WarningsService.setWarning(result.headers().warning);
                 NotifyingService.notify('editionData');

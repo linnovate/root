@@ -1,6 +1,11 @@
 'use strict';
 
-function TaskListController($scope, $timeout, $state, tasks, DiscussionsService, TasksService, ProjectsService, context, $stateParams, EntityService) {
+function TaskListController($scope, $timeout, $state, tasks, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
+
+    let me;
+    UsersService.getMe().then(function(result) {
+        me = result;
+    });
 
     $scope.items = tasks.data || tasks;
 
@@ -27,6 +32,18 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
         NotCreated: 0,
         Creating: 1,
         Created: 2
+    };
+
+    $scope.boldedForMe = function(entity){
+        let bolded = entity.bolded.find((item)=>{
+            return item.id === me._id;
+        });
+
+        if(bolded.bolded){
+          return 'bolded';
+        } else {
+          return 'bold-disabled';
+        }
     };
 
     $scope.update = function(item) {

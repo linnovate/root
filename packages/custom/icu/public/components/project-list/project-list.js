@@ -1,6 +1,11 @@
 'use strict';
 
-function ProjectListController($scope, $state, $timeout, projects, ProjectsService, context, $stateParams, EntityService) {
+function ProjectListController($scope, $state, $timeout, projects, ProjectsService, UsersService, context, $stateParams, EntityService) {
+
+    let me;
+    UsersService.getMe().then(function(result) {
+      me = result;
+    });
 
     $scope.items = projects.data || projects;
 
@@ -28,6 +33,14 @@ function ProjectListController($scope, $state, $timeout, projects, ProjectsServi
         Creating: 1,
         Created: 2
     }
+
+    $scope.boldedForMe = function(entity){
+      let bolded = entity.bolded.find((item)=>{
+        return item.id === me._id;
+      });
+
+      return bolded.bolded;
+    };
 
     $scope.update = function(item) {
         return ProjectsService.update(item);
