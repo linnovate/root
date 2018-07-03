@@ -73,6 +73,7 @@ angular.module('mean.icu.ui.rows', [])
         };
 
         $scope.permsToSee = function(entity){
+          debugger
             return PermissionsService.haveAnyPerms(entity);
         };
 

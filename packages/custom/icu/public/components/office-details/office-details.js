@@ -205,6 +205,8 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
   }
 
   $scope.permsToSee = function() {
+    debugger
+
     return PermissionsService.haveAnyPerms($scope.entity);
   }
 }

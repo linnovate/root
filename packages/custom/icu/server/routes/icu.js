@@ -131,7 +131,7 @@ module.exports = function(Icu, app) {
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
   //.all(auth.requiresLogin, permission.echo)
-    .post(project.create, boldedService.syncBoldUsers, project.updateParent, notification.sendNotification, updates.created)
+    .post(project.create, project.updateParent, notification.sendNotification, updates.created, boldedService.syncBoldUsers,)
     .get(pagination.parseParams, project.all, project.populateSubProjects, star.isStarred, pagination.formResponse);
 
 

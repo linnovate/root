@@ -95,7 +95,7 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   $scope.updateDescription = function(item, newContext) {
     TemplateDocsService.updateTemplateDoc(item._id, newContext);
   }
-  
+
   $scope.delayedUpdateTitle = _.debounce($scope.updateTitle, 500);
   $scope.delayedUpdateDesc= _.debounce($scope.updateDescription, 500);
 
@@ -164,6 +164,8 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   }
 
   $scope.permsToSee = function() {
+    debugger
+
     return PermissionsService.haveAnyPerms($scope.entity);
   }
 

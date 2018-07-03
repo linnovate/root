@@ -421,6 +421,8 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   $scope.permsToSee = function() {
+    debugger
+
     return PermissionsService.haveAnyPerms($scope.entity);
   }
 

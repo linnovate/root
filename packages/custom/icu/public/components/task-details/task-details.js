@@ -61,13 +61,15 @@ function TaskDetailsController($scope, entity, tags, projects, $state, BoldedSer
             $scope.template = template;
         });
     }
-    boldedUpdate($scope.item, 'viewed').then(updatedItem => {
-        $scope.item.bolded = updatedItem.bolded;
-        $scope.update($scope.item);
-    });
+    if($scope.item.length){
+      boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+          $scope.item.bolded = updatedItem.bolded;
+          $scope.update($scope.item);
+      });
+    }
 
     function boldedUpdate(entity, action) {
-        let entityType = 'task';
+        let entityType = 'tasks';
         return BoldedService.boldedUpdate(entity, entityType, action)
     }
 
@@ -442,15 +444,21 @@ function TaskDetailsController($scope, entity, tags, projects, $state, BoldedSer
     $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
 
     $scope.havePermissions = function (type, enableRecycled) {
+
+      if($scope.item.length){
         enableRecycled = enableRecycled || !$scope.isRecycled;
-        return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+        return (PermissionsService.havePermissions($scope.item, type) && enableRecycled);
+      }
     };
 
     $scope.haveEditiorsPermissions = function () {
+
+      if($scope.item.length)
         return PermissionsService.haveEditorsPerms($scope.item);
     };
 
     $scope.permsToSee = function () {
-        return PermissionsService.haveAnyPerms($scope.item);
+
+      return PermissionsService.haveAnyPerms($scope.item);
     }
 }

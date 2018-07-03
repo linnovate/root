@@ -265,6 +265,8 @@ function FolderDetailsController($scope, entity, tasks, people, folders, tags,of
   }
 
   $scope.permsToSee = function() {
+    debugger
+
     return PermissionsService.haveAnyPerms($scope.entity);
   }
 

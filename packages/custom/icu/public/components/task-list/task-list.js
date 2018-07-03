@@ -35,6 +35,8 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
     };
 
     $scope.getBoldedClass = function(entity){
+      // debugger
+        if(!entity)return;
         let bolded = entity.bolded.find((item)=>{
             return item.id === me._id;
         });
@@ -48,7 +50,7 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
 
     $scope.update = function(item) {
         return TasksService.update(item);
-    }
+    };
 
     $scope.create = function(item) {
         var newItem = {

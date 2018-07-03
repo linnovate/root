@@ -15,7 +15,6 @@ angular.module('mean.icu.data.boldedservice', [])
         entity_type: entityType,
         action: action,
       };
-      // debugger;
       console.log(boldedObject);
       return $http.post(ApiUri + EntityPrefix, boldedObject)
         .then(function (result) {

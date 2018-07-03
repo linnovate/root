@@ -61,7 +61,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   });
 
   function boldedUpdate(entity, action) {
-    let entityType = 'project';
+    let entityType = 'projects';
     return BoldedService.boldedUpdate(entity, entityType, action)
   }
 
@@ -402,6 +402,8 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
 
   $scope.permsToSee = function() {
+    debugger
+
     return PermissionsService.haveAnyPerms($scope.item);
   }
 
