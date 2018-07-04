@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.templateDocdetails', []).controller('TemplateDocDetailsController', TemplateDocDetailsController);
 
-function TemplateDocDetailsController($scope, $http, entity, tasks, folders, people, templateDocs, context, $state, TemplateDocsService, PermissionsService, $stateParams) {
+function TemplateDocDetailsController($scope, $http, entity, tasks, folders, people, templateDocs, context, $state, BoldedService, TemplateDocsService, PermissionsService, $stateParams) {
 
   if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("templateDocs"))) {
     $scope.item = entity || context.entity;
@@ -32,14 +32,26 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
 
   $scope.people = people.data || people;
 
+  boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+    $scope.item.bolded = updatedItem.bolded;
+  });
+
+  function boldedUpdate(entity, action) {
+    let entityType = 'templateDocs';
+    return BoldedService.boldedUpdate(entity, entityType, action)
+  }
+
   // ==================================================== onChanges ==================================================== //
 
   $scope.onCategory = function(value) {
-    var json ={
-        'name':'office',
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
+      var json = {
+        'name': 'office',
         'newVal': value && value._id,
-    };
-    TemplateDocsService.updateTemplateDoc($scope.item._id, json);
+      };
+      TemplateDocsService.updateTemplateDoc($scope.item._id, json);
+    })
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -164,8 +176,6 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   }
 
   $scope.permsToSee = function() {
-    debugger
-
     return PermissionsService.haveAnyPerms($scope.entity);
   }
 

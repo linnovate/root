@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.officedetails', []).controller('OfficeDetailsController', OfficeDetailsController);
 
-function OfficeDetailsController($scope, entity, tasks, folders, people, offices, context, $state, OfficesService, PermissionsService, $stateParams, ActivitiesService) {
+function OfficeDetailsController($scope, entity, tasks, folders, people, offices, context, $state, BoldedService, OfficesService, PermissionsService, $stateParams, ActivitiesService) {
 
   // ==================================================== init ==================================================== //
 
@@ -43,6 +43,15 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
     });
   });
 
+  boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+    $scope.item.bolded = updatedItem.bolded;
+  });
+
+  function boldedUpdate(entity, action) {
+    let entityType = 'offices';
+    return BoldedService.boldedUpdate(entity, entityType, action)
+  }
+
   // ==================================================== onChanges ==================================================== //
 
   function navigateToDetails(office) {
@@ -59,23 +68,32 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
   }
 
   $scope.onStar = function(value) {
-    OfficesService.star($scope.item).then(function() {
-      navigateToDetails($scope.item);
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
-    });
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
+      OfficesService.star($scope.item).then(function () {
+        navigateToDetails($scope.item);
+        // "$scope.item.star" will be change in 'ProjectsService.star' function
+      });
+    })
   }
 
   $scope.onColor = function(value) {
-    $scope.update($scope.item, value);
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
+      $scope.update($scope.item, value);
+    })
   }
 
   $scope.onWantToCreateRoom = function() {
-    $scope.item.WantRoom = true;
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
+      $scope.item.WantRoom = true;
 
-    $scope.update($scope.item, context);
+      $scope.update($scope.item, context);
 
-    OfficesService.WantToCreateRoom($scope.item).then(function() {
-      navigateToDetails($scope.item);
+      OfficesService.WantToCreateRoom($scope.item).then(function() {
+        navigateToDetails($scope.item);
+      })
     });
   }
 
@@ -108,7 +126,10 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
         newVal: nVal,
         action: 'renamed'
       };
-      $scope.delayedUpdate($scope.item, newContext);
+      boldedUpdate($scope.item, 'updated').then(updatedItem => {
+        $scope.item.bolded = updatedItem.bolded;
+        $scope.delayedUpdate($scope.item, newContext);
+      })
     }
   });
 
@@ -122,7 +143,10 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
         oldVal: oVal,
         newVal: nVal
       };
-      $scope.delayedUpdate($scope.item, newContext);
+      boldedUpdate($scope.item, 'updated').then(updatedItem => {
+        $scope.item.bolded = updatedItem.bolded;
+        $scope.delayedUpdate($scope.item, newContext);
+      })
     }
   });
 
@@ -205,8 +229,6 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
   }
 
   $scope.permsToSee = function() {
-    debugger
-
     return PermissionsService.haveAnyPerms($scope.entity);
   }
 }

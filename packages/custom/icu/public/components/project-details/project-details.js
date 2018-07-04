@@ -402,8 +402,6 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
 
   $scope.permsToSee = function() {
-    debugger
-
     return PermissionsService.haveAnyPerms($scope.item);
   }
 

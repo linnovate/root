@@ -228,7 +228,6 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     result.created=new Date(result.created);
                     $scope.officeDocuments.push(result);
                     params.id = result._id;
-                    debugger;
                     $state.go(state, params, {
                         reload: true
                     });

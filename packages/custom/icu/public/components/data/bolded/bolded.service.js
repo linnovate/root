@@ -18,12 +18,26 @@ angular.module('mean.icu.data.boldedservice', [])
       console.log(boldedObject);
       return $http.post(ApiUri + EntityPrefix, boldedObject)
         .then(function (result) {
-
           return result.data;
         });
     }
 
+    function getBoldedClass(entity, entityType){
+      if(!entity)return;
+      if(!entity.bolded){
+        boldedUpdate(entity, entityType, 'updated')
+      }
+      let bolded = entity.bolded.find((item)=>{return item.id === me._id});
+
+      if(bolded? bolded.bolded: false){
+        return 'bolded';
+      } else {
+        return 'bold-disabled';
+      }
+    };
+
     return {
       boldedUpdate: boldedUpdate,
+      getBoldedClass: getBoldedClass,
     };
   });

@@ -1,6 +1,6 @@
 'use strict';
 
-function TemplateDocListController($scope, $state, templateDocs, TemplateDocsService, context, $stateParams, EntityService) {
+function TemplateDocListController($scope, $state, templateDocs, BoldedService, TemplateDocsService, context, $stateParams, EntityService) {
 
     $scope.items = templateDocs.data || templateDocs;
 
@@ -11,6 +11,10 @@ function TemplateDocListController($scope, $state, templateDocs, TemplateDocsSer
         NotCreated: 0,
         Creating: 1,
         Created: 2
+    };
+
+    $scope.getBoldedClass = function(entity){
+      return BoldedService.getBoldedClass(entity, 'templateDoc');
     };
 
     $scope.create = function(item) {

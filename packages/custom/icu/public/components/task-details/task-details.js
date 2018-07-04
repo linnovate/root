@@ -60,9 +60,9 @@ function TaskDetailsController($scope, entity, tags, projects, $state, BoldedSer
             $scope.template = template;
         });
     }
+
     boldedUpdate($scope.item, 'viewed').then(updatedItem => {
         $scope.item.bolded = updatedItem.bolded;
-        $scope.update($scope.item);
     });
 
     function boldedUpdate(entity, action) {

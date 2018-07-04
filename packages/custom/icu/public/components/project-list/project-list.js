@@ -1,6 +1,6 @@
 'use strict';
 
-function ProjectListController($scope, $state, $timeout, projects, ProjectsService, UsersService, context, $stateParams, EntityService) {
+function ProjectListController($scope, $state, $timeout, projects, BoldedService, ProjectsService, UsersService, context, $stateParams, EntityService) {
 
     let me;
     UsersService.getMe().then(function(result) {
@@ -35,15 +35,7 @@ function ProjectListController($scope, $state, $timeout, projects, ProjectsServi
     }
 
     $scope.getBoldedClass = function(entity){
-      let bolded = entity.bolded.find((item)=>{
-        return item.id === me._id;
-      });
-
-      if(bolded.bolded){
-        return 'bolded';
-      } else {
-        return 'bold-disabled';
-      }
+      return BoldedService.getBoldedClass(entity, 'project');
     };
 
     $scope.update = function(item) {

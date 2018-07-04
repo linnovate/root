@@ -1,6 +1,6 @@
 'use strict';
 
-function TaskListController($scope, $timeout, $state, tasks, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
+function TaskListController($scope, $timeout, $state, tasks, BoldedService, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
 
     let me;
     UsersService.getMe().then(function(result) {
@@ -35,17 +35,7 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
     };
 
     $scope.getBoldedClass = function(entity){
-      // debugger
-        if(!entity)return;
-        let bolded = entity.bolded.find((item)=>{
-            return item.id === me._id;
-        });
-
-        if(bolded.bolded){
-          return 'bolded';
-        } else {
-          return 'bold-disabled';
-        }
+        return BoldedService.getBoldedClass(entity, 'task');
     };
 
     $scope.update = function(item) {

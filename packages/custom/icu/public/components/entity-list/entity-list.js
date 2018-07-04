@@ -285,8 +285,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }
 
     $scope.permsToSee = function(entity) {
-      debugger
-
       return PermissionsService.haveAnyPerms(entity);
     }
 

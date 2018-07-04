@@ -1384,8 +1384,10 @@ exports.create = function(req, res, next) {
       else {
         logger.log('info', '%s create, %s', req.user.name, 'success without folder');
           User.findOne({_id: result.creator}).exec(function(err, creator) {
-              result.creator = creator;
-              res.send(result);
+            result.creator = creator;
+            // res.send(result);
+            req.locals.result = result;
+            next();
           })
       }
     });
@@ -1432,7 +1434,9 @@ exports.create = function(req, res, next) {
             logger.log('info', '%s create, %s', req.user.name, 'success with folder');
               User.findOne({_id: result.creator}).exec(function(err, creator) {
                   result.creator = creator;
-                  res.send(result);
+                  // res.send(result);
+                  req.locals.result = result;
+                  next();
               })
           }
         });

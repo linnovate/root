@@ -1,6 +1,6 @@
 'use strict';
 
-function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDocumentsService, context, $stateParams, EntityService) {
+function OfficeDocumentListController($scope, $state, BoldedService, officeDocuments, OfficeDocumentsService, context, $stateParams, EntityService) {
 
     $scope.items = officeDocuments.data || officeDocuments;
 
@@ -10,6 +10,10 @@ function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDoc
     $scope.update = function(item) {
         return OfficeDocumentsService.update(item);
     }
+
+    $scope.getBoldedClass = function(entity){
+      return BoldedService.getBoldedClass(entity, 'officeDocument');
+    };
 
     $scope.create = function(parentsFolder) {
         var data = {};

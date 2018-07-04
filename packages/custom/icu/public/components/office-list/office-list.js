@@ -1,6 +1,6 @@
 'use strict';
 
-function OfficeListController($scope, $state, offices, OfficesService, context, $stateParams, EntityService) {
+function OfficeListController($scope, $state, offices, BoldedService, OfficesService, context, $stateParams, EntityService) {
 
     $scope.items = offices.data || offices;
 
@@ -15,6 +15,10 @@ function OfficeListController($scope, $state, offices, OfficesService, context, 
 
     $scope.update = function(item) {
         return OfficesService.update(item);
+    };
+
+    $scope.getBoldedClass = function(entity){
+      return BoldedService.getBoldedClass(entity, 'office');
     };
 
     $scope.create = function(item) {

@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.folderdetails', []).controller('FolderDetailsController', FolderDetailsController);
 
-function FolderDetailsController($scope, entity, tasks, people, folders, tags,offices, $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
+function FolderDetailsController($scope, entity, tasks, people, folders, offices, $timeout, context, $state, BoldedService, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
 
   // ==================================================== init ==================================================== //
 
@@ -50,6 +50,15 @@ function FolderDetailsController($scope, entity, tasks, people, folders, tags,of
       return s._id === $scope.item._id;
     });
   });
+
+  boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+    $scope.item.bolded = updatedItem.bolded;
+  });
+
+  function boldedUpdate(entity, action) {
+    let entityType = 'folders';
+    return BoldedService.boldedUpdate(entity, entityType, action)
+  }
 
   // ==================================================== onChanges ==================================================== //
 
@@ -265,8 +274,6 @@ function FolderDetailsController($scope, entity, tasks, people, folders, tags,of
   }
 
   $scope.permsToSee = function() {
-    debugger
-
     return PermissionsService.haveAnyPerms($scope.entity);
   }
 

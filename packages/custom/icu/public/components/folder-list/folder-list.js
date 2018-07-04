@@ -1,6 +1,6 @@
 'use strict';
 
-function FolderListController($scope, $state, folders, FoldersService, context, $stateParams, OfficesService) {
+function FolderListController($scope, $state, folders, BoldedService, FoldersService, context, $stateParams, OfficesService) {
 
     $scope.items = folders.data || folders;
 
@@ -15,6 +15,10 @@ function FolderListController($scope, $state, folders, FoldersService, context, 
 
     $scope.update = function(item) {
         return FoldersService.update(item);
+    };
+
+    $scope.getBoldedClass = function(entity){
+      return BoldedService.getBoldedClass(entity, 'folder');
     };
 
     $scope.create = function(parent) {

@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.discussiondetails', []).controller('DiscussionDetailsController', DiscussionDetailsController);
 
-function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, DiscussionsService, PermissionsService, ActivitiesService, EntityService, UsersService, $stateParams) {
+function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, BoldedService, DiscussionsService, PermissionsService, ActivitiesService, EntityService, UsersService, $stateParams) {
 
   // ==================================================== init ==================================================== //
 
@@ -61,6 +61,15 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     });
   });
 
+  boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+    $scope.item.bolded = updatedItem.bolded;
+  });
+
+  function boldedUpdate(entity, action) {
+    let entityType = 'discussions';
+    return BoldedService.boldedUpdate(entity, entityType, action)
+  }
+
   // ==================================================== onChanges ==================================================== //
 
   function navigateToDetails(discussion) {
@@ -77,48 +86,66 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   $scope.onStar = function(value) {
-    DiscussionsService.star($scope.item).then(function() {
-      navigateToDetails($scope.item);
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
-    });
-  }
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
 
-  $scope.onAssign = function(value) {
-    $scope.item.assign = value;
-    $scope.updateAndNotify($scope.item);
-  }
-
-  var activeLocationTimeout;
-  $scope.updateLocation = function(discussion) {
-    if (activeLocationTimeout) {
-      clearTimeout(activeLocationTimeout)
-    }
-    activeLocationTimeout = setTimeout(function() {
-      $scope.update(discussion, 'location')
-    }, 500);
-  }
-
-  $scope.onStatus = function(value) {
-    $scope.item.status = value;
-    $scope.update($scope.item, {
-      name: 'status'
+      DiscussionsService.star($scope.item).then(function () {
+        navigateToDetails($scope.item);
+        // "$scope.item.star" will be change in 'ProjectsService.star' function
+      });
     })
   }
 
+  $scope.onAssign = function(value) {
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
+
+      $scope.item.assign = value;
+      $scope.updateAndNotify($scope.item);
+    })
+  }
+
+  var activeLocationTimeout;
+
+  $scope.updateLocation = function(discussion) {
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
+
+      if (activeLocationTimeout) {
+        clearTimeout(activeLocationTimeout)
+      }
+      activeLocationTimeout = setTimeout(function () {
+        $scope.update(discussion, 'location')
+      }, 500);
+    })
+  };
+
   $scope.onStatus = function(value) {
-    $scope.item.status = value;
-    $scope.update($scope.item, {
-      name: 'status'
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
+
+      $scope.item.status = value;
+      $scope.update($scope.item, {
+        name: 'status'
+      })
     })
   }
 
   $scope.onDateDue = function(item, type) {
-    $scope.update(item, type);
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
+
+      $scope.update(item, type);
+    })
   }
 
   $scope.onTags = function(value) {
-    $scope.item.tags = value;
-    $scope.update($scope.item);
+    boldedUpdate($scope.item, 'updated').then(updatedItem => {
+      $scope.item.bolded = updatedItem.bolded;
+
+      $scope.item.tags = value;
+      $scope.update($scope.item);
+    })
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -274,7 +301,10 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
         clearTimeout(activeTitleTimeout)
       }
       activeTitleTimeout = setTimeout(function() {
-        $scope.update($scope.item, 'title')
+        boldedUpdate($scope.item, 'updated').then(updatedItem => {
+          $scope.item.bolded = updatedItem.bolded;
+          $scope.update($scope.item, 'title')
+        })
       }, 2000);
     }
   });
@@ -288,7 +318,10 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
         clearTimeout(activeDescriptionTimeout)
       }
       activeDescriptionTimeout = setTimeout(function() {
-        $scope.update($scope.item, 'description')
+        boldedUpdate($scope.item, 'updated').then(updatedItem => {
+          $scope.item.bolded = updatedItem.bolded;
+          $scope.update($scope.item, 'description')
+        })
       }, 2000);
     }
   });
@@ -421,8 +454,6 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   $scope.permsToSee = function() {
-    debugger
-
     return PermissionsService.haveAnyPerms($scope.entity);
   }
 
