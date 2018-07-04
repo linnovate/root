@@ -364,12 +364,12 @@ module.exports = function(Icu, app) {
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
   //.post(documents.upload, documents.signNew)
-    .post(documents.upload)
+    .post(documentsCrud.create)
     .get(documents.getAll);
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
     .get(documents.getById)
-    .post(documentsCrud.update)
-    .put(documentsCrud.update, star.isStarred, attachments.sign)
+    .post(documentsCrud.read,documentsCrud.update)
+    .put(documentsCrud.read,documentsCrud.update, star.isStarred, attachments.sign)
     .delete(documents.deleteDocument);
   app.route('/api/officeDocuments/create')
     .post(documentsCrud.create);

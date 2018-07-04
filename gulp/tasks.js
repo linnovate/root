@@ -79,7 +79,8 @@ gulp.task('devServe', function () {
     ext: 'html js',
     env: { 'NODE_ENV': 'development' } ,
     ignore: ['node_modules/', 'packages/custom/**/public/', 'dist/'],
-    nodeArgs: ['--inspect']
+//    nodeArgs: ['--inspect']
+    nodeArgs: ['--inspect-brk']
   });
 });
 

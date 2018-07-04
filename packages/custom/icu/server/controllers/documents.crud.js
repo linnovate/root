@@ -1,12 +1,21 @@
 'use strict';
-let options = {
+
+var _ = require('lodash');
+
+var options = {
   includes: 'assign watchers',
-  defaults: {watchers: []}
+  defaults: {
+    watchers: [],
+    circles: {}
+  }
 };
 
-let crud = require('../controllers/crud.js');
-let task = crud('tasks', options);
-let document = crud('documents', options);
+exports.defaultOptions = options;
+
+
+var crud = require('../controllers/crud.js');
+var task = crud('tasks', options);
+var document = crud('documents', options);
 
 var mongoose = require('mongoose'),
   documentModel = mongoose.model('Document'),
@@ -15,7 +24,6 @@ var mongoose = require('mongoose'),
   elasticsearch = require('./elasticsearch.js');
 
 
-exports.defaultOptions = options;
 
 
 // Object.keys(document).forEach(function(methodName) {
@@ -33,14 +41,21 @@ exports.create = function(req, res, next) {
   if(req.locals.error) {
     return next();
   }
+  console.log("document crud create") ;
+  console.log(req.body) ;
+  req.locals.result = req.body ;
+  document.create(req, res, next);
 };
 
 exports.update = function(req, res, next) {
+  console.log("document crud update") ;
+  console.log(req.body) ;
   if(req.locals.error) {
     return next();
   }
   document.update(req, res, next);
 };
+
 
 exports.destroy = function(req, res, next) {
   if(req.locals.error) {

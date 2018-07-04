@@ -51,13 +51,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
              });
          }
 
-        function update(officeDocument) {
-            console.log("OfficeDocumentsService.update")
-            return $http.put(ApiUri + EntityPrefix + '/' + officeDocument._id, officeDocument).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            });
-        }
 
         function addSerialTitle(document1){
             return $http.post(ApiUri + EntityPrefix + "/addSerialTitle", document1).then(function (result) {
@@ -178,7 +171,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         });
     }
 
-
+    
     function updateDocument(id, data) {
         return $http.post(ApiUri + EntityPrefix + "/" + id, data).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
@@ -186,20 +179,24 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         });
     }
 
-        function createDocument(data) {
-            return $http.post(ApiUri + EntityPrefix + "/create" , data).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
-                NotifyingService.notify('editionData');
-                return result.data;
-            });
-        }
+    function update(entity) {
+        return $http.post(ApiUri + EntityPrefix + "/" +entity._id, entity).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            return result.data;
+        });
+    }
 
-        function update(entity, data) {
-            return $http.post(ApiUri + EntityPrefix + "/" +entity._id, data).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            });
-        }
+
+    function createDocument(data) {
+        console.log("createDocument", data);
+        return $http.post(ApiUri + EntityPrefix + "/create" , data).then(function (result) {
+            WarningsService.setWarning(result.headers().warning);
+            NotifyingService.notify('editionData');
+            return result.data;
+        });
+    }
+
+
 
         function uploadFileToDocument(data,file){
             return Upload.upload({
@@ -421,6 +418,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             getByDiscussionId: getByDiscussionId,
             getByUserId: getByUserId,
             saveDocument: saveDocument,
+            update: update,
             updateDocument: updateDocument,
             getByOfficeId: getByOfficeId,
             getByFolderId: getByFolderId,
@@ -431,8 +429,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             distributedDocument, distributedDocument,
             readByDocument, readByDocument,
             sentToDocument, sentToDocument,
-            uploadFileToDocument:uploadFileToDocument,
-            update:update,
+            uploadFileToDocument:uploadFileToDocument,            
             updateWatcher: updateWatcher,
             updateWatcherPerms: updateWatcherPerms,
             updateStatus: updateStatus,

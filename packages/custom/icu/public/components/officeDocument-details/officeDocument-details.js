@@ -419,9 +419,16 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   // ==================================================== Update ==================================================== //
 
+
   $scope.update = function(officeDocument, context) {
 
-    OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {});
+//    OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {});
+    console.log("officeDocumentDetails update", officeDocument) ;
+    officeDocument.id = officeDocument._id ;
+    OfficeDocumentsService.update(officeDocument).then(function(result) {
+            console.log("updated document successfully") ;
+      }) ;
+  
     ActivitiesService.data = ActivitiesService.data || [];
     var me = $scope.me;
     switch (context.name) {

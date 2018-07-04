@@ -1,7 +1,6 @@
 'use strict';
 
 var _ = require('lodash');
-// var q = require('q');
 var async = require('async');
 var config = require('meanio').loadConfig();
 
@@ -77,6 +76,9 @@ exports.create = function(req, res, next) {
   if(req.locals.error) {
     return next();
   }
+  console.log("task create") ;
+  console.log(req.body) ;
+
   req.body.discussions = [];
   if(req.body.discussion) {
     req.body.discussions = [req.body.discussion];
