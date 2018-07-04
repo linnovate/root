@@ -141,7 +141,7 @@ function goOverBoldedArray(entity, action, user_id) {
       entity.bolded[i].bolded = true;
     }
     if (entity.bolded[i].id == user_id) {
-      entity.bolded[i] = changeBolded(entity.bolded[i], false)
+      entity.bolded[i] = changeBolded(entity.bolded[i], true)
     }
   }
 
