@@ -6,8 +6,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, BoldedSer
 
     // ==================================================== init ==================================================== //
 
-    $scope.item = entity || context.entity;
-    $scope.entity = entity || context.entity;
+    $scope.item = typeof entity === 'object'? entity : context.entity;
 
     if (!$scope.item) {
         $state.go('main.tasks.byentity', {
@@ -61,12 +60,10 @@ function TaskDetailsController($scope, entity, tags, projects, $state, BoldedSer
             $scope.template = template;
         });
     }
-    if($scope.item.length){
-      boldedUpdate($scope.item, 'viewed').then(updatedItem => {
-          $scope.item.bolded = updatedItem.bolded;
-          $scope.update($scope.item);
-      });
-    }
+    boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+        $scope.item.bolded = updatedItem.bolded;
+        $scope.update($scope.item);
+    });
 
     function boldedUpdate(entity, action) {
         let entityType = 'tasks';
@@ -444,21 +441,15 @@ function TaskDetailsController($scope, entity, tags, projects, $state, BoldedSer
     $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
 
     $scope.havePermissions = function (type, enableRecycled) {
-
-      if($scope.item.length){
         enableRecycled = enableRecycled || !$scope.isRecycled;
         return (PermissionsService.havePermissions($scope.item, type) && enableRecycled);
-      }
     };
 
     $scope.haveEditiorsPermissions = function () {
-
-      if($scope.item.length)
         return PermissionsService.haveEditorsPerms($scope.item);
     };
 
     $scope.permsToSee = function () {
-
       return PermissionsService.haveAnyPerms($scope.item);
     }
 }

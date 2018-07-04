@@ -190,7 +190,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
-    .post(task.create, boldedService.syncBoldUsers, boldedService.syncBoldUsers, task.updateParent, notification.sendNotification, updates.created)
+    .post(task.create, boldedService.syncBoldUsers, task.updateParent, notification.sendNotification, updates.created)
     .get(pagination.parseParams, task.all, task.populateSubTasks, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
@@ -198,7 +198,7 @@ module.exports = function(Icu, app) {
     .get(task.getZombieTasks, star.isStarred);
   app.route('/api/tasks/:id([0-9a-fA-F]{24})')
     .get(task.read, star.isStarred)
-    .put(task.read, task.update, profile.profile, profile.updateMember, star.isStarred, attachments.sign, updates.updated, notification.updateTaskNotification)
+    .put(task.read, task.update,  boldedService.syncBoldUsers, profile.profile, profile.updateMember, star.isStarred, attachments.sign, updates.updated, notification.updateTaskNotification)
     .delete(star.unstarEntity, task.read, task.removeSubTask, task.destroy);
   app.route('/api/tasks/byAssign')
     .get(task.byAssign, task.populateSubTasks);

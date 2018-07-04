@@ -77,6 +77,7 @@ exports.create = function(req, res, next) {
   if(req.locals.error) {
     return next();
   }
+  req.locals.action = 'create';
   req.body.discussions = [];
   if(req.body.discussion) {
     req.body.discussions = [req.body.discussion];
@@ -95,6 +96,7 @@ exports.update = function(req, res, next) {
   if(req.locals.error) {
     return next();
   }
+  req.locals.action = 'update';
   if(req.body.discussion) {
     var alreadyAdded = _(req.locals.result.discussions).any(function(d) {
       return d.toString() === req.body.discussion;
