@@ -334,9 +334,6 @@ var byAssign = function(req, res, next) {
     });
 };
 
-//       next();
-//     });
-// } ;
 
 
 function getTasksDueTodayQuery(req, callback) {

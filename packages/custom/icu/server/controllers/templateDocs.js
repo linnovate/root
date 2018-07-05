@@ -466,12 +466,7 @@ exports.uploadTemplate = function(req, res, next) {
         }
       });
     });
-
-
-
-    });
-
-//  });
+  });
   return req.pipe(busboy);
 };
 
