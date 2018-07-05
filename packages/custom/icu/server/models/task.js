@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 var TaskSchema = new Schema({
   customId: {
     type: String,
-    unique: true,
+    unique: false,
     dropDups: true
   },
   created: {
