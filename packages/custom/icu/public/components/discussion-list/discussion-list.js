@@ -60,7 +60,7 @@ function DiscussionListController($scope, $state, discussions, BoldedService, Di
     };
 
     $scope.getBoldedClass = function(entity){
-      return BoldedService.getBoldedClass(entity, 'discussion');
+      return BoldedService.getBoldedClass(entity, 'discussions');
     };
 
     $scope.getDate = function(discussion) {

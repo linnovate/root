@@ -12,7 +12,7 @@ function OfficeDocumentListController($scope, $state, BoldedService, officeDocum
     }
 
     $scope.getBoldedClass = function(entity){
-      return BoldedService.getBoldedClass(entity, 'officeDocument');
+      return BoldedService.getBoldedClass(entity, 'officeDocuments');
     };
 
     $scope.create = function(parentsFolder) {

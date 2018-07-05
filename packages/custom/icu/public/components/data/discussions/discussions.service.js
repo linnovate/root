@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.discussionsservice', [])
-.service('DiscussionsService', function (ApiUri, $http, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
+.service('DiscussionsService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
     var EntityPrefix = '/discussions';
     var data;
 
@@ -65,11 +65,15 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function update(discussion) {
-        return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion).then(function (result) {
+        return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion)
+          .then(function (result) {
             NotifyingService.notify('editionData');
-        	WarningsService.setWarning(result.headers().warning);
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
-        });
+          })
+          .then(entity => {
+            return BoldedService.boldedUpdate(entity, 'discussions', 'update');
+          })
     }
 
     function remove(id) {
@@ -133,9 +137,9 @@ angular.module('mean.icu.data.discussionsservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => {
+          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
+        })
     }
 
     function updateStatus(discussion, prev) {
@@ -148,9 +152,9 @@ angular.module('mean.icu.data.discussionsservice', [])
                 prev: prev.status
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => {
+          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
+        })
     }
 
     function updateDue(discussion, prev, type) {
@@ -163,9 +167,9 @@ angular.module('mean.icu.data.discussionsservice', [])
                 prev: type === 'startDue' ? prev.startDate : prev.endDate
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => {
+          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
+        })
     }
 
     function updateLocation(discussion, prev) {
@@ -179,9 +183,9 @@ angular.module('mean.icu.data.discussionsservice', [])
                 prev: prev.location
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => {
+          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
+        })
     }
 
     function updateTitle(discussion, prev, type) {
@@ -216,9 +220,9 @@ angular.module('mean.icu.data.discussionsservice', [])
                 prev: prev.assign ? prev.assign.name : ''
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => {
+          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
+        })
     }
 
     return {

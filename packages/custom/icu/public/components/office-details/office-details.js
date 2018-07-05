@@ -68,33 +68,24 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
   }
 
   $scope.onStar = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-      OfficesService.star($scope.item).then(function () {
-        navigateToDetails($scope.item);
-        // "$scope.item.star" will be change in 'ProjectsService.star' function
-      });
-    })
+    OfficesService.star($scope.item).then(function () {
+      navigateToDetails($scope.item);
+      // "$scope.item.star" will be change in 'ProjectsService.star' function
+    });
   }
 
   $scope.onColor = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-      $scope.update($scope.item, value);
-    })
+    $scope.update($scope.item, value);
   }
 
   $scope.onWantToCreateRoom = function() {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-      $scope.item.WantRoom = true;
+    $scope.item.WantRoom = true;
 
-      $scope.update($scope.item, context);
+    $scope.update($scope.item, context);
 
-      OfficesService.WantToCreateRoom($scope.item).then(function() {
-        navigateToDetails($scope.item);
-      })
-    });
+    OfficesService.WantToCreateRoom($scope.item).then(function() {
+      navigateToDetails($scope.item);
+    })
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -126,10 +117,7 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
         newVal: nVal,
         action: 'renamed'
       };
-      boldedUpdate($scope.item, 'updated').then(updatedItem => {
-        $scope.item.bolded = updatedItem.bolded;
-        $scope.delayedUpdate($scope.item, newContext);
-      })
+      $scope.delayedUpdate($scope.item, newContext);
     }
   });
 
@@ -143,10 +131,7 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
         oldVal: oVal,
         newVal: nVal
       };
-      boldedUpdate($scope.item, 'updated').then(updatedItem => {
-        $scope.item.bolded = updatedItem.bolded;
-        $scope.delayedUpdate($scope.item, newContext);
-      })
+      $scope.delayedUpdate($scope.item, newContext);
     }
   });
 

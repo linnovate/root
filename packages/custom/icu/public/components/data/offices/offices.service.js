@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.officesservice', [])
-.service('OfficesService', function(ApiUri, $http, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('OfficesService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/offices';
     var data, selected;
 
@@ -91,7 +91,10 @@ angular.module('mean.icu.data.officesservice', [])
                 });
             }
             return result.data;
-        });
+        })
+        .then(entity => {
+          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+        })
     }
 
     function remove(id) {
@@ -150,9 +153,9 @@ angular.module('mean.icu.data.officesservice', [])
                 status: office.color
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => {
+          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+        })
     }
 
     function updateTitle(office, prev, type) {

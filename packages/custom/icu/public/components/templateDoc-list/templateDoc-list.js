@@ -14,7 +14,7 @@ function TemplateDocListController($scope, $state, templateDocs, BoldedService, 
     };
 
     $scope.getBoldedClass = function(entity){
-      return BoldedService.getBoldedClass(entity, 'templateDoc');
+      return BoldedService.getBoldedClass(entity, 'templateDocs');
     };
 
     $scope.create = function(item) {

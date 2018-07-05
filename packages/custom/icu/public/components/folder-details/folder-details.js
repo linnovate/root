@@ -76,7 +76,7 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
   }
 
   $scope.onStar = function(value) {
-    FoldersService.star($scope.item).then(function() {
+    FoldersService.star($scope.item).then(function () {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });

@@ -35,7 +35,7 @@ function TaskListController($scope, $timeout, $state, tasks, BoldedService, Disc
     };
 
     $scope.getBoldedClass = function(entity){
-        return BoldedService.getBoldedClass(entity, 'task');
+        return BoldedService.getBoldedClass(entity, 'tasks');
     };
 
     $scope.update = function(item) {

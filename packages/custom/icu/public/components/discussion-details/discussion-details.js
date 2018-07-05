@@ -86,66 +86,42 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   $scope.onStar = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-
-      DiscussionsService.star($scope.item).then(function () {
-        navigateToDetails($scope.item);
-        // "$scope.item.star" will be change in 'ProjectsService.star' function
-      });
-    })
+    DiscussionsService.star($scope.item).then(function () {
+      navigateToDetails($scope.item);
+      // "$scope.item.star" will be change in 'ProjectsService.star' function
+    });
   }
 
   $scope.onAssign = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-
-      $scope.item.assign = value;
-      $scope.updateAndNotify($scope.item);
-    })
+    $scope.item.assign = value;
+    $scope.updateAndNotify($scope.item);
   }
 
   var activeLocationTimeout;
 
   $scope.updateLocation = function(discussion) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-
-      if (activeLocationTimeout) {
-        clearTimeout(activeLocationTimeout)
-      }
-      activeLocationTimeout = setTimeout(function () {
-        $scope.update(discussion, 'location')
-      }, 500);
-    })
+    if (activeLocationTimeout) {
+      clearTimeout(activeLocationTimeout)
+    }
+    activeLocationTimeout = setTimeout(function () {
+      $scope.update(discussion, 'location')
+    }, 500);
   };
 
   $scope.onStatus = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-
-      $scope.item.status = value;
-      $scope.update($scope.item, {
-        name: 'status'
-      })
+    $scope.item.status = value;
+    $scope.update($scope.item, {
+      name: 'status'
     })
   }
 
   $scope.onDateDue = function(item, type) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-
-      $scope.update(item, type);
-    })
+    $scope.update(item, type);
   }
 
   $scope.onTags = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-
-      $scope.item.tags = value;
-      $scope.update($scope.item);
-    })
+    $scope.item.tags = value;
+    $scope.update($scope.item);
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -301,10 +277,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
         clearTimeout(activeTitleTimeout)
       }
       activeTitleTimeout = setTimeout(function() {
-        boldedUpdate($scope.item, 'updated').then(updatedItem => {
-          $scope.item.bolded = updatedItem.bolded;
-          $scope.update($scope.item, 'title')
-        })
+        $scope.update($scope.item, 'title')
       }, 2000);
     }
   });
@@ -318,10 +291,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
         clearTimeout(activeDescriptionTimeout)
       }
       activeDescriptionTimeout = setTimeout(function() {
-        boldedUpdate($scope.item, 'updated').then(updatedItem => {
-          $scope.item.bolded = updatedItem.bolded;
-          $scope.update($scope.item, 'description')
-        })
+        $scope.update($scope.item, 'description')
       }, 2000);
     }
   });

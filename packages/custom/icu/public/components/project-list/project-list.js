@@ -35,7 +35,7 @@ function ProjectListController($scope, $state, $timeout, projects, BoldedService
     }
 
     $scope.getBoldedClass = function(entity){
-      return BoldedService.getBoldedClass(entity, 'project');
+      return BoldedService.getBoldedClass(entity, 'projects');
     };
 
     $scope.update = function(item) {

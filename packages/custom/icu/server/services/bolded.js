@@ -37,29 +37,34 @@ var entityNameMap = {
 function boldUpdate(req, res, next) {
   let {entity_id, user_id, entity_type, action} = req.body;
   let entityController = entityNameMap[entity_type].controller;
+  if (!entity_id) {
+    res.status(400);
+  }
 
   entityController
     .findOne({
       _id: entity_id
     })
+    .populate('watchers')
     .exec(function (err, entity) {
-      if (err) return next();
+      if (err || !entity) {
+        res.status(400);
+        return;
+      }
 
       switch (action) {
-        case 'viewed':
-          syncBoldUsers(
-            {
-              body: entity,
-              controller: entityController,
-              actionType: 'update',
-              boldedUpdate: true
-            }, res, next);
-          entity = goOverBoldedArray(entity, action, user_id);
+        case 'view':
+
+          let ownBolded = entity.bolded.find((bolded)=>{
+            return bolded.id.toString() === user_id;
+          });
+          ownBolded.bolded = false;
+
           let data = {$set: {bolded: entity.bolded}};
           saveEntity(entityController, entity, data);
           break;
 
-        case 'updated':
+        case 'update':
           syncBoldUsers(
             {
               body: entity,
@@ -76,15 +81,15 @@ function boldUpdate(req, res, next) {
 }
 
 function syncBoldUsers(req, res, next) {
-  let data;
-  let boldedUpdate = req.boldedUpdate;
   let entity = req.locals ? req.locals.result : req.body;
-  let entityType = req.locals? req.locals.data.entityName : req.entityType;
-
-  if(!entity){
+  if (!entity) {
     next();
   }
+  let data;
+  let boldedUpdate = req.boldedUpdate;
+  let entityType = req.locals ? req.locals.data.entityName : req.entityType;
   let entityController = req.controller || entityNameMap[entityType].controller;
+
 
   let actionType = req.actionType || 'create';
 
@@ -92,46 +97,26 @@ function syncBoldUsers(req, res, next) {
 
     case 'create':
       entity.bolded = [];
-      entity.bolded.push(createBoldedObject(entity.creator));
+      entity.bolded.push(createBoldedObject(entity.creator, false));
 
       data = {$set: {bolded: entity.bolded}};
       saveEntity(entityController, entity, data);
-
       break;
 
     case 'update':
-      if(typeof entity.watchers[0] === 'string'){
-        entityController.find({_id:{$in: [entity.watchers]}}).exec(function(err, watchers) {
-          if (err) {
-            req.locals.error = err;
-          } else {
-            entity.watchers = watchers;
-            data = {$set: {bolded: compareBoldedAndWatchers(entity)}};
-            saveEntity(entityController, entity, data);
-          }
-        });
-      } else {
-        data = {$set: {bolded: compareBoldedAndWatchers(entity)}};
-        saveEntity(entityController, entity, data);
-      }
+      data = {$set: {bolded: compareBoldedAndWatchers(entity)}};
+      saveEntity(entityController, entity, data);
       break;
   }
-  if(!boldedUpdate){
-    res.json(entity);
+  if (!boldedUpdate) {
+    next();
   }
 }
 
 function saveEntity(entityController, entity, data) {
-  console.log('saveEntity');
+
   entityController.findOneAndUpdate({_id: entity._id}, data,
-    function (err, updatedEntity) {
-      if (err) {
-        req.locals.error = err;
-        console.log('err: ',err);
-      }
-      console.log('entity1: ',entity);
-      entity.bolded = data;
-      console.log('entity2: ',updatedEntity);
+    function (err, entity) {
     });
 }
 
@@ -149,31 +134,26 @@ function goOverBoldedArray(entity, action, user_id) {
 }
 
 function compareBoldedAndWatchers(entity) {
+  entity.bolded = [];
   for (let i = 0; i < entity.watchers.length; i++) {
-    let bolded = entity.bolded.findIndex((bolded) => {
-      let watcherId = entity.watchers[i]._id || entity.watchers[i];
+    let bolded = entity.bolded.find((bolded) => {
 
-
-      return bolded.id.toString() == watcherId.toString();
+      return bolded.id === entity.watchers[i]._id;
     });
-
-    if (bolded === -1) {
-      entity.bolded.push(createBoldedObject(entity.watchers[i]._id || entity.watchers[i]));
+    if (!bolded) {
+      let newBolded = createBoldedObject(entity.watchers[i]._id, true);
+      entity.bolded.push(newBolded);
     }
   }
-
   for (let i = 0; i < entity.bolded.length; i++) {
-    let watcher = entity.watchers.findIndex((watcher) => {
-      let watcherId = watcher._id || watcher;
-
-      return watcherId.toString() == entity.bolded[i].id.toString();
+    let watcher = entity.watchers.find((watcher) => {
+      return watcher._id === entity.bolded[i].id;
     });
 
-    if (watcher === -1) {
+    if (!watcher || !entity.bolded[i].id) {
       entity.bolded.splice(i, 1);
     }
   }
-
   return entity.bolded;
 }
 
@@ -185,11 +165,11 @@ function changeBolded(boldedObject, type) {
   return boldedObject;
 }
 
-function createBoldedObject(userId) {
+function createBoldedObject(userId, status) {
 
   return {
     id: userId,
-    bolded: true,
+    bolded: status,
     lastViewed: Date.now(),
   }
 }

@@ -18,7 +18,7 @@ function OfficeListController($scope, $state, offices, BoldedService, OfficesSer
     };
 
     $scope.getBoldedClass = function(entity){
-      return BoldedService.getBoldedClass(entity, 'office');
+      return BoldedService.getBoldedClass(entity, 'offices');
     };
 
     $scope.create = function(item) {

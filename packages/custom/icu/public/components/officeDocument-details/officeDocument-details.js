@@ -105,121 +105,102 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   }
 
   $scope.onStar = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-
-      OfficeDocumentsService.star($scope.item).then(function () {
-        navigateToDetails($scope.item);
-        // "$scope.item.star" will be change in 'ProjectsService.star' function
-      });
+    OfficeDocumentsService.star($scope.item).then(function () {
+      navigateToDetails($scope.item);
+      // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
   }
 
   $scope.onAssign = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-      $scope.item.assign = value;
-      var json = {
-        'name': 'assign',
-        'newVal': $scope.item.assign
-      };
+    $scope.item.assign = value;
+    var json = {
+      'name': 'assign',
+      'newVal': $scope.item.assign
+    };
 
-      if ($scope.item.assign != null) {
-        // check the assignee is not a watcher already
-        let filtered = $scope.item.watchers.filter(watcher => {
-            return watcher._id == $scope.item.assign
-          }
-        );
-
-        let index = $scope.item.watchers.findIndex(function (watcher) {
-          console.log("watcher", watcher);
-          return watcher === $scope.item.assign;
-        });
-
-        // add assignee as watcher
-        if (filtered.length == 0 && index === -1) {
-          console.log("officeDocument updateAssign updating:")
-          $scope.item.watchers.push($scope.item.assign);
-          console.log($scope.item.watchers);
+    if ($scope.item.assign != null) {
+      // check the assignee is not a watcher already
+      let filtered = $scope.item.watchers.filter(watcher => {
+          return watcher._id == $scope.item.assign
         }
-      }
+      );
 
-      OfficeDocumentsService.updateDocument($scope.item._id, json);
-      OfficeDocumentsService.updateAssign($scope.item, backupEntity).then(function (result) {
+      let index = $scope.item.watchers.findIndex(function (watcher) {
+        console.log("watcher", watcher);
+        return watcher === $scope.item.assign;
+      });
+
+      // add assignee as watcher
+      if (filtered.length == 0 && index === -1) {
+        console.log("officeDocument updateAssign updating:")
+        $scope.item.watchers.push($scope.item.assign);
+        console.log($scope.item.watchers);
+      }
+    }
+
+    OfficeDocumentsService.updateDocument($scope.item._id, json);
+    OfficeDocumentsService.updateAssign($scope.item, backupEntity).then(function (result) {
+      backupEntity = JSON.parse(JSON.stringify($scope.item));
+      ActivitiesService.data = ActivitiesService.data || [];
+      ActivitiesService.data.push(result);
+    });
+  }
+
+  $scope.onDateDue = function(value) {
+    $scope.item.due = value;
+    $scope.update($scope.officeDocument, {
+      name: 'due'
+    });
+  }
+
+  $scope.onStatus = function(value) {
+    $scope.item.status = value;
+    var context = {
+      "name": "status",
+      "newVal": $scope.item.status,
+      "oldVal": officeDoc.status
+    };
+    $scope.update($scope.item, context);
+  }
+
+  $scope.onTags = function(value) {
+    var context = {
+      name: 'tags',
+      oldVal: $scope.item.tags,
+      newVal: value,
+      action: 'changed'
+    };
+    $scope.update($scope.item, context);
+  }
+
+  $scope.onCategory = function(value) {
+    let folderId = value && value._id || undefined;
+    var json = {
+      'name': 'folder',
+      'newVal': folderId,
+    };
+//     if (!$scope.item.folder) {
+//       $scope.item.watchers = $scope.item.folder.watchers.concat($scope.item.watchers);
+//     }
+    $scope.item.watchers = _.map(_.groupBy($scope.item.watchers, function (doc) {
+      return doc._id || doc;
+    }), function (grouped) {
+      return grouped[0];
+    });
+    json.watchers = $scope.item.watchers;
+    OfficeDocumentsService.updateDocument($scope.item._id, json).then(function (res) {
+      OfficeDocumentsService.updateEntity($scope.item, backupEntity).then(function (result) {
+        if (folderId == undefined) {
+          delete $scope.item.folder;
+          $scope.signatures = undefined;
+        } else {
+          $scope.getSignatures();
+        }
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
       });
-    })
-  }
-
-  $scope.onDateDue = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-      $scope.item.due = value;
-      $scope.update($scope.officeDocument, {
-        name: 'due'
-      });
-    })
-  }
-
-  $scope.onStatus = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-      $scope.item.status = value;
-      var context = {
-        "name": "status",
-        "newVal": $scope.item.status,
-        "oldVal": officeDoc.status
-      };
-      $scope.update($scope.item, context);
-    })
-  }
-
-  $scope.onTags = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-      var context = {
-        name: 'tags',
-        oldVal: $scope.item.tags,
-        newVal: value,
-        action: 'changed'
-      };
-      $scope.update($scope.item, context);
-    })
-  }
-
-  $scope.onCategory = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-      let folderId = value && value._id || undefined;
-      var json = {
-        'name': 'folder',
-        'newVal': folderId,
-      };
-//     if (!$scope.item.folder) {
-//       $scope.item.watchers = $scope.item.folder.watchers.concat($scope.item.watchers);
-//     }
-      $scope.item.watchers = _.map(_.groupBy($scope.item.watchers, function (doc) {
-        return doc._id || doc;
-      }), function (grouped) {
-        return grouped[0];
-      });
-      json.watchers = $scope.item.watchers;
-      OfficeDocumentsService.updateDocument($scope.item._id, json).then(function (res) {
-        OfficeDocumentsService.updateEntity($scope.item, backupEntity).then(function (result) {
-          if (folderId == undefined) {
-            delete $scope.item.folder;
-            $scope.signatures = undefined;
-          } else {
-            $scope.getSignatures();
-          }
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
-          ActivitiesService.data = ActivitiesService.data || [];
-          ActivitiesService.data.push(result);
-        });
-      });
-    })
+    });
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -427,10 +408,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         newVal: nVal,
         action: 'renamed'
       };
-      boldedUpdate($scope.item, 'updated').then(updatedItem => {
-        $scope.item.bolded = updatedItem.bolded;
-        $scope.delayedUpdate($scope.item, newContext);
-      })
+      $scope.delayedUpdate($scope.item, newContext);
     }
   });
 
@@ -444,10 +422,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         oldVal: oVal,
         newVal: nVal,
       };
-      boldedUpdate($scope.item, 'updated').then(updatedItem => {
-        $scope.item.bolded = updatedItem.bolded;
-        $scope.delayedUpdate($scope.item, newContext);
-      })
+      $scope.delayedUpdate($scope.item, newContext);
     }
   });
 

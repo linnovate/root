@@ -5,7 +5,7 @@ angular.module('mean.icu.ui.membersfooter', [])
         function controller($scope, $state, $injector, context, $stateParams, $timeout,
                             circlesService,PermissionsService, UsersService, ActivitiesService,TasksService,
                             ProjectsService, DiscussionsService, OfficeDocumentsService, FoldersService,
-                            OfficesService, BoldedService) {
+                            OfficesService) {
 
             var serviceMap = {
                 task: 'TasksService',
@@ -152,7 +152,6 @@ angular.module('mean.icu.ui.membersfooter', [])
 
 
                 getWatchersGroups();
-
             };
 
             $scope.showSelect = false;
@@ -279,10 +278,9 @@ angular.module('mean.icu.ui.membersfooter', [])
                         });
                         break ;
                 }
-
             };
 
-            $scope.isDropdownwatchersOpen = false;
+          $scope.isDropdownwatchersOpen = false;
 
             $scope.toggled = function() {
                 $scope.isDropdownwatchersOpen = !$scope.isDropdownwatchersOpen;

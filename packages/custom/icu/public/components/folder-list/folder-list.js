@@ -18,7 +18,7 @@ function FolderListController($scope, $state, folders, BoldedService, FoldersSer
     };
 
     $scope.getBoldedClass = function(entity){
-      return BoldedService.getBoldedClass(entity, 'folder');
+      return BoldedService.getBoldedClass(entity, 'folders');
     };
 
     $scope.create = function(parent) {
@@ -35,7 +35,7 @@ function FolderListController($scope, $state, folders, BoldedService, FoldersSer
             FoldersService.data.push(result);
             return result;
         });
-    }
+    };
 
     $scope.loadMore = function(start, LIMIT, sort) {
         return OfficesService.getAll(start, LIMIT, sort).then(function(docs) {
