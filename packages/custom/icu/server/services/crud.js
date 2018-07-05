@@ -309,10 +309,10 @@ module.exports = function(entityName, options) {
     circlesAcl.sign('mongoose', oldE.sources, oldE.circles, acl, function(error, circles) {
       if (error) deffered.reject(error);
       else {
-        // oldE.updated = new Date();
-        // oldE.updater = user.user._id;
-        // oldE.circles = _.extend(oldE.circles, circles);
-        // oldE.markModified('circles');
+        oldE.updated = new Date();
+        oldE.updater = user.user._id;
+        oldE.circles = _.extend(oldE.circles, circles);
+        oldE.markModified('circles');
         console.log("crud update XXX") ;
         console.log(JSON.stringify(oldE)) ;
         deffered.resolve(oldE.save(user).then(function(e) {
