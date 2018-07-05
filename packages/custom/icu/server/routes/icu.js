@@ -360,19 +360,16 @@ module.exports = function(Icu, app) {
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
 
-
+  /* OFFICEDOCUMENTS */
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
-  //.post(documents.upload, documents.signNew)
     .post(documentsCrud.create)
-    .get(documents.getAll);
+    .get(documentsCrud.getAll);
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
-    .get(documents.getById)
-    .post(documentsCrud.read,documentsCrud.update)
+    .get(documentsCrud.read, star.isStarred)
     .put(documentsCrud.read,documentsCrud.update, star.isStarred, attachments.sign)
     .delete(documents.deleteDocument);
-  app.route('/api/officeDocuments/create')
-    .post(documentsCrud.create);
+
   app.route('/api/officeDocuments/addSerialTitle')
     .post(documents.addSerialTitle);
 
