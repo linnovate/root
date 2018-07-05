@@ -15,7 +15,6 @@ angular.module('mean.icu.data.boldedservice', [])
         entity_type: entityType,
         action: action,
       };
-      console.log(boldedObject);
       return $http.post(ApiUri + EntityPrefix, boldedObject)
         .then(function (result) {
           return result.data;
@@ -25,6 +24,7 @@ angular.module('mean.icu.data.boldedservice', [])
     function getBoldedClass(entity, entityType){
       if(!entity)return;
       if(!entity.bolded){
+        entity.bolded = [];
         boldedUpdate(entity, entityType, 'updated')
       }
       let bolded = entity.bolded.find((item)=>{return item.id === me._id});
