@@ -2,13 +2,15 @@
 
 var _ = require('lodash');
 
-var task = require('../models/task');
-var project = require('../models/project');
-var discussion = require('../models/discussion');
-var office = require('../models/office');
-var folder = require('../models/folder');
-var document = require('../models/document');
-var templateDoc = require('../models/templateDoc');
+var task = require('../models/task'),
+    project = require('../models/project'),
+    discussion = require('../models/discussion'),
+    office = require('../models/office'),
+    folder = require('../models/folder'),
+    document = require('../models/document'),
+    templateDoc = require('../models/templateDoc'),
+    user = require('../models/user'),
+    mongoose = require('mongoose');
 
 var entityNameMap = {
   tasks: {
@@ -48,13 +50,13 @@ function boldUpdate(req, res, next) {
     .populate('watchers')
     .exec(function (err, entity) {
       if (err || !entity) {
+        console.log('Entity not found: ', entity_id);
         res.status(400);
         return;
       }
 
       switch (action) {
         case 'view':
-
           let ownBolded = entity.bolded.find((bolded)=>{
             return bolded.id.toString() === user_id;
           });
@@ -65,7 +67,8 @@ function boldUpdate(req, res, next) {
           break;
 
         case 'update':
-          syncBoldUsers(
+          entity = goOverBoldedArray(entity, action, user_id);
+          entity = syncBoldUsers(
             {
               body: entity,
               entityType: entity_type,
@@ -73,7 +76,6 @@ function boldUpdate(req, res, next) {
               actionType: 'update',
               boldedUpdate: true
             }, res, next);
-          entity = goOverBoldedArray(entity, action, user_id);
           break;
       }
       res.status(200).send(entity);
@@ -83,7 +85,7 @@ function boldUpdate(req, res, next) {
 function syncBoldUsers(req, res, next) {
   let entity = req.locals ? req.locals.result : req.body;
   if (!entity) {
-    next();
+    res.status(404);
   }
   let data;
   let boldedUpdate = req.boldedUpdate;
@@ -110,11 +112,12 @@ function syncBoldUsers(req, res, next) {
   }
   if (!boldedUpdate) {
     next();
+  } else {
+    return entity;
   }
 }
 
 function saveEntity(entityController, entity, data) {
-
   entityController.findOneAndUpdate({_id: entity._id}, data,
     function (err, entity) {
     });
@@ -122,10 +125,10 @@ function saveEntity(entityController, entity, data) {
 
 function goOverBoldedArray(entity, action, user_id) {
   for (let i = 0; i < entity.bolded.length; i++) {
-    if (action === 'updated') {
+    if (action === 'update') {
       entity.bolded[i].bolded = true;
     }
-    if (entity.bolded[i].id == user_id) {
+    if (entity.bolded[i].id === user_id) {
       entity.bolded[i] = changeBolded(entity.bolded[i], false)
     }
   }
@@ -134,20 +137,18 @@ function goOverBoldedArray(entity, action, user_id) {
 }
 
 function compareBoldedAndWatchers(entity) {
-  entity.bolded = [];
   for (let i = 0; i < entity.watchers.length; i++) {
     let bolded = entity.bolded.find((bolded) => {
-
-      return bolded.id === entity.watchers[i]._id;
+      return bolded.id.toString() === entity.watchers[i]._id.toString();
     });
     if (!bolded) {
-      let newBolded = createBoldedObject(entity.watchers[i]._id, true);
-      entity.bolded.push(newBolded);
+      entity.bolded.push(createBoldedObject(entity.watchers[i]._id.toString(), true));
     }
   }
+
   for (let i = 0; i < entity.bolded.length; i++) {
-    let watcher = entity.watchers.find((watcher) => {
-      return watcher._id === entity.bolded[i].id;
+    let watcher = entity.watchers.find((watcherObj) => {
+      return watcherObj._id.toString() === entity.bolded[i].id.toString();
     });
 
     if (!watcher || !entity.bolded[i].id) {
@@ -158,7 +159,6 @@ function compareBoldedAndWatchers(entity) {
 }
 
 function changeBolded(boldedObject, type) {
-
   boldedObject.bolded = type;
   boldedObject.lastViewed = Date.now();
 
@@ -166,7 +166,6 @@ function changeBolded(boldedObject, type) {
 }
 
 function createBoldedObject(userId, status) {
-
   return {
     id: userId,
     bolded: status,

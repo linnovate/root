@@ -32,7 +32,7 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
 
   $scope.people = people.data || people;
 
-  boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+  boldedUpdate($scope.item, 'view').then(updatedItem => {
     $scope.item.bolded = updatedItem.bolded;
   });
 
@@ -44,14 +44,11 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   // ==================================================== onChanges ==================================================== //
 
   $scope.onCategory = function(value) {
-    boldedUpdate($scope.item, 'updated').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-      var json = {
-        'name': 'office',
-        'newVal': value && value._id,
-      };
-      TemplateDocsService.updateTemplateDoc($scope.item._id, json);
-    })
+    var json = {
+      'name': 'office',
+      'newVal': value && value._id,
+    };
+    TemplateDocsService.updateTemplateDoc($scope.item._id, json);
   }
 
   // ==================================================== Menu events ==================================================== //

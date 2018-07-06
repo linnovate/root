@@ -66,11 +66,8 @@ var ProjectSchema = new Schema({
     {
       _id: false,
       id: {type: Schema.ObjectId, ref: 'User'},
-      bolded: {
-        type: Boolean,
-        default: false
-      },
-      lastViewed: {type: Date}
+      bolded: Boolean,
+      lastViewed: Date
     }
   ],
   permissions: [

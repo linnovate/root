@@ -93,7 +93,7 @@ angular.module('mean.icu.data.officesservice', [])
             return result.data;
         })
         .then(entity => {
-          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+          return BoldedService.boldedUpdate(entity, 'offices', 'update');
         })
     }
 
@@ -154,7 +154,7 @@ angular.module('mean.icu.data.officesservice', [])
             },
             context: {}
         }).then(entity => {
-          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+          return BoldedService.boldedUpdate(entity, 'offices', 'update');
         })
     }
 

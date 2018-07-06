@@ -60,7 +60,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
 
         function signOnDocx(document1,signature){
             var json = {
-                'document':document1,
+                'officeDocuments':document1,
                 'signature':signature
             };
             return $http.post(ApiUri + EntityPrefix + "/signOnDocx", json).then(function (result) {
@@ -175,6 +175,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         return $http.post(ApiUri + EntityPrefix + "/" + id, data).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
             return result.data;
+        })
+        .then(entity=>{
+          return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
         });
     }
 
@@ -192,7 +195,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 return result.data;
             })
             .then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
             })
         }
 
@@ -203,7 +206,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 file: file
             })
             .then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
             })
         }
 
@@ -245,7 +248,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 },
                 context: {}
             }).then(entity => {
-              return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
             })
         }
 
@@ -277,7 +280,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 },
                 context: {}
             }).then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
             })
         }
 
@@ -299,7 +302,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 },
                 context: {}
             }).then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
             })
         }
 
@@ -369,7 +372,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 },
                 context: {}
             }).then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
             })
         }
 

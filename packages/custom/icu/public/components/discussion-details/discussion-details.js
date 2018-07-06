@@ -61,7 +61,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     });
   });
 
-  boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+  boldedUpdate($scope.item, 'view').then(updatedItem => {
     $scope.item.bolded = updatedItem.bolded;
   });
 

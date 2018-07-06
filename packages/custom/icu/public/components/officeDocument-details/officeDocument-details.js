@@ -80,7 +80,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     });
   });
 
-  boldedUpdate($scope.item, 'viewed').then(updatedItem => {
+  boldedUpdate($scope.item, 'view').then(updatedItem => {
     $scope.item.bolded = updatedItem.bolded;
   });
 
