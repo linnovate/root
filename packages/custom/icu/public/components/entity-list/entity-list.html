@@ -3,7 +3,11 @@
     <div ng-include="'/icu/components/entity-list/regions/header.html'"></div>
 
     <div ng-if="!multipleSelectMode" ng-include="'/icu/components/entity-list/regions/filters.html'"></div>
-    <div ng-if="multipleSelectMode" ng-include="'/icu/components/bulk-operations/bulk-operations.html'"></div>
+  <div
+    multiple-select
+    ng-if="multipleSelectMode"
+    class="multiple-select">
+  </div>
 
     <div
         ng-include="'/icu/components/entity-list/regions/list.html'"

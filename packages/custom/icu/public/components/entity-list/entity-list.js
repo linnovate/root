@@ -11,8 +11,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ========================= navigate ========================== //
     // ============================================================= //
 
-    $scope.multipleSelectMode = false;
-
     $scope.isCurrentEntityState = function(id) {
         return $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity`) === 0 && $state.current.name.indexOf('details') === -1;
     }
@@ -194,6 +192,28 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         }
         );
     };
+
+    // ============================================================= //
+    // =================== multiple operations ===================== //
+    // ============================================================= //
+
+    $scope.multipleSelectMode = false;
+    console.log('multipleSelectMode: ', $scope.multipleSelectMode);
+    $scope.multipleSelectMode = true;
+    $scope.selectedItems = [];
+
+    $scope.$on('refreshSelectedList', function (event, args) {
+      let entitySelectedIndex = $scope.selectedItems.findIndex((entity)=>{
+        return entity._id === args.entity._id;
+      });
+
+      if(entitySelectedIndex){
+        $scope.selectedItems.splice(entitySelectedIndex, 1);
+      } else {
+        $scope.selectedItems.push(args.entity);
+      }
+    });
+
 
     // ============================================================= //
     // ======================= item function ======================= //

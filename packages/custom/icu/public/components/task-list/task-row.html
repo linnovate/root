@@ -2,7 +2,13 @@
     <!--<i class="fa fa-ellipsis-v"></i>-->
     <!--<i class="fa fa-ellipsis-v"></i>-->
 <!--</td>-->
-<td class="id">{{$index + 1}}</td>
+<td ng-if="!multipleSelectMode" class="id">{{$index + 1}}</td>
+<td ng-if="multipleSelectMode" class="tick">
+  <input type="checkbox"
+    ng-model="string"
+    [name="string"]
+    [ng-change="refreshSelectedList(item)"]>
+</td>
 <td class="name"
     title="{{item.title}}"
     ng-attr-contenteditable="{{(!displayOnly && haveEditiorsPermissions(item)) && !recycled(item)}}"

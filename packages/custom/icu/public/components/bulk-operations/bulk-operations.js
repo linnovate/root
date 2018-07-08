@@ -1,12 +1,11 @@
 'use strict';
 
-function MultipleSelectController($scope, PermissionsService) {
-
-  var vm = this;
-
-  console.log(vm.selectedItems);
-  // $scope.selectedItems;
-
-}
-
-angular.module('mean.icu.ui.bulkoperations', []).controller('MultipleSelectController', MultipleSelectController);
+angular.module('mean.icu.ui.bulkoperations', [])
+  .component('multipleSelect', {
+    controller: function MultipleSelectController($rootScope, $scope) {
+      $scope;
+      console.log()
+    },
+    templateUrl: '/icu/components/bulk-operations/bulk-operations.html',
+    container: '^^mean.icu.ui.entityList'
+  });
