@@ -61,5 +61,6 @@ module.exports = function(app, db) {app.set('showStackError', true);
   ]));
 
   app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: true }))
 
 };
