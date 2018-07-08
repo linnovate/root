@@ -11,6 +11,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ========================= navigate ========================== //
     // ============================================================= //
 
+    $scope.multipleSelectMode = false;
+
     $scope.isCurrentEntityState = function(id) {
         return $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity`) === 0 && $state.current.name.indexOf('details') === -1;
     }
