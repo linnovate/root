@@ -5,12 +5,10 @@ angular.module('mean.icu.ui.bulkoperations', [])
         $scope.selectedItems = $scope.$parent.selectedItems;
 
         $scope.bulkUpdate = function(type){
-
+            MultipleSelectService.haveBulkPerms($scope.selectedItems, type)
         };
 
         $scope.bulkOperationAllowed = function(type){
             MultipleSelectService.haveBulkPerms($scope.selectedItems, type)
         }
-        //[{action = XXX, currentlyAllowed = true/false}]
-        //getBulkOperationAllowed = function(list of entites,action to be performend)
     });

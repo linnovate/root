@@ -1,7 +1,10 @@
-<div
-    class="operation status"
-    ng-click=""
-    tooltip-side="top" tooltips tooltip-template="{{'Change Status' |  i18next}}"
->
-    status
-</div>
+
+
+<button
+    icu-open-modal="item"
+    show-modal="true"
+    data="selectedItems"
+    activity-type="status"
+    modal-name="bulk-operations"
+    class="bulk-operation"
+></button>

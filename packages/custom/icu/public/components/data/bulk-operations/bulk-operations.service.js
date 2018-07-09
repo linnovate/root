@@ -37,15 +37,26 @@ angular.module('mean.icu.data.multipleselectservice', [])
 
         };
 
-        function haveBulkPerms(entitiesArray, type) {
-            let havePerms = entitiesArray.each((entity)=>{
+        function bulkUpdate(entityArray) {
+            return $http.post(ApiUri + EntityPrefix, entityArray)
+                .then(function (result) {
+                    return result.data;
+                });
+        }
 
-            })
-            PermissionsService
-            return perms;
+        function haveBulkPerms(entitiesArray, type) {
+            let havePermissions = entitiesArray.each((entity)=>{
+                let userPermissions = entity.permissions.find((permission)=>{
+                    return permission.id === me._id;
+                });
+                return _.includes(bulkPermissionsMap[type], userPermissions.level);
+            });
+
+            return havePermissions;
         }
 
         return {
+            bulkUpdate: bulkUpdate,
             haveBulkPerms: haveBulkPerms,
         };
     });

@@ -135,6 +135,19 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                         }
                     });
                 }
+                else if(scope.modalName === 'bulk-operations') {
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        size:  'lg',
+                        templateUrl: '/icu/components/modal-directive/bulkOperations/bulk-operations.html',
+                        controller: bulkOperationsController,
+                        resolve: {
+                            selectedItems: function () {
+                                return scope.data;
+                            }
+                        }
+                    });
+                }
 
                 else {
                 var modalInstance = $uibModal.open({

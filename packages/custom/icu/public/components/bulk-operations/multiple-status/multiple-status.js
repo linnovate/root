@@ -4,10 +4,12 @@
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleStatus', function () {
         function controller($scope) {
-            $scope.multipleChange = function(){
-                status
-                $scope.parent
-            }
+
+            let type = 'status';
+
+            $scope.selecteditems = $scope.$parent.selecteditems;
+
+            $scope.allowed = $scope.$parent.bulkOperationAllowed(type);
         }
         return {
             controller: controller,
