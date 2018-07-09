@@ -104,7 +104,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.onAssign = function(value) {
     $scope.item.assign = value;
-    var json = {
+    var action = {
       'name': 'assign',
       'newVal': $scope.item.assign
     };
@@ -129,7 +129,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
       }
     }
 
-    OfficeDocumentsService.updateDocument($scope.item._id, json);
+    OfficeDocumentsService.update($scope.item, action); // let the service do it's work.
     OfficeDocumentsService.updateAssign($scope.item, backupEntity).then(function(result) {
       backupEntity = JSON.parse(JSON.stringify($scope.item));
       ActivitiesService.data = ActivitiesService.data || [];
@@ -166,7 +166,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.onCategory = function(value) {
     let folderId = value && value._id || undefined;
-    var json = {
+    var action = {
       'name': 'folder',
       'newVal': folderId,
     };
@@ -178,8 +178,10 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     }), function(grouped) {
       return grouped[0];
     });
-    json.watchers = $scope.item.watchers;
-    OfficeDocumentsService.updateDocument($scope.item._id, json).then(function(res) {
+    action.watchers = $scope.item.watchers;
+
+    OfficeDocumentsService.update($scope.item, action) // let the service do it's work
+    .then(function(res) {
       OfficeDocumentsService.updateEntity($scope.item, backupEntity).then(function(result) {
         if (folderId == undefined) {
           delete $scope.item.folder;
@@ -309,41 +311,66 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     });
   }
 
-  $scope.view = function(document1) {
-    if (document1.spPath) {
-      var spSite = document1.spPath.substring(0, document1.spPath.indexOf('ICU') + 3);
 
-      var uri = spSite + "/_layouts/15/WopiFrame.aspx?sourcedoc=" + document1.spPath + "&action=default";
+  
+     $scope.view = function (document1) {
 
-      window.open(uri, '_blank');
-    } else {
-      // Check if need to view as pdf
-      if ((document1.documentType == "docx") || (document1.documentType == "doc") || (document1.documentType == "xlsx") || (document1.documentType == "xls") || (document1.documentType == "ppt") || (document1.documentType == "pptx")) {
-        var arr = document1.path.split("." + document1.documentType);
-        var ToHref = arr[0] + ".pdf";
-        // Check if convert file exists allready
+        if (document1.mmhpath) {
+            var mmhPath = document1.mmhpath.replace(/\//g, '%2f');
+            OfficeDocumentsService.getFileFtp(mmhPath).then(function (result) {
+                if (result.status == 404) {
+                    alertify.logPosition("top left");
+                    alertify.error("הקובץ לא קיים!");
+                }
+            });
+        } else if (document1.spPath) {
+            var spSite = document1.spPath.substring(0, document1.spPath.indexOf('ICU') + 3);
+            var uri = spSite + "/_layouts/15/WopiFrame.aspx?sourcedoc=" + document1.spPath + "&action=default";
+            window.open(uri, '_blank');
+        } else {
+            console.log("PATH");
+            var path = document1.path;
+            path=path.substring(path.indexOf('/files'),path.length);
+            console.log(path);
+            path = path.replace(/\//g, '%2f');
+            OfficeDocumentsService.getFileFtp(path).then(function (result) {
+                if (result.status == 404) {
+                    alertify.logPosition("top left");
+                    alertify.error("הקובץ לא קיים!");
+                }
+            });
 
-        $http({
-          url: ToHref.replace('/files/', '/api/files/'),
-          method: 'HEAD'
-        }).success(function() {
-          // There is allready the convert file
-          window.open(ToHref + '?view=true')
-        }).error(function() {
-          // Send to server
-          $.post('/officeDocsAppend.js', document1).done(function(document2) {
-            // The convert is OK and now we open the pdf to the client in new window
-            window.open(ToHref + '?view=true');
-          }).fail(function(xhr) {
-            console.error(xhr.responseText);
-          });
-        });
-      }// Format is NOT needed to view as pdf
-      else {
-        window.open(document1.path + '?view=true');
-      }
-    }
-  }
+            /**
+
+            // Check if need to view as pdf
+            if (document1.documentType == "docx" || document1.documentType == "doc" || document1.documentType == "xlsx" || document1.documentType == "xls" || document1.documentType == "ppt" || document1.documentType == "pptx") {
+                var arr = document1.path.split("." + document1.documentType);
+                var ToHref = arr[0] + ".pdf";
+                // Check if convert file exists allready
+
+                $http({
+                    url: ToHref.replace('/files/', '/api/files/'),
+                    method: 'HEAD'
+                }).success(function () {
+                    // There is allready the convert file
+                    window.open(ToHref + '?view=true');
+                }).error(function () {
+                    // Send to server
+                    $.post('/officeDocsAppend.js', document1).done(function (document2) {
+                        // The convert is OK and now we open the pdf to the client in new window
+                        window.open(ToHref + '?view=true');
+                    }).fail(function (xhr) {
+                        console.error(xhr.responseText);
+                    });
+                });
+            }
+            // Format is NOT needed to view as pdf
+            else {
+                    window.open(document1.path + '?view=true');
+                }
+                */
+        }
+    };
 
   $scope.upload = function(file) {
     if (file.length > 0) {
@@ -419,9 +446,14 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   // ==================================================== Update ==================================================== //
 
+
   $scope.update = function(officeDocument, context) {
 
-    OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {});
+    officeDocument.id = officeDocument._id ;
+    OfficeDocumentsService.update(officeDocument, context).then(function(result) {
+            console.log("updated document successfully") ;
+    }) ;
+  
     ActivitiesService.data = ActivitiesService.data || [];
     var me = $scope.me;
     switch (context.name) {

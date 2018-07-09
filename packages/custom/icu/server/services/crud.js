@@ -93,6 +93,11 @@ var entityNameMap = {
     mainModel: OfficeDocumentsModel,
     archiveModel: OfficeDocumentsArchiveModel,
     name: 'Document'
+  },    
+  'documents': {
+    mainModel: OfficeDocumentsModel,
+    archiveModel: OfficeDocumentsArchiveModel,
+    name: 'Document'
   },
   'templateDocs': {
     mainModel: TemplateDocsModel,

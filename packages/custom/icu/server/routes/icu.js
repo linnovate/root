@@ -19,6 +19,11 @@ var office = require('../controllers/office');
 var folder = require('../controllers/folder');
 var webHook = require('../controllers/webhook');
 var documents = require('../controllers/documents');
+var config = require('meanio').loadConfig()
+let documentPlugins = require('../controllers/plugins/documents');
+// creates new document plugin middleware
+let documentsPlugin = new documentPlugins[config.documentPlugin];
+
 var templateDocs = require('../controllers/templateDocs');
 var signatures = require('../controllers/signatures');
 var authorization = require('../middlewares/auth.js');
@@ -27,8 +32,8 @@ var entity = require('../middlewares/entity.js');
 var response = require('../middlewares/response.js');
 var pagination = require('../middlewares/pagination.js');
 var error = require('../middlewares/error.js');
-var config = require('meanio').loadConfig(),
-  circleSettings = require(process.cwd() + '/config/circleSettings') || {};
+
+var circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 var order = require('../controllers/order');
 var express = require('express');
 var ftp = require('../services/ftp.js');
@@ -358,19 +363,16 @@ module.exports = function(Icu, app) {
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
 
-
+  /* OFFICEDOCUMENTS */
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
-  //.post(documents.upload, documents.signNew)
-    .post(documents.upload)
-    .get(documents.getAll);
+    .post(documentsPlugin.type,documentsPlugin.create)
+    .get(documentsPlugin.all);
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
-    .get(documents.getById)
-    .post(documents.update)
-    .put(documents.update, star.isStarred, attachments.sign)
-    .delete(documents.deleteDocument);
-  app.route('/api/officeDocuments/create')
-    .post(documents.create);
+    .get(documentsPlugin.read, star.isStarred)    
+    .put(documentsPlugin.read,documentsPlugin.update, star.isStarred, attachments.sign)
+    .delete(documentsPlugin.delete);
+
   app.route('/api/officeDocuments/addSerialTitle')
     .post(documents.addSerialTitle);
 
@@ -431,9 +433,6 @@ module.exports = function(Icu, app) {
     .post(templateDocs.update2)
     .delete(templateDocs.deleteTemplate);
   //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
-
-  app.route('/api/ftp/:url')
-  .all(ftp.getFileFromFtp);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);

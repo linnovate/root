@@ -131,4 +131,7 @@ module.exports = {
     isWorking:false
   },
   usersDomain:"@domain",
+//  documentPlugin: 'sp',
+  documentPlugin: 'default',
+  
 };
