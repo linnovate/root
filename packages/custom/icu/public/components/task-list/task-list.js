@@ -33,7 +33,7 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
         return TasksService.update(item);
     }
 
-    $scope.create = function(item) {
+    $scope.create = function(parent) {
         var newItem = {
             title: '',
             watchers: [],
@@ -41,6 +41,9 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
             __state: creatingStatuses.NotCreated,
             __autocomplete: false
         };
+        if(parent){
+            newItem[parent.type] = parent.id;
+        }
         return TasksService.create(newItem).then(function(result) {
             $scope.items.push(result);
             TasksService.data.push(result);

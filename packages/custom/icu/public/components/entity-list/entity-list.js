@@ -163,9 +163,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.onCreate = function() {
-        let parent;
-        if($state.current.name.indexOf("byentity") !== -1){
-            parent = $state.current.params.entityId;
+        var parent = {};
+        if ($state.current.name.indexOf("byentity") !== -1) {
+            parent.type = $state.current.params.entity;
+            parent.id = $state.current.params.entityId;
         }
         $scope.$parent.create(parent).then((result)=>{
             //             if (localStorage.getItem('type') == 'new') {
