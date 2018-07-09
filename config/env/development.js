@@ -130,5 +130,7 @@ module.exports = {
     libraryName:"libraryName",
     isWorking:false
   },
+    documentPlugin: 'sp',
+//  documentPlugin: 'default',
   usersDomain:"@domain",
 };

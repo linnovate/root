@@ -19,7 +19,10 @@ var office = require('../controllers/office');
 var folder = require('../controllers/folder');
 var webHook = require('../controllers/webhook');
 var documents = require('../controllers/documents');
-var documentsCrud = require('../controllers/documents.crud');
+var config = require('meanio').loadConfig()
+let documentPlugins = require('../controllers/plugins/documents');
+// creates new document plugin middleware
+let documentsPlugin = new documentPlugins[config.documentPlugin];
 
 var templateDocs = require('../controllers/templateDocs');
 var signatures = require('../controllers/signatures');
@@ -29,8 +32,8 @@ var entity = require('../middlewares/entity.js');
 var response = require('../middlewares/response.js');
 var pagination = require('../middlewares/pagination.js');
 var error = require('../middlewares/error.js');
-var config = require('meanio').loadConfig(),
-  circleSettings = require(process.cwd() + '/config/circleSettings') || {};
+
+var circleSettings = require(process.cwd() + '/config/circleSettings') || {};
 var order = require('../controllers/order');
 var express = require('express');
 var ftp = require('../services/ftp.js');
@@ -363,12 +366,12 @@ module.exports = function(Icu, app) {
   /* OFFICEDOCUMENTS */
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
-    .post(documentsCrud.create)
-    .get(documentsCrud.getAll);
+    .post(documentsPlugin.type,documentsPlugin.create)
+    .get(documentsPlugin.all);
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
-    .get(documentsCrud.read, star.isStarred)
-    .put(documentsCrud.read,documentsCrud.update, star.isStarred, attachments.sign)
-    .delete(documents.deleteDocument);
+    .get(documentsPlugin.read, star.isStarred)    
+    .put(documentsPlugin.read,documentsPlugin.update, star.isStarred, attachments.sign)
+    .delete(documentsPlugin.delete);
 
   app.route('/api/officeDocuments/addSerialTitle')
     .post(documents.addSerialTitle);

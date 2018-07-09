@@ -367,7 +367,7 @@ exports.signNew = function(req, res, next) {
     discussion: 'Discussion',
     office: 'Office',
     folder: 'Folder',
-    officeDocuments: 'Document'
+    officeDocuments: 'Document',
   };
   var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
   query.findOne({

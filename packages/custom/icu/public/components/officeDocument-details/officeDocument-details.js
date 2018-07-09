@@ -104,7 +104,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.onAssign = function(value) {
     $scope.item.assign = value;
-    var json = {
+    var action = {
       'name': 'assign',
       'newVal': $scope.item.assign
     };
@@ -129,7 +129,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
       }
     }
 
-    OfficeDocumentsService.updateDocument($scope.item._id, json);
+    OfficeDocumentsService.update($scope.item, action); // let the service do it's work.
     OfficeDocumentsService.updateAssign($scope.item, backupEntity).then(function(result) {
       backupEntity = JSON.parse(JSON.stringify($scope.item));
       ActivitiesService.data = ActivitiesService.data || [];
@@ -166,7 +166,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.onCategory = function(value) {
     let folderId = value && value._id || undefined;
-    var json = {
+    var action = {
       'name': 'folder',
       'newVal': folderId,
     };
@@ -178,8 +178,10 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     }), function(grouped) {
       return grouped[0];
     });
-    json.watchers = $scope.item.watchers;
-    OfficeDocumentsService.updateDocument($scope.item._id, json).then(function(res) {
+    action.watchers = $scope.item.watchers;
+
+    OfficeDocumentsService.update($scope.item, action) // let the service do it's work
+    .then(function(res) {
       OfficeDocumentsService.updateEntity($scope.item, backupEntity).then(function(result) {
         if (folderId == undefined) {
           delete $scope.item.folder;
@@ -422,12 +424,10 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.update = function(officeDocument, context) {
 
-//    OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {});
-    console.log("officeDocumentDetails update", officeDocument) ;
     officeDocument.id = officeDocument._id ;
-    OfficeDocumentsService.update(officeDocument).then(function(result) {
+    OfficeDocumentsService.update(officeDocument, context).then(function(result) {
             console.log("updated document successfully") ;
-      }) ;
+    }) ;
   
     ActivitiesService.data = ActivitiesService.data || [];
     var me = $scope.me;

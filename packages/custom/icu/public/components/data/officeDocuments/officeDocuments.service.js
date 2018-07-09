@@ -123,10 +123,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-
-
-
-
         function download(data, fileName) {
             var a = document.createElement("a");
             document.body.appendChild(a);
@@ -140,8 +136,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
             }, 0);
-
-
         }
 
         function getFileFtp(url) {
@@ -158,15 +152,16 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        // // updates specific data document
+        // function updateDocument(id, data) {
+        //     return $http.post(ApiUri + EntityPrefix + "/" + id, data).then(function (result) {
+        //         WarningsService.setWarning(result.headers().warning);
+        //         return result.data;
+        //     });
+        // }
 
-        function updateDocument(id, data) {
-            return $http.post(ApiUri + EntityPrefix + "/" + id, data).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            });
-        }
-
-        function update(entity) {
+        // updates entire document
+        function update(entity, action = null) {
             return $http.put(ApiUri + EntityPrefix + "/" + entity._id, entity).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
@@ -406,7 +401,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             getByUserId: getByUserId,
             saveDocument: saveDocument,
             update: update,
-            updateDocument: updateDocument,
+//            updateDocument: updateDocument,
             getByOfficeId: getByOfficeId,
             getByFolderId: getByFolderId,
             star: star,
