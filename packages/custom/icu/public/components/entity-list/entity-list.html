@@ -3,16 +3,22 @@
     <div ng-include="'/icu/components/entity-list/regions/header.html'"></div>
 
     <div ng-if="!multipleSelectMode" ng-include="'/icu/components/entity-list/regions/filters.html'"></div>
-  <div
-    multiple-select
-    ng-if="multipleSelectMode"
-    class="multiple-select">
-  </div>
+
+    <div ng-controller="MultipleSelectController"
+         ng-show="multipleSelectMode"
+         class="multiple-select">
+        <multiple-corner-button>
+        </multiple-corner-button>
+        <div class="bulk-operations">
+            <multiple-status></multiple-status>
+        </div>
+    </div>
 
     <div
         ng-include="'/icu/components/entity-list/regions/list.html'"
         class="entity-list-container"
         ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
-    ></div>
+    >
+    </div>
 
 </div>

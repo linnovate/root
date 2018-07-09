@@ -2,12 +2,12 @@
     <!--<i class="fa fa-ellipsis-v"></i>-->
     <!--<i class="fa fa-ellipsis-v"></i>-->
 <!--</td>-->
-<td ng-if="!multipleSelectMode" class="id">{{$index + 1}}</td>
-<td ng-if="multipleSelectMode" class="tick">
+<td ng-hide="item.visible || multipleSelectMode" class="id">{{$index + 1}}</td>
+<td ng-show="item.visible || multipleSelectMode" class="tick">
   <input type="checkbox"
-    ng-model="string"
-    [name="string"]
-    [ng-change="refreshSelectedList(item)"]>
+         ng-change="refreshSelectedList(item)"
+         ng-model="item.selected"
+  >
 </td>
 <td class="name"
     title="{{item.title}}"

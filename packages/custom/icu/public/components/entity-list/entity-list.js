@@ -199,20 +199,33 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     $scope.multipleSelectMode = false;
     console.log('multipleSelectMode: ', $scope.multipleSelectMode);
-    $scope.multipleSelectMode = true;
     $scope.selectedItems = [];
 
-    $scope.$on('refreshSelectedList', function (event, args) {
+    $scope.refreshSelectedList = function (editedEntity) {
       let entitySelectedIndex = $scope.selectedItems.findIndex((entity)=>{
-        return entity._id === args.entity._id;
+        return entity._id === editedEntity._id;
       });
 
-      if(entitySelectedIndex){
-        $scope.selectedItems.splice(entitySelectedIndex, 1);
+      if(entitySelectedIndex === -1){
+          $scope.selectedItems.push(editedEntity);
       } else {
-        $scope.selectedItems.push(args.entity);
+          $scope.selectedItems.splice(entitySelectedIndex, 1);
       }
-    });
+
+      if($scope.selectedItems.length){
+        $scope.multipleSelectMode = true;
+      } else {
+        $scope.multipleSelectMode = false;
+      }
+    };
+
+    $scope.showTick = function(item){
+        item.visible = true;
+    };
+
+    $scope.hideTick = function(item){
+        item.visible = false;
+    };
 
 
     // ============================================================= //

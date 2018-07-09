@@ -7,6 +7,8 @@
                 data-ng-class="{ 'active': isCurrentState(item._id) }"
                 ng-click="onClickRow($event, item)"
                 ng-include="$parent.entityRowTpl"
+                ng-mouseover="showTick(item)"
+                ng-mouseleave="hideTick(item)"
             ></tr>
             <tr>
                 <td

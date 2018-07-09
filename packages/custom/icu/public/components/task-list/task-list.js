@@ -49,7 +49,7 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
     }
 
     $scope.refreshSelectedList = function(entity){
-      $scope.$emit('refreshSelectedList', {entity})
+      $scope.$parent.refreshSelectedList(entity);
     };
 
     $scope.loadMore = function(start, LIMIT, sort) {
