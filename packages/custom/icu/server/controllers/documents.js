@@ -13,7 +13,7 @@ var _ = require('lodash');
 var config = require('meanio').loadConfig();
 var permissions = require('../controllers/permissions.js');
 var logger = require('../services/logger');
-
+var serials = require('../controllers/serials.js');
 
 var ftp = require('../services/ftp');
 var options = {
@@ -280,7 +280,20 @@ exports.signOnDocx = function(req, res, next) {
     });
 };
 
+  function getSerial(){
+    return new Promise(function(fulfill,reject){
+          serials.popFromAvailableSerials().then(function(serial){
+            fulfill(serial);
+          }).catch(function(code){
+            serials.incrementSeq().then(function(serial){
+              fulfill(serial);
+            }).catch(function(code){
+              reject(-1);
+            });
+          });
 
+  })
+  }
 
 exports.addSerialTitle = function(req, res, next) {
   var doc = req.body;
@@ -374,70 +387,99 @@ exports.addSerialTitle = function(req, res, next) {
             });
           });
 
-          var json = {
-            siteUrl: config.SPHelper.SPSiteUrl,
-            fileUrl: spPath,
-            folder: docFolder,
-            office: docOffice,
-            telOffice: telOffice,
-            unitOffice: unitOffice,
-            coreOptions: coreOptions,
-            creds: creds,
-            fileOptions: fileOptions,
-            permissions: users,
-            isTemplate: false
-          };
+      getSerial().then(function(ser){
+        var json = {
+          'siteUrl':config.SPHelper.SPSiteUrl,
+          'fileUrl':spPath,
+          'folder':docFolder,
+          'office':docOffice,
+          'telOffice':telOffice,
+          'unitOffice':unitOffice,
+          'coreOptions':coreOptions,
+          'creds':creds,
+          'fileOptions':fileOptions,
+          'permissions':users,
+          'isTemplate':false,
+          'serial':ser
+        };
 
-          request({
-            url: config.SPHelper.uri + '/api/addSerialTitle',
-            method: 'POST',
-            json: json
-          }, function(error, resp, body) {
-            if(error) {
 
-              logger.log('error', '%s addSerialTitle, %s', req.user.name, 'POST:' + '\'' + config.SPHelper.uri + '/api/addSerialTitle' + '\'', {error: error.stack});
+        request({
+          'url':config.SPHelper.uri+"/api/addSerialTitle",
+          'method':'POST',
+          'json':json
+        },function(error,resp,body){
+          if(error){
+            serials.pushToAvailableSerials(ser).then(function(){
+              logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: error.stack});
               res.send(error);
-            }
-            else {
-              var set = {serial: body.serial, spPath: body.path};
-              Document.findOne({
-                _id: req.body._id
-              }, function(error, doc) {
-                if(error) {
-                  logger.log('error', '%s addSerialTitle, %s', req.user.name, 'doc.find()', {error: error.message});
-                  res.send(error);
-                }
-                else {
-                  doc.serial = body.serial;
-                  doc.spPath = body.path;
-                  doc['id'] = req.body._id;
-                  doc.save(function(err, result) {
-                    if(err) {
-                      res.send(err);
-                      logger.log('error', '%s addSerialTitle, %s', req.user.name, 'doc.save()', {error: err.message});
-                    }
-                    else {
-                      res.send(set);
-                      logger.log('info', '%s addSerialTitle, %s', req.user.name, 'success');
-                    }
-                  });
+          });
 
+          }
+          else if(!body){
+            serials.pushToAvailableSerials(ser).then(function(){
+              logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: "!body"});
+              res.send(error);
+          });
+
+          }
+          else{
+            if(body.serial == ser){
+            var set = {'serial':body.serial,'spPath':body.path};
+            Document.findOne({
+              '_id':req.body._id
+            },function(error,doc){
+              if(error){
+                logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.find()', {error: error.message});
+                res.send(error);
+              }
+              else if(!doc){
+                logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.find()', {error: "!doc"});
+                res.send("error");
+              }
+              else{
+              doc.serial = body.serial;
+              doc.spPath = body.path;
+              doc['id'] = req.body._id;
+              doc.save(function(err,result){
+                if(err){
+                  res.send(err);
+                  logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.save()', {error: err.message});
+                }
+                else{
+                  res.send(set);
+                  logger.log('info', '%s addSerialTitle, %s', req.user.name, 'success' );
                 }
               });
 
             }
+            });
+          }
+          else{
+            serials.pushToAvailableSerials(ser).then(function(){
+              //logger.log('error', '%s addSerialTitle, %s', req.user.name, 'body.serials == ser');
+                  res.status(500).send();
           });
-        }
+
+      }
+          }
+    })
+
+      }).catch(function(err){
+        //logger.log('error', '%s addSerialTitle, %s', req.user.name,'getSerial', {error: err.message});
+        res.status(500).send();
       });
   }
-  else {
-    var user = req.user.email.substring(0, req.user.email.indexOf('@')).toLowerCase();
-    var docFolder, docOffice, telOffice, unitOffice;
-    if(req.body.folder) {
-      docFolder = req.body.folder.title ? req.body.folder.title : 'noFolder';
-      if(req.body.folder.office) {
-        docOffice = req.body.folder.office.title ? req.body.folder.office.title : 'noOffice';
-        if(req.body.folder.office.tel) {
+})
+  }
+  else{
+    var user = req.user.email.substring(0,req.user.email.indexOf('@')).toLowerCase();
+    var docFolder,docOffice,telOffice,unitOffice;
+    if(req.body.folder){
+      docFolder=req.body.folder.title?req.body.folder.title:"noFolder";
+      if(req.body.folder.office){
+        docOffice = req.body.folder.office.title?req.body.folder.office.title:"noOffice";
+        if(req.body.folder.office.tel){
           telOffice = req.body.folder.office.tel;
         }
         else {
@@ -499,38 +541,51 @@ exports.addSerialTitle = function(req, res, next) {
       });
     });
 
+    getSerial().then(function(ser){
     var json = {
-      siteUrl: config.SPHelper.SPSiteUrl,
-      fileUrl: spPath,
-      folder: docFolder,
-      office: docOffice,
-      telOffice: telOffice,
-      unitOffice: unitOffice,
-      coreOptions: coreOptions,
-      creds: creds,
-      fileOptions: fileOptions,
-      permissions: users,
-      isTemplate: false
+      'siteUrl':config.SPHelper.SPSiteUrl,
+      'fileUrl':spPath,
+      'folder':docFolder,
+      'office':docOffice,
+      'telOffice':telOffice,
+      'unitOffice':unitOffice,
+      'coreOptions':coreOptions,
+      'creds':creds,
+      'fileOptions':fileOptions,
+      'permissions':users,
+      'isTemplate':false,
+      'serial':ser
     };
 
     request({
-      url: config.SPHelper.uri + '/api/addSerialTitle',
-      method: 'POST',
-      json: json
-    }, function(error, resp, body) {
-      if(error) {
-        logger.log('error', '%s addSerialTitle, %s', req.user.name, 'POST:' + '\'' + config.SPHelper.uri + '/api/addSerialTitle' + '\'', {error: error.stack});
-        res.send(error);
+      'url':config.SPHelper.uri+"/api/addSerialTitle",
+      'method':'POST',
+      'json':json
+    },function(error,resp,body){
+          if(error||!body){
+            var message = "error";
+            if(error){
+              message = error.stack;
+            }
+            serials.pushToAvailableSerials(ser).then(function(){
+              logger.log('error', '%s addSerialTitle, %s', req.user.name, "POST:"+"'"+config.SPHelper.uri+"/api/addSerialTitle"+"'", {error: message});
+              res.send(error);
+          });
 
-      }
-      else {
-        var set = {serial: body.serial, spPath: body.path};
+          }
+      else{
+        if(body.serial == ser){
+        var set = {'serial':body.serial,'spPath':body.path};
         Document.findOne({
-          _id: req.body._id
-        }, function(error, doc) {
-          if(error) {
-            logger.log('error', '%s addSerialTitle, %s', req.user.name, 'doc.findOne()', {error: error.message});
-
+          '_id':req.body._id
+        },function(error,doc){
+          if(error){
+            logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.findOne()', {error: error.message});
+            res.send("Error");
+          }
+          else if(!doc){
+            logger.log('error', '%s addSerialTitle, %s', req.user.name,'doc.findOne()', {error: "!doc"});
+            res.send("Error");
           }
           else {
             doc.serial = body.serial;
@@ -551,8 +606,20 @@ exports.addSerialTitle = function(req, res, next) {
 
           }
         });
+        }
+        else{
+            serials.pushToAvailableSerials(ser).then(function(){
+              logger.log('error', '%s addSerialTitle, %s', req.user.name, 'body.serials == ser');
+                  res.status(500).send();
+          });
+
+      }
+
       }
     });
+
+    });
+
   }
 
 };
@@ -788,35 +855,88 @@ exports.uploadEmptyDocument = function(req, res, next) {
 /**
 * req.params.id will consist mongoDB _id of the user
 */
-exports.getAll = function(req, res, next) {
-  var start = 0, limit = 25, sort = 'created';
-  if(req.query) {
+exports.getAll = function (req, res, next) {
+  var start=0,limit=25,sort="created",obj={'created':1};
+  var qu = [
+        {$or: [{ watchers: { $in: [req.user._id] } }, { assign: req.user._id }]}
+    ]
+    qu.push({recycled: {$exists:false}})
+  if(req.query){
     start = parseInt(req.query.start);
     limit = parseInt(req.query.limit);
     sort = req.query.sort;
+    sortOrder = parseInt(req.query.sortOrder);
+    obj = {};
+    obj[sort] = sortOrder || 1;
   }
+
+  if(req.query.status){
+    switch (req.query.status){
+      case 'all':
+      console.log("all");
+        break;
+      case 'active':
+        qu.push({status:{$ne:"done"}});
+        console.log("active");
+        break;
+      case 'default':
+        qu.push({status:{$ne:"done"}});
+        console.log("active");
+        break;
+      case 'nonactive':
+        qu.push({status:"done"})
+        console.log("unactive");
+        break ;
+      case 'new':
+        qu.push({status:"new"})
+        console.log("new");
+        break ;
+      case 'done':
+        qu.push({status:"done"})
+        console.log("done");
+        break ;
+      case 'received':
+        qu.push({status:"received"})
+        console.log("received");
+        break ;
+      case 'in-progress':
+        qu.push({status:"in-progress"})
+        console.log("in-progress");
+        break ;
+      case 'sent':
+        qu.push({status:"sent"})
+        console.log("sent");
+        break ;
+
+    }
+  }
+if(req.query.folderId){
+   qu.push({folder: req.query.folderId})
+}
+ //console.dir(status)
   Document.find({
-    $or: [{watchers: {$in: [req.user._id]}}, {assign: req.user._id}]
-  }).sort({sort: 1}).skip(start).limit(limit).populate('folder')
-    .populate('creator')
-    .populate('updater')
-    .populate('sender')
-    .populate('sendingAs')
-    .populate('assign')
-    .populate('relatedDocuments')
-    .populate('forNotice')
-    .populate('watchers')
-    .populate('doneBy')
-    .populate('signBy')
-    .exec(function(err, data) {
-      if(err) {
-        logger.log('error', '%s getAll, %s', req.user.name, 'Document.find', {error: err.message});
-        req.locals.error = err;
-        req.status(400);
+    $and:qu
+
+  }).sort(obj).skip(start).limit(limit).populate('folder')
+  .populate('creator')
+  .populate('updater')
+  .populate('sender')
+  .populate('sendingAs')
+  .populate('assign')
+  .populate('relatedDocuments')
+  .populate('forNotice')
+  .populate('watchers')
+  .populate('doneBy')
+  .populate('signBy')
+  .exec(function(err,data){
+      if (err) {
+        logger.log('error', '%s getAll, %s', req.user.name,'Document.find', {error: err.message});
+        res.locals.error = err;
+        res.status(400);
       }
       else {
-        req.locals.result = data;
-        // logger.log('info', '%s getAll, %s,', req.user.name, 'get all document success' );
+        res.locals.status = req.query.status
+       // logger.log('info', '%s getAll, %s,', req.user.name, 'get all document success' );
 
         res.send(data);
       }
@@ -840,11 +960,25 @@ exports.getById = function(req, res, next) {
     else {
       logger.log('info', '%s getById, %s', req.user.name, 'success');
 
-      req.locals.result = data;
+
+          if(data instanceof Array && data.length == 1){
+              data = data[0];
+          }
+      req.locals.result = data
       res.send(data);
     }
-  });
-};
+  }).populate("folder")
+  .populate('creator')
+  .populate('updater')
+  .populate('sender')
+  .populate('sendingAs')
+  .populate('assign')
+  .populate('relatedDocuments')
+  .populate('forNotice')
+  .populate('watchers')
+  .populate('doneBy')
+  .populate('signBy');
+}
 
 /**
 * req.params.id will consist mongoDB _id of the user
@@ -903,28 +1037,28 @@ exports.getByFolder = function(req, res, next) {
 
 
 //NOT IN USE
-exports.upload = function(req, res, next) {
-  req.locals.data = {};
-  req.locals.data.body = {};
+exports.upload = function (req, res, next) {
+  req.locals.data={};
+  req.locals.data.body={};
   var d = formatDate(new Date());
   var busboy = new Busboy({
     headers: req.headers
   });
   var hasFile = false;
-  busboy.on('file', function(fieldname, file, filename) {
+  busboy.on('file', function (fieldname, file, filename) {
     var port = config.https && config.https.port ? config.https.port : config.http.port;
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
-    mkdirp(path.join(config.attachmentDir, d), function() {
-      file.pipe(fs.createWriteStream(saveTo)).on('close', function(err) {
-        if(err) {
-          logger.log('error', '%s upload, %s', req.user.name, 'mkdirp', {error: err.message});
+    mkdirp(path.join(config.attachmentDir, d), function () {
+      file.pipe(fs.createWriteStream(saveTo)).on('close', function (err) {
+        if(err){
+          logger.log('error', '%s upload, %s', req.user.name,'mkdirp', {error: err.message});
         }
-        var arr = hostFileLocation.split('/files');
-        var pathFor = './files' + arr[1];
+        var arr = hostFileLocation.split("/files");
+        var pathFor = "./files" + arr[1];
         var stats = fs.statSync(pathFor);
-        var fileSizeInBytes = stats['size'];
+        var fileSizeInBytes = stats["size"];
         req.locals.data.body.size = fileSizeInBytes;
       });
       req.locals.data.body.name = filename;
@@ -936,191 +1070,195 @@ exports.upload = function(req, res, next) {
     });
   });
 
-  busboy.on('field', function(fieldname, val) {
+  busboy.on('field', function (fieldname, val) {
     req.locals.data.body[fieldname] = val;
   });
 
-  busboy.on('finish', function() {
-    var user = req.user.email.substring(0, req.user.email.indexOf('@'));
-    var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf('/files'), req.locals.data.body.path.length);
-    var fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
-    req.locals.data.body.path = config.SPHelper.SPSiteUrl + '/' + config.SPHelper.libraryName + '/' + user + '/' + req.locals.data.body.name;
-    var result = fs.readFile('.' + path, function(err, result) {
-      result = JSON.parse(JSON.stringify(result));
-      var coreOptions = {
-        siteUrl: config.SPHelper.SPSiteUrl
+  busboy.on('finish', function () {
+    var user = req.user.email.substring(0,req.user.email.indexOf('@'));
+    var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
+    var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
+    req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+req.locals.data.body.name;
+    var result = fs.readFile("."+path,function(err,result){
+      result=JSON.parse(JSON.stringify(result));
+      var coreOptions={
+        "siteUrl":config.SPHelper.SPSiteUrl
       };
-      var creds = {
-        username: config.SPHelper.username,
-        password: config.SPHelper.password
-      };
-      var folder = config.SPHelper.libraryName + '/' + user;
+      var creds={
+        "username":config.SPHelper.username,
+        "password":config.SPHelper.password
+      }
+      var folder = config.SPHelper.libraryName+"/"+user;
       var fileOptions = {
-        folder: folder,
-        fileName: fileName,
-        fileContent: result
+        "folder":folder,
+        "fileName":fileName,
+        "fileContent":result
       };
 
-      if(req.locals.data.body['folderId']) {
+      if(req.locals.data.body['folderId']){
         var folderId = req.locals.data.body['folderId'];
         Folder.findOne({
-          _id: folderId
-        }).exec(function(err, folder) {
-          if(err) {
-            logger.log('error', '%s upload, %s', req.user.name, 'Folder.findOne', {error: err.message});
+          _id:folderId
+        }).exec(function(err,folder){
+          if(err){
+            logger.log('error', '%s upload, %s', req.user.name,'Folder.findOne', {error: err.message});
 
             req.locals.error = err;
           }
-          if(!folder) {
-            req.locals.error = {
-              status: 404,
-              message: 'Entity not found'
+          if(!folder){
+            req.locals.error={
+              status:404,
+              message:'Entity not found'
             };
           }
-          if(folder) {
+          if(folder){
             var users = [];
-            users.push({
-              __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
-              Role: 3,
-              UserId: user,
-              isCreator: true
-            });
-            folder.watchers.forEach(function(watcher) {
-              if(watcher != req.user._id) {
-                users.push({
-                  __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
-                  Role: 2,
-                  UserId: watcher
-                });
-              }
-            });
-            getUsers(users).then(function(result) {
-              if(result == 'success') {
-                var json = {
-                  coreOptions: coreOptions,
-                  creds: creds,
-                  fileOptions: fileOptions,
-                  permissions: users,
-                  isTemplate: false,
-                  entity: 'folder',
-                  entityId: folderId
-                };
-                request({
-                  url: config.SPHelper.uri + '/api/upload',
-                  method: 'POST',
-                  json: json
-                }, function(error, resp, body) {
-                  // if(error){
-                  //   res.send(error);
-                  // }
-                  //else{
-                  //var path = body.path;
-                  var path = 'Path path path hahaha';
-                  var doc = {
-                    created: new Date(),
-                    updated: new Date(),
-                    title: fileName.substring(fileName.indexOf('-') + 1, fileName.length),
-                    status: 'new',
-                    path: path,
-                    description: '', //important
-                    serial: '',
-                    folder: new ObjectId(folderId),
-                    creator: new ObjectId(req.user._id),
-                    updater: new ObjectId(req.user._id),
-                    sender: new ObjectId(req.user._id),
-                    sendingAs: new ObjectId(),
-                    assign: new ObjectId(req.user._id),
-                    classification: '', //important
-                    size: 0,
-                    circles: [],
-                    relatedDocuments: [], //important
-                    watchers: folder.watchers, //important
-                    documentType: fileName.substring(fileName.indexOf('.') + 1, fileName.length),
+              users.push({
+                '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+                'Role':3,
+                'UserId':user,
+                'isCreator':true
+              });
+              folder.watchers.forEach(function(watcher){
+                if(watcher!=req.user._id){
+                  users.push({
+                    '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+                    'Role':2,
+                    'UserId':watcher
+                  });
+                }
+              });
+              getUsers(users).then(function(result){
+                if(result=='success'){
+                  var json = {
+                    'coreOptions':coreOptions,
+                    'creds':creds,
+                    'fileOptions':fileOptions,
+                    'permissions':users,
+                    'isTemplate':false,
+                    'entity':'folder',
+                    'entityId':folderId
                   };
-                  var obj = new Document(doc);
-                  obj.save(function(error, result) {
-                    if(error) {
-                      res.send(error);
+                  request({
+                    'url':config.SPHelper.uri+"/api/upload",
+                    'method':'POST',
+                    'json':json
+                  },function(error,resp,body){
+                    if(error || !body){
+                     res.status(500).send();
                     }
-                    else {
-                      res.send(result);
+                    else{
+                      console.log("\n\n\n\n\n\n I GOT BODY!!!");
+                      console.dir(body);
+                      //var path = body.path;
+                      var path = 'Path path path hahaha';
+                      var doc = {
+                        'created': new Date(),
+                        'updated':new Date(),
+                        'title':fileName.substring(fileName.indexOf('-')+1,fileName.length),
+                        'status':'new',
+                        'path':path,
+                        'description':'', //important
+                        'serial':'',
+                        'folder':new ObjectId(folderId),
+                        'creator':new ObjectId(req.user._id),
+                        'updater':new ObjectId(req.user._id),
+                        'sender':new ObjectId(req.user._id),
+                        'sendingAs': new ObjectId(),
+                        'assign': new ObjectId(req.user._id),
+                        'classification':'',//important
+                        'size':0,
+                        'circles':[],
+                        'relatedDocuments':[],//important
+                        'watchers':folder.watchers,//important
+                        'documentType':fileName.substring(fileName.indexOf('.')+1,fileName.length),
+                      };
+                      var obj = new Document(doc);
+                      obj.save(function(error,result){
+                        if(error){
+                          res.send(error);
+                        }
+                        else{
+                          res.send(result);
+                        }
+                      });
                     }
                   });
-                  // }
-                });
-              }
-              else {
-                res.send(error);
-              }
-            });
-          }
-        });
+                }
+                else{
+                  res.send(error);
+                }
+              });
+                    }
+                  });
       }
-      else {
+      else{
         var users = [];
         users.push({
-          __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
-          Role: 3,
-          UserId: user,
-          isCreator: true
+          '__metadata':{'type':'SP.Sharing.UserRoleAssignment'},
+          'Role':3,
+          'UserId':user,
+          'isCreator':true
         });
         var json = {
-          coreOptions: coreOptions,
-          creds: creds,
-          fileOptions: fileOptions,
-          permissions: users,
-          isTemplate: false,
-          entity: 'folder',
-          entityId: folderId
+          'coreOptions':coreOptions,
+          'creds':creds,
+          'fileOptions':fileOptions,
+          'permissions':users,
+          'isTemplate':false,
+          'entity':'folder',
+          'entityId':folderId
         };
         request({
-          url: config.SPHelper.uri + '/api/upload',
-          method: 'POST',
-          json: json
-        }, function(error, resp, body) {
-          // if(error){
-          //   res.send(error);
-          // }
-          // else{
-          //   var path = body.path;
-          var path = req.locals.data.body.originalPath;
-          var doc = {
-            created: new Date(),
-            updated: new Date(),
-            title: fileName.substring(fileName.indexOf('-') + 1, fileName.length),
-            status: 'new',
-            path: path,
-            description: '', //important
-            serial: '',
-            folder: undefined,
-            creator: new ObjectId(req.user._id),
-            updater: new ObjectId(req.user._id),
-            sender: new ObjectId(req.user._id),
-            sendingAs: new ObjectId(),
-            assign: new ObjectId(req.user._id),
-            classification: '', //important
-            size: 0,
-            circles: [],
-            relatedDocuments: [], //important
-            watchers: [req.user._id], //important
-            documentType: fileName.substring(fileName.indexOf('.') + 1, fileName.length),
-          };
-          var obj = new Document(doc);
-          obj.save(function(error, result) {
-            if(error) {
-              res.send(error);
-            }
-            else {
-              res.send(result);
+          'url':config.SPHelper.uri+"/api/upload",
+          'method':'POST',
+          'json':json
+        },function(error,resp,body){
+            if(error || !body){
+                      console.log("\n\n\n\n\n\n I GOT RESP!!!");
+                      console.dir(resp);
+                     res.status(500).send();
+              }
+            else{
+           //   var path = body.path;
+           var path=req.locals.data.body.originalPath;
+              var doc = {
+                'created': new Date(),
+                'updated':new Date(),
+                'title':fileName.substring(fileName.indexOf('-')+1,fileName.length),
+                'status':'new',
+                'path':path,
+                'description':'', //important
+                'serial':'',
+                'folder':undefined,
+                'creator':new ObjectId(req.user._id),
+                'updater':new ObjectId(req.user._id),
+                'sender':new ObjectId(req.user._id),
+                'sendingAs': new ObjectId(),
+                'assign': new ObjectId(req.user._id),
+                'classification':'',//important
+                'size':0,
+                'circles':[],
+                'relatedDocuments':[],//important
+                'watchers':[req.user._id],//important
+                'documentType':fileName.substring(fileName.indexOf('.')+1,fileName.length),
+              };
+              var obj = new Document(doc);
+              obj.save(function(error,result){
+                if(error){
+                  res.send(error);
+                }
+                else{
+                  res.send(result);
+                }
+              });
             }
           });
-          // }
-        });
-      }
-    });
-  });
+        }
+      });
+      })
 
-  return req.pipe(busboy);
+      return req.pipe(busboy);
 };
 
 
@@ -1191,16 +1329,18 @@ exports.uploadFileToDocument = function(req, res, next) {
     req.locals.data.body[fieldname] = val;
   });
 
-  busboy.on('finish', function() {
-    var user = req.user.email.substring(0, req.user.email.indexOf('@'));
+  busboy.on('finish', function () {
+    ftp.uploadToFTP(req.locals.data.body.saveTo).then(function(){
+    var user = req.user.email.substring(0,req.user.email.indexOf('@'));
 
     var username = req.user.username;
-    var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf('/files'), req.locals.data.body.path.length);
-    var fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
-    req.locals.data.body.path = config.SPHelper.SPSiteUrl + '/' + config.SPHelper.libraryName + '/' + user + '/' + req.locals.data.body.name;
-    var result = fs.readFile('.' + path, function(err, result) {
-      if(err) {
-        logger.log('error', '%s uploadFileToDocument, %s', req.user.name, 'fs.readFile', {error: err.message});
+    var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf("/files"),req.locals.data.body.path.length);
+    var fileName = path.substring(path.lastIndexOf('/')+1,path.length);
+    req.locals.data.body.path = config.SPHelper.SPSiteUrl+"/"+config.SPHelper.libraryName+"/"+user+"/"+req.locals.data.body.name;
+    var result = fs.readFile("."+path,function(err,result){
+        fs.unlink(req.locals.data.body.saveTo);
+      if(err){
+        logger.log('error', '%s uploadFileToDocument, %s', req.user.name,'fs.readFile', {error: err.message});
 
       }
       result = JSON.parse(JSON.stringify(result));
@@ -1335,20 +1475,28 @@ exports.uploadFileToDocument = function(req, res, next) {
           }).catch(function(err) {
             logger.log('error', '%s uploadFileToDocument, %s', req.user.name, 'getUsers()', {error: err.message});
 
+                });
+              }
+            });
           });
-        }
-      });
     });
-  });
-  return req.pipe(busboy);
-};
+        });
+
+        
+        return req.pipe(busboy);
+      };
 
 
 
-exports.create = function(req, res, next) {
-  console.log('exports.create');
-  var folder = req.body.folder;//contains folder Id
-  if(!folder) {
+
+
+
+
+
+exports.create = function(req,res,next){
+  console.log("exports.create") ;
+  var folderId = req.body.folder;//contains folder Id
+  if(!folderId){
     var doc = {
       created: new Date(),
       updated: new Date(),

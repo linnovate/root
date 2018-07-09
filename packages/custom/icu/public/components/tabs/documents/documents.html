@@ -33,7 +33,7 @@
                         <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-edit.png" src="/icu/assets/img/icon-edit.png" tooltips tooltip-side="left" tooltip-template="{{'preview' | i18next}}">
                     </button>         -->
                     <button class="DocumentIconsLine" id="Document-icon-download">
-                        <a href="{{document.path}}" target="window" tooltip-side="left" tooltip-side="left" tooltips tooltip-template="{{'download' | i18next}}">
+                                            <a ng-click="download(document.path)" target="window" tooltip-side="left" tooltip-side="left" tooltips tooltip-template="{{'download' | i18next}}">
                             <img class="Icons-In-DocumentLine" ng-src="/icu/assets/img/icon-download.svg" src="/icu/assets/img/icon-download.svg">
                         </a>
                     </button>
