@@ -332,8 +332,7 @@ angular.module('mean.icu.ui.displayby', [])
 
             $state.go('main.' + context.main + '.byentity', {
                 entity: entityName,
-                entityId: id,
-                officeDocuments: result
+                entityId: id
             });
         });
             // If we are switching between entities, then shrink the display limit again
