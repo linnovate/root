@@ -163,8 +163,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.onCreate = function() {
-        var parent = {};
         if ($state.current.name.indexOf("byentity") !== -1) {
+            var parent = {};
             parent.type = $state.current.params.entity;
             parent.id = $state.current.params.entityId;
         }
