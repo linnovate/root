@@ -1,6 +1,8 @@
-function bulkOperationsController($scope, selectedItems, MultipleSelectService) {
+function bulkOperationsController($scope, selectedItems, activityType, MultipleSelectService) {
 
-    $scope;
+    $scope.selectedItems = selectedItems;
+    $scope.activityType = activityType;
+// debugger
 
     $scope.bulkUpdate = function(){
         MultipleSelectService

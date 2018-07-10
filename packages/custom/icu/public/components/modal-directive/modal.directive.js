@@ -144,7 +144,10 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                         resolve: {
                             selectedItems: function () {
                                 return scope.data;
-                            }
+                            },
+                            activityType: function () {
+                                return scope.activityType;
+                            },
                         }
                     });
                 }
@@ -175,6 +178,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                 showModal: '=',
                 deleteFn: '&',
                 entityName: '@',
+                activityType: '@',
                 send: '=',
                 sendDocument: '&',
                 data: '=',
@@ -268,7 +272,7 @@ function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, peo
     };
 }
 
-function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,officeDocument, people, UsersService, OfficeDocumentsService) {
+function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter, officeDocument, people, UsersService, OfficeDocumentsService) {
 
     $scope.officeDocument = officeDocument;
     $scope.people = people;

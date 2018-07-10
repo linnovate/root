@@ -45,7 +45,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
         }
 
         function haveBulkPerms(entitiesArray, type) {
-            let havePermissions = entitiesArray.each((entity)=>{
+            let havePermissions = entitiesArray.every((entity)=>{
                 let userPermissions = entity.permissions.find((permission)=>{
                     return permission.id === me._id;
                 });

@@ -31,9 +31,13 @@
             button{
                 width: 20px;
                 height: 20px;
+                border: none;
+                &:active {
+                    outline: 1px solid gold;
+                }
             }
             .status {
-                background: url("/icu/assets/img/icon-status.svg") no-repeat center center;
+                background: url("/icu/assets/img/icon-flag-black.svg") no-repeat center center;
             }
         }
     }

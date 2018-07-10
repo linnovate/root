@@ -4,15 +4,7 @@
 
     <div ng-if="!multipleSelectMode" ng-include="'/icu/components/entity-list/regions/filters.html'"></div>
 
-    <div ng-controller="MultipleSelectController"
-         ng-show="multipleSelectMode"
-         class="multiple-select">
-        <multiple-corner-button>
-        </multiple-corner-button>
-        <div class="bulk-operations">
-            <multiple-status></multiple-status>
-        </div>
-    </div>
+    <multiple-select ng-show="multipleSelectMode"></multiple-select>
 
     <div
         ng-include="'/icu/components/entity-list/regions/list.html'"

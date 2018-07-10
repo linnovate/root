@@ -1,14 +1,21 @@
 'use strict';
 
 angular.module('mean.icu.ui.bulkoperations', [])
-    .controller("MultipleSelectController", function ($scope, MultipleSelectService) {
-        $scope.selectedItems = $scope.$parent.selectedItems;
+    .directive('multipleSelect', function () {
+        function controller($scope, MultipleSelectService) {
 
-        $scope.bulkUpdate = function(type){
-            MultipleSelectService.haveBulkPerms($scope.selectedItems, type)
-        };
+            $scope.selectedItems = $scope.$parent.selectedItems;
 
-        $scope.bulkOperationAllowed = function(type){
-            MultipleSelectService.haveBulkPerms($scope.selectedItems, type)
+            $scope.bulkUpdate = function(type){
+                MultipleSelectService.haveBulkPerms($scope.selectedItems, type)
+            };
+
         }
+        return {
+            controller: controller,
+            templateUrl: '/icu/components/bulk-operations/bulk-operations.html',
+            restrict: 'E',
+        };
     });
+
+

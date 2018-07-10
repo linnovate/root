@@ -3,13 +3,14 @@
 
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleStatus', function () {
-        function controller($scope) {
+        function controller($scope, MultipleSelectService) {
 
             let type = 'status';
 
-            $scope.selecteditems = $scope.$parent.selecteditems;
+            $scope.selecteditems = $scope.$parent.selectedItems;
 
-            $scope.allowed = $scope.$parent.bulkOperationAllowed(type);
+            $scope.allowed = MultipleSelectService.haveBulkPerms($scope.selectedItems, type)
+
         }
         return {
             controller: controller,
