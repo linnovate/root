@@ -25,7 +25,9 @@ function FolderListController($scope, $state, folders, FoldersService, context, 
             __state: creatingStatuses.NotCreated,
             __autocomplete: true
         };
-        if(parent)newItem.office = parent;
+        if(parent){
+            newItem.office = parent.id;
+        }
         return FoldersService.create(newItem).then(function(result) {
             $scope.items.push(result);
             FoldersService.data.push(result);
