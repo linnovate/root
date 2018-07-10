@@ -23,7 +23,7 @@ var config = require('meanio').loadConfig()
 let documentPlugins = require('../controllers/plugins/documents');
 // creates new document plugin middleware
 let documentsPlugin = new documentPlugins[config.documentPlugin];
-
+console.log("documentsPlugin.keys", documentsPlugin.keys) ;
 var templateDocs = require('../controllers/templateDocs');
 var signatures = require('../controllers/signatures');
 var authorization = require('../middlewares/auth.js');
@@ -391,17 +391,18 @@ module.exports = function(Icu, app) {
     .post(documents.signOnDocx);
   app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
 
+  // document sending operations (sentToDocument, distributedDocument, receiveDocument, readByDocument)
   app.route('/api/officeDocuments/receiveDocument/:id([0-9a-fA-F]{24})')
     .post(documents.receiveDocument);
 
   app.route('/api/officeDocuments/distributedDocument/:id([0-9a-fA-F]{24})')
-    .post(documents.distributedDocument);
+    .post(documentsPlugin.distributedDocument);
 
   app.route('/api/officeDocuments/readByDocument/:id([0-9a-fA-F]{24})')
-    .post(documents.readByDocument);
+    .post(documentsPlugin.readByDocument);
 
   app.route('/api/officeDocuments/sentToDocument/:id([0-9a-fA-F]{24})')
-    .post(documents.sentToDocument);
+    .post(documentsPlugin.sentToDocument);
 
   app.route('/api/officeTemplates/createNew')
     .post(templateDocs.createNew);

@@ -15,7 +15,7 @@ var permissions = require('../controllers/permissions.js');
 var logger = require('../services/logger');
 
 
-var ftp = require('../services/ftp');
+//var ftp = require('../services/ftp');
 var options = {
   includes: 'assign watchers',
   defaults: {watchers: []}
@@ -23,6 +23,7 @@ var options = {
 
 exports.defaultOptions = options;
 
+// AUXILLARY FUNCTIONS
 function getDocuments(entity, id) {
   var result = [];
   return new Promise(function(fulfill, reject) {
@@ -66,7 +67,6 @@ function getCreators(paths) {
 }
 
 
-
 function getUsers(users) {
   var request = [];
   return new Promise(function(fulfill, reject) {
@@ -98,6 +98,7 @@ function getUsers(users) {
 }
 
 
+// EXPORTED FUNCTIONS
 exports.uploadEmpty = function(req, res, next) {
   var user = req.user.email.substring(0, req.user.email.indexOf('@')).toLowerCase();
   var users = [];
@@ -279,7 +280,6 @@ exports.signOnDocx = function(req, res, next) {
       }
     });
 };
-
 
 
 exports.addSerialTitle = function(req, res, next) {
@@ -557,6 +557,7 @@ exports.addSerialTitle = function(req, res, next) {
 
 };
 
+
 exports.deleteDocumentFile = function(req, res, next) {
   var id = req.params.id;
   Document.update({_id: id}, {$unset: {path: 1, spPath: 1, serial: 1, signBy: 1}}, function(error, result) {
@@ -571,7 +572,6 @@ exports.deleteDocumentFile = function(req, res, next) {
     }
   });
 };
-
 
 
 exports.uploadDocumentsFromTemplate = function(req, res, next) {
@@ -721,12 +721,13 @@ exports.uploadDocumentsFromTemplate = function(req, res, next) {
     });
   }
 };
+
+
 /**
 *
 * request body includes entityName,fileType,entityId,watchers (As usernames)
 *
 */
-
 exports.uploadEmptyDocument = function(req, res, next) {
   var entityName = req.body.entityName;
   var fileType = req.body.fileType;
@@ -824,7 +825,6 @@ exports.getAll = function(req, res, next) {
 };
 
 
-
 /**
 * req.params.id will consist mongoDB _id of the document
 */
@@ -846,6 +846,7 @@ exports.getById = function(req, res, next) {
   });
 };
 
+
 /**
 * req.params.id will consist mongoDB _id of the user
 */
@@ -866,6 +867,7 @@ exports.getByUserId = function(req, res, next) {
     }
   });
 };
+
 
 /*
 *
@@ -901,227 +903,226 @@ exports.getByFolder = function(req, res, next) {
 };
 
 
+// //NOT IN USE
+// exports.upload = function(req, res, next) {
+//   req.locals.data = {};
+//   req.locals.data.body = {};
+//   var d = formatDate(new Date());
+//   var busboy = new Busboy({
+//     headers: req.headers
+//   });
+//   var hasFile = false;
+//   busboy.on('file', function(fieldname, file, filename) {
+//     var port = config.https && config.https.port ? config.https.port : config.http.port;
+//     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+//     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
+//     var fileType = path.extname(filename).substr(1).toLowerCase();
+//     mkdirp(path.join(config.attachmentDir, d), function() {
+//       file.pipe(fs.createWriteStream(saveTo)).on('close', function(err) {
+//         if(err) {
+//           logger.log('error', '%s upload, %s', req.user.name, 'mkdirp', {error: err.message});
+//         }
+//         var arr = hostFileLocation.split('/files');
+//         var pathFor = './files' + arr[1];
+//         var stats = fs.statSync(pathFor);
+//         var fileSizeInBytes = stats['size'];
+//         req.locals.data.body.size = fileSizeInBytes;
+//       });
+//       req.locals.data.body.name = filename;
+//       req.locals.data.body.path = hostFileLocation;
+//       req.locals.data.body.originalPath = hostFileLocation;
+//       req.locals.data.body.attachmentType = fileType;
+//       req.locals.data.body.size = file._readableState.length;
+//       hasFile = true;
+//     });
+//   });
 
-//NOT IN USE
-exports.upload = function(req, res, next) {
-  req.locals.data = {};
-  req.locals.data.body = {};
-  var d = formatDate(new Date());
-  var busboy = new Busboy({
-    headers: req.headers
-  });
-  var hasFile = false;
-  busboy.on('file', function(fieldname, file, filename) {
-    var port = config.https && config.https.port ? config.https.port : config.http.port;
-    var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
-    var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
-    var fileType = path.extname(filename).substr(1).toLowerCase();
-    mkdirp(path.join(config.attachmentDir, d), function() {
-      file.pipe(fs.createWriteStream(saveTo)).on('close', function(err) {
-        if(err) {
-          logger.log('error', '%s upload, %s', req.user.name, 'mkdirp', {error: err.message});
-        }
-        var arr = hostFileLocation.split('/files');
-        var pathFor = './files' + arr[1];
-        var stats = fs.statSync(pathFor);
-        var fileSizeInBytes = stats['size'];
-        req.locals.data.body.size = fileSizeInBytes;
-      });
-      req.locals.data.body.name = filename;
-      req.locals.data.body.path = hostFileLocation;
-      req.locals.data.body.originalPath = hostFileLocation;
-      req.locals.data.body.attachmentType = fileType;
-      req.locals.data.body.size = file._readableState.length;
-      hasFile = true;
-    });
-  });
+//   busboy.on('field', function(fieldname, val) {
+//     req.locals.data.body[fieldname] = val;
+//   });
 
-  busboy.on('field', function(fieldname, val) {
-    req.locals.data.body[fieldname] = val;
-  });
+//   busboy.on('finish', function() {
+//     var user = req.user.email.substring(0, req.user.email.indexOf('@'));
+//     var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf('/files'), req.locals.data.body.path.length);
+//     var fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
+//     req.locals.data.body.path = config.SPHelper.SPSiteUrl + '/' + config.SPHelper.libraryName + '/' + user + '/' + req.locals.data.body.name;
+//     var result = fs.readFile('.' + path, function(err, result) {
+//       result = JSON.parse(JSON.stringify(result));
+//       var coreOptions = {
+//         siteUrl: config.SPHelper.SPSiteUrl
+//       };
+//       var creds = {
+//         username: config.SPHelper.username,
+//         password: config.SPHelper.password
+//       };
+//       var folder = config.SPHelper.libraryName + '/' + user;
+//       var fileOptions = {
+//         folder: folder,
+//         fileName: fileName,
+//         fileContent: result
+//       };
 
-  busboy.on('finish', function() {
-    var user = req.user.email.substring(0, req.user.email.indexOf('@'));
-    var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf('/files'), req.locals.data.body.path.length);
-    var fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
-    req.locals.data.body.path = config.SPHelper.SPSiteUrl + '/' + config.SPHelper.libraryName + '/' + user + '/' + req.locals.data.body.name;
-    var result = fs.readFile('.' + path, function(err, result) {
-      result = JSON.parse(JSON.stringify(result));
-      var coreOptions = {
-        siteUrl: config.SPHelper.SPSiteUrl
-      };
-      var creds = {
-        username: config.SPHelper.username,
-        password: config.SPHelper.password
-      };
-      var folder = config.SPHelper.libraryName + '/' + user;
-      var fileOptions = {
-        folder: folder,
-        fileName: fileName,
-        fileContent: result
-      };
+//       if(req.locals.data.body['folderId']) {
+//         var folderId = req.locals.data.body['folderId'];
+//         Folder.findOne({
+//           _id: folderId
+//         }).exec(function(err, folder) {
+//           if(err) {
+//             logger.log('error', '%s upload, %s', req.user.name, 'Folder.findOne', {error: err.message});
 
-      if(req.locals.data.body['folderId']) {
-        var folderId = req.locals.data.body['folderId'];
-        Folder.findOne({
-          _id: folderId
-        }).exec(function(err, folder) {
-          if(err) {
-            logger.log('error', '%s upload, %s', req.user.name, 'Folder.findOne', {error: err.message});
+//             req.locals.error = err;
+//           }
+//           if(!folder) {
+//             req.locals.error = {
+//               status: 404,
+//               message: 'Entity not found'
+//             };
+//           }
+//           if(folder) {
+//             var users = [];
+//             users.push({
+//               __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
+//               Role: 3,
+//               UserId: user,
+//               isCreator: true
+//             });
+//             folder.watchers.forEach(function(watcher) {
+//               if(watcher != req.user._id) {
+//                 users.push({
+//                   __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
+//                   Role: 2,
+//                   UserId: watcher
+//                 });
+//               }
+//             });
+//             getUsers(users).then(function(result) {
+//               if(result == 'success') {
+//                 var json = {
+//                   coreOptions: coreOptions,
+//                   creds: creds,
+//                   fileOptions: fileOptions,
+//                   permissions: users,
+//                   isTemplate: false,
+//                   entity: 'folder',
+//                   entityId: folderId
+//                 };
+//                 request({
+//                   url: config.SPHelper.uri + '/api/upload',
+//                   method: 'POST',
+//                   json: json
+//                 }, function(error, resp, body) {
+//                   // if(error){
+//                   //   res.send(error);
+//                   // }
+//                   //else{
+//                   //var path = body.path;
+//                   var path = 'Path path path hahaha';
+//                   var doc = {
+//                     created: new Date(),
+//                     updated: new Date(),
+//                     title: fileName.substring(fileName.indexOf('-') + 1, fileName.length),
+//                     status: 'new',
+//                     path: path,
+//                     description: '', //important
+//                     serial: '',
+//                     folder: new ObjectId(folderId),
+//                     creator: new ObjectId(req.user._id),
+//                     updater: new ObjectId(req.user._id),
+//                     sender: new ObjectId(req.user._id),
+//                     sendingAs: new ObjectId(),
+//                     assign: new ObjectId(req.user._id),
+//                     classification: '', //important
+//                     size: 0,
+//                     circles: [],
+//                     relatedDocuments: [], //important
+//                     watchers: folder.watchers, //important
+//                     documentType: fileName.substring(fileName.indexOf('.') + 1, fileName.length),
+//                   };
+//                   var obj = new Document(doc);
+//                   obj.save(function(error, result) {
+//                     if(error) {
+//                       res.send(error);
+//                     }
+//                     else {
+//                       res.send(result);
+//                     }
+//                   });
+//                   // }
+//                 });
+//               }
+//               else {
+//                 res.send(error);
+//               }
+//             });
+//           }
+//         });
+//       }
+//       else {
+//         var users = [];
+//         users.push({
+//           __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
+//           Role: 3,
+//           UserId: user,
+//           isCreator: true
+//         });
+//         var json = {
+//           coreOptions: coreOptions,
+//           creds: creds,
+//           fileOptions: fileOptions,
+//           permissions: users,
+//           isTemplate: false,
+//           entity: 'folder',
+//           entityId: folderId
+//         };
+//         request({
+//           url: config.SPHelper.uri + '/api/upload',
+//           method: 'POST',
+//           json: json
+//         }, function(error, resp, body) {
+//           // if(error){
+//           //   res.send(error);
+//           // }
+//           // else{
+//           //   var path = body.path;
+//           var path = req.locals.data.body.originalPath;
+//           var doc = {
+//             created: new Date(),
+//             updated: new Date(),
+//             title: fileName.substring(fileName.indexOf('-') + 1, fileName.length),
+//             status: 'new',
+//             path: path,
+//             description: '', //important
+//             serial: '',
+//             folder: undefined,
+//             creator: new ObjectId(req.user._id),
+//             updater: new ObjectId(req.user._id),
+//             sender: new ObjectId(req.user._id),
+//             sendingAs: new ObjectId(),
+//             assign: new ObjectId(req.user._id),
+//             classification: '', //important
+//             size: 0,
+//             circles: [],
+//             relatedDocuments: [], //important
+//             watchers: [req.user._id], //important
+//             documentType: fileName.substring(fileName.indexOf('.') + 1, fileName.length),
+//           };
+//           var obj = new Document(doc);
+//           obj.save(function(error, result) {
+//             if(error) {
+//               res.send(error);
+//             }
+//             else {
+//               res.send(result);
+//             }
+//           });
+//           // }
+//         });
+//       }
+//     });
+//   });
 
-            req.locals.error = err;
-          }
-          if(!folder) {
-            req.locals.error = {
-              status: 404,
-              message: 'Entity not found'
-            };
-          }
-          if(folder) {
-            var users = [];
-            users.push({
-              __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
-              Role: 3,
-              UserId: user,
-              isCreator: true
-            });
-            folder.watchers.forEach(function(watcher) {
-              if(watcher != req.user._id) {
-                users.push({
-                  __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
-                  Role: 2,
-                  UserId: watcher
-                });
-              }
-            });
-            getUsers(users).then(function(result) {
-              if(result == 'success') {
-                var json = {
-                  coreOptions: coreOptions,
-                  creds: creds,
-                  fileOptions: fileOptions,
-                  permissions: users,
-                  isTemplate: false,
-                  entity: 'folder',
-                  entityId: folderId
-                };
-                request({
-                  url: config.SPHelper.uri + '/api/upload',
-                  method: 'POST',
-                  json: json
-                }, function(error, resp, body) {
-                  // if(error){
-                  //   res.send(error);
-                  // }
-                  //else{
-                  //var path = body.path;
-                  var path = 'Path path path hahaha';
-                  var doc = {
-                    created: new Date(),
-                    updated: new Date(),
-                    title: fileName.substring(fileName.indexOf('-') + 1, fileName.length),
-                    status: 'new',
-                    path: path,
-                    description: '', //important
-                    serial: '',
-                    folder: new ObjectId(folderId),
-                    creator: new ObjectId(req.user._id),
-                    updater: new ObjectId(req.user._id),
-                    sender: new ObjectId(req.user._id),
-                    sendingAs: new ObjectId(),
-                    assign: new ObjectId(req.user._id),
-                    classification: '', //important
-                    size: 0,
-                    circles: [],
-                    relatedDocuments: [], //important
-                    watchers: folder.watchers, //important
-                    documentType: fileName.substring(fileName.indexOf('.') + 1, fileName.length),
-                  };
-                  var obj = new Document(doc);
-                  obj.save(function(error, result) {
-                    if(error) {
-                      res.send(error);
-                    }
-                    else {
-                      res.send(result);
-                    }
-                  });
-                  // }
-                });
-              }
-              else {
-                res.send(error);
-              }
-            });
-          }
-        });
-      }
-      else {
-        var users = [];
-        users.push({
-          __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
-          Role: 3,
-          UserId: user,
-          isCreator: true
-        });
-        var json = {
-          coreOptions: coreOptions,
-          creds: creds,
-          fileOptions: fileOptions,
-          permissions: users,
-          isTemplate: false,
-          entity: 'folder',
-          entityId: folderId
-        };
-        request({
-          url: config.SPHelper.uri + '/api/upload',
-          method: 'POST',
-          json: json
-        }, function(error, resp, body) {
-          // if(error){
-          //   res.send(error);
-          // }
-          // else{
-          //   var path = body.path;
-          var path = req.locals.data.body.originalPath;
-          var doc = {
-            created: new Date(),
-            updated: new Date(),
-            title: fileName.substring(fileName.indexOf('-') + 1, fileName.length),
-            status: 'new',
-            path: path,
-            description: '', //important
-            serial: '',
-            folder: undefined,
-            creator: new ObjectId(req.user._id),
-            updater: new ObjectId(req.user._id),
-            sender: new ObjectId(req.user._id),
-            sendingAs: new ObjectId(),
-            assign: new ObjectId(req.user._id),
-            classification: '', //important
-            size: 0,
-            circles: [],
-            relatedDocuments: [], //important
-            watchers: [req.user._id], //important
-            documentType: fileName.substring(fileName.indexOf('.') + 1, fileName.length),
-          };
-          var obj = new Document(doc);
-          obj.save(function(error, result) {
-            if(error) {
-              res.send(error);
-            }
-            else {
-              res.send(result);
-            }
-          });
-          // }
-        });
-      }
-    });
-  });
-
-  return req.pipe(busboy);
-};
+//   return req.pipe(busboy);
+// };
 
 
 
@@ -1344,102 +1345,102 @@ exports.uploadFileToDocument = function(req, res, next) {
 };
 
 
+// NOT IN USE
+// exports.create = function(req, res, next) {
+//   console.log('exports.create');
+//   var folder = req.body.folder;//contains folder Id
+//   if(!folder) {
+//     var doc = {
+//       created: new Date(),
+//       updated: new Date(),
+//       title: '',
+//       status: 'new',
+//       path: undefined,
+//       spPath: undefined,
+//       description: '', //important
+//       serial: '',
+//       folder: undefined,
+//       creator: new ObjectId(req.user._id),
+//       updater: new ObjectId(req.user._id),
+//       sender: new ObjectId(req.user._id),
+//       sendingAs: new ObjectId(),
+//       assign: new ObjectId(req.user._id),
+//       classification: '', //important
+//       size: 0,
+//       circles: [],
+//       relatedDocuments: [], //important
+//       watchers: [req.user._id], //important
+//       permissions: [{id: req.user._id, level: 'editor'}],
+//       doneBy: [],
+//       forNotice: [],
+//       documentType: ''
+//     };
+//     var obj = new Document(doc);
+//     obj.save(function(error, result) {
+//       if(error) {
+//         logger.log('error', '%s create, %s', req.user.name, ' obj.save()', {error: error.message});
 
-exports.create = function(req, res, next) {
-  console.log('exports.create');
-  var folder = req.body.folder;//contains folder Id
-  if(!folder) {
-    var doc = {
-      created: new Date(),
-      updated: new Date(),
-      title: '',
-      status: 'new',
-      path: undefined,
-      spPath: undefined,
-      description: '', //important
-      serial: '',
-      folder: undefined,
-      creator: new ObjectId(req.user._id),
-      updater: new ObjectId(req.user._id),
-      sender: new ObjectId(req.user._id),
-      sendingAs: new ObjectId(),
-      assign: new ObjectId(req.user._id),
-      classification: '', //important
-      size: 0,
-      circles: [],
-      relatedDocuments: [], //important
-      watchers: [req.user._id], //important
-      permissions: [{id: req.user._id, level: 'editor'}],
-      doneBy: [],
-      forNotice: [],
-      documentType: ''
-    };
-    var obj = new Document(doc);
-    obj.save(function(error, result) {
-      if(error) {
-        logger.log('error', '%s create, %s', req.user.name, ' obj.save()', {error: error.message});
+//         res.send(error);
+//       }
+//       else {
+//         logger.log('info', '%s create, %s', req.user.name, 'success without folder');
+//           User.findOne({_id: result.creator}).exec(function(err, creator) {
+//               result.creator = creator;
+//               res.send(result);
+//           })
+//       }
+//     });
+//   }
+//   else {
+//     Folder.findOne({_id: folder}).exec(function(err, folderObj) {
+//       if(err) {
+//         logger.log('error', '%s create, %s', req.user.name, ' Folder.findOne', {error: err.message});
 
-        res.send(error);
-      }
-      else {
-        logger.log('info', '%s create, %s', req.user.name, 'success without folder');
-          User.findOne({_id: result.creator}).exec(function(err, creator) {
-              result.creator = creator;
-              res.send(result);
-          })
-      }
-    });
-  }
-  else {
-    Folder.findOne({_id: folder}).exec(function(err, folderObj) {
-      if(err) {
-        logger.log('error', '%s create, %s', req.user.name, ' Folder.findOne', {error: err.message});
+//         res.send(err);
+//       }
+//       else {
+//         var doc = {
+//           created: new Date(),
+//           updated: new Date(),
+//           title: '',
+//           status: 'new',
+//           path: undefined,
+//           description: '', //important
+//           serial: '',
+//           folder: new ObjectId(folder),
+//           creator: new ObjectId(req.user._id),
+//           updater: new ObjectId(req.user._id),
+//           sender: new ObjectId(req.user._id),
+//           sendingAs: new ObjectId(),
+//           assign: new ObjectId(req.user._id),
+//           classification: '', //important
+//           size: 0,
+//           circles: [],
+//           relatedDocuments: [], //important
+//           watchers: folderObj.watchers, //important
+//           permissions: [{id: req.user._id, level: 'editor'}],
+//           documentType: '',
+//         };
+//         var obj = new Document(doc);
+//         obj.folder = folderObj;
+//         obj.save(function(error, result) {
+//           if(error) {
+//             logger.log('error', '%s create, %s', req.user.name, ' obj.save', {error: error.message});
 
-        res.send(err);
-      }
-      else {
-        var doc = {
-          created: new Date(),
-          updated: new Date(),
-          title: '',
-          status: 'new',
-          path: undefined,
-          description: '', //important
-          serial: '',
-          folder: new ObjectId(folder),
-          creator: new ObjectId(req.user._id),
-          updater: new ObjectId(req.user._id),
-          sender: new ObjectId(req.user._id),
-          sendingAs: new ObjectId(),
-          assign: new ObjectId(req.user._id),
-          classification: '', //important
-          size: 0,
-          circles: [],
-          relatedDocuments: [], //important
-          watchers: folderObj.watchers, //important
-          permissions: [{id: req.user._id, level: 'editor'}],
-          documentType: '',
-        };
-        var obj = new Document(doc);
-        obj.folder = folderObj;
-        obj.save(function(error, result) {
-          if(error) {
-            logger.log('error', '%s create, %s', req.user.name, ' obj.save', {error: error.message});
-
-            res.send(error);
-          }
-          else {
-            logger.log('info', '%s create, %s', req.user.name, 'success with folder');
-              User.findOne({_id: result.creator}).exec(function(err, creator) {
-                  result.creator = creator;
-                  res.send(result);
-              })
-          }
-        });
-      }
-    });
-  }
-};
+//             res.send(error);
+//           }
+//           else {
+//             logger.log('info', '%s create, %s', req.user.name, 'success with folder');
+//               User.findOne({_id: result.creator}).exec(function(err, creator) {
+//                   result.creator = creator;
+//                   res.send(result);
+//               })
+//           }
+//         });
+//       }
+//     });
+//   }
+// };
 
 
 
@@ -1448,74 +1449,75 @@ exports.create = function(req, res, next) {
 * req.params.id contains document mongo id to delete
 *
 */
-exports.deleteDocument = function(req, res) {
-  Document.find({_id: req.params.id}, function(err, file) {
-    if(err) {
-      logger.log('error', '%s deleteDocument, %s', req.user.name, ' Document.find', {error: err.message});
-    }
-    else {
-      var spPath = file[0]._doc.spPath;
-      if(spPath) {
-        var fileName = spPath.substring(spPath.lastIndexOf('/') + 1, spPath.length);
-        var spPath2 = spPath.substring(0, spPath.lastIndexOf('/'));
-        var folderName = spPath.substring(spPath2.lastIndexOf('/') + 1, spPath2.length);
-        var spPath2 = spPath2.substring(0, spPath2.lastIndexOf('/'));
-        var libraryName = spPath2.substring(spPath2.lastIndexOf('/') + 1, spPath2.length);
-        var user = req.user.email.substring(0, req.user.email.indexOf('@'));
-        var context = {
-          siteUrl: config.SPHelper.SPSiteUrl,
-          creds: {
-            username: config.SPHelper.username,
-            password: config.SPHelper.password,
-            domain: config.SPHelper.domain
-          }
-        };
-        var options = {
-          folder: '/' + libraryName + '/' + folderName,
-          filePath: '/' + fileName
-        };
+// // NOT IN USE
+// exports.deleteDocument = function(req, res) {
+//   Document.find({_id: req.params.id}, function(err, file) {
+//     if(err) {
+//       logger.log('error', '%s deleteDocument, %s', req.user.name, ' Document.find', {error: err.message});
+//     }
+//     else {
+//       var spPath = file[0]._doc.spPath;
+//       if(spPath) {
+//         var fileName = spPath.substring(spPath.lastIndexOf('/') + 1, spPath.length);
+//         var spPath2 = spPath.substring(0, spPath.lastIndexOf('/'));
+//         var folderName = spPath.substring(spPath2.lastIndexOf('/') + 1, spPath2.length);
+//         var spPath2 = spPath2.substring(0, spPath2.lastIndexOf('/'));
+//         var libraryName = spPath2.substring(spPath2.lastIndexOf('/') + 1, spPath2.length);
+//         var user = req.user.email.substring(0, req.user.email.indexOf('@'));
+//         var context = {
+//           siteUrl: config.SPHelper.SPSiteUrl,
+//           creds: {
+//             username: config.SPHelper.username,
+//             password: config.SPHelper.password,
+//             domain: config.SPHelper.domain
+//           }
+//         };
+//         var options = {
+//           folder: '/' + libraryName + '/' + folderName,
+//           filePath: '/' + fileName
+//         };
 
-        var json = {
-          context: context,
-          options: options
-        };
-        request({
-          url: config.SPHelper.uri + '/api/delete',
-          method: 'POST',
-          json: json
-        }, function(error, resp, body) {
-          if(error) {
-            logger.log('error', '%s deleteDocument, %s', req.user.name, ' request', {error: error.message});
+//         var json = {
+//           context: context,
+//           options: options
+//         };
+//         request({
+//           url: config.SPHelper.uri + '/api/delete',
+//           method: 'POST',
+//           json: json
+//         }, function(error, resp, body) {
+//           if(error) {
+//             logger.log('error', '%s deleteDocument, %s', req.user.name, ' request', {error: error.message});
 
-          }
-          else {
-            logger.log('info', '%s deleteDocument, %s', req.user.name, 'success with SP');
+//           }
+//           else {
+//             logger.log('info', '%s deleteDocument, %s', req.user.name, 'success with SP');
 
-            res.sendStatus(200);
+//             res.sendStatus(200);
 
-          }
-          //   var creator = folderName;
-          //   if (creator == user) {
-          //  }
-        });
+//           }
+//           //   var creator = folderName;
+//           //   if (creator == user) {
+//           //  }
+//         });
 
 
-      }
-    }
+//       }
+//     }
 
-    Document.remove({_id: req.params.id}, function(err) {
-      if(err) {
-        logger.log('error', '%s deleteDocument, %s', req.user.name, ' Document.remove', {error: err.message});
-      }
-      else {
-        logger.log('info', '%s deleteDocument, %s', req.user.name, 'success without SP');
+//     Document.remove({_id: req.params.id}, function(err) {
+//       if(err) {
+//         logger.log('error', '%s deleteDocument, %s', req.user.name, ' Document.remove', {error: err.message});
+//       }
+//       else {
+//         logger.log('info', '%s deleteDocument, %s', req.user.name, 'success without SP');
 
-        res.sendStatus(200);
-      }
-    });
-  });
+//         res.sendStatus(200);
+//       }
+//     });
+//   });
 
-};
+// };
 
 /**
 * req.body contains zero permission array,entityName,entityId,description,name,assign,classification,relatedDocuments
@@ -1905,37 +1907,38 @@ exports.sign = function(req, res, next) {
   });
 };
 
-exports.signNew = function(req, res, next) {
-  var entities = {
-    project: 'Project',
-    task: 'Task',
-    discussion: 'Discussion',
-    office: 'Office',
-    folder: 'Folder'
-  };
-  var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
-  query.findOne({
-    _id: req.locals.data.body.entityId
-  }).exec(function(err, entity) {
-    if(err) {
-      logger.log('error', '%s signNew, %s', req.user.name, ' query', {error: error.message});
+// DUPLICATED BELOW
+// exports.signNew = function(req, res, next) {
+//   var entities = {
+//     project: 'Project',
+//     task: 'Task',
+//     discussion: 'Discussion',
+//     office: 'Office',
+//     folder: 'Folder'
+//   };
+//   var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+//   query.findOne({
+//     _id: req.locals.data.body.entityId
+//   }).exec(function(err, entity) {
+//     if(err) {
+//       logger.log('error', '%s signNew, %s', req.user.name, ' query', {error: error.message});
 
-      req.locals.error = err;
-    }
-    if(!entity) {
-      req.locals.error = {
-        status: 404,
-        message: 'Entity not found'
-      };
-    }
-    if(entity) {
-      req.locals.data.body.watchers = entity.watchers;
-      req.locals.data.body.watchers.push(entity.assign);
-      req.locals.data.body.circles = entity.circles;
-    }
-    next();
-  });
-};
+//       req.locals.error = err;
+//     }
+//     if(!entity) {
+//       req.locals.error = {
+//         status: 404,
+//         message: 'Entity not found'
+//       };
+//     }
+//     if(entity) {
+//       req.locals.data.body.watchers = entity.watchers;
+//       req.locals.data.body.watchers.push(entity.assign);
+//       req.locals.data.body.circles = entity.circles;
+//     }
+//     next();
+//   });
+// };
 
 exports.signNew = function(req, res, next) {
   var entities = {
@@ -1999,82 +2002,13 @@ exports.receiveDocument = function(req, res, next) {
 };
 
 
-// update user document distributed == viewed.
-exports.distributedDocument = function(req, res, next) {
-  officeDocument  = req.body.officeDocument;
-  var id = req.params.id;
-  Document.update({_id: id}, {$set: {status: 'viewed'}}, function(error, result) {
-    if(error) {
-      logger.log('error', '%s distributedDocument, %s', req.user.name, '  Document.update', {error: error.message});
-
-      res.send(error);
-    }
-    else {
-      logger.log('info', '%s distributedDocument, %s', req.user.name, 'success');
-
-      res.send('ok');
-    }
-  });
-};
-
-// get user document distributed == viewed.
-exports.readByDocument = function(req, res, next) {
-  officeDocument  = req.body.officeDocument;
-  var readBy = officeDocument.readBy;
-  var readbyToId = [];
-  readBy.forEach(function(element) {
-    readbyToId.push(new mongoose.Types.ObjectId(element.user));
-  });
-  var id = req.params.id;
-  User.find({
-    _id: {$in: readbyToId}
-  }, function(err, docs) {
-    if(err) {
-      logger.log('error', '%s readByDocument, %s', req.user.name, '   User.find', {error: err.message});
-
-      res.send(error);
-    }
-    else {
-      logger.log('info', '%s readByDocument, %s', req.user.name, 'success');
-
-      res.send(docs);
-    }
-  });
-};
-
-
-// get users in document sentTo.
-exports.sentToDocument = function(req, res, next) {
-  officeDocument  = req.body.officeDocument;
-  var sentTo = officeDocument.sentTo;
-  var sentToId = [];
-  sentTo.forEach(function(element) {
-    sentToId.push(new mongoose.Types.ObjectId(element.user));
-  });
-  var id = req.params.id;
-  User.find({
-    _id: {$in: sentToId}
-  }, function(err, docs) {
-    if(err) {
-      logger.log('error', '%s sentToDocument, %s', req.user.name, '   User.find', {error: err.message});
-
-      res.send(error);
-    }
-    else {
-      logger.log('info', '%s readByDocument, %s', req.user.name, 'success');
-
-      res.send(docs);
-    }
-  });
-};
-
 
 exports.sendDocument = function(req, res, next) {
   var officeDocument = req.body.officeDocument;
   var sendingForm = req.body.sendingForm;
   var spPath = officeDocument.spPath;
   var assign = officeDocument.assign._id;
-  var creators = officeDocument.creator ? [officeDocument.creator.username.toLowerCase()] : [];
+  var creators = officeDocument.creator ? [officeDocument.creator] : [];
   sendingForm['doneBy'] = sendingForm['doneBy'] ? sendingForm['doneBy'] : [];
   sendingForm['forNotice'] = sendingForm['forNotice'] ? sendingForm['forNotice'] : [];
   sendingForm['sendingAs'] = sendingForm['sendingAs'] ? sendingForm['sendingAs'] : null;
@@ -2230,32 +2164,33 @@ exports.sendDocument = function(req, res, next) {
   });
 };
 
-var copyFile = function(file, dir2) {
+// UNUSED FUNCTION
+// var copyFile = function(file, dir2) {
 
-  //gets file name and adds it to dir2
-  // var f = path.basename(file);
-  // var source = fs.createReadStream(file);
-  // var dest = fs.createWriteStream(path.resolve("http://localhost:3002/files/2018/01/22/", f));
+//   //gets file name and adds it to dir2
+//   // var f = path.basename(file);
+//   // var source = fs.createReadStream(file);
+//   // var dest = fs.createWriteStream(path.resolve("http://localhost:3002/files/2018/01/22/", f));
 
-  // source.pipe(dest);
-  // source.on('end', function() { console.log('Succesfully copied'); });
-  // source.on('error', function(err) { console.log(err); });
-  file = '/home/sraya/Desktop/ICU_25.12.17/root/files/2018/01/22/1516632480971-Combined.pdf';
-  console.time('copying');
-  fs.stat(file, function(err, stat) {
-    // var filesize = stat.size
-    // var bytesCopied = 0
+//   // source.pipe(dest);
+//   // source.on('end', function() { console.log('Succesfully copied'); });
+//   // source.on('error', function(err) { console.log(err); });
+//   file = '/home/sraya/Desktop/ICU_25.12.17/root/files/2018/01/22/1516632480971-Combined.pdf';
+//   console.time('copying');
+//   fs.stat(file, function(err, stat) {
+//     // var filesize = stat.size
+//     // var bytesCopied = 0
 
-    var readStream = fs.createReadStream(file);
+//     var readStream = fs.createReadStream(file);
 
-    readStream.on('data', function(buffer) {
-      //bytesCopied+= buffer.length
-      //var porcentage = ((bytesCopied/filesize)*100).toFixed(2)
-    });
-    readStream.on('end', function() {
-      console.timeEnd('copying');
-    });
-    readStream.pipe(fs.createWriteStream('/home/sraya/Desktop/ICU_25.12.17/root/files/2018/01/22/yyyy.pdf'));
-  });
-};
+//     readStream.on('data', function(buffer) {
+//       //bytesCopied+= buffer.length
+//       //var porcentage = ((bytesCopied/filesize)*100).toFixed(2)
+//     });
+//     readStream.on('end', function() {
+//       console.timeEnd('copying');
+//     });
+//     readStream.pipe(fs.createWriteStream('/home/sraya/Desktop/ICU_25.12.17/root/files/2018/01/22/yyyy.pdf'));
+//   });
+// };
 
