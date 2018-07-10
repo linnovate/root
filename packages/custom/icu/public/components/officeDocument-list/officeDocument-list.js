@@ -11,10 +11,10 @@ function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDoc
         return OfficeDocumentsService.update(item);
     }
 
-    $scope.create = function(parentsFolder) {
+    $scope.create = function(parent) {
         var data = {};
-        if(parentsFolder){
-            data.folder = parentsFolder;
+        if(parent){
+            data.folder = parent.id;
         }
         //         if ($stateParams.entity == 'folder') {
         //             data['folder'] = $stateParams.entityId;
