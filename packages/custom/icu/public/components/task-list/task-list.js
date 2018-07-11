@@ -76,15 +76,6 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
         }
     }
 
-    $scope.excel = function() {
-        TasksService.excel();
-        var me;
-        UsersService.getMe().then(function(me1) {
-            me = me1;
-            window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
-        });
-    }
-
     $scope.getFilter = function() {
         var a = TasksService.filterValue;
         switch (a) {
