@@ -196,7 +196,7 @@ directive('icuSidepane', function() {
             open: $scope.isCurrentState({state: 'discussions'})
         },
         {
-            name: 'Documents',
+            name: 'officeDocuments',
             icon: '/icu/assets/img/icon-document.svg',
             state: 'officeDocuments.all',
             display: ['folders'],//['new', 'received', 'inProgress'],
@@ -279,7 +279,7 @@ directive('icuSidepane', function() {
         {label:'offices', value: false, name: 'office', length: 0},
         {label:'folders', value: false, name: 'folder', length: 0},
         {label:'Attachments', value: false, name: 'attachment', length: 0},
-        {label:'documents', value: false, name: 'officeDocument', length: 0}
+        {label:'officeDocuments', value: false, name: 'officeDocument', length: 0}
     ];
 
     $scope.filteringData = {
