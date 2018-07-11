@@ -28,7 +28,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
             });
 
             function buildModal() {
-                if(scope.modalName == 'receive' && scope.entityName == "officeDocument") {
+                if(scope.modalName == 'receive' && scope.entityName == "officeDocuments") {
 //                    console.log("buildModal receive", scope) ;
                     var modalInstance = $uibModal.open({
                         animation: true,
@@ -65,7 +65,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                         }
                     });
                 }
-                else if(scope.modalName == 'distributed' && scope.entityName == "officeDocument") {
+                else if(scope.modalName == 'distributed' && scope.entityName == "officeDocuments") {
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'md',
@@ -82,7 +82,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                     });
                 }
 
-                else if(scope.modalName == 'send' && scope.entityName == "officeDocument"){
+                else if(scope.modalName == 'send' && scope.entityName == "officeDocuments"){
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'lg',
@@ -100,7 +100,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                     });
 
                 }
-                else if(scope.modalName == 'template' && scope.entityName == "officeDocument"){
+                else if(scope.modalName == 'template' && scope.entityName == "officeDocuments"){
                     var modalInstance = $uibModal.open({
                         animation: true,
                         size:  'lg',
