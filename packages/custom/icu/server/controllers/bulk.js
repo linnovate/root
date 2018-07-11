@@ -11,6 +11,7 @@ const models = {
 
 module.exports = {
   update,
+  recycle,
   remove
 }
 
@@ -62,6 +63,32 @@ function update(req, res, next) {
   })
 }
 
+function recycle(req, res, next) {
+  let entity = req.params.entity;
+  let Model = models[entity];
+  let ids = req.body.ids;
+
+  Model.find({ _id: { $in: ids } })
+  .then(function(docs) {
+    if(!docs.length) throw new httpError(404);
+    return Model.update({
+      _id: { $in: ids }
+    }, {
+      $set: {
+        recycled: new Date;
+      }
+    }, {
+      multi: true
+    })
+  })
+  .then(function(results) {
+    res.end()
+  })
+  .catch(function(err) {
+    next(err)
+  })
+}
+
 function remove(req, res, next) {
   let entity = req.params.entity;
   let Model = models[entity];
@@ -69,7 +96,6 @@ function remove(req, res, next) {
 
   Model.find({ _id: { $in: ids } })
   .then(function(docs) {
-    console.log(docs)
     if(!docs.length) throw new httpError(404);
     return Model.remove({ _id: { $in: ids } })
   })

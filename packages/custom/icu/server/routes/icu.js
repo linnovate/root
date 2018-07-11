@@ -431,6 +431,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/:entity(task|discussion|project|office|folder|document|templateDoc)s/bulk')
     .put(bulk.update)
+    .patch(bulk.recycle)
     .delete(bulk.remove)
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
