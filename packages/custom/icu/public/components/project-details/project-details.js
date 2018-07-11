@@ -373,16 +373,16 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
 
   $scope.permsToSee = function() {
-    return PermissionsService.haveAnyPerms($scope.entity);
+    return PermissionsService.haveAnyPerms($scope.item);
   }
 
   $scope.havePermissions = function(type, enableRecycled) {
     enableRecycled = enableRecycled || !$scope.isRecycled;
-    return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
+    return (PermissionsService.havePermissions($scope.item, type) && enableRecycled);
   }
 
   $scope.haveEditiorsPermissions = function() {
-    return PermissionsService.haveEditorsPerms($scope.entity);
+    return PermissionsService.haveEditorsPerms($scope.item);
   }
 
 }

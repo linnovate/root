@@ -262,7 +262,7 @@ module.exports = function(entityName, options) {
           deffered.resolve(new Model(entity).save(user).then(function(e) {
             orderController.addOrder(e, entity, Model);
             return Model.populate(e, options.includes);
-          }));all
+          }));
         }
       });
   }).catch(function(error){

@@ -4,51 +4,55 @@ var mean = require('meanio'),
   utils = require('./utils'),
   system = require('./system');
 
+var logger = require('../services/logger');
 exports.save = function(doc, docType, room, title) {
-  // console.log("exports.save") ;
-  var newDoc = JSON.parse(JSON.stringify(doc));
-  delete newDoc._id;
-  // console.log("JSON.stringify(doc)") ;
-  // console.log(JSON.stringify(doc)) ;
-  let creator =  doc.creator._id || doc.creator; // comes both ways
-  newDoc.creator =  JSON.parse(JSON.stringify(creator));
-  // console.log("JSON.stringify(newdoc)");
-  // console.log(JSON.stringify(newDoc)) ;
-  // delete newDoc.watchers ; // the mapping of watchers is irrelevant - and needs to be recreated/refactored as a list of uids.
-  mean.elasticsearch.index({
-    index: docType,
-    type: docType,
-    id: doc._id.toString(),
-    body: newDoc
-  }, function(error, response) {
-    // utils.checkAndHandleError(error, res);
-    if(error)
-      system.sendMessage({service: 'elasticsearch', message: response});
-    return error;
-    //if (room)
-    //    if (docType === 'attachment')
-    //        notifications.sendFile({entityType: docType, title: title, room:room, method: 'uploaded', path: doc.path, issue:doc.issue});
-    //    else
-    //notifications.sendFromApi({entityType: docType, title: doc.title, room:room, method: (response.created ? 'created' : 'updated')});
-    return doc;
-  });
+  try {
+    var newDoc = JSON.parse(JSON.stringify(doc));
+    delete newDoc._id;
+    let creator =  doc.creator._id || doc.creator; // comes both ways
+    newDoc.creator =  JSON.parse(JSON.stringify(creator));
+    // delete newDoc.watchers ; // the mapping of watchers is irrelevant - and needs to be recreated/refactored as a list of uids.
+    mean.elasticsearch.index({
+      index: docType,
+      type: docType,
+      id: doc._id.toString(),
+      body: newDoc
+    }, function(error, response) {
+      // utils.checkAndHandleError(error, res);
+      if(error)
+        system.sendMessage({service: 'elasticsearch', message: response});
+      return error;
+      //if (room)
+      //    if (docType === 'attachment')
+      //        notifications.sendFile({entityType: docType, title: title, room:room, method: 'uploaded', path: doc.path, issue:doc.issue});
+      //    else
+      //notifications.sendFromApi({entityType: docType, title: doc.title, room:room, method: (response.created ? 'created' : 'updated')});
+      return doc;
+    });
+  } catch (err){
+    logger.log('error', 'error saving to elastic', {error: err.message})
+  }
 };
 
 exports.delete = function(doc, docType, room, next) {
-  mean.elasticsearch.delete({
-    index: docType,
-    type: docType,
-    id: doc._id.toString()
-  }, function(error, response) {
-    if(error)
-      system.sendMessage({service: 'elasticsearch', message: response});
-    return error;
+  try{
+    mean.elasticsearch.delete({
+      index: docType,
+      type: docType,
+      id: doc._id.toString()
+    }, function(error, response) {
+      if(error)
+        system.sendMessage({service: 'elasticsearch', message: response});
+      return error;
 
-    // utils.checkAndHandleError(error, res);
-    //if (room)
-    //  notifications.sendFromApi({entityType: docType, title: doc.title, room: room, method: 'deleted'});
-    return next();
-  });
+      // utils.checkAndHandleError(error, res);
+      //if (room)
+      //  notifications.sendFromApi({entityType: docType, title: doc.title, room: room, method: 'deleted'});
+      return next();
+    });
+  } catch (err){
+    logger.log('error', 'error deleting from elastic', {error: err.message})
+  }
 };
 
 function inArray(elm, array) {

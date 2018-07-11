@@ -1001,27 +1001,21 @@ exports.excel = function (req, res, next) {
       worksheet.cell(numOfRow, 1).string(req.locals.result[index]._doc.title).style(style);
     }
 
-    if(req.locals.result[index]._doc.due) {
-      worksheet.cell(numOfRow, 2).date(req.locals.result[index]._doc.due).style(style);
-    }
+  if (req.locals.result[index]._doc.due) {
 
-    if(req.locals.result[index]._doc.status) {
-      worksheet.cell(numOfRow, 3).string(req.locals.result[index]._doc.status).style(style);
-    }
+    req.locals.result[index]._doc.due.setTime(req.locals.result[index]._doc.due.getTime() + 2 * 8640000);
 
-    if(req.locals.result[index]._doc.assign) {
-      var query = UserModel.findOne({
-        _id: req.locals.result[index]._doc.assign._doc._id
-      });
-      assignArray[assignArray.length] = numOfRow;
-      query.then(function(user) {
-      //worksheet.cell(numOfRow,4).string(user._doc.name).style(style);
-        worksheet.cell(assignArray[IndexOfassignArray], 4).string(user._doc.name).style(style);
-        workbook.write(config.attachmentDir + path + '/' + req.user.id + 'Tasks.xlsx');
-        IndexOfassignArray++;
-      });
+    worksheet.cell(numOfRow,2).date(req.locals.result[index]._doc.due).style(style);
+  }
 
-    }
+  if (req.locals.result[index]._doc.status) {
+    worksheet.cell(numOfRow,3).string(req.locals.result[index]._doc.status).style(style);
+  }
+
+  if (req.locals.result[index]._doc.assign) {
+    worksheet.cell(numOfRow,4).string(req.locals.result[index]._doc.assign._doc.name).style(style);
+
+  }
 
     if(req.locals.result[index]._doc.watchers.length > 1) {
       for(var numOfWatchers = 0;

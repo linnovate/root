@@ -27,6 +27,9 @@
         <button ng-click="print()" ng-class="{ 'orange': starred }" class="favorites">
             <i class="fa fa-print"></i>
         </button>
+        <button ng-if="taskList" ng-click="excel()" ng-class="{ 'orange': starred }" class="favorites">
+            <i class="fa fa-file-excel-o"></i>
+        </button>
     </div>
     <div class="select-wrapper">
         <div tooltips tooltip-template="{{'sort by' | i18next}}">
