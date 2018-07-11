@@ -57,7 +57,8 @@ function boldUpdate(req, res, next) {
 
       //check if entity comes from another version without bolded parameter
       if(!entity.bolded || !entity.bolded.length){
-        entity.bolded= [].push(createBoldedObject(user_id, false));
+        entity.bolded = [];
+        entity.bolded.push(createBoldedObject(user_id, false));
       }
 
       switch (action) {
