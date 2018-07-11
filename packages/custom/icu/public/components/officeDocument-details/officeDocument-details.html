@@ -22,7 +22,7 @@
     <button class="detail-button send"
             ng-if="item.status == 'new'"
             icu-open-modal
-            entity-name="officeDocument"
+            entity-name="officeDocuments"
             modal-name="send"
             people="people"
             show-modal="true"
@@ -35,7 +35,7 @@
     <button class="detail-button receive"
             ng-if="item.status == 'sent'"
             icu-open-modal
-            entity-name="officeDocument"
+            entity-name="officeDocuments"
             people="people"
             show-modal="true"
             modal-name="distributed"
@@ -49,7 +49,7 @@
     <button class="detail-button receive"
             ng-if="item.status == 'received' && item.viewed != true"
             icu-open-modal
-            entity-name="officeDocument"
+            entity-name="officeDocuments"
             people="people"
             show-modal="true"
             modal-name="receive"
@@ -124,7 +124,7 @@
     <button class="create"
             ng-if="(!item.path && !item.spPath && !uploading)"
             icu-open-modal
-            entity-name="officeDocument"
+            entity-name="officeDocuments"
             show-modal="true"
             modal-name="template"
             data="item">{{ 'createFromTemplate' | i18next }}
