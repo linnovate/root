@@ -1539,7 +1539,7 @@ exports.create = function(req,res,next){
     });
   }
   else {
-    Folder.findOne({_id: folder}).exec(function(err, folderObj) {
+    Folder.findOne({_id: folderId}).exec(function(err, folderObj) {
       if(err) {
         logger.log('error', '%s create, %s', req.user.name, ' Folder.findOne', {error: err.message});
 
@@ -1554,7 +1554,7 @@ exports.create = function(req,res,next){
           path: undefined,
           description: '', //important
           serial: '',
-          folder: new ObjectId(folder),
+          folder: new ObjectId(folderId),
           creator: new ObjectId(req.user._id),
           updater: new ObjectId(req.user._id),
           sender: new ObjectId(req.user._id),
