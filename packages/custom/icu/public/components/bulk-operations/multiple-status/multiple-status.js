@@ -7,10 +7,11 @@ angular.module('mean.icu.ui.bulkoperations')
 
             let type = 'status';
 
-            $scope.selecteditems = $scope.$parent.selectedItems;
+            $scope.selectedItems = $scope.$parent.selectedItems;
 
-            $scope.allowed = MultipleSelectService.haveBulkPerms($scope.selectedItems, type)
-
+            if($scope.selectedItems.length){
+                $scope.allowed = MultipleSelectService.haveBulkPerms($scope.selectedItems, type)
+            }
         }
         return {
             controller: controller,

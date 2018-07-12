@@ -1,3 +1,8 @@
-<div class="corner-button">
-    <span>"{{selectedItems.length}}" Items selected</span>
+<div class="corner">
+    <div
+        class="corner-button"
+        ng-class="cornerState"
+        ng-click="changeCornerState()"
+    ></div>
+    <span>{{selectedItems.length}} Items selected</span>
 </div>

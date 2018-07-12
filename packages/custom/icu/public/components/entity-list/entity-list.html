@@ -4,7 +4,12 @@
 
     <div ng-if="!multipleSelectMode" ng-include="'/icu/components/entity-list/regions/filters.html'"></div>
 
-    <multiple-select ng-show="multipleSelectMode"></multiple-select>
+    <multiple-select
+        ng-if="multipleSelectMode"
+        selected-items="selectedItems"
+        corner-state="cornerState"
+    >
+    </multiple-select>
 
     <div
         ng-include="'/icu/components/entity-list/regions/list.html'"

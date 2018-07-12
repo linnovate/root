@@ -1,6 +1,6 @@
 'use strict';
 
-function TaskListController($scope, $timeout, $state, tasks, DiscussionsService, TasksService, ProjectsService, context, $stateParams, EntityService) {
+function TaskListController($scope, $timeout, $state, tasks, DiscussionsService, TasksService, ProjectsService, context, $stateParams, EntityService, MultipleSelectService) {
 
     $scope.items = tasks.data || tasks;
 
@@ -46,11 +46,22 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
             TasksService.data.push(result);
             return result;
         });
-    }
-
-    $scope.refreshSelectedList = function(entity){
-      $scope.$parent.refreshSelectedList(entity);
     };
+
+    $scope.refreshSelected = function (entity) {
+        MultipleSelectService.refreshSelectedList(entity);
+        $scope.$broadcast('refreshList', {})
+    };
+
+    $scope.$on('changeCornerState', function(event, cornerState){
+        setAllSelected(cornerState === 'all')
+    });
+
+    function setAllSelected(status){
+        for(let i = 0; i < $scope.items.length; i++){
+            $scope.items[i].selected = status;
+        }
+    }
 
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {

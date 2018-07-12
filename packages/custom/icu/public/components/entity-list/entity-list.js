@@ -5,7 +5,7 @@
  * @example <div acme-order-calendar-range></div>
  */
 
-function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, PermissionsService) {
+function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, PermissionsService, MultipleSelectService) {
 
     // ============================================================= //
     // ========================= navigate ========================== //
@@ -198,26 +198,24 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ============================================================= //
 
     $scope.multipleSelectMode = false;
+    $scope.cornerState = MultipleSelectService.getCornerState();
     console.log('multipleSelectMode: ', $scope.multipleSelectMode);
-    $scope.selectedItems = [];
 
-    $scope.refreshSelectedList = function (editedEntity) {
-      let entitySelectedIndex = $scope.selectedItems.findIndex((entity)=>{
-        return entity._id === editedEntity._id;
-      });
+    $scope.$on('refreshList', function (event) {
+        $scope.selectedItems = MultipleSelectService.getSelected();
+        $scope.cornerState = MultipleSelectService.refreshCornerState($scope.items.length);
 
-      if(entitySelectedIndex === -1){
-          $scope.selectedItems.push(editedEntity);
-      } else {
-          $scope.selectedItems.splice(entitySelectedIndex, 1);
-      }
+        if ($scope.selectedItems.length) {
+            $scope.multipleSelectMode = true;
+        } else {
+            $scope.multipleSelectMode = false;
+        }
+    });
 
-      if($scope.selectedItems.length){
-        $scope.multipleSelectMode = true;
-      } else {
+    $scope.$on('disableMultipleMode', function (event) {
         $scope.multipleSelectMode = false;
-      }
-    };
+        MultipleSelectService.refreshSelectedList();
+    });
 
     $scope.showTick = function(item){
         item.visible = true;

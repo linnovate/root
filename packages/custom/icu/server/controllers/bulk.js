@@ -75,7 +75,7 @@ function recycle(req, res, next) {
       _id: { $in: ids }
     }, {
       $set: {
-        recycled: new Date;
+        recycled: new Date
       }
     }, {
       multi: true

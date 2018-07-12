@@ -1,0 +1,49 @@
+multiple-select {
+    height: 44px;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    justify-content: space-between;
+
+    .corner {
+        line-height: 44px;
+        font-weight: bold;
+
+        .corner-button {
+            width: 22px;
+            float: left;
+            height: 22px;
+            margin: 11px 10px;
+            border: 1px solid #E1E1E1;
+            cursor: pointer;
+
+            &.all {
+                background: url('/icu/assets/img/tick.svg') no-repeat center center;
+            }
+            &.some {
+                background: url('/icu/assets/img/long-line.svg') no-repeat center center;
+            }
+            &.none {
+                background: url('/icu/assets/img/Vector.png') no-repeat center center;
+            }
+        }
+    }
+    .bulk-operations {
+        .bulk-operation {
+            width: 40px;
+            height: 100%;
+        }
+        button {
+            width: 20px;
+            height: 20px;
+            border: none;
+            &:active {
+                outline: 1px solid gold;
+            }
+        }
+        .status {
+            background: url("/icu/assets/img/icon-flag-black.svg") no-repeat center center;
+        }
+    }
+
+}
