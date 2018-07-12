@@ -68,7 +68,6 @@ gulp.task('babel', function () {
         }
       }]]
     }))
-    .pipe(process.env.NODE_ENV === 'production' ? plugins.babelMinify(): plugins.util.noop())
     .pipe(distPath())
     .pipe(gulp.dest('dist/'));
 });
