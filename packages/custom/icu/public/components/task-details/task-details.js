@@ -2,11 +2,13 @@
 
 angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
 
-function TaskDetailsController($scope, entity, tags, projects, $state, BoldedService, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
+function TaskDetailsController($scope, entity, tags, projects, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
 
   // ==================================================== init ==================================================== //
 
     $scope.item = typeof entity === 'object'? entity : context.entity;
+    $scope.entityType = 'tasks';
+
 
   if (!$scope.item) {
     $state.go('main.tasks.byentity', {
@@ -59,15 +61,6 @@ function TaskDetailsController($scope, entity, tags, projects, $state, BoldedSer
     TasksService.getTemplate().then(function(template) {
       $scope.template = template;
     });
-  }
-
-  boldedUpdate($scope.item, 'view').then(updatedItem => {
-      $scope.item.bolded = updatedItem.bolded;
-  });
-
-  function boldedUpdate(entity, action) {
-      let entityType = 'tasks';
-      return BoldedService.boldedUpdate(entity, entityType, action)
   }
 
     // ==================================================== onChanges ==================================================== //

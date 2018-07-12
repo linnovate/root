@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.templateDocdetails', []).controller('TemplateDocDetailsController', TemplateDocDetailsController);
 
-function TemplateDocDetailsController($scope, $http, entity, tasks, folders, people, templateDocs, context, $state, BoldedService, TemplateDocsService, PermissionsService, $stateParams) {
+function TemplateDocDetailsController($scope, $http, entity, tasks, folders, people, templateDocs, context, $state, TemplateDocsService, PermissionsService, $stateParams) {
 
   if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("templateDocs"))) {
     $scope.item = entity || context.entity;
@@ -31,15 +31,6 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   $scope.items = templateDocs.data || templateDocs;
 
   $scope.people = people.data || people;
-
-  boldedUpdate($scope.item, 'view').then(updatedItem => {
-    $scope.item.bolded = updatedItem.bolded;
-  });
-
-  function boldedUpdate(entity, action) {
-    let entityType = 'templateDocs';
-    return BoldedService.boldedUpdate(entity, entityType, action)
-  }
 
   // ==================================================== onChanges ==================================================== //
 

@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.discussiondetails', []).controller('DiscussionDetailsController', DiscussionDetailsController);
 
-function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, BoldedService, DiscussionsService, PermissionsService, ActivitiesService, EntityService, UsersService, $stateParams) {
+function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, DiscussionsService, PermissionsService, ActivitiesService, EntityService, UsersService, $stateParams) {
 
   // ==================================================== init ==================================================== //
 
@@ -60,15 +60,6 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
       return s._id === $scope.item._id;
     });
   });
-
-  boldedUpdate($scope.item, 'view').then(updatedItem => {
-    $scope.item.bolded = updatedItem.bolded;
-  });
-
-  function boldedUpdate(entity, action) {
-    let entityType = 'discussions';
-    return BoldedService.boldedUpdate(entity, entityType, action)
-  }
 
   // ==================================================== onChanges ==================================================== //
 

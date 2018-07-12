@@ -45,6 +45,26 @@ angular.module('mean.icu.ui.detailspane', [])
     };
 });
 
+angular.module('mean.icu.ui.detailspane')
+    .directive('detailsView', function () {
+        function controller($scope, $state, BoldedService) {
+            $scope.actionType = 'view';
+            BoldedService.boldedUpdate($scope.item, $scope.entityType, $scope.actionType).then((result) => {
+                $scope.item = result;
+            })
+        }
+
+        return {
+            restrict: 'E',
+            scope: {
+                item: '=',
+                entityType: '=',
+            },
+            controller: controller,
+            templateUrl: '/icu/components/detailspane/detailspane.html'
+        };
+    });
+
 angular.module('mean.icu').controller('DetailsPaneModalInstanceCtrl', function ($uibModalInstance) {
 
   function ok () {

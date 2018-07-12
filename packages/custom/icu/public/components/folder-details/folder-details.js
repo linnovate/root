@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.folderdetails', []).controller('FolderDetailsController', FolderDetailsController);
 
-function FolderDetailsController($scope, entity, tasks, people, folders, offices, $timeout, context, $state, BoldedService, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
+function FolderDetailsController($scope, entity, tasks, people, folders, offices, tags,  $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
 
   // ==================================================== init ==================================================== //
 
@@ -50,15 +50,6 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
       return s._id === $scope.item._id;
     });
   });
-
-  boldedUpdate($scope.item, 'view').then(updatedItem => {
-    $scope.item.bolded = updatedItem.bolded;
-  });
-
-  function boldedUpdate(entity, action) {
-    let entityType = 'folders';
-    return BoldedService.boldedUpdate(entity, entityType, action)
-  }
 
   // ==================================================== onChanges ==================================================== //
 

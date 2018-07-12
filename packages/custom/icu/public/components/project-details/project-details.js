@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, people, projects, tags, $timeout, context, $state, BoldedService, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
+function ProjectDetailsController($scope, $rootScope, entity, people, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
 
   // ==================================================== init ==================================================== //
 
@@ -55,15 +55,6 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
       return s._id === $scope.item._id;
     });
   });
-
-  boldedUpdate($scope.item, 'view').then(updatedItem => {
-    $scope.item.bolded = updatedItem.bolded;
-  });
-
-  function boldedUpdate(entity, action) {
-    let entityType = 'projects';
-    return BoldedService.boldedUpdate(entity, entityType, action)
-  }
 
   // ==================================================== onChanges ==================================================== //
 

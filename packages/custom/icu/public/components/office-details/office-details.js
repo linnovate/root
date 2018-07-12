@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.officedetails', []).controller('OfficeDetailsController', OfficeDetailsController);
 
-function OfficeDetailsController($scope, entity, tasks, folders, people, offices, context, $state, BoldedService, OfficesService, PermissionsService, $stateParams, ActivitiesService) {
+function OfficeDetailsController($scope, entity, tasks, folders, people, offices, context, $state, OfficesService, PermissionsService, $stateParams, ActivitiesService) {
 
   // ==================================================== init ==================================================== //
 
@@ -42,15 +42,6 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
       return s._id === $scope.item._id;
     });
   });
-
-  boldedUpdate($scope.item, 'view').then(updatedItem => {
-    $scope.item.bolded = updatedItem.bolded;
-  });
-
-  function boldedUpdate(entity, action) {
-    let entityType = 'offices';
-    return BoldedService.boldedUpdate(entity, entityType, action)
-  }
 
   // ==================================================== onChanges ==================================================== //
 
