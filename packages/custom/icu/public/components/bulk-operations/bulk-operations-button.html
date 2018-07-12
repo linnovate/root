@@ -1,0 +1,14 @@
+
+<div class="bulk-operation">
+    <div tooltips tooltip-template="{{'multiple' | i18next}} {{type | i18next}}">
+
+        <button
+            icu-open-modal
+            show-modal="true"
+            modal-name="bulk-operations"
+            activity-type="{{type}}"
+            data="selectedItems"
+            class="{{type}}"
+        ></button>
+    </div>
+</div>

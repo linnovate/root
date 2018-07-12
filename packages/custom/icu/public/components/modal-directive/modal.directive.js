@@ -197,7 +197,6 @@ function controller($scope, $uibModalInstance, $filter, entity) {
             $uibModalInstance.close();
         else
             $scope.cancel();
-
     };
 
     $scope.cancel = function () {

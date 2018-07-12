@@ -1,32 +1,13 @@
 <div class="modal-header" id="modalUser">
-    <div class="avatar" title="{{currentUser.name}} {{currentUser.lastname}}"
-         ng-style="{'background-color': currentUser.profile.avatar ? 'transparent' : '#b8e77f' }">
-    <span ng-if="!currentUser.profile.avatar"
-          class="name">{{currentUser.name.charAt(0)}}{{currentUser.lastname.charAt(0)}}
-    </span>
-        <img ng-if="currentUser.profile.avatar"
-             class="image"
-             ng-src="{{currentUser.profile.avatar + imgUrl}}"
-             alt="{{currentUser.name}}"/>
-    </div>
 
     <button type="button" class="closeBtn" aria-hidden="true" ng-click="cancel()">&times;</button>
-    <h3 class="modal-title" ng-if='entity.type != "Document"'>
-        {{ currentUser.name | i18next }}{{ entity.type | i18next }}
+
+    <h3 class="modal-title">
+        {{ activityType }}
     </h3>
-    <div class="tabs">
-        <ul>
-            <li ng-repeat="tab in tabs"
-                class="tab {{isActive(tab)}}"
-                ng-click="setActiveTab(tab)">
-                <a href="#">
-                    {{tab.title | i18next}}
-                </a>
-            </li>
-        </ul>
-    </div>
 </div>
 <div class="modal-body" id="modalUser">
     <section>
+        {{activityType}}
     </section>
 </div>

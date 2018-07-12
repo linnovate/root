@@ -2,17 +2,17 @@
 
 
 angular.module('mean.icu.ui.bulkoperations')
-    .directive('multipleStatus', function () {
-        function multipleStatusController($scope, MultipleSelectService) {
+    .directive('multipleWatch', function () {
+        function multipleWatchController($scope, MultipleSelectService) {
 
-            $scope.type = 'status';
+            $scope.type = 'watch';
 
             $scope.selectedItems = $scope.$parent.selectedItems;
             $scope.allowed = MultipleSelectService.haveBulkPerms($scope.selectedItems, $scope.type)
 
         }
         return {
-            controller: multipleStatusController,
+            controller: multipleWatchController,
             templateUrl: '/icu/components/bulk-operations/bulk-operations-button.html',
             restrict: 'E',
             scope:{}

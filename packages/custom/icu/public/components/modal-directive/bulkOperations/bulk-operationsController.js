@@ -1,4 +1,4 @@
-function bulkOperationsController($scope, selectedItems, activityType, MultipleSelectService) {
+function bulkOperationsController($scope, $uibModalInstance, selectedItems, activityType, MultipleSelectService) {
 
     $scope.selectedItems = selectedItems;
     $scope.activityType = activityType;
@@ -6,5 +6,9 @@ function bulkOperationsController($scope, selectedItems, activityType, MultipleS
 
     $scope.bulkUpdate = function(){
         MultipleSelectService
-    }
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
 }
