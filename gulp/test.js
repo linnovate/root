@@ -1,80 +1,45 @@
-var gulp = require('gulp'),
-  protractor = require('gulp-protractor'),
-  gulpLoadPlugins = require('gulp-load-plugins'),
-  Server = require('karma').Server;
-var plugins = gulpLoadPlugins();
-var defaultTasks = ['e2e'];
+const gulp = require('gulp');
+const gulpLoadPlugins = require('gulp-load-plugins');
+const runSequence = require('run-sequence');
+const child_process = require('child_process');
+const plugins = gulpLoadPlugins();
 
-gulp.task('karma:unit', function (done) {
-  new Server({
-    configFile: __dirname + '/../karma.conf.js'
-  }, done).start();
+var server;
+
+gulp.task('webdriver-update', function(done) {
+  child_process.spawn(require.resolve('protractor/bin/webdriver-manager'), ['update', '--standalone'], {
+    stdio: 'inherit'
+  }).once('close', done);
 });
 
-gulp.task('loadTestSchema', function () {
-  require('../server.js');
-  require('../node_modules/meanio/lib/core_modules/module/util').preload('../packages/**/server', 'model');
-});
-
-gulp.task('mochaTest', ['loadTestSchema'], function () {
-  return gulp.src('../packages/**/server/tests/**/*.js', {read: false})
-    .pipe(plugins.mocha({
-      reporter: 'spec'
-    }));
-});
-
-
-
-
-
-
-
-var child_process = require('child_process');
-
-gulp.task('e2e', ['server'], function(done) {
-
-  var protractor = child_process.spawn('node_modules/.bin/protractor', ['test/e2e/config.js'], {
-    stdio: [0,0,0]
-  })
-
-  protractor.on('exit', function (code) {
-    done()
-    process.exit(code)
-  })
-
-})
-
-gulp.task('server', ['webdriver_update'], function(done) {
-  // require('../server.js');
-
-  var success = 'Mean app started on port 3002';
-
-  var server = child_process.spawn('node', ['server'], {
-    stdio: [0,'pipe',0]
+gulp.task('test-server', function(done) {
+  server = child_process.spawn('node', ['server'], {
+    stdio: ['ignore','pipe','ignore']
   });
 
   // indicate whether server is running
   server.stdout.on('data', function(data) {
     data = data.toString();
-    if(data.match(success)) {
-      console.log(success)
+    if(data.match('Mean app started on port')) {
       done()
     }
   })
-
-  server.on('exit', function(code) {
-    process.exit(code)
-  })
-
-  // kill the server on exit
-  function onExit() {
-    server.kill()
-  }
-  process.on('exit', onExit)
-  process.on('beforeExit', onExit)
-  process.on('uncaughtException', onExit)
 })
 
-gulp.task('webdriver_update', protractor.webdriver_update);
+gulp.task('e2e', function(done) {
+  child_process.spawn(require.resolve('protractor/bin/protractor'), ['test/e2e/config'], {
+    stdio: 'inherit'
+  }).once('close', done);
+})
 
-gulp.task('test', defaultTasks);
+gulp.task('test', function(done) {
+  runSequence(
+    'webdriver-update',
+    'test-server',
+    'e2e',
+    function() {
+      server.kill()
+      done()
+    }
+  );
+});
