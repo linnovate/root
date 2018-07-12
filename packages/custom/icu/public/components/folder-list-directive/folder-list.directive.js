@@ -14,9 +14,12 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
             };
 
             $scope.context = context;
-            $scope.isLoading = true;
 
-            $scope.folders = concatAllfolders();
+            _($scope.folders).each(function (t) {
+                t.__state = creatingStatuses.Created;
+                t.PartTitle = t.title;
+            });
+
 
             if (context.entityName === 'all') {
                 $scope.detailsState = 'main.folders.all.details';
@@ -27,16 +30,6 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
             } else {
                 $scope.detailsState = 'main.folders.byentity.details';
             }
-
-            function concatAllfolders() {
-              // Change form Array.concat to Array.forEach
-              // to fix binding of $scope.folders
-              $scope.subfolders && $scope.subfolders.forEach(function(item) {
-                $scope.folders.push(item);
-              });
-              return $scope.folders;
-            }
-
         }
 
         function link($scope, $element) {
@@ -48,6 +41,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                 }
 
                 var nameFocused = angular.element($event.target).hasClass('name');
+                folder.PartTitle = folder.title;
 
                 if (folder.__state === creatingStatuses.NotCreated) {
                     $scope.createOrUpdate(folder).then(function () {
@@ -85,9 +79,9 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
                 return isActive;
             };
 
+
             $scope.loadMore = function () {
                 if (!$scope.isLoading && $scope.loadNext) {
-                    $scope.isLoading = true;
                     $scope.loadNext().then(function (folders) {
 
                         _(folders.data).each(function(t) {
@@ -107,7 +101,6 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
 
                         $scope.loadNext = folders.next;
                         $scope.loadPrev = folders.prev;
-                        $scope.isLoading = false;
                     });
                 }
             };
