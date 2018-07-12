@@ -36,7 +36,7 @@ function FolderListController($scope, $state, folders, FoldersService, context, 
     }
 
     $scope.loadMore = function(start, LIMIT, sort) {
-        return OfficesService.getAll(start, LIMIT, sort).then(function(docs) {
+        return FoldersService.getAll(start, LIMIT, sort).then(function(docs) {
             $scope.items.concat(docs);
             return $scope.items;
         });
