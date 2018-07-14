@@ -2,7 +2,9 @@
 
 angular.module('mean.icu.ui.bulkoperations', [])
     .directive('multipleSelect', function () {
-        function controller($scope, MultipleSelectService) {
+        function controller($scope, $state, context, MultipleSelectService) {
+
+            $scope.selectedItems = $scope.selectedItems.map(entity => entity._id);
 
             $scope.bulkUpdate = function(type){
                 MultipleSelectService.haveBulkPerms($scope.selectedItems, type);
@@ -12,8 +14,9 @@ angular.module('mean.icu.ui.bulkoperations', [])
                 if(MultipleSelectService.getCornerState() === 'none'){
                     $scope.$emit('disableMultipleMode')
                 }
-            }
+            };
 
+            $scope.entityType = context.main;
         }
         return {
             templateUrl: '/icu/components/bulk-operations/bulk-operations.html',

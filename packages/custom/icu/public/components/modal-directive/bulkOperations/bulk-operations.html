@@ -1,13 +1,31 @@
-<div class="modal-header" id="modalUser">
+<div class="modal-header" id="modalBulk">
 
-    <button type="button" class="closeBtn" aria-hidden="true" ng-click="cancel()">&times;</button>
+    <button type="button" class="closeBtn" aria-hidden="true" ng-click="cancel()">X</button>
 
-    <h3 class="modal-title">
-        {{ activityType }}
-    </h3>
-</div>
-<div class="modal-body" id="modalUser">
-    <section>
-        {{activityType}}
+    <div class="title">{{title}}</div>
+
+    <section
+        ng-if="activityType == 'status'"
+        class="status">
+
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }} {{ 'selected' | i18next }}</span>
+
+        <ui-select ng-model="selected" on-select="bulkUpdate('status', selected)">
+            <ui-select-match>
+                <i class='{{$select.selected}}'></i>
+                <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+            </ui-select-match>
+            <ui-select-choices repeat="status in statuses | filter: $select.search">
+                <i class='{{status}}'></i>
+                <span class='{{status}}'>{{status | i18next}}</span>
+            </ui-select-choices>
+        </ui-select>
     </section>
+
+    <section
+        ng-if="activityType === 'watch'"
+        class="status">
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }} {{ 'selected' | i18next }}</span>
+    </section>
+
 </div>

@@ -2,12 +2,9 @@
 
 angular.module('mean.icu.data.multipleselectservice', [])
     .service('MultipleSelectService', function(ApiUri, $http, $stateParams, $rootScope,
-                                            NotifyingService,OfficesService,UsersService,DiscussionsService,
-                                            TasksService, ProjectsService, PaginationService, MeanSocket,
-                                            WarningsService, ActivitiesService, FoldersService, OfficeDocumentsService,
-                                            TemplateDocsService, PermissionsService
+                                            NotifyingService,OfficesService,UsersService
     ) {
-        let EntityPrefix = '/permissions';
+        let EntityPrefix = '/bulk';
         let me = UsersService.getMe().$$state.value;
         let selectedItems = [];
 
@@ -75,8 +72,8 @@ angular.module('mean.icu.data.multipleselectservice', [])
             return selectedItems;
         }
 
-        function bulkUpdate(entityArray) {
-            return $http.post(ApiUri + EntityPrefix, entityArray)
+        function bulkUpdate(bulkObject, entityName) {
+            return $http.put(ApiUri + '/' + entityName + EntityPrefix, bulkObject)
                 .then(function (result) {
                     return result.data;
                 });

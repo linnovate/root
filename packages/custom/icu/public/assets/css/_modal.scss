@@ -70,6 +70,20 @@
 
     .modal-content {
         .modal-header {
+            .closeBtn {
+                border: none;
+                transition: 0.8s;
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background-color: white;
+                &:hover {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    transform: rotate(90deg);
+                }
+            }
             &#modalUser {
                 height: 165px;
                 display: flex;
@@ -104,20 +118,6 @@
                         }
                     }
                 }
-                .closeBtn {
-                    border: none;
-                    transition: 0.8s;
-                    position: absolute;
-                    top:10px;
-                    right: 10px;
-                    background-color: white;
-                    &:hover {
-                        position: absolute;
-                        top:10px;
-                        right: 10px;
-                        transform:rotate(90deg);
-                    }
-                }
                 .modal-title {
                     margin: 0;
                     width: calc(100% - 85px);
@@ -127,9 +127,9 @@
                     line-height: 30px;
                 }
                 .tabs {
-                    ul{
+                    ul {
                         height: 100%;
-                        width:100%;
+                        width: 100%;
                         padding-left: 0;
                         padding-bottom: 10px;
                         li {
@@ -146,7 +146,7 @@
                             line-height: 22px;
                             width: 170px;
                             &.activeTab {
-                                border-bottom:3px solid #FFA000;
+                                border-bottom: 3px solid #FFA000;
                                 a {
                                     &:link, &:hover, &:active, &:visited {
                                         text-decoration: none;
@@ -155,12 +155,35 @@
                             }
                             a {
                                 color: black;
-                                padding:1px;
+                                padding: 1px;
                                 &:link, &:hover, &:active, &:visited {
                                     text-decoration: none;
                                 }
                             }
                         }
+                    }
+                }
+            }
+            &#modalBulk {
+                .title {
+                    padding: 12px 6px;
+                    font-size: 17px;
+                    line-height: 23px;
+                    font-weight: bold;
+                }
+                .form-control {
+                    width: 100%;
+                    height: 55px;
+                    line-height: 39px;
+                    display: block;
+                    margin: 0 auto;
+                    border-radius: 0;
+
+                    .ui-select-placeholder {
+                        padding-left: 42px;
+                    }
+                    .caret {
+                        display: none;
                     }
                 }
             }

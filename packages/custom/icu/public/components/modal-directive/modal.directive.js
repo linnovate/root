@@ -148,6 +148,9 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                             activityType: function () {
                                 return scope.activityType;
                             },
+                            entityName: function () {
+                                return scope.entityName;
+                            },
                         }
                     });
                 }
