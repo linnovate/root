@@ -152,14 +152,14 @@ AttachmentSchema.post('save', function(req, next) {
     if(err) {
       return err;
     }
-    elasticsearch.save(attachment, 'attachment', result.room, result.title);
+    elasticsearch.save(attachment, 'attachment');
     next();
   });
 
 });
 
 AttachmentSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'attachment', this.room, next);
+  elasticsearch.delete(this, 'attachment', next);
   next();
 });
 
