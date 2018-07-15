@@ -129,7 +129,7 @@ DiscussionSchema.post('save', function() {
   elasticsearch.save(this, 'discussion');
 });
 DiscussionSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'discussion', null, next);
+  elasticsearch.delete(this, 'discussion', next);
   next();
 });
 
