@@ -26,7 +26,7 @@ function detailTabs($state) {
       let path = $state.$current.name.split('.');
       if (['activities', 'documents', 'tasks', 'folders', 'signatures'].includes(path.pop())) {
         path.push(tab);
-        path = path.join('.')
+        path = path.join('.');
       } else {
         path = $state.$current.name + '.' + tab;
       }
@@ -125,7 +125,7 @@ angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentDocume
   $scope.documents = documents;
   $scope.documents.map(doc => AttachmentsService.getAttachmentUser(doc.creator)
       .then(user =>
-          doc.attUser = user.name 
+          doc.attUser = user.name
   ))
 });
 

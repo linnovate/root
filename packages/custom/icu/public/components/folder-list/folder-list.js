@@ -33,11 +33,11 @@ function FolderListController($scope, $state, folders, FoldersService, context, 
             FoldersService.data.push(result);
             return result;
         });
-    }
+    };
 
     $scope.loadMore = function(start, LIMIT, sort) {
-        return OfficesService.getAll(start, LIMIT, sort).then(function(docs) {
-            $scope.items.concat(docs);
+        return FoldersService.getAll(start, LIMIT, sort).then(function(docs) {
+            $scope.items = $scope.items.concat(docs.data);
             return $scope.items;
         });
     }

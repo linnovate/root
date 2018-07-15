@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, people, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
+function ProjectDetailsController($scope, $rootScope, entity, people, tasks, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
 
   // ==================================================== init ==================================================== //
 

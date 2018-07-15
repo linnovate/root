@@ -40,7 +40,7 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('js', '../lib/jquery-ui/jquery-ui.js');
     ICU.aggregateAsset('js', '../lib/angular-ui-date/src/date.js');
     ICU.aggregateAsset('js', '../lib/moment/moment.js');
-    
+
     ICU.aggregateAsset('js', '../lib/ng-file-upload/ng-file-upload.min.js');
     ICU.aggregateAsset('js', '../lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js');
     ICU.aggregateAsset('js', '../lib/querystring/querystring.min.js');
@@ -60,7 +60,7 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.aggregateAsset('js', './daterangepicker.js', {weight: 3});
     ICU.aggregateAsset('js', './angular-daterangepicker.js', {weight: 4});
 
-    
+
     ICU.angularDependencies([
         'ngAlertify',
         'jm.i18next',
@@ -80,7 +80,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.login',
         'mean.icu.ui.saml',
         'mean.icu.ui.register',
-        'mean.icu.ui.auth', 
+        'mean.icu.ui.auth',
         'mean.icu.ui.profile',
         'mean.icu.ui.webhook',
         'mean.icu.ui.displayby',
@@ -100,7 +100,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.taskdetails',
         'mean.icu.ui.entityList',
         'mean.icu.ui.entityListFilters',
-        
+
         'mean.icu.ui.projectlist',
         'mean.icu.ui.officedocumentlist',
 //         'mean.icu.ui.officedocumentlistdirective',
@@ -114,6 +114,7 @@ ICU.register(function (app, auth, database,swagger) {
 //         'mean.icu.ui.templateDoclistdirective',
         'mean.icu.ui.templateDocdetails',
         'mean.icu.ui.folderlist',
+        'mean.icu.ui.folderlistdirective',
         'mean.icu.ui.folderlistFilters',
 //         'mean.icu.ui.folderlistdirective',
         'mean.icu.ui.folderdetails',
@@ -123,7 +124,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.attachmentdetails',
         'mean.icu.ui.attachmentfilter',
         'mean.icu.ui.notificationsheader',
-        'mean.icu.ui.membersfooter', 
+        'mean.icu.ui.membersfooter',
         'mean.icu.ui.tabs',
         'mean.icu.ui.rows',
         'mean.icu.ui.changecontent',
