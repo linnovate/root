@@ -60,7 +60,7 @@ CommentSchema.post('save', function(req, next) {
     if(err) {
       return err;
     }
-    elasticsearch.save(comment, 'comment', task.project.room);
+    elasticsearch.save(comment, 'comment');
     mailManager.send(comment, task);
   });
   next();
@@ -72,7 +72,7 @@ CommentSchema.pre('remove', function(next) {
     if(err) {
       return err;
     }
-    elasticsearch.delete(comment, 'comment', project.room, next);
+    elasticsearch.delete(comment, 'comment', next);
   });
   next();
 });
