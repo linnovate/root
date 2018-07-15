@@ -14,36 +14,43 @@ exports.talkToRocketChat = function(rocketChat, options, callback) {
       }
     };
     request.post(loginRequest, function(error, response, body) {
-      var jsonBody = JSON.parse(body);
-      var status = jsonBody.status;
+        if (body == '' || body == null)
+        {
+                callback(error ? error : body, response ? response.statusCode : 500);
+        }
+        else
+        {
+          var jsonBody = JSON.parse(body);
+          var status = jsonBody.status;
 
-      if(status == 'error' || error) {
-        callback(error ? error : body, response ? response.statusCode : 500);
-      }
-      else {
-        var authToken = jsonBody.data.authToken;
-        var userId = jsonBody.data.userId;
-        var objReq = {
-          uri: rocketChat.uri + options.cmd,
-          method: options.method,
-          headers: {
-            'X-Auth-Token': authToken,
-            'X-User-Id': userId,
-            'Content-Type': 'application/json'
-          },
-          form: options.form,
-          strictSSL: false
-        };
-        request(objReq, function(error, response, body) {
-          if(!error && response.body.length && response.statusCode < 300) {
-            var res = JSON.parse(body);
-            return callback(null, res['ids'] ? {id: res['ids'][0]['rid']} : res, response.statusCode);
-          }
-          else {
+          if(status == 'error' || error) {
             callback(error ? error : body, response ? response.statusCode : 500);
           }
-        });
-      }
+          else {
+            var authToken = jsonBody.data.authToken;
+            var userId = jsonBody.data.userId;
+            var objReq = {
+              uri: rocketChat.uri + options.cmd,
+              method: options.method,
+              headers: {
+                'X-Auth-Token': authToken,
+                'X-User-Id': userId,
+                'Content-Type': 'application/json'
+              },
+              form: options.form,
+              strictSSL: false
+            };
+            request(objReq, function(error, response, body) {
+              if(!error && response.body.length && response.statusCode < 300) {
+                var res = JSON.parse(body);
+                return callback(null, res['ids'] ? {id: res['ids'][0]['rid']} : res, response.statusCode);
+              }
+              else {
+                callback(error ? error : body, response ? response.statusCode : 500);
+              }
+            });
+          }
+        }
     });
   }
   else {
