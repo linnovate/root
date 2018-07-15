@@ -6,23 +6,12 @@
             <tr data-ng-repeat="folder in folders | filterRecycled | filterByOptions | filterByActiveStatus:entityType | orderBy:order.field:order.isReverse"
                 data-ng-class="{ 'active': isCurrentState(folder._id), 'empty' :  !folder._id, 'roww' : folder._id }"
                 ng-class="folder._id ? '': 'empty'"
-                ng-click="initialize($event, folder)"
-                ng-mousedown="currentFolderId(folder._id)"
                 icu-list-row
                 data-id="{{folder._id}}"
                 data="{
-                        folder: folder,
-                        index: $index,
-                        drawArrow: drawArrow,
-                        updateCb: debouncedUpdate,
-                        searchCb: search,
-                        onEnterCb: onEnter,
-                        hideAutoCompleteCb: hideAutoComplete,
-                        focusAutoCompleteCb: focusAutoComplete,
-                        displayOnly: displayOnly,
-                        searchResults: searchResults,
-                        autocomplete: autocomplete,
-                        delete: delete }"
+                    folder: folder,
+                    index: $index,
+                }"
                 type="folder">
                 <td>{{ $index }}<td>
             </tr>
