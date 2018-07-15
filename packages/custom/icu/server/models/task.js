@@ -154,7 +154,7 @@ TaskSchema.post('save', function(req, next) {
       return err;
     }
 
-    elasticsearch.save(task, 'task', project.room);
+    elasticsearch.save(task, 'task');
   });
   next();
 });
@@ -166,7 +166,7 @@ TaskSchema.pre('remove', function(next) {
     if(err) {
       return err;
     }
-    elasticsearch.delete(task, 'task', project.room, next);
+    elasticsearch.delete(task, 'task', next);
   });
   next();
 });
