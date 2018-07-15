@@ -144,12 +144,12 @@ ProjectSchema.statics.load = function(id, cb) {
 var elasticsearch = require('../controllers/elasticsearch');
 
 ProjectSchema.post('save', function(req, next) {
-  elasticsearch.save(this, 'project', this.room);
+  elasticsearch.save(this, 'project');
   next();
 });
 
 ProjectSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'project', this.room, next);
+  elasticsearch.delete(this, 'project', next);
   next();
 });
 

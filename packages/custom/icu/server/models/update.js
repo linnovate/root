@@ -134,7 +134,7 @@ UpdateSchema.post('save', function(req, next) {
       if(err) {
         return err;
       }
-      elasticsearch.save(update, 'update', result.room, result.title);
+      elasticsearch.save(update, 'update');
     });
   }
   else {
@@ -145,7 +145,7 @@ UpdateSchema.post('save', function(req, next) {
 });
 
 UpdateSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'update', this.room, next);
+  elasticsearch.delete(this, 'update', next);
   next();
 });
 

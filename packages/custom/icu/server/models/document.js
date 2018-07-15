@@ -221,26 +221,14 @@ var elasticsearch = require('../controllers/elasticsearch');
 
 DocumentSchema.post('save', function(req, next) {
   var document = this;
-  // DocumentSchema.statics.folder(document.folder._id, function (err, result) {
-  //   if (err) {
-  //     return err;
-  //   }
-  //   elasticsearch.save(document, 'officeDocument', result.room, result.title);
-  //   next();
-  // });
-  elasticsearch.save(document, 'officedocument', undefined, undefined);
+
+  elasticsearch.save(document, 'officedocument');
   next();
 });
 
-// DocumentSchema.post('update', function (req, next) {
-//   var document = this;
-
-//   elasticsearch.save(document, 'officedocument', undefined, undefined);
-//   next();
-// });
 
 DocumentSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'officedocument', this.room, next);
+  elasticsearch.delete(this, 'officedocument', next);
   next();
 });
 

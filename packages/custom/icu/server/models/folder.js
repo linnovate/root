@@ -137,7 +137,7 @@ FolderSchema.post('save', function(req, next) {
     }
 
 
-    elasticsearch.save(task, 'folder', office.room);
+    elasticsearch.save(task, 'folder');
   });
   next();
 });
@@ -148,7 +148,7 @@ FolderSchema.pre('remove', function(next) {
     if(err) {
       return err;
     }
-    elasticsearch.delete(task, 'task', office.room, next);
+    elasticsearch.delete(task, 'task', next);
   });
   next();
 });
@@ -159,12 +159,12 @@ FolderSchema.pre('remove', function(next) {
 
 
 FolderSchema.post('save', function(req, next) {
-  elasticsearch.save(this, 'folder', this.room);
+  elasticsearch.save(this, 'folder');
   next();
 });
 
 FolderSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'folder', this.room, next);
+  elasticsearch.delete(this, 'folder', next);
   next();
 });
 
