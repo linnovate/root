@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
-    .directive('icuFolderList', function ($state, $uiViewScroll, $stateParams, $timeout, context, UsersService, LayoutService) {
+    .directive('icuFolderList', function ($state, $uiViewScroll, $stateParams, $timeout, context) {
         var creatingStatuses = {
             NotCreated: 0,
             Creating: 1,
             Created: 2
         };
 
-        function controller($scope, orderService, FoldersService, dragularService, $element, $interval, $window) {
+        function controller($scope) {
             $scope.currentFolderId = function (id) {
                 $scope.folderId = id;
             };
@@ -46,13 +46,6 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
             templateUrl: '/icu/components/folder-list-directive/folder-list.directive.template.html',
             scope: {
                 folders: '=',
-                loadNext: '=',
-                loadPrev: '=',
-                drawArrow: '=',
-                groupFolders: '=',
-                order: '=',
-                displayOnly: '=',
-                autocomplete: '='
             },
             link: link,
             controller: controller
