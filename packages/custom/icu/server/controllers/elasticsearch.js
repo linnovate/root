@@ -1,74 +1,62 @@
 'use strict';
 
-var mean = require('meanio'),
-  utils = require('./utils'),
-  system = require('./system');
+const mean = require('meanio');
+const utils = require('./utils');
+const system = require('./system');
+const logger = require('../services/logger');
 
-var logger = require('../services/logger');
-exports.save = function(doc, docType, room, title) {
+exports.save = function(doc, docType) {
   try {
-    var newDoc = JSON.parse(JSON.stringify(doc));
+    let newDoc = JSON.parse(JSON.stringify(doc));
+    let creator =  doc.creator._id || doc.creator;
     delete newDoc._id;
-    let creator =  doc.creator._id || doc.creator; // comes both ways
-    newDoc.creator =  JSON.parse(JSON.stringify(creator));
-    // delete newDoc.watchers ; // the mapping of watchers is irrelevant - and needs to be recreated/refactored as a list of uids.
+
+    newDoc.creator = JSON.parse(JSON.stringify(creator));
     mean.elasticsearch.index({
       index: docType,
       type: docType,
       id: doc._id.toString(),
       body: newDoc
     }, function(error, response) {
-      // utils.checkAndHandleError(error, res);
-      if(error)
+
+      if(error) {
         system.sendMessage({service: 'elasticsearch', message: response});
-      return error;
-      //if (room)
-      //    if (docType === 'attachment')
-      //        notifications.sendFile({entityType: docType, title: title, room:room, method: 'uploaded', path: doc.path, issue:doc.issue});
-      //    else
-      //notifications.sendFromApi({entityType: docType, title: doc.title, room:room, method: (response.created ? 'created' : 'updated')});
+        logger.log('error', 'error saving to elastic', {error: error});
+        return error;
+      }
+
       return doc;
     });
-  } catch (err){
-    logger.log('error', 'error saving to elastic', {error: err.message})
+  }
+  catch (err) {
+    logger.log('error', 'error saving to elastic', {error: err.message});
   }
 };
 
-exports.delete = function(doc, docType, room, next) {
-  try{
+exports.delete = function(doc, docType, next) {
+  try {
     mean.elasticsearch.delete({
       index: docType,
       type: docType,
       id: doc._id.toString()
     }, function(error, response) {
-      if(error)
+      if(error) {
         system.sendMessage({service: 'elasticsearch', message: response});
-      return error;
+        logger.log('error', 'error deleting from elastic', {error: error});
+        return error;
+      }
 
-      // utils.checkAndHandleError(error, res);
-      //if (room)
-      //  notifications.sendFromApi({entityType: docType, title: doc.title, room: room, method: 'deleted'});
       return next();
     });
-  } catch (err){
-    logger.log('error', 'error deleting from elastic', {error: err.message})
+  }
+  catch (err) {
+    logger.log('error', 'error deleting from elastic', {error: err.message});
   }
 };
 
-function inArray(elm, array) {
-  for(var i = 0; i < array.length; i++) {
-    if(array[i] == elm) {
-      return i;
-    }
-  }
-  return -1;
-}
-
-var buildSearchResponse = exports.buildSearchResponse = function(type, obj, userId) {
-
-  console.yon('inbuild response');
-  console.log(type);
-  var groups = {};
+let buildSearchResponse = exports.buildSearchResponse = function(type, obj, userId) {
+  let types = ['task', 'project', 'discussion', 'office', 'folder', 'officedocument', 'attachment', 'update'];
+  let groups = {};
   if(type === 'aggs') {
     obj.forEach(function(i) {
       if(i.key != 'update')
@@ -86,104 +74,25 @@ var buildSearchResponse = exports.buildSearchResponse = function(type, obj, user
     });
   }
 
-  if(groups.task != undefined && groups.task != null) {
-    var finalResults1 = [];
-    for(var i = 0; i < groups.task.length; i++) {
-      var task = groups.task[i];
-      if(task.creator == userId || task.assign == userId || inArray(userId, task.watchers) != -1) {
-        finalResults1.push(task);
-      }
-    }
-    groups['task'] = finalResults1;
-  }
-  if(groups.task != undefined && groups.task != null) {
-    var finalResults1 = [];
-    for(var i = 0; i < groups.task.length; i++) {
-      var task = groups.task[i];
-      if(task.creator == userId || task.assign == userId || inArray(userId, task.watchers) != -1) {
-        finalResults1.push(task);
-      }
-    }
-    groups['task'] = finalResults1;
-  }
+  // Go through all types.
+  for(let j = 0; j < types.length; j++) {
 
-  if(groups.project != undefined && groups.project != null) {
-    var finalResults2 = [];
-    for(var i = 0; i < groups.project.length; i++) {
-      var project = groups.project[i];
-      if(project.creator == userId || inArray(userId, project.watchers) != -1) {
-        finalResults2.push(project);
-      }
-    }
-    groups['project'] = finalResults2;
-  }
+    // If the type exists in the groups array.
+    if(groups[types[j]]) {
+      let res = [];
 
-  if(groups.discussion != undefined && groups.discussion != null) {
-    var finalResults3 = [];
-    for(var i = 0; i < groups.discussion.length; i++) {
-      var discussion = groups.discussion[i];
-      if(discussion.creator == userId || inArray(userId, discussion.watchers) != -1) {
-        finalResults3.push(discussion);
-      }
-    }
-    groups['discussion'] = finalResults3;
-  }
+      // go through all objects of this type.
+      for(let i = 0; i < groups[types[j]].length; i++) {
+        // Current object.
+        let obj = groups[types[j]][i];
 
-  if(groups.office != undefined && groups.office != null) {
-    var finalResults2 = [];
-    for(var i = 0; i < groups.office.length; i++) {
-      var office = groups.office[i];
-      if(office.creator == userId || inArray(userId, office.watchers) != -1) {
-        finalResults2.push(office);
+        // If the user has permission for the obj insert it to results.
+        if(obj.creator == userId || obj.assign == userId || obj.watchers.includes(userId))
+          res.push(obj);
       }
+      groups[types[j]] = res;
     }
-    groups['office'] = finalResults2;
   }
-
-  if(groups.folder != undefined && groups.folder != null) {
-    var finalResults2 = [];
-    for(var i = 0; i < groups.folder.length; i++) {
-      var folder = groups.folder[i];
-      if(folder.creator == userId || inArray(userId, folder.watchers) != -1) {
-        finalResults2.push(folder);
-      }
-    }
-    groups['folder'] = finalResults2;
-  }
-
-  if(groups.officedocument != undefined && groups.officedocument != null) {
-    var finalResults2 = [];
-    for(var i = 0; i < groups.officedocument.length; i++) {
-      var officedocument = groups.officedocument[i];
-      if(officedocument.creator == userId || inArray(userId, officedocument.watchers) != -1) {
-        finalResults2.push(officedocument);
-      }
-    }
-    groups['officedocument'] = finalResults2;
-  }
-
-  if(groups.attachment != undefined && groups.attachment != null) {
-    var finalResults2 = [];
-    for(var i = 0; i < groups.attachment.length; i++) {
-      var attachment = groups.attachment[i];
-      if(attachment.creator == userId || inArray(userId, attachment.watchers) != -1) {
-        finalResults2.push(attachment);
-      }
-    }
-    groups['attachment'] = finalResults2;
-  }
-
-  if(groups.update != undefined && groups.update != null) {
-    var finalResults2 = [];
-    for(var i = 0; i < groups.update.length; i++) {
-      var update = groups.update[i];
-      if(update.creator == userId) {
-        finalResults2.push(update);
-      }
-    }
-    groups['update'] = finalResults2;
-  }
-
 
   return groups;
 };
