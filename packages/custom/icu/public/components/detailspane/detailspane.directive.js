@@ -61,7 +61,6 @@ angular.module('mean.icu.ui.detailspane')
                 entityType: '=',
             },
             controller: controller,
-            templateUrl: '/icu/components/detailspane/detailspane.html'
         };
     });
 
