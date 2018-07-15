@@ -195,7 +195,6 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
     };
 
     $scope.subEntity = $scope.getProjName();
-
 }
 
 angular.module('mean.icu.ui.tasklist', []).controller('TaskListController', TaskListController);

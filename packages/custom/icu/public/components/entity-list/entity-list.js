@@ -145,15 +145,21 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.context = context;
     $scope.isLoading = true;
 
-    $scope.taskList = $state.current.name.indexOf('task') !== -1;
-    $scope.excel = function() {
-        TasksService.excel();
-        var me;
-        UsersService.getMe().then(function(me1) {
-            me = me1;
-            window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
-        });
-    }
+    
+    let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
+
+    $scope.showTaskExcel = inCurrentEntity('tasks') 
+    $scope.showOfficeDocumentsExcel = inCurrentEntity('offices');
+
+
+    let tasksExcelHandler = TasksService.excel;
+    $scope.taskExcel = tasksExcelHandler;
+    $scope.excel = {
+        selected:{title:""},
+        officeList:_.filter($scope.offices,(office)=>office.title&&office.title!=="")
+    };
+
+
 
     $scope.onClickRow = function($event, item) {
         if ($scope.displayOnly) {
