@@ -125,12 +125,12 @@ OfficeSchema.statics.load = function(id, cb) {
 var elasticsearch = require('../controllers/elasticsearch');
 
 OfficeSchema.post('save', function(req, next) {
-  elasticsearch.save(this, 'office', this.room);
+  elasticsearch.save(this, 'office');
   next();
 });
 
 OfficeSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'office', this.room, next);
+  elasticsearch.delete(this, 'office', next);
   next();
 });
 
