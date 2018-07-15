@@ -124,7 +124,7 @@ function syncBoldUsers(req, res, next) {
 }
 
 function saveEntity(entityController, entity, data) {
-  entityController.findOneAndUpdate({_id: entity._id}, data,
+  entityController.findOneAndUpdate({_id: entity._id.toString()}, data,
     function (err, entity) {
     });
 }
