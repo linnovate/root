@@ -164,7 +164,8 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     )
   }
 
-  $scope.recycleRestore = function(entity) {
+  $scope.recycleRestore = function() {
+    let entity = $scope.item;
     TasksService.addToParent(entity).then(()=>{
       EntityService.recycleRestore('tasks', entity._id).then(function() {
         let clonedEntity = JSON.parse(JSON.stringify(entity));
