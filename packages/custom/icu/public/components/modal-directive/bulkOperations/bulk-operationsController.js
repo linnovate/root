@@ -1,4 +1,4 @@
-function bulkOperationsController($scope, $uibModalInstance, selectedItems, activityType, entityName, MultipleSelectService) {
+function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedItems, activityType, entityName, MultipleSelectService) {
 
     $scope.selectedItems = selectedItems;
     $scope.activityType = activityType;
@@ -16,6 +16,13 @@ function bulkOperationsController($scope, $uibModalInstance, selectedItems, acti
 
     $scope.statuses = $scope.statusMap[$scope.entityName];
 
+    $scope.selected;
+
+
+    $scope.asd = function(selected, select, selectSelected){
+        debugger;
+    };
+
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
@@ -29,7 +36,7 @@ function bulkOperationsController($scope, $uibModalInstance, selectedItems, acti
         changedBulkObject.update[type] = value;
 
         MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName);
-        // $uibModalInstance.dismiss('cancel');
+        $uibModalInstance.dismiss('cancel');
     };
 
     switch(activityType){
@@ -49,7 +56,7 @@ function bulkOperationsController($scope, $uibModalInstance, selectedItems, acti
             $scope.title = 'Add tags';
             break;
         case 'delete':
-            $scope.title = 'Delete ';
+            $scope.title = `${$i18next('Delete')} ${selectedItems.length} ${entityName}`;
             break;
     }
 }

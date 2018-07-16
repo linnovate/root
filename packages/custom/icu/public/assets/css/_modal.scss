@@ -69,21 +69,112 @@
     }
 
     .modal-content {
-        .modal-header {
-            .closeBtn {
+        #modalBulk {
+            padding: 27px 21px;
+
+            .title {
+                font-size: 17px;
+                line-height: 23px;
+                font-weight: bold;
+                margin-bottom: 40px;
+            }
+            .form-control {
+                width: 100%;
+                height: 55px;
+                line-height: 39px;
+                display: block;
+                border-radius: 0;
+                margin: 0 auto 65px;
+
+                .caret {
+                    display: none !important;
+                }
+            }
+            .ui-select-container.ui-select-bootstrap {
+                i {
+                    -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                    mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                    width: 15px;
+                    height: 17px;
+                    display: inline-block;
+                    margin-right: 13px;
+                }
+            }
+            i.new {background-color: #ff4081; }
+            i.assigned{background-color: #2979ff;}
+            i.in-progress{background-color: #f69679;}
+            i.review{background-color: #8dc63f;}
+            i.rejected{background-color: #ef5350;}
+            i.done{background-color: #757575;}
+            i.canceled{background-color: #ef5350;}
+            i.completed{background-color: #598527;}
+            i.archived{background-color: #ab47bc;}
+            i.waiting-approval{background-color: #ab47bc;}
+            i.scheduled{background-color: #0054a6;}
+            i.received{background-color: #37afef;}
+            i.sent{background-color: #359123;}
+
+            .new{color: #ff4081; }
+            .assigned{color: #2979ff;}
+            .in-progress{color: #f69679;}
+            .review{color: #8dc63f;}
+            .rejected{color: #ef5350;}
+            .done{color: #757575;}
+            .canceled{color: #ef5350;}
+            .waiting-approval{color: #ab47bc;}
+            .completed{color: #598527;}
+            .archived{color: #ab47bc;}
+            .scheduled{color: #0054a6;}
+            .received{color: #37afef;}
+            .sent{color: #359123;}
+
+            .action-button {
+                height: calc(12px * 2);
+                border-radius: 12px;
                 border: none;
-                transition: 0.8s;
+                outline: none;
+                background-color: #fda102;
+                box-shadow: 0 3px 0 0 #ff6400;
+                color: white;
+                padding: 0 10px;
+                white-space: nowrap;
+                float: left;
+                margin-right: 16px;
+            }
+            .cancel {
+                border: none;
+                background: transparent;
+                color: #A6A6A6;
+                font-weight: bold;
+            }
+            .status {
+                height: 200px;
+
+                .selected {
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                    display: block;
+                }
+            }
+            .delete {
+                height: 150px;
+            }
+        }
+        .closeBtn {
+            border: none;
+            transition: 0.8s;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: white;
+            &:hover {
                 position: absolute;
                 top: 10px;
                 right: 10px;
-                background-color: white;
-                &:hover {
-                    position: absolute;
-                    top: 10px;
-                    right: 10px;
-                    transform: rotate(90deg);
-                }
+                transform: rotate(90deg);
             }
+        }
+        .modal-header {
             &#modalUser {
                 height: 165px;
                 display: flex;
@@ -161,29 +252,6 @@
                                 }
                             }
                         }
-                    }
-                }
-            }
-            &#modalBulk {
-                .title {
-                    padding: 12px 6px;
-                    font-size: 17px;
-                    line-height: 23px;
-                    font-weight: bold;
-                }
-                .form-control {
-                    width: 100%;
-                    height: 55px;
-                    line-height: 39px;
-                    display: block;
-                    margin: 0 auto;
-                    border-radius: 0;
-
-                    .ui-select-placeholder {
-                        padding-left: 42px;
-                    }
-                    .caret {
-                        display: none;
                     }
                 }
             }
