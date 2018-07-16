@@ -155,7 +155,7 @@ module.exports = function(Icu, app) {
     .get(office.read, star.isStarred)
   //.put(project.read, project.update, star.isStarred)
   // .put(office.read, office.update, attachments.sign, notification.updateRoom, star.isStarred)
-     .put(folder.read, folder.update, attachments.sign, star.isStarred)
+     .put(office.read, office.update, attachments.sign, star.isStarred)
     .delete(star.unstarEntity, office.read, office.destroy);
   app.route('/api/history/offices/:id([0-9a-fA-F]{24})')
     .get(office.readHistory);
