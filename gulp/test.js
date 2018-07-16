@@ -13,8 +13,10 @@ gulp.task('webdriver-update', function(done) {
 });
 
 gulp.task('test-server', function(done) {
+  if(process.env.ROOT_URL) return done(); // we test a running server, no need to start locally
+
   server = child_process.spawn('node', ['server'], {
-    stdio: ['ignore','pipe','ignore']
+    stdio: ['ignore','pipe','inherit']
   });
 
   // indicate whether server is running
@@ -38,7 +40,7 @@ gulp.task('test', function(done) {
     'test-server',
     'e2e',
     function() {
-      server.kill()
+      server && server.kill()
       done()
     }
   );

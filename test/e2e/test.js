@@ -1,14 +1,20 @@
+const url = require('url');
 const { expect } = require('chai').use(require('chai-as-promised'));
+
+const meanConfig = require('meanio').loadConfig();
+
+const num = new Date().getTime();
+const rootUrl = new url.URL(process.env.ROOT_URL || meanConfig.host);
+
+if(!process.env.ROOT_URL) {
+  rootUrl.port = meanConfig.https.port || meanConfig.http.port;
+}
 
 describe('Root', function() {
 
-  const num = new Date().getTime();
-  const url = 'http://localhost:3002/';
-  const config = require('meanio').loadConfig();
-
   describe('Authentication', function() {
     it('Navigate to site', function() {
-      browser.driver.get(url);
+      browser.driver.get(rootUrl.href);
       expect(browser.driver.getTitle()).to.eventually.equal('ICU');
     });
 
@@ -142,15 +148,6 @@ describe('Root', function() {
       input.sendKeys(protractor.Key.ENTER);
       expect(element(by.css('detail-assign .summary-content')).getText())
         .to.eventually.equal("Test" + num);
-    });
-
-    it('Default status is "New"', function() {
-      let status = element(by.css('detail-status .ui-select-match-text span'));
-      if (config.currentLanguage == 'he') {
-        expect(status.getText()).to.eventually.equal('חדש');
-      } else {
-        expect(status.getText()).to.eventually.equal('New');
-      }
     });
 
     it('Set due date', function() {

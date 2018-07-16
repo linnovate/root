@@ -14,7 +14,7 @@
     "start": "gulp development",
     "build": "gulp build",
     "production": "gulp production",
-    "test": "gulp test",
+    "test": "run_gulp() { export ROOT_URL=$1; gulp test; }; run_gulp",
     "postinstall": "node scripts/postinstall.js && gulp sass"
   },
   "dependencies": {
