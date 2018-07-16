@@ -164,13 +164,14 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     )
   }
 
-  $scope.recycleRestore = function(entity) {
-    TasksService.addToParent($scope.item).then(()=>{
-      EntityService.recycleRestore('tasks', $scope.item._id).then(function() {
-        let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+  $scope.recycleRestore = function() {
+    let entity = $scope.item;
+    TasksService.addToParent(entity).then(()=>{
+      EntityService.recycleRestore('tasks', entity._id).then(function() {
+        let clonedEntity = JSON.parse(JSON.stringify(entity));
         clonedEntity.status = "un-deleted";
         // just for activity status
-        TasksService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+        TasksService.updateStatus(clonedEntity, entity).then(function(result) {
           ActivitiesService.data.push(result);
         });
 
