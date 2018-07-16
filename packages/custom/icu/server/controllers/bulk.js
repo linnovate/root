@@ -1,4 +1,6 @@
 const httpError = require('http-errors');
+var q = require('q');
+
 const models = {
   task: require('../models/task'),
   discussion: require('../models/discussion'),
@@ -33,6 +35,7 @@ function update(req, res, next) {
   tags = tags || [];
 
   Model.find({ _id: { $in: ids } })
+  .then(docs => checkBoldedPermissions(docs) ? true : next("perms Err"))
   .then(function(docs) {
     if(!docs.length) throw new httpError(404);
     return Model.update({
@@ -61,6 +64,16 @@ function update(req, res, next) {
   .catch(function(err) {
     next(err)
   })
+}
+
+function checkBoldedPermissions(docs) {
+
+
+  console.log("checkBoldedPermissions", docs) ;
+  if(docs.length) {
+    return false ;
+  }
+  
 }
 
 function recycle(req, res, next) {
