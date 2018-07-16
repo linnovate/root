@@ -15,7 +15,9 @@ angular.module('mean.icu.ui.bulkoperations')
             controller: multipleDueController,
             templateUrl: '/icu/components/bulk-operations/bulk-operations-button.html',
             restrict: 'E',
-            scope:{}
+            scope:{
+                entityType: "="
+            }
         };
     });
 

@@ -16,11 +16,8 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedI
 
     $scope.statuses = $scope.statusMap[$scope.entityName];
 
-    $scope.selected;
-
-
-    $scope.asd = function(selected, select, selectSelected){
-        debugger;
+    $scope.select = function(selected){
+        $scope.selected = selected;
     };
 
     $scope.cancel = function () {
@@ -35,7 +32,13 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedI
         };
         changedBulkObject.update[type] = value;
 
-        MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName);
+        MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName).then(result=>{
+            for(let i = 0; i < selectedItems.length; i++){
+                let entity = result.find(entity => entity._id === selectedItems[i]._id);
+                Object.assign(selectedItems[i], entity);
+            }
+        });
+
         $uibModalInstance.dismiss('cancel');
     };
 

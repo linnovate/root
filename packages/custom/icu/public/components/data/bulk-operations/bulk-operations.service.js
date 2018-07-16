@@ -73,10 +73,14 @@ angular.module('mean.icu.data.multipleselectservice', [])
         }
 
         function bulkUpdate(bulkObject, entityName) {
-            return $http.put(ApiUri + '/' + entityName + EntityPrefix, bulkObject)
-                .then(function (result) {
+            if(bulkObject.update.delete) {
+                return $http.patch(ApiUri + '/' + entityName + EntityPrefix, bulkObject).then(function (result) {
                     return result.data;
                 });
+            }
+            return $http.put(ApiUri + '/' + entityName + EntityPrefix, bulkObject).then(function (result) {
+                return result.data;
+            });
         }
 
         function haveBulkPerms(entitiesArray, type) {

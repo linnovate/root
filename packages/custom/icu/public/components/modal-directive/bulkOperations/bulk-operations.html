@@ -10,7 +10,7 @@
 
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
 
-        <ui-select ng-model="selected" on-select="asd(selected, $select, $select.selected)">
+        <ui-select ng-model="selected" on-select="select(selected)">
             <ui-select-match placeholder="{{ 'Select status' | i18next }}">
                 <i class='{{$select.selected}}'></i>
                 <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
@@ -29,7 +29,7 @@
         ng-if="activityType === 'delete'"
         class="delete">
 
-        <button class="action-button" ng-click="bulkUpdate('delete')">{{ 'Delete' | i18next}}</button>
+        <button class="action-button" ng-click="bulkUpdate('delete', true)">{{ 'Delete' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
