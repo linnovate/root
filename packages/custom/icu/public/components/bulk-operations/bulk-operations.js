@@ -4,8 +4,6 @@ angular.module('mean.icu.ui.bulkoperations', [])
     .directive('multipleSelect', function () {
         function controller($scope, $state, context, MultipleSelectService) {
 
-            $scope.selectedItems = $scope.selectedItems.map(entity => entity._id);
-
             $scope.bulkUpdate = function(type){
                 MultipleSelectService.haveBulkPerms($scope.selectedItems, type);
             };

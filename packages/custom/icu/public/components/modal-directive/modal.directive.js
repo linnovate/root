@@ -138,7 +138,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                 else if(scope.modalName === 'bulk-operations') {
                     var modalInstance = $uibModal.open({
                         animation: true,
-                        size:  'lg',
+                        size:  'md',
                         templateUrl: '/icu/components/modal-directive/bulkOperations/bulk-operations.html',
                         controller: bulkOperationsController,
                         resolve: {

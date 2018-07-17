@@ -95,14 +95,19 @@ function recycle(req, res, next) {
     })
   })
   .then(function(results) {
-    res.end()
+      return Model.find({ _id: { $in: ids } })
+  })
+  .then(updatedItems=>{
+      if(!updatedItems.length) throw new httpError(404);
+      res.json(updatedItems)
   })
   .catch(function(err) {
-    next(err)
+      next(err)
   })
 }
 
 function remove(req, res, next) {
+  //delete method cannot transfer any data in req.body, Avraham you need to remove this maybe
   let entity = req.params.entity;
   let Model = models[entity];
   let ids = req.body.ids;

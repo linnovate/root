@@ -199,9 +199,9 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     $scope.multipleSelectMode = false;
     $scope.cornerState = MultipleSelectService.getCornerState();
-    console.log('multipleSelectMode: ', $scope.multipleSelectMode);
+    $scope.selectedItems = MultipleSelectService.refreshSelectedList();
 
-    $scope.$on('refreshList', function (event) {
+        $scope.$on('refreshList', function (event) {
         $scope.selectedItems = MultipleSelectService.getSelected();
         $scope.cornerState = MultipleSelectService.refreshCornerState($scope.items.length);
 

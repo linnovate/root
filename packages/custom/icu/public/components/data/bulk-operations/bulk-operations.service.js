@@ -9,12 +9,12 @@ angular.module('mean.icu.data.multipleselectservice', [])
         let selectedItems = [];
 
         let bulkPermissionsMap = {
-            'status' : ['editor'],
-            'assign' : ['editor'],
-            'watcher' : ['editor'],
-            'due' : ['editor'],
-            'tag' : ['editor'],
-            'delete' : ['editor'],
+            'status': ['editor'],
+            'assign': ['editor'],
+            'watcher': ['editor'],
+            'due': ['editor'],
+            'tag': ['editor'],
+            'delete': ['editor'],
         };
 
         let cornerStates = [
@@ -73,10 +73,14 @@ angular.module('mean.icu.data.multipleselectservice', [])
         }
 
         function bulkUpdate(bulkObject, entityName) {
-            return $http.put(ApiUri + '/' + entityName + EntityPrefix, bulkObject)
-                .then(function (result) {
+            if(bulkObject.update.delete) {
+                return $http.patch(ApiUri + '/' + entityName + EntityPrefix, bulkObject).then(function (result) {
                     return result.data;
                 });
+            }
+            return $http.put(ApiUri + '/' + entityName + EntityPrefix, bulkObject).then(function (result) {
+                return result.data;
+            });
         }
 
         function haveBulkPerms(entitiesArray, type) {
