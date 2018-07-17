@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('lodash');
 const httpError = require('http-errors');
 const permissions = require('../controllers/permissions.js');
 var elasticsearch = require('../controllers/elasticsearch');
@@ -40,8 +41,18 @@ function update(req, res, next) {
   watchers = watchers || [];
   tags = tags || [];
 
+  let set = clean(Object.assign({}, changeWholeParameter));
+
+  let addToEach = {};
+  if(watchers.length) addToEach.watchers = { $each: watchers };
+  if(tags.length) addToEach.tags = { $each: tags };
+
+  let addedAttributes = {};
+  if(!_.isEmpty(set)) addedAttributes.$set = set;
+  if(!_.isEmpty(addToEach)) addedAttributes.$addToSet = addToEach;
+
   Model.find({ _id: { $in: ids } })
-  .then(docs => docs.length == 0 ? next() : docs )
+  .then(docs => docs.length === 0 ? next() : docs )
   .then(docs => {
     if (checkBoldedPermissions(docs,req.user)) return docs ;
     else throw new Error("Permission Denied") ;
@@ -49,17 +60,12 @@ function update(req, res, next) {
   .then(function(docs) {
     if(!docs.length) throw new httpError(404);
 
-    let set = clean(Object.assign({}, changeWholeParameter));
     return Model.update({
-      _id: { $in: ids }
-    }, {
-      $addToSet: {
-        watchers: { $each: watchers },
-        tags: { $each: tags }
-      },
-      $set: set,
-    }, {
-      multi: true
+        _id: { $in: ids }
+    },
+        addedAttributes,
+    {
+        multi: true
     })
   })
   .then(function (results) {
