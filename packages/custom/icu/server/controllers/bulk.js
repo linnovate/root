@@ -104,7 +104,6 @@ function clean(obj) {
 }
 
 function remove(req, res, next) {
-  //delete method cannot transfer any data in req.body, Avraham you need to remove this maybe
   let entity = req.params.entity;
   let Model = models[entity];
   let ids = req.body.ids;
