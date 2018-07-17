@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.officedocumentsservice', [])
-    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService, NotifyingService, ActivitiesService) {
+    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, BoldedService, WarningsService, NotifyingService, ActivitiesService) {
         var EntityPrefix = '/officeDocuments';
 
     function getAll(start, limit, sort, sortOrder, status, folderId) {
@@ -51,14 +51,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
              });
          }
 
-        function update(officeDocument) {
-            console.log("OfficeDocumentsService.update")
-            return $http.put(ApiUri + EntityPrefix + '/' + officeDocument._id, officeDocument).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            });
-        }
-
         function addSerialTitle(document1){
             return $http.post(ApiUri + EntityPrefix + "/addSerialTitle", document1).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
@@ -68,7 +60,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
 
         function signOnDocx(document1,signature){
             var json = {
-                'document':document1,
+                'officeDocuments':document1,
                 'signature':signature
             };
             return $http.post(ApiUri + EntityPrefix + "/signOnDocx", json).then(function (result) {
@@ -183,6 +175,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         return $http.post(ApiUri + EntityPrefix + "/" + id, data).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
             return result.data;
+        })
+        .then(entity=>{
+          return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
         });
     }
 
@@ -198,7 +193,10 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return $http.post(ApiUri + EntityPrefix + "/" +entity._id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
-            });
+            })
+            .then(entity=>{
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
+            })
         }
 
         function uploadFileToDocument(data,file){
@@ -206,7 +204,10 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 url: '/api/officeDocuments/uploadFileToDocument',
                 fields: data,
                 file: file
-            });
+            })
+            .then(entity=>{
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
+            })
         }
 
         function uploadDocumentFromTemplate(template,officeDocument){
@@ -246,9 +247,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     userObj: watcher
                 },
                 context: {}
-            }).then(function(result) {
-                return result;
-            });
+            }).then(entity => {
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
+            })
         }
 
         function updateWatcherPerms(officeDocument, me, watcher, type) {
@@ -278,9 +279,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.status
                 },
                 context: {}
-            }).then(function(result) {
-                return result;
-            });
+            }).then(entity=>{
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
+            })
         }
 
         function uploadEmpty(officeDocument){
@@ -300,9 +301,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.created
                 },
                 context: {}
-            }).then(function(result) {
-                return result;
-            });
+            }).then(entity=>{
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
+            })
         }
 
         function sendDocument(sendingForm, officeDocument) {
@@ -370,9 +371,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.assign ? prev.assign.name : ''
                 },
                 context: {}
-            }).then(function(result) {
-                return result;
-            });
+            }).then(entity=>{
+              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
+            })
         }
 
         function updateEntity(officeDocument, prev) {

@@ -73,15 +73,15 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
 
   $scope.onStar = function(value) {
     ProjectsService.star($scope.item).then(function() {
-      navigateToDetails($scope.item);
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
+    navigateToDetails($scope.item);
+    // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
-  }
+  };
 
   $scope.onAssign = function(value) {
-    $scope.item.assign = value;
-    $scope.updateAndNotify($scope.item);
-  }
+      $scope.item.assign = value;
+      $scope.updateAndNotify($scope.item);
+  };
 
   $scope.onDateDue = function(value) {
     $scope.item.due = value;
@@ -89,12 +89,12 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
       $scope.item.discussion = context.entityId;
     }
 
-    ProjectsService.updateDue($scope.item, backupEntity).then(function(result) {
+    ProjectsService.updateDue($scope.item, backupEntity).then(function (result) {
       backupEntity = JSON.parse(JSON.stringify($scope.item));
       ActivitiesService.data.push(result);
     });
 
-    ProjectsService.update($scope.item).then(function(result) {
+    ProjectsService.update($scope.item).then(function (result) {
       if (context.entityName === 'project') {
         var projId = result.project ? result.project._id : undefined;
         if (projId !== context.entityId) {
@@ -107,33 +107,32 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
         }
       }
     });
-  }
+  };
 
   $scope.onStatus = function(value) {
     $scope.item.status = value;
     $scope.update($scope.item, {
       name: 'status'
     })
-  }
+  };
 
   $scope.onColor = function(value) {
     $scope.update($scope.item, value);
-  }
+  };
 
   $scope.onWantToCreateRoom = function() {
     $scope.item.WantRoom = true;
-
     $scope.update($scope.item, context);
 
-    ProjectsService.WantToCreateRoom($scope.item).then(function() {
+    ProjectsService.WantToCreateRoom($scope.item).then(function () {
       navigateToDetails($scope.item);
     });
-  }
+  };
 
   $scope.onTags = function(value) {
-    $scope.item.tags = value;
-    $scope.update($scope.item);
-  }
+      $scope.item.tags = value;
+      $scope.update($scope.item);
+  };
 
   // ==================================================== Menu events ==================================================== //
 
@@ -214,7 +213,6 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
         action: 'renamed'
       };
       $scope.delayedUpdate($scope.item, newContext);
-
       ProjectsService.currentProjectName = $scope.item.title;
     }
   });

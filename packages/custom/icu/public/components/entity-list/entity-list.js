@@ -110,6 +110,9 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }, {
         title: 'created',
         value: 'created'
+    }, {
+      title: 'bolded',
+      value: 'bolded.bolded'
     }];
 
     if (context.entityName != "all") {
@@ -293,7 +296,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }
 
     $scope.permsToSee = function(entity) {
-        return PermissionsService.haveAnyPerms(entity);
+      return PermissionsService.haveAnyPerms(entity);
     }
 
 }

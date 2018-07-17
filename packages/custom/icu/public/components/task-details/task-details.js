@@ -6,8 +6,9 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   // ==================================================== init ==================================================== //
 
-  $scope.item = entity || context.entity;
-  $scope.entity = entity || context.entity;
+    $scope.item = typeof entity === 'object'? entity : context.entity;
+    $scope.entityType = 'tasks';
+
 
   if (!$scope.item) {
     $state.go('main.tasks.byentity', {
@@ -62,7 +63,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     });
   }
 
-  // ==================================================== onChanges ==================================================== //
+    // ==================================================== onChanges ==================================================== //
 
   function navigateToDetails() {
     $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
@@ -160,8 +161,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
           });
         }
       });
-    }
-    )
+    })
   }
 
   $scope.recycleRestore = function() {
@@ -411,7 +411,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   $scope.havePermissions = function(type, enableRecycled) {
     enableRecycled = enableRecycled || !$scope.isRecycled;
-    return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+    return (PermissionsService.havePermissions($scope.item, type) && enableRecycled);
   };
 
   $scope.haveEditiorsPermissions = function() {

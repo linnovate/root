@@ -32,6 +32,7 @@ var config = require('meanio').loadConfig(),
 var order = require('../controllers/order');
 var express = require('express');
 var ftp = require('../services/ftp.js');
+var boldedService = require('../services/bolded.js');
 
 //update mapping - OHAD
 //var mean = require('meanio');
@@ -93,6 +94,9 @@ module.exports = function(Icu, app) {
     .put(notification.updateDropDown);
   //END Notification READ - OHAD
 
+  app.route('/api/bolded')
+    .post(boldedService.boldUpdate);
+
   //recycle && recycleRestore
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/recycle')
     .patch(recycle.recycleEntity);
@@ -127,7 +131,7 @@ module.exports = function(Icu, app) {
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
   //.all(auth.requiresLogin, permission.echo)
-    .post(project.create, project.updateParent, notification.sendNotification, updates.created)
+    .post(project.create, project.updateParent, notification.sendNotification, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, project.all, project.populateSubProjects, star.isStarred, pagination.formResponse);
 
 
@@ -149,7 +153,7 @@ module.exports = function(Icu, app) {
   app.route('/api/offices*').all(entity('offices'));
   app.route('/api/offices')
   //.all(auth.requiresLogin, permission.echo)
-    .post(office.create, updates.created)
+    .post(office.create, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, office.all, star.isStarred, pagination.formResponse);
   app.route('/api/offices/:id([0-9a-fA-F]{24})')
     .get(office.read, star.isStarred)
@@ -166,7 +170,7 @@ module.exports = function(Icu, app) {
   app.route('/api/folders*').all(entity('folders'));
   app.route('/api/folders')
   //.all(auth.requiresLogin, permission.echo)
-    .post(folder.create, updates.created)
+    .post(folder.create, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, folder.all, star.isStarred, pagination.formResponse);
   app.route('/api/folders/:id([0-9a-fA-F]{24})')
     .get(folder.read, star.isStarred)
@@ -186,7 +190,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
-    .post(task.create, task.updateParent, notification.sendNotification, updates.created)
+    .post(task.create, task.updateParent, notification.sendNotification, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, task.all, task.populateSubTasks, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
@@ -272,7 +276,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/discussions*').all(entity('discussions'));
   app.route('/api/discussions')
-    .post(discussion.create, updates.created)
+    .post(discussion.create, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, discussion.all, star.isStarred, pagination.formResponse);
   app.route('/api/history/discussions/:id([0-9a-fA-F]{24})')
     .get(discussion.readHistory);
@@ -370,7 +374,7 @@ module.exports = function(Icu, app) {
     .put(documents.update, star.isStarred, attachments.sign)
     .delete(documents.deleteDocument);
   app.route('/api/officeDocuments/create')
-    .post(documents.create);
+    .post(documents.create, boldedService.syncBoldUsers);
   app.route('/api/officeDocuments/addSerialTitle')
     .post(documents.addSerialTitle);
 

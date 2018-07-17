@@ -77,7 +77,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   $scope.onStar = function(value) {
-    DiscussionsService.star($scope.item).then(function() {
+    DiscussionsService.star($scope.item).then(function () {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
@@ -89,21 +89,15 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   var activeLocationTimeout;
+
   $scope.updateLocation = function(discussion) {
     if (activeLocationTimeout) {
       clearTimeout(activeLocationTimeout)
     }
-    activeLocationTimeout = setTimeout(function() {
+    activeLocationTimeout = setTimeout(function () {
       $scope.update(discussion, 'location')
     }, 500);
-  }
-
-  $scope.onStatus = function(value) {
-    $scope.item.status = value;
-    $scope.update($scope.item, {
-      name: 'status'
-    })
-  }
+  };
 
   $scope.onStatus = function(value) {
     $scope.item.status = value;

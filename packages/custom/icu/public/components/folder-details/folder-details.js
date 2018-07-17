@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.folderdetails', []).controller('FolderDetailsController', FolderDetailsController);
 
-function FolderDetailsController($scope, entity, tasks, people, folders, tags,offices, $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
+function FolderDetailsController($scope, entity, tasks, people, folders, offices, tags,  $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
 
   // ==================================================== init ==================================================== //
 
@@ -66,7 +66,7 @@ function FolderDetailsController($scope, entity, tasks, people, folders, tags,of
   }
 
   $scope.onStar = function(value) {
-    FoldersService.star($scope.item).then(function() {
+    FoldersService.star($scope.item).then(function () {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });

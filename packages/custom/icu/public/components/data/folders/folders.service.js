@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.foldersservice', [])
-.service('FoldersService', function(ApiUri, $http, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('FoldersService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/folders';
     var data, selected;
 
@@ -93,7 +93,10 @@ angular.module('mean.icu.data.foldersservice', [])
                 });
             }
             return result.data;
-        });
+        })
+        .then(entity => {
+          return BoldedService.boldedUpdate(entity, 'folders', 'update');
+        })
     }
 
     function remove(id) {
@@ -144,9 +147,9 @@ angular.module('mean.icu.data.foldersservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => {
+            return BoldedService.boldedUpdate(entity, 'folders', 'update');
+        })
     }
 
     function updateStatus(folder, prev) {
@@ -159,9 +162,9 @@ angular.module('mean.icu.data.foldersservice', [])
                 prev: prev.status
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => {
+            return BoldedService.boldedUpdate(entity, 'folders', 'update');
+        })
     }
 
 
@@ -174,9 +177,9 @@ angular.module('mean.icu.data.foldersservice', [])
                 status: folder.color
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => {
+            return BoldedService.boldedUpdate(entity, 'folders', 'update');
+        })
     }
 
     function updateEntity(folder, prev) {

@@ -127,6 +127,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.membersfooter',
         'mean.icu.ui.tabs',
         'mean.icu.ui.rows',
+        'mean.icu.data.boldedservice',
         'mean.icu.ui.changecontent',
         'mean.icu.ui.avatar',
         'mean.icu.ui.colorpicker',

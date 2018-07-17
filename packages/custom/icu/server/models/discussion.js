@@ -81,6 +81,14 @@ var DiscussionSchema = new Schema({
       ref: 'User'
     }
   ],
+  bolded: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      bolded: Boolean,
+      lastViewed: Date
+    }
+  ],
   permissions: [
     {
       _id: false,
