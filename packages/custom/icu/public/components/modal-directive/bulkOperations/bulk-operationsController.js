@@ -1,4 +1,5 @@
-function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedItems, activityType, entityName, MultipleSelectService, UsersService, SettingServices) {
+function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedItems, activityType, entityName,
+                                  MultipleSelectService, UsersService, SettingServices, PermissionsService) {
 
     $scope.selectedItems = selectedItems;
     $scope.activityType = activityType;
@@ -8,6 +9,12 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedI
 
     $scope.statusMap = SettingServices.getStatusList();
     $scope.statuses = $scope.statusMap[$scope.entityName.substring(0, $scope.entityName.length - 1)];
+
+    let serviceMap = PermissionsService.serviceMap;
+    serviceMap[$scope.entityName].getTags( tags => {
+        $scope.tags = tags;
+    });
+
 
     $scope.select = function(selected){
         $scope.selected = selected;

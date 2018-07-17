@@ -267,6 +267,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             //     .then(function (perms) {return perms});
         }
         return {
+            serviceMap: serviceMap,
             getUserPerms: getUserPerms,
             haveAnyPerms: haveAnyPerms,
             havePermissions: permissions,

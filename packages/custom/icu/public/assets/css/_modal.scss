@@ -174,17 +174,28 @@
                 height: 200px;
 
                 .date {
-                    display: block;
                     width: 100%;
                     height: 50px;
+                    display: block;
                     border: 1px solid #C8C8C8;
                     margin: 20px 0;
+                    background: url("/icu/assets/img/calendar.png") no-repeat scroll 15px center;
 
                     input {
                         left: 50px;
+                        width: calc(100% - 50px);
+                        height: 100%;
                         position: relative;
                         border: none;
                     }
+                }
+            }
+            .tag {
+                .items {
+                    height: 53px;
+                    width: 100%;
+
+
                 }
             }
             .delete {

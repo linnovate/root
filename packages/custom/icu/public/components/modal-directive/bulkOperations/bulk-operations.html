@@ -1,13 +1,9 @@
 <div id="modalBulk">
-
     <button type="button" class="closeBtn" aria-hidden="true" ng-click="cancel()">X</button>
-
     <div class="title">{{title}}</div>
 
-    <section
-        ng-if="activityType == 'status'"
-        class="status">
 
+    <section ng-if="activityType == 'status'" class="status">
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
 
         <ui-select ng-model="selected" on-select="select(selected)">
@@ -25,6 +21,7 @@
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
+
     <!--<section-->
         <!--ng-if="activityType === 'watch'"-->
         <!--class="watch">-->
@@ -33,10 +30,8 @@
         <!--<button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>-->
     <!--</section>-->
 
-    <section
-        ng-if="activityType === 'assign'"
-        class="assign">
 
+    <section ng-if="activityType === 'assign'" class="assign">
         <div tooltips tooltip-template="{{'assignee' | i18next}}">
             <ui-select ng-model="selected" on-select="select(selected._id)">
                 <ui-select-match  placeholder="{{ 'selectAssignee' | i18next }}">
@@ -56,32 +51,35 @@
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
-    <section
-        ng-if="activityType === 'due'"
-        class="due">
 
+    <section ng-if="activityType === 'due'" class="due">
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
-
         <div class="date">
-            <input ng-click="open()" placeholder="{{ 'setDueDate' | i18next }}" ui-date="dueOptions" ng-model="value" />
+            <input ng-click="open()" ng-model="selected" placeholder="{{ 'setDueDate' | i18next }}" ui-date="dueOptions" ng-model="value" />
         </div>
 
         <button class="action-button" ng-click="bulkUpdate('due', selected)">{{ 'Update' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
-    <section
-        ng-if="activityType === 'tag'"
-        class="tag">
+
+    <section ng-if="activityType === 'tag'" class="tag">
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
+        <div class="items">
+            <div ng-repeat="tag in tags" class='item'>
+                <span>{{tag}}</span>
+                <button class="detail-tags-item-remove" ng-click="removeTag(tag)">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
 
         <button class="action-button" ng-click="bulkUpdate('tag', selected)">{{ 'Update' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
-    <section
-        ng-if="activityType === 'delete'"
-        class="delete">
 
+    <section ng-if="activityType === 'delete'" class="delete">
         <button class="action-button" ng-click="bulkUpdate('delete', true)">{{ 'Delete' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>

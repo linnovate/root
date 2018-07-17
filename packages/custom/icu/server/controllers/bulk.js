@@ -63,21 +63,21 @@ function update(req, res, next) {
       multi: true
     })
   })
-  .then(function(results) {
-    return Model.find({ _id: { $in: ids } })
-            .then(docs => {
-                docs.forEach(element => {
-                console.log("saving elastic") ;                
-                element.watchers = [];
-                elasticsearch.save(element, entity);
-                }) 
-                return docs ;
-            })
-  })  
+  .then(function (results) {
+      return Model.find({_id: {$in: ids}})
+          .then(docs => {
+              docs.forEach(element => {
+                  console.log("saving elastic");
+                  element.watchers = [];
+                  elasticsearch.save(element, entity);
+              })
+              return docs;
+          })
+  })
   .then(function(docs) {
     if(!docs.length) throw new httpError(404);
     res.json(docs)
-  })  
+  })
   .catch(function(err) {
     next(err)
   })
@@ -85,10 +85,10 @@ function update(req, res, next) {
 
 function checkBoldedPermissions(docs,user) {
   let permissionDenied = docs.some((doc) => {
-    let allowed = permissions.updateContent({user: user},doc, []) ;    
+    let allowed = permissions.updateContent({user: user},doc, []) ;
     if(!allowed) {
       console.log("checkBoldedPermissions NOT ALLLOWED") ;
-      return !allowed ;       
+      return !allowed ;
     }
   }) ;
 
@@ -96,7 +96,7 @@ function checkBoldedPermissions(docs,user) {
     return false ;
   }
 
-  return true ;  
+  return true ;
 }
 
 
