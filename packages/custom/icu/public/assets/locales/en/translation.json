@@ -276,6 +276,7 @@
     "allTemplateDocs": "All TemplateDocs",
     "settings": "settings",
     "setAsCommenter": "Set as commenter",
+    "setDueDate": "Set Due Date",
     "demoteToViewer": "Set as viewer",
     "promoteToEditor": "Set as Editor",
     "selectOffice": "Select office",

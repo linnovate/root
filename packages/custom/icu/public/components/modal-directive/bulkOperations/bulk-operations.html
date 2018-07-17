@@ -39,7 +39,7 @@
 
         <div tooltips tooltip-template="{{'assignee' | i18next}}">
             <ui-select ng-model="selected" on-select="select(selected._id)">
-                <ui-select-match  placeholder="{{ 'Select assignee' | i18next }}">
+                <ui-select-match  placeholder="{{ 'selectAssignee' | i18next }}">
                     <div icu-avatar user="$select.selected"></div>
                     <span ng-if="$select.selected._id" class="summary-content">
                         {{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}
@@ -59,6 +59,12 @@
     <section
         ng-if="activityType === 'due'"
         class="due">
+
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
+        <div class="date">
+            <input ng-click="open()" placeholder="{{ 'setDueDate' | i18next }}" ui-date="dueOptions" ng-model="value" />
+        </div>
 
         <button class="action-button" ng-click="bulkUpdate('due', selected)">{{ 'Update' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
