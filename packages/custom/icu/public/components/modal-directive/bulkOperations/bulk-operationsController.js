@@ -4,19 +4,19 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
     $scope.selectedItems = selectedItems;
     $scope.activityType = activityType;
     $scope.entityName = entityName;
-    UsersService.getAll().then( allUsers => $scope.people = allUsers );
+    UsersService.getAll().then(allUsers => $scope.people = allUsers);
 
 
     $scope.statusMap = SettingServices.getStatusList();
     $scope.statuses = $scope.statusMap[$scope.entityName.substring(0, $scope.entityName.length - 1)];
 
     let serviceMap = PermissionsService.serviceMap;
-    serviceMap[$scope.entityName].getTags( tags => {
+    serviceMap[$scope.entityName].getTags(tags => {
         $scope.tags = tags;
     });
 
 
-    $scope.select = function(selected){
+    $scope.select = function (selected) {
         $scope.selected = selected;
     };
 
@@ -24,7 +24,7 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
         $uibModalInstance.dismiss('cancel');
     };
 
-    $scope.bulkUpdate = function(type, value) {
+    $scope.bulkUpdate = function (type, value) {
         let idsArray = $scope.selectedItems.map(entity => entity._id);
         let changedBulkObject = {
             update: {},
@@ -45,39 +45,39 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
     //------------------------------------------------//
     //----------------------TAGS----------------------//
 
-    $scope.getUnusedTags = function() {
+    $scope.getUnusedTags = function () {
         return ($scope.tags || []).filter(x => $scope.selected.indexOf(x) < 0);
     };
 
-    $scope.addTagClicked = function() {
+    $scope.addTagClicked = function () {
         $scope.tagInputVisible = true;
-        $timeout(function() {
+        $timeout(function () {
             let element = angular.element('#addTag .ui-select-toggle')[0];
             element.click();
         }, 0);
     };
 
-    $scope.addTag = function(tag) {
-        if(!$scope.selected) $scope.selected = [];
+    $scope.addTag = function (tag) {
+        if (!$scope.selected) $scope.selected = [];
 
-        if(!$scope.selected.find(selectedTag => selectedTag === tag)){
+        if (!$scope.selected.find(selectedTag => selectedTag === tag)) {
             $scope.selected.push(tag);
         }
         $scope.tagInputVisible = false;
     };
 
-    $scope.removeTag = function(tag) {
+    $scope.removeTag = function (tag) {
         $scope.selected = _($scope.selected).without(tag);
     };
 
-    $scope.onOpenClose = function(isOpen) {
+    $scope.onOpenClose = function (isOpen) {
         $scope.tagInputVisible = !isOpen;
     };
 
     //--------------------TAGS END--------------------//
     //------------------------------------------------//
 
-    switch(activityType){
+    switch (activityType) {
         case 'status':
             $scope.title = 'Set Status';
             break;

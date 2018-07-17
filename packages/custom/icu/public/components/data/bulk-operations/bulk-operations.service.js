@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('mean.icu.data.multipleselectservice', [])
-    .service('MultipleSelectService', function(ApiUri, $http, $stateParams, $rootScope,
-                                            NotifyingService,OfficesService,UsersService
+    .service('MultipleSelectService', function (ApiUri, $http, $stateParams, $rootScope,
+                                                NotifyingService, OfficesService, UsersService
     ) {
         let EntityPrefix = '/bulk';
         let me = UsersService.getMe().$$state.value;
@@ -25,10 +25,10 @@ angular.module('mean.icu.data.multipleselectservice', [])
 
         let cornerState = cornerStates[0];
 
-        function refreshCornerState(itemsLength){
-            if(itemsLength === selectedItems.length){
+        function refreshCornerState(itemsLength) {
+            if (itemsLength === selectedItems.length) {
                 cornerState = cornerStates[0];
-            } else if(itemsLength > selectedItems.length){
+            } else if (itemsLength > selectedItems.length) {
                 cornerState = cornerStates[1];
             } else {
                 cornerState = cornerStates[2];
@@ -36,35 +36,35 @@ angular.module('mean.icu.data.multipleselectservice', [])
             return cornerState;
         }
 
-        function getCornerState(){
+        function getCornerState() {
             return cornerState;
         }
 
-        function changeCornerState(){
-            if(cornerState === 'all'){
+        function changeCornerState() {
+            if (cornerState === 'all') {
                 cornerState = cornerStates[2];
-            } else if(cornerState === 'some' || cornerState === 'none'){
+            } else if (cornerState === 'some' || cornerState === 'none') {
                 cornerState = cornerStates[0];
             }
             return cornerState;
         }
 
-        function getSelected(){
+        function getSelected() {
             return selectedItems;
         }
 
 
-        function refreshSelectedList (editedEntity) {
-            if(!editedEntity){
+        function refreshSelectedList(editedEntity) {
+            if (!editedEntity) {
                 selectedItems = [];
                 return;
             }
 
-            let entitySelectedIndex = selectedItems.findIndex((entity)=>{
+            let entitySelectedIndex = selectedItems.findIndex((entity) => {
                 return entity._id === editedEntity._id;
             });
 
-            if(entitySelectedIndex === -1){
+            if (entitySelectedIndex === -1) {
                 selectedItems.push(editedEntity);
             } else {
                 selectedItems.splice(entitySelectedIndex, 1);
@@ -84,8 +84,8 @@ angular.module('mean.icu.data.multipleselectservice', [])
         }
 
         function haveBulkPerms(entitiesArray, type) {
-            let havePermissions = entitiesArray.every((entity)=>{
-                let userPermissions = entity.permissions.find((permission)=>{
+            let havePermissions = entitiesArray.every((entity) => {
+                let userPermissions = entity.permissions.find((permission) => {
                     return permission.id === me._id;
                 });
                 return _.includes(bulkPermissionsMap[type], userPermissions.level);
