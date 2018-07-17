@@ -114,6 +114,7 @@ ICU.register(function (app, auth, database,swagger) {
 //         'mean.icu.ui.templateDoclistdirective',
         'mean.icu.ui.templateDocdetails',
         'mean.icu.ui.folderlist',
+        'mean.icu.ui.folderlistdirective',
         'mean.icu.ui.folderlistFilters',
 //         'mean.icu.ui.folderlistdirective',
         'mean.icu.ui.folderdetails',

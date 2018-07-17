@@ -436,6 +436,9 @@ module.exports = function(Icu, app) {
     .delete(templateDocs.deleteTemplate);
   //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
 
+  app.route('/api/ftp/:url')
+  .all(ftp.getFileFromFtp);
+
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
   //app.use(utils.errorHandler);

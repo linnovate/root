@@ -42,7 +42,7 @@ function TaskListController($scope, $timeout, $state, tasks, BoldedService, Disc
         return TasksService.update(item);
     };
 
-    $scope.create = function(item) {
+    $scope.create = function(parent) {
         var newItem = {
             title: '',
             watchers: [],
@@ -50,6 +50,9 @@ function TaskListController($scope, $timeout, $state, tasks, BoldedService, Disc
             __state: creatingStatuses.NotCreated,
             __autocomplete: false
         };
+        if(parent){
+            newItem[parent.type] = parent.id;
+        }
         return TasksService.create(newItem).then(function(result) {
             $scope.items.push(result);
             TasksService.data.push(result);
@@ -80,15 +83,6 @@ function TaskListController($scope, $timeout, $state, tasks, BoldedService, Disc
                 $scope.isLoading = false;
             });
         }
-    }
-
-    $scope.excel = function() {
-        TasksService.excel();
-        var me;
-        UsersService.getMe().then(function(me1) {
-            me = me1;
-            window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
-        });
     }
 
     $scope.getFilter = function() {
