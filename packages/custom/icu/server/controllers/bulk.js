@@ -1,3 +1,5 @@
+'use strict';
+
 const httpError = require('http-errors');
 const models = {
   task: require('../models/task'),
@@ -95,12 +97,7 @@ function recycle(req, res, next) {
 }
 
 function clean(obj) {
-    for (let propName in obj) {
-        if (obj[propName] === null || obj[propName] === undefined) {
-            delete obj[propName];
-        }
-    }
-    return obj;
+    return Object.keys(obj).forEach((key) => (obj[key] === null) && delete obj[key]);
 }
 
 function remove(req, res, next) {
