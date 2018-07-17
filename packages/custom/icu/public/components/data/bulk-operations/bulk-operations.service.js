@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.data.multipleselectservice', [])
     .service('MultipleSelectService', function (ApiUri, $http, $stateParams, $rootScope,
-                                                NotifyingService, OfficesService, UsersService
+                                                OfficesService, UsersService
     ) {
         let EntityPrefix = '/bulk';
         let me = UsersService.getMe().$$state.value;
@@ -26,7 +26,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
         let cornerState = cornerStates[0];
 
         function refreshCornerState(itemsLength) {
-            if (itemsLength === selectedItems.length) {
+            if (itemsLength === selectedItems.length && itemsLength !== 0) {
                 cornerState = cornerStates[0];
             } else if (itemsLength > selectedItems.length) {
                 cornerState = cornerStates[1];
@@ -56,8 +56,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
 
         function refreshSelectedList(editedEntity) {
             if (!editedEntity) {
-                selectedItems = [];
-                return;
+                return selectedItems = [];
             }
 
             let entitySelectedIndex = selectedItems.findIndex((entity) => {
@@ -74,13 +73,16 @@ angular.module('mean.icu.data.multipleselectservice', [])
 
         function bulkUpdate(bulkObject, entityName) {
             if(bulkObject.update.delete) {
-                return $http.patch(ApiUri + '/' + entityName + EntityPrefix, bulkObject).then(function (result) {
+                return $http.patch(ApiUri + '/' + entityName + EntityPrefix, bulkObject)
+                    .then(function (result) {
+                        refreshSelectedList();
+                        return result.data;
+                    });
+            }
+            return $http.put(ApiUri + '/' + entityName + EntityPrefix, bulkObject)
+                .then(function (result) {
                     return result.data;
                 });
-            }
-            return $http.put(ApiUri + '/' + entityName + EntityPrefix, bulkObject).then(function (result) {
-                return result.data;
-            });
         }
 
         function haveBulkPerms(entitiesArray, type) {

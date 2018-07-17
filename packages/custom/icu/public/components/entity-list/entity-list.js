@@ -5,7 +5,7 @@
  * @example <div acme-order-calendar-range></div>
  */
 
-function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, PermissionsService, MultipleSelectService) {
+function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, PermissionsService, MultipleSelectService, NotifyingService) {
 
     // ============================================================= //
     // ========================= navigate ========================== //
@@ -198,12 +198,12 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ============================================================= //
 
     $scope.multipleSelectMode = false;
-    $scope.cornerState = MultipleSelectService.getCornerState();
     $scope.selectedItems = MultipleSelectService.refreshSelectedList();
+    $scope.cornerState = MultipleSelectService.getCornerState();
 
-        $scope.$on('refreshList', function (event) {
+    $scope.$on('refreshList', function (event) {
         $scope.selectedItems = MultipleSelectService.getSelected();
-        $scope.cornerState = MultipleSelectService.refreshCornerState($scope.items.length);
+        $scope.cornerState = MultipleSelectService.refreshCornerState(getNoneRecycledItems().length);
 
         if ($scope.selectedItems.length) {
             $scope.multipleSelectMode = true;
@@ -217,6 +217,12 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         MultipleSelectService.refreshSelectedList();
     });
 
+    NotifyingService.subscribe('clearSelectedList', function () {
+        $scope.selectedItems = MultipleSelectService.refreshSelectedList();
+        $scope.cornerState = MultipleSelectService.refreshCornerState(getNoneRecycledItems().length);
+        $scope.multipleSelectMode = false;
+    }, $scope);
+
     $scope.showTick = function(item){
         item.visible = true;
     };
@@ -225,6 +231,9 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         item.visible = false;
     };
 
+    function getNoneRecycledItems(){
+        return $scope.items.filter( item => !item.recycled );
+    }
 
     // ============================================================= //
     // ======================= item function ======================= //
