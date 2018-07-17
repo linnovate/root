@@ -37,16 +37,20 @@
         ng-if="activityType === 'assign'"
         class="assign">
 
-        <ui-select ng-model="selected" on-select="select(selected._id)">
-            <ui-select-match placeholder="{{ 'Select status' | i18next }}">
-                <i class='{{$select.selected}}'></i>
-                <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
-            </ui-select-match>
-            <ui-select-choices repeat="user in people | filter: $select.search">
-                <i class='{{ user.name }}'></i>
-                <span class='{{}}'>{{ user.name }}</span>
-            </ui-select-choices>
-        </ui-select>
+        <div tooltips tooltip-template="{{'assignee' | i18next}}">
+            <ui-select ng-model="selected" on-select="select(selected._id)">
+                <ui-select-match  placeholder="{{ 'Select assignee' | i18next }}">
+                    <div icu-avatar user="$select.selected"></div>
+                    <span ng-if="$select.selected._id" class="summary-content">
+                        {{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}
+                    </span>
+                </ui-select-match>
+                <ui-select-choices repeat="user in people">
+                    <div icu-avatar user="user"></div>
+                    <span class="summary-content">{{user.name}}</span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
 
         <button class="action-button" ng-click="bulkUpdate('assign', selected)">{{ 'Update' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>

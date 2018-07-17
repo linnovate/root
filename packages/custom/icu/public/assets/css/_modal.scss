@@ -90,6 +90,9 @@
                     display: none !important;
                 }
             }
+            .ui-select-choices {
+                @include scroll;
+            }
             .ui-select-container.ui-select-bootstrap {
                 i {
                     -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
@@ -98,6 +101,10 @@
                     height: 17px;
                     display: inline-block;
                     margin-right: 13px;
+                }
+                .avatar {
+                    margin: 5px;
+                    line-height: 30px;
                 }
             }
             i.new {background-color: #ff4081; }
@@ -140,6 +147,9 @@
                 white-space: nowrap;
                 float: left;
                 margin-right: 16px;
+            }
+            div[icu-avatar] {
+                display: inline-block;
             }
             .cancel {
                 border: none;

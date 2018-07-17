@@ -23,11 +23,14 @@ function update(req, res, next) {
 
   let {
     watchers,
-    tags,
-    status,
-    due,
-    assign
+    tags
   } = update;
+
+  let changeWholeParameter = {
+      status: update.status,
+      due: update.due,
+      assign: update.assign,
+  };
 
   watchers = watchers || [];
   tags = tags || [];
@@ -35,6 +38,8 @@ function update(req, res, next) {
   Model.find({ _id: { $in: ids } })
   .then(function(docs) {
     if(!docs.length) throw new httpError(404);
+
+    let set = clean(Object.assign({}, changeWholeParameter));
     return Model.update({
       _id: { $in: ids }
     }, {
@@ -42,11 +47,7 @@ function update(req, res, next) {
         watchers: { $each: watchers },
         tags: { $each: tags }
       },
-      $set: {
-        status: status,
-        due: due,
-        assign: assign
-      },
+      $set: set,
     }, {
       multi: true
     })
@@ -91,6 +92,15 @@ function recycle(req, res, next) {
   .catch(function(err) {
       next(err)
   })
+}
+
+function clean(obj) {
+    for (let propName in obj) {
+        if (obj[propName] === null || obj[propName] === undefined) {
+            delete obj[propName];
+        }
+    }
+    return obj;
 }
 
 function remove(req, res, next) {
