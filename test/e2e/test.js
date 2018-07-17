@@ -41,13 +41,15 @@ describe('Root', function() {
     });
 
     it('Confirm the "What\'s new" popup', function() {
-      element(by.buttonText('Don\'t show me again')).click();
+      //element(by.buttonText('Don\'t show me again')).click();
+      element(by.buttonText('אל תראה לי שוב')).click();
       browser.waitForAngular();
     })
 
     it('Logout', function() {
       element(by.css('.user-menu')).click();
-      element(by.linkText('Logout')).click();
+      // element(by.linkText('Logout')).click();
+      element(by.linkText('התנתק')).click();
       browser.driver.wait(function() {
         return element(by.className('login-page')).isPresent();
       }, 3000);
@@ -62,7 +64,8 @@ describe('Root', function() {
       element(by.model('credentials.password')).sendKeys("newstrat");
 
       // submit
-      element(by.buttonText('Login')).click();
+      // element(by.buttonText('Login')).click();
+      element(by.buttonText('התחבר')).click();
 
       browser.driver.wait(function() {
         return userIcon.isPresent();
@@ -78,7 +81,8 @@ describe('Root', function() {
 
     it('Create project', function() {
       element(by.css('.add-menu')).click();
-      element(by.cssContainingText('.add-menu a span', 'Project')).click();
+      // element(by.cssContainingText('.add-menu a span', 'Project')).click();
+      element(by.cssContainingText('.add-menu a span', 'פרויקט')).click();
       browser.waitForAngular();
     });
 
@@ -96,7 +100,8 @@ describe('Root', function() {
 
     it('Create task', function() {
       element(by.css('.add-menu')).click();
-      element(by.cssContainingText('.add-menu a span', 'Task')).click();
+      // element(by.cssContainingText('.add-menu a span', 'Task')).click();
+      element(by.cssContainingText('.add-menu a span', 'משימה')).click();
       browser.waitForAngular();
     });
 
@@ -127,7 +132,8 @@ describe('Root', function() {
 
     it('Create disscussion', function() {
       element(by.css('.add-menu')).click();
-      element(by.cssContainingText('.add-menu a span', 'Discussion')).click();
+      // element(by.cssContainingText('.add-menu a span', 'Discussion')).click();
+      element(by.cssContainingText('.add-menu a span', 'דיון')).click();
       browser.waitForAngular();
     });
 
@@ -176,10 +182,12 @@ describe('Root', function() {
     });
 
     it('Schedule discussion', function() {
-      element(by.buttonText('Schedule discussion')).click();
+      // element(by.buttonText('Schedule discussion')).click();
+      element(by.buttonText('זמן דיון')).click();
       browser.waitForAngular();
       let status = element(by.css('detail-status .ui-select-match-text span'));
-      expect(status.getText()).to.eventually.equal('Scheduled');
+      // expect(status.getText()).to.eventually.equal('Scheduled');
+      expect(status.getText()).to.eventually.equal('זומן');
     });
 
     it('Add watcher', function() {
@@ -196,8 +204,10 @@ describe('Root', function() {
     });
 
     it('Create task', function() {
-      element(by.css('.detail-tabs-switcher')).element(by.buttonText('Tasks')).click();
-      element(by.buttonText('Manage Tasks')).click();
+      // element(by.buttonText('Manage Tasks')).click();
+      element(by.css('.detail-tabs-switcher')).element(by.buttonText('משימות')).click();
+      // element(by.css('.detail-tabs-switcher')).element(by.buttonText('משימות')).click();
+      element(by.buttonText('נהל משימות')).click();
       element(by.css('.projects .create-new-item')).click();
       element(by.css('.item-title')).sendKeys(tName);
       expect(element(by.css('.projects tr.active td.name')).getText()).to.eventually.equal(tName);
