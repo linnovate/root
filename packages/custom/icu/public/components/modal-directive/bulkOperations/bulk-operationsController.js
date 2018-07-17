@@ -1,4 +1,4 @@
-function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedItems, activityType, entityName,
+function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout, selectedItems, activityType, entityName,
                                   MultipleSelectService, UsersService, SettingServices, PermissionsService) {
 
     $scope.selectedItems = selectedItems;
@@ -42,6 +42,41 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedI
         $uibModalInstance.dismiss('cancel');
     };
 
+    //------------------------------------------------//
+    //----------------------TAGS----------------------//
+
+    $scope.getUnusedTags = function() {
+        return ($scope.tags || []).filter(x => $scope.selected.indexOf(x) < 0);
+    };
+
+    $scope.addTagClicked = function() {
+        $scope.tagInputVisible = true;
+        $timeout(function() {
+            let element = angular.element('#addTag .ui-select-toggle')[0];
+            element.click();
+        }, 0);
+    };
+
+    $scope.addTag = function(tag) {
+        if(!$scope.selected) $scope.selected = [];
+
+        if(!$scope.selected.find(selectedTag => selectedTag === tag)){
+            $scope.selected.push(tag);
+        }
+        $scope.tagInputVisible = false;
+    };
+
+    $scope.removeTag = function(tag) {
+        $scope.selected = _($scope.selected).without(tag);
+    };
+
+    $scope.onOpenClose = function(isOpen) {
+        $scope.tagInputVisible = !isOpen;
+    };
+
+    //--------------------TAGS END--------------------//
+    //------------------------------------------------//
+
     switch(activityType){
         case 'status':
             $scope.title = 'Set Status';
@@ -55,7 +90,7 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedI
         case 'due':
             $scope.title = 'Set Due Date';
             break;
-        case 'tag':
+        case 'tags':
             $scope.title = 'Add tags';
             break;
         case 'delete':

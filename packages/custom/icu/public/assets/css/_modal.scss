@@ -136,8 +136,9 @@
             .sent{color: #359123;}
 
             .action-button {
-                height: calc(12px * 2);
-                border-radius: 12px;
+                height: 35px;
+                width: 100px;
+                border-radius: 35px;
                 border: none;
                 outline: none;
                 background-color: #fda102;
@@ -148,13 +149,15 @@
                 float: left;
                 margin-right: 16px;
             }
+            .cancel {
+                width: 100px;
+                height: 35px;
+                border: none;
+                color: #A6A6A6;
+                background: transparent;
+            }
             div[icu-avatar] {
                 display: inline-block;
-            }
-            .cancel {
-                border: none;
-                background: transparent;
-                color: #A6A6A6;
             }
             .status {
                 height: 200px;
@@ -191,11 +194,48 @@
                 }
             }
             .tag {
+                height: 400px;
+
                 .items {
-                    height: 53px;
+                    padding: 12px;
                     width: 100%;
+                    min-height: 53px;
+                    list-style: none;
+                    margin: 20px 0 65px;
+                    border: 1px solid #E8E8E8;
+                    display: inline-flex;
+                    flex-wrap: wrap;
 
+                    .tags-item, .form-control, .tags-input {
+                        width: 80px;
+                        height: 28px;
+                        padding: 0 5px;
+                        margin: 0 7px 10px;
+                    }
+                    .tags-item {
+                        line-height: 28px;
+                        margin: 0 7px 10px;
+                        border: 1px solid #E8E8E8;
+                        display: flex;
+                        justify-content: space-between;
 
+                        span {
+                            display: block;
+                            max-width: 50px;
+                            overflow: hidden;
+                            font-weight: normal;
+                        }
+                    }
+                    .tags-item-remove {
+                        border: none;
+                        background-color: transparent;
+                        transform: translateY(-1px);
+                    }
+                    .form-control {
+                        margin: 0 -5px 10px;
+                        line-height: 25px;
+                        font-weight: normal;
+                    }
                 }
             }
             .delete {

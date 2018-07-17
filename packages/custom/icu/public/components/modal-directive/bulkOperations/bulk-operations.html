@@ -63,16 +63,39 @@
     </section>
 
 
-    <section ng-if="activityType === 'tag'" class="tag">
+    <section ng-if="activityType === 'tags'" class="tag">
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
 
-        <div class="items">
-            <div ng-repeat="tag in tags" class='item'>
+        <!--<div ng-repeat="tag in tags" class='item'>-->
+            <!--<span>{{tag}}</span>-->
+            <!--<button class="detail-tags-item-remove" ng-click="removeTag(tag)">-->
+                <!--<i class="fa fa-times"></i>-->
+            <!--</button>-->
+        <!--</div>-->
+
+        <ul class="items detail-tags-items">
+
+            <li class="tags-item" ng-repeat="tag in selected">
                 <span>{{tag}}</span>
-                <button class="detail-tags-item-remove" ng-click="removeTag(tag)">
+                <button class="tags-item-remove" ng-click="removeTag(tag)">
                     <i class="fa fa-times"></i>
                 </button>
-            </div>
+            </li>
+            <li class="tags-input" ng-if="!value.length || tagInputVisible">
+                <ui-select
+                    ng-model="newTag"
+                    tagging
+                    tagging-label="false"
+                    on-select="addTag(newTag)"
+                >
+                    <ui-select-match id="addTag" placeholder="{{ !selected.length ? 'noLabels' : 'selectTags' | i18next }}">
+                        {{ !selected.length ? 'noLabels' : 'selectTags' | i18next }}
+                    </ui-select-match>
+                    <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">{{tag}}</ui-select-choices>
+                </ui-select>
+            </li>
+        </ul>
+
 
         <button class="action-button" ng-click="bulkUpdate('tag', selected)">{{ 'Update' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>

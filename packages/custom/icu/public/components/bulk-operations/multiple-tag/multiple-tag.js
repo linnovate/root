@@ -5,7 +5,7 @@ angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleTag', function () {
         function multipleTagController($scope, MultipleSelectService) {
 
-            $scope.type = 'tag';
+            $scope.type = 'tags';
 
             $scope.selectedItems = $scope.$parent.selectedItems;
             $scope.allowed = MultipleSelectService.haveBulkPerms($scope.selectedItems, $scope.type)
