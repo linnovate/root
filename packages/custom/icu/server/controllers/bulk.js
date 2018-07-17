@@ -1,3 +1,5 @@
+'use strict';
+
 const httpError = require('http-errors');
 const permissions = require('../controllers/permissions.js');
 var elasticsearch = require('../controllers/elasticsearch');
@@ -26,11 +28,14 @@ function update(req, res, next) {
 
   let {
     watchers,
-    tags,
-    status,
-    due,
-    assign
+    tags
   } = update;
+
+  let changeWholeParameter = {
+      status: update.status,
+      due: update.due,
+      assign: update.assign,
+  };
 
   watchers = watchers || [];
   tags = tags || [];
@@ -44,6 +49,8 @@ function update(req, res, next) {
   .then(function(docs) {
 //    console.log("bulk res", docs) ;
     if(!docs.length) throw new httpError(404);
+
+    let set = clean(Object.assign({}, changeWholeParameter));
     return Model.update({
       _id: { $in: ids }
     }, {
@@ -51,11 +58,7 @@ function update(req, res, next) {
         watchers: { $each: watchers },
         tags: { $each: tags }
       },
-      $set: {
-        status: status,
-        due: due,
-        assign: assign
-      },
+      $set: set,
     }, {
       multi: true
     })
@@ -127,8 +130,11 @@ function recycle(req, res, next) {
   })
 }
 
+function clean(obj) {
+    return Object.keys(obj).forEach((key) => (obj[key] === null) && delete obj[key]);
+}
+
 function remove(req, res, next) {
-  //delete method cannot transfer any data in req.body, Avraham you need to remove this maybe
   let entity = req.params.entity;
   let Model = models[entity];
   let ids = req.body.ids;

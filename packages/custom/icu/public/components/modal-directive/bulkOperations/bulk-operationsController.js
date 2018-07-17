@@ -1,4 +1,4 @@
-function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedItems, activityType, entityName, MultipleSelectService, UsersService) {
+function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedItems, activityType, entityName, MultipleSelectService, UsersService, SettingServices) {
 
     $scope.selectedItems = selectedItems;
     $scope.activityType = activityType;
@@ -6,17 +6,8 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedI
     UsersService.getAll().then( allUsers => $scope.people = allUsers );
 
 
-    $scope.statusMap = {
-        tasks: ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'],
-        projects: ['new', 'assigned', 'in-progress', 'canceled', 'completed', 'archived'],
-        discussions: ['new', 'scheduled', 'done', 'canceled', 'archived'],
-        officeDocuments: ['new', 'in-progress', 'received', 'sent', 'done'],
-        folders: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
-        offices: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
-        templateDocuments: ['new', 'in-progress', 'canceled', 'completed', 'archived']
-    };
-
-    $scope.statuses = $scope.statusMap[$scope.entityName];
+    $scope.statusMap = SettingServices.getStatusList();
+    $scope.statuses = $scope.statusMap[$scope.entityName.substring(0, $scope.entityName.length - 1)];
 
     $scope.select = function(selected){
         $scope.selected = selected;
