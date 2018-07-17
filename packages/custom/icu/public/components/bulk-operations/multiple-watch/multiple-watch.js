@@ -8,7 +8,10 @@ angular.module('mean.icu.ui.bulkoperations')
             $scope.type = 'watch';
 
             $scope.selectedItems = $scope.$parent.selectedItems;
-            $scope.allowed = MultipleSelectService.haveBulkPerms($scope.selectedItems, $scope.type)
+
+            // will be allowed and completed in the future, now just disabled
+            $scope.allowed = false;
+            // $scope.allowed = MultipleSelectService.haveBulkPerms($scope.selectedItems, $scope.type)
 
         }
         return {

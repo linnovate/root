@@ -9,12 +9,12 @@ angular.module('mean.icu.data.multipleselectservice', [])
         let selectedItems = [];
 
         let bulkPermissionsMap = {
-            'status' : ['editor'],
-            'assign' : ['editor'],
-            'watcher' : ['editor'],
-            'due' : ['editor'],
-            'tag' : ['editor'],
-            'delete' : ['editor'],
+            'status': ['editor'],
+            'assign': ['editor'],
+            'watcher': ['editor'],
+            'due': ['editor'],
+            'tag': ['editor'],
+            'delete': ['editor'],
         };
 
         let cornerStates = [

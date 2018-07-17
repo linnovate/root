@@ -25,6 +25,49 @@
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
+    <!--<section-->
+        <!--ng-if="activityType === 'watch'"-->
+        <!--class="watch">-->
+        <!---->
+        <!--<button class="action-button" ng-click="bulkUpdate('watch', selected)">{{ 'Update' | i18next}}</button>-->
+        <!--<button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>-->
+    <!--</section>-->
+
+    <section
+        ng-if="activityType === 'assign'"
+        class="assign">
+
+        <ui-select ng-model="selected" on-select="select(selected._id)">
+            <ui-select-match placeholder="{{ 'Select status' | i18next }}">
+                <i class='{{$select.selected}}'></i>
+                <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+            </ui-select-match>
+            <ui-select-choices repeat="user in people | filter: $select.search">
+                <i class='{{ user.name }}'></i>
+                <span class='{{}}'>{{ user.name }}</span>
+            </ui-select-choices>
+        </ui-select>
+
+        <button class="action-button" ng-click="bulkUpdate('assign', selected)">{{ 'Update' | i18next}}</button>
+        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
+
+    <section
+        ng-if="activityType === 'due'"
+        class="due">
+
+        <button class="action-button" ng-click="bulkUpdate('due', selected)">{{ 'Update' | i18next}}</button>
+        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
+
+    <section
+        ng-if="activityType === 'tag'"
+        class="tag">
+
+        <button class="action-button" ng-click="bulkUpdate('tag', selected)">{{ 'Update' | i18next}}</button>
+        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
+
     <section
         ng-if="activityType === 'delete'"
         class="delete">

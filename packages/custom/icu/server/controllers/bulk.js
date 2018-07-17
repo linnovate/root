@@ -84,7 +84,10 @@ function recycle(req, res, next) {
   .then(function(results) {
       return Model.find({ _id: { $in: ids } })
   })
-      .then(entities)
+  .then(updatedItems=>{
+      if(!updatedItems.length) throw new httpError(404);
+      res.json(updatedItems)
+  })
   .catch(function(err) {
       next(err)
   })

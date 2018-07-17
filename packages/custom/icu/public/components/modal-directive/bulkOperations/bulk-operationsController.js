@@ -1,8 +1,10 @@
-function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedItems, activityType, entityName, MultipleSelectService) {
+function bulkOperationsController($scope, $i18next, $uibModalInstance, selectedItems, activityType, entityName, MultipleSelectService, UsersService) {
 
     $scope.selectedItems = selectedItems;
     $scope.activityType = activityType;
     $scope.entityName = entityName;
+    UsersService.getAll().then( allUsers => $scope.people = allUsers );
+
 
     $scope.statusMap = {
         tasks: ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'],
