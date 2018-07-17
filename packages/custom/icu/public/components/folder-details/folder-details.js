@@ -29,7 +29,6 @@ function FolderDetailsController($scope, entity, tasks, people, folders, tags,of
   $scope.tasks = tasks.data || tasks;
   $scope.items = folders.data || folders;
   $scope.offices = offices.data || offices;
-  $scope.item.tags = tags;
 
   // backup for previous changes - for updates
   var backupEntity = JSON.parse(JSON.stringify($scope.item));
