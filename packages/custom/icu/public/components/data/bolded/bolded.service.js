@@ -29,12 +29,12 @@ angular.module('mean.icu.data.boldedservice', [])
       }
       let bolded = entity.bolded.find((item)=>{return item.id === me._id});
 
-      if(bolded? bolded.bolded: false){
+      if(bolded && bolded.bolded){
         return 'bolded';
       } else {
         return 'bold-disabled';
       }
-    };
+    }
 
     return {
       boldedUpdate: boldedUpdate,
