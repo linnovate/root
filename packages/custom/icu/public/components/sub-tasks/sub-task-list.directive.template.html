@@ -17,8 +17,8 @@
              icu-list-row
              data-id="{{task._id}}",
              ng-class="{'isNew': task.isNew == true,'notNew':task.isNew == false}",
-             ng-mouseover="task.showDelete = true",
-             ng-mouseleave="deleteShowDlt(task)",
+             ng-mouseover="task.showDelete = true"
+             ng-mouseleave="deleteShowDlt(task)"
              data="{    task: task,
                         index: $index,
                         drawArrow: drawArrow,

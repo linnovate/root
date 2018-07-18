@@ -50,6 +50,8 @@ angular.module('mean.icu.ui.detailspane')
         function controller($scope, $state, BoldedService) {
             $scope.actionType = 'view';
             BoldedService.boldedUpdate($scope.item, $scope.entityType, $scope.actionType).then((result) => {
+              delete result.subTasks;
+              delete result.subProjects;
                 Object.assign($scope.item, result);
             });
         }
