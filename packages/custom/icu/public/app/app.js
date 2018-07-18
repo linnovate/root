@@ -37,6 +37,7 @@ angular.module('mean.icu').config([
                         $stateParams.start,
                         $stateParams.limit,
                         $stateParams.sort,
+                        $stateParams.status,
                         $stateParams.starred);
                 }
             }
@@ -65,7 +66,7 @@ angular.module('mean.icu').config([
                     start: 0,
                     limit: LIMIT,
                     sort: SORT,
-                    officeDocuments:undefined
+                    status:"",
                 },
                 views: {
                     'middlepane@main': {
@@ -1160,7 +1161,8 @@ angular.module('mean.icu').config([
                     limit: LIMIT,
                     sort: SORT,
                     officeDocuments:undefined,
-                    activeTab: undefined
+                    activeTab: undefined,
+                    status:"",
                 },
                 views: getListView('officeDocument'),
                 resolve: {
@@ -1179,7 +1181,8 @@ angular.module('mean.icu').config([
                                 localStorage.removeItem("type");
                                 return OfficeDocumentsService.getAll($stateParams.start,
                                     $stateParams.limit,
-                                    $stateParams.sort);
+                                    $stateParams.sort,
+                                    $stateParams.status);
                             }
                         }
                     },

@@ -155,7 +155,7 @@ module.exports = function(Icu, app) {
     .get(office.read, star.isStarred)
   //.put(project.read, project.update, star.isStarred)
   // .put(office.read, office.update, attachments.sign, notification.updateRoom, star.isStarred)
-     .put(folder.read, folder.update, attachments.sign, star.isStarred)
+     .put(office.read, office.update, attachments.sign, star.isStarred)
     .delete(star.unstarEntity, office.read, office.destroy);
   app.route('/api/history/offices/:id([0-9a-fA-F]{24})')
     .get(office.readHistory);
@@ -365,7 +365,8 @@ module.exports = function(Icu, app) {
   app.route('/api/officeDocuments')
   //.post(documents.upload, documents.signNew)
     .post(documents.upload)
-    .get(documents.getAll);
+    //.get(documents.getAll);
+    .get(pagination.parseParams, documents.all, star.isStarred, pagination.formResponse);
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
     .get(documents.getById)
     .post(documents.update)
@@ -389,7 +390,9 @@ module.exports = function(Icu, app) {
     .post(documents.sendDocument);
   app.route('/api/officeDocuments/signOnDocx')
     .post(documents.signOnDocx);
-  app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments').get(documents.getByFolder);
+  app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments')
+  //.get(documents.getByFolder);
+  .get(pagination.parseParams, documents.getByFolder, pagination.formResponse);
 
   app.route('/api/officeDocuments/receiveDocument/:id([0-9a-fA-F]{24})')
     .post(documents.receiveDocument);

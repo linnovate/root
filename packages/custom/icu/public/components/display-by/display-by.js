@@ -273,32 +273,66 @@ angular.module('mean.icu.ui.displayby', [])
         };
 
         $scope.typeSelected = localStorage.getItem("type");
+        
         $scope.switchToType = function (type) {
-            EntityService.setActiveStatusFilterValue(type.name);
-            OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field, EntityService.getSortFilterValue().order,type.name).then(function (result) {
 
-            $scope.officeDocuments=result;
+            if(context.entityName == "folder"){
+                $state.go('main.' + context.main + '.byentity', {
+                    entity: context.entityName,
+                    entityId: context.entityId,
+                    status: type.name
+                });
 
-         $scope.typeSelected = type.name;
+            }else{
+                $state.go('main.' + context.main + '.all', {
+                    status : type.name
+                  },{reload:true});
+            }
 
-         if (context.entityName == 'folder') {
-             $scope.officeDocuments = $scope.officeDocuments.filter(function (officeDocument) {
-                 return officeDocument.status == type.name && officeDocument.folder && officeDocument.folder._id == context.entityId;
-             });
-         } else {
 
-             $scope.officeDocuments = $scope.officeDocuments.filter(function (officeDocument) {
-                 return officeDocument.status == type.name;
-             });
-         }
+                    
+             EntityService.setActiveStatusFilterValue(type.name);
+        //     OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field, EntityService.getSortFilterValue().order,type.name).then(function (results) {
+        //     $scope.officeDocuments=[];
+        //     results.data.forEach(function(result){
+        //         var flag = false;
+        //         if(context.entityName='folder'){
+        //             if(result.status==type.name&&result.folder&&result.folder._id==context.entityId){
+        //                 flag = true;
+        //             }
+        //         }
+        //         else{
+        //             if(result.status==type.name){
+        //                 flag= true;
+        //             }
+        //         }
+        //         if(flag){
+        //             $scope.officeDocuments.push(result);
+        //         }
+                
+        //     });
+          $scope.typeSelected = type.name;
 
-         localStorage.setItem("type", type.name);
+        //  /** 
+        //  if (context.entityName == 'folder') {
+        //      $scope.officeDocuments = $scope.officeDocuments.filter(function (officeDocument) {
+        //          return officeDocument.status == type.name && officeDocument.folder && officeDocument.folder._id == context.entityId;
+        //      });
+        //  } else {
 
-         $state.go($state.current, {
-             officeDocuments: $scope.officeDocuments,
-             activeTab: $scope.item
-         }, { reload: true });
-            });
+        //      $scope.officeDocuments = $scope.officeDocuments.filter(function (officeDocument) {
+        //          return officeDocument.status == type.name;
+        //      });
+        //  }
+        //  */
+
+        //  localStorage.setItem("type", type.name);
+
+        //  $state.go($state.current, {
+        //      officeDocuments: $scope.officeDocuments,
+        //      activeTab: $scope.item
+        //  }, { reload: true });
+        //     });
 
          /**
          var temp=[];
@@ -325,16 +359,21 @@ angular.module('mean.icu.ui.displayby', [])
      };
         $scope.switchTo = function (entityName, id) {
             EntityService.setEntityFolderValue(entityName, id);
-            OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field,
-                                               EntityService.getSortFilterValue().order,
-                                               EntityService.getActiveStatusFilterValue(),
-                                               EntityService.getEntityFolderValue().id).then(function (result) {
+        //     OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field,
+        //                                        EntityService.getSortFilterValue().order,
+        //                                        EntityService.getActiveStatusFilterValue(),
+        //                                        EntityService.getEntityFolderValue().id).then(function (result) {
 
-            $state.go('main.' + context.main + '.byentity', {
+        //     $state.go('main.' + context.main + '.byentity', {
+        //         entity: entityName,
+        //         entityId: id
+        //     });
+        // });
+                $state.go('main.' + context.main + '.byentity', {
                 entity: entityName,
-                entityId: id
+                entityId: id,
+                //status: "done"
             });
-        });
             // If we are switching between entities, then shrink the display limit again
             if (!$scope.visible[entityName]) {
                 $scope.displayLimit.reset();

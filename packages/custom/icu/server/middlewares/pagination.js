@@ -26,7 +26,9 @@ function parseParams(req, res, next) {
     start: req.query.start ? +req.query.start : undefined,
     limit: req.query.limit ? +req.query.limit : undefined
   };
-
+if (req.query.status){
+  req.locals.data.pagination.status = req.query.status;
+}
   next();
 }
 

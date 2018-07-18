@@ -130,7 +130,9 @@ module.exports = function(entityName, options) {
     var mergedPromise;
 
     var query;
-
+    if(pagination && pagination.status){
+      options.conditions = {status : pagination.status};
+    }
     if (currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
       countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);

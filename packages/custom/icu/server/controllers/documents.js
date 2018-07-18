@@ -16,10 +16,18 @@ var logger = require('../services/logger');
 var serials = require('../controllers/serials.js');
 
 var ftp = require('../services/ftp');
+
 var options = {
-  includes: 'assign watchers',
+  includes: 'assign watchers folder',
   defaults: {watchers: []}
 };
+
+var document = crud('officeDocuments', options);
+Object.keys(document).forEach(function(methodName) {
+  if(methodName !== 'destroy') {
+    exports[methodName] = document[methodName];
+  }
+});
 
 exports.defaultOptions = options;
 
@@ -856,6 +864,7 @@ exports.uploadEmptyDocument = function(req, res, next) {
 * req.params.id will consist mongoDB _id of the user
 */
 exports.getAll = function (req, res, next) {
+  console.log("GET ALL !!!");
   var start=0,limit=25,sort="created",obj={'created':1};
   var qu = [
         {$or: [{ watchers: { $in: [req.user._id] } }, { assign: req.user._id }]}
@@ -1006,35 +1015,111 @@ exports.getByUserId = function(req, res, next) {
 *req.params.entity contains the entity {project,discussion,office,}
 *req.params.id contains the entity mongoDB id
 */
+// exports.getByFolder = function(req, res, next) {
+//   Document.find({
+//     folder: req.params.id
+//   }).populate('folder')
+//     .populate('creator')
+//     .populate('updater')
+//     .populate('sender')
+//     .populate('sendingAs')
+//     .populate('assign')
+//     .populate('relatedDocuments')
+//     .populate('forNotice')
+//     .populate('signBy')
+//     .populate('watchers').sort(req.locals.data.pagination.sort)
+//     .skip(req.locals.data.pagination.start)
+//     .limit(req.locals.data.pagination.limit).exec(function(err, data) {
+//       if(err) {
+//         logger.log('error', '%s getByFolder, %s', req.user.name, 'Document.find', {error: err.message});
+
+//         req.locals.error = err;
+//         req.status(400);
+//       }
+//       else {
+//         logger.log('info', '%s getByFolder, %s', req.user.name, 'success');
+
+//         req.locals.result = data;
+//        // res.send(data);
+
+//       next();
+//       }
+//     }).count({}, function (err, c) {
+//       req.locals.data.pagination.count = c
+      
+        
+     
+//     });
+// };
 exports.getByFolder = function(req, res, next) {
-  Document.find({
-    folder: req.params.id
-  }).populate('folder')
-    .populate('creator')
-    .populate('updater')
-    .populate('sender')
-    .populate('sendingAs')
-    .populate('assign')
-    .populate('relatedDocuments')
-    .populate('forNotice')
-    .populate('signBy')
-    .populate('watchers').exec(function(err, data) {
-      if(err) {
-        logger.log('error', '%s getByFolder, %s', req.user.name, 'Document.find', {error: err.message});
+if(req.locals.error) {
+  return next();
+}
 
-        req.locals.error = err;
-        req.status(400);
+var entityQuery = {
+    tType: {
+      $ne: 'template'
+    },
+    $or: [
+      {
+        parent: null
+      }, {
+        parent: {
+          $exists: false
+        }
       }
-      else {
-        logger.log('info', '%s getByFolder, %s', req.user.name, 'success');
+    ]
+  };
+entityQuery["folder"] = req.params.id instanceof Array ? {
+  $in: req.params.id
+} : req.params.id;
 
-        req.locals.result = data;
-        res.send(data);
-      }
-    });
-};
+var starredOnly = false;
+var ids = req.locals.data.ids;
+if(ids && ids.length) {
+  entityQuery._id = {
+    $in: ids
+  };
+  starredOnly = true;
+}
+if(req.locals.data.pagination.status){
+  entityQuery.status = req.locals.data.pagination.status;
+
+}
+var query = req.acl.mongoQuery('Document');
+
+query.find(entityQuery);
+query.populate(options.includes);
+
+Document.find(entityQuery).count({}, function (err, c) {
+  req.locals.data.pagination.count = c;
 
 
+  var pagination = req.locals.data.pagination;
+  if(pagination && pagination.type && pagination.type === 'page') {
+    query.sort(pagination.sort)
+      .skip(pagination.start)
+      .limit(pagination.limit);
+  }
+  query.exec(function(err, tasks) {
+    if(err) {
+      req.locals.error = {
+        message: 'Can\'t get tags'
+      };
+    }
+    else if(starredOnly) {
+      documents.forEach(function(document) {
+        document.star = true;
+      });
+    }
+    else {
+      req.locals.result = tasks;
+
+      next();
+    }
+  });
+});
+}
 
 //NOT IN USE
 exports.upload = function (req, res, next) {

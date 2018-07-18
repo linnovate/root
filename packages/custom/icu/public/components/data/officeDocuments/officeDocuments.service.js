@@ -1,42 +1,65 @@
 'use strict';
 
 angular.module('mean.icu.data.officedocumentsservice', [])
-    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, WarningsService, NotifyingService, ActivitiesService) {
+    .service('OfficeDocumentsService', function ($http, ApiUri, Upload,PaginationService, WarningsService, NotifyingService, ActivitiesService) {
         var EntityPrefix = '/officeDocuments';
 
-    function getAll(start, limit, sort, sortOrder, status, folderId) {
-         var query = "/?start=0&limit=25&sort=created";
-        if (start && limit && sort) {
-            query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort;
-        }
-        if(status){
-            query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status;
-        }
-        if(folderId){
-            query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status + "&folderId="+ folderId;
-        }
-        return $http.get(ApiUri + EntityPrefix + query).then(function (result) {
-            WarningsService.setWarning(result.headers().warning);
-            // result.data = [{
-            //             created: new Date,
-            //             updated: new Date,
-            //             _id: "hgjg",
-            //             title: "sraya",
-            //             path: "/gfdgdgf/dfgdfhg",
-            //             description: "hello world",
-            //             documentType: "pptx",
-            //             entity: "project",
-            //             entityId: "fff",
-            //             creator: "avraham",
-            //             status: "new"
-            //                }]
-            result.data.forEach(function (officeDocument) {
-                officeDocument.created = new Date(officeDocument.created);
-            });
+    // function getAll(start, limit, sort, sortOrder, status, folderId) {
+    //     console.log(start, limit, sort, sortOrder, status, folderId)
+    //      var query = "/?start=0&limit=25&sort=created";
+    //     if (start && limit && sort) {
+    //         query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort;
+    //     }
+    //     if(status){
+    //         query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status;
+    //     }
+    //     if(folderId){
+    //         query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status + "&folderId="+ folderId;
+    //     }
+    //     return $http.get(ApiUri + EntityPrefix + query).then(function (result) {
+    //         WarningsService.setWarning(result.headers().warning);
+    //         // result.data = [{
+    //         //             created: new Date,
+    //         //             updated: new Date,
+    //         //             _id: "hgjg",
+    //         //             title: "sraya",
+    //         //             path: "/gfdgdgf/dfgdfhg",
+    //         //             description: "hello world",
+    //         //             documentType: "pptx",
+    //         //             entity: "project",
+    //         //             entityId: "fff",
+    //         //             creator: "avraham",
+    //         //             status: "new"
+    //         //                }]
+    //         result.data.forEach(function (officeDocument) {
+    //             officeDocument.created = new Date(officeDocument.created);
+    //         });
 
-                return result.data;
-            });
+    //             return result.data;
+    //         });
+    //     }
+    function getAll(start, limit, sort, type, order) {
+        var qs = querystring.encode({
+            start: start,
+            limit: limit,
+            sort: sort,
+            order:order,
+            status:type
+        });
+
+        if (qs.length) {
+            qs = '?' + qs;
         }
+        console.log("get all " + ApiUri + EntityPrefix + qs);
+        return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
+        	WarningsService.setWarning(result.headers().warning);
+            //console.log($rootScope.warning, '$rootScope.warning')
+            return result.data;
+        }, function(err) {return err}).then(function (some) {
+            var data = some.content ? some : [];
+            return PaginationService.processResponse(data);
+        });
+    }
 
          function deleteDocument(id) {
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
@@ -116,18 +139,42 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function getByFolderId(id) {
-            return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
+        // function getByFolderId(id) {
 
-                result.data.forEach(function(officeDocument){
-                    officeDocument.created = new Date(officeDocument.created);
-              }) ;
 
-                return result.data;
-            });
+        //     return $http.get(ApiUri + '/folders/' + id + EntityPrefix).then(function (result) {
+        //         WarningsService.setWarning(result.headers().warning);
+
+        //         result.data.forEach(function(officeDocument){
+        //             officeDocument.created = new Date(officeDocument.created);
+        //       }) ;
+
+        //       return PaginationService.processResponse(result.data);
+        //     });
+        // }
+
+        function getByFolderId(id, start, limit, sort, status) {
+           
+                var qs = querystring.encode({
+                    start: 0,
+                    limit: 25,
+                    sort: "created",
+                    status: status
+                });
+    
+                if (qs.length) {
+                    qs = '?' + qs;
+                }
+    
+                var url = ApiUri  + '/folders/' + id + EntityPrefix;
+                console.log("by folder " +url+ qs);
+                return $http.get(url + qs).then(function(result) {
+                    WarningsService.setWarning(result.headers().warning);
+                    return PaginationService.processResponse(result.data);
+                });
+            
         }
-
+    
         function getByUserId(id) {
             return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);

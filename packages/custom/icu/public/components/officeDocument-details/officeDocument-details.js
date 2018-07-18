@@ -149,7 +149,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     var context = {
       "name": "status",
       "newVal": $scope.item.status,
-      "oldVal": officeDoc.status
+      //"oldVal": officeDoc.status
     };
     $scope.update($scope.item, context);
   }

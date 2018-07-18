@@ -156,7 +156,7 @@ directive('icuSidepane', function() {
             }).then(() => {
                 $scope.officeDocumentsList = [];
                 return OfficeDocumentsService.getAll(0, 0, 'created').then(officeDocuments => {
-                    $scope.officeDocuments = officeDocuments;
+                    $scope.officeDocuments = officeDocuments.data || officeDocuments;
                     $scope.officeDocuments.forEach(function (officeDocument) {
                         if (officeDocument.title)
                             $scope.officeDocumentsList.push(officeDocument);
