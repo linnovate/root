@@ -203,7 +203,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     $scope.$on('refreshList', function (event) {
         $scope.selectedItems = MultipleSelectService.getSelected();
-        $scope.cornerState = MultipleSelectService.refreshCornerState(getNoneRecycledItems().length);
+        $scope.cornerState = MultipleSelectService.refreshCornerState(MultipleSelectService.getNoneRecycledItems($scope.items).length);
 
         if ($scope.selectedItems.length) {
             $scope.multipleSelectMode = true;
@@ -219,7 +219,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     NotifyingService.subscribe('clearSelectedList', function () {
         $scope.selectedItems = MultipleSelectService.refreshSelectedList();
-        $scope.cornerState = MultipleSelectService.refreshCornerState(getNoneRecycledItems().length);
+        $scope.cornerState = MultipleSelectService.refreshCornerState(MultipleSelectService.getNoneRecycledItems($scope.items).length);
         $scope.multipleSelectMode = false;
     }, $scope);
 
@@ -230,10 +230,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.hideTick = function(item){
         item.visible = false;
     };
-
-    function getNoneRecycledItems(){
-        return $scope.items.filter( item => !item.recycled );
-    }
 
     // ============================================================= //
     // ======================= item function ======================= //
