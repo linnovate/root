@@ -979,12 +979,12 @@ async function tasksToExcelServiceFormat(tasks,columns){
              status,
              assign&&assign.name,
              _.map(watchers,watcher=>watcher.name).join("\n"),
-           description,
-           creator&&creator.name, //TODO: creator will be populated after task.all middleware
-           _.map(discussions,(discussion)=>discussion&&discussion.title).join("\n"), //TODO: after pull check if it works to add a task under a discussion because atm it doesnt work
-           project&&project.title,
-           _.map(updates,(update=>`:${update.updated&&update.updated.toLocaleString().substr(0, update.updated.toLocaleString().indexOf(' '))} - ${update.creator.name}`+"\n"+`${update.description}`) ).join("\n"),
-           tags.join("\n"),
+            description,
+            creator&&creator.name, 
+            discussions&&discussions[0]&&discussions[0].title,
+            project&&project.title,
+            _.map(updates,(update=>`:${update.updated&&update.updated.toLocaleString().substr(0, update.updated.toLocaleString().indexOf(' '))} - ${update.creator.name}`+"\n"+`${update.description}`) ).join("\n"),
+            tags.join("\n"),
          ];
  
    
