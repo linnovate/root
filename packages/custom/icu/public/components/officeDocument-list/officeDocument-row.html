@@ -1,5 +1,10 @@
-<td class="id" >{{$index + 1}}</td>
-
+<td ng-hide="item.visible || multipleSelectMode" class="id">{{$index + 1}}</td>
+<td ng-show="item.visible || multipleSelectMode" class="tick">
+  <input type="checkbox"
+         ng-change="refreshSelected(item)"
+         ng-model="item.selected"
+  >
+</td>
 <td class="name"
     title="{{item.title}}"
     ng-attr-contenteditable="{{(!displayOnly && haveEditiorsPermissions(item)) && !recycled(item)}}"

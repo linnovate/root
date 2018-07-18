@@ -1,7 +1,3 @@
-<!--<td  class="move" style="width: 15px;cursor:move;">-->
-    <!--<i class="fa fa-ellipsis-v"></i>-->
-    <!--<i class="fa fa-ellipsis-v"></i>-->
-<!--</td>-->
 <td ng-hide="item.visible || multipleSelectMode" class="id">{{$index + 1}}</td>
 <td ng-show="item.visible || multipleSelectMode" class="tick">
   <input type="checkbox"
@@ -31,6 +27,5 @@
 <td class="status col-sm-2"  ng-class="item.status">{{item.status | i18next }}</td>
 <td class="due">{{item.due | date: 'dd.MM.yyyy'}}</td>
 <td class="arrow">
-   <!--<i ng-if="drawArrow" class="fa chevron-right"></i>-->
     <div ng-if="drawArrow" class="row-arrow"></div>
 </td>

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleCornerButton', function () {
         function controller($scope, MultipleSelectService) {
@@ -7,7 +9,13 @@ angular.module('mean.icu.ui.bulkoperations')
             $scope.changeCornerState = function(){
                 $scope.cornerState = MultipleSelectService.changeCornerState();
                 $scope.$emit('changeCornerState', $scope.cornerState);
-            }
+
+                if($scope.cornerState === 'none'){
+                    $scope.selectedItems = MultipleSelectService.refreshSelectedList();
+                } else {
+                    $scope.selectedItems = MultipleSelectService.getSelected();
+                }
+            };
         }
 
         return {

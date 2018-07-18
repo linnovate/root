@@ -1,6 +1,6 @@
 'use strict';
 
-function DiscussionListController($scope, $state, discussions, DiscussionsService, context, $stateParams, EntityService) {
+function DiscussionListController($scope, $state, discussions, DiscussionsService, context, MultipleSelectService, $stateParams, EntityService) {
 
     $scope.items = discussions.data || discussions;
     $scope.loadNext = discussions.next;
@@ -33,6 +33,22 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
             return result;
         });
     };
+
+    $scope.refreshSelected = function (entity) {
+        MultipleSelectService.refreshSelectedList(entity);
+        $scope.$broadcast('refreshList', {})
+    };
+
+    $scope.$on('changeCornerState', function(event, cornerState){
+        setAllSelected(cornerState === 'all');
+    });
+
+    function setAllSelected(status){
+        for(let i = 0; i < $scope.items.length; i++){
+            $scope.items[i].selected = status;
+        }
+        MultipleSelectService.changeAllSelectedLIst(MultipleSelectService.getNoneRecycledItems($scope.items));
+    }
 
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {

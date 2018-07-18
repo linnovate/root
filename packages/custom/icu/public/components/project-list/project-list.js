@@ -1,6 +1,6 @@
 'use strict';
 
-function ProjectListController($scope, $state, $timeout, projects, ProjectsService, context, $stateParams, EntityService) {
+function ProjectListController($scope, $state, $timeout, projects, ProjectsService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = projects.data || projects;
 
@@ -50,6 +50,21 @@ function ProjectListController($scope, $state, $timeout, projects, ProjectsServi
         });
     };
 
+    $scope.refreshSelected = function (entity) {
+        MultipleSelectService.refreshSelectedList(entity);
+        $scope.$broadcast('refreshList', {})
+    };
+
+    $scope.$on('changeCornerState', function(event, cornerState){
+        setAllSelected(cornerState === 'all');
+    });
+
+    function setAllSelected(status){
+        for(let i = 0; i < $scope.items.length; i++){
+            $scope.items[i].selected = status;
+        }
+        MultipleSelectService.changeAllSelectedLIst(MultipleSelectService.getNoneRecycledItems($scope.items));
+    }
 
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {

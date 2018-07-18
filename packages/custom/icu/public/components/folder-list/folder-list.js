@@ -1,6 +1,6 @@
 'use strict';
 
-function FolderListController($scope, $state, folders, FoldersService, context, $stateParams, OfficesService) {
+function FolderListController($scope, $state, folders, FoldersService, context, $stateParams, OfficesService, MultipleSelectService) {
 
     $scope.items = folders.data || folders;
 
@@ -31,6 +31,22 @@ function FolderListController($scope, $state, folders, FoldersService, context, 
             FoldersService.data.push(result);
             return result;
         });
+    }
+
+    $scope.refreshSelected = function (entity) {
+        MultipleSelectService.refreshSelectedList(entity);
+        $scope.$broadcast('refreshList', {})
+    };
+
+    $scope.$on('changeCornerState', function(event, cornerState){
+        setAllSelected(cornerState === 'all');
+    });
+
+    function setAllSelected(status){
+        for(let i = 0; i < $scope.items.length; i++){
+            $scope.items[i].selected = status;
+        }
+        MultipleSelectService.changeAllSelectedLIst(MultipleSelectService.getNoneRecycledItems($scope.items));
     }
 
     $scope.loadMore = function(start, LIMIT, sort) {

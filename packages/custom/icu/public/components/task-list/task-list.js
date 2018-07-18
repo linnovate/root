@@ -54,13 +54,14 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){
-        setAllSelected(cornerState === 'all')
+        setAllSelected(cornerState === 'all');
     });
 
     function setAllSelected(status){
         for(let i = 0; i < $scope.items.length; i++){
             $scope.items[i].selected = status;
         }
+        MultipleSelectService.changeAllSelectedLIst(MultipleSelectService.getNoneRecycledItems($scope.items));
     }
 
     $scope.loadMore = function(start, LIMIT, sort) {
