@@ -65,6 +65,7 @@ function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDoc
     //         });
     //     }
 
+<<<<<<< HEAD
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {
             $scope.isLoading = true;
@@ -88,6 +89,25 @@ function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDoc
                 $scope.isLoading = false;
             });
         }
+=======
+    $scope.order = {
+        field: $stateParams.sort || 'created',
+        order: 1
+    };
+
+    $scope.loadMore = function() {
+        var LIMIT = 25 ;
+        var start = $scope.items.length;
+        var sort = $scope.order.field;
+        $scope.delayedLoad(start, LIMIT, sort);
+    };
+    $scope.delayedLoad = _.debounce(loadNext, 150);
+    function loadNext(start, LIMIT, sort){
+        OfficeDocumentsService.getAll(start , LIMIT , sort)
+            .then(function(docs){
+                for(let i = 0; i < docs.length; i++){ $scope.items.push(docs[i]) }
+            });
+>>>>>>> fffa147be7b5393e8d5682393809346fae8a2038
     }
 }
 
