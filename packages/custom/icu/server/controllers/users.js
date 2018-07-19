@@ -4,9 +4,9 @@
  * Module dependencies.
  */
 var User = require('../models/user.js'),
-  mongoose = require('../models/user.js'),
-  utils = require('./utils.js'),
+  permissions = require('./permissions.js'),
   _ = require('lodash');
+
 
 var options = {
   includes: 'assign watchers project',
@@ -23,6 +23,26 @@ var user = crud('users', options);
 Object.keys(user).forEach(function(methodName) {
   exports[methodName] = user[methodName];
 });
+
+exports.update = function(req, res, next) {
+  if(req.user.username !== req.body.username){
+    return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
+  }
+
+  User.findById(req.user._id, function (err, user) {
+    if (err){
+      return console.error('Error: ', err);
+    }
+
+    user.set(_.pick(req.body, ['name', 'email']));
+    user.save(function (err, updatedUser) {
+      if (err){
+        return console.error('Error: ', err);
+      }
+      res.send(updatedUser);
+    });
+  });
+};
 
 exports.filterProperties = function(req, res, next) {
   if(req.locals.error) {
@@ -58,3 +78,9 @@ exports.getByEntity = function(req, res, next) { //It is a temporary function. n
   //   }
   // });
 };
+
+function throwError(err) {
+  let deffered = q.defer();
+  deffered.reject(err);
+  return deffered.promise;
+}
