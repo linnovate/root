@@ -72,7 +72,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   $scope.onStar = function(value) {
     TasksService.star($scope.item).then(function() {
-      navigateToDetails($scope.item);
+      // navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
   }
