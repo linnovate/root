@@ -66,7 +66,7 @@ angular.module('mean.icu').config([
                     start: 0,
                     limit: LIMIT,
                     sort: SORT,
-                    status:"",
+                    status:undefined,
                 },
                 views: {
                     'middlepane@main': {
@@ -1162,7 +1162,7 @@ angular.module('mean.icu').config([
                     sort: SORT,
                     officeDocuments:undefined,
                     activeTab: undefined,
-                    status:"",
+                    status:undefined,
                 },
                 views: getListView('officeDocument'),
                 resolve: {

@@ -132,6 +132,8 @@ module.exports = function(entityName, options) {
     var query;
     if(pagination && pagination.status){
       options.conditions = {status : pagination.status};
+    }else{
+      options.conditions = {};
     }
     if (currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);

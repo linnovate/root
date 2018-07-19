@@ -267,12 +267,13 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.changeState = function(state){
             $state.go(state, {
-                officeDocuments: undefined,
+                //officeDocuments: undefined,
+                status:undefined,
                 activeTab: $scope.item
-            }, {reload: false});
+            }, {reload: true});
         };
 
-        $scope.typeSelected = localStorage.getItem("type");
+        //$scope.typeSelected = localStorage.getItem("type");
         
         $scope.switchToType = function (type) {
 
@@ -289,7 +290,7 @@ angular.module('mean.icu.ui.displayby', [])
                   },{reload:true});
             }
 
-
+            $scope.typeSelected = type.name;
                     
              EntityService.setActiveStatusFilterValue(type.name);
         //     OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field, EntityService.getSortFilterValue().order,type.name).then(function (results) {
@@ -311,7 +312,7 @@ angular.module('mean.icu.ui.displayby', [])
         //         }
                 
         //     });
-          $scope.typeSelected = type.name;
+
 
         //  /** 
         //  if (context.entityName == 'folder') {
@@ -359,20 +360,11 @@ angular.module('mean.icu.ui.displayby', [])
      };
         $scope.switchTo = function (entityName, id) {
             EntityService.setEntityFolderValue(entityName, id);
-        //     OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field,
-        //                                        EntityService.getSortFilterValue().order,
-        //                                        EntityService.getActiveStatusFilterValue(),
-        //                                        EntityService.getEntityFolderValue().id).then(function (result) {
 
-        //     $state.go('main.' + context.main + '.byentity', {
-        //         entity: entityName,
-        //         entityId: id
-        //     });
-        // });
                 $state.go('main.' + context.main + '.byentity', {
                 entity: entityName,
                 entityId: id,
-                //status: "done"
+                status:undefined
             });
             // If we are switching between entities, then shrink the display limit again
             if (!$scope.visible[entityName]) {
