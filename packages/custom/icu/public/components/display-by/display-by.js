@@ -222,7 +222,7 @@ angular.module('mean.icu.ui.displayby', [])
             color:'757575'
         }];
 
-        $scope.typeSelected = '';
+        $scope.typeSelected = $state.current.params.status;
 
         $scope.singularItemName = {
             tasks: "task",
@@ -259,11 +259,11 @@ angular.module('mean.icu.ui.displayby', [])
             localStorage.removeItem("type");
         };
 
-        $scope.reset = function(main){
-             EntityService.setEntityFolderValue(undefined, undefined);
-            localStorage.removeItem("type");
-            $scope.typeSelected = null;
-        };
+        // $scope.reset = function(main){
+        //      EntityService.setEntityFolderValue(undefined, undefined);
+        //     localStorage.removeItem("type");
+        //     //$scope.typeSelected = null;
+        // };
 
         $scope.changeState = function(state){
             $state.go(state, {
@@ -283,14 +283,14 @@ angular.module('mean.icu.ui.displayby', [])
                     entityId: context.entityId,
                     status: type.name
                 });
-
+                $scope.typeSelected = type.name;
             }else{
                 $state.go('main.' + context.main + '.all', {
                     status : type.name
                   },{reload:true});
             }
 
-            $scope.typeSelected = type.name;
+           
                     
              EntityService.setActiveStatusFilterValue(type.name);
         //     OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field, EntityService.getSortFilterValue().order,type.name).then(function (results) {
@@ -366,6 +366,9 @@ angular.module('mean.icu.ui.displayby', [])
                 entityId: id,
                 status:undefined
             });
+
+            $scope.typeSelected = '';
+
             // If we are switching between entities, then shrink the display limit again
             if (!$scope.visible[entityName]) {
                 $scope.displayLimit.reset();
