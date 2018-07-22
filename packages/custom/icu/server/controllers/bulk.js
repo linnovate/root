@@ -29,7 +29,7 @@ function update(req, res, next) {
 
   let {
     watchers,
-    tags
+    tag
   } = update;
 
   let changeWholeParameter = {
@@ -39,7 +39,7 @@ function update(req, res, next) {
   };
 
   watchers = watchers || [];
-  tags = tags || [];
+  let tags = tag || [];
 
   let set = clean(Object.assign({}, changeWholeParameter));
 

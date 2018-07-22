@@ -92,7 +92,7 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
         case 'due':
             $scope.title = 'Set Due Date';
             break;
-        case 'tags':
+        case 'tag':
             $scope.title = 'Add tags';
             break;
         case 'delete':
