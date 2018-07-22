@@ -70,10 +70,7 @@ angular.module('mean.icu.data.discussionsservice', [])
             NotifyingService.notify('editionData');
             WarningsService.setWarning(result.headers().warning);
             return result.data;
-          })
-          .then(entity => {
-            return BoldedService.boldedUpdate(entity, 'discussions', 'update');
-          })
+          }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function remove(id) {
@@ -90,7 +87,7 @@ angular.module('mean.icu.data.discussionsservice', [])
             	WarningsService.setWarning(result.headers().warning);
                 discussion.star = !discussion.star;
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function getStarred() {
@@ -118,14 +115,14 @@ angular.module('mean.icu.data.discussionsservice', [])
         return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule').then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function cancele(discussion) {
         return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/cancele').then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function updateWatcher(discussion, me, watcher, type) {
@@ -137,9 +134,7 @@ angular.module('mean.icu.data.discussionsservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(entity => {
-          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function updateStatus(discussion, prev) {
@@ -152,9 +147,7 @@ angular.module('mean.icu.data.discussionsservice', [])
                 prev: prev.status
             },
             context: {}
-        }).then(entity => {
-          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function updateDue(discussion, prev, type) {
@@ -167,9 +160,7 @@ angular.module('mean.icu.data.discussionsservice', [])
                 prev: type === 'startDue' ? prev.startDate : prev.endDate
             },
             context: {}
-        }).then(entity => {
-          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function updateLocation(discussion, prev) {
@@ -183,9 +174,7 @@ angular.module('mean.icu.data.discussionsservice', [])
                 prev: prev.location
             },
             context: {}
-        }).then(entity => {
-          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function updateTitle(discussion, prev, type) {
@@ -200,9 +189,7 @@ angular.module('mean.icu.data.discussionsservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(() => BoldedService.boldedUpdate(discussion, 'discussions', 'update'));
     }
 
     function updateAssign(discussion, prev) {
@@ -220,9 +207,7 @@ angular.module('mean.icu.data.discussionsservice', [])
                 prev: prev.assign ? prev.assign.name : ''
             },
             context: {}
-        }).then(entity => {
-          return BoldedService.boldedUpdate(entity, 'discussions', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     return {

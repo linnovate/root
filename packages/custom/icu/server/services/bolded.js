@@ -50,7 +50,11 @@ function boldUpdate(req, res, next) {
     .populate('watchers')
     .exec(function (err, entity) {
       if (err || !entity) {
-        console.log('Entity not found: ', entity_id);
+        console.log('*****Entity not found*****');
+        console.log('entity_type: ', entity_type);
+        console.log('entity_id: ', entity_id);
+        console.log('action: ', action);
+        console.log('user_id: ', user_id);
         res.status(400);
         return;
       }

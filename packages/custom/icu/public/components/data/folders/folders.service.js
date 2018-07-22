@@ -93,17 +93,14 @@ angular.module('mean.icu.data.foldersservice', [])
                 });
             }
             return result.data;
-        })
-        .then(entity => {
-          return BoldedService.boldedUpdate(entity, 'folders', 'update');
-        })
+        }).then(entity =>  BoldedService.boldedUpdate(entity, 'folders', 'update'));
     }
 
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function(result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
-        });
+        }).then(entity =>  BoldedService.boldedUpdate(entity, 'folders', 'update'));
     }
 
     function star(folder) {
@@ -112,7 +109,7 @@ angular.module('mean.icu.data.foldersservice', [])
             	WarningsService.setWarning(result.headers().warning);
                 folder.star = !folder.star;
                 return result.data;
-            });
+            }).then(entity =>  BoldedService.boldedUpdate(entity, 'folders', 'update'));
     }
 
     function WantToCreateRoom(folder) {
@@ -147,9 +144,7 @@ angular.module('mean.icu.data.foldersservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(entity => {
-            return BoldedService.boldedUpdate(entity, 'folders', 'update');
-        })
+        }).then(entity =>  BoldedService.boldedUpdate(entity, 'folders', 'update'));
     }
 
     function updateStatus(folder, prev) {
@@ -162,11 +157,8 @@ angular.module('mean.icu.data.foldersservice', [])
                 prev: prev.status
             },
             context: {}
-        }).then(entity => {
-            return BoldedService.boldedUpdate(entity, 'folders', 'update');
-        })
+        }).then(() =>  BoldedService.boldedUpdate(folder, 'folders', 'update'));
     }
-
 
     function updateColor(folder, me) {
         return ActivitiesService.create({
@@ -177,9 +169,7 @@ angular.module('mean.icu.data.foldersservice', [])
                 status: folder.color
             },
             context: {}
-        }).then(entity => {
-            return BoldedService.boldedUpdate(entity, 'folders', 'update');
-        })
+        }).then(entity =>  BoldedService.boldedUpdate(entity, 'folders', 'update'));
     }
 
     function updateEntity(folder, prev) {
@@ -194,9 +184,7 @@ angular.module('mean.icu.data.foldersservice', [])
                 prev: prev.office ? prev.office.title : ''
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity =>  BoldedService.boldedUpdate(entity, 'folders', 'update'));
 
     }
 
@@ -212,9 +200,7 @@ angular.module('mean.icu.data.foldersservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity =>  BoldedService.boldedUpdate(folder, 'folders', 'update'));
     }
 
     return {
