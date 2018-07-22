@@ -134,7 +134,7 @@ function goOverBoldedArray(entity, action, user_id) {
     if (action === 'update') {
       entity.bolded[i].bolded = true;
     }
-    if (entity.bolded[i].id === user_id) {
+    if (entity.bolded[i].id.toString() === user_id) {
       entity.bolded[i] = changeBolded(entity.bolded[i], false)
     }
   }

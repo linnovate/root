@@ -208,6 +208,8 @@ angular.module('mean.icu.ui.subprojectslistdirective', []).directive('icuSubProj
     }
 
     $scope.changeState = function(subProject) {
+        console.log($scope.currentContext);
+        // console.log(context);
       $state.go('main.projects.byparent.details', {
         id: subProject._id,
         entityId: subProject.parent._id || subProject.parent,
