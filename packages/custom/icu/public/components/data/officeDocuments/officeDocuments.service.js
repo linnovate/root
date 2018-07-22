@@ -241,7 +241,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     userObj: watcher
                 },
                 context: {}
-            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
+            }).then(result => {
+              return result;
+            });
         }
 
         function updateWatcherPerms(officeDocument, me, watcher, type) {
@@ -256,7 +258,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     permissions: officeDocument.permissions
                 },
                 context: {}
-            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
+            }).then(result => {
+              return result;
+            });
         }
 
         function updateStatus(officeDocument, prev) {
@@ -269,7 +273,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.status
                 },
                 context: {}
-            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
+            }).then(result => {
+              return result;
+            });
         }
 
         function uploadEmpty(officeDocument){
@@ -289,7 +295,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.created
                 },
                 context: {}
-            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
+            }).then(result => {
+              return result;
+            });
         }
 
         function sendDocument(sendingForm, officeDocument) {
@@ -357,7 +365,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.assign ? prev.assign.name : ''
                 },
                 context: {}
-            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
+            }).then(result => {
+              return result;
+            });
         }
 
         function updateEntity(officeDocument, prev) {
@@ -372,8 +382,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.folder ? prev.folder.title : ''
                 },
                 context: {}
-            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
-
+            }).then(result => {
+              return result;
+            });
         }
 
         function updateTitle(officeDocument, prev, type) {
@@ -388,7 +399,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev[type]
                 },
                 context: {}
-            }).then(() => BoldedService.boldedUpdate(officeDocument, 'officeDocuments', 'update'));
+            }).then(result => {
+              return result;
+            });
         }
 
         return {

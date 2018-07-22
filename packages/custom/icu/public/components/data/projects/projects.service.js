@@ -115,7 +115,9 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev.assign ? prev.assign.name : ''
             },
             context: {}
-        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+        }).then(result => {
+          return result;
+        });
     }
 
     function getSubProjects(projectId) {
@@ -266,8 +268,9 @@ angular.module('mean.icu.data.projectsservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
-
+        }).then(result => {
+          return result;
+        });
     }
 
 
@@ -281,9 +284,9 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev.due
             },
             context: {}
-        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
-
-
+        }).then(result => {
+          return result;
+        });
     }
 
 
@@ -297,8 +300,9 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev.status
             },
             context: {}
-        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
-
+        }).then(result => {
+          return result;
+        });
     }
 
 
@@ -311,8 +315,9 @@ angular.module('mean.icu.data.projectsservice', [])
                 status: project.color
             },
             context: {}
-        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
-
+        }).then(result => {
+          return result;
+        });
     }
 
     function updateTitle(project, prev, type) {
@@ -327,7 +332,9 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(() => BoldedService.boldedUpdate(project, 'projects', 'update'));
+        }).then(result => {
+          return result;
+        });
     }
 
 

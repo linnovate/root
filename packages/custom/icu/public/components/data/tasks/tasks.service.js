@@ -94,7 +94,7 @@ angular.module('mean.icu.data.tasksservice', [])
             }
 
             return $http.get(url + qs).then(function(result) {
-            	WarningsService.setWarning(result.headers().warning);
+            	  WarningsService.setWarning(result.headers().warning);
                 return PaginationService.processResponse(result.data);
             });
         }
@@ -102,7 +102,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function search(term) {
         return $http.get(ApiUri + '/search?term=' + term + '&index=task').then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+        	  WarningsService.setWarning(result.headers().warning);
             return result.data.task || [];
         });
     }
@@ -142,17 +142,17 @@ angular.module('mean.icu.data.tasksservice', [])
     function star(task) {
         return $http.patch(ApiUri + EntityPrefix + '/' + task._id + '/star', {star: !task.star})
             .then(function (result) {
-            	WarningsService.setWarning(result.headers().warning);
+            	  WarningsService.setWarning(result.headers().warning);
                 task.star = !task.star;
                 return result.data;
             }).then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+                return BoldedService.boldedUpdate(entity, 'tasks', 'update');
             });
     }
 
     function getStarred() {
         return $http.get(ApiUri + EntityPrefix + '/starred').then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+        	  WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -160,74 +160,74 @@ angular.module('mean.icu.data.tasksservice', [])
     function remove(id) {
         return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
             NotifyingService.notify('editionData');
-        	WarningsService.setWarning(result.headers().warning);
+        	  WarningsService.setWarning(result.headers().warning);
             return result.data;
         }).then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+            return BoldedService.boldedUpdate(entity, 'tasks', 'update');
         });
     }
 
     function getMyTasks() {
     	return $http.get(ApiUri + EntityPrefix + '/byAssign').then(function (result) {
-    		WarningsService.setWarning(result.headers().warning);
+    		    WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
 	function getMyTasksStatistics() {
 		return $http.get(ApiUri + '/myTasksStatistics').then(function (result) {
-			WarningsService.setWarning(result.headers().warning);
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function getOverdueWatchedTasks() {
     	return $http.get(ApiUri + '/overdueWatchedTasks').then(function (result) {
-    		WarningsService.setWarning(result.headers().warning);
+    		    WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function getWatchedTasks() {
     	return $http.get(ApiUri + '/watchedTasks').then(function (result) {
-    		WarningsService.setWarning(result.headers().warning);
+    		    WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function getStarredByassign() {
         return $http.get(ApiUri + EntityPrefix + '/starred/byAssign').then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+            WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function getSubTasks(taskId) {
     	return $http.get(ApiUri + EntityPrefix + '/subtasks/' + taskId).then(function (result) {
-    		WarningsService.setWarning(result.headers().warning);
+    		    WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function getTemplate(taskId) {
        return $http.get(ApiUri + '/templates' ).then(function (result) {
-       	WarningsService.setWarning(result.headers().warning);
+       	    WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
 
     function saveTemplate(id, name){
         return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+        	  WarningsService.setWarning(result.headers().warning);
             return result.data;
-        }).then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+        }).then(entity => {
+            return BoldedService.boldedUpdate(entity, 'tasks', 'update');
         });
     }
 
     function template2subTasks(templateId, data){
         return $http.post(ApiUri  + '/templates/' + templateId + '/toSubTasks', data).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+        	  WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
@@ -235,10 +235,10 @@ angular.module('mean.icu.data.tasksservice', [])
     function deleteTemplate(id){
         return $http.delete(ApiUri + '/templates/' + id).then(function (result) {
             NotifyingService.notify('editionData');
-        	WarningsService.setWarning(result.headers().warning);
+        	  WarningsService.setWarning(result.headers().warning);
             return result.data;
         }).then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+            return BoldedService.boldedUpdate(entity, 'tasks', 'update');
         });
     }
 
@@ -252,8 +252,8 @@ angular.module('mean.icu.data.tasksservice', [])
             },
             context: {}
         })
-        .then(entity => {
-          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+          .then(result => {
+          return result;
         });
     }
 
@@ -267,8 +267,8 @@ angular.module('mean.icu.data.tasksservice', [])
                 prev: prev.status
             },
             context: {}
-        }).then(task=>{
-          return BoldedService.boldedUpdate(task, 'tasks', 'update');
+        }).then(result => {
+          return result;
         });
     }
 
@@ -314,8 +314,8 @@ angular.module('mean.icu.data.tasksservice', [])
                 prev: prev.assign ? prev.assign.name : ''
             },
             context: {}
-        }).then(task=>{
-          return BoldedService.boldedUpdate(task, 'tasks', 'update');
+        }).then(result => {
+          return result;
         });
     }
 
@@ -331,8 +331,8 @@ angular.module('mean.icu.data.tasksservice', [])
                 prev: prev.project ? prev.project.title : ''
             },
             context: {}
-        }).then(function(result) {
-            return result;
+        }).then(result => {
+          return result;
         });
 
     }
@@ -349,8 +349,6 @@ angular.module('mean.icu.data.tasksservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(() =>{
-          return BoldedService.boldedUpdate(task, 'tasks', 'update');
         });
     }
 
