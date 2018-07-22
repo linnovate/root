@@ -15,6 +15,10 @@ angular.module('mean.icu.ui.bulkoperations', [])
             };
 
             $scope.entityType = context.main;
+
+            $scope.showForCurrentEntity = function(operation){
+                return MultipleSelectService.showButton(operation, $scope.entityType);
+            };
         }
         return {
             templateUrl: '/icu/components/bulk-operations/bulk-operations.html',

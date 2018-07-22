@@ -11,11 +11,24 @@ angular.module('mean.icu.data.multipleselectservice', [])
         let bulkPermissionsMap = {
             'status': ['editor'],
             'assign': ['editor'],
-            'watcher': ['editor'],
+            'watch': ['editor'],
             'due': ['editor'],
             'tag': ['editor'],
             'delete': ['editor'],
         };
+
+        let bulkSHowingMap = {
+            'status': ['tasks', 'projects', 'discussions', 'officeDocuments'],
+            'assign': ['tasks', 'projects', 'discussions', 'officeDocuments'],
+            'watch': [],
+            'due': ['tasks', 'projects', 'discussions', 'officeDocuments'],
+            'tag': ['tasks', 'projects', 'discussions', 'officeDocuments', 'folders'],
+            'delete': ['tasks', 'projects', 'discussions', 'officeDocuments', 'folders', 'offices', 'templateDocs']
+        };
+
+        function showButton(operation, entityType){
+            return _.includes(bulkSHowingMap[operation], entityType);
+        }
 
         let cornerStates = [
             'all',
@@ -107,6 +120,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
         return {
             bulkUpdate: bulkUpdate,
             haveBulkPerms: haveBulkPerms,
+            showButton: showButton,
             getSelected: getSelected,
             getCornerState: getCornerState,
             getNoneRecycledItems: getNoneRecycledItems,
