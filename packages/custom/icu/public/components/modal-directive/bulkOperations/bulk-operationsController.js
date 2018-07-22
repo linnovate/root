@@ -25,6 +25,8 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
     };
 
     $scope.bulkUpdate = function (type, value) {
+        if(!value)return;
+
         let idsArray = $scope.selectedItems.map(entity => entity._id);
         let changedBulkObject = {
             update: {},
