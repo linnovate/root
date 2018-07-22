@@ -4,7 +4,7 @@
     <table class="projects" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody class='containerVertical'>
             <tr data-ng-repeat="item in items| filterRecycled | filterByOptions | filterByActiveStatus:activeToggle.field | orderBy:sorting.field:sorting.isReverse"
-                data-ng-class="{ 'active': isCurrentState(item._id) }"
+                data-ng-class="{ 'active': isCurrentState(item._id), 'multipleSelected': item.selected }"
                 ng-click="onClickRow($event, item)"
                 ng-include="$parent.entityRowTpl"
                 ng-mouseover="showTick(item)"
