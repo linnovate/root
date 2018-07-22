@@ -56,7 +56,6 @@ function detailDue() {
     $scope.open = function() {
       if ($scope.checkDate()) {
         document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
-        document.getElementById('past').style.left = document.getElementById('ui-datepicker-div').style.left;
       } else {
         document.getElementById('past').style.display = 'none';
       }
