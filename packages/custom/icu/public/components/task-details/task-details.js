@@ -6,8 +6,9 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   // ==================================================== init ==================================================== //
 
-  $scope.item = entity || context.entity;
-  $scope.entity = entity || context.entity;
+    $scope.item = typeof entity === 'object'? entity : context.entity;
+    $scope.entityType = 'tasks';
+
 
   if (!$scope.item) {
     $state.go('main.tasks.byentity', {
@@ -62,7 +63,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     });
   }
 
-  // ==================================================== onChanges ==================================================== //
+    // ==================================================== onChanges ==================================================== //
 
   function navigateToDetails() {
     $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
@@ -71,7 +72,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   $scope.onStar = function(value) {
     TasksService.star($scope.item).then(function() {
-      navigateToDetails($scope.item);
+      // navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
   }
@@ -160,11 +161,11 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
           });
         }
       });
-    }
-    )
+    })
   }
 
-  $scope.recycleRestore = function(entity) {
+  $scope.recycleRestore = function() {
+    let entity = $scope.item;
     TasksService.addToParent(entity).then(()=>{
       EntityService.recycleRestore('tasks', entity._id).then(function() {
         let clonedEntity = JSON.parse(JSON.stringify(entity));
@@ -410,7 +411,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   $scope.havePermissions = function(type, enableRecycled) {
     enableRecycled = enableRecycled || !$scope.isRecycled;
-    return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+    return (PermissionsService.havePermissions($scope.item, type) && enableRecycled);
   };
 
   $scope.haveEditiorsPermissions = function() {

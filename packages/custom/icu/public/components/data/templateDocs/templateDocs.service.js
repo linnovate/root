@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.templatedocsservice', [])
-    .service('TemplateDocsService', function ($http, ApiUri, NotifyingService, Upload, WarningsService, PaginationService, $rootScope) {
+    .service('TemplateDocsService', function ($http, BoldedService, ApiUri, NotifyingService, Upload, WarningsService, PaginationService, $rootScope) {
         var EntityPrefix = '/officeTemplates';
         var data, selected;
 
@@ -16,7 +16,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
             var qs = querystring.encode({
                 start: start,
                 limit: limit,
-                sort: sort 
+                sort: sort
             });
 
             if (qs.length) {
@@ -42,7 +42,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                  NotifyingService.notify('editionData');
                  return result.status;
-             });
+             }).then(entity => BoldedService.boldedUpdate(entity, 'templateDocs', 'update'));
          }
 
 
@@ -114,7 +114,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
             return $http.post(ApiUri + EntityPrefix +'/'+ id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'templateDocs', 'update'));
         }
         function create(templateDoc) {
             return $http.post(ApiUri + EntityPrefix+"/createNew", templateDoc).then(function (result) {

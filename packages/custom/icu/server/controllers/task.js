@@ -49,7 +49,7 @@ Object.keys(task).forEach(function(methodName) {
   }
 });
 
-Date.prototype.getThisDay = function() {
+Date.prototype.getThisDay = function () {
   var date = new Date();
   // return [date.setHours(0,0,0,0), date.setHours(23,59,59,999)];
   return [
@@ -58,7 +58,7 @@ Date.prototype.getThisDay = function() {
   ];
 };
 
-Date.prototype.getWeek = function() {
+Date.prototype.getWeek = function () {
   var today = new Date(this.setHours(0, 0, 0, 0));
   var date = today.getDate() - today.getDay();
 
@@ -95,6 +95,7 @@ exports.update = function(req, res, next) {
   if(req.locals.error) {
     return next();
   }
+  req.locals.action = 'update';
   if(req.body.discussion) {
     var alreadyAdded = _(req.locals.result.discussions).any(function(d) {
       return d.toString() === req.body.discussion;
@@ -163,7 +164,7 @@ exports.tagsList = function(req, res, next) {
   // });
 };
 
-exports.getByEntity = function(req, res, next) {
+exports.getByEntity = function (req, res, next) {
 
   if(req.locals.error) {
     return next();
@@ -206,7 +207,7 @@ exports.getByEntity = function(req, res, next) {
   query.find(entityQuery);
   query.populate(options.includes);
 
-  Task.find(entityQuery).count({}, function(err, c) {
+  Task.find(entityQuery).count({}, function (err, c) {
     req.locals.data.pagination.count = c;
 
 
@@ -290,7 +291,7 @@ exports.getZombieTasks = function(req, res, next) {
       $size: 0
     },
     currentUser: req.user,
-    tType: {$ne: 'template'}
+    tType: { $ne: 'template' }
   });
   Query.populate(options.includes);
 
@@ -333,7 +334,6 @@ var byAssign = function(req, res, next) {
       next();
     });
 };
-
 
 
 function getTasksDueTodayQuery(req, callback) {
@@ -503,19 +503,19 @@ function myTasksStatistics(req, res, next) {
   }
   async.parallel([
 
-    function(callback) {
+    function (callback) {
       getTasksDueTodayQuery(req, callback);
     },
-    function(callback) {
+    function (callback) {
       getTasksDueWeekQuery(req, callback);
     },
-    function(callback) {
+    function (callback) {
       getOverDueTasksQuery(req, callback);
     },
-    function(callback) {
+    function (callback) {
       getWatchedTasksQuery(req, callback);
     }
-  ], function(err, result) {
+  ], function (err, result) {
     req.locals.result = result;
     req.locals.error = err;
     next();
@@ -549,7 +549,7 @@ exports.getWatchedTasks = function(req, res, next) {
 };
 
 
-exports.getWatchedTasksList = function(req, res, next) {
+exports.getWatchedTasksList = function (req, res, next) {
   //if (req.locals.error) {
   //  return next();
   //}
@@ -615,8 +615,8 @@ exports.getSubTasks = function(req, res, next) {
     _id: req.params.id,
     tType: {$ne: 'template'}
   }, {
-    subTasks: 1
-  })
+      subTasks: 1
+    })
     .populate('subTasks')
     .deepPopulate('subTasks.subTasks subTasks.watchers')
     .exec(function(err, task) {
@@ -680,7 +680,7 @@ exports.removeSubTask = function(req, res, next) {
   });
 };
 
-exports.populateSubTasks = function(req, res, next) {
+exports.populateSubTasks = function (req, res, next) {
   Task.populate(req.locals.result, {
     path: 'subTasks.watchers',
     model: 'User'
@@ -694,7 +694,7 @@ exports.populateSubTasks = function(req, res, next) {
 };
 
 
-exports.GetUsersWantGetMyTodayTasksMail = function() {
+exports.GetUsersWantGetMyTodayTasksMail = function () {
 
   var UserModel = require('../models/user.js');
 
@@ -731,8 +731,8 @@ function MyTasksOfTodaySummary(user) {
   var query = TaskModel.find({
     //*AsButton* assign: req.user._id,
     assign: user._id,
-    status: {$nin: ['rejected', 'done']},
-    tType: {$ne: 'template'}
+    status: { $nin: ['rejected', 'done'] },
+    tType: { $ne: 'template' }
   })
     .populate(options.includes)
     .exec(function(err, tasks) {
@@ -774,7 +774,7 @@ function MyTasksOfTodaySummary(user) {
 }
 
 
-exports.GetUsersWantGetMyWeeklyTasksMail = function() {
+exports.GetUsersWantGetMyWeeklyTasksMail = function () {
 
   var UserModel = require('../models/user.js');
 
@@ -811,8 +811,8 @@ function MyTasksOfNextWeekSummary(user) {
   var query = TaskModel.find({
     //*AsButton* assign: req.user._id,
     assign: user._id,
-    status: {$nin: ['rejected', 'done']},
-    tType: {$ne: 'template'}
+    status: { $nin: ['rejected', 'done'] },
+    tType: { $ne: 'template' }
   })
     .populate(options.includes)
     .exec(function(err, tasks) {
@@ -856,7 +856,7 @@ function MyTasksOfNextWeekSummary(user) {
 }
 
 
-exports.GetUsersWantGetGivenWeeklyTasksMail = function() {
+exports.GetUsersWantGetGivenWeeklyTasksMail = function () {
 
   var UserModel = require('../models/user.js');
 
@@ -913,7 +913,7 @@ function GivenTasksOfNextWeekSummary(user) {
 
         var WeekTasks = [];
 
-        tasks.forEach(function(task) {
+        tasks.forEach(function (task) {
           var due = new Date(task.due);
           if(due >= date[0] && due <= date[1]) {
             task.due.setDate(task.due.getDate() + 1);
@@ -934,7 +934,7 @@ function GivenTasksOfNextWeekSummary(user) {
 }
 
 
-exports.excel = function(req, res, next) {
+exports.excel = function (req, res, next) {
 
   var path = '/notes';
 

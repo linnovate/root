@@ -171,24 +171,25 @@ module.exports = function(entityName, options) {
     return deffered.promise;
   }
 
-  function read(id, user, acl) {
+
+  function read(id, user, acl, query1) {
     var query;
-    if (currentUser) {
+    if(currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
     } else {
       query = Model.find();
-
+    }
+    if(query1) {
+      query.find(query1);
+    } else {
+      query.where({
+        _id: id
+      });
     }
 
-    query.where({
-      _id: id
-    });
-    // query.where(options.conditions);
-
     query.populate(options.includes);
-
     return query.then(function(results) {
-      if (!results.length) {
+      if(!results.length) {
         // throw new Error('Entity not found');
         return {};
       }
@@ -210,7 +211,7 @@ module.exports = function(entityName, options) {
   function create(entity, user, acl) {
     console.log("CRUD CREATE") ;
 
-    //    check permsArray changes     
+    //    check permsArray changes
     let allowed1 = permissions.syncPermsArray(user,entity) ;
     if(!allowed1) {
       // console.log("CRUD NOT ALLOWED") ;
@@ -219,17 +220,17 @@ module.exports = function(entityName, options) {
 
     let deffered = q.defer();
     // check update permissions
-    let allowed2 = permissions.createContent(user,{}, entity) ;    
-    allowed2.then(function(entity) {      
+    let allowed2 = permissions.createContent(user,{}, entity) ;
+    allowed2.then(function(entity) {
       // in case we are not allowed - catch below!
 
-      // possibly handle other permission situations for next then, or reject/throw. 
+      // possibly handle other permission situations for next then, or reject/throw.
       // console.log(JSON.stringify(allowed2)) ;
 
       // deffered.resolve(entity) ;
       // return deffered.promise;
     }).then(function(value) {
-      let model = Model(entity) ;    
+      let model = Model(entity) ;
       return permissions.cloneParentPermission(entity.parent,entityNameMap[model.collection.collectionName].name.toLowerCase()) ;
     }).then(function(clonedPerms) {
 
@@ -261,7 +262,7 @@ module.exports = function(entityName, options) {
           deffered.resolve(new Model(entity).save(user).then(function(e) {
             orderController.addOrder(e, entity, Model);
             return Model.populate(e, options.includes);
-          }));all
+          }));
         }
       });
   }).catch(function(error){
@@ -277,7 +278,7 @@ module.exports = function(entityName, options) {
 
   function update(oldE, newE, user, acl) {
 
-//    check permsArray changes     
+//    check permsArray changes
     console.log("CRUD UPDATE:") ;
     // console.log(JSON.stringify(oldE)) ;
     // console.log(JSON.stringify(newE)) ;
@@ -286,7 +287,7 @@ module.exports = function(entityName, options) {
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
     }
 
-    var allowed2 = permissions.updateContent(user,oldE, newE) ;    
+    var allowed2 = permissions.updateContent(user,oldE, newE) ;
     if(!allowed2) {
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateContent) ;
     }

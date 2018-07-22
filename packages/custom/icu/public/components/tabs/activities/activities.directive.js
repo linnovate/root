@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function() {
-        function controller($scope, UsersService, DocumentsService,PermissionsService, ActivitiesService, $stateParams, $state, $timeout, context, $http, FilesService) {
+        function controller($scope, UsersService, DocumentsService,PermissionsService, ActivitiesService, BoldedService, $stateParams, $state, $timeout, context, $http, FilesService) {
             $scope.isLoading = true;
             $scope.activity = {
                 description: ''
@@ -581,12 +581,21 @@ angular.module('mean.icu.ui.tabs')
                 };
             };
 
+        $scope.download = function(path){
+            var newPath = path.substring(path.indexOf('/files'),path.length);
+             newPath = newPath.replace(/\//g, '%2f');
+            DocumentsService.getFileFtp(newPath).then(function(){
 
-            $scope.save = function() {
-                if (_.isEmpty($scope.attachments) && _.isEmpty($scope.activity.description)) return;
-                $scope.activity.issue = $scope.entityName;
-                $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
-                $scope.activity.type = $scope.attachments && $scope.attachments.length ? 'document' : 'comment';
+            });
+
+        }
+
+
+        $scope.save = function () {
+            if (_.isEmpty($scope.attachments) && _.isEmpty($scope.activity.description)) return;
+            $scope.activity.issue = $scope.entityName;
+            $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
+            $scope.activity.type = $scope.attachments && $scope.attachments.length ? 'document' : 'comment';
 
                 // $scope.activity.size = $scope.attachments[0].size;
 
@@ -633,6 +642,8 @@ angular.module('mean.icu.ui.tabs')
                     //clearForm();
                     $scope.activities.push(result);
                     clearForm();
+                }).then(()=>{
+                  BoldedService.boldedUpdate($scope.entity, $scope.entityName + 's', 'update');
                 });
             };
 

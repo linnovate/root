@@ -15,6 +15,7 @@ var permissions = require('../controllers/permissions.js');
 var logger = require('../services/logger');
 
 
+var ftp = require('../services/ftp');
 var options = {
   includes: 'assign watchers',
   defaults: {watchers: []}
@@ -1166,6 +1167,7 @@ exports.uploadFileToDocument = function(req, res, next) {
   busboy.on('file', function(fieldname, file, filename) {
     var port = config.https && config.https.port ? config.https.port : config.http.port;
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+    req.locals.data.body.saveTo = saveTo;
     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
     mkdirp(path.join(config.attachmentDir, d), function() {
@@ -1382,8 +1384,10 @@ exports.create = function(req, res, next) {
       else {
         logger.log('info', '%s create, %s', req.user.name, 'success without folder');
           User.findOne({_id: result.creator}).exec(function(err, creator) {
-              result.creator = creator;
-              res.send(result);
+            result.creator = creator;
+            // res.send(result);
+            req.locals.result = result;
+            next();
           })
       }
     });
@@ -1430,7 +1434,9 @@ exports.create = function(req, res, next) {
             logger.log('info', '%s create, %s', req.user.name, 'success with folder');
               User.findOne({_id: result.creator}).exec(function(err, creator) {
                   result.creator = creator;
-                  res.send(result);
+                  // res.send(result);
+                  req.locals.result = result;
+                  next();
               })
           }
         });

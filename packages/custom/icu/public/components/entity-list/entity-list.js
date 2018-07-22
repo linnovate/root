@@ -110,6 +110,9 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }, {
         title: 'created',
         value: 'created'
+    }, {
+      title: 'bolded',
+      value: 'bolded.bolded'
     }];
 
     if (context.entityName != "all") {
@@ -145,6 +148,16 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.context = context;
     $scope.isLoading = true;
 
+    $scope.taskList = $state.current.name.indexOf('task') !== -1;
+    $scope.excel = function() {
+        TasksService.excel();
+        var me;
+        UsersService.getMe().then(function(me1) {
+            me = me1;
+            window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
+        });
+    }
+
     $scope.onClickRow = function($event, item) {
         if ($scope.displayOnly) {
             return;
@@ -163,9 +176,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.onCreate = function() {
-        let parent;
-        if($state.current.name.indexOf("byentity") !== -1){
-            parent = $state.current.params.entityId;
+        if ($state.current.name.indexOf("byentity") !== -1) {
+            var parent = {};
+            parent.type = $state.current.params.entity;
+            parent.id = $state.current.params.entityId;
         }
         $scope.$parent.create(parent).then((result)=>{
             //             if (localStorage.getItem('type') == 'new') {
@@ -324,7 +338,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }
 
     $scope.permsToSee = function(entity) {
-        return PermissionsService.haveAnyPerms(entity);
+      return PermissionsService.haveAnyPerms(entity);
     }
 
 }

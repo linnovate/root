@@ -59,7 +59,7 @@
                             <button class="DocumentIconsLine DocumentIconsLineActivities"
                                     id="Update-icon-download">
                                 <!-- download -->
-                                <a href="{{attachment.path}}" target="window">
+                                <a ng-click="download(attachment.path)" target="window">
                                     <img tooltips tooltip-template="{{'download' |  i18next}}" class="Icons-In-DocumentLineActivities" ng-src="/icu/assets/img/icon-download.svg" src="/icu/assets/img/icon-download.svg">
                                 </a>
                             </button>

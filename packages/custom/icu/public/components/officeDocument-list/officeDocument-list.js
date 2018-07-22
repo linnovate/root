@@ -1,6 +1,6 @@
 'use strict';
 
-function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDocumentsService, MultipleSelectService, context, $stateParams, EntityService) {
+function OfficeDocumentListController($scope, $state, BoldedService, officeDocuments, OfficeDocumentsService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = officeDocuments.data || officeDocuments;
 
@@ -11,10 +11,14 @@ function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDoc
         return OfficeDocumentsService.update(item);
     }
 
-    $scope.create = function(parentsFolder) {
+  $scope.getBoldedClass = function(entity){
+    return BoldedService.getBoldedClass(entity, 'officeDocuments');
+  };
+
+    $scope.create = function(parent) {
         var data = {};
-        if(parentsFolder){
-            data.folder = parentsFolder;
+        if(parent){
+            data.folder = parent.id;
         }
         //         if ($stateParams.entity == 'folder') {
         //             data['folder'] = $stateParams.entityId;
@@ -72,11 +76,23 @@ function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDoc
     //         });
     //     }
 
-    $scope.loadMore = function(start, LIMIT, sort) {
-        return OfficeDocumentsService.getAll(start, LIMIT, sort).then(function(docs) {
-            $scope.items.concat(docs);
-            return $scope.items;
-        });
+    $scope.order = {
+        field: $stateParams.sort || 'created',
+        order: 1
+    };
+
+    $scope.loadMore = function() {
+        var LIMIT = 25 ;
+        var start = $scope.items.length;
+        var sort = $scope.order.field;
+        $scope.delayedLoad(start, LIMIT, sort);
+    };
+    $scope.delayedLoad = _.debounce(loadNext, 150);
+    function loadNext(start, LIMIT, sort){
+        OfficeDocumentsService.getAll(start , LIMIT , sort)
+            .then(function(docs){
+                for(let i = 0; i < docs.length; i++){ $scope.items.push(docs[i]) }
+            });
     }
 }
 

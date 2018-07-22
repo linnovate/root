@@ -1,8 +1,11 @@
 'use strict';
 
-function OfficeListController($scope, $state, offices, OfficesService, MultipleSelectService, context, $stateParams, EntityService) {
+function OfficeListController($scope, $state, offices, BoldedService, OfficesService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = offices.data || offices;
+
+    $scope.loadNext = offices.next;
+    $scope.loadPrev = offices.prev;
 
     $scope.entityName = 'offices';
     $scope.entityRowTpl = '/icu/components/office-list/office-row.html';
@@ -15,6 +18,10 @@ function OfficeListController($scope, $state, offices, OfficesService, MultipleS
 
     $scope.update = function(item) {
         return OfficesService.update(item);
+    };
+
+    $scope.getBoldedClass = function(entity){
+      return BoldedService.getBoldedClass(entity, 'offices');
     };
 
     $scope.create = function(item) {
@@ -49,11 +56,27 @@ function OfficeListController($scope, $state, offices, OfficesService, MultipleS
     }
 
     $scope.loadMore = function(start, LIMIT, sort) {
-        return OfficesService.getAll(start, LIMIT, sort).then(function(docs) {
-            $scope.items.concat(docs);
-            return $scope.items;
-        });
-    }
+        if (!$scope.isLoading && $scope.loadNext) {
+            $scope.isLoading = true;
+            $scope.loadNext().then(function (offices) {
+                let officesArray = offices.data;
+
+                _(officesArray).each(function (p) {
+                    p.__state = creatingStatuses.Created;
+                });
+
+                if (officesArray.length) {
+                    for(let i = 0; i < officesArray.length; i++){
+                        $scope.items.push(officesArray[i]);
+                    }
+                }
+
+                $scope.loadNext = offices.next;
+                $scope.loadPrev = offices.prev;
+                $scope.isLoading = false;
+            });
+        }
+    };
 }
 
 angular.module('mean.icu.ui.officelist', []).controller('OfficeListController', OfficeListController);

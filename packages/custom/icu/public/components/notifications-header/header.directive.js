@@ -18,6 +18,10 @@ angular.module('mean.icu.ui.notificationsheader', [])
             // Get the saved Notifications of the user, and show it to him
             var getNotifications = function() {
 
+            UsersService.getMe().then((result)=>{
+                return $scope.me = result;
+            })
+            .then(()=>{
                 // Get the saved Notifications of the user, and show it to him
                 NotificationsService.getByUserId($scope.me._id).then(function(response) {
                     $scope.data = NotificationsService.data;
@@ -36,6 +40,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                         }
                     });
                 });
+            })
             };
 
             getNotifications();
@@ -228,7 +233,6 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     result.created=new Date(result.created);
                     $scope.officeDocuments.push(result);
                     params.id = result._id;
-                    debugger;
                     $state.go(state, params, {
                         reload: true
                     });

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-.service('ProjectsService', function(ApiUri, $http, NotifyingService, PaginationService, MeanSocket, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('ProjectsService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, MeanSocket, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/projects';
     var data, selected;
 
@@ -115,9 +115,7 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev.assign ? prev.assign.name : ''
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function getSubProjects(projectId) {
@@ -128,12 +126,12 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     function create(project) {
-        return $http.post(ApiUri + EntityPrefix, project)
-            .then(function(result) {
-                WarningsService.setWarning(result.headers().warning);
-                NotifyingService.notify('editionData');
-                return result.data;
-            });
+      return $http.post(ApiUri + EntityPrefix, project)
+        .then(function(result) {
+            WarningsService.setWarning(result.headers().warning);
+            NotifyingService.notify('editionData');
+            return result.data;
+        });
     }
 
 
@@ -146,38 +144,40 @@ angular.module('mean.icu.data.projectsservice', [])
             context.type = 'project';
         }
 
-        return $http.put(ApiUri + EntityPrefix + '/' + project._id, project).then(function(result) {
-        	WarningsService.setWarning(result.headers().warning);
-            if (project.subProjects
-                && project.subProjects.length
-                && project.subProjects[project.subProjects.length-1]
-                && !project.subProjects[project.subProjects.length-1]._id) {
-                var subProject = project.subProjects[project.subProjects.length-1];
-            }
-            if(TasksService.data) {
-                TasksService.data.forEach(function(task) {
-                    if (task.project && task.project._id === project._id) {
-                        task.project = result.data;
-                    }
-                });
-            }
-            if(TasksService.tabData) {
-                TasksService.tabData.forEach(function(task) {
-                    if (task.project && task.project._id === project._id) {
-                        task.project = result.data;
-                    }
-                });
-            }
-            if (result.data && result.data.subProjects)
-            for (var i = 0; i < result.data.subProjects.length; i++) {
-                if(result.data.subProjects[i].due) {
-                    result.data.subProjects[i].due = new Date(result.data.subProjects[i].due);
-                }
-            }
-            if (subProject) result.data.subProjects.push(subProject);
-            NotifyingService.notify('editionData');
-            return result.data;
-        });
+        return $http.put(ApiUri + EntityPrefix + '/' + project._id, project)
+          .then(function(result) {
+            WarningsService.setWarning(result.headers().warning);
+              if (project.subProjects
+                  && project.subProjects.length
+                  && project.subProjects[project.subProjects.length-1]
+                  && !project.subProjects[project.subProjects.length-1]._id) {
+                  var subProject = project.subProjects[project.subProjects.length-1];
+              }
+              if(TasksService.data) {
+                  TasksService.data.forEach(function(task) {
+                      if (task.project && task.project._id === project._id) {
+                          task.project = result.data;
+                      }
+                  });
+              }
+              if(TasksService.tabData) {
+                  TasksService.tabData.forEach(function(task) {
+                      if (task.project && task.project._id === project._id) {
+                          task.project = result.data;
+                      }
+                  });
+              }
+              if (result.data && result.data.subProjects)
+              for (var i = 0; i < result.data.subProjects.length; i++) {
+                  if(result.data.subProjects[i].due) {
+                      result.data.subProjects[i].due = new Date(result.data.subProjects[i].due);
+                  }
+              }
+              if (subProject) result.data.subProjects.push(subProject);
+              NotifyingService.notify('editionData');
+
+              return result.data;
+          }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function remove(id) {
@@ -185,7 +185,7 @@ angular.module('mean.icu.data.projectsservice', [])
             NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function star(project) {
@@ -194,7 +194,7 @@ angular.module('mean.icu.data.projectsservice', [])
             	WarningsService.setWarning(result.headers().warning);
                 project.star = !project.star;
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function WantToCreateRoom(project) {
@@ -231,7 +231,7 @@ angular.module('mean.icu.data.projectsservice', [])
         return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
             return result.data;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function template2subProjects(templateId, data){
@@ -266,9 +266,8 @@ angular.module('mean.icu.data.projectsservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+
     }
 
 
@@ -282,9 +281,8 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev.due
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+
 
     }
 
@@ -299,9 +297,8 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev.status
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+
     }
 
 
@@ -314,9 +311,8 @@ angular.module('mean.icu.data.projectsservice', [])
                 status: project.color
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+
     }
 
     function updateTitle(project, prev, type) {
@@ -331,9 +327,7 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(() => BoldedService.boldedUpdate(project, 'projects', 'update'));
     }
 
 

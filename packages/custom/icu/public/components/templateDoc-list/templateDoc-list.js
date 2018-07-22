@@ -1,16 +1,23 @@
 'use strict';
 
-function TemplateDocListController($scope, $state, templateDocs, TemplateDocsService, MultipleSelectService, context, $stateParams, EntityService) {
+function TemplateDocListController($scope, $state, templateDocs, BoldedService, TemplateDocsService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = templateDocs.data || templateDocs;
 
     $scope.entityName = 'templateDocs';
     $scope.entityRowTpl = '/icu/components/templateDoc-list/templateDoc-row.html';
 
+    $scope.loadNext = templateDocs.next;
+    $scope.loadPrev = templateDocs.prev;
+
     var creatingStatuses = {
         NotCreated: 0,
         Creating: 1,
         Created: 2
+    };
+
+    $scope.getBoldedClass = function(entity){
+      return BoldedService.getBoldedClass(entity, 'templateDocs');
     };
 
     $scope.create = function(item) {
@@ -60,10 +67,28 @@ function TemplateDocListController($scope, $state, templateDocs, TemplateDocsSer
     }
 
     $scope.loadMore = function(start, LIMIT, sort) {
-        return TemplateDocsService.getAll(start, LIMIT, sort).then(function(docs) {
-            $scope.items.concat(docs);
-            return $scope.items;
-        });
+        if (!$scope.isLoading && $scope.loadNext) {
+            $scope.isLoading = true;
+            $scope.loadNext().then(function(items) {
+
+                _(items.data).each(function(p) {
+                    p.__state = creatingStatuses.Created;
+                });
+
+                var offset = $scope.displayOnly ? 0 : 1;
+
+                if (items.data.length) {
+                    var index = $scope.items.length - offset;
+                    var args = [index, 0].concat(items.data);
+
+                    [].splice.apply($scope.items, args);
+                }
+
+                $scope.loadNext = items.next;
+                $scope.loadPrev = items.prev;
+                $scope.isLoading = false;
+            });
+        }
     }
 }
 

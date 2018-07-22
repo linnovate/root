@@ -6,6 +6,11 @@ var mongoose = require('mongoose'),
   request = require('request');
 
 var TaskSchema = new Schema({
+  customId: {
+    type: String,
+    unique: false,
+    dropDups: true
+  },
   created: {
     type: Date,
     default: Date.now
@@ -47,7 +52,14 @@ var TaskSchema = new Schema({
       ref: 'User'
     }
   ],
-
+  bolded: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      bolded: Boolean,
+      lastViewed: Date
+    }
+  ],
   permissions: [
     {
       _id: false,

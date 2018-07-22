@@ -96,7 +96,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   }
 
   $scope.onStar = function(value) {
-    OfficeDocumentsService.star($scope.item).then(function() {
+    OfficeDocumentsService.star($scope.item).then(function () {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
@@ -111,12 +111,12 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
     if ($scope.item.assign != null) {
       // check the assignee is not a watcher already
-      let filtered = $scope.item.watchers.filter(watcher=>{
-        return watcher._id == $scope.item.assign
-      }
+      let filtered = $scope.item.watchers.filter(watcher => {
+          return watcher._id == $scope.item.assign
+        }
       );
 
-      let index = $scope.item.watchers.findIndex(function(watcher) {
+      let index = $scope.item.watchers.findIndex(function (watcher) {
         console.log("watcher", watcher);
         return watcher === $scope.item.assign;
       });
@@ -130,7 +130,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     }
 
     OfficeDocumentsService.updateDocument($scope.item._id, json);
-    OfficeDocumentsService.updateAssign($scope.item, backupEntity).then(function(result) {
+    OfficeDocumentsService.updateAssign($scope.item, backupEntity).then(function (result) {
       backupEntity = JSON.parse(JSON.stringify($scope.item));
       ActivitiesService.data = ActivitiesService.data || [];
       ActivitiesService.data.push(result);
@@ -156,10 +156,10 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.onTags = function(value) {
     var context = {
-        name: 'tags',
-        oldVal: $scope.item.tags,
-        newVal:  value,
-        action: 'changed'
+      name: 'tags',
+      oldVal: $scope.item.tags,
+      newVal: value,
+      action: 'changed'
     };
     $scope.update($scope.item, context);
   }
@@ -173,14 +173,14 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 //     if (!$scope.item.folder) {
 //       $scope.item.watchers = $scope.item.folder.watchers.concat($scope.item.watchers);
 //     }
-    $scope.item.watchers = _.map(_.groupBy($scope.item.watchers, function(doc) {
+    $scope.item.watchers = _.map(_.groupBy($scope.item.watchers, function (doc) {
       return doc._id || doc;
-    }), function(grouped) {
+    }), function (grouped) {
       return grouped[0];
     });
     json.watchers = $scope.item.watchers;
-    OfficeDocumentsService.updateDocument($scope.item._id, json).then(function(res) {
-      OfficeDocumentsService.updateEntity($scope.item, backupEntity).then(function(result) {
+    OfficeDocumentsService.updateDocument($scope.item._id, json).then(function (res) {
+      OfficeDocumentsService.updateEntity($scope.item, backupEntity).then(function (result) {
         if (folderId == undefined) {
           delete $scope.item.folder;
           $scope.signatures = undefined;

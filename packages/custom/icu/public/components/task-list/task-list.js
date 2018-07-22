@@ -1,6 +1,11 @@
 'use strict';
 
-function TaskListController($scope, $timeout, $state, tasks, DiscussionsService, TasksService, ProjectsService, context, $stateParams, EntityService, MultipleSelectService) {
+function TaskListController($scope, $timeout, $state, tasks, BoldedService, MultipleSelectService DiscussionsService, TasksService, ProjectsService, context, UsersService) {
+
+    let me;
+    UsersService.getMe().then(function(result) {
+        me = result;
+    });
 
     $scope.items = tasks.data || tasks;
 
@@ -29,11 +34,15 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
         Created: 2
     };
 
+    $scope.getBoldedClass = function(entity){
+        return BoldedService.getBoldedClass(entity, 'tasks');
+    };
+
     $scope.update = function(item) {
         return TasksService.update(item);
-    }
+    };
 
-    $scope.create = function(item) {
+    $scope.create = function(parent) {
         var newItem = {
             title: '',
             watchers: [],
@@ -41,6 +50,9 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
             __state: creatingStatuses.NotCreated,
             __autocomplete: false
         };
+        if(parent){
+            newItem[parent.type] = parent.id;
+        }
         return TasksService.create(newItem).then(function(result) {
             $scope.items.push(result);
             TasksService.data.push(result);
@@ -87,15 +99,6 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
                 $scope.isLoading = false;
             });
         }
-    }
-
-    $scope.excel = function() {
-        TasksService.excel();
-        var me;
-        UsersService.getMe().then(function(me1) {
-            me = me1;
-            window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
-        });
     }
 
     $scope.getFilter = function() {

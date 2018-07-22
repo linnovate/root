@@ -219,6 +219,8 @@ angular.module('mean.icu.ui.subtaskslistdirective', []).directive('icuSubTaskLis
     }
 
     $scope.changeState = function(subTask) {
+        console.log($scope.currentContext);
+        // console.log(context);
       $state.go('main.tasks.byparent.details', {
         id: subTask._id,
         entityId: subTask.parent._id || subTask.parent,

@@ -15,7 +15,7 @@
     ng-keydown="onKeydown($event, $index)"
     ng-blur="bluring(item, $event)"
     ng-focus="focusing(item)"
-    ng-class="{'noFocus':!item.focus}"
+    ng-class="[getBoldedClass(item), {'noFocus': !item.focus}]"
 ></td>
 
 <td class="folder">

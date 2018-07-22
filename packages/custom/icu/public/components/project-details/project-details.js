@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, tasks, people, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
+function ProjectDetailsController($scope, $rootScope, entity, people, tasks, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
 
   // ==================================================== init ==================================================== //
 
@@ -21,8 +21,6 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
     $state.go('.activities');
   }
 
-  $scope.entity = entity || context.entity;
-  $scope.tasks = tasks.data || tasks;
   $scope.items = projects.data || projects;
 
   $scope.editorOptions = {
@@ -75,15 +73,15 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
 
   $scope.onStar = function(value) {
     ProjectsService.star($scope.item).then(function() {
-      navigateToDetails($scope.item);
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
+    navigateToDetails($scope.item);
+    // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
-  }
+  };
 
   $scope.onAssign = function(value) {
-    $scope.item.assign = value;
-    $scope.updateAndNotify($scope.item);
-  }
+      $scope.item.assign = value;
+      $scope.updateAndNotify($scope.item);
+  };
 
   $scope.onDateDue = function(value) {
     $scope.item.due = value;
@@ -91,12 +89,12 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
       $scope.item.discussion = context.entityId;
     }
 
-    ProjectsService.updateDue($scope.item, backupEntity).then(function(result) {
+    ProjectsService.updateDue($scope.item, backupEntity).then(function (result) {
       backupEntity = JSON.parse(JSON.stringify($scope.item));
       ActivitiesService.data.push(result);
     });
 
-    ProjectsService.update($scope.item).then(function(result) {
+    ProjectsService.update($scope.item).then(function (result) {
       if (context.entityName === 'project') {
         var projId = result.project ? result.project._id : undefined;
         if (projId !== context.entityId) {
@@ -109,33 +107,32 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
         }
       }
     });
-  }
+  };
 
   $scope.onStatus = function(value) {
     $scope.item.status = value;
     $scope.update($scope.item, {
       name: 'status'
     })
-  }
+  };
 
   $scope.onColor = function(value) {
     $scope.update($scope.item, value);
-  }
+  };
 
   $scope.onWantToCreateRoom = function() {
     $scope.item.WantRoom = true;
-
     $scope.update($scope.item, context);
 
-    ProjectsService.WantToCreateRoom($scope.item).then(function() {
+    ProjectsService.WantToCreateRoom($scope.item).then(function () {
       navigateToDetails($scope.item);
     });
-  }
+  };
 
   $scope.onTags = function(value) {
-    $scope.item.tags = value;
-    $scope.update($scope.item);
-  }
+      $scope.item.tags = value;
+      $scope.update($scope.item);
+  };
 
   // ==================================================== Menu events ==================================================== //
 
@@ -216,7 +213,6 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
         action: 'renamed'
       };
       $scope.delayedUpdate($scope.item, newContext);
-
       ProjectsService.currentProjectName = $scope.item.title;
     }
   });
@@ -285,17 +281,17 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
     $rootScope.$broadcast('refreshList');
   }
 
-  $scope.update = function(item, context) {
-    if (context.name === 'color') {
+  $scope.update = function(item, type) {
+    if (type.name === 'color') {
         item.color = context.newVal;
     }
     ProjectsService.update(item, context).then(function(res) {
       if (ProjectsService.selected && res._id === ProjectsService.selected._id) {
-        if (context.name === 'title') {
+        if (type === 'title') {
           ProjectsService.selected.title = res.title;
         }
       }
-      switch (context.name) {
+      switch (type) {
       case 'status':
         if (context.entityName === 'discussion') {
           item.discussion = context.entityId;
@@ -317,7 +313,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
         break;
       case 'title':
       case 'description':
-        ProjectsService.updateTitle(item, backupEntity, context.name).then(function(result) {
+        ProjectsService.updateTitle(item, backupEntity, type).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
@@ -375,16 +371,16 @@ function ProjectDetailsController($scope, $rootScope, entity, tasks, people, pro
   $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
 
   $scope.permsToSee = function() {
-    return PermissionsService.haveAnyPerms($scope.entity);
+    return PermissionsService.haveAnyPerms($scope.item);
   }
 
   $scope.havePermissions = function(type, enableRecycled) {
     enableRecycled = enableRecycled || !$scope.isRecycled;
-    return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
+    return (PermissionsService.havePermissions($scope.item, type) && enableRecycled);
   }
 
   $scope.haveEditiorsPermissions = function() {
-    return PermissionsService.haveEditorsPerms($scope.entity);
+    return PermissionsService.haveEditorsPerms($scope.item);
   }
 
 }

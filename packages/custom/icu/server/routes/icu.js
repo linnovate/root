@@ -2,6 +2,7 @@
 
 var project = require('../controllers/project');
 var task = require('../controllers/task');
+var customData = require('../controllers/customData');
 var comment = require('../controllers/comments');
 var discussion = require('../controllers/discussion');
 var profile = require('../controllers/profile');
@@ -31,6 +32,7 @@ var config = require('meanio').loadConfig(),
 var order = require('../controllers/order');
 var express = require('express');
 var ftp = require('../services/ftp.js');
+var boldedService = require('../services/bolded.js');
 var bulk = require('../controllers/bulk');
 
 //update mapping - OHAD
@@ -68,9 +70,14 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs|new)*').all(circles.acl());
+  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs|new|customData)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
+   //app.use('/api/files', express.static(config.attachmentDir));
+
+  //app.get('/files', attachments.getByPath, error, attachments.download);
+
+
   app.use('/api/Excelfiles', express.static(config.attachmentDir));
 
 
@@ -87,6 +94,9 @@ module.exports = function(Icu, app) {
   app.route('/api/notification1/:id([0-9a-fA-F]{24})')
     .put(notification.updateDropDown);
   //END Notification READ - OHAD
+
+  app.route('/api/bolded')
+    .post(boldedService.boldUpdate);
 
   //recycle && recycleRestore
   app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/recycle')
@@ -122,7 +132,7 @@ module.exports = function(Icu, app) {
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
   //.all(auth.requiresLogin, permission.echo)
-    .post(project.create, project.updateParent, notification.sendNotification, updates.created)
+    .post(project.create, project.updateParent, notification.sendNotification, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, project.all, project.populateSubProjects, star.isStarred, pagination.formResponse);
 
 
@@ -144,7 +154,7 @@ module.exports = function(Icu, app) {
   app.route('/api/offices*').all(entity('offices'));
   app.route('/api/offices')
   //.all(auth.requiresLogin, permission.echo)
-    .post(office.create, updates.created)
+    .post(office.create, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, office.all, star.isStarred, pagination.formResponse);
   app.route('/api/offices/:id([0-9a-fA-F]{24})')
     .get(office.read, star.isStarred)
@@ -161,7 +171,7 @@ module.exports = function(Icu, app) {
   app.route('/api/folders*').all(entity('folders'));
   app.route('/api/folders')
   //.all(auth.requiresLogin, permission.echo)
-    .post(folder.create, updates.created)
+    .post(folder.create, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, folder.all, star.isStarred, pagination.formResponse);
   app.route('/api/folders/:id([0-9a-fA-F]{24})')
     .get(folder.read, star.isStarred)
@@ -181,7 +191,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
-    .post(task.create, task.updateParent, notification.sendNotification, updates.created)
+    .post(task.create, task.updateParent, notification.sendNotification, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, task.all, task.populateSubTasks, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
@@ -193,6 +203,7 @@ module.exports = function(Icu, app) {
     .delete(star.unstarEntity, task.read, task.removeSubTask, task.destroy);
   app.route('/api/tasks/byAssign')
     .get(task.byAssign, task.populateSubTasks);
+
 
   // app.route('/api/tasks/subtasks')
   // 	.post(task.addSubTasks)
@@ -266,7 +277,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/discussions*').all(entity('discussions'));
   app.route('/api/discussions')
-    .post(discussion.create, updates.created)
+    .post(discussion.create, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, discussion.all, star.isStarred, pagination.formResponse);
   app.route('/api/history/discussions/:id([0-9a-fA-F]{24})')
     .get(discussion.readHistory);
@@ -364,7 +375,7 @@ module.exports = function(Icu, app) {
     .put(documents.update, star.isStarred, attachments.sign)
     .delete(documents.deleteDocument);
   app.route('/api/officeDocuments/create')
-    .post(documents.create);
+    .post(documents.create, boldedService.syncBoldUsers);
   app.route('/api/officeDocuments/addSerialTitle')
     .post(documents.addSerialTitle);
 

@@ -35,9 +35,9 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   // ==================================================== onChanges ==================================================== //
 
   $scope.onCategory = function(value) {
-    var json ={
-        'name':'office',
-        'newVal': value && value._id,
+    var json = {
+      'name': 'office',
+      'newVal': value && value._id,
     };
     TemplateDocsService.updateTemplateDoc($scope.item._id, json);
   }
@@ -95,7 +95,7 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   $scope.updateDescription = function(item, newContext) {
     TemplateDocsService.updateTemplateDoc(item._id, newContext);
   }
-  
+
   $scope.delayedUpdateTitle = _.debounce($scope.updateTitle, 500);
   $scope.delayedUpdateDesc= _.debounce($scope.updateDescription, 500);
 

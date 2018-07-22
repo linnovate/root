@@ -59,7 +59,7 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
   }
 
   $scope.onStar = function(value) {
-    OfficesService.star($scope.item).then(function() {
+    OfficesService.star($scope.item).then(function () {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
@@ -76,7 +76,7 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
 
     OfficesService.WantToCreateRoom($scope.item).then(function() {
       navigateToDetails($scope.item);
-    });
+    })
   }
 
   // ==================================================== Menu events ==================================================== //

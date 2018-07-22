@@ -296,6 +296,7 @@ exports.uploadTemplate = function(req, res, next) {
   busboy.on('file', function(fieldname, file, filename) {
     var port = config.https && config.https.port ? config.https.port : config.http.port;
     var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+    req.locals.data.body.saveTo = saveTo;
     var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
     var fileType = path.extname(filename).substr(1).toLowerCase();
     mkdirp(path.join(config.attachmentDir, d), function() {

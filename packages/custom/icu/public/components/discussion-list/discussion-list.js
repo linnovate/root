@@ -1,6 +1,6 @@
 'use strict';
 
-function DiscussionListController($scope, $state, discussions, DiscussionsService, context, MultipleSelectService, $stateParams, EntityService) {
+function DiscussionListController($scope, $state, discussions, DiscussionsService, context, BoldedService, MultipleSelectService, $stateParams, EntityService) {
 
     $scope.items = discussions.data || discussions;
     $scope.loadNext = discussions.next;
@@ -73,6 +73,10 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
                 $scope.isLoading = false;
             });
         }
+    };
+
+    $scope.getBoldedClass = function(entity){
+      return BoldedService.getBoldedClass(entity, 'discussions');
     };
 
     $scope.getDate = function(discussion) {
