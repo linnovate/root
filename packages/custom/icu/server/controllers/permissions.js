@@ -433,7 +433,7 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
   // console.log("// check if the added watcher is the assignee:") ;
   // console.log(JSON.stringify(newDoc)) ;
   let oldWatchers = oldDoc.watchers instanceof Array ? oldDoc.watchers.map(function (item) {
-    return String(item._doc._id) ;
+    return String(item._id) ;
   }) : [];
 
   let newWatchers = oldDoc.watchers instanceof Array ? newDoc.watchers.map(function (item) {

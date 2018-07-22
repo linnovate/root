@@ -1973,36 +1973,6 @@ exports.signNew = function(req, res, next) {
 };
 
 
-// update user document received.
-exports.receiveDocument = function(req, res, next) {
-  officeDocument  = req.body.officeDocument;
-  var id = req.params.id;
-  Document.update({_id: officeDocument.ref}, {$push: {readBy: {date: Date.now(), user: req.user._id}}}, function(error, result) {
-    if(error) {
-      //TBD
-      logger.log('error', '%s receiveDocument, %s', req.user.name, '  Document.update', {error: error.message});
-    }
-    else {
-      logger.log('info', '%s receiveDocument, %s', req.user.name, 'success');
-    }
-  });
-
-  Document.update({_id: id}, {$set: {viewed: true}}, function(error, result) {
-    if(error) {
-      logger.log('error', '%s receiveDocument, %s', req.user.name, '  Document.update', {error: error.message});
-
-      res.send(error);
-    }
-    else {
-      logger.log('info', '%s receiveDocument, %s', req.user.name, 'success');
-
-      res.send('ok');
-    }
-  });
-};
-
-
-
 exports.sendDocument = function(req, res, next) {
   var officeDocument = req.body.officeDocument;
   var sendingForm = req.body.sendingForm;

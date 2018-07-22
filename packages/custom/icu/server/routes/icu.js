@@ -23,7 +23,7 @@ var config = require('meanio').loadConfig()
 let documentPlugins = require('../controllers/plugins/documents');
 // creates new document plugin middleware
 let documentsPlugin = new documentPlugins[config.documentPlugin];
-console.log("documentsPlugin.keys", documentsPlugin.keys) ;
+console.log("documentsPlugin.keys", Object.keys(documentsPlugin)) ;
 var templateDocs = require('../controllers/templateDocs');
 var signatures = require('../controllers/signatures');
 var authorization = require('../middlewares/auth.js');
@@ -366,11 +366,11 @@ module.exports = function(Icu, app) {
   /* OFFICEDOCUMENTS */
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
-    .post(documentsPlugin.type,documentsPlugin.create)
+    .post(documentsPlugin.create.bind(documentsPlugin))
     .get(documentsPlugin.all);
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
     .get(documentsPlugin.read, star.isStarred)    
-    .put(documentsPlugin.read,documentsPlugin.update, star.isStarred, attachments.sign)
+    .put(documentsPlugin.read, documentsPlugin.update.bind(documentsPlugin), star.isStarred, attachments.sign)
     .delete(documentsPlugin.delete);
 
   app.route('/api/officeDocuments/addSerialTitle')
@@ -393,7 +393,7 @@ module.exports = function(Icu, app) {
 
   // document sending operations (sentToDocument, distributedDocument, receiveDocument, readByDocument)
   app.route('/api/officeDocuments/receiveDocument/:id([0-9a-fA-F]{24})')
-    .post(documents.receiveDocument);
+    .post(documentsPlugin.receiveDocument);
 
   app.route('/api/officeDocuments/distributedDocument/:id([0-9a-fA-F]{24})')
     .post(documentsPlugin.distributedDocument);
