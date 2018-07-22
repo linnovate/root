@@ -16,6 +16,10 @@ angular.module('mean.icu.ui.bulkoperations')
                     $scope.selectedItems = MultipleSelectService.getSelected();
                 }
             };
+
+            $scope.$on('refreshList', function (event) {
+                $scope.cornerState = MultipleSelectService.getCornerState();
+            });
         }
 
         return {
