@@ -42,7 +42,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
                  NotifyingService.notify('editionData');
                  return result.status;
-             });
+             }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
          }
 
          function deleteDocumentFile(id){
@@ -175,10 +175,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         return $http.post(ApiUri + EntityPrefix + "/" + id, data).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
             return result.data;
-        })
-        .then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
     }
 
         function createDocument(data) {
@@ -193,10 +190,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return $http.post(ApiUri + EntityPrefix + "/" +entity._id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
-            })
-            .then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
-            })
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function uploadFileToDocument(data,file){
@@ -218,7 +212,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return $http.post(ApiUri + EntityPrefix + "/uploadDocumentFromTemplate" , json).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function star(officeDocument) {
@@ -227,7 +221,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     WarningsService.setWarning(result.headers().warning);
                     officeDocument.star = !officeDocument.star;
                     return result.data;
-                });
+                }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function getStarred() {
@@ -247,9 +241,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     userObj: watcher
                 },
                 context: {}
-            }).then(entity => {
-              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
-            })
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function updateWatcherPerms(officeDocument, me, watcher, type) {
@@ -264,9 +256,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     permissions: officeDocument.permissions
                 },
                 context: {}
-            }).then(function(result) {
-                return result;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function updateStatus(officeDocument, prev) {
@@ -279,9 +269,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.status
                 },
                 context: {}
-            }).then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
-            })
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function uploadEmpty(officeDocument){
@@ -301,9 +289,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.created
                 },
                 context: {}
-            }).then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
-            })
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function sendDocument(sendingForm, officeDocument) {
@@ -314,7 +300,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return $http.post(ApiUri + EntityPrefix +  '/sendDocument', data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function receiveDocument(officeDocument) {
@@ -324,7 +310,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return $http.post(ApiUri + EntityPrefix +  '/receiveDocument/' + officeDocument._id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function distributedDocument(officeDocument) {
@@ -334,7 +320,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return $http.post(ApiUri + EntityPrefix +  '/distributedDocument/' + officeDocument._id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function readByDocument(officeDocument) {
@@ -352,7 +338,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             };
             return $http.post(ApiUri + EntityPrefix +  '/sentToDocument/' + officeDocument._id, data).then(function (result) {
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
 
@@ -371,9 +357,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.assign ? prev.assign.name : ''
                 },
                 context: {}
-            }).then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
-            })
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
         function updateEntity(officeDocument, prev) {
@@ -388,9 +372,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev.folder ? prev.folder.title : ''
                 },
                 context: {}
-            }).then(function(result) {
-                return result;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
 
         }
 
@@ -406,9 +388,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     prev: prev[type]
                 },
                 context: {}
-            }).then(function(result) {
-                return result;
-            });
+            }).then(() => BoldedService.boldedUpdate(officeDocument, 'officeDocuments', 'update'));
         }
 
         return {

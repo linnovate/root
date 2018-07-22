@@ -91,10 +91,7 @@ angular.module('mean.icu.data.officesservice', [])
                 });
             }
             return result.data;
-        })
-        .then(entity => {
-          return BoldedService.boldedUpdate(entity, 'offices', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'offices', 'update'));
     }
 
     function remove(id) {
@@ -102,7 +99,7 @@ angular.module('mean.icu.data.officesservice', [])
             NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'offices', 'update'));
     }
 
     function star(office) {
@@ -111,7 +108,7 @@ angular.module('mean.icu.data.officesservice', [])
             	WarningsService.setWarning(result.headers().warning);
                 office.star = !office.star;
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'offices', 'update'));
     }
 
     function WantToCreateRoom(office) {
@@ -139,9 +136,7 @@ angular.module('mean.icu.data.officesservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'offices', 'update'));
     }
 
     function updateColor(office, me) {
@@ -153,9 +148,7 @@ angular.module('mean.icu.data.officesservice', [])
                 status: office.color
             },
             context: {}
-        }).then(entity => {
-          return BoldedService.boldedUpdate(entity, 'offices', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'offices', 'update'));
     }
 
     function updateTitle(office, prev, type) {
@@ -170,9 +163,7 @@ angular.module('mean.icu.data.officesservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(() => BoldedService.boldedUpdate(office, 'offices', 'update'));
     }
 
     return {

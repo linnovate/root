@@ -136,7 +136,7 @@ angular.module('mean.icu.data.tasksservice', [])
             })
             .then(entity => {
                 return BoldedService.boldedUpdate(entity, 'tasks', 'update');
-            })
+            });
     }
 
     function star(task) {
@@ -145,7 +145,9 @@ angular.module('mean.icu.data.tasksservice', [])
             	WarningsService.setWarning(result.headers().warning);
                 task.star = !task.star;
                 return result.data;
-            })
+            }).then(entity=>{
+              return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+            });
     }
 
     function getStarred() {
@@ -160,6 +162,8 @@ angular.module('mean.icu.data.tasksservice', [])
             NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
+        }).then(entity=>{
+          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
         });
     }
 
@@ -216,6 +220,8 @@ angular.module('mean.icu.data.tasksservice', [])
         return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
+        }).then(entity=>{
+          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
         });
     }
 
@@ -231,6 +237,8 @@ angular.module('mean.icu.data.tasksservice', [])
             NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
+        }).then(entity=>{
+          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
         });
     }
 
@@ -246,7 +254,7 @@ angular.module('mean.icu.data.tasksservice', [])
         })
         .then(entity => {
           return BoldedService.boldedUpdate(entity, 'tasks', 'update');
-        })
+        });
     }
 
     function updateStatus(task, prev) {
@@ -261,7 +269,7 @@ angular.module('mean.icu.data.tasksservice', [])
             context: {}
         }).then(task=>{
           return BoldedService.boldedUpdate(task, 'tasks', 'update');
-        })
+        });
     }
 
     function updateDue(task, prev) {
@@ -274,8 +282,8 @@ angular.module('mean.icu.data.tasksservice', [])
                 prev: prev.due
             },
             context: {}
-        }).then(function(result) {
-            return result;
+        }).then(entity=>{
+          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
         });
 
     }
@@ -308,7 +316,7 @@ angular.module('mean.icu.data.tasksservice', [])
             context: {}
         }).then(task=>{
           return BoldedService.boldedUpdate(task, 'tasks', 'update');
-        })
+        });
     }
 
     function updateEntity(task, prev) {
@@ -341,8 +349,8 @@ angular.module('mean.icu.data.tasksservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(function(result) {
-            return result;
+        }).then(() =>{
+          return BoldedService.boldedUpdate(task, 'tasks', 'update');
         });
     }
 

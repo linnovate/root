@@ -115,9 +115,7 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev.assign ? prev.assign.name : ''
             },
             context: {}
-        }).then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'projects', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function getSubProjects(projectId) {
@@ -179,10 +177,7 @@ angular.module('mean.icu.data.projectsservice', [])
               NotifyingService.notify('editionData');
 
               return result.data;
-          })
-          .then(entity=>{
-            return BoldedService.boldedUpdate(entity, 'projects', 'update');
-          })
+          }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function remove(id) {
@@ -190,7 +185,7 @@ angular.module('mean.icu.data.projectsservice', [])
             NotifyingService.notify('editionData');
         	WarningsService.setWarning(result.headers().warning);
             return result.data;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function star(project) {
@@ -199,7 +194,7 @@ angular.module('mean.icu.data.projectsservice', [])
             	WarningsService.setWarning(result.headers().warning);
                 project.star = !project.star;
                 return result.data;
-            });
+            }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function WantToCreateRoom(project) {
@@ -236,7 +231,7 @@ angular.module('mean.icu.data.projectsservice', [])
         return $http.post(ApiUri + EntityPrefix + '/' + id + '/toTemplate', name).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
             return result.data;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
     }
 
     function template2subProjects(templateId, data){
@@ -271,9 +266,8 @@ angular.module('mean.icu.data.projectsservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'projects', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+
     }
 
 
@@ -287,9 +281,8 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev.due
             },
             context: {}
-        }).then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'projects', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+
 
     }
 
@@ -304,9 +297,8 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev.status
             },
             context: {}
-        }).then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'projects', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+
     }
 
 
@@ -319,9 +311,8 @@ angular.module('mean.icu.data.projectsservice', [])
                 status: project.color
             },
             context: {}
-        }).then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'projects', 'update');
-        })
+        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+
     }
 
     function updateTitle(project, prev, type) {
@@ -336,9 +327,7 @@ angular.module('mean.icu.data.projectsservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(function(result) {
-            return result;
-        });
+        }).then(() => BoldedService.boldedUpdate(project, 'projects', 'update'));
     }
 
 
