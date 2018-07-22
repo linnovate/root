@@ -2,8 +2,10 @@
 
 angular.module('mean.icu.ui.detailspane', [])
 .directive('icuDetailspane', function ($uibModal) {
-    function controller() {
-
+    function controller($scope, NotifyingService, MultipleSelectService) {
+        NotifyingService.subscribe('disableDetailsPane', function () {
+            $scope.disabled = !!MultipleSelectService.getSelected().length;
+        }, $scope);
     }
 
     function link($scope, $element, $attr) {

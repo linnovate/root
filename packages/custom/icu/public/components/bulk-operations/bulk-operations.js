@@ -10,7 +10,7 @@ angular.module('mean.icu.ui.bulkoperations', [])
 
             $scope.checkCornerState = function(){
                 if(MultipleSelectService.getCornerState() === 'none'){
-                    $scope.$emit('disableMultipleMode');
+                    $scope.$emit('refreshList');
                 }
             };
 

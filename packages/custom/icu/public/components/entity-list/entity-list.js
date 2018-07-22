@@ -209,19 +209,23 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             $scope.multipleSelectMode = true;
         } else {
             $scope.multipleSelectMode = false;
+            MultipleSelectService.refreshSelectedList();
         }
-    });
-
-    $scope.$on('disableMultipleMode', function (event) {
-        $scope.multipleSelectMode = false;
-        MultipleSelectService.refreshSelectedList();
+        $scope.toggleDetailsPane();
     });
 
     NotifyingService.subscribe('clearSelectedList', function () {
         $scope.selectedItems = MultipleSelectService.refreshSelectedList();
         $scope.cornerState = MultipleSelectService.refreshCornerState(MultipleSelectService.getNoneRecycledItems($scope.items).length);
         $scope.multipleSelectMode = false;
+        $scope.toggleDetailsPane();
     }, $scope);
+
+    $scope.toggleDetailsPane = function(){
+        $scope.disabledDetailsPane = !!$scope.selectedItems.length;
+        NotifyingService.notify('disableDetailsPane');
+    };
+    $scope.toggleDetailsPane();
 
     $scope.showTick = function(item){
         item.visible = true;
