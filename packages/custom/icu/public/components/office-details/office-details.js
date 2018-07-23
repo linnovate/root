@@ -126,7 +126,7 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
     }
   });
 
-  $scope.$watch('office.tel', function(nVal, oVal) {
+  $scope.$watch('item.tel', function(nVal, oVal) {
     if (nVal !== oVal) {
       var context = {
         name: 'tel',
@@ -138,7 +138,7 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
     }
   });
 
-  $scope.$watch('office.unit', function(nVal, oVal) {
+  $scope.$watch('item.unit', function(nVal, oVal) {
     if (nVal !== oVal) {
       var context = {
         name: 'unit',
