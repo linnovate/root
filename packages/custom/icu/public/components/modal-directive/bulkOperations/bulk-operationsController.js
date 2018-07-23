@@ -39,11 +39,12 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
                 for(let i = 0; i < selectedItems.length; i++){
                     let entity = result.find(entity => entity._id === selectedItems[i]._id);
                     Object.assign(selectedItems[i], entity);
-                    if(changedBulkObject.update.delete)NotifyingService.notify('clearSelectedList');
+                  if(changedBulkObject.update.delete)NotifyingService.notify('clearSelectedList');
                 }
+              MultipleSelectService.setSelectedList(selectedItems);
+              NotifyingService.notify('refreshList');
+              $uibModalInstance.dismiss('cancel');
             });
-
-        $uibModalInstance.dismiss('cancel');
     };
 
     //------------------------------------------------//

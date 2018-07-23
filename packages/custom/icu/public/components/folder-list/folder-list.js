@@ -1,6 +1,6 @@
 'use strict';
 
-function FolderListController($scope, $state, folders, BoldedService, FoldersService, context, $stateParams, OfficesService, MultipleSelectService) {
+function FolderListController($scope, $state, folders, BoldedService, NotifyingService, FoldersService, context, $stateParams, OfficesService, MultipleSelectService) {
 
     $scope.items = folders.data || folders;
 
@@ -44,7 +44,7 @@ function FolderListController($scope, $state, folders, BoldedService, FoldersSer
 
     $scope.refreshSelected = function (entity) {
         MultipleSelectService.refreshSelectedList(entity);
-        $scope.$broadcast('refreshList', {})
+        NotifyingService.notify('refreshList');
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){

@@ -215,22 +215,22 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.selectedItems = MultipleSelectService.refreshSelectedList();
     $scope.cornerState = MultipleSelectService.getCornerState();
 
-    $scope.$on('refreshList', function (event) {
-        $scope.selectedItems = MultipleSelectService.getSelected();
-        $scope.cornerState = MultipleSelectService.refreshCornerState(MultipleSelectService.getNoneRecycledItems($scope.items).length);
+    NotifyingService.subscribe('refreshList', function () {
+      $scope.selectedItems = MultipleSelectService.setSelectedList(filterResults(MultipleSelectService.getSelected()));
+      $scope.cornerState = MultipleSelectService.refreshCornerState(filterResults($scope.items).length);
 
-        if ($scope.selectedItems.length) {
+      if ($scope.selectedItems.length) {
             $scope.multipleSelectMode = true;
         } else {
             $scope.multipleSelectMode = false;
             MultipleSelectService.refreshSelectedList();
         }
         $scope.toggleDetailsPane();
-    });
+    }, $scope);
 
     NotifyingService.subscribe('clearSelectedList', function () {
         $scope.selectedItems = MultipleSelectService.refreshSelectedList();
-        $scope.cornerState = MultipleSelectService.refreshCornerState(MultipleSelectService.getNoneRecycledItems($scope.items).length);
+        $scope.cornerState = MultipleSelectService.refreshCornerState(filterResults($scope.items).length);
         $scope.multipleSelectMode = false;
         $scope.toggleDetailsPane();
     }, $scope);
@@ -248,6 +248,14 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.hideTick = function(item){
         item.visible = false;
     };
+
+    function filterResults(itemsArray){
+      let newArray = $filter('filterRecycled')(itemsArray);
+      newArray = $filter('filterByOptions')(newArray);
+      newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
+      newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
+      return newArray;
+    }
 
     // ============================================================= //
     // ======================= item function ======================= //

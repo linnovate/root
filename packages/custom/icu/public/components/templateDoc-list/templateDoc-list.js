@@ -1,6 +1,6 @@
 'use strict';
 
-function TemplateDocListController($scope, $state, templateDocs, BoldedService, TemplateDocsService, MultipleSelectService, context, $stateParams, EntityService) {
+function TemplateDocListController($scope, $state, templateDocs, NotifyingService, BoldedService, TemplateDocsService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = templateDocs.data || templateDocs;
 
@@ -52,7 +52,7 @@ function TemplateDocListController($scope, $state, templateDocs, BoldedService, 
 
     $scope.refreshSelected = function (entity) {
         MultipleSelectService.refreshSelectedList(entity);
-        $scope.$broadcast('refreshList', {})
+        NotifyingService.notify('refreshList');
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){
