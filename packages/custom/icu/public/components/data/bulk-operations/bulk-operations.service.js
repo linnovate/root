@@ -66,6 +66,9 @@ angular.module('mean.icu.data.multipleselectservice', [])
             return selectedItems;
         }
 
+        function setSelectedList(list){
+            return selectedItems = list;
+        }
 
         function refreshSelectedList(editedEntity) {
             if (!editedEntity) {
@@ -121,6 +124,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
             bulkUpdate: bulkUpdate,
             haveBulkPerms: haveBulkPerms,
             showButton: showButton,
+            setSelectedList: setSelectedList,
             getSelected: getSelected,
             getCornerState: getCornerState,
             getNoneRecycledItems: getNoneRecycledItems,
