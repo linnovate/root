@@ -339,3 +339,118 @@ a.Names-In-List-On-Side{
 p {
     margin: 0;
 }
+
+.listFolder {
+    padding-left: 10px;
+    color: white;
+    border-bottom: 1px solid #424e52;
+
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+
+        &:last-of-type {
+            margin-bottom: 10px;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            position: relative;
+            width: 185px;
+            .tag-color {
+                @include tag(5px);
+            }
+            &last-of-type {
+                margin-bottom: 10px;
+            }
+            &.more {
+                color: $orange;
+                cursor: pointer;
+                margin-bottom: 17px;
+                font-size: 10px;
+                line-height: 14px;
+                font-weight: bold;
+                margin-top:10px;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+
+            a {
+                margin-bottom: 11px;
+                font-size: 13px;
+                max-width: 165px;
+                line-height: 18px;
+                color: #DDEAF0;
+                cursor: pointer;
+                display: inherit;
+                position: relative;
+                word-break: break-all;
+                text-decoration: none;
+            }
+
+            &.selected {
+
+                a:before {
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    margin-left: -15px;
+                    margin-right: 1.5px;
+                    content: " ";
+
+                    border-left: 5px solid $orange;
+                    border-right: 5px solid transparent;
+                    border-top: 5px solid transparent;
+                    border-bottom: 5px solid transparent;
+
+                    position: absolute;
+                    top: 50%;
+                    //margin-top: -6px;
+                    transform: translateY(-50%);
+                    -webkit-transform: translateY(-50%);
+                }
+            }
+        }
+    }
+    .ui-select-choices-group{
+        display: block;
+    }
+    .ui-select-toggle {
+        height: 32px;
+        outline: 0;
+        border: none;
+        z-index: 2;
+    }
+    .ui-select-match-text{
+        position: relative
+    }
+
+    .ui-select-container .ui-select-choices-row .ui-select-choices-row-inner {
+        display: flex;
+        align-items: center;
+    }
+
+    .ui-select-choices{
+        padding-right: 10px !important;
+        position: relative;
+    }
+    .select{
+        color: #f5f5f5;
+        background: #313c40 !important;
+        padding-left: 10px;
+
+        .select-match{
+            color: #f5f5f5;
+            background: #313c40 !important;
+            padding-right: 10px !important;
+        }
+    }
+    // .select-match{
+    //     padding-right: 10px !important;
+    // }
+}
+    

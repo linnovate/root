@@ -401,7 +401,32 @@
         </ul>
 
     </div>
-    <div class="folders"
+    
+    <div class="listFolder officeDocuments" ng-if="context.main == 'officeDocuments' && activeTab.name !== 'search'">
+        <p class="title type"> {{ 'folders' | i18next }} </p>
+        <ui-select class="select" ng-model="officesList.office" on-select="changeOrder();goToParentState()" theme="bootstrap">
+            <ui-select-match class="select-match" placeholder="{{'selectOffice' | i18next}}">
+                {{removeTags($select.selected.title)}}
+            </ui-select-match>
+            <ui-select-choices repeat="office in officesList | filter: $select.search">
+                <div ng-bind-html="office.title | i18next | uppercase"></div>
+            </ui-select-choices>
+        </ui-select>
+        <ul>
+            <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100"
+                data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
+                data-ng-click="switchTo('folder', folder._id)"
+                ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)">
+                <a href class="Names-In-List-On-Side"
+                    ng-bind-html="folder.title"
+                >
+                </a>
+                <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- <div class="folders"
          ng-if="foldersList
                 && activeTab.display.indexOf('folders') !== -1">
         <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}
@@ -449,7 +474,7 @@
                 ng-click="collapse('folders')" class="more">{{ 'less' | i18next }}
             </li>
         </ul>
-    </div>
+    </div> -->
     <div class="sidefilters" ng-if="activeTab.name == 'search'">
         <!--<hr/>-->
     </div>
