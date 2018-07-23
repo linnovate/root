@@ -10,7 +10,7 @@
                 ng-mouseover="showTick(item)"
                 ng-mouseleave="hideTick(item)"
             ></tr>
-            <tr>
+            <tr ng-if="!multipleSelectMode">
                 <td
                     class="create-new-item"
                     ng-click="onCreate()"
