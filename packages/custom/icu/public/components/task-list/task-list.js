@@ -1,6 +1,6 @@
 'use strict';
 
-function TaskListController($scope, $timeout, $state, tasks, BoldedService, MultipleSelectService, NotifyingService, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
+function TaskListController($scope, $timeout, $state, tasks, BoldedService, MultipleSelectService, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
 
     let me;
     UsersService.getMe().then(function(result) {
@@ -62,7 +62,7 @@ function TaskListController($scope, $timeout, $state, tasks, BoldedService, Mult
 
     $scope.refreshSelected = function (entity) {
         MultipleSelectService.refreshSelectedList(entity);
-        NotifyingService.notify('refreshList');
+        $scope.$broadcast('refreshList', {});
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){
@@ -73,7 +73,13 @@ function TaskListController($scope, $timeout, $state, tasks, BoldedService, Mult
         for(let i = 0; i < $scope.items.length; i++){
             $scope.items[i].selected = status;
         }
-        MultipleSelectService.changeAllSelectedLIst(MultipleSelectService.getNoneRecycledItems($scope.items));
+        if(status){
+          MultipleSelectService.setSelectedList($scope.items);
+          $scope.$broadcast('refreshList', {});
+        } else {
+          MultipleSelectService.refreshSelectedList();
+          NotifyingService.notify('refreshSelectedList');
+        }
     }
 
     $scope.loadMore = function(start, LIMIT, sort) {

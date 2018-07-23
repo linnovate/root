@@ -216,13 +216,11 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.cornerState = MultipleSelectService.getCornerState();
 
     $scope.$on('refreshList', function (event) {
-        $scope.selectedItems = MultipleSelectService.getSelected();
-        refreshListAndState();
+        refreshState();
     });
 
     NotifyingService.subscribe('refreshSelectedList', function () {
-        $scope.selectedItems = MultipleSelectService.setSelectedList(filterResults(MultipleSelectService.getSelected()));
-        refreshListAndState();
+        refreshState();
     }, $scope);
 
     NotifyingService.subscribe('clearSelectedList', function () {
@@ -245,7 +243,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         item.visible = false;
     };
 
-    function refreshListAndState(){
+    function refreshState(){
+        $scope.selectedItems = MultipleSelectService.setSelectedList(filterResults(MultipleSelectService.getSelected()));
         $scope.cornerState = MultipleSelectService.refreshCornerState(filterResults($scope.items).length);
 
         if ($scope.selectedItems.length) {

@@ -51,19 +51,25 @@ function TemplateDocListController($scope, $state, templateDocs, NotifyingServic
     //     }
 
     $scope.refreshSelected = function (entity) {
-        MultipleSelectService.refreshSelectedList(entity);
-        NotifyingService.notify('refreshList');
+      MultipleSelectService.refreshSelectedList(entity);
+      $scope.$broadcast('refreshList', {});
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){
-        setAllSelected(cornerState === 'all');
+      setAllSelected(cornerState === 'all');
     });
 
     function setAllSelected(status){
-        for(let i = 0; i < $scope.items.length; i++){
-            $scope.items[i].selected = status;
-        }
-        MultipleSelectService.changeAllSelectedLIst(MultipleSelectService.getNoneRecycledItems($scope.items));
+      for(let i = 0; i < $scope.items.length; i++){
+        $scope.items[i].selected = status;
+      }
+      if(status){
+        MultipleSelectService.setSelectedList($scope.items);
+        $scope.$broadcast('refreshList', {});
+      } else {
+        MultipleSelectService.refreshSelectedList();
+        NotifyingService.notify('refreshSelectedList');
+      }
     }
 
     $scope.loadMore = function(start, LIMIT, sort) {

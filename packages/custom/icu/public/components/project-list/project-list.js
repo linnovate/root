@@ -1,6 +1,6 @@
 'use strict';
 
-function ProjectListController($scope, $state, $timeout, projects, BoldedService, MultipleSelectService, NotifyingService, ProjectsService, UsersService, context, $stateParams, EntityService) {
+function ProjectListController($scope, $state, $timeout, projects, NotifyingService, BoldedService, MultipleSelectService, ProjectsService, UsersService, context, $stateParams, EntityService) {
 
     let me;
     UsersService.getMe().then(function(result) {
@@ -60,19 +60,25 @@ function ProjectListController($scope, $state, $timeout, projects, BoldedService
     };
 
     $scope.refreshSelected = function (entity) {
-        MultipleSelectService.refreshSelectedList(entity);
-        NotifyingService.notify('refreshList');
+      MultipleSelectService.refreshSelectedList(entity);
+      $scope.$broadcast('refreshList', {});
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){
-        setAllSelected(cornerState === 'all');
+      setAllSelected(cornerState === 'all');
     });
 
     function setAllSelected(status){
-        for(let i = 0; i < $scope.items.length; i++){
-            $scope.items[i].selected = status;
-        }
-        MultipleSelectService.changeAllSelectedLIst(MultipleSelectService.getNoneRecycledItems($scope.items));
+      for(let i = 0; i < $scope.items.length; i++){
+        $scope.items[i].selected = status;
+      }
+      if(status){
+        MultipleSelectService.setSelectedList($scope.items);
+        $scope.$broadcast('refreshList', {});
+      } else {
+        MultipleSelectService.refreshSelectedList();
+        NotifyingService.notify('refreshSelectedList');
+      }
     }
 
     $scope.loadMore = function(start, LIMIT, sort) {

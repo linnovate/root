@@ -70,7 +70,7 @@ function boldUpdate(req, res, next) {
           let ownBolded = entity.bolded.find((bolded)=>{
             return bolded.id.toString() === user_id;
           });
-          ownBolded.bolded = false;
+          if(ownBolded)ownBolded.bolded = false;
 
           let data = {$set: {bolded: entity.bolded}};
           saveEntity(entityController, entity, data);

@@ -1,7 +1,7 @@
 function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout, selectedItems, activityType, entityName,
                                   MultipleSelectService, UsersService, SettingServices, PermissionsService, NotifyingService) {
 
-    $scope.selectedItems = selectedItems;
+    $scope.selectedItems = MultipleSelectService.getSelected();
     $scope.activityType = activityType;
     $scope.entityName = entityName;
     UsersService.getAll().then(allUsers => $scope.people = allUsers);

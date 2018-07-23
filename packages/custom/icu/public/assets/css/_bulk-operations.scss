@@ -54,6 +54,9 @@ multiple-select {
                     outline: 1px solid gold;
                 }
             }
+            .disabledButton {
+              opacity: 0.2;
+            }
             .status {
                 background: url("/icu/assets/img/icon-flag-black.svg") no-repeat center center;
             }

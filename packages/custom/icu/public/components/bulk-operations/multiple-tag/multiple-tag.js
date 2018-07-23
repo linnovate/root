@@ -8,8 +8,19 @@ angular.module('mean.icu.ui.bulkoperations')
             $scope.type = 'tag';
 
             $scope.selectedItems = $scope.$parent.selectedItems;
-            $scope.allowed = MultipleSelectService.haveBulkPerms($scope.selectedItems, $scope.type);
+            refreshAllowed();
 
+            $scope.$on('refreshList', function (event) {
+              refreshAllowed();
+            });
+
+            NotifyingService.subscribe('refreshSelectedList', function () {
+              refreshAllowed();
+            }, $scope);
+
+            function refreshAllowed(){
+              return $scope.allowed = MultipleSelectService.haveBulkPerms($scope.type);
+            }
         }
         return {
             controller: multipleTagController,

@@ -87,10 +87,6 @@ angular.module('mean.icu.data.multipleselectservice', [])
             return selectedItems;
         }
 
-        function changeAllSelectedLIst(newList){
-            selectedItems = newList;
-        }
-
         function bulkUpdate(bulkObject, entityName) {
             if(bulkObject.update.delete) {
                 return $http.patch(ApiUri + '/' + entityName + EntityPrefix, bulkObject)
@@ -105,8 +101,8 @@ angular.module('mean.icu.data.multipleselectservice', [])
                 });
         }
 
-        function haveBulkPerms(entitiesArray, type) {
-            let havePermissions = entitiesArray.every((entity) => {
+        function haveBulkPerms(type) {
+            let havePermissions = selectedItems.every((entity) => {
                 let userPermissions = entity.permissions.find((permission) => {
                     return permission.id === me._id;
                 });
@@ -130,7 +126,6 @@ angular.module('mean.icu.data.multipleselectservice', [])
             getNoneRecycledItems: getNoneRecycledItems,
             refreshSelectedList: refreshSelectedList,
             refreshCornerState: refreshCornerState,
-            changeAllSelectedLIst: changeAllSelectedLIst,
             changeCornerState: changeCornerState
         };
     });
