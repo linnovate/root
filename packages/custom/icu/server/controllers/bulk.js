@@ -39,7 +39,7 @@ function update(req, res, next) {
   };
 
   watchers = watchers || [];
-  let tags = tag || [];
+  tags = tags || [];
 
   let set = clean(Object.assign({}, changeWholeParameter));
 

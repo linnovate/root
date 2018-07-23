@@ -88,8 +88,8 @@
                     tagging-label="false"
                     on-select="addTag(newTag)"
                 >
-                    <ui-select-match id="addTag" placeholder="{{ !selected.length ? 'noLabels' : 'selectTags' | i18next }}">
-                        {{ !selected.length ? 'noLabels' : 'selectTags' | i18next }}
+                    <ui-select-match id="addTag" placeholder="{{ !selected.length ? 'noTags' : 'selectTags' | i18next }}">
+                        {{ !selected.length ? 'noTags' : 'selectTags' | i18next }}
                     </ui-select-match>
                     <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">{{tag}}</ui-select-choices>
                 </ui-select>
