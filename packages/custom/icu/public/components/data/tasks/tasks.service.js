@@ -282,8 +282,8 @@ angular.module('mean.icu.data.tasksservice', [])
                 prev: prev.due
             },
             context: {}
-        }).then(entity=>{
-          return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+        }).then(function(result) {
+            return result;
         });
 
     }
@@ -349,6 +349,8 @@ angular.module('mean.icu.data.tasksservice', [])
                 prev: prev[type]
             },
             context: {}
+        }).then(function(result) {
+            return result;
         });
     }
 

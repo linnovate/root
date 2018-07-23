@@ -1,6 +1,6 @@
 'use strict';
 
-function DiscussionListController($scope, $state, discussions, DiscussionsService, context, BoldedService, MultipleSelectService, $stateParams, EntityService) {
+function DiscussionListController($scope, $state, discussions, DiscussionsService, context, BoldedService, MultipleSelectService, NotifyingService, $stateParams, EntityService) {
 
     $scope.items = discussions.data || discussions;
     $scope.loadNext = discussions.next;
@@ -36,7 +36,7 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
 
     $scope.refreshSelected = function (entity) {
         MultipleSelectService.refreshSelectedList(entity);
-        $scope.$broadcast('refreshList', {})
+        NotifyingService.notify('refreshList');
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){

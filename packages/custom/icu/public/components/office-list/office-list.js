@@ -1,6 +1,6 @@
 'use strict';
 
-function OfficeListController($scope, $state, offices, BoldedService, OfficesService, MultipleSelectService, context, $stateParams, EntityService) {
+function OfficeListController($scope, $state, offices, NotifyingService, BoldedService, OfficesService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = offices.data || offices;
 
@@ -41,7 +41,7 @@ function OfficeListController($scope, $state, offices, BoldedService, OfficesSer
 
     $scope.refreshSelected = function (entity) {
         MultipleSelectService.refreshSelectedList(entity);
-        $scope.$broadcast('refreshList', {})
+      NotifyingService.notify('refreshList');
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){
