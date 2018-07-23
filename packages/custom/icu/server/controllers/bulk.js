@@ -29,7 +29,7 @@ function update(req, res, next) {
 
   let {
     watchers,
-    tag
+    tags
   } = update;
 
   let changeWholeParameter = {
