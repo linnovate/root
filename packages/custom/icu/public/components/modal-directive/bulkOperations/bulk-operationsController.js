@@ -39,67 +39,69 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
                 for(let i = 0; i < $scope.selectedItems.length; i++){
                     let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
                     Object.assign($scope.selectedItems[i], entity);
-                    if(changedBulkObject.update.delete)NotifyingService.notify('clearSelectedList');
                 }
+                if(changedBulkObject.update.delete)NotifyingService.notify('clearSelectedList');
                 MultipleSelectService.setSelectedList($scope.selectedItems);
-                NotifyingService.notify('refreshSelectedList');
+                NotifyingService.notify('refreshAfterOperation');
                 $uibModalInstance.dismiss('cancel');
             });
     };
 
-    //------------------------------------------------//
-    //----------------------TAGS----------------------//
+  //------------------------------------------------//
+  //----------------------TAGS----------------------//
 
-    $scope.getUnusedTags = function () {
-        return ($scope.tags || []).filter(x => $scope.selected.indexOf(x) < 0);
-    };
 
-    $scope.addTagClicked = function () {
-        $scope.tagInputVisible = true;
-        $timeout(function () {
-            let element = angular.element('#addTag .ui-select-toggle')[0];
-            element.click();
-        }, 0);
-    };
+  //remove this
+  $scope.getUnusedTags = function () {
+      return ($scope.tags || []).filter(x => $scope.selected.indexOf(x) < 0);
+  };
+
+  $scope.addTagClicked = function () {
+      $scope.tagInputVisible = true;
+      $timeout(function () {
+          let element = angular.element('#addTag .ui-select-toggle')[0];
+          element.click();
+      }, 0);
+  };
 
     $scope.addTag = function (tag) {
-        if (!$scope.selected) $scope.selected = [];
+      if (!$scope.selected) $scope.selected = [];
 
-        if (!$scope.selected.find(selectedTag => selectedTag === tag)) {
-            $scope.selected.push(tag);
-        }
-        $scope.tagInputVisible = false;
-    };
+      if (!$scope.selected.find(selectedTag => selectedTag === tag)) {
+          $scope.selected.push(tag);
+      }
+      $scope.tagInputVisible = false;
+  };
 
-    $scope.removeTag = function (tag) {
-        $scope.selected = _($scope.selected).without(tag);
-    };
+  $scope.removeTag = function (tag) {
+      $scope.selected = _($scope.selected).without(tag);
+  };
 
-    $scope.onOpenClose = function (isOpen) {
-        $scope.tagInputVisible = !isOpen;
-    };
+  $scope.onOpenClose = function (isOpen) {
+      $scope.tagInputVisible = !isOpen;
+  };
 
-    //--------------------TAGS END--------------------//
-    //------------------------------------------------//
+  //--------------------TAGS END--------------------//
+  //------------------------------------------------//
 
-    switch (activityType) {
-        case 'status':
-            $scope.title = 'Set Status';
-            break;
-        case 'watch':
-            $scope.title = 'Set Watchers';
-            break;
-        case 'assign':
-            $scope.title = 'Assign to';
-            break;
-        case 'due':
-            $scope.title = 'Set Due Date';
-            break;
-        case 'tag':
-            $scope.title = 'Add tags';
-            break;
-        case 'delete':
-            $scope.title = `${$i18next('Delete')} ${selectedItems.length} ${entityName}`;
-            break;
-    }
+  switch (activityType) {
+      case 'status':
+          $scope.title = 'Set Status';
+          break;
+      case 'watch':
+          $scope.title = 'Set Watchers';
+          break;
+      case 'assign':
+          $scope.title = 'Assign to';
+          break;
+      case 'due':
+          $scope.title = 'Set Due Date';
+          break;
+      case 'tag':
+          $scope.title = 'Add tags';
+          break;
+      case 'delete':
+          $scope.title = `${$i18next('Delete')} ${selectedItems.length} ${entityName}`;
+          break;
+  }
 }

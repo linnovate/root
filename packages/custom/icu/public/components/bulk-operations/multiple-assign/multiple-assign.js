@@ -4,19 +4,14 @@
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleAssign', function () {
         function multipleAssignController($scope, MultipleSelectService, NotifyingService) {
-
             $scope.type = 'assign';
-
             $scope.selectedItems = $scope.$parent.selectedItems;
+
             refreshAllowed();
 
             $scope.$on('refreshList', function (event) {
               refreshAllowed();
             });
-
-            NotifyingService.subscribe('refreshSelectedList', function () {
-              refreshAllowed();
-            }, $scope);
 
             function refreshAllowed(){
                 return $scope.allowed = MultipleSelectService.haveBulkPerms($scope.type);

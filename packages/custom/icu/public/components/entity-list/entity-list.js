@@ -216,24 +216,24 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.cornerState = MultipleSelectService.getCornerState();
 
     $scope.$on('refreshList', function (event) {
-        refreshState();
+        multipleSelectRefreshState();
     });
 
-    NotifyingService.subscribe('refreshSelectedList', function () {
-        refreshState();
+    NotifyingService.subscribe('refreshAfterOperation', function () {
+        multipleSelectRefreshState();
     }, $scope);
 
     NotifyingService.subscribe('clearSelectedList', function () {
         $scope.cornerState = MultipleSelectService.refreshCornerState(filterResults($scope.items).length);
         $scope.multipleSelectMode = false;
-        $scope.toggleDetailsPane();
+        $scope.multipleSelectToggleBlock();
     }, $scope);
 
-    $scope.toggleDetailsPane = function(){
+    $scope.multipleSelectToggleBlock = function(){
         $scope.disabledDetailsPane = !!$scope.selectedItems.length;
         NotifyingService.notify('disableDetailsPane');
     };
-    $scope.toggleDetailsPane();
+    $scope.multipleSelectToggleBlock();
 
     $scope.showTick = function(item){
         item.visible = true;
@@ -243,17 +243,28 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         item.visible = false;
     };
 
-    function refreshState(){
+    $scope.checkForHideMultiple = function(){
+        if(MultipleSelectService.getCornerState() === 'none'){
+            $scope.multipleSelectMode = false;
+        }
+    };
+
+    // takes selected entities from service, filters it according to active list filters,
+    // changing the corner-button state,
+    // changing multipleSelectMode according to existing items in the list and selected items list
+    // calls check for enable/disable details pane
+    // * * * refactor of all items
+    function multipleSelectRefreshState(){
         $scope.selectedItems = MultipleSelectService.setSelectedList(filterResults(MultipleSelectService.getSelected()));
         $scope.cornerState = MultipleSelectService.refreshCornerState(filterResults($scope.items).length);
+        //simplify, create single function: list, mode and corner state in the one function in service
 
         if ($scope.selectedItems.length) {
-          $scope.multipleSelectMode = true;
+            $scope.multipleSelectMode = true;
         } else {
-          $scope.multipleSelectMode = false;
-          MultipleSelectService.refreshSelectedList();
+            MultipleSelectService.refreshSelectedList();
         }
-        $scope.toggleDetailsPane();
+        $scope.multipleSelectToggleBlock();
     }
 
     function filterResults(itemsArray){

@@ -4,9 +4,7 @@
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleWatch', function () {
         function multipleWatchController($scope, MultipleSelectService, NotifyingService) {
-
             $scope.type = 'watch';
-
             $scope.selectedItems = $scope.$parent.selectedItems;
 
             // will be allowed and completed in the future, now just disabled

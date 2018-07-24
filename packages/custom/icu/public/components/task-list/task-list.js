@@ -60,26 +60,25 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
         });
     };
 
-    $scope.refreshSelected = function (entity) {
+    $scope.multipleSelectRefreshSelected = function (entity) {
         MultipleSelectService.refreshSelectedList(entity);
         $scope.$broadcast('refreshList', {});
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){
-        setAllSelected(cornerState === 'all');
+        multipleSelectSetAllSelected(cornerState === 'all');
     });
 
-    function setAllSelected(status){
+    function multipleSelectSetAllSelected(status){
         for(let i = 0; i < $scope.items.length; i++){
             $scope.items[i].selected = status;
         }
         if(status){
           MultipleSelectService.setSelectedList($scope.items);
-          $scope.$broadcast('refreshList', {});
         } else {
           MultipleSelectService.refreshSelectedList();
-          NotifyingService.notify('refreshSelectedList');
         }
+        $scope.$broadcast('refreshList');
     }
 
     $scope.loadMore = function(start, LIMIT, sort) {

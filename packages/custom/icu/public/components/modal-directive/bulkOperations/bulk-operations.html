@@ -55,7 +55,7 @@
     <section ng-if="activityType === 'due'" class="due">
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
         <div class="date">
-            <input ng-click="open()" ng-model="selected" placeholder="{{ 'setDueDate' | i18next }}" ui-date="dueOptions" ng-model="value" />
+            <input ng-click="open()" ng-model="selected" placeholder="{{ 'setDueDate' | i18next }}" ui-date="dueOptions" />
         </div>
 
         <button class="action-button" ng-click="bulkUpdate('due', selected)">{{ 'Update' | i18next}}</button>

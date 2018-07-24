@@ -6,20 +6,17 @@ angular.module('mean.icu.ui.bulkoperations')
             $scope.selectedItems = $scope.$parent.selectedItems;
             $scope.cornerState = $scope.$parent.cornerState;
 
-            $scope.changeCornerState = function(){
-                $scope.cornerState = MultipleSelectService.changeCornerState();
-                $scope.$emit('changeCornerState', $scope.cornerState);
-
-                if($scope.cornerState === 'none'){
-                    $scope.selectedItems = MultipleSelectService.refreshSelectedList();
-                } else {
-                    $scope.selectedItems = MultipleSelectService.getSelected();
-                }
+            $scope.notifyChangingState = function(){
+                $scope.$emit('changeCornerState', MultipleSelectService.changeCornerState());
             };
 
             $scope.$on('refreshList', function (event) {
-                $scope.cornerState = MultipleSelectService.getCornerState();
+                $scope.changeCornerState();
             });
+
+            $scope.changeCornerState = function(){
+                $scope.cornerState = MultipleSelectService.getCornerState();
+            };
         }
 
         return {

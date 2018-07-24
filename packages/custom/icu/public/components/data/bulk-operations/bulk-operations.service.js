@@ -39,9 +39,9 @@ angular.module('mean.icu.data.multipleselectservice', [])
         let cornerState = cornerStates[0];
 
         function refreshCornerState(itemsLength) {
-            if (itemsLength === selectedItems.length && itemsLength !== 0) {
+            if ((itemsLength === selectedItems.length) && itemsLength !== 0) {
                 cornerState = cornerStates[0];
-            } else if (itemsLength > selectedItems.length) {
+            } else if ((itemsLength > selectedItems.length) && selectedItems.length !== 0) {
                 cornerState = cornerStates[1];
             } else {
                 cornerState = cornerStates[2];

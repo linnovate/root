@@ -8,12 +8,6 @@ angular.module('mean.icu.ui.bulkoperations', [])
                 MultipleSelectService.haveBulkPerms($scope.selectedItems, type);
             };
 
-            $scope.checkCornerState = function(){
-                if(MultipleSelectService.getCornerState() === 'none'){
-                    $scope.$emit('refreshList');
-                }
-            };
-
             $scope.entityType = context.main;
 
             $scope.showForCurrentEntity = function(operation){

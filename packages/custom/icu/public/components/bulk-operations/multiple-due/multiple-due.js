@@ -4,19 +4,13 @@
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleDue', function () {
         function multipleDueController($scope, MultipleSelectService, NotifyingService) {
-
             $scope.type = 'due';
-
             $scope.selectedItems = $scope.$parent.selectedItems;
-            refreshAllowed();
 
+            refreshAllowed();
             $scope.$on('refreshList', function (event) {
               refreshAllowed();
             });
-
-            NotifyingService.subscribe('refreshSelectedList', function () {
-              refreshAllowed();
-            }, $scope);
 
             function refreshAllowed(){
               return $scope.allowed = MultipleSelectService.haveBulkPerms($scope.type);

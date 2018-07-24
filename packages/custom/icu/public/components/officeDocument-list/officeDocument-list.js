@@ -51,20 +51,19 @@ function OfficeDocumentListController($scope, $state, BoldedService, NotifyingSe
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){
-      setAllSelected(cornerState === 'all');
+        multipleSelectSetAllSelected(cornerState === 'all');
     });
 
-    function setAllSelected(status){
-      for(let i = 0; i < $scope.items.length; i++){
-        $scope.items[i].selected = status;
-      }
-      if(status){
-        MultipleSelectService.setSelectedList($scope.items);
-        $scope.$broadcast('refreshList', {});
-      } else {
-        MultipleSelectService.refreshSelectedList();
-        NotifyingService.notify('refreshSelectedList');
-      }
+    function multipleSelectSetAllSelected(status){
+        for(let i = 0; i < $scope.items.length; i++){
+            $scope.items[i].selected = status;
+        }
+        if(status){
+            MultipleSelectService.setSelectedList($scope.items);
+        } else {
+            MultipleSelectService.refreshSelectedList();
+        }
+        $scope.$broadcast('refreshList');
     }
 
     //     $scope.search = function(item) {
