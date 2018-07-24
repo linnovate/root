@@ -45,9 +45,9 @@ function OfficeDocumentListController($scope, $state, BoldedService, NotifyingSe
         });
     }
 
-    $scope.refreshSelected = function (entity) {
-      MultipleSelectService.refreshSelectedList(entity);
-      $scope.$broadcast('refreshList', {});
+    $scope.multipleSelectRefreshSelected = function (entity) {
+        MultipleSelectService.refreshSelectedList(entity);
+        $scope.$broadcast('refreshList', {});
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){

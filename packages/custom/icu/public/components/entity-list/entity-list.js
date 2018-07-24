@@ -211,6 +211,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // =================== multiple operations ===================== //
     // ============================================================= //
 
+    $scope.mouseOnMultiple = false;
     $scope.multipleSelectMode = false;
     $scope.selectedItems = MultipleSelectService.refreshSelectedList();
     $scope.cornerState = MultipleSelectService.getCornerState();
@@ -234,6 +235,11 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         NotifyingService.notify('disableDetailsPane');
     };
     $scope.multipleSelectToggleBlock();
+
+    $scope.cursorEnterMultiple = function(mouseOn){
+        console.log(mouseOn);
+        $scope.mouseOnMultiple = !!mouseOn;
+    };
 
     $scope.showTick = function(item){
         item.visible = true;
@@ -264,6 +270,11 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         } else {
             MultipleSelectService.refreshSelectedList();
         }
+        if(!$scope.selectedItems.length && !$scope.mouseOnMultiple){
+            debugger;
+            $scope.multipleSelectMode = false;
+        }
+
         $scope.multipleSelectToggleBlock();
     }
 
