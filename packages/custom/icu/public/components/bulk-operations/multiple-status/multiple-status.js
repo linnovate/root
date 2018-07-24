@@ -3,7 +3,7 @@
 
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleStatus', function () {
-        function multipleStatusController($scope, MultipleSelectService) {
+        function multipleStatusController($scope, MultipleSelectService, NotifyingService) {
 
             $scope.type = 'status';
 

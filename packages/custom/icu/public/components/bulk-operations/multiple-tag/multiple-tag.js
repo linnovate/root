@@ -3,7 +3,7 @@
 
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleTag', function () {
-        function multipleTagController($scope, MultipleSelectService) {
+        function multipleTagController($scope, MultipleSelectService, NotifyingService) {
 
             $scope.type = 'tag';
 

@@ -3,7 +3,7 @@
 
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleWatch', function () {
-        function multipleWatchController($scope, MultipleSelectService) {
+        function multipleWatchController($scope, MultipleSelectService, NotifyingService) {
 
             $scope.type = 'watch';
 

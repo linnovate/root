@@ -1,6 +1,6 @@
 'use strict';
 
-function TaskListController($scope, $timeout, $state, tasks, BoldedService, MultipleSelectService, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
+function TaskListController($scope, $timeout, $state, tasks, NotifyingService, BoldedService, MultipleSelectService, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
 
     let me;
     UsersService.getMe().then(function(result) {

@@ -1,4 +1,4 @@
-function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout, selectedItems, activityType, entityName,
+function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout, activityType, entityName,
                                   MultipleSelectService, UsersService, SettingServices, PermissionsService, NotifyingService) {
 
     $scope.selectedItems = MultipleSelectService.getSelected();
@@ -36,14 +36,14 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
 
         MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName)
             .then(result => {
-                for(let i = 0; i < selectedItems.length; i++){
-                    let entity = result.find(entity => entity._id === selectedItems[i]._id);
-                    Object.assign(selectedItems[i], entity);
+                for(let i = 0; i < $scope.selectedItems.length; i++){
+                    let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
+                    Object.assign($scope.selectedItems[i], entity);
                     if(changedBulkObject.update.delete)NotifyingService.notify('clearSelectedList');
                 }
-              NotifyingService.notify('refreshSelectedList');
-              $uibModalInstance.dismiss('cancel');
-
+                MultipleSelectService.setSelectedList($scope.selectedItems);
+                NotifyingService.notify('refreshSelectedList');
+                $uibModalInstance.dismiss('cancel');
             });
     };
 

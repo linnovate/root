@@ -142,9 +142,6 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                         templateUrl: '/icu/components/modal-directive/bulkOperations/bulk-operations.html',
                         controller: bulkOperationsController,
                         resolve: {
-                            selectedItems: function () {
-                                return scope.data;
-                            },
                             activityType: function () {
                                 return scope.activityType;
                             },

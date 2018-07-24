@@ -3,7 +3,7 @@
 
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleDue', function () {
-        function multipleDueController($scope, MultipleSelectService) {
+        function multipleDueController($scope, MultipleSelectService, NotifyingService) {
 
             $scope.type = 'due';
 
