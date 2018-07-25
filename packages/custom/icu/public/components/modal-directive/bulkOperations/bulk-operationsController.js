@@ -79,19 +79,19 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
 
   switch (activityType) {
       case 'status':
-          $scope.title = 'Set Status';
+          $scope.title = 'setStatus';
           break;
       case 'watch':
-          $scope.title = 'Set Watchers';
+          $scope.title = 'setWatchers';
           break;
       case 'assign':
-          $scope.title = 'Assign to';
+          $scope.title = 'assignTo';
           break;
       case 'due':
-          $scope.title = 'Set Due Date';
+          $scope.title = 'setDueDate';
           break;
       case 'tag':
-          $scope.title = 'Add tags';
+          $scope.title = 'addTags';
           break;
       case 'delete':
           $scope.title = `${$i18next('Delete')} ${$scope.selectedItems.length} ${entityName}`;
