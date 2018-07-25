@@ -17,7 +17,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
             'delete': ['editor'],
         };
 
-        let bulkSHowingMap = {
+        let bulkShowingMap = {
             'status': ['tasks', 'projects', 'discussions', 'officeDocuments'],
             'assign': ['tasks', 'projects', 'discussions', 'officeDocuments'],
             'watch': [],
@@ -27,7 +27,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
         };
 
         function showButton(operation, entityType){
-            return _.includes(bulkSHowingMap[operation], entityType);
+            return _.includes(bulkShowingMap[operation], entityType);
         }
 
         let cornerStates = [

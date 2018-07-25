@@ -221,7 +221,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.multipleSelectRefreshSelected = function (entity) {
         MultipleSelectService.refreshSelectedList(entity);
         multipleSelectRefreshState();
-        $scope.$broadcast('refreshSelectedList');
     };
 
     $scope.$on('changeCornerState', function(event, cornerState){
@@ -238,65 +237,75 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             MultipleSelectService.refreshSelectedList();
         }
         multipleSelectRefreshState();
-        $scope.$broadcast('refreshSelectedList');
     }
 
-    NotifyingService.subscribe('refreshAfterOperation', ()=>{ multipleSelectRefreshState() }, $scope);
-
-    NotifyingService.subscribe('clearSelectedList', function () {
-        $scope.cornerState = MultipleSelectService.refreshCornerState(filterResults($scope.items).length);
-        $scope.multipleSelectMode = false;
-        $scope.multipleSelectToggleBlock();
+    NotifyingService.subscribe('refreshAfterOperation', () => {
+        multipleSelectRefreshState();
     }, $scope);
 
-    $scope.multipleSelectToggleBlock = function(){
-        $scope.disabledDetailsPane = !!$scope.selectedItems.length;
-        NotifyingService.notify('disableDetailsPane');
-    };
-    $scope.multipleSelectToggleBlock();
+    NotifyingService.subscribe('clearSelectedList', () => {
+        changeMultipleMode(false);
+        $scope.cornerState = getRefreshedCornerState();
+        NotifyingService.notify('multipleDisableDetailsPaneCheck');
+    }, $scope);
 
-    $scope.cursorEnterMultiple = function(mouseOn){
-        console.log(mouseOn);
-        $scope.mouseOnMultiple = !!mouseOn;
-    };
-
+    $scope.cursorEnterMultiple = function(mouseOn){ $scope.mouseOnMultiple = !!mouseOn };
     $scope.showTick = function(item){ item.visible = true };
     $scope.hideTick = function(item){ item.visible = false };
 
     $scope.checkForHideMultiple = function(){
         if(MultipleSelectService.getCornerState() === 'none'){
-            $scope.multipleSelectMode = false;
+            changeMultipleMode(false);
         }
     };
 
-    // takes selected entities from service, filters it according to active list filters,
-    // changing the corner-button state,
-    // changing multipleSelectMode according to existing items in the list and selected items list
-    // calls check for enable/disable details pane
-    // * * * refactor of all items
     function multipleSelectRefreshState(){
-        $scope.selectedItems = MultipleSelectService.setSelectedList(filterResults(MultipleSelectService.getSelected()));
-        $scope.cornerState = MultipleSelectService.refreshCornerState(filterResults($scope.items).length);
-        //simplify, create single function: list, mode and corner state in the one function in service
+        $scope.selectedItems = getFilteredSelectedList();
+        $scope.cornerState = getRefreshedCornerState();
 
         if ($scope.selectedItems.length) {
-            $scope.multipleSelectMode = true;
+            changeMultipleMode(true);
         } else {
             MultipleSelectService.refreshSelectedList();
         }
-        if(!$scope.selectedItems.length && !$scope.mouseOnMultiple){
-            $scope.multipleSelectMode = false;
-        }
 
-        $scope.multipleSelectToggleBlock();
+        multipleDisablingCheck();
+        $scope.$broadcast('refreshBulkButtonsAccess');
+        NotifyingService.notify('multipleDisableDetailsPaneCheck');
+    }
+
+    function multipleDisablingCheck(){
+        if(!$scope.selectedItems.length && !$scope.mouseOnMultiple){
+            changeMultipleMode(false);
+        }
+    }
+
+    function changeMultipleMode(value){
+        $scope.multipleSelectMode = value;
+    }
+
+    function getFilteredSelectedList(){
+        let selected = MultipleSelectService.getSelected();
+        let filteredSelected = filterResults(selected);
+        let newSelectedList = MultipleSelectService.setSelectedList(filteredSelected);
+
+        return newSelectedList;
+    }
+
+    function getRefreshedCornerState(){
+        let filteredItems = filterResults($scope.items);
+        let refreshedCornerState = MultipleSelectService.refreshCornerState(filteredItems.length);
+
+        return refreshedCornerState;
     }
 
     function filterResults(itemsArray){
-      let newArray = $filter('filterRecycled')(itemsArray);
-      newArray = $filter('filterByOptions')(newArray);
-      newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
-      newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
-      return newArray;
+        let newArray = $filter('filterRecycled')(itemsArray);
+        newArray = $filter('filterByOptions')(newArray);
+        newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
+        newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
+
+        return newArray;
     }
 
     // ============================================================= //

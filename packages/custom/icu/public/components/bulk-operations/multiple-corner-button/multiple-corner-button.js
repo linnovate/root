@@ -10,7 +10,7 @@ angular.module('mean.icu.ui.bulkoperations')
                 $scope.$emit('changeCornerState', MultipleSelectService.changeCornerState());
             };
 
-            $scope.$on('refreshSelectedList', function (event) {
+            $scope.$on('refreshBulkButtonsAccess', function (event) {
                 $scope.changeCornerState();
             });
 

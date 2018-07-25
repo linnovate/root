@@ -7,12 +7,12 @@ angular.module('mean.icu.ui.bulkoperations')
             $scope.type = 'status';
             $scope.selectedItems = $scope.$parent.selectedItems;
 
-            refreshAllowed();
-            $scope.$on('refreshSelectedList', function (event) {
-              refreshAllowed();
+            refreshAccess();
+            $scope.$on('refreshBulkButtonsAccess', function (event) {
+                refreshAccess();
             });
 
-            function refreshAllowed(){
+            function refreshAccess(){
               return $scope.allowed = MultipleSelectService.haveBulkPerms($scope.type);
             }
         }

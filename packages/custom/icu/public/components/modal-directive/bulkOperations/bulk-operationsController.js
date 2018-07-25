@@ -51,6 +51,7 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
   //------------------------------------------------//
   //----------------------TAGS----------------------//
 
+  $scope.tags = [];
   $scope.addTagClicked = function () {
       $scope.tagInputVisible = true;
       $timeout(function () {
@@ -93,7 +94,7 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
           $scope.title = 'Add tags';
           break;
       case 'delete':
-          $scope.title = `${$i18next('Delete')} ${selectedItems.length} ${entityName}`;
+          $scope.title = `${$i18next('Delete')} ${$scope.selectedItems.length} ${entityName}`;
           break;
   }
 }
