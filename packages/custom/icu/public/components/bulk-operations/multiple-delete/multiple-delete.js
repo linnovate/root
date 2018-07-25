@@ -8,7 +8,7 @@ angular.module('mean.icu.ui.bulkoperations')
             $scope.selectedItems = $scope.$parent.selectedItems;
 
             refreshAllowed();
-            $scope.$on('refreshList', function (event) {
+            $scope.$on('refreshSelectedList', function (event) {
               refreshAllowed();
             });
 

@@ -10,6 +10,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ============================================================= //
     // ========================= navigate ========================== //
     // ============================================================= //
+    console.log('$parent.entityRowTpl: ', $scope.$parent.entityRowTpl);
+    $scope.unifiedRowTpl = '/icu/components/entity-list/regions/row.html';
 
     $scope.isCurrentEntityState = function(id) {
         return $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity`) === 0 && $state.current.name.indexOf('details') === -1;
@@ -216,13 +218,30 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.selectedItems = MultipleSelectService.refreshSelectedList();
     $scope.cornerState = MultipleSelectService.getCornerState();
 
-    $scope.$on('refreshList', function (event) {
+    $scope.multipleSelectRefreshSelected = function (entity) {
+        MultipleSelectService.refreshSelectedList(entity);
         multipleSelectRefreshState();
+        $scope.$broadcast('refreshSelectedList');
+    };
+
+    $scope.$on('changeCornerState', function(event, cornerState){
+        multipleSelectSetAllSelected(cornerState === 'all');
     });
 
-    NotifyingService.subscribe('refreshAfterOperation', function () {
+    function multipleSelectSetAllSelected(status){
+        for(let i = 0; i < $scope.items.length; i++){
+            $scope.items[i].selected = status;
+        }
+        if(status){
+            MultipleSelectService.setSelectedList($scope.items);
+        } else {
+            MultipleSelectService.refreshSelectedList();
+        }
         multipleSelectRefreshState();
-    }, $scope);
+        $scope.$broadcast('refreshSelectedList');
+    }
+
+    NotifyingService.subscribe('refreshAfterOperation', ()=>{ multipleSelectRefreshState() }, $scope);
 
     NotifyingService.subscribe('clearSelectedList', function () {
         $scope.cornerState = MultipleSelectService.refreshCornerState(filterResults($scope.items).length);
@@ -241,13 +260,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $scope.mouseOnMultiple = !!mouseOn;
     };
 
-    $scope.showTick = function(item){
-        item.visible = true;
-    };
-
-    $scope.hideTick = function(item){
-        item.visible = false;
-    };
+    $scope.showTick = function(item){ item.visible = true };
+    $scope.hideTick = function(item){ item.visible = false };
 
     $scope.checkForHideMultiple = function(){
         if(MultipleSelectService.getCornerState() === 'none'){
@@ -271,7 +285,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             MultipleSelectService.refreshSelectedList();
         }
         if(!$scope.selectedItems.length && !$scope.mouseOnMultiple){
-            debugger;
             $scope.multipleSelectMode = false;
         }
 

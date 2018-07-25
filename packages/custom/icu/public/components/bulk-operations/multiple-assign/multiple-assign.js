@@ -9,7 +9,7 @@ angular.module('mean.icu.ui.bulkoperations')
 
             refreshAllowed();
 
-            $scope.$on('refreshList', function (event) {
+            $scope.$on('refreshSelectedList', function (event) {
               refreshAllowed();
             });
 

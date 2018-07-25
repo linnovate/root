@@ -6,10 +6,11 @@
             <tr data-ng-repeat="item in items | filterRecycled | filterByOptions | filterByActiveStatus:activeToggle.field | orderBy:sorting.field:sorting.isReverse"
                 data-ng-class="{ 'active': isCurrentState(item._id), 'multipleSelected': item.selected }"
                 ng-click="onClickRow($event, item)"
-                ng-include="$parent.entityRowTpl"
+                ng-include="unifiedRowTpl"
                 ng-mouseover="showTick(item)"
                 ng-mouseleave="hideTick(item)"
-            ></tr>
+            >
+            </tr>
             <tr ng-if="!multipleSelectMode">
                 <td
                     class="create-new-item"

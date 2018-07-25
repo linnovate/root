@@ -45,27 +45,6 @@ function OfficeDocumentListController($scope, $state, BoldedService, NotifyingSe
         });
     }
 
-    $scope.multipleSelectRefreshSelected = function (entity) {
-        MultipleSelectService.refreshSelectedList(entity);
-        $scope.$broadcast('refreshList', {});
-    };
-
-    $scope.$on('changeCornerState', function(event, cornerState){
-        multipleSelectSetAllSelected(cornerState === 'all');
-    });
-
-    function multipleSelectSetAllSelected(status){
-        for(let i = 0; i < $scope.items.length; i++){
-            $scope.items[i].selected = status;
-        }
-        if(status){
-            MultipleSelectService.setSelectedList($scope.items);
-        } else {
-            MultipleSelectService.refreshSelectedList();
-        }
-        $scope.$broadcast('refreshList');
-    }
-
     //     $scope.search = function(item) {
     //         return OfficeDocumentsService.search(term).then(function(searchResults) {
     //             _(searchResults).each(function(sr) {

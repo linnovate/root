@@ -1,22 +1,3 @@
-<td ng-hide="item.visible || multipleSelectMode" class="id">{{$index + 1}}</td>
-<td ng-show="item.visible || multipleSelectMode" class="tick">
-  <input type="checkbox"
-         ng-change="multipleSelectRefreshSelected(item)"
-         ng-model="item.selected"
-  >
-</td>
-<td class="name"
-    title="{{item.title}}"
-    ng-attr-contenteditable="{{(!displayOnly && haveEditiorsPermissions(item)) && !recycled(item)}}"
-    strip-br="true"
-    tabindex="0"
-    ng-model="item.title"
-    ng-change="onChange(item)"
-    ng-keydown="onKeydown($event, $index)"
-    ng-blur="bluring(item, $event)"
-    ng-focus="focusing(item)"
-    ng-class="[getBoldedClass(item), {'noFocus': !item.focus}]"
-></td>
 <td class="status col-sm-2" ng-class="item.status">{{item.status | i18next }}</td>
 <td class="arrow">
     <i ng-if="drawArrow" class="fa chevron-right"></i>
