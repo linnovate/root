@@ -10,12 +10,6 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
     $scope.statusMap = SettingServices.getStatusList();
     $scope.statuses = $scope.statusMap[$scope.entityName.substring(0, $scope.entityName.length - 1)];
 
-    let serviceMap = PermissionsService.serviceMap;
-    serviceMap[$scope.entityName].getTags(tags => {
-        $scope.tags = tags;
-    });
-
-
     $scope.select = function (selected) {
         $scope.selected = selected;
     };
@@ -47,14 +41,15 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
             });
     };
 
+    //------------------------------------------------//
+    //----------------------DUE----------------------//
+
+    $scope.dueOptions = {
+        dateFormat: 'dd.mm.yy'
+    };
+
   //------------------------------------------------//
   //----------------------TAGS----------------------//
-
-
-  //remove this
-  $scope.getUnusedTags = function () {
-      return ($scope.tags || []).filter(x => $scope.selected.indexOf(x) < 0);
-  };
 
   $scope.addTagClicked = function () {
       $scope.tagInputVisible = true;
@@ -80,9 +75,6 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
   $scope.onOpenClose = function (isOpen) {
       $scope.tagInputVisible = !isOpen;
   };
-
-  //--------------------TAGS END--------------------//
-  //------------------------------------------------//
 
   switch (activityType) {
       case 'status':
