@@ -261,6 +261,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     function multipleSelectRefreshState(){
         $scope.selectedItems = getFilteredSelectedList();
+        refreshActiveItemsInList();
         $scope.cornerState = getRefreshedCornerState();
 
         if ($scope.selectedItems.length) {
@@ -306,6 +307,13 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;
+    }
+
+    function refreshActiveItemsInList(){
+        for(let item of $scope.items){
+            let entity = $scope.selectedItems.find( selectedItems => selectedItems._id === item._id );
+            item.selected = !!entity;
+        }
     }
 
     // ============================================================= //
