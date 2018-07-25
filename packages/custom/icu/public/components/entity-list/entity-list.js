@@ -243,12 +243,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         multipleSelectRefreshState();
     }, $scope);
 
-    NotifyingService.subscribe('clearSelectedList', () => {
-        changeMultipleMode(false);
-        $scope.cornerState = getRefreshedCornerState();
-        NotifyingService.notify('multipleDisableDetailsPaneCheck');
-    }, $scope);
-
     $scope.cursorEnterMultiple = function(mouseOn){ $scope.mouseOnMultiple = !!mouseOn };
     $scope.showTick = function(item){ item.visible = true };
     $scope.hideTick = function(item){ item.visible = false };

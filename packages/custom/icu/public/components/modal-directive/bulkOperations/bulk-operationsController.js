@@ -1,4 +1,4 @@
-function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout, activityType, entityName,
+function bulkOperationsController($scope, context, $stateParams, $state, $i18next, $uibModalInstance, $timeout, activityType, entityName,
                                   MultipleSelectService, UsersService, SettingServices, PermissionsService, NotifyingService) {
 
     $scope.selectedItems = MultipleSelectService.getSelected();
@@ -34,12 +34,23 @@ function bulkOperationsController($scope, $i18next, $uibModalInstance, $timeout,
                     let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
                     Object.assign($scope.selectedItems[i], entity);
                 }
-                if(changedBulkObject.update.delete)NotifyingService.notify('clearSelectedList');
+                if(changedBulkObject.update.delete){
+                    refreshState();
+                }
                 MultipleSelectService.setSelectedList($scope.selectedItems);
                 NotifyingService.notify('refreshAfterOperation');
                 $uibModalInstance.dismiss('cancel');
             });
     };
+
+    function refreshState(){
+        let currentState = $state.current.name;
+        $state.go(currentState, {
+            entity: 'all',
+        }, {
+            reload: true
+        });
+    }
 
     //------------------------------------------------//
     //----------------------DUE----------------------//
