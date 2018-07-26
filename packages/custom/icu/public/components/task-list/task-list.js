@@ -3,7 +3,6 @@
 function TaskListController($scope, $timeout, $state, tasks, DiscussionsService, TasksService, ProjectsService, context, $stateParams, EntityService) {
 
     $scope.items = tasks.data || tasks;
-
     $scope.loadNext = tasks.next;
     $scope.loadPrev = tasks.prev;
 
