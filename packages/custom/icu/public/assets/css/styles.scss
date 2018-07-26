@@ -120,6 +120,15 @@ table {
     pointer-events: auto;
 }
 
+.fullyDisabled {
+    @extend .disabled;
+}
+
+.fullyDisabled:after {
+    @extend .disabled:after;
+    z-index: 4;
+}
+
 .enabled {
     pointer-events: all;
     z-index: 3;
