@@ -90,19 +90,19 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
   switch (activityType) {
       case 'status':
-          $scope.title = 'setStatus';
+          $scope.title = `${$i18next('setStatus')}`;
           break;
       case 'watch':
-          $scope.title = 'setWatchers';
+          $scope.title = `${$i18next('setWatchers')}`;
           break;
       case 'assign':
-          $scope.title = 'assignTo';
+          $scope.title = `${$i18next('assignTo')}`;
           break;
       case 'due':
-          $scope.title = 'setDueDate';
+          $scope.title = `${$i18next('setDueDate')}`;
           break;
       case 'tag':
-          $scope.title = 'addTags';
+          $scope.title = `${$i18next('addTags')}`;
           break;
       case 'delete':
           $scope.title = `${$i18next('Delete')} ${$scope.selectedItems.length} ${entityName}`;

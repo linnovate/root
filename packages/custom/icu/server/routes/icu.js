@@ -440,10 +440,10 @@ module.exports = function(Icu, app) {
   app.route('/api/ftp/:url')
   .all(ftp.getFileFromFtp);
 
-  app.route('/api/:entity(task|discussion|project|office|folder|document|templateDoc)s/bulk')
+  app.route('/api/:entity(task|discussion|project|office|folder|officeDocument|templateDoc)s/bulk')
     .put(bulk.update)
     .patch(bulk.recycle)
-    .delete(bulk.remove)
+    .delete(bulk.remove);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);

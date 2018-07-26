@@ -11,7 +11,7 @@ const models = {
   project: require('../models/project'),
   office: require('../models/office'),
   folder: require('../models/folder'),
-  document: require('../models/document'),
+  officeDocument: require('../models/document'),
   templateDoc: require('../models/templateDoc')
 };
 
