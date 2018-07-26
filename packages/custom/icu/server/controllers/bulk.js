@@ -50,8 +50,9 @@ function update(req, res, next) {
   let addedAttributes = {};
   if(!_.isEmpty(set)) addedAttributes.$set = set;
   if(!_.isEmpty(addToEach)) addedAttributes.$addToSet = addToEach;
+  let findArrayIds = { _id: { $in: ids } };
 
-  Model.find({ _id: { $in: ids } })
+    Model.find(findArrayIds)
   .then(docs => docs.length === 0 ? next() : docs )
   .then(docs => {
     if (checkBoldedPermissions(docs,req.user)) return docs ;
@@ -60,16 +61,13 @@ function update(req, res, next) {
   .then(function(docs) {
     if(!docs.length) throw new httpError(404);
 
-    return Model.update({
-        _id: { $in: ids }
-    },
+    return Model.update(
+        findArrayIds,
         addedAttributes,
-    {
-        multi: true
-    })
+        { multi: true })
   })
   .then(function (results) {
-      return Model.find({_id: {$in: ids}})
+      return Model.find(findArrayIds)
   })
   .then(docs => {
     if(!docs.length) throw new httpError(404);
@@ -94,21 +92,20 @@ function recycle(req, res, next) {
   let Model = models[entity];
   let ids = req.body.ids;
 
-  Model.find({ _id: { $in: ids } })
+  let findArrayIds = { _id: { $in: ids } };
+  let recycledSet = { $set: { recycled: new Date } };
+
+  Model.find(findArrayIds)
   .then(function(docs) {
     if(!docs.length) throw new httpError(404);
-    return Model.update({
-      _id: { $in: ids }
-    }, {
-      $set: {
-        recycled: new Date
-      }
-    }, {
-      multi: true
-    })
+
+    return Model.update(
+        findArrayIds,
+        recycledSet,
+        { multi: true });
   })
   .then(function (results) {
-    return Model.find({_id: {$in: ids}})
+    return Model.find(findArrayIds);
   })
   .then(docs => {
     if(!docs.length) throw new httpError(404);
@@ -137,7 +134,6 @@ function clean(obj) {
 }
 
 function remove(req, res, next) {
-  //usused - remove this maybe
   let entity = req.params.entity;
   let Model = models[entity];
   let ids = req.body.ids;
