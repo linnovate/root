@@ -151,7 +151,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         var me;
         UsersService.getMe().then(function(me1) {
             me = me1;
-            window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
+            window.open(window.base + 'api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
         });
     }
 
