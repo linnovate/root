@@ -4,19 +4,6 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
 
     $scope.items = tasks.data || tasks;
 
-    var subTasks = [];
-    $scope.items.forEach(function (item) {
-        if (item.subTasks && item.subTasks.length > 0) {
-            return subTasks = subTasks.concat(item.subTasks.filter(function (subTask) {
-                return subTask !== 'undefined';
-            }));
-        }
-    });
-
-    subTasks && subTasks.forEach(function (item) {
-        $scope.items.push(item);
-    });
-
     $scope.loadNext = tasks.next;
     $scope.loadPrev = tasks.prev;
 
