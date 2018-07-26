@@ -36,15 +36,15 @@
     <button ngf-select
             ngf-change="upload($files)"
             ngf-multiple="true"
-            class="choose" ng-if="(!templateDoc.path && !templateDoc.spPath)">{{ 'chooseFile' | i18next }}
+            class="choose" ng-if="(!item.path && !item.spPath)">{{ 'chooseFile' | i18next }}
     </button>
     <div style="overflow:inherit" class="tab-content">
         <div class="documents">
-            <div ng-if="templateDoc.path||templateDoc.spPath" class="document" >
+            <div ng-if="item.path||item.spPath" class="document" >
             <!-- <a href="{{officeDocument.path}}" target="window"> -->
-                <a ng-click="view(templateDoc)" target="window">
-                    <div class="icon {{templateDoc.templateType}}"></div>
-                    <div id="templateDocTitle">{{templateDoc.title}}</div>
+                <a ng-click="view(item)" target="window">
+                    <div class="icon {{item.templateType}}"></div>
+                    <div id="templateDocTitle">{{item.title}}</div>
                 </a>
             </div>
         </div>
