@@ -32,6 +32,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
             .then(result => {
                 for(let i = 0; i < $scope.selectedItems.length; i++){
                     let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
+                    if(typeof entity.due === 'string')entity.due = new Date(entity.due);
                     Object.assign($scope.selectedItems[i], entity);
                 }
                 if(changedBulkObject.update.delete){
