@@ -161,41 +161,6 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
 
     init();
 
-    $scope.getProjName = function() {
-        var entityType = $scope.currentContext.entityName;
-        if ($scope.currentContext != undefined && $scope.currentContext.entity != undefined && $scope.currentContext.entity.title != undefined) {
-            return $scope.currentContext.entity.title;
-        } else if ($scope.currentContext != undefined && $scope.currentContext.entity != undefined && $scope.currentContext.entity.name != undefined) {
-            return $scope.currentContext.entity.name;
-        } else {
-            if (entityType == "discussion" && DiscussionsService.currentDiscussionName != undefined) {
-                return DiscussionsService.currentDiscussionName;
-            } else if (ProjectsService.currentProjectName != undefined) {
-                return ProjectsService.currentProjectName;
-            } else {
-                var tasks = $scope.tasks;
-                if (tasks.length == 1) {
-                    $state.go('401');
-                    return "you dont have permission";
-                } else if (tasks.length) {
-                    var task = tasks[0];
-                    var result;
-                    if (task.project != undefined) {
-                        result = task.project.title
-                    } else if (task.discussions != undefined && task.discussions.title != undefined) {
-                        result = task.discussions[0].title;
-                    } else {
-                        result = "you dont have permission";
-                    }
-                    return result;
-                }
-            }
-
-        }
-    };
-
-    $scope.subEntity = $scope.getProjName();
-
 }
 
 angular.module('mean.icu.ui.tasklist', []).controller('TaskListController', TaskListController);
