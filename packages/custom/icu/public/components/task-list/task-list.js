@@ -14,7 +14,7 @@ function TaskListController($scope, $timeout, $state, tasks, DiscussionsService,
     });
 
     subTasks && subTasks.forEach(function (item) {
-        $scope.items.push(item);
+        //$scope.items.push(item);
     });
 
     $scope.loadNext = tasks.next;
