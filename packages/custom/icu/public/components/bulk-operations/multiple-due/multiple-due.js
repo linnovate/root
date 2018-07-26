@@ -5,6 +5,7 @@ angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleDue', function () {
         function multipleDueController($scope, MultipleSelectService, NotifyingService) {
             $scope.type = 'due';
+            $scope.tooltipTitle = 'bulkDue';
             $scope.selectedItems = $scope.$parent.selectedItems;
 
             refreshAccess();

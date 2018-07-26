@@ -97,7 +97,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
           $scope.title = `${$i18next('setWatchers')}`;
           break;
       case 'assign':
-          $scope.title = `${$i18next('assignTo')}`;
+          $scope.title = `${$i18next('assign')}`;
           break;
       case 'due':
           $scope.title = `${$i18next('setDueDate')}`;
@@ -106,7 +106,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
           $scope.title = `${$i18next('addTags')}`;
           break;
       case 'delete':
-          $scope.title = `${$i18next('Delete')} ${$scope.selectedItems.length} ${entityName}`;
+          $scope.title = `${$i18next('Delete')}`;
           break;
   }
 }

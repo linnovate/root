@@ -159,13 +159,12 @@
             div[icu-avatar] {
                 display: inline-block;
             }
+            .selected {
+                margin-bottom: 10px;
+                display: block;
+            }
             .status {
                 height: 300px;
-
-                .selected {
-                    margin-bottom: 10px;
-                    display: block;
-                }
             }
             .watch {
 
@@ -239,7 +238,7 @@
                 }
             }
             .delete {
-                height: 50px;
+                height: 100px;
             }
         }
         .closeBtn {

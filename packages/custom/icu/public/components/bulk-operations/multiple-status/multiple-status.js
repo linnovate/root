@@ -5,6 +5,7 @@ angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleStatus', function () {
         function multipleStatusController($scope, MultipleSelectService, NotifyingService) {
             $scope.type = 'status';
+            $scope.tooltipTitle = 'bulkStatus';
             $scope.selectedItems = $scope.$parent.selectedItems;
 
             refreshAccess();

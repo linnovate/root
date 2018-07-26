@@ -32,6 +32,8 @@
 
 
     <section ng-if="activityType === 'assign'" class="assign">
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
         <div tooltips tooltip-template="{{'assignee' | i18next}}">
             <ui-select ng-model="selected" on-select="select(selected._id)">
                 <ui-select-match  placeholder="{{ 'selectAssignee' | i18next }}">
@@ -54,6 +56,7 @@
 
     <section ng-if="activityType === 'due'" class="due">
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
         <div class="date">
             <input ng-click="open()" ng-model="selected" placeholder="{{ 'setDueDate' | i18next }}" ui-date="dueOptions" />
         </div>
@@ -103,6 +106,8 @@
 
 
     <section ng-if="activityType === 'delete'" class="delete">
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
         <button class="action-button" ng-click="bulkUpdate('delete', true)">{{ 'delete' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>

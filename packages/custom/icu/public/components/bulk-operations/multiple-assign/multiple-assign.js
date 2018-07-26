@@ -5,6 +5,7 @@ angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleAssign', function () {
         function multipleAssignController($scope, MultipleSelectService, NotifyingService) {
             $scope.type = 'assign';
+            $scope.tooltipTitle = 'bulkAssignee';
             $scope.selectedItems = $scope.$parent.selectedItems;
 
             refreshAccess();

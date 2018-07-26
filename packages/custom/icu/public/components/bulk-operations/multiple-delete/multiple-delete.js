@@ -5,6 +5,7 @@ angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleDelete', function () {
         function multipleDeleteController($scope, MultipleSelectService, NotifyingService) {
             $scope.type = 'delete';
+            $scope.tooltipTitle = 'bulkDelete';
             $scope.selectedItems = $scope.$parent.selectedItems;
 
             refreshAccess();

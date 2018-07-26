@@ -5,6 +5,7 @@ angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleTag', function () {
         function multipleTagController($scope, MultipleSelectService, NotifyingService) {
             $scope.type = 'tag';
+            $scope.tooltipTitle = 'bulkTags';
             $scope.selectedItems = $scope.$parent.selectedItems;
 
             refreshAccess();
