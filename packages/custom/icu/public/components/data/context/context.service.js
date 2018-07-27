@@ -44,7 +44,7 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
                 }
 
                 if (!entityName && parts[2] === 'byparent') {
-                    entityName = 'task';
+                    entityName = main;
                 }
 
                 return {
