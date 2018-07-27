@@ -39,8 +39,9 @@ var entityNameMap = {
 function boldUpdate(req, res, next) {
   let {entity_id, user_id, entity_type, action} = req.body;
   let entityController = entityNameMap[entity_type].controller;
-  if (!entity_id) {
-    res.status(400);
+  if (!entity_id || !user_id || !entity_type || !action) {
+    res.status(400).send('Bad input data');
+    return;
   }
 
   entityController
@@ -55,7 +56,7 @@ function boldUpdate(req, res, next) {
         console.log('entity_id: ', entity_id);
         console.log('action: ', action);
         console.log('user_id: ', user_id);
-        res.status(400);
+        res.status(400).send(err || ('cannot find entity ' + entity_id));
         return;
       }
 
@@ -66,6 +67,7 @@ function boldUpdate(req, res, next) {
       }
 
       switch (action) {
+
         case 'view':
           let ownBolded = entity.bolded.find((bolded)=>{
             return bolded.id.toString() === user_id;
@@ -95,7 +97,7 @@ function boldUpdate(req, res, next) {
 function syncBoldUsers(req, res, next) {
   let entity = req.locals ? req.locals.result : req.body;
   if (!entity) {
-    res.status(404);
+    res.status(404).send('No entity');
   }
   let data;
   let boldedUpdate = req.boldedUpdate;
