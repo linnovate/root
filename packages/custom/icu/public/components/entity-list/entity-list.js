@@ -217,6 +217,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.multipleSelectMode = false;
     $scope.selectedItems = MultipleSelectService.refreshSelectedList();
     $scope.cornerState = MultipleSelectService.getCornerState();
+    NotifyingService.notify('multipleDisableDetailsPaneCheck');
 
     $scope.multipleSelectRefreshSelected = function (entity) {
         MultipleSelectService.refreshSelectedList(entity);
