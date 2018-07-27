@@ -16,6 +16,9 @@ var OfficeSchema = new Schema({
   title: {
     type: String
   },
+  recycled: {
+    type: Date,
+  },
   parent: {
     type: Schema.ObjectId,
     ref: 'Office'

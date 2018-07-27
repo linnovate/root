@@ -11,6 +11,9 @@ var TemplateDocSchema = new Schema({
   title: {
     type: String
   },
+  recycled: {
+    type: Date,
+  },
   path: {
     type: String
   },

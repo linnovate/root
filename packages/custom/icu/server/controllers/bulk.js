@@ -2,8 +2,8 @@
 
 var _ = require('lodash');
 const httpError = require('http-errors');
-const permissions = require('../controllers/permissions.js');
-var elasticsearch = require('../controllers/elasticsearch');
+const permissions = require('./permissions.js');
+var elasticsearch = require('./elasticsearch');
 
 const models = {
   task: require('../models/task'),
@@ -160,9 +160,5 @@ function checkBoldedPermissions(docs,user) {
     }
   }) ;
 
-  if (permissionDenied) {
-    return false ;
-  }
-
-  return true ;
+  return !permissionDenied;
 }
