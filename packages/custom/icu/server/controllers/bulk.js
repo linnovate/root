@@ -68,18 +68,16 @@ function update(req, res, next) {
   })
   .then(function (results) {
       return Model.find(findArrayIds)
+          .populate('watchers');
   })
   .then(docs => {
+    res.json(docs);
     if(!docs.length) throw new httpError(404);
     docs.forEach(element => {
         console.log("saving elastic");
         element.watchers = [];
         elasticsearch.save(element, entity);
-    })
-    return docs;
-  })
-  .then(function(docs) {
-    res.json(docs)
+    });
   })
   .catch(function(err) {
     next(err)
