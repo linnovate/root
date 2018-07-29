@@ -1,12 +1,22 @@
 <div class="entity-list" ng-controller="EntityListController">
     <div ng-include="'/icu/components/entity-list/regions/header.html'"></div>
 
-    <div ng-include="'/icu/components/entity-list/regions/filters.html'"></div>
+    <div ng-if="!multipleSelectMode" ng-include="'/icu/components/entity-list/regions/filters.html'"></div>
+
+    <multiple-select
+        ng-if="multipleSelectMode"
+        selected-items="selectedItems"
+        corner-state="cornerState"
+        ng-mouseleave="checkForHideMultiple();cursorEnterMultiple(false)"
+        ng-mouseenter="cursorEnterMultiple(true)"
+    >
+    </multiple-select>
 
     <div
         ng-include="'/icu/components/entity-list/regions/list.html'"
         class="entity-list-container"
         ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
-    ></div>
+    >
+    </div>
 
 </div>

@@ -69,6 +69,192 @@
     }
 
     .modal-content {
+        #modalBulk {
+            font-weight: bold;
+            padding: 27px 21px;
+
+            .title {
+                font-size: 17px;
+                line-height: 23px;
+                margin-bottom: 40px;
+            }
+            .form-control {
+                width: 100%;
+                height: 55px;
+                line-height: 39px;
+                display: block;
+                border-radius: 0;
+                margin: 0 auto 65px;
+
+                .caret {
+                    display: none !important;
+                }
+            }
+            .ui-select-choices {
+                @include scroll;
+            }
+            .ui-select-container.ui-select-bootstrap {
+                i {
+                    -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                    mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
+                    width: 15px;
+                    height: 17px;
+                    display: inline-block;
+                    margin-right: 13px;
+                }
+                .avatar {
+                    margin: 5px;
+                    line-height: 30px;
+                }
+            }
+            i.new {background-color: #ff4081; }
+            i.assigned{background-color: #2979ff;}
+            i.in-progress{background-color: #f69679;}
+            i.review{background-color: #8dc63f;}
+            i.rejected{background-color: #ef5350;}
+            i.done{background-color: #757575;}
+            i.canceled{background-color: #ef5350;}
+            i.completed{background-color: #598527;}
+            i.archived{background-color: #ab47bc;}
+            i.waiting-approval{background-color: #ab47bc;}
+            i.scheduled{background-color: #0054a6;}
+            i.received{background-color: #37afef;}
+            i.sent{background-color: #359123;}
+
+            .new{color: #ff4081; }
+            .assigned{color: #2979ff;}
+            .in-progress{color: #f69679;}
+            .review{color: #8dc63f;}
+            .rejected{color: #ef5350;}
+            .done{color: #757575;}
+            .canceled{color: #ef5350;}
+            .waiting-approval{color: #ab47bc;}
+            .completed{color: #598527;}
+            .archived{color: #ab47bc;}
+            .scheduled{color: #0054a6;}
+            .received{color: #37afef;}
+            .sent{color: #359123;}
+
+            .action-button {
+                height: 35px;
+                width: 100px;
+                border-radius: 35px;
+                border: none;
+                outline: none;
+                background-color: #fda102;
+                box-shadow: 0 3px 0 0 #ff6400;
+                color: white;
+                padding: 0 10px;
+                white-space: nowrap;
+                float: left;
+                margin-right: 16px;
+            }
+            .cancel {
+                width: 100px;
+                height: 35px;
+                border: none;
+                color: #A6A6A6;
+                background: transparent;
+            }
+            div[icu-avatar] {
+                display: inline-block;
+            }
+            .selected {
+                margin-bottom: 10px;
+                display: block;
+            }
+            .status {
+                height: 300px;
+            }
+            .watch {
+
+            }
+            .assign {
+                height: 300px;
+            }
+            .due {
+                height: 200px;
+
+                .date {
+                    width: 100%;
+                    height: 50px;
+                    display: block;
+                    border: 1px solid #C8C8C8;
+                    margin: 20px 0;
+                    background: url("/icu/assets/img/calendar.png") no-repeat scroll 15px center;
+
+                    input {
+                        left: 50px;
+                        width: calc(100% - 50px);
+                        height: 100%;
+                        position: relative;
+                        border: none;
+                    }
+                }
+            }
+            .tag {
+                height: 400px;
+
+                .items {
+                    padding: 12px;
+                    width: 100%;
+                    min-height: 53px;
+                    list-style: none;
+                    margin: 20px 0;
+                    border: 1px solid #E8E8E8;
+                    display: inline-flex;
+                    flex-wrap: wrap;
+
+                    .tags-item, .form-control, .tags-input {
+                        width: 80px;
+                        height: 28px;
+                        padding: 0 5px;
+                        margin: 7px;
+                    }
+                    .tags-item {
+                        line-height: 28px;
+                        border: 1px solid #E8E8E8;
+                        display: flex;
+                        justify-content: space-between;
+
+                        span {
+                            display: block;
+                            max-width: 50px;
+                            overflow: hidden;
+                            font-weight: normal;
+                            white-space: nowrap;
+                        }
+                    }
+                    .tags-item-remove {
+                        border: none;
+                        background-color: transparent;
+                        transform: translateY(-1px);
+                    }
+                    .form-control {
+                        margin: 0 -5px 10px;
+                        line-height: 25px;
+                        font-weight: normal;
+                    }
+                }
+            }
+            .delete {
+                height: 100px;
+            }
+        }
+        .closeBtn {
+            border: none;
+            transition: 0.8s;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: white;
+            &:hover {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                transform: rotate(90deg);
+            }
+        }
         .modal-header {
             &#modalUser {
                 height: 165px;
@@ -104,20 +290,6 @@
                         }
                     }
                 }
-                .closeBtn {
-                    border: none;
-                    transition: 0.8s;
-                    position: absolute;
-                    top:10px;
-                    right: 10px;
-                    background-color: white;
-                    &:hover {
-                        position: absolute;
-                        top:10px;
-                        right: 10px;
-                        transform:rotate(90deg);
-                    }
-                }
                 .modal-title {
                     margin: 0;
                     width: calc(100% - 85px);
@@ -127,9 +299,9 @@
                     line-height: 30px;
                 }
                 .tabs {
-                    ul{
+                    ul {
                         height: 100%;
-                        width:100%;
+                        width: 100%;
                         padding-left: 0;
                         padding-bottom: 10px;
                         li {
@@ -146,7 +318,7 @@
                             line-height: 22px;
                             width: 170px;
                             &.activeTab {
-                                border-bottom:3px solid #FFA000;
+                                border-bottom: 3px solid #FFA000;
                                 a {
                                     &:link, &:hover, &:active, &:visited {
                                         text-decoration: none;
@@ -155,7 +327,7 @@
                             }
                             a {
                                 color: black;
-                                padding:1px;
+                                padding: 1px;
                                 &:link, &:hover, &:active, &:visited {
                                     text-decoration: none;
                                 }

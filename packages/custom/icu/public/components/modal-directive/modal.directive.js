@@ -135,6 +135,22 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                         }
                     });
                 }
+                else if(scope.modalName === 'bulk-operations') {
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        size:  'md',
+                        templateUrl: '/icu/components/modal-directive/bulkOperations/bulk-operations.html',
+                        controller: bulkOperationsController,
+                        resolve: {
+                            activityType: function () {
+                                return scope.activityType;
+                            },
+                            entityName: function () {
+                                return scope.entityName;
+                            },
+                        }
+                    });
+                }
 
                 else {
                 var modalInstance = $uibModal.open({
@@ -162,6 +178,7 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                 showModal: '=',
                 deleteFn: '&',
                 entityName: '@',
+                activityType: '@',
                 send: '=',
                 sendDocument: '&',
                 data: '=',
@@ -180,7 +197,6 @@ function controller($scope, $uibModalInstance, $filter, entity) {
             $uibModalInstance.close();
         else
             $scope.cancel();
-
     };
 
     $scope.cancel = function () {
@@ -255,7 +271,7 @@ function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, peo
     };
 }
 
-function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,officeDocument, people, UsersService, OfficeDocumentsService) {
+function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter, officeDocument, people, UsersService, OfficeDocumentsService) {
 
     $scope.officeDocument = officeDocument;
     $scope.people = people;

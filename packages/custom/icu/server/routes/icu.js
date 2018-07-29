@@ -33,6 +33,7 @@ var order = require('../controllers/order');
 var express = require('express');
 var ftp = require('../services/ftp.js');
 var boldedService = require('../services/bolded.js');
+var bulk = require('../controllers/bulk');
 
 //update mapping - OHAD
 //var mean = require('meanio');
@@ -438,6 +439,11 @@ module.exports = function(Icu, app) {
 
   app.route('/api/ftp/:url')
   .all(ftp.getFileFromFtp);
+
+  app.route('/api/:entity(task|discussion|project|office|folder|officeDocument|templateDoc)s/bulk')
+    .put(bulk.update)
+    .patch(bulk.recycle)
+    .delete(bulk.remove);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);

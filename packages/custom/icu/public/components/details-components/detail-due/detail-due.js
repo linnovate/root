@@ -12,7 +12,7 @@ function detailDue() {
     scope: {
       value: "=",
       list: "=",
-      onChange: "&"
+      onChange: "="
     },
     link: link,
     templateUrl: '/icu/components/details-components/detail-due/detail-due.html',
@@ -41,7 +41,7 @@ function detailDue() {
           $scope.open();
         }
       },
-      dateFormat: 'd.m.yy'
+      dateFormat: 'dd.mm.yy'
     };
 
     $scope.checkDate = function() {

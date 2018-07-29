@@ -136,7 +136,9 @@ angular.module('mean.icu.data.officesservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(entity => BoldedService.boldedUpdate(entity, 'offices', 'update'));
+        }).then(result => {
+          return result;
+        });
     }
 
     function updateColor(office, me) {
@@ -148,7 +150,9 @@ angular.module('mean.icu.data.officesservice', [])
                 status: office.color
             },
             context: {}
-        }).then(entity => BoldedService.boldedUpdate(entity, 'offices', 'update'));
+        }).then(result => {
+          return result;
+        });
     }
 
     function updateTitle(office, prev, type) {
@@ -163,7 +167,9 @@ angular.module('mean.icu.data.officesservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(() => BoldedService.boldedUpdate(office, 'offices', 'update'));
+        }).then(result => {
+          return result;
+        });
     }
 
     return {

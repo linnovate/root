@@ -5,11 +5,12 @@
  * @example <div acme-order-calendar-range></div>
  */
 
-function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService,  PermissionsService) {
+function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, PermissionsService, MultipleSelectService, NotifyingService) {
 
     // ============================================================= //
     // ========================= navigate ========================== //
     // ============================================================= //
+    $scope.unifiedRowTpl = '/icu/components/entity-list/regions/row.html';
 
     $scope.isCurrentEntityState = function(id) {
         return $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity`) === 0 && $state.current.name.indexOf('details') === -1;
@@ -206,6 +207,108 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         }
         );
     };
+
+    // ============================================================= //
+    // =================== multiple operations ===================== //
+    // ============================================================= //
+
+    $scope.mouseOnMultiple = false;
+    $scope.multipleSelectMode = false;
+    $scope.selectedItems = MultipleSelectService.refreshSelectedList();
+    $scope.cornerState = MultipleSelectService.getCornerState();
+    NotifyingService.notify('multipleDisableDetailsPaneCheck');
+
+    $scope.multipleSelectRefreshSelected = function (entity) {
+        MultipleSelectService.refreshSelectedList(entity);
+        multipleSelectRefreshState();
+    };
+
+    $scope.$on('changeCornerState', function(event, cornerState){
+        multipleSelectSetAllSelected(cornerState === 'all');
+    });
+
+    function multipleSelectSetAllSelected(status){
+        for(let i = 0; i < $scope.items.length; i++){
+            $scope.items[i].selected = status;
+        }
+        if(status){
+            MultipleSelectService.setSelectedList($scope.items);
+        } else {
+            MultipleSelectService.refreshSelectedList();
+        }
+        multipleSelectRefreshState();
+    }
+
+    NotifyingService.subscribe('refreshAfterOperation', () => {
+        multipleSelectRefreshState();
+    }, $scope);
+
+    $scope.cursorEnterMultiple = function(mouseOn){ $scope.mouseOnMultiple = !!mouseOn };
+    $scope.showTick = function(item){ item.visible = true };
+    $scope.hideTick = function(item){ item.visible = false };
+
+    $scope.checkForHideMultiple = function(){
+        if(MultipleSelectService.getCornerState() === 'none'){
+            changeMultipleMode(false);
+        }
+    };
+
+    function multipleSelectRefreshState(){
+        $scope.selectedItems = getFilteredSelectedList();
+        refreshActiveItemsInList();
+        $scope.cornerState = getRefreshedCornerState();
+
+        if ($scope.selectedItems.length) {
+            changeMultipleMode(true);
+        } else {
+            MultipleSelectService.refreshSelectedList();
+        }
+
+        multipleDisablingCheck();
+        $scope.$broadcast('refreshBulkButtonsAccess');
+        NotifyingService.notify('multipleDisableDetailsPaneCheck');
+    }
+
+    function multipleDisablingCheck(){
+        if(!$scope.selectedItems.length && !$scope.mouseOnMultiple){
+            changeMultipleMode(false);
+        }
+    }
+
+    function changeMultipleMode(value){
+        $scope.multipleSelectMode = value;
+    }
+
+    function getFilteredSelectedList(){
+        let selected = MultipleSelectService.getSelected();
+        let filteredSelected = filterResults(selected);
+        let newSelectedList = MultipleSelectService.setSelectedList(filteredSelected);
+
+        return newSelectedList;
+    }
+
+    function getRefreshedCornerState(){
+        let filteredItems = filterResults($scope.items);
+        let refreshedCornerState = MultipleSelectService.refreshCornerState(filteredItems.length);
+
+        return refreshedCornerState;
+    }
+
+    function filterResults(itemsArray){
+        let newArray = $filter('filterRecycled')(itemsArray);
+        newArray = $filter('filterByOptions')(newArray);
+        newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
+        newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
+
+        return newArray;
+    }
+
+    function refreshActiveItemsInList(){
+        for(let item of $scope.items){
+            let entity = $scope.selectedItems.find( selectedItems => selectedItems._id === item._id );
+            item.selected = !!entity;
+        }
+    }
 
     // ============================================================= //
     // ======================= item function ======================= //

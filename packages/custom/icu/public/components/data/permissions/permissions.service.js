@@ -74,6 +74,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             var status = null;
 
             var usersPerms = _.find(entity.permissions, {'id': getUserId(user)});
+            if(!usersPerms)return false;
 
             if(usersPerms){
                 switch (usersPerms.level) {
@@ -249,6 +250,7 @@ angular.module('mean.icu.data.permissionsservice', [])
 
             if(entity.permissions.length !== 0){
                 var usersPerms = _.find(entity.permissions, {'id': getUserId(member)});
+                if(!usersPerms)return false;
 
                 switch (usersPerms.level) {
                     case 'editor': havePerm = editorPerms[type];
@@ -267,6 +269,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             //     .then(function (perms) {return perms});
         }
         return {
+            serviceMap: serviceMap,
             getUserPerms: getUserPerms,
             haveAnyPerms: haveAnyPerms,
             havePermissions: permissions,

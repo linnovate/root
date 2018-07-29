@@ -1,18 +1,3 @@
-<td class="id" >{{$index + 1}}</td>
-
-<td class="name"
-    title="{{item.title}}"
-    ng-attr-contenteditable="{{(!displayOnly && haveEditiorsPermissions(item)) && !recycled(item)}}"
-    strip-br="true"
-    tabindex="0"
-    ng-model="item.title"
-    ng-change="onChange(item)"
-    ng-keydown="onKeydown($event, $index)"
-    ng-blur="bluring(item, $event)"
-    ng-focus="focusing(item)"
-    ng-class="[getBoldedClass(item), {'noFocus': !item.focus}]"
-></td>
-
 <td class="folder">
     <span class="tag folder"
           title="{{item.folder.title}}"

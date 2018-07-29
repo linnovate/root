@@ -144,7 +144,9 @@ angular.module('mean.icu.data.foldersservice', [])
                 userObj: watcher
             },
             context: {}
-        }).then(entity =>  BoldedService.boldedUpdate(entity, 'folders', 'update'));
+        }).then(result => {
+          return result;
+        });
     }
 
     function updateStatus(folder, prev) {
@@ -157,7 +159,9 @@ angular.module('mean.icu.data.foldersservice', [])
                 prev: prev.status
             },
             context: {}
-        }).then(() =>  BoldedService.boldedUpdate(folder, 'folders', 'update'));
+        }).then(result => {
+          return result;
+        });
     }
 
     function updateColor(folder, me) {
@@ -169,7 +173,9 @@ angular.module('mean.icu.data.foldersservice', [])
                 status: folder.color
             },
             context: {}
-        }).then(entity =>  BoldedService.boldedUpdate(entity, 'folders', 'update'));
+        }).then(result => {
+          return result;
+        });
     }
 
     function updateEntity(folder, prev) {
@@ -184,8 +190,9 @@ angular.module('mean.icu.data.foldersservice', [])
                 prev: prev.office ? prev.office.title : ''
             },
             context: {}
-        }).then(entity =>  BoldedService.boldedUpdate(entity, 'folders', 'update'));
-
+        }).then(result => {
+          return result;
+        });
     }
 
     function updateTitle(folder, prev, type) {
@@ -200,7 +207,9 @@ angular.module('mean.icu.data.foldersservice', [])
                 prev: prev[type]
             },
             context: {}
-        }).then(entity =>  BoldedService.boldedUpdate(folder, 'folders', 'update'));
+        }).then(result => {
+          return result;
+        });
     }
 
     return {

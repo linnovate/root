@@ -1,0 +1,80 @@
+multiple-select {
+
+    .multiple-container {
+
+        width: 100%;
+        height: 44px;
+        background-color: white;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .corner {
+            line-height: 44px;
+            font-weight: bold;
+
+            .corner-button {
+                width: 22px;
+                float: left;
+                height: 22px;
+                margin: 11px 10px;
+                border: 1px solid #E1E1E1;
+                cursor: pointer;
+
+                &.all {
+                    background: url('/icu/assets/img/tick.svg') no-repeat center center;
+                }
+                &.some {
+                    background: url('/icu/assets/img/long-line.svg') no-repeat center center;
+                }
+                &.none {
+                    background: url('/icu/assets/img/Vector.png') no-repeat center center;
+                }
+            }
+        }
+        .bulk-operations {
+            display: flex;
+
+            .bulk-operation {
+                width: 40px;
+                height: 100%;
+                position: relative;
+            }
+            button {
+                width: 100%;
+                height: 100%;
+                border: none;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+
+                &:active {
+                    outline: 1px solid gold;
+                }
+            }
+            .disabledButton {
+              opacity: 0.2;
+            }
+            .status {
+                background: url("/icu/assets/img/icon-flag-black.svg") no-repeat center center;
+            }
+            .watch {
+                background: url("/icu/assets/img/icon-eye-black.svg") no-repeat center center;
+            }
+            .assign {
+                background: url("/icu/assets/img/icon-people-black.svg") no-repeat center center;
+            }
+            .due {
+                background: url("/icu/assets/img/icon-due.svg") no-repeat center center;
+            }
+            .tag {
+                background: url("/icu/assets/img/icon-tag.svg") no-repeat center center;
+            }
+            .delete {
+                background: url("/icu/assets/img/icon-garbage-black.svg") no-repeat center center;
+            }
+        }
+    }
+}

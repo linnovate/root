@@ -1,6 +1,6 @@
 'use strict';
 
-function ProjectListController($scope, $state, $timeout, projects, BoldedService, ProjectsService, UsersService, context, $stateParams, EntityService) {
+function ProjectListController($scope, $state, $timeout, projects, NotifyingService, BoldedService, MultipleSelectService, ProjectsService, UsersService, context, $stateParams, EntityService) {
 
     let me;
     UsersService.getMe().then(function(result) {
@@ -58,7 +58,6 @@ function ProjectListController($scope, $state, $timeout, projects, BoldedService
             return result;
         });
     };
-
 
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {

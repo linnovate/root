@@ -1,6 +1,6 @@
 'use strict';
 
-function TaskListController($scope, $timeout, $state, tasks, BoldedService, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
+function TaskListController($scope, $timeout, $state, tasks, NotifyingService, BoldedService, MultipleSelectService, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
 
     let me;
     UsersService.getMe().then(function(result) {
@@ -58,7 +58,7 @@ function TaskListController($scope, $timeout, $state, tasks, BoldedService, Disc
             TasksService.data.push(result);
             return result;
         });
-    }
+    };
 
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {

@@ -1,6 +1,6 @@
 'use strict';
 
-function TemplateDocListController($scope, $state, templateDocs, BoldedService, TemplateDocsService, context, $stateParams, EntityService) {
+function TemplateDocListController($scope, $state, templateDocs, NotifyingService, BoldedService, TemplateDocsService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = templateDocs.data || templateDocs;
 

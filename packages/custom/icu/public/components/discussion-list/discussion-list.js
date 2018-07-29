@@ -1,6 +1,6 @@
 'use strict';
 
-function DiscussionListController($scope, $state, discussions, BoldedService, DiscussionsService, context, $stateParams, EntityService) {
+function DiscussionListController($scope, $state, discussions, NotifyingService, DiscussionsService, context, BoldedService, MultipleSelectService, $stateParams, EntityService) {
 
     $scope.items = discussions.data || discussions;
     $scope.loadNext = discussions.next;

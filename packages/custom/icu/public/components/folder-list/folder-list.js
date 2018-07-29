@@ -1,6 +1,6 @@
 'use strict';
 
-function FolderListController($scope, $state, folders, BoldedService, FoldersService, context, $stateParams, OfficesService) {
+function FolderListController($scope, $state, folders, NotifyingService, BoldedService, FoldersService, context, $stateParams, OfficesService, MultipleSelectService) {
 
     $scope.items = folders.data || folders;
 

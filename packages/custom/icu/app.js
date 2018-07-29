@@ -99,6 +99,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.usersFilter',
         'mean.icu.ui.taskdetails',
         'mean.icu.ui.entityList',
+        'mean.icu.ui.bulkoperations',
         'mean.icu.ui.entityListFilters',
 
         'mean.icu.ui.projectlist',
@@ -135,6 +136,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.searchlist',
         'mean.icu.ui.searchlistfilter',
         'mean.icu.data.activitiesservice',
+        'mean.icu.data.multipleselectservice',
         'mean.icu.data.documentsservice',
         'mean.icu.data.attachmentsservice',
         'mean.icu.data.filesservice',
@@ -142,6 +144,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.notificationsservice',
         'mean.icu.data.projectsservice',
         'mean.icu.data.permissionsservice',
+        'mean.icu.data.multipleselectservice',
         'mean.icu.data.officedocumentsservice',
         'mean.icu.data.templatedocsservice',
         'mean.icu.data.officesservice',

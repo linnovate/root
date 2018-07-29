@@ -1,6 +1,6 @@
 'use strict';
 
-function OfficeListController($scope, $state, offices, BoldedService, OfficesService, context, $stateParams, EntityService) {
+function OfficeListController($scope, $state, offices, NotifyingService, BoldedService, OfficesService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = offices.data || offices;
 

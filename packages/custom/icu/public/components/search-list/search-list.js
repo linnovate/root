@@ -1,5 +1,5 @@
 'use strict';
- 
+
 angular.module('mean.icu.ui.searchlist')
 .controller('SearchListController', function ($rootScope, $scope, $stateParams, $location, $timeout, results, term, SearchService, UsersService) {
 	$scope.results = results;
