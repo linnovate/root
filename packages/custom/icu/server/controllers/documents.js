@@ -17,6 +17,7 @@ var serials = require('../controllers/serials.js');
 
 var ftp = require('../services/ftp');
 
+var excel = require('../services/excel');
 var options = {
   includes: 'assign watchers folder',
   defaults: {watchers: []}
@@ -185,6 +186,108 @@ exports.uploadEmpty = function(req, res, next) {
 
 };
 
+
+
+/**
+ *
+ *
+ * @param {*} to date in iso format to get documents up to
+ * @returns mapping of folder(id) to number of documents up to "to" in that folder
+ */
+function getFolderIndexMapUpToDate(to){
+  let agg = [
+    {$addFields:{
+      upTo:
+      {
+        $cond: [ { $lt: [ {$toDate:"$created"} , {$toDate:to} ] }, 1 , 0 ]
+      }
+    }
+  },
+    {$group:{_id:"$folder",count:{$sum:"$upTo"} }}
+  ];
+
+   return Document.aggregate(agg)
+   .exec(function(err,indexMapper){
+    if(err)console.log(err);
+    return indexMapper;
+  })
+}
+
+
+/**
+ *
+ *
+ * @param {*} office ID of an office to get documens from
+ * @param {*} from Date in ISO Format, specifies the Date that documents rerieved will after
+ * @param {*} to Date in ISO Format, specifies the Date that documents rerieved will before
+ * @returns All Documents from the given office s.t. they were created in the Date range of [from,to]
+ */
+function getDocumentsByOfficeIdAndDateRange(office,from,to){
+  return Document.find({"created":{
+    $gte:from,
+    $lte:to
+  }}).populate({
+    path:'folder',
+    match:{'office':office}
+  })
+  .sort({'folder':1,'created':1})
+  .exec(function(err,docs){
+    if(err)console.log(err);
+    return docs;
+  })
+}
+
+
+
+/**
+ *
+ *
+ * @param {*} docs documents returned from the mongoose query
+ * @param {*} indexMapper
+ * @returns
+ */
+function documentsQueryToExcelServiceFormat(docs,indexMapper){
+  var index = 1;
+  var folderId;
+  let filteredDocs = _.filter(docs,doc=>doc.folder);
+  let mapper = {}
+  indexMapper.forEach(aggRow => {
+    mapper[aggRow._id] = aggRow.count;
+  });
+  let docArray = _.map(filteredDocs,(doc)=>{
+    let curFolderId = doc.folder._id;
+    if(curFolderId!==folderId){
+      index = 1;
+      folderId = curFolderId;
+    }
+    let row = [(index+mapper[folderId])+"",doc.folder.title,doc.title,doc.serial+""];
+    index++;
+    return row;
+  });
+return excel.json2workbook({"rows":docArray,"columns":["אינדקס","תקייה","כותרת מסמך","סימוכין"],"columnsBold":true});
+}
+
+
+//expects:
+//from to = dates in iso format
+//office = id of the office to get the documents from
+exports.getExcelSummary = function(req,res,next){
+  let from = req.body.from;
+  let to = req.body.to;
+  let office = req.body.office;
+  //setting mime type as excel
+  res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  //setting the name of the file to be downloaded
+  res.attachment("Summary.xlsx");
+
+  getDocumentsByOfficeIdAndDateRange(office,from,to).then((docs)=>{
+    getFolderIndexMapUpToDate(from).then((indexMapper)=>{
+      documentsQueryToExcelServiceFormat(docs,indexMapper).then(summary=>{
+        res.send(summary);
+      });
+    });
+  });
+}
 
 exports.signOnDocx = function(req, res, next) {
   var doc = req.body.document;

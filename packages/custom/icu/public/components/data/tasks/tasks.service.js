@@ -356,21 +356,14 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function excel() {
-        var qs = querystring.encode({
-            start: 0,
-            limit: 0,
-            sort: "created"
-        });
-
-        if (qs.length) {
-            qs = '?' + qs;
-        }
-        return $http.get(ApiUri + EntityPrefix + '/excel' + qs).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
-            return result.data;
-        }, function(err) {return err}).then(function (some) {
-            var data = some.content ? some : [];
-            return PaginationService.processResponse(data);
+        $http.get(ApiUri+"/tasks/excel",{
+            responseType: 'arraybuffer',
+        headers:{
+            'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            
+        }}).then(function(data){
+            let blob = new Blob([data.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+            saveAs(blob,'Summary.xlsx');
         });
     }
 

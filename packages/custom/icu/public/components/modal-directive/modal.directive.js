@@ -135,6 +135,20 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
                         }
                     });
                 }
+                else if(scope.modalName == 'export-excel-by-date') {
+                    var modalInstance = $uibModal.open({
+                        backdropClass: 'backdrop-document-preview',
+                        animation: true,
+                        size:  '40%',
+                        templateUrl: '/icu/components/modal-directive/export-excel-by-date/export-excel-by-date.html',
+                        controller: controllerExportExcelByDate,
+                        resolve: {
+                            office: function () {
+                                return scope.data;
+                            }
+                        }
+                    });
+                }
 
                 else {
                 var modalInstance = $uibModal.open({

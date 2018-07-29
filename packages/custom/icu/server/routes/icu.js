@@ -50,7 +50,7 @@ module.exports = function(Icu, app) {
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
-  app.route(/^((?!\/hi\/).)*$/).all(authorization);
+  //omri uncomment app.route(/^((?!\/hi\/).)*$/).all(authorization);
 
   //app.route(/^((?!\/hi\/).)*$/).all(authorization, socket);
 
@@ -367,6 +367,11 @@ module.exports = function(Icu, app) {
     .post(documents.upload)
     //.get(documents.getAll);
     .get(pagination.parseParams, documents.all, star.isStarred, pagination.formResponse);
+    
+  //used for excel summary
+  app.route('/api/officeDocuments/summary')
+  .post(documents.getExcelSummary);
+
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
     .get(documents.getById)
     .post(documents.update)

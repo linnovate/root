@@ -1,0 +1,14 @@
+<div class="modal-header">
+</div>
+<div class="modal-body"  style="width:40%;">  
+ <p>{{office.title}}</p>
+ <p>{{range}}</p>
+ <input date-range-picker class="form-control date-picker" type="text" ng-model="date"
+ options="dateoptions" placeholder="{{'Choose Date Range' | i18next}}" />
+</div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="download()">{{'Download' | i18next }}</button>
+</div>  
+

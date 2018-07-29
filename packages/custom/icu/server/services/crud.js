@@ -8,6 +8,7 @@ var orderController = require('../controllers/order.js');
 var permissions = require('../controllers/permissions.js');
 
 var mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
 var ObjectId = mongoose.Types.ObjectId;
 
 var TaskModel = require('../models/task.js');
