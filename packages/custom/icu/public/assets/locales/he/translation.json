@@ -211,6 +211,7 @@
 	"tasksImWatching": "משימות שאני עוקב אחריהן",
 	"title":  "כותרת",
 	"This Deadline is in the past!": "תאריך יעד עבר!",
+    "couldNotSetPreviousTime": "לא ניתן להגדיר זמן עבר",
 	"to": "ל",
 	"toThis": "ל",
 	"today": "היום",

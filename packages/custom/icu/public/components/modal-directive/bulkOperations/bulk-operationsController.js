@@ -57,8 +57,26 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     //------------------------------------------------//
     //----------------------DUE----------------------//
 
+    $scope.selectedDue = {};
+    $scope.setDueDate = 'setDueDate';
+    $scope.dueDateErrorMessage = 'couldNotSetPreviousTime';
+    $scope.duePlaceholder = $scope.setDueDate;
+
     $scope.dueOptions = {
-        dateFormat: 'dd.mm.yy'
+        dateFormat: 'dd.mm.yy',
+        onSelect: function() {
+            $scope.dateCheck();
+        }
+    };
+
+    $scope.dateCheck = function(){
+        let nowTime = new Date();
+        if($scope.selectedDue.date < nowTime){
+            $scope.duePlaceholder = $scope.dueDateErrorMessage;
+            $scope.selectedDue.date = '';
+        } else {
+            $scope.bulkUpdate('due', $scope.selectedDue.date);
+        }
     };
 
   //------------------------------------------------//

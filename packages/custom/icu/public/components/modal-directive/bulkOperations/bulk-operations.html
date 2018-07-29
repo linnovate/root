@@ -58,10 +58,10 @@
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
 
         <div class="date">
-            <input ng-click="open()" ng-model="selected" placeholder="{{ 'setDueDate' | i18next }}" ui-date="dueOptions" />
+            <input ng-model="selectedDue.date" placeholder="{{ duePlaceholder | i18next }}" ui-date="dueOptions" />
         </div>
 
-        <button class="action-button" ng-click="bulkUpdate('due', selected)">{{ 'update' | i18next}}</button>
+        <button class="action-button" ng-click="dateCheck(selectedDue.date)">{{ 'update' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
