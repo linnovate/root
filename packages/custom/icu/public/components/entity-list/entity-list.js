@@ -10,7 +10,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ============================================================= //
     // ========================= navigate ========================== //
     // ============================================================= //
-    console.log('$parent.entityRowTpl: ', $scope.$parent.entityRowTpl);
     $scope.unifiedRowTpl = '/icu/components/entity-list/regions/row.html';
 
     $scope.isCurrentEntityState = function(id) {
