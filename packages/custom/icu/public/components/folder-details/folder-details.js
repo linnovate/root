@@ -114,16 +114,20 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
   }
 
   $scope.menuItems = [{
-    label: 'recycleFolder',
-    icon: 'times-circle',
+    label: 'deleteFolder',
     fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.deleteFolder,
   },{
-      label: 'Say Hi!',
-      icon: 'chat',
-      display: true,
-      action: $scope.onWantToCreateRoom
+    label: 'unrecycleFolder',
+    fa: 'fa-times-circle',
+    display: $scope.item.hasOwnProperty('recycled'),
+    action: $scope.recycleRestore,
+  }, {
+    label: 'Say Hi!',
+    icon: 'chat',
+    display: true,
+    action: $scope.onWantToCreateRoom
   }];
 
   // ==================================================== Category ==================================================== //

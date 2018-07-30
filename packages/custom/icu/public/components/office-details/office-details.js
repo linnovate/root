@@ -92,16 +92,20 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
   }
 
   $scope.menuItems = [{
-    label: 'recycleOffice',
-    icon: 'times-circle',
+    label: 'deleteOffice',
     fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.deleteOffice,
   }, {
-      label: 'Say Hi!',
-      icon: 'chat',
-      display: true,
-      action: $scope.onWantToCreateRoom
+    label: 'unrecycleProject',
+    fa: 'fa-times-circle',
+    display: $scope.item.hasOwnProperty('recycled'),
+    action: $scope.recycleRestore,
+  }, {
+    label: 'Say Hi!',
+    icon: 'chat',
+    display: true,
+    action: $scope.onWantToCreateRoom
   }
   ];
 

@@ -172,13 +172,11 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
   $scope.menuItems = [{
       label: 'recycleDiscussion',
-      icon: 'times-circle',
       fa: 'fa-times-circle',
       display: !$scope.item.hasOwnProperty('recycled'),
       action: $scope.recycle,
     }, {
       label: 'unrecycleDiscussion',
-      icon: 'times-circle',
       fa: 'fa-times-circle',
       display: $scope.item.hasOwnProperty('recycled'),
       action: $scope.recycleRestore,
