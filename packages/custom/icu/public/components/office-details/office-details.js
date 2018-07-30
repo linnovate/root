@@ -2,9 +2,11 @@
 
 angular.module('mean.icu.ui.officedetails', []).controller('OfficeDetailsController', OfficeDetailsController);
 
-function OfficeDetailsController($scope, entity, tasks, folders, people, offices, context, $state, OfficesService, PermissionsService, $stateParams, ActivitiesService) {
+function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, people, offices, context, $state, EntityService, OfficesService, PermissionsService, $stateParams, ActivitiesService) {
 
   // ==================================================== init ==================================================== //
+
+  let currentState = $state.current.name;
 
   if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("offices"))) {
     $scope.item = entity || context.entity;
@@ -81,21 +83,56 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
 
   // ==================================================== Menu events ==================================================== //
 
-  $scope.deleteOffice = function() {
-    OfficesService.remove($scope.item._id).then(function() {
-      $state.go('main.offices.all', {
-        entity: 'all'
-      }, {
-        reload: true
-      });
-    });
-  }
+    $scope.recycle = function() {
+        EntityService.recycle('offices', $scope.item._id).then(function() {
+            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            clonedEntity.status = "Recycled"
+
+            refreshList();
+            if (currentState.indexOf('search') != -1) {
+                $state.go(currentState, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true,
+                    query: $stateParams.query
+                });
+            } else {
+                $state.go('main.offices.all', {
+                    entity: 'all'
+                }, {
+                    reload: true
+                });
+            }
+        });
+    };
+
+    $scope.recycleRestore = function() {
+        EntityService.recycleRestore('offices', $scope.item._id).then(function() {
+            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            clonedEntity.status = "un-deleted";
+
+            refreshList();
+
+            var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.offices.all';
+            $state.go(state, {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {
+                reload: true
+            });
+        });
+    };
+
+    function refreshList() {
+        $rootScope.$broadcast('refreshList');
+    }
 
   $scope.menuItems = [{
     label: 'deleteOffice',
     fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
-    action: $scope.deleteOffice,
+    action: $scope.recycle,
   }, {
     label: 'unrecycleProject',
     fa: 'fa-times-circle',

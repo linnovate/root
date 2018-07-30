@@ -2,9 +2,11 @@
 
 angular.module('mean.icu.ui.folderdetails', []).controller('FolderDetailsController', FolderDetailsController);
 
-function FolderDetailsController($scope, entity, tasks, people, folders, offices, tags,  $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
+function FolderDetailsController($rootScope, $scope, entity, tasks, people, folders, offices, tags,  $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService, EntityService) {
 
   // ==================================================== init ==================================================== //
+
+  let currentState = $state.current.name;
 
   if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("folders"))) {
     $scope.item = entity || context.entity;
@@ -102,22 +104,64 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
 
   // ==================================================== Menu events ==================================================== //
 
-  $scope.deleteFolder = function(folder) {
-    FoldersService.remove($scope.item._id).then(function() {
+    $scope.recycle = function() {
+        EntityService.recycle('folders', $scope.item._id).then(function() {
+            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            clonedEntity.status = "Recycled"
+            // just for activity status
+            FoldersService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+                ActivitiesService.data.push(result);
+            });
 
-      $state.go('main.folders.all', {
-        entity: 'all'
-      }, {
-        reload: true
-      });
-    });
-  }
+            refreshList();
+            if (currentState.indexOf('search') != -1) {
+                $state.go(currentState, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true,
+                    query: $stateParams.query
+                });
+            } else {
+                $state.go('main.folders.all', {
+                    entity: 'all'
+                }, {
+                    reload: true
+                });
+            }
+        });
+    }
+
+    $scope.recycleRestore = function() {
+        EntityService.recycleRestore('folders', $scope.item._id).then(function() {
+            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            clonedEntity.status = "un-deleted";
+            // just for activity status
+            FoldersService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+                ActivitiesService.data.push(result);
+            });
+
+            refreshList();
+
+            var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.folders.all';
+            $state.go(state, {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {
+                reload: true
+            });
+        });
+    }
+
+    function refreshList() {
+        $rootScope.$broadcast('refreshList');
+    }
 
   $scope.menuItems = [{
     label: 'deleteFolder',
     fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
-    action: $scope.deleteFolder,
+    action: $scope.recycle,
   },{
     label: 'unrecycleFolder',
     fa: 'fa-times-circle',

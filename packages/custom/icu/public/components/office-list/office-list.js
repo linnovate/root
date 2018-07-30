@@ -59,7 +59,7 @@ function OfficeListController($scope, $state, offices, NotifyingService, BoldedS
                 $scope.loadPrev = offices.prev;
                 $scope.isLoading = false;
 
-                return items.data;
+                return offices.data;
             });
         }
         return [];

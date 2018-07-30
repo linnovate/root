@@ -2,7 +2,9 @@
 
 angular.module('mean.icu.ui.templateDocdetails', []).controller('TemplateDocDetailsController', TemplateDocDetailsController);
 
-function TemplateDocDetailsController($scope, $http, entity, tasks, folders, people, templateDocs, context, $state, TemplateDocsService, PermissionsService, $stateParams) {
+function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, folders, people, templateDocs, context, $state, TemplateDocsService, EntityService, PermissionsService, $stateParams) {
+
+  let currentState = $state.current.name;
 
   if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("templateDocs"))) {
     $scope.item = entity || context.entity;
@@ -43,23 +45,56 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   }
 
   // ==================================================== Menu events ==================================================== //
+    $scope.recycle = function() {
+        EntityService.recycle('templateDocs', $scope.item._id).then(function() {
+            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            clonedEntity.status = "Recycled";
 
-  $scope.deleteTemplateDoc = function() {
-    TemplateDocsService.delete($scope.item._id).then(function() {
+            refreshList();
+            if (currentState.indexOf('search') != -1) {
+                $state.go(currentState, {
+                    entity: context.entityName,
+                    entityId: context.entityId
+                }, {
+                    reload: true,
+                    query: $stateParams.query
+                });
+            } else {
+                $state.go('main.templateDocs.all', {
+                    entity: 'all'
+                }, {
+                    reload: true
+                });
+            }
+        });
+    }
 
-      $state.go('main.templateDocs.all', {
-        entity: 'all'
-      }, {
-        reload: true
-      });
-    });
-  }
+    $scope.recycleRestore = function() {
+        EntityService.recycleRestore('templateDocs', $scope.item._id).then(function() {
+            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            clonedEntity.status = "un-deleted"
+
+            refreshList();
+
+            var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.templateDocs.all';
+            $state.go(state, {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {
+                reload: true
+            });
+        });
+    }
+
+    function refreshList() {
+        $rootScope.$broadcast('refreshList');
+    }
 
   $scope.menuItems = [{
     label: 'deleteTemplateDoc',
     fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
-    action: $scope.deleteTemplateDoc,
+    action: $scope.recycle,
   },{
     label: 'unrecycleTemplateDoc',
     fa: 'fa-times-circle',

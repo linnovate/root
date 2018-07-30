@@ -32,7 +32,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
   $scope.me = me;
   $scope.tags = tags;
 
-  var currentState = $state.current.name;
+  let currentState = $state.current.name;
 
   // backup for previous changes - for updates
   var backupEntity = JSON.parse(JSON.stringify($scope.item));
@@ -194,12 +194,12 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
       label: 'recycleProject',
       fa: 'fa-times-circle',
       display: !$scope.item.hasOwnProperty('recycled'),
-      action: $scope.recycle,
+      action: $scope.recycle
     }, {
       label: 'unrecycleProject',
       fa: 'fa-times-circle',
       display: $scope.item.hasOwnProperty('recycled'),
-      action: $scope.recycleRestore,
+      action: $scope.recycleRestore
     }, {
       label: 'Say Hi!',
       icon: 'chat',
