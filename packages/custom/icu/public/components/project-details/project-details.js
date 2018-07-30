@@ -192,15 +192,21 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
 
   $scope.menuItems = [{
       label: 'recycleProject',
-      icon: 'times-circle',
+      fa: 'fa-times-circle',
       display: !$scope.item.hasOwnProperty('recycled'),
       action: $scope.recycle,
     }, {
       label: 'unrecycleProject',
-      icon: 'times-circle',
+      fa: 'fa-times-circle',
       display: $scope.item.hasOwnProperty('recycled'),
       action: $scope.recycleRestore,
-  }];
+    }, {
+      label: 'Say Hi!',
+      icon: 'chat',
+      display: true,
+      action: $scope.onWantToCreateRoom
+  }
+  ];
 
   // ==================================================== $watch: title / desc ==================================================== //
 
