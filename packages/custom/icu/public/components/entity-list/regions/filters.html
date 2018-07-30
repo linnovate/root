@@ -4,7 +4,10 @@
 
         <div class="select-wrapper select-wrapper-active-status">
             <div tooltips tooltip-template="{{'filter by activity status' | i18next}}">
-                <ui-select ng-disabled="activeToggle.disabled" ng-model="activeToggle.field" on-select="filterActive()" search-enabled="false">
+                <ui-select ng-disabled="activeToggle.disabled"
+                           ng-model="activeToggle.field"
+                           on-select="filterActive();loadMore()"
+                           search-enabled="false">
                     <ui-select-match>
                         <button class="tasks active-status"><span class="bold">{{'status' | i18next}}: </span>{{$select.selected.title | i18next }}</button>
                     </ui-select-match>
@@ -34,7 +37,10 @@
     <div class="select-wrapper">
         <div tooltips tooltip-template="{{'sort by' | i18next}}">
             <button class="button-left-part" ng-click="changeOrder()" ng-class="{'rotate' : sorting.isReverse}"></button>
-            <ui-select class="inline-block"  ng-model="sorting.field" on-select="changeOrder()" search-enabled="false">
+            <ui-select class="inline-block"
+                       ng-model="sorting.field"
+                       on-select="changeOrder();loadMore()"
+                       search-enabled="false">
                 <ui-select-match>
                     <button class="button-right-part tasks">{{$select.selected.title | i18next}}</button>
                 </ui-select-match>
