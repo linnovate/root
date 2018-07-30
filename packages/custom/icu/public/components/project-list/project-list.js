@@ -26,6 +26,7 @@ function ProjectListController($scope, $state, $timeout, projects, ProjectsServi
     var creatingStatuses = {
         NotCreated: 0,
         Creating: 1,
+        Creating: 1,
         Created: 2
     }
 
@@ -54,7 +55,7 @@ function ProjectListController($scope, $state, $timeout, projects, ProjectsServi
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {
             $scope.isLoading = true;
-            $scope.loadNext().then(function(items) {
+            return $scope.loadNext().then(function(items) {
 
                 _(items.data).each(function(p) {
                     p.__state = creatingStatuses.Created;
@@ -72,8 +73,11 @@ function ProjectListController($scope, $state, $timeout, projects, ProjectsServi
                 $scope.loadNext = items.next;
                 $scope.loadPrev = items.prev;
                 $scope.isLoading = false;
+
+                return items.data;
             });
         }
+        return [];
     }
 }
 
