@@ -192,11 +192,13 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
   $scope.menuItems = [{
     label: 'recycleTask',
     icon: 'times-circle',
+    fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.recycle,
   }, {
     label: 'unrecycleTask',
     icon: 'times-circle',
+    fa: 'fa-times-circle',
     display: $scope.item.hasOwnProperty('recycled'),
     action: $scope.recycleRestore,
   }];

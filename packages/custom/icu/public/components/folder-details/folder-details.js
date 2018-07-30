@@ -114,8 +114,9 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
   }
 
   $scope.menuItems = [{
-    label: 'deleteFolder',
+    label: 'recycleFolder',
     icon: 'times-circle',
+    fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.deleteFolder,
   },{

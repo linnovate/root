@@ -92,8 +92,9 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
   }
 
   $scope.menuItems = [{
-    label: 'deleteOffice',
+    label: 'recycleOffice',
     icon: 'times-circle',
+    fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.deleteOffice,
   }, {

@@ -56,8 +56,9 @@ function TemplateDocDetailsController($scope, $http, entity, tasks, folders, peo
   }
 
   $scope.menuItems = [{
-    label: 'deleteTemplateDoc',
+    label: 'recycleTemplateDoc',
     icon: 'times-circle',
+    fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.deleteTemplateDoc,
   }];
