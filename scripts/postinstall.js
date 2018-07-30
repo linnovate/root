@@ -184,5 +184,11 @@ packagesMeanJson(source);
 
 
 
+//add npm dependencies for angularjs from npm
+let cpx = require('cpx');
 
+cpx.copy("./node_modules/file-saver/FileSaver.min.js","./packages/custom/icu/public/assets/lib/file-saver/FileSaver.min.js");
+//cpx.copy("./node_modules/file-saver/FileSaver.min.js","./packages/custom/icu/public/assets/js/FileSaver.min.js");
+//cpx.copy("./node_modules/file-saver/FileSaver.min.js","./dist/icu/assets/js/FileSaver.min.js"); //trying now
+//cpx.copy("./node_modules/file-saver/FileSaver.min.js","./dist/icu/assets/lib/file-saver/FileSaver.min.js");
 
