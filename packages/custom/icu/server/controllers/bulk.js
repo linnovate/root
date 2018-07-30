@@ -103,7 +103,8 @@ function recycle(req, res, next) {
         { multi: true });
   })
   .then(function (results) {
-    return Model.find(findArrayIds);
+    return Model.find(findArrayIds)
+        .populate('creator');
   })
   .then(docs => {
     if(!docs.length) throw new httpError(404);

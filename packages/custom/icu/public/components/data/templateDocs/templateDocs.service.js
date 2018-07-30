@@ -113,8 +113,9 @@ angular.module('mean.icu.data.templatedocsservice', [])
         function updateTemplateDoc(id, data) {
             return $http.post(ApiUri + EntityPrefix +'/'+ id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
+                getById(id).then(entitiesArray=>BoldedService.boldedUpdate(entitiesArray[0], 'templateDocs', 'update'));
                 return result.data;
-            }).then(entity => BoldedService.boldedUpdate(entity, 'templateDocs', 'update'));
+            });
         }
         function create(templateDoc) {
             return $http.post(ApiUri + EntityPrefix+"/createNew", templateDoc).then(function (result) {
