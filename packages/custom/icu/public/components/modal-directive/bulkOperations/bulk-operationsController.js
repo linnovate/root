@@ -63,10 +63,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     $scope.duePlaceholder = $scope.setDueDate;
 
     $scope.dueOptions = {
-        dateFormat: 'dd.mm.yy',
-        onSelect: function() {
-            $scope.dateCheck();
-        }
+        dateFormat: 'dd.mm.yy'
     };
 
     $scope.dateCheck = function(){
