@@ -96,7 +96,13 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
     icon: 'times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.deleteOffice,
-  }];
+  }, {
+      label: 'Say Hi!',
+      icon: 'chat',
+      display: true,
+      action: $scope.onWantToCreateRoom
+  }
+  ];
 
   // ==================================================== $watch: title / desc ==================================================== //
 
