@@ -17,7 +17,11 @@
             </ui-select-choices>
         </ui-select>
 
-        <button class="action-button" ng-click="bulkUpdate('status', selected)">{{ 'update' | i18next}}</button>
+        <button class="action-button"
+                ng-class="{ 'disabled' : !selected}"
+                ng-click="bulkUpdate('status', selected)">
+            {{ 'update' | i18next}}
+        </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
@@ -49,7 +53,11 @@
             </ui-select>
         </div>
 
-        <button class="action-button" ng-click="bulkUpdate('assign', selected)">{{ 'update' | i18next}}</button>
+        <button class="action-button"
+                ng-class="{ 'disabled' : !selected}"
+                ng-click="bulkUpdate('assign', selected)">
+            {{ 'update' | i18next}}
+        </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
@@ -61,7 +69,11 @@
             <input ng-model="selectedDue.date" placeholder="{{ duePlaceholder | i18next }}" ui-date="dueOptions" />
         </div>
 
-        <button class="action-button" ng-click="dateCheck(selectedDue.date)">{{ 'update' | i18next}}</button>
+        <button class="action-button"
+                ng-class="{ 'disabled' : !selectedDue.date}"
+                ng-click="dateCheck(selectedDue.date)">
+            {{ 'update' | i18next}}
+        </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
@@ -100,7 +112,11 @@
         </ul>
 
 
-        <button class="action-button" ng-click="bulkUpdate('tags', selected)">{{ 'update' | i18next}}</button>
+        <button class="action-button"
+                ng-class="{ 'disabled' : !selected}"
+                ng-click="bulkUpdate('tags', selected)">
+            {{ 'update' | i18next}}
+        </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
