@@ -45,7 +45,7 @@ function FolderListController($scope, $state, folders, NotifyingService, BoldedS
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {
             $scope.isLoading = true;
-            $scope.loadNext().then(function(items) {
+            return $scope.loadNext().then(function(items) {
 
                 _(items.data).each(function(p) {
                     p.__state = creatingStatuses.Created;
@@ -63,8 +63,11 @@ function FolderListController($scope, $state, folders, NotifyingService, BoldedS
                 $scope.loadNext = items.next;
                 $scope.loadPrev = items.prev;
                 $scope.isLoading = false;
+
+                return items.data;
             });
         }
+        return [];
     }
 }
 

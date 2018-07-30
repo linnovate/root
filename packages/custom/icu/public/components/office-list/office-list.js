@@ -42,7 +42,7 @@ function OfficeListController($scope, $state, offices, NotifyingService, BoldedS
     $scope.loadMore = function(start, LIMIT, sort) {
         if (!$scope.isLoading && $scope.loadNext) {
             $scope.isLoading = true;
-            $scope.loadNext().then(function (offices) {
+            return $scope.loadNext().then(function (offices) {
                 let officesArray = offices.data;
 
                 _(officesArray).each(function (p) {
@@ -58,8 +58,11 @@ function OfficeListController($scope, $state, offices, NotifyingService, BoldedS
                 $scope.loadNext = offices.next;
                 $scope.loadPrev = offices.prev;
                 $scope.isLoading = false;
+
+                return items.data;
             });
         }
+        return [];
     };
 }
 

@@ -18,7 +18,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
         };
 
         let bulkShowingMap = {
-            'status': ['tasks', 'projects', 'discussions', 'officeDocuments'],
+            'status': ['tasks', 'projects', 'discussions', 'officeDocuments', 'folders'],
             'assign': ['tasks', 'projects', 'discussions', 'officeDocuments'],
             'watch': [],
             'due': ['tasks', 'projects', 'discussions', 'officeDocuments'],
