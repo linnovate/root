@@ -118,6 +118,11 @@ function FolderDetailsController($scope, entity, tasks, people, folders, offices
     icon: 'times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.deleteFolder,
+  },{
+      label: 'Say Hi!',
+      icon: 'chat',
+      display: true,
+      action: $scope.onWantToCreateRoom
   }];
 
   // ==================================================== Category ==================================================== //
