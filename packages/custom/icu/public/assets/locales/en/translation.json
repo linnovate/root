@@ -208,7 +208,7 @@
     "projectsFromDiscussion": "PROJECTS FROM DISCUSSION:",
     "discussionsFromProject": "DISCUSSIONS FROM PROJECT:",
     "This Deadline is in the past!": "This Deadline is in the past!",
-    "couldNotSetPreviousTime": "You couldn't set past time",
+    "couldNotSetPreviousTime": "This Deadline is in the past!",
     "title": "Title",
     "to": "to",
     "today": "Today",
