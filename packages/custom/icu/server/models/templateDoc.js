@@ -8,6 +8,10 @@ var TemplateDocSchema = new Schema({
   created: {
     type: Date
   },
+  creator: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
   title: {
     type: String
   },
