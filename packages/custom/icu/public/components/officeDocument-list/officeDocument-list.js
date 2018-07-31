@@ -65,14 +65,14 @@ function OfficeDocumentListController($scope, $state, NotifyingService, officeDo
         var LIMIT = 25 ;
         var start = $scope.items.length;
         var sort = $scope.order.field;
-        return $scope.delayedLoad(start, LIMIT, sort);
+        return loadNext(start, LIMIT, sort);
     };
-    $scope.delayedLoad = _.debounce(loadNext, 150);
+
     function loadNext(start, LIMIT, sort){
         return OfficeDocumentsService.getAll(start , LIMIT , sort)
             .then(function(docs){
-                for(let i = 0; i < docs.length; i++){ $scope.items.push(docs[i]) }
-                return docs;
+                for(let i = 0; i < docs.data.length; i++){ $scope.items.push(docs.data[i]) }
+                return docs.data;
             });
     }
 }
