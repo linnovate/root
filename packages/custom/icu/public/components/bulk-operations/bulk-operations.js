@@ -20,6 +20,7 @@ angular.module('mean.icu.ui.bulkoperations', [])
             scope: {
                 selectedItems: '=',
                 cornerState: '=',
+                cursorEnterMultiple: '='
             },
             controller: controller
         };
