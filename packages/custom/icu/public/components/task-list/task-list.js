@@ -85,7 +85,7 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
                     return items.data;
                 });
         }
-        return [];
+        return new Promise();
     };
 
     $scope.getFilter = function() {

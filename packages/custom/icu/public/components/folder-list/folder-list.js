@@ -67,7 +67,7 @@ function FolderListController($scope, $state, folders, NotifyingService, BoldedS
                 return items.data;
             });
         }
-        return [];
+        return new Promise();
     }
 }
 

@@ -75,6 +75,7 @@ function TemplateDocListController($scope, $state, templateDocs, NotifyingServic
                 return items.data;
             });
         }
+        return new Promise();
     }
 }
 

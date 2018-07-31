@@ -59,7 +59,7 @@ function DiscussionListController($scope, $state, discussions, NotifyingService,
                 return items.data;
             });
         }
-        return [];
+        return new Promise();
     };
 
     $scope.getBoldedClass = function(entity){

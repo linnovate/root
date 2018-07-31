@@ -62,7 +62,7 @@ function OfficeListController($scope, $state, offices, NotifyingService, BoldedS
                 return offices.data;
             });
         }
-        return [];
+        return new Promise();
     };
 }
 

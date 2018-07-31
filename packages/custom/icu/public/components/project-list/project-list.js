@@ -85,7 +85,7 @@ function ProjectListController($scope, $state, $timeout, projects, NotifyingServ
                 return items.data;
             });
         }
-        return [];
+        return new Promise();
     }
 }
 
