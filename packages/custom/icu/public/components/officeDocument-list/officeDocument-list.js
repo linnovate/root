@@ -1,6 +1,6 @@
 'use strict';
 
-function OfficeDocumentListController($scope, $state, NotifyingService, officeDocuments, OfficeDocumentsService, context, $stateParams, EntityService) {
+function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDocumentsService, context, $stateParams, EntityService) {
 
     $scope.items = officeDocuments.data || officeDocuments;
 
