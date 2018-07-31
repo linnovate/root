@@ -122,21 +122,21 @@
 
   <div class="row-buttons" ng-class="{ 'disabled' : !havePermissions('description')}">
     <button class="create"
-            ng-if="(!item.path && !item.spPath && !uploading)"
+            ng-if="(!item.path && !item.spPath && !item.mmhpath && !uploading)"
             icu-open-modal
             entity-name="officeDocuments"
             show-modal="true"
             modal-name="template"
             data="item">{{ 'createFromTemplate' | i18next }}
     </button>
-    <button ngf-select ngf-change="upload($files)" ngf-multiple="true" class="choose" ng-if="(!item.path && !item.spPath && !uploading)">{{ 'chooseFile' | i18next }}</button>
+    <button ngf-select ngf-change="upload($files)" ngf-multiple="true" class="choose" ng-if="(!item.path && !item.spPath && !item.mmhpath && !uploading)">{{ 'chooseFile' | i18next }}</button>
     <div class="progress" ng-if="uploading">
       <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" ng-style="{width:progressPercentage+'%'}">{{progressPercentage}}%</div>
     </div>
 
     <div style="overflow:inherit" class="tab-content">
       <div class="documents">
-        <div ng-if="item.path||item.spPath" class="document">
+        <div ng-if="item.path || item.spPath || item.mmhpath " class="document">
           <a ng-click="view(item)" target="window">
             <div class="icon {{item.documentType}}"></div>
             <div id="documentTitle">{{item.title}}</div>
