@@ -5,7 +5,7 @@
  * @example <div acme-order-calendar-range></div>
  */
 
-function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService,  PermissionsService, NotifyingService) {
+function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService,  PermissionsService) {
 
     // ============================================================= //
     // ========================= navigate ========================== //
@@ -110,9 +110,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }, {
         title: 'created',
         value: 'created'
-    }, {
-      title: 'bolded',
-      value: 'bolded.bolded'
     }];
 
     if (context.entityName != "all") {
@@ -154,7 +151,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         var me;
         UsersService.getMe().then(function(me1) {
             me = me1;
-            window.open(window.origin + '/api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
+            window.open(window.baseUrl + 'api/Excelfiles/notes/' + me.id + 'Tasks.xlsx');
         });
     }
 
