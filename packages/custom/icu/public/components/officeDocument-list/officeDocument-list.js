@@ -7,15 +7,6 @@ function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDoc
     $scope.entityName = 'officeDocuments';
     $scope.entityRowTpl = '/icu/components/officeDocument-list/officeDocument-row.html';
 
-    $scope.loadNext = officeDocuments.next;
-    $scope.loadPrev = officeDocuments.prev;
-
-    var creatingStatuses = {
-        NotCreated: 0,
-        Creating: 1,
-        Created: 2
-    }
-
     $scope.update = function(item) {
         return OfficeDocumentsService.update(item);
     }
@@ -65,29 +56,24 @@ function OfficeDocumentListController($scope, $state, officeDocuments, OfficeDoc
     //         });
     //     }
 
-    $scope.loadMore = function(start, LIMIT, sort) {
-        if (!$scope.isLoading && $scope.loadNext) {
-            $scope.isLoading = true;
-            $scope.loadNext().then(function(items) {
+    $scope.order = {
+        field: $stateParams.sort || 'created',
+        order: 1
+    };
 
-                _(items.data).each(function(p) {
-                    p.__state = creatingStatuses.Created;
-                });
+    $scope.loadMore = function() {
+        var LIMIT = 25 ;
+        var start = $scope.items.length;
+        var sort = $scope.order.field;
+        return loadNext(start, LIMIT, sort);
+    };
 
-                var offset = $scope.displayOnly ? 0 : 1;
-
-                if (items.data.length) {
-                    var index = $scope.items.length - offset;
-                    var args = [index, 0].concat(items.data);
-
-                    [].splice.apply($scope.items, args);
-                }
-
-                $scope.loadNext = items.next;
-                $scope.loadPrev = items.prev;
-                $scope.isLoading = false;
+    function loadNext(start, LIMIT, sort){
+        return OfficeDocumentsService.getAll(start , LIMIT , sort)
+            .then(function(docs){
+                for(let i = 0; i < docs.data.length; i++){ $scope.items.push(docs.data[i]) }
+                return docs.data;
             });
-        }
     }
 }
 

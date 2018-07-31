@@ -194,6 +194,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             //                     officeDocuments
             //                 });
             //             } else {
+            $scope.refreshVisibleItems();
             $timeout(()=> {
               let els = $element.find('td.name');
               els.length && els[els.length - 1].focus();
@@ -266,14 +267,45 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     $scope.loadMore = function() {
         var LIMIT = 25;
+        let loadedVisibleCount = 0;
+        let listEnd = false;
 
-        if (!$scope.isLoading) {
-            var start = $scope.items.length;
-            var sort = 'created';
-            //$scope.order.field;
-            $scope.$parent.loadMore(start, LIMIT, sort);
+        loadWithVisibleCheck(listEnd, loadedVisibleCount);
+
+        function loadWithVisibleCheck(listEnd, loadedVisibleCount) {
+            if (!$scope.isLoading) {
+                if (loadedVisibleCount < 25 && !listEnd) {
+                    var start = $scope.items.length;
+                    var sort = 'created';
+                    //$scope.order.field;
+                    $scope.$parent.loadMore(start, LIMIT, sort).then(result => {
+                        if (result.length === 0) listEnd = true;
+                        loadedVisibleCount += filterResults(result).length;
+                        $scope.refreshVisibleItems();
+                        loadWithVisibleCheck(listEnd, loadedVisibleCount);
+                    })
+                }
+            }
         }
     };
+
+    $scope.refreshVisibleItems = function(){
+        $scope.visibleItems = filterResults($scope.items);
+    };
+    $scope.refreshVisibleItems();
+
+    $scope.$on('refreshList', function () {
+        $scope.refreshVisibleItems();
+    });
+
+    function filterResults(itemsArray){
+        let newArray = $filter('filterRecycled')(itemsArray);
+        newArray = $filter('filterByOptions')(newArray);
+        newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
+        newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
+
+        return newArray;
+    }
 
     // ============================================================= //
     // ======================== Permissions ======================== //
