@@ -111,6 +111,7 @@
 	"forNotice": "לידיעה",
 	"fromtemplate": "מתבנית",
 	"in-progress":  "בתהליך",
+	"itemsSelected":  "פריטים נבחרו",
 	"waiting-approval": "מחכה לאישור",
 	"sent":"נשלח",
 	"distributed":"הפצה",
@@ -289,6 +290,7 @@
 	"deleteTemplateDoc": "מחק תבנית מסמך",
     "templateDocsFrom": " תבנית מסמך מ ",
     "templateDoc": "תבנית מסמך",
+    "templateDocs": "מסמכי תבנית",
 	"deleteOfficeDocument": "מחק מסמך",
 	"recycleOfficeDocument": "מחק מסמך",
 	"unrecycleOfficeDocument": "אחזר מסמך",
@@ -339,6 +341,7 @@
     "rank":"דרגה",
     "fullName": "שם",
 	"selectSignature": "בחר חתימה",
+	"selectStatus": "בחר סטטוס",
     "signBy":"חתום על ידי",
     "noSignatures": "אין חתימות",
 

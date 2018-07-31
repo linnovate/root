@@ -7,7 +7,7 @@
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
 
         <ui-select ng-model="selected" on-select="select(selected)">
-            <ui-select-match placeholder="{{ 'Select status' | i18next }}">
+            <ui-select-match placeholder="{{ 'selectStatus' | i18next }}">
                 <i class='{{$select.selected}}'></i>
                 <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
             </ui-select-match>

@@ -122,7 +122,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
           $scope.title = `${$i18next('addTags')}`;
           break;
       case 'delete':
-          $scope.title = `${$i18next('Delete')}`;
+          $scope.title = `${$i18next('delete')}`;
           break;
   }
 }
