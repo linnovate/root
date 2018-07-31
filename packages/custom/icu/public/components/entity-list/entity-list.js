@@ -291,6 +291,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
     $scope.refreshVisibleItems();
 
+    $scope.$on('refreshList', function () {
+        $scope.refreshVisibleItems();
+    });
+
     function filterResults(itemsArray){
         let newArray = $filter('filterRecycled')(itemsArray);
         newArray = $filter('filterByOptions')(newArray);
