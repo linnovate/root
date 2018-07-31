@@ -3,7 +3,9 @@
 
     <multiple-corner-button></multiple-corner-button>
 
-    <div class="bulk-operations">
+    <div class="bulk-operations"
+         ng-click="cursorEnterMultiple(false)"
+    >
         <multiple-status ng-if="showForCurrentEntity('status')" entity-type="entityType"></multiple-status>
         <!--<multiple-watch ng-if="showForCurrentEntity('watch')" entity-type="entityType"></multiple-watch>-->
         <multiple-assign ng-if="showForCurrentEntity('assign')" entity-type="entityType"></multiple-assign>
