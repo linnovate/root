@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
 
-function TaskDetailsController($scope, entity, tags, projects, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
+function TaskDetailsController($injector, $scope, entity, tags, projects, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
 
   // ==================================================== init ==================================================== //
 
@@ -419,5 +419,50 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   $scope.permsToSee = function() {
     return PermissionsService.haveAnyPerms($scope.item);
+  };
+
+  let editableElements = {
+    title: {
+      class: '.item-title',
+      attributes: ['contentEditable', 'stripBr'],
+      neededPerms: 'description'
+    },
+    desc:{
+      class: '.detail-desc',
+      attributes: ['contentEditable', 'stripBr'],
+      neededPerms: 'description'
+    }
+  };
+
+
+  $scope.enableInputs = function(){
+    for(let element in editableElements){
+      let elem = editableElements[element];
+      if($scope.haveEditiorsPermissions(elem.neededPerms)){
+        enableEdit(elem);
+      } else {
+        disableEdit(elem)
+      }
+    }
+  };
+
+  $scope.enableInputs();
+
+  function enableEdit(e) {
+    $(e.class).attr('contenteditable', 'true');
+  }
+
+  function disableEdit(e) {
+    $(e.class).attr('data-disable-editing', 'true');
+    $(e.class).attr('data-disable-toolbar', 'true');
+  }
+
+  function compile(element){
+    var el = angular.element(element);
+    $scope = el.scope();
+    $injector = el.injector();
+    $injector.invoke(function($compile){
+      $compile(el)($scope)
+    })
   }
 }

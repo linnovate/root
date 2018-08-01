@@ -34,17 +34,27 @@
     {{currentContext.entity.title}}
   </div>
 
-  <div class="detail-title" ng-class="{ 'disabled' : !havePermissions('description')}">
+  <div class="detail-title"ng-class="{ 'disabled' : !havePermissions('description')}">
     <div class="item-title"
-       contenteditable="true"
+       ng-init="enableInputs()"
        tabindex="1"
-       strip-br="true"
        ng-model="item.title"
-       medium-editor>
+       medium-editor
+       strip-br="true"
+    >
     </div>
   </div>
 
-  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="item.description" options="{{editorOptions}}"></div>
+  <div class="detail-desc"
+       ng-class="{ 'disabled' : !havePermissions('description')}"
+       tabindex="2"
+       ng-model="item.description"
+       medium-editor
+       strip-br="true"
+       contenteditable="true"
+       options="{{editorOptions}}"
+  >
+  </div>
 
   <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
 
