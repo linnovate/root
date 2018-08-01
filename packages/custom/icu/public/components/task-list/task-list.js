@@ -60,32 +60,34 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
         });
     };
 
-    $scope.loadMore = function(start, LIMIT, sort) {
-        if (!$scope.isLoading && $scope.loadNext) {
-            $scope.isLoading = true;
-            return $scope.loadNext()
-                .then(function(items) {
-                    _(items.data).each(function(p) {
-                        p.__state = creatingStatuses.Created;
+    $scope.loadMore = function (start, LIMIT, sort) {
+        return new Promise((resolve) => {
+            if (!$scope.isLoading && $scope.loadNext) {
+                $scope.isLoading = true;
+                return $scope.loadNext()
+                    .then(function (items) {
+                        _(items.data).each(function (p) {
+                            p.__state = creatingStatuses.Created;
+                        });
+
+                        var offset = $scope.displayOnly ? 0 : 1;
+
+                        if (items.data.length) {
+                            var index = $scope.items.length - offset;
+                            var args = [index, 0].concat(items.data);
+
+                            [].splice.apply($scope.items, args);
+                        }
+
+                        $scope.loadNext = items.next;
+                        $scope.loadPrev = items.prev;
+                        $scope.isLoading = false;
+
+                        return items.data;
                     });
-
-                    var offset = $scope.displayOnly ? 0 : 1;
-
-                    if (items.data.length) {
-                        var index = $scope.items.length - offset;
-                        var args = [index, 0].concat(items.data);
-
-                        [].splice.apply($scope.items, args);
-                    }
-
-                    $scope.loadNext = items.next;
-                    $scope.loadPrev = items.prev;
-                    $scope.isLoading = false;
-
-                    return items.data;
-                });
-        }
-        return new Promise();
+            }
+            return resolve([]);
+        })
     };
 
     $scope.getFilter = function() {
