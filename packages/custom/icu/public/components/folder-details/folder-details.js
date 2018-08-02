@@ -38,7 +38,7 @@ function FolderDetailsController($rootScope, $scope, entity, tasks, people, fold
   $scope.people = people.data || people;
 
   $scope.updateCurrentFolder = function(){
-    FoldersService.currentFolderName = $scope.items.title;
+    FoldersService.currentFolderName = $scope.item.title;
   }
 
   FoldersService.getTags().then(result =>
