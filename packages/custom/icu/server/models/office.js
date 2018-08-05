@@ -86,6 +86,9 @@ var OfficeSchema = new Schema({
   },
   tel: {
     type: String
+  },
+  roomName: {
+    type: String
   }
 });
 

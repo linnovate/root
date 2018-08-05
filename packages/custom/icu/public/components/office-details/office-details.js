@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.officedetails', []).controller('OfficeDetailsController', OfficeDetailsController);
 
-function OfficeDetailsController($scope, entity, tasks, folders, people, offices, context, $state, OfficesService, PermissionsService, $stateParams, ActivitiesService) {
+function OfficeDetailsController($scope, entity, tasks, folders, people, offices, context, $state, OfficesService, PermissionsService, $stateParams, ActivitiesService, $window) {
 
   // ==================================================== init ==================================================== //
 
@@ -74,10 +74,17 @@ function OfficeDetailsController($scope, entity, tasks, folders, people, offices
 
     $scope.update($scope.item, context);
 
-    OfficesService.WantToCreateRoom($scope.item).then(function() {
+    OfficesService.WantToCreateRoom($scope.item).then(function(data) {
       navigateToDetails($scope.item);
+      if(data.roomName) {
+        $window.open(window.config.rocketChat.uri + '/group/', data.roomName);
+        return true;
+      }
+      else {
+        return false;
+      }
     });
-  }
+  };
 
   // ==================================================== Menu events ==================================================== //
 

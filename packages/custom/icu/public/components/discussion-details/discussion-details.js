@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.discussiondetails', []).controller('DiscussionDetailsController', DiscussionDetailsController);
 
-function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, DiscussionsService, PermissionsService, ActivitiesService, EntityService, UsersService, $stateParams) {
+function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, DiscussionsService, PermissionsService, ActivitiesService, EntityService, UsersService, $stateParams, $window) {
 
   // ==================================================== init ==================================================== //
 
@@ -82,6 +82,23 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
   }
+
+  $scope.onWantToCreateRoom = function() {
+    $scope.item.WantRoom = true;
+
+    $scope.update($scope.item, context);
+
+    DiscussionsService.WantToCreateRoom($scope.item).then(function(data) {
+      navigateToDetails($scope.item);
+      if(data.roomName) {
+        $window.open(window.config.rocketChat.uri + '/group/', data.roomName);
+        return true;
+      }
+      else {
+        return false;
+      }
+    });
+  };
 
   $scope.onAssign = function(value) {
     $scope.item.assign = value;
