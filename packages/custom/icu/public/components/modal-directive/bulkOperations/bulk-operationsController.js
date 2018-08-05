@@ -35,6 +35,8 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                     if(typeof entity.due === 'string')entity.due = new Date(entity.due);
                     entity = _.pick(entity, ['status', 'assign', 'due', 'tags', 'recycled']);
                     Object.assign($scope.selectedItems[i], entity);
+                    $scope.selectedItems[i];
+                    debugger;
                 }
                 if(changedBulkObject.update.delete){
                     refreshState();
