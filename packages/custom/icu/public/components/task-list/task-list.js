@@ -18,9 +18,11 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
         }
     });
 
-    subTasks && subTasks.forEach(function (item) {
-        $scope.items.push(item);
-    });
+    if(context.entityName !== 'my'){
+        subTasks && subTasks.forEach(function (item) {
+            $scope.items.push(item);
+        });
+    }
 
     $scope.loadNext = tasks.next;
     $scope.loadPrev = tasks.prev;
