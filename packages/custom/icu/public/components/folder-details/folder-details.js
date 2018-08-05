@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.folderdetails', []).controller('FolderDetailsController', FolderDetailsController);
 
-function FolderDetailsController($scope, entity, tasks, people, folders, tags,offices, $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
+function FolderDetailsController($scope, entity, tasks, people, folders, tags, offices, $timeout, $window, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService) {
 
   // ==================================================== init ==================================================== //
 
@@ -84,16 +84,21 @@ function FolderDetailsController($scope, entity, tasks, people, folders, tags,of
   }
 
   $scope.onWantToCreateRoom = function() {
-    if ($scope.item.WantRoom == false) {
-      $scope.item.WantRoom = true;
+    $scope.item.WantRoom = true;
 
-      $scope.update($scope.item, context);
+    $scope.update($scope.item, context);
 
-      FoldersService.WantToCreateRoom($scope.item).then(function() {
-        navigateToDetails($scope.item);
-      });
-    }
-  }
+    FoldersService.WantToCreateRoom($scope.item).then(function(data) {
+      navigateToDetails($scope.item);
+      if(data.roomName) {
+        $window.open(window.config.rocketChat.uri + '/group/', data.roomName);
+        return true;
+      }
+      else {
+        return false;
+      }
+    });
+};
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;

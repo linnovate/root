@@ -4,16 +4,10 @@ var config = require('meanio').loadConfig();
 var notifications = require('../root-notifications')({ //CHANGE TO 'root-notifications' IN ORDER TO TAKE FROM node_modules
   rocketChat: config.rocketChat
 });
-var projectController = require('./project.js');
-var officeController = require('./office.js');
-var folderController = require('./folder.js');
 var hiSettings = require(process.cwd() + '/config/hiSettings') || {};
 
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema,
   Message = mongoose.model('Message'),
-  Office = mongoose.model('Office'),
-  Folder = mongoose.model('Folder'),
   Project = require('../models/project'),
   Task = require('../models/task'),
   projectmodel = require('../models/project'),
@@ -21,6 +15,15 @@ var mongoose = require('mongoose'),
 var UserCreator = mongoose.model('User');
 
 var port = config.https && config.https.port ? config.https.port : config.http.port;
+
+const logger = require('../services/logger');
+let RocketChat = undefined;
+let RocketChatGroup = undefined;
+
+if(config.rocketChat.active) {
+  RocketChat = require('rocketChatService');
+  RocketChatGroup = new RocketChat(config.rocketChat);
+}
 
 //Made By OHAD
 
@@ -87,158 +90,104 @@ exports.updateDropDown = function(req, res, next) {
 };
 //END Made By OHAD
 
-var generateRoomName = function(name, id) {
-  if(!name || name === '') {
-    name = new Date().toISOString().replace(/\..+/, '').replace(/:/, '-').replace(/:/, '-');
-  }
-  return name + '-' + id;
+function stripHTML(text) {
+  const htmlReg = /<\/?([a-z][a-z0-9]*)\b[^>]*>?/gi;
+  text = text || '';
+  return text.replace(htmlReg, '').trim();
+}
+
+var generateRoomName = function(title) {
+  return stripHTML((title + '_' + Date.now().toString()).replace(/ /g, '_'));
 };
 
-exports.createRoom = function(req, res, next) {
-  if(req.locals.error) {
+exports.createRoom = async function(req, res, next) {
+  if(!req.locals || req.locals.error || !req.locals.result) {
     return next();
   }
-  Project.findOne({
-    _id: req.locals.result._id
-  }).exec(function(error, project) {
-    if(!req.locals.result.hasRoom) {
-      createRoom(req.locals.result, function(error, result) {
-        if(error) {
-          req.hi = {
-            error: error
-          };
-          project.hasRoom = true;
-          req.locals.result.hasRoom = true;
-          project.save();
-          next();
-        }
-        else {
-          req.body.room = result.group._id;
-          projectController.update(req, res, next);
-        }
-      });
-    }
 
+  let doc = req.locals.result;
+
+  // If there isnt room for this Object -->
+  if(!doc.room) {
+    try{
+      const watchers = doc.watchers.map(doc => doc.username);
+      const roomName = generateRoomName(doc.title);
+
+      const group = await RocketChatGroup.createGroup(roomName, watchers);
+
+      doc.room = group;
+      doc.roomName = roomName;
+      doc.save();
+      next();
+    } catch (err) {
+      req.hi = {
+        error: err
+      };
+      doc.save();
+      logger.log('error', 'error Creating RocketChat Group', {error: err});
+    }
+  }
+
+};
+
+exports.updateRoom = async function(req, res, next) {
+  if(!req.locals || req.locals.error || !req.locals.result ||
+     !req.locals.old || !req.locals.result.room) {
+    return next();
+  }
+
+  let data = req.locals.result;
+  const oldData = req.locals.old;
+
+  // If the title changed -->
+  if (data.title !== oldData.title) {
+    try {
+      const roomName = generateRoomName(data.title);
+      await RocketChatGroup.renameGroup(data.room, roomName);
+
+      data.roomName = roomName;
+      data.save();
+      req.locals.result.roomName = roomName;
+      next();
+    } catch(err){
+      req.hi = {
+        error: err
+      };
+      logger.log('error', 'error renaming RocketChat Group', { error: err });
+    }
+  }
+
+  // Formatting.
+  const oldWatchers = oldData.watchers.map(doc => doc.username);
+  const watchers = data.watchers.map(doc => doc.username);
+
+  // Filter who to add / remove.
+  const toAdd = watchers.filter(userName => !oldWatchers.includes(userName));
+  const toKick = oldWatchers.filter(userName => !watchers.includes(userName));
+
+  toAdd.map(async username => {
+    try {
+      await RocketChatGroup.addUserToGroup(data.room, username);
+      next();
+    } catch (err) {
+      req.hi = {
+        error: err
+      };
+      logger.log('error', 'error adding user to RocketChat Group', { error: err });
+    }
   });
 
-  // END Made By OHAD
-};
-
-exports.updateRoom = function(req, res, next) {
-  if(req.locals.error) {
-    return next();
-  }
-  if(!req.locals.result.room && !req.locals.result.hasRoom && req.locals.result.WantRoom) {
-    Project.findOne({
-      _id: req.locals.result._id
-    }).exec(function(error, project) {
-      if(!project.hasRoom) {
-
-        Project.update({
-          _id: req.locals.result._id
-        }, {
-          $set: {
-            hasRoom: true
-          }
-        }, function() {
-          exports.createRoom(req, res, next);
-        });
-      }
-    });
-  }
-  else {
-    var data = req.locals.result;
-    var oldData = req.locals.old;
-    var changed = '';
-    var changedArray = [];
-    for(var i in data) {
-      if(hiSettings.projectNotify[i] && hiSettings.projectNotify[i].chat) {
-        //if (hiSettings.officeNotify[i] && hiSettings.officeNotify[i].chat) {
-        if(data[i] !== oldData[i]) {
-          changed = i + ' changed to ' + data[i];
-          changedArray.push(changed);
-        }
-      }
-    }
-
-    if(changed !== '') {
-      req.body.context = {
-        action: 'updated',
-        type: 'project',
-        //type: 'office',
-        name: data.title,
-        user: req.user.username,
-        description: changedArray,
-        url: config.host + ':' + port + '/projects/all/' + data._id + '/activities'
-        //url: config.host + ':' + port + '/offices/all/' + data._id + '/activities'
+  toKick.map(async username => {
+    try {
+      await RocketChatGroup.kickUserFromGroup(data.room, username);
+      next();
+    } catch (err) {
+      req.hi = {
+        error: err
       };
-      notifications.notify(['hi'], 'createMessage', {
-        message: bulidMassage(req.body.context),
-        roomId: data.room
-      }, function(error, result) {
-        if(error) {
-          req.hi = {
-            error: error
-          };
-        }
-      });
+      logger.log('error', 'error kicking user from RocketChat Group', { error: err });
     }
-
-    if(req.locals.result.title !== req.locals.old.title) {
-      var str1 = req.locals.result.title.replace(/\s/g, '_');
-      var d = new Date(req.locals.result.created);
-      var sec = d.getSeconds().toString().length == 1 ? '0' + d.getSeconds() : '' + d.getSeconds();
-      var str2 = d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear() + '_' + d.getHours() + '-' + d.getMinutes() + '-' + sec;
-      notifications.notify(['hi'], 'renameRoom', {
-        name: generateRoomName(str1, str2),
-        roomId: req.locals.result.room,
-        message: 'message'
-      }, function(error, result) {
-        if(error) {
-          console.log('there is error in renameRoom');
-          req.hi = {
-            error: error
-          };
-        }
-      });
-    }
-    var added = req.locals.result.watchers.filter(function(o1) {
-      return !req.locals.old.watchers.some(function(o2) {
-        return o1.id === o2.id;
-      });
-    });
-    for(var i in added) {
-      if(added[i] && added[i].id) {
-        notifications.notify(['hi'], 'addMember', {
-          member: added[i].id,
-          roomId: req.locals.result.room
-        }, function(error, result) { });
-      }
-    }
-
-    var removed = req.locals.old.watchers.filter(function(o1) {
-      return !req.locals.result.watchers.some(function(o2) {
-        return o1.id === o2.id;
-      });
-    });
-    for(var i in removed) {
-      if(removed[i] && removed[i].id) {
-        notifications.notify(['hi'], 'removeMember', {
-          member: removed[i].id,
-          roomId: req.locals.result.room
-        }, function(error, result) {
-          if(error) {
-            req.hi = {
-              error: error
-            };
-          }
-        });
-      }
-    }
-
-    next();
-  }
-
+  });
 };
 
 
@@ -287,9 +236,6 @@ exports.sendNotification = function(req, res, next) {
               };
             }
           });
-        }
-        else {
-          createRoomAndSendMessage(project, req, next);
         }
       });
     }
@@ -402,9 +348,6 @@ exports.sendUpdate = function(req, res, next) {
             }
           });
         }
-        else if(req.locals.WantRoom) {
-          createRoomAndSendMessage(project, req, next);
-        }
       });
 
     }
@@ -427,9 +370,6 @@ exports.sendUpdate = function(req, res, next) {
 
               }
             });
-          }
-          else {
-            createRoomAndSendMessage(task.project, req, next);
           }
         }
       });
@@ -608,77 +548,77 @@ var bulidMassage = function(context) {
 };
 
 
-function createRoom(project, callback) {
-  // Made By OHAD
-  var arrayOfUsernames = [];
+// function createRoom(project, callback) {
+//   // Made By OHAD
+//   var arrayOfUsernames = [];
 
-  // Get the username by the _id from the mongo.
-  // There is callback so everything is in the callback
-  UserCreator.findOne({
-    _id: project.creator
-  }, function(err, user) {
-    Project.findOne({_id: project._id}).populate('watchers').exec(function(err, proj) {
-      if(user && user.id) arrayOfUsernames.push(user.id);
+//   // Get the username by the _id from the mongo.
+//   // There is callback so everything is in the callback
+//   UserCreator.findOne({
+//     _id: project.creator
+//   }, function(err, user) {
+//     Project.findOne({_id: project._id}).populate('watchers').exec(function(err, proj) {
+//       if(user && user.id) arrayOfUsernames.push(user.id);
 
-      // Check if there is watchers
-      if(project.watchers && project.watchers.length != 0) {
-        proj.watchers.forEach(function(item) {
-          //if (item.profile && item.profile.hiUid && ArrayOfusernames.indexOf(item.profile.hiUid) < 0)
-          if(item.id) {
-            arrayOfUsernames.push(item.id);
-          }
-        });
-      }
-      var str1 = project.title.replace(/\s/g, '_');
-      var d = new Date();
-      var sec = d.getSeconds().toString().length == 1 ? '0' + d.getSeconds() : '' + d.getSeconds();
-      var str2 = d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear() + '_' + d.getHours() + '-' + d.getMinutes() + '-' + sec;
-      var name = generateRoomName(str1, str2);
-      notifications.notify(['hi'], 'createRoom', {
-        name: name,
-        message: 'message',
-        members: arrayOfUsernames
-      }, function(error, result) {
-        if(!error) {
-          Project.update({_id: project._id}, {$set: {hasRoom: true, room: result.group._id}}, function(err, result) {
+//       // Check if there is watchers
+//       if(project.watchers && project.watchers.length != 0) {
+//         proj.watchers.forEach(function(item) {
+//           //if (item.profile && item.profile.hiUid && ArrayOfusernames.indexOf(item.profile.hiUid) < 0)
+//           if(item.id) {
+//             arrayOfUsernames.push(item.id);
+//           }
+//         });
+//       }
+//       var str1 = project.title.replace(/\s/g, '_');
+//       var d = new Date();
+//       var sec = d.getSeconds().toString().length == 1 ? '0' + d.getSeconds() : '' + d.getSeconds();
+//       var str2 = d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear() + '_' + d.getHours() + '-' + d.getMinutes() + '-' + sec;
+//       var name = generateRoomName(str1, str2);
+//       notifications.notify(['hi'], 'createRoom', {
+//         name: name,
+//         message: 'message',
+//         members: arrayOfUsernames
+//       }, function(error, result) {
+//         if(!error) {
+//           Project.update({_id: project._id}, {$set: {hasRoom: true, room: result.group._id}}, function(err, result) {
 
-          });
-        }
-        //callback(error, result)
+//           });
+//         }
+//         //callback(error, result)
 
-      });
-    });
+//       });
+//     });
 
 
-    //End Of callback
-  });
-  // END Made By OHAD
+//     //End Of callback
+//   });
+//   // END Made By OHAD
 
-}
+// }
 
-function createRoomAndSendMessage(project, req, next) {
-  createRoom(project, function(error, result) {
-    if(error) {
-      req.hi = {
-        error: error
-      };
-      next();
-    }
-    else {
-      project.room = result.id;
-      project.save();
-      req.body.context.room = result.group._id;
-      req.body.context.user = req.user.name;
-      notifications.notify(['hi'], 'createMessage', {
-        message: bulidMassage(req.body.context),
-        roomId: project.room
-      }, function(error, result) {
-        if(error) {
-          req.hi = {
-            error: error
-          };
-        }
-      });
-    }
-  });
-}
+// function createRoomAndSendMessage(project, req, next) {
+//   createRoom(project, function(error, result) {
+//     if(error) {
+//       req.hi = {
+//         error: error
+//       };
+//       next();
+//     }
+//     else {
+//       project.room = result.id;
+//       project.save();
+//       req.body.context.room = result.group._id;
+//       req.body.context.user = req.user.name;
+//       notifications.notify(['hi'], 'createMessage', {
+//         message: bulidMassage(req.body.context),
+//         roomId: project.room
+//       }, function(error, result) {
+//         if(error) {
+//           req.hi = {
+//             error: error
+//           };
+//         }
+//       });
+//     }
+//   });
+// }

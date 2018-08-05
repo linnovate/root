@@ -73,6 +73,7 @@ exports.render = function(req, res) {
 			'whatsNew': config.whatsNew,
 			'activeStatus': config.activeStatus,
 			'isPortNeeded': config.isPortNeeded,
+			'rocketChat': config.rocketChat,
 		}
 	});
 };

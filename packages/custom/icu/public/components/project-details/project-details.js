@@ -2,22 +2,24 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, people, tasks, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me) {
+function ProjectDetailsController($scope, $rootScope, entity, people, tasks, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me, $window) {
 
   // ==================================================== init ==================================================== //
 
-  if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("projects"))) {
+  if($state.$current.url.source.includes('search') || $state.$current.url.source.includes('projects')) {
     $scope.item = entity || context.entity;
-  } else {
+  }
+  else {
     $scope.item = context.entity || entity;
   }
 
-  if (!$scope.item) {
+  if(!$scope.item) {
     $state.go('main.projects.byentity', {
       entity: context.entityName,
       entityId: context.entityId
     });
-  } else if ($scope.item && ($state.current.name === 'main.projects.all.details' || $state.current.name === 'main.search.project' || $state.current.name === 'main.projects.byentity.details')) {
+  }
+  else if($scope.item && ($state.current.name === 'main.projects.all.details' || $state.current.name === 'main.search.project' || $state.current.name === 'main.projects.byentity.details')) {
     $state.go('.activities');
   }
 
@@ -38,14 +40,14 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
   var backupEntity = JSON.parse(JSON.stringify($scope.item));
 
   $scope.people = people.data || people;
-  if ($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+  if($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
     var newPeople = {
       name: 'no select'
     };
     $scope.people.push(_(newPeople).clone());
   }
-  for (var i = 0; i < $scope.people.length; i++) {
-    if ($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job == null)) {
+  for(var i = 0; i < $scope.people.length; i++) {
+    if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job == null)) {
       $scope.people[i].job = $scope.people[i].name;
     }
   }
@@ -76,16 +78,16 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
-  }
+  };
 
   $scope.onAssign = function(value) {
     $scope.item.assign = value;
     $scope.updateAndNotify($scope.item);
-  }
+  };
 
   $scope.onDateDue = function(value) {
     $scope.item.due = value;
-    if (context.entityName === 'discussion') {
+    if(context.entityName === 'discussion') {
       $scope.item.discussion = context.entityId;
     }
 
@@ -95,9 +97,9 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
     });
 
     ProjectsService.update($scope.item).then(function(result) {
-      if (context.entityName === 'project') {
+      if(context.entityName === 'project') {
         var projId = result.project ? result.project._id : undefined;
-        if (projId !== context.entityId) {
+        if(projId !== context.entityId) {
           $state.go('main.projects.byentity', {
             entity: context.entityName,
             entityId: context.entityId
@@ -107,33 +109,40 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
         }
       }
     });
-  }
+  };
 
   $scope.onStatus = function(value) {
     $scope.item.status = value;
     $scope.update($scope.item, {
       name: 'status'
-    })
-  }
+    });
+  };
 
   $scope.onColor = function(value) {
     $scope.update($scope.item, value);
-  }
+  };
 
   $scope.onWantToCreateRoom = function() {
     $scope.item.WantRoom = true;
 
     $scope.update($scope.item, context);
 
-    ProjectsService.WantToCreateRoom($scope.item).then(function() {
+    ProjectsService.WantToCreateRoom($scope.item).then(function(data) {
       navigateToDetails($scope.item);
+      if(data.roomName) {
+        $window.open(window.config.rocketChat.uri + '/group/', data.roomName);
+        return true;
+      }
+      else {
+        return false;
+      }
     });
-  }
+  };
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;
     $scope.update($scope.item);
-  }
+  };
 
   // ==================================================== Menu events ==================================================== //
 
@@ -141,14 +150,14 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
     ProjectsService.removeFromParent($scope.item).then(()=>{
       EntityService.recycle('projects', $scope.item._id).then(function() {
         let clonedEntity = JSON.parse(JSON.stringify($scope.item));
-        clonedEntity.status = "Recycled"
+        clonedEntity.status = 'Recycled';
         // just for activity status
         ProjectsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
           ActivitiesService.data.push(result);
         });
 
         refreshList();
-        if (currentState.indexOf('search') !== -1) {
+        if(currentState.indexOf('search') !== -1) {
           $state.go(currentState, {
             entity: context.entityName,
             entityId: context.entityId
@@ -156,7 +165,8 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
             reload: true,
             query: $stateParams.query
           });
-        } else {
+        }
+        else {
           $state.go('main.projects.all', {
             entity: 'all',
           }, {
@@ -165,14 +175,14 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
         }
       });
     }
-    )
-  }
+    );
+  };
 
   $scope.recycleRestore = function() {
     ProjectsService.addToParent($scope.item).then(()=>{
       EntityService.recycleRestore('projects', $scope.item._id).then(function() {
         let clonedEntity = JSON.parse(JSON.stringify($scope.item));
-        clonedEntity.status = "un-deleted";
+        clonedEntity.status = 'un-deleted';
         // just for activity status
         ProjectsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
           ActivitiesService.data.push(result);
@@ -188,10 +198,11 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
         });
       });
     }
-    )
-  }
+    );
+  };
 
-  $scope.menuItems = [{
+  $scope.menuItems = [
+    {
       label: 'recycleProject',
       icon: 'times-circle',
       display: !$scope.item.hasOwnProperty('recycled'),
@@ -201,12 +212,13 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
       icon: 'times-circle',
       display: $scope.item.hasOwnProperty('recycled'),
       action: $scope.recycleRestore,
-  }];
+    }
+  ];
 
   // ==================================================== $watch: title / desc ==================================================== //
 
   $scope.$watch('item.title', function(nVal, oVal) {
-    if (nVal !== oVal && oVal) {
+    if(nVal !== oVal && oVal) {
       var newContext = {
         name: 'title',
         oldVal: oVal,
@@ -223,7 +235,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
   $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if (nText != oText && oText) {
+    if(nText != oText && oText) {
       var newContext = {
         name: 'description',
         oldVal: oVal,
@@ -239,13 +251,14 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
   $scope.updateAndNotify = function(project) {
     project.status = $scope.statuses[1];
 
-    if (context.entityName === 'discussion') {
+    if(context.entityName === 'discussion') {
       project.discussion = context.entityId;
     }
 
-    if (project.assign === undefined || project.assign === null) {
+    if(project.assign === undefined || project.assign === null) {
       delete project['assign'];
-    } else {
+    }
+    else {
       // check the assignee is not a watcher already
       let filtered = project.watchers.filter(watcher=>{
         return watcher._id == project.assign;
@@ -253,15 +266,15 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
       );
 
       // add assignee as watcher
-      if (filtered.length == 0) {
+      if(filtered.length == 0) {
         project.watchers.push(project.assign);
       }
     }
 
     ProjectsService.update(project).then(function(result) {
-      if (context.entityName === 'project') {
+      if(context.entityName === 'project') {
         var projId = result.project ? result.project._id : undefined;
-        if (projId !== context.entityId) {
+        if(projId !== context.entityId) {
           $state.go('main.projects.byentity', {
             entity: context.entityName,
             entityId: context.entityId
@@ -277,25 +290,25 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
       });
     });
 
-  }
+  };
 
   function refreshList() {
     $rootScope.$broadcast('refreshList');
   }
 
   $scope.update = function(item, type) {
-    if (type.name === 'color') {
-        item.color = context.newVal;
+    if(type.name === 'color') {
+      item.color = context.newVal;
     }
     ProjectsService.update(item, context).then(function(res) {
-      if (ProjectsService.selected && res._id === ProjectsService.selected._id) {
-        if (type === 'title') {
+      if(ProjectsService.selected && res._id === ProjectsService.selected._id) {
+        if(type === 'title') {
           ProjectsService.selected.title = res.title;
         }
       }
       switch (type) {
       case 'status':
-        if (context.entityName === 'discussion') {
+        if(context.entityName === 'discussion') {
           item.discussion = context.entityId;
         }
 
@@ -324,7 +337,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
         break;
       }
     });
-  }
+  };
 
   $scope.delayedUpdate = _.debounce($scope.update, 2000);
 
@@ -332,41 +345,41 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
 
   $scope.updateStatusForApproval = function() {
     let context = {
-      action: "updated",
-      name: "status",
-      type: "project"
-    }
-    $scope.item.status = "waiting-approval";
+      action: 'updated',
+      name: 'status',
+      type: 'project'
+    };
+    $scope.item.status = 'waiting-approval';
     $scope.update(entity, context);
-  }
+  };
 
   // ==================================================== Template ==================================================== //
 
   $scope.saveTemplate = function(newTemplate) {
-    return ProjectsService.saveTemplate($stateParams.id, newTemplate)
-  }
+    return ProjectsService.saveTemplate($stateParams.id, newTemplate);
+  };
 
   $scope.deleteTemplate = function(id) {
-    return ProjectsService.deleteTemplate(id)
-  }
+    return ProjectsService.deleteTemplate(id);
+  };
 
   $scope.implementTemplate = function(id) {
     return ProjectsService.template2subProjects(id, {
-        'projectId': $stateParams.id
+      projectId: $stateParams.id
     }).then(function(result) {
-        for (var i = result.length - 1; i >= 0; i--) {
-            result[i].isNew = true;
+      for(var i = result.length - 1; i >= 0; i--) {
+        result[i].isNew = true;
+      }
+      $timeout(function() {
+        for(var i = result.length - 1; i >= 0; i--) {
+          result[i].isNew = false;
         }
-        $timeout(function() {
-          for (var i = result.length - 1; i >= 0; i--) {
-            result[i].isNew = false;
-          }
-        }, 5000);
-        var tmp = $scope.item.subProjects.pop()
-        $scope.item.subProjects = $scope.item.subProjects.concat(result);
-        $scope.item.subProjects.push(tmp);
+      }, 5000);
+      var tmp = $scope.item.subProjects.pop();
+      $scope.item.subProjects = $scope.item.subProjects.concat(result);
+      $scope.item.subProjects.push(tmp);
     });
-  }
+  };
   // ==================================================== havePermissions ==================================================== //
 
   $scope.enableRecycled = true;
@@ -374,15 +387,15 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
 
   $scope.permsToSee = function() {
     return PermissionsService.haveAnyPerms($scope.item);
-  }
+  };
 
   $scope.havePermissions = function(type, enableRecycled) {
     enableRecycled = enableRecycled || !$scope.isRecycled;
-    return (PermissionsService.havePermissions($scope.item, type) && enableRecycled);
-  }
+    return PermissionsService.havePermissions($scope.item, type) && enableRecycled;
+  };
 
   $scope.haveEditiorsPermissions = function() {
     return PermissionsService.haveEditorsPerms($scope.item);
-  }
+  };
 
 }

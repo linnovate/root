@@ -85,6 +85,9 @@ var FolderSchema = new Schema({
   WantRoom: {
     type: Boolean,
     default: false
+  },
+  roomName: {
+    type: String
   }
 });
 

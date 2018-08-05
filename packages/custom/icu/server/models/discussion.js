@@ -99,6 +99,20 @@ var DiscussionSchema = new Schema({
   sources: [String],
   circles: {
     type: Schema.Types.Mixed
+  },
+  roomName: {
+    type: String
+  },
+  WantRoom: {
+    type: Boolean,
+    default: false
+  },
+  room: {
+    type: String
+  },
+  hasRoom: {
+    type: Boolean,
+    default: false
   }
 });
 
