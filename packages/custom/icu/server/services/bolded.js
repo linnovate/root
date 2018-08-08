@@ -97,7 +97,7 @@ function boldUpdate(req, res, next) {
 function syncBoldUsers(req, res, next) {
   let entity = req.locals ? req.locals.result : req.body;
   if (!entity) {
-    res.status(404).send('No entity');
+    return res.status(404).send('No entity');
   }
   let data;
   let boldedUpdate = req.boldedUpdate;
