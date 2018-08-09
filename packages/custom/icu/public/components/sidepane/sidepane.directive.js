@@ -201,7 +201,7 @@ directive('icuSidepane', function() {
             state: 'officeDocuments.all',
             display: ['folders'],//['new', 'received', 'inProgress'],
             open: $scope.isCurrentState({state: 'officeDocuments'}),
-            func: $scope.createLists,
+            //func: $scope.createLists,
         },
         {
             name: 'settings',
