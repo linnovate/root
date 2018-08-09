@@ -145,7 +145,8 @@ angular.module('mean.icu.data.permissionsservice', [])
             console.log(typeOfService) ;
 
 
-            if(typeOfService == 'officeDocuments') {
+            if(clonedEntity.serial != undefined) {
+                var serviceName = OfficeDocumentsService;
                 // Artium - see bug in documents:
                 // adding 2 watchers one after the other - the permissions array give only 2 items in perms array.
                 serviceName.updateWatcherPerms(clonedEntity, user, user, 'updateWatcherPerms') ;

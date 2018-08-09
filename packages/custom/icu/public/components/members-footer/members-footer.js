@@ -125,7 +125,9 @@ angular.module('mean.icu.ui.membersfooter', [])
                     frequentUser: member._id
                 }
 
-                if(context.main=="officeDocuments"){
+                if(entity.serial != undefined){
+                    var serviceName = "officeDocuments";
+                    var service = $injector.get(serviceName);
                     let a = [];
                     entity.watchers.forEach(function(watcher){
                         if(watcher instanceof Object) {
