@@ -106,7 +106,7 @@ ICU.register(function (app, auth, database,swagger) {
 
         'mean.icu.ui.projectlist',
         'mean.icu.ui.officedocumentlist',
-//         'mean.icu.ui.officedocumentlistdirective',
+        'mean.icu.ui.officedocumentlistdirective',
         'mean.icu.ui.officeDocumentdetails',
 //         'mean.icu.ui.projectlistdirective',
         'mean.icu.ui.projectdetails',

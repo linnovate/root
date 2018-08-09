@@ -1,0 +1,25 @@
+<div class="officedocuments">
+    <div class="action-bar">
+        <button class="orange-btn"
+                ng-click="manageOfficeDocuments()">
+            {{ 'manageOfficeDocuments' | i18next}}
+        </button>
+    </div>
+
+    <div icu-office-document-list
+         class="entity-list-container"
+         officeDocuments="officeDocuments"
+         load-next="loadNext"
+         load-prev="loadPrev"
+         draw-arrow="false"
+         ordering="sorting"
+         display-only="true">
+     </div>
+
+    <div class="action-bar" ng-show="officedocuments.length > 10">
+        <button class="orange-btn"
+                ng-click="manageOfficeDocuments()">
+            {{ 'manageOfficeDocuments' | i18next}}
+        </button>
+    </div>
+</div>

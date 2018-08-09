@@ -24,7 +24,7 @@ function detailTabs($state) {
 
     $scope.onClickTab = function(tab) {
       let path = $state.$current.name.split('.');
-      if (['activities', 'documents', 'tasks', 'folders', 'signatures'].includes(path.pop())) {
+      if (['activities', 'documents', 'tasks', 'folders', 'signatures', 'officedocuments'].includes(path.pop())) {
         path.push(tab);
         path = path.join('.');
       } else {
@@ -37,7 +37,7 @@ function detailTabs($state) {
       return $state.$current.name;
     }, function(newVal, oldVal) {
       let tab = newVal.split('.').pop();
-      if ($scope.selection != tab && ['activities', 'documents', 'tasks', 'folders', 'signatures'].includes(tab)) {
+      if ($scope.selection != tab && ['activities', 'documents', 'tasks', 'folders', 'signatures', 'officedocuments'].includes(tab)) {
         $scope.selection = tab;
         //         $scope.onClick(tab);
       }
@@ -98,6 +98,10 @@ angular.module('mean.icu.ui.detailsComponents').controller('FolderDocumentsContr
 });
 angular.module('mean.icu.ui.detailsComponents').controller('FolderTasksController', function($scope, entity, context, tasks, $state) {
   $scope.tasks = tasks;
+});
+angular.module('mean.icu.ui.detailsComponents').controller('FolderOfficeDocumentsController', function($scope, entity, context, officeDocuments, $state) {
+  $scope.officeDocuments = officeDocuments;
+  $scope.officeDocument = officeDocuments;
 });
 
 angular.module('mean.icu.ui.detailsComponents').controller('OfficeActivitiesController', function($scope, entity, context, activities, ActivitiesService) {

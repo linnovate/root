@@ -1,0 +1,63 @@
+.tab-content {
+    .officedocuments {
+
+        .action-bar {
+            padding: 12px;
+            height: 50px;
+
+            .orange-btn {
+                @include ellipse(12px);
+                @include button;
+                background-color: $orange;
+                box-shadow: 0 3px 0 0 $dark-orange;
+                color: white;
+                padding: 0 10px;
+                white-space: nowrap;
+                float: left;
+            }
+        }
+
+        @include table;
+
+        tbody {
+            tr {
+                background-color: $cream;
+                border: none;
+                cursor: default !important;
+
+                .id {
+                    width: 55px;
+                    color: $grey1;
+                }
+
+                .tag {
+                    @include tag(10px);
+                    padding: 0 10px;
+                }
+
+                .due {
+                    width: 150px;
+                }
+
+                .status {
+                    &.received {
+                        color: $blue;
+                    }
+
+                    &.completed {
+                        color: $green;
+                    }
+                }
+
+                .name-column {
+                    width: 200px;
+                }
+                td {
+                    &.name {
+                        padding-left: 7px;
+                    }
+                }
+            }
+        }
+    }
+}
