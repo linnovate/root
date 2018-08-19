@@ -8,6 +8,9 @@ var TaskModel = require('../models/task.js');
 var ProjectModel = require('../models/project.js');
 var DiscussionModel = require('../models/discussion.js');
 var OfficeDocumentsModel = require('../models/document.js');
+var FolderModel = require('../models/folder');
+var OfficeModel = require('../models/office');
+var TemplateDocsModel = require('../models/templateDoc');
 var elasticsearch = require('../controllers/elasticsearch');
 
 
@@ -32,6 +35,21 @@ var entityNameMap = {
     //      archiveModel: OfficeDocumentsArchiveModel,
     name: 'officeDocument'
   },
+  folders: {
+    mainModel: FolderModel,
+    //      archiveModel: OfficeDocumentsArchiveModel,
+    name: 'folder'
+  },
+  offices: {
+    mainModel: OfficeModel,
+    //      archiveModel: OfficeDocumentsArchiveModel,
+    name: 'office'
+  },
+  templateDocs: {
+    mainModel: TemplateDocsModel,
+    //      archiveModel: OfficeDocumentsArchiveModel,
+    name: 'templateDoc'
+  }
 };
 
 function recycleEntity(entityType, id) {

@@ -2,11 +2,17 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  archive = require('./archive.js');
+  archive = require('./archive.js'),
+  modelUtils = require('./modelUtils'),
+  config = require('meanio').loadConfig() ;
 
 var TemplateDocSchema = new Schema({
   created: {
     type: Date
+  },
+  creator: {
+    type: Schema.ObjectId,
+    ref: 'User'
   },
   title: {
     type: String
@@ -155,6 +161,17 @@ TemplateDocSchema.pre('remove', function (next) {
 });
 
 */
+
+/**
+ * middleware
+ */
+
+// Will not execute until the first middleware calls `next()`
+TemplateDocSchema.pre('save', function(next) {
+  let entity = this ;
+  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+});
+
 
 TemplateDocSchema.plugin(archive, 'templateDoc');
 

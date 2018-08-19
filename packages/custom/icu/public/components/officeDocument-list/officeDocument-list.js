@@ -69,9 +69,9 @@ function OfficeDocumentListController($scope, $state, BoldedService, NotifyingSe
         var LIMIT = 25 ;
         var start = $scope.items.length;
         var sort = $scope.order.field;
-        return $scope.delayedLoad(start, LIMIT, sort);
+        return loadNext(start, LIMIT, sort);
     };
-    $scope.delayedLoad = _.debounce(loadNext, 150);
+
     function loadNext(start, LIMIT, sort){
         return OfficeDocumentsService.getAll(start , LIMIT , sort)
             .then(function(docs){

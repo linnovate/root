@@ -99,11 +99,11 @@ module.exports = function(Icu, app) {
     .post(boldedService.boldUpdate);
 
   //recycle && recycleRestore
-  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/recycle')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments|templateDocs)/:id([0-9a-fA-F]{24})/recycle')
     .patch(recycle.recycleEntity);
-  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments)/:id([0-9a-fA-F]{24})/recycle_restore')
+  app.route('/api/:entity(tasks|discussions|projects|offices|folders|officeDocuments|templateDocs)/:id([0-9a-fA-F]{24})/recycle_restore')
     .patch(recycle.recycleRestoreEntity);
-  app.route('/api/:entity(all|tasks|discussions|projects|offices|folders|officeDocuments)/get_recycle_bin')
+  app.route('/api/:entity(all|tasks|discussions|projects|offices|folders|officeDocuments|templateDocs)/get_recycle_bin')
     .get(recycle.recycleGetBin);
   app.route('/api/get_search_all')
     .get(recycle.searchAll);

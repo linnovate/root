@@ -40,29 +40,34 @@ function OfficeListController($scope, $state, offices, NotifyingService, BoldedS
     };
 
     $scope.loadMore = function(start, LIMIT, sort) {
-        if (!$scope.isLoading && $scope.loadNext) {
-            $scope.isLoading = true;
-            return $scope.loadNext().then(function (offices) {
-                let officesArray = offices.data;
+        return new Promise((resolve) => {
+            if (!$scope.isLoading && $scope.loadNext) {
+                $scope.isLoading = true;
 
-                _(officesArray).each(function (p) {
-                    p.__state = creatingStatuses.Created;
-                });
+                return $scope.loadNext()
+                    .then(function(items) {
+                        _(items.data).each(function(p) {
+                          p.__state = creatingStatuses.Created;
+                        });
 
-                if (officesArray.length) {
-                    for(let i = 0; i < officesArray.length; i++){
-                        $scope.items.push(officesArray[i]);
-                    }
-                }
+                        var offset = $scope.displayOnly ? 0 : 1;
 
-                $scope.loadNext = offices.next;
-                $scope.loadPrev = offices.prev;
-                $scope.isLoading = false;
+                        if (items.data.length) {
+                          var index = $scope.items.length - offset;
+                          var args = [index, 0].concat(items.data);
 
-                return items.data;
-            });
-        }
-        return [];
+                          [].splice.apply($scope.items, args);
+                        }
+
+                        $scope.loadNext = items.next;
+                        $scope.loadPrev = items.prev;
+                        $scope.isLoading = false;
+
+                        return resolve(items.data);
+                    });
+            }
+            return resolve([]);
+        })
     };
 }
 

@@ -106,7 +106,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
         }
       }
     });
-  }
+  };
 
   $scope.onStatus = function(value) {
     $scope.item.status = value;
@@ -191,12 +191,12 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   $scope.menuItems = [{
     label: 'recycleTask',
-    icon: 'times-circle',
+    fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.recycle,
   }, {
     label: 'unrecycleTask',
-    icon: 'times-circle',
+    fa: 'fa-times-circle',
     display: $scope.item.hasOwnProperty('recycled'),
     action: $scope.recycleRestore,
   }];
@@ -218,7 +218,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     var project = {
       color: '0097A7',
       title: value,
-      watchers: [],
+      watchers: []
     };
     return ProjectsService.create(project).then(function(result) {
       $scope.projects.push(result);
@@ -331,8 +331,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
         ActivitiesService.data.push(res);
       });
     });
-
-  }
+  };
 
   $scope.update = function(item, type, proj) {
     if (proj && proj !== '') {

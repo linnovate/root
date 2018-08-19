@@ -51,6 +51,7 @@ function getTemplates(entity, id) {
 exports.createNew = function(req, res, next) {
   var template = {
     created: new Date(),
+    creator: req.user._id,
     title: '',
     path: undefined,
     spPath: undefined,

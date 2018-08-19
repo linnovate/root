@@ -12,8 +12,8 @@
                     justify-content: space-between;
                     align-items: center;
                     &.active {
-                        //background-color: $grey;
-                        color: white;
+                        background-color: rgba(0, 174, 239, 0.1);
+                        border: 1px solid #00AEEF;
 
                         .project {
                             color: black;
