@@ -11,7 +11,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
         let bulkPermissionsMap = {
             'status': ['editor'],
             'assign': ['editor'],
-            'watch': ['editor'],
+            'watchers': ['editor'],
             'due': ['editor'],
             'tag': ['editor'],
             'delete': ['editor'],
@@ -20,7 +20,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
         let bulkShowingMap = {
             'status': ['tasks', 'projects', 'discussions', 'officeDocuments', 'folders'],
             'assign': ['tasks', 'projects', 'discussions', 'officeDocuments'],
-            'watch': [],
+            'watchers': ['tasks', 'projects', 'discussions', 'officeDocuments', 'folders', 'offices'],
             'due': ['tasks', 'projects', 'discussions', 'officeDocuments'],
             'tag': ['tasks', 'projects', 'discussions', 'officeDocuments', 'folders'],
             'delete': ['tasks', 'projects', 'discussions', 'officeDocuments', 'folders', 'offices', 'templateDocs']

@@ -4,8 +4,10 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     $scope.selectedItems = MultipleSelectService.getSelected();
     $scope.activityType = activityType;
     $scope.entityName = entityName;
-    UsersService.getAll().then(allUsers => $scope.people = allUsers);
-
+    UsersService.getAll().then(allUsers => {
+      $scope.people = allUsers;
+      $scope.unUsedWatchers = $scope.getUnusedWatchers();
+    });
 
     $scope.statusMap = SettingServices.getStatusList();
     $scope.statuses = $scope.statusMap[$scope.entityName.substring(0, $scope.entityName.length - 1)];
@@ -33,7 +35,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                 for(let i = 0; i < $scope.selectedItems.length; i++){
                     let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
                     if(typeof entity.due === 'string')entity.due = new Date(entity.due);
-                    entity = _.pick(entity, ['status', 'assign', 'due', 'tags', 'recycled']);
+                    entity = _.pick(entity, ['status', 'watchers', 'assign', 'due', 'tags', 'recycled']);
                     Object.assign($scope.selectedItems[i], entity);
                 }
                 if(changedBulkObject.update.delete){
@@ -53,6 +55,49 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
             reload: true
         });
     }
+
+    //--------------------------------------------------//
+    //----------------------watchers----------------------//
+
+    $scope.usedWatchers = [];
+    $scope.unUsedWatchers = [];
+
+    $scope.getUnusedWatchers = function(){
+      // return _.differenceBy($scope.people, $scope.usedWatchers, '_id'); // didn't
+      let unUsed = [];
+      for(let prop in $scope.people){
+        if(!_.includes($scope.usedWatchers, $scope.people[prop])){
+          unUsed.push($scope.people[prop]);
+        }
+      }
+      return unUsed;
+    };
+
+    $scope.addMember = function(member){
+      $scope.usedWatchers.push(member);
+      $scope.unUsedWatchers = $scope.unUsedWatchers.filter(watcher => watcher._id !== member._id);
+    };
+
+    $scope.removeMember = function(member){
+      $scope.unUsedWatchers.push(member);
+      $scope.usedWatchers = $scope.usedWatchers.filter(watcher => watcher._id !== member._id);
+    };
+
+    $scope.triggerSelect = function() {
+      $scope.showSelect = !$scope.showSelect;
+      if ($scope.showSelect) {
+        $scope.animate = false;
+      }
+    };
+
+    $scope.getWatchersIds = function(watchers){
+      return watchers.map(watcher => watcher._id);
+    };
+
+    $scope.showDelete = function (user, show) {
+      user.showDelete = show;
+      console.log(show)
+    };
 
     //------------------------------------------------//
     //----------------------DUE----------------------//
@@ -109,7 +154,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
       case 'status':
           $scope.title = `${$i18next('setStatus')}`;
           break;
-      case 'watch':
+      case 'watchers':
           $scope.title = `${$i18next('setWatchers')}`;
           break;
       case 'assign':

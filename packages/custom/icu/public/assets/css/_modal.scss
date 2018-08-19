@@ -169,6 +169,39 @@
             }
             .watch {
 
+              .watchers-list {
+                display: flex;
+                border: 1px solid #C8C8C8;
+                margin: 10px 0;
+                max-height: 250px;
+                overflow-y: auto;
+
+                .watcher {
+                  div[icu-avatar] {
+                    padding: 0;
+                  }
+                }
+
+                .remove {
+                  right: 0;
+                  position: absolute;
+                  z-index: 2;
+                }
+
+                .add-member-container {
+                  display: flex;
+                  align-items: center;
+                  color: white;
+
+                  #addMember {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 32px;
+                    border: none;
+                    margin: 14px 5px;
+                  }
+                }
+              }
             }
             .assign {
                 height: 300px;

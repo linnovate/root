@@ -26,13 +26,62 @@
     </section>
 
 
-    <!--<section-->
-        <!--ng-if="activityType === 'watch'"-->
-        <!--class="watch">-->
-        <!---->
-        <!--<button class="action-button" ng-click="bulkUpdate('watch', selected)">{{ 'update' | i18next}}</button>-->
-        <!--<button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>-->
-    <!--</section>-->
+    <section ng-if="activityType === 'watchers'" class="watch">
+      <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
+      <div class="watchers-list">
+        <div class="watcher"
+             data-ng-repeat="member in usedWatchers track by $index"
+             ng-if="usedWatchers.length">
+          <div class="btn-group dropup"
+               ng-mouseover="showDelete(member, true)"
+               ng-mouseleave="showDelete(member, false)">
+            <div icu-avatar
+                 user="member"
+                 entity="entity"
+                 class="btn btn-secondary"
+                 aria-haspopup="true"
+                 aria-expanded="false">
+            </div>
+            <div ng-if="member.showDelete"
+                 class="remove"
+                 ng-click="removeMember(member)">
+              <i class="fa fa-close"></i>
+            </div>
+          </div>
+          <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
+        </div>
+        <div class="add-member-container"
+             ng-if="unUsedWatchers.length">
+          <button class="add" id="addMember" ng-click="triggerSelect()" ng-class="{transition: animate}">
+            <i tooltips tooltip-template="{{'add watcher' | i18next }}" tooltip-side='left' class="fa fa-plus"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="new-member-input" ng-if="showSelect">
+        <ui-select ng-model="member"
+                   theme="bootstrap"
+                   on-select="addMember(member);triggerSelect()">
+          <ui-select-match
+            placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}"
+            autofocus>
+            {{$select.selected.name}}
+          </ui-select-match>
+          <ui-select-choices class="scroll" repeat="user in unUsedWatchers">
+
+            <div icu-avatar
+                 user="user"
+                 entity="entity">
+            </div>
+            <span >{{user.name}}</span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+
+      <button class="action-button" ng-click="bulkUpdate('watchers', getWatchersIds(usedWatchers))">{{ 'update' | i18next}}</button>
+        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
 
 
     <section ng-if="activityType === 'assign'" class="assign">

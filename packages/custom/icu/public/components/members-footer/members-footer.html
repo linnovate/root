@@ -29,7 +29,9 @@
         </div>
     </div>
 
-    <div ng-if="!entity.watchers.length && !watchersGroups.length" class="left-notification" ng-click="triggerSelect()">
+    <div ng-if="!entity.watchers.length && !watchersGroups.length"
+         class="left-notification"
+         ng-click="triggerSelect()">
         {{'noWatchers' | i18next}}
     </div>
 
@@ -49,8 +51,8 @@
                 <span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>
             </ui-select-choices>
         </ui-select>
-
     </div>
+
     <div uib-dropdown class="showMore"
          ng-if="showMore"
          is-open="isDropdownwatchersOpen">
