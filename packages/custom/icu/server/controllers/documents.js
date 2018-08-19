@@ -1,3 +1,4 @@
+var httpError = require('http-errors');
 var crud = require('../controllers/crud.js');
 var Task = require('../models/task'), Attachment = require('../models/attachment');
 var Document = require('../models/document');
@@ -2263,3 +2264,29 @@ var copyFile = function(file, dir2) {
   });
 };
 
+exports.indexInFolder = function(req, res, next) {
+  Document.findById(req.params.id)
+  .then(function(doc) {
+    if(!doc.folder) throw new httpError(400, 'Document not in a folder');
+    if(doc.folderIndex) throw new httpError(400, 'Document already indexed');
+    return doc;
+  })
+  .then(function(doc) {
+    return Document.count({
+      folder: doc.folder
+    })
+    .then(function(count) {
+      doc.folderIndex = count;
+      return doc;
+    })
+  })
+  .then(function(doc) {
+    return doc.save();
+  })
+  .then(function(doc) {
+    res.json(doc);
+  })
+  .catch(function(err) {
+    next(err);
+  })
+}

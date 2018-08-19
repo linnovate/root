@@ -406,6 +406,9 @@ module.exports = function(Icu, app) {
   app.route('/api/officeDocuments/sentToDocument/:id([0-9a-fA-F]{24})')
     .post(documents.sentToDocument);
 
+  app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})/indexInFolder')
+    .post(documents.indexInFolder);
+
   app.route('/api/officeTemplates/createNew')
     .post(templateDocs.createNew);
 

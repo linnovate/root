@@ -155,7 +155,10 @@ var DocumentSchema = new Schema({
         default: 'viewer'
       }
     }
-  ]
+  ],
+  folderIndex: {
+    type: Number
+  }
 });
 
 var starVirtual = DocumentSchema.virtual('star');
