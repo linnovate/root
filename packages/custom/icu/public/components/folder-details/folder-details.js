@@ -160,13 +160,12 @@ function FolderDetailsController($rootScope, $scope, entity, tasks, people, fold
     label: 'deleteFolder',
     fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
-    action: $scope.deleteFolder,
-  },{
-      label: 'Say Hi!',
-      icon: 'chat',
-      display: true,
-      action: $scope.onWantToCreateRoom
     action: $scope.recycle,
+  },{
+    label: 'Say Hi!',
+    icon: 'chat',
+    display: true,
+    action: $scope.onWantToCreateRoom
   },{
     label: 'unrecycleFolder',
     fa: 'fa-times-circle',
