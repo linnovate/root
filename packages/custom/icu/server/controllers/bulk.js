@@ -28,55 +28,49 @@ function update(req, res, next) {
   let update = req.body.update;
 
   let {
+    status,
+    due,
+    assign,
     watchers,
-    tags
+    tags,
+    permissions
   } = update;
 
-  let changeWholeParameter = {
-      status: update.status,
-      due: update.due,
-      assign: update.assign,
-  };
-
-  watchers = watchers || [];
-  tags = tags || [];
-
-  let set = clean(Object.assign({}, changeWholeParameter));
-
-  let addToEach = {};
-  if(watchers.length) addToEach.watchers = { $each: watchers };
-  if(tags.length) addToEach.tags = { $each: tags };
-
-  let addedAttributes = {};
-  if(!_.isEmpty(set)) addedAttributes.$set = set;
-  if(!_.isEmpty(addToEach)) addedAttributes.$addToSet = addToEach;
-  let findArrayIds = { _id: { $in: ids } };
-
-    Model.find(findArrayIds)
-  .then(docs => docs.length === 0 ? next() : docs )
+  Model.find({ _id: { $in: ids } })
   .then(docs => {
     if (checkBoldedPermissions(docs,req.user)) return docs ;
     else throw new Error("Permission Denied") ;
   })
   .then(function(docs) {
     if(!docs.length) throw new httpError(404);
+    docs = docs.map(doc => {
+      if(status) doc.status = status;
+      if(due) doc.due = due;
+      if(assign) doc.assign = assign;
 
-    return Model.update(
-        findArrayIds,
-        addedAttributes,
-        { multi: true })
+      if(watchers && watchers.length) {
+        doc.watchers = unionArraysBy(doc.watchers, watchers);
+      }
+      if(tags && tags.length) {
+        doc.tags = unionArraysBy(doc.tags, tags);
+      }
+      if(permissions && permissions.length) {
+        doc.permissions = unionArraysBy(doc.permissions, permissions, 'id');
+      }
+      return doc.save();
+    })
+
+    return Promise.all(docs)
   })
-  .then(function (results) {
-      return Model.find(findArrayIds)
-          .populate('watchers');
+  .then(function(docs) {
+    return Model.populate(docs, { path: 'watchers' });
   })
   .then(docs => {
     res.json(docs);
-    if(!docs.length) throw new httpError(404);
-    docs.forEach(element => {
-        console.log("saving elastic");
-        element.watchers = [];
-        elasticsearch.save(element, entity);
+    docs.forEach(doc => {
+      console.log("saving elastic");
+      doc.watchers = [];
+      elasticsearch.save(element, entity);
     });
   })
   .catch(function(err) {
@@ -160,4 +154,18 @@ function checkBoldedPermissions(docs,user) {
   }) ;
 
   return !permissionDenied;
+}
+
+// Emulates https://lodash.com/docs/4.17.10#unionBy
+// IMPORTANT: For arrays of objecst or strings only
+function unionArraysBy(orig, override, key) {
+  let object = {};
+  key = key || 0;
+  orig.forEach(el => {
+    object[el[key]] = el;
+  })
+  override.forEach(el => {
+    object[el[key]] = el;
+  })
+  return Object.values(object);
 }
