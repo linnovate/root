@@ -24,39 +24,65 @@ module.exports = {
 function update(req, res, next) {
   let entity = req.params.entity;
   let Model = models[entity];
-  let ids = req.body.ids;
-  let update = req.body.update;
-
   let {
-    status,
-    due,
-    assign,
-    watchers,
-    tags,
-    permissions
-  } = update;
+    ids,
+    update,
+    remove
+  } = req.body;
 
   Model.find({ _id: { $in: ids } })
   .then(docs => {
-    if (checkBoldedPermissions(docs,req.user)) return docs ;
-    else throw new Error("Permission Denied") ;
+    if(!docs.length) throw new httpError(404);
+    if(!checkBoldedPermissions(docs, req.user)) throw new Error("Permission Denied");
+    return docs;
   })
   .then(function(docs) {
-    if(!docs.length) throw new httpError(404);
     docs = docs.map(doc => {
-      if(status) doc.status = status;
-      if(due) doc.due = due;
-      if(assign) doc.assign = assign;
 
-      if(watchers && watchers.length) {
-        doc.watchers = unionArraysBy(doc.watchers, watchers);
+      if(update) {
+
+        let {
+          status,
+          due,
+          assign,
+          watchers,
+          tags,
+          permissions
+        } = update;
+
+        if(status) doc.status = status;
+        if(due) doc.due = due;
+        if(assign) doc.assign = assign;
+
+        if(watchers && watchers.length) {
+          doc.watchers = unionArraysBy(doc.watchers, watchers);
+        }
+        if(tags && tags.length) {
+          doc.tags = unionArraysBy(doc.tags, tags);
+        }
+        if(permissions && permissions.length) {
+          doc.permissions = unionArraysBy(doc.permissions, permissions, 'id');
+        }
+
       }
-      if(tags && tags.length) {
-        doc.tags = unionArraysBy(doc.tags, tags);
+
+      if(remove) {
+        let {
+          watchers,
+          tags
+        } = remove;
+        if(tags && tags.length) {
+          doc.tags = _.difference(doc.tags, tags);
+        }
+        if(watchers && watchers.length) {
+          doc.watchers = _.difference(doc.watchers, watchers);
+          watchers.forEach(watcher => {
+            let permIndex = doc.permissions.findIndex(p => p.id === watcher);
+            if(permIndex !== -1) doc.permissions.splice(permIndex, 1);
+          })
+        }
       }
-      if(permissions && permissions.length) {
-        doc.permissions = unionArraysBy(doc.permissions, permissions, 'id');
-      }
+
       return doc.save();
     })
 
