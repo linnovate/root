@@ -31,7 +31,7 @@
 
       <div class="watchers-list">
         <div class="watcher"
-             data-ng-repeat="member in usedWatchers track by $index"
+             data-ng-repeat="member in usedWatchers"
              ng-if="usedWatchers.length">
           <div class="btn-group dropup"
                ng-mouseover="showDelete(member, true)"
@@ -39,20 +39,26 @@
             <div icu-avatar
                  user="member"
                  entity="entity"
-                 class="btn btn-secondary"
-                 aria-haspopup="true"
-                 aria-expanded="false">
+                 class="btn btn-secondary dropdown-toggle"
+                 ng-click="selfTest(member)"
+                 aria-expanded="false"
+                 data-toggle="dropdown"
+                 aria-haspopup="true">
             </div>
-            <div ng-if="member.showDelete"
-                 class="remove"
-                 ng-click="removeMember(member)">
-              <i class="fa fa-close"></i>
+            <div class="dropdown-menu" ng-hide="member.selfTest">
+              <h6 class="dropdown-header name">{{member.username}}</h6>
+              <h6 class="dropdown-header status">{{userPermissionStatus(member)}}</h6>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" ng-click="setEditor(member)">{{'promoteToEditor' | i18next}}</a>
+              <a class="dropdown-item" href="#" ng-click="setCommenter(member)">{{'setAsCommenter' | i18next}}</a>
+              <a class="dropdown-item" href="#" ng-click="setViewer(member)">{{'demoteToViewer' | i18next}}</a>
+              <a class="dropdown-item" href="#" ng-click="removeMember(member)">{{'remove' | i18next}}</a>
             </div>
           </div>
           <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
         </div>
         <div class="add-member-container"
-             ng-if="unUsedWatchers.length">
+             ng-if="people.length - usedWatchers.length">
           <button class="add" id="addMember" ng-click="triggerSelect()" ng-class="{transition: animate}">
             <i tooltips tooltip-template="{{'add watcher' | i18next }}" tooltip-side='left' class="fa fa-plus"></i>
           </button>
@@ -68,7 +74,7 @@
             autofocus>
             {{$select.selected.name}}
           </ui-select-match>
-          <ui-select-choices class="scroll" repeat="user in unUsedWatchers">
+          <ui-select-choices class="scroll" repeat="user in unusedWatchers">
 
             <div icu-avatar
                  user="user"
@@ -80,7 +86,7 @@
       </div>
 
       <button class="action-button" ng-click="bulkUpdate('watchers', getWatchersIds(usedWatchers))">{{ 'update' | i18next}}</button>
-        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+      <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
 

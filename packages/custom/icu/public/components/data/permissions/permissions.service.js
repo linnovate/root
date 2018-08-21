@@ -245,7 +245,7 @@ angular.module('mean.icu.data.permissionsservice', [])
                 qs = '?' + qs;
             }
 
-            //untill permissions backend route isn't complete
+            // until permissions backend route isn't complete
             var havePerm = false;
 
             if(entity.permissions.length !== 0){
@@ -268,6 +268,17 @@ angular.module('mean.icu.data.permissionsservice', [])
             // }, function(err) {return err})
             //     .then(function (perms) {return perms});
         }
+
+      function getUnifiedPerms(member, selectedItems){
+        let unifPerms = getPermissionStatus(member, selectedItems[0]);
+        let selectedItemsLength = selectedItems.length;
+        for(let i = 0; i < selectedItemsLength; i++){
+          let perm = selectedItems[i].permissions.filter(perm => perm.id === member._id);
+          if(perm[0] && unifPerms !== perm[0].level)unifPerms = 'Different permissions';
+        }
+        return unifPerms;
+      }
+
         return {
             serviceMap: serviceMap,
             getUserPerms: getUserPerms,
@@ -276,6 +287,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             haveEditorsPerms: haveEditorsPerms,
             haveCommenterPerms: haveCommenterPerms,
             getPermissionStatus: getPermissionStatus,
+            getUnifiedPerms: getUnifiedPerms,
             updateEntityPermission: updateEntityPermission,
             changeUsersPermissions: changeUsersPermissions,
         };

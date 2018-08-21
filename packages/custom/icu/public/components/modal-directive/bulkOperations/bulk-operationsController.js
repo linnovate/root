@@ -2,14 +2,18 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                                   MultipleSelectService, UsersService, SettingServices, PermissionsService, NotifyingService) {
 
     $scope.selectedItems = MultipleSelectService.getSelected();
+    $scope.selected = [];
+    $scope.remove = [];
     $scope.activityType = activityType;
     $scope.entityName = entityName;
     UsersService.getAll().then(allUsers => {
       $scope.people = allUsers;
-      $scope.unUsedWatchers = $scope.getUnusedWatchers();
+      $scope.usedWatchers = $scope.getUsedWatchers();
     });
+    UsersService.getMe().then( me => $scope.me = me);
 
-    $scope.statusMap = SettingServices.getStatusList();
+
+  $scope.statusMap = SettingServices.getStatusList();
     $scope.statuses = $scope.statusMap[$scope.entityName.substring(0, $scope.entityName.length - 1)];
 
     $scope.select = function (selected) {
@@ -47,6 +51,34 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
             });
     };
 
+    $scope.updateComplex = function(){
+        if(!value)return;
+
+        let idsArray = $scope.selectedItems.map(entity => entity._id);
+        let changedBulkObject = {
+            update: {},
+            ids: idsArray
+        };
+        if($scope.selected.length)changedBulkObject.update = $scope.selected;
+        if($scope.selected.length)changedBulkObject.remove = $scope.remove;
+
+        MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName)
+            .then(result => {
+                for(let i = 0; i < $scope.selectedItems.length; i++){
+                    let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
+                    if(typeof entity.due === 'string')entity.due = new Date(entity.due);
+                    entity = _.pick(entity, ['status', 'watchers', 'assign', 'due', 'tags', 'recycled']);
+                    Object.assign($scope.selectedItems[i], entity);
+                }
+                if(changedBulkObject.update.delete){
+                    refreshState();
+                }
+                MultipleSelectService.setSelectedList($scope.selectedItems);
+                NotifyingService.notify('refreshAfterOperation');
+                $uibModalInstance.dismiss('cancel');
+            });
+    };
+
     function refreshState(){
         let currentState = $state.current.name;
         $state.go(currentState, {
@@ -60,43 +92,131 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     //----------------------watchers----------------------//
 
     $scope.usedWatchers = [];
-    $scope.unUsedWatchers = [];
+    $scope.unusedWatchers = [];
 
-    $scope.getUnusedWatchers = function(){
-      // return _.differenceBy($scope.people, $scope.usedWatchers, '_id'); // didn't
-      let unUsed = [];
-      for(let prop in $scope.people){
-        if(!_.includes($scope.usedWatchers, $scope.people[prop])){
-          unUsed.push($scope.people[prop]);
+    $scope.getUsedWatchers = function(){
+        let used = $scope.people;
+        let selectedLength = $scope.selectedItems.length;
+
+        for(let i = 0; i < selectedLength; i++){
+          used = used.filter( watcher => _.includes(getIdsArray($scope.selectedItems[i].watchers), watcher._id) )
         }
-      }
-      return unUsed;
+
+        setSelected(used);
+        refreshUnusedWatchers(used);
+        return used;
     };
 
-    $scope.addMember = function(member){
-      $scope.usedWatchers.push(member);
-      $scope.unUsedWatchers = $scope.unUsedWatchers.filter(watcher => watcher._id !== member._id);
-    };
+    function setSelected(used){
+        let selected = $scope.selected;
+        selected.watchers = [];
+        selected.permissions = [];
 
-    $scope.removeMember = function(member){
-      $scope.unUsedWatchers.push(member);
-      $scope.usedWatchers = $scope.usedWatchers.filter(watcher => watcher._id !== member._id);
-    };
+        return used.forEach( watcher => {
+            selected.watchers.push(watcher._id);
+        })
+    }
+
+    function refreshUnusedWatchers(used){
+        let unusedWatchers = $scope.unusedWatchers = [];
+        let unUsedIds = _.difference(getIdsArray($scope.people), getIdsArray(used));
+        let unUsedIdsLength = unUsedIds.length;
+
+        for(let i = 0; i < unUsedIdsLength; i++){
+            unusedWatchers.push($scope.people.find( watcher => watcher._id === unUsedIds[i]))
+        }
+        return unusedWatchers;
+    }
+
+    function getIdsArray(objArray){
+        return objArray.map(obj => obj._id);
+    }
 
     $scope.triggerSelect = function() {
-      $scope.showSelect = !$scope.showSelect;
-      if ($scope.showSelect) {
-        $scope.animate = false;
-      }
+        $scope.showSelect = !$scope.showSelect;
+        if ($scope.showSelect) {
+            $scope.animate = false;
+        }
     };
 
     $scope.getWatchersIds = function(watchers){
-      return watchers.map(watcher => watcher._id);
+        return watchers.map(watcher => watcher._id);
     };
 
-    $scope.showDelete = function (user, show) {
-      user.showDelete = show;
-      console.log(show)
+    $scope.selfTest = function(member){
+        member.selfTest = $scope.me._id === member._id;
+        return member;
+    };
+
+    $scope.userPermissionStatus = function(member){
+        if(member) return PermissionsService.getUnifiedPerms(member, $scope.selectedItems);
+        return 'No Permissions';
+    };
+
+    function changePerms(member, newPerms){
+        $scope.updateSelectedWatchers('addUpdate', member, newPerms);
+    }
+
+    $scope.setEditor = function(user){return changePerms(user, 'editor')};
+    $scope.setCommenter = function(user){return changePerms(user, 'commenter');};
+    $scope.setViewer = function(user){return changePerms(user, 'viewer')};
+
+    $scope.addMember = function(member){
+        $scope.usedWatchers.push(member);
+        $scope.updateSelectedWatchers('addUpdate', member);
+    };
+
+    $scope.removeMember = function(member){
+        $scope.usedWatchers = $scope.usedWatchers.filter(watcher => watcher._id !== member._id);
+        $scope.updateSelectedWatchers('remove', member);
+    };
+
+    $scope.updateSelectedWatchers = function(action, watcher, value){
+        eraseLastChange(watcher);
+        $scope.selected.watchers.push(watcher._id);
+        switch(action){
+            case 'addUpdate':
+                $scope.selected.permissions.push(
+                    {
+                        id: watcher._id,
+                        level: value || 'viewer'
+                    });
+                changePermsToEntities(watcher, value);
+                break;
+            case 'remove':
+                $scope.remove.push(watcher._id);
+                changePermsToEntities(watcher);
+                break;
+        }
+
+        function changePermsToEntities(watcher, value){
+            let selectedItemsLength = $scope.selectedItems.length;
+            for(let i = 0; i < selectedItemsLength; i++){
+                $scope.selectedItems[i].permissions.push({
+                    id: watcher._id,
+                    level: value || 'viewer'
+                });
+            }
+        }
+
+        function eraseLastChange(newWatcherOperation){
+            findAndRemoveField($scope.selected, 'watchers', newWatcherOperation, true);
+            findAndRemoveField($scope.selected, 'permissions', newWatcherOperation, false);
+            findAndRemoveField($scope.remove, 'watchers', newWatcherOperation, true);
+        }
+        function findAndRemoveField(updateObject, field, newWatcherOperation, id){
+            if(!updateObject.length)return;
+            newWatcherOperation = id ? newWatcherOperation._id : newWatcherOperation;
+            let updateParameter = updateObject[field];
+            let updateLength = updateParameter.length;
+
+            for(let i = 0; i < updateLength; i++){
+                if(updateParameter[i] === newWatcherOperation){
+                    delete updateParameter[i];
+                    break;
+                }
+            }
+        }
     };
 
     //------------------------------------------------//
