@@ -52,15 +52,14 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     $scope.updateComplex = function(){
-        if(!value)return;
 
         let idsArray = $scope.selectedItems.map(entity => entity._id);
         let changedBulkObject = {
             update: {},
             ids: idsArray
         };
-        if($scope.selected.length)changedBulkObject.update = $scope.selected;
-        if($scope.selected.length)changedBulkObject.remove = $scope.remove;
+        if(Object.keys($scope.selected).length)changedBulkObject.update = $scope.selected;
+        if($scope.remove.length)changedBulkObject.remove = $scope.remove;
 
         MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName)
             .then(result => {
