@@ -2267,7 +2267,7 @@ var copyFile = function(file, dir2) {
 exports.indexInFolder = function(req, res, next) {
   Document.findById(req.params.id)
   .then(function(doc) {
-    // if(!doc.folder) throw new httpError(400, 'Document not in a folder');
+    if(!doc.folder) throw new httpError(400, 'Document not in a folder');
     if(doc.folderIndex) throw new httpError(400, 'Document already indexed');
     return doc;
   })
