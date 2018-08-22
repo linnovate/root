@@ -404,6 +404,13 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function getFolderIndex(officeDocument){
+            return $http.post(ApiUri + EntityPrefix + '/' + officeDocument._id + '/indexInFolder', officeDocument)
+                .then(function (result) {
+                    return result.data;
+                });
+        }
+
         return {
             sendDocument:sendDocument,
             getAll: getAll,
@@ -413,6 +420,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             getByTaskId: getByTaskId,
             getByProjectId: getByProjectId,
             getByDiscussionId: getByDiscussionId,
+            getFolderIndex: getFolderIndex,
             getByUserId: getByUserId,
             saveDocument: saveDocument,
             updateDocument: updateDocument,
@@ -426,7 +434,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             readByDocument, readByDocument,
             sentToDocument, sentToDocument,
             uploadFileToDocument:uploadFileToDocument,
-            update:update,
             updateWatcher: updateWatcher,
             updateWatcherPerms: updateWatcherPerms,
             updateStatus: updateStatus,

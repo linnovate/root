@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.officeDocumentdetails', []).controller('OfficeDocumentDetailsController', OfficeDocumentDetailsController);
 
-function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, $timeout, $http) {
+function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, NotifyingService, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, $timeout, $http) {
 
   // ==================================================== init ==================================================== //
 
@@ -192,7 +192,13 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         ActivitiesService.data.push(result);
       });
     });
-  }
+  };
+
+  $scope.setFolderIndex = function(item){
+    if(!item.folderIndex){
+      OfficeDocumentsService.getFolderIndex(item).then( data => Object.assign(item, data));
+    }
+  };
 
   // ==================================================== Menu events ==================================================== //
 
