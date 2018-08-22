@@ -75,9 +75,9 @@ function update(req, res, next) {
           doc.tags = _.difference(doc.tags, tags);
         }
         if(watchers && watchers.length) {
-          doc.watchers = _.difference(doc.watchers, watchers);
+          doc.watchers = _.difference(doc.watchers.map(v => v.toString()), watchers);
           watchers.forEach(watcher => {
-            let permIndex = doc.permissions.findIndex(p => p.id === watcher);
+            let permIndex = doc.permissions.findIndex(p => p.id.toString() === watcher);
             if(permIndex !== -1) doc.permissions.splice(permIndex, 1);
           })
         }
