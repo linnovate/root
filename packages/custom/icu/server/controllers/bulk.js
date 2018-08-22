@@ -55,10 +55,10 @@ function update(req, res, next) {
         if(assign) doc.assign = assign;
 
         if(watchers && watchers.length) {
-          doc.watchers = unionArraysBy(doc.watchers, watchers);
+          doc.watchers = _.union(doc.watchers.map(v => v.toString()), watchers);
         }
         if(tags && tags.length) {
-          doc.tags = unionArraysBy(doc.tags, tags);
+          doc.tags = _.union(doc.tags, tags);
         }
         if(permissions && permissions.length) {
           doc.permissions = unionArraysBy(doc.permissions, permissions, 'id');
@@ -96,7 +96,7 @@ function update(req, res, next) {
     docs.forEach(doc => {
       console.log("saving elastic");
       doc.watchers = [];
-      elasticsearch.save(element, entity);
+      elasticsearch.save(doc, entity);
     });
   })
   .catch(function(err) {
@@ -183,10 +183,9 @@ function checkBoldedPermissions(docs,user) {
 }
 
 // Emulates https://lodash.com/docs/4.17.10#unionBy
-// IMPORTANT: For arrays of objecst or strings only
+// IMPORTANT: For arrays of objects or strings only
 function unionArraysBy(orig, override, key) {
   let object = {};
-  key = key || 0;
   orig.forEach(el => {
     object[el[key]] = el;
   })
