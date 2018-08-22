@@ -21,7 +21,7 @@ function detailDue() {
 
   function link($scope, element, attrs) {
 
-    $scope.value = new Date($scope.value);
+    if($scope.value)$scope.value = new Date($scope.value);
 
     //due start
     if ($scope.firstValue)
