@@ -16,6 +16,8 @@ var permissions = require('../controllers/permissions.js');
 var logger = require('../services/logger');
 var serials = require('../controllers/serials.js');
 
+var moment = require('moment');
+
 var ftp = require('../services/ftp');
 
 var excel = require('../services/excel');
@@ -200,7 +202,7 @@ function getFolderIndexMapUpToDate(to){
     {$addFields:{
       upTo:
       {
-        $cond: [ { $lt: [ {$toDate:"$created"} , {$toDate:to} ] }, 1 , 0 ]
+        $cond: [ { $lt: [ "$created", moment(to).toDate() ] }, 1 , 0 ]
       }
     }
   },

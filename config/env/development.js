@@ -92,7 +92,7 @@ module.exports = {
       (process.env.ELASTICSEARCH_IP || 'localhost') + ':9200',
     ],
     port: 9200,
-    log: 'trace',
+    log: 'error',
     keepAlive: false,
     sniffOnConnectionFault:true,
     maxRetries:50
