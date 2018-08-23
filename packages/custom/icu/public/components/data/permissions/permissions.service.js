@@ -276,7 +276,7 @@ angular.module('mean.icu.data.permissionsservice', [])
           let perm = selectedItems[i].permissions.filter(perm => perm.id === member._id);
           if(perm[0] && unifPerms !== perm[0].level)unifPerms = 'Different permissions';
         }
-        return unifPerms;
+        return unifPerms || 'viewer';
       }
 
         return {

@@ -2,13 +2,12 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                                   MultipleSelectService, UsersService, SettingServices, PermissionsService, NotifyingService) {
 
     $scope.selectedItems = MultipleSelectService.getSelected();
-    $scope.selected = [];
-    $scope.remove = [];
+    $scope.selected = {};
     $scope.activityType = activityType;
     $scope.entityName = entityName;
     UsersService.getAll().then(allUsers => {
-      $scope.people = allUsers;
-      $scope.usedWatchers = $scope.getUsedWatchers();
+        $scope.people = allUsers;
+        $scope.getUsedWatchers();
     });
     UsersService.getMe().then( me => $scope.me = me);
 
@@ -52,14 +51,32 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     $scope.updateComplex = function(){
+        let updateObject = $scope.selected.filter( bulkObject => !bulkObject.remove);
+        let updateIds = updateObject.map( bulkObject => bulkObject._id);
+        let updatePermissions = updateObject.map( bulkObject => {
+            return {
+                'id': bulkObject._id,
+                'permissions': bulkObject.permissions
+            }
+        });
+
+        let removeObject = $scope.selected.filter( bulkObject => bulkObject.remove);
+        let removedIds = removeObject.map( bulkObject => bulkObject._id);
 
         let idsArray = $scope.selectedItems.map(entity => entity._id);
         let changedBulkObject = {
-            update: {},
             ids: idsArray
         };
-        if(Object.keys($scope.selected).length)changedBulkObject.update = $scope.selected;
-        if($scope.remove.length)changedBulkObject.remove = $scope.remove;
+
+        if(updateIds.length){
+            changedBulkObject.update = {};
+            changedBulkObject.update.watchers = updateIds;
+            changedBulkObject.update.permissions = updatePermissions;
+        }
+        if(removeObject.length){
+            changedBulkObject.remove = {};
+            changedBulkObject.remove.watchers = removedIds;
+        }
 
         MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName)
             .then(result => {
@@ -75,6 +92,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                 MultipleSelectService.setSelectedList($scope.selectedItems);
                 NotifyingService.notify('refreshAfterOperation');
                 $uibModalInstance.dismiss('cancel');
+                $state.reload();
             });
     };
 
@@ -94,58 +112,38 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     $scope.unusedWatchers = [];
 
     $scope.getUsedWatchers = function(){
-        let used = $scope.people;
-        let selectedLength = $scope.selectedItems.length;
+        let usedIds = getIdsArray($scope.selectedItems[0].watchers);
 
-        for(let i = 0; i < selectedLength; i++){
-          used = used.filter( watcher => _.includes(getIdsArray($scope.selectedItems[i].watchers), watcher._id) )
+        for(let selectedItem of $scope.selectedItems){
+            usedIds = _.intersection(getIdsArray(selectedItem.watchers), usedIds)
         }
 
-        setSelected(used);
-        refreshUnusedWatchers(used);
-        return used;
+        $scope.usedWatchers = usedIds.map( id => _.find($scope.people, { '_id': id}));
+        $scope.getUnusedWatchers();
+        $scope.transformToBulkObjects($scope.usedWatchers);
     };
 
-    function setSelected(used){
-        let selected = $scope.selected;
-        selected.watchers = [];
-        selected.permissions = [];
+    $scope.getUnusedWatchers = function(){
+        let unUsedIds = _.difference(getIdsArray($scope.people), getIdsArray($scope.usedWatchers));
+        $scope.unusedWatchers = unUsedIds.map( id =>  _.find($scope.people, { '_id': id}));
+    };
 
-        return used.forEach( watcher => {
-            selected.watchers.push(watcher._id);
-        })
-    }
+    $scope.transformToBulkObjects = function(array){
+        $scope.selected = array.map( object =>  createBulkWatcher(object._id, $scope.userPermissionStatus(object), false, true));
+    };
 
-    function refreshUnusedWatchers(used){
-        let unusedWatchers = $scope.unusedWatchers = [];
-        let unUsedIds = _.difference(getIdsArray($scope.people), getIdsArray(used));
-        let unUsedIdsLength = unUsedIds.length;
-
-        for(let i = 0; i < unUsedIdsLength; i++){
-            unusedWatchers.push($scope.people.find( watcher => watcher._id === unUsedIds[i]))
+    function createBulkWatcher(id, perms, remove, primary){
+        return {
+            '_id': id,
+            'permissions': perms,
+            'remove': remove,
+            'primary': primary
         }
-        return unusedWatchers;
     }
 
     function getIdsArray(objArray){
         return objArray.map(obj => obj._id);
     }
-
-    $scope.triggerSelect = function() {
-        $scope.showSelect = !$scope.showSelect;
-        if ($scope.showSelect) {
-            $scope.animate = false;
-        }
-    };
-
-    $scope.getWatchersIds = function(watchers){
-        return watchers.map(watcher => watcher._id);
-    };
-
-    $scope.selfTest = function(member){
-        member.selfTest = $scope.me._id === member._id;
-        return member;
-    };
 
     $scope.userPermissionStatus = function(member){
         if(member) return PermissionsService.getUnifiedPerms(member, $scope.selectedItems);
@@ -153,7 +151,8 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     function changePerms(member, newPerms){
-        $scope.updateSelectedWatchers('addUpdate', member, newPerms);
+        let bulkWatcher = $scope.selected.find( watcher => watcher._id === member._id);
+        bulkWatcher.permissions = newPerms;
     }
 
     $scope.setEditor = function(user){return changePerms(user, 'editor')};
@@ -162,59 +161,31 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
     $scope.addMember = function(member){
         $scope.usedWatchers.push(member);
-        $scope.updateSelectedWatchers('addUpdate', member);
+
+        let bulkWatcher = createBulkWatcher(member._id,  $scope.userPermissionStatus(member), false, false);
+        $scope.selected.push(bulkWatcher);
     };
 
     $scope.removeMember = function(member){
-        $scope.usedWatchers = $scope.usedWatchers.filter(watcher => watcher._id !== member._id);
-        $scope.updateSelectedWatchers('remove', member);
+        $scope.usedWatchers = _.reject($scope.usedWatchers,  {'_id': member._id});
+
+        let bulkWatcher = $scope.selected.find( watcher => watcher._id === member._id);
+        if(bulkWatcher.primary){
+            bulkWatcher.remove = true;
+        } else {
+            $scope.selected = _.reject($scope.selected,  {'_id': member._id});
+        }
     };
 
-    $scope.updateSelectedWatchers = function(action, watcher, value){
-        eraseLastChange(watcher);
-        $scope.selected.watchers.push(watcher._id);
-        switch(action){
-            case 'addUpdate':
-                $scope.selected.permissions.push(
-                    {
-                        id: watcher._id,
-                        level: value || 'viewer'
-                    });
-                changePermsToEntities(watcher, value);
-                break;
-            case 'remove':
-                $scope.remove.push(watcher._id);
-                changePermsToEntities(watcher);
-                break;
-        }
+    $scope.selfTest = function(member){
+        member.selfTest = $scope.me._id === member._id;
+        return member;
+    };
 
-        function changePermsToEntities(watcher, value){
-            let selectedItemsLength = $scope.selectedItems.length;
-            for(let i = 0; i < selectedItemsLength; i++){
-                $scope.selectedItems[i].permissions.push({
-                    id: watcher._id,
-                    level: value || 'viewer'
-                });
-            }
-        }
-
-        function eraseLastChange(newWatcherOperation){
-            findAndRemoveField($scope.selected, 'watchers', newWatcherOperation, true);
-            findAndRemoveField($scope.selected, 'permissions', newWatcherOperation, false);
-            findAndRemoveField($scope.remove, 'watchers', newWatcherOperation, true);
-        }
-        function findAndRemoveField(updateObject, field, newWatcherOperation, id){
-            if(!updateObject.length)return;
-            newWatcherOperation = id ? newWatcherOperation._id : newWatcherOperation;
-            let updateParameter = updateObject[field];
-            let updateLength = updateParameter.length;
-
-            for(let i = 0; i < updateLength; i++){
-                if(updateParameter[i] === newWatcherOperation){
-                    delete updateParameter[i];
-                    break;
-                }
-            }
+    $scope.triggerSelect = function() {
+        $scope.showSelect = !$scope.showSelect;
+        if ($scope.showSelect) {
+            $scope.animate = false;
         }
     };
 
