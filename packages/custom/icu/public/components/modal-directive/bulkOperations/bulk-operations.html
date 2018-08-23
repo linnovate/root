@@ -145,8 +145,8 @@
 
         <ul class="items detail-tags-items">
 
-            <li class="tags-item" ng-repeat="tag in selected">
-                <span>{{tag}}</span>
+            <li class="tags-item" ng-repeat="tag in usedTags">
+                <span>{{tag.tag}}</span>
                 <button class="tags-item-remove" ng-click="removeTag(tag)">
                     <i class="fa fa-times"></i>
                 </button>
@@ -169,7 +169,7 @@
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !selected}"
-                ng-click="bulkUpdate('tags', selected)">
+                ng-click="tagUpdate()">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>

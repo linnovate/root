@@ -51,7 +51,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     $scope.updateComplex = function(){
-        let updateObject = $scope.selected.filter( bulkObject => !bulkObject.remove);
+        let updateObject = $scope.selectedWatchers.filter( bulkObject => !bulkObject.remove);
         let updateIds = updateObject.map( bulkObject => bulkObject._id);
         let updatePermissions = updateObject.map( bulkObject => {
             return {
@@ -60,7 +60,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
             }
         });
 
-        let removeObject = $scope.selected.filter( bulkObject => bulkObject.remove);
+        let removeObject = $scope.selectedWatchers.filter( bulkObject => bulkObject.remove);
         let removedIds = removeObject.map( bulkObject => bulkObject._id);
 
         let idsArray = $scope.selectedItems.map(entity => entity._id);
@@ -110,6 +110,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
     $scope.usedWatchers = [];
     $scope.unusedWatchers = [];
+    $scope.selectedWatchers = {};
 
     $scope.getUsedWatchers = function(){
         let usedIds = getIdsArray($scope.selectedItems[0].watchers);
@@ -129,7 +130,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     $scope.transformToBulkObjects = function(array){
-        $scope.selected = array.map( object =>  createBulkWatcher(object._id, $scope.userPermissionStatus(object), false, true));
+        $scope.selectedWatchers = array.map( object =>  createBulkWatcher(object._id, $scope.userPermissionStatus(object), false, true));
     };
 
     function createBulkWatcher(id, perms, remove, primary){
@@ -151,7 +152,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     function changePerms(member, newPerms){
-        let bulkWatcher = $scope.selected.find( watcher => watcher._id === member._id);
+        let bulkWatcher = $scope.selectedWatchers.find( watcher => watcher._id === member._id);
         bulkWatcher.permissions = newPerms;
     }
 
@@ -163,17 +164,17 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         $scope.usedWatchers.push(member);
 
         let bulkWatcher = createBulkWatcher(member._id,  $scope.userPermissionStatus(member), false, false);
-        $scope.selected.push(bulkWatcher);
+        $scope.selectedWatchers.push(bulkWatcher);
     };
 
     $scope.removeMember = function(member){
         $scope.usedWatchers = _.reject($scope.usedWatchers,  {'_id': member._id});
 
-        let bulkWatcher = $scope.selected.find( watcher => watcher._id === member._id);
+        let bulkWatcher = $scope.selectedWatchers.find( watcher => watcher._id === member._id);
         if(bulkWatcher.primary){
             bulkWatcher.remove = true;
         } else {
-            $scope.selected = _.reject($scope.selected,  {'_id': member._id});
+            $scope.selectedWatchers = _.reject($scope.selectedWatchers,  {'_id': member._id});
         }
     };
 
@@ -214,7 +215,29 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   //------------------------------------------------//
   //----------------------TAGS----------------------//
 
+  $scope.usedTags = [];
+  $scope.removedTags = [];
   $scope.tags = [];
+
+  getUsedTags();
+  function getUsedTags(){
+    let usedTags = $scope.selectedItems[0].tags;
+
+    for(let selectedItem of $scope.selectedItems){
+      usedTags = _.intersection(selectedItem.tags, usedTags)
+    }
+
+    $scope.usedTags = usedTags.map( tag => tagsToBulkObjects(tag, false, true))
+  }
+
+  function tagsToBulkObjects(tag, remove, primary){
+    return {
+      'tag': tag,
+      'primary': primary,
+      'remove': remove
+    }
+  }
+
   $scope.addTagClicked = function () {
       $scope.tagInputVisible = true;
       $timeout(function () {
@@ -224,17 +247,59 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   };
 
     $scope.addTag = function (tag) {
-      if (!$scope.selected) $scope.selected = [];
+      $scope.usedTags.push(tagsToBulkObjects(tag, false, false));
 
-      if (!$scope.selected.find(selectedTag => selectedTag === tag)) {
-          $scope.selected.push(tag);
-      }
       $scope.tagInputVisible = false;
   };
 
   $scope.removeTag = function (tag) {
-      $scope.selected = _($scope.selected).without(tag);
+    let bulkTag = $scope.usedTags.find( obj => obj.tag === obj);
+
+    if(bulkTag.primary){
+      bulkTag.remove = true;
+    } else {
+      $scope.usedTags = _.reject($scope.usedTags,  {'tag': tag});
+    }
   };
+
+  $scope.tagUpdate = function(){
+    let updateObject = $scope.usedTags.filter( bulkObject => !bulkObject.remove);
+    let updateIds = updateObject.map( bulkObject => bulkObject.tag);
+
+    let removeObject = $scope.usedTags.filter( bulkObject => bulkObject.remove);
+    let removedIds = removeObject.map( bulkObject => bulkObject.tag);
+
+    let idsArray = $scope.selectedItems.map(entity => entity._id);
+    let changedBulkObject = {
+      ids: idsArray
+    };
+
+    if(updateIds.length){
+      changedBulkObject.update = {};
+      changedBulkObject.update.tags = updateIds;
+    }
+    if(removeObject.length){
+      changedBulkObject.remove = {};
+      changedBulkObject.remove.tags = removedIds;
+    }
+
+    MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName)
+      .then(result => {
+        for(let i = 0; i < $scope.selectedItems.length; i++){
+          let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
+          if(typeof entity.due === 'string')entity.due = new Date(entity.due);
+          entity = _.pick(entity, ['status', 'watchers', 'assign', 'due', 'tags', 'recycled']);
+          Object.assign($scope.selectedItems[i], entity);
+        }
+        if(changedBulkObject.update.delete){
+          refreshState();
+        }
+        MultipleSelectService.setSelectedList($scope.selectedItems);
+        NotifyingService.notify('refreshAfterOperation');
+        $uibModalInstance.dismiss('cancel');
+        $state.reload();
+      });
+  }
 
   $scope.onOpenClose = function (isOpen) {
       $scope.tagInputVisible = !isOpen;
