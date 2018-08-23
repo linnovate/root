@@ -56,7 +56,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         let updatePermissions = updateObject.map( bulkObject => {
             return {
                 'id': bulkObject._id,
-                'permissions': bulkObject.permissions
+                'level': bulkObject.permissions
             }
         });
 
@@ -71,7 +71,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         if(updateIds.length){
             changedBulkObject.update = {};
             changedBulkObject.update.watchers = updateIds;
-            changedBulkObject.update.level = updatePermissions;
+            changedBulkObject.update.permissions = updatePermissions;
         }
         if(removeObject.length){
             changedBulkObject.remove = {};
