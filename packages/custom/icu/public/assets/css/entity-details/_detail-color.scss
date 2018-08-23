@@ -1,9 +1,10 @@
 
 .detail-color {
     position: relative;
-    min-width: 50px;
+    min-width: 60px;
     z-index: 4;
     height: 100%;
+
     .colorpicker {
         @include center;
     }

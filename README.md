@@ -2,15 +2,24 @@
 
 ## Install
 
-Run:
+#### Setup
 
+Development
 ```bash
-git clone git@github.com:linnovate/root.git
-cd root
-docker-compose up
+npm i
+npm run build
+docker-compose up -d
 ```
 
-### Prerequisites
+#### Test
+```bash
+npm test [url]
+```
+If `url` is not specified, then a local instance will be started.
 
-- **Docker , docker-compose** , node 4.x
-- test
+
+#### Deploy
+
+```bash
+docker-compose -f docker-compose.production.yml up -d
+```

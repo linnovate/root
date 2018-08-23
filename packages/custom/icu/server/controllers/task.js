@@ -100,6 +100,7 @@ exports.update = function(req, res, next) {
   if(req.locals.error) {
     return next();
   }
+  req.locals.action = 'update';
   if(req.body.discussion) {
     var alreadyAdded = _(req.locals.result.discussions).any(function(d) {
       return d.toString() === req.body.discussion;
@@ -338,10 +339,6 @@ var byAssign = function(req, res, next) {
       next();
     });
 };
-
-//       next();
-//     });
-// } ;
 
 
 function getTasksDueTodayQuery(req, callback) {

@@ -249,15 +249,18 @@
                 }
 
                 &.active {
-                    background-color: #E3F3F5 !important;
+                    background-color: #E3F3F5;
                     border-bottom: 1px solid #31B9EB;
                     td {
                         color: #1A1A1A;
-                        background-color: #E3F3F5;
+                        //background-color: #E3F3F5;
                     }
                     td.arrow .delete-icon {
                         display: block;
                     }
+                }
+                &.multipleSelected {
+                    background: #FCF4E6;
                 }
             }
         }
@@ -307,4 +310,18 @@
             text-overflow: ellipsis;
         }
     }
+}
+
+.bolded {
+  font-weight: bold !important;
+  a, b, p, i, u, blockquote, li, h1, h2, h3 {
+    font-weight: bold !important;
+  }
+}
+
+.bold-disabled {
+  font-weight: normal !important;
+  a, b, p, i, u, blockquote, li, h1, h2, h3 {
+    font-weight: normal !important;
+  }
 }

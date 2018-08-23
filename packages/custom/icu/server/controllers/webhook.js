@@ -1,5 +1,6 @@
-var mongoose = require('mongoose'),
-  User = mongoose.model('User');
+var mongoose = require('mongoose');
+var User = mongoose.model('User');
+var _ = require('lodash');
 
 var crud = require('../controllers/crud.js');
 var crudService = require('../services/crud.js');
@@ -38,6 +39,9 @@ exports.create = function(req, res, next) {
           entity.update(req, res, next);
         }
 
+      })
+      .catch(function(err) {
+        next(err)
       });
   } else entity.create(req, res, next);
 };

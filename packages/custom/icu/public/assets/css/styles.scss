@@ -28,6 +28,7 @@ body {
 @import 'mixins/file-icon-sprites';
 @import 'avatar';
 @import 'colorpicker';
+@import 'bulk-operations';
 @import 'login';
 @import 'register';
 @import 'profile';
@@ -118,6 +119,15 @@ table {
     width: 100%; height: 100%;
     top: 0; left: 0;
     pointer-events: auto;
+}
+
+.fullyDisabled {
+    @extend .disabled;
+}
+
+.fullyDisabled:after {
+    @extend .disabled:after;
+    z-index: 4;
 }
 
 .enabled {

@@ -1,6 +1,6 @@
 'use strict';
 
-function DiscussionListController($scope, $state, discussions, DiscussionsService, context, $stateParams, EntityService) {
+function DiscussionListController($scope, $state, discussions, NotifyingService, DiscussionsService, context, BoldedService, MultipleSelectService, $stateParams, EntityService) {
 
     $scope.items = discussions.data || discussions;
     $scope.loadNext = discussions.next;
@@ -35,31 +35,38 @@ function DiscussionListController($scope, $state, discussions, DiscussionsServic
     };
 
     $scope.loadMore = function(start, LIMIT, sort) {
+      return new Promise((resolve) => {
         if (!$scope.isLoading && $scope.loadNext) {
-            $scope.isLoading = true;
-            return $scope.loadNext().then(function(items) {
+          $scope.isLoading = true;
 
-                _(items.data).each(function(p) {
-                    p.__state = creatingStatuses.Created;
-                });
+          return $scope.loadNext()
+            .then(function(items) {
+              _(items.data).each(function(p) {
+                p.__state = creatingStatuses.Created;
+              });
 
-                var offset = $scope.displayOnly ? 0 : 1;
+              var offset = $scope.displayOnly ? 0 : 1;
 
-                if (items.data.length) {
-                    var index = $scope.items.length - offset;
-                    var args = [index, 0].concat(items.data);
+              if (items.data.length) {
+                var index = $scope.items.length - offset;
+                var args = [index, 0].concat(items.data);
 
-                    [].splice.apply($scope.items, args);
-                }
+                [].splice.apply($scope.items, args);
+              }
 
-                $scope.loadNext = items.next;
-                $scope.loadPrev = items.prev;
-                $scope.isLoading = false;
+              $scope.loadNext = items.next;
+              $scope.loadPrev = items.prev;
+              $scope.isLoading = false;
 
-                return items.data;
+              return resolve(items.data);
             });
         }
-        return [];
+        return resolve([]);
+      })
+    };
+
+    $scope.getBoldedClass = function(entity){
+      return BoldedService.getBoldedClass(entity, 'discussions');
     };
 
     $scope.getDate = function(discussion) {

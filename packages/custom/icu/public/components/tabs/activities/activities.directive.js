@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function() {
-        function controller($scope, UsersService, DocumentsService,PermissionsService, ActivitiesService, $stateParams, $state, $timeout, context, $http, FilesService) {
+        function controller($scope, UsersService, DocumentsService,PermissionsService, ActivitiesService, BoldedService, $stateParams, $state, $timeout, context, $http, FilesService) {
             $scope.isLoading = true;
             $scope.activity = {
                 description: ''
@@ -642,6 +642,8 @@ angular.module('mean.icu.ui.tabs')
                     //clearForm();
                     $scope.activities.push(result);
                     clearForm();
+                }).then(()=>{
+                  BoldedService.boldedUpdate($scope.entity, $scope.entityName + 's', 'update');
                 });
             };
 

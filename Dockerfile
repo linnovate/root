@@ -1,19 +1,18 @@
-FROM node:8
+FROM node:8-alpine
 
-WORKDIR /usr/src/app
+RUN apk update \
+  && apk add git \
+  && npm install -g npm@latest
 COPY . /usr/src/app
-
-# Install latest version of npm to solve package-lock.json problems
-RUN npm install -g npm@latest
-
-RUN chown -R node:node /usr/src/app
+WORKDIR /usr/src/app
+USER root
+RUN chown -R node .
 USER node:node
 
-RUN npm install
-RUN npm run build
+RUN npm install \
+  && npm run production \
+  && npm prune --production
 
-ENV PORT 3000
-ENV MONGODB_URI mongodb://root-db/icu
-ENV ELASTICSEARCH_IP root-elastic
+EXPOSE 3000
 
 CMD ["node", "server"]

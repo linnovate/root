@@ -2,7 +2,9 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  archive = require('./archive.js');
+  archive = require('./archive.js'),
+  modelUtils = require('./modelUtils'),
+  config = require('meanio').loadConfig() ;
 
 
 var ProjectSchema = new Schema({
@@ -60,6 +62,14 @@ var ProjectSchema = new Schema({
     {
       type: Schema.ObjectId,
       ref: 'User'
+    }
+  ],
+  bolded: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      bolded: Boolean,
+      lastViewed: Date
     }
   ],
   permissions: [
@@ -146,10 +156,17 @@ ProjectSchema.statics.load = function(id, cb) {
  */
 var elasticsearch = require('../controllers/elasticsearch');
 
+// Will not execute until the first middleware calls `next()`
+ProjectSchema.pre('save', function(next) {
+  let entity = this ;
+  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+});
+
 ProjectSchema.post('save', function(req, next) {
   elasticsearch.save(this, 'project');
   next();
 });
+
 
 ProjectSchema.pre('remove', function(next) {
   elasticsearch.delete(this, 'project', next);

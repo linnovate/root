@@ -12,7 +12,7 @@ function detailDue() {
     scope: {
       value: "=",
       list: "=",
-      onChange: "&"
+      onChange: "="
     },
     link: link,
     templateUrl: '/icu/components/details-components/detail-due/detail-due.html',
@@ -21,7 +21,7 @@ function detailDue() {
 
   function link($scope, element, attrs) {
 
-    $scope.firstValue = new Date($scope.value);
+    if($scope.value)$scope.value = new Date($scope.value);
 
     //due start
     if ($scope.firstValue)
@@ -41,7 +41,7 @@ function detailDue() {
           $scope.open();
         }
       },
-      dateFormat: 'd.m.yy'
+      dateFormat: 'dd.mm.yy'
     };
 
     $scope.checkDate = function() {

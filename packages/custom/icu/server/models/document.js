@@ -2,8 +2,10 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  archive = require('./archive.js');
-
+  archive = require('./archive.js'),
+  modelUtils = require('./modelUtils'),
+  config = require('meanio').loadConfig() ;
+  
 var DocumentSchema = new Schema({
   created: {
     type: Date
@@ -135,6 +137,14 @@ var DocumentSchema = new Schema({
       ref: 'User',
     }
   ],
+  bolded: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      bolded: Boolean,
+      lastViewed: Date
+    }
+  ],
   permissions: [
     {
       _id: false,
@@ -145,7 +155,10 @@ var DocumentSchema = new Schema({
         default: 'viewer'
       }
     }
-  ]
+  ],
+  folderIndex: {
+    type: Number
+  }
 });
 
 var starVirtual = DocumentSchema.virtual('star');
@@ -217,6 +230,12 @@ DocumentSchema.statics.folder = function(id, cb) {
 };
 
 var elasticsearch = require('../controllers/elasticsearch');
+
+// Will not execute until the first middleware calls `next()`
+DocumentSchema.pre('save', function(next) {
+  let entity = this ;
+  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+});
 
 
 DocumentSchema.post('save', function(req, next) {

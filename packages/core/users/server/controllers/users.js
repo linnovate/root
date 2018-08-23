@@ -189,7 +189,7 @@ exports.user = function(req, res, next, id) {
 
 exports.resetpassword = function (req, res, next) {
     User.findOne({
-        id: req.body.email,
+        id: req.body.id,
     }, function (err, user) {
         if (user == null) {
             return res.status(400).json({

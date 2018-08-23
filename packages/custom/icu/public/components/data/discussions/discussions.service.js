@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.discussionsservice', [])
-  .service('DiscussionsService', function(ApiUri, $http, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
+  .service('DiscussionsService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
     var EntityPrefix = '/discussions';
     var data;
 
@@ -67,11 +67,12 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function update(discussion) {
-      return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion).then(function(result) {
-        NotifyingService.notify('editionData');
-        WarningsService.setWarning(result.headers().warning);
-        return result.data;
-      });
+      return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion)
+        .then(result => {
+          NotifyingService.notify('editionData');
+          WarningsService.setWarning(result.headers().warning);
+          return result.data;
+        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function remove(id) {
@@ -84,11 +85,11 @@ angular.module('mean.icu.data.discussionsservice', [])
 
     function star(discussion) {
       return $http.patch(ApiUri + EntityPrefix + '/' + discussion._id + '/star', {star: !discussion.star})
-        .then(function(result) {
+        .then(result => {
           WarningsService.setWarning(result.headers().warning);
           discussion.star = !discussion.star;
           return result.data;
-        });
+        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function getStarred() {
@@ -116,14 +117,14 @@ angular.module('mean.icu.data.discussionsservice', [])
       return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule').then(function(result) {
         WarningsService.setWarning(result.headers().warning);
         return result.data;
-      });
+      }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function cancele(discussion) {
       return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/cancele').then(function(result) {
         WarningsService.setWarning(result.headers().warning);
         return result.data;
-      });
+      }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
     function updateWatcher(discussion, me, watcher, type) {
@@ -135,7 +136,7 @@ angular.module('mean.icu.data.discussionsservice', [])
           userObj: watcher
         },
         context: {}
-      }).then(function(result) {
+      }).then(result => {
         return result;
       });
     }
@@ -150,7 +151,7 @@ angular.module('mean.icu.data.discussionsservice', [])
           prev: prev.status
         },
         context: {}
-      }).then(function(result) {
+      }).then(result => {
         return result;
       });
     }
@@ -165,7 +166,7 @@ angular.module('mean.icu.data.discussionsservice', [])
           prev: type === 'startDue' ? prev.startDate : prev.endDate
         },
         context: {}
-      }).then(function(result) {
+      }).then(result => {
         return result;
       });
     }
@@ -181,7 +182,7 @@ angular.module('mean.icu.data.discussionsservice', [])
           prev: prev.location
         },
         context: {}
-      }).then(function(result) {
+      }).then(result => {
         return result;
       });
     }
@@ -198,17 +199,16 @@ angular.module('mean.icu.data.discussionsservice', [])
           prev: prev[type]
         },
         context: {}
-      }).then(function(result) {
+      }).then(result => {
         return result;
       });
     }
 
     function updateAssign(discussion, prev) {
-      var activityType;
-      if(discussion.assign) {
+      var activityType
+      if (discussion.assign) {
         activityType = prev.assign ? 'assign' : 'assignNew';
-      }
-      else {
+      } else {
         activityType = 'unassign';
       }
       return ActivitiesService.create({
@@ -220,7 +220,7 @@ angular.module('mean.icu.data.discussionsservice', [])
           prev: prev.assign ? prev.assign.name : ''
         },
         context: {}
-      }).then(function(result) {
+      }).then(result => {
         return result;
       });
     }

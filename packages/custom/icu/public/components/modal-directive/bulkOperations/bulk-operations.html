@@ -1,0 +1,186 @@
+<div id="modalBulk">
+    <button type="button" class="closeBtn" aria-hidden="true" ng-click="cancel()">X</button>
+    <div class="title">{{title}}</div>
+
+
+    <section ng-if="activityType == 'status'" class="status">
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
+        <ui-select ng-model="selected" on-select="select(selected)">
+            <ui-select-match placeholder="{{ 'selectStatus' | i18next }}">
+                <i class='{{$select.selected}}'></i>
+                <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
+            </ui-select-match>
+            <ui-select-choices repeat="status in statuses | filter: $select.search">
+                <i class='{{status}}'></i>
+                <span class='{{status}}'>{{status | i18next}}</span>
+            </ui-select-choices>
+        </ui-select>
+
+        <button class="action-button"
+                ng-class="{ 'disabled' : !selected}"
+                ng-click="bulkUpdate('status', selected)">
+            {{ 'update' | i18next}}
+        </button>
+        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
+
+
+    <section ng-if="activityType === 'watchers'" class="watch">
+      <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
+      <div class="watchers-list">
+        <div class="watcher"
+             data-ng-repeat="member in usedWatchers"
+             ng-if="usedWatchers.length">
+          <div class="btn-group dropup"
+               ng-mouseover="showDelete(member, true)"
+               ng-mouseleave="showDelete(member, false)">
+            <div icu-avatar
+                 user="member"
+                 entity="entity"
+                 class="btn btn-secondary dropdown-toggle"
+                 ng-click="selfTest(member)"
+                 aria-expanded="false"
+                 data-toggle="dropdown"
+                 aria-haspopup="true">
+            </div>
+            <div class="dropdown-menu" ng-hide="member.selfTest">
+              <h6 class="dropdown-header name">{{member.username}}</h6>
+              <h6 class="dropdown-header status">{{userPermissionStatus(member)}}</h6>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#" ng-click="setEditor(member)">{{'promoteToEditor' | i18next}}</a>
+              <a class="dropdown-item" href="#" ng-click="setCommenter(member)">{{'setAsCommenter' | i18next}}</a>
+              <a class="dropdown-item" href="#" ng-click="setViewer(member)">{{'demoteToViewer' | i18next}}</a>
+              <a class="dropdown-item" href="#" ng-click="removeMember(member)">{{'remove' | i18next}}</a>
+            </div>
+          </div>
+          <div class="numberOfPeople" ng-if="member.users.length">{{member.users.length > 99 ? '+99' : member.users.length}}</div>
+        </div>
+        <div class="add-member-container"
+             ng-if="people.length - usedWatchers.length">
+          <button class="add" id="addMember" ng-click="triggerSelect()" ng-class="{transition: animate}">
+            <i tooltips tooltip-template="{{'add watcher' | i18next }}" tooltip-side='left' class="fa fa-plus"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="new-member-input" ng-if="showSelect">
+        <ui-select ng-model="member"
+                   theme="bootstrap"
+                   on-select="addMember(member);triggerSelect()">
+          <ui-select-match
+            placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}"
+            autofocus>
+            {{$select.selected.name}}
+          </ui-select-match>
+          <ui-select-choices class="scroll" repeat="user in unusedWatchers">
+
+            <div icu-avatar
+                 user="user"
+                 entity="entity">
+            </div>
+            <span >{{user.name}}</span>
+          </ui-select-choices>
+        </ui-select>
+      </div>
+
+      <button class="action-button" ng-click="updateComplex()">{{ 'update' | i18next}}</button>
+      <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
+
+
+    <section ng-if="activityType === 'assign'" class="assign">
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
+        <div tooltips tooltip-template="{{'assignee' | i18next}}">
+            <ui-select ng-model="selected" on-select="select(selected._id)">
+                <ui-select-match  placeholder="{{ 'selectAssignee' | i18next }}">
+                    <div icu-avatar user="$select.selected"></div>
+                    <span ng-if="$select.selected._id" class="summary-content">
+                        {{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}
+                    </span>
+                </ui-select-match>
+                <ui-select-choices repeat="user in people">
+                    <div icu-avatar user="user"></div>
+                    <span class="summary-content">{{user.name}}</span>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+
+        <button class="action-button"
+                ng-class="{ 'disabled' : !selected}"
+                ng-click="bulkUpdate('assign', selected)">
+            {{ 'update' | i18next}}
+        </button>
+        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
+
+
+    <section ng-if="activityType === 'due'" class="due">
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
+        <div class="date">
+            <input ng-model="selectedDue.date" placeholder="{{ duePlaceholder | i18next }}" ui-date="dueOptions" />
+        </div>
+
+        <button class="action-button"
+                ng-class="{ 'disabled' : !selectedDue.date}"
+                ng-click="dateCheck(selectedDue.date)">
+            {{ 'update' | i18next}}
+        </button>
+        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
+
+
+    <section ng-if="activityType === 'tag'" class="tag">
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
+        <!--<div ng-repeat="tag in tags" class='item'>-->
+            <!--<span>{{tag}}</span>-->
+            <!--<button class="detail-tags-item-remove" ng-click="removeTag(tag)">-->
+                <!--<i class="fa fa-times"></i>-->
+            <!--</button>-->
+        <!--</div>-->
+
+        <ul class="items detail-tags-items">
+
+            <li class="tags-item" ng-repeat="tag in usedTagsFiltered track by $index">
+                <span>{{tag.tag}}</span>
+                <button class="tags-item-remove" ng-click="removeTag(tag)">
+                    <i class="fa fa-times"></i>
+                </button>
+            </li>
+            <li class="tags-input" ng-if="!value.length || tagInputVisible">
+                <ui-select
+                    ng-model="newTag"
+                    tagging
+                    tagging-label="false"
+                    on-select="addTag(newTag)"
+                >
+                    <ui-select-match id="addTag" placeholder="{{ !selected.length ? 'noTags' : 'selectTags' | i18next }}">
+                        {{ !selected.length ? 'noTags' : 'selectTags' | i18next }}
+                    </ui-select-match>
+                    <ui-select-choices repeat="tag in tags | filter: $select.search">{{tag}}</ui-select-choices>
+                </ui-select>
+            </li>
+        </ul>
+
+
+        <button class="action-button"
+                ng-class="{ 'disabled' : !selected}"
+                ng-click="tagUpdate()">
+            {{ 'update' | i18next}}
+        </button>
+        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
+
+
+    <section ng-if="activityType === 'delete'" class="delete">
+        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+
+        <button class="action-button" ng-click="bulkUpdate('delete', true)">{{ 'delete' | i18next}}</button>
+        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+    </section>
+
+</div>

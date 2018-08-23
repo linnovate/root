@@ -1,3 +1,5 @@
+<details-view item="item" entity-type="'officeDocuments'"></details-view>
+
 <div class="entity-details officeDocument-details" ng-if="item._id">
   <div class="permission" ng-if="item && !item._id">
     <div class="perIcon"></div>
@@ -10,7 +12,7 @@
 
     <detail-assign value="item.assign" me="me" list="people" on-change="onAssign"></detail-assign>
 
-    <detail-due value="item.due" on-change="updateDue"></detail-due>
+    <detail-due value="item.due" on-change="onDateDue"></detail-due>
 
     <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
 
@@ -71,6 +73,15 @@
             ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled"
             ng-click="updateStatusForApproval(item)">
         {{'updateStatusForApproval' | i18next }}
+    </button>
+    <button class="detail-button setFolderIndex"
+            ng-if="!item.folderIndex"
+            ng-click="setFolderIndex(item)">
+        {{'File' | i18next }}
+    </button>
+    <button class="detail-button setFolderIndex"
+            ng-if="item.folderIndex">
+      {{'File' | i18next }}:{{item.folderIndex}}
     </button>
   </div>
 

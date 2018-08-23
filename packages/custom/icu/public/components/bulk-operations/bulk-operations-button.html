@@ -1,0 +1,14 @@
+
+<div class="bulk-operation" ng-class="{ 'disabled disabledButton': !allowed }">
+    <div tooltips tooltip-template="{{tooltipTitle | i18next}}">
+
+        <button
+            icu-open-modal
+            show-modal="true"
+            modal-name="bulk-operations"
+            activity-type="{{type}}"
+            entity-name="{{entityType}}"
+            class="{{type}}"
+        ></button>
+    </div>
+</div>

@@ -34,7 +34,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
   $scope.me = me;
   $scope.tags = tags;
 
-  var currentState = $state.current.name;
+  let currentState = $state.current.name;
 
   // backup for previous changes - for updates
   var backupEntity = JSON.parse(JSON.stringify($scope.item));
@@ -75,8 +75,8 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
 
   $scope.onStar = function(value) {
     ProjectsService.star($scope.item).then(function() {
-      navigateToDetails($scope.item);
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
+    navigateToDetails($scope.item);
+    // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
   };
 
@@ -91,7 +91,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
       $scope.item.discussion = context.entityId;
     }
 
-    ProjectsService.updateDue($scope.item, backupEntity).then(function(result) {
+    ProjectsService.updateDue($scope.item, backupEntity).then(function (result) {
       backupEntity = JSON.parse(JSON.stringify($scope.item));
       ActivitiesService.data.push(result);
     });
@@ -124,7 +124,6 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
 
   $scope.onWantToCreateRoom = function() {
     $scope.item.WantRoom = true;
-
     $scope.update($scope.item, context);
 
     ProjectsService.WantToCreateRoom($scope.item).then(function(data) {
@@ -204,12 +203,12 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
   $scope.menuItems = [
     {
       label: 'recycleProject',
-      icon: 'times-circle',
+      fa: 'fa-times-circle',
       display: !$scope.item.hasOwnProperty('recycled'),
-      action: $scope.recycle,
+      action: $scope.recycle
     }, {
       label: 'unrecycleProject',
-      icon: 'times-circle',
+      fa: 'fa-times-circle',
       display: $scope.item.hasOwnProperty('recycled'),
       action: $scope.recycleRestore,
     }
@@ -226,7 +225,6 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
         action: 'renamed'
       };
       $scope.delayedUpdate($scope.item, newContext);
-
       ProjectsService.currentProjectName = $scope.item.title;
     }
   });
