@@ -142,6 +142,11 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         }
     }
 
+     $scope.getBulkWatchersClass = function(member){
+        let bulkObject = $scope.selectedWatchers.find( watcher => watcher._id === member._id);
+        return bulkObject.permissions
+    };
+
     function getIdsArray(objArray){
         return objArray.map(obj => obj._id);
     }
