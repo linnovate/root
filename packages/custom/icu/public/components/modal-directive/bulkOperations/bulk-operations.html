@@ -38,8 +38,7 @@
                ng-mouseleave="showDelete(member, false)">
             <div icu-avatar
                  user="member"
-                 entity="entity"
-                 class="btn btn-secondary dropdown-toggle"
+                 class="btn btn-secondary dropdown-toggle {{getBulkWatchersClass(member)}}"
                  ng-click="selfTest(member)"
                  aria-expanded="false"
                  data-toggle="dropdown"
