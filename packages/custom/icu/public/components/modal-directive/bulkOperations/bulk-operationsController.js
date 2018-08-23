@@ -216,10 +216,13 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   //----------------------TAGS----------------------//
 
   $scope.usedTags = [];
+  $scope.usedTagsFiltered;
   $scope.removedTags = [];
   $scope.tags = [];
 
   getUsedTags();
+  filterUsedTags();
+
   function getUsedTags(){
     let usedTags = $scope.selectedItems[0].tags;
 
@@ -228,6 +231,10 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     }
 
     $scope.usedTags = usedTags.map( tag => tagsToBulkObjects(tag, false, true))
+  }
+
+  function filterUsedTags(){
+    $scope.usedTagsFiltered = $scope.usedTags.filter( tag => !tag.remove);
   }
 
   function tagsToBulkObjects(tag, remove, primary){
@@ -250,16 +257,18 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
       $scope.usedTags.push(tagsToBulkObjects(tag, false, false));
 
       $scope.tagInputVisible = false;
+      filterUsedTags();
   };
 
-  $scope.removeTag = function (tag) {
-    let bulkTag = $scope.usedTags.find( obj => obj.tag === obj);
+  $scope.removeTag = function (tagObj) {
+    let bulkTag = $scope.usedTags.find( obj => obj.tag === tagObj.tag);
 
     if(bulkTag.primary){
       bulkTag.remove = true;
     } else {
-      $scope.usedTags = _.reject($scope.usedTags,  {'tag': tag});
+      $scope.usedTags = _.reject($scope.usedTags,  {'tag': tagObj.tag});
     }
+    filterUsedTags();
   };
 
   $scope.tagUpdate = function(){

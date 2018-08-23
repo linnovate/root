@@ -145,7 +145,7 @@
 
         <ul class="items detail-tags-items">
 
-            <li class="tags-item" ng-repeat="tag in usedTags">
+            <li class="tags-item" ng-repeat="tag in usedTagsFiltered track by $index">
                 <span>{{tag.tag}}</span>
                 <button class="tags-item-remove" ng-click="removeTag(tag)">
                     <i class="fa fa-times"></i>
