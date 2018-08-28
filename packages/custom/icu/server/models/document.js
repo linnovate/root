@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
   archive = require('./archive.js'),
   modelUtils = require('./modelUtils'),
   config = require('meanio').loadConfig() ;
-  
+
 var DocumentSchema = new Schema({
   created: {
     type: Date
@@ -24,6 +24,9 @@ var DocumentSchema = new Schema({
     required: true,
     enum: ['new', 'in-progress', 'received', 'waiting-approval', 'done', 'sent'],
     default: 'new'
+  },
+  due: {
+    type: Date
   },
   path: {
     type: String
