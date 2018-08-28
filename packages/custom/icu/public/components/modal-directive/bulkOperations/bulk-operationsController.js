@@ -224,6 +224,15 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   $scope.usedTagsFiltered;
   $scope.removedTags = [];
   $scope.tags = [];
+  $scope.lastTagInput;
+
+  $scope.getlastInputText = function(val){
+    $scope.lastTagInput = val;
+  };
+
+  $scope.addLastInputTextToTag = function(){
+    $scope.addTag($scope.lastTagInput);
+  };
 
   getUsedTags();
   filterUsedTags();
