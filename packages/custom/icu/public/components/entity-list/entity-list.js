@@ -149,10 +149,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.context = context;
     $scope.isLoading = true;
 
-    
+
     let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
 
-    $scope.showTaskExcel = inCurrentEntity('tasks') 
+    $scope.showTaskExcel = inCurrentEntity('tasks')
     $scope.showOfficeDocumentsExcel = inCurrentEntity('offices');
 
 
@@ -390,6 +390,17 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.refreshVisibleItems = function(){
         $scope.visibleItems = filterResults($scope.items);
     };
+
+    function setStatusFilterValue(value){
+      let newActiveToggleField;
+      if(!value)value = 'all';
+      if(['new', 'assigned', 'in-progress', 'review'].includes(value))newActiveToggleField = 'active';
+      if(['rejected', 'done', 'archived', 'canceled', 'completed'].includes(value))newActiveToggleField = 'nonactive';
+
+      if(newActiveToggleField)$scope.activeToggle.field = newActiveToggleField;
+    }
+
+    setStatusFilterValue($stateParams.status);
     $scope.refreshVisibleItems();
 
     $scope.$on('refreshList', function () {
@@ -400,9 +411,14 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         let newArray = $filter('filterRecycled')(itemsArray);
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
+        if($stateParams.status)newArray = filterByDefiniteStatus(newArray, $stateParams.status);
         newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;
+    }
+
+    function filterByDefiniteStatus(array, value){
+      return array.filter( entity => entity.status === value);
     }
 
     // ============================================================= //
