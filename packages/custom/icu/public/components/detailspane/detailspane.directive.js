@@ -51,9 +51,11 @@ angular.module('mean.icu.ui.detailspane')
     .directive('detailsView', function () {
         function controller($scope, $state, BoldedService) {
             $scope.actionType = 'view';
-            BoldedService.boldedUpdate($scope.item, $scope.entityType, $scope.actionType).then((result) => {
-                $scope.item.bolded = result.bolded;
-            });
+            BoldedService.boldedUpdate($scope.item, $scope.entityType, $scope.actionType)
+              .then((result) => {
+                  $scope.item.bolded = result.bolded;
+              })
+              .catch(err => console.log(err));
         }
 
         return {

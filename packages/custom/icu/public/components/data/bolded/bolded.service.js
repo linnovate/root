@@ -10,8 +10,7 @@ angular.module('mean.icu.data.boldedservice', [])
 
     function boldedUpdate(entity, entityType, action){
       if(!entity._id){
-        console.log('No entity ID');
-        return;
+        return Promise.reject('No entity ID');
       }
       let boldedObject = {
         entity_id: entity._id,
