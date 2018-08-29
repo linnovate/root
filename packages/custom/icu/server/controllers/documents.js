@@ -20,7 +20,8 @@ var ftp = require('../services/ftp');
 var excel = require('../services/excel');
 var options = {
   includes: 'assign watchers folder',
-  defaults: {watchers: []}
+  defaults: {watchers: []},
+  conditions: {$or: [ {officemmah: {$exists: false}}]}
 };
 
 var document = crud('officeDocuments', options);
@@ -1154,12 +1155,36 @@ exports.getByUserId = function(req, res, next) {
      
 //     });
 // };
+
+exports.checkOfficemmah = function(req, res, next) {
+  if(req.locals.error) {
+    return next();
+  }
+
+
+  Folder.findById(req.params.id,  function(err, data) {
+    if(data.officemmah == undefined)
+    {
+      req.locals.ismmah = false;
+    }
+    else
+    {
+      req.locals.ismmah = true;
+    }
+
+    next();
+  }); 
+};
+
+
 exports.getByFolder = function(req, res, next) {
 if(req.locals.error) {
   return next();
 }
 
-var entityQuery = {
+if(req.locals.ismmah)
+{
+  var entityQuery = {
     tType: {
       $ne: 'template'
     },
@@ -1173,6 +1198,26 @@ var entityQuery = {
       }
     ]
   };
+}
+else
+{
+  var entityQuery = {
+    tType: {
+      $ne: 'template'
+    },
+    $or: [
+      {
+        parent: null
+      }, {
+        parent: {
+          $exists: false
+        }
+      }
+    ],
+    $or: [{officemmah : {$exists : false}}]
+  };
+}
+
 entityQuery["folder"] = req.params.id instanceof Array ? {
   $in: req.params.id
 } : req.params.id;

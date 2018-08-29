@@ -175,7 +175,7 @@ module.exports = function(Icu, app) {
   app.route('/api/folders/tags')
     .get(folder.tagsList);
 
-  app.route('/api/officeDocuments*').all(entity('officeDocuments'));
+  //app.route('/api/officeDocuments*').all(entity('officeDocuments'));
 
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
@@ -387,7 +387,8 @@ module.exports = function(Icu, app) {
   app.route('/api/officeDocuments/signOnDocx')
     .post(documents.signOnDocx);
   app.route('/api/folders/:id([0-9a-fA-F]{24})/officeDocuments')
-    .get(pagination.parseParams, documents.getByFolder, pagination.formResponse);
+    //.get(pagination.parseParams, documents.getByFolder, pagination.formResponse);
+    .get(pagination.parseParams, documents.checkOfficemmah, documents.getByFolder, pagination.formResponse);
 
   app.route('/api/officeDocuments/receiveDocument/:id([0-9a-fA-F]{24})')
     .post(documents.receiveDocument);

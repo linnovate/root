@@ -134,7 +134,7 @@ module.exports = function(entityName, options) {
     if(pagination && pagination.status){
       options.conditions = {status : pagination.status};
     }else{
-      options.conditions = {};
+      //options.conditions = {};
     }
     if (currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
@@ -152,9 +152,9 @@ module.exports = function(entityName, options) {
           .limit(pagination.limit);
 
         query.populate(options.includes);
-        query.hint({
+        /*query.hint({
           _id: 1
-        });
+        });*/
 
         mergedPromise = q.all([query, countQuery]).then(function(results) {
           pagination.count = results[1];
