@@ -57,6 +57,10 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
+            data.content = data.content.map( doc => {
+                doc.created = new Date(doc.created);
+                return doc;
+            });
             return PaginationService.processResponse(data);
         });
     }
@@ -146,27 +150,27 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         // }
 
         function getByFolderId(id, start, limit, sort, status) {
-           
+
                 var qs = querystring.encode({
                     start: 0,
                     limit: 25,
                     sort: "created",
                     status: status
                 });
-    
+
                 if (qs.length) {
                     qs = '?' + qs;
                 }
-    
+
                 var url = ApiUri  + '/folders/' + id + EntityPrefix;
                 console.log("by folder " +url+ qs);
                 return $http.get(url + qs).then(function(result) {
                     WarningsService.setWarning(result.headers().warning);
                     return PaginationService.processResponse(result.data);
                 });
-            
+
         }
-    
+
         function getByUserId(id) {
             return $http.get(ApiUri + '/users/' + id + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
