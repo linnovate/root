@@ -139,8 +139,9 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.onDateDue = function(value) {
     $scope.item.due = value;
-    $scope.update($scope.officeDocument, {
-      name: 'due'
+    $scope.update($scope.item, {
+      name: 'due',
+      value: value
     });
   }
 

@@ -57,10 +57,12 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
-            data.content = data.content.map( doc => {
-                doc.created = new Date(doc.created);
-                return doc;
-            });
+            if(data.content) {
+                data.content = data.content.map(doc => {
+                    doc.created = new Date(doc.created);
+                    return doc;
+                });
+            }
             return PaginationService.processResponse(data);
         });
     }
@@ -272,7 +274,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     WarningsService.setWarning(result.headers().warning);
                     officeDocument.star = !officeDocument.star;
                     return result.data;
-                }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
+                })
         }
 
         function getStarred() {
@@ -341,9 +343,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 data: {
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
-                    type: 'updateCreated',
-                    TaskDue: officeDocument.created,
-                    prev: prev.created
+                    type: 'updateDue',
+                    TaskDue: officeDocument.due,
+                    prev: prev.due
                 },
                 context: {}
             }).then(result => {

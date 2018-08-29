@@ -1176,7 +1176,7 @@ exports.checkOfficemmah = function(req, res, next) {
     }
 
     next();
-  }); 
+  });
 };
 
 
@@ -2193,7 +2193,16 @@ exports.update = function(req, res, next) {
             else {
               logger.log('info', '%s update, %s', req.user.name, 'DB update success');
 
-              res.send(result);
+              if(req.body.name == 'due') {
+                Document.findOne({_id: req.params.id}, function(err, doc) {
+                  if(err)logger.log('error', '%s update, %s', req.user.name, ' Document.findOne', {error: err.message});
+                  doc.due = req.body.value;
+                  doc.save();
+                  res.send(doc);
+                });
+              }else{
+                res.send(result);
+              }
             }
           });
 
