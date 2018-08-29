@@ -1153,9 +1153,9 @@ exports.getByUserId = function(req, res, next) {
 //       }
 //     }).count({}, function (err, c) {
 //       req.locals.data.pagination.count = c
-      
-        
-     
+
+
+
 //     });
 // };
 
@@ -1718,7 +1718,7 @@ exports.uploadFileToDocument = function(req, res, next) {
     });
         });
 
-        
+
         return req.pipe(busboy);
       };
 

@@ -196,7 +196,8 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.setFolderIndex = function(item){
     if(!item.folderIndex){
-      OfficeDocumentsService.getFolderIndex(item).then( data => Object.assign(item, data));
+      OfficeDocumentsService.getFolderIndex(item)
+        .then( data => Object.assign(item, {folderIndex: data.folderIndex}));
     }
   };
 
@@ -316,7 +317,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   }
 
 
-  
+
      $scope.view = function (document1) {
 
         if (document1.mmhpath) {
