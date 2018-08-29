@@ -130,17 +130,22 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function (tasks, $stateParams, TasksService) {
-                        //entity: function ($stateParams, tasks, TasksService) {
                         var task = _(tasks.data || tasks).find(function (t) {
                             return t._id === $stateParams.id;
                         });
-                        if (!task) {
-                            return TasksService.getById($stateParams.id).then(function (task) {
-                                return task;
+                        return TasksService.getStarred()
+                            .then(starred => {
+                                if($stateParams.starred){
+                                    tasks.data = tasks.data.filter( task => _.includes(getArrIds(starred), task._id) );
+                                }
+                                if (!task) {
+                                    return TasksService.getById($stateParams.id).then(function (task) {
+                                        return task;
+                                    });
+                                } else {
+                                    return task;
+                                }
                             });
-                        } else {
-                            return task;
-                        }
                     },
                     tags: function (TasksService) {
                         return TasksService.getTags().then(function (tags) {
@@ -149,6 +154,10 @@ angular.module('mean.icu').config([
                     }
                 }
             };
+        }
+
+        function getArrIds(arr){
+            return arr.map( entity => entity._id )
         }
 
         function getProjectDetailsState(urlPrefix) {
