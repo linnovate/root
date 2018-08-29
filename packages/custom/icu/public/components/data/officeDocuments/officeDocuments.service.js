@@ -252,9 +252,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 fields: data,
                 file: file
             })
-            .then(entity=>{
-              return BoldedService.boldedUpdate(entity, 'officeDocuments', 'update');
-            })
         }
 
         function uploadDocumentFromTemplate(template,officeDocument){
