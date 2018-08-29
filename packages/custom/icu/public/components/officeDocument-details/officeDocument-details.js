@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.officeDocumentdetails', []).controller('OfficeDocumentDetailsController', OfficeDocumentDetailsController);
 
-function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, NotifyingService, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, $timeout, $http) {
+function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, NotifyingService, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, UsersService, $timeout, $http) {
 
   // ==================================================== init ==================================================== //
 
@@ -13,6 +13,10 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   }
   if (Array.isArray($scope.item)) {
     $scope.item = $scope.item[0];
+  }
+  if(typeof $scope.item.creator === 'string'){
+    UsersService.getById($scope.item.creator)
+      .then( creator => $scope.item.creator = creator)
   }
 
   if (!$scope.item) {
