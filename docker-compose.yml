@@ -1,8 +1,8 @@
-version: '3'
+version: '2'
 
 services:
   app:
-    image: node:8
+    image: node:8-alpine
     working_dir: /usr/src/app
     volumes:
       - ./:/usr/src/app
@@ -21,8 +21,13 @@ services:
     image: mongo:3.6
     ports:
       - 27017:27017
+    volumes:
+      - ./data/mongo:/data/db
 
   elasticsearch:
     image: elasticsearch:5.6
     ports:
       - 9200:9200
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
+    mem_limit: 512m

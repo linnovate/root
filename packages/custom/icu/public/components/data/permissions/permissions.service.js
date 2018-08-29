@@ -74,6 +74,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             var status = null;
 
             var usersPerms = _.find(entity.permissions, {'id': getUserId(user)});
+            if(!usersPerms)return false;
 
             if(usersPerms){
                 switch (usersPerms.level) {
@@ -245,11 +246,12 @@ angular.module('mean.icu.data.permissionsservice', [])
                 qs = '?' + qs;
             }
 
-            //untill permissions backend route isn't complete
+            // until permissions backend route isn't complete
             var havePerm = false;
 
             if(entity.permissions.length !== 0){
                 var usersPerms = _.find(entity.permissions, {'id': getUserId(member)});
+                if(!usersPerms)return false;
 
                 switch (usersPerms.level) {
                     case 'editor': havePerm = editorPerms[type];
@@ -267,13 +269,26 @@ angular.module('mean.icu.data.permissionsservice', [])
             // }, function(err) {return err})
             //     .then(function (perms) {return perms});
         }
+
+      function getUnifiedPerms(member, selectedItems){
+        let unifPerms = getPermissionStatus(member, selectedItems[0]);
+        let selectedItemsLength = selectedItems.length;
+        for(let i = 0; i < selectedItemsLength; i++){
+          let perm = selectedItems[i].permissions.filter(perm => perm.id === member._id);
+          if(perm[0] && unifPerms !== perm[0].level)unifPerms = 'Different permissions';
+        }
+        return unifPerms || 'viewer';
+      }
+
         return {
+            serviceMap: serviceMap,
             getUserPerms: getUserPerms,
             haveAnyPerms: haveAnyPerms,
             havePermissions: permissions,
             haveEditorsPerms: haveEditorsPerms,
             haveCommenterPerms: haveCommenterPerms,
             getPermissionStatus: getPermissionStatus,
+            getUnifiedPerms: getUnifiedPerms,
             updateEntityPermission: updateEntityPermission,
             changeUsersPermissions: changeUsersPermissions,
         };

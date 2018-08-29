@@ -317,7 +317,13 @@ exports.cancele = function(req, res, next) {
       ];
 
       Discussion.populate(discussion, options, function(err, doc) {
-        if(err || !doc) return next();
+        if(err || !doc || !doc.assign) { 
+          req.locals.error = {
+            message: 'Problem in cancelling discussion'
+          };
+    
+          return next();
+        }
         mailService.send('discussionCancele', {
           discussion: discussion,
           projects: projects,

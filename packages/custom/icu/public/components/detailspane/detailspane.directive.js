@@ -2,8 +2,10 @@
 
 angular.module('mean.icu.ui.detailspane', [])
 .directive('icuDetailspane', function ($uibModal) {
-    function controller() {
-
+    function controller($scope, NotifyingService, MultipleSelectService) {
+        NotifyingService.subscribe('multipleDisableDetailsPaneCheck', function () {
+            $scope.disabled = !!MultipleSelectService.getSelected().length;
+        }, $scope);
     }
 
     function link($scope, $element, $attr) {
@@ -44,6 +46,27 @@ angular.module('mean.icu.ui.detailspane', [])
         templateUrl: '/icu/components/detailspane/detailspane.html'
     };
 });
+
+angular.module('mean.icu.ui.detailspane')
+    .directive('detailsView', function () {
+        function controller($scope, $state, BoldedService) {
+            $scope.actionType = 'view';
+            BoldedService.boldedUpdate($scope.item, $scope.entityType, $scope.actionType)
+              .then((result) => {
+                  $scope.item.bolded = result.bolded;
+              })
+              .catch(err => console.log(err));
+        }
+
+        return {
+            restrict: 'E',
+            scope: {
+                item: '=',
+                entityType: '=',
+            },
+            controller: controller,
+        };
+    });
 
 angular.module('mean.icu').controller('DetailsPaneModalInstanceCtrl', function ($uibModalInstance) {
 

@@ -2,10 +2,15 @@ exports.config = {
   specs: [__dirname + '/test.js'],
   onPrepare: function() {
     browser.driver.manage().window().maximize();
-    global.EC = protractor.ExpectedConditions;
+    browser.manage().timeouts().pageLoadTimeout(12000);
   },
-  framework: 'jasmine2',
-  jasmineNodeOpts: {
-    showColors: true
+  onComplete: function() {
+    return browser.quit();
+  },
+  framework: 'mocha',
+  mochaOpts: {
+    timeout: 5000,
+    slow: 3000,
+    reporter: 'spec'
   },
 };

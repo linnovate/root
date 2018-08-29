@@ -164,7 +164,7 @@ exports.search = function(req, res, next) {
         multi_match: {
           query: req.query.term.replace(',', '* '),
           type: 'cross_fields',
-          fields: ['title^3', 'color', 'name', 'tags', 'description', 'file.filename', 'serial'],
+          fields: ['title^3', 'color', 'name', 'tags', 'description', 'file.filename', 'serial', 'folderIndex'],
           operator: 'or'
         }
       },

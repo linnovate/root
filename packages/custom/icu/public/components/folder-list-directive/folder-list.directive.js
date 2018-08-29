@@ -14,6 +14,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
             };
 
             $scope.context = context;
+            $scope.isLoading = true;
 
             _($scope.folders).each(function (t) {
                 t.__state = creatingStatuses.Created;

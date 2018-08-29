@@ -18,8 +18,7 @@ module.exports = {
     //Made By OHAD - name: 'MEAN - FullStack JS - Development'
     name: 'ICU'
   },
-  //hostname: 'http://192.168.245.152:3000',
-//  host: 'http://root.demo.linnovate.net:3008',
+  // host: 'http://root.205pre.projects.linnovate.net',
   host: 'http://localhost',
   isPortNeeded: false,
   facebook: {
@@ -93,7 +92,7 @@ module.exports = {
       (process.env.ELASTICSEARCH_IP || 'localhost') + ':9200',
     ],
     port: 9200,
-    log: 'trace',
+    log: 'error',
     keepAlive: false,
     sniffOnConnectionFault:true,
     maxRetries:50
@@ -131,4 +130,6 @@ module.exports = {
     isWorking:false
   },
   usersDomain:"@domain",
+  superSeeAll: false ,
 };
+

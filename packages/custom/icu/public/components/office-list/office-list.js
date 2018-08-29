@@ -1,6 +1,6 @@
 'use strict';
 
-function OfficeListController($scope, $state, offices, OfficesService, context, $stateParams, EntityService) {
+function OfficeListController($scope, $state, offices, NotifyingService, BoldedService, OfficesService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = offices.data || offices;
 
@@ -18,6 +18,10 @@ function OfficeListController($scope, $state, offices, OfficesService, context, 
 
     $scope.update = function(item) {
         return OfficesService.update(item);
+    };
+
+    $scope.getBoldedClass = function(entity){
+      return BoldedService.getBoldedClass(entity, 'offices');
     };
 
     $scope.create = function(item) {
@@ -59,6 +63,37 @@ function OfficeListController($scope, $state, offices, OfficesService, context, 
             });
         }
         return [];
+
+        /*
+        return new Promise((resolve) => {
+            if (!$scope.isLoading && $scope.loadNext) {
+                $scope.isLoading = true;
+
+                return $scope.loadNext()
+                    .then(function(items) {
+                        _(items.data).each(function(p) {
+                          p.__state = creatingStatuses.Created;
+                        });
+
+                        var offset = $scope.displayOnly ? 0 : 1;
+
+                        if (items.data.length) {
+                          var index = $scope.items.length - offset;
+                          var args = [index, 0].concat(items.data);
+
+                          [].splice.apply($scope.items, args);
+                        }
+
+                        $scope.loadNext = items.next;
+                        $scope.loadPrev = items.prev;
+                        $scope.isLoading = false;
+
+                        return resolve(items.data);
+                    });
+            }
+            return resolve([]);
+        })
+        */
     };
 }
 

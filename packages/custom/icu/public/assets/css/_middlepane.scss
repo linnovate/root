@@ -59,18 +59,19 @@
     }
 
     .header {
+        display: flex;
         height: $header-height;
         border-bottom: 1px solid $light-grey1;
 
         .hide-menu, .hide-details {
+            flex-shrink: 0;
             float: left;
             height: $header-height;
-            width: $header-height;
+            width: 61px;
             background-color: white;
             border: 1px solid $light-grey1;
             background-repeat: no-repeat;
             background-position: center center;
-            margin-left: 6px;
 
             .menu-icon {
                 padding-left: 5px;

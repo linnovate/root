@@ -38,6 +38,7 @@ exports.create = function(req, res, next) {
   if(req.locals.error) {
     return next();
   }
+  req.locals.action = 'create';
   req.body.discussions = [];
   if(req.body.discussion) {
     req.body.discussions = [req.body.discussion];

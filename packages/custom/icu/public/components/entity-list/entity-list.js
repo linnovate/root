@@ -5,11 +5,12 @@
  * @example <div acme-order-calendar-range></div>
  */
 
-function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService,  PermissionsService) {
+function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService, PermissionsService, MultipleSelectService, NotifyingService) {
 
     // ============================================================= //
     // ========================= navigate ========================== //
     // ============================================================= //
+    $scope.unifiedRowTpl = '/icu/components/entity-list/regions/row.html';
 
     $scope.isCurrentEntityState = function(id) {
         return $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity`) === 0 && $state.current.name.indexOf('details') === -1;
@@ -110,6 +111,9 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }, {
         title: 'created',
         value: 'created'
+    }, {
+      title: 'bolded',
+      value: 'bolded.bolded'
     }];
 
     if (context.entityName != "all") {
@@ -145,10 +149,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.context = context;
     $scope.isLoading = true;
 
-    
+
     let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
 
-    $scope.showTaskExcel = inCurrentEntity('tasks') 
+    $scope.showTaskExcel = inCurrentEntity('tasks')
     $scope.showOfficeDocumentsExcel = inCurrentEntity('offices');
 
 
@@ -210,6 +214,100 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         }
         );
     };
+
+    // ============================================================= //
+    // =================== multiple operations ===================== //
+    // ============================================================= //
+
+    $scope.mouseOnMultiple = false;
+    $scope.multipleSelectMode = false;
+    $scope.selectedItems = MultipleSelectService.refreshSelectedList();
+    $scope.cornerState = MultipleSelectService.getCornerState();
+    NotifyingService.notify('multipleDisableDetailsPaneCheck');
+
+    $scope.multipleSelectRefreshSelected = function (entity) {
+        MultipleSelectService.refreshSelectedList(entity);
+        multipleSelectRefreshState();
+    };
+
+    $scope.$on('changeCornerState', function(event, cornerState){
+        multipleSelectSetAllSelected(cornerState === 'all');
+    });
+
+    function multipleSelectSetAllSelected(status){
+        for(let i = 0; i < $scope.visibleItems.length; i++){
+            $scope.visibleItems[i].selected = status;
+        }
+        if(status){
+            MultipleSelectService.setSelectedList($scope.visibleItems);
+        } else {
+            MultipleSelectService.refreshSelectedList();
+        }
+        multipleSelectRefreshState();
+    }
+
+    NotifyingService.subscribe('refreshAfterOperation', () => {
+        multipleSelectRefreshState();
+        $scope.refreshVisibleItems();
+    }, $scope);
+
+    $scope.cursorEnterMultiple = function(mouseOn){ $scope.mouseOnMultiple = !!mouseOn };
+    $scope.showTick = function(item){ item.visible = true };
+    $scope.hideTick = function(item){ item.visible = false };
+
+    $scope.checkForHideMultiple = function(){
+        if(MultipleSelectService.getCornerState() === 'none'){
+            changeMultipleMode(false);
+        }
+    };
+
+    function multipleSelectRefreshState(){
+        $scope.selectedItems = getFilteredSelectedList();
+        refreshActiveItemsInList();
+        $scope.cornerState = getRefreshedCornerState();
+
+        if ($scope.selectedItems.length) {
+            changeMultipleMode(true);
+        } else {
+            MultipleSelectService.refreshSelectedList();
+        }
+
+        multipleDisablingCheck();
+        $scope.$broadcast('refreshBulkButtonsAccess');
+        NotifyingService.notify('multipleDisableDetailsPaneCheck');
+    }
+
+    function multipleDisablingCheck(){
+        if(!$scope.selectedItems.length && !$scope.mouseOnMultiple){
+            changeMultipleMode(false);
+        }
+    }
+
+    function changeMultipleMode(value){
+        $scope.multipleSelectMode = value;
+    }
+
+    function getFilteredSelectedList(){
+        let selected = MultipleSelectService.getSelected();
+        let filteredSelected = filterResults(selected);
+        let newSelectedList = MultipleSelectService.setSelectedList(filteredSelected);
+
+        return newSelectedList;
+    }
+
+    function getRefreshedCornerState(){
+        let filteredItems = filterResults($scope.visibleItems);
+        let refreshedCornerState = MultipleSelectService.refreshCornerState(filteredItems.length);
+
+        return refreshedCornerState;
+    }
+
+    function refreshActiveItemsInList(){
+        for(let item of $scope.visibleItems){
+            let entity = $scope.selectedItems.find( selectedItems => selectedItems._id === item._id );
+            item.selected = !!entity;
+        }
+    }
 
     // ============================================================= //
     // ======================= item function ======================= //
@@ -292,6 +390,17 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.refreshVisibleItems = function(){
         $scope.visibleItems = filterResults($scope.items);
     };
+
+    function setStatusFilterValue(value){
+      let newActiveToggleField;
+      if(!value)value = 'all';
+      if(['new', 'assigned', 'in-progress', 'review'].includes(value))newActiveToggleField = 'active';
+      if(['rejected', 'done', 'archived', 'canceled', 'completed'].includes(value))newActiveToggleField = 'nonactive';
+
+      if(newActiveToggleField)$scope.activeToggle.field = newActiveToggleField;
+    }
+
+    setStatusFilterValue($stateParams.status);
     $scope.refreshVisibleItems();
 
     $scope.$on('refreshList', function () {
@@ -302,9 +411,14 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         let newArray = $filter('filterRecycled')(itemsArray);
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
+        if($stateParams.status)newArray = filterByDefiniteStatus(newArray, $stateParams.status);
         newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;
+    }
+
+    function filterByDefiniteStatus(array, value){
+      return array.filter( entity => entity.status === value);
     }
 
     // ============================================================= //
@@ -331,7 +445,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }
 
     $scope.permsToSee = function(entity) {
-        return PermissionsService.haveAnyPerms(entity);
+      return PermissionsService.haveAnyPerms(entity);
     }
 
 }

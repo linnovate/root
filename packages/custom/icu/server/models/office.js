@@ -2,7 +2,9 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  archive = require('./archive.js');
+  archive = require('./archive.js'),
+  modelUtils = require('./modelUtils'),
+  config = require('meanio').loadConfig() ;
 
 
 var OfficeSchema = new Schema({
@@ -15,6 +17,9 @@ var OfficeSchema = new Schema({
   },
   title: {
     type: String
+  },
+  recycled: {
+    type: Date,
   },
   parent: {
     type: Schema.ObjectId,
@@ -53,6 +58,14 @@ var OfficeSchema = new Schema({
     {
       type: Schema.ObjectId,
       ref: 'User'
+    }
+  ],
+  bolded: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      bolded: Boolean,
+      lastViewed: Date
     }
   ],
   permissions: [
@@ -126,6 +139,14 @@ OfficeSchema.statics.load = function(id, cb) {
  * middleware
  */
 var elasticsearch = require('../controllers/elasticsearch');
+
+
+// Will not execute until the first middleware calls `next()`
+OfficeSchema.pre('save', function(next) {
+  let entity = this ;
+  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+});
+
 
 OfficeSchema.post('save', function(req, next) {
   elasticsearch.save(this, 'office');

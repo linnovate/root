@@ -216,7 +216,7 @@ module.exports = function(entityName, options) {
   function create(entity, user, acl) {
     console.log("CRUD CREATE") ;
 
-    //    check permsArray changes     
+    //    check permsArray changes
     let allowed1 = permissions.syncPermsArray(user,entity) ;
     if(!allowed1) {
       // console.log("CRUD NOT ALLOWED") ;
@@ -225,17 +225,17 @@ module.exports = function(entityName, options) {
 
     let deffered = q.defer();
     // check update permissions
-    let allowed2 = permissions.createContent(user,{}, entity) ;    
-    allowed2.then(function(entity) {      
+    let allowed2 = permissions.createContent(user,{}, entity) ;
+    allowed2.then(function(entity) {
       // in case we are not allowed - catch below!
 
-      // possibly handle other permission situations for next then, or reject/throw. 
+      // possibly handle other permission situations for next then, or reject/throw.
       // console.log(JSON.stringify(allowed2)) ;
 
       // deffered.resolve(entity) ;
       // return deffered.promise;
     }).then(function(value) {
-      let model = Model(entity) ;    
+      let model = Model(entity) ;
       return permissions.cloneParentPermission(entity.parent,entityNameMap[model.collection.collectionName].name.toLowerCase()) ;
     }).then(function(clonedPerms) {
 
@@ -283,7 +283,7 @@ module.exports = function(entityName, options) {
 
   function update(oldE, newE, user, acl) {
 
-//    check permsArray changes     
+//    check permsArray changes
     console.log("CRUD UPDATE:") ;
     // console.log(JSON.stringify(oldE)) ;
     // console.log(JSON.stringify(newE)) ;
@@ -292,7 +292,7 @@ module.exports = function(entityName, options) {
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
     }
 
-    var allowed2 = permissions.updateContent(user,oldE, newE) ;    
+    var allowed2 = permissions.updateContent(user,oldE, newE) ;
     if(!allowed2) {
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateContent) ;
     }

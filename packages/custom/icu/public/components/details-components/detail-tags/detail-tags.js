@@ -13,7 +13,7 @@ function detailTags($timeout) {
       value: "=",
       list: "=",
       onChange: "="
-    }, 
+    },
     link: link,
     templateUrl: '/icu/components/details-components/detail-tags/detail-tags.html',
     restrict: 'E'
@@ -36,22 +36,24 @@ function detailTags($timeout) {
     }
 
     $scope.addTag = function(tag) {
-      $scope.value.push(tag);
-      $scope.onChange($scope.value);
+      if(!$scope.value.includes(tag)){
+        $scope.value.push(tag);
+        $scope.onChange($scope.value);
+      }
 //       $scope.newTag = null;
       $scope.tagInputVisible = false;
     }
-    
+
     $scope.removeTag = function(tag) {
       $scope.value = _($scope.value).without(tag);
 //       $scope.newTag = null;
       $scope.onChange($scope.value);
     }
-    
+
     $scope.onOpenClose = function(isOpen) {
       $scope.tagInputVisible = !isOpen;
     }
-    
 
-  } 
+
+  }
 }

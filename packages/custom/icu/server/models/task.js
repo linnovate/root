@@ -3,7 +3,10 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   archive = require('./archive.js'),
-  request = require('request');
+  request = require('request'),
+  userSchema = require('./user'),
+  modelUtils = require('./modelUtils'),
+  config = require('meanio').loadConfig() ;
 
 var TaskSchema = new Schema({
   customId: {
@@ -52,7 +55,14 @@ var TaskSchema = new Schema({
       ref: 'User'
     }
   ],
-
+  bolded: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      bolded: Boolean,
+      lastViewed: Date
+    }
+  ],
   permissions: [
     {
       _id: false,
@@ -157,6 +167,13 @@ TaskSchema.post('save', function(req, next) {
     elasticsearch.save(task, 'task');
   });
   next();
+});
+
+
+// Will not execute until the first middleware calls `next()`
+TaskSchema.pre('save', function(next) {
+  let entity = this ;
+  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
 });
 
 

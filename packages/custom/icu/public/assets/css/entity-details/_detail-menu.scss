@@ -1,10 +1,10 @@
 
 detail-menu {
-  @include golden-hover;
   flex-grow: 1;
 }
 
 .detail-menu {
+    @include golden-hover;
     height: $panel-height;
     max-width: $panel-height;
     float: right;
@@ -29,12 +29,22 @@ detail-menu {
         right: 0;
     }
 
+    .ellipsis {
+        background: url('/icu/assets/img/icon-ellipsis.svg')no-repeat center;
+    }
+
+    .chat {
+        background: url('/icu/assets/img/icon-chat.svg')no-repeat center;
+        width: 16px;
+        height: 18px;
+    }
+
     .menu-items {
         li {
             position: relative;
 
             a {
-                height: 30px;
+                height: 45px;
                 line-height: 28px;
                 padding: 0 20px 0 10px;
                 display: flex;

@@ -2,8 +2,9 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  archive = require('./archive.js');
-
+  archive = require('./archive.js'),
+  modelUtils = require('./modelUtils'),
+  config = require('meanio').loadConfig() ;
 
 var FolderSchema = new Schema({
   created: {
@@ -12,6 +13,9 @@ var FolderSchema = new Schema({
   },
   updated: {
     type: Date
+  },
+  recycled: {
+    type: Date,
   },
   title: {
     type: String
@@ -54,6 +58,14 @@ var FolderSchema = new Schema({
     {
       type: Schema.ObjectId,
       ref: 'User'
+    }
+  ],
+  bolded: [
+    {
+      _id: false,
+      id: {type: Schema.ObjectId, ref: 'User'},
+      bolded: Boolean,
+      lastViewed: Date
     }
   ],
   permissions: [
@@ -159,6 +171,12 @@ FolderSchema.pre('remove', function(next) {
 /**
  * middleware
  */
+
+ // Will not execute until the first middleware calls `next()`
+ FolderSchema.pre('save', function(next) {
+  let entity = this ;
+  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+});
 
 
 FolderSchema.post('save', function(req, next) {

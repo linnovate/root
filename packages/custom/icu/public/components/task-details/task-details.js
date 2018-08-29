@@ -6,8 +6,9 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   // ==================================================== init ==================================================== //
 
-  $scope.item = entity || context.entity;
-  $scope.entity = entity || context.entity;
+    $scope.item = typeof entity === 'object'? entity : context.entity;
+    $scope.entityType = 'tasks';
+
 
   if (!$scope.item) {
     $state.go('main.tasks.byentity', {
@@ -62,7 +63,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     });
   }
 
-  // ==================================================== onChanges ==================================================== //
+    // ==================================================== onChanges ==================================================== //
 
   function navigateToDetails() {
     $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
@@ -105,7 +106,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
         }
       }
     });
-  }
+  };
 
   $scope.onStatus = function(value) {
     $scope.item.status = value;
@@ -160,8 +161,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
           });
         }
       });
-    }
-    )
+    })
   }
 
   $scope.recycleRestore = function() {
@@ -191,12 +191,12 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   $scope.menuItems = [{
     label: 'recycleTask',
-    icon: 'times-circle',
+    fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
     action: $scope.recycle,
   }, {
     label: 'unrecycleTask',
-    icon: 'times-circle',
+    fa: 'fa-times-circle',
     display: $scope.item.hasOwnProperty('recycled'),
     action: $scope.recycleRestore,
   }];
@@ -218,7 +218,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     var project = {
       color: '0097A7',
       title: value,
-      watchers: [],
+      watchers: []
     };
     return ProjectsService.create(project).then(function(result) {
       $scope.projects.push(result);
@@ -331,8 +331,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
         ActivitiesService.data.push(res);
       });
     });
-
-  }
+  };
 
   $scope.update = function(item, type, proj) {
     if (proj && proj !== '') {
@@ -411,7 +410,7 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
 
   $scope.havePermissions = function(type, enableRecycled) {
     enableRecycled = enableRecycled || !$scope.isRecycled;
-    return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+    return (PermissionsService.havePermissions($scope.item, type) && enableRecycled);
   };
 
   $scope.haveEditiorsPermissions = function() {
