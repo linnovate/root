@@ -61,7 +61,7 @@ function DiscussionDue() {
 
     $scope.startDueOptions = {
       onSelect: function() {
-        $scope.onChange($scope.item, 'due');
+        $scope.onChange($scope.item, 'startDue');
         $scope.updateDatesString();
         $scope.open();
       },
@@ -78,10 +78,10 @@ function DiscussionDue() {
     };
     $scope.endDueOptions = _.clone($scope.startDueOptions);
 
-    $scope.startDueOptions.onSelect = function() {
-      $scope.onChange($scope.item, 'startDue');
-      $scope.updateDatesString();
-      $scope.open();
+    $scope.updateDueTime = function(){
+        $scope.onChange($scope.item, 'due');
+        $scope.updateDatesString();
+        $scope.open();
     }
 
     $scope.endDueOptions.onSelect = function() {

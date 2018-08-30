@@ -23,11 +23,16 @@
   <div class="dateTitle" id="startDateTitle">{{'startDate' | i18next}}</div>
   <input id="startDate" ng-click="open()" ui-date="startDueOptions" ng-model="item.startDate" ng-class='{"oldDate":!checkDate()}'>
   <div ng-hide="item.allDay" class="dateTitle" id="startTimeTitle">{{'startTime' | i18next}}</div>
-  <div style="direction:ltr" ng-hide="item.allDay" id="startTime" uib-timepicker="timeOptions" ng-model="item.startTime" show-meridian="false" ng-change="update(item)"></div>
+  <div style="direction:ltr" ng-hide="item.allDay" id="startTime" uib-timepicker="timeOptions"
+       ng-model="item.startTime"
+       show-meridian="false" ng-change="updateDueTime()"></div>
   <div ng-hide="item.allDay" class="dateTitle" id="endDateTitle">{{'endDate' | i18next}}</div>
   <input ng-hide="item.allDay" id="endDate" ng-click="open()" ui-date="endDueOptions" ng-model="item.endDate" ng-class='{"oldDate":!checkDate()}'>
   <div ng-hide="item.allDay" class="dateTitle" id="endTimeTitle">{{'endTime' | i18next}}</div>
-  <div style="direction:ltr" ng-hide="item.allDay" id="endTime" ng-model="item.endTime" uib-timepicker="timeOptions" ng-model="item.endTime" show-meridian="false" ng-change="update(item)"></div>
+  <div style="direction:ltr" ng-hide="item.allDay" id="endTime" uib-timepicker="timeOptions"
+       ng-model="item.endTime"
+       show-meridian="false" ng-change="updateDueTime()">
+  </div>
   <div id="allDayTitle">{{allDayTitle}}</div>
   <input id="allDay" type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="item.allDay" ng-change="checkboxClick(item)">
 </div>
