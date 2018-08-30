@@ -136,7 +136,8 @@ angular.module('mean.icu').config([
                         return TasksService.getStarred()
                             .then(starred => {
                                 if($stateParams.starred){
-                                    tasks.data = tasks.data.filter( task => _.includes(getArrIds(starred), task._id) );
+                                    let tasksArr = tasks.data || tasks;
+                                    tasksArr = tasksArr.filter( task => _.includes(getArrIds(starred), task._id) );
                                 }
                                 if (!task) {
                                     return TasksService.getById($stateParams.id).then(function (task) {
