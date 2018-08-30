@@ -162,8 +162,6 @@ angular.module('mean.icu.data.tasksservice', [])
             NotifyingService.notify('editionData');
         	  WarningsService.setWarning(result.headers().warning);
             return result.data;
-        }).then(entity=>{
-            return BoldedService.boldedUpdate(entity, 'tasks', 'update');
         });
     }
 

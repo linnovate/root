@@ -127,7 +127,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', []).directive('icuSubTaskLis
         })
         $scope.tasks.splice(taskindex, 1);
       });
-    }
+    };
 
     $scope.select = function(selectedTask) {
       var currentTask = _($scope.tasks).findIndex(function(t) {
