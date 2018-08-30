@@ -161,6 +161,7 @@
                             left: 0;
                             transform: none;
                             width:100%;
+                            @include disable-text-styles;
                         }
                     }
 

@@ -1,6 +1,6 @@
 @mixin disable-text-styles {
   font-weight: normal;
-  a, b, p, i, u, blockquote, li, h1, h2, h3 {
+  a, b, p, i, u, blockquote, li, h1, h2, h3, h4 {
     margin: 0 !important;
     padding: 0 !important;
     border-left: none !important;
