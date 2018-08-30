@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskoptions', [])
-.controller('TaskOptionsController', function ($scope, $state, tasks, TasksService) {
+.controller('TaskOptionsController', function ($scope, $state, tasks, TasksService, NotifyingService) {
 
     function filterRecycled(data) {
         return data.filter(entity => {
@@ -50,16 +50,15 @@ angular.module('mean.icu.ui.taskoptions', [])
 
 	$scope.filterTasks = function (filterValue) {
 		TasksService.filterValue = filterValue;
-		if (filterValue == 'watched') {
+		if (filterValue === 'watched') {
 			TasksService.getWatchedTasks().then(function (result) {
 				TasksService.watchedTasksArray = filterRecycled(result);
 			});
 		}
-	};
+        NotifyingService.notify('filterMyTasks');
+  };
 
 	if ($state.current.name === 'main.tasks.byassign') {
 		$state.go('.activities');
 	}
-
-
 });

@@ -62,7 +62,7 @@ angular.module('mean.icu.ui.entityListFilters', [])
 	return function(tasks) {
 		if (!tasks || !(tasks instanceof Array)) return tasks;
 		var filterValue = TasksService.filterValue;
-		var out = []
+		var out = [];
 
 		switch(filterValue) {
 			case 'today':

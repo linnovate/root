@@ -421,6 +421,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
       return array.filter( entity => entity.status === value);
     }
 
+    NotifyingService.subscribe('filterMyTasks', function () {
+      $scope.refreshVisibleItems();
+    }, $scope);
+
     // ============================================================= //
     // ======================== Permissions ======================== //
     // ============================================================= //

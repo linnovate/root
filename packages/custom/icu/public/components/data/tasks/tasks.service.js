@@ -373,7 +373,7 @@ angular.module('mean.icu.data.tasksservice', [])
             responseType: 'arraybuffer',
         headers:{
             'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            
+
         }}).then(function(data){
             let blob = new Blob([data.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
             saveAs(blob,'Summary.xlsx');
