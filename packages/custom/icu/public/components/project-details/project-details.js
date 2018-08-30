@@ -140,7 +140,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;
-    $scope.update($scope.item);
+    $scope.update($scope.item, {name: 'tag'});
   };
 
   // ==================================================== Menu events ==================================================== //
