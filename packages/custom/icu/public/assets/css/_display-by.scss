@@ -331,6 +331,7 @@ div.all, div.my {
     padding-left: 20px;
 }
 a.Names-In-List-On-Side{
+    @include disable-text-styles;
     &:hover{
         color: #FFB435 !important;
     }
@@ -453,4 +454,3 @@ p {
     //     padding-right: 10px !important;
     // }
 }
-    

@@ -8,8 +8,9 @@ detail-category {
   margin: 5px 16px;
 
     .detail-category-value {
-        transition: 0.3s;
         @include tag(14px);
+        @include disable-text-styles;
+        transition: 0.3s;
         width: initial;
         padding: 3px 13px;
         color: white;
