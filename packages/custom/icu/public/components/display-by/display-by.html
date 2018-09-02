@@ -361,7 +361,7 @@
                 && activeTab.name !== 'search'">
         <!--<p ng-click="visible.office = !visible.office && folders.length !== 0" class="title">{{ 'folders' | i18next }}</p>-->
         <ul>
-            <li class="title go-to-Offices title all"
+            <li class="go-to-Offices all"
                 ng-click="GoToFolders()"
                 data-ng-class="{ 'selected': currentState.indexOf('main.folders') !== -1}">
                 <a href class="Names-In-List-On-Side">
@@ -370,7 +370,7 @@
                     </p>
                 </a>
             </li>
-            <li class="title go-to-Offices title all"
+            <li class="go-to-Offices all"
                 ng-click="GoToOffices()"
                 data-ng-class="{ 'selected': currentState.indexOf('main.offices')  !== -1}">
                 <a href class="Names-In-List-On-Side">
@@ -379,7 +379,7 @@
                     </p>
                 </a>
             </li>
-            <li class="title go-to-Offices title all"
+            <li class="go-to-Offices all"
                 ng-click="GoToTemplateDocs()"
                 data-ng-class="{ 'selected': currentState.indexOf('main.templateDocs')  !== -1}">
                 <a href class="Names-In-List-On-Side">
@@ -388,7 +388,7 @@
                     </p>
                 </a>
             </li>
-            <li class="title go-to-Offices title all"
+            <li class="go-to-Offices all"
                 ng-if="me.roles.indexOf('admin')>=-1"
                 ng-click="GoToAdminSettings()"
                 data-ng-class="{ 'selected': currentState.indexOf('main.adminSettings')}">
@@ -401,7 +401,7 @@
         </ul>
 
     </div>
-    
+
     <div class="listFolder officeDocuments" ng-if="context.main == 'officeDocuments' && activeTab.name !== 'search'">
         <p class="title type"> {{ 'folders' | i18next }} </p>
         <ui-select class="select" ng-model="officesList.office" on-select="changeOrder();goToParentState()" theme="bootstrap">
