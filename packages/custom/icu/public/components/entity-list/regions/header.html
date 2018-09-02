@@ -4,6 +4,6 @@
 >
     <header class="title">
         {{ entityName + 'From' | i18next}}{{currentContext.entityName | i18next}}
-        <span ng-bind-html="currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name"></span>
+        <span class="entityTitle" ng-bind-html="currentContext.entity.title ? currentContext.entity.title : currentContext.entity.name"></span>
     </header>
 </div>

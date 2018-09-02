@@ -145,9 +145,6 @@
                         @media screen and (max-width: 1585px) {
                             width: 80px;
                         }
-                        @media screen and (max-width: 1585px) {
-                            width: 80px;
-                        }
                         span {
                             padding: 3px 13px;
                             position: relative;
@@ -219,6 +216,7 @@
                         }
                         @media screen and (max-width: 1585px) {
                             width: 80px;
+                            line-height: 25px;
                         }
                     }
 
@@ -254,6 +252,7 @@
                     border-bottom: 1px solid #31B9EB;
                     td {
                         color: #1A1A1A;
+                        max-height: 100%;
                         //background-color: #E3F3F5;
                     }
                     td.arrow .delete-icon {

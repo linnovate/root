@@ -226,6 +226,9 @@
                     padding: 0px 10px;
                 }
             }
+            .entityTitle {
+                @include disable-text-styles
+            }
             .showInPrint {
                 display: none;
             }

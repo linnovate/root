@@ -59,7 +59,7 @@ detail-status {
         display: flex;
         align-items: center;
         height: 100%;
-        width: 133px;
+        min-width: 133px;
         @include ui-select;
 
         .ui-select-container.ui-select-bootstrap {
