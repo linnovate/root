@@ -36,6 +36,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             'subs' : true,
             'info' : true,
             'tab-content' : true,
+            'tab-content.manage' : true,
             'watchers' : true,
         };
 
@@ -48,6 +49,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             'subs' : false,
             'info' : false,
             'tab-content' : true,
+            'tab-content.manage' : false,
             'watchers' : false,
         };
 
@@ -60,6 +62,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             'subs' : false,
             'info' : false,
             'tab-content' : false,
+            'tab-content.manage' : false,
             'watchers' : false,
         };
 

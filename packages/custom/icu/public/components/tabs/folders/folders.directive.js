@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tabs')
-    .directive('icuTabsFolders', function ($state, $filter, FoldersService) {
+    .directive('icuTabsFolders', function ($state, $filter, FoldersService, PermissionsService) {
         function controller($scope) {
             $scope.sorting = {
                 field: 'created',
@@ -38,6 +38,11 @@ angular.module('mean.icu.ui.tabs')
             }
 
             sort();
+
+            $scope.havePermissions = function(type, enableRecycled) {
+                enableRecycled = enableRecycled || !$scope.isRecycled;
+                return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
+            }
 
             $scope.manageFolders = function () {
                 $state.go('main.folders.byentity.activities', {

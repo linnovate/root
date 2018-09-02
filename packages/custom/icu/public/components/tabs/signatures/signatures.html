@@ -1,4 +1,4 @@
-<div >
+<div ng-class="{ 'disabled' : !havePermissions('tab-content.manage')}">
     <table class="table " ng-if='signatures.length > 0'>
         <thead class="partOfTable">
             <tr>
@@ -13,7 +13,7 @@
         <tbody   class="signature-table sigTable">
 
             <tr class="signature-hover partOfTable" ng-repeat="signature in signatures"
-                                        ng-mouseover="showButton = true" 
+                                        ng-mouseover="showButton = true"
                                         ng-mouseleave="showButton = false">
               <td>{{$index + 1}}</td>
               <td><p class="full-name">{{signature.fullName}}</p></td>
@@ -45,7 +45,7 @@
             </div>
             <div class="col-xs-1">
                     <button type="submit" class="addSignature"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-            </div>    
+            </div>
             </form>
           </div>
 </div>

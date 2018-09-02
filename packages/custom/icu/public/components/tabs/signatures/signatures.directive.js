@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tabs')
-    .directive('icuTabsSignatures', function ($state, $filter, SignaturesService) {
+    .directive('icuTabsSignatures', function ($state, $filter, SignaturesService, PermissionsService) {
         function controller($scope) {
 
             $scope.signature = '';
@@ -23,6 +23,11 @@ angular.module('mean.icu.ui.tabs')
                 }).catch(function(error){
 
                 })
+            }
+
+            $scope.havePermissions = function(type, enableRecycled) {
+                enableRecycled = enableRecycled || !$scope.isRecycled;
+                return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
             }
         }
 

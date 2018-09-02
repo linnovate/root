@@ -252,7 +252,7 @@ function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, peo
   $scope.enableRecycled = true;
   $scope.havePermissions = function(type, enableRecycled) {
     enableRecycled = enableRecycled || !$scope.isRecycled;
-    return (PermissionsService.havePermissions(entity, type) && enableRecycled);
+      return (PermissionsService.havePermissions(entity, type) && enableRecycled);
   }
 
   $scope.haveEditiorsPermissions = function() {

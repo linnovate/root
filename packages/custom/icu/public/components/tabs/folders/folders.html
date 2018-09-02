@@ -1,4 +1,4 @@
-<div class="folders">
+<div class="folders" ng-class="{ 'disabled' : !havePermissions('tab-content.manage')}">
     <div class="action-bar">
         <button class="orange-btn"
                 ng-click="manageFolders()">
