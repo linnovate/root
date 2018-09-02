@@ -183,9 +183,9 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.onCreate = function() {
-        if ($state.current.name.indexOf("byentity") !== -1) {
+        if ($state.current.name.indexOf("byentity") !== -1 || $state.current.name.indexOf("byparent") !== -1) {
             var parent = {};
-            parent.type = $state.current.params.entity;
+            parent.type = $state.current.params.entity || 'parent';
             parent.id = $state.current.params.entityId;
         }
         $scope.$parent.create(parent).then((result)=>{
