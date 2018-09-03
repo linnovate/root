@@ -14,7 +14,6 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
             };
 
             $scope.context = context;
-            $scope.isLoading = true;
 
             _($scope.folders).each(function (t) {
                 t.__state = creatingStatuses.Created;
@@ -82,7 +81,7 @@ angular.module('mean.icu.ui.folderlistdirective', ['dragularModule'])
 
 
             $scope.loadMore = function () {
-                if (!$scope.isLoading && $scope.loadNext) {
+                if ($scope.loadNext) {
                     $scope.loadNext().then(function (folders) {
 
                         _(folders.data).each(function(t) {
