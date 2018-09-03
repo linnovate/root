@@ -119,13 +119,21 @@
     <section ng-if="activityType === 'due'" class="due">
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
 
-        <div class="date">
+        <div class="date"
+             ng-if="entityName !== 'discussions'">
             <input ng-model="selectedDue.date" placeholder="{{ duePlaceholder | i18next }}" ui-date="dueOptions" />
         </div>
 
+        <discussion-due
+            ng-if="entityName == 'discussions'"
+            item="selectedDue"
+            on-change="setDiscussionDue"
+            in-modal="true">
+        </discussion-due>
+
         <button class="action-button"
-                ng-class="{ 'disabled' : !selectedDue.date}"
-                ng-click="dateCheck(selectedDue.date)">
+                ng-class="{ 'disabled' : !enableSetDueDate }"
+                ng-click="dateCheck()">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>

@@ -51,7 +51,13 @@ function update(req, res, next) {
         } = update;
 
         if(status) doc.status = status;
-        if(due) doc.due = due;
+        if(due){
+          if(checkIncludesDueFields(due)){
+            Object.assign(doc, due);
+          } else {
+            doc.due = due;
+          }
+        }
         if(assign) doc.assign = assign;
 
         if(watchers && watchers.length) {
@@ -193,4 +199,8 @@ function unionArraysBy(orig, override, key) {
     object[el[key]] = el;
   })
   return Object.values(object);
+}
+
+function checkIncludesDueFields({startDate, endDate, startTime, endTime, allDay}){
+  return !!((startDate && endDate && startTime && endTime) || (startDate && allDay));
 }

@@ -11,7 +11,8 @@ function DiscussionDue() {
   return {
     scope: {
       item: "=",
-      onChange: "="
+      onChange: "=",
+      inModal: "="
     },
     link: link,
     templateUrl: '/icu/components/discussion-details/discussion-due/discussion-due.html',
@@ -66,13 +67,16 @@ function DiscussionDue() {
         $scope.open();
       },
       onClose: function() {
+        let datePicker = $scope.inModal ? $('#modalBulk').find('ui-datepicker-div') : $('ui-datepicker-div');
+
         if (!$scope.checkDate()) {
-          document.getElementById('ui-datepicker-div').style.display = 'block';
+          datePicker.css( "display", "block" );
           $scope.open();
         } else {
-          document.getElementById('ui-datepicker-div').style.display = 'none';
+          datePicker.css( "display", "none" );
           $scope.open();
         }
+        datePicker.css( "z-index", "1051" )
       },
       dateFormat: 'd.m.yy'
     };
@@ -117,26 +121,32 @@ function DiscussionDue() {
     }
 
     $scope.open = function() {
-      var d = new Date();
+      let d = new Date();
+      let datePicker = document.getElementById('ui-datepicker-div');
+      let before = document.getElementById('before').style;
+      let past = document.getElementById('past').style;
+
       if (d > $scope.item.startDate || d > $scope.item.endDate) {
-        document.getElementById('before').style.display = 'none';
-        document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
-        document.getElementById('past').style.left = 0;//document.getElementById('ui-datepicker-div').style.left;
+        before.display = 'none';
+        past.display = datePicker.style.display;
+        past.left = 0;//datePicker.style.left;
       } else if ($scope.item.endDate < $scope.item.startDate) {
-        document.getElementById('past').style.display = 'none';
-        document.getElementById('before').style.display = document.getElementById('ui-datepicker-div').style.display;
-        document.getElementById('before').style.left = 0;//document.getElementById('ui-datepicker-div').style.left;
+        past.display = 'none';
+        before.display = datePicker.style.display;
+        before.left = 0;//datePicker.style.left;
       } else {
-        document.getElementById('past').style.display = 'none';
-        document.getElementById('before').style.display = 'none';
+        past.display = 'none';
+        before.display = 'none';
       }
-    }
+      if($scope.inModal)datePicker.style.zIndex = 1051;
+    };
 
     $scope.dueClicked = function() {
-      if (!$scope.fade) {
-        $('.dueDiv').fadeIn(1000);
+        let dueDiv = $scope.inModal ? $('#modalBulk').find('.dueDiv') : $('.dueDiv');
+        if (!$scope.fade) {
+            dueDiv.fadeIn(1000);
       } else {
-        $('.dueDiv').fadeOut(1000);
+            dueDiv.fadeOut(1000);
       }
       $scope.fade = !$scope.fade;
     }

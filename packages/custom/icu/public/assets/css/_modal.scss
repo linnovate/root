@@ -78,18 +78,7 @@
                 line-height: 23px;
                 margin-bottom: 40px;
             }
-            .form-control {
-                width: 100%;
-                height: 55px;
-                line-height: 39px;
-                display: block;
-                border-radius: 0;
-                margin: 0 auto 65px;
 
-                .caret {
-                    display: none !important;
-                }
-            }
             .ui-select-choices {
                 @include scroll;
             }
@@ -166,6 +155,20 @@
             }
             .status {
                 height: 300px;
+            }
+            .status, .assign {
+                .form-control {
+                    width: 100%;
+                    height: 55px;
+                    line-height: 39px;
+                    display: block;
+                    border-radius: 0;
+                    margin: 0 auto 65px;
+
+                    .caret {
+                        display: none !important;
+                    }
+                }
             }
             .watch {
 
@@ -268,13 +271,8 @@
                 height: 200px;
 
                 .date {
-                    width: 100%;
-                    height: 50px;
                     display: block;
-                    border: 1px solid #C8C8C8;
-                    margin: 20px 0;
                     background: url("/icu/assets/img/calendar.png") no-repeat scroll 15px center;
-
                     input {
                         left: 50px;
                         width: calc(100% - 50px);
@@ -283,6 +281,12 @@
                         border: none;
                     }
                 }
+              .date, .detail-due {
+                border: 1px solid #C8C8C8;
+                margin: 20px 0;
+                width: 100%;
+                height: 50px;
+              }
             }
             .tag {
                 height: 400px;
