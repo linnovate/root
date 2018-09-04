@@ -23,6 +23,12 @@
         table-layout: fixed; /* even columns width , fix width of table too*/
     }
 
+    .colorpicker {
+        .dropdown {
+            left: 0;
+        }
+    }
+
     .sigTable {
         display: block;
         height: 200px;
