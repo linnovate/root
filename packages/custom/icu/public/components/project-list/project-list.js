@@ -18,10 +18,6 @@ function ProjectListController($scope, $state, $timeout, projects, NotifyingServ
         }
     });
 
-    subProjects && subProjects.forEach(function (item) {
-        $scope.items.push(item);
-    });
-
     $scope.loadNext = projects.next;
     $scope.loadPrev = projects.prev;
 

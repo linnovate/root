@@ -306,9 +306,6 @@ exports.removeSubProject = function(req, res, next) {
 };
 
 exports.populateSubProjects = function(req, res, next) {
-    req.locals.result = req.locals.result.filter((item)=>{
-        return !item.parent;
-    });
  projectModel.populate(req.locals.result, {
     path: 'subProjects.watchers',
     model: 'User'
