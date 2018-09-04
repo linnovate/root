@@ -251,7 +251,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   };
 
   $scope.addLastInputTextToTag = function(){
-    $scope.addTag($scope.lastTagInput);
+    if($scope.lastTagInput.length)$scope.addTag($scope.lastTagInput);
   };
 
   getUsedTags();

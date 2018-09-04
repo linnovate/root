@@ -332,6 +332,9 @@
                         font-weight: normal;
                     }
                 }
+                .ui-select-match {
+                    i { display: none }
+                }
             }
             .delete {
                 height: 100px;
