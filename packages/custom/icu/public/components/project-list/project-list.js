@@ -31,7 +31,6 @@ function ProjectListController($scope, $state, $timeout, projects, NotifyingServ
     var creatingStatuses = {
         NotCreated: 0,
         Creating: 1,
-        Creating: 1,
         Created: 2
     }
 

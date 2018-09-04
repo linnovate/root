@@ -140,12 +140,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // =========================== list ============================ //
     // ============================================================= //
 
-    var creatingStatuses = {
-        NotCreated: 0,
-        Creating: 1,
-        Created: 2
-    }
-
     $scope.context = context;
     $scope.isLoading = true;
 
@@ -387,9 +381,26 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         }
     };
 
-    $scope.refreshVisibleItems = function(){
-        $scope.visibleItems = filterResults($scope.items);
+    $scope.refreshVisibleItems = function() {
+        let typeOfService = $stateParams.id ? context.main : context.entityName ;
+        let serviceName = PermissionsService.serviceMap[typeOfService];
+
+        if ($stateParams.starred) {
+            return serviceName.getStarred()
+                .then(starred => {
+                    if($stateParams.starred){
+                        $scope.items = $scope.items.filter( entity => _.includes(getArrIds(starred), entity._id) );
+                    }
+                    $scope.visibleItems = filterResults($scope.items);
+                })
+        } else {
+            $scope.visibleItems = filterResults($scope.items);
+        }
     };
+
+    function getArrIds(arr){
+        return arr.map( entity => entity._id )
+    }
 
     function setStatusFilterValue(value){
       let newActiveToggleField;
