@@ -53,7 +53,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $scope.detailsState = `main.${$scope.$parent.entityName}.all.details`;
     } else if (context.entityName === 'my') {
         $scope.detailsState = `main.${$scope.$parent.entityName}.byassign.details`;
-    } else if (context.entityName === 'task') {
+    } else if (context.entityName === 'task' || context.entityName === 'project') {
         $scope.detailsState = `main.${$scope.$parent.entityName}.byparent.details`;
     } else {
         $scope.detailsState = `main.${$scope.$parent.entityName}.byentity.details`;
