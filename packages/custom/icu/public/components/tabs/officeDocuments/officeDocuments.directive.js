@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.tabs')
-    .directive('icuTabsOfficedocuments', function ($state, $filter, OfficeDocumentsService) {
+    .directive('icuTabsOfficedocuments', function ($state, $filter, OfficeDocumentsService, PermissionsService) {
         function controller($scope) {
             $scope.sorting = {
                 field: 'created',
@@ -40,6 +40,11 @@ angular.module('mean.icu.ui.tabs')
             }
 
             sort();
+
+            $scope.havePermissions = function(type, enableRecycled) {
+                enableRecycled = enableRecycled || !$scope.isRecycled;
+                return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
+            }
 
             $scope.manageOfficeDocuments = function () {
                 $state.go('main.officeDocuments.byentity.activities', {
