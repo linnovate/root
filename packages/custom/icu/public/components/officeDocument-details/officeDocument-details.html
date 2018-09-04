@@ -79,10 +79,9 @@
             ng-click="setFolderIndex(item)">
         {{'File' | i18next }}
     </button>
-    <button class="detail-button setFolderIndex"
-            ng-if="item.folderIndex">
+    <div ng-if="item.folderIndex">
       {{'File' | i18next }}:{{item.folderIndex}}
-    </button>
+    </div>
   </div>
 
   <div class="info" ng-class="{ 'disabled' : !havePermissions('info')}">
