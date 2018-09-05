@@ -89,9 +89,15 @@ em {
     }
     tr {
       display: table-row !important;
+
       td:nth-child(4) {
         width: 40%;
       }
     }
+  }
+  .tick {
+    height: 50px;
+    display: flex;
+    align-items: center;
   }
 }

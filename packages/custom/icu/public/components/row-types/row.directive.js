@@ -99,8 +99,6 @@ angular.module('mean.icu.ui.rows', [])
                 $event.target.children.length === 0 ? scrollLeft($event.target) : scrollLeft($event.target.firstChild);
             }
         };
-
-        //*****MSM*****//
     }
 
 
