@@ -9,11 +9,6 @@ var mongoose = require('mongoose'),
   config = require('meanio').loadConfig() ;
 
 var TaskSchema = new Schema({
-  customId: {
-    type: String,
-    unique: false,
-    dropDups: true
-  },
   created: {
     type: Date,
     default: Date.now
@@ -109,7 +104,16 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Task'
   },
-  customData: {}
+  custom: {
+    id: {
+      type: String,
+      index: true
+    },
+    type: {
+      type: String,
+    },
+    data: {}
+  }
 });
 
 var starVirtual = TaskSchema.virtual('star');

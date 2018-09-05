@@ -30,14 +30,13 @@ exports.find = function(req, res, next) {
 };
 
 exports.findByCustomId = function(req, res, next) {
-  console.log('11111');
   if(req.locals.error) {
     return next();
   }
-
+  console.log('iiiiiiiiiiiiiiiiiiiiiii')
   var query = req.acl.mongoQuery('Task');
 
-  query.findOne({customId: Buffer.from(req.params.id, 'base64').toString()})
+  query.findOne({'custom.id': req.params.id})
     .exec(function(err, tasks) {
       if(err) {
         req.locals.error = {

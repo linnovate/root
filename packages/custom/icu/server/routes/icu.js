@@ -2,7 +2,7 @@
 
 var project = require('../controllers/project');
 var task = require('../controllers/task');
-// var customData = require('../controllers/customData');
+var customData = require('../controllers/customData');
 var comment = require('../controllers/comments');
 var discussion = require('../controllers/discussion');
 var profile = require('../controllers/profile');
@@ -440,6 +440,12 @@ module.exports = function(Icu, app) {
     .post(templateDocs.update2)
     .delete(templateDocs.deleteTemplate);
   //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
+
+  app.route('/api/customData*').all(entity('customData'));
+  app.route('/api/customData')
+    .get(customData.find);
+  app.route('/api/customData/:id')
+    .get(customData.findByCustomId);
 
   app.route('/api/ftp/:url')
     .all(ftp.getFileFromFtp);
