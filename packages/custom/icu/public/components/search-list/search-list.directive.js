@@ -19,6 +19,11 @@ angular.module('mean.icu.ui.searchlist', [])
         for(var i = 0;i<$scope.results.length;i++){
             $scope.results[i].id = $scope.results[i].id ? $scope.results[i].id:$scope.results[i]._id;
         }
+
+        //********Multiple Select Search*******//
+        $scope.showTick = function(item){ item.visible = true };
+        $scope.hideTick = function(item){ item.visible = false };
+        $scope.multipleSelectMode = true;
     }
 
     return {

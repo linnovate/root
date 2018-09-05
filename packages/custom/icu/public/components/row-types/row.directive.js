@@ -9,7 +9,7 @@
     Add folder of the details of the type (in the right side). Like "/icu/packages/custom/icu/public/components/task-details"
 */
 angular.module('mean.icu.ui.rows', [])
-.directive('icuListRow', function($compile, $http, $templateRequest, $i18next, UsersService, PermissionsService) {
+.directive('icuListRow', function($compile, $http, $templateRequest, $i18next, UsersService, PermissionsService, MultipleSelectService) {
     var templates = {
         people: '/icu/components/row-types/people-row.html',
         task: '/icu/components/row-types/task-row.html',
@@ -99,6 +99,8 @@ angular.module('mean.icu.ui.rows', [])
                 $event.target.children.length === 0 ? scrollLeft($event.target) : scrollLeft($event.target.firstChild);
             }
         };
+
+        //*****MSM*****//
     }
 
 
