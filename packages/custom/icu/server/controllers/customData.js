@@ -37,13 +37,13 @@ exports.findByCustomId = function(req, res, next) {
   var query = req.acl.mongoQuery('Task');
 
   query.findOne({'custom.id': req.params.id})
-    .exec(function(err, tasks) {
-      if(err) {
+    .exec(function(err, task) {
+      if(err || !task) {
         req.locals.error = {
-          message: 'Can\'t get my tasks'
+          message: 'Can\'t get the task'
         };
       } else {
-        req.locals.result = tasks;
+        req.locals.result = task;
       }
       next();
     });
