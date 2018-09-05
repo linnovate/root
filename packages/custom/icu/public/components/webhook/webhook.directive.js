@@ -4,7 +4,7 @@ angular.module('mean.icu.ui.webhook', [])
     function controller($scope) {
         $scope.createWebhook = function() {
             if ($scope.me && $scope.me.uid) {
-                var url = location.origin + '/api/new';
+                var url = location.origin + '/api/hook';
                 var query = {
                     entity: $scope.data.entity,
                     name: $scope.data.name

@@ -9,13 +9,14 @@ exports.find = function(req, res, next) {
     switch (key) {
     case 'uid':
       break;
+    case 'type':
+      queryString['custom.type'] = req.query.type;
+      break;
     default:
-      queryString[`customData.${key}`] = req.query[key];
+      queryString[`custom.data.${key}`] = req.query[key];
       break;
     }
   });
-  console.log('queryString');
-  console.log(JSON.stringify(queryString));
   query.find(queryString)
     .exec(function(err, tasks) {
       if(err) {
@@ -30,21 +31,19 @@ exports.find = function(req, res, next) {
 };
 
 exports.findByCustomId = function(req, res, next) {
-  console.log('11111');
   if(req.locals.error) {
     return next();
   }
-
   var query = req.acl.mongoQuery('Task');
 
-  query.findOne({customId: Buffer.from(req.params.id, 'base64').toString()})
-    .exec(function(err, tasks) {
-      if(err) {
+  query.findOne({'custom.id': req.params.id})
+    .exec(function(err, task) {
+      if(err || !task) {
         req.locals.error = {
-          message: 'Can\'t get my tasks'
+          message: 'Can\'t get the task'
         };
       } else {
-        req.locals.result = tasks;
+        req.locals.result = task;
       }
       next();
     });

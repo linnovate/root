@@ -2,7 +2,7 @@
 
 var project = require('../controllers/project');
 var task = require('../controllers/task');
-// var customData = require('../controllers/customData');
+var customData = require('../controllers/customData');
 var comment = require('../controllers/comments');
 var discussion = require('../controllers/discussion');
 var profile = require('../controllers/profile');
@@ -21,7 +21,7 @@ var webHook = require('../controllers/webhook');
 var documents = require('../controllers/documents');
 var templateDocs = require('../controllers/templateDocs');
 var signatures = require('../controllers/signatures');
-// var authorization = require('../middlewares/auth.js');
+var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
 var entity = require('../middlewares/entity.js');
 var response = require('../middlewares/response.js');
@@ -66,7 +66,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs|new|customData)*').all(circles.acl());
+  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs|hook)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
   //app.use('/api/files', express.static(config.attachmentDir));
@@ -340,8 +340,8 @@ module.exports = function(Icu, app) {
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
 
-  app.route('/api/new')
-    .post(webHook.create); //notification.0, updates.created)
+  app.route('/api/hook')
+    .post(authorization, webHook.create);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
@@ -440,6 +440,12 @@ module.exports = function(Icu, app) {
     .post(templateDocs.update2)
     .delete(templateDocs.deleteTemplate);
   //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
+
+  app.route('/api/customData*').all(authorization, circles.acl(), entity('customData'));
+  app.route('/api/customData')
+    .get(customData.find);
+  app.route('/api/customData/:id')
+    .get(customData.findByCustomId);
 
   app.route('/api/ftp/:url')
     .all(ftp.getFileFromFtp);
