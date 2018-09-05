@@ -21,7 +21,7 @@ var webHook = require('../controllers/webhook');
 var documents = require('../controllers/documents');
 var templateDocs = require('../controllers/templateDocs');
 var signatures = require('../controllers/signatures');
-// var authorization = require('../middlewares/auth.js');
+var authorization = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
 var entity = require('../middlewares/entity.js');
 var response = require('../middlewares/response.js');
@@ -340,8 +340,8 @@ module.exports = function(Icu, app) {
   app.route('/api/event-drops')
     .get(eventDrops.getMyEvents);
 
-  app.route('/api/new')
-    .post(webHook.create); //notification.0, updates.created)
+  app.route('/api/hook')
+    .post(authorization, webHook.create);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
