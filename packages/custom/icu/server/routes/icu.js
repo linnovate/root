@@ -66,7 +66,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs|hook|customData)*').all(circles.acl());
+  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs|hook)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
   //app.use('/api/files', express.static(config.attachmentDir));
@@ -441,7 +441,7 @@ module.exports = function(Icu, app) {
     .delete(templateDocs.deleteTemplate);
   //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
 
-  app.route('/api/customData*').all(entity('customData'));
+  app.route('/api/customData*').all(authorization, circles.acl(), entity('customData'));
   app.route('/api/customData')
     .get(customData.find);
   app.route('/api/customData/:id')

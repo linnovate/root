@@ -9,13 +9,14 @@ exports.find = function(req, res, next) {
     switch (key) {
     case 'uid':
       break;
+    case 'type':
+      queryString['custom.type'] = req.query.type;
+      break;
     default:
-      queryString[`customData.${key}`] = req.query[key];
+      queryString[`custom.data.${key}`] = req.query[key];
       break;
     }
   });
-  console.log('queryString');
-  console.log(JSON.stringify(queryString));
   query.find(queryString)
     .exec(function(err, tasks) {
       if(err) {
@@ -33,7 +34,6 @@ exports.findByCustomId = function(req, res, next) {
   if(req.locals.error) {
     return next();
   }
-  console.log('iiiiiiiiiiiiiiiiiiiiiii')
   var query = req.acl.mongoQuery('Task');
 
   query.findOne({'custom.id': req.params.id})
