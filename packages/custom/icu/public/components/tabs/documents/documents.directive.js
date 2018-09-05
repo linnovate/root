@@ -143,7 +143,6 @@ angular.module('mean.icu.ui.tabs')
             $scope.remove = function (file, index) {
                 DocumentsService.delete(file._id).then(function (status) {
                     if (status == 200) {
-                        $scope.documents.splice(index, 1);
                         ActivitiesService.create({
                           data: {
                               issue: ActivitiesService.issue,
@@ -155,7 +154,7 @@ angular.module('mean.icu.ui.tabs')
                         })
                     }
                 });
-
+                $scope.documents.splice(index, 1);
             };
 
             $scope.autoFormatFilesize = function (fileSize) {
