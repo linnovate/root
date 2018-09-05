@@ -14,11 +14,12 @@ exports.create = function(req, res, next) {
   req.body.assign = req.user;
   req.body.circles = {};
   req.body.entity = req.body.entity || req.query.entity || 'task';
+  if(req.query.project) req.body.project = req.query.project;
 
   var options = {
     includes: 'assign watchers project subTasks discussions',
     defaults: {
-      project: undefined,
+      project: req.query.project || undefined,
       assign: undefined,
       discussions: [],
       watchers: [],

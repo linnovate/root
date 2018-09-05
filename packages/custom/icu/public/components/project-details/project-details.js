@@ -200,6 +200,13 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
     );
   };
 
+  $scope.createWebhook = function() {
+    if(!$scope.me || !$scope.me.uid) return;
+    var url = location.origin + '/api/hook';
+    url = url + '?entity=task&uid=' + $scope.me.uid + '&project=' + $scope.item._id;
+    alert(url);
+  };
+
   $scope.menuItems = [
     {
       label: 'recycleProject',
@@ -211,6 +218,11 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
       fa: 'fa-times-circle',
       display: $scope.item.hasOwnProperty('recycled'),
       action: $scope.recycleRestore,
+    }, {
+      label: 'createWebhook',
+      fa: 'fa-plus-circle',
+      display: true,
+      action: $scope.createWebhook,
     }
   ];
 
