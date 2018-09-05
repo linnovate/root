@@ -209,6 +209,11 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
 
   $scope.menuItems = [
     {
+      label: 'createWebhook',
+      fa: 'fa-plus-circle',
+      display: true,
+      action: $scope.createWebhook,
+    }, {
       label: 'recycleProject',
       fa: 'fa-times-circle',
       display: !$scope.item.hasOwnProperty('recycled'),
@@ -218,11 +223,6 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
       fa: 'fa-times-circle',
       display: $scope.item.hasOwnProperty('recycled'),
       action: $scope.recycleRestore,
-    }, {
-      label: 'createWebhook',
-      fa: 'fa-plus-circle',
-      display: true,
-      action: $scope.createWebhook,
     }
   ];
 
