@@ -136,7 +136,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 };
 
                 if (context.entityName === 'all') {
-                    if (context.main === 'tasks') {
+                    if (context.main === 'tasks' || context.main === 'officeDocuments') {
                         // tasks.all
                         state = 'main.tasks.all.details';
                         params.entity = 'task';
