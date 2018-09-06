@@ -6,7 +6,7 @@
     <section ng-if="activityType == 'status'" class="status">
         <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
 
-        <ui-select ng-model="selects[$index].selected" on-select="select(selected)">
+        <ui-select ng-model="selects[$index].selected" on-select="select(selects[$index].selected)">
             <ui-select-match placeholder="{{ 'selectStatus' | i18next }}">
                 <i class='{{$select.selected}}'></i>
                 <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
