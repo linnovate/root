@@ -208,34 +208,48 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     $scope.enableSetDueDate = false;
 
     $scope.dueOptions = {
-        dateFormat: 'dd.mm.yy'
+      onSelect: function() {
+        $scope.enableUpdateButton();
+      },
+      dateFormat: 'dd.mm.yy'
     };
 
     $scope.dateCheck = function(){
-        let nowTime = new Date();
         if($scope.entityName !== 'discussions'){
-          if($scope.selectedDue.date < nowTime){
+          if(checkPastDue()){
             $scope.duePlaceholder = $scope.dueDateErrorMessage;
             $scope.selectedDue.date = '';
             return;
           } else {
-            $scope.bulkUpdate('due', $scope.selectedDue.date);
+            if($scope.enableUpdateButton){
+              $scope.bulkUpdate('due', $scope.selectedDue.date);
+            }
           }
         } else {
-          if($scope.setDiscussionDue()){
+          if($scope.enableUpdateButton()){
             $scope.bulkUpdate('due', $scope.selectedDue);
           }
         }
     };
 
-    $scope.setDiscussionDue = function(){
+    $scope.enableUpdateButton = function(){
       let selectedDue = $scope.selectedDue;
-      $scope.enableSetDueDate = (
-        (selectedDue.startDate && selectedDue.endDate && selectedDue.startTime && selectedDue.endTime)
-        || (selectedDue.startDate && selectedDue.allDay)
-      );
+      if($scope.entityName === 'discussions'){
+        $scope.enableSetDueDate = (
+          (selectedDue.startDate && selectedDue.endDate && selectedDue.startTime && selectedDue.endTime)
+          || (selectedDue.startDate && selectedDue.allDay)
+        );
+      } else {
+        $scope.enableSetDueDate = !checkPastDue();
+      }
+
       return $scope.enableSetDueDate;
     };
+
+    function checkPastDue(){
+      let nowTime = new Date();
+      return $scope.selectedDue.date < nowTime;
+    }
 
   //------------------------------------------------//
   //----------------------TAGS----------------------//
