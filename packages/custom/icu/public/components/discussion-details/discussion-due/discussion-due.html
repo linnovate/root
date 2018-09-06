@@ -33,6 +33,6 @@
        ng-model="item.endTime"
        show-meridian="false" ng-change="updateDueTime()">
   </div>
-  <div id="allDayTitle">{{allDayTitle}}</div>
+  <div id="allDayTitle">{{ 'allDay' | i18next }}</div>
   <input id="allDay" type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="item.allDay" ng-change="checkboxClick(item)">
 </div>
