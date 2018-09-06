@@ -3,7 +3,7 @@
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleCornerButton', function () {
         function controller($scope, MultipleSelectService) {
-            $scope.selectedItems = $scope.$parent.selectedItems;
+            $scope.selectedItems = $scope.$parent.selectedItems || MultipleSelectService.getSelected();
             $scope.cornerState = $scope.$parent.cornerState;
 
             $scope.notifyChangingState = function(){

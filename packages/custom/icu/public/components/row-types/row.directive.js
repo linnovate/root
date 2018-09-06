@@ -106,7 +106,8 @@ angular.module('mean.icu.ui.rows', [])
         restrict: 'A',
         scope: {
             type: '@',
-            data: '='
+            data: '=',
+            multipleSelectMode: '='
         },
         link: link,
         transclude: true,
