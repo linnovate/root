@@ -207,7 +207,17 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
     alert(url);
   };
 
+  $scope.publishProject = function() {
+    window.location = location.origin + '/projectPage/' + $scope.item.title + '/' + $scope.item._id;
+  };
+
   $scope.menuItems = [
+    {
+      label: 'publishProject',
+      fa: 'fa-upload',
+      display: true,
+      action: $scope.publishProject,
+    },
     {
       label: 'createWebhook',
       fa: 'fa-plus-circle',
