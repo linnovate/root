@@ -1166,6 +1166,7 @@ angular.module('mean.icu').config([
                     officeDocuments:undefined,
                     activeTab: undefined,
                     status:undefined,
+                    filterStatus:undefined,
                 },
                 views: getListView('officeDocument'),
                 resolve: {

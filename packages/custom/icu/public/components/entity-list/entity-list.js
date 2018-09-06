@@ -422,7 +422,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         let newArray = $filter('filterRecycled')(itemsArray);
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
-        if($stateParams.status)newArray = filterByDefiniteStatus(newArray, $stateParams.status);
+        if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
         newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;

@@ -259,11 +259,12 @@ angular.module('mean.icu.ui.displayby', [])
             localStorage.removeItem("type");
         };
 
-        // $scope.reset = function(main){
-        //      EntityService.setEntityFolderValue(undefined, undefined);
-        //     localStorage.removeItem("type");
-        //     //$scope.typeSelected = null;
-        // };
+        $scope.reset = function(main){
+          $stateParams.filterStatus = null;
+          $state.go('main.' + context.main + '.all',
+            {reload:true}
+          );
+        };
 
         $scope.changeState = function(state){
             $state.go(state, {
@@ -274,7 +275,7 @@ angular.module('mean.icu.ui.displayby', [])
         };
 
         //$scope.typeSelected = localStorage.getItem("type");
-        
+
         $scope.switchToType = function (type) {
 
             if(context.entityName == "folder"){
@@ -285,13 +286,14 @@ angular.module('mean.icu.ui.displayby', [])
                 });
                 $scope.typeSelected = type.name;
             }else{
-                $state.go('main.' + context.main + '.all', {
-                    status : type.name
-                  },{reload:true});
+                $state.go('main.' + context.main + '.all',
+                  {filterStatus : type.name},
+                  {reload:true}
+                  );
             }
 
-           
-                    
+
+
              EntityService.setActiveStatusFilterValue(type.name);
         //     OfficeDocumentsService.getAll(0,25,EntityService.getSortFilterValue().field, EntityService.getSortFilterValue().order,type.name).then(function (results) {
         //     $scope.officeDocuments=[];
@@ -310,11 +312,11 @@ angular.module('mean.icu.ui.displayby', [])
         //         if(flag){
         //             $scope.officeDocuments.push(result);
         //         }
-                
+
         //     });
 
 
-        //  /** 
+        //  /**
         //  if (context.entityName == 'folder') {
         //      $scope.officeDocuments = $scope.officeDocuments.filter(function (officeDocument) {
         //          return officeDocument.status == type.name && officeDocument.folder && officeDocument.folder._id == context.entityId;
