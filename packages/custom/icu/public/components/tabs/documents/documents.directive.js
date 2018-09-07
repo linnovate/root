@@ -29,7 +29,6 @@ angular.module('mean.icu.ui.tabs')
             if($scope.entity)$scope.isRecycled = $scope.entity.hasOwnProperty('recycled');
 
             $scope.havePermissions = function(type){
-                //TODO: Fix after release: remove this if check and disable directive usage in tasks.my.activities without entity
                 if($scope.entity)return (PermissionsService.havePermissions($scope.entity, type) && !$scope.isRecycled);
             };
 
@@ -96,21 +95,13 @@ angular.module('mean.icu.ui.tabs')
             $scope.isOpen[document._id] = !$scope.isOpen[document._id];
         };
 
-
-
-
-
         $scope.download = function(path){
             var newPath = path.substring(path.indexOf('/files'),path.length);
              newPath = newPath.replace(/\//g, '%2f');
             DocumentsService.getFileFtp(newPath).then(function(){
 
             });
-
         }
-
-
-
 
         $scope.view = function (document1) {
 
@@ -140,7 +131,21 @@ angular.module('mean.icu.ui.tabs')
                     window.open(document1.path + '?view=true');
                 }
             };
+
+            $scope.checkAttachmentCreator = doc => {
+                let havePerms = $scope.havePermissions('tab-content');
+                let isEditor = (user) => PermissionsService.getPermissionStatus(user, $scope.entity) === 'editor';
+                if(!$scope.me){
+                    UsersService.getMe().then( me => {
+                        $scope.me = me;
+                        return (havePerms && doc.creator === me._id) || isEditor(me);
+                    });
+                } else return (havePerms && doc.creator === $scope.me._id) || isEditor($scope.me);
+            };
+
             $scope.remove = function (file, index) {
+                let userPerms = PermissionsService.getPermissionStatus($scope.me, $scope.entity);
+                if(!$scope.checkAttachmentCreator(file) || userPerms !== 'editor')return;
                 DocumentsService.delete(file._id).then(function (status) {
                     if (status == 200) {
                         ActivitiesService.create({

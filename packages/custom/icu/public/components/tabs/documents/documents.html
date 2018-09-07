@@ -4,7 +4,7 @@
     </div>
     <div
         class="document-list scroll">
-        <div ng-show="documents.length" id="DocumentLine" class="document" ng-repeat-start="document in documents">
+        <div ng-show="documents.length" id="DocumentLine" class="document" ng-repeat-start="document in documents" ng-class="{ 'disabled' : !checkAttachmentCreator(document)}">
             <a href="{{document.path}}" target="window">
                 <div class="icon {{document.attachmentType}}"></div>
             </a>
