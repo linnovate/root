@@ -46,10 +46,10 @@ var entityNameMap = {
     mainModel: TemplateDocsModel,
     name: 'TemplateDoc'
   }
-  
+
 };
 
-exports.permError = 
+exports.permError =
 {
   denied: "permission denied",
   granted: "permission granted",
@@ -77,7 +77,7 @@ exports.searchIdIndex = function(idVal, arr) {
 };
 
 /*
-    function: return the values that exist in both input arrays, 
+    function: return the values that exist in both input arrays,
     and the values that exist only in the first array.
     input: 2 arrays.
     return: the index in which the value exist, or null otherwise.
@@ -90,7 +90,7 @@ function leftIntersect(arr1, arr2) {
 }
 
 /*
-    function: check if there is an id in arr2, that is not present in 1.    
+    function: check if there is an id in arr2, that is not present in 1.
     input: 2 arrays.
     return: true if id is found in arr2 and arr1, false otherwise.
 */
@@ -137,16 +137,16 @@ exports.updateContent = function(user, oldDoc, newDoc) {
     return true;
   }
   if(oldDoc.profile) {
-    // hack the type of content to update is user 
+    // hack the type of content to update is user
     // since it has a profile...
     // since we do not have user update permission always return true
     return true ;
   }
-  
+
   let newPerms = newDoc && Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
   let oldPerms = oldDoc && Array.isArray(oldDoc['permissions']) ? oldDoc['permissions'].slice() : [];
 
-  // is user allowed to update content?    
+  // is user allowed to update content?
   if(!exports.allowUpdateContent(user, oldPerms, {})) {
     console.log("updated content - not allowed");
     return false ;
@@ -160,7 +160,7 @@ exports.updateContent = function(user, oldDoc, newDoc) {
   return true ;
 }
 
-exports.syncPermsArray = function(user, doc) { 
+exports.syncPermsArray = function(user, doc) {
   // console.log("syncPermsArray >>>>") ;
   // console.log(doc) ;
   return true ;
@@ -178,32 +178,32 @@ exports.createContent = function(user, oldDoc, newDoc) {
 
   if(!newDoc || !newDoc.issue || !entityNameMap[newDoc.issue]) {
     // this is not one of the entity create cases.
-    deffered.resolve("OK") ;  
-    return deffered.promise ;    
+    deffered.resolve("OK") ;
+    return deffered.promise ;
   }
-  if (newDoc.issue == 'update') {    
+  if (newDoc.issue === 'update') {
     // creating an update message
-    deffered.resolve("OK") ;  
-    return deffered.promise;        
+    deffered.resolve("OK");
+    return deffered.promise;
   }
 
-  if (newDoc.type == 'comment' || newDoc.type == 'document') {    
-    let Model = entityNameMap[newDoc.issue].mainModel;    
+  if (newDoc.type === 'comment' || newDoc.type === 'document') {
+    let Model = entityNameMap[newDoc.issue].mainModel;
 
     Model.findOne({'_id': newDoc.issueId},function(err,doc){
       // console.log("doc") ;
       // console.log(doc) ;
-      let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];      
+      let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
       if(!exports.allowUpdateUpdates(user, newPerms, {})) {
         console.log("updates - not allowed");
         deffered.reject(exports.permError.denied + ":" + exports.permError.allowUpdateUpdates);
         return deffered.promise;
-      }  
-      // console.log("updates - allowed");      
-      deffered.resolve("OK") ;  
-      return deffered.promise;        
+      }
+      // console.log("updates - allowed");
+      deffered.resolve("OK") ;
+      return deffered.promise;
     })
-    return deffered.promise;            
+    return deffered.promise;
   }
 
   if(newDoc.type == 'assign' && newDoc.issue == 'officeDocuments') {
@@ -211,14 +211,14 @@ exports.createContent = function(user, oldDoc, newDoc) {
     // console.log("assign");
     // console.log(JSON.stringify(newDoc));
     let Model = entityNameMap['officeDocument'].mainModel;
-    let assigneeAdded = String(newDoc.userObj) ;     
-    
+    let assigneeAdded = String(newDoc.userObj) ;
+
     Model.findOne({'_id': newDoc.issueId},function(err,doc){
       // push assignee permissions
       let exist = exports.searchIdIndex(String(assigneeAdded),doc['permissions']) ;
 
       if(exist == null) {
-//        console.log("adding assignee") ;      
+//        console.log("adding assignee") ;
         let tmp = doc['permissions'].slice() ;
         tmp.push({"id":String(assigneeAdded),"level":"commenter"});
         doc['permissions'] = tmp ;
@@ -234,7 +234,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
         // console.log("perms array before:");
         // console.log(JSON.stringify(doc['permissions']));
         // console.log("--------------------");
-  
+
         let tmp = doc['permissions'] ;
         tmp.splice(exist,1) ;
         tmp.push({"id":String(assigneeAdded),"level":"commenter"});
@@ -244,17 +244,17 @@ exports.createContent = function(user, oldDoc, newDoc) {
         // console.log("--------------------");
       }
       doc.save(function(err,result){
-        //         todo        
+        //         todo
         //         if(err){
         //         }
-        //         else{          
+        //         else{
         //         }
         //         return deffered.promise;
       });
       deffered.resolve(newDoc);
-      return deffered.promise;       
+      return deffered.promise;
       })
-    return deffered.promise;                
+    return deffered.promise;
   }
 
   if(newDoc.type == 'updateWatcherPerms' && newDoc.issue == 'officeDocuments') {
@@ -266,7 +266,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
         console.log("updated perms array - not allowed");
         deffered.reject() ;
         return deffered.promise ;
-      }  
+      }
 
       // console.log("newDoc permissions") ;
       // console.log(JSON.stringify(newDoc.permissions)) ;
@@ -275,12 +275,12 @@ exports.createContent = function(user, oldDoc, newDoc) {
         if(err){
           deffered.reject() ;
         }
-        else { 
+        else {
           deffered.resolve(doc) ;
         }
       });
     })
-    return deffered.promise ;        
+    return deffered.promise ;
   }
 
   if(newDoc.type == 'updateWatcher' && newDoc.issue == 'officeDocuments') {
@@ -292,31 +292,31 @@ exports.createContent = function(user, oldDoc, newDoc) {
       // console.log(doc) ;
       let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
       // console.log(newPerms) ;
-      
-      let watcherAdded = String(newUid) ;      
-      // console.log("updateWatcher:"); 
+
+      let watcherAdded = String(newUid) ;
+      // console.log("updateWatcher:");
       // console.log(watcherAdded);
 
       let permLevel = String(watcherAdded) == String(newDoc.assign) ? 'commenter' : 'viewer' ;
-      let watcherAddedPerms = {id:String(watcherAdded),level:permLevel} ; // default watcher perms      
+      let watcherAddedPerms = {id:String(watcherAdded),level:permLevel} ; // default watcher perms
 
       newPerms.push(watcherAddedPerms);
       // console.log("updated perms array:");
       // console.log(JSON.stringify(newPerms));
       // console.log("--------------------");
-      doc.permissions = newPerms ;  
-      // console.log(JSON.stringify(doc));      
-      
+      doc.permissions = newPerms ;
+      // console.log(JSON.stringify(doc));
+
       doc.save(function(err,result){
         if(err){
           deffered.reject() ;
         }
-        else { 
+        else {
           deffered.resolve(newDoc) ;
         }
       });
     })
-    return deffered.promise;        
+    return deffered.promise;
   }
 
   if(newDoc.type == 'removeWatcher' && newDoc.issue == 'officeDocuments') {
@@ -329,15 +329,15 @@ exports.createContent = function(user, oldDoc, newDoc) {
       // console.log(doc) ;
       let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
 //      console.log(newPerms) ;
-      let watcherRemoved = String(newUid);      
+      let watcherRemoved = String(newUid);
       let exist = exports.searchIdIndex(String(watcherRemoved),newPerms) ;
       // console.log("perms array before:");
       // console.log(JSON.stringify(doc['permissions']));
       // console.log("--------------------");
 
-      if(exist == null) { 
+      if(exist == null) {
         // cannot find removed watcher - this shouldnt happen
-        deffered.reject(exports.permError.system) ;  
+        deffered.reject(exports.permError.system) ;
         return deffered.promise;
       }
 
@@ -349,35 +349,35 @@ exports.createContent = function(user, oldDoc, newDoc) {
         if(err){
           deffered.reject() ;
         }
-        else { 
+        else {
           deffered.resolve(newDoc) ;
         }
       });
     })
-    return deffered.promise;        
+    return deffered.promise;
   }
 
   // a catcher for all other create content permissions
   console.log("content create catch all case.") ;
-  let Model = entityNameMap[newDoc.issue].mainModel;    
+  let Model = entityNameMap[newDoc.issue].mainModel;
 
   Model.findOne({'_id': newDoc.issueId},function(err,doc){
     // console.log("doc general update") ;
     // console.log(doc) ;
-    let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];      
+    let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
     if(!exports.allowUpdateContent(user, newPerms, {})) {
       console.log("update content - not allowed");
       deffered.reject(exports.permError.denied + ":" + exports.permError.allowCreateContent);
       return deffered.promise;
-    }  
+    }
     else {
-      // console.log("update content - allowed");      
-      deffered.resolve("OK") ;  
-      return deffered.promise;        
+      // console.log("update content - allowed");
+      deffered.resolve("OK") ;
+      return deffered.promise;
     }
   })
-//  deffered.resolve("OK") ;  
-  return deffered.promise;        
+//  deffered.resolve("OK") ;
+  return deffered.promise;
 }
 
 
@@ -389,10 +389,10 @@ exports.cloneParentPermission = function(parentID,modelName) {
     return deffered.promise;
   }
   let Model = entityNameMap[modelName].mainModel;
-  return Model.findOne({_id: parentID}, function(err, doc) {    
+  return Model.findOne({_id: parentID}, function(err, doc) {
     let clonedPerms = { cloned: true ,
       permissions: doc.permissions ,
-      watchers: watchersFromPermissions(doc.permissions) 
+      watchers: watchersFromPermissions(doc.permissions)
     }
     deffered.resolve(clonedPerms) ;
     return deffered.promise;
@@ -405,7 +405,7 @@ function watchersFromPermissions(permissions) {
   if (permissions.length == 0) return null ;
   permissions.forEach(function(perms) {
     watchers.push(perms.id) ;
-  })  
+  })
   return watchers ;
 }
 
@@ -442,7 +442,7 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
 
   newWatchers = cleanArray(newWatchers) ;
 
-  // permissions array update needed? check if watchers changed.  
+  // permissions array update needed? check if watchers changed.
   let diff = isDifferentArray(oldWatchers,newWatchers);
 //  console.log("DIFF PERMS ARRAY:") ;
 //  console.log(diff) ;
@@ -451,16 +451,16 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
   }
 
   let newPerms = newDoc && Array.isArray(newDoc['permissions']) ? newDoc['permissions'].slice() : [];
-  
-  // is user allowed to update Perms?    
+
+  // is user allowed to update Perms?
   // console.log("newPerms:") ;
   // console.log(JSON.stringify(newPerms));
   if(!exports.allowUpdateWatcher(user, newPerms)) {
     console.log("updated perms array - not allowed");
     return false ;
-  }  
+  }
 
-  // console.log("updating perms...") ;                
+  // console.log("updating perms...") ;
   // console.log("original perms array:");
   // console.log(newPerms);
   // console.log("--------------------");
@@ -468,18 +468,18 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
   // watcher added
   let watcherAdded = leftIntersect(newWatchers,oldWatchers) ;
   if(watcherAdded.length > 0) {
-    // check if the added watcher is the assignee:      
+    // check if the added watcher is the assignee:
     // console.log("ASSIGNEE:") ;
     // console.log(JSON.stringify(newDoc.assign)) ;
     watcherAdded.forEach(function(watcher) {
       let permLevel = String(watcher) == String(newDoc.assign) ? 'commenter' : 'viewer' ;
-      
+
       // console.log("LEVEL:") ;
-      // console.log(permLevel) ;           
+      // console.log(permLevel) ;
       let watcherAddedPerms = {id:String(watcher),level:permLevel} ; // default watcher perms
       newPerms.push(watcherAddedPerms);
     })
-  }                        
+  }
   // console.log("old-->");
   // console.log(JSON.stringify(oldWatchers));
   // console.log("new-->");
@@ -494,9 +494,9 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
   // console.log("new-->");
   // console.log(JSON.stringify(newWatchers));
   // console.log("removed ->>");
-  // console.log(JSON.stringify(watcherRemoved));    
-  
-  if(watcherRemoved.length > 0) {      
+  // console.log(JSON.stringify(watcherRemoved));
+
+  if(watcherRemoved.length > 0) {
     let index = exports.searchIdIndex(watcherRemoved[0], newDoc.permissions) ;// remove from permissions array
     newPerms.splice(index,1);
   }
@@ -565,7 +565,7 @@ exports.allowUpdateContent = function(user, perms, field) {
 
   // console.log("permissions 'update content': ");
   // console.log(allowed.length > 0 ? "true" : "false");
-  
+
   return (allowed.length > 0) ;
 };
 
@@ -590,6 +590,38 @@ exports.allowUpdateUpdates = function(user, perms, field) {
 
   // console.log("permissions 'update content': ");
   // console.log(allowed.length > 0 ? "true" : "false");
-  
+
   return (allowed.length > 0) ;
+};
+
+/*
+  allow remove attachments.
+*/
+exports.allowRemoveAttachments = function(user, file, {parent, id}) {
+  return new Promise( (resolve,reject) => {
+    if(!parent || !id)reject("Wrong request");
+
+    let Model = entityNameMap[parent].mainModel;
+    Model.findOne({'_id': id})
+      .exec()
+      .then(doc => {
+        if(!doc)return reject("No parent entity");
+
+        let permsAllowed = ["editor", "commenter"],
+          allowed = false;
+
+        let permissions = doc.permissions.filter( permission => String(permission.id) === String(user._id))[0];
+        if(_.includes(permsAllowed, permissions.level))allowed = true;
+        if(permissions.level === 'commenter')allowed = String(file.creator) === String(user._id);
+
+        if(allowed){
+          resolve(allowed);
+        } else {
+          reject("User have no permissions to remove attachment")
+        }
+      })
+      .catch((err) => {
+        reject(err)
+      });
+  })
 };

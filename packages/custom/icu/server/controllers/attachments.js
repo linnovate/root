@@ -6,6 +6,7 @@ var mean = require('meanio'),
   mkdirp = require('mkdirp'),
   config = require('meanio').loadConfig(),
   Busboy = require('busboy'),
+  permissions = require('./permissions'),
   q = require('q');
 
 var options = {
@@ -166,7 +167,7 @@ exports.upload = function(req, res, next) {
       }catch(err){
         console.log(err)
       }
-      
+
     }).catch(function(){
        try{
       if(fs.existsSync(path)){
@@ -175,7 +176,7 @@ exports.upload = function(req, res, next) {
       }catch(err){
         console.log(err)
       }
-     
+
         logger.log('error', '%s upload, %s', req.user.name, ' busboy.on(finish)', {error: 'No file was attached'});
         req.locals.error = {
           message: 'No file was attached'
@@ -203,34 +204,37 @@ exports.deleteFile = function (req, res) {
         res.status(500).send("error");
 
       } else {
-
-        if(file[0]&&file[0]._doc&&file[0]._doc.path){
-        Attachment.count({path:file[0]._doc.path},function(err,c){
-          Attachment.remove({ _id: req.params.id }, function (err) {
-            if (err) {
-              logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.remove()', {error: err.message});
-              res.status(500).send(err);
-            } else {
-              if(!err && c<=1){
-                var strUrl = file[0]._doc.path;
-                var index = strUrl.indexOf('/files');
-                var pathFile = strUrl.substring(index);
-                var pathPDF = pathFile.replace('/files','/preview');
-                var flag = pathPDF.endsWith('.pdf');
-                pathPDF = pathPDF.substring(0,pathPDF.lastIndexOf('.'))+'.pdf';
-                ftp.archiveFileFromFtp(pathFile).then(function(){
-                  if(!flag){
-                    ftp.deleteFileFromFtp(pathPDF).then(function(){
-                      res.send("ok");
-
-                  }).catch(function(err){
-                    res.status(500).send(err);
-                  });
-                  }
-                  
-                }).catch(function(err){
+        // if(!permissions.allowRemoveAttachments(req.user, file[0], req.query))return;
+        return permissions.allowRemoveAttachments(req.user, file[0], req.query)
+          .then(allow => {
+            if(file[0]&&file[0]._doc&&file[0]._doc.path){
+            Attachment.count({path:file[0]._doc.path},function(err,c){
+              Attachment.remove({ _id: req.params.id }, function (err) {
+                if (err) {
+                  logger.log('error', '%s deleteFile, %s', req.user.name, ' Attachment.remove()', {error: err.message});
                   res.status(500).send(err);
-                });
+                } else {
+                  if(!err && c<=1){
+                    var strUrl = file[0]._doc.path;
+                    var index = strUrl.indexOf('/files');
+                    var pathFile = strUrl.substring(index);
+                    var pathPDF = pathFile.replace('/files','/preview');
+                    var flag = pathPDF.endsWith('.pdf');
+                    pathPDF = pathPDF.substring(0,pathPDF.lastIndexOf('.'))+'.pdf';
+                    res.status(200).send({status: "OK"})
+                    ftp.archiveFileFromFtp(pathFile).then(function(){
+                      if(!flag){
+                        ftp.deleteFileFromFtp(pathPDF).then(function(){
+                          res.send("ok");
+
+                      }).catch(function(err){
+                        res.status(500).send(err);
+                      });
+                      }
+
+                    }).catch(function(err){
+                      res.status(500).send(err);
+                    });
 
 /**
                 fs.stat(pathFile, function (err, stats) {
@@ -257,35 +261,21 @@ exports.deleteFile = function (req, res) {
                 });
 */
 
-
-
-              }
-              else{
-                res.sendStatus(200);
-              }
-
-
-            };
-          });
-
-        });
-
-
-}
-else{
-          res.status(500).send("error");
-
-}
-
-
-
-
-
-
-
+                  } else {
+                    res.status(200).send({status: "OK"});
+                  }
+                }
+              });
+            });
+            }
+            else {
+              res.status(500).send("error");
+            }
+          },err => {
+            res.status(403).send(err);
+          })
       }
-    });
-  return res;
+  });
 };
 
 

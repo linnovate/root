@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsDocuments', function () {
-        function controller($scope, $http, DocumentsService, context, ActivitiesService, $stateParams, UsersService, AttachmentsService, PermissionsService) {
+        function controller($scope, $http,  $state, $stateParams, DocumentsService, context, ActivitiesService, UsersService, AttachmentsService, PermissionsService) {
 
             ActivitiesService.issueId=$stateParams.id || $stateParams.entityId;
 
@@ -133,20 +133,29 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.checkAttachmentCreator = doc => {
-                let havePerms = $scope.havePermissions('tab-content');
-                let isEditor = (user) => PermissionsService.getPermissionStatus(user, $scope.entity) === 'editor';
+                let havePerms = $scope.havePermissions('tab-content'),
+                  commenterAndCreator = (me) => {
+                    let creatorId = doc.creator._id || doc.creator;
+                    return havePerms && (creatorId === me._id)
+                  },
+                  isEditor = (user) => PermissionsService.getPermissionStatus(user, $scope.entity) === 'editor';
+
+
                 if(!$scope.me){
                     UsersService.getMe().then( me => {
                         $scope.me = me;
-                        return (havePerms && doc.creator === me._id) || isEditor(me);
+                        return commenterAndCreator($scope.me) || isEditor(me);
                     });
-                } else return (havePerms && doc.creator === $scope.me._id) || isEditor($scope.me);
+                } else return commenterAndCreator($scope.me) || isEditor($scope.me);
             };
 
             $scope.remove = function (file, index) {
-                let userPerms = PermissionsService.getPermissionStatus($scope.me, $scope.entity);
-                if(!$scope.checkAttachmentCreator(file) || userPerms !== 'editor')return;
-                DocumentsService.delete(file._id).then(function (status) {
+                // if(!$scope.checkAttachmentCreator(file))return;
+                let currentEntity = $state.current.name.split('.')[1];
+                let parent = currentEntity.slice(0, currentEntity.length-1);
+
+                DocumentsService.delete(file._id, {parent: parent, id: $scope.entity._id})
+                  .then(function (status) {
                     if (status == 200) {
                         ActivitiesService.create({
                           data: {
@@ -158,8 +167,9 @@ angular.module('mean.icu.ui.tabs')
                           context: {}
                         })
                     }
-                });
-                $scope.documents.splice(index, 1);
+                  })
+                  .then( () => $scope.documents.splice(index, 1))
+                  .catch( err => console.log(err));
             };
 
             $scope.autoFormatFilesize = function (fileSize) {

@@ -11,11 +11,15 @@ angular.module('mean.icu.data.documentsservice', [])
             });
         }
 
-        function delete1(id) {
-            return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
-             	//WarningsService.setWarning(result.headers().warning);
-                 return result.status;
-             });
+        function delete1(id, parent) {
+            return $http.delete(ApiUri + EntityPrefix + '/' + id, {params: parent})
+                .then(function (result) {
+                  //WarningsService.setWarning(result.headers().warning);
+                     return result.status;
+                })
+                .catch( err => {
+                    throw new Error(err);
+                })
          }
 
         function getById(id) {
