@@ -391,10 +391,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
                     if($stateParams.starred){
                         $scope.items = $scope.items.filter( entity => _.includes(getArrIds(starred), entity._id) );
                     }
-                    $scope.visibleItems = filterResults($scope.items);
+                    $scope.visibleItems = removeDuplicates((filterResults($scope.items)))
                 })
         } else {
-            $scope.visibleItems = filterResults($scope.items);
+            $scope.visibleItems = removeDuplicates(filterResults(removeDuplicates($scope.items)))
         }
     };
 
@@ -414,27 +414,34 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     setStatusFilterValue($stateParams.status);
     $scope.refreshVisibleItems();
 
-    $scope.$on('refreshList', function () {
-        $scope.refreshVisibleItems();
-    });
-
     function filterResults(itemsArray){
         let newArray = $filter('filterRecycled')(itemsArray);
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
+        if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
         newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;
+    }
+
+    function removeDuplicates(array){
+      let arrayIds = _.map(array, entity => entity._id);
+      let sortedArrIds = _.union(arrayIds);
+      return _.filter(array, entity => _.includes(sortedArrIds, entity._id))
     }
 
     function filterByDefiniteStatus(array, value){
       return array.filter( entity => entity.status === value);
     }
 
-    NotifyingService.subscribe('filterMyTasks', function () {
-      $scope.refreshVisibleItems();
-    }, $scope);
+    function filterByParent(array, value){
+      let parentId = entity => entity[$stateParams.entity]._id || entity[$stateParams.entity];
+      return array.filter( entity => parentId(entity) === value);
+    }
+
+    NotifyingService.subscribe('filterMyTasks', () => $scope.refreshVisibleItems(), $scope);
+    $scope.$on('refreshList', () => $scope.refreshVisibleItems());
 
     // ============================================================= //
     // ======================== Permissions ======================== //
@@ -445,24 +452,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $scope.me = me;
     });
 
-    $scope.recycled = function(entity) {
-        if (entity && entity.hasOwnProperty('recycled'))
-            return true;
-        return false;
-    }
-
-    $scope.havePermissions = function(entity, type) {
-        return PermissionsService.havePermissions(entity, type);
-    }
-
-    $scope.haveEditiorsPermissions = function(entity) {
-        return PermissionsService.haveEditorsPerms(entity);
-    }
-
-    $scope.permsToSee = function(entity) {
-      return PermissionsService.haveAnyPerms(entity);
-    }
-
+    $scope.recycled = entity => entity && entity.hasOwnProperty('recycled');
+    $scope.havePermissions = (entity, type) => PermissionsService.havePermissions(entity, type);
+    $scope.haveEditiorsPermissions = entity => PermissionsService.haveEditorsPerms(entity);
+    $scope.permsToSee = entity => PermissionsService.haveAnyPerms(entity)
 }
 
 angular.module('mean.icu.ui.entityList', ['dragularModule']).controller('EntityListController', EntityListController);
