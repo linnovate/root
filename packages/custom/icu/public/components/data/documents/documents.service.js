@@ -18,7 +18,7 @@ angular.module('mean.icu.data.documentsservice', [])
                      return result.status;
                 })
                 .catch( err => {
-                    throw new Error(err);
+                    throw new Error(err.statusText);
                 })
          }
 

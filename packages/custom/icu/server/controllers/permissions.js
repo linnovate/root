@@ -601,7 +601,7 @@ exports.allowRemoveAttachments = function(user, file, {parent, id}) {
   return new Promise( (resolve,reject) => {
     if(!parent || !id)reject("Wrong request");
 
-    let Model = entityNameMap[parent].mainModel;
+    let Model = entityNameMap[parent + 's'].mainModel;
     Model.findOne({'_id': id})
       .exec()
       .then(doc => {
