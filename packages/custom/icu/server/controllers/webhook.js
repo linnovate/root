@@ -27,10 +27,10 @@ exports.create = function(req, res, next) {
     },
   };
   var entity = crud(req.body.entity.toLowerCase() + 's', options);
-  if(req.body.customId) {
+  if(req.body.custom && req.body.custom.id) {
     var entityService = crudService(req.body.entity.toLowerCase() + 's', options);
     entityService
-      .read(null, req.user, req.acl, {'custom.id': req.body.customId})
+      .read(null, req.user, req.acl, {'custom.id': req.body.custom.id})
       .then(function(e) {
         if(_.isEmpty(e)) {
           entity.create(req, res, next);
@@ -42,7 +42,7 @@ exports.create = function(req, res, next) {
 
       })
       .catch(function(err) {
-        next(err)
+        next(err);
       });
   } else entity.create(req, res, next);
 };
@@ -50,6 +50,7 @@ exports.create = function(req, res, next) {
 
 exports.subTasks = function(req, res, next) {
   var task = req.locals.result;
+  if (!req.body.template) return next();
   req.body.templates = req.body.templates.split(',');
   if (req.locals.error) return next();
   if (req.body.templates) {
