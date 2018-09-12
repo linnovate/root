@@ -9,8 +9,7 @@ exports.render = function(req, res) {
       project: {
         title: project.title,
         id: project._id.toString(),
-        creatorUid: project.creator.uid.toString(),
-        templates: project.templates.map(t => t.toString())
+        creatorUid: project.creator.uid.toString()
       }
     });
   });

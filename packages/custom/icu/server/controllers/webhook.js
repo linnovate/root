@@ -49,30 +49,27 @@ exports.create = function(req, res, next) {
 
 
 exports.subTasks = function(req, res, next) {
-  var task = req.locals.result;
-  if (!req.body.template) return next();
-  req.body.templates = req.body.templates.split(',');
   if (req.locals.error) return next();
-  if (req.body.templates) {
-    req.params.id = req.body.templates[0];
-    req.body.taskId = task._id;
+  var task = req.locals.result;
+  if (!task.project || !task.project.templates || !task.project.templates.length) return next();
+  req.params.id = task.project.templates[0];
+  req.body.taskId = task._id;
 
-    templates.toSubTasks(req, res, next, function(err, data) {
-      if (err) {
-        req.locals.error = err;
-        return next();
+  templates.toSubTasks(req, res, next, function(err, data) {
+    if (err) {
+      req.locals.error = err;
+      return next();
+    }
+    Task.update({
+      _id: task._id}, {$set: {
+      subTasks: data
+    }}).exec(function(err, res) {
+      if (err) req.locals.error = err;
+      else {
+        req.locals.result = task;
+        req.locals.result.subTasks = data;
       }
-      Task.update({
-        _id: task._id}, {$set: {
-        subTasks: data
-      }}).exec(function(err, res) {
-        if (err) req.locals.error = err;
-        else {
-          req.locals.result = task;
-          req.locals.result.subTasks = data;
-        }
-        next();
-      });
+      next();
     });
-  } else next();
+  });
 }
