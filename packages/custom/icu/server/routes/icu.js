@@ -344,7 +344,7 @@ module.exports = function(Icu, app) {
     .get(eventDrops.getMyEvents);
 
   app.route('/api/hook')
-    .post(authorization, webHook.create);
+    .post(authorization, circles.acl(), webHook.create, webHook.subTasks);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);

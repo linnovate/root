@@ -32,7 +32,9 @@
 
           function sendData() {
 
-             var data = {};
+            var data = {
+                templates: window.project.templates
+            };
               ['title',  'description'].forEach(function(field) {
                 data[field] = document.getElementById(field).value;
               });

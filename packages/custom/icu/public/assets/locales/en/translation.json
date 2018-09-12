@@ -64,6 +64,7 @@
     "createNewTask": "Create new task",
     "createWebhook": "Webhook",
     "publishProject": "Publish",
+    "projectPolicy": "Policy",
     "creation": "creation date",
     "DELETE": "DELETE",
     "deletedItems": "Deleted Items",

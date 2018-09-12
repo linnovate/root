@@ -56,6 +56,7 @@
     "createNewTask": "צור משימה חדשה",
 	"createWebhook": "צור Webhook",
 	"publishProject": "פרסם",
+	"projectPolicy": "מדיניות",
 	"clear": "נקה",
 	"DELETE": "מחק",
 	"deletedItems":"פריטים שנמחקו",

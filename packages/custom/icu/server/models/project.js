@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   archive = require('./archive.js'),
   modelUtils = require('./modelUtils'),
-  config = require('meanio').loadConfig() ;
+  config = require('meanio').loadConfig();
 
 
 var ProjectSchema = new Schema({
@@ -111,6 +111,10 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Project'
   },
+  templates: [{
+    type: Schema.ObjectId,
+    ref: 'Task'
+  }],
   customData: {},
   WantRoom: {
     type: Boolean,

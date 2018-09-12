@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, people, tasks, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, PermissionsService, EntityService, $stateParams, me, $window) {
+function ProjectDetailsController($scope, $rootScope, entity, people, tasks, projects, tags, $timeout, context, $state, ProjectsService, ActivitiesService, TasksService, PermissionsService, EntityService, $stateParams, me, $window, $uibModal) {
 
   // ==================================================== init ==================================================== //
 
@@ -208,33 +208,70 @@ function ProjectDetailsController($scope, $rootScope, entity, people, tasks, pro
   };
 
   $scope.publishProject = function() {
-    window.location = location.origin + '/projectPage/' + $scope.item.title + '/' + $scope.item._id;
+    window.location = location.origin + '/projectPage/' + $scope.item.title.replace(/[^a-zA-Z ]/g, '') + '/' + $scope.item._id;
   };
 
-  $scope.menuItems = [
-    {
-      label: 'publishProject',
-      fa: 'fa-upload',
-      display: true,
-      action: $scope.publishProject,
-    },
-    {
-      label: 'createWebhook',
-      fa: 'fa-plus-circle',
-      display: true,
-      action: $scope.createWebhook,
-    }, {
-      label: 'recycleProject',
-      fa: 'fa-times-circle',
-      display: !$scope.item.hasOwnProperty('recycled'),
-      action: $scope.recycle
-    }, {
-      label: 'unrecycleProject',
-      fa: 'fa-times-circle',
-      display: $scope.item.hasOwnProperty('recycled'),
-      action: $scope.recycleRestore,
-    }
-  ];
+  TasksService.getTemplate().then(function(template) {
+    $scope.template = template;
+  });
+
+  $scope.openPolicyModal = function() {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      size: '40%',
+      templateUrl: '/icu/components/project-policy/project-policy.html',
+      controller: 'ProjectPolicyController',
+      resolve: {
+        item: function() {
+          return $scope.item;
+        },
+        template: function() {
+          return $scope.template;
+        },
+        me: function() {
+          return $scope.me;
+        },
+        people: function() {
+          return $scope.people;
+        }
+      }
+    });
+
+    modalInstance.result.then(function(result) {
+      $scope.item.templates = result;
+      ProjectsService.update($scope.item).then(function(project) {
+        alert('saved');
+        console.log(project);
+      });
+    });
+  };
+
+  $scope.menuItems = [{
+    label: 'projectPolicy',
+    fa: 'fa-list-ol',
+    display: true,
+    action: $scope.openPolicyModal,
+  }, {
+    label: 'publishProject',
+    fa: 'fa-upload',
+    display: true,
+    action: $scope.publishProject,
+  }, {
+    label: 'createWebhook',
+    fa: 'fa-plus-circle',
+    display: true,
+    action: $scope.createWebhook,
+  }, {
+    label: 'recycleProject',
+    fa: 'fa-times-circle',
+    display: !$scope.item.hasOwnProperty('recycled'),
+    action: $scope.recycle
+  }, {
+    label: 'unrecycleProject',
+    fa: 'fa-times-circle',
+    display: $scope.item.hasOwnProperty('recycled'),
+    action: $scope.recycleRestore,
+  } ];
 
   // ==================================================== $watch: title / desc ==================================================== //
 

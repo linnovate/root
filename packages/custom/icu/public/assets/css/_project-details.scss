@@ -1,3 +1,69 @@
-.project-details {
+.project-details {}
 
+.project-policy {
+    .modal-body {
+        padding: 20px;
+    }
+    detail-templater {
+        float: none;
+    }
+    .open-template-menu {
+        display: inline-block;
+        float: none;
+    }
+
+    .dropdown-menu {
+        width: 270px;
+
+
+        li.title,
+        li.templates {
+            span {
+                border-bottom: 1px solid #d9d9d9;
+            }
+        }
+
+        li {
+            margin: 0 10px;
+
+            span {
+                display: block;
+                padding: 0px 5px;
+                line-height: 2.5;
+                margin: 5px 5px;
+
+                &.last {
+                    border-bottom: none;
+                }
+            }
+
+            &.templates {
+                .delete {
+                    display: none;
+                }
+            }
+
+            &.new-template {
+               display: none;
+            }
+
+            &.avatar {
+                display: none;
+            }
+
+            .save-template {
+                display: none;
+            }
+
+            &:last-child {
+                margin: 0;
+                background-color: #f6f6f6;
+                padding: 10px
+            }
+        }
+    }
+
+    .template-watcher {
+        display: none;
+    }
 }
