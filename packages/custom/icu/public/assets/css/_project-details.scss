@@ -2,7 +2,11 @@
 
 .project-policy {
     .modal-body {
-        padding: 20px;
+        padding: 15px !important;
+        display: flex;
+        > div:first-child {
+            padding: 0 10px;
+        }
     }
     detail-templater {
         float: none;
