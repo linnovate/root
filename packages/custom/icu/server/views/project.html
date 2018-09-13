@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml" itemscope="itemscope"
+    itemtype="http://schema.org/Product">
+
+<head>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>{{project.title}}</h2>
+        <form id="createTaskForm">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" class="form-control" id="title" placeholder="Enter title" name="title">
+            </div>
+            <div class="form-group">
+                <label for="pwd">Description:</label>
+                <input type="description" class="form-control" id="description" placeholder="Enter Description" name="description">
+            </div>
+            <input type="hidden" id="project" name="project" value="5b8f97b89355dd9aa847c154">
+            <button type="submit" class="btn btn-default" onclick="sendData()">Submit</button>
+        </form>
+    </div>
+</body>
+<footer>
+  <script type="text/javascript">
+
+      window.addEventListener("load", function () {
+          window.project = {{project|json|safe}};
+
+          function sendData() {
+
+            var data = {};
+              ['title',  'description'].forEach(function(field) {
+                data[field] = document.getElementById(field).value;
+              });
+
+              var XHR = new XMLHttpRequest();
+
+              XHR.addEventListener("load", function (event) {
+                  //alert(event.target.responseText);
+                  alert('Your request saved successfully');
+                  form.reset();
+              });
+
+              XHR.addEventListener("error", function (event) {
+                  alert('Oops! Something went wrong.');
+              });
+
+              XHR.open("POST", `${window.location.origin}/api/hook?entity=task&uid=${window.project.creatorUid}&project=${window.project.id}`);
+              XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+              var params = Object.keys(data).map(
+                  function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
+              ).join('&');
+
+              XHR.send(params);
+          }
+
+          var form = document.getElementById("createTaskForm");
+          form.addEventListener("submit", function (event) {
+              event.preventDefault();
+
+              sendData();
+          });
+      });
+
+  </script>
+</footer>
+
+</html>

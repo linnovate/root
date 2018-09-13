@@ -55,7 +55,7 @@ module.exports = function(app, db) {app.set('showStackError', true);
 
   app.use(modRewrite([
 
-    '!^/api/.*|metadata\.xml/callback|\\_getModules|\\.html|\\.js|\\.css|\\.swf|\\.jp(e?)g|\\.png|\\.ico|^favicon\.ico|\\.gif|\\.svg|\\.eot|\\.ttf|\\.woff|\\.pdf$ / [L]',
+    '!^/api/.*|metadata\.xml/callback|\\_getModules|\\projectPage/.*|\\.html|\\.js|\\.css|\\.swf|\\.jp(e?)g|\\.png|\\.ico|^favicon\.ico|\\.gif|\\.svg|\\.eot|\\.ttf|\\.woff|\\.pdf$ / [L]',
     '^/files/.* / [L]'
 
   ]));

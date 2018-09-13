@@ -34,6 +34,7 @@ var express = require('express');
 var ftp = require('../services/ftp.js');
 var boldedService = require('../services/bolded.js');
 var bulk = require('../controllers/bulk');
+var publishProject = require('../controllers/publish-project');
 
 //update mapping - OHAD
 //var mean = require('meanio');
@@ -45,6 +46,8 @@ var bulk = require('../controllers/bulk');
 
 module.exports = function(Icu, app) {
   var circles = require('circles-npm')(app, config.circles.uri, circleSettings);
+
+  app.route('/projectPage/:title/:id').get(publishProject.render);
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
@@ -341,7 +344,7 @@ module.exports = function(Icu, app) {
     .get(eventDrops.getMyEvents);
 
   app.route('/api/hook')
-    .post(authorization, webHook.create);
+    .post(authorization, circles.acl(), webHook.create, webHook.subTasks);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
