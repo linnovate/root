@@ -61,7 +61,7 @@ exports.subTasks = function(req, res, next) {
       return next();
     }
     Task.update({
-      _id: task._id}, {$set: {
+      _id: task._id}, {$addToSet: {
       subTasks: data
     }}).exec(function(err, res) {
       if (err) req.locals.error = err;
