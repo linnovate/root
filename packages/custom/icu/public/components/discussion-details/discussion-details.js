@@ -91,7 +91,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     DiscussionsService.WantToCreateRoom($scope.item).then(function(data) {
       navigateToDetails($scope.item);
       if(data.roomName) {
-        $window.open(window.config.rocketChat.uri + '/group/', data.roomName);
+        $window.open(window.config.rocketChat.uri + '/group/' + data.roomName);
         return true;
       }
       else {
