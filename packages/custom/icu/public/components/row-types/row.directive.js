@@ -32,13 +32,19 @@ angular.module('mean.icu.ui.rows', [])
         'search-officedocument': '/icu/components/row-types/search-officeDocument-row.html',
         'search-templateDoc': '/icu/components/row-types/search-templateDoc-row.html',
         'subtasks': '/icu/components/row-types/sub-tasks-row.html',
-        'subprojects': '/icu/components/row-types/sub-projects-row.html',
+        'subprojects': '/icu/components/row-types/sub-projects-row.html'
     };
 
-    function compileTemplate($scope, $element, template) {
+    function compileTemplate($scope, $element, template, MultipleSelectService) {
         $element.html(template);
         var scope = $scope.$new(true);
+
         scope.data = $scope.data;
+        scope.multipleSelectMode = $scope.multipleSelectMode;
+
+        scope.$on('checkMultipleMode', () => scope.checkMultipleMode());
+        scope.checkMultipleMode = () => scope.multipleSelectMode = MultipleSelectService.getSelected().length > 0;
+
         $compile($element.contents())(scope);
     }
 
@@ -47,7 +53,7 @@ angular.module('mean.icu.ui.rows', [])
         if ($scope.type.indexOf('search') > -1) {
 	        var templateUrl = templates[$scope.type];
 	        $templateRequest(templateUrl).then(function(result) {
-	            compileTemplate($scope, $element, result);
+	            compileTemplate($scope, $element, result, MultipleSelectService);
 	        });
 		}
         if ($scope.data[$scope.type] && $scope.data[$scope.type].due) {

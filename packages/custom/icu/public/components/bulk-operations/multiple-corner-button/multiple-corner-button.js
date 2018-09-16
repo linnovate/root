@@ -2,21 +2,14 @@
 
 angular.module('mean.icu.ui.bulkoperations')
     .directive('multipleCornerButton', function () {
-        function controller($scope, MultipleSelectService) {
+        function controller($rootScope, $scope, MultipleSelectService) {
             $scope.selectedItems = $scope.$parent.selectedItems || MultipleSelectService.getSelected();
-            $scope.cornerState = $scope.$parent.cornerState;
+            $scope.cornerState = $scope.$parent.cornerState || MultipleSelectService.getCornerState();
 
-            $scope.notifyChangingState = function(){
-                $scope.$emit('changeCornerState', MultipleSelectService.changeCornerState());
-            };
+            $scope.notifyChangingState = () => $rootScope.$broadcast('changeCornerState', MultipleSelectService.changeCornerState());
 
-            $scope.$on('refreshBulkButtonsAccess', function (event) {
-                $scope.changeCornerState();
-            });
-
-            $scope.changeCornerState = function(){
-                $scope.cornerState = MultipleSelectService.getCornerState();
-            };
+            $scope.$on('refreshBulkButtonsAccess', () => $scope.changeCornerState());
+            $scope.changeCornerState = () => $scope.cornerState = MultipleSelectService.getCornerState();
         }
 
         return {

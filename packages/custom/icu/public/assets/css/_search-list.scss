@@ -80,22 +80,32 @@ em {
 .search-list {
   overflow-y: auto;
   height: 100%;
-  .search {
-    .project.tag, .office.tag {
-      border-radius: 15px;
-      padding: 3px 14px;
-      max-width: 50px;
-      line-height: 50px;
-    }
-    tr {
-      display: table-row !important;
 
-      td:nth-child(4) {
-        width: 40%;
+  .list-table{
+    .search {
+      .project.tag, .office.tag {
+        border-radius: 15px;
+        padding: 3px 14px;
+        max-width: 50px;
+        line-height: 50px;
+      }
+      tr {
+        display: table-row !important;
+
+        td:nth-child(4) {
+          width: 40%;
+        }
+        .id{
+          width: 32px;
+        }
+      }
+      .tick {
+        height: 50px;
+        width: 30px;
+          input {
+              margin-left: 10px;
+          }
       }
     }
-  }
-  .tick {
-      display: block;
   }
 }

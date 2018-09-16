@@ -224,9 +224,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         multipleSelectRefreshState();
     };
 
-    $scope.$on('changeCornerState', function(event, cornerState){
-        multipleSelectSetAllSelected(cornerState === 'all');
-    });
+    $scope.$on('changeCornerState', (event, cornerState) => multipleSelectSetAllSelected(cornerState === 'all'));
 
     function multipleSelectSetAllSelected(status){
         for(let i = 0; i < $scope.visibleItems.length; i++){
@@ -282,18 +280,15 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }
 
     function getFilteredSelectedList(){
-        let selected = MultipleSelectService.getSelected();
-        let filteredSelected = filterResults(selected);
-        let newSelectedList = MultipleSelectService.setSelectedList(filteredSelected);
+        let selected = MultipleSelectService.getSelected(),
+            filteredSelected = filterResults(selected),
+            newSelectedList = MultipleSelectService.setSelectedList(filteredSelected);
 
         return newSelectedList;
     }
 
     function getRefreshedCornerState(){
-        let filteredItems = filterResults($scope.visibleItems);
-        let refreshedCornerState = MultipleSelectService.refreshCornerState(filteredItems.length);
-
-        return refreshedCornerState;
+        return MultipleSelectService.refreshCornerState(filterResults($scope.visibleItems).length);
     }
 
     function refreshActiveItemsInList(){
@@ -308,7 +303,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ============================================================= //
 
     $scope.onKeydown = function($event, index) {
-        angular.element($event.target).css('box-shadow', 'none')
+        angular.element($event.target).css('box-shadow', 'none');
 
         if ($event.keyCode === 13) {
             $event.preventDefault();
@@ -445,24 +440,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $scope.me = me;
     });
 
-    $scope.recycled = function(entity) {
-        if (entity && entity.hasOwnProperty('recycled'))
-            return true;
-        return false;
-    }
-
-    $scope.havePermissions = function(entity, type) {
-        return PermissionsService.havePermissions(entity, type);
-    }
-
-    $scope.haveEditiorsPermissions = function(entity) {
-        return PermissionsService.haveEditorsPerms(entity);
-    }
-
-    $scope.permsToSee = function(entity) {
-      return PermissionsService.haveAnyPerms(entity);
-    }
-
+    $scope.recycled = entity => entity && entity.hasOwnProperty('recycled');
+    $scope.havePermissions = (entity, type) => PermissionsService.havePermissions(entity, type);
+    $scope.haveEditiorsPermissions = entity =>  PermissionsService.haveEditorsPerms(entity);
+    $scope.permsToSee = entity => PermissionsService.haveAnyPerms(entity);
 }
 
 angular.module('mean.icu.ui.entityList', ['dragularModule']).controller('EntityListController', EntityListController);

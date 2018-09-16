@@ -54,7 +54,7 @@ angular.module('mean.icu.ui.searchlist', [])
             }
 
             multipleDisablingCheck();
-            $scope.$broadcast('refreshBulkButtonsAccess');
+            $rootScope.$broadcast('refreshBulkButtonsAccess');
             NotifyingService.notify('multipleDisableDetailsPaneCheck');
         }
 
@@ -70,6 +70,20 @@ angular.module('mean.icu.ui.searchlist', [])
                 $scope.multipleSelectMode = false;
             }
         }
+        $scope.changeMultipleMode = () => $scope.$broadcast('checkMultipleMode');
+        $scope.$on('changeCornerState', (event, cornerState) => multipleSelectSetAllSelected(cornerState === 'all'));
+
+        function multipleSelectSetAllSelected(status){
+            for(let i = 0; i < $scope.results.length; i++){
+                $scope.results[i].selected = status;
+            }
+            if(status){
+                MultipleSelectService.setSelectedList($scope.results);
+            } else {
+                MultipleSelectService.refreshSelectedList();
+            }
+            multipleSelectRefreshState();
+        }
     }
 
     return {
@@ -77,7 +91,8 @@ angular.module('mean.icu.ui.searchlist', [])
         templateUrl: '/icu/components/search-list/search-list.directive.html',
         scope: {
             results: '=',
-            multipleSelectMode: '='
+            multipleSelectMode: '=',
+            changeMultipleMode: '='
         },
         controller: controller
     };

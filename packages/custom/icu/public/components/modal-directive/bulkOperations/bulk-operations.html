@@ -4,9 +4,12 @@
 
 
     <section ng-if="activityType == 'status'" class="status">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+      <!--<span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>-->
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
 
-        <ui-select ng-model="selects[$index].selected" on-select="select(selected)">
+        <ui-select ng-model="selects[$index].selected" on-select="select(selects[$index].selected)">
             <ui-select-match placeholder="{{ 'selectStatus' | i18next }}">
                 <i class='{{$select.selected}}'></i>
                 <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
@@ -19,7 +22,7 @@
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !selected}"
-                ng-click="bulkUpdate('status', selected)">
+                ng-click="bulkUpdateEvery('status', selected)">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
@@ -27,7 +30,9 @@
 
 
     <section ng-if="activityType === 'watchers'" class="watch">
-      <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
 
       <div class="watchers-list">
         <div class="watcher"
@@ -90,7 +95,9 @@
 
 
     <section ng-if="activityType === 'assign'" class="assign">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
 
         <div tooltips tooltip-template="{{'assignee' | i18next}}">
             <ui-select ng-model="selected" on-select="select(selected._id)">
@@ -109,7 +116,7 @@
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !selected}"
-                ng-click="bulkUpdate('assign', selected)">
+                ng-click="bulkUpdateEvery('assign', selected)">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
@@ -117,8 +124,9 @@
 
 
     <section ng-if="activityType === 'due'" class="due">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
-
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
         <div class="date"
              ng-if="entityName !== 'discussions'">
             <input ng-model="selectedDue.date" placeholder="{{ duePlaceholder | i18next }}" ui-date="dueOptions" />
@@ -141,7 +149,9 @@
 
 
     <section ng-if="activityType === 'tag'" class="tag">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
 
         <!--<div ng-repeat="tag in tags" class='item'>-->
             <!--<span>{{tag}}</span>-->
@@ -192,9 +202,11 @@
 
 
     <section ng-if="activityType === 'delete'" class="delete">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
 
-        <button class="action-button" ng-click="bulkUpdate('delete', true)">{{ 'delete' | i18next}}</button>
+        <button class="action-button" ng-click="bulkUpdateEvery('delete', true)">{{ 'delete' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
