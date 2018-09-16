@@ -206,6 +206,7 @@ exports.toTemplate = function(req, res, next) {
 };
 
 exports.toSubTasks = function(req, res, next) {
+  var cb = arguments[3];
   //TODO: save documents
   var tasks = {},
     totals = {
@@ -219,10 +220,10 @@ exports.toSubTasks = function(req, res, next) {
   }).exec(function(err, task) {
     if(err) {
       req.locals.error = err;
-      next();
+      if(cb) return cb(err); else next();
     } if(!task) {
       req.locals.error = new Error('No template.');
-      next();
+      if(cb) return cb('No template.'); else next();
     }
     else {
       var created = task.created;
@@ -235,7 +236,7 @@ exports.toSubTasks = function(req, res, next) {
       }).exec(function(err, task) {
         if(err) {
           req.locals.error = err;
-          next();
+          if(cb) return cb(err); else next();
         }
         else {
           totals.tasks = 1;
@@ -252,7 +253,7 @@ exports.toSubTasks = function(req, res, next) {
                 req.locals.result.push(templates[t].t);
               }
             }
-            next();
+            if(cb) return cb(null, req.locals.result); else next();
           });
         }
       });

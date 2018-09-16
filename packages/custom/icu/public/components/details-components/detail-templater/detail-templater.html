@@ -11,7 +11,7 @@
         </span>
       </li>
       <li class="templates" ng-if="!templates.length">
-        <span>{{ ' noTemplates' | i18next }}</span>
+        <span>{{ 'noTemplates' | i18next }}</span>
       </li>
       <li class="templates" ng-repeat="temp in templates">
         <!-- ng-if="temp.subTasks.length" -->
@@ -27,7 +27,7 @@
           <span>
             <b>{{'saveTemplate' | i18next }}</b>
           </span>
-          <input type="text" name="newTemplate" placeholder="Template Name" ng-model="newTemplate.name">
+          <input type="text" name="newTemplate" placeholder="{{ 'templateName' | i18next }}" ng-model="newTemplate.name">
         </div>
       </li>
       <li class="avatar">

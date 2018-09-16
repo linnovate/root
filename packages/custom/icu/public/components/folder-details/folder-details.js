@@ -92,7 +92,7 @@ function FolderDetailsController($rootScope, $scope, entity, tasks, people, fold
     FoldersService.WantToCreateRoom($scope.item).then(function(data) {
       navigateToDetails($scope.item);
       if(data.roomName) {
-        $window.open(window.config.rocketChat.uri + '/group/', data.roomName);
+        $window.open(window.config.rocketChat.uri + '/group/' + data.roomName);
         return true;
       }
       else {

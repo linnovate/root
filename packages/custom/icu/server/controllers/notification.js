@@ -21,7 +21,7 @@ let RocketChat = undefined;
 let RocketChatGroup = undefined;
 
 if(config.rocketChat.active) {
-  RocketChat = require('rocketChatService');
+  RocketChat = require('rocketchatService');
   RocketChatGroup = new RocketChat(config.rocketChat);
 }
 

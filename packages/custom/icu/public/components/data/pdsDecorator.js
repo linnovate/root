@@ -38,7 +38,7 @@ var passiveDataSrtuctureDecorator = function($delegate) {
         for (var i = 0; i < keys.length; i+=1) {
             var property = newData[keys[i]];
 
-            if (typeof(property) === 'object' || !data[keys[i]]) {
+            if (typeof(property) === 'object' || !data[keys[i]] || keys[i] == 'roomName') {
                 data[keys[i]] = newData[keys[i]];
             }
         }

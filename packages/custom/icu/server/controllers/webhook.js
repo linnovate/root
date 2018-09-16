@@ -1,9 +1,9 @@
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
 var _ = require('lodash');
-
+var mongoose = require('mongoose');
+var Task = mongoose.model('Task');
 var crud = require('../controllers/crud.js');
 var crudService = require('../services/crud.js');
+var templates = require('../controllers/templates');
 
 exports.create = function(req, res, next) {
 
@@ -27,10 +27,10 @@ exports.create = function(req, res, next) {
     },
   };
   var entity = crud(req.body.entity.toLowerCase() + 's', options);
-  if(req.body.customId) {
+  if(req.body.custom && req.body.custom.id) {
     var entityService = crudService(req.body.entity.toLowerCase() + 's', options);
     entityService
-      .read(null, req.user, req.acl, {customId: req.body.customId})
+      .read(null, req.user, req.acl, {'custom.id': req.body.custom.id})
       .then(function(e) {
         if(_.isEmpty(e)) {
           entity.create(req, res, next);
@@ -42,7 +42,34 @@ exports.create = function(req, res, next) {
 
       })
       .catch(function(err) {
-        next(err)
+        next(err);
       });
   } else entity.create(req, res, next);
 };
+
+
+exports.subTasks = function(req, res, next) {
+  if (req.locals.error) return next();
+  var task = req.locals.result;
+  if (!task.project || !task.project.templates || !task.project.templates.length) return next();
+  req.params.id = task.project.templates[0];
+  req.body.taskId = task._id;
+
+  templates.toSubTasks(req, res, next, function(err, data) {
+    if (err) {
+      req.locals.error = err;
+      return next();
+    }
+    Task.update({
+      _id: task._id}, {$addToSet: {
+      subTasks: data
+    }}).exec(function(err, res) {
+      if (err) req.locals.error = err;
+      else {
+        req.locals.result = task;
+        req.locals.result.subTasks = data;
+      }
+      next();
+    });
+  });
+}

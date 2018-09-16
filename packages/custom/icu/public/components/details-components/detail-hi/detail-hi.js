@@ -32,7 +32,7 @@ function detailHi($window) {
           $scope.clicked = !$scope.onClick();
         }
         else {
-          $window.open(window.config.rocketChat.uri + '/group/', $scope.value.roomName);
+          $window.open(window.config.rocketChat.uri + '/group/' + $scope.value.roomName);
         }
       }
     };

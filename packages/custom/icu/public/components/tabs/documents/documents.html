@@ -12,7 +12,7 @@
             <div class="text" id="DocumentTextLine">
                 <div class="title"><b>{{document.name}}<span> | {{document.size | bytes }}</span></b></div>
                 <!-- <div class="time">{{document.created | date:'medium'}}</div> -->
-                <span class="txt">Uploaded by <span class="txt attCreator">{{document.attUser}}</span>, </span>
+                <span class="txt">{{ 'uploadedBy' | i18next }} <span class="txt attCreator">{{document.attUser}}</span>, </span>
                 <span class="txt attCreated">{{document.created | date : 'h:mma MMM d, yyyy'}}</span>
                 <div id="AllDocumentIcons">
                     <!-- <button class="DocumentIconsLine" id="Document-icon-revert">
