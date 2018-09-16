@@ -294,7 +294,7 @@ exports.getExcelSummary = function(req,res,next){
 }
 
 exports.signOnDocx = function(req, res, next) {
-  var doc = req.body.document;
+  var doc = req.body.officeDocuments;
   var signature = JSON.parse(req.body.signature);
 
   Document.find({_id: doc._id})
