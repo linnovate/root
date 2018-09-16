@@ -78,7 +78,7 @@
             autofocus>
             {{$select.selected.name}}
           </ui-select-match>
-          <ui-select-choices class="scroll" repeat="user in unusedWatchers">
+          <ui-select-choices class="scroll" repeat="user in unusedWatchers | filter: $select.search">
 
             <div icu-avatar
                  user="user"
@@ -100,7 +100,7 @@
       </span>
 
         <div tooltips tooltip-template="{{'assignee' | i18next}}">
-            <ui-select ng-model="selected" on-select="select(selected._id)">
+            <ui-select ng-model="selects[$index].selected" on-select="select(selects[$index].selected._id)">
                 <ui-select-match  placeholder="{{ 'selectAssignee' | i18next }}">
                     <div icu-avatar user="$select.selected"></div>
                     <span ng-if="$select.selected._id" class="summary-content">
@@ -174,6 +174,7 @@
                     tagging
                     tagging-label="false"
                     on-select="addTag(newTag)"
+                    ng-mouseleave="addLastInputTextToTag($select.search)"
                 >
                     <ui-select-match
                       id="addTag"
@@ -193,7 +194,6 @@
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !selected}"
-                ng-mouseenter="addLastInputTextToTag()"
                 ng-click="tagUpdate()">
             {{ 'update' | i18next}}
         </button>

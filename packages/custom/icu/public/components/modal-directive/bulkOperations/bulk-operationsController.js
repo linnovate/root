@@ -114,7 +114,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                     MultipleSelectService.setSelectedList($scope.selectedItems);
                     NotifyingService.notify('refreshAfterOperation');
                     $uibModalInstance.dismiss('cancel');
-                    $state.reload();
                 });
         }
     };
@@ -228,13 +227,15 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     $scope.enableSetDueDate = false;
 
     $scope.dueOptions = {
+        onSelect: function() {
+            $scope.entityDateCheck();
+        },
         dateFormat: 'dd.mm.yy'
     };
 
     $scope.dateCheck = function(){
-        let nowTime = new Date();
         if($scope.entityName !== 'discussions'){
-          if($scope.selectedDue.date < nowTime){
+          if(!$scope.entityDateCheck()){
             $scope.duePlaceholder = $scope.dueDateErrorMessage;
             $scope.selectedDue.date = '';
             return;
@@ -257,6 +258,13 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
       return $scope.enableSetDueDate;
     };
 
+    $scope.entityDateCheck = function(){
+        let nowTime = new Date();
+        $scope.enableSetDueDate = !($scope.selectedDue.date < nowTime);
+
+        return $scope.enableSetDueDate;
+    };
+
   //------------------------------------------------//
   //----------------------TAGS----------------------//
 
@@ -264,14 +272,15 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   $scope.usedTagsFiltered;
   $scope.removedTags = [];
   $scope.tags = [];
-  $scope.lastTagInput;
 
   $scope.getlastInputText = function(val){
     $scope.lastTagInput = val;
   };
 
-  $scope.addLastInputTextToTag = function(){
-    if($scope.lastTagInput.length)$scope.addTag($scope.lastTagInput);
+  $scope.addLastInputTextToTag = function(query){
+    if(query.length && !$scope.usedTags.find( tagObj => tagObj.tag === query)){
+        $scope.addTag(query);
+    }
   };
 
   getUsedTags();
@@ -360,7 +369,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         MultipleSelectService.setSelectedList($scope.selectedItems);
         NotifyingService.notify('refreshAfterOperation');
         $uibModalInstance.dismiss('cancel');
-        $state.reload();
       });
   }
 
