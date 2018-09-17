@@ -16,6 +16,8 @@ angular.module('mean.icu.ui.searchlist', [])
         };
 
         $scope.initialize = function ($event, result) {
+            if($scope.multipleSelectMode)return;
+
             $state.go(`main.search.${result.type ? result.type : result._type}`,
             {
                 id: result.entityId ? result.entityId : result.id
