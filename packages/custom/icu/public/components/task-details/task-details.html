@@ -91,6 +91,13 @@
     </div>
   </div>
 
+  <button data-toggle="collapse" data-target="#customdata" ng-if="item.custom && item.custom.data" class="detail-button customdata">Custom Data</button>
+  <div id="customdata" class="collapse">
+      <div ng-repeat="(key, value) in item.custom.data" class="customdata">
+          <div>{{key}}</div><div>{{value}}</div>
+      </div>
+  </div>
+
   <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
 
   <div class="sub-items-section" ng-class="{ 'disabled' : !havePermissions('subs')}">
