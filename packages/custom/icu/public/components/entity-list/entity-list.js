@@ -426,18 +426,18 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }
 
     function removeDuplicates(array){
-      let arrayIds = _.map(array, entity => entity._id);
-      let sortedArrIds = _.union(arrayIds);
-      return _.filter(array, entity => _.includes(sortedArrIds, entity._id))
+      return _.uniq(array, _.property('_id'));
     }
 
     function filterByDefiniteStatus(array, value){
       return array.filter( entity => entity.status === value);
     }
 
-    function filterByParent(array, value){
-      let parentId = entity => entity[$stateParams.entity]._id || entity[$stateParams.entity];
-      return array.filter( entity => parentId(entity) === value);
+    function filterByParent(array, value) {
+      return array.filter(entity => {
+        let parent = entity[$stateParams.entity];
+        return parent && (value === parent || value === parent._id);
+      });
     }
 
     NotifyingService.subscribe('filterMyTasks', () => $scope.refreshVisibleItems(), $scope);

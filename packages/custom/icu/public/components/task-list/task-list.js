@@ -85,7 +85,7 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
                         $scope.loadPrev = items.prev;
                         $scope.isLoading = false;
 
-                        return items.data;
+                        return resolve(items.data);
                     });
             }
             return resolve([]);
