@@ -26,6 +26,14 @@ angular.module('mean.icu.ui.membersfooter', [])
             $scope.hideAddButton = context.main=="templateDocs" ? false:true;
             $scope.me = UsersService.getMe().$$state.value;
 
+            if($state.current.name.indexOf('search') !== -1){
+                let entity = $state.current.name.split('.')[2];
+                let service = $injector.get(serviceMap[entity]);
+
+                service.getById($scope.entity._id)
+                    .then(res => $scope.entity.watchers = res.watchers);
+            }
+
             UsersService.getAll().then(users=>{
                 for(var i = 0; i < $scope.entity.watchers.length; i++){
                     if(typeof $scope.entity.watchers[i] === 'string'){
