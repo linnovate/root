@@ -132,7 +132,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
     $scope.usedWatchers = [];
     $scope.unusedWatchers = [];
-    $scope.selectedWatchers = {};
+    $scope.selectedWatchers = [];
 
     $scope.getUsedWatchers = function(){
         let usedIds = getIdsArray($scope.selectedItems[0].watchers);
@@ -170,7 +170,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     function getIdsArray(objArray){
-        return objArray.map(obj => obj._id);
+        return objArray.map(obj => obj._id || obj);
     }
 
     $scope.userPermissionStatus = function(member){
