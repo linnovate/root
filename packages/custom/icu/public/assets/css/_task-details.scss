@@ -10,7 +10,22 @@
                 width: 150px;
             }
         }
-	}
+    }
+    .customdata {
+        display: flex;
+        align-items: center;
+        div {
+            padding: 5px;
+        }
+        div:first-child {
+            width: 25%;
+            border-right: solid 1px #0000001f;
+            text-align: right;
+        }
+        div:last-child {
+            text-align: left;
+        }
+    }
 }
 ul.dropdown-menu {
 	text-align: inherit;
