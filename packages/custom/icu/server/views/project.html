@@ -4,6 +4,9 @@
 
 <head>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+    <style>
+        form {max-width: 500px;}
+    </style>
 </head>
 
 <body>
@@ -12,15 +15,52 @@
         <h2>{{project.title}}</h2>
         <form id="createTaskForm">
             <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" class="form-control" id="title" placeholder="Enter title" name="title">
+                <label for="title">Fullname:</label>
+                <input type="text" class="form-control" id="title" placeholder="Enter Fullname" name="fullname">
             </div>
             <div class="form-group">
-                <label for="pwd">Description:</label>
-                <input type="description" class="form-control" id="description" placeholder="Enter Description" name="description">
+                <label for="description">Summary:</label>
+                <textarea class="form-control" rows="3" id="description" placeholder="Enter Summary" name="summary"></textarea>
             </div>
-            <input type="hidden" id="project" name="project" value="5b8f97b89355dd9aa847c154">
-            <button type="submit" class="btn btn-default" onclick="sendData()">Submit</button>
+            <hr>
+            <div class="form-group">
+
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" id="custom-tender-number" placeholder="Tender No.">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" id="custom-job" placeholder="Job">
+                    </div>
+                    <div class="col-md-4">
+                    <select class="form-control" id="custom-tender-type">
+                        <option value="" disabled selected>Tender Type</option>
+                        <option>All</option>
+                        <option>Public</option>
+                    </select>
+                        </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <select class="form-control" id="custom-area">
+                            <option value="" disabled selected>Area</option>
+                            <option>All</option>
+                            <option>North</option>
+                            <option>South</option>
+                            <option>Tel Aviv</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" id="custom-minimal-wage" placeholder="Minimal Wage">
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control" id="custom-maximal-wage" placeholder="Maximal Wage">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-md btn-block">Send</button>
+            </div>
         </form>
     </div>
 </body>
@@ -32,16 +72,26 @@
 
           function sendData() {
 
-            var data = {};
+            var data = {
+                custom: {
+                    type: 'tender',
+                    data: {}
+                }
+            };
               ['title',  'description'].forEach(function(field) {
                 data[field] = document.getElementById(field).value;
+              });
+              var nodes = document.querySelectorAll('[id]');
+              nodes.forEach(function(node) {
+                  if (node.id.indexOf('custom-') > -1) {
+                      data.custom.data[node.id.replace('custom-', '')] = node.value;
+                  }
               });
 
               var XHR = new XMLHttpRequest();
 
               XHR.addEventListener("load", function (event) {
-                  //alert(event.target.responseText);
-                  alert('Your request saved successfully');
+                  alert(event.target.statusText);
                   form.reset();
               });
 
@@ -50,13 +100,9 @@
               });
 
               XHR.open("POST", `${window.location.origin}/api/hook?entity=task&uid=${window.project.creatorUid}&project=${window.project.id}`);
-              XHR.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                XHR.setRequestHeader("Content-Type", "application/json");
 
-              var params = Object.keys(data).map(
-                  function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
-              ).join('&');
-
-              XHR.send(params);
+              XHR.send(JSON.stringify(data));
           }
 
           var form = document.getElementById("createTaskForm");
