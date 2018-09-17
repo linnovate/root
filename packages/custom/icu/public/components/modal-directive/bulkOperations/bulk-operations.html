@@ -72,7 +72,7 @@
       <div class="new-member-input" ng-if="showSelect">
         <ui-select ng-model="member"
                    theme="bootstrap"
-                   on-select="addMember(member);triggerSelect()">
+                   on-select="addMember(member);triggerSelect();getUnusedWatchers()">
           <ui-select-match
             placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}"
             autofocus>
