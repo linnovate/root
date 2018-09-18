@@ -95,7 +95,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                 MultipleSelectService.setSelectedList($scope.selectedItems);
                 NotifyingService.notify('refreshAfterOperation');
                 $uibModalInstance.dismiss('cancel');
-                $state.reload();
             });
     };
 
