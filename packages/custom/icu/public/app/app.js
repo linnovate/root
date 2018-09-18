@@ -1018,9 +1018,17 @@ angular.module('mean.icu').config([
                     entity: function (TasksService, $stateParams) {
                         return TasksService.getById($stateParams.entityId)
                     },
-                    tasks: function (TasksService, $stateParams) {
-                        return TasksService.getSubTasks($stateParams.entityId)
-
+                    tasks: function (TasksService, $state, $stateParams) {
+                        if($state.current.name.indexOf('byentity') !== -1){
+                            return TasksService.getByProjectId(
+                              $stateParams.entityId,
+                              $stateParams.start,
+                              $stateParams.limit,
+                              $stateParams.sort
+                            );
+                        } else {
+                            return TasksService.getSubTasks($stateParams.entityId)
+                        }
                     }
                 }
             })
