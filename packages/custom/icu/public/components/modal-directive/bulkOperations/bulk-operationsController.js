@@ -27,9 +27,12 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         $uibModalInstance.dismiss('cancel');
     };
 
-    $scope.bulkUpdateEvery = (type, value) => {
+    $scope.bulkUpdateEvery = (type, value, flag) => {
         $scope.selectedTypes.forEach( entityName => {
             let entityArray = $scope.selectedArrays[entityName];
+            if(flag === 'tags' && entityArray.length){
+                $scope.tagUpdate(entityArray, entityName + 's');
+            }
             if(entityArray.length)$scope.bulkUpdate(type, value, entityArray, entityName + 's');
         })
     };
@@ -275,6 +278,9 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   $scope.removedTags = [];
   $scope.tags = [];
 
+  getUsedTags();
+  filterUsedTags();
+
   $scope.getlastInputText = function(val){
     $scope.lastTagInput = val;
   };
@@ -284,9 +290,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         $scope.addTag(query);
     }
   };
-
-  getUsedTags();
-  filterUsedTags();
 
   function getUsedTags(){
     let usedTags = $scope.selectedItems[0].tags;
@@ -311,18 +314,18 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   }
 
   $scope.addTagClicked = function () {
-      $scope.tagInputVisible = true;
-      $timeout(function () {
-          let element = angular.element('#addTag .ui-select-toggle')[0];
-          element.click();
-      }, 0);
+    $scope.tagInputVisible = true;
+    $timeout(function () {
+        let element = angular.element('#addTag .ui-select-toggle')[0];
+        element.click();
+    }, 0);
   };
 
-    $scope.addTag = function (tag) {
-      $scope.usedTags.push(tagsToBulkObjects(tag, false, false));
+  $scope.addTag = function (tag) {
+    $scope.usedTags.push(tagsToBulkObjects(tag, false, false));
 
-      $scope.tagInputVisible = false;
-      filterUsedTags();
+    $scope.tagInputVisible = false;
+    filterUsedTags();
   };
 
   $scope.removeTag = function (tagObj) {
@@ -336,31 +339,35 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     filterUsedTags();
   };
 
-  $scope.tagUpdate = function(){
+  $scope.tagUpdate = function(entityArray, entityName){
+    debugger
     let updateObject = $scope.usedTags.filter( bulkObject => !bulkObject.remove);
-    let updateIds = updateObject.map( bulkObject => bulkObject.tag);
+
+    let updatedTags = updateObject.map( bulkObject => bulkObject.tag);
 
     let removeObject = $scope.usedTags.filter( bulkObject => bulkObject.remove);
     let removedIds = removeObject.map( bulkObject => bulkObject.tag);
 
-    let idsArray = $scope.selectedItems.map(entity => entity._id);
+    let idsArray = entityArray.map(entity => entity._id);
     let changedBulkObject = {
       ids: idsArray
     };
 
-    if(updateIds.length){
+    if(updatedTags.length){
       changedBulkObject.update = {};
-      changedBulkObject.update.tags = updateIds;
+      changedBulkObject.update.tags = updatedTags;
     }
     if(removeObject.length){
       changedBulkObject.remove = {};
       changedBulkObject.remove.tags = removedIds;
     }
 
-    MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName)
+    MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
       .then(result => {
         for(let i = 0; i < $scope.selectedItems.length; i++){
           let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
+          if(!entity)continue;
+
           if(typeof entity.due === 'string')entity.due = new Date(entity.due);
           entity = _.pick(entity, ['status', 'watchers', 'assign', 'due', 'tags', 'recycled']);
           Object.assign($scope.selectedItems[i], entity);

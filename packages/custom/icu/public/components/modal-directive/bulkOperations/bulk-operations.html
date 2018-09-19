@@ -194,7 +194,7 @@
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !selected}"
-                ng-click="tagUpdate()">
+                ng-click="bulkUpdateEvery(null, null, 'tags')">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
