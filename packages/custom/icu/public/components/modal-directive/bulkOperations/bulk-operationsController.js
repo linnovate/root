@@ -340,7 +340,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   };
 
   $scope.tagUpdate = function(entityArray, entityName){
-    debugger
     let updateObject = $scope.usedTags.filter( bulkObject => !bulkObject.remove);
 
     let updatedTags = updateObject.map( bulkObject => bulkObject.tag);
