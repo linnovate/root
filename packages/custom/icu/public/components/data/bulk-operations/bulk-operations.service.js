@@ -36,8 +36,13 @@ angular.module('mean.icu.data.multipleselectservice', [])
             'delete': ['tasks', 'projects', 'discussions', 'officeDocuments', 'folders', 'offices', 'templateDocs']
         };
 
-        function showButton(operation, entityType){
-            return _.includes(bulkShowingMap[operation], entityType);
+        function showButton(operation){
+            return Object.keys(selectedEntityArrays).every( entity => {
+                return (
+                    (selectedEntityArrays[entity].length === 0)
+                    || _.includes(bulkShowingMap[operation], entity + 's')
+                )
+            })
         }
 
         let cornerStates = [
@@ -130,7 +135,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
         function haveBulkPerms(type) {
             let havePermissions = selectedItems.every((entity) => {
                 let userPermissions = entity.permissions.find( permission =>  permission.id === me._id);
-                return _.includes(bulkPermissionsMap[type], userPermissions.level);
+                return userPermissions ? _.includes(bulkPermissionsMap[type], userPermissions.level) : false;
             });
 
             return havePermissions;
