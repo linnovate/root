@@ -35,6 +35,8 @@ angular.module('mean.icu.ui.membersfooter', [])
             }
 
             UsersService.getAll().then(users=>{
+                if(!$scope.entity.watchers)return;
+
                 for(var i = 0; i < $scope.entity.watchers.length; i++){
                     if(typeof $scope.entity.watchers[i] === 'string'){
                         $scope.entity.watchers[i] = _.find(users, { '_id': $scope.entity.watchers[i]});
