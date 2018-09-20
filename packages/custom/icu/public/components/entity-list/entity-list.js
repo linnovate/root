@@ -430,7 +430,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         return newArray;
     }
 
-    function removeDuplicates(array){
+    function removeDuplicates(array) {
       return _.uniq(array, _.property('_id'));
     }
 

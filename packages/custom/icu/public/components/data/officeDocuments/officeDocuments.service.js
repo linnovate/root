@@ -167,6 +167,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 var url = ApiUri  + '/folders/' + id + EntityPrefix;
                 console.log("by folder " +url+ qs);
                 return $http.get(url + qs).then(function(result) {
+                    result.data.content.forEach(function(officeDocument) {
+                        officeDocument.created = new Date(officeDocument.created);
+                    });
                     WarningsService.setWarning(result.headers().warning);
                     return PaginationService.processResponse(result.data);
                 });

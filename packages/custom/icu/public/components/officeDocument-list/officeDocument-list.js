@@ -75,7 +75,8 @@ function OfficeDocumentListController($scope, $state, BoldedService, NotifyingSe
     function loadNext(start, LIMIT, sort){
         return OfficeDocumentsService.getAll(start , LIMIT , sort)
             .then(function(docs){
-                for(let i = 0; i < docs.data.length; i++){ $scope.items.push(docs.data[i]) }
+                $scope.items = $scope.items.concat(docs.data);
+                $scope.items = _.uniq($scope.items, _.property('_id'));
                 return docs.data;
             });
     }
