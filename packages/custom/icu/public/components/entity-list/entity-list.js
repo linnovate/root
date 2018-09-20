@@ -368,7 +368,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
         function loadWithVisibleCheck(listEnd, loadedVisibleCount) {
             if (!$scope.isLoading) {
-                if (loadedVisibleCount < 25 || !!listEnd) {
+                if (loadedVisibleCount < 25 && !listEnd) {
                     var start = $scope.items.length;
                     var sort = 'created';
                     //$scope.order.field;
