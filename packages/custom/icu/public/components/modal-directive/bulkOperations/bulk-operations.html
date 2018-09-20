@@ -128,20 +128,20 @@
         {{ selectedArrays[entity].length }} {{ entity | i18next }}
       </span>
         <div class="date"
-             ng-if="entityName !== 'discussions'">
+             ng-if="showNormalDueInput()">
             <input ng-model="selectedDue.date" placeholder="{{ duePlaceholder | i18next }}" ui-date="dueOptions" />
         </div>
 
         <discussion-due
-            ng-if="entityName == 'discussions'"
-            item="selectedDue"
+            ng-if="showDiscussionsDueInput()"
+            item="selectedDiscussionDue"
             on-change="setDiscussionDue"
             in-modal="true">
         </discussion-due>
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !enableSetDueDate }"
-                ng-click="dateCheck()">
+                ng-click="bulkUpdateEvery('due', selectedDue.date)">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
@@ -152,14 +152,6 @@
       <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
         {{ selectedArrays[entity].length }} {{ entity | i18next }}
       </span>
-
-        <!--<div ng-repeat="tag in tags" class='item'>-->
-            <!--<span>{{tag}}</span>-->
-            <!--<button class="detail-tags-item-remove" ng-click="removeTag(tag)">-->
-                <!--<i class="fa fa-times"></i>-->
-            <!--</button>-->
-        <!--</div>-->
-
         <ul class="items detail-tags-items">
 
             <li class="tags-item" ng-repeat="tag in usedTagsFiltered track by $index">
@@ -194,7 +186,7 @@
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !selected}"
-                ng-click="bulkUpdateEvery(null, null, 'tags')">
+                ng-click="bulkUpdateEvery('tag', null)">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>

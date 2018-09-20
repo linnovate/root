@@ -27,14 +27,23 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         $uibModalInstance.dismiss('cancel');
     };
 
-    $scope.bulkUpdateEvery = (type, value, flag) => {
-        $scope.selectedTypes.forEach( entityName => {
+    $scope.bulkUpdateEvery = (type, value) => {
+        for(let i = 0; i < $scope.selectedTypes.length; i++){
+            let entityName = $scope.selectedTypes[i];
             let entityArray = $scope.selectedArrays[entityName];
-            if(flag === 'tags' && entityArray.length){
+            if(!entityArray.length)continue;
+
+            if( type === 'tag'){
                 $scope.tagUpdate(entityArray, entityName + 's');
+                return;
             }
-            if(entityArray.length)$scope.bulkUpdate(type, value, entityArray, entityName + 's');
-        })
+            if( type === 'due' && entityName === 'discussion' ){
+                $scope.dateCheck(entityArray, entityName + 's');
+                return;
+            }
+
+            $scope.bulkUpdate(type, value, entityArray, entityName + 's');
+        }
     };
 
     $scope.bulkUpdate = function (type, value, selectedArray = $scope.selectedItems, entityName = $scope.entityName) {
@@ -110,7 +119,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                         if(!entity)continue;
 
                         if(typeof entity.due === 'string')entity.due = new Date(entity.due);
-                        entity = _.pick(entity, ['status', 'watchers', 'assign', 'due', 'tags', 'recycled']);
+                        entity = _.pick(entity, ['status', 'watchers', 'permissions', 'assign', 'due', 'tags', 'recycled']);
                         Object.assign($scope.selectedItems[i], entity);
                     }
                     if(changedBulkObject.update.delete){
@@ -226,6 +235,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     //----------------------DUE----------------------//
 
     $scope.selectedDue = {};
+    $scope.selectedDiscussionDue = {};
     $scope.setDueDate = 'setDueDate';
     $scope.dueDateErrorMessage = 'couldNotSetPreviousTime';
     $scope.duePlaceholder = $scope.setDueDate;
@@ -238,29 +248,28 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         dateFormat: 'dd.mm.yy'
     };
 
-    $scope.dateCheck = function(){
-        if($scope.entityName !== 'discussions'){
+    $scope.dateCheck = function(entityArray, entityName){
+        if(entityName !== 'discussions'){
           if(!$scope.entityDateCheck()){
             $scope.duePlaceholder = $scope.dueDateErrorMessage;
             $scope.selectedDue.date = '';
             return;
           } else {
-            $scope.bulkUpdate('due', $scope.selectedDue.date);
+            $scope.bulkUpdate('due', $scope.selectedDue.date, entityArray, entityName);
           }
         } else {
           if($scope.setDiscussionDue()){
-            $scope.bulkUpdate('due', $scope.selectedDue);
+            $scope.bulkUpdate('due', $scope.selectedDiscussionDue, entityArray, entityName);
           }
         }
     };
 
     $scope.setDiscussionDue = function(){
-      let selectedDue = $scope.selectedDue;
-      $scope.enableSetDueDate = (
-        (selectedDue.startDate && selectedDue.endDate && selectedDue.startTime && selectedDue.endTime)
-        || (selectedDue.startDate && selectedDue.allDay)
-      );
-      return $scope.enableSetDueDate;
+      let selectedDue = $scope.selectedDiscussionDue,
+        startEndTime = selectedDue.startDate && selectedDue.endDate && selectedDue.startTime && selectedDue.endTime,
+        startAllDay = selectedDue.startDate && selectedDue.allDay;
+
+      return $scope.enableSetDueDate = !!startEndTime || !!startAllDay;
     };
 
     $scope.entityDateCheck = function(){
@@ -269,6 +278,13 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
         return $scope.enableSetDueDate;
     };
+
+    $scope.showNormalDueInput = () => {
+        return $scope.selectedTypes.some( entityType => {
+            return entityType !== 'discussion' && !!$scope.selectedArrays[entityType].length
+        })
+    };
+    $scope.showDiscussionsDueInput = () => !!$scope.selectedArrays['discussion'].length;
 
   //------------------------------------------------//
   //----------------------TAGS----------------------//
