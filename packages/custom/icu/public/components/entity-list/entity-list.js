@@ -93,6 +93,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             $scope.sorting.isReverse = !$scope.sorting.isReverse;
         }
 
+        $scope.refreshVisibleItems();
+
         /*Made By OHAD - Needed for reversing sort*/
         $state.go($state.current.name, {
             sort: $scope.sorting.field
@@ -396,8 +398,9 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
                     $scope.visibleItems = removeDuplicates((filterResults($scope.items)))
                 })
         } else {
-            $scope.visibleItems = removeDuplicates(filterResults(removeDuplicates($scope.items)))
+            $scope.visibleItems = removeDuplicates(filterResults($scope.items))
         }
+
     };
 
     function getArrIds(arr){
