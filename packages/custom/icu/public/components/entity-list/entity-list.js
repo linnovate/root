@@ -99,6 +99,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $state.go($state.current.name, {
             sort: $scope.sorting.field
         });
+
+        $scope.refreshVisibleItems();
     };
 
     $scope.sorting = {

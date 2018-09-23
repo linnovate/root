@@ -34,13 +34,13 @@
             <i class="fa fa-file-excel-o"></i>
         </button>
     </div>
-    
+
     <div ng-if="showOfficeDocumentsExcel" class="select-wrapper">
         <div tooltips tooltip-template="{{'Excel Summary' | i18next}}">
             <ui-select ng-model="excel.selected"  search-enabled="false" >
                     <ui-select-match >  <button class="excel"><i class="fa fa-file-excel-o"></i></button> </ui-select-match>
                     <ui-select-choices class="sorting" repeat="office in excel.officeList">
-                      <div  icu-open-modal="export-excel-by-date" entity-name="export-excel-by-date" show-modal="true" modal-name="export-excel-by-date" data="office" 
+                      <div  icu-open-modal="export-excel-by-date" entity-name="export-excel-by-date" show-modal="true" modal-name="export-excel-by-date" data="office"
                       class="DocumentIconsLine att officeSelect">
                       {{office.title}}
                     </div>
