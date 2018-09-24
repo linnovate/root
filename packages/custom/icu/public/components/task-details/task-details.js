@@ -189,7 +189,57 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     )
   }
 
+  $scope.items = tasks.data || tasks;
+
+  var creatingStatuses = {
+    NotCreated: 0,
+    Creating: 1,
+    Created: 2
+  };
+
+  $scope.duplicate = function(parent) {
+    let clonedItem = JSON.parse(JSON.stringify($scope.item));
+    let newItem = {
+      bolded: clonedItem.bolded,
+      creator: clonedItem.creator,
+      description: clonedItem.description,
+      discussions: clonedItem.discussions,
+      permissions: clonedItem.permissions,
+      sources: clonedItem.sources,
+      status: clonedItem.status,
+      //subTasks: clonedItem.subTasks,
+      tags: clonedItem.tags,
+      title: clonedItem.title,
+      watchers: clonedItem.watchers,
+      __state: creatingStatuses.NotCreated,
+      __autocomplete: false
+    };
+
+    // let newItem = JSON.parse(JSON.stringify($scope.item));
+    // delete newItem.id;
+    // delete newItem._id;
+    // delete newItem.created;
+    // delete newItem.updated;
+    // delete newItem.subTasks;
+
+    if(parent){
+      newItem[parent.type] = parent.id;
+    }
+
+    TasksService.create(newItem).then(function(result) {
+      $scope.items.push(result);
+      TasksService.data.push(result);
+      console.dir(result);
+      refreshList();
+    });
+  };
+
   $scope.menuItems = [{
+    label: 'duplicateTask',
+    fa: 'fa-times-circle',
+    display: true,
+    action: $scope.duplicate,
+  },{
     label: 'recycleTask',
     fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
