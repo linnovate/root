@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
 
-function TaskDetailsController($scope, entity, tags, projects, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
+function TaskDetailsController($scope, entity, tags, projects, tasks, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
 
   // ==================================================== init ==================================================== //
 
@@ -197,41 +197,36 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     Created: 2
   };
 
-  $scope.duplicate = function(parent) {
-    let clonedItem = JSON.parse(JSON.stringify($scope.item));
+  $scope.duplicate = function() {
     let newItem = {
-      bolded: clonedItem.bolded,
-      creator: clonedItem.creator,
-      description: clonedItem.description,
-      discussions: clonedItem.discussions,
-      permissions: clonedItem.permissions,
-      sources: clonedItem.sources,
-      status: clonedItem.status,
-      //subTasks: clonedItem.subTasks,
-      tags: clonedItem.tags,
-      title: clonedItem.title,
-      watchers: clonedItem.watchers,
+      title: '',
+      watchers: [],
+      tags: [],
       __state: creatingStatuses.NotCreated,
       __autocomplete: false
     };
 
-    // let newItem = JSON.parse(JSON.stringify($scope.item));
-    // delete newItem.id;
-    // delete newItem._id;
-    // delete newItem.created;
-    // delete newItem.updated;
-    // delete newItem.subTasks;
+    let duplicate = _.pick($scope.item,
+      [
+        'bolded',
+        'creator',
+        'discussions',
+        'permissions',
+        'status',
+        'tags',
+        'title',
+        'description',
+        'watchers',
+        '__state',
+        '__autocomplete',
+      ]);
 
-    if(parent){
-      newItem[parent.type] = parent.id;
-    }
-
-    TasksService.create(newItem).then(function(result) {
-      $scope.items.push(result);
-      TasksService.data.push(result);
-      console.dir(result);
-      refreshList();
-    });
+    Object.assign(newItem, duplicate);
+    TasksService.create(newItem)
+      .then( result => {
+        $scope.items.push(result);
+        refreshList();
+      })
   };
 
   $scope.menuItems = [{
