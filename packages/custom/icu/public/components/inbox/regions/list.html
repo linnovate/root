@@ -1,10 +1,15 @@
-<div class="list-table">
-    <table class="search">
+<div class="inbox-table">
+    <table>
 
         <tbody>
-        <tr data-ng-repeat="activity in activities track by $index">
-
-        </tr>
+            <tr ng-repeat="activity in activities">
+                <td>{{activity.issue}}</td>
+                <td>{{activity.issueId}}</td>
+                {{activity.issue}}
+                {{activity.type}}
+                {{activity.creator._id}}
+            </tr>
         </tbody>
+
     </table>
 </div>

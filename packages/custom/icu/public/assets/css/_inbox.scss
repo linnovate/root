@@ -1,0 +1,17 @@
+.inbox-container {
+    .inbox-table {
+        table{
+            @include table;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 700;
+
+            tr {
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+    }
+}

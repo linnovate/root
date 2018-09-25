@@ -1587,19 +1587,27 @@ angular.module('mean.icu').config([
             })
             .state('main.inbox', {
                 url: '/inbox',
+                params: {
+
+                },
                 views: {
                     'middlepane@main': {
                         templateUrl: '/icu/components/inbox/inbox.html',
                         controller: 'InboxListController'
                     },
                     'detailspane@main': {
-                        templateUrl: '/icu/components/inbox/inbox-details.html',
+                        templateUrl: '/icu/components/inbox/regions/inbox-details.html',
                         controller: 'InboxListController'
                     }
                 },
                 resolve: {
-                    activities: function (ActivitiesService, $stateParams) {
-                        return ActivitiesService.getByUserId($stateParams.id);
+                    me: function (UsersService) {
+                        return UsersService.getMe().then(function (result) {
+                            return UsersService.getById(result._id);
+                        });
+                    },
+                    activities: function (ActivitiesService, $stateParams, me) {
+                        return ActivitiesService.getByUserId(me._id);
                     }
                 }
             })

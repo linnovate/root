@@ -6,7 +6,10 @@ angular.module('mean.icu.data.activitiesservice', [])
     var data ;
 
     function getByUserId(id) {
-        return [];
+        return $http.get(ApiUri + EntityPrefix + '/byUser/' + id)
+            .then(function(result) {
+                return data = result.data;
+            });
     }
 
     function getUser(updates) {
