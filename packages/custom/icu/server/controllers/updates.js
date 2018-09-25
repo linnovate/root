@@ -100,15 +100,14 @@ exports.getByUser = function(req, res, next) {
     }
 
     let id = req.params.id;
-    // Update.find({
-    //     creator: id
-    // })
-    // .populate('userObj', 'name lastname profile')
-    // .populate('creator', 'name lastname profile')
-    // .then(function(updates) {
-    //     req.locals.result = updates;
-        next();
-    // });
+    Update.find({
+        creator: id
+    })
+    .populate('userObj', 'name lastname profile')
+    .populate('creator', 'name lastname profile')
+    .then(function(updates) {
+        res.status(200).send(updates);
+    });
 };
 
 exports.created = function(req, res, next) {

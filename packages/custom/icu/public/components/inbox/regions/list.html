@@ -1,6 +1,15 @@
-<div class="inbox-table scroll">
-    <table infinite-scroll='loadMore()' infinite-scroll-container="'.inbox-table'" infinite-scroll-parent>
-        <tbody ng-include="'/icu/components/inbox/regions/row.html'">
+<div class="inbox-table">
+    <table>
+
+        <tbody>
+            <tr ng-repeat="activity in activities">
+                <td>{{activity.issue}}</td>
+                <td>{{activity.issueId}}</td>
+                {{activity.issue}}
+                {{activity.type}}
+                {{activity.creator._id}}
+            </tr>
         </tbody>
+
     </table>
 </div>
