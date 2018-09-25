@@ -1,6 +1,9 @@
-<div class="inbox-container">
+<div class="inbox-list" ng-controller="InboxController">
   <div ng-include="'/icu/components/inbox/regions/header.html'"></div>
 
-  <div class="inbox-list" ng-include="'/icu/components/inbox/regions/list.html'">
+  <div
+    ng-include="'/icu/components/inbox/regions/list.html'"
+    class="inbox-container"
+  >
   </div>
 </div>

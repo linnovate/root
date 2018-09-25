@@ -1587,61 +1587,62 @@ angular.module('mean.icu').config([
             })
             .state('main.inbox', {
                 url: '/inbox',
-                params: {
-                    start: 0,
-                    limit: LIMIT,
-                    sort: SORT
-                },
                 views: {
                     'middlepane@main': {
                         templateUrl: '/icu/components/inbox/inbox.html',
                         controller: 'InboxListController'
                     },
                     'detailspane@main': {
-                        templateUrl: '/icu/components/inbox/regions/inbox-details.html',
+                        templateUrl: '/icu/components/inbox/inbox-details.html',
                         controller: 'InboxListController'
                     }
                 },
                 resolve: {
-                    me: (UsersService) => UsersService.getMe().then((result) =>  UsersService.getById(result._id)),
-                    activities: (ActivitiesService, $stateParams, me) => {
-                        return ActivitiesService.getByUserId(
-                            me._id,
-                            $stateParams.start,
-                            $stateParams.limit,
-                            $stateParams.sort
-                        )
-                    },
-                    entities: (activities, InboxService) => InboxService.getUpdateEntities(activities.data)
-
+                    activities: function (ActivitiesService, $stateParams) {
+                        return ActivitiesService.getByUserId($stateParams.id);
+                    }
                 }
             })
+            .state('main.inbox.recycled', getRecycledEntities('recycled'))
             .state('main.inbox.task', getTaskDetailsState('/task'))
             .state('main.inbox.task.activities', getDetailsTabState('task', 'activities'))
+            .state('main.inbox.task.activities.modal', getDetailspaneModal())
             .state('main.inbox.task.documents', getDetailsTabState('task', 'documents'))
 
             .state('main.inbox.project', getProjectDetailsState('/project'))
             .state('main.inbox.project.activities', getDetailsTabState('project', 'activities'))
+            .state('main.inbox.project.activities.modal', getDetailspaneModal())
             .state('main.inbox.project.documents', getDetailsTabState('project', 'documents'))
+            .state('main.inbox.project.tasks', getDetailsTabState('project', 'tasks'))
 
             .state('main.inbox.discussion', getDiscussionDetailsState('/discussion'))
             .state('main.inbox.discussion.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.inbox.discussion.activities.modal', getDetailspaneModal())
             .state('main.inbox.discussion.documents', getDetailsTabState('discussion', 'documents'))
+            .state('main.inbox.discussion.tasks', getDetailsTabState('discussion', 'tasks'))
 
             .state('main.inbox.office', getOfficeDetailsState('/office'))
             .state('main.inbox.office.activities', getDetailsTabState('office', 'activities'))
+            .state('main.inbox.office.activities.modal', getDetailspaneModal())
             .state('main.inbox.office.documents', getDetailsTabState('office', 'documents'))
+            .state('main.inbox.office.tasks', getDetailsTabState('office', 'tasks'))
 
             .state('main.inbox.templateDoc', getTemplateDocDetailsState('/templateDoc'))
             .state('main.inbox.templateDoc.activities', getDetailsTabState('templateDoc', 'activities'))
+            .state('main.inbox.templateDoc.activities.modal', getDetailspaneModal())
             .state('main.inbox.templateDoc.documents', getDetailsTabState('templateDoc', 'documents'))
+            .state('main.inbox.templateDoc.tasks', getDetailsTabState('templateDoc', 'tasks'))
 
             .state('main.inbox.folder', getFolderDetailsState('/folder'))
             .state('main.inbox.folder.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.inbox.folder.activities.modal', getDetailspaneModal())
             .state('main.inbox.folder.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.inbox.folder.tasks', getDetailsTabState('folder', 'tasks'))
 
             .state('main.inbox.officeDocument', getOfficeDocumentDetailsState('/officeDocument'))
             .state('main.inbox.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.inbox.officeDocument.activities.modal', getDetailspaneModal())
+            .state('main.inbox.officeDocument.documents', getDetailsTabState('officeDocument', 'documents'))
 
         // .state('main.documents', {
         //     url: '/docuoments',
