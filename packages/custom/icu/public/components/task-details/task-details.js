@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
 
-function TaskDetailsController($scope, entity, tags, projects, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
+function TaskDetailsController($scope, entity, tags, projects, tasks, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
 
   // ==================================================== init ==================================================== //
 
@@ -189,7 +189,52 @@ function TaskDetailsController($scope, entity, tags, projects, $state, TasksServ
     )
   }
 
+  $scope.items = tasks.data || tasks;
+
+  var creatingStatuses = {
+    NotCreated: 0,
+    Creating: 1,
+    Created: 2
+  };
+
+  $scope.duplicate = function() {
+    let newItem = {
+      title: '',
+      watchers: [],
+      tags: [],
+      __state: creatingStatuses.NotCreated,
+      __autocomplete: false
+    };
+
+    let duplicate = _.pick($scope.item,
+      [
+        'bolded',
+        'creator',
+        'discussions',
+        'permissions',
+        'status',
+        'tags',
+        'title',
+        'description',
+        'watchers',
+        '__state',
+        '__autocomplete',
+      ]);
+
+    Object.assign(newItem, duplicate);
+    TasksService.create(newItem)
+      .then( result => {
+        $scope.items.push(result);
+        refreshList();
+      })
+  };
+
   $scope.menuItems = [{
+    label: 'duplicateTask',
+    fa: 'fa-times-circle',
+    display: true,
+    action: $scope.duplicate,
+  },{
     label: 'recycleTask',
     fa: 'fa-times-circle',
     display: !$scope.item.hasOwnProperty('recycled'),
