@@ -34,6 +34,7 @@ var express = require('express');
 var ftp = require('../services/ftp.js');
 var boldedService = require('../services/bolded.js');
 var bulk = require('../controllers/bulk');
+var inbox = require('../controllers/inbox');
 var publishProject = require('../controllers/publish-project');
 
 //update mapping - OHAD
@@ -459,6 +460,9 @@ module.exports = function(Icu, app) {
     .put(bulk.update)
     .patch(bulk.recycle)
     .delete(bulk.remove);
+
+  app.route('/api/inbox')
+    .post(inbox.getUpdateEntities);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
