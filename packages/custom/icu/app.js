@@ -141,6 +141,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.searchlistfilter',
         'mean.icu.data.activitiesservice',
         'mean.icu.data.multipleselectservice',
+        'mean.icu.data.inboxservice',
         'mean.icu.data.documentsservice',
         'mean.icu.data.attachmentsservice',
         'mean.icu.data.filesservice',

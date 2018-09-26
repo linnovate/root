@@ -1601,14 +1601,11 @@ angular.module('mean.icu').config([
                     }
                 },
                 resolve: {
-                    me: function (UsersService) {
-                        return UsersService.getMe().then(function (result) {
-                            return UsersService.getById(result._id);
-                        });
-                    },
-                    activities: function (ActivitiesService, $stateParams, me) {
-                        return ActivitiesService.getByUserId(me._id);
-                    }
+                    me: (UsersService) => UsersService.getMe()
+                        .then((result) =>  UsersService.getById(result._id)),
+                    activities: (ActivitiesService, $stateParams, me) => ActivitiesService.getByUserId(me._id),
+                    entities: (activities, InboxService) => InboxService.getUpdateEntities(activities)
+
                 }
             })
             .state('main.inbox.task', getTaskDetailsState('/task'))

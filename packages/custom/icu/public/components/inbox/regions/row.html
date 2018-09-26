@@ -1,0 +1,18 @@
+<tr ng-repeat="activity in activities">
+    <td>
+        <div class="update-head">
+            <div class="title">{{activity.entity.title}}</div>
+            <div class="parent">{{getParent(activity)}}</div>
+        </div>
+        <div class="update-body">
+            <div icu-avatar user="activity.creator"></div>
+            <div class="update-content">
+                <div class="update-info">
+                    <div class="update-action">{{activity.type}}</div>
+                    <div class="update-date">{{formatDate(activity.created)}}</div>
+                </div>
+                <div class="update-data">{{getUpdateData(activity)}}</div>
+            </div>
+        </div>
+    </td>
+</tr>
