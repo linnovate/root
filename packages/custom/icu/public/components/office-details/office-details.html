@@ -20,18 +20,57 @@
 
   </div>
 
-  <div class="detail-title"
-       ng-class="{ 'disabled' : !havePermissions('description')}">
-    <div class="item-title"
+  <div ng-if="!disabled && havePermissions('description')">
+    <div class="detail-title">
+      <div class="item-title"
          contenteditable="true"
          tabindex="1"
          strip-br="true"
          ng-model="item.title"
-         medium-editor>
+         medium-editor
+      >
+      </div>
+    </div>
+
+    <div class="detail-desc"
+       ng-class="{ 'disabled' : !havePermissions('description')}"
+       contenteditable="true"
+       tabindex="2"
+       strip-br="true"
+       medium-editor
+       ng-model="item.description"
+       options="{{editorOptions}}"
+    >
     </div>
   </div>
 
-  <div class="detail-desc" ng-class="{ 'disabled' : !havePermissions('description')}" contenteditable="true" tabindex="2" strip-br="true" medium-editor ng-model="item.description" options="{{editorOptions}}"></div>
+  <div ng-if="disabled || !havePermissions('description')">
+    <div class="detail-title">
+      <div class="item-title"
+           contenteditable="true"
+           tabindex="1"
+           strip-br="true"
+           ng-model="item.title"
+           medium-editor
+           data-disable-editing="true"
+           data-disable-toolbar="true"
+      >
+      </div>
+    </div>
+
+    <div class="detail-desc"
+         ng-class="{ 'disabled' : !havePermissions('description')}"
+         contenteditable="true"
+         tabindex="2"
+         strip-br="true"
+         medium-editor
+         ng-model="item.description"
+         options="{{editorOptions}}"
+         data-disable-editing="true"
+         data-disable-toolbar="true"
+    >
+    </div>
+  </div>
 
   <div class="detail-fields">
 

@@ -8,7 +8,7 @@
 
     <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
 
-    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
+    <detail-menu items="menuItems"></detail-menu>
 
 </div>
 
@@ -34,26 +34,50 @@
     {{currentContext.entity.title}}
   </div>
 
-  <div class="detail-title"ng-class="{ 'disabled' : !havePermissions('description')}">
-    <div class="item-title"
-       ng-init="enableInputs()"
-       tabindex="1"
-       ng-model="item.title"
-       medium-editor
-       strip-br="true"
-    >
-    </div>
-  </div>
 
-  <div class="detail-desc"
-       ng-class="{ 'disabled' : !havePermissions('description')}"
+  <div ng-if="!disabled && havePermissions('description')">
+    <div class="detail-title" >
+      <div class="item-title"
+         ng-init="enableInputs()"
+         tabindex="1"
+         ng-model="item.title"
+         medium-editor
+         strip-br="true"
+      >
+      </div>
+    </div>
+    <div class="detail-desc"
        tabindex="2"
        ng-model="item.description"
        medium-editor
        strip-br="true"
-       contenteditable="true"
        options="{{editorOptions}}"
-  >
+    >
+    </div>
+  </div>
+
+  <div ng-if="disabled || !havePermissions('description')">
+    <div class="detail-title" >
+      <div class="item-title"
+         tabindex="1"
+         ng-model="item.title"
+         medium-editor
+         strip-br="true"
+         data-disable-editing="true"
+         data-disable-toolbar="true"
+      >
+      </div>
+    </div>
+    <div class="detail-desc"
+       tabindex="2"
+       ng-model="item.description"
+       medium-editor
+       strip-br="true"
+       options="{{editorOptions}}"
+       data-disable-editing="true"
+       data-disable-toolbar="true"
+    >
+    </div>
   </div>
 
   <detail-tags value="item.tags" ng-class="{ 'disabled' : !havePermissions('tags')}" list="tags" on-change="onTags"></detail-tags>
