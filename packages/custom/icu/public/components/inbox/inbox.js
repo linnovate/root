@@ -42,7 +42,10 @@ angular.module('mean.icu.ui.inbox', [])
             let entity = activity.entity;
             let parent = entity.project || entity.folder || entity.office;
 
-            return parent ? parent.title : '';
+            if(parent){
+                activity.parent = parent.title;
+                activity.parentColor = parent.color;
+            }
         };
 
         function getEntityById(id){
@@ -64,6 +67,6 @@ angular.module('mean.icu.ui.inbox', [])
             let hours = date.getHours();
             let minutes = date.getMinutes();
 
-            return `${minutes}/${hours} ${dd}.${mm}.${yy}`;
+            return `${hours}:${minutes} | ${dd}/${mm}/${yy}`;
         }
     });

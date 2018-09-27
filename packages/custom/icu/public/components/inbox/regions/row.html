@@ -1,8 +1,12 @@
 <tr ng-repeat="activity in activities">
     <td>
         <div class="update-head">
-            <div class="title">{{activity.entity.title}}</div>
-            <div class="parent">{{getParent(activity)}}</div>
+            <div class="title icon {{activity.issue}}">{{activity.entity.title}}</div>
+            <div class="parent"
+                 ng-style="{'background-color': '#' + activity.parentColor, 'color': 'white'}"
+                 ng-init="getParent(activity)">
+                {{activity.parent}}
+            </div>
         </div>
         <div class="update-body">
             <div icu-avatar user="activity.creator"></div>
