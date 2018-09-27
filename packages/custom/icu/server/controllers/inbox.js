@@ -30,6 +30,8 @@ function getUpdateEntities(req, res, next) {
         Promises.push(
             new Promise( resolve => {
                 return Model.find({ _id: { $in: entities[entityType] } })
+                    .populate('creator')
+                    .populate('userObj')
                     .populate('watchers')
                     .populate('project')
                     .populate('folder')
