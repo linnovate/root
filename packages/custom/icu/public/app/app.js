@@ -1601,8 +1601,7 @@ angular.module('mean.icu').config([
                     }
                 },
                 resolve: {
-                    me: (UsersService) => UsersService.getMe()
-                        .then((result) =>  UsersService.getById(result._id)),
+                    me: (UsersService) => UsersService.getMe().then((result) =>  UsersService.getById(result._id)),
                     activities: (ActivitiesService, $stateParams, me) => ActivitiesService.getByUserId(me._id),
                     entities: (activities, InboxService) => InboxService.getUpdateEntities(activities)
 
