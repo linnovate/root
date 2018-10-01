@@ -9,7 +9,9 @@ angular.module('mean.icu.ui.inbox', [])
         $scope.inboxState = 'main.inbox';
 
         $scope.getActivityDescription = (activity) => {
-            let creator = activity.entityObj.creator._id === me._id ? me.username : activity.entityObj.creator.username;
+            let creator;
+            if(activity.entityObj)
+                creator = activity.entityObj.creator._id === me._id ? me.username : activity.entityObj.creator.username;
 
             switch (activity.type){
                 case 'create' :
