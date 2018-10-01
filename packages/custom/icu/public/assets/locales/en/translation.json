@@ -404,5 +404,11 @@
   "yes": "yes",
   "yesterday": "Yesterday",
   "youMustEnterAName": "You must enter a name",
-  "youMustEnterAValidEmailAddress": "You must enter a valid email address"
+  "youMustEnterAValidEmailAddress": "You must enter a valid email address",
+  "youAddedAsWatcher": "You added as watcher",
+  "addedYouAsWatcher": "added you as watcher",
+  "changedParentOf": "changed parent of",
+  "bindedEntity": "binded entity",
+  "unassigned": "unassigned",
+  "updated": "updated"
 }

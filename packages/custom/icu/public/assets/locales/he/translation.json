@@ -411,5 +411,11 @@
   "yes": "אישור",
   "yesteday": "אתמול",
   "youMustEnterAName": "You must enter a name",
-  "youMustEnterAValidEmailAddress": "You must enter a valid email address"
+  "youMustEnterAValidEmailAddress": "You must enter a valid email address",
+  "youAddedAsWatcher": "אתה הוסיף בתור צופה",
+  "addedYouAsWatcher": "הוסיף בתור צופה",
+  "changedParentOf": "שינוי הורה",
+  "bindedEntity": "נקשר הישות",
+  "unassigned": "ללא הקצאה",
+  "updated": "מְעוּדכָּן"
 }
