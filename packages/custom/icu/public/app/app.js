@@ -1483,7 +1483,7 @@ angular.module('mean.icu').config([
                         controller: 'SearchListController'
                     },
                     'detailspane@main': {
-                        templateUrl: '/icu/components/search-list/inbox-details.html',
+                        templateUrl: '/icu/components/search-list/no-results.html',
                         controller: 'SearchListController'
                     }
                 },
