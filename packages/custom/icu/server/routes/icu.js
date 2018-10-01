@@ -301,7 +301,7 @@ module.exports = function(Icu, app) {
   // .post(updates.create, notification.sendUpdate)
     .get(updates.all, updates.getAttachmentsForUpdate);
   app.route('/api/updates/byUser/:id([0-9a-fA-F]{24})')
-    .get(updates.all, updates.getByUser);
+    .get(pagination.parseParams, updates.all, updates.getByUser, pagination.formResponse);
   app.route('/api/updates/:id([0-9a-fA-F]{24})')
     .get(updates.read, updates.getAttachmentsForUpdate)
     .put(updates.update);

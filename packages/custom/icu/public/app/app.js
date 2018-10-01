@@ -1588,7 +1588,9 @@ angular.module('mean.icu').config([
             .state('main.inbox', {
                 url: '/inbox',
                 params: {
-
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
                 },
                 views: {
                     'middlepane@main': {
@@ -1602,8 +1604,15 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     me: (UsersService) => UsersService.getMe().then((result) =>  UsersService.getById(result._id)),
-                    activities: (ActivitiesService, $stateParams, me) => ActivitiesService.getByUserId(me._id),
-                    entities: (activities, InboxService) => InboxService.getUpdateEntities(activities)
+                    activities: (ActivitiesService, $stateParams, me) => {
+                        return ActivitiesService.getByUserId(
+                            me._id,
+                            $stateParams.start,
+                            $stateParams.limit,
+                            $stateParams.sort
+                        )
+                    },
+                    entities: (activities, InboxService) => InboxService.getUpdateEntities(activities.data)
 
                 }
             })
