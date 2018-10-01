@@ -30,6 +30,7 @@ angular.module('mean.icu.data.permissionsservice', [])
         var editorPerms = {
             'summary' : true,
             'description' : true,
+            'detail-buttons' : true,
             'tabs' : true,
             'tags' : true,
             'tags.manageTasks' : true,
@@ -43,6 +44,7 @@ angular.module('mean.icu.data.permissionsservice', [])
         var commenterPerms = {
             'summary' : false,
             'description' : false,
+            'detail-buttons' : false,
             'tabs' : true,
             'tags' : false,
             'tags.manageTasks' : false,
@@ -56,6 +58,7 @@ angular.module('mean.icu.data.permissionsservice', [])
         var viewerPerms = {
             'summary' : false,
             'description' : false,
+            'detail-buttons' : false,
             'tabs' : true,
             'tags' : false,
             'tags.manageTasks' : false,

@@ -20,7 +20,7 @@
 
   </div>
 
-  <div class="detail-buttons">
+  <div class="detail-buttons" ng-if="haveEditiorsPermissions('detail-buttons')">
     <button class="detail-button send"
             ng-if="item.status == 'new'"
             icu-open-modal
