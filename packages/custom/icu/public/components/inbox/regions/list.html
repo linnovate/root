@@ -1,5 +1,5 @@
 <div class="inbox-table scroll">
-    <table>
+    <table infinite-scroll='loadMore()' infinite-scroll-container="'.inbox-table'" infinite-scroll-parent>
         <tbody ng-include="'/icu/components/inbox/regions/row.html'">
         </tbody>
     </table>

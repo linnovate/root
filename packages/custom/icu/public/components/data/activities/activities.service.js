@@ -1,14 +1,25 @@
 'use strict';
 
 angular.module('mean.icu.data.activitiesservice', [])
-.service('ActivitiesService', function (ApiUri, $http, UsersService, WarningsService) {
+.service('ActivitiesService', function (ApiUri, $http, UsersService, WarningsService, PaginationService) {
     var EntityPrefix = '/updates';
     var data ;
 
-    function getByUserId(id) {
-        return $http.get(ApiUri + EntityPrefix + '/byUser/' + id)
+    function getByUserId(id, start, limit, sort) {
+        var qs = querystring.encode({
+            start: start,
+            limit: limit,
+            sort: sort
+        });
+
+        if (qs.length) {
+            qs = '?' + qs;
+        }
+
+        return $http.get(ApiUri + EntityPrefix + '/byUser/' + id + qs)
             .then(function(result) {
-                return data = result.data;
+                let data = result.data.content ? result.data : [];
+                return PaginationService.processResponse(data);
             });
     }
 
