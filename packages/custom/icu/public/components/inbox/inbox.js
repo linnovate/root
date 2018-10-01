@@ -16,13 +16,13 @@ angular.module('mean.icu.ui.inbox', [])
                     return `${creator} ${$i18next('created')} ${activity.entityObj.title}`;
                     break;
                 case 'updateWatcher' :
-                    let newWatcher = activity.userObj.toString();
+                    let newWatcher = activity.userObj.name;
                     return (creator === me._id)
                         ? `${$i18next('youAddedAsWatcher')} ${newWatcher}`
                         : `${creator} ${$i18next('addedYouAsWatcher')}`;
                     break;
                 case 'removeWatcher' :
-                    return `${creator} ${$i18next('removedWatcher')} ${activity.userObj.username}`;
+                    return `${creator} ${$i18next('removeWatcher')} ${activity.userObj.name}`;
                     break;
                 case 'updateEntity' :
                     return `${creator} ${$i18next('changedParentOf')} ${activity.entityObj.title} ${$i18next('to')} ${activity.entityObj.title}`;
@@ -32,10 +32,10 @@ angular.module('mean.icu.ui.inbox', [])
                     break;
                 case 'assign' :
                 case 'assignNew' :
-                    return `${creator} ${$i18next('assigned')} ${activity.userObj.username} ${$i18next('to')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('assigned')} ${activity.userObj.name} ${$i18next('to')} ${activity.entityObj.title}`;
                     break;
                 case 'unassign' :
-                    return `${creator} ${$i18next('unassigned')} ${activity.userObj.username} ${$i18next('from')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('unassigned')} ${activity.userObj.name} ${$i18next('from')} ${activity.entityObj.title}`;
                     break;
                 case 'update' :
                 case 'updateNew' :
