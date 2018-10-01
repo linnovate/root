@@ -417,5 +417,14 @@
   "changedParentOf": "שינוי הורה",
   "bindedEntity": "נקשר הישות",
   "unassigned": "ללא הקצאה",
-  "updated": "מְעוּדכָּן"
+  "updated": "מְעוּדכָּן",
+  "changedDueDateTo": "שינוי תאריך יעד",
+  "leavedComment": "השאר תגובה",
+  "addedAttachment": "הוסף קובץ מצורף",
+  "addedLocation": "הוספה",
+  "changedStatusTo": "שינה את המצב ל",
+  "changedLocationTo": "מיקום שונה ל",
+  "removed": "הוסר",
+  "removedAttachment": "קבצים מצורפים",
+  "removedLocation": "מיקום שהוסר"
 }

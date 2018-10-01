@@ -39,13 +39,37 @@ angular.module('mean.icu.ui.inbox', [])
                 case 'unassign' :
                     return `${creator} ${$i18next('unassigned')} ${activity.userObj.name} ${$i18next('from')} ${activity.entityObj.title}`;
                     break;
+                case 'updateDue' :
+                    return `${creator} ${$i18next('changedDueDateTo')} ${activity.TaskDue}`;
+                    break;
+                case 'comment' :
+                    return `${creator} ${$i18next('leavedComment')} ${activity.description}`;
+                    break;
+                case 'document' :
+                    return `${creator} ${$i18next('addedAttachment')}`;
+                    break;
+                case 'documentDelete' :
+                    return `${creator} ${$i18next('removedAttachment')}`;
+                    break;
                 case 'update' :
                 case 'updateNew' :
                 case 'updateTitle' :
                 case 'updateNewTitle' :
                     return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
                     break;
-
+                case 'updateStatus' :
+                    return activity.status === 'deleted' ?
+                     `${creator} ${$i18next('removed')} ${activity.entityObj.title}` :
+                     `${creator} ${$i18next('changedStatusTo')} ${activity.status}`;
+                    break;
+                case 'updateNewLocation' :
+                    return`${creator} ${$i18next('addedLocation')} ${activity.status}`;
+                    break;
+                case 'updateLocation' :
+                    return activity.status === '' ?
+                     `${creator} ${$i18next('removedLocation')}` :
+                     `${creator} ${$i18next('changedLocationTo')} ${activity.status}`;
+                    break;
             }
         };
 
