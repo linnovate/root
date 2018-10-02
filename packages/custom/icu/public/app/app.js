@@ -1537,9 +1537,6 @@ angular.module('mean.icu').config([
                             }
                         }
                      },
-                    tasks: function (results) {
-                        return results.filter( r => r._type === 'task');
-                    },
                     term: function ($stateParams) {
                         return $stateParams.query;
                     }
