@@ -1533,14 +1533,12 @@ angular.module('mean.icu').config([
                                 return data;
                             } else {
                                 SearchService.results = SearchService.filteringResults = [];
-                                return {};
+                                return [];
                             }
                         }
                      },
                     tasks: function (results) {
-                        return _(results).filter(function (r) {
-                            return r._type === 'task';
-                        });
+                        return results.filter( r => r._type === 'task');
                     },
                     term: function ($stateParams) {
                         return $stateParams.query;
