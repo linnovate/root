@@ -22,11 +22,10 @@ var ftp = require('../services/ftp');
 
 var excel = require('../services/excel');
 var options = {
-  includes: 'assign watchers folder',
+  includes: 'assign watchers folder task',
   defaults: {watchers: []},
   conditions: {$or: [ {officemmah: {$exists: false}}]}
 };
-
 var document = crud('officeDocuments', options);
 Object.keys(document).forEach(function(methodName) {
   if(methodName !== 'destroy') {
@@ -1033,7 +1032,9 @@ if(req.query.folderId){
   Document.find({
     $and:qu
 
-  }).sort(obj).skip(start).limit(limit).populate('folder')
+  }).sort(obj).skip(start).limit(limit)
+  .populate('folder')
+  .populate('task')
   .populate('creator')
   .populate('updater')
   .populate('sender')
