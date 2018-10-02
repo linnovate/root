@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.officeDocumentdetails', []).controller('OfficeDocumentDetailsController', OfficeDocumentDetailsController);
 
-function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, UsersService, DetailsPaneService) {
+function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, NotifyingService, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, UsersService, $timeout, $http) {
 
   // ==================================================== init ==================================================== //
 
@@ -171,15 +171,18 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     $scope.update($scope.item, context);
   }
 
-  $scope.onCategory = function(value) {
-    let folderId = value && value._id || undefined;
-    var json = {
-      'name': 'folder',
-      'newVal': folderId,
+  $scope.onTaskRelation = function(value) {
+    $scope.item.task = value;
+    $scope.onCategory(value, 'task')
+  };
+
+  $scope.onCategory = function(value, type = 'folder') {
+    let id = value && value._id || undefined;
+    let json = {
+      'name': type,
+      'newVal': id,
     };
-//     if (!$scope.item.folder) {
-//       $scope.item.watchers = $scope.item.folder.watchers.concat($scope.item.watchers);
-//     }
+
     $scope.item.watchers = _.map(_.groupBy($scope.item.watchers, function (doc) {
       return doc._id || doc;
     }), function (grouped) {
@@ -187,8 +190,8 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     });
     json.watchers = $scope.item.watchers;
     OfficeDocumentsService.updateDocument($scope.item._id, json).then(function (res) {
-      OfficeDocumentsService.updateEntity($scope.item, backupEntity).then(function (result) {
-        if (folderId == undefined) {
+      OfficeDocumentsService.updateEntity($scope.item, backupEntity, type).then(function (result) {
+        if (id == undefined) {
           delete $scope.item.folder;
           $scope.signatures = undefined;
         } else {

@@ -6,7 +6,7 @@
  */
 angular.module('mean.icu.ui.detailsComponents').directive('detailCategory', detailCategory);
 
-function detailCategory(ProjectsService, OfficesService, FoldersService, context) {
+function detailCategory(TasksService, ProjectsService, OfficesService, FoldersService, context) {
 
   return {
     scope: {
@@ -15,6 +15,7 @@ function detailCategory(ProjectsService, OfficesService, FoldersService, context
       items: "=",
       onChange: "=",
       onCreate: "=",
+      type: "="
     },
     link: link,
     templateUrl: '/icu/components/details-components/detail-category/detail-category.html',
@@ -51,15 +52,17 @@ function detailCategory(ProjectsService, OfficesService, FoldersService, context
       $scope.selectText = null;
     }
 
-      var serviceMap = {
+      let serviceMap = {
           tasks: ProjectsService,
           officeDocuments: FoldersService,
           folders: OfficesService,
-          templateDocs: OfficesService
+          templateDocs: OfficesService,
+
+          task: TasksService
       };
 
     $scope.updateEntityList = function () {
-        let service = serviceMap[context.main];
+        let service = serviceMap[ $scope.type || context.main ];
         service.getAll(0, 0, 'created')
             .then(function (data) {
                 $scope.items = data.data || data;
@@ -71,7 +74,7 @@ function detailCategory(ProjectsService, OfficesService, FoldersService, context
 
 angular.module('mean.icu.ui.detailsComponents').filter('searchfilter', function() {
   return function(input, query) {
-    var r = RegExp('(' + query + ')');
+    let r = RegExp('(' + query + ')');
     if (input !== undefined)
       return input.replace(r, '<span class="super-class">$1</span>');
   }

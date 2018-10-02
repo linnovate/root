@@ -424,15 +424,15 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateEntity(officeDocument, prev) {
-            var activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
+        function updateEntity(officeDocument, prev, type = 'folder') {
+            let activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: activityType,
-                    entityType: 'folder',
-                    entity: officeDocument.folder.title,
+                    entityType: type,
+                    entity: type === 'folder' ? officeDocument.folder.title : officeDocument.task.title,
                     prev: prev.folder ? prev.folder.title : ''
                 },
                 context: {}
