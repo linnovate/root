@@ -35,7 +35,9 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function getByEntityId(entity) {
+      debugger;
       return function(id, start, limit, sort, starred) {
+        debugger;
         var qs = querystring.encode({
           start: start,
           limit: limit,
@@ -237,6 +239,7 @@ angular.module('mean.icu.data.discussionsservice', [])
     return {
       getAll: getAll,
       getById: getById,
+      getByTaskId: getByEntityId('tasks'),
       getByProjectId: getByEntityId('projects'),
       getTags: getTags,
       create: create,

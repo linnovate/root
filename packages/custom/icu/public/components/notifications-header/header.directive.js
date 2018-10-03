@@ -199,26 +199,20 @@ angular.module('mean.icu.ui.notificationsheader', [])
             };
 
             $scope.createDiscussion = function() {
-                var discussion = {
+                let discussion = {
                     title: '',
                     watchers: [],
                 };
 
-                var params = {};
-                var state = 'main.discussions.all.details.activities';
+                let params = {};
+                let state = 'main.discussions.all.details.activities';
+                let id = $stateParams.entityId || $stateParams.id;
 
-                if ($stateParams.entity === 'project' && $stateParams.entityId) {
-                    discussion['project'] = $stateParams.entityId;
+                if ($stateParams.entity === 'project' && id) {
+                    discussion['project'] = id;
                     state = 'main.discussions.byentity.details.activities';
                     params.entity = 'project';
-                    params.entityId = $stateParams.entityId;
-                } else {
-                    if (context.main === 'projects' && $stateParams.id) {
-                        discussion['project'] = $stateParams.id;
-                        state = 'main.discussions.byentity.details.activities';
-                        params.entity = 'project';
-                        params.entityId = $stateParams.id;
-                    }
+                    params.entityId = id;
                 }
 
                 DiscussionsService.create(discussion).then(function(result) {

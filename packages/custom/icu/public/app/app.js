@@ -1017,6 +1017,28 @@ angular.module('mean.icu').config([
             .state('main.tasks.byparent.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byparent.details.documents', getDetailsTabState('task', 'documents'))
 
+            .state('main.tasks.discussions', {
+                url: '/discussions/:entityId',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('discussion'),
+                resolve: {
+                    discussions:  (DiscussionsService, $stateParams) => {
+                        return $stateParams.starred ?
+                            DiscussionsService.getStarred() :
+                            DiscussionsService.getByTaskId(
+                              $stateParams.entityId,
+                              $stateParams.start,
+                              $stateParams.limit,
+                              $stateParams.sort
+                            );
+                    }
+                }
+            })
 
             .state('main.projects', {
                 url: '/projects',

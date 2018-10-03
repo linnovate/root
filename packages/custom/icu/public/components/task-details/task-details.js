@@ -11,7 +11,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
     $scope.item = typeof entity === 'object'? entity : context.entity;
     $scope.entityType = 'tasks';
 
-
+  debugger;
   if (!$scope.item) {
     $state.go('main.tasks.byentity', {
       entity: context.entityName,
