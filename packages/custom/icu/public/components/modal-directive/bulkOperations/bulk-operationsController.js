@@ -264,7 +264,12 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   };
 
   $scope.addLastInputTextToTag = function(){
-    if($scope.lastTagInput.length)$scope.addTag($scope.lastTagInput);
+    if($scope.lastTagInput.length){
+      let unEnteredTag = $scope.lastTagInput;
+      $scope.lastTagInput = '';
+
+      $scope.addTag(unEnteredTag);
+    }
   };
 
   getUsedTags();
