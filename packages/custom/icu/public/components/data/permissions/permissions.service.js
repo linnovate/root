@@ -7,8 +7,11 @@ angular.module('mean.icu.data.permissionsservice', [])
                                             WarningsService, ActivitiesService, FoldersService, OfficeDocumentsService,
                                             TemplateDocsService
     ) {
-        var EntityPrefix = '/permissions';
+        // var EntityPrefix = '/permissions';
         var me = UsersService.getMe().$$state.value;
+
+        $rootScope.$on('Login', () => me = UsersService.getMe().$$state.value);
+
 
         var serviceMap = {
             task: TasksService,
@@ -69,8 +72,7 @@ angular.module('mean.icu.data.permissionsservice', [])
         function haveAnyPerms(entity, user) {
             if(!entity.permissions)entity.permissions = [];
             user = user || me;
-            var perms = !!_.find(entity.permissions, {'id': getUserId(user)});
-            return perms;
+            return !!_.find(entity.permissions, {'id': getUserId(user)});
         }
 
         function getPermissionStatus(user, entity) {
@@ -151,8 +153,6 @@ angular.module('mean.icu.data.permissionsservice', [])
 
             if(clonedEntity.serial != undefined) {
                 var serviceName = OfficeDocumentsService;
-                // Artium - see bug in documents:
-                // adding 2 watchers one after the other - the permissions array give only 2 items in perms array.
                 serviceName.updateWatcherPerms(clonedEntity, user, user, 'updateWatcherPerms') ;
             }
             else {
