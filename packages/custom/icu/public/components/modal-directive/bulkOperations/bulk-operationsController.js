@@ -263,15 +263,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     $scope.lastTagInput = val;
   };
 
-  $scope.addLastInputTextToTag = function(){
-    if($scope.lastTagInput.length){
-      let unEnteredTag = $scope.lastTagInput;
-      $scope.lastTagInput = '';
-
-      $scope.addTag(unEnteredTag);
-    }
-  };
-
   getUsedTags();
   filterUsedTags();
 
@@ -305,11 +296,11 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
       }, 0);
   };
 
-    $scope.addTag = function (tag) {
-      $scope.usedTags.push(tagsToBulkObjects(tag, false, false));
+  $scope.addTag = function (tag) {
+    $scope.usedTags.push(tagsToBulkObjects(tag, false, false));
 
-      $scope.tagInputVisible = false;
-      filterUsedTags();
+    $scope.tagInputVisible = false;
+    filterUsedTags();
   };
 
   $scope.removeTag = function (tagObj) {
@@ -323,7 +314,13 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     filterUsedTags();
   };
 
-  $scope.tagUpdate = function(){
+  $scope.tagUpdate = function() {
+
+    // add last input text to tags array;
+    if($scope.lastTagInput.length){
+      $scope.addTag($scope.lastTagInput);
+    }
+
     let updateObject = $scope.usedTags.filter( bulkObject => !bulkObject.remove);
     let updateIds = updateObject.map( bulkObject => bulkObject.tag);
 

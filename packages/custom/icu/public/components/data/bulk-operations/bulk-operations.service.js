@@ -88,7 +88,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
         }
 
         function bulkUpdate(bulkObject, entityName) {
-            if(bulkObject.update.delete) {
+            if(bulkObject.update && bulkObject.update.delete) {
                 return $http.patch(ApiUri + '/' + entityName + EntityPrefix, bulkObject)
                     .then(function (result) {
                         refreshSelectedList();
