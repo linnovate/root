@@ -2657,18 +2657,22 @@ var copyFile = function(file, dir2) {
 };
 
 exports.indexInFolder = function(req, res, next) {
-  Document.findById(req.params.id)
+  let { id } = req.params;
+  Document.findById(id)
   .then(function(doc) {
     if(!doc.folder) throw new httpError(400, 'Document not in a folder');
     if(doc.folderIndex) throw new httpError(400, 'Document already indexed');
     return doc;
   })
   .then(function(doc) {
-    return Document.count({
+    return Document.find({
       folder: doc.folder
-    })
-    .then(function(count) {
-      doc.folderIndex = count;
+    }, '_id')
+    .then(function(docs) {
+      let ids = docs.map(doc => String(doc._id));
+      let index = ids.indexOf(id);
+      index++;
+      doc.folderIndex = index;
       return doc;
     })
   })
