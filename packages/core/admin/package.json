@@ -19,7 +19,7 @@
     "postinstall": "bower install"
   },
   "dependencies": {
-    "request": "^2.87.0"
+    "request": "^2.88.0"
   },
   "license": "MIT",
   "_id": "mean-admin@0.0.3",

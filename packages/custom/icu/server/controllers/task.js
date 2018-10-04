@@ -945,7 +945,7 @@ function GivenTasksOfNextWeekSummary(user) {
  * @param {*} columns what columns to display in the excel
  * @returns a promise that returns workbook
  */
-async function tasksToExcelServiceFormat(tasks,columns){
+async function tasksToExcelServiceFormat(tasks,columns,datesColumns){
   let UpdateModel = require('../models/update');
    tasks = _.map(tasks,task=>task._doc);
    let filteredTasks = _.filter(tasks,task=>task.title);
@@ -972,7 +972,7 @@ async function tasksToExcelServiceFormat(tasks,columns){
            .populate('creator', null, 'User');
        let row = [
              title,
-             due&&due.toLocaleString().substr(0, due.toLocaleString().indexOf(' ')), // * gives the date as "year-month-day time" and removes time
+             //due&&due.toLocaleString().substr(0, due.toLocaleString().indexOf(' ')), // * gives the date as "year-month-day time" and removes time
              status,
              assign&&assign.name,
              _.map(watchers,watcher=>watcher.name).join("\n"),
@@ -987,7 +987,31 @@ async function tasksToExcelServiceFormat(tasks,columns){
    
      return row;
    }));
- return excelService.json2workbook({"rows":taskArray,columns,"columnsBold":true});
+   let taskDatesArray = await Promise.all(_.map(filteredTasks,async (task)=>{
+    let {
+      _id,
+      due,
+    } = task;
+      //console.log("%^$^%$^%$^");
+      //console.log(task);
+     let updates = await UpdateModel
+          .find({
+            issueId: _id,
+            type: "comment"
+          })
+          .populate('creator', null, 'User');
+      let lastUpdate = _.last(updates);
+      let lastUpdateDate = lastUpdate&&lastUpdate.updated
+
+      let row = [
+            due,//&&due.toLocaleString().substr(0, due.toLocaleString().indexOf(' ')), // * gives the date as "year-month-day time" and removes time
+          lastUpdateDate// _.map(updates,(update=>`:${update.updated&&update.updated.toLocaleString().substr(0, update.updated.toLocaleString().indexOf(' '))} - ${update.creator.name}`+"\n"+`${update.description}`) ).join("\n"),
+        ];
+
+  
+    return row;
+  }));
+ return excelService.json2workbookWithDates({"rows":taskArray,dates:taskDatesArray,columns,datesColumns,"columnsBold":true});
  }
  
  
@@ -999,12 +1023,17 @@ async function tasksToExcelServiceFormat(tasks,columns){
    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
    //setting the name of the file to be downloaded
    res.attachment("Summary.xlsx");
-   let columns = ["כותרת","תג"+"\""+"ב","סטטוס","אחראי","משתתפים","תיאור","יוצר המשימה","שם דיון","שם פרוייקט","עדכונים","תגיות"]
+  //  let columns = ["כותרת","תג"+"\""+"ב","סטטוס","אחראי","משתתפים","תיאור","יוצר המשימה","שם דיון","שם פרוייקט","עדכונים","תגיות"]
+   let columns = ["כותרת","סטטוס","אחראי","משתתפים","תיאור","יוצר המשימה","שם דיון","שם פרוייקט","עדכונים","תגיות"]
+   let datesColumns = ["תג"+"\""+"ב","תאריך תגובה אחרון"]
    let tasks = req.locals.result;
-   tasksToExcelServiceFormat(tasks,columns).then(summary=>{
+   tasksToExcelServiceFormat(tasks,columns,datesColumns).then(summary=>{
      res.send(summary);
    });
  };
 
+
+
+ 
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;

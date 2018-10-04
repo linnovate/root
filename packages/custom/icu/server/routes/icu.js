@@ -51,7 +51,7 @@ module.exports = function(Icu, app) {
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
   app.route(/^((?!\/hi\/).)*$/).all(locals);
-  //omri uncomment app.route(/^((?!\/hi\/).)*$/).all(authorization);
+  app.route(/^((?!\/hi\/).)*$/).all(authorization);
 
   //app.route(/^((?!\/hi\/).)*$/).all(authorization, socket);
 
