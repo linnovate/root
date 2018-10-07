@@ -109,25 +109,11 @@ table {
 }
 
 .disabled {
-    pointer-events: none;
+  cursor: not-allowed;
 }
 
-.disabled:after {
-    cursor: not-allowed;
-    content: '';
-    position: absolute;
-    width: 100%; height: 100%;
-    top: 0; left: 0;
-    pointer-events: auto;
-}
-
-.fullyDisabled {
-    @extend .disabled;
-}
-
-.fullyDisabled:after {
-    @extend .disabled:after;
-    z-index: 4;
+.disabled * {
+  pointer-events: none;
 }
 
 .enabled {

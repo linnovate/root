@@ -464,5 +464,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
 
   $scope.permsToSee = function() {
     return PermissionsService.haveAnyPerms($scope.item);
-  }
+  };
+
 }
+
