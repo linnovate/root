@@ -20,7 +20,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
     });
   }
   else if($scope.item && ($state.current.name === 'main.projects.all.details' || $state.current.name === 'main.search.project' || $state.current.name === 'main.projects.byentity.details')) {
-    $state.go('.activities');
+    $state.go('.documents');
   }
 
   $scope.items = projects.data || projects;

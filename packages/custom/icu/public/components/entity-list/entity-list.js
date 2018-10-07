@@ -33,7 +33,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
                 entityId: context.entityId,
             });
         }
-        if ($state.current.name === `main.${$scope.$parent.entityName}.all` || $state.current.name === `main.${$scope.$parent.entityName}.byentity` || $state.current.name === `main.${$scope.$parent.entityName}.all.details.activities` || $state.current.name === `main.${$scope.$parent.entityName}.byentity.details.activities`) {
+        if ($state.current.name === `main.${$scope.$parent.entityName}.all` || $state.current.name === `main.${$scope.$parent.entityName}.byentity` || $state.current.name === `main.${$scope.$parent.entityName}.all.details.documents` || $state.current.name === `main.${$scope.$parent.entityName}.byentity.details.documents`) {
             var date = new Date();
             var lastIndex = possibleNavigate.length - 1;
             var diff = date.getTime() - new Date(possibleNavigate[lastIndex].created).getTime();
@@ -44,7 +44,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             }
         }
     } else {
-        if ($state.current.name == `main.${$scope.$parent.entityName}.all.details.activities`) {
+        if ($state.current.name == `main.${$scope.$parent.entityName}.all.details.documents`) {
             $state.go(`main.${$scope.$parent.entityName}.all`);
         }
     }
@@ -172,7 +172,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
         var nameFocused = angular.element($event.target).hasClass('name');
 
-        $state.go($scope.detailsState + '.activities', {
+        $state.go($scope.detailsState + '.documents', {
             id: item._id,
             entity: context.entityName,
             entityId: context.entityId,
@@ -190,7 +190,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         }
         $scope.$parent.create(parent).then((result)=>{
             //             if (localStorage.getItem('type') == 'new') {
-            //                 $state.go($scope.detailsState + '.activities', {
+            //                 $state.go($scope.detailsState + '.documents', {
             //                     id: result._id,
             //                     entity: context.entityName,
             //                     entityId: context.entityId,
@@ -203,7 +203,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
               let els = $element.find('td.name');
               els.length && els[els.length - 1].focus();
             },100);
-            $state.go($scope.detailsState + '.activities', {
+            $state.go($scope.detailsState + '.documents', {
                 id: result._id,
                 entity: context.entityName,
                 entityId: context.entityId,
@@ -320,7 +320,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             $event.preventDefault();
 
             if ($element.find('td.name')[index + 1] && $scope.items[index + 1]) {
-                $state.go($scope.detailsState + '.activities', {
+                $state.go($scope.detailsState + '.documents', {
                     id: $scope.items[index + 1]._id,
                     entity: context.entityName,
                     entityId: context.entityId,

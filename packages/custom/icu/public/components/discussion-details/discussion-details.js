@@ -13,7 +13,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   if ($scope.item && ($state.current.name === 'main.tasks.byentity.details' || $state.current.name === 'main.search.discussion' || $state.current.name === 'main.discussions.all.details' || $state.current.name === 'main.discussions.byentity.details')) {
-    $state.go('.activities');
+    $state.go('.documents');
   }
 
   $scope.editorOptions = {

@@ -25,7 +25,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
       entityId: context.entityId
     });
   } else if ($scope.item && ($state.current.name === 'main.officeDocuments.all.details' || $state.current.name === 'main.search.officeDocument' || $state.current.name === 'main.officeDocuments.byentity.details')) {
-    $state.go('.activities');
+    $state.go('.documents');
   }
 
   $scope.editorOptions = {

@@ -16,7 +16,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
       entityId: context.entityId
     });
   } else if ($scope.item && ($state.current.name === 'main.tasks.byentity.details' || $state.current.name === 'main.search.task' || $state.current.name === 'main.tasks.all.details' || $state.current.name === 'main.tasks.byassign.details')) {
-    $state.go('.activities');
+    $state.go('.documents');
   }
 
   $scope.editorOptions = {
