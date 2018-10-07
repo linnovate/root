@@ -225,14 +225,25 @@ angular.module('mean.icu.ui.notificationsheader', [])
             };
 
             $scope.createOfficeDocument = function() {
+                let params = {},
+                    state,
+                    newDocument = {},
+                    id = $stateParams.entityId || $stateParams.id;
 
-                var params = {};
-                var state = 'main.officeDocuments.all.details.activities';
+                if ($stateParams.currentEntity === 'task' && id) {
+                    newDocument.task = id;
+                    state = 'main.tasks.officeDocument.details.activities';
+                    params.entity = 'task';
+                    params.entityId = id;
+                } else {
+                    state = 'main.officeDocuments.all.details.activities';
+                }
 
-                OfficeDocumentsService.createDocument({}).then(function(result){
+                OfficeDocumentsService.createDocument(newDocument).then(function(result){
                     result.created=new Date(result.created);
                     $scope.officeDocuments.push(result);
                     params.id = result._id;
+
                     $state.go(state, params, {
                         reload: false
                     });

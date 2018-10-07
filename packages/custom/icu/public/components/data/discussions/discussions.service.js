@@ -35,9 +35,7 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function getByEntityId(entity) {
-      debugger;
       return function(id, start, limit, sort, starred) {
-        debugger;
         var qs = querystring.encode({
           start: start,
           limit: limit,

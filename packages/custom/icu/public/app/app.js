@@ -893,7 +893,8 @@ angular.module('mean.icu').config([
                     starred: false,
                     start: 0,
                     limit: LIMIT,
-                    sort: SORT
+                    sort: SORT,
+                    currentEntity: 'task'
                 },
                 resolve: {
                     tasks: function (TasksService, $stateParams) {
@@ -1017,20 +1018,21 @@ angular.module('mean.icu').config([
             .state('main.tasks.byparent.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byparent.details.documents', getDetailsTabState('task', 'documents'))
 
-            .state('main.tasks.discussions', {
-                url: '/discussions/:entityId',
+            .state('main.tasks.officeDocument', {
+                url: '/officeDocument/:entityId',
                 params: {
                     starred: false,
                     start: 0,
                     limit: LIMIT,
                     sort: SORT
                 },
-                views: getListView('discussion'),
+                views: getListView('officeDocument'),
                 resolve: {
-                    discussions:  (DiscussionsService, $stateParams) => {
+                    officeDocuments:  (OfficeDocumentsService, $stateParams) => {
+                        debugger;
                         return $stateParams.starred ?
-                            DiscussionsService.getStarred() :
-                            DiscussionsService.getByTaskId(
+                            OfficeDocumentsService.getStarred() :
+                            OfficeDocumentsService.getByTaskId(
                               $stateParams.entityId,
                               $stateParams.start,
                               $stateParams.limit,
@@ -1039,6 +1041,11 @@ angular.module('mean.icu').config([
                     }
                 }
             })
+            .state('main.tasks.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.tasks.officeDocument.documents', getDetailsTabState('officeDocument', 'documents'))
+            .state('main.tasks.officeDocument.details', getOfficeDocumentDetailsState())
+            .state('main.tasks.officeDocument.details.activities', getDetailsTabState('officeDocument', 'activities'))
+
 
             .state('main.projects', {
                 url: '/projects',

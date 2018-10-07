@@ -1732,7 +1732,9 @@ exports.uploadFileToDocument = function(req, res, next) {
 
 exports.create = function(req,res,next){
   console.log("exports.create") ;
-  var folderId = req.body.folder;//contains folder Id
+  let folderId = req.body.folder;//contains folder Id
+  let taskId = req.body.task;
+
   if(!folderId){
     var doc = {
       created: new Date(),
@@ -1744,6 +1746,7 @@ exports.create = function(req,res,next){
       description: '', //important
       serial: '',
       folder: undefined,
+      task: new ObjectId(taskId),
       creator: new ObjectId(req.user._id),
       updater: new ObjectId(req.user._id),
       sender: new ObjectId(req.user._id),
@@ -1794,6 +1797,7 @@ exports.create = function(req,res,next){
           description: '', //important
           serial: '',
           folder: new ObjectId(folderId),
+          task: new ObjectId(taskId),
           creator: new ObjectId(req.user._id),
           updater: new ObjectId(req.user._id),
           sender: new ObjectId(req.user._id),

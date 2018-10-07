@@ -106,7 +106,28 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function getByTaskId(id) {
+        function getByTaskId(id, start, limit, sort, starred) {
+            var qs = querystring.encode({
+                start: start,
+                limit: limit,
+                sort: sort
+            });
+
+            if(qs.length) {
+                qs = '?' + qs;
+            }
+
+            var url = ApiUri + '/' + entity + '/' + id + EntityPrefix;
+            if(starred) {
+                url += '/starred';
+            }
+
+            return $http.get(url + qs).then(function(result) {
+                WarningsService.setWarning(result.headers().warning);
+                return PaginationService.processResponse(result.data);
+            });
+
+
             return $http.get(ApiUri + '/tasks/' + id + EntityPrefix).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
