@@ -9,7 +9,7 @@
     Add folder of the details of the type (in the right side). Like "/icu/packages/custom/icu/public/components/task-details"
 */
 angular.module('mean.icu.ui.rows', [])
-.directive('icuListRow', function($compile, $http, $templateRequest, $i18next, UsersService, PermissionsService) {
+.directive('icuListRow', function($compile, $http, $templateRequest, $i18next, UsersService, PermissionsService, MultipleSelectService) {
     var templates = {
         people: '/icu/components/row-types/people-row.html',
         task: '/icu/components/row-types/task-row.html',
@@ -32,13 +32,19 @@ angular.module('mean.icu.ui.rows', [])
         'search-officedocument': '/icu/components/row-types/search-officeDocument-row.html',
         'search-templateDoc': '/icu/components/row-types/search-templateDoc-row.html',
         'subtasks': '/icu/components/row-types/sub-tasks-row.html',
-        'subprojects': '/icu/components/row-types/sub-projects-row.html',
+        'subprojects': '/icu/components/row-types/sub-projects-row.html'
     };
 
-    function compileTemplate($scope, $element, template) {
+    function compileTemplate($scope, $element, template, MultipleSelectService) {
         $element.html(template);
         var scope = $scope.$new(true);
+
         scope.data = $scope.data;
+        scope.multipleSelectMode = $scope.multipleSelectMode;
+
+        scope.$on('checkMultipleMode', () => scope.checkMultipleMode());
+        scope.checkMultipleMode = () => scope.multipleSelectMode = MultipleSelectService.getSelected().length > 0;
+
         $compile($element.contents())(scope);
     }
 
@@ -47,7 +53,7 @@ angular.module('mean.icu.ui.rows', [])
         if ($scope.type.indexOf('search') > -1) {
 	        var templateUrl = templates[$scope.type];
 	        $templateRequest(templateUrl).then(function(result) {
-	            compileTemplate($scope, $element, result);
+	            compileTemplate($scope, $element, result, MultipleSelectService);
 	        });
 		}
         if ($scope.data[$scope.type] && $scope.data[$scope.type].due) {
@@ -106,7 +112,8 @@ angular.module('mean.icu.ui.rows', [])
         restrict: 'A',
         scope: {
             type: '@',
-            data: '='
+            data: '=',
+            multipleSelectMode: '='
         },
         link: link,
         transclude: true,

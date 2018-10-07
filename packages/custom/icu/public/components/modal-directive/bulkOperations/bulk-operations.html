@@ -4,7 +4,10 @@
 
 
     <section ng-if="activityType == 'status'" class="status">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+      <!--<span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>-->
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
 
         <ui-select ng-model="selects[$index].selected" on-select="select(selects[$index].selected)">
             <ui-select-match placeholder="{{ 'selectStatus' | i18next }}">
@@ -19,7 +22,7 @@
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !selected}"
-                ng-click="bulkUpdate('status', selected)">
+                ng-click="bulkUpdateEvery('status', selected)">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
@@ -27,7 +30,9 @@
 
 
     <section ng-if="activityType === 'watchers'" class="watch">
-      <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
 
       <div class="watchers-list">
         <div class="watcher"
@@ -67,13 +72,13 @@
       <div class="new-member-input" ng-if="showSelect">
         <ui-select ng-model="member"
                    theme="bootstrap"
-                   on-select="addMember(member);triggerSelect()">
+                   on-select="addMember(member);triggerSelect();getUnusedWatchers()">
           <ui-select-match
             placeholder="{{unusedWatchers.length ? 'selectMembers' : 'allUsersWatching' | i18next}}"
             autofocus>
             {{$select.selected.name}}
           </ui-select-match>
-          <ui-select-choices class="scroll" repeat="user in unusedWatchers">
+          <ui-select-choices class="scroll" repeat="user in unusedWatchers | filter: $select.search">
 
             <div icu-avatar
                  user="user"
@@ -90,10 +95,12 @@
 
 
     <section ng-if="activityType === 'assign'" class="assign">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
 
         <div tooltips tooltip-template="{{'assignee' | i18next}}">
-            <ui-select ng-model="selected" on-select="select(selected._id)">
+            <ui-select ng-model="selects[$index].selected" on-select="select(selects[$index].selected._id)">
                 <ui-select-match  placeholder="{{ 'selectAssignee' | i18next }}">
                     <div icu-avatar user="$select.selected"></div>
                     <span ng-if="$select.selected._id" class="summary-content">
@@ -109,7 +116,7 @@
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !selected}"
-                ng-click="bulkUpdate('assign', selected)">
+                ng-click="bulkUpdateEvery('assign', selected)">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
@@ -117,23 +124,24 @@
 
 
     <section ng-if="activityType === 'due'" class="due">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
-
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
         <div class="date"
-             ng-if="entityName !== 'discussions'">
+             ng-if="showNormalDueInput()">
             <input ng-model="selectedDue.date" placeholder="{{ duePlaceholder | i18next }}" ui-date="dueOptions" />
         </div>
 
         <discussion-due
-            ng-if="entityName == 'discussions'"
-            item="selectedDue"
+            ng-if="showDiscussionsDueInput()"
+            item="selectedDiscussionDue"
             on-change="enableUpdateButton"
             in-modal="true">
         </discussion-due>
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !enableSetDueDate }"
-                ng-click="dateCheck()">
+                ng-click="bulkUpdateEvery('due', selectedDue.date)">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
@@ -141,15 +149,9 @@
 
 
     <section ng-if="activityType === 'tag'" class="tag">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
-
-        <!--<div ng-repeat="tag in tags" class='item'>-->
-            <!--<span>{{tag}}</span>-->
-            <!--<button class="detail-tags-item-remove" ng-click="removeTag(tag)">-->
-                <!--<i class="fa fa-times"></i>-->
-            <!--</button>-->
-        <!--</div>-->
-
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
         <ul class="items detail-tags-items">
 
             <li class="tags-item" ng-repeat="tag in usedTagsFiltered track by $index">
@@ -164,6 +166,7 @@
                     tagging
                     tagging-label="false"
                     on-select="addTag(newTag)"
+                    ng-mouseleave="addLastInputTextToTag($select.search)"
                 >
                     <ui-select-match
                       id="addTag"
@@ -183,7 +186,7 @@
 
         <button class="action-button"
                 ng-class="{ 'disabled' : !selected}"
-                ng-click="tagUpdate()">
+                ng-click="bulkUpdateEvery('tag', null)">
             {{ 'update' | i18next}}
         </button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
@@ -191,9 +194,11 @@
 
 
     <section ng-if="activityType === 'delete'" class="delete">
-        <span class="selected">{{ selectedItems.length }} {{ entityName | i18next }}</span>
+      <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
+        {{ selectedArrays[entity].length }} {{ entity | i18next }}
+      </span>
 
-        <button class="action-button" ng-click="bulkUpdate('delete', true)">{{ 'delete' | i18next}}</button>
+        <button class="action-button" ng-click="bulkUpdateEvery('delete', true)">{{ 'delete' | i18next}}</button>
         <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 

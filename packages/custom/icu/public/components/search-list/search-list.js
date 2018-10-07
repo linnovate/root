@@ -55,6 +55,9 @@ angular.module('mean.icu.ui.searchlist')
         });
     }
 
-    });
+    //**********Multiple Select*********//
+    $scope.multipleSelectMode = false;
+
+});
 
 
