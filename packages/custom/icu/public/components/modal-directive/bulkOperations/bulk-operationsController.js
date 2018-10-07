@@ -35,18 +35,18 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
             if( type === 'tag'){
                 $scope.tagUpdate(entityArray, entityName + 's');
-                return;
+                continue;
             }
             if( type === 'due' && entityName === 'discussion' ){
                 $scope.dateCheck(entityArray, entityName + 's');
-                return;
+                continue;
             }
 
-            $scope.bulkUpdate(type, value, entityArray, entityName + 's');
+            $scope.bulkUpdate(type, value, entityArray, entityName + 's', true);
         }
     };
 
-    $scope.bulkUpdate = function (type, value, selectedArray = $scope.selectedItems, entityName = $scope.entityName) {
+    $scope.bulkUpdate = function (type, value, selectedArray = $scope.selectedItems, entityName = $scope.entityName, searchList) {
         if(!value)return;
 
         let idsArray = selectedArray.map(entity => entity._id);
@@ -72,7 +72,8 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                 if(changedBulkObject.update.delete){
                     refreshState();
                 }
-                MultipleSelectService.setSelectedList(selectedArray);
+                if(!searchList)
+                  MultipleSelectService.setSelectedList(selectedArray);
                 NotifyingService.notify('refreshAfterOperation');
                 $uibModalInstance.dismiss('cancel');
             });
@@ -363,6 +364,12 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   };
 
   $scope.tagUpdate = function(entityArray, entityName){
+
+    // add last input text to tags array;
+    if($scope.lastTagInput.length){
+        $scope.addTag($scope.lastTagInput);
+    }
+
     let updateObject = $scope.usedTags.filter( bulkObject => !bulkObject.remove);
 
     let updatedTags = updateObject.map( bulkObject => bulkObject.tag);
@@ -394,7 +401,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
           entity = _.pick(entity, ['status', 'watchers', 'assign', 'due', 'tags', 'recycled']);
           Object.assign($scope.selectedItems[i], entity);
         }
-        if(changedBulkObject.update.delete){
+        if(changedBulkObject.update && changedBulkObject.update.delete){
           refreshState();
         }
         MultipleSelectService.setSelectedList($scope.selectedItems);
