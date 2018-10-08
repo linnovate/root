@@ -164,6 +164,7 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.warningsservice',
         'mean.icu.data.eventdropsservice',
         'mean.icu.data.layoutservice',
+        'mean.icu.data.detailspaneservice',
         'mean.icu.decorators.pdsDecorator',
         'infinite-scroll',
         'mean.icu.ui.modaldeletetasksbyentity',

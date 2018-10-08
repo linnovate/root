@@ -18,7 +18,7 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
       entityId: context.entityId
     });
   } else if ($scope.item && ($state.current.name === 'main.templateDocs.all.details' || $state.current.name === 'main.search.templateDoc' || $state.current.name === 'main.templateDocs.byentity.details')) {
-    $state.go('.documents');
+    $state.go('.' + window.config.defaultTab);
   }
 
   $scope.options = {

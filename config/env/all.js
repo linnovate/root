@@ -73,6 +73,7 @@ module.exports = {
       img:"" 
     }
   ],
+  defaultTab: 'activities', // only one of 'activities', 'documents'
   ScheduledMailSendWeekly: '59 1 * * 0',
   ScheduledMailSendDaly: '59 1 * * 0-5',
   activeStatus: require('../activeStatusSettings'),

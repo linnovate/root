@@ -2,9 +2,11 @@
 
 angular.module('mean.icu.ui.officedetails', []).controller('OfficeDetailsController', OfficeDetailsController);
 
-function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, people, offices, context, $state, EntityService, OfficesService, PermissionsService, $stateParams, ActivitiesService, $window) {
+function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, people, offices, context, $state, EntityService, OfficesService, PermissionsService, $stateParams, ActivitiesService, $window, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
+
+  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'folders', 'signatures']);
 
   let currentState = $state.current.name;
 
@@ -20,7 +22,7 @@ function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, peo
       entityId: context.entityId
     });
   } else if ($scope.item && ($state.current.name === 'main.offices.all.details' || $state.current.name === 'main.search.office' || $state.current.name === 'main.offices.byentity.details')) {
-    $state.go('.documents');
+    $state.go('.' + window.config.defaultTab);
   }
 
   $scope.editorOptions = {

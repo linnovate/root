@@ -106,7 +106,7 @@
 
   </div>
 
-  <detail-tabs tabs="['documents','activities']" item="item" entity-name="task" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
+  <detail-tabs tabs="tabs" item="item" entity-name="task" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
 
   <icu-members-footer
     ng-if="item._id"

@@ -2,9 +2,11 @@
 
 angular.module('mean.icu.ui.discussiondetails', []).controller('DiscussionDetailsController', DiscussionDetailsController);
 
-function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, DiscussionsService, PermissionsService, ActivitiesService, EntityService, UsersService, $stateParams, $window) {
+function DiscussionDetailsController($scope, $rootScope, entity, tasks, context, tags, $state, $timeout, people, DiscussionsService, PermissionsService, ActivitiesService, EntityService, UsersService, $stateParams, $window, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
+
+  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'tasks']);
 
   if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("discussions"))) {
     $scope.item = entity || context.entity;
@@ -13,7 +15,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   if ($scope.item && ($state.current.name === 'main.tasks.byentity.details' || $state.current.name === 'main.search.discussion' || $state.current.name === 'main.discussions.all.details' || $state.current.name === 'main.discussions.byentity.details')) {
-    $state.go('.documents');
+    $state.go('.' + window.config.defaultTab);
   }
 
   $scope.editorOptions = {

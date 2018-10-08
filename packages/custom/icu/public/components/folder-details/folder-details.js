@@ -2,9 +2,11 @@
 
 angular.module('mean.icu.ui.folderdetails', []).controller('FolderDetailsController', FolderDetailsController);
 
-function FolderDetailsController($rootScope, $scope, entity, tasks, people, folders, offices, tags,  $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService, EntityService) {
+function FolderDetailsController($rootScope, $scope, entity, tasks, people, folders, offices, tags,  $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService, EntityService, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
+
+  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'officedocuments']);
 
   let currentState = $state.current.name;
 

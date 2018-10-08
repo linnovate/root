@@ -33,7 +33,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
                 entityId: context.entityId,
             });
         }
-        if ($state.current.name === `main.${$scope.$parent.entityName}.all` || $state.current.name === `main.${$scope.$parent.entityName}.byentity` || $state.current.name === `main.${$scope.$parent.entityName}.all.details.documents` || $state.current.name === `main.${$scope.$parent.entityName}.byentity.details.documents`) {
+        if ($state.current.name === `main.${$scope.$parent.entityName}.all` || $state.current.name === `main.${$scope.$parent.entityName}.byentity` || $state.current.name === `main.${$scope.$parent.entityName}.all.details.${window.config.defaultTab}` || $state.current.name === `main.${$scope.$parent.entityName}.byentity.details.${window.config.defaultTab}`) {
             var date = new Date();
             var lastIndex = possibleNavigate.length - 1;
             var diff = date.getTime() - new Date(possibleNavigate[lastIndex].created).getTime();
@@ -44,7 +44,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             }
         }
     } else {
-        if ($state.current.name == `main.${$scope.$parent.entityName}.all.details.documents`) {
+        if ($state.current.name == `main.${$scope.$parent.entityName}.all.details.${window.config.defaultTab}`) {
             $state.go(`main.${$scope.$parent.entityName}.all`);
         }
     }
@@ -172,7 +172,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
         var nameFocused = angular.element($event.target).hasClass('name');
 
-        $state.go($scope.detailsState + '.documents', {
+        $state.go($scope.detailsState + '.' + window.config.defaultTab, {
             id: item._id,
             entity: context.entityName,
             entityId: context.entityId,
@@ -189,21 +189,12 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             parent.id = $state.current.params.entityId;
         }
         $scope.$parent.create(parent).then((result)=>{
-            //             if (localStorage.getItem('type') == 'new') {
-            //                 $state.go($scope.detailsState + '.documents', {
-            //                     id: result._id,
-            //                     entity: context.entityName,
-            //                     entityId: context.entityId,
-            //                     nameFocused: false,
-            //                     officeDocuments
-            //                 });
-            //             } else {
             $scope.refreshVisibleItems();
             $timeout(()=> {
               let els = $element.find('td.name');
               els.length && els[els.length - 1].focus();
             },100);
-            $state.go($scope.detailsState + '.documents', {
+            $state.go($scope.detailsState + '.' + window.config.defaultTab, {
                 id: result._id,
                 entity: context.entityName,
                 entityId: context.entityId,
@@ -320,7 +311,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             $event.preventDefault();
 
             if ($element.find('td.name')[index + 1] && $scope.items[index + 1]) {
-                $state.go($scope.detailsState + '.documents', {
+                $state.go($scope.detailsState + '.' + window.config.defaultTab, {
                     id: $scope.items[index + 1]._id,
                     entity: context.entityName,
                     entityId: context.entityId,

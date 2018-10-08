@@ -2,9 +2,11 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, people, projects, $timeout, context, $state, ProjectsService, ActivitiesService, TasksService, PermissionsService, EntityService, $stateParams, me, $window, $uibModal) {
+function ProjectDetailsController($scope, $rootScope, entity, people, projects, $timeout, context, $state, ProjectsService, ActivitiesService, TasksService, PermissionsService, EntityService, $stateParams, me, $window, $uibModal, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
+
+  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'tasks']);
 
   if($state.$current.url.source.includes('search') || $state.$current.url.source.includes('projects')) {
     $scope.item = entity || context.entity;
@@ -20,7 +22,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
     });
   }
   else if($scope.item && ($state.current.name === 'main.projects.all.details' || $state.current.name === 'main.search.project' || $state.current.name === 'main.projects.byentity.details')) {
-    $state.go('.documents');
+    $state.go('.' + window.config.defaultTab);
   }
 
   $scope.items = projects.data || projects;

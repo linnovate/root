@@ -2,9 +2,11 @@
 
 angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
 
-function TaskDetailsController($scope, entity, tags, projects, tasks, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me) {
+function TaskDetailsController($scope, entity, tags, projects, tasks, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
+
+  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents']);
 
     $scope.item = typeof entity === 'object'? entity : context.entity;
     $scope.entityType = 'tasks';
@@ -16,7 +18,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
       entityId: context.entityId
     });
   } else if ($scope.item && ($state.current.name === 'main.tasks.byentity.details' || $state.current.name === 'main.search.task' || $state.current.name === 'main.tasks.all.details' || $state.current.name === 'main.tasks.byassign.details')) {
-    $state.go('.documents');
+    $state.go('.' + window.config.defaultTab);
   }
 
   $scope.editorOptions = {

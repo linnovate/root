@@ -71,6 +71,7 @@ exports.render = function(req, res) {
 			'circles': circlesLocations(),
 			'version': config.version,
 			'whatsNew': config.whatsNew,
+			'defaultTab': config.defaultTab,
 			'activeStatus': config.activeStatus,
 			'isPortNeeded': config.isPortNeeded,
 			'rocketChat': config.rocketChat,

@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('mean.icu.ui.taskoptions', [])
-.controller('TaskOptionsController', function ($scope, $state, tasks, TasksService, NotifyingService) {
+.controller('TaskOptionsController', function ($scope, $state, tasks, TasksService, NotifyingService, DetailsPaneService) {
+
+	$scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents']);
 
     function filterRecycled(data) {
         return data.filter(entity => {
@@ -59,6 +61,6 @@ angular.module('mean.icu.ui.taskoptions', [])
   };
 
 	if ($state.current.name === 'main.tasks.byassign') {
-		$state.go('.documents');
+		$state.go('.' + window.config.defaultTab);
 	}
 });
