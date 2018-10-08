@@ -1029,7 +1029,6 @@ angular.module('mean.icu').config([
                 views: getListView('officeDocument'),
                 resolve: {
                     officeDocuments:  (OfficeDocumentsService, $stateParams) => {
-                        debugger;
                         return $stateParams.starred ?
                             OfficeDocumentsService.getStarred() :
                             OfficeDocumentsService.getByTaskId(

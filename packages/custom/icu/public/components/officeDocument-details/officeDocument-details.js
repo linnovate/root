@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.officeDocumentdetails', []).controller('OfficeDocumentDetailsController', OfficeDocumentDetailsController);
 
-function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, NotifyingService, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, UsersService, $timeout, $http) {
+function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, TasksService, NotifyingService, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, UsersService, $timeout, $http) {
 
   // ==================================================== init ==================================================== //
 
@@ -173,7 +173,8 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.onTaskRelation = function(value) {
     $scope.item.task = value;
-    $scope.onCategory(value, 'task')
+    $scope.onCategory(value, 'task');
+    TasksService.relateToTask(value._id, 'officeDocuments', $scope.item._id)
   };
 
   $scope.onCategory = function(value, type = 'folder') {

@@ -107,7 +107,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         }
 
         function getByTaskId(id, start, limit, sort, starred) {
-            var qs = querystring.encode({
+            let qs = querystring.encode({
                 start: start,
                 limit: limit,
                 sort: sort
@@ -117,21 +117,18 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 qs = '?' + qs;
             }
 
-            var url = ApiUri + '/' + entity + '/' + id + EntityPrefix;
+            let url = ApiUri + EntityPrefix + '/byTask/' + id + qs;
             if(starred) {
                 url += '/starred';
             }
 
-            return $http.get(url + qs).then(function(result) {
-                WarningsService.setWarning(result.headers().warning);
-                return PaginationService.processResponse(result.data);
-            });
-
-
-            return $http.get(ApiUri + '/tasks/' + id + EntityPrefix).then(function (result) {
+            return $http.get(url).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
-            });
+            })
+            .then( docs => {
+                return PaginationService.processResponse(docs);
+            })
         }
 
         function getByProjectId(id) {

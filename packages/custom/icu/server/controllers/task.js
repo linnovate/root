@@ -4,6 +4,7 @@ var _ = require('lodash');
 // var q = require('q');
 var async = require('async');
 var config = require('meanio').loadConfig();
+var ObjectId = require('mongoose').Types.ObjectId;
 
 /**
  * includes = space seperated entities to populate in middleware .all
@@ -77,6 +78,24 @@ Date.prototype.getWeek = function () {
   ];
 };
 
+exports.relateEntity = function(req, res, next) {
+  let { taskId, entityType, entityId} = req.body;
+
+  Task.findOne({_id: taskId})
+    .populate('watchers')
+    .then( doc => {
+      if(!doc[entityType])
+        doc[entityType] = [];
+      doc[entityType].push(new ObjectId(entityId));
+      return doc;
+    })
+    .then(doc => {
+      res.json(doc);
+    })
+    .catch(function (err) {
+      next(err)
+    })
+};
 
 exports.create = function(req, res, next) {
   if(req.locals.error) {

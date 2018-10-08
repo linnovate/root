@@ -292,6 +292,19 @@ exports.getExcelSummary = function(req,res,next){
   });
 }
 
+exports.getByTaskId = function(req,res,next){
+    let taskId = req.params.id;
+
+    Document.find(
+      { task: ObjectId(taskId) })
+      .exec(function(err, documents) {
+        if(!documents)return;
+        // res.send(documents);
+        req.locals.result = documents;
+        next();
+      })
+}
+
 exports.signOnDocx = function(req, res, next) {
   var doc = req.body.officeDocuments;
   var signature = JSON.parse(req.body.signature);
@@ -1746,7 +1759,7 @@ exports.create = function(req,res,next){
       description: '', //important
       serial: '',
       folder: undefined,
-      task: new ObjectId(taskId),
+      task: taskId ? new ObjectId(taskId) : undefined,
       creator: new ObjectId(req.user._id),
       updater: new ObjectId(req.user._id),
       sender: new ObjectId(req.user._id),
@@ -1771,7 +1784,9 @@ exports.create = function(req,res,next){
       }
       else {
         logger.log('info', '%s create, %s', req.user.name, 'success without folder');
-          User.findOne({_id: result.creator}).exec(function(err, creator) {
+          User.findOne({_id: result.creator})
+            .populate('task')
+            .exec(function(err, creator) {
             result.creator = creator;
             // res.send(result);
             req.locals.result = result;
@@ -1781,7 +1796,8 @@ exports.create = function(req,res,next){
     });
   }
   else {
-    Folder.findOne({_id: folderId}).exec(function(err, folderObj) {
+    Folder.findOne({_id: folderId})
+      .exec(function(err, folderObj) {
       if(err) {
         logger.log('error', '%s create, %s', req.user.name, ' Folder.findOne', {error: err.message});
 
@@ -1797,7 +1813,7 @@ exports.create = function(req,res,next){
           description: '', //important
           serial: '',
           folder: new ObjectId(folderId),
-          task: new ObjectId(taskId),
+          task: taskId ? new ObjectId(taskId) : undefined,
           creator: new ObjectId(req.user._id),
           updater: new ObjectId(req.user._id),
           sender: new ObjectId(req.user._id),

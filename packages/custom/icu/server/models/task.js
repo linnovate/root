@@ -54,6 +54,12 @@ var TaskSchema = new Schema({
       ref: 'User'
     }
   ],
+  officeDocuments: [
+    {
+      type: Schema.ObjectId,
+      ref: 'OfficeDocument'
+    }
+  ],
   bolded: [
     {
       _id: false,
