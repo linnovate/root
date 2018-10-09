@@ -38,7 +38,7 @@ function ProjectListController($scope, $state, $timeout, projects, NotifyingServ
         return ProjectsService.update(item);
     }
 
-    $scope.create = function(item) {
+    $scope.create = function(parent) {
 
         var newItem = {
             title: '',
@@ -47,7 +47,9 @@ function ProjectListController($scope, $state, $timeout, projects, NotifyingServ
             __state: creatingStatuses.NotCreated,
             __autocomplete: true
         };
-
+        if(parent){
+            newItem[parent.type] = parent.id;
+        }
         return ProjectsService.create(newItem).then(function(result) {
             $scope.items.push(result);
             ProjectsService.data.push(result);

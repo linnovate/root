@@ -29,6 +29,12 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Discussion'
   },
+  discussions: [
+    {
+      type: Schema.ObjectId,
+      ref: 'Discussion'
+    }
+  ],
   creator: {
     type: Schema.ObjectId,
     ref: 'User'

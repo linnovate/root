@@ -106,6 +106,12 @@ var DiscussionSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Project'
   },
+  projects: [
+    {
+      type: Schema.ObjectId,
+      ref: 'Project'
+    }
+  ],
   sources: [String],
   circles: {
     type: Schema.Types.Mixed
