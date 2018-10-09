@@ -129,7 +129,7 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function ($state, $stateParams, tasks, TasksService, results = []) {
+                    entity: function ($state, $stateParams, tasks, TasksService, results) {
                         if($state.current.name.indexOf('search') !== -1){
                             return _(results.data || results).find(t => t._id === $stateParams.id);
                         } else {
@@ -707,7 +707,8 @@ angular.module('mean.icu').config([
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
-                    }
+                    },
+                    results: () => []
                 }
             })
             .state('main.people', {
