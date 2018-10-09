@@ -19,14 +19,17 @@ function DiscussionListController($scope, $state, discussions, NotifyingService,
         return DiscussionsService.update(item);
     };
 
-    $scope.create = function(item) {
-        var newItem = {
+    $scope.create = function(parent) {
+        let newItem = {
             title: '',
             watchers: [],
             tags: [],
             __state: creatingStatuses.NotCreated,
             __autocomplete: false
         };
+        if(parent){
+          newItem[parent.type] = parent.id;
+        }
         return DiscussionsService.create(newItem).then(function(result) {
             $scope.items.push(result);
             DiscussionsService.data.push(result);
