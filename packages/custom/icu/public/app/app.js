@@ -131,12 +131,12 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, tasks, TasksService, results) {
                         if($state.current.name.indexOf('search') !== -1){
-                            return _(results.data || results).find(t => t._id === $stateParams.id);
+                            return _(results.data || results).find(t => ((t._id || t.id) === $stateParams.id));
                         } else {
                             let task = _(tasks.data || tasks).find(t => t._id === $stateParams.id);
                             return task ?
                                 task :
-                                TasksService.getById($stateParams.id)
+                                TasksService.getById($stateParams.id);
                         }
                     },
                     tags: function (TasksService) {
