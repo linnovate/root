@@ -77,6 +77,10 @@ var TaskSchema = new Schema({
   description: {
     type: String
   },
+  discussion: {
+    type: Schema.ObjectId,
+    ref: 'Discussion'
+  },
   discussions: [
     {
       type: Schema.ObjectId,
