@@ -2,6 +2,10 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                                   MultipleSelectService, UsersService, SettingServices, PermissionsService, NotifyingService) {
 
     $scope.selectedItems = MultipleSelectService.getSelected();
+
+    $scope.selectedArrays = MultipleSelectService.getSelectedEntityArrays();
+    $scope.selectedTypes = Object.keys($scope.selectedArrays);
+
     $scope.selected = {};
     $scope.activityType = activityType;
     $scope.entityName = entityName;
@@ -23,79 +27,110 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         $uibModalInstance.dismiss('cancel');
     };
 
-    $scope.bulkUpdate = function (type, value) {
+    $scope.bulkUpdateEvery = (type, value) => {
+        for(let i = 0; i < $scope.selectedTypes.length; i++){
+            let entityName = $scope.selectedTypes[i];
+            let entityArray = $scope.selectedArrays[entityName];
+            if(!entityArray.length)continue;
+
+            if( type === 'tag'){
+                $scope.tagUpdate(entityArray, entityName + 's');
+                continue;
+            }
+            if( type === 'due' && entityName === 'discussion' ){
+                $scope.dateCheck(entityArray, entityName + 's');
+                continue;
+            }
+
+            $scope.bulkUpdate(type, value, entityArray, entityName + 's', true);
+        }
+    };
+
+    $scope.bulkUpdate = function (type, value, selectedArray = $scope.selectedItems, entityName = $scope.entityName, searchList) {
         if(!value)return;
 
-        let idsArray = $scope.selectedItems.map(entity => entity._id);
+        let idsArray = selectedArray.map(entity => entity._id);
         let changedBulkObject = {
             update: {},
             ids: idsArray
         };
         changedBulkObject.update[type] = value;
 
-        MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName)
+        MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
             .then(result => {
-                for(let i = 0; i < $scope.selectedItems.length; i++){
-                    let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
+                for(let i = 0; i < selectedArray.length; i++){
+                    let entity = result.find(entity => entity._id === selectedArray[i]._id);
+                    if(!entity)continue;
+
                     if(typeof entity.due === 'string')entity.due = new Date(entity.due);
                     entity = _.pick(entity, [
                       'status', 'watchers', 'assign',
                       'due', 'startDate', 'endDate', 'startTime', 'endTime', 'allDay',
                       'tags', 'recycled']);
-                    Object.assign($scope.selectedItems[i], entity);
+                    Object.assign(selectedArray[i], entity);
                 }
                 if(changedBulkObject.update.delete){
                     refreshState();
                 }
-                MultipleSelectService.setSelectedList($scope.selectedItems);
+                if(!searchList)
+                  MultipleSelectService.setSelectedList(selectedArray);
                 NotifyingService.notify('refreshAfterOperation');
                 $uibModalInstance.dismiss('cancel');
             });
     };
 
     $scope.updateComplex = function(){
+        let arraysOfTypes = $scope.selectedTypes;
         let updateObject = $scope.selectedWatchers.filter( bulkObject => !bulkObject.remove);
-        let updateIds = updateObject.map( bulkObject => bulkObject._id);
-        let updatePermissions = updateObject.map( bulkObject => {
-            return {
-                'id': bulkObject._id,
-                'level': bulkObject.permissions
-            }
-        });
 
-        let removeObject = $scope.selectedWatchers.filter( bulkObject => bulkObject.remove);
-        let removedIds = removeObject.map( bulkObject => bulkObject._id);
+        for (let i = 0; i < arraysOfTypes.length; i++){
+            let entityArray = $scope.selectedArrays[arraysOfTypes[i]];
+            if(!entityArray.length)continue;
 
-        let idsArray = $scope.selectedItems.map(entity => entity._id);
-        let changedBulkObject = {
-            ids: idsArray
-        };
-
-        if(updateIds.length){
-            changedBulkObject.update = {};
-            changedBulkObject.update.watchers = updateIds;
-            changedBulkObject.update.permissions = updatePermissions;
-        }
-        if(removeObject.length){
-            changedBulkObject.remove = {};
-            changedBulkObject.remove.watchers = removedIds;
-        }
-
-        MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName)
-            .then(result => {
-                for(let i = 0; i < $scope.selectedItems.length; i++){
-                    let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
-                    if(typeof entity.due === 'string')entity.due = new Date(entity.due);
-                    entity = _.pick(entity, ['status', 'watchers', 'permissions', 'assign', 'due', 'tags', 'recycled']);
-                    Object.assign($scope.selectedItems[i], entity);
+            let updateIds = updateObject.map( bulkObject => bulkObject._id);
+            let updatePermissions = updateObject.map( bulkObject => {
+                return {
+                    'id': bulkObject._id,
+                    'level': bulkObject.permissions
                 }
-                if(changedBulkObject.update.delete){
-                    refreshState();
-                }
-                MultipleSelectService.setSelectedList($scope.selectedItems);
-                NotifyingService.notify('refreshAfterOperation');
-                $uibModalInstance.dismiss('cancel');
             });
+
+            let removeObject = $scope.selectedWatchers.filter( bulkObject => bulkObject.remove);
+            let removedIds = removeObject.map( bulkObject => bulkObject._id);
+
+            let idsArray = entityArray.map(entity => entity._id);
+            let changedBulkObject = {
+                ids: idsArray
+            };
+
+            if(updateIds.length){
+                changedBulkObject.update = {};
+                changedBulkObject.update.watchers = updateIds;
+                changedBulkObject.update.permissions = updatePermissions;
+            }
+            if(removeObject.length){
+                changedBulkObject.remove = {};
+                changedBulkObject.remove.watchers = removedIds;
+            }
+
+            MultipleSelectService.bulkUpdate(changedBulkObject, arraysOfTypes[i] + 's')
+                .then(result => {
+                    for(let i = 0; i < $scope.selectedItems.length; i++){
+                        let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
+                        if(!entity)continue;
+
+                        if(typeof entity.due === 'string')entity.due = new Date(entity.due);
+                        entity = _.pick(entity, ['status', 'watchers', 'permissions', 'assign', 'due', 'tags', 'recycled']);
+                        Object.assign($scope.selectedItems[i], entity);
+                    }
+                    if(changedBulkObject.update.delete){
+                        refreshState();
+                    }
+                    MultipleSelectService.setSelectedList($scope.selectedItems);
+                    NotifyingService.notify('refreshAfterOperation');
+                    $uibModalInstance.dismiss('cancel');
+                });
+        }
     };
 
     function refreshState(){
@@ -112,7 +147,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
     $scope.usedWatchers = [];
     $scope.unusedWatchers = [];
-    $scope.selectedWatchers = {};
+    $scope.selectedWatchers = [];
 
     $scope.getUsedWatchers = function(){
         let usedIds = getIdsArray($scope.selectedItems[0].watchers);
@@ -150,7 +185,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     function getIdsArray(objArray){
-        return objArray.map(obj => obj._id);
+        return objArray.map(obj => obj._id || obj);
     }
 
     $scope.userPermissionStatus = function(member){
@@ -201,49 +236,58 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     //----------------------DUE----------------------//
 
     $scope.selectedDue = {};
+    $scope.selectedDiscussionDue = {};
     $scope.setDueDate = 'setDueDate';
     $scope.dueDateErrorMessage = 'couldNotSetPreviousTime';
     $scope.duePlaceholder = $scope.setDueDate;
     $scope.enableSetDueDate = false;
 
     $scope.dueOptions = {
-      onSelect: function() {
-        $scope.enableUpdateButton();
-      },
-      dateFormat: 'dd.mm.yy'
+        onSelect: function() {
+            $scope.entityDateCheck();
+        },
+        dateFormat: 'dd.mm.yy'
     };
 
-    $scope.dateCheck = function(){
-        if($scope.entityName !== 'discussions'){
-          if(checkPastDue()){
+    $scope.dateCheck = function(entityArray, entityName){
+        if(entityName !== 'discussions'){
+          if(!$scope.entityDateCheck()){
             $scope.duePlaceholder = $scope.dueDateErrorMessage;
             $scope.selectedDue.date = '';
             return;
           } else {
             if($scope.enableUpdateButton){
-              $scope.bulkUpdate('due', $scope.selectedDue.date);
+              $scope.bulkUpdate('due', $scope.selectedDue.date, entityArray, entityName);
             }
           }
         } else {
           if($scope.enableUpdateButton()){
-            $scope.bulkUpdate('due', $scope.selectedDue);
+            $scope.bulkUpdate('due', $scope.selectedDiscussionDue, entityArray, entityName);
           }
         }
     };
 
-    $scope.enableUpdateButton = function(){
-      let selectedDue = $scope.selectedDue;
-      if($scope.entityName === 'discussions'){
-        $scope.enableSetDueDate = (
-          (selectedDue.startDate && selectedDue.endDate && selectedDue.startTime && selectedDue.endTime)
-          || (selectedDue.startDate && selectedDue.allDay)
-        );
-      } else {
-        $scope.enableSetDueDate = !checkPastDue();
-      }
+    $scope.setDiscussionDue = function(){
+      let selectedDue = $scope.selectedDiscussionDue,
+        startEndTime = selectedDue.startDate && selectedDue.endDate && selectedDue.startTime && selectedDue.endTime,
+        startAllDay = selectedDue.startDate && selectedDue.allDay;
 
-      return $scope.enableSetDueDate;
+      return $scope.enableSetDueDate = !!startEndTime || !!startAllDay;
     };
+
+    $scope.entityDateCheck = function(){
+        let nowTime = new Date();
+        $scope.enableSetDueDate = !($scope.selectedDue.date < nowTime);
+
+        return $scope.enableSetDueDate;
+    };
+
+    $scope.showNormalDueInput = () => {
+        return $scope.selectedTypes.some( entityType => {
+            return entityType !== 'discussion' && !!$scope.selectedArrays[entityType].length
+        })
+    };
+    $scope.showDiscussionsDueInput = () => !!$scope.selectedArrays['discussion'].length;
 
     function checkPastDue(){
       let nowTime = new Date();
@@ -257,14 +301,19 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   $scope.usedTagsFiltered;
   $scope.removedTags = [];
   $scope.tags = [];
-  $scope.lastTagInput;
+
+  getUsedTags();
+  filterUsedTags();
 
   $scope.getlastInputText = function(val){
     $scope.lastTagInput = val;
   };
 
-  getUsedTags();
-  filterUsedTags();
+  $scope.addLastInputTextToTag = function(query){
+    if(query.length && !$scope.usedTags.find( tagObj => tagObj.tag === query)){
+        $scope.addTag(query);
+    }
+  };
 
   function getUsedTags(){
     let usedTags = $scope.selectedItems[0].tags;
@@ -289,11 +338,11 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   }
 
   $scope.addTagClicked = function () {
-      $scope.tagInputVisible = true;
-      $timeout(function () {
-          let element = angular.element('#addTag .ui-select-toggle')[0];
-          element.click();
-      }, 0);
+    $scope.tagInputVisible = true;
+    $timeout(function () {
+        let element = angular.element('#addTag .ui-select-toggle')[0];
+        element.click();
+    }, 0);
   };
 
   $scope.addTag = function (tag) {
@@ -314,48 +363,50 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     filterUsedTags();
   };
 
-  $scope.tagUpdate = function() {
+  $scope.tagUpdate = function(entityArray, entityName){
 
     // add last input text to tags array;
     if($scope.lastTagInput.length){
-      $scope.addTag($scope.lastTagInput);
+        $scope.addTag($scope.lastTagInput);
     }
 
     let updateObject = $scope.usedTags.filter( bulkObject => !bulkObject.remove);
-    let updateIds = updateObject.map( bulkObject => bulkObject.tag);
+
+    let updatedTags = updateObject.map( bulkObject => bulkObject.tag);
 
     let removeObject = $scope.usedTags.filter( bulkObject => bulkObject.remove);
     let removedIds = removeObject.map( bulkObject => bulkObject.tag);
 
-    let idsArray = $scope.selectedItems.map(entity => entity._id);
+    let idsArray = entityArray.map(entity => entity._id);
     let changedBulkObject = {
       ids: idsArray
     };
 
-    if(updateIds.length){
+    if(updatedTags.length){
       changedBulkObject.update = {};
-      changedBulkObject.update.tags = updateIds;
+      changedBulkObject.update.tags = updatedTags;
     }
     if(removeObject.length){
       changedBulkObject.remove = {};
       changedBulkObject.remove.tags = removedIds;
     }
 
-    MultipleSelectService.bulkUpdate(changedBulkObject, $scope.entityName)
+    MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
       .then(result => {
         for(let i = 0; i < $scope.selectedItems.length; i++){
           let entity = result.find(entity => entity._id === $scope.selectedItems[i]._id);
+          if(!entity)continue;
+
           if(typeof entity.due === 'string')entity.due = new Date(entity.due);
           entity = _.pick(entity, ['status', 'watchers', 'assign', 'due', 'tags', 'recycled']);
           Object.assign($scope.selectedItems[i], entity);
         }
-        if(changedBulkObject.update.delete){
+        if(changedBulkObject.update && changedBulkObject.update.delete){
           refreshState();
         }
         MultipleSelectService.setSelectedList($scope.selectedItems);
         NotifyingService.notify('refreshAfterOperation');
         $uibModalInstance.dismiss('cancel');
-        $state.reload();
       });
   }
 

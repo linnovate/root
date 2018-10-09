@@ -1,4 +1,10 @@
-<td class="id">{{data.index + 1}}</td>
+<td ng-hide="data.result.visible || multipleSelectMode" class="id">{{data.index + 1}}</td>
+<td ng-show="data.result.visible || multipleSelectMode" class="tick">
+  <input type="checkbox"
+         ng-model="data.result.selected"
+         ng-change="data.multipleSelectRefreshSelected(data.result, multipleSelectMode);data.changeMultipleMode()"
+  >
+</td>
 <td class="icon icon-discussion"></td>
 <td class="name search-row" title="{{data.discussion.title}}" span ng-bind-html="data.result.title[0]"></td>
 <td></td>

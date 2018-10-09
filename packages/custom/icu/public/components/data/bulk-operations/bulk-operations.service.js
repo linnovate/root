@@ -1,12 +1,22 @@
 'use strict';
 
 angular.module('mean.icu.data.multipleselectservice', [])
-    .service('MultipleSelectService', function (ApiUri, $http, $stateParams, $rootScope,
+    .service('MultipleSelectService', function (ApiUri, $http, $state, $stateParams, $rootScope,
                                                 OfficesService, UsersService
     ) {
         let EntityPrefix = '/bulk';
         let me = UsersService.getMe().$$state.value;
         let selectedItems = [];
+
+        let selectedEntityArrays = {
+            task: [],
+            project: [],
+            discussion: [],
+            officeDocument: [],
+            folder: [],
+            office: [],
+            templateDoc: []
+        };
 
         let bulkPermissionsMap = {
             'status': ['editor'],
@@ -26,8 +36,13 @@ angular.module('mean.icu.data.multipleselectservice', [])
             'delete': ['tasks', 'projects', 'discussions', 'officeDocuments', 'folders', 'offices', 'templateDocs']
         };
 
-        function showButton(operation, entityType){
-            return _.includes(bulkShowingMap[operation], entityType);
+        function showButton(operation){
+            return Object.keys(selectedEntityArrays).every( entity => {
+                return (
+                    (selectedEntityArrays[entity].length === 0)
+                    || _.includes(bulkShowingMap[operation], entity + 's')
+                )
+            })
         }
 
         let cornerStates = [
@@ -66,25 +81,41 @@ angular.module('mean.icu.data.multipleselectservice', [])
             return selectedItems;
         }
 
+        function getSelectedEntityArrays() {
+            return selectedEntityArrays;
+        }
+
         function setSelectedList(list){
             return selectedItems = list;
         }
 
         function refreshSelectedList(editedEntity) {
             if (!editedEntity) {
+                Object.keys(selectedEntityArrays).forEach( entity => selectedEntityArrays[entity] = [] );
                 return selectedItems = [];
             }
 
+            let entityType = editedEntity._type || getEntityType();
             let entitySelectedIndex = selectedItems.findIndex((entity) => {
                 return entity._id === editedEntity._id;
             });
 
             if (entitySelectedIndex === -1) {
                 selectedItems.push(editedEntity);
+                selectedEntityArrays[entityType].push(editedEntity);
             } else {
                 selectedItems.splice(entitySelectedIndex, 1);
+
+                let selectedTypesIndex = selectedEntityArrays[entityType]
+                    .findIndex( entity =>  entity._id === editedEntity._id);
+                selectedEntityArrays[entityType].splice(selectedTypesIndex, 1);
             }
             return selectedItems;
+        }
+
+        function getEntityType(){
+            let entityType = $state.current.name.split('.')[1];
+            return entityType.substring(0, entityType.length - 1);
         }
 
         function bulkUpdate(bulkObject, entityName) {
@@ -103,10 +134,8 @@ angular.module('mean.icu.data.multipleselectservice', [])
 
         function haveBulkPerms(type) {
             let havePermissions = selectedItems.every((entity) => {
-                let userPermissions = entity.permissions.find((permission) => {
-                    return permission.id === me._id;
-                });
-                return _.includes(bulkPermissionsMap[type], userPermissions.level);
+                let userPermissions = entity.permissions.find( permission =>  permission.id === me._id);
+                return userPermissions ? _.includes(bulkPermissionsMap[type], userPermissions.level) : false;
             });
 
             return havePermissions;
@@ -122,6 +151,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
             showButton: showButton,
             setSelectedList: setSelectedList,
             getSelected: getSelected,
+            getSelectedEntityArrays: getSelectedEntityArrays,
             getCornerState: getCornerState,
             getNoneRecycledItems: getNoneRecycledItems,
             refreshSelectedList: refreshSelectedList,

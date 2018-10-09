@@ -221,9 +221,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         multipleSelectRefreshState();
     };
 
-    $scope.$on('changeCornerState', function(event, cornerState){
-        multipleSelectSetAllSelected(cornerState === 'all');
-    });
+    $scope.$on('changeCornerState', (event, cornerState) => multipleSelectSetAllSelected(cornerState === 'all'));
 
     function multipleSelectSetAllSelected(status){
         for(let i = 0; i < $scope.visibleItems.length; i++){
@@ -279,18 +277,15 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }
 
     function getFilteredSelectedList(){
-        let selected = MultipleSelectService.getSelected();
-        let filteredSelected = filterResults(selected);
-        let newSelectedList = MultipleSelectService.setSelectedList(filteredSelected);
+        let selected = MultipleSelectService.getSelected(),
+            filteredSelected = filterResults(selected),
+            newSelectedList = MultipleSelectService.setSelectedList(filteredSelected);
 
         return newSelectedList;
     }
 
     function getRefreshedCornerState(){
-        let filteredItems = filterResults($scope.visibleItems);
-        let refreshedCornerState = MultipleSelectService.refreshCornerState(filteredItems.length);
-
-        return refreshedCornerState;
+        return MultipleSelectService.refreshCornerState(filterResults($scope.visibleItems).length);
     }
 
     function refreshActiveItemsInList(){
@@ -305,7 +300,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ============================================================= //
 
     $scope.onKeydown = function($event, index) {
-        angular.element($event.target).css('box-shadow', 'none')
+        angular.element($event.target).css('box-shadow', 'none');
 
         if ($event.keyCode === 13) {
             $event.preventDefault();
@@ -393,7 +388,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         } else {
             $scope.visibleItems = removeDuplicates(filterResults($scope.items))
         }
-
     };
 
     function getArrIds(arr){

@@ -3,14 +3,24 @@
     <table class="search">
 
         <tbody>
-            <tr data-ng-repeat="result in results | searchResultsFilter | filteringByUpdated" 
+        <!--data-ui-sref="main.search.{{result.type ? result.type : result._type}}({id: result.entityId ? result.entityId : result.id})"-->
+        <tr data-ng-repeat="result in results | searchResultsFilter | filteringByUpdated"
                 data-ui-sref-active="active"
-                data-ui-sref="main.search.{{result.type ? result.type : result._type}}({id: result.entityId ? result.entityId : result.id})"
                 icu-list-row
 
-                data="{ index: $index, result: result }"
-                ng-click="rowClicked()"
-                type="search-{{result._type}}">
+                data="{
+                    index: $index,
+                    result: result,
+                    multipleSelectRefreshSelected: multipleSelectRefreshSelected,
+                    changeMultipleMode: changeMultipleMode,
+                }"
+                multiple-select-mode="multipleSelectMode"
+
+                ng-click="rowClicked();initialize($event, result)"
+                type="search-{{result._type}}"
+                ng-mouseover="showTick(result)"
+                ng-mouseleave="hideTick(result)"
+            >
             </tr>
         </tbody>
     </table>

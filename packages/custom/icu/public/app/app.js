@@ -129,17 +129,14 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function (tasks, $stateParams, TasksService) {
-                        var task = _(tasks.data || tasks).find(function (t) {
-                            return t._id === $stateParams.id;
-                        });
-
-                        if (!task) {
-                            return TasksService.getById($stateParams.id).then(function (task) {
-                                return task;
-                            });
+                    entity: function ($state, $stateParams, tasks, TasksService, results) {
+                        if($state.current.name.indexOf('search') !== -1){
+                            return _(results.data || results).find(t => t._id === $stateParams.id);
                         } else {
-                            return task;
+                            let task = _(tasks.data || tasks).find(t => t._id === $stateParams.id);
+                            return task ?
+                                task :
+                                TasksService.getById($stateParams.id)
                         }
                     },
                     tags: function (TasksService) {
@@ -172,17 +169,14 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function ($stateParams, projects, ProjectsService) {
-                        var project = _(projects.data || projects).find(function (project) {
-                            return project._id === $stateParams.id;
-                        });
-
-                        if (!project) {
-                            return ProjectsService.getById($stateParams.id).then(function (project) {
-                                return project;
-                            });
+                    entity: function ($state, $stateParams, projects, ProjectsService, results = []) {
+                        if($state.current.name.indexOf('search') !== -1){
+                            return _(results.data || results).find(d => d._id === $stateParams.id);
                         } else {
-                            return project;
+                            let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
+                            return project ?
+                                project :
+                                ProjectsService.getById($stateParams.id)
                         }
                     },
                     tasks: function (TasksService, $stateParams) {
@@ -217,22 +211,16 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function ($stateParams, officeDocuments, OfficeDocumentsService) {
-                        var officeDocument = _(officeDocuments.data || officeDocuments).find(function (t) {
-                            return t._id === $stateParams.id;
-                        });
-
-                        if (!officeDocument) {
-                            return OfficeDocumentsService.getById($stateParams.id).then(function (officeDocument) {
-                                return officeDocument;
-                            });
+                    entity: function ($state, $stateParams, officeDocuments, OfficeDocumentsService, results = []) {
+                        if($state.current.name.indexOf('search') !== -1){
+                            return _(results.data || results).find(d => d._id === $stateParams.id);
                         } else {
-                            return officeDocument;
+                            let officeDocument = _(officeDocuments.data || officeDocuments).find(t => t._id === $stateParams.id);
+                            return officeDocument ?
+                                officeDocument :
+                                OfficeDocumentsService.getById($stateParams.id)
                         }
                     },
-                    // tasks: function(TasksService, $stateParams) {
-                    //     return TasksService.getByOfficeDocumentId($stateParams.id);
-                    // },
                     people: function (UsersService) {
                         return UsersService.getAll();
                     }
@@ -257,17 +245,14 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function ($stateParams, offices, OfficesService) {
-                        var office = _(offices.data || offices).find(function (t) {
-                            return t._id === $stateParams.id;
-                        });
-
-                        if (!office) {
-                            return OfficesService.getById($stateParams.id).then(function (office) {
-                                return office;
-                            });
+                    entity: function ($state, $stateParams, offices, OfficesService, results = []) {
+                        if($state.current.name.indexOf('search') !== -1){
+                            return _(results.data || results).find(d => d._id === $stateParams.id);
                         } else {
-                            return office;
+                            let office = _(offices.data || offices).find(t => t._id === $stateParams.id);
+                            return office ?
+                                office :
+                                OfficesService.getById($stateParams.id)
                         }
                     },
                     folders: function (FoldersService, $stateParams) {
@@ -297,17 +282,14 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function ($stateParams, templateDocs, TemplateDocsService) {
-                        var templateDoc = _(templateDocs.data || templateDocs).find(function (t) {
-                            return t._id === $stateParams.id;
-                        });
-
-                        if (!templateDoc) {
-                            return TemplateDocsService.getById($stateParams.id).then(function (templateDoc) {
-                                return templateDoc;
-                            });
+                    entity: function ($state, $stateParams, templateDocs, TemplateDocsService, results = []) {
+                        if($state.current.name.indexOf('search') !== -1){
+                            return _(results.data || results).find(d => d._id === $stateParams.id);
                         } else {
-                            return templateDoc;
+                            let templateDoc = _(templateDocs.data || templateDocs).find(t => t._id === $stateParams.id);
+                            return templateDoc ?
+                                templateDoc :
+                                TemplateDocsService.getById($stateParams.id)
                         }
                     },
                     people: function (UsersService) {
@@ -334,17 +316,14 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function ($stateParams, folders, FoldersService) {
-                        var folder = _(folders.data || folders).find(function (t) {
-                            return t._id === $stateParams.id;
-                        });
-
-                        if (!folder) {
-                            return FoldersService.getById($stateParams.id).then(function (folder) {
-                                return folder;
-                            });
+                    entity: function ($state, $stateParams, folders, FoldersService, results = []) {
+                        if($state.current.name.indexOf('search') !== -1){
+                            return _(results.data || results).find(d => d._id === $stateParams.id);
                         } else {
-                            return folder;
+                            let folder = _(folders.data || folders).find(t => t._id === $stateParams.id);
+                            return folder ?
+                                folder :
+                                FoldersService.getById($stateParams.id)
                         }
                     },
                     tasks: function (TasksService, $stateParams) {
@@ -402,17 +381,14 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    entity: function ($stateParams, discussions, DiscussionsService) {
-                        var discussion = _(discussions.data || discussions).find(function (t) {
-                            return t._id === $stateParams.id;
-                        });
-
-                        if (!discussion) {
-                            return DiscussionsService.getById($stateParams.id).then(function (discussion) {
-                                return discussion;
-                            });
+                    entity: function ($state, $stateParams, discussions, DiscussionsService, results = []) {
+                        if($state.current.name.indexOf('search') !== -1){
+                            return _(results.data || results).find(d => d._id === $stateParams.id);
                         } else {
-                            return discussion;
+                            let discussion = _(discussions.data || discussions).find(t => t._id === $stateParams.id);
+                            return discussion ?
+                                discussion :
+                                DiscussionsService.getById($stateParams.id)
                         }
                     },
                     tasks: function (TasksService, $stateParams) {
@@ -731,7 +707,8 @@ angular.module('mean.icu').config([
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
-                    }
+                    },
+                    results: () => []
                 }
             })
             .state('main.people', {
@@ -1609,6 +1586,64 @@ angular.module('mean.icu').config([
                     FilesService.getByPath()
                 }
             })
+            .state('main.inbox', {
+                url: '/inbox',
+                params: {
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: {
+                    'middlepane@main': {
+                        templateUrl: '/icu/components/inbox/inbox.html',
+                        controller: 'InboxListController'
+                    },
+                    'detailspane@main': {
+                        templateUrl: '/icu/components/inbox/regions/inbox-details.html',
+                        controller: 'InboxListController'
+                    }
+                },
+                resolve: {
+                    me: (UsersService) => UsersService.getMe().then((result) =>  UsersService.getById(result._id)),
+                    activities: (ActivitiesService, $stateParams, me) => {
+                        return ActivitiesService.getByUserId(
+                            me._id,
+                            $stateParams.start,
+                            $stateParams.limit,
+                            $stateParams.sort
+                        );
+                    },
+                    updatedEntities: (activities, InboxService) =>
+                        InboxService.getUpdateEntities(activities.data)
+                }
+            })
+            .state('main.inbox.task', getTaskDetailsState('/task'))
+            .state('main.inbox.task.activities', getDetailsTabState('task', 'activities'))
+            .state('main.inbox.task.documents', getDetailsTabState('task', 'documents'))
+
+            .state('main.inbox.project', getProjectDetailsState('/project'))
+            .state('main.inbox.project.activities', getDetailsTabState('project', 'activities'))
+            .state('main.inbox.project.documents', getDetailsTabState('project', 'documents'))
+
+            .state('main.inbox.discussion', getDiscussionDetailsState('/discussion'))
+            .state('main.inbox.discussion.activities', getDetailsTabState('discussion', 'activities'))
+            .state('main.inbox.discussion.documents', getDetailsTabState('discussion', 'documents'))
+
+            .state('main.inbox.office', getOfficeDetailsState('/office'))
+            .state('main.inbox.office.activities', getDetailsTabState('office', 'activities'))
+            .state('main.inbox.office.documents', getDetailsTabState('office', 'documents'))
+
+            .state('main.inbox.templateDoc', getTemplateDocDetailsState('/templateDoc'))
+            .state('main.inbox.templateDoc.activities', getDetailsTabState('templateDoc', 'activities'))
+            .state('main.inbox.templateDoc.documents', getDetailsTabState('templateDoc', 'documents'))
+
+            .state('main.inbox.folder', getFolderDetailsState('/folder'))
+            .state('main.inbox.folder.activities', getDetailsTabState('folder', 'activities'))
+            .state('main.inbox.folder.documents', getDetailsTabState('folder', 'documents'))
+
+            .state('main.inbox.officeDocument', getOfficeDocumentDetailsState('/officeDocument'))
+            .state('main.inbox.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
+
         // .state('main.documents', {
         //     url: '/docuoments',
         //     views: {

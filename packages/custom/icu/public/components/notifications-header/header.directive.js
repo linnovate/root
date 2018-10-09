@@ -117,6 +117,12 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 });
             };
 
+            $scope.openInbox = function() {
+                $state.go('main.inbox', {
+                    id: $scope.me._id
+                });
+            };
+
             var entities = {
                 projects: 'project',
                 discussions: 'discussion',

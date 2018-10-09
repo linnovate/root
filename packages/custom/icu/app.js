@@ -102,6 +102,8 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.usersFilter',
         'mean.icu.ui.taskdetails',
         'mean.icu.ui.entityList',
+        'mean.icu.ui.inbox',
+        'mean.icu.data.inboxservice',
         'mean.icu.ui.bulkoperations',
         'mean.icu.ui.entityListFilters',
 

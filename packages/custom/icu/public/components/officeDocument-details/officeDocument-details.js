@@ -14,7 +14,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     $scope.item = context.entity || entity;
   }
   if (Array.isArray($scope.item)) {
-    $scope.item = $scope.item[0];
+    $scope.item = $scope.item[0] || context.entity;
   }
   if(typeof $scope.item.creator === 'string'){
     UsersService.getById($scope.item.creator)
@@ -507,11 +507,11 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.havePermissions = function(type, enableRecycled) {
     enableRecycled = enableRecycled || !$scope.isRecycled;
-    return (PermissionsService.havePermissions($scope.entity, type) && enableRecycled);
-  }
+    return (PermissionsService.havePermissions($scope.item, type) && enableRecycled);
+  };
 
   $scope.haveEditiorsPermissions = function() {
-    return PermissionsService.haveEditorsPerms($scope.entity);
+    return PermissionsService.haveEditorsPerms($scope.item);
   }
 
 }

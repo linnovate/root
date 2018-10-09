@@ -94,6 +94,23 @@ exports.getByEntity = function(req, res, next) {
   });
 };
 
+exports.getByUser = function(req, res, next) {
+    if(req.locals.error) {
+        return next();
+    }
+
+    let id = req.params.id;
+    // Update.find({
+    //     creator: id
+    // })
+    // .populate('userObj', 'name lastname profile')
+    // .populate('creator', 'name lastname profile')
+    // .then(function(updates) {
+    //     req.locals.result = updates;
+        next();
+    // });
+};
+
 exports.created = function(req, res, next) {
   if(req.locals.error) {
     return next();
