@@ -2,16 +2,14 @@
 
 angular.module('mean.icu.ui.inbox', [])
 .controller('InboxListController',
-    function ($scope, $state, $stateParams, $i18next, me, activities, entities) {
+    function ($scope, $state, $stateParams, $i18next, me, activities, updatedEntities) {
         $scope.me = me;
-        $scope.activities = activities.data;
-        $scope.entities = entities;
+        $scope.activities = updatedEntities.activities;
+        $scope.entities = updatedEntities.entities;
         $scope.inboxState = 'main.inbox';
 
         $scope.getActivityDescription = (activity) => {
-            let creator;
-            if(activity.entityObj)
-                creator = activity.entityObj.creator._id === me._id ? me.username : activity.entityObj.creator.username;
+            let creator = activity.creator.username;
 
             switch (activity.type){
                 case 'create' :

@@ -1610,10 +1610,10 @@ angular.module('mean.icu').config([
                             $stateParams.start,
                             $stateParams.limit,
                             $stateParams.sort
-                        )
+                        );
                     },
-                    entities: (activities, InboxService) => InboxService.getUpdateEntities(activities.data)
-
+                    updatedEntities: (activities, InboxService) =>
+                        InboxService.getUpdateEntities(activities.data)
                 }
             })
             .state('main.inbox.task', getTaskDetailsState('/task'))

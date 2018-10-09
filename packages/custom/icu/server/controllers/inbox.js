@@ -1,52 +1,62 @@
 'use strict';
 
 var _ = require('lodash');
-const httpError = require('http-errors');
+const HttpError = require('http-errors');
 
+const modelsPath = '../models/';
 const models = {
-    task: require('../models/task'),
-    discussion: require('../models/discussion'),
-    project: require('../models/project'),
-    office: require('../models/office'),
-    folder: require('../models/folder'),
-    officeDocument: require('../models/document'),
-    templateDoc: require('../models/templateDoc')
+    task: require(modelsPath + 'task'),
+    discussion: require( modelsPath + 'discussion'),
+    project: require(modelsPath + 'project'),
+    office: require(modelsPath + 'office'),
+    folder: require(modelsPath + 'folder'),
+    officeDocument: require(modelsPath + 'document'),
+    templateDoc: require(modelsPath + 'templateDoc')
 };
 
-module.exports = {
-    getUpdateEntities,
-}
-//    if(!docs.length) throw new httpError(404);
-
 function getUpdateEntities(req, res, next) {
-    let entities = req.body;
+    let activities = req.body;
     let allEntities = [];
+    let allEntitiesIds = [];
+
     let Promises = [];
 
-    for(let entityType in entities) {
-        if(!entities[entityType].length)continue;
-        let Model = models[entityType];
+    for(let i in activities) {
+        let activity = activities[i];
+        let Model = models[activity.issue];
 
         Promises.push(
             new Promise( resolve => {
-                return Model.find({ _id: { $in: entities[entityType] } })
+                if(_.includes(allEntitiesIds, activity.issueId)){
+                    activity.entityObj = allEntities.find( entity => entity._id === activity.issueId );
+                    return resolve();
+                }
+
+                return Model.findOne({ _id: activity.issueId })
                     .populate('creator')
                     .populate('userObj')
                     .populate('watchers')
                     .populate('project')
                     .populate('folder')
                     .populate('office')
-                    .then(docs => {
-                        if(!docs.length) throw new httpError(404);
-                        allEntities = allEntities.concat(docs);
-                        return resolve(docs);
-                    })
+                    .then(doc => {
+                        if(!doc) throw new HttpError(404);
+
+                        activity.entityObj = doc;
+                        allEntities.push(doc);
+                        allEntitiesIds.push(doc._id.toString());
+                        return resolve(doc);
+                    });
             })
 
-        )
+        );
     }
     Promise.all(Promises)
         .then( result => {
-            res.status(200).send(allEntities)
-        })
+            res.status(200).send({activities: activities, entities: allEntities});
+        });
+}
+
+module.exports = {
+    getUpdateEntities,
 }
