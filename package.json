@@ -37,6 +37,7 @@
     "file-saver": "^1.3.8",
     "ftp": "0.3.10",
     "gridfs-stream": "1.1.1",
+    "http-errors": "^1.7.1",
     "ical-toolkit": "1.0.9",
     "jsonfile": "4.0.0",
     "jsonwebtoken": "^5.0.0",
