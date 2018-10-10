@@ -7,9 +7,9 @@ var Module = require('meanio').Module;
 var config = require('meanio').loadConfig();
 var MeanSocket = new Module('mean-socket');
 
-if (config.https.port === null){
-    MeanSocket.register(function(app, auth, database, http) {
-        var io = require('./server/config/socketio')(http);        
+if (config.https && config.https.port) {
+    MeanSocket.register(function(app, auth, database, https) {
+        var io = require('./server/config/socketio')(https);
 
         MeanSocket.routes(io);
 
@@ -23,10 +23,10 @@ if (config.https.port === null){
 
         return MeanSocket;
     });
-}else{
-    MeanSocket.register(function(app, auth, database, https) {
+} else {
+    MeanSocket.register(function(app, auth, database, http) {
 
-        var io = require('./server/config/socketio')(https);        
+        var io = require('./server/config/socketio')(http);
 
         MeanSocket.routes(io);
 

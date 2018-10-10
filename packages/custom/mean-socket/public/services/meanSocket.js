@@ -1,10 +1,7 @@
 'use strict';
 
-var baseUrl = config.host + '/';
-
 angular.module('mean.mean-socket').factory('MeanSocket', function($rootScope) {
-	//var socket = io.connect(baseUrl);
-	var socket = io.connect(baseUrl, {transports:['websocket']});
+	var socket = io.connect(location.host, {transports:['websocket']});
 	return {
 		on: function(eventName, callback) {
 			socket.on(eventName, function() {
