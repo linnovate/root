@@ -1,4 +1,4 @@
-<tr ng-repeat="activity in activities"
+<tr ng-repeat="activity in activities | orderBy: 'created': true"
     ng-click="initiate($event, activity.entityObj, activity.issue)">
     <td>
         <div class="update-head">
