@@ -2,7 +2,8 @@
 
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
-  archive = require('./archive.js');
+  archive = require('./archive.js'),
+  socket = require('../../../mean-socket/server');
 
 
 var UpdateSchema = new Schema({
@@ -129,6 +130,7 @@ var elasticsearch = require('../controllers/elasticsearch');
 
 UpdateSchema.post('save', function(req, next) {
   var update = this;
+  socket.notify(req.userObj, req);
   if(UpdateSchema.statics[update.issue]) {
     UpdateSchema.statics[update.issue](update.issueId, function(err, result) {
       if(err) {

@@ -7,7 +7,6 @@ var notifications = require('../root-notifications')({ //CHANGE TO 'root-notific
 var hiSettings = require(process.cwd() + '/config/hiSettings') || {};
 
 var mongoose = require('mongoose'),
-  Message = mongoose.model('Message'),
   Project = require('../models/project'),
   Task = require('../models/task'),
   projectmodel = require('../models/project'),

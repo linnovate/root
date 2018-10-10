@@ -3,8 +3,8 @@
 angular.module('mean.icu.data.permissionsservice', [])
     .service('PermissionsService', function(ApiUri, $http, $stateParams, $rootScope,
                                             NotifyingService,OfficesService,UsersService,DiscussionsService,
-                                            TasksService, ProjectsService, PaginationService, MeanSocket,
-                                            WarningsService, ActivitiesService, FoldersService, OfficeDocumentsService,
+                                            TasksService, ProjectsService, PaginationService, WarningsService,
+                                            ActivitiesService, FoldersService, OfficeDocumentsService,
                                             TemplateDocsService
     ) {
         // var EntityPrefix = '/permissions';

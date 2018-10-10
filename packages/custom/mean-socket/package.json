@@ -6,14 +6,8 @@
     "name": "Rivka Tzur"
   },
   "mean": "0.4.0",
-  "engines": {
-    "node": "0.10.x",
-    "npm": "1.4.x"
-  },
   "dependencies": {
-    "moment": "^2.22.2",
-    "q": "^1.5.1",
-    "socket.io": "^1.7.4"
+    "socket.io": "^2.1.1"
   },
   "license": "MIT"
 }

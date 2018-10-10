@@ -12,9 +12,9 @@ var ICU = new Module('icu');
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
-ICU.register(function (app, auth, database,swagger) {
+ICU.register(function (app, auth, database, swagger) {
 
-     swagger.add(__dirname);
+    swagger.add(__dirname);
     //We enable routing. By default the Package Object is passed to the routes
     ICU.routes(app, auth, database);
 
@@ -97,8 +97,6 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.detailsComponents',
         'mean.icu.ui.tasklist',
         'mean.icu.ui.tasklistdirective',
-//         'mean.icu.ui.tasklistFilter',
-//         'mean.icu.ui.folderlistFilter',
         'mean.icu.ui.usersFilter',
         'mean.icu.ui.taskdetails',
         'mean.icu.ui.entityList',
@@ -106,26 +104,20 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.data.inboxservice',
         'mean.icu.ui.bulkoperations',
         'mean.icu.ui.entityListFilters',
-
         'mean.icu.ui.projectlist',
         'mean.icu.ui.officedocumentlist',
         'mean.icu.ui.officedocumentlistdirective',
         'mean.icu.ui.officeDocumentdetails',
-//         'mean.icu.ui.projectlistdirective',
         'mean.icu.ui.projectdetails',
         'mean.icu.ui.officelist',
-//         'mean.icu.ui.officelistdirective',
         'mean.icu.ui.officedetails',
         'mean.icu.ui.templateDoclist',
-//         'mean.icu.ui.templateDoclistdirective',
         'mean.icu.ui.templateDocdetails',
         'mean.icu.ui.folderlist',
         'mean.icu.ui.folderlistdirective',
         'mean.icu.ui.folderlistFilters',
-//         'mean.icu.ui.folderlistdirective',
         'mean.icu.ui.folderdetails',
         'mean.icu.ui.discussionlist',
-//         'mean.icu.ui.discussionlistdirective',
         'mean.icu.ui.discussiondetails',
         'mean.icu.ui.attachmentdetails',
         'mean.icu.ui.attachmentfilter',
@@ -172,8 +164,6 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.modaldeletetasksbyentity',
         'mean.icu.ui.modalcompartmentalization',
         'mean.icu.ui.taskoptions',
-//         'mean.icu.ui.subtasks',
-//         'mean.icu.ui.subprojects',
         'mean.icu.ui.subtaskslistdirective',
         'mean.icu.ui.subprojectslistdirective',
         '720kb.tooltips',
@@ -181,77 +171,6 @@ ICU.register(function (app, auth, database,swagger) {
         'mean.icu.ui.notify',
         'daterangepicker'
     ]);
-
-
-console.yon = function(data, inspect) {
-
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-
-    if (typeof data === 'object') {
-
-        if (inspect) {
-            return console.dir(data);
-        }
-
-        return console.dir(data);
-    }
-
-    console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
-
-    console.log(data);
-
-}
-    /**
-     //Uncomment to use. Requires meanio@0.3.7 or above
-     // Save settings with callback
-     // Use this for saving data from administration pages
-     ICU.settings({
-        'someSetting': 'some value'
-    }, function(err, settings) {
-        //you now have the settings object
-    });
-
-     // Another save settings example this time with no callback
-     // This writes over the last settings.
-     ICU.settings({
-        'anotherSettings': 'some value'
-    });
-
-     // Get settings. Retrieves latest saved settigns
-     ICU.settings(function(err, settings) {
-        //you now have the settings object
-    });
-     */
-
-    //class someClass {
-    //	constructor(name, age) {
-    //		this.name = name;
-    //		this.age = age;
-    //	}
-    //
-    //	sayName() {
-    //		console.log('some class ' + this.name);
-    //	}
-    //}
-    //
-    //class Child extends someClass {
-    //	constructor(name, age) {
-    //		super(name, age);
-    //	}
-    //
-    //	// Override the someClass method above
-    //	sayName() {
-    //		// This will call someClass.sayName() triggering the old alert
-    //		// Which will just display our name
-    //		super();
-    //
-    //		// This will trigger the new alert which has labels and our age
-    //		console.log('Name:' + this.name + ' Age:' + this.age);
-    //	}
-    //}
-    //
-    //var myChild = new Child('dwayne', 27);
-    //myChild.sayName();
 
     return ICU;
 });
