@@ -81,23 +81,7 @@ angular.module('mean.icu.ui.inbox', [])
             }
         };
 
-        $scope.formatDate = date => {
-            date = new Date(date);
-
-            let dd = date.getDate();
-            if (dd < 10) dd = '0' + dd;
-
-            let mm = date.getMonth() + 1;
-            if (mm < 10) mm = '0' + mm;
-
-            let yy = date.getFullYear() % 100;
-            if (yy < 10) yy = '0' + yy;
-
-            let hours = date.getHours();
-            let minutes = date.getMinutes();
-
-            return `${hours}:${minutes} | ${dd}/${mm}/${yy}`;
-        };
+        $scope.formatDate = date => moment(date).format('HH:mm | DD/mm/YYYY');
 
         $scope.initiate = function($event, entity, activityType) {
             $state.go($scope.inboxState + '.' + activityType, {

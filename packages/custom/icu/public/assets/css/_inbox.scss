@@ -36,6 +36,7 @@
                                 .title {
                                     display: inline;
                                     width: auto;
+                                    font-size: 18px;
                                 }
 
                                 .parent {
@@ -50,9 +51,9 @@
 
                                 .icon:before {
                                     content: ' ';
-                                    width: 30px;
-                                    height: 30px;
-                                    margin: 10px 10px 0;
+                                    width: 32px;
+                                    height: 32px;
+                                    margin: 10px 10px 0 0px;
                                     float: left;
                                     background: #C1C1C1;
                                 }
