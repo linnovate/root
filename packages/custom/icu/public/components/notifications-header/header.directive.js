@@ -240,7 +240,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     $scope.officeDocuments.push(result);
                     params.id = result._id;
                     $state.go(state, params, {
-                        reload: true
+                        reload: false
                     });
 
                 });

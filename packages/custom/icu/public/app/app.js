@@ -215,7 +215,7 @@ angular.module('mean.icu').config([
                         if($state.current.name.indexOf('search') !== -1){
                             return _(officeDocuments.data || officeDocuments).find(d => d._id === $stateParams.id);
                         } else {
-                            let officeDocument = _(officeDocuments.data || officeDocuments).find(t => t._id === $stateParams.id);
+                            let officeDocument = OfficeDocumentsService.data.find(t => t._id === $stateParams.id);
                             return officeDocument ?
                                 officeDocument :
                                 OfficeDocumentsService.getById($stateParams.id)
