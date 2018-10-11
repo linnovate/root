@@ -30,7 +30,8 @@ module.exports = function(MeanSocket, io) {
     function getMessages(channel) {
         var deferred = Q.defer();
 
-        MeanSocket.settings(function(err, settings) {
+         MeanSocket.settings(function(err, settings) {
+            console.log(err, settings)
             require(settings.settings.funcPage)[settings.settings.getAllMessagesFunc](channel, function(cb) {
                 deferred.resolve(cb);
             });
@@ -58,9 +59,8 @@ module.exports = function(MeanSocket, io) {
         });
 
         socket.on('user:joined', function(user) {
-            var message = user.name + ' joined the room';
             io.emit('user:joined', {
-                message: message,
+                message: user.name + ' joined the room',
                 time: moment(),
                 expires: moment().add(10)
             });
@@ -82,7 +82,7 @@ module.exports = function(MeanSocket, io) {
             //END CHECK
 
 
-            MeanSocket.settings(function(err, settings) {
+             MeanSocket.settings(function(err, settings) {
                 require(settings.settings.funcPage)[settings.settings.getMessageFunc](message, function(cb) {
                     io.emit('message:channel:' + message.channel, cb);
                 });
