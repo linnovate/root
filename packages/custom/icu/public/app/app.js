@@ -1560,6 +1560,8 @@ angular.module('mean.icu').config([
             .state('main.search.folder.activities.modal', getDetailspaneModal())
             .state('main.search.folder.documents', getDetailsTabState('folder', 'documents'))
             .state('main.search.folder.tasks', getDetailsTabState('folder', 'tasks'))
+            .state('main.search.folder.officedocuments', getDetailsTabState('folder', 'officeDocuments'))
+
 
             .state('main.search.officeDocument', getOfficeDocumentDetailsState('/officeDocument'))
             .state('main.search.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
