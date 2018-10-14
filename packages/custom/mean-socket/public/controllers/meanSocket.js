@@ -21,9 +21,7 @@ angular.module('mean.mean-socket').controller('MeanSocketController', ['$scope',
 		};
 
 		$scope.socketAfterGet = function(message) {
-            
-            NotificationsService.addLastnotification(message);  
-            
+      NotificationsService.notify(message);
 		};
 
 		$scope.socketAfterGetChannels = function(channels) {

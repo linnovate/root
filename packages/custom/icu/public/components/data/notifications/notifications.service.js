@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('mean.icu.data.notificationsservice', [])
-    .service('NotificationsService', function($http, ApiUri, WarningsService) {
+    .service('NotificationsService', function($http, ApiUri, WarningsService, $state) {
 
         var EntityPrefix = '/notification';
         var EntityPrefix1 = '/notification1';
 
-         var data = {
+        var data = {
             notifications: [],
             notificationsToWatch: 0,
             lastNotification: null,
@@ -14,52 +14,53 @@ angular.module('mean.icu.data.notificationsservice', [])
             isFull:false
         };
 
-        function addLastnotification(notification) {
-            data.notificationsToWatch += 1;
-            data.notifications.unshift(notification);
-            data.lastNotification = notification;
+        // audio file to play on push notification
+        // audio source: https://notificationsounds.com/sound-effects/just-like-magic-506
+        var audio = document.createElement('audio');
+        audio.type = 'audio/ogg';
+        audio.src = '/dist/icu/assets/audio/just-like-magic.mp3';
+
+        if (Notification.permission !== "denied") {
+            Notification.requestPermission(permission => {
+            });
         }
 
-        function getByUserId(id , wantLess) {
-            var limit = data.notifications.length ? 5 : 4;
-            return $http.get(ApiUri + EntityPrefix + '/' + id + '?limit=' + limit + '&skip=' + data.notifications.length).then(function(result) {
-                data.notificationsToWatch = result.data.newMessages;
-                data.notifications.push.apply(data.notifications, result.data.list);
-                if(data.notifications.length >=10){
-                	data.isFull=true;
-                	data.notifications = data.notifications.slice(0,10);
-                }
-                if(wantLess){
-                	data.isFull=false;
-                	data.notifications = data.notifications.slice(0,5);
-                }
-                data.lastNotification = data.notifications[0];
-                data.hasMore = result.data.count - data.notifications.length
+        function notify(data) {
+            console.log('New notification:', data);
+            if(Notification.permission === 'denied') {
+                console.log('Notification aborted - permission denied');
                 return;
+            }
+
+            let { title, body, id } = parseNotification(data);
+            let notification = new Notification(title, {
+                body,
+                icon: '/favicon.ico'
             });
+            notification.onclick = function(event) {
+                this.close();
+                window.focus();
+                $state.go('main.tasks.all.details', { id });
+            }
+            audio.play();
+            setTimeout(notification.close.bind(notification), 4000);
         }
 
-        function updateByUserId(id) {
-
-            return $http.put(ApiUri + EntityPrefix + '/' + id).then(function(result) {
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            });
-        }
-
-        function updateByUserId_DropDown(id) {
-
-            return $http.put(ApiUri + EntityPrefix1 + '/' + id).then(function(result) {
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            });
+        function parseNotification(data) {
+            let { entity, type, content, id } = data;
+            let title = '';
+            let body = '';
+            switch(type) {
+                case 'assign':
+                    title += 'New';
+                    body += 'You were assigned to';
+            }
+            title += ` ${entity}`;
+            body += ` ${entity}: ${content}`;
+            return { title, body, id };
         }
 
         return {
-            getByUserId: getByUserId,
-            addLastnotification: addLastnotification,
-            updateByUserId: updateByUserId,
-            updateByUserId_DropDown: updateByUserId_DropDown,
-            data: data
+            notify
         };
     });
