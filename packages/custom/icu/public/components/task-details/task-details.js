@@ -214,11 +214,9 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
         'creator',
         'discussions',
         'permissions',
-        'status',
         'tags',
         'title',
         'description',
-        'watchers',
         '__state',
         '__autocomplete',
       ]);
