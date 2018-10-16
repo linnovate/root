@@ -215,7 +215,7 @@ angular.module('mean.icu').config([
                         if($state.current.name.indexOf('search') !== -1){
                             return _(officeDocuments.data || officeDocuments).find(d => d._id === $stateParams.id);
                         } else {
-                            let officeDocument = OfficeDocumentsService.data.find(t => t._id === $stateParams.id);
+                            let officeDocument = (officeDocuments.data || officeDocuments).find(t => t._id === $stateParams.id);
                             return officeDocument ?
                                 officeDocument :
                                 OfficeDocumentsService.getById($stateParams.id)
@@ -917,10 +917,13 @@ angular.module('mean.icu').config([
             .state('main.tasks.all.details.documents', getDetailsTabState('task', 'documents'))
             // .state('main.tasks.all.details.subtasks', getDetailsSubTasksState())
 
+            .state('main.tasks.all.details.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
+
             .state('main.tasks.byentity', generateStateByEntity('task'))
             .state('main.tasks.byentity.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byentity.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.documents', getDetailsTabState('task', 'documents'))
+            .state('main.tasks.byentity.officedocuments', getDetailsTabState('task', 'officeDocuments'))
             .state('main.tasks.byentity.tasks', getDetailsTabState('task', 'tasks'))
             // .state('main.tasks.byentity.subtasks', getDetailsSubTasksState())
 
@@ -928,6 +931,7 @@ angular.module('mean.icu').config([
             .state('main.tasks.byentity.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.details.documents', getDetailsTabState('task', 'documents'))
+            .state('main.tasks.byentity.details.officedocuments', getDetailsTabState('task', 'officeDocuments'))
             // .state('main.tasks.byentity.details.subtasks', getDetailsSubTasksState())
 
             .state('main.tasks.byassign', {
@@ -970,6 +974,7 @@ angular.module('mean.icu').config([
             .state('main.tasks.byassign.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byassign.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byassign.details.documents', getDetailsTabState('task', 'documents'))
+            .state('main.tasks.byassign.details.officedocuments', getDetailsTabState('task', 'officeDocuments'))
 
 
             .state('main.tasks.byparent', {

@@ -128,7 +128,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             })
             .then( docs => {
                 return PaginationService.processResponse(docs);
-            })
+            });
         }
 
         function getByProjectId(id) {

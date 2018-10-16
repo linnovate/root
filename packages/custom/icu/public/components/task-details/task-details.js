@@ -6,7 +6,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
 
   // ==================================================== init ==================================================== //
 
-  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents']);
+  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'officeDocuments']);
 
     $scope.item = typeof entity === 'object'? entity : context.entity;
     $scope.entityType = 'tasks';

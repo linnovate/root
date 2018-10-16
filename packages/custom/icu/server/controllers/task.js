@@ -189,15 +189,16 @@ exports.tagsList = function(req, res, next) {
 };
 
 exports.getByEntity = function (req, res, next) {
-
   if(req.locals.error) {
     return next();
   }
 
   var entities = {
+      tasks: 'task',
       projects: 'project',
       users: 'assign',
       discussions: 'discussions',
+      officeDocuments: 'officeDocument',
       tags: 'tags'
     },
     entityQuery = {
@@ -1027,7 +1028,7 @@ async function tasksToExcelServiceFormat(tasks,columns,datesColumns){
           lastUpdateDate// _.map(updates,(update=>`:${update.updated&&update.updated.toLocaleString().substr(0, update.updated.toLocaleString().indexOf(' '))} - ${update.creator.name}`+"\n"+`${update.description}`) ).join("\n"),
         ];
 
-  
+
     return row;
   }));
  return excelService.json2workbookWithDates({"rows":taskArray,dates:taskDatesArray,columns,datesColumns,"columnsBold":true});
@@ -1053,6 +1054,6 @@ async function tasksToExcelServiceFormat(tasks,columns,datesColumns){
 
 
 
- 
+
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;

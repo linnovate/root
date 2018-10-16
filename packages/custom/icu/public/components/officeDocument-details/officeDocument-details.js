@@ -2,11 +2,11 @@
 
 angular.module('mean.icu.ui.officeDocumentdetails', []).controller('OfficeDocumentDetailsController', OfficeDocumentDetailsController);
 
-function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, TasksService, NotifyingService, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, UsersService, $timeout, $http) {
+function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, people, officeDocuments, context, $state, TasksService, NotifyingService, OfficeDocumentsService, ActivitiesService, SignaturesService, EntityService, PermissionsService, $stateParams, UsersService, DetailsPaneService, $timeout, $http) {
 
   // ==================================================== init ==================================================== //
 
-  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents']);
+  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'tasks']);
 
   if (($state.$current.url.source.includes("search")) || ($state.$current.url.source.includes("officeDocuments"))) {
     $scope.item = entity || context.entity;

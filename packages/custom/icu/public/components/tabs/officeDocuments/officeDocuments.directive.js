@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('mean.icu.ui.tabs')
-    .directive('icuTabsOfficedocuments', function ($state, $filter, OfficeDocumentsService, PermissionsService) {
+    .directive('icuTabsOfficeDocuments', function ($state, $filter, OfficeDocumentsService, PermissionsService) {
         function controller($scope) {
             $scope.sorting = {
                 field: 'created',
                 isReverse: false
             };
 
+            debugger;
             $scope.officeDocuments = $scope.$parent.$parent.officeDocuments;
 
             $scope.loadNext = $scope.officeDocuments.next;

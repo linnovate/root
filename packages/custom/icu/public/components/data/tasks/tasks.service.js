@@ -396,6 +396,7 @@ angular.module('mean.icu.data.tasksservice', [])
         getByDiscussionId: getByEntityId('discussions'),
         getByOfficeId: getByEntityId('offices'),
         getByFolderId: getByEntityId('folders'),
+        getByOfficeDocumentId: getByEntityId('officeDocuments'),
         search: search,
         create: create,
         update: update,

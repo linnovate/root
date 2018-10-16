@@ -54,6 +54,10 @@ var TaskSchema = new Schema({
       ref: 'User'
     }
   ],
+  officeDocument: {
+    type: Schema.ObjectId,
+    ref: 'OfficeDocument'
+  },
   officeDocuments: [
     {
       type: Schema.ObjectId,
