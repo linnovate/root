@@ -1803,9 +1803,17 @@ exports.create = function(req,res,next){
           circles: [],
           relatedDocuments: [], //important
           watchers: folderObj.watchers, //important
-          permissions: [{id: req.user._id, level: 'editor'}],
+          //permissions: [{id: req.user._id, level: 'editor'}],
           documentType: '',
         };
+
+        doc.permissions =[];
+
+        //Add all permissions from the parent folder to the officedocument
+        for(var index = 0 ; index < folderObj.watchers.length; index++){
+          doc.permissions[index] = {id: new ObjectId(folderObj.watchers[index].id), level: folderObj.permissions[index].level};
+        }
+
         var obj = new Document(doc);
         obj.folder = folderObj;
         obj.save(function(error, result) {
