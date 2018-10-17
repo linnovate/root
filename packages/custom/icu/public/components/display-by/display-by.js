@@ -244,6 +244,8 @@ angular.module('mean.icu.ui.displayby', [])
         };
 
         // Reverse list in sideline
+        $scope.tasksList = $scope.tasksList.slice();
+        $scope.tasksList.reverse();
         $scope.projectsList = $scope.projectsList.slice();
         $scope.projectsList.reverse();
         $scope.allItems.projects = $scope.allItems.projects.slice();

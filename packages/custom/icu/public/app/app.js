@@ -915,9 +915,9 @@ angular.module('mean.icu').config([
             .state('main.tasks.all.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.all.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.all.details.documents', getDetailsTabState('task', 'documents'))
+            .state('main.tasks.all.details.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
             // .state('main.tasks.all.details.subtasks', getDetailsSubTasksState())
 
-            .state('main.tasks.all.details.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
 
             .state('main.tasks.byentity', generateStateByEntity('task'))
             .state('main.tasks.byentity.activities', getDetailsTabState('task', 'activities'))

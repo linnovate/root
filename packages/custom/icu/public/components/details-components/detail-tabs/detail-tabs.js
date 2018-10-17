@@ -63,7 +63,7 @@ angular.module('mean.icu.ui.detailsComponents').controller('TaskDocumentsControl
   })
 });
 angular.module('mean.icu.ui.detailsComponents').controller('TaskOfficeDocumentsController', function($scope, officeDocuments) {
-  $scope.officeDocuments = officeDocuments.data || officeDocuments;
+  $scope.officeDocuments = officeDocuments.data;
 });
 
 angular.module('mean.icu.ui.detailsComponents').controller('ProjectActivitiesController', function($scope, entity, context, activities, ActivitiesService) {

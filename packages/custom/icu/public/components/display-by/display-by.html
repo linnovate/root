@@ -238,6 +238,34 @@
         <!--<p class="intro">{{'display'+context.main+'By' | i18next}}:</p>-->
     </div>
 
+  <div class="list tasks"
+       ng-if="tasksList
+         && activeTab.display.indexOf('tasks') !== -1
+         && activeTab.name !== 'search'">
+    <p ng-click="visible.task = !visible.task"
+       class="title">
+      {{ "tasksFromOfficeDocument" | i18next | uppercase}}
+    </p>
+    <ul ng-if="visible.task && tasksList.length !== 0">
+      <li data-ng-repeat="task in tasksList | filterRecycled | limitTo: displayLimit['tasks']"
+          data-ng-class="{'selected': context.entityName === 'task' && task._id === context.entityId }"
+          data-ng-click="switchTo('task', task._id)"
+          ng-if="task._id && task.title">
+        <a href class="Names-In-List-On-Side" ng-bind-html="task.title">
+        </a>
+        <div class="tag-color" ng-style="{'background-color': '#' + task.color}"></div>
+      </li>
+      <li ng-if="tasksList.length > displayLimit['tasks']"
+          ng-click="showMore(tasksList.length, 'tasks')"
+          class="more">{{ 'more' | i18next }}
+      </li>
+      <li ng-if="tasksList.length == displayLimit['tasks'] && displayLimit['tasks'] > 3"
+          ng-click="collapse('tasks')"
+          class="more">{{ 'less' | i18next }}
+      </li>
+    </ul>
+  </div>
+
     <div class="list projects"
          ng-if="projectsList
          && activeTab.display.indexOf('projects') !== -1
