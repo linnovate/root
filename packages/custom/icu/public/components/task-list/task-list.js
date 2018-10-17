@@ -54,6 +54,10 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
         };
         if(parent){
             newItem[parent.type] = parent.id;
+            if(parent.type == 'project') {
+                newItem.watchers = context.entity.watchers;
+                newItem.permissions = context.entity.permissions;
+            }
         }
         return TasksService.create(newItem).then(function(result) {
             $scope.items.push(result);
