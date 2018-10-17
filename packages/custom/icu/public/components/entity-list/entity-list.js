@@ -163,8 +163,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         officeList:_.filter($scope.offices,(office)=>office.title&&office.title!=="")
     };
 
-
-
     $scope.onClickRow = function($event, item) {
         if ($scope.displayOnly) {
             return;
@@ -390,6 +388,18 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         }
     };
 
+    $scope.checkForInactiveEntity = () => {
+        if(!$scope.visibleItems.some( item => item._id === $stateParams.id ))
+            $state.go($state.current.name,
+                {
+                    id: $scope.visibleItems[0]._id,
+                    entity: context.entityName,
+                    entityId: context.entityId,
+                    nameFocused: true
+                })
+
+    };
+
     function getArrIds(arr){
         return arr.map( entity => entity._id )
     }
@@ -405,6 +415,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     setStatusFilterValue($stateParams.status);
     $scope.refreshVisibleItems();
+    $scope.checkForInactiveEntity();
 
     function filterResults(itemsArray){
         let newArray = $filter('filterRecycled')(itemsArray);
