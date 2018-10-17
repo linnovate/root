@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.tasksservice', [])
-.service('TasksService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
+.service('TasksService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
     var EntityPrefix = '/tasks';
     var filterValue = false;
     var data, tabData, IsNew;
@@ -297,14 +297,6 @@ angular.module('mean.icu.data.tasksservice', [])
         if (task.assign) {
             var message = {};
             message.content = task.title || '-';
-            MeanSocket.emit('message:send', {
-                message: message,
-                user: me,
-                channel: task.assign,
-                id: task.id,
-                entity: 'task',
-                type: 'assign'
-            });
 
             var activityType = prev.assign ? 'assign' : 'assignNew';
         } else {

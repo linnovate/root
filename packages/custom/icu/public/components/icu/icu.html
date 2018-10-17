@@ -1,5 +1,3 @@
-<!--<div icu-sidepane projects="projects" discussions="discussions" people="people" ng-if="!menu.isHidden" class="sidepane"></div>-->
-<!-- people="people" -->
 <div class="icu-data">
 <div icu-sidepane
      tasks="tasks"
@@ -16,7 +14,6 @@
      get-side-menu-icon="getSideMenuIcon"
 
      ng-hide="menu.isHidden"></div>
-<!--<div class="datapane" ng-class="{ wide: menu.isHidden }">-->
     <div class="panes-wrapper"
          ng-class="{ wide: menu.isHidden }"
          ng-if="state.current.name.indexOf('adminSettings') < 0">
@@ -42,16 +39,4 @@
          ng-if="state.current.name.indexOf('adminSettings')>0">
         <div icu-mainpane class="mainpane"></div>
     </div>
-    <!--<div>-->
 </div>
-
-
-<!--OHAD-->
-<div data-ng-controller="MeanSocketController">
-    <use-mean-socket after-join="socketAfterJoin(channel, messages)" mean-socket-after-get="socketAfterGet(message)" mean-socket-after-get-all-channels="socketAfterGetChannels(channels)"
-        join-to-channel="activeChannel" />
-
-    <div mean-socket after-send="socketAfterSend(message)"></div>
-</div>
-
-<!--END OHAD-->

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.projectsservice', [])
-  .service('ProjectsService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, MeanSocket, TasksService, $rootScope, WarningsService, ActivitiesService) {
+  .service('ProjectsService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/projects';
     var data, selected;
 
@@ -96,14 +96,6 @@ angular.module('mean.icu.data.projectsservice', [])
       if(project.assign) {
         var message = {};
         message.content = project.title || '-';
-        MeanSocket.emit('message:send', {
-          message: message,
-          user: me,
-          channel: project.assign,
-          id: project.id,
-          entity: 'task',
-          type: 'assign'
-        });
 
         var activityType = prev.assign ? 'assign' : 'assignNew';
       }
