@@ -1,0 +1,13 @@
+{
+  "name": "mean-socket",
+  "version": "0.0.1",
+  "description": "Some description of mean-socket",
+  "author": {
+    "name": "Rivka Tzur"
+  },
+  "mean": "0.4.0",
+  "dependencies": {
+    "socket.io": "^2.1.1"
+  },
+  "license": "MIT"
+}

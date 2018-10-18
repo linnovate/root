@@ -13,101 +13,16 @@ angular.module('mean.icu.ui.notificationsheader', [])
         $document) {
         function controller($scope) {
 
-            $scope.notificationsToWatch = 0;
+            UsersService.getMe().then(me => {
 
-            // Get the saved Notifications of the user, and show it to him
-            var getNotifications = function() {
+                $scope.socket = io();
 
-            UsersService.getMe().then((result)=>{
-                return $scope.me = result;
+                $scope.socket.on('connect', () => {
+                    console.log('socket.id:', $scope.socket.id);
+                    $scope.socket.emit('register', me._id);
+                })
+
             })
-            .then(()=>{
-                // Get the saved Notifications of the user, and show it to him
-                NotificationsService.getByUserId($scope.me._id).then(function(response) {
-                    $scope.data = NotificationsService.data;
-
-                    if(NotificationsService.data.lastNotification)
-                    {
-                        if (NotificationsService.data.lastNotification.content.length > 25) {
-                            NotificationsService.data.lastNotification.content =
-                                NotificationsService.data.lastNotification.content.substring(0, 25) + "...";
-                        }
-                    };
-
-                    _(NotificationsService.data.notifications).each(function (n) {
-                        if (n.content.length > 25) {
-                            n.content = n.content.substring(0, 25) + "...";
-                        }
-                    });
-                });
-            })
-            };
-
-            getNotifications();
-
-            $scope.context = context;
-            $scope.allNotifications = false;
-
-            $scope.GoToNotification = function(this_notification) {
-                if (!this_notification.IsWatched) {
-                    NotificationsService.updateByUserId(this_notification._id).then(function(result) {
-                        this_notification.IsWatched = true;
-                    });
-                }
-
-                $scope.allNotifications = false;
-
-                $state.go('main.tasks.all.details', {
-                    id: this_notification.id,
-                    entity: context.entityName,
-                    //entityId: context.entityId
-                });
-            };
-
-            $scope.triggerDropdown = function() {
-
-                NotificationsService.updateByUserId_DropDown($scope.me._id).then(function(result) {
-
-                    $scope.allNotifications = !$scope.allNotifications;
-
-                    NotificationsService.data.notificationsToWatch = 0;
-
-                });
-            };
-
-            $scope.loadMore = function() {
-                NotificationsService.getByUserId($scope.me._id,false).then(function(response) {});
-            };
-
-            $scope.loadLess = function() {
-                NotificationsService.getByUserId($scope.me._id,true).then(function(response) {});
-            };
-
-            $scope.details = {
-                assign: [{
-                    type: 'object',
-                    value: 'entity'
-                }, {
-                    type: 'text',
-                    value: '"',
-                    klass: 'entity-name'
-                }, {
-                    type: 'object',
-                    value: 'content',
-                    klass: 'entity-name'
-                }, {
-                    type: 'text',
-                    value: '"',
-                    klass: 'entity-name'
-                }, {
-                    type: 'text',
-                    value: 'assignedTo'
-                }, {
-                    type: 'deepObject',
-                    value: ['user', 'name'],
-                    klass: 'user'
-                }]
-            };
 
             $scope.logout = function() {
                 UsersService.logout().then(function() {
