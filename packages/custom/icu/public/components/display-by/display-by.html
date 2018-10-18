@@ -242,7 +242,7 @@
          ng-if="tasksList.length && activeTab.name == 'officeDocuments'">
       <p ng-click="visible.task = !visible.task"
          class="title">
-        {{ "tasksFromOfficeDocument" | i18next | uppercase}}
+        {{ "OfficeDocumentsFromTask" | i18next | uppercase}}
       </p>
       <ul ng-if="visible.task && tasksList.length !== 0">
         <li data-ng-repeat="task in tasksList | filterRecycled | limitTo: displayLimit['tasks']"
@@ -327,7 +327,7 @@
          ng-if="officeDocumentsList.length && activeTab.name == 'tasks'">
         <p ng-click="visible.officeDocument = !visible.officeDocument "
            class="title">
-            {{ 'OfficeDocumentsFromTask' | i18next | uppercase}}
+            {{ 'tasksFromOfficeDocument' | i18next | uppercase}}
         </p>
         <ul ng-if="visible.officeDocument && officeDocumentsList.length !== 0">
             <li data-ng-repeat="officeDocument in officeDocumentsList | filterRecycled | limitTo: displayLimit['officeDocuments']"
