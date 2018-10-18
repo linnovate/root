@@ -297,12 +297,8 @@ exports.getByTaskId = function(req,res,next){
 
     Document.find({ task: {$in: [ ObjectId(taskId) ]} })
       .exec(function(err, documents) {
-        if(!documents.length){
-          req.locals.data.pagination.count = 0;
-        } else {
-          req.locals.data.pagination.count = documents.length;
-          req.locals.result = documents;
-        }
+          req.locals.data.pagination.count = documents.length || 0;
+          req.locals.result = documents || [];
         next();
       })
 }
