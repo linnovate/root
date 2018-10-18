@@ -8,7 +8,6 @@ angular.module('mean.icu.ui.tabs')
                 isReverse: false
             };
 
-            debugger;
             $scope.officeDocuments = $scope.$parent.$parent.officeDocuments;
 
             $scope.loadNext = $scope.officeDocuments.next;

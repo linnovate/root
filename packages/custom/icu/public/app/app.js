@@ -479,7 +479,6 @@ angular.module('mean.icu').config([
 //                         },
                         controllerProvider: function ($stateParams) {
                             var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
-                            debugger;
                             console.log(main, tab);
                             return entity + capitalizedTab + 'Controller';
                         }
