@@ -4,13 +4,14 @@ var _ = require('lodash');
 // var q = require('q');
 var async = require('async');
 var config = require('meanio').loadConfig();
+var ObjectId = require('mongoose').Types.ObjectId;
 
 /**
  * includes = space seperated entities to populate in middleware .all
- * 
+ *
  */
 var options = {
-  includes: 'assign watchers project subTasks discussions creator',
+  includes: 'assign watchers project discussion subTasks discussions creator',
   defaults: {
     project: undefined,
     assign: undefined,
@@ -77,6 +78,24 @@ Date.prototype.getWeek = function () {
   ];
 };
 
+exports.relateEntity = function(req, res, next) {
+  let { taskId, entityType, entityId} = req.body;
+
+  Task.findOne({_id: taskId})
+    .populate('watchers')
+    .then( doc => {
+      if(!doc[entityType])
+        doc[entityType] = [];
+      doc[entityType].push(new ObjectId(entityId));
+      return doc;
+    })
+    .then(doc => {
+      res.json(doc);
+    })
+    .catch(function (err) {
+      next(err)
+    })
+};
 
 exports.create = function(req, res, next) {
   if(req.locals.error) {
@@ -170,15 +189,16 @@ exports.tagsList = function(req, res, next) {
 };
 
 exports.getByEntity = function (req, res, next) {
-
   if(req.locals.error) {
     return next();
   }
 
   var entities = {
+      tasks: 'task',
       projects: 'project',
       users: 'assign',
       discussions: 'discussions',
+      officeDocuments: 'officeDocument',
       tags: 'tags'
     },
     entityQuery = {
@@ -977,14 +997,14 @@ async function tasksToExcelServiceFormat(tasks,columns,datesColumns){
              assign&&assign.name,
              _.map(watchers,watcher=>watcher.name).join("\n"),
             description,
-            creator&&creator.name, 
+            creator&&creator.name,
             discussions&&discussions[0]&&discussions[0].title,
             project&&project.title,
             _.map(updates,(update=>`:${update.updated&&update.updated.toLocaleString().substr(0, update.updated.toLocaleString().indexOf(' '))} - ${update.creator.name}`+"\n"+`${update.description}`) ).join("\n"),
             tags.join("\n"),
          ];
- 
-   
+
+
      return row;
    }));
    let taskDatesArray = await Promise.all(_.map(filteredTasks,async (task)=>{
@@ -1008,17 +1028,17 @@ async function tasksToExcelServiceFormat(tasks,columns,datesColumns){
           lastUpdateDate// _.map(updates,(update=>`:${update.updated&&update.updated.toLocaleString().substr(0, update.updated.toLocaleString().indexOf(' '))} - ${update.creator.name}`+"\n"+`${update.description}`) ).join("\n"),
         ];
 
-  
+
     return row;
   }));
  return excelService.json2workbookWithDates({"rows":taskArray,dates:taskDatesArray,columns,datesColumns,"columnsBold":true});
  }
- 
- 
+
+
  exports.excel = function (req, res, next) {
-   
+
    //return res.json(req.locals.result);
- 
+
    //setting mime type as excel
    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
    //setting the name of the file to be downloaded
@@ -1034,6 +1054,6 @@ async function tasksToExcelServiceFormat(tasks,columns,datesColumns){
 
 
 
- 
+
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;

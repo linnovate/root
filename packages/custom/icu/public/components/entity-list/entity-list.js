@@ -16,9 +16,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         return $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity`) === 0 && $state.current.name.indexOf('details') === -1;
     }
 
-    let possibleNavigate = $scope.$parent.items.filter(function(t) {
-        return t.recycled == null;
-    })
+    let possibleNavigate = $scope.$parent.items.filter( t => t.recycled == null );
 
     if (possibleNavigate.length) {
         function navigateToDetails(item) {

@@ -26,14 +26,16 @@ angular.module('mean.icu').config([
                     getFn = 'getById';
                 }
                 if (service.IsNew) {
-                    return service[getFn]($stateParams.entityId,
+                    return service[getFn](
+                        $stateParams.entityId,
                         $stateParams.start,
                         BIGLIMIT,
                         $stateParams.sort,
                         $stateParams.starred);
                 }
                 else {
-                    return service[getFn]($stateParams.entityId,
+                    return service[getFn](
+                        $stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
                         $stateParams.sort,
@@ -49,8 +51,9 @@ angular.module('mean.icu').config([
                     return context.entity;
                 }
             ];
-            if (main !== 'task') {
+            if (main !== 'task' && main !== 'officeDocument') {
                 resolve.tasks = function (TasksService, $stateParams) {
+                    console.log(main);
                     if ($stateParams.entityId && $stateParams.id) {
                         return;
                     }
@@ -58,7 +61,6 @@ angular.module('mean.icu').config([
                     return TasksService[getFn]($stateParams.entityId);
                 };
             }
-
             return {
                 url: '/by-:entity/:entityId',
                 params: {
@@ -215,7 +217,7 @@ angular.module('mean.icu').config([
                         if($state.current.name.indexOf('search') !== -1){
                             return _(officeDocuments.data || officeDocuments).find(d => d._id === $stateParams.id);
                         } else {
-                            let officeDocument = OfficeDocumentsService.data.find(t => t._id === $stateParams.id);
+                            let officeDocument = (officeDocuments.data || officeDocuments).find(t => t._id === $stateParams.id);
                             return officeDocument ?
                                 officeDocument :
                                 OfficeDocumentsService.getById($stateParams.id)
@@ -477,6 +479,8 @@ angular.module('mean.icu').config([
 //                         },
                         controllerProvider: function ($stateParams) {
                             var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
+                            debugger;
+                            console.log(main, tab);
                             return entity + capitalizedTab + 'Controller';
                         }
                     }
@@ -893,7 +897,8 @@ angular.module('mean.icu').config([
                     starred: false,
                     start: 0,
                     limit: LIMIT,
-                    sort: SORT
+                    sort: SORT,
+                    currentEntity: 'task'
                 },
                 resolve: {
                     tasks: function (TasksService, $stateParams) {
@@ -914,12 +919,15 @@ angular.module('mean.icu').config([
             .state('main.tasks.all.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.all.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.all.details.documents', getDetailsTabState('task', 'documents'))
+            .state('main.tasks.all.details.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
             // .state('main.tasks.all.details.subtasks', getDetailsSubTasksState())
+
 
             .state('main.tasks.byentity', generateStateByEntity('task'))
             .state('main.tasks.byentity.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byentity.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.documents', getDetailsTabState('task', 'documents'))
+            .state('main.tasks.byentity.officedocuments', getDetailsTabState('task', 'officeDocuments'))
             .state('main.tasks.byentity.tasks', getDetailsTabState('task', 'tasks'))
             // .state('main.tasks.byentity.subtasks', getDetailsSubTasksState())
 
@@ -927,6 +935,7 @@ angular.module('mean.icu').config([
             .state('main.tasks.byentity.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.details.documents', getDetailsTabState('task', 'documents'))
+            .state('main.tasks.byentity.details.officedocuments', getDetailsTabState('task', 'officeDocuments'))
             // .state('main.tasks.byentity.details.subtasks', getDetailsSubTasksState())
 
             .state('main.tasks.byassign', {
@@ -969,6 +978,7 @@ angular.module('mean.icu').config([
             .state('main.tasks.byassign.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byassign.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byassign.details.documents', getDetailsTabState('task', 'documents'))
+            .state('main.tasks.byassign.details.officedocuments', getDetailsTabState('task', 'officeDocuments'))
 
 
             .state('main.tasks.byparent', {
@@ -1016,6 +1026,33 @@ angular.module('mean.icu').config([
             .state('main.tasks.byparent.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byparent.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byparent.details.documents', getDetailsTabState('task', 'documents'))
+
+            .state('main.tasks.officeDocument', {
+                url: '/officeDocument/:entityId',
+                params: {
+                    starred: false,
+                    start: 0,
+                    limit: LIMIT,
+                    sort: SORT
+                },
+                views: getListView('officeDocument'),
+                resolve: {
+                    officeDocuments:  (OfficeDocumentsService, $stateParams) => {
+                        return $stateParams.starred ?
+                            OfficeDocumentsService.getStarred() :
+                            OfficeDocumentsService.getByTaskId(
+                              $stateParams.entityId,
+                              $stateParams.start,
+                              $stateParams.limit,
+                              $stateParams.sort
+                            );
+                    }
+                }
+            })
+            .state('main.tasks.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
+            .state('main.tasks.officeDocument.documents', getDetailsTabState('officeDocument', 'documents'))
+            .state('main.tasks.officeDocument.details', getOfficeDocumentDetailsState())
+            .state('main.tasks.officeDocument.details.activities', getDetailsTabState('officeDocument', 'activities'))
 
 
             .state('main.projects', {

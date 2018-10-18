@@ -76,6 +76,13 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
+    function relateToTask(taskId, entityType, entityId){
+        return $http.post(ApiUri +  EntityPrefix + '/relate', { taskId: taskId, entityType: entityType, entityId: entityId })
+          .then(function(result) {
+              return result.data
+          });
+    }
+
     function getByEntityId(entity) {
         return function(id, start, limit, sort, starred) {
             var qs = querystring.encode({
@@ -389,10 +396,12 @@ angular.module('mean.icu.data.tasksservice', [])
         getByDiscussionId: getByEntityId('discussions'),
         getByOfficeId: getByEntityId('offices'),
         getByFolderId: getByEntityId('folders'),
+        getByOfficeDocumentId: getByEntityId('officeDocuments'),
         search: search,
         create: create,
         update: update,
         remove: remove,
+        relateToTask: relateToTask,
         getStarred: getStarred,
         star: star,
         getMyTasks: getMyTasks,

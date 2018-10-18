@@ -16,15 +16,15 @@ function OfficeDocumentListController($scope, $state, BoldedService, NotifyingSe
   };
 
     $scope.create = function(parent) {
-        var data = {};
+        var newItem = {};
         if(parent){
-            data.folder = parent.id;
+            newItem[parent.type] = parent.id;
         }
         //         if ($stateParams.entity == 'folder') {
         //             data['folder'] = $stateParams.entityId;
         //         }
 
-        return OfficeDocumentsService.createDocument(data).then(function(result) {
+        return OfficeDocumentsService.createDocument(newItem).then(function(result) {
             result.created = new Date(result.created);
             $scope.items.push(result);
             //             if (localStorage.getItem('type') == 'new') {

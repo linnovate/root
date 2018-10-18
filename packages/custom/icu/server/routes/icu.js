@@ -207,6 +207,9 @@ module.exports = function(Icu, app) {
   app.route('/api/tasks/subtasks/:id([0-9a-fA-F]{24})')
     .get(task.getSubTasks);
 
+  app.route('/api/tasks/relate')
+    .post(task.relateEntity);
+
   app.route('/api/projects/subprojects/:id([0-9a-fA-F]{24})')
     .get(project.getSubProjects);
 
@@ -373,6 +376,11 @@ module.exports = function(Icu, app) {
   //used for excel summary
   app.route('/api/officeDocuments/summary')
     .post(documents.getExcelSummary);
+
+  app.route('/api/tasks/:id([0-9a-fA-F]{24})/officeDocuments')
+    .get(pagination.parseParams, documents.getByTaskId, pagination.formResponse);
+  app.route('/api/tasks/:id([0-9a-fA-F]{24})/officeDocuments/starred')
+    .get(pagination.parseParams, star.getStarredIds('tasks'), documents.getByTaskId, pagination.formResponse);
 
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
     .get(documents.getById)

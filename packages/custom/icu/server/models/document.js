@@ -44,6 +44,16 @@ var DocumentSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Signature'
   },
+  task: {
+    type: Schema.ObjectId,
+    ref: 'Task'
+  },
+  tasks: [
+    {
+      type: Schema.ObjectId,
+      ref: 'OfficeDocument'
+    }
+  ],
   folder: {
     type: Schema.ObjectId,
     ref: 'Folder'

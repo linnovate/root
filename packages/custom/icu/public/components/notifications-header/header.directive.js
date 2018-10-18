@@ -199,26 +199,20 @@ angular.module('mean.icu.ui.notificationsheader', [])
             };
 
             $scope.createDiscussion = function() {
-                var discussion = {
+                let discussion = {
                     title: '',
                     watchers: [],
                 };
 
-                var params = {};
-                var state = 'main.discussions.all.details.activities';
+                let params = {};
+                let state = 'main.discussions.all.details.activities';
+                let id = $stateParams.entityId || $stateParams.id;
 
-                if ($stateParams.entity === 'project' && $stateParams.entityId) {
-                    discussion['project'] = $stateParams.entityId;
+                if ($stateParams.entity === 'project' && id) {
+                    discussion['project'] = id;
                     state = 'main.discussions.byentity.details.activities';
                     params.entity = 'project';
-                    params.entityId = $stateParams.entityId;
-                } else {
-                    if (context.main === 'projects' && $stateParams.id) {
-                        discussion['project'] = $stateParams.id;
-                        state = 'main.discussions.byentity.details.activities';
-                        params.entity = 'project';
-                        params.entityId = $stateParams.id;
-                    }
+                    params.entityId = id;
                 }
 
                 DiscussionsService.create(discussion).then(function(result) {
@@ -226,19 +220,30 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     params.id = result._id;
                     $state.go(state, params, {
                         reload: true
-                    })
+                    });
                 });
             };
 
             $scope.createOfficeDocument = function() {
+                let params = {},
+                    state,
+                    newDocument = {},
+                    id = $stateParams.entityId || $stateParams.id;
 
-                var params = {};
-                var state = 'main.officeDocuments.all.details.activities';
+                if ($stateParams.currentEntity === 'task' && id) {
+                    newDocument.task = id;
+                    state = 'main.tasks.officeDocument.details.activities';
+                    params.entity = 'task';
+                    params.entityId = id;
+                } else {
+                    state = 'main.officeDocuments.all.details.activities';
+                }
 
-                OfficeDocumentsService.createDocument({}).then(function(result){
+                OfficeDocumentsService.createDocument(newDocument).then(function(result){
                     result.created=new Date(result.created);
                     $scope.officeDocuments.push(result);
                     params.id = result._id;
+
                     $state.go(state, params, {
                         reload: false
                     });

@@ -237,6 +237,7 @@ angular.module('mean.icu.data.discussionsservice', [])
     return {
       getAll: getAll,
       getById: getById,
+      getByTaskId: getByEntityId('tasks'),
       getByProjectId: getByEntityId('projects'),
       getTags: getTags,
       create: create,

@@ -24,7 +24,7 @@ function detailTabs($state) {
 
     $scope.onClickTab = function(tab) {
       let path = $state.$current.name.split('.');
-      if (['activities', 'documents', 'tasks', 'folders', 'signatures', 'officedocuments'].includes(path.pop())) {
+      if (['activities', 'documents', 'tasks', 'folders', 'signatures', 'officeDocuments'].includes(path.pop())) {
         path.push(tab);
         path = path.join('.');
       } else {
@@ -37,7 +37,8 @@ function detailTabs($state) {
       return $state.$current.name;
     }, function(newVal, oldVal) {
       let tab = newVal.split('.').pop();
-      if ($scope.selection != tab && ['activities', 'documents', 'tasks', 'folders', 'signatures', 'officedocuments'].includes(tab)) {
+      debugger;
+      if ($scope.selection != tab && ['activities', 'documents', 'tasks', 'folders', 'signatures', 'officeDocuments'].includes(tab)) {
         $scope.selection = tab;
         //         $scope.onClick(tab);
       }
@@ -54,7 +55,6 @@ angular.module('mean.icu.ui.detailsComponents').controller('TaskActivitiesContro
     a.taskName = tasksNames[a.issueId];
   })
 });
-
 angular.module('mean.icu.ui.detailsComponents').controller('TaskDocumentsController', function($scope, entity, context, documents, tasks, AttachmentsService) {
   $scope.documents = documents;
   var tasksNames = _.object(_.pluck(tasks, '_id'), _.pluck(tasks, 'title'));
@@ -62,6 +62,9 @@ angular.module('mean.icu.ui.detailsComponents').controller('TaskDocumentsControl
   $scope.documents.forEach(function(a) {
     a.taskName = tasksNames[a.issueId];
   })
+});
+angular.module('mean.icu.ui.detailsComponents').controller('TaskOfficeDocumentsController', function($scope, officeDocuments) {
+  $scope.officeDocuments = officeDocuments.data;
 });
 
 angular.module('mean.icu.ui.detailsComponents').controller('ProjectActivitiesController', function($scope, entity, context, activities, ActivitiesService) {
@@ -131,6 +134,9 @@ angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentDocume
       .then(user =>
           doc.attUser = user.name
   ))
+});
+angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentTasksController', function($scope, entity, context, tasks, $state) {
+    $scope.tasks = tasks;
 });
 
 

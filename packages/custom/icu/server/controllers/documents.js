@@ -22,11 +22,10 @@ var ftp = require('../services/ftp');
 
 var excel = require('../services/excel');
 var options = {
-  includes: 'assign watchers folder',
+  includes: 'assign watchers folder task',
   defaults: {watchers: []},
   conditions: {$or: [ {officemmah: {$exists: false}}]}
 };
-
 var document = crud('officeDocuments', options);
 Object.keys(document).forEach(function(methodName) {
   if(methodName !== 'destroy') {
@@ -292,6 +291,23 @@ exports.getExcelSummary = function(req,res,next){
     });
   });
 }
+
+exports.getByTaskId = function(req,res,next){
+    let taskId = req.params.id;
+
+    Document.find({ task: {$in: [ ObjectId(taskId) ]} })
+      .exec(function(err, documents) {
+        if(!documents.length){
+          req.locals.data.pagination.count = 0;
+        } else {
+          req.locals.data.pagination.count = documents.length;
+          req.locals.result = documents;
+        }
+        next();
+      })
+}
+
+
 
 exports.signOnDocx = function(req, res, next) {
   var doc = req.body.officeDocuments;
@@ -1033,7 +1049,9 @@ if(req.query.folderId){
   Document.find({
     $and:qu
 
-  }).sort(obj).skip(start).limit(limit).populate('folder')
+  }).sort(obj).skip(start).limit(limit)
+  .populate('folder')
+  .populate('task')
   .populate('creator')
   .populate('updater')
   .populate('sender')
@@ -1731,7 +1749,9 @@ exports.uploadFileToDocument = function(req, res, next) {
 
 exports.create = function(req,res,next){
   console.log("exports.create") ;
-  var folderId = req.body.folder;//contains folder Id
+  let folderId = req.body.folder;//contains folder Id
+  let taskId = req.body.task;
+
   if(!folderId){
     var doc = {
       created: new Date(),
@@ -1743,6 +1763,7 @@ exports.create = function(req,res,next){
       description: '', //important
       serial: '',
       folder: undefined,
+      task: taskId ? new ObjectId(taskId) : undefined,
       creator: new ObjectId(req.user._id),
       updater: new ObjectId(req.user._id),
       sender: new ObjectId(req.user._id),
@@ -1767,7 +1788,9 @@ exports.create = function(req,res,next){
       }
       else {
         logger.log('info', '%s create, %s', req.user.name, 'success without folder');
-          User.findOne({_id: result.creator}).exec(function(err, creator) {
+          User.findOne({_id: result.creator})
+            .populate('task')
+            .exec(function(err, creator) {
             result.creator = creator;
             // res.send(result);
             req.locals.result = result;
@@ -1777,7 +1800,8 @@ exports.create = function(req,res,next){
     });
   }
   else {
-    Folder.findOne({_id: folderId}).exec(function(err, folderObj) {
+    Folder.findOne({_id: folderId})
+      .exec(function(err, folderObj) {
       if(err) {
         logger.log('error', '%s create, %s', req.user.name, ' Folder.findOne', {error: err.message});
 
@@ -1793,6 +1817,7 @@ exports.create = function(req,res,next){
           description: '', //important
           serial: '',
           folder: new ObjectId(folderId),
+          task: taskId ? new ObjectId(taskId) : undefined,
           creator: new ObjectId(req.user._id),
           updater: new ObjectId(req.user._id),
           sender: new ObjectId(req.user._id),

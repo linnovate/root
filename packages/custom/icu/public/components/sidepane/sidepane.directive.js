@@ -11,6 +11,7 @@ directive('icuSidepane', function() {
 
         $scope.folders = $scope.folders.data || $scope.folders;
         $scope.offices = $scope.offices.data || $scope.offices;
+        $scope.tasks = $scope.tasks.data || $scope.tasks;
         $scope.projects = $scope.projects.data || $scope.projects;
         $scope.attachments = $scope.officeDocuments.data || $scope.officeDocuments;
         $scope.discussions = $scope.discussions.data || $scope.discussions;
@@ -129,11 +130,15 @@ directive('icuSidepane', function() {
 
         $scope.createLists = function(){
             return new Promise((resolve) => {
+                $scope.tasksList = [];
+                $scope.tasks.forEach( t => {if(t.title)$scope.tasksList.push(t)});
+
                 $scope.projectsList = [];
-                $scope.projects.forEach(function(project) {
-                    if(project.title)
-                        $scope.projectsList.push(project);
-                });
+                $scope.projects.forEach( p => {if(p.title)$scope.projectsList.push(p)});
+
+                $scope.officeDocumentsList = [];
+                $scope.officeDocuments.forEach( doc => {if(doc.title) $scope.officeDocumentsList.push(doc)});
+
                 resolve();
             }).then(() => {
                 $scope.officesList = [];
@@ -151,15 +156,6 @@ directive('icuSidepane', function() {
                     $scope.folders.forEach(function (folder) {
                         if (folder.title)
                             $scope.foldersList.push(folder);
-                    });
-                });
-            }).then(() => {
-                $scope.officeDocumentsList = [];
-                return OfficeDocumentsService.getAll(0, 0, 'created').then(officeDocuments => {
-                    $scope.officeDocuments = officeDocuments.data || officeDocuments;
-                    $scope.officeDocuments.forEach(function (officeDocument) {
-                        if (officeDocument.title)
-                            $scope.officeDocumentsList.push(officeDocument);
                     });
                 });
             }).then(() => {

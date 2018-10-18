@@ -90,7 +90,9 @@
     <p ng-if="item.serial">{{'simochin' | i18next }}: {{item.serial}} </p>
   </div>
 
-  <detail-category placeholder="'selectFolder' | i18next" value="item.folder" items="folders" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent"></detail-category>
+  <detail-category placeholder="'selectFolder' | i18next" value="item.folder" items="folders" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent"> </detail-category>
+
+  <detail-category placeholder="'selectTask' | i18next" value="item.task" items="tasks" type="'task'" on-change="onTaskRelation" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent"> </detail-category>
 
   <div class="parent" ng-if="item.parent">{{currentContext.entity.title}}</div>
 
@@ -208,12 +210,12 @@
       <b>{{'forNotice' | i18next }}: </b>
       <span ng-repeat="forNotice in item.forNotice">
         {{forNotice.name}}
-                     <span ng-if="$index != item.forNotice.length-1">,</span>
+        <span ng-if="$index != item.forNotice.length-1">,</span>
       </span>
     </p>
   </div>
 
-  <detail-tabs tabs="tabs" item="item" entity-name="officeDocuments" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
+  <detail-tabs tabs="tabs" item="item" entity-name="officeDocument" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
 
   <icu-members-footer
     ng-if="item._id"

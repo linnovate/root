@@ -106,11 +106,29 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function getByTaskId(id) {
-            return $http.get(ApiUri + '/tasks/' + id + EntityPrefix).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            });
+        function getByEntityId(entity) {
+            return function(id, start, limit, sort, starred) {
+                var qs = querystring.encode({
+                    start: start,
+                    limit: limit,
+                    sort: sort
+                });
+
+                if(qs.length) {
+                    qs = '?' + qs;
+                }
+
+                var url = ApiUri + '/' + entity + '/' + id + EntityPrefix;
+                if(starred) {
+                    url += '/starred';
+                }
+
+                return $http.get(url + qs).then(function(result) {
+                    if(!result.data.content)result.data.content = [];
+                    WarningsService.setWarning(result.headers().warning);
+                    return PaginationService.processResponse(result.data);
+                });
+            };
         }
 
         function getByProjectId(id) {
@@ -424,15 +442,15 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateEntity(officeDocument, prev) {
-            var activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
+        function updateEntity(officeDocument, prev, type = 'folder') {
+            let activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
             return ActivitiesService.create({
                 data: {
                     issue: 'officeDocuments',
                     issueId: officeDocument._id,
                     type: activityType,
-                    entityType: 'folder',
-                    entity: officeDocument.folder.title,
+                    entityType: type,
+                    entity: type === 'folder' ? officeDocument.folder.title : officeDocument.task.title,
                     prev: prev.folder ? prev.folder.title : ''
                 },
                 context: {}
@@ -471,7 +489,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             delete:deleteDocument,
             update: update,
             getById: getById,
-            getByTaskId: getByTaskId,
+            getByTaskId: getByEntityId('tasks'),
             getByProjectId: getByProjectId,
             getByDiscussionId: getByDiscussionId,
             getFolderIndex: getFolderIndex,

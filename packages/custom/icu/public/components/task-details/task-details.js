@@ -2,15 +2,14 @@
 
 angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
 
-function TaskDetailsController($scope, entity, tags, projects, tasks, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me, DetailsPaneService) {
+function TaskDetailsController($scope, entity, projects, tasks, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
 
-  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents']);
+  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'officeDocuments']);
 
     $scope.item = typeof entity === 'object'? entity : context.entity;
     $scope.entityType = 'tasks';
-
 
   if (!$scope.item) {
     $state.go('main.tasks.byentity', {
@@ -28,7 +27,6 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
   $scope.statuses = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'];
 
   $scope.me = me;
-  $scope.tags = tags;
   $scope.projects = projects.data || projects;
 
   var currentState = $state.current.name;
@@ -255,6 +253,11 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
   }
 
   // ==================================================== Category ==================================================== //
+
+  $scope.onTaskRelation = function(value) {
+    $scope.item.discussion = value;
+    $scope.update($scope.item, 'discussion');
+  };
 
   $scope.onCategory = function(value) {
     $scope.item.project = value;
