@@ -106,29 +106,29 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function getByTaskId(id, start, limit, sort, starred) {
-            let qs = querystring.encode({
-                start: start,
-                limit: limit,
-                sort: sort
-            });
+        function getByEntityId(entity) {
+            return function(id, start, limit, sort, starred) {
+                var qs = querystring.encode({
+                    start: start,
+                    limit: limit,
+                    sort: sort
+                });
 
-            if(qs.length) {
-                qs = '?' + qs;
-            }
+                if(qs.length) {
+                    qs = '?' + qs;
+                }
 
-            let url = ApiUri + EntityPrefix + '/byTask/' + id + qs;
-            if(starred) {
-                url += '/starred';
-            }
+                var url = ApiUri + '/' + entity + '/' + id + EntityPrefix;
+                if(starred) {
+                    url += '/starred';
+                }
 
-            return $http.get(url).then(function (result) {
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            })
-            .then( docs => {
-                return PaginationService.processResponse(docs);
-            });
+                return $http.get(url + qs).then(function(result) {
+                    if(!result.data.content)result.data.content = [];
+                    WarningsService.setWarning(result.headers().warning);
+                    return PaginationService.processResponse(result.data);
+                });
+            };
         }
 
         function getByProjectId(id) {
@@ -489,7 +489,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             delete:deleteDocument,
             update: update,
             getById: getById,
-            getByTaskId: getByTaskId,
+            getByTaskId: getByEntityId('tasks'),
             getByProjectId: getByProjectId,
             getByDiscussionId: getByDiscussionId,
             getFolderIndex: getFolderIndex,

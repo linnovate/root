@@ -4,7 +4,6 @@ angular.module('mean.icu.ui.tabs')
     .directive('icuTabsDocuments', function () {
         function controller($scope, $http,  $state, $stateParams, DocumentsService, context, ActivitiesService, UsersService, AttachmentsService, PermissionsService) {
 
-          debugger;
             ActivitiesService.issueId=$stateParams.id || $stateParams.entityId;
 
             $scope.stateParams = $stateParams;

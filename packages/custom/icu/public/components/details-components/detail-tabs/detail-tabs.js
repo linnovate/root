@@ -37,7 +37,8 @@ function detailTabs($state) {
       return $state.$current.name;
     }, function(newVal, oldVal) {
       let tab = newVal.split('.').pop();
-      if ($scope.selection != tab && ['activities', 'documents', 'tasks', 'folders', 'signatures', 'officedocuments'].includes(tab)) {
+      debugger;
+      if ($scope.selection != tab && ['activities', 'documents', 'tasks', 'folders', 'signatures', 'officeDocuments'].includes(tab)) {
         $scope.selection = tab;
         //         $scope.onClick(tab);
       }

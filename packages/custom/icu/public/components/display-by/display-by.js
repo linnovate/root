@@ -254,6 +254,8 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.allItems.discussions.reverse();
         $scope.discussions = $scope.discussions.slice();
         $scope.discussions.reverse();
+        $scope.officeDocumentsList = $scope.officeDocumentsList.slice();
+        $scope.officeDocumentsList.reverse();
 
         $scope.context = context;
 
@@ -364,7 +366,6 @@ angular.module('mean.icu.ui.displayby', [])
      };
         $scope.switchTo = function (entityName, id) {
             EntityService.setEntityFolderValue(entityName, id);
-
                 $state.go('main.' + context.main + '.byentity', {
                 entity: entityName,
                 entityId: id,
@@ -388,6 +389,7 @@ angular.module('mean.icu.ui.displayby', [])
         };
 
         $scope.visible = {
+            task: true,
             project: true,
             discussion: true,
             user: true,

@@ -295,15 +295,19 @@ exports.getExcelSummary = function(req,res,next){
 exports.getByTaskId = function(req,res,next){
     let taskId = req.params.id;
 
-    Document.find(
-      { task: ObjectId(taskId) })
+    Document.find({ task: {$in: [ ObjectId(taskId) ]} })
       .exec(function(err, documents) {
-        if(!documents)return;
-        // res.send(documents);
-        req.locals.result = documents;
+        if(!documents.length){
+          req.locals.data.pagination.count = 0;
+        } else {
+          req.locals.data.pagination.count = documents.length;
+          req.locals.result = documents;
+        }
         next();
       })
 }
+
+
 
 exports.signOnDocx = function(req, res, next) {
   var doc = req.body.officeDocuments;

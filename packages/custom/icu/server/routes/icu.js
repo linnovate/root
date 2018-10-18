@@ -377,8 +377,10 @@ module.exports = function(Icu, app) {
   app.route('/api/officeDocuments/summary')
     .post(documents.getExcelSummary);
 
-  app.route('/api/officeDocuments/byTask/:id([0-9a-fA-F]{24})')
-    .get(pagination.parseParams, documents.all, documents.getByTaskId, pagination.formResponse);
+  app.route('/api/tasks/:id([0-9a-fA-F]{24})/officeDocuments')
+    .get(pagination.parseParams, documents.getByTaskId, pagination.formResponse);
+  app.route('/api/tasks/:id([0-9a-fA-F]{24})/officeDocuments/starred')
+    .get(pagination.parseParams, star.getStarredIds('tasks'), documents.getByTaskId, pagination.formResponse);
 
   app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})')
     .get(documents.getById)

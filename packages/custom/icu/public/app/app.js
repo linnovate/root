@@ -26,14 +26,16 @@ angular.module('mean.icu').config([
                     getFn = 'getById';
                 }
                 if (service.IsNew) {
-                    return service[getFn]($stateParams.entityId,
+                    return service[getFn](
+                        $stateParams.entityId,
                         $stateParams.start,
                         BIGLIMIT,
                         $stateParams.sort,
                         $stateParams.starred);
                 }
                 else {
-                    return service[getFn]($stateParams.entityId,
+                    return service[getFn](
+                        $stateParams.entityId,
                         $stateParams.start,
                         $stateParams.limit,
                         $stateParams.sort,
@@ -49,8 +51,9 @@ angular.module('mean.icu').config([
                     return context.entity;
                 }
             ];
-            if (main !== 'task') {
+            if (main !== 'task' && main !== 'officeDocument') {
                 resolve.tasks = function (TasksService, $stateParams) {
+                    console.log(main);
                     if ($stateParams.entityId && $stateParams.id) {
                         return;
                     }
@@ -58,7 +61,6 @@ angular.module('mean.icu').config([
                     return TasksService[getFn]($stateParams.entityId);
                 };
             }
-
             return {
                 url: '/by-:entity/:entityId',
                 params: {
@@ -477,6 +479,8 @@ angular.module('mean.icu').config([
 //                         },
                         controllerProvider: function ($stateParams) {
                             var entity = $stateParams.id ? capitalizedMain : capitalize($stateParams.entity);
+                            debugger;
+                            console.log(main, tab);
                             return entity + capitalizedTab + 'Controller';
                         }
                     }
