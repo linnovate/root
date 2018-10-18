@@ -54,16 +54,23 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
         };
         if(parent){
             newItem[parent.type] = parent.id;
-            if(parent.type == 'project') {
-                newItem.watchers = context.entity.watchers;
-                newItem.permissions = context.entity.permissions;
-            }
         }
         return TasksService.create(newItem).then(function(result) {
             $scope.items.push(result);
             TasksService.data.push(result);
             return result;
-        });
+        }).then( item => {
+            let updated = false;
+            if(parent.type == 'project') {
+                let parentParams = _.pick(context.entity, ['watchers', 'permissions']);
+                Object.assign(item, parentParams);
+                updated = !updated;
+            }
+            return {item, updated};
+        }).then( res => {
+            if(res.updated)TasksService.update(res.item);
+            return res.item;
+        } )
     };
 
     $scope.loadMore = function (start, LIMIT, sort) {

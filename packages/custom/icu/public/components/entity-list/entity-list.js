@@ -389,7 +389,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.checkForInactiveEntity = () => {
-        if(!$scope.visibleItems.some( item => item._id === $stateParams.id ))
+        if($scope.visibleItems.length && !$scope.visibleItems.some( item => item._id === $stateParams.id )){
             $state.go($state.current.name,
                 {
                     id: $scope.visibleItems[0]._id,
@@ -397,7 +397,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
                     entityId: context.entityId,
                     nameFocused: true
                 })
-
+        }
     };
 
     function getArrIds(arr){
