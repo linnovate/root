@@ -19,8 +19,12 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
                 $scope.socket.on('connect', () => {
                     console.log('socket.id:', $scope.socket.id);
-                    $scope.socket.emit('register', me._id);
+                    setTimeout(() => {
+                        $scope.socket.emit('register', me._id);
+                    }, 10)
                 })
+
+                $scope.socket.on('update', NotificationsService.notify);
 
             })
 

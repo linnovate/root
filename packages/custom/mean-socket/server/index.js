@@ -26,7 +26,8 @@ function socketServer(server) {
 }
 
 function notify(userId, msg) {
-  io.to(userId, msg)
+  console.log('notifying:', userId, msg)
+  io.to(userId).emit('update', msg)
 }
 
 module.exports = {
