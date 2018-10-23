@@ -2061,83 +2061,130 @@ exports.update = function(req, res, next) {
         }
         docToUpdate = doc;
         var oldWatchers = [];
-        doc.watchers.forEach(function(w) {
-          oldWatchers.push(w.toString());
-        });
-        var spPath = doc.spPath;
-        if(spPath) {
-          var watchersReq = [], oldWatchersReq = [];
-          oldWatchers.forEach(function(w) {
-            oldWatchersReq.push({
-              type: 'SP.Sharing.UserRoleAssignment',
-              Role: 2,
-              UserId: w,
-            });
-          });
-          watchers.forEach(function(w) {
-            watchersReq.push({
-              type: 'SP.Sharing.UserRoleAssignment',
-              Role: 2,
-              UserId: w,
-            });
-          });
-          var creator = [];
-          if(doc.assign) {
-            creator = [
-              {
-                type: 'SP.Sharing.UserRoleAssignment',
-                Role: 2,
-                UserId: doc.assign.toString(),
-              }
-            ];
+
+        // Find the parent folder
+        Folder.findOne({_id: req.body.newVal})
+        .exec(function(err, folderObj) {
+          if(err) {
+            logger.log('error', '%s create, %s', req.user.name, ' Folder.findOne', {error: err.message});
+    
+            res.send(err);
           }
+          else {
+            // Check if folder found
+            if(folderObj){
+    
+              req.body.permissions = [];
 
-          getUsers(creator).then(function() {
-            getUsers(watchersReq).then(function() {
-              getUsers(oldWatchersReq).then(function() {
-                var users = [], zero = [];
-                watchersReq.forEach(function(w) {
-                  users.push(w.UserId);
-                });
-                oldWatchersReq.forEach(function(w) {
-                  zero.push(w.UserId);
-                });
-                var json = {
-                  siteUrl: config.SPHelper.SPSiteUrl,
-                  paths: [spPath],
-                  users: users,
-                  creators: [creator[0].UserId],
-                  zero: zero
-                };
-                request({
-                  url: config.SPHelper.uri + '/api/share',
-                  method: 'POST',
-                  json: json
-                }, function(error, resp, body) {
-                  if(error) {
-                    logger.log('error', '%s update, %s', req.user.name, ' request', {error: error.message});
+              //Add all watchers & permissions from the parent folder to the officedocument
+              for(var index = 0 ; index < folderObj.watchers.length; index++)
+              {
+                // Check if watcher from parent folder in already in the array
+                if(watchers.indexOf(new ObjectId(folderObj.watchers[index].id)) == -1)
+                {
+                  watchers.push(new ObjectId(folderObj.watchers[index].id));
+                }
+                // Check if watcher from parent folder in already in the array
+                if(doc.watchers.indexOf(new ObjectId(folderObj.watchers[index].id)) == -1)
+                {
+                  doc.watchers.push(new ObjectId(folderObj.watchers[index].id));
+                  doc.permissions.push({id: new ObjectId(folderObj.watchers[index].id), level: folderObj.permissions[index].level});
+                }
+              }
+            
+              // Save the document with the new watchers & permissions
+              doc.save(function(err, result) {
+                if(err) {
+                  logger.log('error', '%s update, %s', req.user.name, ' doc.save', {error: err.message});
+        
+                  res.send(err);
+                }
+              });
+            }
 
+            docToUpdate = doc;
+
+            doc.watchers.forEach(function(w) {
+              oldWatchers.push(w.toString());
+            });
+            var spPath = doc.spPath;
+            if(spPath) {
+              var watchersReq = [], oldWatchersReq = [];
+              oldWatchers.forEach(function(w) {
+                oldWatchersReq.push({
+                  type: 'SP.Sharing.UserRoleAssignment',
+                  Role: 2,
+                  UserId: w,
+                });
+              });
+              watchers.forEach(function(w) {
+                watchersReq.push({
+                  type: 'SP.Sharing.UserRoleAssignment',
+                  Role: 2,
+                  UserId: w,
+                });
+              });
+              var creator = [];
+              if(doc.assign) {
+                creator = [
+                  {
+                    type: 'SP.Sharing.UserRoleAssignment',
+                    Role: 2,
+                    UserId: doc.assign.toString(),
                   }
-                  else {
-                    logger.log('info', '%s update, %s', req.user.name, 'success with SP');
+                ];
+              }
 
-                  }
+              getUsers(creator).then(function() {
+                getUsers(watchersReq).then(function() {
+                  getUsers(oldWatchersReq).then(function() {
+                    var users = [], zero = [];
+                    watchersReq.forEach(function(w) {
+                      users.push(w.UserId);
+                    });
+                    oldWatchersReq.forEach(function(w) {
+                      zero.push(w.UserId);
+                    });
+                    var json = {
+                      siteUrl: config.SPHelper.SPSiteUrl,
+                      paths: [spPath],
+                      users: users,
+                      creators: [creator[0].UserId],
+                      zero: zero
+                    };
+                    request({
+                      url: config.SPHelper.uri + '/api/share',
+                      method: 'POST',
+                      json: json
+                    }, function(error, resp, body) {
+                      if(error) {
+                        logger.log('error', '%s update, %s', req.user.name, ' request', {error: error.message});
+
+                      }
+                      else {
+                        logger.log('info', '%s update, %s', req.user.name, 'success with SP');
+
+                      }
+                    });
+                  }).catch(function(err) {
+                    logger.log('error', '%s update, %s', req.user.name, ' getUsers', {error: err.message});
+
+                  });
+                }).catch(function(err) {
+                  logger.log('error', '%s update, %s', req.user.name, ' getUsers', {error: err.message});
+
                 });
+
               }).catch(function(err) {
                 logger.log('error', '%s update, %s', req.user.name, ' getUsers', {error: err.message});
 
               });
-            }).catch(function(err) {
-              logger.log('error', '%s update, %s', req.user.name, ' getUsers', {error: err.message});
 
-            });
+            }
 
-          }).catch(function(err) {
-            logger.log('error', '%s update, %s', req.user.name, ' getUsers', {error: err.message});
+          }
+        });
 
-          });
-
-        }
       });
     }
     else if(req.body.name == 'assign') {
@@ -2205,7 +2252,7 @@ exports.update = function(req, res, next) {
 
       if(req.body.watchers) {
         docToUpdate['watchers'] = req.body.watchers;
-      }
+       }
       docToUpdate.save(function(err, result) {
         if(err) {
           logger.log('error', '%s update, %s', req.user.name, ' docToUpdate.save', {error: err.message});

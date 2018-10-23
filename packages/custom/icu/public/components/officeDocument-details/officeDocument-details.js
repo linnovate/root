@@ -198,6 +198,10 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         } else {
           $scope.getSignatures();
         }
+        //Update the scope with the response from server
+        $scope.item.watchers = res.watchers;
+        $scope.item.permissions = res.permissions;
+
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
