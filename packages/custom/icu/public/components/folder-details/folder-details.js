@@ -6,7 +6,7 @@ function FolderDetailsController($rootScope, $scope, entity, tasks, people, fold
 
   // ==================================================== init ==================================================== //
 
-  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'officedocuments']);
+  $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'officeDocuments']);
 
   let currentState = $state.current.name;
 

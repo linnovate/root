@@ -24,11 +24,12 @@ function detailTabs($state) {
 
     $scope.onClickTab = function(tab) {
       let path = $state.$current.name.split('.');
-      if (['activities', 'documents', 'tasks', 'folders', 'signatures', 'officeDocuments'].includes(path.pop())) {
+      if (['activities', 'documents', 'tasks', 'folders', 'signatures', 'officeDocuments'].includes(path[path.length - 1])) {
+        path.pop();
+        path = path.join('.') + '.' + tab;
+      } else {
         path.push(tab);
         path = path.join('.');
-      } else {
-        path = $state.$current.name + '.' + tab;
       }
       $state.go(path);
     }
@@ -103,7 +104,6 @@ angular.module('mean.icu.ui.detailsComponents').controller('FolderTasksControlle
 });
 angular.module('mean.icu.ui.detailsComponents').controller('FolderOfficeDocumentsController', function($scope, entity, context, officeDocuments, $state) {
   $scope.officeDocuments = officeDocuments;
-  $scope.officeDocument = officeDocuments;
 });
 
 angular.module('mean.icu.ui.detailsComponents').controller('OfficeActivitiesController', function($scope, entity, context, activities, ActivitiesService) {

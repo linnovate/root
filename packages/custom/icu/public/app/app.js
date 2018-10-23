@@ -1482,21 +1482,21 @@ angular.module('mean.icu').config([
             .state('main.folders.all.details.activities.modal', getDetailspaneModal())
             .state('main.folders.all.details.documents', getDetailsTabState('folder', 'documents'))
             .state('main.folders.all.details.tasks', getDetailsTabState('folder', 'tasks'))
-            .state('main.folders.all.details.officedocuments', getDetailsTabState('folder', 'officeDocuments'))
+            .state('main.folders.all.details.officeDocuments', getDetailsTabState('folder', 'officeDocuments'))
 
             .state('main.folders.byentity', generateStateByEntity('folder'))
             .state('main.folders.byentity.activities', getDetailsTabState('folder', 'activities'))
             .state('main.folders.byentity.activities.modal', getDetailspaneModal())
             .state('main.folders.byentity.documents', getDetailsTabState('folder', 'documents'))
             .state('main.folders.byentity.folders', getDetailsTabState('folder', 'folders'))
-            .state('main.folders.byentity.officedocuments', getDetailsTabState('folder', 'officeDocuments'))
+            .state('main.folders.byentity.officeDocuments', getDetailsTabState('folder', 'officeDocuments'))
 
             .state('main.folders.byentity.details', getFolderDetailsState())
             .state('main.folders.byentity.details.activities', getDetailsTabState('folder', 'activities'))
             .state('main.folders.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.folders.byentity.details.documents', getDetailsTabState('folder', 'documents'))
             .state('main.folders.byentity.details.tasks', getDetailsTabState('folder', 'tasks'))
-            .state('main.folders.byentity.details.officedocuments', getDetailsTabState('folder', 'officeDocuments'))
+            .state('main.folders.byentity.details.officeDocuments', getDetailsTabState('folder', 'officeDocuments'))
 
             .state('main.adminSettings', {
                 url: '/adminSettings',
