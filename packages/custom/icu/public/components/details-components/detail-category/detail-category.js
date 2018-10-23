@@ -6,7 +6,7 @@
  */
 angular.module('mean.icu.ui.detailsComponents').directive('detailCategory', detailCategory);
 
-function detailCategory(TasksService, ProjectsService, OfficesService, FoldersService, context) {
+function detailCategory(context, TasksService, ProjectsService, OfficesService, FoldersService, DiscussionsService) {
 
   return {
     scope: {
@@ -58,7 +58,8 @@ function detailCategory(TasksService, ProjectsService, OfficesService, FoldersSe
           folders: OfficesService,
           templateDocs: OfficesService,
 
-          task: TasksService
+          task: TasksService,
+          discussion: DiscussionsService
       };
 
     $scope.updateEntityList = function () {
