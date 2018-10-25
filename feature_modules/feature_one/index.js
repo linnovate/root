@@ -1,1 +1,1 @@
-export const feature_name = 'test.module';
+module.exports = 'test.module';

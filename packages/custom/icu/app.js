@@ -8,26 +8,10 @@ var Module = require('meanio').Module;
 
 var ICU = new Module('icu');
 
-const fs = require('fs');
-const testFolder5 = './';
-const testFolder = './feature_modules';
+const path = require('path');
+const appDir = path.dirname(require.main.filename);
 
-fs.readdir(testFolder5, (err, files) => {
-  files.forEach(file => {
-    console.log(file);
-  });
-  console.log('**************************123*************************')
-})
-
-fs.readdir(testFolder, (err, files) => {
-  files.forEach(file => {
-    console.log(file);
-  });
-  console.log('**************************123*************************')
-})
-
-const featureModules = require('./feature_modules/index.js');
-// import { featureModules } from '/featureModules';
+const featureModules = require( appDir + '/feature_modules/index.js' );
 
 /*
  * All MEAN packages require registration
@@ -40,8 +24,6 @@ ICU.register(function (app, auth, database,swagger) {
     ICU.routes(app, auth, database);
 
     app.set('views', __dirname + '/server/views');
-
-
 
     //We are adding a link to the main menu for all authenticated users
     ICU.menus.add({
@@ -203,8 +185,8 @@ ICU.register(function (app, auth, database,swagger) {
       'daterangepicker'
     ];
 
-    // let allDependencies = angularDependencies.concat(featureModules);
-    ICU.angularDependencies(angularDependencies);
+    const allDependencies = angularDependencies.concat(featureModules);
+    ICU.angularDependencies(allDependencies);
 
 
 console.yon = function(data, inspect) {

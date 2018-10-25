@@ -1,6 +1,6 @@
 'use strict';
 
-import { feature_name } from '../../../index';
+const feature_name = require('../../../index');
 
 angular.module( feature_name, []).controller('testFeatureModuleController',
 

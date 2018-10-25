@@ -1,7 +1,5 @@
-import { feature_name as feature_one }  from './feature_one/index';
+const feature_one = require('./feature_one/index');
 
-const all_modules = [
+module.exports = [
     feature_one
 ];
-
-module.exports = { all_modules };
