@@ -4,18 +4,24 @@
 /**
  * Module dependencies.
  */
-var mean = require('meanio'),
-  compression = require('compression'),
-  morgan = require('morgan'),
-  consolidate = require('consolidate'),
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  helpers = require('view-helpers'),
-  flash = require('connect-flash'),
-  modRewrite = require('connect-modrewrite'),
-  config = mean.loadConfig();
+const mean = require('meanio');
+const compression = require('compression');
+const morgan = require('morgan');
+const consolidate = require('consolidate');
+const express = require('express');
+const bodyParser = require('body-parser');
+const helpers = require('view-helpers');
+const flash = require('connect-flash');
+const modRewrite = require('connect-modrewrite');
+const config = mean.loadConfig();
+const APINew = require('../api');
 
-module.exports = function(app, db) {app.set('showStackError', true);
+module.exports = function(app, db) {
+
+  app.use('/api/v1', APINew);
+
+  app.set('showStackError', true);
+
   // Prettify HTML
   app.locals.pretty = true;
 
