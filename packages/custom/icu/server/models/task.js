@@ -26,10 +26,6 @@ var TaskSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'Project'
   },
-  discussion: {
-    type: Schema.ObjectId,
-    ref: 'Discussion'
-  },
   creator: {
     type: Schema.ObjectId,
     ref: 'User'

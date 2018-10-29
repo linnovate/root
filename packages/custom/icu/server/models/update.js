@@ -4,59 +4,32 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   archive = require('./archive.js');
 
-
-var UpdateSchema = new Schema({
-  created: {
-    type: Date
-  },
-  updated: {
-    type: Date
-  },
-  issue: {
-    type: String,
-    required: true
-  },
-  issueId: {
-    type: Schema.Types.ObjectId,
-    required: true
-  },
-  creator: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  },
-  description: {
-    type: String
-  },
-  type: {
-    type: String
-  },
-  TaskDue: {
-    type: String
-  },
-  status: {
-    type: String
-  },
-  color: {
-    type: String
-  },
-  watcher: {
-    type: String
-  },
-  miscData: {
-    type: String
-  },
-  userObj: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  },
-  prev: {
-    type: String
-  },
+const UpdateSchema = new Schema({
   entity: {
     type: String
   },
   entityType: {
     type: String
+  },
+  creator: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  },
+  action: {
+    type: String,
+    enum: [
+      'create', 'delete',
+      'due', 'status', 'assign', 'location',
+      'title', 'description', 'comment', 'attachment',
+      'watcher',
+    ],
+    default: 'viewer',
+  },
+  prev: {
+    type: Schema.Types.Mixed
+  },
+  new: {
+    type: Schema.Types.Mixed
   }
 });
 
