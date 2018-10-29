@@ -307,7 +307,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             console.log("OfficeDocumentsService.updateWatcher", officeDocument, me, watcher, type)
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: type || 'updateWatcher',
                     userObj: watcher
@@ -323,7 +323,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
 
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: 'updateWatcherPerms',
                     userObj: watcher,
@@ -360,7 +360,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         function updateDue(officeDocument, prev) {
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: 'updateDue',
                     TaskDue: officeDocument.due,
@@ -430,7 +430,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             }
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: activityType,
                     userObj: officeDocument.assign,
@@ -446,7 +446,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             let activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: activityType,
                     entityType: type,
@@ -464,7 +464,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
             return ActivitiesService.create({
                 data: {
-                    issue: 'officeDocuments',
+                    issue: 'officeDocument',
                     issueId: officeDocument._id,
                     type: activityType,
                     status: officeDocument[type],
