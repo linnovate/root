@@ -9,7 +9,11 @@ const UpdateSchema = new Schema({
     type: String
   },
   entityType: {
-    type: String
+    type: String,
+    enum: [
+      'task', 'project', 'discussion', 'officeDocument',
+      'folder', 'office', 'templateDocument'
+    ]
   },
   creator: {
     type: Schema.ObjectId,
@@ -18,12 +22,16 @@ const UpdateSchema = new Schema({
   action: {
     type: String,
     enum: [
-      'create', 'delete',
-      'due', 'status', 'assign', 'location',
-      'title', 'description', 'comment', 'attachment',
-      'watcher',
-    ],
-    default: 'viewer',
+      'create', 'update', 'delete'
+    ]
+  },
+  updateField: {
+      type: String,
+      enum: [
+          'due', 'status', 'assign', 'location',
+          'title', 'description', 'comment', 'attachment',
+          'watcher',
+      ]
   },
   prev: {
     type: Schema.Types.Mixed
@@ -46,13 +54,13 @@ UpdateSchema.set('toObject', {virtuals: true});
 /**
  * Validations
  */
-UpdateSchema.path('issue').validate(function(issue) {
-  return !!issue;
-}, 'Issue cannot be blank');
+UpdateSchema.path('entity').validate(function(entity) {
+  return !!entity;
+}, 'Entity cannot be blank');
 
-UpdateSchema.path('issueId').validate(function(issueId) {
-  return !!issueId;
-}, 'Issue id cannot be blank');
+UpdateSchema.path('entityType').validate(function(entityType) {
+  return !!entityType;
+}, 'Entity type id cannot be blank');
 
 /**
  * Statics
