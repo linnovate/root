@@ -247,92 +247,17 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    function updateWatcher(task, me, watcher, type) {
+    //TODO find the reason why this function created and maybe remove
+    function updateEntity(task, me, prev) {
+        let action = prev.project ? 'update' : 'create';
         return ActivitiesService.create({
             data: {
-                issue: 'task',
-                issueId: task.id,
-                type: type || 'updateWatcher',
-                userObj: watcher
-            },
-            context: {}
-        })
-          .then(result => {
-          return result;
-        });
-    }
+                creator: me,
+                entity: task.id,
+                entityType: 'task',
 
-    function updateStatus(task, prev) {
-        return ActivitiesService.create({
-            data: {
-                issue: 'task',
-                issueId: task.id,
-                type: 'updateStatus',
-                status: task.status,
-                prev: prev.status
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
-    }
-
-    function updateDue(task, prev) {
-        return ActivitiesService.create({
-            data: {
-                issue: 'task',
-                issueId: task.id,
-                type: 'updateDue',
-                TaskDue: task.due,
-                prev: prev.due
-            },
-            context: {}
-        }).then(function(result) {
-            return result;
-        });
-
-    }
-
-    function assign(task, me, prev) {
-        if (task.assign) {
-            var message = {};
-            message.content = task.title || '-';
-            MeanSocket.emit('message:send', {
-                message: message,
-                user: me,
-                channel: task.assign,
-                id: task.id,
-                entity: 'task',
-                type: 'assign'
-            });
-
-            var activityType = prev.assign ? 'assign' : 'assignNew';
-        } else {
-            var activityType = 'unassign';
-        }
-        return ActivitiesService.create({
-            data: {
-                issue: 'task',
-                issueId: task.id,
-                type: activityType,
-                userObj: task.assign,
-                prev: prev.assign ? prev.assign.name : ''
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
-    }
-
-    function updateEntity(task, prev) {
-        var activityType = prev.project ? 'updateEntity' : 'updateNewEntity';
-        return ActivitiesService.create({
-            data: {
-                issue: 'task',
-                issueId: task.id,
-                type: activityType,
-                entityType: 'project',
-                entity: task.project.title,
+                action: action,
+                current: task.assign,
                 prev: prev.project ? prev.project.title : ''
             },
             context: {}
@@ -342,21 +267,39 @@ angular.module('mean.icu.data.tasksservice', [])
 
     }
 
-    function updateTitle(task, prev, type) {
-        var capitalizedType = type[0].toUpperCase() + type.slice(1);
-        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
-        return ActivitiesService.create({
-            data: {
-                issue: 'task',
-                issueId: task.id,
-                type: activityType,
-                status: task[type],
-                prev: prev[type]
-            },
-            context: {}
-        }).then(function(result) {
-            return result;
-        });
+    function createActivity(updateField){
+        return function(entity, me, prev, remove){
+            let action = typeof remove === 'undefined'
+                ? prev[updateField] ? 'update' : 'create'
+                : 'remove';
+            return ActivitiesService.create({
+                data: {
+                    creator: me,
+                    entity: entity.id,
+                    entityType: 'task',
+
+                    updateField: updateField,
+                    action: action,
+                    current: entity[updateField],
+                    prev: prev[updateField]
+                },
+                context: {}
+            }).then(function(result) {
+                if (updateField === 'assign' && task.assign) {
+                    var message = {};
+                    message.content = task.title || '-';
+                    MeanSocket.emit('message:send', {
+                        message: message,
+                        user: me,
+                        channel: task.assign,
+                        id: task.id,
+                        entity: 'task',
+                        type: 'assign'
+                    });
+                }
+                return result;
+            });
+        }
     }
 
     function MyTasksOfNextWeekSummary() {
@@ -415,15 +358,16 @@ angular.module('mean.icu.data.tasksservice', [])
         saveTemplate: saveTemplate,
         template2subTasks:template2subTasks,
         deleteTemplate: deleteTemplate,
-        assign: assign,
-        updateDue: updateDue,
-        updateStatus: updateStatus,
-        updateWatcher: updateWatcher,
+        assign: createActivity('assign'),
+        updateDue: createActivity('due'),
+        updateTitle: createActivity('title'),
+        updateStatus: createActivity('status'),
+        updateWatcher: createActivity('watcher'),
+        updateDescription: createActivity('description'),
         data: data,
         tabData: tabData,
         IsNew: IsNew,
         updateEntity: updateEntity,
-        updateTitle: updateTitle,
         MyTasksOfNextWeekSummary: MyTasksOfNextWeekSummary,
         GivenTasksOfNextWeekSummary: GivenTasksOfNextWeekSummary,
         excel: excel

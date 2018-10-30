@@ -19,24 +19,21 @@ const UpdateSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
-  action: {
-    type: String,
-    enum: [
-      'create', 'update', 'delete'
-    ]
-  },
   updateField: {
       type: String,
       enum: [
           'due', 'status', 'assign', 'location',
           'title', 'description', 'comment', 'attachment',
-          'watcher',
+          'watchers',
       ]
+  },
+  data: {
+    type: Date
   },
   prev: {
     type: Schema.Types.Mixed
   },
-  new: {
+  current: {
     type: Schema.Types.Mixed
   }
 });
