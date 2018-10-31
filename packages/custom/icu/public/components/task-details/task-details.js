@@ -208,17 +208,9 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
 
     let duplicate = _.pick($scope.item,
       [
-        'bolded',
-        'creator',
-        'discussions',
-        'permissions',
-        'status',
-        'tags',
         'title',
         'description',
-        'watchers',
-        '__state',
-        '__autocomplete',
+        'due'
       ]);
 
     Object.assign(newItem, duplicate);
@@ -226,7 +218,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, Ta
       .then( result => {
         $scope.items.push(result);
         refreshList();
-      })
+      });
   };
 
   $scope.menuItems = [{
