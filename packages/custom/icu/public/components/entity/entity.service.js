@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.icu.ui.entity', []).service('EntityService', function (ApiUri, $http, $stateParams, PaginationService, WarningsService, ActivitiesService, MeanSocket, SettingServices) {
+angular.module('mean.icu.ui.entity', []).service('EntityService', function (ApiUri, $http, $stateParams, PaginationService, WarningsService, ActivitiesService, SettingServices) {
     var activeStatusFilterValue = "default";
     var SortFilterValue = {
                              field:"created",
