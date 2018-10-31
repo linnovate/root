@@ -22,12 +22,13 @@ const UpdateSchema = new Schema({
   updateField: {
       type: String,
       enum: [
-          'due', 'status', 'assign', 'location',
+          'create', 'remove',
+          'due', 'status', 'assign', 'location', 'color',
           'title', 'description', 'comment', 'attachment',
           'watchers',
       ]
   },
-  data: {
+  date: {
     type: Date
   },
   prev: {

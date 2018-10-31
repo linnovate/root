@@ -256,7 +256,6 @@ angular.module('mean.icu.data.tasksservice', [])
                 entity: task.id,
                 entityType: 'task',
 
-                action: action,
                 current: task.assign,
                 prev: prev.project ? prev.project.title : ''
             },
@@ -269,17 +268,14 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function createActivity(updateField){
         return function(entity, me, prev, remove){
-            let action = typeof remove === 'undefined'
-                ? prev[updateField] ? 'update' : 'create'
-                : 'remove';
             return ActivitiesService.create({
                 data: {
                     creator: me,
+                    date: new Date(),
                     entity: entity.id,
                     entityType: 'task',
 
                     updateField: updateField,
-                    action: action,
                     current: entity[updateField],
                     prev: prev[updateField]
                 },

@@ -92,36 +92,36 @@ angular.module('mean.icu.data.projectsservice', [])
       };
     }
 
-    function assign(project, me, prev) {
-      if(project.assign) {
-        var message = {};
-        message.content = project.title || '-';
-        MeanSocket.emit('message:send', {
-          message: message,
-          user: me,
-          channel: project.assign,
-          id: project.id,
-          entity: 'task',
-          type: 'assign'
-        });
+    function createActivity(updateField){
+      return function(entity, me, prev, remove){
+        return ActivitiesService.create({
+          data: {
+            creator: me,
+              date: new Date(),
+              entity: entity.id,
+              entityType: 'project',
 
-        var activityType = prev.assign ? 'assign' : 'assignNew';
+            updateField: updateField,
+            current: entity[updateField],
+            prev: prev[updateField]
+          },
+          context: {}
+        }).then(function(result) {
+          if (updateField === 'assign' && task.assign) {
+            var message = {};
+            message.content = task.title || '-';
+            MeanSocket.emit('message:send', {
+              message: message,
+              user: me,
+              channel: task.assign,
+              id: task.id,
+              entity: 'project',
+              type: 'assign'
+            });
+          }
+          return result;
+        });
       }
-      else {
-        var activityType = 'unassign';
-      }
-      return ActivitiesService.create({
-        data: {
-          issue: 'project',
-          issueId: project.id,
-          type: activityType,
-          userObj: project.assign,
-          prev: prev.assign ? prev.assign.name : ''
-        },
-        context: {}
-      }).then(function(result) {
-        return result;
-      });
     }
 
     function getSubProjects(projectId) {
@@ -262,88 +262,7 @@ angular.module('mean.icu.data.projectsservice', [])
       });
     }
 
-    // update activities
-    function updateWatcher(project, me, watcher, type) {
-      return ActivitiesService.create({
-        data: {
-          issue: 'project',
-          issueId: project.id,
-          type: type || 'updateWatcher',
-          userObj: watcher
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
-
-
-    function updateDue(project, prev) {
-      return ActivitiesService.create({
-        data: {
-          issue: 'project',
-          issueId: project.id,
-          type: 'updateDue',
-          TaskDue: project.due,
-          prev: prev.due
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
-
-
-    function updateStatus(project, prev) {
-      return ActivitiesService.create({
-        data: {
-          issue: 'project',
-          issueId: project.id,
-          type: 'updateStatus',
-          status: project.status,
-          prev: prev.status
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
-
-
-    function updateColor(project, me) {
-      return ActivitiesService.create({
-        data: {
-          issue: 'project',
-          issueId: project.id,
-          type: 'updateColor',
-          status: project.color
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
-
-    function updateTitle(project, prev, type) {
-      var capitalizedType = type[0].toUpperCase() + type.slice(1);
-      var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
-      return ActivitiesService.create({
-        data: {
-          issue: 'project',
-          issueId: project.id,
-          type: activityType,
-          status: project[type],
-          prev: prev[type]
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
-
-
     return {
-      assign: assign,
       addToParent: addToParent,
       getAll: getAll,
       getById: getById,
@@ -364,10 +283,11 @@ angular.module('mean.icu.data.projectsservice', [])
       data: data,
       selected: selected,
       WantToCreateRoom: WantToCreateRoom,
-      updateWatcher: updateWatcher,
-      updateDue: updateDue,
-      updateStatus: updateStatus,
-      updateColor: updateColor,
-      updateTitle: updateTitle
+      assign: createActivity('assign'),
+      updateDue: createActivity('due'),
+      updateTitle: createActivity('title'),
+      updateColor: createActivity('color'),
+      updateStatus: createActivity('status'),
+      updateWatcher: createActivity('watcher'),
     };
   });

@@ -17,9 +17,10 @@ module.exports = function(entityName, options) {
 
     return new UpdateModel({
       creator: options.user,
-      data: new Date(),
+      date: new Date(),
       entity: id,
-      entityType: type
+      entityType: type,
+
     }).save({
       user: options.user
     });
@@ -30,7 +31,7 @@ module.exports = function(entityName, options) {
 
     return new UpdateModel({
       creator: options.user,
-      data: new Date(),
+      date: new Date(),
       entity: id,
       entityType: type
     }).save({
