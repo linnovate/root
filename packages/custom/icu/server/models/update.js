@@ -22,7 +22,7 @@ const UpdateSchema = new Schema({
   updateField: {
       type: String,
       enum: [
-          'create', 'remove',
+          'create',
           'due', 'status', 'assign', 'location', 'color',
           'title', 'description', 'comment', 'attachment',
           'watchers',

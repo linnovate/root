@@ -20,6 +20,7 @@ module.exports = function(entityName, options) {
       date: new Date(),
       entity: id,
       entityType: type,
+      updateField: 'create'
 
     }).save({
       user: options.user
