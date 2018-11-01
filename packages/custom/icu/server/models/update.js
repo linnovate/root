@@ -5,42 +5,59 @@ var mongoose = require('mongoose'),
   archive = require('./archive.js'),
   socket = require('../../../mean-socket/server');
 
-const UpdateSchema = new Schema({
-  entity: {
-    type: String
+var UpdateSchema = new Schema({
+  created: {
+    type: Date
   },
-  entityType: {
+  updated: {
+    type: Date
+  },
+  issue: {
     type: String,
-    enum: [
-      'task', 'project', 'discussion', 'officeDocument',
-      'folder', 'office', 'templateDocument'
-    ]
+    required: true
+  },
+  issueId: {
+    type: Schema.Types.ObjectId,
+    required: true
   },
   creator: {
     type: Schema.ObjectId,
     ref: 'User'
   },
-  action: {
-    type: String,
-    enum: [
-      'create', 'update', 'delete'
-    ]
+  description: {
+    type: String
   },
-  updateField: {
-      type: String,
-      enum: [
-          'due', 'status', 'assign', 'location',
-          'title', 'description', 'comment', 'attachment',
-          'watcher',
-      ]
+  type: {
+    type: String
+  },
+  TaskDue: {
+    type: String
+  },
+  status: {
+    type: String
+  },
+  color: {
+    type: String
+  },
+  watcher: {
+    type: String
+  },
+  miscData: {
+    type: String
+  },
+  userObj: {
+    type: Schema.ObjectId,
+    ref: 'User'
   },
   prev: {
-    type: Schema.Types.Mixed
+    type: String
   },
-  new: {
-    type: Schema.Types.Mixed
-  }
-});
+  entity: {
+    type: String
+  },
+  entityType: {
+    t
+    ype: St
 
 var attachmentsVirtual = UpdateSchema.virtual('attachments');
 attachmentsVirtual.get(function() {
