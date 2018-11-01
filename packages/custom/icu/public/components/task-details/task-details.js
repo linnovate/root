@@ -208,15 +208,9 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
 
     let duplicate = _.pick($scope.item,
       [
-        'bolded',
-        'creator',
-        'discussions',
-        'permissions',
-        'tags',
         'title',
         'description',
-        '__state',
-        '__autocomplete',
+        'due'
       ]);
 
     Object.assign(newItem, duplicate);
