@@ -156,10 +156,10 @@ angular.module('mean.icu.ui.membersfooter', [])
                         'newVal':a
                     }
                     entity.watchers = a;
-                    service.update(entity,json, action, member._id);
+                    return service.update(entity,json, action, member._id);
                 }
                 else{
-                    service.update(entity, data, action, member._id);
+                    return service.update(entity, data, action, member._id);
                 }
 
 
@@ -245,51 +245,54 @@ angular.module('mean.icu.ui.membersfooter', [])
                         });
                     }
                 }
+                update($scope.entity, member, 'added')
+                  .then(updatedEntity => {
+                    let { watchers, permissions } = updatedEntity;
+                    Object.assign($scope.entity, watchers, permissions);
+                    $scope.animate = true;
 
-                update($scope.entity, member, 'added');
-                $scope.animate = true;
-
-                var task = $scope.entity ;
-                var me = $scope.me ;
-                if (context.entityName === 'discussion') {
-                    task.discussion = context.entityId;
-                }
-                switch(context.main) {
-                    case 'projects':
-                        ProjectsService.updateWatcher(task, me, member).then(function(result) {
-                            ActivitiesService.data.push(result);
+                    var task = $scope.entity;
+                    var me = $scope.me ;
+                    if (context.entityName === 'discussion') {
+                      task.discussion = context.entityId;
+                    }
+                    switch(context.main) {
+                      case 'projects':
+                        ProjectsService.updateWatcher(task, me, member).then(function (result) {
+                          ActivitiesService.data.push(result);
                         });
-                        break ;
-                    case 'tasks':
-                        TasksService.updateWatcher(task, me, member).then(function(result) {
-                            ActivitiesService.data.push(result);
+                        break;
+                      case 'tasks':
+                        TasksService.updateWatcher(task, me, member).then(function (result) {
+                          ActivitiesService.data.push(result);
                         });
-                        break ;
-                    case 'discussions':
-                        DiscussionsService.updateWatcher(task, me, member).then(function(result) {
-                            ActivitiesService.data = ActivitiesService.data || [] ;
-                            ActivitiesService.data.push(result);
+                        break;
+                      case 'discussions':
+                        DiscussionsService.updateWatcher(task, me, member).then(function (result) {
+                          ActivitiesService.data = ActivitiesService.data || [];
+                          ActivitiesService.data.push(result);
                         });
-                        break ;
-                    case 'officeDocuments':
-                        OfficeDocumentsService.updateWatcher(task, me, member).then(function(result) {
-                            ActivitiesService.data = ActivitiesService.data || [] ;
-                            ActivitiesService.data.push(result);
+                        break;
+                      case 'officeDocuments':
+                        OfficeDocumentsService.updateWatcher(task, me, member).then(function (result) {
+                          ActivitiesService.data = ActivitiesService.data || [];
+                          ActivitiesService.data.push(result);
                         });
-                        break ;
-                    case 'folders':
-                        FoldersService.updateWatcher(task, me, member).then(function(result) {
-                            ActivitiesService.data = ActivitiesService.data || [] ;
-                            ActivitiesService.data.push(result);
+                        break;
+                      case 'folders':
+                        FoldersService.updateWatcher(task, me, member).then(function (result) {
+                          ActivitiesService.data = ActivitiesService.data || [];
+                          ActivitiesService.data.push(result);
                         });
-                        break ;
-                    case 'offices':
-                        OfficesService.updateWatcher(task, me, member).then(function(result) {
-                            ActivitiesService.data = ActivitiesService.data || [] ;
-                            ActivitiesService.data.push(result);
+                        break;
+                      case 'offices':
+                        OfficesService.updateWatcher(task, me, member).then(function (result) {
+                          ActivitiesService.data = ActivitiesService.data || [];
+                          ActivitiesService.data.push(result);
                         });
-                        break ;
-                }
+                        break;
+                    }
+                  });
             };
 
           $scope.isDropdownwatchersOpen = false;
