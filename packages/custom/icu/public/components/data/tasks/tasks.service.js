@@ -281,14 +281,14 @@ angular.module('mean.icu.data.tasksservice', [])
                 },
                 context: {}
             }).then(function(result) {
-                if (updateField === 'assign' && task.assign) {
+                if (updateField === 'assign' && entity.assign) {
                     var message = {};
-                    message.content = task.title || '-';
+                    message.content = entity.title || '-';
                     MeanSocket.emit('message:send', {
                         message: message,
                         user: me,
-                        channel: task.assign,
-                        id: task.id,
+                        channel: entity.assign,
+                        id: entity.id,
                         entity: 'task',
                         type: 'assign'
                     });

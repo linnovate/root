@@ -135,47 +135,36 @@ angular.module('mean.icu.data.foldersservice', [])
         });
     }
 
-    function updateWatcher(folder, me, watcher, type) {
-        return ActivitiesService.create({
-            data: {
-                issue: 'folder',
-                issueId: folder.id,
-                type: type || 'updateWatcher',
-                userObj: watcher
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
-    }
+    function createActivity(updateField){
+        return function(entity, me, prev){
+            return ActivitiesService.create({
+                data: {
+                    creator: me,
+                    date: new Date(),
+                    entity: entity.id,
+                    entityType: 'project',
 
-    function updateStatus(folder, prev) {
-        return ActivitiesService.create({
-            data: {
-                issue: 'folder',
-                issueId: folder.id,
-                type: 'updateStatus',
-                status: folder.status,
-                prev: prev.status
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
-    }
-
-    function updateColor(folder, me) {
-        return ActivitiesService.create({
-            data: {
-                issue: 'folder',
-                issueId: folder.id,
-                type: 'updateColor',
-                status: folder.color
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
+                    updateField: updateField,
+                    current: entity[updateField],
+                    prev: prev[updateField]
+                },
+                context: {}
+            }).then(function(result) {
+                if (updateField === 'assign' && entity.assign) {
+                    var message = {};
+                    message.content = entity.title || '-';
+                    MeanSocket.emit('message:send', {
+                        message: message,
+                        user: me,
+                        channel: entity.assign,
+                        id: entity.id,
+                        entity: 'project',
+                        type: 'assign'
+                    });
+                }
+                return result;
+            });
+        }
     }
 
     function updateEntity(folder, prev) {
@@ -188,23 +177,6 @@ angular.module('mean.icu.data.foldersservice', [])
                 entityType: 'office',
                 entity: folder.office.title,
                 prev: prev.office ? prev.office.title : ''
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
-    }
-
-    function updateTitle(folder, prev, type) {
-        var capitalizedType = type[0].toUpperCase() + type.slice(1);
-        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
-        return ActivitiesService.create({
-            data: {
-                issue: 'folder',
-                issueId: folder.id,
-                type: activityType,
-                status: folder[type],
-                prev: prev[type]
             },
             context: {}
         }).then(result => {
@@ -228,10 +200,10 @@ angular.module('mean.icu.data.foldersservice', [])
         data: data,
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
-        updateWatcher: updateWatcher,
-        updateStatus: updateStatus,
-        updateColor: updateColor,
-        updateEntity: updateEntity,
-        updateTitle: updateTitle
+        updateTitle: createActivity('title'),
+        updateColor: createActivity('color'),
+        updateStatus: createActivity('status'),
+        updateWatcher: createActivity('watcher'),
+        updateEntity: updateEntity
     };
 });

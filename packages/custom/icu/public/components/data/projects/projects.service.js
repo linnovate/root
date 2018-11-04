@@ -93,7 +93,7 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     function createActivity(updateField){
-      return function(entity, me, prev, remove){
+      return function(entity, me, prev){
         return ActivitiesService.create({
           data: {
             creator: me,
@@ -107,14 +107,14 @@ angular.module('mean.icu.data.projectsservice', [])
           },
           context: {}
         }).then(function(result) {
-          if (updateField === 'assign' && task.assign) {
+          if (updateField === 'assign' && entity.assign) {
             var message = {};
-            message.content = task.title || '-';
+            message.content = entity.title || '-';
             MeanSocket.emit('message:send', {
               message: message,
               user: me,
-              channel: task.assign,
-              id: task.id,
+              channel: entity.assign,
+              id: entity.id,
               entity: 'project',
               type: 'assign'
             });

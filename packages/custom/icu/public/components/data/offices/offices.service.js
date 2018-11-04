@@ -127,49 +127,36 @@ angular.module('mean.icu.data.officesservice', [])
         });
     }
 
-    function updateWatcher(office, me, watcher, type) {
-        return ActivitiesService.create({
-            data: {
-                issue: 'office',
-                issueId: office.id,
-                type: type || 'updateWatcher',
-                userObj: watcher
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
-    }
+    function createActivity(updateField){
+        return function(entity, me, prev){
+            return ActivitiesService.create({
+                data: {
+                    creator: me,
+                    date: new Date(),
+                    entity: entity.id,
+                    entityType: 'office',
 
-    function updateColor(office, me) {
-        return ActivitiesService.create({
-            data: {
-                issue: 'office',
-                issueId: office.id,
-                type: 'updateColor',
-                status: office.color
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
-    }
-
-    function updateTitle(office, prev, type) {
-        var capitalizedType = type[0].toUpperCase() + type.slice(1);
-        var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
-        return ActivitiesService.create({
-            data: {
-                issue: 'office',
-                issueId: office.id,
-                type: activityType,
-                status: office[type],
-                prev: prev[type]
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
+                    updateField: updateField,
+                    current: entity[updateField],
+                    prev: prev[updateField]
+                },
+                context: {}
+            }).then(function(result) {
+                if (updateField === 'assign' && entity.assign) {
+                    var message = {};
+                    message.content = entity.title || '-';
+                    MeanSocket.emit('message:send', {
+                        message: message,
+                        user: me,
+                        channel: entity.assign,
+                        id: entity.id,
+                        entity: 'office',
+                        type: 'assign'
+                    });
+                }
+                return result;
+            });
+        }
     }
 
     return {
@@ -187,8 +174,8 @@ angular.module('mean.icu.data.officesservice', [])
         data: data,
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
-        updateWatcher: updateWatcher,
-        updateColor: updateColor,
-        updateTitle: updateTitle
+        updateColor: createActivity('color'),
+        updateTitle: createActivity('title'),
+        updateWatcher: createActivity('watcher')
     };
 });

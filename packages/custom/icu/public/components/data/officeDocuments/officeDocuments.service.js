@@ -303,72 +303,42 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateWatcher(officeDocument, me, watcher, type) {
-            console.log("OfficeDocumentsService.updateWatcher", officeDocument, me, watcher, type)
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: type || 'updateWatcher',
-                    userObj: watcher
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
+        function createActivity(updateField){
+            return function(entity, me, prev, remove){
+                return ActivitiesService.create({
+                    data: {
+                        creator: me,
+                        date: new Date(),
+                        entity: entity.id,
+                        entityType: 'officeDocument',
 
-        function updateWatcherPerms(officeDocument, me, watcher, type) {
-            console.log("OfficeDocumentsService.updateWatcherPerms", officeDocument, me, watcher, type)
-
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: 'updateWatcherPerms',
-                    userObj: watcher,
-                    permissions: officeDocument.permissions
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
-
-        function updateStatus(officeDocument, prev) {
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: 'updateStatus',
-                    status: officeDocument.status,
-                    prev: prev.status
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
+                        updateField: updateField,
+                        current: entity[updateField],
+                        prev: prev[updateField]
+                    },
+                    context: {}
+                }).then(function(result) {
+                    if (updateField === 'assign' && entity.assign) {
+                        var message = {};
+                        message.content = entity.title || '-';
+                        MeanSocket.emit('message:send', {
+                            message: message,
+                            user: me,
+                            channel: entity.assign,
+                            id: entity.id,
+                            entity: 'officeDocument',
+                            type: 'assign'
+                        });
+                    }
+                    return result;
+                });
+            }
         }
 
         function uploadEmpty(officeDocument){
             return $http.post(ApiUri+EntityPrefix+"/uploadEmpty",officeDocument).then(function(result){
                 WarningsService.setWarning(result.headers().warning);
                 return result.data;
-            });
-        }
-
-        function updateDue(officeDocument, prev) {
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: 'updateDue',
-                    TaskDue: officeDocument.due,
-                    prev: prev.due
-                },
-                context: {}
-            }).then(result => {
-              return result;
             });
         }
 
@@ -421,27 +391,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
-
-        function updateAssign(officeDocument, prev) {
-            if (officeDocument.assign) {
-                var activityType = prev.assign ? 'assign' : 'assignNew';
-            } else {
-                var activityType = 'unassign';
-            }
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: activityType,
-                    userObj: officeDocument.assign,
-                    prev: prev.assign ? prev.assign.name : ''
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
-
         function updateEntity(officeDocument, prev, type = 'folder') {
             let activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
             return ActivitiesService.create({
@@ -452,23 +401,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     entityType: type,
                     entity: type === 'folder' ? officeDocument.folder.title : officeDocument.task.title,
                     prev: prev.folder ? prev.folder.title : ''
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
-
-        function updateTitle(officeDocument, prev, type) {
-            var capitalizedType = type[0].toUpperCase() + type.slice(1);
-            var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: activityType,
-                    status: officeDocument[type],
-                    prev: prev[type]
                 },
                 context: {}
             }).then(result => {
@@ -506,15 +438,15 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             readByDocument, readByDocument,
             sentToDocument, sentToDocument,
             uploadFileToDocument:uploadFileToDocument,
-            updateWatcher: updateWatcher,
             updateWatcherPerms: updateWatcherPerms,
-            updateStatus: updateStatus,
-            updateDue: updateDue,
             uploadDocumentFromTemplate:uploadDocumentFromTemplate,
             addSerialTitle:addSerialTitle,
-            updateAssign: updateAssign,
+            updateDue: createActivity('due'),
+            updateTitle: createActivity('title'),
+            updateStatus: createActivity('status'),
+            updateAssign: createActivity('assign'),
+            updateWatcher: createActivity('watcher'),
             updateEntity: updateEntity,
-            updateTitle: updateTitle,
             uploadEmpty:uploadEmpty,
             deleteDocumentFile:deleteDocumentFile,
             signOnDocx:signOnDocx,
