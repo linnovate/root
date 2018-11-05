@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.foldersservice', [])
-.service('FoldersService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('FoldersService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService, MeanSocket) {
     var EntityPrefix = '/folders';
     var data, selected;
 

@@ -4,40 +4,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
     .service('OfficeDocumentsService', function ($http, ApiUri, Upload, PaginationService, BoldedService, WarningsService, NotifyingService, ActivitiesService) {
         var EntityPrefix = '/officeDocuments';
 
-    // function getAll(start, limit, sort, sortOrder, status, folderId) {
-    //     console.log(start, limit, sort, sortOrder, status, folderId)
-    //      var query = "/?start=0&limit=25&sort=created";
-    //     if (start && limit && sort) {
-    //         query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort;
-    //     }
-    //     if(status){
-    //         query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status;
-    //     }
-    //     if(folderId){
-    //         query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status + "&folderId="+ folderId;
-    //     }
-    //     return $http.get(ApiUri + EntityPrefix + query).then(function (result) {
-    //         WarningsService.setWarning(result.headers().warning);
-    //         // result.data = [{
-    //         //             created: new Date,
-    //         //             updated: new Date,
-    //         //             _id: "hgjg",
-    //         //             title: "sraya",
-    //         //             path: "/gfdgdgf/dfgdfhg",
-    //         //             description: "hello world",
-    //         //             documentType: "pptx",
-    //         //             entity: "project",
-    //         //             entityId: "fff",
-    //         //             creator: "avraham",
-    //         //             status: "new"
-    //         //                }]
-    //         result.data.forEach(function (officeDocument) {
-    //             officeDocument.created = new Date(officeDocument.created);
-    //         });
-
-    //             return result.data;
-    //         });
-    //     }
     function getAll(start, limit, sort, type, order) {
         var qs = querystring.encode({
             start: start,
@@ -52,7 +18,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         }
         console.log("get all " + ApiUri + EntityPrefix + qs);
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+            WarningsService.setWarning(result.headers().warning);
             //console.log($rootScope.warning, '$rootScope.warning')
             return result.data;
         }, function(err) {return err}).then(function (some) {
@@ -303,8 +269,32 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
+        function updateWatcherPerms(officeDocument, me, watcher, type) {
+            console.log("OfficeDocumentsService.updateWatcherPerms", officeDocument, me, watcher, type)
+
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocument',
+                    issueId: officeDocument._id,
+                    type: 'updateWatcherPerms',
+                    userObj: watcher,
+                    permissions: officeDocument.permissions
+                },
+                context: {}
+            }).then(result => {
+                return result;
+            });
+        }
+
+        function uploadEmpty(officeDocument){
+            return $http.post(ApiUri+EntityPrefix+"/uploadEmpty",officeDocument).then(function(result){
+                WarningsService.setWarning(result.headers().warning);
+                return result.data;
+            });
+        }
+
         function createActivity(updateField){
-            return function(entity, me, prev, remove){
+            return function(entity, me, prev){
                 return ActivitiesService.create({
                     data: {
                         creator: me,
@@ -333,13 +323,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     return result;
                 });
             }
-        }
-
-        function uploadEmpty(officeDocument){
-            return $http.post(ApiUri+EntityPrefix+"/uploadEmpty",officeDocument).then(function(result){
-                WarningsService.setWarning(result.headers().warning);
-                return result.data;
-            });
         }
 
         function sendDocument(sendingForm, officeDocument) {
@@ -391,6 +374,27 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
+
+        function updateAssign(officeDocument, prev) {
+            if (officeDocument.assign) {
+                var activityType = prev.assign ? 'assign' : 'assignNew';
+            } else {
+                var activityType = 'unassign';
+            }
+            return ActivitiesService.create({
+                data: {
+                    issue: 'officeDocument',
+                    issueId: officeDocument._id,
+                    type: activityType,
+                    userObj: officeDocument.assign,
+                    prev: prev.assign ? prev.assign.name : ''
+                },
+                context: {}
+            }).then(result => {
+                return result;
+            });
+        }
+
         function updateEntity(officeDocument, prev, type = 'folder') {
             let activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
             return ActivitiesService.create({
@@ -404,7 +408,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 },
                 context: {}
             }).then(result => {
-              return result;
+                return result;
             });
         }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.officesservice', [])
-.service('OfficesService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
+.service('OfficesService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService, MeanSocket) {
     var EntityPrefix = '/offices';
     var data, selected;
 
