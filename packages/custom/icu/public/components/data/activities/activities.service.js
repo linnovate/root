@@ -20,7 +20,13 @@ angular.module('mean.icu.data.activitiesservice', [])
             .then(function(result) {
                 let data = result.data.content ? result.data : [];
                 return PaginationService.processResponse(data);
-            });
+            })
+            .catch(err => {
+                console.error("No activities found");
+                let noResults = {};
+                noResults.data = [];
+                return noResults;
+            })
     }
 
     function getUser(updates) {
