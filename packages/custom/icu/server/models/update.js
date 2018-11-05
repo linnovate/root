@@ -56,8 +56,9 @@ var UpdateSchema = new Schema({
     type: String
   },
   entityType: {
-    t
-    ype: St
+    type: String
+  }
+});
 
 var attachmentsVirtual = UpdateSchema.virtual('attachments');
 attachmentsVirtual.get(function() {
