@@ -651,66 +651,14 @@ angular.module('mean.icu').config([
                     me: function (UsersService) {
                         return UsersService.getMe();
                     },
-                    projects: function (ProjectsService) {
-                        return ProjectsService.getAll(0, 0, SORT).then(function (data) {
-                            ProjectsService.data = data.data || data;
-                            return data;
-                        }, function (err) {
-                            return [];
-                        });
-                    },
-                    discussions: function (DiscussionsService) {
-                        return DiscussionsService.getAll(0, 0, SORT).then(function (data) {
-                            DiscussionsService.data = data.data || data;
-                            return data;
-                        }, function (err) {
-                            return [];
-                        });
-                    },
-                    tasks: function (TasksService) {
-                        return TasksService.getAll(0, 0, SORT).then(function (data) {
-                            TasksService.data = data.data || data;
-                            return data;
-                        }, function (err) {
-                            return [];
-                        });
-                    },
-                    offices: function (OfficesService) {
-                        return OfficesService.getAll(0, 0, SORT).then(function (data) {
-                            OfficesService.data = data.data || data;
-                            return data;
-                        }, function (err) {
-                            return [];
-                        });
-                    },
-                    templateDocs: function (TemplateDocsService) {
-                        //return TemplateDocsService.getAll().then(function (data) {
-                        return TemplateDocsService.getAll(0, 0, SORT).then(function (data) {
-                            TemplateDocsService.data = data.data || data;
-                            return data;
-                        }, function (err) {
-                            return [];
-                        });
-                    },
-                    folders: function (FoldersService) {
-                        return FoldersService.getAll(0, 0, SORT).then(function (data) {
-                            FoldersService.data = data.data || data;
-                            return data;
-                        }, function (err) {
-                            return [];
-                        });
-                    },
-                    officeDocuments: function (OfficeDocumentsService) {
-                        return OfficeDocumentsService.getAll(0, 0, SORT).then(function (data) {
-                            OfficeDocumentsService.data = data.data || data;
-                            return data;
-                        }, function (err) {
-                            return [];
-                        });
-                    },
-                    people: function (UsersService) {
-                        return UsersService.getAll();
-                    },
+                    projects: () => [],
+                    discussions: () => [],
+                    tasks: () => [],
+                    offices: () => [],
+                    templateDocs: () => [],
+                    folders: () => [],
+                    officeDocuments: () => [],
+                    people: () => [],
                     results: () => []
                 }
             })
