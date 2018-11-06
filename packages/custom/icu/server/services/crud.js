@@ -241,7 +241,7 @@ module.exports = function(entityName, options) {
 
       // console.log("CRUD ALLOWED") ;
       // RE-HACK - if this is document update - don't do anything
-      if(entity.officeDocuments=="officeDocuments" && entity.issueId) {
+      if(entity.officeDocuments=="officeDocuments" && entity.entity) {
         // officeDocs hacked crud - so that update operations are by create.
         // we override this behaviour in permissions for watchers addition.
         // console.log("officeDocuments return without create....");
