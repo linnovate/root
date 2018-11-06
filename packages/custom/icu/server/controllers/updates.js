@@ -97,19 +97,18 @@ exports.getByEntity = function(req, res, next) {
 };
 
 exports.getByUser = function(req, res, next) {
-    if(req.locals.error) {
-        return next();
-    }
-
+    let pagination = req.locals.data.pagination;
+    let start = pagination.start, limit = pagination.limit;
     let id = req.params.id;
-    // Update.find({
-    //     creator: id
-    // })
-    // .populate('creator', 'name lastname profile')
-    // .then(function(updates) {
-    //     req.locals.result = updates;
-        next();
-    // });
+
+    Update.find({
+        creator: id
+    })
+    .skip(start).limit(limit)
+    .populate('creator', 'name lastname profile')
+    .then(function(updates) {
+        res.status(200).send(updates);
+    });
 };
 
 exports.created = function(req, res, next) {

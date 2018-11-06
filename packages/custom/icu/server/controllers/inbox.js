@@ -23,16 +23,16 @@ function getUpdateEntities(req, res, next) {
 
     for(let i in activities) {
         let activity = activities[i];
-        let Model = models[activity.issue];
+        let Model = models[activity.entityType];
 
         Promises.push(
             new Promise( resolve => {
-                if(_.includes(allEntitiesIds, activity.issueId)){
-                    activity.entityObj = allEntities.find( entity => entity._id === activity.issueId );
+                if(_.includes(allEntitiesIds, activity.entity)){
+                    activity.entityObj = allEntities.find( entity => entity._id === activity.entity );
                     return resolve();
                 }
 
-                return Model.findOne({ _id: activity.issueId })
+                return Model.findOne({ _id: activity.entity })
                     .populate('creator')
                     .populate('userObj')
                     .populate('watchers')

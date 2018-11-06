@@ -1652,7 +1652,7 @@ angular.module('mean.icu').config([
                         );
                     },
                     updatedEntities: (activities, InboxService) =>
-                        InboxService.getUpdateEntities(activities.data)
+                        InboxService.getUpdateEntities(activities)
                 }
             })
             .state('main.inbox.task', getTaskDetailsState('/task'))

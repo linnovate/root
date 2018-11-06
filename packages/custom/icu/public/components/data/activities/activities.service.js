@@ -17,10 +17,7 @@ angular.module('mean.icu.data.activitiesservice', [])
         }
 
         return $http.get(ApiUri + EntityPrefix + '/byUser/' + id + qs)
-            .then(function(result) {
-                let data = result.data.content ? result.data : [];
-                return PaginationService.processResponse(data);
-            })
+            .then( result => result.data )
             .catch(err => {
                 console.error("No activities found");
                 let noResults = {};

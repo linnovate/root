@@ -8,8 +8,8 @@ angular.module('mean.icu.ui.tabs')
                 description: ''
             };
 
-            ActivitiesService.issue = $scope.entityName;
-            ActivitiesService.issueId=$stateParams.id || $stateParams.entityId;
+            ActivitiesService.entityType = $scope.entityName;
+            ActivitiesService.entity=$stateParams.id || $stateParams.entityId;
 
             $scope.context = context;
             $scope.stateParams = $stateParams;
@@ -55,8 +55,8 @@ angular.module('mean.icu.ui.tabs')
 
         $scope.save = function () {
             if (_.isEmpty($scope.attachments) && _.isEmpty($scope.activity.description)) return;
-            $scope.activity.issue = $scope.entityName;
-            $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
+            $scope.activity.entityType = $scope.entityName;
+            $scope.activity.entity = $stateParams.id || $stateParams.entityId;
             $scope.activity.type = $scope.attachments && $scope.attachments.length ? 'document' : 'comment';
 
                 // $scope.activity.size = $scope.attachments[0].size;
@@ -71,7 +71,7 @@ angular.module('mean.icu.ui.tabs')
                         action: 'added',
                         type: $scope.activity.type,
                         description: $scope.activity.description,
-                        issue: $scope.activity.issue,
+                        issue: $scope.activity.entityType,
                         issueName: $scope.entity.title,
                         name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : '',
                         location: location.href
