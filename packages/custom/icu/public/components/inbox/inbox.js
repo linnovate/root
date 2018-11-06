@@ -21,7 +21,6 @@ angular.module('mean.icu.ui.inbox', [])
                     return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
                     break;
                 case 'description' :
-                    debugger
                     return `${creator} ${$i18next('updated')} ${activity.entityObj.description}`;
                     break;
             }
