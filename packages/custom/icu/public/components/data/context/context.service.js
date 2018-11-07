@@ -32,6 +32,11 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
                     main = reverseMainMap[parts[1]];
                 }
 
+                // When in context of search, the entity you selected is in parts[2]
+                if (parts[1] == 'search') {
+                    main = reverseMainMap[parts[2]];
+                }
+
                 var params = state.params;
                 var entityName = params.entity;
 
