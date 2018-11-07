@@ -24,6 +24,7 @@ var utils = require('./utils'),
   elasticsearch = require('./elasticsearch.js');
 
 var Order = require('../models/order');
+var striptags = require('striptags');
 
 Object.keys(discussionController).forEach(function(methodName) {
   if(methodName !== 'destroy') {
@@ -208,6 +209,11 @@ exports.summary = function(req, res, next) {
         return !task.project;
       });
 
+      // Strip the tags from task's title
+      additionalTasks.forEach(function(task) {
+        task.title = striptags(task.title);
+      });
+
       var options = [
         {
           path: 'watchers',
@@ -216,7 +222,7 @@ exports.summary = function(req, res, next) {
         }, {
           path: 'assign',
           model: 'User',
-          select: 'name email'
+          select: 'name email lastname'
         }, {
           path: 'creator',
           model: 'User',
@@ -230,6 +236,7 @@ exports.summary = function(req, res, next) {
 
       Discussion.populate(discussion, options, function(err, doc) {
         if(err || !doc) return next();
+        discussion = striptags(discussion.title);
         mailService.send('discussionSummary', {
           discussion: discussion,
           projects: projects,

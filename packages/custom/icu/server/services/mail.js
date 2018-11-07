@@ -7,7 +7,8 @@ var smtpTransport = require('nodemailer-smtp-transport');
 var EmailTemplate = require('../../../mail-templates/node_modules/email-templates').EmailTemplate;
 var icalToolkit = require('ical-toolkit');
 var path = require('path');
-var URL = 'http://localhost:3002';
+var URL = config.host;
+var striptags = require('striptags');
 var logger = require('./logger');
 
 // node modules for creating PDF files
@@ -173,14 +174,9 @@ function addTasksToDocx(docx, tasks, assigns, discussionId, tasksNum) {
       var pObj = docx.createP({align: 'right'});
       var currentTask = tasks[i];
       var flag = currentTask.title.charAt(0) >= 'א' && currentTask.title.charAt(0) <= 'ת';
-      if(flag) {
-        // pObj.addText ((i+1)+". " , {font_size: 14, font_face:'David',bold:true});
-        pObj.addText(currentTask.title, {font_size: 19, font_face: 'David', bold: true, underline: true});
-      }
-      if(!flag) {
-        pObj.addText(currentTask.title, {font_size: 14, font_face: 'David', bold: true, underline: true});
-        pObj.addText(' .' + (i + 1), {font_size: 14, font_face: 'David', bold: true});
-      }
+        pObj.addText("מ ", {font_size: 4, font_face:'David',bold:true});
+        pObj.addText("" + (i+1) + ". " , {font_size: 14, font_face:'David',bold:true});
+        pObj.addText(striptags(currentTask.title), {font_size: 14, font_face: 'David', bold: true, underline: true});
       if(currentTask.description) {
       //description
         var desc = currentTask.description ? currentTask.description.substring(3, currentTask.description.length - 4) : '';
@@ -188,10 +184,10 @@ function addTasksToDocx(docx, tasks, assigns, discussionId, tasksNum) {
         var flag = desc.charAt(0) >= 'א' && desc.charAt(0) <= 'ת';
         if(flag) {
           pObj.addText('פירוט:', {font_size: 14, font_face: 'David', bold: true, underline: true});
-          pObj.addText(desc, {font_size: 14, font_face: 'David'});
+          pObj.addText(striptags(desc), {font_size: 14, font_face: 'David'});
         }
         if(!flag) {
-          pObj.addText(desc, {font_size: 14, font_face: 'David'});
+          pObj.addText(striptags(desc), {font_size: 14, font_face: 'David'});
           pObj.addText(':פירוט', {font_size: 14, font_face: 'David', bold: true, underline: true});
         }
       }
@@ -204,7 +200,7 @@ function addTasksToDocx(docx, tasks, assigns, discussionId, tasksNum) {
         pObj.addLineBreak();
         for(var j = 0; j < currentTask.watchers.length; j++) {
         //var watcher = assigns[i+tasksNum+j];
-          var watcher = currentTask.watchers[j].name;
+          var watcher = currentTask.watchers[j].name + ' ' + currentTask.watchers[j].lastname;
           pObj.addText(watcher);
           if(j != currentTask.watchers.length - 1) {
             pObj.addText(' , ');
@@ -215,9 +211,9 @@ function addTasksToDocx(docx, tasks, assigns, discussionId, tasksNum) {
       //URL
       var pObj = docx.createP({align: 'right'});
       var address = prefix + tasks[i]._id + '/activities';
-      pObj.addText(':כתובת המשימה', {font_size: 14, font_face: 'David', bold: true, underline: true});
+      pObj.addText(':כתובת המשימה', {font_size: 10, font_face: 'David', bold: true, underline: true});
       pObj.addLineBreak();
-      pObj.addText(address, {font_face: 'David', font_size: 10, underline: true});
+      pObj.addText(address, {font_face: 'David', font_size: 6, underline: true});
 
       //assign
       pObj.addLineBreak();
@@ -229,12 +225,12 @@ function addTasksToDocx(docx, tasks, assigns, discussionId, tasksNum) {
 
         var pObj = docx.createP({align: 'left'});
         if(flag) {
-          pObj.addText('אחראי:', {font_size: 14, font_face: 'David', bold: true, underline: true});
-          pObj.addText(assign, {font_size: 14, font_face: 'David'});
+          pObj.addText('אחראי: ', {font_size: 14, font_face: 'David', bold: true, underline: true});
+          pObj.addText(assign + ' ' + currentTask.assign.lastname, {font_size: 14, font_face: 'David'});
         }
         if(!flag) {
-          pObj.addText(assign, {font_size: 14, font_face: 'David'});
-          pObj.addText(':אחראי', {font_size: 14, font_face: 'David', bold: true, underline: true});
+          pObj.addText(assign + ' ' + currentTask.assign.lastname, {font_size: 14, font_face: 'David'});
+          pObj.addText(':אחראי ', {font_size: 14, font_face: 'David', bold: true, underline: true});
         }
       }
 
@@ -288,13 +284,13 @@ function createPDF(discussion, tasks) {
     if(discussion.title) {
     //Discussion title
       var flag = discussion.title.charAt(0) >= 'א' && discussion.title.charAt(0) <= 'ת';
-      if(flag) {
-        header.addText('דיון:', {font_size: 14, font_face: 'David', bold: true, underline: true});
-        header.addText(discussion.title, {font_size: 14, font_face: 'David', underline: true});
-      }
       if(!flag) {
-        header.addText(discussion.title, {font_size: 14, font_face: 'David', underline: true});
-        header.addText(':דיון', {font_size: 14, font_face: 'David', bold: true, underline: true});
+        header.addText('דיון: ', {font_size: 16, font_face: 'David', bold: true, underline: true});
+        header.addText(striptags(discussion.title), {font_size: 16, font_face: 'David', underline: true});
+      }
+      if(flag) {
+        header.addText(striptags(discussion.title), {font_size: 16, font_face: 'David', underline: true});
+        header.addText(':דיון ', {font_size: 16, font_face: 'David', bold: true, underline: true});
       }
     }
 
@@ -304,15 +300,15 @@ function createPDF(discussion, tasks) {
       var flag = discussion.assign.name.charAt(0) >= 'א' && discussion.assign.name.charAt(0) <= 'ת';
 
       if(flag) {
-        pObj.addText('אחראי הדיון:', {font_size: 14, font_face: 'David', bold: true, underline: true});
-        pObj.addText(discussion.assign.name, {font_size: 14, font_face: 'David'});
+        pObj.addText('אחראי הדיון: ', {font_size: 14, font_face: 'David', bold: true, underline: true});
+        pObj.addText(discussion.assign.name + ' ' + discussion.assign.lastname, {font_size: 14, font_face: 'David'});
       }
       if(!flag) {
         if(discussion.assign.lastname) {
           pObj.addText(discussion.assign.lastname + ' ', {font_size: 14, font_face: 'David'});
         }
-        pObj.addText(discussion.assign.name, {font_size: 14, font_face: 'David'});
-        pObj.addText(':אחראי הדיון', {font_size: 14, font_face: 'David', bold: true, underline: true});
+        pObj.addText(discussion.assign.name + ' ' + discussion.assign.lastname, {font_size: 14, font_face: 'David'});
+        pObj.addText(':אחראי הדיון ', {font_size: 14, font_face: 'David', bold: true, underline: true});
       }
     }
 
@@ -323,10 +319,7 @@ function createPDF(discussion, tasks) {
       pObj.addText('בדיון נכחו', {font_size: 14, font_face: 'David', bold: true, underline: true});
       pObj.addLineBreak();
       for(var i = 0; i < discussion.watchers.length; i++) {
-        if(discussion.watchers[i].lastname) {
-          pObj.addText(discussion.watchers[i].lastname + ' ', {font_size: 14, font_face: 'David'});
-        }
-        pObj.addText(discussion.watchers[i].name, {font_size: 14, font_face: 'David'});
+        pObj.addText(discussion.watchers[i].name + ' ' + discussion.watchers[i].lastname, {font_size: 14, font_face: 'David'});
         if(i != discussion.watchers.length - 1) {
           pObj.addText(' , ', {font_size: 14, font_face: 'David'});
         }
@@ -383,22 +376,22 @@ function createPDF(discussion, tasks) {
       var pObj = docx.createP({align: 'right'});
       var flag = discussion.location.charAt(0) >= 'א' && discussion.location.charAt(0) <= 'ת';
       if(flag) {
-        pObj.addText('מיקום:', {font_size: 14, font_face: 'David', bold: true, underline: true});
+        pObj.addText('מיקום: ', {font_size: 14, font_face: 'David', bold: true, underline: true});
         pObj.addText(discussion.location, {font_size: 14, font_face: 'David'});
       }
       if(!flag) {
         pObj.addText(discussion.location, {font_size: 14, font_face: 'David'});
-        pObj.addText(':מיקום', {font_size: 14, font_face: 'David', bold: true, underline: true});
+        pObj.addText(':מיקום ', {font_size: 14, font_face: 'David', bold: true, underline: true});
       }
     }
 
     //url
     var pObj = docx.createP({align: 'right'});
 
-    pObj.addText(':כתובת הדיון', {font_size: 14, font_face: 'David', bold: true, underline: true});
+    pObj.addText(':כתובת הדיון', {font_size: 10, font_face: 'David', bold: true, underline: true});
     pObj.addLineBreak();
     var url = URL + '/discussions/all/' + discussion._id;
-    pObj.addText(url, {font_size: 10, font_face: 'David', underline: true});
+    pObj.addText(url, {font_size: 6, font_face: 'David', underline: true});
     var pObj = docx.createP();
     pObj.addLineBreak();
     //tasks
@@ -471,12 +464,13 @@ exports.send = function(type, data) {
     if(ids.indexOf(recipients[i]._id.toString()) === -1) {
       var json = {
         name: recipients[i].name,
-        email: recipients[i].email
+        email: recipients[i].email, 
+        lastname: recipients[i].lastname 
       };
       attendingPeople.push(json);
       ids.push(recipients[i]._id.toString());
       emails.push(recipients[i].email);
-      data.attendees.push(recipients[i].name);
+      data.attendees.push(recipients[i].name + ' ' + recipients[i].lastname);
     }
   }
   var status = data.discussion.status;
@@ -579,7 +573,7 @@ exports.send = function(type, data) {
           var mailOptions = {
             to: recipient,
             from: config.emailFrom,
-            subject: data.discussion.title,
+            subject: striptags(data.discussion.title),
             html: results.html,
             text: results.text,
             forceEmbeddedImages: true
