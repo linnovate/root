@@ -79,8 +79,16 @@ angular.module('mean.icu.ui.tabs')
                 }
 
                 ActivitiesService.create({
-                    data: $scope.activity,
-                    context: context
+                    data: {
+                        creator: $scope.me,
+                        date: new Date(),
+                        entity: $scope.entity._id,
+                        entityType: $scope.entityName,
+
+                        updateField: 'comment',
+                        current: $scope.activity,
+                    },
+                    context: {}
                 }).then(function(result) {
                     if (!_.isEmpty($scope.attachments)) {
                         var file = $scope.attachments;

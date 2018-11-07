@@ -57,8 +57,16 @@ angular.module('mean.icu.ui.tabs')
                 }
 
                 ActivitiesService.create({
-                    data: $scope.activity,
-                    context: context
+                    data: {
+                        creator: $scope.me,
+                        date: new Date(),
+                        entity: $scope.entity._id,
+                        entityType: $scope.entityName,
+
+                        updateField: 'attachment',
+                        current: $scope.activity,
+                    },
+                    context: {}
                 }).then(function(result) {
                     if (!_.isEmpty($scope.attachments)) {
                         var file = $scope.attachments;
@@ -155,15 +163,17 @@ angular.module('mean.icu.ui.tabs')
 
                 DocumentsService.delete(file._id, {parent: parent, id: $scope.entity._id})
                   .then(function (status) {
-                    if (status == 200) {
+                    if (status === 200) {
                         ActivitiesService.create({
-                          data: {
-                              issue: ActivitiesService.entity,
-                              issueId: ActivitiesService.entityType,
-                              type: 'documentDelete',
-                              description: ''
-                          },
-                          context: {}
+                            data: {
+                                creator: $scope.me,
+                                date: new Date(),
+                                entity: ActivitiesService.entity,
+                                entityType: ActivitiesService.entityType,
+
+                                updateField: 'attachment',
+                            },
+                            context: {}
                         })
                     }
                   })

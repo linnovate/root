@@ -17,11 +17,29 @@ angular.module('mean.icu.ui.inbox', [])
                 case 'due' :
                     return `${creator} ${$i18next('changedDueDateTo')} ${moment(activity.entityObj.due).format('DD/MM/YYYY')}`
                     break;
+                case 'status' :
+                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    break;
                 case 'title' :
                     return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
                     break;
+                case 'assign' :
+                    return `${creator} ${$i18next('created')} ${activity.entityObj.title}`;
+                    break;
+                case 'location' :
+                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    break;
+                case 'color' :
+                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    break;
                 case 'description' :
-                    return `${creator} ${$i18next('updated')} ${activity.entityObj.description}`;
+                    return `${creator} ${$i18next('created')} ${activity.entityObj.title}`;
+                    break;
+                case 'comment' :
+                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    break;
+                case 'attachment' :
+                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
                     break;
             }
         };
