@@ -199,11 +199,7 @@ function FolderDetailsController($rootScope, $scope, entity, tasks, people, fold
     });
 
     FoldersService.update($scope.item).then(function(result) {
-      FoldersService.updateEntity($scope.item, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
-        ActivitiesService.data = ActivitiesService.data || [];
-        ActivitiesService.data.push(result);
-      });
       //if (context.entityName === 'office') {
       var officeId = result.office ? result.office._id : undefined;
       if (!officeId) {

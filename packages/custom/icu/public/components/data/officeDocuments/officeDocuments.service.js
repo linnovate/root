@@ -269,23 +269,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateWatcherPerms(officeDocument, me, watcher, type) {
-            console.log("OfficeDocumentsService.updateWatcherPerms", officeDocument, me, watcher, type)
-
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: 'updateWatcherPerms',
-                    userObj: watcher,
-                    permissions: officeDocument.permissions
-                },
-                context: {}
-            }).then(result => {
-                return result;
-            });
-        }
-
         function uploadEmpty(officeDocument){
             return $http.post(ApiUri+EntityPrefix+"/uploadEmpty",officeDocument).then(function(result){
                 WarningsService.setWarning(result.headers().warning);
@@ -395,23 +378,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateEntity(officeDocument, prev, type = 'folder') {
-            let activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: activityType,
-                    entityType: type,
-                    entity: type === 'folder' ? officeDocument.folder.title : officeDocument.task.title,
-                    prev: prev.folder ? prev.folder.title : ''
-                },
-                context: {}
-            }).then(result => {
-                return result;
-            });
-        }
-
         function getFolderIndex(officeDocument){
             return $http.post(ApiUri + EntityPrefix + '/' + officeDocument._id + '/indexInFolder', officeDocument)
                 .then(function (result) {
@@ -442,7 +408,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             readByDocument, readByDocument,
             sentToDocument, sentToDocument,
             uploadFileToDocument:uploadFileToDocument,
-            updateWatcherPerms: updateWatcherPerms,
             uploadDocumentFromTemplate:uploadDocumentFromTemplate,
             addSerialTitle:addSerialTitle,
             updateDue: createActivity('due'),
@@ -450,7 +415,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             updateStatus: createActivity('status'),
             updateAssign: createActivity('assign'),
             updateWatcher: createActivity('watcher'),
-            updateEntity: updateEntity,
+            updateWatcherPerms: createActivity('permissions'),
             uploadEmpty:uploadEmpty,
             deleteDocumentFile:deleteDocumentFile,
             signOnDocx:signOnDocx,

@@ -25,6 +25,10 @@ function getUpdateEntities(req, res, next) {
         let activity = activities[i];
         let Model = models[activity.entityType];
 
+        if(!Model){
+            console.error('No model for that entity type provided');
+            continue;
+        }
         Promises.push(
             new Promise( resolve => {
                 if(_.includes(allEntitiesIds, activity.entity)){
@@ -34,7 +38,6 @@ function getUpdateEntities(req, res, next) {
 
                 return Model.findOne({ _id: activity.entity })
                     .populate('creator')
-                    .populate('userObj')
                     .populate('watchers')
                     .populate('project')
                     .populate('folder')

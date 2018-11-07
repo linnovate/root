@@ -386,10 +386,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
       $scope.createProject(proj, function(result) {
         item.project = result;
         TasksService.update(item).then(function(result) {
-          TasksService.updateEntity(item, me, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
-            ActivitiesService.data.push(result);
-          });
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
 
           if (context.entityName === 'project') {
             var projId = result.project ? result.project._id : undefined;
@@ -411,10 +408,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
     }
     TasksService.update(item).then(function(result) {
       if (type === 'project') {
-        TasksService.updateEntity(item, me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
-          ActivitiesService.data.push(result);
-        });
       }
       var isSearchState = currentState.indexOf('search') != -1;
       if (context.entityName === 'project' && !isSearchState) {

@@ -247,25 +247,6 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    //TODO find the reason why this function created and maybe remove
-    function updateEntity(task, me, prev) {
-        let action = prev.project ? 'update' : 'create';
-        return ActivitiesService.create({
-            data: {
-                creator: me,
-                entity: task.id,
-                entityType: 'task',
-
-                current: task.assign,
-                prev: prev.project ? prev.project.title : ''
-            },
-            context: {}
-        }).then(result => {
-          return result;
-        });
-
-    }
-
     function createActivity(updateField){
         return function(entity, me, prev, remove){
             return ActivitiesService.create({
@@ -363,7 +344,6 @@ angular.module('mean.icu.data.tasksservice', [])
         data: data,
         tabData: tabData,
         IsNew: IsNew,
-        updateEntity: updateEntity,
         MyTasksOfNextWeekSummary: MyTasksOfNextWeekSummary,
         GivenTasksOfNextWeekSummary: GivenTasksOfNextWeekSummary,
         excel: excel

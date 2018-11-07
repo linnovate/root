@@ -191,7 +191,6 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     });
     json.watchers = $scope.item.watchers;
     OfficeDocumentsService.updateDocument($scope.item._id, json).then(function (res) {
-      OfficeDocumentsService.updateEntity($scope.item, backupEntity, type).then(function (result) {
         if (id == undefined) {
           delete $scope.item.folder;
           $scope.signatures = undefined;
@@ -203,9 +202,6 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         $scope.item.permissions = res.permissions;
 
         backupEntity = JSON.parse(JSON.stringify($scope.item));
-        ActivitiesService.data = ActivitiesService.data || [];
-        ActivitiesService.data.push(result);
-      });
     });
   };
 
