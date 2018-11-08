@@ -103,7 +103,7 @@ angular.module('mean.icu.data.projectsservice', [])
 
             updateField: updateField,
             current: entity[updateField],
-            prev: prev[updateField]
+            prev: prev ? prev[updateField] : ''
           },
           context: {}
         }).then(function(result) {

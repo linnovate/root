@@ -249,7 +249,6 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function createActivity(updateField){
         return function(entity, me, prev, remove){
-            debugger;
             return ActivitiesService.create({
                 data: {
                     creator: me,
@@ -259,7 +258,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
                     updateField: updateField,
                     current: entity[updateField],
-                    prev: prev[updateField]
+                    prev: prev ? prev[updateField] : ''
                 },
                 context: {}
             }).then(function(result) {
