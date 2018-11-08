@@ -6,6 +6,7 @@ angular.module('mean.icu.ui.inbox', [])
         $scope.me = me;
         $scope.activities = updatedEntities.activities;
         $scope.entities = updatedEntities.entities;
+        $scope.users = updatedEntities.users;
         $scope.inboxState = 'main.inbox';
 
         $scope.getActivityDescription = (activity) => {
@@ -15,31 +16,31 @@ angular.module('mean.icu.ui.inbox', [])
                     return `${creator} ${$i18next('created')} ${activity.entityObj.title}`;
                     break;
                 case 'due' :
-                    return `${creator} ${$i18next('changedDueDateTo')} ${moment(activity.entityObj.due).format('DD/MM/YYYY')}`
+                    return `${creator} ${$i18next('changedDueDateTo')} ${moment(activity.entityObj.due).format('DD/MM/YYYY')}`;
                     break;
                 case 'status' :
-                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('changedStatusTo')} ${activity.current}`;
                     break;
                 case 'title' :
-                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('changedTitleTo')} ${activity.current}`;
                     break;
                 case 'assign' :
-                    return `${creator} ${$i18next('created')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('assigned')} ${ getUser(activity.current).username }`;
                     break;
                 case 'location' :
-                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('changedLocationTo')} ${activity.current}`;
                     break;
                 case 'color' :
-                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('updatedColor')} ${activity.current}`;
                     break;
                 case 'description' :
-                    return `${creator} ${$i18next('created')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('updatedDescription')} ${activity.current}`;
                     break;
                 case 'comment' :
-                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('leavedComment')} ${activity.current}`;
                     break;
                 case 'attachment' :
-                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('addedAttachment')} ${activity.current}`;
                     break;
             }
         };
@@ -88,6 +89,10 @@ angular.module('mean.icu.ui.inbox', [])
             }
         };
 
+        function getUser(userId){
+            return $scope.users.find( user => user._id === userId)
+        }
+
         function loadData (START, LIMIT) {
             return new Promise((resolve) => {
                 if ($scope.loadNext) {
@@ -110,5 +115,5 @@ angular.module('mean.icu.ui.inbox', [])
                 }
                 return resolve([]);
             })
-        };
+        }
     });

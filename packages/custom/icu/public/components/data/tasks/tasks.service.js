@@ -249,6 +249,7 @@ angular.module('mean.icu.data.tasksservice', [])
 
     function createActivity(updateField){
         return function(entity, me, prev, remove){
+            debugger;
             return ActivitiesService.create({
                 data: {
                     creator: me,

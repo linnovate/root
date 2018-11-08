@@ -357,27 +357,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
-
-        function updateAssign(officeDocument, prev) {
-            if (officeDocument.assign) {
-                var activityType = prev.assign ? 'assign' : 'assignNew';
-            } else {
-                var activityType = 'unassign';
-            }
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: activityType,
-                    userObj: officeDocument.assign,
-                    prev: prev.assign ? prev.assign.name : ''
-                },
-                context: {}
-            }).then(result => {
-                return result;
-            });
-        }
-
         function getFolderIndex(officeDocument){
             return $http.post(ApiUri + EntityPrefix + '/' + officeDocument._id + '/indexInFolder', officeDocument)
                 .then(function (result) {
