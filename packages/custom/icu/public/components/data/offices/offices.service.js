@@ -176,6 +176,6 @@ angular.module('mean.icu.data.officesservice', [])
         WantToCreateRoom: WantToCreateRoom,
         updateColor: createActivity('color'),
         updateTitle: createActivity('title'),
-        updateWatcher: createActivity('watcher')
+        updateWatcher: createActivity('watchers')
     };
 });

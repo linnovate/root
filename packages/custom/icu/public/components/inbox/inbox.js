@@ -42,6 +42,9 @@ angular.module('mean.icu.ui.inbox', [])
                 case 'attachment' :
                     return `${creator} ${$i18next('addedAttachment')} ${activity.current}`;
                     break;
+                case 'watchers' :
+                    return `${creator} ${$i18next('changedWatchers')}`;
+                    break;
             }
         };
 

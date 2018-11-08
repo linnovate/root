@@ -393,7 +393,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             updateTitle: createActivity('title'),
             updateStatus: createActivity('status'),
             updateAssign: createActivity('assign'),
-            updateWatcher: createActivity('watcher'),
+            updateWatcher: createActivity('watchers'),
             updateWatcherPerms: createActivity('permissions'),
             uploadEmpty:uploadEmpty,
             deleteDocumentFile:deleteDocumentFile,

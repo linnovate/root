@@ -186,6 +186,6 @@ angular.module('mean.icu.data.foldersservice', [])
         updateTitle: createActivity('title'),
         updateColor: createActivity('color'),
         updateStatus: createActivity('status'),
-        updateWatcher: createActivity('watcher'),
+        updateWatcher: createActivity('watchers'),
     };
 });

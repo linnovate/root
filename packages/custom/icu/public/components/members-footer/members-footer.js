@@ -246,7 +246,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     }
                 }
 
-                const backupEntity = JSON.parse(JSON.stringify($scope.item));
+                const backupEntity = JSON.parse(JSON.stringify($scope.entity));
                 update($scope.entity, member, 'added');
                 $scope.animate = true;
 
@@ -310,7 +310,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     });
                 }
 
-                const backupEntity = JSON.parse(JSON.stringify($scope.item));
+                const backupEntity = JSON.parse(JSON.stringify($scope.entity));
                 update($scope.entity, member, 'removed');
 
                 var task = $scope.entity ;
