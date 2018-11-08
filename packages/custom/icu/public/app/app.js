@@ -1658,6 +1658,7 @@ angular.module('mean.icu').config([
             .state('main.inbox.task', getTaskDetailsState('/task'))
             .state('main.inbox.task.activities', getDetailsTabState('task', 'activities'))
             .state('main.inbox.task.documents', getDetailsTabState('task', 'documents'))
+            .state('main.inbox.task.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
 
             .state('main.inbox.project', getProjectDetailsState('/project'))
             .state('main.inbox.project.activities', getDetailsTabState('project', 'activities'))

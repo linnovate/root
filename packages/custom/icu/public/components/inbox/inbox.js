@@ -58,7 +58,7 @@ angular.module('mean.icu.ui.inbox', [])
         $scope.formatDate = date => moment(date).format('HH:mm | DD/MM/YYYY');
 
         $scope.initiate = function($event, entity, activityType) {
-            $state.go($scope.inboxState + '.' + activityType, {
+            $state.go($scope.inboxState + '.' + activityType + '.activities', {
                 id: entity._id,
                 entity: activityType,
                 entityId: entity._id
