@@ -86,7 +86,7 @@ angular.module('mean.icu.ui.tabs')
                         entityType: $scope.entityName,
 
                         updateField: 'comment',
-                        current: $scope.activity,
+                        current: $scope.activity.description,
                     },
                     context: {}
                 }).then(function(result) {
