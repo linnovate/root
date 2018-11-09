@@ -282,7 +282,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     data: {
                         creator: me,
                         date: new Date(),
-                        entity: entity.id,
+                        entity: entity._id,
                         entityType: 'officeDocument',
 
                         updateField: updateField,
@@ -391,6 +391,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             addSerialTitle:addSerialTitle,
             updateDue: createActivity('due'),
             updateTitle: createActivity('title'),
+            updateDescription: createActivity('description'),
             updateStatus: createActivity('status'),
             updateAssign: createActivity('assign'),
             updateWatcher: createActivity('watchers'),

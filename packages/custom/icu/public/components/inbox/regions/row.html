@@ -1,5 +1,7 @@
 <tr ng-repeat="activity in activities | orderBy: 'created': true"
-    ng-click="initiate($event, activity.entityObj, activity.entityType)">
+    ng-click="initiate($event, activity.entityObj, activity.entityType)"
+    ng-if="activity.updateField"
+>
     <td>
         <div class="update-head">
             <div class="title icon {{activity.entityType}}">{{ activity.entityObj.title || ( activity.entityType | i18next )}}</div>

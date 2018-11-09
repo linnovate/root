@@ -463,28 +463,34 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   // ==================================================== Update ==================================================== //
 
   $scope.update = function(officeDocument, context) {
-
     OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {});
     ActivitiesService.data = ActivitiesService.data || [];
     var me = $scope.me;
     switch (context.name) {
     case 'due':
-      OfficeDocumentsService.updateDue(officeDocument, backupEntity).then(function(result) {
+      OfficeDocumentsService.updateDue(officeDocument, me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
       });
       break;
     case 'status':
-      OfficeDocumentsService.updateStatus(officeDocument, backupEntity).then(function(result) {
+      OfficeDocumentsService.updateStatus(officeDocument, me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
       });
       break;
     case 'title':
+        OfficeDocumentsService.updateTitle(officeDocument, me, backupEntity).then(function(result) {
+            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            ActivitiesService.data = ActivitiesService.data || [];
+            ActivitiesService.data.push(result);
+            refreshList();
+        });
+        break;
     case 'description':
-      OfficeDocumentsService.updateTitle(officeDocument, backupEntity, context.name).then(function(result) {
+      OfficeDocumentsService.updateDescription(officeDocument, me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
