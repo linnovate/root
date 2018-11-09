@@ -184,6 +184,7 @@ angular.module('mean.icu.data.foldersservice', [])
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
         updateTitle: createActivity('title'),
+        updateDescription: createActivity('description'),
         updateColor: createActivity('color'),
         updateStatus: createActivity('status'),
         updateWatcher: createActivity('watchers'),

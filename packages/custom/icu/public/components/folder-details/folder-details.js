@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.folderdetails', []).controller('FolderDetailsController', FolderDetailsController);
 
-function FolderDetailsController($rootScope, $scope, entity, tasks, people, folders, offices, tags,  $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService, EntityService, DetailsPaneService) {
+function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, folders, offices, tags,  $timeout, context, $state, FoldersService, PermissionsService, $stateParams, OfficesService, ActivitiesService, EntityService, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
 
@@ -278,7 +278,7 @@ function FolderDetailsController($rootScope, $scope, entity, tasks, people, fold
       }
       switch (context.name) {
       case 'status':
-        FoldersService.updateStatus(folder, backupEntity).then(function(result) {
+        FoldersService.updateStatus(folder, me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
@@ -286,14 +286,20 @@ function FolderDetailsController($rootScope, $scope, entity, tasks, people, fold
         break;
 
       case 'color':
-        FoldersService.updateColor(folder).then(function(result) {
+        FoldersService.updateColor(folder, me, backupEntity).then(function(result) {
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
         break;
       case 'title':
+          FoldersService.updateTitle(folder, me, backupEntity).then(function(result) {
+              backupEntity = JSON.parse(JSON.stringify($scope.item));
+              ActivitiesService.data = ActivitiesService.data || [];
+              ActivitiesService.data.push(result);
+          });
+          break;
       case 'description':
-        FoldersService.updateTitle(folder, backupEntity, context.name).then(function(result) {
+        FoldersService.updateDescription(folder, me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
