@@ -245,8 +245,10 @@ angular.module('mean.icu.ui.membersfooter', [])
                         });
                     }
                 }
+
+                const backupEntity = JSON.parse(JSON.stringify($scope.entity));
                 update($scope.entity, member, 'added')
-                  .then(updatedEntity => {
+                    .then(updatedEntity => {update($scope.entity, member, 'added').then(updatedEntity => {
                     let { watchers, permissions } = updatedEntity;
                     Object.assign($scope.entity, watchers, permissions);
                     $scope.animate = true;
@@ -263,7 +265,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                         });
                         break;
                       case 'tasks':
-                        TasksService.updateWatcher(task, me, member).then(function (result) {
+                        TasksService.updateWatcher(task, me, backupEntity).then(function (result) {
                           ActivitiesService.data.push(result);
                         });
                         break;
@@ -312,6 +314,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     });
                 }
 
+                const backupEntity = JSON.parse(JSON.stringify($scope.entity));
                 update($scope.entity, member, 'removed');
 
                 var task = $scope.entity ;
@@ -329,7 +332,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                         break ;
 
                     case 'tasks':
-                        TasksService.updateWatcher(task, me, member, 'removeWatcher').then(function(result) {
+                        TasksService.updateWatcher(task, me, backupEntity, 'remove').then(function(result) {
                             ActivitiesService.data.push(result);
                         });
                         break ;

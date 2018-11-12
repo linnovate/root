@@ -312,9 +312,8 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
     DiscussionsService.update(discussion);
     switch (type) {
-    case 'startDue':
-    case 'endDue':
-      DiscussionsService.updateDue(discussion, backupEntity, type).then(function(result) {
+    case 'due':
+      DiscussionsService.updateDue(discussion, $scope.me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
@@ -322,7 +321,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
       break;
 
     case 'status':
-      DiscussionsService.updateStatus(discussion, backupEntity).then(function(result) {
+      DiscussionsService.updateStatus(discussion, $scope.me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
@@ -330,7 +329,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
       break;
 
     case 'location':
-      DiscussionsService.updateLocation(discussion, backupEntity).then(function(result) {
+      DiscussionsService.updateLocation(discussion, $scope.me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
@@ -351,15 +350,22 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
         }
       }
 
-      DiscussionsService.updateAssign(discussion, backupEntity).then(function(result) {
+      DiscussionsService.updateAssign(discussion, $scope.me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
       });
       break;
-    case 'title':
     case 'description':
-      DiscussionsService.updateTitle(discussion, backupEntity, type).then(function(result) {
+        DiscussionsService.updateDescription(discussion, $scope.me, backupEntity).then(function(result) {
+            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            ActivitiesService.data = ActivitiesService.data || [];
+            ActivitiesService.data.push(result);
+            refreshList();
+        });
+        break;
+    case 'title':
+      DiscussionsService.updateTitle(discussion, $scope.me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);

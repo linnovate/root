@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.discussionsservice', [])
-  .service('DiscussionsService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
+  .service('DiscussionsService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
     var EntityPrefix = '/discussions';
     var data;
 
@@ -127,102 +127,36 @@ angular.module('mean.icu.data.discussionsservice', [])
       }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
     }
 
-    function updateWatcher(discussion, me, watcher, type) {
-      return ActivitiesService.create({
-        data: {
-          issue: 'discussion',
-          issueId: discussion.id,
-          type: type || 'updateWatcher',
-          userObj: watcher
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
+    function createActivity(updateField){
+      return function(entity, me, prev, remove){
+        return ActivitiesService.create({
+          data: {
+            creator: me,
+            date: new Date(),
+            entity: entity.id,
+            entityType: 'discussion',
 
-    function updateStatus(discussion, prev) {
-      return ActivitiesService.create({
-        data: {
-          issue: 'discussion',
-          issueId: discussion.id,
-          type: 'updateStatus',
-          status: discussion.status,
-          prev: prev.status
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
-
-    function updateDue(discussion, prev, type) {
-      return ActivitiesService.create({
-        data: {
-          issue: 'discussion',
-          issueId: discussion.id,
-          type: 'update' + type[0].toUpperCase() + type.slice(1),
-          TaskDue: type === 'startDue' ? discussion.startDate : discussion.endDate,
-          prev: type === 'startDue' ? prev.startDate : prev.endDate
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
-
-    function updateLocation(discussion, prev) {
-      var activityType = prev.location ? 'updateLocation' : 'updateNewLocation';
-      return ActivitiesService.create({
-        data: {
-          issue: 'discussion',
-          issueId: discussion.id,
-          type: activityType,
-          status: discussion.location,
-          prev: prev.location
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
-
-    function updateTitle(discussion, prev, type) {
-      var capitalizedType = type[0].toUpperCase() + type.slice(1);
-      var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
-      return ActivitiesService.create({
-        data: {
-          issue: 'discussion',
-          issueId: discussion.id,
-          type: activityType,
-          status: discussion[type],
-          prev: prev[type]
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
-    }
-
-    function updateAssign(discussion, prev) {
-      var activityType
-      if (discussion.assign) {
-        activityType = prev.assign ? 'assign' : 'assignNew';
-      } else {
-        activityType = 'unassign';
+            updateField: updateField,
+            current: entity[updateField],
+            prev: prev[updateField]
+          },
+          context: {}
+        }).then(function(result) {
+          if (updateField === 'assign' && entity.assign) {
+            var message = {};
+            message.content = entity.title || '-';
+            MeanSocket.emit('message:send', {
+              message: message,
+              user: me,
+              channel: entity.assign,
+              id: entity.id,
+              entity: 'discussion',
+              type: 'assign'
+            });
+          }
+          return result;
+        });
       }
-      return ActivitiesService.create({
-        data: {
-          issue: 'discussion',
-          issueId: discussion.id,
-          type: activityType,
-          userObj: discussion.assign,
-          prev: prev.assign ? prev.assign.name : ''
-        },
-        context: {}
-      }).then(result => {
-        return result;
-      });
     }
 
     function WantToCreateRoom(discussion) {
@@ -249,12 +183,13 @@ angular.module('mean.icu.data.discussionsservice', [])
       summary: summary,
       data: data,
       cancele: cancele,
-      updateWatcher: updateWatcher,
-      updateStatus: updateStatus,
-      updateDue: updateDue,
-      updateLocation: updateLocation,
-      updateAssign: updateAssign,
-      updateTitle: updateTitle,
+      updateDue: createActivity('due'),
+      updateTitle: createActivity('title'),
+      updateDescription: createActivity('description'),
+      updateStatus: createActivity('status'),
+      updateAssign: createActivity('assign'),
+      updateWatcher: createActivity('watchers'),
+      updateLocation: createActivity('location'),
       WantToCreateRoom: WantToCreateRoom,
     };
   });

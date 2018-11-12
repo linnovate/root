@@ -1600,16 +1600,18 @@ angular.module('mean.icu').config([
                         );
                     },
                     updatedEntities: (activities, InboxService) =>
-                        InboxService.getUpdateEntities(activities.data)
+                        InboxService.getUpdateEntities(activities)
                 }
             })
             .state('main.inbox.task', getTaskDetailsState('/task'))
             .state('main.inbox.task.activities', getDetailsTabState('task', 'activities'))
             .state('main.inbox.task.documents', getDetailsTabState('task', 'documents'))
+            .state('main.inbox.task.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
 
             .state('main.inbox.project', getProjectDetailsState('/project'))
             .state('main.inbox.project.activities', getDetailsTabState('project', 'activities'))
             .state('main.inbox.project.documents', getDetailsTabState('project', 'documents'))
+            .state('main.inbox.project.tasks', getDetailsTabState('project', 'tasks'))
 
             .state('main.inbox.discussion', getDiscussionDetailsState('/discussion'))
             .state('main.inbox.discussion.activities', getDetailsTabState('discussion', 'activities'))

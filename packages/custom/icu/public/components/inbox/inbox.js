@@ -6,67 +6,44 @@ angular.module('mean.icu.ui.inbox', [])
         $scope.me = me;
         $scope.activities = updatedEntities.activities;
         $scope.entities = updatedEntities.entities;
+        $scope.users = updatedEntities.users;
         $scope.inboxState = 'main.inbox';
 
         $scope.getActivityDescription = (activity) => {
-            let creator = activity.creator.username;
-
-            switch (activity.type){
+            let creator = activity.creator.name;
+            switch (activity.updateField){
                 case 'create' :
                     return `${creator} ${$i18next('created')} ${activity.entityObj.title}`;
                     break;
-                case 'updateWatcher' :
-                    let newWatcher = activity.userObj.name;
-                    return (creator === me._id)
-                        ? `${$i18next('youAddedAsWatcher')} ${newWatcher}`
-                        : `${creator} ${$i18next('addedYouAsWatcher')}`;
+                case 'due' :
+                    return `${creator} ${$i18next('changedDueDateTo')} ${moment(activity.entityObj.due).format('DD/MM/YYYY')}`;
                     break;
-                case 'removeWatcher' :
-                    return `${creator} ${$i18next('removeWatcher')} ${activity.userObj.name}`;
+                case 'status' :
+                    return `${creator} ${$i18next('changedStatusTo')} ${activity.current}`;
                     break;
-                case 'updateEntity' :
-                    return `${creator} ${$i18next('changedParentOf')} ${activity.entityObj.title} ${$i18next('to')} ${activity.entityObj.title}`;
-                    break;
-                case 'updateNewEntity' :
-                    return `${creator} ${$i18next('bindedEntity')} ${activity.entityObj.title} ${$i18next('with')} ${activity.entity}`;
+                case 'title' :
+                    return `${creator} ${$i18next('changedTitleTo')} ${activity.current}`;
                     break;
                 case 'assign' :
-                case 'assignNew' :
-                    return `${creator} ${$i18next('assigned')} ${activity.userObj.name} ${$i18next('to')} ${activity.entityObj.title}`;
+                    return `${creator} ${$i18next('assigned')} ${ getUser(activity.current).username }`;
                     break;
-                case 'unassign' :
-                    return `${creator} ${$i18next('unassigned')} ${activity.userObj.name} ${$i18next('from')} ${activity.entityObj.title}`;
+                case 'location' :
+                    return `${creator} ${$i18next('changedLocationTo')} ${activity.current}`;
                     break;
-                case 'updateDue' :
-                    return `${creator} ${$i18next('changedDueDateTo')} ${activity.TaskDue}`;
+                case 'color' :
+                    return `${creator} ${$i18next('updatedColor')} ${activity.current}`;
+                    break;
+                case 'description' :
+                    return `${creator} ${$i18next('updatedDescription')} ${activity.current}`;
                     break;
                 case 'comment' :
-                    return `${creator} ${$i18next('leavedComment')} ${activity.description}`;
+                    return `${creator} ${$i18next('leavedComment')} ${activity.current}`;
                     break;
-                case 'document' :
-                    return `${creator} ${$i18next('addedAttachment')}`;
+                case 'attachment' :
+                    return `${creator} ${$i18next('addedAttachment')} ${activity.current}`;
                     break;
-                case 'documentDelete' :
-                    return `${creator} ${$i18next('removedAttachment')}`;
-                    break;
-                case 'update' :
-                case 'updateNew' :
-                case 'updateTitle' :
-                case 'updateNewTitle' :
-                    return `${creator} ${$i18next('updated')} ${activity.entityObj.title}`;
-                    break;
-                case 'updateStatus' :
-                    return activity.status === 'deleted' ?
-                     `${creator} ${$i18next('removed')} ${activity.entityObj.title}` :
-                     `${creator} ${$i18next('changedStatusTo')} ${activity.status}`;
-                    break;
-                case 'updateNewLocation' :
-                    return`${creator} ${$i18next('addedLocation')} ${activity.status}`;
-                    break;
-                case 'updateLocation' :
-                    return activity.status === '' ?
-                     `${creator} ${$i18next('removedLocation')}` :
-                     `${creator} ${$i18next('changedLocationTo')} ${activity.status}`;
+                case 'watchers' :
+                    return `${creator} ${$i18next('changedWatchers')}`;
                     break;
             }
         };
@@ -81,10 +58,10 @@ angular.module('mean.icu.ui.inbox', [])
             }
         };
 
-        $scope.formatDate = date => moment(date).format('HH:mm | DD/mm/YYYY');
+        $scope.formatDate = date => moment(date).format('HH:mm | DD/MM/YYYY');
 
         $scope.initiate = function($event, entity, activityType) {
-            $state.go($scope.inboxState + '.' + activityType, {
+            $state.go($scope.inboxState + '.' + activityType + '.activities', {
                 id: entity._id,
                 entity: activityType,
                 entityId: entity._id
@@ -115,6 +92,10 @@ angular.module('mean.icu.ui.inbox', [])
             }
         };
 
+        function getUser(userId){
+            return $scope.users.find( user => user._id === userId)
+        }
+
         function loadData (START, LIMIT) {
             return new Promise((resolve) => {
                 if ($scope.loadNext) {
@@ -137,5 +118,5 @@ angular.module('mean.icu.ui.inbox', [])
                 }
                 return resolve([]);
             })
-        };
+        }
     });

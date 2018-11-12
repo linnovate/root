@@ -7,22 +7,37 @@
                 <div class="title">
                     <div class="text">
                         <span class="user-name">{{activity.creator.name}} {{activity.creator.lastname}}</span>
-                        <span class="activity-details" ng-repeat="val in details[activity.type]">
-                            <span ng-switch="val.type">
-                                <span ng-switch-when="object">{{activity[val.value] | i18next}}</span>
-                                <span ng-switch-when="deepObject" class="{{val.klass}}">{{activity[val.value[0]][val.value[1]] | i18next}}&nbsp</span>
-                                <span ng-switch-when="prev-assign" class="{{val.klass}}">{{activity[val.value] | i18next}}&nbsp</span>
-                                <span ng-switch-when="nbsp">{{' '}}&nbsp</span>
-                                <span ng-switch-when="prev-date">{{activity[val.value] | date:'MM/dd/yy'}}</span>
-                                <span ng-switch-when="prev-string">{{activity[val.value] | i18next}}</span>
-                                <span ng-switch-when="to">{{'to' | i18next}}</span>
-                                <span ng-switch-when="date">{{activity[val.value] | date:'MM/dd/yy'}}</span>
-                                <span ng-switch-when="string" ng-bind-html="activity[val.value]"></span>
+                        <span class="activity-details" ng-repeat="val in details">
+                            <span ng-switch="activity.updateField">
+                                <span ng-switch-when="create">{{ val.value | i18next }}</span>
+                                <span ng-switch-when="status|assign|location|color">
+                                    {{ 'changed' | i18next }}&nbsp{{ activity.updateField | i18next }}
+                                    {{ 'to' | i18next }}&nbsp{{ activity.current }}
+                                </span>
+                                <span ng-switch-when="due">
+                                    {{ 'changed' | i18next }}&nbsp{{ activity.updateField | i18next }}
+                                    {{ 'to' | i18next }}&nbsp{{ activity.current | date:'MM/dd/yy' }}
+                                </span>
+                                <span ng-switch-when="title">
+                                    {{ 'changed' | i18next }}&nbsp{{ activity.updateField | i18next }}
+                                    {{ 'from' | i18next }}&nbsp{{ activity.prev }}
+                                    {{ 'to' | i18next }}&nbsp{{ activity.current }}
+                                </span>
+                                <span ng-switch-when="description">
+                                    {{ 'changed' | i18next }}&nbsp{{ activity.updateField | i18next }}
+                                    {{ 'to' | i18next }}&nbsp{{ activity.current }}
+                                </span>
+                                <span ng-switch-when="comment">
+                                    {{ 'leavedComment' | i18next }}&nbsp{{ activity.current }}
+                                </span>
+                                <span ng-switch-when="attachment">
+                                    {{activity[val.value] | date:'MM/dd/yy'}}
+                                </span>
                                 <span ng-switch-default ng-bind-html="val.value | i18next"></span>
                             </span>
                         </span>
                     </div>
-                    <div class="activity-date">{{activity.created | date:"MM/dd/yyyy ' | ' h:mma"}}</div>
+                    <div class="activity-date">{{activity.date | date:"MM/dd/yyyy ' | ' h:mma"}}</div>
                 </div>
                 <div class="description">
                     {{activity.description}}

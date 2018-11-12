@@ -93,7 +93,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
       $scope.item.discussion = context.entityId;
     }
 
-    ProjectsService.updateDue($scope.item, backupEntity).then(function (result) {
+    ProjectsService.updateDue($scope.item, $scope.me, backupEntity).then(function (result) {
       backupEntity = JSON.parse(JSON.stringify($scope.item));
       ActivitiesService.data.push(result);
     });
@@ -365,13 +365,13 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
           ProjectsService.selected.title = res.title;
         }
       }
-      switch (type) {
+      switch (type.name) {
       case 'status':
         if(context.entityName === 'discussion') {
           item.discussion = context.entityId;
         }
 
-        ProjectsService.updateStatus(item, backupEntity).then(function(result) {
+        ProjectsService.updateStatus(item, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
@@ -379,7 +379,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
         break;
 
       case 'color':
-        ProjectsService.updateColor(item).then(function(result) {
+        ProjectsService.updateColor(item, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
@@ -387,7 +387,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
         break;
       case 'title':
       case 'description':
-        ProjectsService.updateTitle(item, backupEntity, type).then(function(result) {
+        ProjectsService.updateTitle(item, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);

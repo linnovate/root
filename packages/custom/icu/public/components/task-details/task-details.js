@@ -88,7 +88,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
       $scope.item.discussion = context.entityId;
     }
 
-    TasksService.updateDue($scope.item, backupEntity).then(function(result) {
+    TasksService.updateDue($scope.item, me, backupEntity).then(function(result) {
       backupEntity = JSON.parse(JSON.stringify($scope.item));
       ActivitiesService.data.push(result);
     });
@@ -115,7 +115,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
       $scope.item.discussion = context.entityId;
     }
 
-    TasksService.updateStatus($scope.item, backupEntity).then(function(result) {
+    TasksService.updateStatus($scope.item, me, backupEntity).then(function(result) {
       backupEntity = JSON.parse(JSON.stringify($scope.item));
       ActivitiesService.data.push(result);
     });
@@ -138,7 +138,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
         let clonedEntity = JSON.parse(JSON.stringify($scope.item));
         clonedEntity.status = "deleted";
         // just for activity status
-        TasksService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+        TasksService.updateStatus(clonedEntity, me, $scope.item).then(function(result) {
           ActivitiesService.data.push(result);
         });
 
@@ -171,7 +171,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
         let clonedEntity = JSON.parse(JSON.stringify(entity));
         clonedEntity.status = "un-deleted";
         // just for activity status
-        TasksService.updateStatus(clonedEntity, entity).then(function(result) {
+        TasksService.updateStatus(clonedEntity, me, entity).then(function(result) {
           ActivitiesService.data.push(result);
         });
 
@@ -380,10 +380,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
       $scope.createProject(proj, function(result) {
         item.project = result;
         TasksService.update(item).then(function(result) {
-          TasksService.updateEntity(item, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
-            ActivitiesService.data.push(result);
-          });
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
 
           if (context.entityName === 'project') {
             var projId = result.project ? result.project._id : undefined;
@@ -405,10 +402,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
     }
     TasksService.update(item).then(function(result) {
       if (type === 'project') {
-        TasksService.updateEntity(item, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
-          ActivitiesService.data.push(result);
-        });
       }
       var isSearchState = currentState.indexOf('search') != -1;
       if (context.entityName === 'project' && !isSearchState) {
@@ -433,7 +427,8 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
         }
       }
       if (type === 'title' || type === 'description') {
-        TasksService.updateTitle(item, backupEntity, type).then(function(result) {
+        let func = type === 'title' ? 'updateTitle' : 'updateDescription';
+        TasksService[func](item, me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
