@@ -3,7 +3,7 @@
 angular.module('mean.icu.data.foldersservice', [])
 .service('FoldersService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/folders';
-    var data, selected;
+    var data = [], selected;
 
     function getAll(start, limit, sort) {
         var qs = querystring.encode({

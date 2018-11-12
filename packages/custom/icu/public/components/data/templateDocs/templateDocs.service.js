@@ -3,7 +3,7 @@
 angular.module('mean.icu.data.templatedocsservice', [])
     .service('TemplateDocsService', function ($http, BoldedService, ApiUri, NotifyingService, Upload, WarningsService, PaginationService, $rootScope) {
         var EntityPrefix = '/officeTemplates';
-        var data, selected;
+        var data = [], selected;
 
         //   function getAll() {
         //     return $http.get(ApiUri + EntityPrefix).then(function (result) {
