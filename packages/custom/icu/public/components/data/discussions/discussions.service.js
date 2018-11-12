@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.discussionsservice', [])
-  .service('DiscussionsService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService, MeanSocket) {
+  .service('DiscussionsService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
     var EntityPrefix = '/discussions';
     var data;
 
