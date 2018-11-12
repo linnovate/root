@@ -386,8 +386,15 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
         });
         break;
       case 'title':
-      case 'description':
         ProjectsService.updateTitle(item, $scope.me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+          refreshList();
+        });
+        break;
+      case 'description':
+        ProjectsService.updateDescription(item, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
