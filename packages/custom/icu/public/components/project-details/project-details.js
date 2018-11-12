@@ -42,7 +42,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   var backupEntity = JSON.parse(JSON.stringify($scope.item));
 
   $scope.people = people.data || people;
-  if($scope.people && $scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+  if($scope.people.length && $scope.people[$scope.people.length - 1].name !== 'no select') {
     var newPeople = {
       name: 'no select'
     };
