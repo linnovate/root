@@ -210,6 +210,7 @@ function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, peo
   // ==================================================== Update ==================================================== //
 
   $scope.update = function(office, context) {
+      let me = $scope.me;
       if (context.name === 'color') {
           office.color = context.newVal;
       }
@@ -221,25 +222,32 @@ function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, peo
       }
       switch (context.name) {
       case 'color':
-        OfficesService.updateColor(office).then(function(result) {
+        OfficesService.updateColor(office, me, backupEntity).then(function(result) {
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
+        break;
       case 'title':
+      OfficesService.updateTitle(office, me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+      });
+      break;
       case 'description':
-        OfficesService.updateTitle(office, backupEntity, context.name).then(function(result) {
+        OfficesService.updateDescription(office, me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
+        break;
       case 'tel':
       case 'unit':
-        OfficesService.updateTitle(office, backupEntity, context.name).then(function(result) {
+        OfficesService.updateTitle(office, me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
         });
         break;
       }
-
     });
   }
 

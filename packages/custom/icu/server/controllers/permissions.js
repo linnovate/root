@@ -176,21 +176,21 @@ exports.createContent = function(user, oldDoc, newDoc) {
   // console.log(JSON.stringify(oldDoc)) ;
   let deffered = q.defer();
 
-  if(!newDoc || !newDoc.issue || !entityNameMap[newDoc.issue]) {
+  if(!newDoc || !newDoc.entityType || !entityNameMap[newDoc.entityType]) {
     // this is not one of the entity create cases.
     deffered.resolve("OK") ;
     return deffered.promise ;
   }
-  if (newDoc.issue === 'update') {
+  if (newDoc.entityType === 'update') {
     // creating an update message
     deffered.resolve("OK");
     return deffered.promise;
   }
 
   if (newDoc.type === 'comment' || newDoc.type === 'document') {
-    let Model = entityNameMap[newDoc.issue].mainModel;
+    let Model = entityNameMap[newDoc.entityType].mainModel;
 
-    Model.findOne({'_id': newDoc.issueId},function(err,doc){
+    Model.findOne({'_id': newDoc.entity},function(err,doc){
       // console.log("doc") ;
       // console.log(doc) ;
       let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
@@ -206,14 +206,14 @@ exports.createContent = function(user, oldDoc, newDoc) {
     return deffered.promise;
   }
 
-  if(newDoc.type == 'assign' && newDoc.issue == 'officeDocuments') {
+  if(newDoc.updateField == 'assign' && newDoc.entityType == 'officeDocuments') {
     // this piece of code is designed to UPDATE watchers/permissions for new officeDoc assign.
     // console.log("assign");
     // console.log(JSON.stringify(newDoc));
     let Model = entityNameMap['officeDocument'].mainModel;
     let assigneeAdded = String(newDoc.userObj) ;
 
-    Model.findOne({'_id': newDoc.issueId},function(err,doc){
+    Model.findOne({'_id': newDoc.entity},function(err,doc){
       // push assignee permissions
       let exist = exports.searchIdIndex(String(assigneeAdded),doc['permissions']) ;
 
@@ -257,10 +257,10 @@ exports.createContent = function(user, oldDoc, newDoc) {
     return deffered.promise;
   }
 
-  if(newDoc.type == 'updateWatcherPerms' && newDoc.issue == 'officeDocuments') {
+  if(newDoc.updateField == 'watcher' && newDoc.entityType == 'officeDocuments') {
     console.log("updateWatcherPerms") ;
     let Model = entityNameMap['officeDocument'].mainModel;
-    Model.findOne({'_id': newDoc.issueId},function(err,doc){
+    Model.findOne({'_id': newDoc.entity},function(err,doc){
       let oldPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
       if(!exports.allowUpdateWatcher(user, oldPerms)) {
         console.log("updated perms array - not allowed");
@@ -283,11 +283,11 @@ exports.createContent = function(user, oldDoc, newDoc) {
     return deffered.promise ;
   }
 
-  if(newDoc.type == 'updateWatcher' && newDoc.issue == 'officeDocuments') {
+  if(newDoc.updateField == 'updateWatcher' && newDoc.entityType == 'officeDocuments') {
     // this piece of code is designed to UPDATE watchers/permissions for new officeDoc watchers.
     let newUid = newDoc.userObj._id ? newDoc.userObj._id : newDoc.userObj ;
     let Model = entityNameMap['officeDocument'].mainModel;
-    Model.findOne({'_id': newDoc.issueId},function(err,doc){
+    Model.findOne({'_id': newDoc.entity},function(err,doc){
       // console.log("doc") ;
       // console.log(doc) ;
       let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
@@ -319,12 +319,12 @@ exports.createContent = function(user, oldDoc, newDoc) {
     return deffered.promise;
   }
 
-  if(newDoc.type == 'removeWatcher' && newDoc.issue == 'officeDocuments') {
+  if(newDoc.updateField == 'removeWatcher' && newDoc.entityType == 'officeDocuments') {
     // this piece of code is designed to REMOVE watchers/permissions for new officeDoc watchers.
     let newUid = newDoc.userObj._id ? newDoc.userObj._id : newDoc.userObj ;
 //    console.log("remove watcher perms...");
     let Model = entityNameMap['officeDocument'].mainModel;
-    Model.findOne({'_id': newDoc.issueId},function(err,doc){
+    Model.findOne({'_id': newDoc.entity},function(err,doc){
       // console.log("doc");
       // console.log(doc) ;
       let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];
@@ -359,9 +359,9 @@ exports.createContent = function(user, oldDoc, newDoc) {
 
   // a catcher for all other create content permissions
   console.log("content create catch all case.") ;
-  let Model = entityNameMap[newDoc.issue].mainModel;
+  let Model = entityNameMap[newDoc.entityType].mainModel;
 
-  Model.findOne({'_id': newDoc.issueId},function(err,doc){
+  Model.findOne({'_id': newDoc.entity},function(err,doc){
     // console.log("doc general update") ;
     // console.log(doc) ;
     let newPerms = doc && Array.isArray(doc['permissions']) ? doc['permissions'].slice() : [];

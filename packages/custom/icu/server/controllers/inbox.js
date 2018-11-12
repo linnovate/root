@@ -11,7 +11,8 @@ const models = {
     office: require(modelsPath + 'office'),
     folder: require(modelsPath + 'folder'),
     officeDocument: require(modelsPath + 'document'),
-    templateDoc: require(modelsPath + 'templateDoc')
+    templateDoc: require(modelsPath + 'templateDoc'),
+    user: require('../models/user.js')
 };
 
 function getUpdateEntities(req, res, next) {
@@ -23,18 +24,21 @@ function getUpdateEntities(req, res, next) {
 
     for(let i in activities) {
         let activity = activities[i];
-        let Model = models[activity.issue];
+        let Model = models[activity.entityType];
 
+        if(!Model){
+            console.error('No model for that entity type provided');
+            continue;
+        }
         Promises.push(
             new Promise( resolve => {
-                if(_.includes(allEntitiesIds, activity.issueId)){
-                    activity.entityObj = allEntities.find( entity => entity._id === activity.issueId );
+                if(_.includes(allEntitiesIds, activity.entity)){
+                    activity.entityObj = allEntities.find( entity => entity._id === activity.entity );
                     return resolve();
                 }
 
-                return Model.findOne({ _id: activity.issueId })
+                return Model.findOne({ _id: activity.entity })
                     .populate('creator')
-                    .populate('userObj')
                     .populate('watchers')
                     .populate('project')
                     .populate('folder')
@@ -53,10 +57,31 @@ function getUpdateEntities(req, res, next) {
     }
     Promise.all(Promises)
         .then( result => {
-            res.status(200).send({activities: activities, entities: allEntities});
+            return getAllUserObjects(activities);
+        })
+        .then( userObjects => {
+            res.status(200).send({activities: activities, entities: allEntities, users: userObjects});
         });
+}
+
+function getAllUserObjects(activities){
+    return new Promise((resolve) => {
+        let userArray = [];
+        for(let activity of activities){
+            if(activity.updateField === 'assign')
+                userArray.push(activity.current)
+        }
+        if(userArray.length)
+            return models.user.find({
+                _id: {$in: userArray}
+            }, (err, docs) => {
+                if(err) console.error(err);
+                return resolve(docs)
+            });
+        return  resolve([]);
+    })
 }
 
 module.exports = {
     getUpdateEntities,
-}
+};

@@ -191,7 +191,6 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     });
     json.watchers = $scope.item.watchers;
     OfficeDocumentsService.updateDocument($scope.item._id, json).then(function (res) {
-      OfficeDocumentsService.updateEntity($scope.item, backupEntity, type).then(function (result) {
         if (id == undefined) {
           delete $scope.item.folder;
           $scope.signatures = undefined;
@@ -203,9 +202,6 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         $scope.item.permissions = res.permissions;
 
         backupEntity = JSON.parse(JSON.stringify($scope.item));
-        ActivitiesService.data = ActivitiesService.data || [];
-        ActivitiesService.data.push(result);
-      });
     });
   };
 
@@ -467,28 +463,34 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   // ==================================================== Update ==================================================== //
 
   $scope.update = function(officeDocument, context) {
-
     OfficeDocumentsService.updateDocument(officeDocument._id, context).then(function(res) {});
     ActivitiesService.data = ActivitiesService.data || [];
     var me = $scope.me;
     switch (context.name) {
     case 'due':
-      OfficeDocumentsService.updateDue(officeDocument, backupEntity).then(function(result) {
+      OfficeDocumentsService.updateDue(officeDocument, me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
       });
       break;
     case 'status':
-      OfficeDocumentsService.updateStatus(officeDocument, backupEntity).then(function(result) {
+      OfficeDocumentsService.updateStatus(officeDocument, me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
       });
       break;
     case 'title':
+        OfficeDocumentsService.updateTitle(officeDocument, me, backupEntity).then(function(result) {
+            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            ActivitiesService.data = ActivitiesService.data || [];
+            ActivitiesService.data.push(result);
+            refreshList();
+        });
+        break;
     case 'description':
-      OfficeDocumentsService.updateTitle(officeDocument, backupEntity, context.name).then(function(result) {
+      OfficeDocumentsService.updateDescription(officeDocument, me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);

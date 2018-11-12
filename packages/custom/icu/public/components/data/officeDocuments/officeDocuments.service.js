@@ -4,40 +4,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
     .service('OfficeDocumentsService', function ($http, ApiUri, Upload, PaginationService, BoldedService, WarningsService, NotifyingService, ActivitiesService) {
         var EntityPrefix = '/officeDocuments';
 
-    // function getAll(start, limit, sort, sortOrder, status, folderId) {
-    //     console.log(start, limit, sort, sortOrder, status, folderId)
-    //      var query = "/?start=0&limit=25&sort=created";
-    //     if (start && limit && sort) {
-    //         query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort;
-    //     }
-    //     if(status){
-    //         query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status;
-    //     }
-    //     if(folderId){
-    //         query = "/?start=" + start + "&limit=" + limit + "&sort=" + sort + "&sortOrder=" + sortOrder + "&status="+ status + "&folderId="+ folderId;
-    //     }
-    //     return $http.get(ApiUri + EntityPrefix + query).then(function (result) {
-    //         WarningsService.setWarning(result.headers().warning);
-    //         // result.data = [{
-    //         //             created: new Date,
-    //         //             updated: new Date,
-    //         //             _id: "hgjg",
-    //         //             title: "sraya",
-    //         //             path: "/gfdgdgf/dfgdfhg",
-    //         //             description: "hello world",
-    //         //             documentType: "pptx",
-    //         //             entity: "project",
-    //         //             entityId: "fff",
-    //         //             creator: "avraham",
-    //         //             status: "new"
-    //         //                }]
-    //         result.data.forEach(function (officeDocument) {
-    //             officeDocument.created = new Date(officeDocument.created);
-    //         });
-
-    //             return result.data;
-    //         });
-    //     }
     function getAll(start, limit, sort, type, order) {
         var qs = querystring.encode({
             start: start,
@@ -52,7 +18,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         }
         console.log("get all " + ApiUri + EntityPrefix + qs);
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
-        	WarningsService.setWarning(result.headers().warning);
+            WarningsService.setWarning(result.headers().warning);
             //console.log($rootScope.warning, '$rootScope.warning')
             return result.data;
         }, function(err) {return err}).then(function (some) {
@@ -303,53 +269,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateWatcher(officeDocument, me, watcher, type) {
-            console.log("OfficeDocumentsService.updateWatcher", officeDocument, me, watcher, type)
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: type || 'updateWatcher',
-                    userObj: watcher
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
-
-        function updateWatcherPerms(officeDocument, me, watcher, type) {
-            console.log("OfficeDocumentsService.updateWatcherPerms", officeDocument, me, watcher, type)
-
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: 'updateWatcherPerms',
-                    userObj: watcher,
-                    permissions: officeDocument.permissions
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
-
-        function updateStatus(officeDocument, prev) {
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: 'updateStatus',
-                    status: officeDocument.status,
-                    prev: prev.status
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
-
         function uploadEmpty(officeDocument){
             return $http.post(ApiUri+EntityPrefix+"/uploadEmpty",officeDocument).then(function(result){
                 WarningsService.setWarning(result.headers().warning);
@@ -357,19 +276,36 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             });
         }
 
-        function updateDue(officeDocument, prev) {
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: 'updateDue',
-                    TaskDue: officeDocument.due,
-                    prev: prev.due
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
+        function createActivity(updateField){
+            return function(entity, me, prev){
+                return ActivitiesService.create({
+                    data: {
+                        creator: me,
+                        date: new Date(),
+                        entity: entity._id,
+                        entityType: 'officeDocument',
+
+                        updateField: updateField,
+                        current: entity[updateField],
+                        prev: prev[updateField]
+                    },
+                    context: {}
+                }).then(function(result) {
+                    if (updateField === 'assign' && entity.assign) {
+                        var message = {};
+                        message.content = entity.title || '-';
+                        MeanSocket.emit('message:send', {
+                            message: message,
+                            user: me,
+                            channel: entity.assign,
+                            id: entity.id,
+                            entity: 'officeDocument',
+                            type: 'assign'
+                        });
+                    }
+                    return result;
+                });
+            }
         }
 
         function sendDocument(sendingForm, officeDocument) {
@@ -421,61 +357,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
         }
 
-
-        function updateAssign(officeDocument, prev) {
-            if (officeDocument.assign) {
-                var activityType = prev.assign ? 'assign' : 'assignNew';
-            } else {
-                var activityType = 'unassign';
-            }
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: activityType,
-                    userObj: officeDocument.assign,
-                    prev: prev.assign ? prev.assign.name : ''
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
-
-        function updateEntity(officeDocument, prev, type = 'folder') {
-            let activityType = prev.folder ? 'updateEntity' : 'updateNewEntity';
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: activityType,
-                    entityType: type,
-                    entity: type === 'folder' ? officeDocument.folder.title : officeDocument.task.title,
-                    prev: prev.folder ? prev.folder.title : ''
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
-
-        function updateTitle(officeDocument, prev, type) {
-            var capitalizedType = type[0].toUpperCase() + type.slice(1);
-            var activityType = prev[type] ? 'update' + capitalizedType : 'updateNew' + capitalizedType;
-            return ActivitiesService.create({
-                data: {
-                    issue: 'officeDocument',
-                    issueId: officeDocument._id,
-                    type: activityType,
-                    status: officeDocument[type],
-                    prev: prev[type]
-                },
-                context: {}
-            }).then(result => {
-              return result;
-            });
-        }
-
         function getFolderIndex(officeDocument){
             return $http.post(ApiUri + EntityPrefix + '/' + officeDocument._id + '/indexInFolder', officeDocument)
                 .then(function (result) {
@@ -506,15 +387,15 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             readByDocument, readByDocument,
             sentToDocument, sentToDocument,
             uploadFileToDocument:uploadFileToDocument,
-            updateWatcher: updateWatcher,
-            updateWatcherPerms: updateWatcherPerms,
-            updateStatus: updateStatus,
-            updateDue: updateDue,
             uploadDocumentFromTemplate:uploadDocumentFromTemplate,
             addSerialTitle:addSerialTitle,
-            updateAssign: updateAssign,
-            updateEntity: updateEntity,
-            updateTitle: updateTitle,
+            updateDue: createActivity('due'),
+            updateTitle: createActivity('title'),
+            updateDescription: createActivity('description'),
+            updateStatus: createActivity('status'),
+            updateAssign: createActivity('assign'),
+            updateWatcher: createActivity('watchers'),
+            updateWatcherPerms: createActivity('permissions'),
             uploadEmpty:uploadEmpty,
             deleteDocumentFile:deleteDocumentFile,
             signOnDocx:signOnDocx,

@@ -4,11 +4,11 @@ angular.module('mean.icu.ui.tabs')
     .directive('icuTabsDocuments', function () {
         function controller($scope, $http,  $state, $stateParams, DocumentsService, context, ActivitiesService, UsersService, AttachmentsService, PermissionsService) {
 
-            ActivitiesService.issueId=$stateParams.id || $stateParams.entityId;
+            ActivitiesService.entity=$stateParams.id || $stateParams.entityId;
 
             $scope.stateParams = $stateParams;
 
-            ActivitiesService.issue = $scope.entityName;
+            ActivitiesService.entityType = $scope.entityName;
             $scope.context = context;
             $scope.isOpen = {};
             $scope.activity = {
@@ -33,10 +33,10 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.save = function() {
-                if (_.isEmpty($scope.attachments) && _.isEmpty($scope.activity.description)) return;
-                $scope.activity.issue = $scope.entityName;
-                $scope.activity.issueId = $stateParams.id || $stateParams.entityId;
-                $scope.activity.type = $scope.attachments && $scope.attachments.length ? 'document' : 'comment';
+                if (_.isEmpty($scope.attachments)) return;
+                $scope.activity.entityType = $scope.entityName;
+                $scope.activity.entity = $stateParams.id || $stateParams.entityId;
+                $scope.activity.updateField = $scope.attachments && $scope.attachments.length ? 'attachment' : 'comment';
 
                 // $scope.activity.size = $scope.attachments[0].size;
 
@@ -48,9 +48,8 @@ angular.module('mean.icu.ui.tabs')
                     context = {
                         room: isRoomProject ? $scope.entity.room : $scope.entity.project.room,
                         action: 'added',
-                        type: $scope.activity.type,
-                        description: $scope.activity.description,
-                        issue: $scope.activity.issue,
+                        updateField: $scope.activity.updateField,
+                        issue: $scope.activity.entityType,
                         issueName: $scope.entity.title,
                         name: !_.isEmpty($scope.attachments) ? $scope.attachments[0].name : '',
                         location: location.href
@@ -58,8 +57,16 @@ angular.module('mean.icu.ui.tabs')
                 }
 
                 ActivitiesService.create({
-                    data: $scope.activity,
-                    context: context
+                    data: {
+                        creator: $scope.me,
+                        date: new Date(),
+                        entity: $scope.entity._id,
+                        entityType: $scope.entityName,
+
+                        updateField: 'attachment',
+                        current: $scope.activity,
+                    },
+                    context: {}
                 }).then(function(result) {
                     if (!_.isEmpty($scope.attachments)) {
                         var file = $scope.attachments;
@@ -156,15 +163,17 @@ angular.module('mean.icu.ui.tabs')
 
                 DocumentsService.delete(file._id, {parent: parent, id: $scope.entity._id})
                   .then(function (status) {
-                    if (status == 200) {
+                    if (status === 200) {
                         ActivitiesService.create({
-                          data: {
-                              issue: ActivitiesService.issue,
-                              issueId: ActivitiesService.issueId,
-                              type: 'documentDelete',
-                              description: ''
-                          },
-                          context: {}
+                            data: {
+                                creator: $scope.me,
+                                date: new Date(),
+                                entity: ActivitiesService.entity,
+                                entityType: ActivitiesService.entityType,
+
+                                updateField: 'attachment',
+                            },
+                            context: {}
                         })
                     }
                   })

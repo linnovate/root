@@ -5,58 +5,38 @@ var mongoose = require('mongoose'),
   archive = require('./archive.js'),
   socket = require('../../../mean-socket/server');
 
-var UpdateSchema = new Schema({
-  created: {
-    type: Date
+const UpdateSchema = new Schema({
+  entity: {
+    type: String
   },
-  updated: {
-    type: Date
-  },
-  issue: {
+  entityType: {
     type: String,
-    required: true
-  },
-  issueId: {
-    type: Schema.Types.ObjectId,
-    required: true
+    enum: [
+      'task', 'project', 'discussion', 'officeDocument',
+      'folder', 'office', 'templateDocument'
+    ]
   },
   creator: {
     type: Schema.ObjectId,
     ref: 'User'
   },
-  description: {
-    type: String
+  updateField: {
+      type: String,
+      enum: [
+          'create',
+          'due', 'status', 'assign', 'location', 'color',
+          'title', 'description', 'comment', 'attachment',
+          'watchers',
+      ]
   },
-  type: {
-    type: String
-  },
-  TaskDue: {
-    type: String
-  },
-  status: {
-    type: String
-  },
-  color: {
-    type: String
-  },
-  watcher: {
-    type: String
-  },
-  miscData: {
-    type: String
-  },
-  userObj: {
-    type: Schema.ObjectId,
-    ref: 'User'
+  date: {
+    type: Date
   },
   prev: {
-    type: String
+    type: Schema.Types.Mixed
   },
-  entity: {
-    type: String
-  },
-  entityType: {
-    type: String
+  current: {
+    type: Schema.Types.Mixed
   }
 });
 

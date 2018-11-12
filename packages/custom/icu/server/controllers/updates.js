@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 
 
 var options = {
-  includes: 'creator userObj'
+  includes: 'entity creator',
 };
 
 exports.defaultOptions = options;
@@ -44,13 +44,13 @@ exports.getAttachmentsForUpdate = function(req, res, next) {
   }
 
   var query = {
-    issueId: req.locals.result._id
+    entity: req.locals.result._id
   };
 
   if(_.isArray(req.locals.result)) {
     var ids = _(req.locals.result).pluck('_id').value();
     query = {
-      issueId: {
+      entity: {
         $in: ids
       }
     };
@@ -60,7 +60,7 @@ exports.getAttachmentsForUpdate = function(req, res, next) {
     if(_.isArray(req.locals.result)) {
       _.each(req.locals.result, function(i) {
         i.attachments = _.filter(attachments, function(a) {
-          return a.issueId.toString() === i._id.toString();
+          return a.entity.toString() === i._id.toString();
         });
       });
 
@@ -86,29 +86,29 @@ exports.getByEntity = function(req, res, next) {
     type = 'templateDoc';
   }
   Update.find({
-    issue: type,
-    issueId: req.params.id
-  }).populate('userObj', 'name lastname profile').populate('creator', 'name lastname profile').then(function(updates) {
+    entityType: type,
+    entity: req.params.id
+  })
+  .populate('creator', 'name lastname profile')
+  .then(function(updates) {
     req.locals.result = updates;
     next();
   });
 };
 
 exports.getByUser = function(req, res, next) {
-    if(req.locals.error) {
-        return next();
-    }
-
+    let pagination = req.locals.data.pagination;
+    let start = pagination.start, limit = pagination.limit;
     let id = req.params.id;
-    // Update.find({
-    //     creator: id
-    // })
-    // .populate('userObj', 'name lastname profile')
-    // .populate('creator', 'name lastname profile')
-    // .then(function(updates) {
-    //     req.locals.result = updates;
-        next();
-    // });
+
+    Update.find({
+        creator: id
+    })
+    .skip(start).limit(limit)
+    .populate('creator', 'name lastname profile')
+    .then(function(updates) {
+        res.status(200).send(updates);
+    });
 };
 
 exports.created = function(req, res, next) {
@@ -116,7 +116,7 @@ exports.created = function(req, res, next) {
     return next();
   }
 
-  var entityName = req.params.entity || req.locals.data.entityName;
+  var entityName = req.locals.data.entityName;
   var entityService = updateService(entityName, {
     user: req.user
   });
@@ -167,19 +167,22 @@ exports.getMyTasks = function(req, res, next) {
   MyTasks(req).then(function(data) {
 
     Update.find({
-      issue: 'task',
-      issueId: {
+      entityType: 'task',
+      entity: {
         $in: data
       }
-    }).populate('userObj', 'name lastname').populate({path: 'issueId', model: Task, select: 'title'}).populate('creator', 'name lastname').exec(function(err, data) {
-      if(err) {
-        req.locals.error = err;
-      }
-      else {
-        req.locals.result = data;
-      }
-      next();
-    });
+    })
+      .populate({path: 'entity', model: Task, select: 'title'})
+      .populate('creator', 'name lastname')
+      .exec(function(err, data) {
+        if(err) {
+          req.locals.error = err;
+        }
+        else {
+          req.locals.result = data;
+        }
+        next();
+      });
   }, function(err) {
     req.locals.error = err;
     next();
@@ -199,8 +202,8 @@ exports.signNew = function(req, res, next) {
       templateDoc: 'TemplateDoc'
   };
 
-  var query = req.acl.mongoQuery(entities[req.body.data.issue]);
-  query.findOne({_id: req.body.data.issueId}).exec(function(err, entity) {
+  var query = req.acl.mongoQuery(entities[req.body.data.entityType]);
+  query.findOne({_id: req.body.data.entity}).exec(function(err, entity) {
     if(err) {
       req.locals.error = err;
     }
