@@ -79,6 +79,9 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   $scope.onStar = function(value) {
+
+    $scope.update($scope.item, 'star');
+
     DiscussionsService.star($scope.item).then(function () {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
@@ -309,7 +312,6 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   // ==================================================== update ==================================================== //
 
   $scope.update = function(discussion, type) {
-
     DiscussionsService.update(discussion);
     switch (type) {
     case 'due':
@@ -317,6 +319,15 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
+      });
+      break;
+
+    case 'star':
+      DiscussionsService.updateStar(discussion, $scope.me, backupEntity).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+        refreshList();
       });
       break;
 
