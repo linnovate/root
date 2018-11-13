@@ -109,7 +109,7 @@ var elasticsearch = require('../controllers/elasticsearch');
 
 UpdateSchema.post('save', function(req, next) {
   var update = this;
-  socket.notify(req.userObj, req);
+
   if(UpdateSchema.statics[update.issue]) {
     UpdateSchema.statics[update.issue](update.issueId, function(err, result) {
       if(err) {
@@ -122,8 +122,60 @@ UpdateSchema.post('save', function(req, next) {
     elasticsearch.save(update, 'update');
   }
 
+  checkAndNotify(update);
+
   next();
 });
+
+function checkAndNotify(update) {
+
+  let { entityType } = update;
+
+  // Check if update is important
+  if(![
+    'comment',
+    'assign',
+    'due',
+    'status'
+  ].includes(update.updateField)) return;
+
+  let modelName = entityType[0].toUpperCase() + entityType.slice(1);
+
+  mongoose.model('Update')
+  .populate(update, [{
+    path: 'creator',
+    select: 'name username'
+  }, {
+    path: 'entity',
+    model: modelName
+  }], (err, doc) => {
+    console.log('################################################################')
+    console.log('############################ RESULT ############################')
+    console.log('################################################################')
+    console.log(update)
+
+    if(err) {
+      console.log('population error')
+      console.log(err)
+      return;
+    };
+
+    let { entity, creator } = update;
+
+    // Check if there is assignee
+    if(!entity || !entity.assign) {
+      console.log('no assignee');
+      return;
+    };
+
+    // Skip if assignee by himself created the update
+    if(creator._id.equals(entity.assign)) {
+      console.log('assignee himself updated');
+      return;
+    };
+    socket.notify(entity.assign.toString(), update);
+  })
+}
 
 UpdateSchema.pre('remove', function(next) {
   elasticsearch.delete(this, 'update', next);

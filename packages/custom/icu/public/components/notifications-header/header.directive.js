@@ -15,15 +15,17 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
             UsersService.getMe().then(me => {
 
-                if($scope.socket) return;
-                $scope.socket = io();
+                // Handle the socket globally, in order to avoid duplicated connection in case
+                // angular destroys and re-initializes the module
+                if(window.socket) return;
+                window.socket = io();
 
-                $scope.socket.on('connect', () => {
-                    console.log('socket.id:', $scope.socket.id)
-                    $scope.socket.emit('register', me._id);
+                window.socket.on('connect', () => {
+                    console.log('socket.id:', window.socket.id);
+                    window.socket.emit('register', me._id);
                 })
 
-                $scope.socket.on('update', NotificationsService.notify);
+                window.socket.on('update', NotificationsService.notify);
 
             })
 
