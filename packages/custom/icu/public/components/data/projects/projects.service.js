@@ -3,7 +3,7 @@
 angular.module('mean.icu.data.projectsservice', [])
   .service('ProjectsService', function(ApiUri, $http, BoldedService, NotifyingService, PaginationService, TasksService, $rootScope, WarningsService, ActivitiesService) {
     var EntityPrefix = '/projects';
-    var data, selected;
+    var data = [], selected;
 
     function getAll(start, limit, sort) {
       var qs = querystring.encode({

@@ -44,7 +44,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   // backup for previous changes - for updates
   var backupEntity = JSON.parse(JSON.stringify($scope.item));
 
-  if ($scope.people[Object.keys($scope.people).length - 1].name !== 'no select') {
+  if ($scope.people.length && $scope.people[$scope.people.length - 1].name !== 'no select') {
     var newPeople = {
       name: 'no select'
     };

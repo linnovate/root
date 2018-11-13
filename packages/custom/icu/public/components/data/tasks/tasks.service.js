@@ -4,7 +4,7 @@ angular.module('mean.icu.data.tasksservice', [])
 .service('TasksService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
     var EntityPrefix = '/tasks';
     var filterValue = false;
-    var data, tabData, IsNew;
+    var data = [], tabData, IsNew;
 
     function getAll(start, limit, sort) {
         var qs = querystring.encode({
