@@ -141,10 +141,9 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     }
 
     OfficeDocumentsService.updateDocument($scope.item._id, json);
-    OfficeDocumentsService.updateAssign($scope.item, backupEntity).then(function (result) {
-      backupEntity = JSON.parse(JSON.stringify($scope.item));
-      ActivitiesService.data = ActivitiesService.data || [];
-      ActivitiesService.data.push(result);
+
+    $scope.update($scope.item, {
+      name: 'assign'
     });
   }
 
@@ -481,6 +480,13 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
       break;
     case 'star':
       OfficeDocumentsService.updateStar(officeDocument, me, backupEntity).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+      });
+      break;
+    case 'assign':
+      OfficeDocumentsService.updateAssign(officeDocument, me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
