@@ -71,10 +71,19 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
   }
 
   $scope.onStar = function(value) {
+
+      TasksService.updateStar($scope.item, me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data.push(result);
+      });
+
     TasksService.star($scope.item).then(function() {
       // navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
+
+
+
   }
 
   $scope.onAssign = function(value) {

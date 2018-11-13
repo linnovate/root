@@ -285,6 +285,7 @@ angular.module('mean.icu.data.projectsservice', [])
       WantToCreateRoom: WantToCreateRoom,
       assign: createActivity('assign'),
       updateDue: createActivity('due'),
+      updateStar: createActivity('star'),
       updateTitle: createActivity('title'),
       updateColor: createActivity('color'),
       updateStatus: createActivity('status'),
