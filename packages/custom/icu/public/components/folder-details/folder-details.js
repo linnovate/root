@@ -291,7 +291,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
         break;
 
       case 'star':
-        FoldersService.updateStar(folder, $scope.me, backupEntity).then(function(result) {
+        FoldersService.updateStar(folder, me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
