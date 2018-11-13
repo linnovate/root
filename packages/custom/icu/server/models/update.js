@@ -24,9 +24,9 @@ const UpdateSchema = new Schema({
       type: String,
       enum: [
           'create',
-          'due', 'status', 'assign', 'location', 'color',
+          'star', 'due', 'status', 'assign', 'location', 'color',
           'title', 'description', 'comment', 'attachment',
-          'watchers',
+          'watchers'
       ]
   },
   date: {

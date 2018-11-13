@@ -76,9 +76,15 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   }
 
   $scope.onStar = function(value) {
+
+    ProjectsService.updateStar($scope.item, me, backupEntity).then(function(result) {
+      backupEntity = JSON.parse(JSON.stringify($scope.item));
+      ActivitiesService.data.push(result);
+    });
+
     ProjectsService.star($scope.item).then(function() {
-    navigateToDetails($scope.item);
-    // "$scope.item.star" will be change in 'ProjectsService.star' function
+      navigateToDetails($scope.item);
+      // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
   };
 

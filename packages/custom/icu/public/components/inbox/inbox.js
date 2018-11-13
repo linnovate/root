@@ -15,6 +15,9 @@ angular.module('mean.icu.ui.inbox', [])
                 case 'create' :
                     return `${creator} ${$i18next('created')} ${activity.entityObj.title}`;
                     break;
+                case 'star' :
+                    return `${creator} ${$i18next('updatedStar')}`;
+                    break;
                 case 'due' :
                     return `${creator} ${$i18next('changedDueDateTo')} ${moment(activity.entityObj.due).format('DD/MM/YYYY')}`;
                     break;
@@ -44,6 +47,10 @@ angular.module('mean.icu.ui.inbox', [])
                     break;
                 case 'watchers' :
                     return `${creator} ${$i18next('changedWatchers')}`;
+                    break;
+                case 'assign' :
+                    debugger
+                    return `${creator} ${$i18next('assigned')} ${activity.current.username} ${$i18next('to')} ${activity.entityObj.title}`;
                     break;
             }
         };
