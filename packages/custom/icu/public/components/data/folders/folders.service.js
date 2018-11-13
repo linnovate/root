@@ -142,7 +142,7 @@ angular.module('mean.icu.data.foldersservice', [])
                     creator: me,
                     date: new Date(),
                     entity: entity.id,
-                    entityType: 'project',
+                    entityType: 'folder',
 
                     updateField: updateField,
                     current: entity[updateField],
@@ -158,7 +158,7 @@ angular.module('mean.icu.data.foldersservice', [])
                         user: me,
                         channel: entity.assign,
                         id: entity.id,
-                        entity: 'project',
+                        entity: 'folder',
                         type: 'assign'
                     });
                 }
@@ -184,6 +184,7 @@ angular.module('mean.icu.data.foldersservice', [])
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
         updateTitle: createActivity('title'),
+        updateStar: createActivity('star'),
         updateDescription: createActivity('description'),
         updateColor: createActivity('color'),
         updateStatus: createActivity('status'),

@@ -69,6 +69,11 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
   }
 
   $scope.onStar = function(value) {
+
+    $scope.update($scope.item, {
+      name: 'star'
+    });
+
     FoldersService.star($scope.item).then(function () {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
@@ -279,6 +284,14 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
       switch (context.name) {
       case 'status':
         FoldersService.updateStatus(folder, me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+        break;
+
+      case 'star':
+        FoldersService.updateStar(folder, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
