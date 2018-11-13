@@ -140,10 +140,9 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
       }
     }
 
-    OfficeDocumentsService.updateDocument($scope.item._id, json);
-
     $scope.update($scope.item, {
-      name: 'assign'
+      name: 'assign',
+      newVal: $scope.item.assign
     });
   }
 
