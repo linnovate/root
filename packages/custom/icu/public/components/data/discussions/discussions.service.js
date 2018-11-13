@@ -184,6 +184,7 @@ angular.module('mean.icu.data.discussionsservice', [])
       data: data,
       cancele: cancele,
       updateDue: createActivity('due'),
+      updateStar: createActivity('star'),
       updateTitle: createActivity('title'),
       updateDescription: createActivity('description'),
       updateStatus: createActivity('status'),
