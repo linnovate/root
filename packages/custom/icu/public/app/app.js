@@ -644,7 +644,7 @@ angular.module('mean.icu').config([
                     templateDocs: () => [],
                     folders: () => [],
                     officeDocuments: () => [],
-                    people: () => [],
+                    people: UsersService => UsersService.getAll(),
                     results: () => []
                 }
             })
