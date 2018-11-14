@@ -18,6 +18,9 @@ angular.module('mean.icu.ui.inbox', [])
                 case 'star' :
                     return `${creator} ${$i18next('updatedStar')}`;
                     break;
+                case 'tags' :
+                  return `${creator} ${$i18next('updatedTagsTo')} ${activity.current}`;
+                  break;
                 case 'due' :
                     return `${creator} ${$i18next('changedDueDateTo')} ${moment(activity.entityObj.due).format('DD/MM/YYYY')}`;
                     break;
