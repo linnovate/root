@@ -3,25 +3,30 @@
 angular.module('mean.icu.data.notificationsservice', [])
     .service('NotificationsService', function($http, ApiUri, WarningsService, $state) {
 
-        // audio file to play on push notification
-        // audio source: https://notificationsounds.com/sound-effects/just-like-magic-506
-        var audio = document.createElement('audio');
-        audio.type = 'audio/ogg';
-        audio.src = '/dist/icu/assets/audio/just-like-magic.mp3';
+        let audio = window.notificationAudio;
+
+        if(!window.notificationAudio) {
+            audio = window.notificationAudio = document.createElement('audio');
+            audio.type = 'audio/ogg';
+
+            // Taken from: https://notificationsounds.com/sound-effects/just-like-magic-506
+            audio.src = '/dist/icu/assets/audio/just-like-magic.mp3';
+        }
+
 
         if (Notification.permission !== "denied") {
-            Notification.requestPermission(permission => {
-            });
+            Notification.requestPermission(permission => { });
         }
 
         function notify(data) {
-            console.log('New notification:', data);
+
             if(Notification.permission === 'denied') {
                 console.log('Notification aborted - permission denied');
                 return;
             }
 
             let { title, body } = parseNotification(data);
+
             let notification = new Notification(title, {
                 body,
                 icon: '/favicon.ico'
@@ -36,7 +41,13 @@ angular.module('mean.icu.data.notificationsservice', [])
                     nameFocused: true
                 });
             }
+
+            // Start from beginning in case of consecutive when previous audio didn't yet finished
+            audio.currentTime = 0;
+
             audio.play();
+
+            // Hide after 4s
             setTimeout(notification.close.bind(notification), 4000);
         }
 
