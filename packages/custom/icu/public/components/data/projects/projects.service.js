@@ -286,6 +286,7 @@ angular.module('mean.icu.data.projectsservice', [])
       assign: createActivity('assign'),
       updateDue: createActivity('due'),
       updateStar: createActivity('star'),
+      updateDescription: createActivity('description'),
       updateTitle: createActivity('title'),
       updateColor: createActivity('color'),
       updateStatus: createActivity('status'),
