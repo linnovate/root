@@ -290,6 +290,7 @@ angular.module('mean.icu.data.projectsservice', [])
       updateTitle: createActivity('title'),
       updateColor: createActivity('color'),
       updateStatus: createActivity('status'),
+      updateTags: createActivity('tags'),
       updateWatcher: createActivity('watchers'),
     };
   });

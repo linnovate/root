@@ -147,7 +147,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;
-    $scope.update($scope.item, {name: 'tag'});
+    $scope.update($scope.item, {name: 'tags'});
   };
 
   // ==================================================== Menu events ==================================================== //
@@ -392,6 +392,13 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
         break;
       case 'star':
         ProjectsService.updateStar(item, $scope.me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+        break;
+      case 'tags':
+        ProjectsService.updateTags(item, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
