@@ -387,10 +387,13 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.checkForInactiveEntity = () => {
-        if($scope.visibleItems.length && !$scope.visibleItems.some( item => item._id === $stateParams.id )){
+        if($scope.visibleItems.length){
+            let entityIndex = $scope.visibleItems.findIndex( item => item._id === $stateParams.id );
+            entityIndex = entityIndex === -1 ? 0 : entityIndex;
+
             $state.go($state.current.name,
                 {
-                    id: $scope.visibleItems[0]._id,
+                    id: $scope.visibleItems[entityIndex]._id,
                     entity: context.entityName,
                     entityId: context.entityId,
                     nameFocused: true
