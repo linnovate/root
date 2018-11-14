@@ -338,6 +338,7 @@ angular.module('mean.icu.data.tasksservice', [])
         assign: createActivity('assign'),
         updateDue: createActivity('due'),
         updateStar: createActivity('star'),
+        updateTags: createActivity('tags'),
         updateTitle: createActivity('title'),
         updateStatus: createActivity('status'),
         updateWatcher: createActivity('watchers'),
