@@ -123,9 +123,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
   $scope.onStatus = function(value) {
     $scope.item.status = value;
-    $scope.update($scope.item, {
-      name: 'status'
-    })
+    $scope.update($scope.item, 'status');
   }
 
   $scope.onDateDue = function(item, type) {
