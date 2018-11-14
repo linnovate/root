@@ -484,6 +484,13 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         ActivitiesService.data.push(result);
       });
       break;
+    case 'tags':
+      OfficeDocumentsService.updateTags(officeDocument, me, backupEntity).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+      });
+      break;
     case 'assign':
       OfficeDocumentsService.updateAssign(officeDocument, me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
