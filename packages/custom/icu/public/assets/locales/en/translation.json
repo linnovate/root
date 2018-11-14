@@ -420,6 +420,7 @@
   "unassigned": "unassigned",
   "updated": "updated",
   "changedDueDateTo": "changed due date to",
+  "changedDeadlineTo": "changed deadline date to",
   "leavedComment": "leaved comment",
   "addedAttachment": "added attachment",
   "addedLocation": "added location",

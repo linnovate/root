@@ -24,6 +24,9 @@ angular.module('mean.icu.ui.inbox', [])
                 case 'due' :
                     return `${creator} ${$i18next('changedDueDateTo')} ${moment(activity.entityObj.due).format('DD/MM/YYYY')}`;
                     break;
+                case 'deadline' :
+                  return `${creator} ${$i18next('changedDeadlineTo')} ${moment(activity.entityObj.startDate).format('DD/MM/YYYY')} - ${moment(activity.entityObj.endDate).format('DD/MM/YYYY')}`;
+                  break;
                 case 'status' :
                     return `${creator} ${$i18next('changedStatusTo')} ${activity.current}`;
                     break;
