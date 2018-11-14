@@ -72,10 +72,10 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
 
   $scope.onStar = function(value) {
 
-    TasksService.updateStar($scope.item, me, backupEntity).then(function(result) {
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
-        ActivitiesService.data.push(result);
-    });
+      TasksService.updateStar($scope.item, me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data.push(result);
+      });
 
     TasksService.star($scope.item).then(function() {
       // navigateToDetails($scope.item);
@@ -137,11 +137,6 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
   $scope.onTags = function(value) {
     $scope.item.tags = value;
     $scope.update($scope.item);
-
-    TasksService.updateTags($scope.item, me, backupEntity).then(function(result) {
-      backupEntity = JSON.parse(JSON.stringify($scope.item));
-      ActivitiesService.data.push(result);
-    });
   }
 
   // ==================================================== Menu events ==================================================== //
