@@ -77,9 +77,8 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
 
   $scope.onStar = function(value) {
 
-    ProjectsService.updateStar($scope.item, me, backupEntity).then(function(result) {
-      backupEntity = JSON.parse(JSON.stringify($scope.item));
-      ActivitiesService.data.push(result);
+    $scope.update($scope.item, {
+      name: 'star'
     });
 
     ProjectsService.star($scope.item).then(function() {
@@ -391,9 +390,16 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
           ActivitiesService.data.push(result);
         });
         break;
+      case 'star':
+        ProjectsService.updateStar(item, $scope.me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+        break;
       case 'title':
       case 'description':
-        ProjectsService.updateTitle(item, $scope.me, backupEntity).then(function(result) {
+        ProjectsService.updateDescription(item, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
