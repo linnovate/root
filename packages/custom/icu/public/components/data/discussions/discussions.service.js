@@ -189,6 +189,7 @@ angular.module('mean.icu.data.discussionsservice', [])
       updateDescription: createActivity('description'),
       updateStatus: createActivity('status'),
       updateAssign: createActivity('assign'),
+      updateTags: createActivity('tags'),
       updateWatcher: createActivity('watchers'),
       updateLocation: createActivity('location'),
       WantToCreateRoom: WantToCreateRoom,

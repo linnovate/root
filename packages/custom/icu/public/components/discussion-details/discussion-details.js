@@ -134,7 +134,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;
-    $scope.update($scope.item);
+    $scope.update($scope.item, 'tags');
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -324,6 +324,15 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
     case 'star':
       DiscussionsService.updateStar(discussion, $scope.me, backupEntity).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+        refreshList();
+      });
+      break;
+
+    case 'tags':
+      DiscussionsService.updateTags(discussion, $scope.me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
