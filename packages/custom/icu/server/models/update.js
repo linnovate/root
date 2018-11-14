@@ -149,30 +149,16 @@ function checkAndNotify(update) {
     path: 'entity',
     model: modelName
   }], (err, doc) => {
-    console.log('################################################################')
-    console.log('############################ RESULT ############################')
-    console.log('################################################################')
-    console.log(update)
 
-    if(err) {
-      console.log('population error')
-      console.log(err)
-      return;
-    };
+    if(err) return;
 
     let { entity, creator } = update;
 
     // Check if there is assignee
-    if(!entity || !entity.assign) {
-      console.log('no assignee');
-      return;
-    };
+    if(!entity || !entity.assign) return;
 
     // Skip if assignee by himself created the update
-    if(creator._id.equals(entity.assign)) {
-      console.log('assignee himself updated');
-      return;
-    };
+    if(creator._id.equals(entity.assign)) return;
     socket.notify(entity.assign.toString(), update);
   })
 }
