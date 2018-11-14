@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 
 
 var options = {
-  includes: 'entity creator',
+  includes: 'creator',
 };
 
 exports.defaultOptions = options;
