@@ -110,14 +110,6 @@ angular.module('mean.icu.data.projectsservice', [])
           if (updateField === 'assign' && entity.assign) {
             var message = {};
             message.content = entity.title || '-';
-            MeanSocket.emit('message:send', {
-              message: message,
-              user: me,
-              channel: entity.assign,
-              id: entity.id,
-              entity: 'project',
-              type: 'assign'
-            });
           }
           return result;
         });
