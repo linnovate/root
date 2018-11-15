@@ -1,9 +1,13 @@
 'use strict';
 
 angular.module('mean.icu.data.inboxservice', [])
-    .service('InboxService', function(ApiUri, $http, $stateParams, WarningsService
+    .service('InboxService', function(ApiUri, $http, $stateParams, $i18next, WarningsService, UsersService
     ) {
-        var EntityPrefix = '/inbox';
+        const EntityPrefix = '/inbox';
+        let users = [];
+        UsersService.getAll().then( allUsers => {
+          users = allUsers;
+        });
 
         function getUpdateEntities(activities) {
             return $http.post(ApiUri + EntityPrefix, activities)
@@ -14,7 +18,63 @@ angular.module('mean.icu.data.inboxservice', [])
                 );
         }
 
+      function getActivityDescription (activity) {
+        let creator = activity.creator.name;
+        switch (activity.updateField){
+          case 'create' :
+            return `${creator} ${$i18next('created')} ${activity.entityObj.title}`;
+            break;
+          case 'star' :
+            return `${creator} ${$i18next('updatedStar')}`;
+            break;
+          case 'tags' :
+            return `${creator} ${$i18next('updatedTagsTo')} ${activity.current}`;
+            break;
+          case 'due' :
+            return `${creator} ${$i18next('changedDueDateTo')} ${moment(activity.entityObj.due).format('DD/MM/YYYY')}`;
+            break;
+          case 'deadline' :
+            return `${creator} ${$i18next('changedDeadlineTo')} ${moment(activity.entityObj.startDate).format('DD/MM/YYYY')} - ${moment(activity.entityObj.endDate).format('DD/MM/YYYY')}`;
+            break;
+          case 'status' :
+            return `${creator} ${$i18next('changedStatusTo')} ${activity.current}`;
+            break;
+          case 'title' :
+            return `${creator} ${$i18next('changedTitleTo')} ${activity.current}`;
+            break;
+          case 'assign' :
+            return `${creator} ${$i18next('assigned')} ${ getUser(activity.current).username }`;
+            break;
+          case 'location' :
+            return `${creator} ${$i18next('changedLocationTo')} ${activity.current}`;
+            break;
+          case 'color' :
+            return `${creator} ${$i18next('updatedColor')} ${activity.current}`;
+            break;
+          case 'description' :
+            return `${creator} ${$i18next('updatedDescription')} ${activity.current}`;
+            break;
+          case 'comment' :
+            return `${creator} ${$i18next('leavedComment')} ${activity.current}`;
+            break;
+          case 'attachment' :
+            return `${creator} ${$i18next('addedAttachment')} ${activity.current}`;
+            break;
+          case 'watchers' :
+            return `${creator} ${$i18next('changedWatchers')}`;
+            break;
+          case 'assign' :
+            return `${creator} ${$i18next('assigned')} ${activity.current.username} ${$i18next('to')} ${activity.entityObj.title}`;
+            break;
+        }
+      }
+
+      function getUser(userId){
+        return users.find( user => user._id === userId)
+      }
+
         return {
-            getUpdateEntities: getUpdateEntities,
+          getUpdateEntities,
+          getActivityDescription,
         };
     });

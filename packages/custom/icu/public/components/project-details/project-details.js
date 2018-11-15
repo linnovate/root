@@ -70,9 +70,14 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   }
 
   $scope.onStar = function(value) {
+
+    $scope.update($scope.item, {
+      name: 'star'
+    });
+
     ProjectsService.star($scope.item).then(function() {
-    navigateToDetails($scope.item);
-    // "$scope.item.star" will be change in 'ProjectsService.star' function
+      navigateToDetails($scope.item);
+      // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
   };
 
@@ -136,7 +141,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;
-    $scope.update($scope.item, {name: 'tag'});
+    $scope.update($scope.item, {name: 'tags'});
   };
 
   // ==================================================== Menu events ==================================================== //
@@ -379,9 +384,23 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
           ActivitiesService.data.push(result);
         });
         break;
+      case 'star':
+        ProjectsService.updateStar(item, $scope.me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+        break;
+      case 'tags':
+        ProjectsService.updateTags(item, $scope.me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+        break;
       case 'title':
       case 'description':
-        ProjectsService.updateTitle(item, $scope.me, backupEntity).then(function(result) {
+        ProjectsService.updateDescription(item, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);

@@ -79,6 +79,9 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   }
 
   $scope.onStar = function(value) {
+
+    $scope.update($scope.item, 'star');
+
     DiscussionsService.star($scope.item).then(function () {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
@@ -120,18 +123,16 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
   $scope.onStatus = function(value) {
     $scope.item.status = value;
-    $scope.update($scope.item, {
-      name: 'status'
-    })
+    $scope.update($scope.item, 'status');
   }
 
-  $scope.onDateDue = function(item, type) {
-    $scope.update(item, type);
+  $scope.onDateDue = function(value) {
+    $scope.update($scope.item, 'deadline');
   }
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;
-    $scope.update($scope.item);
+    $scope.update($scope.item, 'tags');
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -309,14 +310,31 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   // ==================================================== update ==================================================== //
 
   $scope.update = function(discussion, type) {
-
     DiscussionsService.update(discussion);
     switch (type) {
-    case 'due':
-      DiscussionsService.updateDue(discussion, $scope.me, backupEntity).then(function(result) {
+    case 'deadline':
+      DiscussionsService.updateDeadline(discussion, $scope.me, backupEntity).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
+      });
+      break;
+
+    case 'star':
+      DiscussionsService.updateStar(discussion, $scope.me, backupEntity).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+        refreshList();
+      });
+      break;
+
+    case 'tags':
+      DiscussionsService.updateTags(discussion, $scope.me, backupEntity).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+        refreshList();
       });
       break;
 

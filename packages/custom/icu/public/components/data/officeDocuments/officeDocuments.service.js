@@ -382,6 +382,8 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             uploadDocumentFromTemplate:uploadDocumentFromTemplate,
             addSerialTitle:addSerialTitle,
             updateDue: createActivity('due'),
+            updateStar: createActivity('star'),
+            updateTags: createActivity('tags'),
             updateTitle: createActivity('title'),
             updateDescription: createActivity('description'),
             updateStatus: createActivity('status'),

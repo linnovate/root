@@ -142,19 +142,13 @@ angular.module('mean.icu.data.foldersservice', [])
                     creator: me,
                     date: new Date(),
                     entity: entity.id,
-                    entityType: 'project',
+                    entityType: 'folder',
 
                     updateField: updateField,
                     current: entity[updateField],
                     prev: prev[updateField]
                 },
                 context: {}
-            }).then(function(result) {
-                if (updateField === 'assign' && entity.assign) {
-                    var message = {};
-                    message.content = entity.title || '-';
-                }
-                return result;
             });
         }
     }
@@ -176,6 +170,7 @@ angular.module('mean.icu.data.foldersservice', [])
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
         updateTitle: createActivity('title'),
+        updateStar: createActivity('star'),
         updateDescription: createActivity('description'),
         updateColor: createActivity('color'),
         updateStatus: createActivity('status'),

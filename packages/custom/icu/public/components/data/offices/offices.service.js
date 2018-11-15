@@ -166,8 +166,10 @@ angular.module('mean.icu.data.officesservice', [])
         data: data,
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
+        updateDescription: createActivity('description'),
         updateColor: createActivity('color'),
         updateTitle: createActivity('title'),
+        updateStar: createActivity('star'),
         updateWatcher: createActivity('watchers')
     };
 });

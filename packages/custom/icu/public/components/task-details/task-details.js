@@ -2,7 +2,10 @@
 
 angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
 
-function TaskDetailsController($scope, entity, projects, tasks, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me, DetailsPaneService) {
+function TaskDetailsController($scope, entity, projects, tasks, $state, $rootScope, $timeout, context, $stateParams,
+                               me, people,
+                               TasksService, ActivitiesService, PermissionsService,
+                               ProjectsService, EntityService, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
 
@@ -71,10 +74,19 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
   }
 
   $scope.onStar = function(value) {
+
+    TasksService.updateStar($scope.item, me, backupEntity).then(function(result) {
+        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        ActivitiesService.data.push(result);
+    });
+
     TasksService.star($scope.item).then(function() {
       // navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
+
+
+
   }
 
   $scope.onAssign = function(value) {
@@ -128,6 +140,11 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, TasksSer
   $scope.onTags = function(value) {
     $scope.item.tags = value;
     $scope.update($scope.item);
+
+    TasksService.updateTags($scope.item, me, backupEntity).then(function(result) {
+      backupEntity = JSON.parse(JSON.stringify($scope.item));
+      ActivitiesService.data.push(result);
+    });
   }
 
   // ==================================================== Menu events ==================================================== //

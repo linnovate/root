@@ -63,6 +63,11 @@ function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, peo
   }
 
   $scope.onStar = function(value) {
+
+    $scope.update($scope.item, {
+      name: 'star'
+    });
+
     OfficesService.star($scope.item).then(function () {
       navigateToDetails($scope.item);
       // "$scope.item.star" will be change in 'ProjectsService.star' function
@@ -234,6 +239,13 @@ function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, peo
           ActivitiesService.data.push(result);
       });
       break;
+      case 'star':
+        OfficesService.updateStar(office, me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+        });
+        break;
       case 'description':
         OfficesService.updateDescription(office, me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));

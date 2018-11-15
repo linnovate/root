@@ -277,9 +277,12 @@ angular.module('mean.icu.data.projectsservice', [])
       WantToCreateRoom: WantToCreateRoom,
       assign: createActivity('assign'),
       updateDue: createActivity('due'),
+      updateStar: createActivity('star'),
+      updateDescription: createActivity('description'),
       updateTitle: createActivity('title'),
       updateColor: createActivity('color'),
       updateStatus: createActivity('status'),
+      updateTags: createActivity('tags'),
       updateWatcher: createActivity('watchers'),
     };
   });
