@@ -39,6 +39,8 @@ angular.module('mean.icu.data.notificationsservice', [])
                     entity: 'all',
                     id: data.entity._id,
                     nameFocused: true
+                }, {
+                    reload: true
                 });
             }
 
