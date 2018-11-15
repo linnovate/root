@@ -245,6 +245,8 @@ angular.module('mean.icu.ui.membersfooter', [])
                         });
                     }
                 }
+
+                let backupEntity = JSON.parse(JSON.stringify($scope.entity));
                 update($scope.entity, member, 'added')
                   .then(updatedEntity => {
                     let { watchers, permissions } = updatedEntity;

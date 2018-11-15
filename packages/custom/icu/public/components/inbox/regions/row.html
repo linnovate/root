@@ -4,11 +4,11 @@
 >
     <td>
         <div class="update-head">
-            <div class="title icon {{activity.entityType}}">{{ activity.entityObj.title || ( activity.entityType | i18next )}}</div>
+            <div class="title icon {{activity.entityType}}" ng-bind-html="activity.entityObj.title || ( activity.entityType | i18next )"></div>
             <div class="parent"
                  ng-style="{'background-color': '#' + activity.parentColor, 'color': 'white'}"
-                 ng-init="getParent(activity)">
-                {{activity.parent}}
+                 ng-init="getParent(activity)"
+                 ng-bind-html="activity.parent">
             </div>
         </div>
         <div class="update-body">

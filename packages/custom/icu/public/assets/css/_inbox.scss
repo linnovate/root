@@ -34,8 +34,7 @@
                                 justify-content: space-between;
 
                                 .title {
-                                    display: inline;
-                                    width: auto;
+                                    width: 100%;
                                     font-size: 18px;
                                 }
 
@@ -45,8 +44,15 @@
                                     padding: 0 12px;
                                     line-height: 22px;
                                     height: 22px;
+                                    max-width: 20%;
 
                                     @include disable-text-styles;
+
+                                    & * {
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: nowrap;
+                                    }
                                 }
 
                                 .icon:before {
@@ -112,6 +118,7 @@
                                         .update-date {
                                             font-weight: normal;
                                             color: #A8A8A8;
+                                            flex-shrink: 0;
                                         }
                                     }
                                     .update-data {

@@ -798,15 +798,6 @@ angular.module('mean.icu').config([
                     }
                 }
             })
-            // .state('socket', {
-            //     // url: '/help',
-            //     // template: '/home/as/Desktop/icu/packages/custom/mean-socket/public/views/index.html',
-            //     // url: '/help1',
-            //     // template: '/home/as/Desktop/icu/packages/custom/mean-socket/public/views/index1.html',
-            //     url: '/help2',
-            //     template: '/home/as/Desktop/icu/packages/custom/mean-socket/public/views/index2.html',
-            //     controller: 'MeanSocketController'
-            // })
             .state('main.tasks', {
                 url: '/tasks',
                 views: {

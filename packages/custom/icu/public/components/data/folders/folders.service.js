@@ -149,20 +149,6 @@ angular.module('mean.icu.data.foldersservice', [])
                     prev: prev[updateField]
                 },
                 context: {}
-            }).then(function(result) {
-                if (updateField === 'assign' && entity.assign) {
-                    var message = {};
-                    message.content = entity.title || '-';
-                    MeanSocket.emit('message:send', {
-                        message: message,
-                        user: me,
-                        channel: entity.assign,
-                        id: entity.id,
-                        entity: 'folder',
-                        type: 'assign'
-                    });
-                }
-                return result;
             });
         }
     }

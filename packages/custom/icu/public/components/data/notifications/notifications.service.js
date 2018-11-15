@@ -3,61 +3,75 @@
 angular.module('mean.icu.data.notificationsservice', [])
     .service('NotificationsService', function($http, ApiUri, WarningsService, $state) {
 
-        var EntityPrefix = '/notification';
-        var EntityPrefix1 = '/notification1';
+        let audio = window.notificationAudio;
 
-        var data = {
-            notifications: [],
-            notificationsToWatch: 0,
-            lastNotification: null,
-            hasMore: 0,
-            isFull:false
-        };
+        if(!window.notificationAudio) {
+            audio = window.notificationAudio = document.createElement('audio');
+            audio.type = 'audio/ogg';
 
-        // audio file to play on push notification
-        // audio source: https://notificationsounds.com/sound-effects/just-like-magic-506
-        var audio = document.createElement('audio');
-        audio.type = 'audio/ogg';
-        audio.src = '/dist/icu/assets/audio/just-like-magic.mp3';
+            // Taken from: https://notificationsounds.com/sound-effects/just-like-magic-506
+            audio.src = '/dist/icu/assets/audio/just-like-magic.mp3';
+        }
+
 
         if (Notification.permission !== "denied") {
-            Notification.requestPermission(permission => {
-            });
+            Notification.requestPermission(permission => { });
         }
 
         function notify(data) {
-            console.log('New notification:', data);
+
             if(Notification.permission === 'denied') {
                 console.log('Notification aborted - permission denied');
                 return;
             }
 
-            let { title, body, id } = parseNotification(data);
+            let { title, body } = parseNotification(data);
+
             let notification = new Notification(title, {
                 body,
                 icon: '/favicon.ico'
             });
+
             notification.onclick = function(event) {
                 this.close();
                 window.focus();
-                $state.go('main.tasks.all.details', { id });
+                $state.go(`main.${data.entityType}s.all.details.${window.config.defaultTab}`, {
+                    entity: 'all',
+                    id: data.entity._id,
+                    nameFocused: true
+                }, {
+                    reload: true
+                });
             }
+
+            // Start from beginning in case of consecutive when previous audio didn't yet finished
+            audio.currentTime = 0;
+
             audio.play();
+
+            // Hide after 4s
             setTimeout(notification.close.bind(notification), 4000);
         }
 
         function parseNotification(data) {
-            let { entity, type, content, id } = data;
-            let title = '';
+            let { entity, creator, updateField, current } = data;
+            let title = entity.title;
             let body = '';
-            switch(type) {
+            switch(updateField) {
                 case 'assign':
-                    title += 'New';
-                    body += 'You were assigned to';
+                    body = 'You were assigned by ' + creator.name;
+                    break;
+                case 'due':
+                    body = 'Due date changed to ' + moment(current).format('DD/MM/YYYY');
+                    break;
+                case 'status':
+                    body = 'Status changed to ' + current.toUpperCase();
+                    break;
+                case 'comment':
+                    body = creator.name + ' commented: ' + current;
+                    break;
             }
-            title += ` ${entity}`;
-            body += ` ${entity}: ${content}`;
-            return { title, body, id };
+            return { title, body };
         }
 
         return {

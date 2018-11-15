@@ -8,13 +8,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
 
   $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'tasks']);
 
-  if($state.$current.url.source.includes('search') || $state.$current.url.source.includes('projects')) {
-    $scope.item = entity || context.entity;
-  }
-  else {
-    $scope.item = context.entity || entity;
-  }
-
+  $scope.item = entity || context.entity;
   if(!$scope.item) {
     $state.go('main.projects.byentity', {
       entity: context.entityName,

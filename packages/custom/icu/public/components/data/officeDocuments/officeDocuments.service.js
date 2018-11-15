@@ -294,14 +294,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                     if (updateField === 'assign' && entity.assign) {
                         var message = {};
                         message.content = entity.title || '-';
-                        MeanSocket.emit('message:send', {
-                            message: message,
-                            user: me,
-                            channel: entity.assign,
-                            id: entity.id,
-                            entity: 'officeDocument',
-                            type: 'assign'
-                        });
                     }
                     return result;
                 });

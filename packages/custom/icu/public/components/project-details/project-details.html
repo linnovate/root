@@ -100,7 +100,7 @@
       class="icu-sub-project-list entity-list-container"
       ng-class="{small: currentContext.entityName !== 'all', big: currentContext.entityName === 'all'}"
       project="item"
-      projects="item.subProjects"
+      projects="item.subProjects || []"
       load-next="loadNext"
       load-prev="loadPrev"
       draw-arrow="true"
