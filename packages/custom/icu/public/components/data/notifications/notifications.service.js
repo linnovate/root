@@ -25,11 +25,11 @@ angular.module('mean.icu.data.notificationsservice', [])
                 return;
             }
 
-            let { title, body } = parseNotification(data);
+            let { title, body, icon } = parseNotification(data);
 
             let notification = new Notification(title, {
                 body,
-                icon: '/favicon.ico'
+                icon: `/icu/assets/img/notification/${icon}.png`
             });
 
             notification.onclick = function(event) {
@@ -54,24 +54,54 @@ angular.module('mean.icu.data.notificationsservice', [])
         }
 
         function parseNotification(data) {
-            let { entity, creator, updateField, current } = data;
-            let title = entity.title;
-            let body = '';
+            let { entity, entityType, creator, updateField, current, prev } = data;
+
+            // Strip html tags
+            let entityTitle = entity.title.replace(/<(?:.|\n)*?>/gm, '');
+            let creatorName = creator.name;
+
+            let title, body, icon;
+
             switch(updateField) {
                 case 'assign':
-                    body = 'You were assigned by ' + creator.name;
+                    title = `${entityTitle} assigned to you`
+                    body = `${entityTitle} has been assigned to you by ${creatorName}`;
                     break;
                 case 'due':
-                    body = 'Due date changed to ' + moment(current).format('DD/MM/YYYY');
+                    current = formatDate(current);
+                    prev = formatDate(prev);
+                    title = `${entityTitle} due » ${current}`;
+                    body = `${creatorName} has change the due date of ${entityTitle} from "${prev}" to "${current}"`;
                     break;
                 case 'status':
-                    body = 'Status changed to ' + current.toUpperCase();
+                    current = toCapitalCase(current);
+                    prev = toCapitalCase(prev);
+                    title = `${entityTitle} status » ${current}`;
+                    body = `${creatorName} has change the status of ${entityTitle} from "${prev}" to "${current}"`;
                     break;
                 case 'comment':
-                    body = creator.name + ' commented: ' + current;
+                    title = `${entityTitle} comment`;
+                    body = `${creatorName} commented: "${current}"`;
                     break;
             }
-            return { title, body };
+
+            // Set different icons for every entity, default to `task` icon
+            if(['officeDocument', 'task', 'project', 'discussion'].includes(entityType)) {
+                icon = entityType;
+            } else {
+                icon = 'task';
+            }
+
+            return { title, body, icon };
+        }
+
+
+        function formatDate(date) {
+            return moment(date).format('DD/MM/YYYY');
+        }
+
+        function toCapitalCase(txt) {
+            return txt[0].toUpperCase() + txt.slice(1);
         }
 
         return {
