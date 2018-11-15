@@ -2,7 +2,10 @@
 
 angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
 
-function TaskDetailsController($scope, entity, projects, tasks, $state, TasksService, ActivitiesService, PermissionsService, context, $stateParams, $rootScope, people, $timeout, ProjectsService, EntityService, me, DetailsPaneService) {
+function TaskDetailsController($scope, entity, projects, tasks, $state, $rootScope, $timeout, context, $stateParams,
+                               me, people,
+                               TasksService, ActivitiesService, PermissionsService,
+                               ProjectsService, EntityService, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
 

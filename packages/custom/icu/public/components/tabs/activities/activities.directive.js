@@ -2,7 +2,10 @@
 
 angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function() {
-        function controller($scope, UsersService, DocumentsService,PermissionsService, ActivitiesService, BoldedService, $stateParams, $state, $timeout, context, $http, FilesService) {
+        function controller($scope,$state, $timeout, context, $http,
+                            UsersService, DocumentsService,PermissionsService, ActivitiesService, BoldedService,
+                            $stateParams, InboxService, FilesService
+        ) {
             $scope.isLoading = true;
             $scope.activity = {
                 description: ''
@@ -10,6 +13,7 @@ angular.module('mean.icu.ui.tabs')
 
             ActivitiesService.entityType = $scope.entityName;
             ActivitiesService.entity=$stateParams.id || $stateParams.entityId;
+            $scope.getActivityDescription = InboxService.getActivityDescription;
 
             $scope.context = context;
             $scope.stateParams = $stateParams;
@@ -186,6 +190,7 @@ angular.module('mean.icu.ui.tabs')
             restrict: 'A',
             scope: {
                 activities: '=',
+                updatedEntities: '=',
                 entity: '=',
                 entityName: '@'
             },

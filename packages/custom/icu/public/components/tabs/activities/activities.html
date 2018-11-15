@@ -7,40 +7,11 @@
                 <div class="title">
                     <div class="text">
                         <span class="user-name">{{activity.creator.name}} {{activity.creator.lastname}}</span>
-                        <span class="activity-details" ng-repeat="val in details">
-                            <span ng-switch="activity.updateField">
-                                <span ng-switch-when="create">{{ val.value | i18next }}</span>
-                                <span ng-switch-when="status|assign|location|color">
-                                    {{ 'changed' | i18next }}&nbsp{{ activity.updateField | i18next }}
-                                    {{ 'to' | i18next }}&nbsp{{ activity.current }}
-                                </span>
-                                <span ng-switch-when="due">
-                                    {{ 'changed' | i18next }}&nbsp{{ activity.updateField | i18next }}
-                                    {{ 'to' | i18next }}&nbsp{{ activity.current | date:'MM/dd/yy' }}
-                                </span>
-                                <span ng-switch-when="title">
-                                    {{ 'changed' | i18next }}&nbsp{{ activity.updateField | i18next }}
-                                    {{ 'from' | i18next }}&nbsp{{ activity.prev }}
-                                    {{ 'to' | i18next }}&nbsp{{ activity.current }}
-                                </span>
-                                <span ng-switch-when="description">
-                                    {{ 'changed' | i18next }}&nbsp{{ activity.updateField | i18next }}
-                                    {{ 'to' | i18next }}&nbsp{{ activity.current }}
-                                </span>
-                                <span ng-switch-when="comment">
-                                    {{ 'leavedComment' | i18next }}&nbsp{{ activity.current }}
-                                </span>
-                                <span ng-switch-when="attachment">
-                                    {{activity[val.value] | date:'MM/dd/yy'}}
-                                </span>
-                                <span ng-switch-default ng-bind-html="val.value | i18next"></span>
-                            </span>
-                        </span>
                     </div>
                     <div class="activity-date">{{activity.date | date:"MM/dd/yyyy ' | ' h:mma"}}</div>
                 </div>
                 <div class="description">
-                    {{activity.description}}
+                    {{ getActivityDescription(activity) }}
                 </div>
                 <div id="UpdatetLine" data-ng-repeat="attachment in activity.attachments" class="attachment">
                     <div  class="icon {{attachment.attachmentType}}">
