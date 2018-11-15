@@ -140,6 +140,9 @@ function checkAndNotify(update) {
   ].includes(update.updateField)) return;
 
   let modelName = entityType[0].toUpperCase() + entityType.slice(1);
+  if(entityType === 'officeDocument') {
+    modelName = 'Document';
+  }
 
   mongoose.model('Update')
   .populate(update, [{
