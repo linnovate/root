@@ -1,4 +1,4 @@
-<tr ng-repeat="activity in activities | orderBy: 'created': true"
+<tr ng-repeat="activity in activities | orderBy: 'date': false"
     ng-click="initiate($event, activity.entityObj, activity.entityType)"
     ng-if="activity.updateField"
 >

@@ -2,12 +2,13 @@
 
 angular.module('mean.icu.ui.inbox', [])
 .controller('InboxListController',
-    function ($scope, $state, $stateParams, me, people, activities, updatedEntities, InboxService) {
+    function ($scope, $state, $stateParams, me, people, activities, updatedEntities, InboxService, ActivitiesService) {
         $scope.me = me;
         $scope.activities = updatedEntities.activities;
         $scope.entities = updatedEntities.entities;
         $scope.users = updatedEntities.users;
         $scope.inboxState = 'main.inbox';
+        $scope.loadNext = ActivitiesService.getByUserId;
 
         $scope.getActivityDescription = InboxService.getActivityDescription;
 
@@ -31,51 +32,33 @@ angular.module('mean.icu.ui.inbox', [])
             });
         };
 
-        $scope.loadNext = activities.next;
-        $scope.loadPrev = activities.prev;
+        $scope.debouncedLoadMore = _.debounce(loadMore, 300);
 
-        $scope.loadMore = function() {
+        function loadMore(){
+            let START = $scope.activities.length;
             let LIMIT = 25;
-            let loadedCount = 0;
-            let listEnd = false;
 
-            loadedCheck(listEnd, loadedCount);
-
-            function loadedCheck(listEnd, loadedCount) {
-                if (loadedCount < 25 && !listEnd) {
-                    let START = $scope.activities.length;
-
-                    loadData(START, LIMIT)
-                        .then(result => {
-                            if (result.length === 0) listEnd = true;
-                            loadedCount += result.length;
-                            loadedCheck(listEnd, loadedCount);
-                        })
-                }
-            }
-        };
+            loadData(START, LIMIT)
+        }
 
         function loadData (START, LIMIT) {
-            return new Promise((resolve) => {
-                if ($scope.loadNext) {
-                    return $scope.loadNext()
-                        .then(function (items) {
-                            let offset = $scope.displayOnly ? 0 : 1;
+            return $scope.loadNext(me._id, START, LIMIT, 'created')
+                .then( items => {
+                    if(!items)return;
+                    return InboxService.getUpdateEntities(items)
+                })
+                .then(updatedActivities => {
+                    if(!updatedActivities)return;
 
-                            if (items.data.length) {
-                                let index = $scope.activities.length - offset;
-                                let args = [index, 0].concat(items.data);
+                    let items = updatedActivities.activities;
+                    if (items.length) {
+                        let index = $scope.activities.length;
+                        let args = [index, 0].concat(items);
 
-                                [].splice.apply($scope.activities, args);
-                            }
+                        [].splice.apply($scope.activities, args);
+                    }
 
-                            $scope.loadNext = items.next;
-                            $scope.loadPrev = items.prev;
-
-                            return resolve(items.data);
-                        });
-                }
-                return resolve([]);
-            })
+                    return items;
+                });
         }
     });
