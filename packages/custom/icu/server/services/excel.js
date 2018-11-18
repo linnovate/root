@@ -1,5 +1,8 @@
 const XlsxPopulate = require('xlsx-populate');
 const striptags = require('striptags');
+const Entities = require('html-entities').AllHtmlEntities;// remove html entities like &nbsp
+const entities = new Entities();
+const decodeEntities = entities.decode; 
 /*
 json structure:
 {
@@ -23,7 +26,7 @@ function json2workbookWithDates(json){
 
     for(let j = 0;j<regColumnsLength+datesColumnsLength;j++){
     if(j<regColumnsLength){
-     sheet.row(1).cell(j+1).value(striptags(json.columns[j]))
+     sheet.row(1).cell(j+1).value(decodeEntities(striptags(json.columns[j])))
      sheet.row(1).cell(j+1).style({
        "bold":json.columnsBold,
        "fontFamily":"Arial",
@@ -41,7 +44,7 @@ function json2workbookWithDates(json){
       for(let j =0;j<json.rows[i].length+json.dates[i].length;j++){
         let cell = sheet.row(i+2).cell(j+1);
         if(j<json.rows[i].length)
-          cell.value(striptags(json.rows[i][j]));
+          cell.value(decodeEntities(striptags(json.rows[i][j])));
         else {
           cell.value(json.dates[i][j-json.rows[i].length]);
           cell.style("numberFormat","dddd, mmmm dd, yyyy");
@@ -78,7 +81,7 @@ function json2workbook(json){
     let sheet = workbook.sheet("Sheet1");
 
     for(let j = 0;j<json.columns.length;j++){
-     sheet.row(1).cell(j+1).value(striptags(json.columns[j]))
+     sheet.row(1).cell(j+1).value(decodeEntities(striptags(json.columns[j])))
      sheet.row(1).cell(j+1).style({
        "bold":json.columnsBold,
        "fontFamily":"Arial",
@@ -88,7 +91,7 @@ function json2workbook(json){
     for(let i = 0;i<json.rows.length;i++){
       for(let j =0;j<json.rows[i].length;j++){
         let cell = sheet.row(i+2).cell(j+1);
-        cell.value(striptags(json.rows[i][j]));
+        cell.value(decodeEntities(striptags(json.rows[i][j])));
         cell.style({
           "fontFamily":"Arial",
           "wrapText":true,
