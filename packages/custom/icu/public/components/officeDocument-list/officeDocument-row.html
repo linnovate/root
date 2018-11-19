@@ -1,8 +1,8 @@
 <td class="folder">
-    <span class="tag folder"
+    <span class="tag folder disable"
           title="{{item.folder.title}}"
-          ng-style="{'background-color': '#' + item.folder.color, 'color': 'white'}">
-        {{item.folder.title}}
+          ng-style="{'background-color': '#' + item.folder.color, 'color': 'white'}"
+          ng-bind-html="item.folder.title">
     </span>
 </td>
 

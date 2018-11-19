@@ -237,6 +237,7 @@
 
                     .tag {
                         @include tag(14px);
+                        @include disable-text-styles;
                         padding: 5px;
                         width: initial;
                         max-width: 100%;
