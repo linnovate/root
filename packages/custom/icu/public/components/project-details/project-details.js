@@ -221,7 +221,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
       animation: true,
       size: '40%',
       templateUrl: '/icu/components/project-policy/project-policy.html',
-      controller: 'ProjectPolicyController',
+      controller: ProjectPolicyController,
       resolve: {
         item: function() {
           return $scope.item;
