@@ -43,7 +43,11 @@ angular.module('mean.icu.data.inboxservice', [])
             return `${creator} ${$i18next('changedTitleTo')} ${activity.current}`;
             break;
           case 'assign' :
-            return `${creator} ${$i18next('assigned')} ${ getUser(activity.current).username }`;
+            let currentUser = getUser(activity.current);
+            let prevUser = getUser(activity.prev);
+            return currentUser
+              ? `${creator} ${$i18next('assigned')} ${ currentUser.username}`
+              : `${creator} ${$i18next('unassign')} ${ prevUser.username}`;
             break;
           case 'location' :
             return `${creator} ${$i18next('changedLocationTo')} ${activity.current}`;
@@ -62,9 +66,6 @@ angular.module('mean.icu.data.inboxservice', [])
             break;
           case 'watchers' :
             return `${creator} ${$i18next('changedWatchers')}`;
-            break;
-          case 'assign' :
-            return `${creator} ${$i18next('assigned')} ${activity.current.username} ${$i18next('to')} ${activity.entityObj.title}`;
             break;
         }
       }
