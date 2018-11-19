@@ -37,7 +37,7 @@ angular.module('mean.icu.data.inboxservice', [])
             return `${creator} ${$i18next('changedDeadlineTo')} ${moment(activity.entityObj.startDate).format('DD/MM/YYYY')} - ${moment(activity.entityObj.endDate).format('DD/MM/YYYY')}`;
             break;
           case 'status' :
-            return `${creator} ${$i18next('changedStatusTo')} ${activity.current}`;
+          return `${creator} ${$i18next('changedStatusTo')} ${$i18next(activity.current)}`;
             break;
           case 'title' :
             return `${creator} ${$i18next('changedTitleTo')} ${activity.current}`;
