@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 
 const UpdateSchema = new Schema({
   entity: {
-    type: String
+    type: Schema.ObjectId
   },
   entityType: {
     type: String,
