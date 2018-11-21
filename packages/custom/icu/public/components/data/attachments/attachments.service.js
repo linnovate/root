@@ -3,11 +3,51 @@
 angular.module('mean.icu.data.attachmentsservice', [])
     .service('AttachmentsService', function ($http, $timeout, ApiUri, Upload, UsersService, WarningsService) {
 
+    let EntityPrefix = '/attachments';
+
     function getAttachmentUser(_id) {
             return UsersService.getById(_id).then(user => {
                 return user ;
-            }) ;            
-    }    
+            });
+    }
+
+    function fillActivitiesWithAttachments(activities){
+        if(!activities)return;
+
+        let activitiesIds = getActivitiesAttachments(activities);
+        return downloadAttachments(activitiesIds)
+            .then( attachments => insertAttachmentsToActivities(attachments.data, activities));
+    }
+
+    function getActivitiesAttachments(activities){
+        if(!activities)return;
+        let activitiesWithAttachmentIds = [];
+
+        for(let activity in activities){
+            let act = activities[activity];
+
+            if(act.updateField === 'attachment'){
+                activitiesWithAttachmentIds.push(act._id)
+            }
+        }
+        return activitiesWithAttachmentIds;
+    }
+
+    function downloadAttachments(attachmentIds){
+        return $http.post(ApiUri + EntityPrefix + '/byIds', attachmentIds)
+    }
+
+    function insertAttachmentsToActivities(attachments, activities){
+        for(let attachment in attachments){
+
+            let attach = attachments[attachment];
+            let act = activities.find( activity => attach.issueId === activity._id );
+
+            act.attachments = act.attachments || [];
+            act.attachments.push(attach)
+        }
+        return activities;
+    }
 
     function previewWindow(document1) {
         if(document1.spPath){
@@ -95,7 +135,8 @@ angular.module('mean.icu.data.attachmentsservice', [])
     return {
         previewTab: previewTab,
         previewWindow: previewWindow,
-        getAttachmentUser: getAttachmentUser
+        getAttachmentUser: getAttachmentUser,
+        fillActivitiesWithAttachments: fillActivitiesWithAttachments
     };
 
 });

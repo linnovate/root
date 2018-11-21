@@ -7,6 +7,7 @@ var mean = require('meanio'),
   config = require('meanio').loadConfig(),
   Busboy = require('busboy'),
   permissions = require('./permissions'),
+  httpError = require('http-errors'),
   q = require('q');
 
 var options = {
@@ -451,6 +452,20 @@ exports.sign = function(req, res, next) {
   }, function(err, numAffected) {
     next();
   });
+};
+
+exports.getAttachmentsByIds = function(req, res, next) {
+    let activitiesIds = req.body;
+
+    Attachment.find({ issueId: {$in: activitiesIds} })
+        .exec(function(err, documents) {
+            if(err){
+                console.error(err);
+                throw new httpError(404);
+            }
+            req.locals.result = documents;
+            next();
+        })
 };
 
 exports.signNew = function(req, res, next) {

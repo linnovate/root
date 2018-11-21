@@ -271,6 +271,8 @@ module.exports = function(Icu, app) {
     .get(attachments.getByEntity);
   app.route('/api/tasks/myTasks/attachments')
     .get(attachments.getMyTasks);
+  app.route('/api/attachments/byIds')
+    .post(attachments.getAttachmentsByIds);
 
   app.route('/api/search')
     .get(elasticsearch.search);
