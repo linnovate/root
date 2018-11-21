@@ -34,7 +34,7 @@ angular.module('mean.icu.data.inboxservice', [])
             return `${creator} ${$i18next('changedDueDateTo')} ${moment( activity.current ).format('DD/MM/YYYY')}`;
             break;
           case 'deadline' :
-            return `${creator} ${$i18next('changedDeadlineTo')} ${moment(activity.entityObj.startDate).format('DD/MM/YYYY')} - ${moment(activity.entityObj.endDate).format('DD/MM/YYYY')}`;
+            return `${creator} ${$i18next('changedDeadlineTo')} ${moment(activity.date).format('DD/MM/YYYY')}`;
             break;
           case 'status' :
           return `${creator} ${$i18next('changedStatusTo')} ${$i18next(activity.current)}`;
@@ -59,10 +59,10 @@ angular.module('mean.icu.data.inboxservice', [])
             return `${creator} ${$i18next('updatedDescription')} ${activity.current}`;
             break;
           case 'comment' :
-            return `${creator} ${$i18next('leavedComment')} ${activity.current}`;
+            return `${activity.current}`;
             break;
           case 'attachment' :
-            return `${creator} ${$i18next('addedAttachment')} ${activity.current}`;
+            return `${activity.current}`;
             break;
           case 'watchers' :
             return `${creator} ${$i18next('changedWatchers')}`;

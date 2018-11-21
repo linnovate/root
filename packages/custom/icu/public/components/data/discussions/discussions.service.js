@@ -146,7 +146,7 @@ angular.module('mean.icu.data.discussionsservice', [])
             var message = {};
             message.content = entity.title || '-';
           }
-          return result;
+          return result.data;
         });
       }
     }
