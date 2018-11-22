@@ -1126,7 +1126,8 @@ exports.getByUserId = function(req, res, next) {
       logger.log('info', '%s getByUserId, %s', req.user.name, 'success');
 
       req.locals.result = data;
-      res.send(data);
+      // res.send(data);
+      next();
     }
   });
 };
@@ -1790,6 +1791,8 @@ exports.create = function(req,res,next){
             result.creator = creator;
             // res.send(result);
             req.locals.result = result;
+            req.locals.data = {};
+            req.locals.data.entityName = 'officeDocuments';
             next();
           })
       }
@@ -2067,13 +2070,13 @@ exports.update = function(req, res, next) {
         .exec(function(err, folderObj) {
           if(err) {
             logger.log('error', '%s create, %s', req.user.name, ' Folder.findOne', {error: err.message});
-    
+
             res.send(err);
           }
           else {
             // Check if folder found
             if(folderObj){
-    
+
               req.body.permissions = [];
 
               //Add all watchers & permissions from the parent folder to the officedocument
@@ -2091,12 +2094,12 @@ exports.update = function(req, res, next) {
                   doc.permissions.push({id: new ObjectId(folderObj.watchers[index].id), level: folderObj.permissions[index].level});
                 }
               }
-            
+
               // Save the document with the new watchers & permissions
               doc.save(function(err, result) {
                 if(err) {
                   logger.log('error', '%s update, %s', req.user.name, ' doc.save', {error: err.message});
-        
+
                   res.send(err);
                 }
               });

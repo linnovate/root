@@ -390,7 +390,7 @@ module.exports = function(Icu, app) {
     .put(documents.update, star.isStarred, attachments.sign)
     .delete(documents.deleteDocument);
   app.route('/api/officeDocuments/create')
-    .post(documents.create, boldedService.syncBoldUsers);
+    .post(documents.create, updates.created, boldedService.syncBoldUsers);
   app.route('/api/officeDocuments/addSerialTitle')
     .post(documents.addSerialTitle);
 
