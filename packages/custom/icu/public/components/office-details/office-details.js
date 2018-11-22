@@ -100,7 +100,10 @@ function OfficeDetailsController($rootScope, $scope, entity, tasks, folders, peo
     $scope.recycle = function() {
         EntityService.recycle('offices', $scope.item._id).then(function() {
             let clonedEntity = JSON.parse(JSON.stringify($scope.item));
-            clonedEntity.status = "Recycled"
+            clonedEntity.status = "Recycled";
+            OfficesService.updateStatus(clonedEntity, $scope.item).then(function(result) {
+                ActivitiesService.data.push(result);
+            });
 
             refreshList();
             if (currentState.indexOf('search') != -1) {

@@ -138,7 +138,7 @@ angular.module('mean.icu.data.officesservice', [])
 
                     updateField: updateField,
                     current: entity[updateField],
-                    prev: prev[updateField]
+                    prev: prev ? prev[updateField] : ''
                 },
                 context: {}
             }).then(function(result) {
@@ -166,10 +166,11 @@ angular.module('mean.icu.data.officesservice', [])
         data: data,
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
-        updateDescription: createActivity('description'),
+        updateStar: createActivity('star'),
         updateColor: createActivity('color'),
         updateTitle: createActivity('title'),
-        updateStar: createActivity('star'),
-        updateWatcher: createActivity('watchers')
+        updateStatus: createActivity('status'),
+        updateWatcher: createActivity('watchers'),
+        updateDescription: createActivity('description'),
     };
 });

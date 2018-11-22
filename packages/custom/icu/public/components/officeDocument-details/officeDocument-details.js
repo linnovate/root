@@ -220,7 +220,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   $scope.recycle = function() {
     EntityService.recycle('officeDocuments', $scope.item._id).then(function() {
       let clonedEntity = JSON.parse(JSON.stringify($scope.item));
-      clonedEntity.status = "Recycled"
+      clonedEntity.status = "Recycled";
       // just for activity status
       OfficeDocumentsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
         ActivitiesService.data.push(result);
