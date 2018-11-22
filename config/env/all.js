@@ -1,27 +1,21 @@
 'use strict';
 
-
-var path = require('path'),
-  rootPath = path.normalize(__dirname + '/../..');
+const PORT = process.env.PORT || 3000;
+const ROOT_PATH = require('path').join(__dirname, '../..');
 
 module.exports = {
-  root: rootPath,
+  root: ROOT_PATH,
   http: {
-    port: process.env.PORT || 3002
+    port: PORT
   },
   https: {
-    //port: null,
-    port: false,
-
-    // Paths to key and cert as string
+    port: process.env.HTTPS ? PORT : false,
     ssl: {
-      key: '',
-      cert: ''
+      key: process.env.HTTPS_KEY_PATH,
+      cert: process.env.HTTPS_CERT_PATH
     }
   },
   hostname: process.env.HOST || process.env.HOSTNAME,
-  db: process.env.MONGOHQ_URL,
-  socketPort: process.env.SOCKETPORT || 3003,
   templateEngine: 'swig',
 
   // The secret should be set to a non-guessable string that
@@ -51,31 +45,63 @@ module.exports = {
     name: 'he',
     direction: 'rtl',
   }],
-   currentLanguage: 'en',
-   // currentLanguage: 'he',
+  currentLanguage: process.env.LANG || 'en',
   // The session cookie name
   sessionName: 'connect.sid',
-  attachmentDir: rootPath + '/files',
-//  activeProvider: 'google',
-  activeProvider: 'local',
+  attachmentDir: ROOT_PATH + '/files',
+
+  // Auth providers
+  activeProvider: process.env.AUTH_PROVIDER || 'local',
+  facebook: {
+    clientID: 'DEFAULT_APP_ID',
+    clientSecret: 'APP_SECRET',
+    callbackURL: '/api/auth/facebook/callback'
+  },
+  saml: {
+    strategy : {
+      options :{
+        samlOptions: ''
+      }
+    },
+    clientID: 'DEFAULT_APP_ID',
+    clientSecret: 'APP_SECRET',
+    callbackURL: '/metadata.xml/callback'
+  },
+  twitter: {
+    clientID: 'DEFAULT_CONSUMER_KEY',
+    clientSecret: 'CONSUMER_SECRET',
+    callbackURL: '/api/auth/twitter/callback'
+  },
+  github: {
+    clientID: 'DEFAULT_APP_ID',
+    clientSecret: 'APP_SECRET',
+    callbackURL: '/api/auth/github/callback'
+  },
+  google: {
+    clientID: process.env.GOOGLE_CLIENT_ID || 'APP_ID',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'APP_SECRET',
+    callbackURL: '/api/auth/google/callback'
+  },
+  linkedin: {
+    clientID: 'DEFAULT_API_KEY',
+    clientSecret: 'SECRET_KEY',
+    callbackURL: '/api/auth/linkedin/callback'
+  },
+
   circleSettings: require('../circleSettings') || {},
 
   version: '1.0.7',
-  whatsNew:[
-    {
-      content:'fix document...bla bla',
-      header:'hjghjghj', 
-      img:"/icu/assets/img/whatsNew/t.png" 
-    },
-    {
-      content:'fix document... hahaha',
-      header:'hjghjghj', 
-      img:"" 
-    }
-  ],
-  defaultTab: 'activities', // only one of 'activities', 'documents'
+  whatsNew:[{
+    content:'fix document...bla bla',
+    header:'hjghjghj', 
+    img:"/icu/assets/img/whatsNew/t.png" 
+  }, {
+    content:'fix document... hahaha',
+    header:'hjghjghj', 
+    img:"" 
+  }],
+  defaultTab: 'activities', // one of 'activities', 'documents'
   ScheduledMailSendWeekly: '59 1 * * 0',
   ScheduledMailSendDaly: '59 1 * * 0-5',
-  activeStatus: require('../activeStatusSettings'),
-  
+  activeStatus: require('../activeStatusSettings')
 };
