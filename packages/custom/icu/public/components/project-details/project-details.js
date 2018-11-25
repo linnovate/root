@@ -277,7 +277,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   // ==================================================== $watch: title / desc ==================================================== //
 
   $scope.$watch('item.title', function(nVal, oVal) {
-    if(nVal !== oVal && oVal) {
+    if(nVal !== oVal) {
       var newContext = {
         name: 'title',
         oldVal: oVal,
@@ -293,7 +293,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if(nText != oText && oText) {
+    if(nText != oText) {
       var newContext = {
         name: 'description',
         oldVal: oVal,

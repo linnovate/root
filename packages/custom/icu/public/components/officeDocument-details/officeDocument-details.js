@@ -438,7 +438,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   // ==================================================== $watch: title / desc ==================================================== //
 
   $scope.$watch('item.title', function(nVal, oVal) {
-    if (nVal !== oVal && oVal) {
+    if (nVal !== oVal) {
       var newContext = {
         name: 'title',
         oldVal: oVal,
@@ -453,7 +453,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if (nText != oText && oText) {
+    if (nText != oText) {
       var newContext = {
         name: 'description',
         oldVal: oVal,

@@ -259,7 +259,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
   $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if (nText != oText && oText) {
+    if (nText != oText) {
       var context = {
         name: 'description',
         oldVal: oVal,
