@@ -1,13 +1,13 @@
-FROM node:8-alpine
+FROM node:10-alpine
 
 RUN apk update \
-  && apk add git \
-  && npm install -g npm@latest
-COPY . /usr/src/app
-WORKDIR /usr/src/app
-USER root
-RUN chown -R node .
+  && apk add git
+
 USER node:node
+
+COPY --chown=node:node . /usr/src/app
+
+WORKDIR /usr/src/app
 
 RUN npm install \
   && npm run production \
