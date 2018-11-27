@@ -25,7 +25,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
     theme: 'bootstrap',
     buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
   };
-  $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'completed', 'archived'];
+  $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'done', 'archived'];
 
   $scope.me = me;
   $scope.tags = $scope.item.tags;

@@ -46,7 +46,7 @@ var FolderSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
+    enum: ['new', 'in-progress', 'canceled', 'done', 'archived'],
     default: 'new'
   },
   tags: [String],
