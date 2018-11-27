@@ -174,12 +174,6 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     $scope.update($scope.item, context);
   }
 
-  $scope.onTaskRelation = function(value) {
-    $scope.item.task = value;
-    $scope.onCategory(value, 'task');
-    TasksService.relateToTask(value._id, 'officeDocuments', $scope.item._id)
-  };
-
   $scope.onCategory = function(value, type = 'folder') {
     let id = value && value._id || undefined;
     let json = {
