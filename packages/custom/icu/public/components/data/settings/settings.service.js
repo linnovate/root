@@ -3,7 +3,7 @@
 angular.module('mean.icu.data.settingsservice', [])
 .service('SettingServices', function($http, WarningsService) {
 
-    // var userFilter = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done', 'archived','canceled','completed'];
+    // var userFilter = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done', 'archived','canceled','done'];
 
     function getAll() {
         return $http.get('/api/admin/moduleSettings/icu').then(function(result) {
@@ -14,12 +14,12 @@ angular.module('mean.icu.data.settingsservice', [])
 
     let statusList = {
         task: ['new', 'assigned', 'in-progress', 'waiting-approval', 'review', 'rejected', 'done'],
-        project: ['new', 'assigned','in-progress', 'canceled', 'waiting-approval', 'completed', 'archived'],
+        project: ['new', 'assigned','in-progress', 'canceled', 'waiting-approval', 'done', 'archived'],
         discussion: ['new', 'scheduled', 'done', 'canceled', 'waiting-approval', 'archived'],
         officeDocument: ['new', 'in-progress', 'received', 'done', 'waiting-approval','sent'],
-        folder: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
-        office: ['new', 'in-progress', 'canceled', 'completed', 'archived'],
-        templateDocument: ['new', 'in-progress', 'canceled', 'completed', 'archived']
+        folder: ['new', 'in-progress', 'canceled', 'done', 'archived'],
+        office: ['new', 'in-progress', 'canceled', 'done', 'archived'],
+        templateDocument: ['new', 'in-progress', 'canceled', 'done', 'archived']
     }
 
     function getStatusList (){
@@ -29,10 +29,10 @@ angular.module('mean.icu.data.settingsservice', [])
         return ['new', 'assigned', 'in-progress', 'review'];
     }
     function getNonActiveStatusList (){
-        return ['rejected', 'done', 'archived','canceled','completed'];
+        return ['rejected', 'done', 'archived','canceled','done'];
     }
     function getUserFilter (){
-        return ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done', 'archived','canceled','completed'];
+        return ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done', 'archived','canceled','done'];
     }
 
 
