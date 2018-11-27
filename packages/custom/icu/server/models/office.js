@@ -1,11 +1,10 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose'),
+var mongoose = require("mongoose"),
   Schema = mongoose.Schema,
-  archive = require('./archive.js'),
-  modelUtils = require('./modelUtils'),
-  config = require('meanio').loadConfig() ;
-
+  archive = require("./archive.js"),
+  modelUtils = require("./modelUtils"),
+  config = require("meanio").loadConfig();
 
 var OfficeSchema = new Schema({
   created: {
@@ -19,23 +18,23 @@ var OfficeSchema = new Schema({
     type: String
   },
   recycled: {
-    type: Date,
+    type: Date
   },
   parent: {
     type: Schema.ObjectId,
-    ref: 'Office'
+    ref: "Office"
   },
   discussion: {
     type: Schema.ObjectId,
-    ref: 'Discussion'
+    ref: "Discussion"
   },
   creator: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   manager: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   signature: {
     circles: {},
@@ -47,8 +46,8 @@ var OfficeSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'in-progress', 'canceled', 'done', 'archived'],
-    default: 'new'
+    enum: ["new", "in-progress", "canceled", "done", "archived"],
+    default: "new"
   },
   description: {
     type: String
@@ -57,13 +56,13 @@ var OfficeSchema = new Schema({
   watchers: [
     {
       type: Schema.ObjectId,
-      ref: 'User'
+      ref: "User"
     }
   ],
   bolded: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       bolded: Boolean,
       lastViewed: Date
     }
@@ -71,11 +70,11 @@ var OfficeSchema = new Schema({
   permissions: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       level: {
         type: String,
-        enum: ['viewer', 'commenter', 'editor'],
-        default: 'viewer'
+        enum: ["viewer", "commenter", "editor"],
+        default: "viewer"
       }
     }
   ],
@@ -100,31 +99,34 @@ var OfficeSchema = new Schema({
   tel: {
     type: String
   },
+  internalTel: {
+    type: String
+  },
   roomName: {
     type: String
   }
 });
 
-var starVirtual = OfficeSchema.virtual('star');
+var starVirtual = OfficeSchema.virtual("star");
 starVirtual.get(function() {
   return this._star;
 });
 starVirtual.set(function(value) {
   this._star = value;
 });
-OfficeSchema.set('toJSON', {
+OfficeSchema.set("toJSON", {
   virtuals: true
 });
-OfficeSchema.set('toObject', {
+OfficeSchema.set("toObject", {
   virtuals: true
 });
 
 /**
  * Validations
  */
-OfficeSchema.path('color').validate(function(color) {
+OfficeSchema.path("color").validate(function(color) {
   return /^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/i.test(color);
-}, 'Invalid HEX color.');
+}, "Invalid HEX color.");
 
 /**
  * Statics
@@ -132,32 +134,32 @@ OfficeSchema.path('color').validate(function(color) {
 OfficeSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
-  }).populate('creator', 'name username').exec(cb);
+  })
+    .populate("creator", "name username")
+    .exec(cb);
 };
 
 /**
  * middleware
  */
-var elasticsearch = require('../controllers/elasticsearch');
-
+var elasticsearch = require("../controllers/elasticsearch");
 
 // Will not execute until the first middleware calls `next()`
-OfficeSchema.pre('save', function(next) {
-  let entity = this ;
-  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+OfficeSchema.pre("save", function(next) {
+  let entity = this;
+  config.superSeeAll ? modelUtils.superSeeAll(entity, next) : next();
 });
 
-
-OfficeSchema.post('save', function(req, next) {
-  elasticsearch.save(this, 'office');
+OfficeSchema.post("save", function(req, next) {
+  elasticsearch.save(this, "office");
   next();
 });
 
-OfficeSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'office', next);
+OfficeSchema.pre("remove", function(next) {
+  elasticsearch.delete(this, "office", next);
   next();
 });
 
-OfficeSchema.plugin(archive, 'office');
+OfficeSchema.plugin(archive, "office");
 
-module.exports = mongoose.model('Office', OfficeSchema);
+module.exports = mongoose.model("Office", OfficeSchema);

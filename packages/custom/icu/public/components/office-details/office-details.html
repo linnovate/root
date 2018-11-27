@@ -91,6 +91,17 @@
       ng-model="item.tel"
       options="{{editorOptions}}"
       medium-editor></div>
+
+      <label>{{ 'internalTel' | i18next }}</label>
+      <div class="text officeDetails"
+        contenteditable="true"
+        tabindex="2"
+        strip-br="true"
+        ng-model="item.internalTel"
+        options="{{editorOptions}}"
+        medium-editor></div>
+
+
   </div>
 
     <detail-tabs tabs="tabs" item="item" entity-name="office" ng-class="{ 'disabled' : !havePermissions('tabs', enableRecycled)}"></detail-tabs>
