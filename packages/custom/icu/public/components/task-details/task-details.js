@@ -240,7 +240,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, $rootSco
 
   $scope.menuItems = [{
     label: 'duplicateTask',
-    fa: 'fa-times-circle',
+    fa: 'fa-copy',
     display: true,
     action: $scope.duplicate,
   },{
