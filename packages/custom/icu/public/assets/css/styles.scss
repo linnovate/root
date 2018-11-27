@@ -7,12 +7,6 @@ body {
     font-family: 'openSansHebrew';
 }
 
-@font-face {
-  font-family: 'openSansHebrew';
-  src: url("../fonts/open-sans-hebrew/OpenSansHebrew-Regular.ttf");
-  font-weight: normal;
-  font-style: normal; }
-
 @import '../lib/font-awesome/scss/font-awesome.scss';
 @import '../lib/open-sans/scss/open-sans.scss';
 @import 'variables';

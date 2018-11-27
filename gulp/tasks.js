@@ -20,7 +20,7 @@ const paths = {
     'packages/*/*/public/**/*.html',
     'packages/*/*/server/views/**'
   ],
-  css:  'packages/custom/*/public/assets/{css,lib/**}/*.css',
+  css:  'packages/custom/*/public/assets/{css,lib/**,fonts/**}/*.css',
   sass: 'packages/custom/icu/public/assets/css/**/*.scss'
 };
 

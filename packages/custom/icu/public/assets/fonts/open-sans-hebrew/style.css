@@ -1,0 +1,55 @@
+@font-face {
+  font-family: 'openSansHebrew';
+  src: url('OpenSansHebrew-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'openSansHebrew';
+  src: url('OpenSansHebrew-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'openSansHebrew';
+  src: url('OpenSansHebrewExtraBold-Italic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'openSansHebrew';
+  src: url('OpenSansHebrew-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'openSansHebrew';
+  src: url('OpenSansHebrew-BoldItalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'openSansHebrew';
+  src: url('OpenSansHebrew-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'openSansHebrew';
+  src: url('OpenSansHebrew-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'openSansHebrew';
+  src: url('OpenSansHebrew-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
