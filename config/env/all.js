@@ -45,7 +45,7 @@ module.exports = {
     name: 'he',
     direction: 'rtl',
   }],
-  currentLanguage: process.env.LANG || 'en',
+  currentLanguage: process.env.ROOT_LANG || 'en',
   // The session cookie name
   sessionName: 'connect.sid',
   attachmentDir: ROOT_PATH + '/files',
