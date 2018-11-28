@@ -204,7 +204,7 @@
                             &.rejected{color: #ef5350;}
                             &.done{color: #757575;}
                             &.canceled{color: #ef5350;}
-                            &.completed{color: #598527;}
+                            &.done{color: #598527;}
                             &.archived{color: #ab47bc;}
                             &.waiting-approval{color: #ab47bc;}
                             &.scheduled{color: #0054a6;}
@@ -237,6 +237,7 @@
 
                     .tag {
                         @include tag(14px);
+                        @include disable-text-styles;
                         padding: 5px;
                         width: initial;
                         max-width: 100%;

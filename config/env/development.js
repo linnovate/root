@@ -1,7 +1,7 @@
 'use strict';
 console.log("************ DEVELOPMENT MODE *****************")
 module.exports = {
- db: (process.env.MONGODB_URI || 'mongodb://localhost/icu-dev'),
+  db: process.env.MONGODB_URI || 'mongodb://localhost/icu-dev',
   debug: true,
   logging: {
     format: 'tiny',
@@ -21,41 +21,6 @@ module.exports = {
   // host: 'http://root.205pre.projects.linnovate.net',
   host: 'http://localhost',
   isPortNeeded: false,
-  facebook: {
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
-    callbackURL: 'http://localhost:3000/api/auth/facebook/callback'
-  },
-  saml: {
-    strategy : {
-      options :{
-        samlOptions: ''
-      }
-    },
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
-    callbackURL: 'http://localhost/metadata.xml/callback'
-  },
-  twitter: {
-    clientID: 'DEFAULT_CONSUMER_KEY',
-    clientSecret: 'CONSUMER_SECRET',
-    callbackURL: 'http://localhost:3000/api/auth/twitter/callback'
-  },
-  github: {
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
-    callbackURL: 'http://localhost:3000/api/auth/github/callback'
-  },
-  google: {
-    clientID: '1065843995383-l0f0a740nenvn4vk3id9nur2pdlu4ktf.apps.googleusercontent.com',
-    clientSecret: 'SmulksiTH_XZY519GgSEIocF',
-    callbackURL: 'http://root.projects.linnovate.net/api/auth/google/callback'
-  },
-  linkedin: {
-    clientID: 'DEFAULT_API_KEY',
-    clientSecret: 'SECRET_KEY',
-    callbackURL: 'http://localhost:3000/api/auth/linkedin/callback'
-  },
   emailFrom: 'SENDER EMAIL ADDRESS', // sender address like ABC <abc@example.com>
   mailer: {
     service: 'SMTP', // Gmail, SMTP

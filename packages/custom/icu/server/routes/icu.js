@@ -271,6 +271,8 @@ module.exports = function(Icu, app) {
     .get(attachments.getByEntity);
   app.route('/api/tasks/myTasks/attachments')
     .get(attachments.getMyTasks);
+  app.route('/api/attachments/byIds')
+    .post(attachments.getAttachmentsByIds);
 
   app.route('/api/search')
     .get(elasticsearch.search);
@@ -388,7 +390,7 @@ module.exports = function(Icu, app) {
     .put(documents.update, star.isStarred, attachments.sign)
     .delete(documents.deleteDocument);
   app.route('/api/officeDocuments/create')
-    .post(documents.create, boldedService.syncBoldUsers);
+    .post(documents.create, updates.created, boldedService.syncBoldUsers);
   app.route('/api/officeDocuments/addSerialTitle')
     .post(documents.addSerialTitle);
 

@@ -174,12 +174,6 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     $scope.update($scope.item, context);
   }
 
-  $scope.onTaskRelation = function(value) {
-    $scope.item.task = value;
-    $scope.onCategory(value, 'task');
-    TasksService.relateToTask(value._id, 'officeDocuments', $scope.item._id)
-  };
-
   $scope.onCategory = function(value, type = 'folder') {
     let id = value && value._id || undefined;
     let json = {
@@ -220,7 +214,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   $scope.recycle = function() {
     EntityService.recycle('officeDocuments', $scope.item._id).then(function() {
       let clonedEntity = JSON.parse(JSON.stringify($scope.item));
-      clonedEntity.status = "Recycled"
+      clonedEntity.status = "Recycled";
       // just for activity status
       OfficeDocumentsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
         ActivitiesService.data.push(result);
@@ -438,7 +432,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   // ==================================================== $watch: title / desc ==================================================== //
 
   $scope.$watch('item.title', function(nVal, oVal) {
-    if (nVal !== oVal && oVal) {
+    if (nVal !== oVal) {
       var newContext = {
         name: 'title',
         oldVal: oVal,
@@ -453,7 +447,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if (nText != oText && oText) {
+    if (nText != oText) {
       var newContext = {
         name: 'description',
         oldVal: oVal,

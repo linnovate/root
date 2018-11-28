@@ -49,7 +49,7 @@ angular.module('mean.icu.ui.entityListFilters', [])
 							return  ['new', 'assigned', 'in-progress', 'review'].includes(entity.status);
 							break;
 						case 'nonactive':
-							return  ['rejected', 'done', 'archived', 'canceled', 'completed'].includes(entity.status);
+							return  ['rejected', 'done', 'archived', 'canceled', 'done'].includes(entity.status);
 							break;
 					}
 					return true;

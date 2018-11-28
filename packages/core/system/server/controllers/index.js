@@ -67,7 +67,6 @@ exports.render = function(req, res) {
             'direction': getCurrentDirection(),
 			'activeProvider': config.activeProvider,
 			'host': config.host,
-			'socketPort': config.socketPort,
 			'circles': circlesLocations(),
 			'version': config.version,
 			'whatsNew': config.whatsNew,

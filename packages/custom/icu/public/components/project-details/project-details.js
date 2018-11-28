@@ -25,7 +25,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
     theme: 'bootstrap',
     buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
   };
-  $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'completed', 'archived'];
+  $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'done', 'archived'];
 
   $scope.me = me;
   $scope.tags = $scope.item.tags;
@@ -221,7 +221,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
       animation: true,
       size: '40%',
       templateUrl: '/icu/components/project-policy/project-policy.html',
-      controller: 'ProjectPolicyController',
+      controller: ProjectPolicyController,
       resolve: {
         item: function() {
           return $scope.item;
@@ -277,7 +277,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   // ==================================================== $watch: title / desc ==================================================== //
 
   $scope.$watch('item.title', function(nVal, oVal) {
-    if(nVal !== oVal && oVal) {
+    if(nVal !== oVal) {
       var newContext = {
         name: 'title',
         oldVal: oVal,
@@ -293,7 +293,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   $scope.$watch('item.description', function(nVal, oVal) {
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if(nText != oText && oText) {
+    if(nText != oText) {
       var newContext = {
         name: 'description',
         oldVal: oVal,
@@ -399,6 +399,13 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
         });
         break;
       case 'title':
+        ProjectsService.updateTitle(item, $scope.me, backupEntity).then(function(result) {
+          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          ActivitiesService.data = ActivitiesService.data || [];
+          ActivitiesService.data.push(result);
+          refreshList();
+        });
+        break;
       case 'description':
         ProjectsService.updateDescription(item, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));

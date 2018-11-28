@@ -128,7 +128,7 @@ AttachmentSchema.statics.folder = function(id, cb) {
   });
 };
 
-AttachmentSchema.statics.officeDocuments = function(id, cb) {
+AttachmentSchema.statics.officeDocument = function(id, cb) {
   require('./document');
   var Document = mongoose.model('Document');
   Document.findById(id, function(err, officeDocument) {

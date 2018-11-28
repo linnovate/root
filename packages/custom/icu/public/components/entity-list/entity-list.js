@@ -409,7 +409,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
       let newActiveToggleField;
       if(!value)value = 'all';
       if(['new', 'assigned', 'in-progress', 'review'].includes(value))newActiveToggleField = 'active';
-      if(['rejected', 'done', 'archived', 'canceled', 'completed'].includes(value))newActiveToggleField = 'nonactive';
+      if(['rejected', 'done', 'archived', 'canceled', 'done'].includes(value))newActiveToggleField = 'nonactive';
 
       if(newActiveToggleField)$scope.activeToggle.field = newActiveToggleField;
     }

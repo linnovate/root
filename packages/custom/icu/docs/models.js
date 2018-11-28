@@ -170,7 +170,7 @@ exports.models = {
       },
       status: {
         type: 'string',
-        description: 'enum: [\'New\', \'Archived\', \'Cancelled\', \'In-Progress\', \'Completed\']'
+        description: 'enum: [\'New\', \'Archived\', \'Cancelled\', \'In-Progress\', \'done\']'
       },
       circles: {
           type: 'string',

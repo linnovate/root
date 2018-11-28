@@ -25,7 +25,7 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
     theme: 'bootstrap',
     buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
   };
-  $scope.statuses = ['new', 'in-progress', 'canceled', 'completed', 'archived'];
+  $scope.statuses = ['new', 'in-progress', 'canceled', 'done', 'archived'];
 
   $scope.entity = entity || context.entity;
   $scope.tasks = tasks.data || tasks;

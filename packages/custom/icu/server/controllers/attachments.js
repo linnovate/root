@@ -7,6 +7,7 @@ var mean = require('meanio'),
   config = require('meanio').loadConfig(),
   Busboy = require('busboy'),
   permissions = require('./permissions'),
+  httpError = require('http-errors'),
   q = require('q');
 
 var options = {
@@ -35,7 +36,7 @@ exports.getByEntity = function(req, res, next) {
       updates: 'update',
       offices: 'office',
       folders: 'folder',
-      officeDocuments: 'officeDocuments'
+      officeDocuments: 'officeDocument'
     },
     entity = entities[req.params.entity];
 
@@ -453,6 +454,20 @@ exports.sign = function(req, res, next) {
   });
 };
 
+exports.getAttachmentsByIds = function(req, res, next) {
+    let activitiesIds = req.body;
+
+    Attachment.find({ issueId: {$in: activitiesIds} })
+        .exec(function(err, documents) {
+            if(err){
+                console.error(err);
+                throw new httpError(404);
+            }
+            req.locals.result = documents;
+            next();
+        })
+};
+
 exports.signNew = function(req, res, next) {
   var entities = {
     project: 'Project',
@@ -460,7 +475,7 @@ exports.signNew = function(req, res, next) {
     discussion: 'Discussion',
     office: 'Office',
     folder: 'Folder',
-    officeDocuments: 'Document'
+    officeDocument: 'Document'
   };
   var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
   query.findOne({

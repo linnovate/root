@@ -4,7 +4,7 @@ angular.module('mean.icu.ui.tabs')
     .directive('icuTabsActivities', function() {
         function controller($scope,$state, $timeout, context, $http,
                             UsersService, DocumentsService,PermissionsService, ActivitiesService, BoldedService,
-                            $stateParams, InboxService, FilesService
+                            $stateParams, InboxService, AttachmentsService, FilesService
         ) {
             $scope.isLoading = true;
             $scope.activity = {
@@ -47,13 +47,20 @@ angular.module('mean.icu.ui.tabs')
                 };
             };
 
+            $scope.$watch('activities', function(nVal, oVal) {
+                if ( (oVal === undefined) && (nVal !== oVal) && (!!nVal.length) ) {
+                    AttachmentsService.fillActivitiesWithAttachments($scope.activities).then( activities => {
+                        $scope.activities = activities;
+                    });
+                }
+            });
+
         $scope.download = function(path){
             var newPath = path.substring(path.indexOf('/files'),path.length);
              newPath = newPath.replace(/\//g, '%2f');
             DocumentsService.getFileFtp(newPath).then(function(){
 
             });
-
         }
 
 
@@ -82,6 +89,43 @@ angular.module('mean.icu.ui.tabs')
                     }
                 }
 
+            if(!_.isEmpty($scope.attachments)){
+
+                ActivitiesService.create({
+                    data: {
+                            creator: $scope.me,
+                            date: new Date(),
+                            entity: $scope.entity._id,
+                            entityType: $scope.entityName,
+
+                            updateField: 'attachment',
+                            current: $scope.activity.description || '',
+                        },
+                        context: {}
+                    }).then(function(result) {
+                        let file = $scope.attachments;
+                        let data = {
+                            issueId: result._id,
+                            issue: 'update',
+                            entity: $scope.entityName,
+                            entityId: $stateParams.id || $stateParams.entityId
+                        };
+
+                        result.attachments = [];
+
+                        for(let index = 0; index < file.length; index++) {
+
+                            DocumentsService.saveAttachments(data, file[index])
+                                .then(function(attachment) {
+                                    result.attachments[result.attachments.length] = attachment;
+                                })
+                        }
+                        $scope.activities.push(result);
+                        clearForm();
+                    }).then(() => {
+                        BoldedService.boldedUpdate($scope.entity, $scope.entityName + 's', 'update');
+                    });
+            } else {
                 ActivitiesService.create({
                     data: {
                         creator: $scope.me,
@@ -93,33 +137,13 @@ angular.module('mean.icu.ui.tabs')
                         current: $scope.activity.description,
                     },
                     context: {}
-                }).then(function(result) {
-                    if (!_.isEmpty($scope.attachments)) {
-                        var file = $scope.attachments;
-                        var data = {
-                            issueId: result._id,
-                            issue: 'update',
-                            entity: $scope.entityName,
-                            entityId: $stateParams.id || $stateParams.entityId
-                        };
-
-                        result.attachments = [];
-
-                        for (var index = 0; index < file.length; index++) {
-
-                            DocumentsService.saveAttachments(data, file[index])
-                                .then(function(attachment) {
-                                result.attachments[result.attachments.length] = attachment;
-                            });
-                        }
-                    }
-                    //clearForm();
+                })
+                  .then( result => {
                     $scope.activities.push(result);
                     clearForm();
-                }).then(()=>{
-                  BoldedService.boldedUpdate($scope.entity, $scope.entityName + 's', 'update');
-                });
-            };
+                  })
+            }
+        };
 
             $timeout(function() {
                 $scope.isLoading = false;
