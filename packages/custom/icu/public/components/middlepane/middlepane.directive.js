@@ -58,11 +58,7 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
 
     function search(term) {
         SearchService.builtInSearchArray = false;
-        if (term && term.length) {
-            $state.go('main.search', {query: term});
-        } else {
-            //$state.go('main.tasks.all');
-        }
+        $state.go('main.search', {query: term});
     }
 
     function refreshQuery(term){
