@@ -2196,7 +2196,7 @@ exports.create = function(req, res, next) {
       }
     });
   } else {
-    Folder.findOne({ _id: folderId }).exec(function(err, folderObj) {
+    Folder.findOne({ _id: folderId }).populate('office').exec(function(err, folderObj) {
       if (err) {
         logger.log("error", "%s create, %s", req.user.name, " Folder.findOne", {
           error: err.message
