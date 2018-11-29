@@ -59,11 +59,9 @@ angular.module('mean.icu.ui.detailsComponents').controller('TaskActivitiesContro
 });
 angular.module('mean.icu.ui.detailsComponents').controller('TaskDocumentsController', function($scope, entity, context, documents, tasks, AttachmentsService) {
   $scope.documents = documents;
-  var tasksNames = _.object(_.pluck(tasks, '_id'), _.pluck(tasks, 'title'));
-  $scope.documents.map(doc=>AttachmentsService.getAttachmentUser(doc.creator).then(user=>doc.attUser = user.name))
-  $scope.documents.forEach(function(a) {
-    a.taskName = tasksNames[a.issueId];
-  })
+  $scope.documents.map(doc=>AttachmentsService.getAttachmentUser(doc.creator).then(user=>doc.attUser = user.name));
+  let tasksNames = _.object(_.pluck(tasks, '_id'), _.pluck(tasks, 'title'));
+  $scope.documents.forEach((doc) => doc.taskName = tasksNames[doc.issueId])
 });
 angular.module('mean.icu.ui.detailsComponents').controller('TaskOfficeDocumentsController', function($scope, officeDocuments) {
   $scope.officeDocuments = officeDocuments.data;
@@ -141,10 +139,7 @@ angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentActivi
 });
 angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentDocumentsController', function($scope, entity, context, documents, AttachmentsService) {
   $scope.documents = documents;
-  $scope.documents.map(doc => AttachmentsService.getAttachmentUser(doc.creator)
-      .then(user =>
-          doc.attUser = user.name
-  ))
+  $scope.documents.map(doc => AttachmentsService.getAttachmentUser(doc.creator).then(user => doc.attUser = user.name ))
 });
 angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentTasksController', function($scope, entity, context, tasks, $state) {
     $scope.tasks = tasks;
