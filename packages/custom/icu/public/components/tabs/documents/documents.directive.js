@@ -86,10 +86,10 @@ angular.module('mean.icu.ui.tabs')
                                     console.log('[attachment]', [attachment]);
 
                                     result.attachments[result.attachments.length] = attachment;
-                                    AttachmentsService.getAttachmentUser(attachment.creator._id)
+                                    AttachmentsService.getAttachmentUser(result.creator._id)
                                         .then(user => {
-                                            attachment.attUser = user.name ;
-                                            $scope.documents.push(attachment);
+                                            result.attUser = user.name ;
+                                            $scope.documents.push(result);
                                         })
                                 });
                         }

@@ -370,20 +370,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.refreshVisibleItems = function() {
-        let typeOfService = $stateParams.id ? context.main : context.entityName ;
-        let serviceName = PermissionsService.serviceMap[typeOfService];
-
-        if ($stateParams.starred) {
-            return serviceName.getStarred()
-                .then(starred => {
-                    if($stateParams.starred){
-                        $scope.items = $scope.items.filter( entity => _.includes(getArrIds(starred), entity._id) );
-                    }
-                    $scope.visibleItems = removeDuplicates((filterResults($scope.items)))
-                })
-        } else {
-            $scope.visibleItems = removeDuplicates(filterResults($scope.items))
-        }
+        $scope.visibleItems = removeDuplicates(filterResults($scope.items))
     };
 
     $scope.checkForInactiveEntity = () => {
@@ -391,7 +378,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             let entityIndex = $scope.visibleItems.findIndex( item => item._id === $stateParams.id );
             entityIndex = entityIndex === -1 ? 0 : entityIndex;
 
-            $state.go($state.current.name,
+            $state.go($scope.detailsState || $state.current.name,
                 {
                     id: $scope.visibleItems[entityIndex]._id,
                     entity: context.entityName,
@@ -400,10 +387,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
                 })
         }
     };
-
-    function getArrIds(arr){
-        return arr.map( entity => entity._id )
-    }
 
     function setStatusFilterValue(value){
       let newActiveToggleField;
