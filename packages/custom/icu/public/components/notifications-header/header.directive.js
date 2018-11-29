@@ -165,7 +165,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     params.id = result._id;
 
                     $state.go(state, params, {
-                        reload: false
+                        reload: true
                     });
 
                 });
