@@ -88,15 +88,34 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     }
                 }
 
-                TasksService.create(task).then(function(result) {
-                    TasksService.data.push(result);
-                    TasksService.IsNew = true;
-                    params.id = result._id;
-                    $state.go(state, params, {
+                TasksService.create(task).then((result) => {
+                  TasksService.data.push(result);
+                  TasksService.IsNew = true;
+                  params.id = result._id;
+                  return result;
+                }).then(item => {
+                  let updated = false;
+                  if(params.entity === 'project') {
+                    ProjectsService.getById(params.entityId).then((parentEntity) => {
+                      let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
+                      Object.assign(item, parentParams);
+                      updated = !updated;
+                      return {item, updated};
+                    }).then( res => {
+                      if(res.updated)TasksService.update(res.item);
+                      return res.item;
+                    }).then(() => {
+                      $state.go(state, params, {
                         reload: true
+                      });
                     });
+                  } else {
+                    $state.go(state, params, {
+                      reload: true
+                    });
+                  }
                 });
-            };
+              };
 
             $scope.createProject = function() {
                 var project = {
