@@ -161,6 +161,8 @@ angular.module('mean.icu.ui.tabs')
                 let currentEntity = $state.current.name.split('.')[1];
                 let parent = currentEntity.slice(0, currentEntity.length-1);
 
+                if(parent === 'folder') parent = 'folders';
+
                 DocumentsService.delete(file._id, {parent: parent, id: $scope.entity._id})
                   .then(function (status) {
                     if (status === 200) {
