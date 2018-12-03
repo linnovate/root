@@ -4,7 +4,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     $scope.selectedItems = MultipleSelectService.getSelected();
 
     $scope.selectedArrays = MultipleSelectService.getSelectedEntityArrays();
-    $scope.selectedTypes = Object.keys($scope.selectedArrays);
+    $scope.selectedTypes = Object.keys($scope.selectedArrays).filter( arrayName => $scope.selectedArrays[arrayName].length );
 
     $scope.selected = {};
     $scope.activityType = activityType;
@@ -16,8 +16,8 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     UsersService.getMe().then( me => $scope.me = me);
 
 
-  $scope.statusMap = SettingServices.getStatusList();
-    $scope.statuses = $scope.statusMap[$scope.entityName.substring(0, $scope.entityName.length - 1)];
+    $scope.statusMap = SettingServices.getStatusList();
+    $scope.statuses = _.intersection(...$scope.selectedTypes.map( type => $scope.statusMap[type] ));
 
     $scope.select = function (selected) {
         $scope.selected = selected;
