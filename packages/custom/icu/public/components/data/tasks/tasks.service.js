@@ -142,7 +142,10 @@ angular.module('mean.icu.data.tasksservice', [])
                 return result.data;
             })
             .then(entity => {
-                return BoldedService.boldedUpdate(entity, 'tasks', 'update');
+                let bolded = _.pick(BoldedService.boldedUpdate(entity, 'tasks', 'update'), 'bolded');
+                Object.assign(entity, bolded);
+
+                return entity;
             });
     }
 

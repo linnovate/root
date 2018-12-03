@@ -175,7 +175,13 @@ angular.module('mean.icu.data.projectsservice', [])
           NotifyingService.notify('editionData');
 
           return result.data;
-        }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+        })
+        .then(entity => {
+          let bolded = _.pick(BoldedService.boldedUpdate(entity, 'projects', 'update'), 'bolded');
+          Object.assign(entity, bolded);
+
+          return entity;
+        });
     }
 
     function remove(id) {

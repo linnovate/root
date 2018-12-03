@@ -46,9 +46,9 @@ angular.module('mean.icu.data.inboxservice', [])
           case 'assign' :
             let currentUser = getUser(activity.current);
             let prevUser = getUser(activity.prev);
-            return currentUser
-              ? `${creator} ${$i18next('assigned')} ${ currentUser.username}`
-              : `${creator} ${$i18next('unassign')} ${ prevUser.username}`;
+            return currentUser ?
+              `${creator} ${$i18next('assigned')} ${ currentUser.username}`:
+              `${creator} ${$i18next('unassign')} ${ prevUser.username}`;
             break;
           case 'location' :
             return `${creator} ${$i18next('changedLocationTo')} ${activity.current}`;
