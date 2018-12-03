@@ -61,16 +61,22 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
             return result;
         }).then( item => {
             let updated = false;
-            if(parent && parent.type == 'project') {
-                let parentParams = _.pick(context.entity, ['watchers', 'permissions']);
-                Object.assign(item, parentParams);
-                updated = !updated;
+            if(parent && parent.type === 'project') {
+                ProjectsService.getById(context.entityId).then((parentEntity) => {
+                  let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
+                  Object.assign(item, parentParams);
+                  updated = !updated;
+                  return {item, updated};
+                  console.log('parent params');
+                  console.dir(parentEntity);
+                }).then( res => {
+                  if(res.updated)TasksService.update(res.item);
+                  return res.item;
+                } );
+
             }
-            return {item, updated};
-        }).then( res => {
-            if(res.updated)TasksService.update(res.item);
-            return res.item;
-        } )
+
+        })
     };
 
     $scope.loadMore = function (start, LIMIT, sort) {

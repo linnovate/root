@@ -417,6 +417,11 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, $rootSco
     if (context.entityName === 'discussion') {
       item.discussion = context.entityId;
     }
+    if (type === 'project') {
+      item.watchers = item.project.watchers;
+      item.permissions = item.project.permissions;
+    }
+
     TasksService.update(item).then(function(result) {
       if (type === 'project') {
           backupEntity = JSON.parse(JSON.stringify($scope.item));

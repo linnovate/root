@@ -9,14 +9,27 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   $scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents', 'tasks']);
 
   $scope.item = entity || context.entity;
+
   if(!$scope.item) {
-    $state.go('main.projects.byentity', {
-      entity: context.entityName,
-      entityId: context.entityId
-    });
-  }
-  else if($scope.item && ($state.current.name === 'main.projects.all.details' || $state.current.name === 'main.search.project' || $state.current.name === 'main.projects.byentity.details')) {
-    $state.go('.' + window.config.defaultTab);
+    switch($state.current.name) {
+      case 'main.tasks.byentity.tasks':
+        $state.go('.' + window.config.defaultTab);
+        break;
+      default:
+        $state.go('main.projects.byentity', {
+          entity: context.entityName,
+          entityId: context.entityId
+        });
+        break;
+    }
+  } else if($scope.item) {
+    switch($state.current.name) {
+      case 'main.projects.all.details':
+      case 'main.search.project':
+      case 'main.projects.byentity.details':
+        $state.go('.' + window.config.defaultTab);
+        break;
+    }
   }
 
   $scope.items = projects.data || projects;
