@@ -3,7 +3,7 @@
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, $stateParams,SettingServices, $filter, $location, $rootScope,
-        context, SearchService, EntityService, OfficesService, OfficeDocumentsService, FoldersService,
+        context, SearchService, EntityService, OfficesService, OfficeDocumentsService,
         NotifyingService, TasksService
     ){
         $scope.context = context;
@@ -128,43 +128,6 @@ directive('icuSidepane', function() {
           }
         };
 
-        $scope.createLists = function(){
-            return new Promise((resolve) => {
-                $scope.tasksList = [];
-                $scope.tasks.forEach( t => {if(t.title)$scope.tasksList.push(t)});
-
-                $scope.projectsList = [];
-                $scope.projects.forEach( p => {if(p.title)$scope.projectsList.push(p)});
-
-                $scope.officeDocumentsList = [];
-                $scope.officeDocuments.forEach( doc => {if(doc.title) $scope.officeDocumentsList.push(doc)});
-
-                resolve();
-            }).then(() => {
-                $scope.officesList = [];
-                return OfficesService.getAll(0, 0, 'created').then(offices => {
-                    $scope.offices = offices.data || offices;
-                    $scope.offices.forEach(function (office) {
-                        if (office.title)
-                            $scope.officesList.push(office);
-                    });
-                });
-            }).then(() => {
-                $scope.foldersList = [];
-                return FoldersService.getAll(0, 0, 'created').then(folders => {
-                    $scope.folders = folders.data || folders;
-                    $scope.folders.forEach(function (folder) {
-                        if (folder.title)
-                            $scope.foldersList.push(folder);
-                    });
-                });
-            }).then(() => {
-                if ($scope.officesList.length > 0) {
-                    $scope.officesList.office = $scope.officesList[0];
-                }
-            });
-        };
-
         $scope.items = [{
             name: 'search',
             icon: '/icu/assets/img/search-nav.svg',
@@ -216,6 +179,7 @@ directive('icuSidepane', function() {
     ];
 
     $scope.setActive = function(item){
+        NotifyingService.notify('editionData');
         return $scope.activeTab = item;
     };
 
