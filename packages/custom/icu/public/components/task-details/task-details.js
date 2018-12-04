@@ -417,7 +417,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, $rootSco
     if (context.entityName === 'discussion') {
       item.discussion = context.entityId;
     }
-    if (type === 'project') {
+    if (type === 'project' && item.project) {
       item.watchers = item.project.watchers;
       item.permissions = item.project.permissions;
     }
