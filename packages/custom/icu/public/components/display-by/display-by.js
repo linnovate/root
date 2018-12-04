@@ -3,11 +3,14 @@
 
 angular.module('mean.icu.ui.displayby', [])
 .directive('icuDisplayBy', function() {
-    function controller($scope, $state, context,SettingServices,SearchService,EntityService, $rootScope, $stateParams,$location, $window,NotifyingService,UsersService, TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService) {
+    function controller($scope, $state, context,SettingServices,SearchService,EntityService, $rootScope, $stateParams,$location, $window,NotifyingService,UsersService, TasksService,ProjectsService,DiscussionsService,OfficesService,TemplateDocsService, OfficeDocumentsService, FoldersService) {
         $scope.statusList = SettingServices.getStatusList();
         $scope.activeList = SettingServices.getActiveStatusList();
         $scope.archiveList = SettingServices.getNonActiveStatusList();
         $scope.userFilterList = SettingServices.getUserFilter();
+        $scope.tasksList = [];
+        $scope.projectsList = [];
+        $scope.officeDocumentsList = [];
 
         $rootScope.$on('changeStatus',function(){
           $scope.AllStatus = $scope.statusList[$scope.filteringData.issue];
@@ -127,19 +130,53 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.tmpStatus = [];
         }
 
+        $scope.createLists = function(){
+          return new Promise((resolve) => {
+            resolve();
+          }).then(() => {
+            $scope.officesList = [];
+            return OfficesService.getAll(0, 0, 'created').then(offices => {
+              $scope.offices = offices.data || offices;
+              $scope.offices.forEach(function (office) {
+                if (office.title)
+                  $scope.officesList.push(office);
+              });
+            });
+          }).then(() => {
+            $scope.foldersList = [];
+            return FoldersService.getAll(0, 0, 'created').then(folders => {
+              $scope.folders = folders.data || folders;
+              $scope.folders.forEach(function (folder) {
+                if (folder.title)
+                  $scope.foldersList.push(folder);
+              });
+            });
+          }).then(() => {
+            if ($scope.officesList.length > 0) {
+              $scope.officesList.office = $scope.officesList[0];
+            }
+          });
+        };
+
         $scope.typeClicked = false;
 
         NotifyingService.subscribe('editionData', function () {
             TasksService.getAll(0,2500,'created').then(function (data) {
                 $scope.tasks = data.data || data;
+                $scope.tasksList = [];
+                $scope.tasks.forEach( t => {if(t.title)$scope.tasksList.push(t)});
             });
 
             ProjectsService.getAll(0,2500,'created').then(function (data) {
                 $scope.projects = data.data || data;
+                $scope.projectsList = [];
+                $scope.projects.forEach( p => {if(p.title)$scope.projectsList.push(p)});
             });
 
             DiscussionsService.getAll(0,2500,'created').then(function (data) {
                 $scope.discussions = data.data || data;
+                $scope.discussionsList = [];
+                $scope.officeDocuments.forEach( doc => {if(doc.title) $scope.officeDocumentsList.push(doc)});
             });
 
             OfficeDocumentsService.getAll(0,2500,'created').then(function (data) {
@@ -160,6 +197,7 @@ angular.module('mean.icu.ui.displayby', [])
             $scope.createLists();
         }, $scope);
 
+        NotifyingService.notify('editionData');
         $scope.createLists();
 
         $scope.focus = false;
