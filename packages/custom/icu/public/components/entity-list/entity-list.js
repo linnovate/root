@@ -187,8 +187,12 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $scope.$parent.create(parent).then((result)=>{
             $scope.refreshVisibleItems();
             $timeout(()=> {
-              let els = $element.find('td.name');
-              els.length && els[els.length - 1].focus();
+              let lastElementIndex = $element.find('td.name').length - 1;
+              let currentElement = $element.find('td.name').get(lastElementIndex - 1);
+              let nextElement = $element.find('td.name').get(lastElementIndex);
+
+              let focusedElement = currentElement && nextElement;
+              focusedElement.focus();
             },100);
             $state.go($scope.detailsState + '.' + window.config.defaultTab, {
                 id: result._id,
@@ -300,15 +304,17 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
         if ($event.keyCode === 13) {
             $event.preventDefault();
+            let nextElementCreated = $scope.items[index + 1];
+            let nextElementInDOM = $element.find('td.name').get(index + 1);
 
-            if ($element.find('td.name')[index + 1] && $scope.items[index + 1]) {
+            if (nextElementCreated && nextElementInDOM) {
                 $state.go($scope.detailsState + '.' + window.config.defaultTab, {
                     id: $scope.items[index + 1]._id,
                     entity: context.entityName,
                     entityId: context.entityId,
                     nameFocused: true
                 });
-                $element.find('td.name')[index + 1].focus();
+                nextElementInDOM.focus();
             } else {
                 $scope.onCreate();
             }
