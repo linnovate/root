@@ -100,7 +100,8 @@ module.exports = {
     header:'hjghjghj', 
     img:"" 
   }],
-  defaultTab: 'activities', // one of 'activities', 'documents'
+  admins: (process.env.ROOT_ADMINS || '').split(/\s+/), // White space separated list of emails
+  defaultTab: process.env.DEFAULT_TAB || 'activities', // Possible values: `activities`, `documents`
   ScheduledMailSendWeekly: '59 1 * * 0',
   ScheduledMailSendDaly: '59 1 * * 0-5',
   activeStatus: require('../activeStatusSettings')
