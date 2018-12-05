@@ -67,8 +67,6 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
                   Object.assign(item, parentParams);
                   updated = !updated;
                   return {item, updated};
-                  console.log('parent params');
-                  console.dir(parentEntity);
                 }).then( res => {
                   if(res.updated)TasksService.update(res.item);
                   return res.item;
