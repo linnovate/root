@@ -264,7 +264,11 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, $rootSco
   // ==================================================== Category ==================================================== //
 
   $scope.onTaskRelation = function(value) {
-    $scope.item.discussion = value;
+    if(value) {
+      $scope.item.discussion = value;
+    } else {
+      $scope.item.discussion = {};
+    }
     $scope.update($scope.item, 'discussion');
   };
 
