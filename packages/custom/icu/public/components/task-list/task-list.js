@@ -62,7 +62,7 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
         }).then( item => {
             let updated = false;
             if(parent && parent.type === 'project') {
-                ProjectsService.getById(context.entityId).then((parentEntity) => {
+                return ProjectsService.getById(context.entityId).then((parentEntity) => {
                   let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
                   Object.assign(item, parentParams);
                   updated = !updated;
@@ -75,7 +75,7 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
                 } );
 
             }
-
+            return item;
         })
     };
 
