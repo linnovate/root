@@ -1025,7 +1025,7 @@ angular.module('mean.icu').config([
                         //        $stateParams.limit = ProjectsService.data.length;
                         //    }
                             return ProjectsService.getAll($stateParams.start,
-                                $stateParams.limit,
+                                getIdFromQuery() || $stateParams.limit,
                                 $stateParams.sort);
                         }
                     }
@@ -1137,7 +1137,7 @@ angular.module('mean.icu').config([
                         //        }
                                 localStorage.removeItem("type");
                                 return OfficeDocumentsService.getAll($stateParams.start,
-                                    $stateParams.limit,
+                                    getIdFromQuery() || $stateParams.limit,
                                     $stateParams.sort,
                                     $stateParams.status);
                             }
@@ -1210,7 +1210,7 @@ angular.module('mean.icu').config([
                       //          $stateParams.limit = DiscussionsService.data.length;
                        //     }
                             return DiscussionsService.getAll($stateParams.start,
-                                $stateParams.limit,
+                                getIdFromQuery() || $stateParams.limit,
                                 $stateParams.sort);
                         }
                     }
