@@ -29,7 +29,7 @@ angular.module('mean.icu').config([
                     return service[getFn](
                         $stateParams.entityId,
                         $stateParams.start,
-                        BIGLIMIT,
+                        LIMIT,
                         $stateParams.sort,
                         $stateParams.starred);
                 }
