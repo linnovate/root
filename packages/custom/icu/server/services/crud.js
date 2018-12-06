@@ -146,11 +146,29 @@ module.exports = function(entityName, options) {
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
-        query.find(options.conditions)
-          .sort(pagination.sort)
-          .skip(pagination.start)
-          .limit(pagination.limit);
+        if(typeof pagination.limit === 'number') {
+          query.find(options.conditions)
+            .sort(pagination.sort)
+            .skip(pagination.start)
+            .limit(pagination.limit);
+        } else {
+          // finding all elements from "start" to "ID" of element
+          let start = query.find(options.conditions)
+            .sort({_id: 1})
+            .limit(1)
+            .toArray()[0]._id;
+          let end = query.find({ _id: pagination.limit })
+            .sort({_id: 1})
+            .limit(1)
+            .toArray()[0]._id;
 
+          query.find({
+            "_id": {
+              $gte: start,
+              $lte: end
+            }
+          })
+        }
         query.populate(options.includes);
         /*query.hint({
           _id: 1

@@ -62,13 +62,25 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     var isScrolled = false;
 
     $scope.isCurrentState = function(id) {
-        var isActive = ($state.current.name.indexOf(`main.${$scope.$parent.entityName}.byparent.details`) === 0 || $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity.details`) === 0 || $state.current.name.indexOf(`main.${$scope.$parent.entityName}.all.details`) === 0) && $state.params.id === id;
+        let currentState = postfix => $state.current.name.indexOf(`main.${$scope.$parent.entityName}${postfix}`) === 0;
+        let isActive = (
+          currentState('.byparent.details') || currentState('.byentity.details') ||
+          currentState('.all.details') && $state.params.id === id
+        );
         if (isActive && !isScrolled) {
-            //$uiViewScroll($element.find('[data-id="' + $stateParams.id + '"]'));
             isScrolled = true;
         }
+        if(isActive)$scope.seenSelectedItem = true;
         return isActive;
     };
+
+    $scope.$watch('seenSelectedItem', (newValue) => {
+      if(newValue) {
+        $timeout(() => {
+          document.querySelector('tr.active').scrollIntoView({ behavior: 'smooth' });
+        }, 0);
+      }
+    });
 
     // ============================================================= //
     // ========================== filters ========================== //

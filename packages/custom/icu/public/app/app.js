@@ -148,6 +148,13 @@ angular.module('mean.icu').config([
             };
         }
 
+        function getIdFromQuery(){
+          let urlParams = window.location.pathname.split('/');
+          let index = urlParams.findIndex( element => element === 'all') + 1;
+          let id = urlParams[index];
+          return id.length === 24 ? id : null;
+        }
+
         function getProjectDetailsState(urlPrefix) {
             if (!urlPrefix) {
                 urlPrefix = '';
@@ -833,7 +840,7 @@ angular.module('mean.icu').config([
                             //    $stateParams.limit = TasksService.data.length;
                            // }
                             return TasksService.getAll($stateParams.start,
-                                $stateParams.limit,
+                                getIdFromQuery() || $stateParams.limit,
                                 $stateParams.sort);
                         }
                     }
