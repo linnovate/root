@@ -5,6 +5,8 @@
  */
 var jsonfile = require('jsonfile');
 var file = 'url/data.json';
+var _ = require('lodash');
+
 
 
 var mongoose = require('mongoose'),
@@ -18,7 +20,9 @@ var mongoose = require('mongoose'),
   config = require('meanio').loadConfig(),
   circleSettings = require(process.cwd() + '/config/circleSettings') || {},
   circles = require('circles-npm')(null, config.circles.uri, circleSettings),
-  uuidv1 = require('uuid/v1');
+  uuidv1 = require('uuid/v1'),
+  ADMINS = process.env.ROOT_ADMINS;
+
 
 
 exports.authCallbackSaml = function(req, res) {
@@ -164,6 +168,9 @@ exports.getJwt = function(req, res) {
  * Send User
  */
 exports.me = function(req, res) {
+  //adding admin attribute to have client-side permissions to edit
+  if(_.includes(req.user.email, ADMINS)){ req.user.isAdmin = true }
+
   res.json(req.user || null);
 };
 

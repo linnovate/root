@@ -25,15 +25,19 @@ angular.module('mean.icu.data.usersservice', [])
             deferred.resolve(me);
         } else {
             $http.get('/api/users/me').then(function(result) {
-            	WarningsService.setWarning(result.headers().warning);
-                if (!result.data) {
-                    deferred.reject(null);
-                } else {
-                    getById(result.data._id).then(function(user) {
-                        me = user;
-                        deferred.resolve(me);
-                    });
-                }
+                WarningsService.setWarning(result.headers().warning);
+                    if (!result.data) {
+                        deferred.reject(null);
+                    } else {
+                        me = result.data;
+
+                        //TODO I really don't know why we are requesting user once again
+                        // after we get him by '/api/users/me' route, maybe remove
+                        getById(result.data._id).then(function(user) {
+                            Object.assign(me, user);
+                            deferred.resolve(me);
+                        });
+                  }
 
             }, function() {
                 deferred.reject(null);

@@ -44,6 +44,7 @@ var OfficeDocumentsArchiveModel = mongoose.model('officeDocument_archive');
 var TemplateDocsModel = require('../models/templateDoc.js');
 var TemplateDocsArchiveModel = mongoose.model('templateDoc_archive');
 
+let ADMINS = process.env.ROOT_ADMINS;
 
 var entityNameMap = {
   'tasks': {
@@ -113,7 +114,7 @@ var defaults = {
 module.exports = function(entityName, options) {
   var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders', 'officeDocuments', 'templateDocs'];
   if (findByUser.indexOf(entityName) > -1)
-    var currentUser = true;
+    var enabledOnlyForRelatedUsers = true;
 
   var Model = entityNameMap[entityName].mainModel;
   var ArchiveModel = entityNameMap[entityName].archiveModel;
@@ -124,7 +125,14 @@ module.exports = function(entityName, options) {
 
   options = _.defaults(options, defaults);
 
+  function isAdmin(user){
+    if(_.includes(user.email, ADMINS)){
+      user.isAdmin = true;
+    }
+  }
+
   function all(pagination, user, acl) {
+    isAdmin(user);
     var deffered = q.defer();
 
     var countQuery;
@@ -136,7 +144,7 @@ module.exports = function(entityName, options) {
     }else{
       //options.conditions = {};
     }
-    if (currentUser) {
+    if (enabledOnlyForRelatedUsers && !user.isAdmin) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
       countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);
     } else {
@@ -178,8 +186,9 @@ module.exports = function(entityName, options) {
 
 
   function read(id, user, acl, query1) {
+    isAdmin(user);
     var query;
-    if(currentUser) {
+    if(enabledOnlyForRelatedUsers && !user.isAdmin) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
     } else {
       query = Model.find();
@@ -215,10 +224,11 @@ module.exports = function(entityName, options) {
 
   function create(entity, user, acl) {
     console.log("CRUD CREATE") ;
+    isAdmin(user);
 
     //    check permsArray changes
     let allowed1 = permissions.syncPermsArray(user,entity) ;
-    if(!allowed1) {
+    if(!allowed1 || !user.isAdmin) {
       // console.log("CRUD NOT ALLOWED") ;
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
     }
@@ -282,6 +292,7 @@ module.exports = function(entityName, options) {
 
 
   function update(oldE, newE, user, acl) {
+    isAdmin(user);
 
 //    check permsArray changes
     console.log("CRUD UPDATE:") ;
