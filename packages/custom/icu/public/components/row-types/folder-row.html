@@ -1,4 +1,4 @@
-<td class="id">{{ data.folder._id ? data.index + 1 : ''}}</td>
+<td class="id" ng-bind-html="data.folder._id ? data.index + 1 : ''"></td>
 <td class="name"
     ng-attr-colspan="{{data.folder._id ? undefined : 5}}"
     title="{{data.folder.title}}"

@@ -9,8 +9,8 @@
                         </a>
                 </button>
                 <div class="icon {{attType}}"></div>
-                <span class="txt attName">{{attName}} | </span><span class="txt attSize">{{attSize | bytes}}</span><br />
-                <span class="txt">Uploaded by <span class="txt attCreator">{{attCreator}}</span>, </span><span class="txt attCreated">{{attCreated | date : 'h:mma MMM d, yyyy'}}</span>
+                <span class="txt attName" ng-bind-html="(attName) + ' | '"></span><span class="txt attSize" ng-bind-html="attSize | bytes"></span><br />
+                <span class="txt">Uploaded by <span class="txt attCreator" ng-bind-html="attCreator"></span>, </span><span class="txt attCreated" ng-bind-html="attCreated | date : 'h:mma MMM d, yyyy'"></span>
         </div>
 
     <h3 class="modal-title" ng-if='true'>

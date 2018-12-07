@@ -16,9 +16,7 @@
 
   <detail-category placeholder="'selectOffice' | i18next" value="item.office" items="offices" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent" ></detail-category>
 
-  <div class="parent" ng-if="templateDoc.parent">
-      {{currentContext.entity.title}}
-  </div>
+  <div class="parent" ng-if="templateDoc.parent" ng-bind-html="currentContext.entity.title"></div>
 
   <div ng-if="!disabled && havePermissions('description')">
     <div class="detail-title">

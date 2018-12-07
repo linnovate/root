@@ -1,4 +1,4 @@
-<td ng-hide="item.visible || multipleSelectMode" class="id">{{$index + 1}}</td>
+<td ng-hide="item.visible || multipleSelectMode" class="id" ng-bind-html="$index + 1"></td>
 <td ng-show="item.visible || multipleSelectMode" class="tick">
     <input type="checkbox"
            ng-change="multipleSelectRefreshSelected(item)"

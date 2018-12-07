@@ -15,10 +15,10 @@
             <div icu-avatar user="activity.creator"></div>
             <div class="update-content">
                 <div class="update-info">
-                    <div class="update-action">{{getActivityDescription(activity)}}</div>
-                    <div class="update-date">{{formatDate(activity.created)}}</div>
+                    <div class="update-action" ng-bind-html="getActivityDescription(activity)"></div>
+                    <div class="update-date" ng-bind-html="formatDate(activity.created)"></div>
                 </div>
-                <div class="update-data">{{activity.status}}</div>
+                <div class="update-data" ng-bind-html="activity.status"></div>
             </div>
         </div>
     </td>

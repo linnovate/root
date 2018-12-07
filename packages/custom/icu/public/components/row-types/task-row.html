@@ -1,4 +1,4 @@
-<td class="id">{{ data.task._id ? data.index + 1 : ''}}</td>
+<td class="id" ng-bind-html="data.task._id ? data.index + 1 : ''"></td>
 <td class="name"
     title="{{data.task.title}}"
     ng-attr-colspan="{{data.task._id ? undefined : 5}}"
@@ -24,9 +24,7 @@
 <td class="status col-sm-2"  ng-class="data.task.status">
     {{ (data.task._id ? data.task.status  : '') | i18next }}
 </td>
-<td class="due">
-    {{ (data.task._id ? data.task.due  : '') | date: 'dd.MM.yyyy' }}
-</td>
+<td class="due" ng-bind-html="(data.task._id ? data.task.due  : '') | date: 'dd.MM.yyyy'"></td>
 <td class="arrow">
     <div ng-if="data.drawArrow && data.task._id" class="row-arrow"></div>
 </td>

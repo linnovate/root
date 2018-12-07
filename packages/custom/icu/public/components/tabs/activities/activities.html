@@ -6,9 +6,9 @@
             <div class="activity-content">
                 <div class="title">
                     <div class="text">
-                        <span class="user-name">{{activity.creator.name}} {{activity.creator.lastname}}</span>
+                        <span class="user-name" ng-bind-html="activity.creator.name"></span>
                     </div>
-                    <div class="activity-date">{{activity.date | date:"MM/dd/yyyy ' | ' h:mma"}}</div>
+                    <div class="activity-date" ng-bind-html="activity.date | date:'MM/dd/yyyy' + ' | ' + 'h:mma'"></div>
                 </div>
                 <div class="description" ng-bind-html="getActivityDescription(activity)"></div>
                 <div id="UpdatetLine" data-ng-repeat="attachment in activity.attachments" class="attachment">
@@ -56,7 +56,7 @@
                             </button> -->
                         </div>
                     </div>
-                    <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
+                    <span class="name" title="{{attachment.name}}" ng-bind-html="attachment.name"></span>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
                         ngf-multiple="true"></button>
 
                 <span data-ng-repeat="attachment in attachments">
-                    <span class="name" title="{{attachment.name}}">{{attachment.name}}</span>
+                    <span class="name" title="{{attachment.name}}" ng-bind-html="attachment.name"></span>
                 </span>
 
                 <button type="submit" class="save" >{{ 'add' | i18next }}</button>

@@ -16,7 +16,7 @@
                      aria-expanded="false"></div>
                     <span class="sr-only">Toggle Dropdown</span>
                 <div class="dropdown-menu" ng-hide="member.selfTest">
-                    <h6 class="dropdown-header name">{{member.username}}</h6>
+                    <h6 class="dropdown-header name" ng-bind-html="member.username"></h6>
                     <h6 class="dropdown-header status">{{userPermissionStatus(member) | i18next}}</h6>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" ng-click="setEditor(member)">{{'promoteToEditor' | i18next}}</a>
@@ -37,8 +37,7 @@
 
     <div class="new-member-input" ng-if="showSelect">
         <ui-select ng-model="member" theme="bootstrap" on-select="addMember(member)">
-            <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}" autofocus>
-                {{$select.selected.name}}
+            <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}" ng-bind-html="{$select.selected.name}" autofocus>
             </ui-select-match>
             <ui-select-choices class="scroll" repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
                 <!--<div ng-bind-html="user.job | highlight: $select.search"></div>-->
@@ -47,7 +46,7 @@
                      user="user"
                      entity="entity"
                      ng-mouseover="getGroupDetails(user)"></div>
-                <span ng-mouseover="getGroupDetails(user)">{{user.job}}</span>
+                <span ng-mouseover="getGroupDetails(user)" ng-bind-html="user.job"></span>
                 <span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>
             </ui-select-choices>
         </ui-select>

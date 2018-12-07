@@ -16,10 +16,10 @@
                                         ng-mouseover="showButton = true"
                                         ng-mouseleave="showButton = false">
               <td>{{$index + 1}}</td>
-              <td><p class="full-name">{{signature.fullName}}</p></td>
-              <td><p class="full-name">{{signature.rank}}</p></td>
-              <td><p class="full-name">{{signature.role}}</p></td>
-              <td><p class="full-name">{{signature.unit}}</p></td>
+              <td><p class="full-name" ng-bind-html="signature.fullName"></p></td>
+              <td><p class="full-name" ng-bind-html="signature.rank"></p></td>
+              <td><p class="full-name" ng-bind-html="signature.role"></p></td>
+              <td><p class="full-name" ng-bind-html="signature.unit"></p></td>
              <td class="deleteSignature"> <button class="deleteSignature-button" ng-show="showButton" ng-click="delete(signature)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
             </tr>
 

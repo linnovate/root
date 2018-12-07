@@ -1,4 +1,4 @@
-<td ng-hide="data.result.visible || multipleSelectMode" class="id">{{data.index + 1}}</td>
+<td ng-hide="data.result.visible || multipleSelectMode" class="id" ng-bind-html="data.index + 1"></td>
 <td ng-show="data.result.visible || multipleSelectMode" class="tick">
   <input type="checkbox"
          ng-model="data.result.selected"

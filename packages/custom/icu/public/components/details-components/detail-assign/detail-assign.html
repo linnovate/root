@@ -11,7 +11,7 @@
       </ui-select-match>
       <ui-select-choices repeat="user._id as user in list | filter: { job: $select.search } | filterByFrequentUsers: me">
         <div icu-avatar user="user"></div>
-        <span class="summary-content">{{user.job}}</span>
+        <span class="summary-content" ng-bind-html="user.job"></span>
       </ui-select-choices>
     </ui-select>
   </div>

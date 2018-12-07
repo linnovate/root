@@ -1,6 +1,4 @@
-<td class="id">
-    {{ data.officeDocument._id ? data.index + 1 : ''}}
-</td>
+<td class="id" ng-bind-html="data.officeDocument._id ? data.index + 1 : ''"></td>
 
 <td class="name"
     ng-click="!data.officeDocument._id && data.create()"

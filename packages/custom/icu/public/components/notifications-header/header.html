@@ -1,7 +1,7 @@
 <header class="header">
     <div class="notifications">
         <div class="indicator">
-            <span ng-show="data.notificationsToWatch" class="count">{{data.notificationsToWatch}}</span>
+            <span ng-show="data.notificationsToWatch" class="count" ng-bind-html="data.notificationsToWatch"></span>
         </div>
     </div>
     <div class="last-notification" ng-click="triggerDropdown()">
@@ -23,7 +23,7 @@
     <div class="all-notifications" ng-if="allNotifications">
         <div class="notification" ng-repeat="notification in data.notifications" ng-click="GoToNotification(notification)">
             <div ng-class="{'notification-NotWatched': !notification.IsWatched}" class="notification-content">
-                <div class="notification-time">{{notification.time | when}}</div>
+                <div class="notification-time" ng-bind-html="notification.time | when"></div>
                 <span ng-repeat="val in details[notification.type]">
                     <span class="text" ng-switch="val.type">
                         <span ng-switch-when="object" class="{{val.klass}}">{{notification[val.value] | i18next}}</span>
