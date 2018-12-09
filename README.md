@@ -3,8 +3,9 @@
 ## Install
 
 #### Setup
+Development  
+Make sure use the node version of your local node version.  
 
-Development
 ```bash
 npm i
 npm run build
