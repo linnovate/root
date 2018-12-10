@@ -166,7 +166,7 @@ exports.getJwt = function(req, res) {
 exports.me = function(req, res) {
   //adding admin attribute to have client-side permissions to edit
   let admins = config.admins.split(/\s/);
-  if(admins.includes(req.user.email)) { req.user.isAdmin = true }
+  req.user.isAdmin = admins.includes(req.user.email)
 
   res.json(req.user || null);
 };
