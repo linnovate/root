@@ -46,7 +46,7 @@ var TemplateDocsArchiveModel = mongoose.model('templateDoc_archive');
 
 let mean = require('meanio');
 let config = mean.loadConfig();
-let ADMINS = getAdminsEmails(config.admins);
+let admins = config.admins.split(/\s/);
 
 var entityNameMap = {
   'tasks': {
@@ -113,14 +113,6 @@ var defaults = {
   conditions: {}
 };
 
-function getAdminsEmails(configEmails){
-  let emails = [];
-  for(let prop in configEmails){
-    emails.push(configEmails[prop]);
-  }
-  return emails;
-}
-
 module.exports = function(entityName, options) {
   var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders', 'officeDocuments', 'templateDocs'];
   if (findByUser.indexOf(entityName) > -1)
@@ -136,7 +128,7 @@ module.exports = function(entityName, options) {
   options = _.defaults(options, defaults);
 
   function isAdmin(user){
-    if(_.includes(user.email, ADMINS)){
+    if(admins.includes(user.email)){
       user.isAdmin = true;
     }
   }

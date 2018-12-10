@@ -101,7 +101,7 @@ module.exports = {
     header:'hjghjghj',
     img:""
   }],
-  admins: (process.env.ROOT_ADMINS || '').split(/\s+/), // White space separated list of emails
+  admins: process.env.ROOT_ADMINS || '', // White space separated list of emails
   defaultTab: process.env.DEFAULT_TAB || 'activities', // Possible values: `activities`, `documents`
   ScheduledMailSendWeekly: '59 1 * * 0',
   ScheduledMailSendDaly: '59 1 * * 0-5',

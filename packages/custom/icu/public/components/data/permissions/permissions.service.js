@@ -249,15 +249,6 @@ angular.module('mean.icu.data.permissionsservice', [])
 
             haveAnyPerms(entity, member);
 
-            // let qs = querystring.encode({
-            //     user: me,
-            //     type: type,
-            // });
-            //
-            // if (qs.length) {
-            //     qs = '?' + qs;
-            // }
-
             // until permissions backend route isn't complete
             let havePerm = false;
 
