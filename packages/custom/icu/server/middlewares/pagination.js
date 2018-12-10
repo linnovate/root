@@ -24,7 +24,7 @@ function parseParams(req, res, next) {
     type: type,
     sort: req.query.sort ? req.query.sort : 'created',
     start: req.query.start ? +req.query.start : undefined,
-    limit: typeof +req.query.limit === 'number' ? +req.query.limit : req.query.limit
+    limit: isNaN(+req.query.limit) ? req.query.limit || undefined : +req.query.limit
   };
 if (req.query.status){
   req.locals.data.pagination.status = req.query.status;

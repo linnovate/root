@@ -9,8 +9,8 @@ angular.module('mean.icu.ui.notificationsheader', [])
         ProjectsService,
         DiscussionsService,
         UsersService,
-        OfficeDocumentsService,
-        $document) {
+        OfficeDocumentsService
+    ){
         function controller($scope) {
 
             UsersService.getMe().then(me => {
@@ -91,6 +91,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 TasksService.create(task).then((result) => {
                   TasksService.data.push(result);
                   TasksService.IsNew = true;
+                  $stateParams.id = result._id;
                   params.id = result._id;
                   return result;
                 }).then(item => {
