@@ -44,7 +44,9 @@ var OfficeDocumentsArchiveModel = mongoose.model('officeDocument_archive');
 var TemplateDocsModel = require('../models/templateDoc.js');
 var TemplateDocsArchiveModel = mongoose.model('templateDoc_archive');
 
-let ADMINS = process.env.ROOT_ADMINS;
+let mean = require('meanio');
+let config = mean.loadConfig();
+let ADMINS = getAdminsEmails(config.admins);
 
 var entityNameMap = {
   'tasks': {
@@ -110,6 +112,14 @@ var defaults = {
   includes: '',
   conditions: {}
 };
+
+function getAdminsEmails(configEmails){
+  let emails = [];
+  for(let prop in configEmails){
+    emails.push(configEmails[prop]);
+  }
+  return emails;
+}
 
 module.exports = function(entityName, options) {
   var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders', 'officeDocuments', 'templateDocs'];
@@ -228,7 +238,7 @@ module.exports = function(entityName, options) {
 
     //    check permsArray changes
     let allowed1 = permissions.syncPermsArray(user,entity) ;
-    if(!allowed1 || !user.isAdmin) {
+    if(!allowed1 && !user.isAdmin) {
       // console.log("CRUD NOT ALLOWED") ;
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
     }
@@ -292,7 +302,7 @@ module.exports = function(entityName, options) {
 
 
   function update(oldE, newE, user, acl) {
-    isAdmin(user);
+    isAdmin(user.user);
 
 //    check permsArray changes
     console.log("CRUD UPDATE:") ;
@@ -304,7 +314,7 @@ module.exports = function(entityName, options) {
     }
 
     var allowed2 = permissions.updateContent(user,oldE, newE) ;
-    if(!allowed2) {
+    if(!allowed2 && !user.user.isAdmin) {
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateContent) ;
     }
 

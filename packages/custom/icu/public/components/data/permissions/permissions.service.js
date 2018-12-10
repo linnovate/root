@@ -240,12 +240,13 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function permissions(entity, type, user) {
-            if(user.isAdmin)return true;
-
             if(Array.isArray(entity)){
                 entity = entity[0];
             }
+
             let member = user || me;
+            if(member === me && me.isAdmin)return true;
+
             haveAnyPerms(entity, member);
 
             // let qs = querystring.encode({
