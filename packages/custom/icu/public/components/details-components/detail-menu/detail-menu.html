@@ -6,7 +6,7 @@
     <li ng-repeat="item in items" ng-if="item.display">
       <a href="#" ng-click="item.action()">
         <i class="fa fa-2x {{item.fa || item.icon}}"></i>
-        <span>{{ item.label | i18next }}</span>
+        <span ng-bind-html="item.label | i18next"></span>
       </a>
     </li>
   </ul>

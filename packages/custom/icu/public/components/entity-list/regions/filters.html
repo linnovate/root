@@ -9,10 +9,10 @@
                            on-select="filterActive();loadMore()"
                            search-enabled="false">
                     <ui-select-match>
-                        <button class="tasks active-status"><span class="bold">{{'status' | i18next}}: </span>{{$select.selected.title | i18next }}</button>
+                        <button class="tasks active-status"><span class="bold" ng-bind-html="('status' | i18next) + ': '"></span><span ng-bind-html="$select.selected.title | i18next"></span></button>
                     </ui-select-match>
                     <ui-select-choices class="sorting" repeat="field.value as field in activeToggleList">
-                        {{field.title | i18next}}
+                        <span ng-bind-html="field.title | i18next"></span>
                     </ui-select-choices>
                 </ui-select>
             </div>
@@ -41,8 +41,7 @@
                     <ui-select-match >  <button class="excel"><i class="fa fa-file-excel-o"></i></button> </ui-select-match>
                     <ui-select-choices class="sorting" repeat="office in excel.officeList">
                       <div  icu-open-modal="export-excel-by-date" entity-name="export-excel-by-date" show-modal="true" modal-name="export-excel-by-date" data="office"
-                      class="DocumentIconsLine att officeSelect">
-                      {{office.title}}
+                      class="DocumentIconsLine att officeSelect" ng-bind-html="office.title">
                     </div>
                     </ui-select-choices>
                   </ui-select>
@@ -56,10 +55,10 @@
                        on-select="changeOrder();loadMore()"
                        search-enabled="false">
                 <ui-select-match>
-                    <button class="button-right-part tasks">{{$select.selected.title | i18next}}</button>
+                    <button class="button-right-part tasks" ng-bind-html="$select.selected.title | i18next"></button>
                 </ui-select-match>
                 <ui-select-choices class="sorting" repeat="field.value as field in sortingList | filter: $select.search">
-                    {{field.title | i18next}}
+                    <span ng-bind-html="field.title | i18next"></span>
                 </ui-select-choices>
             </ui-select>
         </div>

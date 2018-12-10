@@ -2,8 +2,8 @@
     <div class="permission">
         <div class="perIcon">
         </div>
-        <div class="perTitle">{{ 'perTitle' | i18next }}</div>
-        <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+        <div class="perTitle" ng-bind-html="'perTitle' | i18next"></div>
+        <div class="perMsg" ng-bind-html="'perMsg' | i18next"></div>
     </div>
     <div class="back"  ng-click="goBack()">< Go back</div>
 </section>

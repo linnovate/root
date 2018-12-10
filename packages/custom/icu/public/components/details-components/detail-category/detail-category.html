@@ -13,7 +13,7 @@
   <ui-select-choices repeat="item in items | filter:$select.search | filterRecycled">
     <div class="detail-category-row" ng-show="item.title" ng-class="{ 'create new': item.class}">
       <div ng-bind-html="item.title | searchfilter:$select.search" class="detail-category-row-title"></div>
-      <div ng-click="create()" ng-show="item.class && create" class="detail-category-create-btn">{{ 'createNew' | i18next }}</div>
+      <div ng-click="create()" ng-show="item.class && create" class="detail-category-create-btn" ng-bind-html="'createNew' | i18next"></div>
     </div>
   </ui-select-choices>
 

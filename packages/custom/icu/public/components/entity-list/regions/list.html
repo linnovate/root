@@ -18,7 +18,8 @@
                     ng-attr-colspan="2"
                     tabindex="0"
                     ng-model="newItem"
-                >{{'Create New Item' | i18next}}</td>
+                    ng-bind-html="'Create New Item' | i18next"
+                ></td>
             </tr>
         </tbody>
     </table>
@@ -26,15 +27,11 @@
 <div class="bottomBar" style="height: 10px;"></div>
 <div class="list-table-print">
     <div class="header">
-        <div>{{'name' | i18next}}</div>
-        <div>{{'status' | i18next}}</div>
+        <div ng-bind-html="'name' | i18next"></div>
+        <div ng-bind-html="'status' | i18next"></div>
     </div>
     <div data-ng-repeat="item in visibleItems" class="task-row">
-        <div>
-            {{item.title}}
-        </div>
-        <div class="status" ng-class="item.status">
-            {{item.status | i18next }}
-        </div>
+        <div ng-bind-html="item.title"></div>
+        <div class="status" ng-class="item.status" ng-bind-html="item.status | i18next"></div>
     </div>
 </div>

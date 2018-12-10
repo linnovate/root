@@ -4,5 +4,5 @@
         ng-class="cornerState"
         ng-click="notifyChangingState()"
     ></div>
-    <span>{{selectedItems.length}} {{ 'itemsSelected' | i18next }}</span>
+    <span ng-bind-html="selectedItems.length + ' ' + ('itemsSelected' | i18next)"></span>
 </div>

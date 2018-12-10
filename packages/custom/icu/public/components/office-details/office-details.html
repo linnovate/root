@@ -4,8 +4,8 @@
 
   <div class="permission" ng-if="item && !item._id && !permsToSee">
     <div class="perIcon"></div>
-    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
-    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+    <div class="perTitle" ng-bind-html="'perTitle' | i18next"></div>
+    <div class="perMsg" ng-bind-html="'perMsg' | i18next"></div>
   </div>
 
   <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
@@ -74,7 +74,7 @@
 
   <div class="detail-fields">
 
-    <label>{{ 'unit' | i18next }}</label>
+    <label ng-bind-html="'unit' | i18next"></label>
     <div class="text officeDetails"
      contenteditable="true"
      tabindex="2"
@@ -83,7 +83,7 @@
      options="{{editorOptions}}"
      medium-editor></div>
 
-    <label>{{ 'tel' | i18next }}</label>
+    <label ng-bind-html="'tel' | i18next"></label>
     <div class="text officeDetails"
       contenteditable="true"
       tabindex="2"
@@ -92,7 +92,7 @@
       options="{{editorOptions}}"
       medium-editor></div>
 
-      <label>{{ 'internalTel' | i18next }}</label>
+      <label ng-bind-html="'internalTel' | i18next"></label>
       <div class="text officeDetails"
         contenteditable="true"
         tabindex="2"

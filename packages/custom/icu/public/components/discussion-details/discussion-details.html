@@ -4,8 +4,8 @@
 
   <div class="permission" ng-if="item && !item._id && !permsToSee">
     <div class="perIcon"></div>
-    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
-    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+    <div class="perTitle" ng-bind-html="'perTitle' | i18next"></div>
+    <div class="perMsg" ng-bind-html="'perMsg' | i18next"></div>
   </div>
 
   <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
@@ -17,7 +17,7 @@
     <discussion-due item="item" on-change="onDateDue"></discussion-due>
 
     <div class="location">
-       <div class="placeholder" ng-if="!item.location">{{ 'location' | i18next }}</div>
+       <div class="placeholder" ng-if="!item.location" ng-bind-html="'location' | i18next"></div>
        <input type="text"  ng-model="item.location" ng-change="updateLocation(item)">
     </div>
 
@@ -30,12 +30,8 @@
   </div>
 
   <div class="detail-buttons" ng-if="haveEditiorsPermissions('detail-buttons')">
-    <button class="detail-button approval" ng-click="updateStatusForApproval()" ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled">
-      {{'updateStatusForApproval' | i18next }}
-    </button>
-    <button class="detail-button" ng-click="statusesActionsMap[item.status].method(item)" ng-disabled="disableButton()" ng-if="statusesActionsMap[item.status]">
-      {{statusesActionsMap[item.status].label | i18next}}
-    </button>
+    <button class="detail-button approval" ng-click="updateStatusForApproval()" ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled" ng-bind-html="'updateStatusForApproval' | i18next"></button>
+    <button class="detail-button" ng-click="statusesActionsMap[item.status].method(item)" ng-disabled="disableButton()" ng-if="statusesActionsMap[item.status]" ng-bind-html="statusesActionsMap[item.status].label | i18next"></button>
   </div>
 
   <div ng-if="!disabled && havePermissions('description')">

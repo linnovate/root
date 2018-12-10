@@ -1,6 +1,6 @@
 <div class="detail-tabs">
   <div class="detail-tabs-switcher">
-    <button ng-repeat="tab in tabs" class="tab three" ng-click="onClickTab(tab)" ng-class="{'active': tab == selection}">{{ tab | i18next }}</button>
+    <button ng-repeat="tab in tabs" class="tab three" ng-click="onClickTab(tab)" ng-class="{'active': tab == selection}" ng-bind-html="tab | i18next"></button>
   </div>
 </div>
 

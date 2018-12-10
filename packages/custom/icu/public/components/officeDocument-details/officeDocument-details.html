@@ -3,8 +3,8 @@
 <div class="entity-details officeDocument-details" ng-if="item._id">
   <div class="permission" ng-if="item && !item._id">
     <div class="perIcon"></div>
-    <div class="perTitle">{{ 'perTitle' | i18next }}</div>
-    <div class="perMsg">{{ 'perMsg' | i18next }}</div>
+    <div class="perTitle" ng-bind-html="'perTitle' | i18next"></div>
+    <div class="perMsg" ng-bind-html="'perMsg' | i18next"></div>
   </div>
   <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
 
@@ -31,9 +31,8 @@
             send="true"
             data="item"
             send-fn="sendDocument(item)"
-    >
-        {{ 'send' | i18next }}
-    </button>
+            ng-bind-html="'send' | i18next"
+    ></button>
     <button class="detail-button receive"
             ng-if="item.status == 'sent'"
             icu-open-modal
@@ -45,9 +44,9 @@
             sent="true"
             data="item"
             send-fn="distributedDocument(item)"
-            class="sendBtn">
-        {{ 'distributed' | i18next }}
-    </button>
+            class="sendBtn"
+            ng-bind-html="'distributed' | i18next"
+    ></button>
     <button class="detail-button receive"
             ng-if="item.status == 'received' && item.viewed != true"
             icu-open-modal
@@ -60,25 +59,25 @@
             data="item"
             send-fn="receiveDocument(item)"
             class="sendBtn"
-            ng-class="{ 'enabled' : !isRecycled}">
-        {{ 'receive' | i18next }}
-    </button>
+            ng-class="{ 'enabled' : !isRecycled}"
+            ng-bind-html="'receive' | i18next"
+    ></button>
     <button class="detail-button simochin"
             ng-class="{ 'disabled' : !havePermissions('info')}"
             ng-if="!item.serial && !settingSerial"
-            ng-click="addSerialTitle(item)">
-        {{'simochin' | i18next }}
-    </button>
+            ng-click="addSerialTitle(item)"
+            ng-bind-html="'simochin' | i18next"
+    ></button>
     <button class="detail-button approval"
             ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled"
-            ng-click="updateStatusForApproval(item)">
-        {{'updateStatusForApproval' | i18next }}
-    </button>
+            ng-click="updateStatusForApproval(item)"
+            ng-bind-html="'updateStatusForApproval' | i18next"
+    ></button>
     <button class="detail-button setFolderIndex"
             ng-if="!item.folderIndex"
-            ng-click="setFolderIndex(item)">
-        {{'File' | i18next }}
-    </button>
+            ng-click="setFolderIndex(item)"
+            ng-bind-html="'File' | i18next"
+    ></button>
     <div ng-if="item.folderIndex">
       {{'File' | i18next }}: {{item.folderIndex}}
     </div>

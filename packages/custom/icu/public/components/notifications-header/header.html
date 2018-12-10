@@ -1,19 +1,20 @@
 <header class="header">
     <div class="notifications">
         <div class="indicator">
-            <span ng-show="data.notificationsToWatch" class="count">{{data.notificationsToWatch}}</span>
+            <span ng-show="data.notificationsToWatch" class="count" ng-bind-html="
+data.notificationsToWatch"></span>
         </div>
     </div>
     <div class="last-notification" ng-click="triggerDropdown()">
         <!--<span class="text">{{data.lastNotification.entity}}-->
         <div ng-show="data.lastNotification && !allNotifications" ng-class="{'notification-NotWatched': !notification.IsWatched}">
-            <span class="notification-time">{{data.lastNotification.time | when}}</span>
+            <span class="notification-time" ng-bind-html="data.lastNotification.time | when"></span>
             <span class="notification-content">
                 <span ng-repeat="val in details[data.lastNotification.type]">
                     <span class="text" ng-switch="val.type">
-                        <span ng-switch-when="object" class="{{val.klass}}">{{data.lastNotification[val.value] | i18next}}</span>
-                        <span ng-switch-when="deepObject" class="{{val.klass}}">{{data.lastNotification[val.value[0]][val.value[1]] | i18next}}</span>
-                        <span ng-switch-default class="{{val.klass}}">{{val.value | i18next}}</span>
+                        <span ng-switch-when="object" class="{{val.klass}}" ng-bind-html="data.lastNotification[val.value] | i18next"></span>
+                        <span ng-switch-when="deepObject" class="{{val.klass}}" ng-bind-html="data.lastNotification[val.value[0]][val.value[1]] | i18next"></span>
+                        <span ng-switch-default class="{{val.klass}}" ng-bind-html="val.value | i18next"></span>
                     </span>
                 </span>
             </span>
@@ -26,15 +27,15 @@
                 <div class="notification-time">{{notification.time | when}}</div>
                 <span ng-repeat="val in details[notification.type]">
                     <span class="text" ng-switch="val.type">
-                        <span ng-switch-when="object" class="{{val.klass}}">{{notification[val.value] | i18next}}</span>
-                        <span ng-switch-when="deepObject" class="{{val.klass}}">{{notification[val.value[0]][val.value[1]] | i18next}}</span>
-                        <span ng-switch-default class="{{val.klass}}">{{val.value | i18next}}</span>
+                        <span ng-switch-when="object" class="{{val.klass}}" ng-bind-html="notification[val.value] | i18next"></span>
+                        <span ng-switch-when="deepObject" class="{{val.klass}}" ng-bind-html="notification[val.value[0]][val.value[1]] | i18next"></span>
+                        <span ng-switch-default class="{{val.klass}}" ng-bind-html="val.value | i18next"></span>
                     </span>
                 </span>
             </div>
         </div>
-         <div class="notification" ng-show="data.hasMore && (!data.isFull)" ng-click="loadMore()"><span>{{'loadMore' | i18next}}</span></div>
-         <div class="notification" ng-show="data.isFull" ng-click="loadLess()"><span>{{'loadLess' | i18next}}</span></div>
+         <div class="notification" ng-show="data.hasMore && (!data.isFull)" ng-click="loadMore()"><span ng-bind-html="'loadMore' | i18next"></span></div>
+         <div class="notification" ng-show="data.isFull" ng-click="loadLess()"><span ng-bind-html="'loadLess' | i18next"></span></div>
     </div>
     <div class="time" ng-click="triggerDropdown()">
         <i class="fa fa-chevron-down"></i>
@@ -48,25 +49,25 @@
             <li>
                 <a href ng-click="createTask()">
                 <img ng-src="/icu/assets/img/icon-task.svg">
-                    <span>{{ 'task' | i18next }}</span>
+                    <span ng-bind-html="'task' | i18next"></span>
                 </a>
             </li>
             <li>
                 <a href ng-click="createProject()">
                  <img class="icon-projects" ng-src="/icu/assets/img/icon-project.svg">
-                 <span>{{ 'project' | i18next }}</span>
+                 <span ng-bind-html="'project' | i18next"></span>
                 </a>
             </li>
             <li>
                 <a href ng-click="createDiscussion()">
               <img ng-src="/icu/assets/img/icon-discussiont.svg">
-                     <span>{{ 'discussion' | i18next }}</span>
+                     <span ng-bind-html="'discussion' | i18next"></span>
                 </a>
             </li>
             <li>
                 <a href ng-click="createOfficeDocument()">
               <img ng-src="/icu/assets/img/icon-document-black.png">
-                     <span>{{ 'document' | i18next }}</span>
+                     <span ng-bind-html="'document' | i18next"></span>
                 </a>
             </li>
         </ul>
@@ -75,10 +76,10 @@
         <div uib-dropdown-toggle icu-avatar user="me"></div>
         <ul class="dropdown-menu menu-items" role="menu">
 
-            <li><a href icu-open-modal show-modal="true" modal-name="currentUser">{{ 'profilePage' | i18next }}</a></li>
-            <li><a href ui-sref="main.adminSettings">{{ 'createWebhook' | i18next }}</a></li>
-            <li><a href ng-click="logout()">{{ 'logout' | i18next }}</a></li>
-            <li><a href ng-click="openInbox()">{{ 'inbox' | i18next }}</a></li>
+            <li><a href icu-open-modal show-modal="true" modal-name="currentUser" ng-bind-html="'profilePage' | i18next"></a></li>
+            <li><a href ui-sref="main.adminSettings" ng-bind-html="'createWebhook' | i18next"></a></li>
+            <li><a href ng-click="logout()" ng-bind-html="'logout' | i18next"></a></li>
+            <li><a href ng-click="openInbox()" ng-bind-html="'inbox' | i18next"></a></li>
         </ul>
     </div>
 </header>
