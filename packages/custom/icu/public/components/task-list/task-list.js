@@ -62,20 +62,18 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
         }).then( item => {
             let updated = false;
             if(parent && parent.type === 'project') {
-                ProjectsService.getById(context.entityId).then((parentEntity) => {
+                return ProjectsService.getById(context.entityId).then((parentEntity) => {
                   let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
                   Object.assign(item, parentParams);
                   updated = !updated;
                   return {item, updated};
-                  console.log('parent params');
-                  console.dir(parentEntity);
                 }).then( res => {
                   if(res.updated)TasksService.update(res.item);
                   return res.item;
                 } );
 
             }
-
+            return item;
         })
     };
 

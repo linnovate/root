@@ -621,11 +621,7 @@ angular.module('mean.icu').config([
                 templateUrl: '/icu/components/profile-page/profile-page.html',
                 controller: 'ProfileController',
                 resolve: {
-                    me: function (UsersService) {
-                        return UsersService.getMe().then(function (result) {
-                            return UsersService.getById(result._id);
-                        });
-                    }
+                    me: UsersService => UsersService.getMe()
                 }
             })
             .state('main', {
@@ -634,9 +630,7 @@ angular.module('mean.icu').config([
                 templateUrl: '/icu/components/icu/icu.html',
                 controller: 'IcuController',
                 resolve: {
-                    me: function (UsersService) {
-                        return UsersService.getMe();
-                    },
+                    me: UsersService => UsersService.getMe(),
                     projects: () => [],
                     discussions: () => [],
                     tasks: () => [],
@@ -1567,7 +1561,7 @@ angular.module('mean.icu').config([
                     }
                 },
                 resolve: {
-                    me: (UsersService) => UsersService.getMe().then((result) =>  UsersService.getById(result._id)),
+                    me: UsersService => UsersService.getMe(),
                     activities: (ActivitiesService, $stateParams, me) => {
                         return ActivitiesService.getByUserId(
                             me._id,

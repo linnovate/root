@@ -574,6 +574,11 @@ exports.allowUpdateContent = function(user, perms, field) {
   allow update of entity info.
 */
 exports.allowUpdateUpdates = function(user, perms, field) {
+  //just for admins
+  if(user.isAdmin){
+    return "editor";
+  }
+  //for regular users
   let uid =  String(user.user._id);
   // console.log("perms:") ;
   // console.log(JSON.stringify(perms)) ;

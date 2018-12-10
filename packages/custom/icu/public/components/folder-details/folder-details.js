@@ -187,21 +187,21 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
   // ==================================================== Category ==================================================== //
 
-  $scope.onCategory = function(value) {
-    if (!value) {
-      delete  $scope.item.office;
-      $scope.update($scope.item);
-      return;
-    }
-
-    $scope.item.office = value;
-
-    $scope.item.watchers = $scope.item.watchers.concat($scope.item.office.watchers);
-    $scope.item.watchers = _.map(_.groupBy($scope.item.watchers, function(doc) {
-      return doc._id;
-    }), function(grouped) {
-      return grouped[0];
+  function removeDuplicates(objArr, prop) {
+    return objArr.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
     });
+  }
+
+  $scope.onCategory = function(value) {
+
+    if (value) {
+      $scope.item.office = value;
+      $scope.item.watchers = $scope.item.watchers.concat($scope.item.office.watchers);
+      $scope.item.watchers = removeDuplicates($scope.item.watchers, '_id')
+    } else {
+      $scope.item.office = {}
+    }
 
     FoldersService.update($scope.item).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));

@@ -2,6 +2,7 @@
 
 const PORT = process.env.PORT || 3000;
 const ROOT_PATH = require('path').join(__dirname, '../..');
+require('dotenv').config();
 
 module.exports = {
   root: ROOT_PATH,
@@ -93,14 +94,14 @@ module.exports = {
   version: '1.0.7',
   whatsNew:[{
     content:'fix document...bla bla',
-    header:'hjghjghj', 
-    img:"/icu/assets/img/whatsNew/t.png" 
+    header:'hjghjghj',
+    img:"/icu/assets/img/whatsNew/t.png"
   }, {
     content:'fix document... hahaha',
-    header:'hjghjghj', 
-    img:"" 
+    header:'hjghjghj',
+    img:""
   }],
-  admins: (process.env.ROOT_ADMINS || '').split(/\s+/), // White space separated list of emails
+  admins: process.env.ROOT_ADMINS || '', // White space separated list of emails
   defaultTab: process.env.DEFAULT_TAB || 'activities', // Possible values: `activities`, `documents`
   ScheduledMailSendWeekly: '59 1 * * 0',
   ScheduledMailSendDaly: '59 1 * * 0-5',
