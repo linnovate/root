@@ -61,18 +61,27 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     var isScrolled = false;
 
-    $scope.isCurrentState = function(id) {
+    $scope.seenSelectedItem = false;
+    $scope.isCurrentState = isCurrentState();
+    $scope.isCurrentEntity = function(id){
+        let currentSelected = $state.params.id === id;
+
+        if(currentSelected)
+            $scope.seenSelectedItem = true;
+        return currentSelected
+    };
+
+    function isCurrentState() {
         let currentState = postfix => $state.current.name.indexOf(`main.${$scope.$parent.entityName}${postfix}`) === 0;
         let isActive = (
           currentState('.byparent.details') || currentState('.byentity.details') ||
-          currentState('.all.details') && $state.params.id === id
+          currentState('.all.details')
         );
         if (isActive && !isScrolled) {
             isScrolled = true;
         }
-        if(isActive)$scope.seenSelectedItem = true;
         return isActive;
-    };
+    }
 
     $scope.$watch('seenSelectedItem', (newValue) => {
       if(newValue) {

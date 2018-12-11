@@ -132,6 +132,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 ProjectsService.create(project).then(function(result) {
                     $scope.projects.push(result);
                     params.id = result._id;
+                    $stateParams.id = result._id;
                     $state.go(state, params, {
                         reload: true
                     });
@@ -158,6 +159,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 DiscussionsService.create(discussion).then(function(result) {
                     $scope.discussions.push(result);
                     params.id = result._id;
+                    $stateParams.id = result._id;
                     $state.go(state, params, {
                         reload: true
                     });
@@ -183,7 +185,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     result.created=new Date(result.created);
                     $scope.officeDocuments.push(result);
                     params.id = result._id;
-
+                    $stateParams.id = result._id;
                     $state.go(state, params, {
                         reload: true
                     });
