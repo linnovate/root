@@ -3,12 +3,6 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    .big {
-        .list-table {
-            height: 100%;
-            overflow-y: scroll;
-        }
-    }
     .entity-list-container {
         height: calc(100% - 44px);
         overflow-y: hidden;

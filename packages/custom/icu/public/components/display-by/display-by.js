@@ -161,37 +161,37 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.typeClicked = false;
 
         NotifyingService.subscribe('editionData', function () {
-            TasksService.getAll(0,2500,'created').then(function (data) {
+            TasksService.getAll(0,25,'created').then(function (data) {
                 $scope.tasks = data.data || data;
                 $scope.tasksList = [];
                 $scope.tasks.forEach( t => {if(t.title)$scope.tasksList.push(t)});
             });
 
-            ProjectsService.getAll(0,2500,'created').then(function (data) {
+            ProjectsService.getAll(0,25,'created').then(function (data) {
                 $scope.projects = data.data || data;
                 $scope.projectsList = [];
                 $scope.projects.forEach( p => {if(p.title)$scope.projectsList.push(p)});
             });
 
-            DiscussionsService.getAll(0,2500,'created').then(function (data) {
+            DiscussionsService.getAll(0,25,'created').then(function (data) {
                 $scope.discussions = data.data || data;
                 $scope.discussionsList = [];
                 $scope.officeDocuments.forEach( doc => {if(doc.title) $scope.officeDocumentsList.push(doc)});
             });
 
-            OfficeDocumentsService.getAll(0,2500,'created').then(function (data) {
+            OfficeDocumentsService.getAll(0,25,'created').then(function (data) {
                 $scope.documents = data.data || data;
             });
 
-            OfficesService.getAll(0,2500,'created').then(function (data) {
+            OfficesService.getAll(0,25,'created').then(function (data) {
                 $scope.offices = data.data || data;
             });
 
-            TemplateDocsService.getAll(0,2500,'created').then(function (data) {
+            TemplateDocsService.getAll(0,25,'created').then(function (data) {
                 $scope.templateDocs = data.data || data;
             });
 
-            UsersService.getAll(0,2500,'created').then(function (data) {
+            UsersService.getAll(0,25,'created').then(function (data) {
                 $scope.people = data.data || data;
             });
             $scope.createLists();
