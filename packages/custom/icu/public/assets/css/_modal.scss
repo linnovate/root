@@ -158,6 +158,10 @@
                 .ui-select-bootstrap > .ui-select-match > .btn{
                     text-align: left !important;
                 }
+                .dropdown-menu{
+                overflow: auto;
+                      height: 100%;
+                }
             }
             .status, .assign {
                 .form-control {
@@ -174,7 +178,8 @@
                 }
             }
             .watch {
-
+            height: 200px;
+            overflow : auto;
               .watchers-list {
                 display: flex;
                 border: 1px solid #C8C8C8;
@@ -268,10 +273,13 @@
               }
             }
             .assign {
-                height: 300px;
+                height: 200px;
+                overflow : auto;
+
             }
             .due {
-                height: 230px;
+                overflow : auto;
+                height: 200px;
 
                 .date {
                     display: block;
@@ -292,7 +300,8 @@
               }
             }
             .tag {
-                height: 400px;
+                overflow : auto;
+                height: 200px;
 
                 .items {
                     padding: 12px;
