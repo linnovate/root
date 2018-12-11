@@ -46,7 +46,6 @@ var TemplateDocsArchiveModel = mongoose.model('templateDoc_archive');
 
 let mean = require('meanio');
 let config = mean.loadConfig();
-let admins = config.admins.split(/\s/);
 
 var entityNameMap = {
   'tasks': {
@@ -127,14 +126,7 @@ module.exports = function(entityName, options) {
 
   options = _.defaults(options, defaults);
 
-  function isAdmin(user){
-    if(admins.includes(user.email)){
-      user.isAdmin = true;
-    }
-  }
-
   function all(pagination, user, acl) {
-    isAdmin(user);
     var deffered = q.defer();
 
     var countQuery;
@@ -188,7 +180,6 @@ module.exports = function(entityName, options) {
 
 
   function read(id, user, acl, query1) {
-    isAdmin(user);
     var query;
     if(enabledOnlyForRelatedUsers && !user.isAdmin) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
@@ -226,7 +217,6 @@ module.exports = function(entityName, options) {
 
   function create(entity, user, acl) {
     console.log("CRUD CREATE") ;
-    isAdmin(user);
 
     //    check permsArray changes
     let allowed1 = permissions.syncPermsArray(user,entity) ;
@@ -294,7 +284,6 @@ module.exports = function(entityName, options) {
 
 
   function update(oldE, newE, user, acl) {
-    isAdmin(user.user);
 
 //    check permsArray changes
     console.log("CRUD UPDATE:") ;

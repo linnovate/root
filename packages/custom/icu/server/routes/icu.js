@@ -21,7 +21,7 @@ var webHook = require('../controllers/webhook');
 var documents = require('../controllers/documents');
 var templateDocs = require('../controllers/templateDocs');
 var signatures = require('../controllers/signatures');
-var authorization = require('../middlewares/auth.js');
+var auth = require('../middlewares/auth.js');
 var locals = require('../middlewares/locals.js');
 var entity = require('../middlewares/entity.js');
 var response = require('../middlewares/response.js');
@@ -51,16 +51,7 @@ module.exports = function(Icu, app) {
   app.route('/projectPage/:title/:id').get(publishProject.render);
 
   // /^((?!\/hi\/).)*$/ all routes without '/api/hi/*'
-  app.route(/^((?!\/hi\/).)*$/).all(locals);
-  app.route(/^((?!\/hi\/).)*$/).all(authorization);
-
-  //app.route(/^((?!\/hi\/).)*$/).all(authorization, socket);
-
-  //app.route(/^((?!\/socket.io\/).)*$/).all(locals);
-  //app.route(/^((\/socket.io\/).)*$/).all(authorization);
-
-  // When need to update mapping, use this authorization, and not the abouve one
-  // app.route(/^((\/index-data\/).)*$/).all(authorization);
+  app.route(/^((?!\/hi\/).)*$/).all(locals, auth.authenticate, auth.isAdmin);
 
   //update mapping - OHAD
   app.post('/api/index-data/:schema', function(req, res) {
@@ -130,7 +121,6 @@ module.exports = function(Icu, app) {
 
   app.route('/api/projects*').all(entity('projects'));
   app.route('/api/projects')
-  //.all(auth.requiresLogin, permission.echo)
     .post(project.create, project.updateParent, notification.sendNotification, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, project.all, project.populateSubProjects, star.isStarred, pagination.formResponse);
 
@@ -152,7 +142,6 @@ module.exports = function(Icu, app) {
 
   app.route('/api/offices*').all(entity('offices'));
   app.route('/api/offices')
-  //.all(auth.requiresLogin, permission.echo)
     .post(office.create, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, office.all, star.isStarred, pagination.formResponse);
   app.route('/api/offices/:id([0-9a-fA-F]{24})')
@@ -168,7 +157,6 @@ module.exports = function(Icu, app) {
 
   app.route('/api/folders*').all(entity('folders'));
   app.route('/api/folders')
-  //.all(auth.requiresLogin, permission.echo)
     .post(folder.create, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, folder.all, star.isStarred, pagination.formResponse);
   app.route('/api/folders/:id([0-9a-fA-F]{24})')
@@ -352,7 +340,7 @@ module.exports = function(Icu, app) {
     .get(eventDrops.getMyEvents);
 
   app.route('/api/hook')
-    .post(authorization, circles.acl(), webHook.create, webHook.subTasks);
+    .post(circles.acl(), webHook.create, webHook.subTasks);
 
   app.route(/^((?!\/hi\/).)*$/).all(response);
   app.route(/^((?!\/hi\/).)*$/).all(error);
@@ -457,7 +445,7 @@ module.exports = function(Icu, app) {
     .delete(templateDocs.deleteTemplate);
   //app.route('/api/:entity(tasks|discussions|projects|offices|folders)/:id([0-9a-fA-F]{24})/templates').get(templateDocs.getByEntity);
 
-  app.route('/api/customData*').all(authorization, circles.acl(), entity('customData'));
+  app.route('/api/customData*').all(circles.acl(), entity('customData'));
   app.route('/api/customData')
     .get(customData.find);
   app.route('/api/customData/:id')

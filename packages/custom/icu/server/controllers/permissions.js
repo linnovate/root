@@ -513,6 +513,11 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
   allow update watchers
 */
 exports.allowUpdateWatcher = function(user, perms) {
+
+  if(user.user.isAdmin){
+    return true;
+  }
+
   let uid =  String(user.user._id);
   let index = exports.searchIdIndex(String(uid),perms) ;
   if(index != null && perms[index].level == "editor") {
