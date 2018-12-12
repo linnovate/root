@@ -147,13 +147,6 @@ angular.module('mean.icu').config([
             };
         }
 
-        function getIdFromURL(){
-          let urlParams = window.location.pathname.split('/');
-          let index = urlParams.findIndex( element => element === 'all') + 1;
-          let id = urlParams[index];
-          return id.length === 24 ? id : null;
-        }
-
         function getProjectDetailsState(urlPrefix) {
             if (!urlPrefix) {
                 urlPrefix = '';
@@ -178,17 +171,9 @@ angular.module('mean.icu').config([
                     entity: function ($state, $stateParams, projects, results, ProjectsService) {
                         if($state.current.name.indexOf('search') !== -1){
                             return _( results ).find(d => d._id === $stateParams.id);
-                        } else {
-                            return ProjectsService.getAll($stateParams.start,
-                                $stateParams.id || getIdFromURL() || $stateParams.limit,
-                                $stateParams.sort)
-                                .then( results => {
-                                    projects = results;
-                                    let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
-                                    return project ? project : ProjectsService.getById($stateParams.id)
-                                });
-
                         }
+                        let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
+                        return project ? project : ProjectsService.getById($stateParams.id)
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByProjectId($stateParams.id);
@@ -226,14 +211,8 @@ angular.module('mean.icu').config([
                         if($state.current.name.indexOf('search') !== -1){
                             return _( results ).find(d => d._id === $stateParams.id);
                         } else {
-                            return OfficeDocumentsService.getAll($stateParams.start,
-                                $stateParams.id || getIdFromURL() || $stateParams.limit,
-                                $stateParams.sort)
-                                .then( results => {
-                                    officeDocuments = results;
-                                    let officeDocument = (officeDocuments.data || officeDocuments).find(t => t._id === $stateParams.id);
-                                    return officeDocument ? officeDocument : OfficeDocumentsService.getById($stateParams.id)
-                                });
+                            let officeDocument = (officeDocuments.data || officeDocuments).find(t => t._id === $stateParams.id);
+                            return officeDocument ? officeDocument : OfficeDocumentsService.getById($stateParams.id)
                         }
                     },
                     people: function (UsersService) {
@@ -393,16 +372,9 @@ angular.module('mean.icu').config([
                     entity: function ($state, $stateParams, discussions, results, DiscussionsService) {
                         if($state.current.name.indexOf('search') !== -1){
                             return _( results).find(d => d._id === $stateParams.id);
-                        } else {
-                            return DiscussionsService.getAll($stateParams.start,
-                                $stateParams.id || getIdFromURL() || $stateParams.limit,
-                                $stateParams.sort)
-                                .then( results => {
-                                    discussions = results;
-                                    let discussion = _(discussions.data || discussions).find(t => t._id === $stateParams.id);
-                                    return discussion ? discussion : DiscussionsService.getById($stateParams.id)
-                                });
                         }
+                        let discussion = _(discussions.data || discussions).find(t => t._id === $stateParams.id);
+                        return discussion ? discussion : DiscussionsService.getById($stateParams.id)
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByDiscussionId($stateParams.id);
@@ -1040,8 +1012,9 @@ angular.module('mean.icu').config([
                         //    if (typeof ProjectsService.data !== 'undefined') {
                         //        $stateParams.limit = ProjectsService.data.length;
                         //    }
-                            return ProjectsService.getAll($stateParams.start,
-                                getIdFromURL() || $stateParams.limit,
+                            return ProjectsService.getAll(
+                                $stateParams.start,
+                                $stateParams.limit,
                                 $stateParams.sort);
                         }
                     }
@@ -1152,8 +1125,9 @@ angular.module('mean.icu').config([
                          //           $stateParams.limit = OfficeDocumentsService.data.length;
                         //        }
                                 localStorage.removeItem("type");
-                                return OfficeDocumentsService.getAll($stateParams.start,
-                                    getIdFromURL() || $stateParams.limit,
+                                return OfficeDocumentsService.getAll(
+                                    $stateParams.start,
+                                    $stateParams.limit,
                                     $stateParams.sort,
                                     $stateParams.status);
                             }
@@ -1225,8 +1199,9 @@ angular.module('mean.icu').config([
                       //      if (typeof DiscussionsService.data !== 'undefined') {
                       //          $stateParams.limit = DiscussionsService.data.length;
                        //     }
-                            return DiscussionsService.getAll($stateParams.start,
-                                getIdFromURL() || $stateParams.limit,
+                            return DiscussionsService.getAll(
+                                $stateParams.start,
+                                $stateParams.limit,
                                 $stateParams.sort);
                         }
                     }

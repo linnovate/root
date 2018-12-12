@@ -1,31 +1,40 @@
 'use strict';
 
 angular.module('mean.icu.data.discussionsservice', [])
-  .service('DiscussionsService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
+  .service('DiscussionsService', function (ApiUri, $http, $stateParams,
+                                           BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
     var EntityPrefix = '/discussions';
     var data = [];
 
     function getAll(start, limit, sort) {
-      var qs = querystring.encode({
-        start: start,
-        limit: limit,
-        sort: sort
-      });
+        var qs = {
+            start: start,
+            sort: sort
+        };
+        let paramsId = $stateParams.id;
+        qs.limit = findInExistingDiscussions(paramsId) ? limit : paramsId;
+        qs = querystring.encode(qs);
 
-      if(qs.length) {
-        qs = '?' + qs;
-      }
+        if (qs.length) {
+            qs = '?' + qs;
+        }
 
-      return $http.get(ApiUri + EntityPrefix + qs).then(function(result) {
-        WarningsService.setWarning(result.headers().warning);
-        return result.data;
-      }, function(err) {
-        return err;
-      }).then(function(some) {
-        var data = some.content ? some : [];
-        return PaginationService.processResponse(data);
-      });
+        return $http.get(ApiUri + EntityPrefix + qs).then(function(result) {
+            WarningsService.setWarning(result.headers().warning);
+            data = result.data.content;
+            return result.data;
+        }, function(err) {
+            return err;
+        }).then(function(some) {
+            var data = some.content ? some : [];
+            return PaginationService.processResponse(data);
+        });
     }
+
+      function findInExistingDiscussions(id){
+          if(!id)return true;
+          return !!data.find( taskInList => taskInList._id === id );
+      }
 
     function getById(id) {
       return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
