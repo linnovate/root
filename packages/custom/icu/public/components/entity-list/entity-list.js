@@ -90,11 +90,14 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     function scrollToElement(){
         let list = document.getElementsByClassName('list-table scroll')[0],
             elem = document.querySelector('tr.active');
-        if(list && elem)return;
+        if(!list && !elem)return;
 
         let listBottom = list.scrollTop + list.offsetHeight,
             elementBottom = elem.offsetTop + elem.offsetHeight;
-        if(elementBottom > listBottom)list.scrollTop = elem.offsetTop;
+        // if(elementBottom > listBottom)list.scrollTop = elem.offsetTop;
+        if(elementBottom > listBottom)
+            elem.scrollIntoView({ behavior: 'smooth' });
+
     }
 
     // ============================================================= //
