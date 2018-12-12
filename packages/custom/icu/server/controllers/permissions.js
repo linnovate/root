@@ -46,7 +46,6 @@ var entityNameMap = {
     mainModel: TemplateDocsModel,
     name: 'TemplateDoc'
   }
-
 };
 
 exports.permError =
@@ -549,6 +548,11 @@ exports.allowUpdateWatcherLevel = function(user, perms) {
   allow update of entity info.
 */
 exports.allowUpdateContent = function(user, perms, field) {
+  //admin pass this check anyway
+  if(user.user.isAdmin){
+    return "editor";
+  }
+
   let uid =  String(user.user._id);
   if(!perms) {
     return false ;

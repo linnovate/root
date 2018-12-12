@@ -44,9 +44,6 @@ var OfficeDocumentsArchiveModel = mongoose.model('officeDocument_archive');
 var TemplateDocsModel = require('../models/templateDoc.js');
 var TemplateDocsArchiveModel = mongoose.model('templateDoc_archive');
 
-let mean = require('meanio');
-let config = mean.loadConfig();
-
 var entityNameMap = {
   'tasks': {
     mainModel: TaskModel,

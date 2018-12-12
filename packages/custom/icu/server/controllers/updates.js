@@ -5,7 +5,6 @@ var utils = require('./utils');
 var mongoose = require('mongoose'),
   ObjectId = require('mongoose').Types.ObjectId;
 
-
 var options = {
   includes: 'creator',
 };
@@ -202,7 +201,11 @@ exports.signNew = function(req, res, next) {
       templateDoc: 'TemplateDoc'
   };
 
-  var query = req.acl.mongoQuery(entities[req.body.data.entityType]);
+  var query = req.user.isAdmin ?
+    mongoose.model(entities[req.body.data.entityType]) :
+    req.acl.mongoQuery(entities[req.body.data.entityType]);
+
+
   query.findOne({_id: req.body.data.entity}).exec(function(err, entity) {
     if(err) {
       req.locals.error = err;
