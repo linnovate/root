@@ -41,9 +41,7 @@
   </detail-category>
 
 
-  <div class="parent" ng-if="item.parent">
-    {{currentContext.entity.title}}
-  </div>
+  <div class="parent" ng-if="item.parent" ng-bind-html="currentContext.entity.title"></div>
 
 
   <div ng-if="!disabled && havePermissions('description')">
@@ -94,7 +92,7 @@
   <button data-toggle="collapse" data-target="#customdata" ng-if="item.custom && item.custom.data" class="detail-button customdata">Custom Data</button>
   <div id="customdata" class="collapse">
       <div ng-repeat="(key, value) in item.custom.data" class="customdata">
-          <div>{{key}}</div><div>{{value}}</div>
+          <div ng-bind-html="key"></div><div ng-bind-html="value"></div>
       </div>
   </div>
 

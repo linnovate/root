@@ -5,7 +5,7 @@
         </h3>
     </div>
     <div class="modal-body">
-        <div ng-repeat="t in selectedTemplates">{{t.title}}<br></div>
+        <div ng-repeat="t in selectedTemplates" ng-bind-html="t.title"><br></div>
         <detail-templater templates="template" on-save="saveTemplate" on-delete="deleteTemplate" on-implement="implementTemplate"
             item="item" users="people" me="me"></detail-templater>
     </div>

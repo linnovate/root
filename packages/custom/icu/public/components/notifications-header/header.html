@@ -1,13 +1,13 @@
 <header class="header">
     <div class="notifications">
         <div class="indicator">
-            <span ng-show="data.notificationsToWatch" class="count">{{data.notificationsToWatch}}</span>
+            <span ng-show="data.notificationsToWatch" class="count" ng-bind-html="data.notificationsToWatch"></span>
         </div>
     </div>
     <div class="last-notification" ng-click="triggerDropdown()">
         <!--<span class="text">{{data.lastNotification.entity}}-->
         <div ng-show="data.lastNotification && !allNotifications" ng-class="{'notification-NotWatched': !notification.IsWatched}">
-            <span class="notification-time">{{data.lastNotification.time | when}}</span>
+            <span class="notification-time" ng-bind-html="data.lastNotification.time | when"></span>
             <span class="notification-content">
                 <span ng-repeat="val in details[data.lastNotification.type]">
                     <span class="text" ng-switch="val.type">

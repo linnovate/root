@@ -16,7 +16,7 @@
                      aria-expanded="false"></div>
                     <span class="sr-only">Toggle Dropdown</span>
                 <div class="dropdown-menu" ng-hide="member.selfTest">
-                    <h6 class="dropdown-header name">{{member.username}}</h6>
+                    <h6 class="dropdown-header name" ng-bind-html="member.username"></h6>
                     <h6 class="dropdown-header status">{{userPermissionStatus(member) | i18next}}</h6>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" ng-click="setEditor(member)">{{'promoteToEditor' | i18next}}</a>
@@ -47,8 +47,8 @@
                      user="user"
                      entity="entity"
                      ng-mouseover="getGroupDetails(user)"></div>
-                <span ng-mouseover="getGroupDetails(user)">{{user.job}}</span>
-                <span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>
+                <span ng-mouseover="getGroupDetails(user)" ng-bind-html="user.job"></span>
+                <span ng-if="user.numberOfPeople" ng-bind-html="'(' + (user.numberOfPeople) + ')'"></span>
             </ui-select-choices>
         </ui-select>
     </div>
@@ -60,8 +60,7 @@
                 class="counter btn btn-secondary dropdown-toggle"
                 ng-class="{'closeDropdown': isDropdownwatchersOpen}"
                 uib-dropdown-toggle
-                ng-click="toggled()">
-            +{{otherWatchers.length}}
+                ng-click="toggled()" ng-bind-html="'+' + (otherWatchers.length)">
         </button>
         <div class="watchersContainer" uib-dropdown-menu role="menu" aria-labelledby="single-button">
             <div class="otherWatchers">
@@ -80,7 +79,7 @@
                              aria-expanded="false"></div>
                         <span class="sr-only">Toggle Dropdown</span>
                         <div class="dropdown-menu" ng-hide="member.selfTest">
-                            <h6 class="dropdown-header name">{{member.username}}</h6>
+                            <h6 class="dropdown-header name" ng-bind-html="member.username"></h6>
                             <h6 class="dropdown-header status">{{userPermissionStatus(member) | i18next}}</h6>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#" ng-click="setEditor(member)">{{'promoteToEditor' | i18next}}</a>
