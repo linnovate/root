@@ -116,7 +116,7 @@ angular.module('mean.icu').config([
             }
 
             return {
-                url: urlPrefix,
+                url: urlPrefix + '/:id',
                 views: {
                     'detailspane@main': {
                         templateUrl: '/icu/components/task-details/task-details.html',
@@ -131,11 +131,6 @@ angular.module('mean.icu').config([
                     nameFocused: false
                 },
                 resolve: {
-                    tasks: (TasksService, $stateParams) => {
-                        return TasksService.getAll($stateParams.start,
-                            $stateParams.id || getIdFromURL() || $stateParams.limit,
-                            $stateParams.sort)
-                    },
                     entity: function ($state, $stateParams, tasks, results, TasksService) {
                         if($state.current.name.indexOf('search') !== -1){
                             return _( results ).find(t => ((t._id || t.id) === $stateParams.id));
@@ -844,7 +839,7 @@ angular.module('mean.icu').config([
                 }
             })
             .state('main.tasks.all', {
-                url: '/all/:id',
+                url: '/all',
                 views: getListView('task'),
                 params: {
                     activeToggle: 'active',
@@ -859,11 +854,9 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return TasksService.getStarred();
                         } else {
-                           // if (typeof TasksService.data !== 'undefined') {
-                            //    $stateParams.limit = TasksService.data.length;
-                           // }
-                            return TasksService.getAll($stateParams.start,
-                                $stateParams.id || getIdFromURL() || $stateParams.limit,
+                            return TasksService.getAll(
+                                $stateParams.start,
+                                $stateParams.limit,
                                 $stateParams.sort);
                         }
                     }
