@@ -130,6 +130,7 @@ module.exports = function(entityName, options) {
     var mergedPromise;
 
     var query;
+    var queryById;
     if(pagination && pagination.status){
       options.conditions = {status : pagination.status};
     }else{
@@ -137,6 +138,7 @@ module.exports = function(entityName, options) {
     }
     if (enabledOnlyForRelatedUsers && !user.isAdmin) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
+      queryById = acl.mongoQuery(entityNameMap[entityName].name);
       countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);
     } else {
       query = Model.find(options.conditions);
@@ -145,22 +147,45 @@ module.exports = function(entityName, options) {
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
-        query.find(options.conditions)
-          .sort(pagination.sort)
-          .skip(pagination.start)
-          .limit(pagination.limit);
+        if(typeof pagination.limit === 'number') {
+          query.find(options.conditions)
+            .sort(pagination.sort)
+            .skip(pagination.start)
+            .limit(pagination.limit);
 
-        query.populate(options.includes);
-        /*query.hint({
-          _id: 1
-        });*/
+          query.populate(options.includes);
+          mergedPromise = q.all([query, countQuery]).then(function(results) {
+            pagination.count = results[1];
+            return results[0];
+          });
 
-        mergedPromise = q.all([query, countQuery]).then(function(results) {
-          pagination.count = results[1];
-          return results[0];
-        });
+          deffered.resolve(mergedPromise);
+        } else {
 
-        deffered.resolve(mergedPromise);
+          // finding all elements from "start" to "ID" of element
+          queryById.find({ _id: { $lte: pagination.limit }})
+            .sort(pagination.sort)
+            .count({}, (err, count) => {
+              let entitiesListCount = 25;
+              count = count < entitiesListCount ? entitiesListCount : count;
+
+              query.find(options.conditions)
+                .sort(pagination.sort)
+                .skip(pagination.start)
+                .limit(count);
+
+              pagination.limit = count;
+              pagination.start = pagination.limit - entitiesListCount;
+
+              query.populate(options.includes);
+              mergedPromise = q.all([query, countQuery]).then(function(results) {
+                pagination.count = results[1];
+                return results[0];
+              });
+
+              deffered.resolve(mergedPromise);
+            })
+        }
       }
     } else {
       query.find(options.conditions);
