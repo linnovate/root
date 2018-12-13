@@ -1,17 +1,21 @@
 'use strict';
 
 angular.module('mean.icu.data.tasksservice', [])
-.service('TasksService', function (ApiUri, $http, BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
+.service('TasksService', function (ApiUri, $http, $stateParams,
+                                   BoldedService, NotifyingService, PaginationService, WarningsService,
+                                   ActivitiesService) {
     var EntityPrefix = '/tasks';
     var filterValue = false;
     var data = [], tabData, IsNew;
 
     function getAll(start, limit, sort) {
-        var qs = querystring.encode({
+        var qs = {
             start: start,
-            limit: limit,
             sort: sort
-        });
+        };
+        let paramsId = $stateParams.id;
+        qs.limit = findInExistingTasks(paramsId) ? limit : paramsId;
+        qs = querystring.encode(qs);
 
         if (qs.length) {
             qs = '?' + qs;
@@ -22,12 +26,17 @@ angular.module('mean.icu.data.tasksservice', [])
         // });
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
         	WarningsService.setWarning(result.headers().warning);
-            data = result.data;
+            data = result.data.content;
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
             return PaginationService.processResponse(data);
         });
+    }
+
+    function findInExistingTasks(taskId){
+        if(!taskId)return true;
+        return !!data.find( taskInList => taskInList._id === taskId );
     }
 
     function getTags() {
