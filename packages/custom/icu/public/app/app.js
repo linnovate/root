@@ -29,7 +29,7 @@ angular.module('mean.icu').config([
                     return service[getFn](
                         $stateParams.entityId,
                         $stateParams.start,
-                        BIGLIMIT,
+                        LIMIT,
                         $stateParams.sort,
                         $stateParams.starred);
                 }
@@ -134,10 +134,9 @@ angular.module('mean.icu').config([
                     entity: function ($state, $stateParams, tasks, results, TasksService) {
                         if($state.current.name.indexOf('search') !== -1){
                             return _( results ).find(t => ((t._id || t.id) === $stateParams.id));
-                        } else {
-                            let task = _(tasks.data || tasks).find(t => t._id === $stateParams.id);
-                            return task ? task : TasksService.getById($stateParams.id);
                         }
+                        let task = _(tasks.data || tasks).find(t => t._id === $stateParams.id);
+                        return task ? task : TasksService.getById($stateParams.id);
                     },
                     tags: function (TasksService) {
                         return TasksService.getTags().then(function (tags) {
@@ -172,10 +171,9 @@ angular.module('mean.icu').config([
                     entity: function ($state, $stateParams, projects, results, ProjectsService) {
                         if($state.current.name.indexOf('search') !== -1){
                             return _( results ).find(d => d._id === $stateParams.id);
-                        } else {
-                            let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
-                            return project ? project : ProjectsService.getById($stateParams.id)
                         }
+                        let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
+                        return project ? project : ProjectsService.getById($stateParams.id)
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByProjectId($stateParams.id);
@@ -374,10 +372,9 @@ angular.module('mean.icu').config([
                     entity: function ($state, $stateParams, discussions, results, DiscussionsService) {
                         if($state.current.name.indexOf('search') !== -1){
                             return _( results).find(d => d._id === $stateParams.id);
-                        } else {
-                            let discussion = _(discussions.data || discussions).find(t => t._id === $stateParams.id);
-                            return discussion ? discussion : DiscussionsService.getById($stateParams.id)
                         }
+                        let discussion = _(discussions.data || discussions).find(t => t._id === $stateParams.id);
+                        return discussion ? discussion : DiscussionsService.getById($stateParams.id)
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByDiscussionId($stateParams.id);
@@ -823,10 +820,8 @@ angular.module('mean.icu').config([
                         if ($stateParams.starred) {
                             return TasksService.getStarred();
                         } else {
-                           // if (typeof TasksService.data !== 'undefined') {
-                            //    $stateParams.limit = TasksService.data.length;
-                           // }
-                            return TasksService.getAll($stateParams.start,
+                            return TasksService.getAll(
+                                $stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
                         }
@@ -1011,7 +1006,8 @@ angular.module('mean.icu').config([
                         //    if (typeof ProjectsService.data !== 'undefined') {
                         //        $stateParams.limit = ProjectsService.data.length;
                         //    }
-                            return ProjectsService.getAll($stateParams.start,
+                            return ProjectsService.getAll(
+                                $stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
                         }
@@ -1123,7 +1119,8 @@ angular.module('mean.icu').config([
                          //           $stateParams.limit = OfficeDocumentsService.data.length;
                         //        }
                                 localStorage.removeItem("type");
-                                return OfficeDocumentsService.getAll($stateParams.start,
+                                return OfficeDocumentsService.getAll(
+                                    $stateParams.start,
                                     $stateParams.limit,
                                     $stateParams.sort,
                                     $stateParams.status);
@@ -1196,7 +1193,8 @@ angular.module('mean.icu').config([
                       //      if (typeof DiscussionsService.data !== 'undefined') {
                       //          $stateParams.limit = DiscussionsService.data.length;
                        //     }
-                            return DiscussionsService.getAll($stateParams.start,
+                            return DiscussionsService.getAll(
+                                $stateParams.start,
                                 $stateParams.limit,
                                 $stateParams.sort);
                         }

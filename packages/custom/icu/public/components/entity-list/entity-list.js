@@ -61,14 +61,44 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     var isScrolled = false;
 
-    $scope.isCurrentState = function(id) {
-        var isActive = ($state.current.name.indexOf(`main.${$scope.$parent.entityName}.byparent.details`) === 0 || $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity.details`) === 0 || $state.current.name.indexOf(`main.${$scope.$parent.entityName}.all.details`) === 0) && $state.params.id === id;
+    $scope.seenSelectedItem = false;
+    $scope.isCurrentState = isCurrentState();
+    $scope.isCurrentEntity = function(id){
+        let currentSelected = $state.params.id === id;
+
+        if(currentSelected)
+            $scope.seenSelectedItem = true;
+        return currentSelected
+    };
+
+    function isCurrentState() {
+        let currentState = postfix => $state.current.name.indexOf(`main.${$scope.$parent.entityName}${postfix}`) === 0;
+        let isActive = (
+          currentState('.byparent.details') || currentState('.byentity.details') ||
+          currentState('.all.details')
+        );
         if (isActive && !isScrolled) {
-            //$uiViewScroll($element.find('[data-id="' + $stateParams.id + '"]'));
             isScrolled = true;
         }
         return isActive;
-    };
+    }
+
+    $scope.$watch('seenSelectedItem', newValue => {
+      if(newValue)$timeout(() => scrollToElement(), 0);
+    });
+
+    function scrollToElement(){
+        let list = document.getElementsByClassName('list-table scroll')[0],
+            elem = document.querySelector('tr.active');
+        if(!list && !elem)return;
+
+        let listBottom = list.scrollTop + list.offsetHeight,
+            elementBottom = elem.offsetTop + elem.offsetHeight;
+        // if(elementBottom > listBottom)list.scrollTop = elem.offsetTop;
+        if(elementBottom > listBottom)
+            elem.scrollIntoView({ behavior: 'smooth' });
+
+    }
 
     // ============================================================= //
     // ========================== filters ========================== //
