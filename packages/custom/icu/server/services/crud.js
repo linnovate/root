@@ -138,10 +138,10 @@ module.exports = function(entityName, options) {
     }
     if (enabledOnlyForRelatedUsers && !user.isAdmin) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
-      queryById = acl.mongoQuery(entityNameMap[entityName].name);
       countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);
     } else {
       query = Model.find(options.conditions);
+      queryById = acl.mongoQuery(entityNameMap[entityName].name);
       countQuery = Model.find(options.conditions).count();
     }
 
