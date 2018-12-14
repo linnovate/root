@@ -287,6 +287,8 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
+        }).then(() => {
+          refreshList();
         });
         break;
 
