@@ -13,15 +13,15 @@
                             <span ng-switch-when="deepObject" class="{{val.klass}}">{{activity[val.value[0]][val.value[1]] | i18next}}&nbsp</span>
                             <span ng-switch-when="prev-assign" class="{{val.klass}}">{{activity[val.value] | i18next}}&nbsp</span>
                             <span ng-switch-when="nbsp">{{' '}}&nbsp</span>
-                            <span ng-switch-when="prev-date">{{activity[val.value] | date:'MM/dd/yy'}}</span>
+                            <span ng-switch-when="prev-date">{{activity[val.value] | date:'dd/MM/yyyy'}}</span>
                             <span ng-switch-when="prev-string">{{activity[val.value] | i18next}}</span>
                             <span ng-switch-when="to">{{'to' | i18next}}</span>
-                            <span ng-switch-when="date">{{activity[val.value] | date:'MM/dd/yy'}}</span>
+                            <span ng-switch-when="date">{{activity[val.value] | date:'dd/MM/yyyy'}}</span>
                             <span ng-switch-when="string" ng-bind-html="activity[val.value]"></span>
                             <span ng-switch-default ng-bind-html="val.value | i18next"></span>
                         </span>
                     </span>
-                    <span class="activity-date">{{activity.created | date:"MM/dd/yyyy 'at' h:mma"}}</span>
+                    <span class="activity-date">{{activity.created | date:"dd/MM/yyyy 'at' h:mma"}}</span>
                 </div>
             </div>
             <div class="description">
