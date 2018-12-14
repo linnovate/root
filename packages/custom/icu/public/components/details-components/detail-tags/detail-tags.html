@@ -3,7 +3,7 @@
   <ul class="detail-tags-items">
 
     <li class="detail-tags-item" ng-repeat="tag in value">
-      <span ng-bind-html="tag"></span>
+      <span>{{tag}}</span>
       <button class="detail-tags-item-remove" ng-click="removeTag(tag)">
         <i class="fa fa-times"></i>
       </button>
@@ -17,7 +17,7 @@
         on-select="addTag(newTag)"
       >
         <ui-select-match id="addTag" placeholder="{{ !value.length ? 'noLabels' : 'selectTags' | i18next }}">{{$item}}</ui-select-match>
-        <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search" ng-bind-html="tag"></ui-select-choices>
+        <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">{{tag}}</ui-select-choices>
       </ui-select>
     </li>
 

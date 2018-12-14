@@ -92,7 +92,7 @@
 
   <detail-category placeholder="'selectFolder' | i18next" value="item.folder" items="folders" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent"> </detail-category>
 
-  <div class="parent" ng-if="item.parent" ng-bind-html="currentContext.entity.title"></div>
+  <div class="parent" ng-if="item.parent">{{currentContext.entity.title}}</div>
 
   <div ng-if="!disabled && havePermissions('description')">
     <div class="detail-title">
@@ -186,7 +186,7 @@
         <div ng-if="item.path || item.spPath || item.mmhpath " class="document">
           <a ng-click="view(item)" target="window">
             <div class="icon {{item.documentType}}"></div>
-            <div id="documentTitle" ng-bind-html="item.title"></div>
+            <div id="documentTitle">{{item.title}}</div>
           </a>
           <button ng-click="deleteDocumentFile(item)">X</button>
         </div>
@@ -200,14 +200,14 @@
     <p class="doneBy" ng-if="item.doneBy">
       <b>{{'doneBy' | i18next }}: </b>
       <span ng-repeat="doneBy in item.doneBy">
-          <span ng-bind-html="doneBy.name"></span>
-          <span ng-if="$index != item.doneBy.length-1">,</span>
+        {{doneBy.name}}
+                         <span ng-if="$index != item.doneBy.length-1">,</span>
       </span>
     </p>
     <p class="forNotice" ng-if="item.forNotice">
       <b>{{'forNotice' | i18next }}: </b>
       <span ng-repeat="forNotice in item.forNotice">
-        <span ng-bind-html="forNotice.name"></span>
+        {{forNotice.name}}
         <span ng-if="$index != item.forNotice.length-1">,</span>
       </span>
     </p>
