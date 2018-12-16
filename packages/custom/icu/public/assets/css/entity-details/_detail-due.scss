@@ -179,23 +179,29 @@ discussion-due {
                         display: none;
                     }
                 }
-                a.ui-state-default.ui-state-active{
-                    /* Ellipse */
-                    background: #FFA000!important;;
-                    border-radius: 50%;
-                    width: 26px;
-                    color: #DFF2F9;
-                    text-align: center;
-                    font-size: 13px;
-                }
+             
                 a.ui-state-default{
                     color: #DFF2F9;
                     background:none !important;
                     border: none;
                     text-align: center;
                 }
+               a.ui-state-highlight {
+                    color: #00AEEF;
+                }
+                a.ui-state-active, a.ui-state-hover {
+                    background: #FFA000!important;
+                    border-radius: 50%;
+                    -moz-border-radius:50%;
+                    -webkit-border-radius:50%;
+                    color: #DFF2F9;
+                    text-align: center;
+                    border: none;
+                }
+
+
                 td{
-                                    padding: 7px;
+                 padding: 7px;
 
                 }
 
