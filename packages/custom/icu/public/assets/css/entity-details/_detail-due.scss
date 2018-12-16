@@ -131,15 +131,13 @@ discussion-due {
     }
 }
 #ui-datepicker-div{
-    
-     // .ui-widget-content{
-            /* Rectangle */
-            height: 250px;
-            width: 284px;
+     /*rtl:begin:ignore*/
+            height: 323px;
+            width: 318px;
             padding: 21px;
             background: #2C363A;
             background-color: #2C363A !important;
-            font-family: Open Sans;
+            font-family: 'Open Sans';
             font-style: normal;
             font-weight: normal;
             line-height: normal;
@@ -147,10 +145,9 @@ discussion-due {
             text-align: center;
             text-transform: uppercase;
             color: #DFF2F9;
-                //  }   
-            
+            direction: ltr !important;
+
          .ui-widget-header{
-        
                 font-family: Open Sans;
                 font-style: normal;
                 font-weight: bold;
@@ -165,18 +162,19 @@ discussion-due {
              }   
                 
                 /* arrows */
-                a.ui-datepicker-next.ui-corner-all[title~="Prev"]:after{
-                        content: '>';
+                a.ui-datepicker-prev.ui-corner-all[title~="Prev"]:after{
+                        content: '<';
                         color: #FFFFFF;
-                        font-size: 15px;
+                        font-size: 18px;
                 }
                 a.ui-datepicker-next.ui-corner-all[title~="Next"]:after{
-                    content: '<';
+                    content: '>';
                     color: #FFFFFF;                   
-                    font-size: 15px;
+                    font-size: 18px;
                 }
 
-                a.ui-datepicker-next.ui-corner-all[title~="Next"], a.ui-datepicker-next.ui-corner-all[title~="Prev"]{
+                // a.ui-datepicker-prev.ui-corner-all
+                a.ui-datepicker-next.ui-corner-all[title~="Next"], a.ui-datepicker-prev.ui-corner-all[title~="Prev"]{
                      span{
                         display: none;
                     }
@@ -194,6 +192,12 @@ discussion-due {
                     color: #DFF2F9;
                     background:none !important;
                     border: none;
+                    text-align: center;
+                }
+                td{
+                                    padding: 7px;
+
                 }
 
-    }
+            /*rtl:end:ignore*/
+}
