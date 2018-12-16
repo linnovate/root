@@ -4,7 +4,7 @@
     <table class="projects" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody class='containerVertical'>
             <tr data-ng-repeat="item in visibleItems"
-                data-ng-class="{ 'active': isCurrentState(item._id), 'multipleSelected': item.selected }"
+                data-ng-class="{ 'active': isCurrentState && isCurrentEntity(item._id), 'multipleSelected': item.selected }"
                 ng-click="onClickRow($event, item)"
                 ng-include="unifiedRowTpl"
                 ng-mouseover="showTick(item)"
@@ -31,7 +31,7 @@
     </div>
     <div data-ng-repeat="item in visibleItems" class="task-row">
         <div>
-            {{item.title}}
+            {{item.title | htmlToPlaintext}}
         </div>
         <div class="status" ng-class="item.status">
             {{item.status | i18next }}

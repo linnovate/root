@@ -61,14 +61,44 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     var isScrolled = false;
 
-    $scope.isCurrentState = function(id) {
-        var isActive = ($state.current.name.indexOf(`main.${$scope.$parent.entityName}.byparent.details`) === 0 || $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity.details`) === 0 || $state.current.name.indexOf(`main.${$scope.$parent.entityName}.all.details`) === 0) && $state.params.id === id;
+    $scope.seenSelectedItem = false;
+    $scope.isCurrentState = isCurrentState();
+    $scope.isCurrentEntity = function(id){
+        let currentSelected = $state.params.id === id;
+
+        if(currentSelected)
+            $scope.seenSelectedItem = true;
+        return currentSelected
+    };
+
+    function isCurrentState() {
+        let currentState = postfix => $state.current.name.indexOf(`main.${$scope.$parent.entityName}${postfix}`) === 0;
+        let isActive = (
+          currentState('.byparent.details') || currentState('.byentity.details') ||
+          currentState('.all.details')
+        );
         if (isActive && !isScrolled) {
-            //$uiViewScroll($element.find('[data-id="' + $stateParams.id + '"]'));
             isScrolled = true;
         }
         return isActive;
-    };
+    }
+
+    $scope.$watch('seenSelectedItem', newValue => {
+      if(newValue)$timeout(() => scrollToElement(), 0);
+    });
+
+    function scrollToElement(){
+        let list = document.getElementsByClassName('list-table scroll')[0],
+            elem = document.querySelector('tr.active');
+        if(!list && !elem)return;
+
+        let listBottom = list.scrollTop + list.offsetHeight,
+            elementBottom = elem.offsetTop + elem.offsetHeight;
+        // if(elementBottom > listBottom)list.scrollTop = elem.offsetTop;
+        if(elementBottom > listBottom)
+            elem.scrollIntoView({ behavior: 'smooth' });
+
+    }
 
     // ============================================================= //
     // ========================== filters ========================== //
@@ -187,8 +217,12 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $scope.$parent.create(parent).then((result)=>{
             $scope.refreshVisibleItems();
             $timeout(()=> {
-              let els = $element.find('td.name');
-              els.length && els[els.length - 1].focus();
+              let lastElementIndex = $element.find('td.name').length - 1;
+              let currentElement = $element.find('td.name').get(lastElementIndex - 1);
+              let nextElement = $element.find('td.name').get(lastElementIndex);
+
+              let focusedElement = currentElement && nextElement;
+              focusedElement.focus();
             },100);
             $state.go($scope.detailsState + '.' + window.config.defaultTab, {
                 id: result._id,
@@ -300,15 +334,17 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
         if ($event.keyCode === 13) {
             $event.preventDefault();
+            let nextElementCreated = $scope.items[index + 1];
+            let nextElementInDOM = $element.find('td.name').get(index + 1);
 
-            if ($element.find('td.name')[index + 1] && $scope.items[index + 1]) {
+            if (nextElementCreated && nextElementInDOM) {
                 $state.go($scope.detailsState + '.' + window.config.defaultTab, {
                     id: $scope.items[index + 1]._id,
                     entity: context.entityName,
                     entityId: context.entityId,
                     nameFocused: true
                 });
-                $element.find('td.name')[index + 1].focus();
+                nextElementInDOM.focus();
             } else {
                 $scope.onCreate();
             }

@@ -8,9 +8,7 @@ var task = require('../models/task'),
     office = require('../models/office'),
     folder = require('../models/folder'),
     document = require('../models/document'),
-    templateDoc = require('../models/templateDoc'),
-    user = require('../models/user'),
-    mongoose = require('mongoose');
+    templateDoc = require('../models/templateDoc');
 
 var entityNameMap = {
   tasks: {

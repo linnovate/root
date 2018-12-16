@@ -7,13 +7,13 @@ angular.module('mean.icu.data.permissionsservice', [])
                                             ActivitiesService, FoldersService, OfficeDocumentsService,
                                             TemplateDocsService
     ) {
-        // var EntityPrefix = '/permissions';
-        var me = UsersService.getMe().$$state.value;
+        // let EntityPrefix = '/permissions';
+        let me;
+        UsersService.getMe().then( user => me = user );
+        $rootScope.$on('Login', UsersService.getMe().then( user => me = user ));
 
-        $rootScope.$on('Login', () => me = UsersService.getMe().$$state.value);
 
-
-        var serviceMap = {
+        let serviceMap = {
             task: TasksService,
             tasks: TasksService,
             project: ProjectsService,
@@ -30,7 +30,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             templateDocs: TemplateDocsService,
         };
 
-        var editorPerms = {
+        let editorPerms = {
             'summary' : true,
             'description' : true,
             'detail-buttons' : true,
@@ -44,7 +44,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             'watchers' : true,
         };
 
-        var commenterPerms = {
+        let commenterPerms = {
             'summary' : false,
             'description' : false,
             'detail-buttons' : false,
@@ -58,7 +58,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             'watchers' : false,
         };
 
-        var viewerPerms = {
+        let viewerPerms = {
             'summary' : false,
             'description' : false,
             'detail-buttons' : false,
@@ -79,9 +79,12 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function getPermissionStatus(user, entity) {
-            var status = null;
+            //if admin
+            if(user.isAdmin)return 'editor';
 
-            var usersPerms = _.find(entity.permissions, {'id': getUserId(user)});
+            let status = null;
+
+            let usersPerms = _.find(entity.permissions, {'id': getUserId(user)});
             if(!usersPerms)return false;
 
             if(usersPerms){
@@ -102,7 +105,7 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function getUserId(user){
-            var userId = (typeof(user) == 'string') ? user : user._id;
+            let userId = (typeof(user) == 'string') ? user : user._id;
             return userId;
         }
 
@@ -122,9 +125,9 @@ angular.module('mean.icu.data.permissionsservice', [])
             user = user || me;
             haveAnyPerms(entity, user);
 
-            var havePerms = false;
+            let havePerms = false;
             if(entity.permissions.length !== 0) {
-                var usersPerms = getUserPerms(entity, user);
+                let usersPerms = getUserPerms(entity, user);
                 if(usersPerms){
                     havePerms = usersPerms.level === 'commenter';
                 }
@@ -137,25 +140,25 @@ angular.module('mean.icu.data.permissionsservice', [])
                 return false;
             }
 
-            var userId = getUserId(user);
+            let userId = getUserId(user);
             if(haveAnyPerms(entity, user)){
                 _.find(entity.permissions, {'id': userId}).level = perms;
             } else {
-                var newPerms = {
+                let newPerms = {
                     'id': userId,
                     'level': perms,
                 };
                 entity.permissions.push(newPerms);
             }
-            var typeOfService = $stateParams.id ? context.main : context.entityName ;
-            var serviceName = serviceMap[typeOfService];
-            var clonedEntity = JSON.parse(JSON.stringify(entity));
+            let typeOfService = $stateParams.id ? context.main : context.entityName ;
+            let serviceName = serviceMap[typeOfService];
+            let clonedEntity = JSON.parse(JSON.stringify(entity));
             console.log("changeUsersPermissions", serviceName, clonedEntity)
             console.log(typeOfService) ;
 
 
             if(clonedEntity.serial != undefined) {
-                var serviceName = OfficeDocumentsService;
+                let serviceName = OfficeDocumentsService;
                 serviceName.updateWatcherPerms(clonedEntity, user, clonedEntity.permissions) ;
             }
             else {
@@ -166,13 +169,13 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function updateEntity(entity, context) {
-            var entityService = (context.main === 'tasks' ?  TasksService :  ProjectsService);
-            var backupEntity = JSON.parse(JSON.stringify(entity));
+            let entityService = (context.main === 'tasks' ?  TasksService :  ProjectsService);
+            let backupEntity = JSON.parse(JSON.stringify(entity));
 
             if (context.main !== 'discussions') {
                 entityService.update(entity).then(function (result) {
                     if (context.entityName === 'project') {
-                        var projId = result.project ? result.project._id : undefined;
+                        let projId = result.project ? result.project._id : undefined;
                         if (projId !== context.entityId) {
                             $state.go('main.' + context.main + '.byentity', {
                                 entity: context.entityName,
@@ -212,7 +215,7 @@ angular.module('mean.icu.data.permissionsservice', [])
         }
 
         function updateEntityPermission(entity, context) {
-            var statuses = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'];
+            let statuses = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'];
 
             entity.status = statuses[1];
             if (context.entityName === 'discussion') {
@@ -240,23 +243,17 @@ angular.module('mean.icu.data.permissionsservice', [])
             if(Array.isArray(entity)){
                 entity = entity[0];
             }
-            var member = user || me;
+
+            let member = user || me;
+            if(member === me && me.isAdmin)return true;
+
             haveAnyPerms(entity, member);
 
-            var qs = querystring.encode({
-                user: me,
-                type: type,
-            });
-
-            if (qs.length) {
-                qs = '?' + qs;
-            }
-
             // until permissions backend route isn't complete
-            var havePerm = false;
+            let havePerm = false;
 
             if(entity.permissions.length !== 0){
-                var usersPerms = _.find(entity.permissions, {'id': getUserId(member)});
+                let usersPerms = _.find(entity.permissions, {'id': getUserId(member)});
                 if(!usersPerms)return false;
 
                 switch (usersPerms.level) {

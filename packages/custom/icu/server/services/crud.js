@@ -44,7 +44,6 @@ var OfficeDocumentsArchiveModel = mongoose.model('officeDocument_archive');
 var TemplateDocsModel = require('../models/templateDoc.js');
 var TemplateDocsArchiveModel = mongoose.model('templateDoc_archive');
 
-
 var entityNameMap = {
   'tasks': {
     mainModel: TaskModel,
@@ -113,7 +112,7 @@ var defaults = {
 module.exports = function(entityName, options) {
   var findByUser = ['tasks', 'projects', 'discussions', 'attachments', 'templates', 'offices', 'folders', 'officeDocuments', 'templateDocs'];
   if (findByUser.indexOf(entityName) > -1)
-    var currentUser = true;
+    var enabledOnlyForRelatedUsers = true;
 
   var Model = entityNameMap[entityName].mainModel;
   var ArchiveModel = entityNameMap[entityName].archiveModel;
@@ -130,45 +129,68 @@ module.exports = function(entityName, options) {
     var countQuery;
     var mergedPromise;
 
-    var query;
+    var queryFn;
     if(pagination && pagination.status){
       options.conditions = {status : pagination.status};
     }else{
       //options.conditions = {};
     }
-    if (currentUser) {
-      query = acl.mongoQuery(entityNameMap[entityName].name);
+    if (enabledOnlyForRelatedUsers && !user.isAdmin) {
+      queryFn = () => acl.mongoQuery(entityNameMap[entityName].name);
       countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);
     } else {
-      query = Model.find(options.conditions);
+      queryFn = () => Model.find(options.conditions);
       countQuery = Model.find(options.conditions).count();
     }
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
-        query.find(options.conditions)
-          .sort(pagination.sort)
-          .skip(pagination.start)
-          .limit(pagination.limit);
+        if(typeof pagination.limit === 'number') {
+          let query = queryFn().find(options.conditions)
+            .sort(pagination.sort)
+            .skip(pagination.start)
+            .limit(pagination.limit)
+            .populate(options.includes);
 
-        query.populate(options.includes);
-        /*query.hint({
-          _id: 1
-        });*/
+          mergedPromise = q.all([query, countQuery]).then(function(results) {
+            pagination.count = results[1];
+            return results[0];
+          });
 
-        mergedPromise = q.all([query, countQuery]).then(function(results) {
-          pagination.count = results[1];
-          return results[0];
-        });
+          deffered.resolve(mergedPromise);
+        } else {
 
-        deffered.resolve(mergedPromise);
+          // finding all elements from "start" to "ID" of element
+          queryFn().find({ _id: { $lte: pagination.limit }})
+            .sort(pagination.sort)
+            .count({}, (err, count) => {
+              let entitiesListCount = 25;
+              count = count < entitiesListCount ? entitiesListCount : count;
+
+              let query = queryFn().find(options.conditions)
+                .sort(pagination.sort)
+                .skip(pagination.start)
+                .limit(count)
+                .populate(options.includes);
+
+              pagination.limit = count;
+              pagination.start = pagination.limit - entitiesListCount;
+
+              mergedPromise = q.all([query, countQuery]).then(function(results) {
+                pagination.count = results[1];
+                return results[0];
+              });
+
+              deffered.resolve(mergedPromise);
+            })
+        }
       }
     } else {
-      query.find(options.conditions);
-      query.populate(options.includes);
-      query.hint({
-        _id: 1
-      });
+      let query = queryFn().find(options.conditions)
+        .populate(options.includes)
+        .hint({
+          _id: 1
+        });
 
       deffered.resolve(query);
     }
@@ -179,7 +201,7 @@ module.exports = function(entityName, options) {
 
   function read(id, user, acl, query1) {
     var query;
-    if(currentUser) {
+    if(enabledOnlyForRelatedUsers && !user.isAdmin) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
     } else {
       query = Model.find();
@@ -218,7 +240,7 @@ module.exports = function(entityName, options) {
 
     //    check permsArray changes
     let allowed1 = permissions.syncPermsArray(user,entity) ;
-    if(!allowed1) {
+    if(!allowed1 && !user.isAdmin) {
       // console.log("CRUD NOT ALLOWED") ;
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateWatcher) ;
     }
@@ -293,7 +315,7 @@ module.exports = function(entityName, options) {
     }
 
     var allowed2 = permissions.updateContent(user,oldE, newE) ;
-    if(!allowed2) {
+    if(!allowed2 && !user.user.isAdmin) {
       return throwError(permissions.permError.denied + ":" + permissions.permError.allowUpdateContent) ;
     }
 

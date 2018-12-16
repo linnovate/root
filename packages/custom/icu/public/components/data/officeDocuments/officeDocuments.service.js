@@ -1,25 +1,28 @@
 'use strict';
 
 angular.module('mean.icu.data.officedocumentsservice', [])
-    .service('OfficeDocumentsService', function ($http, ApiUri, Upload, PaginationService, BoldedService, WarningsService, NotifyingService, ActivitiesService) {
+    .service('OfficeDocumentsService', function ($http, $stateParams, ApiUri, Upload,
+                                                 PaginationService, BoldedService, WarningsService, NotifyingService, ActivitiesService) {
         var EntityPrefix = '/officeDocuments';
+        var data = [];
 
     function getAll(start, limit, sort, type, order) {
-        var qs = querystring.encode({
+        let qs = {
             start: start,
-            limit: limit,
             sort: sort,
             order:order,
             status:type
-        });
+        };
+        let paramsId = $stateParams.id;
+        qs.limit = findInExistingOfficeDocuments(paramsId) ? limit : paramsId;
+        qs = querystring.encode(qs);
 
         if (qs.length) {
             qs = '?' + qs;
         }
-        console.log("get all " + ApiUri + EntityPrefix + qs);
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
-            //console.log($rootScope.warning, '$rootScope.warning')
+            data = result.data.content;
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
@@ -32,6 +35,11 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return PaginationService.processResponse(data);
         });
     }
+
+        function findInExistingOfficeDocuments(id){
+            if(!id)return true;
+            return !!data.find( taskInList => taskInList._id === id );
+        }
 
          function deleteDocument(id) {
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {

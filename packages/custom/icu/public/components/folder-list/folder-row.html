@@ -1,6 +1,6 @@
 <td class="office">
     <span class="tag office"
-          title="{{item.office.title}}"
+          title="{{item.office.title | htmlToPlaintext}}"
           ng-style="{'background-color': '#' + item.office.color, 'color': 'white'}"
           ng-bind-html="item.office.title">
     </span>

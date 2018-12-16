@@ -14,6 +14,7 @@ var options = {
   includes: 'creator updater'
 };
 
+var mongoose = require('mongoose');
 var crud = require('../controllers/crud.js');
 var attachment = crud('attachments', options);
 var Task = require('../models/task'),
@@ -477,7 +478,10 @@ exports.signNew = function(req, res, next) {
     folder: 'Folder',
     officeDocument: 'Document'
   };
-  var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+  var query = req.user.isAdmin ?
+    mongoose.model(entities[req.locals.data.body.entity]) :
+    req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+
   query.findOne({
     _id: req.locals.data.body.entityId
   }).exec(function(err, entity) {

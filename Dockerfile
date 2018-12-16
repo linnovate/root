@@ -9,6 +9,8 @@ COPY --chown=node:node . /usr/src/app
 
 WORKDIR /usr/src/app
 
+ARG ROOT_LANG
+
 RUN npm install \
   && npm run production \
   && npm prune --production

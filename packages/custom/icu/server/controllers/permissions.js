@@ -46,7 +46,6 @@ var entityNameMap = {
     mainModel: TemplateDocsModel,
     name: 'TemplateDoc'
   }
-
 };
 
 exports.permError =
@@ -513,6 +512,11 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
   allow update watchers
 */
 exports.allowUpdateWatcher = function(user, perms) {
+
+  if(user.user.isAdmin){
+    return true;
+  }
+
   let uid =  String(user.user._id);
   let index = exports.searchIdIndex(String(uid),perms) ;
   if(index != null && perms[index].level == "editor") {
@@ -544,6 +548,11 @@ exports.allowUpdateWatcherLevel = function(user, perms) {
   allow update of entity info.
 */
 exports.allowUpdateContent = function(user, perms, field) {
+  //admin pass this check anyway
+  if(user.user.isAdmin){
+    return "editor";
+  }
+
   let uid =  String(user.user._id);
   if(!perms) {
     return false ;
@@ -574,6 +583,11 @@ exports.allowUpdateContent = function(user, perms, field) {
   allow update of entity info.
 */
 exports.allowUpdateUpdates = function(user, perms, field) {
+  //just for admins
+  if(user.isAdmin){
+    return "editor";
+  }
+  //for regular users
   let uid =  String(user.user._id);
   // console.log("perms:") ;
   // console.log(JSON.stringify(perms)) ;
