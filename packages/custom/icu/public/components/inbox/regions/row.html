@@ -15,7 +15,7 @@
             <div icu-avatar user="activity.creator"></div>
             <div class="update-content">
                 <div class="update-info">
-                    <div class="update-action">{{getActivityDescription(activity)}}</div>
+                    <div class="update-action">{{getActivityDescription(activity) | htmlToPlaintext}}</div>
                     <div class="update-date">{{formatDate(activity.date)}}</div>
                 </div>
                 <div class="update-data">{{activity.status}}</div>

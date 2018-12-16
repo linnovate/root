@@ -11,8 +11,7 @@
 <td class="project">
     <span class="tag project"
           title="{{data.result.projectObj.title}}"
-          ng-style="color={'background-color': '#' + data.result.projectObj.color}">
-        {{data.result.projectObj.title}}
+          ng-style="color={'background-color': '#' + data.result.projectObj.color}" ng-bind-html="data.result.projectObj.title">
     </span>
 </td>
 <td class="arrow"><i class="fa chevron-right"></i></td>

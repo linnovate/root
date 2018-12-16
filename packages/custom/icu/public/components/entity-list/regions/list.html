@@ -31,7 +31,7 @@
     </div>
     <div data-ng-repeat="item in visibleItems" class="task-row">
         <div>
-            {{item.title}}
+            {{item.title | htmlToPlaintext}}
         </div>
         <div class="status" ng-class="item.status">
             {{item.status | i18next }}

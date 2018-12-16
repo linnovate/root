@@ -48,8 +48,7 @@
         <div class="suggestions">
             <p class="suggestion" ng-repeat="result in searchResults"
                 ng-class="{ 'active': $index === selectedSuggestion }"
-                ng-mousedown="select(result)">
-                {{result.title}}
+                ng-mousedown="select(result)" ng-bind-html="result.title">
             </p>
         </div>
     </div>
