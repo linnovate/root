@@ -59,8 +59,10 @@ angular.module('mean.icu.ui.entityListFilters', [])
 	};
 })
 .filter('htmlToPlaintext', function() {
-    return function(text) {
-        return  text ? String(text).replace(/<[^>]+>/gm, '') : '';
+    return function(html) {
+        let tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
     };
 })
 .filter('filterByOptions', function (TasksService) {
