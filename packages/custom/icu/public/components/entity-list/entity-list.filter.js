@@ -58,6 +58,13 @@ angular.module('mean.icu.ui.entityListFilters', [])
 		return out;
 	};
 })
+.filter('htmlToPlaintext', function() {
+    return function(html) {
+        let tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+    };
+})
 .filter('filterByOptions', function (TasksService) {
 	return function(tasks) {
 		if (!tasks || !(tasks instanceof Array)) return tasks;
