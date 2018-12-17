@@ -497,7 +497,6 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
-      }).then(() => {
         refreshList();
       });
       break;
