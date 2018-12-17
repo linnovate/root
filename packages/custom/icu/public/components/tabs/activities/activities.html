@@ -8,7 +8,7 @@
                     <div class="text">
                         <span class="user-name">{{activity.creator.name}} {{activity.creator.lastname}}</span>
                     </div>
-                    <div class="activity-date">{{activity.date | date:"MM/dd/yyyy ' | ' h:mma"}}</div>
+                    <div class="activity-date">{{activity.date | date:"dd/MM/yyyy ' | ' h:mma"}}</div>
                 </div>
                 <div class="description" ng-bind-html="getActivityDescription(activity)"></div>
                 <div id="UpdatetLine" data-ng-repeat="attachment in activity.attachments" class="attachment">

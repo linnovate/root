@@ -18,7 +18,7 @@
     {{ (data.discussion._id ? data.discussion.status  : '') | i18next }}
 </td>
 <td class="due">
-    {{ (data.discussion._id ? data.discussion.startDate  : '') | date: 'dd.MM.yyyy' }}
+    {{ (data.discussion._id ? data.discussion.startDate  : '') | date: 'dd/MM/yyyy' }}
 </td>
 <td class="arrow">
     <i ng-if="data.drawArrow" class="fa chevron-right"></i>

@@ -160,7 +160,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', []).directive('icuSubTaskLis
             $scope.open(task);
           }
         },
-        dateFormat: 'd.m.yy'
+        dateFormat: 'dd/mm/yy'
       }
     }
 
