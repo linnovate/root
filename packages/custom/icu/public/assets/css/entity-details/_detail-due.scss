@@ -148,7 +148,7 @@ discussion-due {
             direction: ltr !important;
 
          .ui-widget-header{
-                font-family: Open Sans;
+                font-family: 'Open Sans';
                 font-style: normal;
                 font-weight: bold;
                 line-height: normal;
@@ -185,6 +185,8 @@ discussion-due {
                     background:none !important;
                     border: none;
                     text-align: center;
+                    font-weight: normal;
+
                 }
                a.ui-state-highlight {
                     color: #00AEEF;
