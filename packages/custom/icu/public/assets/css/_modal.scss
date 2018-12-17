@@ -437,6 +437,13 @@
         }
         .modal-body {
             padding: 15px 0 0;
+
+            icu-members-footer {
+                width: calc(100% - 23px);
+                bottom: 14px;
+                left: 12px;
+            }
+
             &#modalUser {
                 min-height: 344px;
                 background-color:#FCFBF6;

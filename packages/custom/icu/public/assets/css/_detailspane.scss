@@ -20,10 +20,6 @@ $tab-content-height: calc(
     top: 0;
     right: 0;
 
-    @media screen and (max-width: $small-resolution) {
-        max-width: $min-detailspane-width;
-    }
-
     textarea {
         resize: none;
     }
