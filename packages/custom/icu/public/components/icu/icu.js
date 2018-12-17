@@ -7,6 +7,7 @@ angular.module('mean.icu').controller('IcuController',
         me,
         $state,
         $stateParams,
+        $timeout,
         projects,
         discussions,
         officeDocuments,
@@ -182,20 +183,11 @@ angular.module('mean.icu').controller('IcuController',
         var state = toState;
         state.params = toParams;
         initializeContext(state);
-        initializeContext(state);
     });
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
-      $scope.currentState = toState.name;
-      let currentState = $state.current;
-
-      if (currentState.url !== '/modal'
-          && LayoutService.show()
-          && $scope.detailsPane.isHidden
-      ) {
-          $state.go(currentState.name + '.modal');
-      }
-
+        // $scope.currentState = toState.name;
+        // let currentState = $state.current;
     });
 });
 
