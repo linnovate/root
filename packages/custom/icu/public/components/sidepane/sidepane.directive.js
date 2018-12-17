@@ -455,7 +455,7 @@ directive('icuSidepane', function() {
             //                        console.log("SearchService.filteringByUpdated", SearchService.filteringByUpdated)
             $state.go('main.search', { dateUpdated: value }) ;
         },
-        dateFormat: 'd.m.yy'
+        dateFormat: 'dd/mm/yy'
     };
 
     $scope.updateDueDate = {
@@ -469,7 +469,7 @@ directive('icuSidepane', function() {
             SearchService.filteringByUpdated = SearchService.filteringByUpdated;
             $state.go('main.search', { dateUpdated: value }) ;
         },
-        dateFormat: 'd.m.yy'
+        dateFormat: 'dd/mm/yy'
     };
 
     function arrayUnique(array) {
