@@ -11,7 +11,7 @@
             <td class="status col-sm-2  filename" ng-class="officeDocument.status">{{ officeDocument.title | i18next }}</td>
             <td class="status col-sm-2" ng-class="officeDocument.status">{{ officeDocument.status | i18next }}</td>
             <td class="status col-sm-2" ng-class="officeDocument.tags">{{officeDocument.tags[0] | json}}</td>
-            <td class="status col-sm-2" ng-class="officeDocument.date">{{officeDocument.created | date: "dd-MM-yy"}}</td>
+            <td class="status col-sm-2" ng-class="officeDocument.date">{{officeDocument.created | date: "dd/MM/yyyy"}}</td>
         </tr>
     </table>
 

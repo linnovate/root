@@ -25,7 +25,7 @@
     {{ (data.folder._id ? data.task.status  : '') | i18next }}
 </td>
 <td ng-if="data.folder._id" class="due">
-    {{ (data.folder._id ? data.folder.due  : '') | date: 'dd.MM.yyyy' }}
+    {{ (data.folder._id ? data.folder.due  : '') | date: 'dd/MM/yyyy' }}
 </td>
 <td class="arrow" ng-if="data.folder._id">
    <i ng-if="data.drawArrow" class="fa chevron-right"></i>

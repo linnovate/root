@@ -16,9 +16,7 @@
 
   <detail-category placeholder="'selectOffice' | i18next" value="item.office" items="offices" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent" ></detail-category>
 
-  <div class="parent" ng-if="templateDoc.parent">
-      {{currentContext.entity.title}}
-  </div>
+  <div class="parent" ng-if="templateDoc.parent" ng-bind-html="currentContext.entity.title"></div>
 
   <div ng-if="!disabled && havePermissions('description')">
     <div class="detail-title">
@@ -81,7 +79,7 @@
             <!-- <a href="{{officeDocument.path}}" target="window"> -->
                 <a ng-click="view(item)" target="window">
                     <div class="icon {{item.templateType}}"></div>
-                    <div id="templateDocTitle">{{item.title}}</div>
+                    <div id="templateDocTitle" ng-bind-html="item.title"></div>
                 </a>
             </div>
         </div>

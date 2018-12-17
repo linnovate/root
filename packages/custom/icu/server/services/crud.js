@@ -129,31 +129,29 @@ module.exports = function(entityName, options) {
     var countQuery;
     var mergedPromise;
 
-    var query;
-    var queryById;
+    var queryFn;
     if(pagination && pagination.status){
       options.conditions = {status : pagination.status};
     }else{
       //options.conditions = {};
     }
     if (enabledOnlyForRelatedUsers && !user.isAdmin) {
-      query = acl.mongoQuery(entityNameMap[entityName].name);
+      queryFn = () => acl.mongoQuery(entityNameMap[entityName].name);
       countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);
     } else {
-      query = Model.find(options.conditions);
-      queryById = acl.mongoQuery(entityNameMap[entityName].name);
+      queryFn = () => Model.find(options.conditions);
       countQuery = Model.find(options.conditions).count();
     }
 
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
         if(typeof pagination.limit === 'number') {
-          query.find(options.conditions)
+          let query = queryFn().find(options.conditions)
             .sort(pagination.sort)
             .skip(pagination.start)
-            .limit(pagination.limit);
+            .limit(pagination.limit)
+            .populate(options.includes);
 
-          query.populate(options.includes);
           mergedPromise = q.all([query, countQuery]).then(function(results) {
             pagination.count = results[1];
             return results[0];
@@ -163,21 +161,21 @@ module.exports = function(entityName, options) {
         } else {
 
           // finding all elements from "start" to "ID" of element
-          queryById.find({ _id: { $lte: pagination.limit }})
+          queryFn().find({ _id: { $lte: pagination.limit }})
             .sort(pagination.sort)
             .count({}, (err, count) => {
               let entitiesListCount = 25;
               count = count < entitiesListCount ? entitiesListCount : count;
 
-              query.find(options.conditions)
+              let query = queryFn().find(options.conditions)
                 .sort(pagination.sort)
                 .skip(pagination.start)
-                .limit(count);
+                .limit(count)
+                .populate(options.includes);
 
               pagination.limit = count;
               pagination.start = pagination.limit - entitiesListCount;
 
-              query.populate(options.includes);
               mergedPromise = q.all([query, countQuery]).then(function(results) {
                 pagination.count = results[1];
                 return results[0];
@@ -188,11 +186,11 @@ module.exports = function(entityName, options) {
         }
       }
     } else {
-      query.find(options.conditions);
-      query.populate(options.includes);
-      query.hint({
-        _id: 1
-      });
+      let query = queryFn().find(options.conditions)
+        .populate(options.includes)
+        .hint({
+          _id: 1
+        });
 
       deffered.resolve(query);
     }

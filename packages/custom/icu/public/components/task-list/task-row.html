@@ -1,12 +1,12 @@
 <td class="project">
     <span class="tag project"
-          title="{{item.project.title}}"
+          title="{{item.project.title | htmlToPlaintext}}"
           ng-style="{'background-color': '#' + item.project.color, 'color': 'white'}"
           ng-bind-html="item.project.title">
     </span>
 </td>
 <td class="status col-sm-2"  ng-class="item.status">{{item.status | i18next }}</td>
-<td class="due">{{item.due | date: 'dd.MM.yyyy'}}</td>
+<td class="due">{{item.due | date: 'dd/MM/yyyy'}}</td>
 <td class="arrow">
     <div ng-if="drawArrow" class="row-arrow"></div>
 </td>

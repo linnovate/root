@@ -60,7 +60,7 @@
             {{task.status | i18next }}
         </div>
         <div>
-            {{task.due | date: 'dd.MM.yyyy'}}
+            {{task.due | date: 'dd/MM/yyyy'}}
         </div>
         <div class="watchers">
             <span ng-repeat="watcher in task.watchers">{{watcher.name}}</span>
@@ -73,7 +73,7 @@
                 {{subTask.status | i18next }}
             </div>
             <div>
-                {{subTask.due | date: 'dd.MM.yyyy'}}
+                {{subTask.due | date: 'dd/MM/yyyy'}}
             </div>
             <div>
                 <span ng-repeat="watcher in subTask.watchers">{{watcher.name}}</span>

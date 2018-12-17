@@ -387,6 +387,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
           backupEntity = JSON.parse(JSON.stringify($scope.item));
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
+          refreshList();
         });
         break;
 
