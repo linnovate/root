@@ -11,11 +11,8 @@ angular.module('mean.icu.data.localstorageservice', [])
       $window.localStorage.setItem(key, formattedData);
       return data;
     }
-    function load(key){
-
-      let data = $window.localStorage.getItem(key);
-      if(typeof data === 'object')data = JSON.stringify(data);
-      return data;
+    function load(key) {
+      return JSON.parse($window.localStorage.getItem(key));
     }
 
     return {
