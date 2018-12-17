@@ -162,7 +162,7 @@ angular.module('mean.icu.ui.subprojectslistdirective', []).directive('icuSubProj
             $scope.open(project);
           }
         },
-        dateFormat: 'd.m.yy'
+        dateFormat: 'dd/mm/yy'
       }
     }
 

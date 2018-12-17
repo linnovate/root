@@ -83,7 +83,7 @@ function DiscussionDue() {
         }
         datePicker.css( "z-index", "1051" )
       },
-      dateFormat: 'd.m.yy'
+      dateFormat: 'dd/mm/yy'
     };
     $scope.endDueOptions = _.clone($scope.startDueOptions);
 

@@ -254,7 +254,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         onSelect: function() {
             $scope.entityDateCheck();
         },
-        dateFormat: 'dd.mm.yy'
+        dateFormat: 'dd/mm/yy'
     };
 
     $scope.dateCheck = function(entityArray, entityName){

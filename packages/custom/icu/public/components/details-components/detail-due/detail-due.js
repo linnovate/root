@@ -48,7 +48,7 @@ function detailDue() {
           $scope.open();
         }
       },
-      dateFormat: 'dd.mm.yy'
+      dateFormat: 'dd/mm/yy'
     };
 
     $scope.checkDate = function() {

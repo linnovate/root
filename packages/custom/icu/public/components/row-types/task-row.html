@@ -25,7 +25,7 @@
     {{ (data.task._id ? data.task.status  : '') | i18next }}
 </td>
 <td class="due">
-    {{ (data.task._id ? data.task.due  : '') | date: 'dd.MM.yyyy' }}
+    {{ (data.task._id ? data.task.due  : '') | date: 'dd/MM/yyyy' }}
 </td>
 <td class="arrow">
     <div ng-if="data.drawArrow && data.task._id" class="row-arrow"></div>
