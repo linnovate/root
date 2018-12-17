@@ -343,6 +343,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
         backupEntity = JSON.parse(JSON.stringify($scope.item));
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
+        refreshList();
       });
       break;
 
