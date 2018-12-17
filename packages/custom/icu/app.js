@@ -103,6 +103,7 @@ ICU.register(function (app, auth, database, swagger) {
         'mean.icu.ui.entityList',
         'mean.icu.ui.inbox',
         'mean.icu.data.inboxservice',
+        'mean.icu.data.localstorageservice',
         'mean.icu.ui.bulkoperations',
         'mean.icu.ui.entityListFilters',
         'mean.icu.ui.projectlist',

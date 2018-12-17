@@ -17,7 +17,8 @@ angular.module('mean.icu').controller('IcuController',
         context,
         tasks,
         LayoutService,
-        TasksService) {
+        TasksService,
+        LocalStorageService) {
     $scope.menu = {
         isHidden: false
     };
@@ -54,8 +55,17 @@ angular.module('mean.icu').controller('IcuController',
         return LayoutService.getSideMenuIcon();
     };
 
+    //local storage saving and getting hiding state
+    refreshInterface(LayoutService.getStateValue());
+    let updateLayoutState = (layoutState) => LocalStorageService.save("layoutState", layoutState);
+
     $scope.changeLayout = function() {
       var state = LayoutService.changeLayout();
+      refreshInterface(state);
+      updateLayoutState(state)
+    };
+
+    function refreshInterface(state){
       if (state === 4) {
         $scope.detailsPane.isHidden = false;
         $scope.menu.isHidden = false;
@@ -63,20 +73,18 @@ angular.module('mean.icu').controller('IcuController',
         $scope.detailsPane.isHidden = false;
         $scope.menu.isHidden = true;
       } else if (state === 2) {
-          $scope.detailsPane.isHidden = true;
-          $scope.menu.isHidden = true;
+        $scope.detailsPane.isHidden = true;
+        $scope.menu.isHidden = true;
       } else {
-          $scope.detailsPane.isHidden = true;
-          $scope.menu.isHidden = false;
+        $scope.detailsPane.isHidden = true;
+        $scope.menu.isHidden = false;
       }
       if(state !== 4 && state !== 1){
-          $scope.hiddenButton = true;
+        $scope.hiddenButton = true;
       } else {
-          $scope.hiddenButton = false;
+        $scope.hiddenButton = false;
       }
-    };
-
-    $scope.hiddenButton = false;
+    }
 
     //Made By OHAD
     //$state.go('socket');
@@ -179,10 +187,13 @@ angular.module('mean.icu').controller('IcuController',
 
     $rootScope.$on('$stateChangeSuccess', function (event, toState) {
       $scope.currentState = toState.name;
-      if (toState.url !== '/modal') {
-        if (LayoutService.show() && $scope.detailsPane.isHidden) {
-            $state.go(toState.name + '.modal');
-        }
+      let currentState = $state.current;
+
+      if (currentState.url !== '/modal'
+          && LayoutService.show()
+          && $scope.detailsPane.isHidden
+      ) {
+          $state.go(currentState.name + '.modal');
       }
 
     });

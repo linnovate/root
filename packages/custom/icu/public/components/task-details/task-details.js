@@ -19,7 +19,12 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, $rootSco
       entity: context.entityName,
       entityId: context.entityId
     });
-  } else if ($scope.item && ($state.current.name === 'main.tasks.byentity.details' || $state.current.name === 'main.search.task' || $state.current.name === 'main.tasks.all.details' || $state.current.name === 'main.tasks.byassign.details')) {
+  } else if ($scope.item
+      && ($state.current.name === 'main.tasks.byentity.details'
+          || $state.current.name === 'main.search.task'
+          || $state.current.name === 'main.tasks.all.details'
+          || $state.current.name === 'main.tasks.byassign.details')
+  ) {
     $state.go('.' + window.config.defaultTab);
   }
 

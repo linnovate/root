@@ -1,8 +1,13 @@
 'use strict';
 
 angular.module('mean.icu.data.layoutservice', [])
-.service('LayoutService', function () {
-	var show = false, state = 4;
+.service('LayoutService', function (LocalStorageService) {
+    var show = false, state = 4;
+
+    //for saving hided layout state after refreshing the page
+    let savedValue = LocalStorageService.load("layoutState");
+    if(Number.isInteger(+savedValue))
+    state = +savedValue;
 
     function getShow() {
         return show;
@@ -37,7 +42,10 @@ angular.module('mean.icu.data.layoutservice', [])
         }
         else if (state === 1)
             return '/icu/assets/img/sections7.svg';
+    }
 
+    function getStateValue(){
+        return state;
     }
 
     return {
@@ -45,6 +53,7 @@ angular.module('mean.icu.data.layoutservice', [])
         clicked: clicked,
         unClick: unClick,
         changeLayout: changeLayout,
+        getStateValue: getStateValue,
         getLayoutIcon: getLayoutIcon,
         getSideMenuIcon: getSideMenuIcon
     };
