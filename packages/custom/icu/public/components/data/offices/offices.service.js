@@ -167,7 +167,6 @@ angular.module('mean.icu.data.officesservice', [])
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
         updateStar: createActivity('star'),
-        updateColor: createActivity('color'),
         updateTitle: createActivity('title'),
         updateStatus: createActivity('status'),
         updateWatcher: createActivity('watchers'),

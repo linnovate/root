@@ -390,14 +390,6 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
           refreshList();
         });
         break;
-
-      case 'color':
-        ProjectsService.updateColor(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
-          ActivitiesService.data = ActivitiesService.data || [];
-          ActivitiesService.data.push(result);
-        });
-        break;
       case 'star':
         ProjectsService.updateStar(item, $scope.me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));

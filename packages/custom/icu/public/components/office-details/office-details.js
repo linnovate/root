@@ -305,14 +305,6 @@ function OfficeDetailsController(
         }
       }
       switch (context.name) {
-        case "color":
-          OfficesService.updateColor(office, me, backupEntity).then(function(
-            result
-          ) {
-            ActivitiesService.data = ActivitiesService.data || [];
-            ActivitiesService.data.push(result);
-          });
-          break;
         case "title":
           OfficesService.updateTitle(office, me, backupEntity).then(function(
             result
