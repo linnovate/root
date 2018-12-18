@@ -165,6 +165,7 @@ discussion-due {
                 
                 /* arrows */
                 a.ui-datepicker-prev.ui-corner-all[title~="Prev"]:after{
+                    text-decoration: none;
                         content: '<';
                         color: #FFFFFF;
                         font-size: 18px;
@@ -173,6 +174,11 @@ discussion-due {
                     content: '>';
                     color: #FFFFFF;                   
                     font-size: 18px;
+                    text-decoration: none;
+                }
+
+                a:hover, a:focus{
+                    text-decoration: none;
                 }
 
                 // a.ui-datepicker-prev.ui-corner-all
@@ -181,32 +187,44 @@ discussion-due {
                         display: none;
                     }
                 }
-             
-                a.ui-state-default{
-                    color: #DFF2F9;
+              td{
+                  padding: 7px;
+                    span,a{
+                    width:26px;
+                    height: 26px;
+                    }
+                        a.ui-state-default {
+                            color: #DFF2F9;
+                            background:none !important;
+                            border: none;
+                            text-align: center;
+                            font-weight: normal;
+
+                        }
+                         a.ui-state-highlight {
+                            color: #00AEEF;
+                        }
+                        a.ui-state-active, a.ui-state-hover {
+                            background: #FFA000!important;
+                            border-radius: 50%;
+                            -moz-border-radius:50%;
+                            -webkit-border-radius:50%;
+                            color: #DFF2F9;
+                            text-align: center;
+                            border: none;
+                        }
+                        
+
+                }
+                .ui-state-disabled  {
+                    span{
+                    font-family: 'Open Sans';
+                    font-style: normal;                        
                     background:none !important;
-                    border: none;
-                    text-align: center;
                     font-weight: normal;
-
-                }
-               a.ui-state-highlight {
-                    color: #00AEEF;
-                }
-                a.ui-state-active, a.ui-state-hover {
-                    background: #FFA000!important;
-                    border-radius: 50%;
-                    -moz-border-radius:50%;
-                    -webkit-border-radius:50%;
-                    color: #DFF2F9;
-                    text-align: center;
                     border: none;
-                }
-
-
-                td{
-                 padding: 7px;
-
+                    color:#e7dada;
+                    }
                 }
 
             /*rtl:end:ignore*/
