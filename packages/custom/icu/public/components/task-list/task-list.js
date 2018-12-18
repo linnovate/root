@@ -106,10 +106,6 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
             return resolve([]);
         })
     };
-    
-    $scope.loadAll = function() {
-        return TasksService.getAll(0, 0);
-    }
 
     $scope.getFilter = function() {
         var a = TasksService.filterValue;

@@ -117,25 +117,18 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.changeOrder = function() {
-        $scope.loadAll()
-            .then((result) => {
-                $scope.items = result.data;
-            })
-            .then(() => {
-                if ($scope.sorting.field != "custom") {
-                    $scope.sorting.isReverse = !$scope.sorting.isReverse;
-                }
-    
-                $scope.refreshVisibleItems();
-    
-                /*Made By OHAD - Needed for reversing sort*/
-                $state.go($state.current.name, {
-                    sort: $scope.sorting.field
-                });
-    
-                $scope.refreshVisibleItems();
-            }
-        );
+        if ($scope.sorting.field != "custom") {
+            $scope.sorting.isReverse = !$scope.sorting.isReverse;
+        }
+
+        $scope.refreshVisibleItems();
+
+        /*Made By OHAD - Needed for reversing sort*/
+        $state.go($state.current.name, {
+            sort: $scope.sorting.field
+        });
+
+        $scope.refreshVisibleItems();
     };
 
     $scope.sorting = {
@@ -403,7 +396,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
                     //$scope.order.field;
                     $scope.$parent.loadMore(start, LIMIT, sort).then(result => {
                         if (result.length === 0) listEnd = true;
-                        loadedVisibleCount = filterResults(result).length;
+                        loadedVisibleCount += filterResults(result).length;
                         $scope.refreshVisibleItems();
                         loadWithVisibleCheck(listEnd, loadedVisibleCount);
                     })
@@ -411,10 +404,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             }
         }
     };
-    
-    $scope.loadAll = function() {
-        return $scope.$parent.loadAll();
-    }
 
     $scope.refreshVisibleItems = function() {
         $scope.visibleItems = removeDuplicates(filterResults($scope.items))
