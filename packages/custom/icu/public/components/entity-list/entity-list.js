@@ -174,9 +174,24 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // =========================== list ============================ //
     // ============================================================= //
 
-    $scope.context = context;
-    $scope.isLoading = true;
+    //Yehudit
+    $scope.postionNewItemBtn = function() {
+        console.log('postionNewItemBtnnnnnnnnn');
+        let newItemElement = document.getElementsByClassName("create-new-item")[0];
+        let TbodyElement = document.getElementsByClassName("containerVertical")[0];
+        let listTableElement = document.getElementsByClassName("list-table")[0];
+          if(TbodyElement.offsetHeight>=listTableElement.offsetHeight)
+          {
+           $(newItemElement).addClass('postion-new-item');
+          }
+         else
+         newItemElement.remove('postion-new-item');
+      }
+      $(document).ready(function(){
+        $scope.postionNewItemBtn();
+      });
 
+    
 
     let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
 
@@ -234,6 +249,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
         }
         );
+        $scope.postionNewItemBtn();
     };
 
     // ============================================================= //
