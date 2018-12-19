@@ -108,11 +108,18 @@ angular.module('mean.icu.data.activitiesservice', [])
     }
 
     function create(update) {
-        return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
+      if(!activitiesChecksMap[update.data.updateField](update.data.prev, update.data.current))
+        return;
+
+      return $http.post(ApiUri + EntityPrefix, update).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
             return result.data;
         });
     }
+
+    const activitiesChecksMap = {
+        'title': checkForTitleUpdateNeeded
+    };
 
     return {
         getById: getById,
@@ -126,7 +133,6 @@ angular.module('mean.icu.data.activitiesservice', [])
         getByOfficeId: getByOfficeId,
         getByTemplateDocId: getByTemplateDocId,
         getByFolderId: getByFolderId,
-        getByOfficeDocumentId:getByOfficeDocumentId,
-        checkForTitleUpdateNeeded:checkForTitleUpdateNeeded
+        getByOfficeDocumentId:getByOfficeDocumentId
     };
 });

@@ -260,15 +260,10 @@ angular.module('mean.icu.data.tasksservice', [])
         });
     }
 
-    let activitiesChecksMap = {
-      'title': ActivitiesService.checkForTitleUpdateNeeded
-    };
-
     function createActivity(updateField){
         return function(entity, me, prev){
           prev = prev ? prev[updateField] : '';
 
-          if(activitiesChecksMap[updateField]( prev, entity[updateField] )){
             return ActivitiesService.create({
               data: {
                 creator: me,
@@ -281,14 +276,7 @@ angular.module('mean.icu.data.tasksservice', [])
                 prev: prev
               },
               context: {}
-            }).then(function(result) {
-              if (updateField === 'assign' && entity.assign) {
-                var message = {};
-                message.content = entity.title || '-';
-              }
-              return result;
             });
-          }
 
         }
     }

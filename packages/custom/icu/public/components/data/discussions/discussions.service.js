@@ -150,12 +150,6 @@ angular.module('mean.icu.data.discussionsservice', [])
             prev: prev ? prev[updateField] : ''
           },
           context: {}
-        }).then(function(result) {
-          if (updateField === 'assign' && entity.assign) {
-            var message = {};
-            message.content = entity.title || '-';
-          }
-          return result.data;
         });
       }
     }
