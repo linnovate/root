@@ -255,7 +255,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     function multipleSelectSetAllSelected(status){
         for(let i = 0; i < $scope.visibleItems.length; i++){
-            $scope.visibleItems[i].selected = status;
+            let row = $scope.visibleItems[i];
+
+            if(!row.selected)MultipleSelectService.refreshSelectedList(row);
+            row.selected = status;
         }
         if(status){
             MultipleSelectService.setSelectedList($scope.visibleItems);
