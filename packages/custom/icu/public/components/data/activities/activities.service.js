@@ -26,6 +26,11 @@ angular.module('mean.icu.data.activitiesservice', [])
             })
     }
 
+    function checkForTitleUpdateNeeded(oldTitle, newTitle){
+        let stripedHtml = text => text.replace(/<[^>]+>/g, '');
+        return stripedHtml(oldTitle) !== stripedHtml(newTitle);
+    }
+
     function getUser(updates) {
         return UsersService.getAll().then(function(users) {
             return updates.map(function (u) {
@@ -121,6 +126,7 @@ angular.module('mean.icu.data.activitiesservice', [])
         getByOfficeId: getByOfficeId,
         getByTemplateDocId: getByTemplateDocId,
         getByFolderId: getByFolderId,
-        getByOfficeDocumentId:getByOfficeDocumentId
+        getByOfficeDocumentId:getByOfficeDocumentId,
+        checkForTitleUpdateNeeded:checkForTitleUpdateNeeded
     };
 });
