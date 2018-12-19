@@ -22,7 +22,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         }
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
-            data = result.data.content;
+            data = result.data.content || result.data;
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
