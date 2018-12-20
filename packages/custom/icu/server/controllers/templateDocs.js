@@ -236,7 +236,8 @@ exports.getByUserId = function(req, res, next) {
 //req.body.folder.office contains id of office
 exports.getByOfficeId = function(req, res, next) {
   TemplateDoc.find({
-    office: req.body.folder.office
+    office: req.body.folder.office,
+    recycled: {$exists: false}
   }, function(err, data) {
     if(err) {
       logger.log('error', '%s templateDocx.getByOfficeId, %s', req.user.name, ' TemplateDoc.find', {error: err.message});
