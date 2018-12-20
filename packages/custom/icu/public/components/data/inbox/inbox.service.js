@@ -65,7 +65,7 @@ angular.module('mean.icu.data.inboxservice', [])
             return `${creator} ${$i18next('updatedDescription')} ${activity.current}`;
             break;
           case 'comment' :
-            return `${activity.current}`;
+            return `${creator} ${$i18next('addComment')} ${activity.current}`;
             break;
           case 'attachment' :
             return `${creator} ${$i18next('addedAttachment')}`;
