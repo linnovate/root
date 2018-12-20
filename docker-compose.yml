@@ -10,12 +10,16 @@ services:
       PORT: 3000
       MONGODB_URI: mongodb://mongo/icu-dev
       ELASTICSEARCH_IP: elasticsearch
+      FTP_IP: ftp
+      FTP_USER_NAME: admin
+      FTP_USER_PASS: admin
     ports:
       - 3000:3000
     command: node server
     depends_on:
       - mongo
       - elasticsearch
+      - ftp
 
   mongo:
     image: mongo:3.6
@@ -31,3 +35,17 @@ services:
     volumes:
       - ./data/elasticsearch:/usr/share/elasticsearch/data
     mem_limit: 512m
+
+  ftp:
+    image: stilliard/pure-ftpd
+    ports:
+      - 21:21
+      - 30000-30009:30000-30009
+    volumes: # remember to replace /folder_on_disk/ with the path to where you want to store the files on the host machine
+      - ./data/ftp:/home/admin
+    environment:
+      PUBLICHOST: ftp
+      FTP_USER_NAME: admin
+      FTP_USER_PASS: admin
+      FTP_USER_HOME: /home/admin
+    restart: always
