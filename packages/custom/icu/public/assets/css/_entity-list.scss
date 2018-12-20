@@ -78,7 +78,10 @@
                         margin-left: 2em;
                         padding: 0 4em 0 1em;
                     }
-
+                    &.postion-new-item{
+                        bottom: 0px;   
+                        position: absolute;
+                    }
                     &.id {
                         font-size: 13px;
                         font-weight: normal;

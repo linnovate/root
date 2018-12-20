@@ -178,6 +178,27 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.isLoading = true;
 
 
+    //Yehudit
+    $scope.postionNewItemBtn = function() {
+        let newItemElement = document.getElementsByClassName("create-new-item")[0];
+        let TbodyElement = document.getElementsByClassName("containerVertical")[0];
+        let listTableElement = document.getElementsByClassName("list-table")[0];
+          if(TbodyElement.offsetHeight>=listTableElement.offsetHeight)
+          {
+          $(newItemElement).addClass('postion-new-item');
+         }
+        //  else
+        //  newItemElement.remove('postion-new-item');
+      }
+
+    //   $scope.$watch('$viewContentLoaded', function(){
+    //     console.log('viewContentLoaded');
+    //     //Here your view content is fully loaded !!
+    //     $scope.postionNewItemBtn();
+    //   });
+        
+
+      
     let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
 
     $scope.showTaskExcel = inCurrentEntity('tasks')
@@ -231,7 +252,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
                 nameFocused: true
             });
             //             }
-
+            $scope.postionNewItemBtn();
         }
         );
     };
