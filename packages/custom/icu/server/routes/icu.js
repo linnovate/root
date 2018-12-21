@@ -225,9 +225,9 @@ module.exports = function(Icu, app) {
   // app.route('/api/:entity(discussions|projects|offices|users|folders)/:id([0-9a-fA-F]{24})/folders')
   //     .get(pagination.parseParams, folder.getByEntity, pagination.formResponse);
 
-  app.route('/api/:entity(discussions|projects|offices|users|folders|officeDocuments)/:id([0-9a-fA-F]{24})/tasks')
+  app.route('/api/:entity(discussions|projects|offices|users|folders)/:id([0-9a-fA-F]{24})/tasks')
     .get(pagination.parseParams, task.getByEntity, pagination.formResponse);
-  app.route('/api/:entity(discussions|projects|offices|users|folders|officeDocuments)/:id([0-9a-fA-F]{24})/tasks/starred')
+  app.route('/api/:entity(discussions|projects|offices|users|folders)/:id([0-9a-fA-F]{24})/tasks/starred')
     .get(pagination.parseParams, star.getStarredIds('tasks'), task.getByEntity, pagination.formResponse);
   app.route('/api/history/tasks/:id([0-9a-fA-F]{24})')
     .get(task.readHistory);
@@ -380,7 +380,7 @@ module.exports = function(Icu, app) {
     .post(documents.getExcelSummary);
 
   app.route('/api/tasks/:id([0-9a-fA-F]{24})/officeDocuments')
-    .get(pagination.parseParams, documents.getByTaskId, pagination.formResponse);
+    .get(pagination.parseParams, task.getByOfficeDocumentId, pagination.formResponse);
   app.route('/api/tasks/:id([0-9a-fA-F]{24})/officeDocuments/starred')
     .get(pagination.parseParams, star.getStarredIds('tasks'), documents.getByTaskId, pagination.formResponse);
 
@@ -389,6 +389,8 @@ module.exports = function(Icu, app) {
     .post(documents.update)
     .put(documents.update, star.isStarred, attachments.sign)
     .delete(documents.deleteDocument);
+  app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})/tasks')
+    .get(pagination.parseParams, documents.getByTaskId, pagination.formResponse);
   app.route('/api/officeDocuments/create')
     .post(documents.create, updates.created, boldedService.syncBoldUsers);
   app.route('/api/officeDocuments/addSerialTitle')
