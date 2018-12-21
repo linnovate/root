@@ -1,6 +1,6 @@
 'use strict';
 
-function OfficeDocumentListController($scope, $state, BoldedService, NotifyingService, officeDocuments, OfficeDocumentsService, MultipleSelectService, context, $stateParams, EntityService) {
+function OfficeDocumentListController($scope, $state, BoldedService, NotifyingService, officeDocuments, OfficeDocumentsService, TasksService, MultipleSelectService, context, $stateParams, EntityService) {
 
     $scope.items = officeDocuments.data || officeDocuments;
 
@@ -24,7 +24,18 @@ function OfficeDocumentListController($scope, $state, BoldedService, NotifyingSe
             result.created = new Date(result.created);
             $scope.items.push(result);
             return result;
-        });
+        })
+        .then(item => {
+            if(parent && parent.type === 'task'){
+                TasksService.getById(context.entityId)
+                    .then(parentEntity => {
+                        parentEntity.officeDocuments = parentEntity.tasks || [];
+                        parentEntity.officeDocuments.push(item._id);
+                        TasksService.update(parentEntity._id, parentEntity);
+                    })
+            }
+            return item;
+        })
     };
 
     $scope.order = {

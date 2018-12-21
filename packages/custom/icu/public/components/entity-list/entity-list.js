@@ -442,7 +442,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
-        if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
+        // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
         newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;

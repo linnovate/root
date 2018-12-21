@@ -303,6 +303,18 @@ exports.getByEntity = function (req, res, next) {
 
 };
 
+exports.getByOfficeDocumentId = function(req, res, next){
+    let taskId = req.params.id;
+
+    Task.findOne({ _id: taskId })
+        .populate("officeDocuments")
+        .then( doc => {
+            req.locals.data.pagination.count = doc.officeDocuments.length || 0;
+            req.locals.result = doc.officeDocuments || [];
+            next();
+        })
+};
+
 exports.getZombieTasks = function(req, res, next) {
   if(req.locals.error) {
     return next();
