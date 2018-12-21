@@ -98,9 +98,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 }
 
                 return $http.get(url + qs).then(function(result) {
-                    if(!result.data.content)result.data.content = [];
+                    let data = result.data.content || result.data || [];
                     WarningsService.setWarning(result.headers().warning);
-                    return PaginationService.processResponse(result.data);
+                    return PaginationService.processResponse(data);
                 });
             };
         }
