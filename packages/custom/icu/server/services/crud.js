@@ -146,8 +146,12 @@ module.exports = function(entityName, options) {
     if (pagination && pagination.type) {
       if (pagination.type === 'page') {
         if(typeof pagination.limit === 'number') {
+
+          let sorting = {};
+          sorting[pagination.sort] = pagination.order;
+
           let query = queryFn().find(options.conditions)
-            .sort(pagination.sort)
+            .sort(sorting)
             .skip(pagination.start)
             .limit(pagination.limit)
             .populate(options.includes);
@@ -162,13 +166,13 @@ module.exports = function(entityName, options) {
 
           // finding all elements from "start" to "ID" of element
           queryFn().find({ _id: { $lte: pagination.limit }})
-            .sort(pagination.sort)
+            .sort(sorting)
             .count({}, (err, count) => {
               let entitiesListCount = 25;
               count = count < entitiesListCount ? entitiesListCount : count;
 
               let query = queryFn().find(options.conditions)
-                .sort(pagination.sort)
+                .sort(sorting)
                 .skip(pagination.start)
                 .limit(count)
                 .populate(options.includes);

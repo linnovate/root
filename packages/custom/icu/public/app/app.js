@@ -3,9 +3,10 @@
 angular.module('mean.icu').config([
     '$meanStateProvider',
     function ($meanStateProvider) {
-        var LIMIT = 25;
-        var SORT = 'created';
-        var BIGLIMIT = 2500;
+        const LIMIT = 25;
+        const SORT = 'created';
+        const BIGLIMIT = 2500;
+        const ORDER = 'asc';
 
         var capitalize = function (str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
@@ -813,7 +814,8 @@ angular.module('mean.icu').config([
                     start: 0,
                     limit: LIMIT,
                     sort: SORT,
-                    currentEntity: 'task'
+                    currentEntity: 'task',
+                    order: ORDER
                 },
                 resolve: {
                     tasks: function (TasksService, $stateParams) {
@@ -823,7 +825,8 @@ angular.module('mean.icu').config([
                             return TasksService.getAll(
                                 $stateParams.start,
                                 $stateParams.limit,
-                                $stateParams.sort);
+                                $stateParams.sort,
+                                $stateParams.order);
                         }
                     }
                 }

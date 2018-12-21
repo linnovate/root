@@ -117,23 +117,28 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.changeOrder = function() {
-        if ($scope.sorting.field != "custom") {
-            $scope.sorting.isReverse = !$scope.sorting.isReverse;
+
+        if($stateParams.order === 'asc') {
+            $stateParams.sort = $scope.sorting.field;
+            $stateParams.order = 'desc';
+        } else if($stateParams.order === 'desc') {
+            $stateParams.sort = $scope.sorting.field;
+            $stateParams.order = 'asc';
         }
 
-        $scope.refreshVisibleItems();
-
         /*Made By OHAD - Needed for reversing sort*/
-        $state.go($state.current.name, {
-            sort: $scope.sorting.field
+        $state.go($state.current.name).then(() => {
+            if($stateParams.order === 'asc') {
+                $scope.context.isReverse = false;
+            } else if($stateParams.order === 'desc') {
+                $scope.context.isReverse = true;
+            }
         });
 
-        $scope.refreshVisibleItems();
     };
 
     $scope.sorting = {
         field: $stateParams.sort || 'created',
-        isReverse: false
     };
 
     $scope.sortingList = [{
@@ -443,7 +448,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
         if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
-        newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
+        // newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;
     }

@@ -50,7 +50,7 @@
     </div>
     <div class="select-wrapper">
         <div tooltips tooltip-template="{{'sort by' | i18next}}">
-            <button class="button-left-part" ng-click="changeOrder()" ng-class="{'rotate' : sorting.isReverse}"></button>
+            <button class="button-left-part" ng-click="changeOrder()" ng-class="{'rotate' : context.isReverse}"></button>
             <ui-select class="inline-block"
                        ng-model="sorting.field"
                        on-select="changeOrder();loadMore()"
