@@ -105,5 +105,10 @@ module.exports = {
   defaultTab: process.env.DEFAULT_TAB || 'activities', // Possible values: `activities`, `documents`
   ScheduledMailSendWeekly: '59 1 * * 0',
   ScheduledMailSendDaly: '59 1 * * 0-5',
-  activeStatus: require('../activeStatusSettings')
+  activeStatus: require('../activeStatusSettings'),
+  ftp: {
+    host: process.env.FTP_IP,
+    user: process.env.FTP_USER_NAME,
+    password: process.env.FTP_USER_PASS
+  }
 };
