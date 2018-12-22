@@ -126,7 +126,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             $stateParams.order = 'asc';
         }
 
-        /*Made By OHAD - Needed for reversing sort*/
         $state.go($state.current.name).then(() => {
             if($stateParams.order === 'asc') {
                 $scope.context.isReverse = false;
@@ -136,6 +135,19 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         });
 
     };
+
+  $scope.changeSortingField = function() {
+
+    $stateParams.sort = $scope.sorting.field;
+    $state.go($state.current.name).then(() => {
+      if($stateParams.order === 'asc') {
+        $scope.context.isReverse = false;
+      } else if($stateParams.order === 'desc') {
+        $scope.context.isReverse = true;
+      }
+    });
+
+  };
 
     $scope.sorting = {
         field: $stateParams.sort || 'created',

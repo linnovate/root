@@ -144,11 +144,10 @@ module.exports = function(entityName, options) {
     }
 
     if (pagination && pagination.type) {
+      let sorting = {};
+      sorting[pagination.sort] = pagination.order;
       if (pagination.type === 'page') {
         if(typeof pagination.limit === 'number') {
-
-          let sorting = {};
-          sorting[pagination.sort] = pagination.order;
 
           let query = queryFn().find(options.conditions)
             .sort(sorting)
