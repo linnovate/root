@@ -66,7 +66,7 @@ angular.module('mean.icu.ui.entityListFilters', [])
     };
 })
 .filter('filterByOptions', function (TasksService) {
-	return function(tasks) {
+	return function(tasks, myTasksPage) {
 		if (!tasks || !(tasks instanceof Array)) return tasks;
 		var filterValue = TasksService.filterValue;
 		var out = [];
@@ -100,12 +100,11 @@ angular.module('mean.icu.ui.entityListFilters', [])
 				});
 				break;
 			case 'watched':
-				if(TasksService.watchedTasksArray!=undefined){
-					TasksService.watchedTasksArray.forEach(function(task){
-						task.PartTitle = task.title.length<20?task.title: (task.title.substring(0,20)+"...");
-						out.push(task);
-					});
-				}
+			    let arrayToFilter = myTasksPage ? tasks : TasksService.watchedTasksArray;
+                arrayToFilter.forEach(function(task){
+                    task.PartTitle = task.title.length<20?task.title: (task.title.substring(0,20)+"...");
+                    out.push(task);
+                });
 				break;
 			default:
 				out = tasks;
