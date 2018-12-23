@@ -39,7 +39,22 @@ function FolderListController($scope, $state, folders, NotifyingService, BoldedS
             $scope.items.push(result);
             FoldersService.data.push(result);
             return result;
-        });
+        }).then( item => {
+          let updated = false;
+          if(parent && parent.type === 'office') {
+              return OfficesService.getById(context.entityId).then((parentEntity) => {
+                let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
+                Object.assign(item, parentParams);
+                updated = !updated;
+                return {item, updated};
+              }).then( res => {
+                if(res.updated)FoldersService.update(res.item);
+                return res.item;
+              } );
+
+          }
+          return item;
+      })
     };
 
       $scope.loadMore = function(start, LIMIT, sort) {
