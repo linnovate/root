@@ -77,19 +77,16 @@ angular.module('mean.icu.ui.tabs')
                             entityId: $stateParams.id || $stateParams.entityId
                         };
 
-                        result.attachments = [];
-
                         for (var index = 0; index < file.length; index++) {
 
                             DocumentsService.saveAttachments(data, file[index])
                                 .then(function(attachment) {
                                     console.log('[attachment]', [attachment]);
 
-                                    result.attachments[result.attachments.length] = attachment;
-                                    AttachmentsService.getAttachmentUser(result.creator._id)
+                                    AttachmentsService.getAttachmentUser(attachment.creator._id)
                                         .then(user => {
-                                            result.attUser = user.name ;
-                                            $scope.documents.push(result);
+                                            attachment.attUser = user.name ;
+                                            $scope.documents.push(attachment);
                                         })
                                 });
                         }
