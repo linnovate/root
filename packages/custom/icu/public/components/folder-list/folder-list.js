@@ -53,10 +53,8 @@ function FolderListController($scope, $state, folders, NotifyingService, BoldedS
                   p.__state = creatingStatuses.Created;
                 });
 
-                var offset = $scope.displayOnly ? 0 : 1;
-
                 if (items.data.length) {
-                  var index = $scope.items.length - offset;
+                  var index = $scope.items.length;
                   var args = [index, 0].concat(items.data);
 
                   [].splice.apply($scope.items, args);
