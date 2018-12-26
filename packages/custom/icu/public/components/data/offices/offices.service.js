@@ -5,11 +5,12 @@ angular.module('mean.icu.data.officesservice', [])
     var EntityPrefix = '/offices';
     var data = [], selected;
 
-    function getAll(start, limit, sort) {
+    function getAll(start, limit, sort, order) {
         var qs = querystring.encode({
             start: start,
             limit: limit,
-            sort: sort
+            sort: sort,
+            order: order
         });
 
         if (qs.length) {

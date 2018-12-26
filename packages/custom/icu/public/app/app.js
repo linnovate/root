@@ -998,7 +998,8 @@ angular.module('mean.icu').config([
                     starred: false,
                     start: 0,
                     limit: LIMIT,
-                    sort: SORT
+                    sort: SORT,
+                    order: ORDER
                 },
                 views: getListView('project'),
                 resolve: {
@@ -1012,7 +1013,8 @@ angular.module('mean.icu').config([
                             return ProjectsService.getAll(
                                 $stateParams.start,
                                 $stateParams.limit,
-                                $stateParams.sort);
+                                $stateParams.sort,
+                                $stateParams.order);
                         }
                     }
                 }
@@ -1106,6 +1108,7 @@ angular.module('mean.icu').config([
                     activeTab: undefined,
                     status:undefined,
                     filterStatus:undefined,
+                    order: ORDER
                 },
                 views: getListView('officeDocument'),
                 resolve: {
@@ -1126,7 +1129,8 @@ angular.module('mean.icu').config([
                                     $stateParams.start,
                                     $stateParams.limit,
                                     $stateParams.sort,
-                                    $stateParams.status);
+                                    $stateParams.status,
+                                    $stateParams.order);
                             }
                         }
                     },
@@ -1185,7 +1189,8 @@ angular.module('mean.icu').config([
                     starred: false,
                     start: 0,
                     limit: LIMIT,
-                    sort: SORT
+                    sort: SORT,
+                    order: ORDER
                 },
                 views: getListView('discussion'),
                 resolve: {
@@ -1199,7 +1204,8 @@ angular.module('mean.icu').config([
                             return DiscussionsService.getAll(
                                 $stateParams.start,
                                 $stateParams.limit,
-                                $stateParams.sort);
+                                $stateParams.sort,
+                                $stateParams.order);
                         }
                     }
                 }
@@ -1250,7 +1256,8 @@ angular.module('mean.icu').config([
                     starred: false,
                     start: 0,
                     limit: LIMIT,
-                    sort: SORT
+                    sort: SORT,
+                    order: ORDER
                 },
                 views: getListView('office'),
                 resolve: {
@@ -1263,7 +1270,8 @@ angular.module('mean.icu').config([
                        //     }
                             return OfficesService.getAll($stateParams.start,
                                 $stateParams.limit,
-                                $stateParams.sort);
+                                $stateParams.sort,
+                                $stateParams.order);
                         }
                     }
                 }
@@ -1316,7 +1324,8 @@ angular.module('mean.icu').config([
                     starred: false,
                     start: 0,
                     limit: LIMIT,
-                    sort: SORT
+                    sort: SORT,
+                    order: ORDER
                 },
                 views: getListView('templateDoc'),
                 resolve: {
@@ -1329,7 +1338,8 @@ angular.module('mean.icu').config([
                      //       }
                             return TemplateDocsService.getAll($stateParams.start,
                                 $stateParams.limit,
-                                $stateParams.sort);
+                                $stateParams.sort,
+                                $stateParams.order);
                         }
                     }
                 }
@@ -1379,7 +1389,8 @@ angular.module('mean.icu').config([
                     starred: false,
                     start: 0,
                     limit: LIMIT,
-                    sort: SORT
+                    sort: SORT,
+                    order: ORDER
                 },
                 views: getListView('folder'),
                 resolve: {
@@ -1392,7 +1403,8 @@ angular.module('mean.icu').config([
                      //       }
                             return FoldersService.getAll($stateParams.start,
                                 $stateParams.limit,
-                                $stateParams.sort);
+                                $stateParams.sort,
+                                $stateParams.order);
                         }
                     }
                 }

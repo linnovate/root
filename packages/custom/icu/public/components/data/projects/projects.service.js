@@ -6,10 +6,11 @@ angular.module('mean.icu.data.projectsservice', [])
     var EntityPrefix = '/projects';
     var data = [], selected;
 
-    function getAll(start, limit, sort) {
+    function getAll(start, limit, sort, order) {
         var qs = {
             start: start,
-            sort: sort
+            sort: sort,
+            order: order
         };
         let paramsId = $stateParams.id;
         qs.limit = findInExistingProjects(paramsId) ? limit : paramsId;

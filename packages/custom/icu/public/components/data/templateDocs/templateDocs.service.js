@@ -12,11 +12,12 @@ angular.module('mean.icu.data.templatedocsservice', [])
         //     });
         // }
 
-        function getAll(start, limit, sort) {
+        function getAll(start, limit, sort, order) {
             var qs = querystring.encode({
                 start: start,
                 limit: limit,
-                sort: sort
+                sort: sort,
+                order: order
             });
 
             if (qs.length) {
