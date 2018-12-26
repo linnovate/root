@@ -57,7 +57,40 @@ function recycleEntity(entityType, id) {
   var name = entityNameMap[entityType].name;
   // var promise = Model.update({'_id':id},{$set:{'recycled': Date.now()}}).exec();
   // elasticsearch.save(this, name);
-  // return promise ;
+  // return promise ; 
+
+  switch(entityType) {
+    case 'projects':
+    //delete related tasks
+    removeProjectFromEntities('tasks',id);
+    ///delete dissctaion
+    removeProjectFromEntities('discussions',id);
+      break;
+    case 'folders':
+      //delete document
+      removeFolderFromEntities('officeDocuments',id);
+      break;
+    case "discussions":
+      //delete folder
+      removeDiscussionsFromEntities('folders',id);
+      //delete project
+      removeDiscussionsFromEntities('projects',id);
+      //delete tasks
+      removeDiscussionsFromEntities('tasks',id);
+      break;
+    case 'offices':
+     //delete folder
+     removeOfficesFromEntities('folders',id);
+     //TODO: delete Signature 
+    //  removeOfficesFromEntities('folders',id);
+     //delete TemplateDoc
+     removeOfficesFromEntities('templateDocs',id);
+     break;
+    case 'documents':
+         //delete task
+      removeDocumentsFromEntities('officeDocuments',id);
+     break;
+  }
   var promise =
     Model.findOne({
       _id: id
@@ -72,6 +105,43 @@ function recycleEntity(entityType, id) {
     });
   return promise;
 
+}
+
+function removeProjectFromEntities(type,id){
+  entityNameMap[type].mainModel.update({
+    project: id
+  }, {
+    project: null
+  }).exec();
+}
+function removeFolderFromEntities(type,id){
+  entityNameMap[type].mainModel.update({
+    folder: id
+  }, {
+    folder: null
+  }).exec();
+}
+function removeDiscussionsFromEntities(type,id){
+  entityNameMap[type].mainModel.update({
+    discussion: id
+  }, {
+    discussion: null
+  }).exec();
+}
+
+function removeOfficesFromEntities(type,id){
+  entityNameMap[type].mainModel.update({
+    office: id
+  }, {
+    office: null
+  }).exec();
+}
+function removeDocumentsFromEntities(type,id){
+  entityNameMap[type].mainModel.update({
+    document: id
+  }, {
+    document: null
+  }).exec();
 }
 
 function recycleRestoreEntity(entityType, id) {
