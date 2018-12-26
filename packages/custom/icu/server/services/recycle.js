@@ -112,21 +112,22 @@ function removeProjectFromEntities(type,id){
     project: id
   }, {
     project: null
-  }).exec();
+  }, {multi: true}).exec();
+
 }
 function removeFolderFromEntities(type,id){
   entityNameMap[type].mainModel.update({
     folder: id
   }, {
     folder: null
-  }).exec();
+  }, {multi: true}).exec();
 }
 function removeDiscussionsFromEntities(type,id){
   entityNameMap[type].mainModel.update({
     discussion: id
   }, {
     discussion: null
-  }).exec();
+  }, {multi: true}).exec();
 }
 
 function removeOfficesFromEntities(type,id){
@@ -134,14 +135,14 @@ function removeOfficesFromEntities(type,id){
     office: id
   }, {
     office: null
-  }).exec();
+  }, {multi: true}).exec();
 }
 function removeDocumentsFromEntities(type,id){
   entityNameMap[type].mainModel.update({
     document: id
   }, {
     document: null
-  }).exec();
+  }, {multi: true}).exec();
 }
 
 function recycleRestoreEntity(entityType, id) {
