@@ -60,46 +60,45 @@ var entityNameMap = {
 function recycleEntity(entityType, id) {
   var Model = entityNameMap[entityType].mainModel;
   var name = entityNameMap[entityType].name;
-  // var promise = Model.update({'_id':id},{$set:{'recycled': Date.now()}}).exec();
-  // elasticsearch.save(this, name);
-  // return promise ; 
 
   switch(entityType) {
     case 'projects':
-    updateEntityRelation('tasks','project',id);
-    updateEntityRelation('discussions','project',id);
+      updateEntityRelation('tasks', 'project', id);
+      updateEntityRelation('discussions', 'project', id);
       break;
     case 'folders':
-      updateEntityRelation('officeDocuments','folder',id);
+      updateEntityRelation('officeDocuments', 'folder', id);
       break;
     case "discussions":
-      updateEntityRelation('folders','discussion',id);
-      updateEntityRelation('projects','discussion',id);
-      updateEntityRelationInArray('projects','discussions',id);
-      updateEntityRelation('tasks','discussion',id);
-      updateEntityRelationInArray('tasks','discussions',id);
+      updateEntityRelation('folders', 'discussion', id);
+      updateEntityRelation('projects', 'discussion', id);
+      updateEntityRelationInArray('projects', 'discussions', id);
+      updateEntityRelation('tasks', 'discussion', id);
+      updateEntityRelationInArray('tasks', 'discussions', id);
       break;
     case 'offices':
-     updateEntityRelation('folders','office',id);
-      updateEntityRelation('signatures','office',id);
-     updateEntityRelation('templateDocs','office',id);
-     break;
+      updateEntityRelation('folders', 'office', id);
+      updateEntityRelation('signatures', 'office', id);
+      updateEntityRelation('templateDocs', 'office', id);
+      break;
     case 'documents':
-        updateEntityRelationInArray('tasks','officeDocuments',id);
-        updateEntityRelationInArray('documents','relatedDocuments',id);
-     break;
+      updateEntityRelationInArray('tasks', 'officeDocuments', id);
+      updateEntityRelationInArray('documents', 'relatedDocuments', id);
+      break;
   }
-return Model.findOne({
-      _id: id
-    }).exec(function(error, entity) {
-      entity.recycled = Date.now();
-      entity.save(function(err) {
-        if(err) {
-          console.log(err);
-        }
-        else  elasticsearch.save(entity, name);
-      });
+
+  return Model.findOne({
+    _id: id
+  }).exec(function(error, entity) {
+    entity.recycled = Date.now();
+    entity.save(function(err) {
+      if(err) {
+        console.log(err);
+      } else {
+        elasticsearch.save(entity, name);
+      }
     });
+  });
 }
 
 
