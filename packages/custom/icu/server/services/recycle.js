@@ -62,33 +62,38 @@ function recycleEntity(entityType, id) {
   switch(entityType) {
     case 'projects':
     //delete related tasks
-    removeProjectFromEntities('tasks',id);
+    removeFromSingleEntities('tasks','project',id);
     ///delete dissctaion
-    removeProjectFromEntities('discussions',id);
+    removeFromSingleEntities('discussions','project',id);
       break;
     case 'folders':
       //delete document
-      removeFolderFromEntities('officeDocuments',id);
+      removeFromSingleEntities('officeDocuments','folder',id);
       break;
     case "discussions":
       //delete folder
-      removeDiscussionsFromEntities('folders',id);
+      removeFromSingleEntities('folders','discussion',id);
       //delete project
-      removeDiscussionsFromEntities('projects',id);
+      removeFromSingleEntities('projects','discussion',id);
+       //delete projects
+      removeFromArrayEntities('projects','discussions',id);
       //delete tasks
-      removeDiscussionsFromEntities('tasks',id);
+      removeFromSingleEntities('tasks','discussion',id);
+      removeFromArrayEntities('tasks','discussions',id);
       break;
     case 'offices':
      //delete folder
-     removeOfficesFromEntities('folders',id);
+     removeFromSingleEntities('folders','office',id);
      //TODO: delete Signature 
     //  removeOfficesFromEntities('folders',id);
      //delete TemplateDoc
-     removeOfficesFromEntities('templateDocs',id);
+     removeFromSingleEntities('templateDocs','office',id);
      break;
     case 'documents':
          //delete task
-      removeDocumentsFromEntities('officeDocuments',id);
+        removeFromArrayEntities('tasks','officeDocuments',id);
+        //delete doc
+        removeFromArrayEntities('documents','relatedDocuments',id);
      break;
   }
   var promise =
@@ -107,43 +112,24 @@ function recycleEntity(entityType, id) {
 
 }
 
-function removeProjectFromEntities(type,id){
+function removeFromSingleEntities(type,field,id){
   entityNameMap[type].mainModel.update({
-    project: id
+    [field]: id
   }, {
-    project: null
+    [field]: null
   }, {multi: true}).exec();
 
 }
-function removeFolderFromEntities(type,id){
+function removeFromArrayEntities(type,field,id){
   entityNameMap[type].mainModel.update({
-    folder: id
+    [field]: { $in : [id] } //?? maybe without $in
   }, {
-    folder: null
+    $pull: {[field]: id}
   }, {multi: true}).exec();
-}
-function removeDiscussionsFromEntities(type,id){
-  entityNameMap[type].mainModel.update({
-    discussion: id
-  }, {
-    discussion: null
-  }, {multi: true}).exec();
+
 }
 
-function removeOfficesFromEntities(type,id){
-  entityNameMap[type].mainModel.update({
-    office: id
-  }, {
-    office: null
-  }, {multi: true}).exec();
-}
-function removeDocumentsFromEntities(type,id){
-  entityNameMap[type].mainModel.update({
-    document: id
-  }, {
-    document: null
-  }, {multi: true}).exec();
-}
+
 
 function recycleRestoreEntity(entityType, id) {
   var Model = entityNameMap[entityType].mainModel;
