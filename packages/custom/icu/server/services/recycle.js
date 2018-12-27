@@ -61,43 +61,32 @@ function recycleEntity(entityType, id) {
 
   switch(entityType) {
     case 'projects':
-    //delete related tasks
-    removeFromSingleEntities('tasks','project',id);
-    ///delete dissctaion
-    removeFromSingleEntities('discussions','project',id);
+    updateEntityRelation('tasks','project',id);
+    updateEntityRelation('discussions','project',id);
       break;
     case 'folders':
-      //delete document
-      removeFromSingleEntities('officeDocuments','folder',id);
+      updateEntityRelation('officeDocuments','folder',id);
       break;
     case "discussions":
-      //delete folder
-      removeFromSingleEntities('folders','discussion',id);
-      //delete project
-      removeFromSingleEntities('projects','discussion',id);
-       //delete projects
-      removeFromArrayEntities('projects','discussions',id);
-      //delete tasks
-      removeFromSingleEntities('tasks','discussion',id);
-      removeFromArrayEntities('tasks','discussions',id);
+      updateEntityRelation('folders','discussion',id);
+      updateEntityRelation('projects','discussion',id);
+      updateEntityRelationInArray('projects','discussions',id);
+      updateEntityRelation('tasks','discussion',id);
+      updateEntityRelationInArray('tasks','discussions',id);
       break;
     case 'offices':
-     //delete folder
-     removeFromSingleEntities('folders','office',id);
+     updateEntityRelation('folders','office',id);
      //TODO: delete Signature 
     //  removeOfficesFromEntities('folders',id);
      //delete TemplateDoc
-     removeFromSingleEntities('templateDocs','office',id);
+     updateEntityRelation('templateDocs','office',id);
      break;
     case 'documents':
-         //delete task
-        removeFromArrayEntities('tasks','officeDocuments',id);
-        //delete doc
-        removeFromArrayEntities('documents','relatedDocuments',id);
+        updateEntityRelationInArray('tasks','officeDocuments',id);
+        updateEntityRelationInArray('documents','relatedDocuments',id);
      break;
   }
-  var promise =
-    Model.findOne({
+return Model.findOne({
       _id: id
     }).exec(function(error, entity) {
       entity.recycled = Date.now();
@@ -108,11 +97,10 @@ function recycleEntity(entityType, id) {
         else  elasticsearch.save(entity, name);
       });
     });
-  return promise;
-
 }
 
-function removeFromSingleEntities(type,field,id){
+
+function updateEntityRelation(type,field,id){
   entityNameMap[type].mainModel.update({
     [field]: id
   }, {
@@ -120,7 +108,7 @@ function removeFromSingleEntities(type,field,id){
   }, {multi: true}).exec();
 
 }
-function removeFromArrayEntities(type,field,id){
+function updateEntityRelationInArray(type,field,id){
   entityNameMap[type].mainModel.update({
     [field]: id 
   }, {
