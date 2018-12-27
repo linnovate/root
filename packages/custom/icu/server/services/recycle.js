@@ -11,6 +11,7 @@ var OfficeDocumentsModel = require('../models/document.js');
 var FolderModel = require('../models/folder');
 var OfficeModel = require('../models/office');
 var TemplateDocsModel = require('../models/templateDoc');
+var SignatureModel = require('../models/signature');
 var elasticsearch = require('../controllers/elasticsearch');
 
 
@@ -49,6 +50,10 @@ var entityNameMap = {
     mainModel: TemplateDocsModel,
     //      archiveModel: OfficeDocumentsArchiveModel,
     name: 'templateDoc'
+  },
+  signatures: {
+    mainModel: SignatureModel,
+    name: 'signature'
   }
 };
 
@@ -76,9 +81,7 @@ function recycleEntity(entityType, id) {
       break;
     case 'offices':
      updateEntityRelation('folders','office',id);
-     //TODO: delete Signature 
-    //  removeOfficesFromEntities('folders',id);
-     //delete TemplateDoc
+      updateEntityRelation('signatures','office',id);
      updateEntityRelation('templateDocs','office',id);
      break;
     case 'documents':
