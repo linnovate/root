@@ -122,7 +122,7 @@ function removeFromSingleEntities(type,field,id){
 }
 function removeFromArrayEntities(type,field,id){
   entityNameMap[type].mainModel.update({
-    [field]: { $in : [id] } //?? maybe without $in
+    [field]: id 
   }, {
     $pull: {[field]: id}
   }, {multi: true}).exec();
