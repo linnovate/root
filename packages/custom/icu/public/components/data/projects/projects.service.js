@@ -79,11 +79,12 @@ angular.module('mean.icu.data.projectsservice', [])
     }
 
     function getByEntityId(entity) {
-      return function(id, start, limit, sort, starred) {
+      return function(id, start, limit, sort, status, starred, order) {
         var qs = querystring.encode({
           start: start,
           limit: limit,
-          sort: sort
+          sort: sort,
+          order: order
         });
 
         if(qs.length) {

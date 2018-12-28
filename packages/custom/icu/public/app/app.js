@@ -32,7 +32,8 @@ angular.module('mean.icu').config([
                         $stateParams.start,
                         LIMIT,
                         $stateParams.sort,
-                        $stateParams.starred);
+                        $stateParams.starred,
+                        $stateParams.order);
                 }
                 else {
                     return service[getFn](
@@ -41,7 +42,8 @@ angular.module('mean.icu').config([
                         $stateParams.limit,
                         $stateParams.sort,
                         $stateParams.status,
-                        $stateParams.starred);
+                        $stateParams.starred,
+                        $stateParams.order);
                 }
             }
             }
@@ -70,6 +72,7 @@ angular.module('mean.icu').config([
                     limit: LIMIT,
                     sort: SORT,
                     status:undefined,
+                    order: ORDER
                 },
                 views: {
                     'middlepane@main': {

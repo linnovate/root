@@ -238,7 +238,9 @@ exports.getByEntity = function (req, res, next) {
 
     var pagination = req.locals.data.pagination;
     if(pagination && pagination.type && pagination.type === 'page') {
-      query.sort(pagination.sort)
+      let sorting = {};
+      sorting[pagination.sort] = pagination.order;
+      query.sort(sorting)
         .skip(pagination.start)
         .limit(pagination.limit);
     }
