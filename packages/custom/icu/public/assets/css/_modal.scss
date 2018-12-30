@@ -159,8 +159,7 @@
                     text-align: left !important;
                 }
                 .dropdown-menu{
-                overflow: auto;
-                      height: 100%;
+                      overflow: auto;
                 }
             }
             .status, .assign {
@@ -179,7 +178,7 @@
             }
             .watch {
             height: 200px;
-            overflow : auto;
+            // overflow : auto;
               .watchers-list {
                 display: flex;
                 border: 1px solid #C8C8C8;
@@ -274,7 +273,7 @@
             }
             .assign {
                 height: 200px;
-                overflow : auto;
+                // overflow : auto;
 
             }
             .due {
