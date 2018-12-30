@@ -181,6 +181,9 @@ discussion-due {
 
     // a.ui-datepicker-prev.ui-corner-all
     a.ui-datepicker-next.ui-corner-all[title~="Next"], a.ui-datepicker-prev.ui-corner-all[title~="Prev"] {
+        background:none;
+        border: none;
+        cursor: pointer;
         span {
             display: none;
         }
