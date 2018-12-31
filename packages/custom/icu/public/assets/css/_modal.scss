@@ -83,7 +83,6 @@
                 margin-bottom: 40px;
             }
 
-            
             .ui-select-container.ui-select-bootstrap {
                 i {
                     -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
@@ -155,11 +154,8 @@
                 display: inline-block;
             }
             .status {
-                .ui-select-bootstrap > .ui-select-match > .btn{
+                .ui-select-bootstrap > .ui-select-match > .btn {
                     text-align: left !important;
-                }
-                .dropdown-menu{
-                      overflow: auto;
                 }
             }
             .status, .assign {
@@ -177,7 +173,8 @@
                 }
             }
             .watch {
-              .watchers-list {
+
+                .watchers-list {
                 display: flex;
                 border: 1px solid #C8C8C8;
                 margin: 10px 0;
@@ -719,7 +716,6 @@
                         }
 
                         .ui-select-match {
-                            
                             .btn {
                                 border: 1px solid #D9D9D9;
                                 position: relative;

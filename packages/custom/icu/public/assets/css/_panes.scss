@@ -75,6 +75,7 @@
                         min-width: 20px;
                         width: 22px;
                         text-align: center;
+
                         @media screen and (max-width: $small-resolution) {
                           display: none;
                         }

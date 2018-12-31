@@ -236,7 +236,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
         }
         );
-        $scope.postionNewItemBtn();
     };
 
     // ============================================================= //
@@ -258,7 +257,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     function multipleSelectSetAllSelected(status){
         for(let i = 0; i < $scope.visibleItems.length; i++){
-            $scope.visibleItems[i].selected = status;
+            let row = $scope.visibleItems[i];
+
+            if(!row.selected)MultipleSelectService.refreshSelectedList(row);
+            row.selected = status;
         }
         if(status){
             MultipleSelectService.setSelectedList($scope.visibleItems);
@@ -445,7 +447,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
-        if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
+        // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
         newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;

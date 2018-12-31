@@ -96,10 +96,8 @@ detail-category {
             min-width: 150px;
             border-radius: 0;
             margin-top: -2px;
-        /*rtl:begin:ignore*/
-        direction: ltr;
-        /*rtl:end:ignore*/
-
+            /*rtl:ignore*/
+            direction: ltr;
         }
 
         input {
@@ -124,9 +122,9 @@ detail-category {
         }
         .ui-select-choices-row {
             .ui-select-choices-row-inner {
-               display: flex;
-               align-items: center;
-                 text-align: left;
+                display: flex;
+                align-items: center;
+                text-align: left;
            }
             a { padding: 0 20px;}
        }
@@ -142,4 +140,3 @@ detail-category {
     }
 
 }
-
