@@ -50,6 +50,12 @@
                         padding: 10px 15px;
                     }
                 }
+                &.postion-new-item{
+                    bottom: 0px;   
+                    width: 100%;
+                    position: absolute;
+                    background-color: white;
+                }
                 &.empty {
                     [contenteditable][colspan]:empty:not(:focus):before {
                         padding-left: 0;
@@ -80,10 +86,7 @@
                         padding: 0 4em 0 1em;
                     }
 
-                    &.postion-new-item{
-                        bottom: 0px;   
-                        position: absolute;
-                    }
+                   
                     &.id {
                         font-size: 13px;
                         font-weight: normal;

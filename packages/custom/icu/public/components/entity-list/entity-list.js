@@ -174,24 +174,11 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // =========================== list ============================ //
     // ============================================================= //
 
-    //Yehudit
     $scope.postionNewItemBtn = function() {
-        console.log('postionNewItemBtnnnnnnnnn');
-        let newItemElement = document.getElementsByClassName("create-new-item")[0];
         let TbodyElement = document.getElementsByClassName("containerVertical")[0];
         let listTableElement = document.getElementsByClassName("list-table")[0];
-          if(TbodyElement.offsetHeight>=listTableElement.offsetHeight)
-          {
-           $(newItemElement).addClass('postion-new-item');
-          }
-         else
-         newItemElement.remove('postion-new-item');
-      }
-      $(document).ready(function(){
-        $scope.postionNewItemBtn();
-      });
-
-    
+        return TbodyElement.offsetHeight >= listTableElement.offsetHeight;
+    }
 
     let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
 
@@ -271,10 +258,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     function multipleSelectSetAllSelected(status){
         for(let i = 0; i < $scope.visibleItems.length; i++){
-            let row = $scope.visibleItems[i];
-
-            if(!row.selected)MultipleSelectService.refreshSelectedList(row);
-            row.selected = status;
+            $scope.visibleItems[i].selected = status;
         }
         if(status){
             MultipleSelectService.setSelectedList($scope.visibleItems);
@@ -461,7 +445,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
-        // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
+        if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
         newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;
