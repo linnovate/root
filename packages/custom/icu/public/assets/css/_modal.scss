@@ -79,9 +79,7 @@
                 margin-bottom: 40px;
             }
 
-            .ui-select-choices {
-                @include scroll;
-            }
+            
             .ui-select-container.ui-select-bootstrap {
                 i {
                     -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
