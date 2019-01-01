@@ -7,7 +7,19 @@
         height: calc(100% - 44px);
         overflow-y: hidden;
         .list-table {
-            height: 100%;
+            max-height: calc(100% - 51px);
+        }
+        .create-new-item {
+            background: white;
+            height: 51px;
+            align-items: center;
+            display: flex;
+            color: #888888;
+            padding: 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #e1e1e1;
+            border-top: 1px solid #e1e1e1;
+            font-size: 14px;
         }
 
     }
@@ -50,12 +62,6 @@
                         padding: 10px 15px;
                     }
                 }
-                &.postion-new-item{
-                    bottom: 0px;   
-                    width: 100%;
-                    position: absolute;
-                    background-color: white;
-                }
                 &.empty {
                     [contenteditable][colspan]:empty:not(:focus):before {
                         padding-left: 0;
@@ -78,12 +84,6 @@
                     color: #1A1A1A;
                     &:focus {
                       outline: none;
-                    }
-
-                    &.create-new-item {
-                        color: rgba(0, 0, 0, 0.29);
-                        margin-left: 2em;
-                        padding: 0 4em 0 1em;
                     }
 
                     &.id {

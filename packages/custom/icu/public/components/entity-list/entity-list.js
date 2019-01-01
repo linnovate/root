@@ -174,12 +174,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // =========================== list ============================ //
     // ============================================================= //
 
-    $scope.postionNewItemBtn = function() {
-        let TbodyElement = document.getElementsByClassName("containerVertical")[0];
-        let listTableElement = document.getElementsByClassName("list-table")[0];
-        return TbodyElement.offsetHeight >= listTableElement.offsetHeight;
-    }
-
     let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
 
     $scope.showTaskExcel = inCurrentEntity('tasks')
