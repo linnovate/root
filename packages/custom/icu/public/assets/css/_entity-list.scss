@@ -5,6 +5,7 @@
     flex-direction: column;
     .entity-list-container {
         height: calc(100% - 44px);
+        overflow-y: hidden;
         .list-table {
             height: 100%;
         }
