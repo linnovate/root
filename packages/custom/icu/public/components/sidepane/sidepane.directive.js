@@ -19,6 +19,7 @@ directive('icuSidepane', function() {
         //$scope.templateDocs = $scope.templateDocs.data || $scope.templateDocs;
         $scope.people = $scope.people.data || $scope.people;
         $scope.toggleVisibility = function(toggledItem) {
+            $scope.context.isReverse = false;
             let prev = toggledItem.open;
 
             $scope.items.forEach(function(i) {
