@@ -50,10 +50,10 @@ angular.module('mean.icu.data.inboxservice', [])
             if(currentUser && prevUser)
               return `${creator} ${$i18next('assigned')} ${ currentUser.username} ${$i18next('and')} ${$i18next('unassign')} ${ prevUser.username}`;
             else if(currentUser)
-              return `${creator} ${$i18next('assigned')} ${ currentUser.username}`;
+              return `${creator} ${$i18next('assignedUser')} ${ currentUser.username}`;
             else if(prevUser)
               return `${$i18next('unassign')} ${ prevUser.username}`;
-            else return '';
+            else return $i18next('unassign');
             break;
           case 'location' :
             return `${creator} ${$i18next('changedLocationTo')} ${activity.current}`;
@@ -65,7 +65,7 @@ angular.module('mean.icu.data.inboxservice', [])
             return `${creator} ${$i18next('updatedDescription')} ${activity.current}`;
             break;
           case 'comment' :
-            return `${activity.current}`;
+            return `${creator} ${$i18next('addComment')} ${activity.current}`;
             break;
           case 'attachment' :
             return `${creator} ${$i18next('addedAttachment')}`;

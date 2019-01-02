@@ -1,6 +1,8 @@
 'use strict';
 
-function TaskListController($scope, $timeout, $state, tasks, NotifyingService, BoldedService, MultipleSelectService, DiscussionsService, TasksService, ProjectsService, context, UsersService) {
+function TaskListController($scope, $timeout, $state, tasks, NotifyingService, BoldedService,
+                            MultipleSelectService, DiscussionsService, TasksService, ProjectsService, context,
+                            UsersService, OfficeDocumentsService) {
 
     let me;
     UsersService.getMe().then(function(result) {
@@ -62,16 +64,28 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
         }).then( item => {
             let updated = false;
             if(parent && parent.type === 'project') {
-                return ProjectsService.getById(context.entityId).then((parentEntity) => {
-                  let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
-                  Object.assign(item, parentParams);
-                  updated = !updated;
-                  return {item, updated};
-                }).then( res => {
+                return ProjectsService.getById(context.entityId)
+                    .then((parentEntity) => {
+                      let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
+                      Object.assign(item, parentParams);
+                      updated = !updated;
+                      return {item, updated};
+                    }).then( res => {
                   if(res.updated)TasksService.update(res.item);
-                  return res.item;
+                    return res.item;
                 } );
+            } else if(parent && parent.type === 'officeDocument'){
+                OfficeDocumentsService.getById(context.entityId)
+                    .then(parentEntity => {
+                        parentEntity.tasks = parentEntity.tasks ||  [];
+                        parentEntity.tasks.push(item._id);
 
+                        let context = {
+                            name: "tasks",
+                            newVal: parentEntity.tasks
+                        };
+                        OfficeDocumentsService.updateDocument(parentEntity._id, context);
+                    })
             }
             return item;
         })

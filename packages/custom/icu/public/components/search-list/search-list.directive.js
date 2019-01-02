@@ -77,10 +77,14 @@ angular.module('mean.icu.ui.searchlist', [])
 
         function multipleSelectSetAllSelected(status){
             for(let i = 0; i < $scope.results.length; i++){
-                $scope.results[i].selected = status;
+                let rowSelectStatus = $scope.results[i];
+
+                if(!rowSelectStatus.selected)MultipleSelectService.refreshSelectedList($scope.results[i]);
+                rowSelectStatus.selected = status;
             }
             if(status){
-                MultipleSelectService.setSelectedList($scope.results);
+                let copy = _.map($scope.results, _.clone);
+                MultipleSelectService.setSelectedList(copy);
             } else {
                 MultipleSelectService.refreshSelectedList();
             }

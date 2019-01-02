@@ -11,6 +11,7 @@ var OfficeDocumentsModel = require('../models/document.js');
 var FolderModel = require('../models/folder');
 var OfficeModel = require('../models/office');
 var TemplateDocsModel = require('../models/templateDoc');
+var SignatureModel = require('../models/signature');
 var elasticsearch = require('../controllers/elasticsearch');
 
 
@@ -49,30 +50,76 @@ var entityNameMap = {
     mainModel: TemplateDocsModel,
     //      archiveModel: OfficeDocumentsArchiveModel,
     name: 'templateDoc'
+  },
+  signatures: {
+    mainModel: SignatureModel,
+    name: 'signature'
   }
 };
 
 function recycleEntity(entityType, id) {
   var Model = entityNameMap[entityType].mainModel;
   var name = entityNameMap[entityType].name;
-  // var promise = Model.update({'_id':id},{$set:{'recycled': Date.now()}}).exec();
-  // elasticsearch.save(this, name);
-  // return promise ;
-  var promise =
-    Model.findOne({
-      _id: id
-    }).exec(function(error, entity) {
-      entity.recycled = Date.now();
-      entity.save(function(err) {
-        if(err) {
-          console.log(err);
-        }
-        else  elasticsearch.save(entity, name);
-      });
+
+  switch(entityType) {
+    case 'projects':
+      updateEntityRelation('tasks', 'project', id);
+      updateEntityRelation('discussions', 'project', id);
+      break;
+    case 'folders':
+      updateEntityRelation('officeDocuments', 'folder', id);
+      break;
+    case "discussions":
+      updateEntityRelation('folders', 'discussion', id);
+      updateEntityRelation('projects', 'discussion', id);
+      updateEntityRelationInArray('projects', 'discussions', id);
+      updateEntityRelation('tasks', 'discussion', id);
+      updateEntityRelationInArray('tasks', 'discussions', id);
+      break;
+    case 'offices':
+      updateEntityRelation('folders', 'office', id);
+      updateEntityRelation('signatures', 'office', id);
+      updateEntityRelation('templateDocs', 'office', id);
+      break;
+    case 'documents':
+      updateEntityRelationInArray('tasks', 'officeDocuments', id);
+      updateEntityRelationInArray('documents', 'relatedDocuments', id);
+      break;
+  }
+
+  return Model.findOne({
+    _id: id
+  }).exec(function(error, entity) {
+    entity.recycled = Date.now();
+    entity.save(function(err) {
+      if(err) {
+        console.log(err);
+      } else {
+        elasticsearch.save(entity, name);
+      }
     });
-  return promise;
+  });
+}
+
+
+function updateEntityRelation(type,field,id){
+  entityNameMap[type].mainModel.update({
+    [field]: id
+  }, {
+    [field]: null
+  }, {multi: true}).exec();
 
 }
+function updateEntityRelationInArray(type,field,id){
+  entityNameMap[type].mainModel.update({
+    [field]: id 
+  }, {
+    $pull: {[field]: id}
+  }, {multi: true}).exec();
+
+}
+
+
 
 function recycleRestoreEntity(entityType, id) {
   var Model = entityNameMap[entityType].mainModel;

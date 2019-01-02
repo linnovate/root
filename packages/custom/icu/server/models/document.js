@@ -47,7 +47,7 @@ var DocumentSchema = new Schema({
   tasks: [
     {
       type: Schema.ObjectId,
-      ref: 'OfficeDocument'
+      ref: 'Task'
     }
   ],
   folder: {

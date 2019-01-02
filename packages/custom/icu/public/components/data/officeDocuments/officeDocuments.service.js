@@ -22,7 +22,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         }
         return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
-            data = result.data.content;
+            data = result.data.content || result.data;
             return result.data;
         }, function(err) {return err}).then(function (some) {
             var data = some.content ? some : [];
@@ -98,9 +98,9 @@ angular.module('mean.icu.data.officedocumentsservice', [])
                 }
 
                 return $http.get(url + qs).then(function(result) {
-                    if(!result.data.content)result.data.content = [];
+                    let data = result.data.content || result.data || [];
                     WarningsService.setWarning(result.headers().warning);
-                    return PaginationService.processResponse(result.data);
+                    return PaginationService.processResponse(data);
                 });
             };
         }

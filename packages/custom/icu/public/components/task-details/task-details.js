@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.taskdetails', []).controller('TaskDetailsController', TaskDetailsController);
 
-function TaskDetailsController($scope, entity, projects, tasks, $state, $rootScope, $timeout, context, $stateParams,
+function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $rootScope, $timeout, context, $stateParams,
                                me, people,
                                TasksService, ActivitiesService, PermissionsService,
                                ProjectsService, EntityService, DetailsPaneService) {
@@ -30,6 +30,7 @@ function TaskDetailsController($scope, entity, projects, tasks, $state, $rootSco
   $scope.statuses = ['new', 'assigned', 'in-progress', 'review', 'rejected', 'done'];
 
   $scope.me = me;
+  $scope.tags = tags;
   $scope.projects = projects.data || projects;
 
   var currentState = $state.current.name;

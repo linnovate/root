@@ -142,10 +142,6 @@ angular.module('mean.icu.data.multipleselectservice', [])
             return havePermissions;
         }
 
-        function getNoneRecycledItems(items){
-            return items.filter( item => !item.recycled );
-        }
-
         return {
             bulkUpdate: bulkUpdate,
             haveBulkPerms: haveBulkPerms,
@@ -154,7 +150,6 @@ angular.module('mean.icu.data.multipleselectservice', [])
             getSelected: getSelected,
             getSelectedEntityArrays: getSelectedEntityArrays,
             getCornerState: getCornerState,
-            getNoneRecycledItems: getNoneRecycledItems,
             refreshSelectedList: refreshSelectedList,
             refreshCornerState: refreshCornerState,
             changeCornerState: changeCornerState

@@ -117,40 +117,23 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.changeOrder = function() {
-
-        if($stateParams.order === 'asc') {
-            $stateParams.sort = $scope.sorting.field;
-            $stateParams.order = 'desc';
-        } else if($stateParams.order === 'desc') {
-            $stateParams.sort = $scope.sorting.field;
-            $stateParams.order = 'asc';
+        if ($scope.sorting.field != "custom") {
+            $scope.sorting.isReverse = !$scope.sorting.isReverse;
         }
 
-        $state.go($state.current.name).then(() => {
-            if($stateParams.order === 'asc') {
-                $scope.context.isReverse = false;
-            } else if($stateParams.order === 'desc') {
-                $scope.context.isReverse = true;
-            }
+        $scope.refreshVisibleItems();
+
+        /*Made By OHAD - Needed for reversing sort*/
+        $state.go($state.current.name, {
+            sort: $scope.sorting.field
         });
 
+        $scope.refreshVisibleItems();
     };
-
-  $scope.changeSortingField = function() {
-
-    $stateParams.sort = $scope.sorting.field;
-    $state.go($state.current.name).then(() => {
-      if($stateParams.order === 'asc') {
-        $scope.context.isReverse = false;
-      } else if($stateParams.order === 'desc') {
-        $scope.context.isReverse = true;
-      }
-    });
-
-  };
 
     $scope.sorting = {
         field: $stateParams.sort || 'created',
+        isReverse: false
     };
 
     $scope.sortingList = [{
@@ -272,7 +255,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     function multipleSelectSetAllSelected(status){
         for(let i = 0; i < $scope.visibleItems.length; i++){
-            $scope.visibleItems[i].selected = status;
+            let row = $scope.visibleItems[i];
+
+            if(!row.selected)MultipleSelectService.refreshSelectedList(row);
+            row.selected = status;
         }
         if(status){
             MultipleSelectService.setSelectedList($scope.visibleItems);
@@ -427,7 +413,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.checkForInactiveEntity = () => {
-        if($scope.visibleItems.length){
+        if($scope.visibleItems.length && $stateParams.id) {
             let entityIndex = $scope.visibleItems.findIndex( item => item._id === $stateParams.id );
             entityIndex = entityIndex === -1 ? 0 : entityIndex;
 
@@ -459,8 +445,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
-        if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
-        // newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
+        // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
+        newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;
     }
