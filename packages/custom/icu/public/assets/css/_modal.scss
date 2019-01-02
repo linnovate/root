@@ -87,8 +87,8 @@
                 i {
                     -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
                     mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-                    width: 15px;
-                    height: 17px;
+                    width: 18px;
+                    height: 18px;
                     display: inline-block;
                     margin-right: 13px;
                 }
@@ -157,6 +157,40 @@
                 .ui-select-bootstrap > .ui-select-match > .btn {
                     text-align: left !important;
                 }
+                .ui-select-choices-row {
+                    a {
+                        height: 50px;
+                        padding: 15px 20px;
+                        * {
+                            vertical-align: middle;
+                        }
+                        &:focus {
+                            background-color: inherit;
+                        }
+                    }
+                    &.active a {
+                        background-color: #e3f3f5;
+                    }
+                }
+                .form-control {
+                    background-image: url(/dist/icu/assets/img/icon-flag.svg);
+                    background-repeat: no-repeat;
+                    background-position: left 10px center;
+                    padding-left: 40px;
+
+                    &:hover {
+                        color: #333;
+                        background-color: #fff;
+                        border-color: #ccc;
+                    }
+                }
+                .new              .form-control { background-image: url(/dist/icu/assets/img/icon-flag-new.svg); }
+                .assigned         .form-control { background-image: url(/dist/icu/assets/img/icon-flag-assigned.svg); }
+                .in-progress      .form-control { background-image: url(/dist/icu/assets/img/icon-flag-in-progress.svg); }
+                .waiting-approval .form-control { background-image: url(/dist/icu/assets/img/icon-flag-waiting-approval.svg); }
+                .review           .form-control { background-image: url(/dist/icu/assets/img/icon-flag-review.svg); }
+                .rejected         .form-control { background-image: url(/dist/icu/assets/img/icon-flag-rejected.svg); }
+                .done             .form-control { background-image: url(/dist/icu/assets/img/icon-flag-done.svg); }
             }
             .status, .assign {
                 .form-control {
@@ -699,13 +733,17 @@
                         padding: 0;
                         position: absolute;
 
-    .ui-select-choices-row {
-        .active {
-        a {
-            background-color: #D9D9D9;
-                }
-            }
-        }
+                        .ui-select-choices-row {
+                            a {
+                                height: 40px;
+                                padding: 10px 20px;
+                            }
+                            .active {
+                                a {
+                                    background-color: #D9D9D9;
+                                    }
+                                }
+                            }
 
                         .form-control {
                             width: 265px;

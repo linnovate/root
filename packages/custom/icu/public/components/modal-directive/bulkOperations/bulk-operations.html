@@ -10,8 +10,7 @@
       </span>
 
         <ui-select ng-model="selects[$index].selected" on-select="select(selects[$index].selected)">
-            <ui-select-match placeholder="{{ 'selectStatus' | i18next }}">
-                <i class='{{$select.selected}}'></i>
+            <ui-select-match class='{{$select.selected}}' placeholder="{{ 'selectStatus' | i18next }}">
                 <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
             </ui-select-match>
             <ui-select-choices repeat="status in statuses | filter: $select.search">
