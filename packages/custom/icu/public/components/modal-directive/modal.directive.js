@@ -287,20 +287,25 @@ function dragCtrl($scope, $state,$uibModalInstance, $filter, officeDocument, peo
 
 function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter, officeDocument, people, UsersService, OfficeDocumentsService) {
 
+    $scope.activeProvider = window.config.activeProvider;
+
     $scope.officeDocument = officeDocument;
     $scope.people = people;
     $scope.currentUser = UsersService.getMe().$$state.value;
+
     $scope.tabs = [
         {
             title: 'general',
-        },
-        {
-            title: 'notifications',
         }
-        // ,{
-        //     title: 'Components',
-        // }
     ];
+    if($scope.activeProvider === 'local') {
+        $scope.tabs.push(
+            {
+                title: 'notifications',
+            }
+        );
+    }
+
     $scope.activeTab = $scope.tabs[0];
     $scope.setActiveTab = function(tab){
         $scope.activeTab = tab;
@@ -455,6 +460,7 @@ function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,
             $state.go($state.current.name, null, { reload: true });
         });
     }
+
 }
 
 
