@@ -32,7 +32,7 @@
             {{'accountInformation' | i18next | uppercase}}
         </div>
         <div class="data">
-            <div class="info">
+            <div class="info" ng-show="activeProvider === 'local'">
                 <label for="name">{{'fullName' | i18next}}</label>
                 <input id="name" ng-change="updateUserInfo()"  type="text" ng-model="currentUser.name" ng-model-options="{ debounce: 1000 }" required>
                 <label for="email">{{'emailAddress' | i18next}}</label>
