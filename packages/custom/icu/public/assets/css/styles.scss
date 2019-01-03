@@ -706,8 +706,7 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
     }
   }
 }
-
-.scroll {
+.ui-select-choices , .scroll {
   overflow-y: auto;
 
   @include scroll;

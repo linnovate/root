@@ -198,6 +198,7 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
             parent.id = $state.current.params.entityId;
         }
         $scope.$parent.create(parent).then((result) => {
+            $scope.items.push(result);
             $scope.refreshVisibleItems();
             $timeout(() => {
               $element.find('td.name').get(0).focus();

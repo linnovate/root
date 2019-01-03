@@ -36,6 +36,8 @@ function detailDue() {
 
 
     $scope.dueOptions = {
+      dayNamesMin: ['S','M','T','W','T','F','S'],
+      showOtherMonths: true,
       onSelect: function() {
         $scope.onChange($scope.value);
       },

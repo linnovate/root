@@ -72,6 +72,10 @@
         #modalBulk {
             font-weight: bold;
             padding: 27px 21px;
+            section {
+                height: initial;
+                overflow: initial;
+            }
 
             .title {
                 font-size: 17px;
@@ -79,15 +83,12 @@
                 margin-bottom: 40px;
             }
 
-            .ui-select-choices {
-                @include scroll;
-            }
             .ui-select-container.ui-select-bootstrap {
                 i {
                     -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
                     mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-                    width: 15px;
-                    height: 17px;
+                    width: 18px;
+                    height: 18px;
                     display: inline-block;
                     margin-right: 13px;
                 }
@@ -150,10 +151,46 @@
                 display: inline-block;
             }
             .selected {
-                margin-bottom: 10px;
+                display: inline-block;
             }
             .status {
-                height: 300px;
+                .ui-select-bootstrap > .ui-select-match > .btn {
+                    text-align: left !important;
+                }
+                .ui-select-choices-row {
+                    a {
+                        height: 50px;
+                        padding: 15px 20px;
+                        * {
+                            vertical-align: middle;
+                        }
+                        &:focus {
+                            background-color: inherit;
+                        }
+                    }
+                    &.active a {
+                        background-color: #e3f3f5;
+                    }
+                }
+                .form-control {
+                    background-image: url(/dist/icu/assets/img/icon-flag.svg);
+                    background-repeat: no-repeat;
+                    background-position: left 10px center;
+                    padding-left: 40px;
+
+                    &:hover {
+                        color: #333;
+                        background-color: #fff;
+                        border-color: #ccc;
+                    }
+                }
+                .new              .form-control { background-image: url(/dist/icu/assets/img/icon-flag-new.svg); }
+                .assigned         .form-control { background-image: url(/dist/icu/assets/img/icon-flag-assigned.svg); }
+                .in-progress      .form-control { background-image: url(/dist/icu/assets/img/icon-flag-in-progress.svg); }
+                .waiting-approval .form-control { background-image: url(/dist/icu/assets/img/icon-flag-waiting-approval.svg); }
+                .review           .form-control { background-image: url(/dist/icu/assets/img/icon-flag-review.svg); }
+                .rejected         .form-control { background-image: url(/dist/icu/assets/img/icon-flag-rejected.svg); }
+                .done             .form-control { background-image: url(/dist/icu/assets/img/icon-flag-done.svg); }
             }
             .status, .assign {
                 .form-control {
@@ -162,7 +199,7 @@
                     line-height: 39px;
                     display: block;
                     border-radius: 0;
-                    margin: 0 auto 65px;
+                    margin: 10px auto;
 
                     .caret {
                         display: none !important;
@@ -171,7 +208,7 @@
             }
             .watch {
 
-              .watchers-list {
+                .watchers-list {
                 display: flex;
                 border: 1px solid #C8C8C8;
                 margin: 10px 0;
@@ -263,40 +300,38 @@
                   }
                 }
               }
-            }
-            .assign {
-                height: 300px;
+              .form-control {
+                  margin-bottom: 10px;
+              }
             }
             .due {
-                height: 230px;
-
                 .date {
                     display: block;
-                    background: url("/icu/assets/img/calendar.png") no-repeat scroll 15px center;
                     input {
-                        left: 50px;
-                        width: calc(100% - 50px);
+                        padding-left: 50px;
+                        width: 100%;
                         height: 100%;
                         position: relative;
                         border: none;
+                        background: url(/icu/assets/img/calendar.png) no-repeat;
+                        background-position: left 10px center;
+
                     }
                 }
               .date, .detail-due {
                 border: 1px solid #C8C8C8;
-                margin: 20px 0;
+                margin: 10px 0;
                 width: 100%;
                 height: 50px;
               }
             }
             .tag {
-                height: 400px;
-
                 .items {
                     padding: 12px;
                     width: 100%;
                     min-height: 53px;
                     list-style: none;
-                    margin: 20px 0;
+                    margin: 10px 0;
                     border: 1px solid #E8E8E8;
                     display: inline-flex;
                     flex-wrap: wrap;
@@ -335,9 +370,6 @@
                 .ui-select-match {
                     i { display: none }
                 }
-            }
-            .delete {
-                height: 100px;
             }
         }
         .closeBtn {
@@ -702,13 +734,17 @@
                         padding: 0;
                         position: absolute;
 
-    .ui-select-choices-row {
-        .active {
-        a {
-            background-color: #D9D9D9;
-                }
-            }
-        }
+                        .ui-select-choices-row {
+                            a {
+                                height: 40px;
+                                padding: 10px 20px;
+                            }
+                            .active {
+                                a {
+                                    background-color: #D9D9D9;
+                                    }
+                                }
+                            }
 
                         .form-control {
                             width: 265px;
