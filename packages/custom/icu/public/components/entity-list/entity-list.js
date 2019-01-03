@@ -174,10 +174,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // =========================== list ============================ //
     // ============================================================= //
 
-    $scope.context = context;
-    $scope.isLoading = true;
-
-
     let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
 
     $scope.showTaskExcel = inCurrentEntity('tasks')
@@ -413,7 +409,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.checkForInactiveEntity = () => {
-        if($scope.visibleItems.length){
+        if($scope.visibleItems.length && $stateParams.id) {
             let entityIndex = $scope.visibleItems.findIndex( item => item._id === $stateParams.id );
             entityIndex = entityIndex === -1 ? 0 : entityIndex;
 
@@ -445,7 +441,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
-        if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
+        // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
         newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
 
         return newArray;

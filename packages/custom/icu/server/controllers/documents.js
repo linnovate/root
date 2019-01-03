@@ -1,8 +1,8 @@
 var httpError = require("http-errors");
 var crud = require("../controllers/crud.js");
 var Task = require("../models/task"),
-  Attachment = require("../models/attachment");
-var Document = require("../models/document");
+    Attachment = require("../models/attachment"),
+    Document = require("../models/document");
 var mean = require("meanio"),
   path = require("path"),
   fs = require("fs"),
@@ -342,16 +342,15 @@ exports.getExcelSummary = function(req, res, next) {
 };
 
 exports.getByTaskId = function(req, res, next) {
-  let taskId = req.params.id;
+  let officeDocumentId = req.params.id;
 
-  Document.find({ task: { $in: [ObjectId(taskId)] } }).exec(function(
-    err,
-    documents
-  ) {
-    req.locals.data.pagination.count = documents.length || 0;
-    req.locals.result = documents || [];
-    next();
-  });
+    Document.findOne({ _id: officeDocumentId })
+      .populate("tasks")
+      .exec(function(err, doc) {
+        req.locals.data.pagination.count = doc.tasks.length || 0;
+        req.locals.result = doc.tasks || [];
+        next();
+      });
 };
 
 exports.signOnDocx = function(req, res, next) {
@@ -2152,7 +2151,6 @@ exports.create = function(req, res, next) {
       description: "", //important
       serial: "",
       folder: undefined,
-      task: taskId ? new ObjectId(taskId) : undefined,
       creator: new ObjectId(req.user._id),
       updater: new ObjectId(req.user._id),
       sender: new ObjectId(req.user._id),
@@ -2191,8 +2189,8 @@ exports.create = function(req, res, next) {
             req.locals.result = result;
             req.locals.data = {};
             req.locals.data.entityName = "officeDocuments";
-            next();
-          });
+            return taskId ? addToParent('Task', taskId, result._id) : null;
+          }).then(()=>next())
       }
     });
   } else {
@@ -2213,7 +2211,6 @@ exports.create = function(req, res, next) {
           description: "", //important
           serial: "",
           folder: new ObjectId(folderId),
-          task: taskId ? new ObjectId(taskId) : undefined,
           creator: new ObjectId(req.user._id),
           updater: new ObjectId(req.user._id),
           sender: new ObjectId(req.user._id),
@@ -2258,14 +2255,27 @@ exports.create = function(req, res, next) {
               result.creator = creator;
               // res.send(result);
               req.locals.result = result;
-              next();
-            });
+              return taskId ? addToParent('Task', taskId, result._id) : null;
+            }).then(()=>next())
           }
         });
       }
     });
   }
 };
+
+function addToParent(parentType, parentId, childId){
+    let Model = mongoose.model(parentType);
+    return Model.findOne({_id: parentId})
+        .then( doc => {
+            if(!_.includes(doc.officeDocuments, childId)) {
+                return Model.update(
+                  { _id: parentId },
+                  { $push: { officeDocuments: childId } }
+                );
+            }
+        })
+}
 
 /**
  *

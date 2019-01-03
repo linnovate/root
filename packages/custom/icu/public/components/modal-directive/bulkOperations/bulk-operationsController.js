@@ -243,6 +243,8 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     $scope.enableSetDueDate = false;
 
     $scope.dueOptions = {
+        dayNamesMin: ['S','M','T','W','T','F','S'],
+        showOtherMonths: true,
         onSelect: function() {
             $scope.entityDateCheck();
         },

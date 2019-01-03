@@ -13,7 +13,9 @@
 
         tr {
             height: 51px;
-            border-bottom: 1px solid $light-grey1;
+            &:not(:last-child) {
+                border-bottom: 1px solid $light-grey1;
+            }
         }
     }
 }
