@@ -80,6 +80,7 @@ em {
 .search-list {
   overflow-y: auto;
   height: 100%;
+  @include scroll;
 
   .list-table{
     .search {
