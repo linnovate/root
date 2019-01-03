@@ -11,18 +11,16 @@
                 ng-mouseleave="hideTick(item)"
             >
             </tr>
-            <tr ng-if="!multipleSelectMode">
-                <td
-                    class="create-new-item"
-                    ng-click="onCreate()"
-                    ng-attr-colspan="2"
-                    tabindex="0"
-                    ng-model="newItem"
-                >{{'Create New Item' | i18next}}</td>
-            </tr>
         </tbody>
     </table>
 </div>
+<div
+    class="create-new-item"
+    ng-if="!multipleSelectMode"
+    ng-click="onCreate()"
+    tabindex="0"
+    ng-model="newItem"
+    >{{'Create New Item' | i18next}}</div>
 <div class="bottomBar" style="height: 10px;"></div>
 <div class="list-table-print">
     <div class="header">

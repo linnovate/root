@@ -174,10 +174,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // =========================== list ============================ //
     // ============================================================= //
 
-    $scope.context = context;
-    $scope.isLoading = true;
-
-
     let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
 
     $scope.showTaskExcel = inCurrentEntity('tasks')

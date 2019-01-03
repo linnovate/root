@@ -96,6 +96,8 @@ detail-category {
             min-width: 150px;
             border-radius: 0;
             margin-top: -2px;
+            /*rtl:ignore*/
+            direction: ltr;
         }
 
         input {
@@ -115,12 +117,14 @@ detail-category {
             .ui-select-choices-row-inner {
                 background-color: #f5f5f5;
                 color: $dark-grey;
+                text-align: left;
             }
         }
         .ui-select-choices-row {
             .ui-select-choices-row-inner {
-               display: flex;
-               align-items: center;
+                display: flex;
+                align-items: center;
+                text-align: left;
            }
             a { padding: 0 20px;}
        }
