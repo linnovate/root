@@ -1,4 +1,6 @@
 .detail-due {
+
+ 
     //width: 107px;
     display: flex;
     align-items: center;
@@ -125,6 +127,118 @@ discussion-due {
         }
         #allDayTitle {
             margin-left: 49px;
+        }
+    }
+}
+#ui-datepicker-div {
+    width: 307px;
+    padding: 20px 13px;
+    background: #2C363A;
+    background-color: #2C363A !important;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 13px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #DFF2F9;
+    /*rtl:ignore*/
+    direction: ltr !important;
+    border-radius: 0px;
+    border: none;
+
+    .ui-widget-header {
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: bold;
+        line-height: normal;
+        font-size: 12px;
+        text-align: center;
+        text-transform: uppercase;
+        color: #FFA000;
+        border: none !important;
+        background:none !important;
+        margin: 0 3px;
+    }
+
+    a.ui-corner-all {
+        background:none;
+        border: none;
+        cursor: pointer;
+        top: 0 !important;
+        &.ui-datepicker-next {
+            /*rtl:ignore*/
+            right: 2px !important;
+        }
+        &.ui-datepicker-prev {
+            /*rtl:ignore*/
+            left: 2px !important;
+        }
+        span {
+            position: initial;
+            margin: auto;
+            line-height: 12px;
+            width: 8px;
+            height: 100%;
+            background-position: 0;
+            background-repeat: no-repeat;
+            &.ui-icon-circle-triangle-e {
+                background-image: url('data:image/svg+xml;charset=UTF-8,<svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg"> <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.39964L1.44653 -3.57628e-07L7.63636 6L1.44653 12L0 10.6004L4.74762 6L0 1.39964Z" fill="white"/></svg>');
+            }
+            &.ui-icon-circle-triangle-w {
+                background-image: url('data:image/svg+xml;charset=UTF-8,<svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg"> <path fill-rule="evenodd" clip-rule="evenodd" d="M8 1.39964L6.55347 -3.57628e-07L0.363637 6L6.55347 12L8 10.6004L3.25238 6L8 1.39964Z" fill="white"/></svg>');
+            }
+        }
+    }
+
+    table.ui-datepicker-calendar {
+        margin-top: 10px;
+    }
+
+    a:hover, a:focus {
+        text-decoration: none;
+        box-shadow: none;
+    }
+
+    td {
+        padding: 7px;
+        span, a {
+            width:26px;
+            height: 26px;
+            padding: 0;
+            line-height: 26px;
+        }
+        a.ui-state-default {
+            color: #DFF2F9;
+            background:none !important;
+            border: none;
+            text-align: center;
+            font-weight: normal;
+        }
+        a.ui-state-highlight {
+            color: #00AEEF;
+        }
+        a.ui-state-active, a.ui-state-hover {
+            background: #FFA000!important;
+            border-radius: 50%;
+            -moz-border-radius:50%;
+            -webkit-border-radius:50%;
+            color: #DFF2F9;
+            text-align: center;
+            border: none;
+        }
+    }
+
+    .ui-state-disabled  {
+        span {
+            font-family: 'Open Sans';
+            font-style: normal;
+            background:none !important;
+            font-weight: normal;
+            border: none;
+            color:#e7dada;
+            text-align: center;
         }
     }
 }

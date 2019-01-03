@@ -1,16 +1,31 @@
 @mixin scroll {
+
+
+
     &::-webkit-scrollbar {
-        width: 5px;
+        width: 11px;
+        border-radius: 30px;
     }
-
+    
+    /* Track */
     &::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        border-radius: 10px;
+        background: white;
+    }
+    
+    /* Handle */
+    &::-webkit-scrollbar-thumb { 
+        background: rgb(192, 188, 188);
+        height: 2px;
+        margin: 20px;
+        border: 3px solid white;
+        border-radius: 21px;
+    }
+    
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: #EEEEEE;
     }
 
-    &::-webkit-scrollbar-thumb {
-        border-radius: 10px;
-        background-color: white;
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-    }
+
+   
 }

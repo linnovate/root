@@ -263,17 +263,17 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   $scope.menuItems = [{
     label: 'projectPolicy',
     fa: 'fa-list-ol',
-    display: true,
+    display: false,
     action: $scope.openPolicyModal,
   }, {
     label: 'publishProject',
     fa: 'fa-upload',
-    display: true,
+    display: false,
     action: $scope.publishProject,
   }, {
     label: 'createWebhook',
     fa: 'fa-plus-circle',
-    display: true,
+    display: false,
     action: $scope.createWebhook,
   }, {
     label: 'recycleProject',
