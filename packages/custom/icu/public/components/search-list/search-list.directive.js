@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.searchlist', [])
 .directive('icuSearchList', function (LayoutService) {
-    function controller($rootScope, $scope, $state,$filter, SearchService, MultipleSelectService, NotifyingService) {
+    function controller($rootScope, $scope, $state, $filter, SearchService, MultipleSelectService, NotifyingService) {
 
         SearchService.builtInSearchArray = false;
 
@@ -38,15 +38,16 @@ angular.module('mean.icu.ui.searchlist', [])
 
         $scope.showTick = function(item){ item.visible = true };
         $scope.hideTick = function(item){ item.visible = false };
+
         function filterVisibleItems(){
             let visibleItems = $filter('searchResultsFilter')($scope.results);
-           return $filter('filteringByUpdated')(visibleItems);
+            return $filter('filteringByUpdated')(visibleItems);
         }
         $scope.multipleSelectRefreshSelected = function (entity) {
             MultipleSelectService.refreshSelectedList(entity);
             multipleSelectRefreshState(filterVisibleItems());
         };
-        
+
         function multipleSelectRefreshState(visibleItems){
             $scope.selectedItems = MultipleSelectService.getSelected();
             refreshActiveItemsInList();
