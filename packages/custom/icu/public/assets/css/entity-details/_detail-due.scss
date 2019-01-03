@@ -1,4 +1,6 @@
 .detail-due {
+
+ 
     //width: 107px;
     display: flex;
     align-items: center;
@@ -127,4 +129,103 @@ discussion-due {
             margin-left: 49px;
         }
     }
+}
+#ui-datepicker-div{
+     /*rtl:begin:ignore*/
+            height: 323px;
+            width: 318px;
+            padding: 21px;
+            background: #2C363A;
+            background-color: #2C363A !important;
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 13px;
+            text-align: center;
+            text-transform: uppercase;
+            color: #DFF2F9;
+            direction: ltr !important;
+            border-radius: 0px;
+            border: none;
+
+         .ui-widget-header{
+                font-family: 'Open Sans';
+                font-style: normal;
+                font-weight: bold;
+                line-height: normal;
+                font-size: 12px;
+                text-align: center;
+                text-transform: uppercase;
+                color: #FFA000;
+                border: none !important;
+                background:none !important;
+
+             }   
+                
+                /* arrows */
+                a.ui-datepicker-prev.ui-corner-all[title~="Prev"]:after{
+                    text-decoration: none;
+                        content: '<';
+                        color: #FFFFFF;
+                        font-size: 18px;
+                }
+                a.ui-datepicker-next.ui-corner-all[title~="Next"]:after{
+                    content: '>';
+                    color: #FFFFFF;                   
+                    font-size: 18px;
+                    text-decoration: none;
+                }
+
+                a:hover, a:focus{
+                    text-decoration: none;
+                }
+
+                // a.ui-datepicker-prev.ui-corner-all
+                a.ui-datepicker-next.ui-corner-all[title~="Next"], a.ui-datepicker-prev.ui-corner-all[title~="Prev"]{
+                     span{
+                        display: none;
+                    }
+                }
+              td{
+                  padding: 7px;
+                    span,a{
+                    width:26px;
+                    height: 26px;
+                    }
+                        a.ui-state-default {
+                            color: #DFF2F9;
+                            background:none !important;
+                            border: none;
+                            text-align: center;
+                            font-weight: normal;
+
+                        }
+                         a.ui-state-highlight {
+                            color: #00AEEF;
+                        }
+                        a.ui-state-active, a.ui-state-hover {
+                            background: #FFA000!important;
+                            border-radius: 50%;
+                            -moz-border-radius:50%;
+                            -webkit-border-radius:50%;
+                            color: #DFF2F9;
+                            text-align: center;
+                            border: none;
+                        }
+                        
+
+                }
+                .ui-state-disabled  {
+                    span{
+                    font-family: 'Open Sans';
+                    font-style: normal;                        
+                    background:none !important;
+                    font-weight: normal;
+                    border: none;
+                    color:#e7dada;
+                    }
+                }
+
+            /*rtl:end:ignore*/
 }
