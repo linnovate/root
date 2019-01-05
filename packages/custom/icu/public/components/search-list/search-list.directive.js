@@ -74,6 +74,7 @@ angular.module('mean.icu.ui.searchlist', [])
         function multipleDisablingCheck(){
             if(!$scope.selectedItems.length && !$scope.mouseOnMultiple){
                 $scope.multipleSelectMode = false;
+                $scope.changeMultipleMode();
             }
         }
         $scope.changeMultipleMode = () => $scope.$broadcast('checkMultipleMode');
