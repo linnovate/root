@@ -33,8 +33,10 @@ exports.create = function(req, res, next) {
       .read(null, req.user, req.acl, {'custom.id': req.body.custom.id})
       .then(function(e) {
         if(_.isEmpty(e)) {
+          req.locals.update = false;
           entity.create(req, res, next);
         } else {
+          req.locals.update = true;
           req.locals.result = req.locals.result || {};
           req.locals.result = e;
           entity.update(req, res, next);
@@ -49,7 +51,7 @@ exports.create = function(req, res, next) {
 
 
 exports.subTasks = function(req, res, next) {
-  if (req.locals.error) return next();
+  if (req.locals.error || req.locals.update === true) return next();
   var task = req.locals.result;
   if (!task.project || !task.project.templates || !task.project.templates.length) return next();
   req.params.id = task.project.templates[0];
