@@ -5,17 +5,17 @@
         <!--<div class="search">{{'search' | i18next}}-->
             <!--<span class="close-search" ng-click="closeSearch()">x</span>-->
         <!--</div>-->
-        <div class="subtitle typeList" ng-click="filteringData.issue='all';resetFilter();filterSearchByType();">
+        <div class="subtitle typeList" ng-click="filteringData.issue='all';resetFilter();searchByEntity()">
             {{'showResultsOf' | i18next}}:
         </div>
-        <div class="clear" ng-click="filteringData.issue='all';resetFilter();filterSearchByType()">{{'clear' | i18next}}</div>
+        <div class="clear" ng-click="filteringData.issue='all';resetFilter();searchByEntity()">{{'clear' | i18next}}</div>
         <ul class="issue">
             <li ng-repeat="issue in issues"
-                ng-click="searchByEntity(issue.name);filteringData.issue = issue.name;">
+                ng-click="searchByEntity(issue.name);filteringData.issue = issue.name">
                 <input type="radio" ng-model="filteringData.issue" ng-value="issue.name"/>
                 <span class="arrow-left" ng-show="filteringData.issue == issue.name"></span>
                 <span class="icon icon-{{issue.name}}"></span>
-                <span>{{issue.label | i18next}} ({{issue.length}})</span>
+                <span>{{ifield in AllStatus track by $index | orderBy:fieldssue.label | i18next}} ({{issue.length}})</span>
             </li>
         </ul>
 
