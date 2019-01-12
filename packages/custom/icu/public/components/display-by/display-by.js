@@ -158,6 +158,14 @@ angular.module('mean.icu.ui.displayby', [])
           });
         };
 
+        $scope.searchByEntity = docType => {
+            $location.search('type', docType);
+
+            let state = $state.current.name;
+            // $state.go(state);
+            $state.reload();
+        };
+
         $scope.typeClicked = false;
 
         NotifyingService.subscribe('editionData', function () {

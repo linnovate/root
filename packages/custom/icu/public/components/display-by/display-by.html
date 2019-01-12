@@ -11,7 +11,7 @@
         <div class="clear" ng-click="filteringData.issue='all';resetFilter();filterSearchByType()">{{'clear' | i18next}}</div>
         <ul class="issue">
             <li ng-repeat="issue in issues"
-                ng-click="filteringData.issue = issue.name;filterSearchByType();resetFilter();">
+                ng-click="searchByEntity(issue.name);filteringData.issue = issue.name;">
                 <input type="radio" ng-model="filteringData.issue" ng-value="issue.name"/>
                 <span class="arrow-left" ng-show="filteringData.issue == issue.name"></span>
                 <span class="icon icon-{{issue.name}}"></span>

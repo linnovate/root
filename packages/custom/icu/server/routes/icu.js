@@ -61,7 +61,7 @@ module.exports = function(Icu, app) {
   });
   //END update mapping - OHAD
 
-  app.route('/api/:entity(officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs|hook)*').all(circles.acl());
+  app.route('/api/:entity(search|officeDocsFiles|tasks|discussions|projects|users|circles|files|attachments|updates|templates|myTasksStatistics|event-drops|offices|folders|officeDocuments|officeTemplates|templateDocs|hook)*').all(circles.acl());
 
   app.use('/api/files', attachments.getByPath, error, express.static(config.attachmentDir));
   //app.use('/api/files', express.static(config.attachmentDir));
@@ -263,7 +263,7 @@ module.exports = function(Icu, app) {
     .post(attachments.getAttachmentsByIds);
 
   app.route('/api/search')
-    .get(elasticsearch.search);
+    .get(pagination.parseParams, elasticsearch.search, pagination.formResponse);
 
   app.route('/api/discussions*').all(entity('discussions'));
   app.route('/api/discussions')

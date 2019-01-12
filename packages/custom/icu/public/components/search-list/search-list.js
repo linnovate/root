@@ -2,17 +2,21 @@
 
 angular.module('mean.icu.ui.searchlist')
 .controller('SearchListController', function ($rootScope, $scope, $stateParams, $location, $timeout, results, term, SearchService, UsersService) {
-	$scope.results = results;
+    $scope.results = results.data;
+    $scope.resultsLength = results.counts.total;
+    $scope.loadNext = results.next;
+    $scope.loadPrev = results.prev;
+
     filterFinalRes();
 
-	$scope.inObjArray = function(id,array){
-		array.forEach(function(w){
-			if(w._id && w._id === id){
-				return true;
-			}
-		});
-		return false;
-	};
+    $scope.inObjArray = function(id,array){
+      array.forEach(function(w){
+        if(w._id && w._id === id){
+          return true;
+        }
+      });
+      return false;
+    };
 
     $scope.$on('refreshList', function (ev) {
         SearchService.find(term).then(function(res){
@@ -37,7 +41,6 @@ angular.module('mean.icu.ui.searchlist')
             }
             $scope.term = term;
             $scope.results = finalResults;
-            $scope.resultsLength = $scope.results.length;
         });
     }
 

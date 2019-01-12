@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('mean.icu.ui.searchlistfilter', [])
-.filter('filteringByUpdated', function (SearchService,$location) {    
-    return function(results) {  
+.filter('filteringByUpdated', function (SearchService,$location) {
+    return function(results) {
         var arr = [];
         if($location.search() && $location.search().recycled) {
           for(var i = 0;i<SearchService.filteringResults.length;i++){
@@ -26,7 +26,7 @@ angular.module('mean.icu.ui.searchlistfilter', [])
             if (SearchService.filteringByDueDate && e.due) {
                 entityDueDate = new Date(e.due)
             }
-            let res = false;           
+            let res = false;
             if (e._type == 'officeDocument')
               e.due = e.created;
             if (SearchService.filteringByDueDate  && e.due){
@@ -45,7 +45,7 @@ angular.module('mean.icu.ui.searchlistfilter', [])
                   }
                   else res = false;
             }
-              
+
             else if (entityDate > filterDate)
                res = true;
             return res ? e.id : -1 ;
@@ -58,17 +58,15 @@ angular.module('mean.icu.ui.searchlistfilter', [])
             }
         }
         return out;
-    }
-    return out = filteringResults ;
+    };
+    return filteringResults ;
 })
 .filter('searchResultsFilter', function (SearchService,$location) {
 	return function(results) {
-        if ($location.path().split("/").pop() == "recycled") {
-            SearchService.filteringResults = results ;     
-        }
+        SearchService.filteringResults = results ;
 
 		var filteringResults = SearchService.filteringResults.map(function(e) {
-            return e.id
+            return e._id
         });
 
         var out = [];
@@ -84,5 +82,5 @@ angular.module('mean.icu.ui.searchlistfilter', [])
     return function(length) {
         return  SearchService.filteringResults.length;
     }
-    
+
 });

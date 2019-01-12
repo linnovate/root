@@ -24,11 +24,47 @@ angular.module('mean.icu.ui.searchlist', [])
             })
         };
 
-
-        for(var i = 0;i<$scope.results.length;i++){
-            $scope.results[i].id = $scope.results[i].id ? $scope.results[i].id:$scope.results[i]._id;
-            $scope.results[i]._id = $scope.results[i].id;
+        setIdsToResults();
+        function setIdsToResults(){
+            for(var i = 0;i<$scope.results.length;i++){
+                $scope.results[i].id = $scope.results[i].id ? $scope.results[i].id:$scope.results[i]._id;
+                $scope.results[i]._id = $scope.results[i].id;
+            }
         }
+
+        $scope.loadMore = () => {
+            if ($scope.loadNext) {
+                return $scope.loadNext()
+                    .then(items => {
+                        let moreResults = [];
+                        for(let prop in items.data){
+                            if(prop === 'count')continue;
+
+                            items.data[prop].map( entity => {
+                                entity._type = prop;
+                                entity._type === "officedocument" ?
+                                    entity._type="officeDocument" :
+                                    entity._type ;
+                                return entity;
+                            });
+                            moreResults = moreResults.concat(items.data[prop]);
+                        }
+                        if (moreResults.length) {
+                            $scope.results.push(...moreResults);
+                            // let index = $scope.results.length - 1;
+                            // let args = [index, 0].concat(moreResults);
+                            // [].splice.apply($scope.results, args);
+                        }
+                        setIdsToResults();
+
+                        $scope.loadNext = items.next;
+                        $scope.loadPrev = items.prev;
+
+                        return moreResults;
+                    });
+            }
+            return [];
+        };
 
         //********Multiple Select Search*******//
         $scope.mouseOnMultiple = false;
@@ -97,6 +133,8 @@ angular.module('mean.icu.ui.searchlist', [])
         templateUrl: '/icu/components/search-list/search-list.directive.html',
         scope: {
             results: '=',
+            loadNext: '=',
+            loadPrev: '=',
             multipleSelectMode: '=',
             changeMultipleMode: '='
         },

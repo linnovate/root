@@ -1453,7 +1453,10 @@ angular.module('mean.icu').config([
                             if(query !== '___'){
                               SearchService.refreshQuery(query);
                             }
-                            return SearchService.find(query);
+                            let params = new URLSearchParams($location.url().split('?')[1]);
+                            let docType = params.get("type");
+
+                            return SearchService.find(query, docType);
                         } else {
                             if (SearchService.builtInSearchArray) {
                                 var data = SearchService.builtInSearchArray.map(function (d) {

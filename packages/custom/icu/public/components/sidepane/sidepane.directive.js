@@ -350,7 +350,7 @@ directive('icuSidepane', function() {
           $scope.issues[i].length = 0;
         }
 
-        if (!results || !results.length) return ;
+        // if (!results || !results.length) return ;
         let filteredByType = [], index;
 
         for (let i=0; i< results.length; i++) {
@@ -382,9 +382,20 @@ directive('icuSidepane', function() {
             index = issuesOrder.indexOf(results[i]._type);
             if($stateParams.query == ''){
               $scope.issues[index].length = 0;
-            } else {
-              identifyRecycled(results[i], $scope.issues[index]);
             }
+            // else {
+            //   identifyRecycled(results[i], $scope.issues[index]);
+            // }
+        }
+
+        let counts = SearchService.counts;
+        for(let docType in counts){
+          if(docType === 'total')continue;
+
+          let issue = $scope.issues.find( issueObj => issueObj.name === docType);
+          if(issue){
+            issue.length = counts[docType];
+          }
         }
         SearchService.setFilteringResults(filteredByType);
         SearchService.filteringResults = filteredByType;
@@ -466,26 +477,12 @@ directive('icuSidepane', function() {
             $scope.dueDate = new Date(value) ;
             document.getElementById('ui-datepicker-div').style.display = 'block';
             SearchService.filteringByDueDate = valueChanged;
-            SearchService.filteringByUpdated = SearchService.filteringByUpdated;
             $state.go('main.search', { dateUpdated: value }) ;
         },
         dateFormat: 'dd/mm/yy'
     };
 
-    function arrayUnique(array) {
-        var a = array.concat();
-        for(var i=0; i<a.length; ++i) {
-            for(var j=i+1; j<a.length; ++j) {
-                if(a[i] === a[j])
-                    a.splice(j--, 1);
-            }
-        }
-
-        return a;
-    }
-
      $scope.filterActive = function(type) {
-         console.log('ttttttt',type)
          $scope.activeToggle.field = type;
          EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
          $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });

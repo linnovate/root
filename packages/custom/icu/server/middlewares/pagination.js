@@ -26,6 +26,11 @@ function parseParams(req, res, next) {
     start: req.query.start ? +req.query.start : undefined,
     limit: isNaN(+req.query.limit) ? req.query.limit || undefined : +req.query.limit
   };
+  if(req.query.term)
+    req.locals.data.pagination.term = req.query.term;
+  if(req.query.docType)
+    req.locals.data.pagination.docType = req.query.docType;
+
 if (req.query.status){
   req.locals.data.pagination.status = req.query.status;
 }
