@@ -3,6 +3,7 @@
 angular.module('mean.icu.ui.searchlist')
 .controller('SearchListController', function ($rootScope, $scope, $stateParams, $location, $timeout, results, term, SearchService, UsersService) {
     $scope.results = results.data;
+    SearchService.filteringResults = results.data;
     $scope.resultsLength = results.counts.total;
     $scope.loadNext = results.next;
     $scope.loadPrev = results.prev;

@@ -63,8 +63,6 @@ angular.module('mean.icu.ui.searchlistfilter', [])
 })
 .filter('searchResultsFilter', function (SearchService,$location) {
 	return function(results) {
-        SearchService.filteringResults = results ;
-
 		var filteringResults = SearchService.filteringResults.map(function(e) {
             return e._id
         });
