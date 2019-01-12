@@ -15,7 +15,7 @@
                 <input type="radio" ng-model="filteringData.issue" ng-value="issue.name"/>
                 <span class="arrow-left" ng-show="filteringData.issue == issue.name"></span>
                 <span class="icon icon-{{issue.name}}"></span>
-                <span>{{ifield in AllStatus track by $index | orderBy:fieldssue.label | i18next}} ({{issue.length}})</span>
+                <span>{{issue.label | i18next}} ({{issue.length}})</span>
             </li>
         </ul>
 
