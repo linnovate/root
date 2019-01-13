@@ -33,7 +33,7 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.save = function() {
-                if (_.isEmpty($scope.attachments)) return;
+                if (_.isEmpty($scope.attachments) && _.isEmpty($scope.activity.description)) return;
                 $scope.activity.entityType = $scope.entityName;
                 $scope.activity.entity = $stateParams.id || $stateParams.entityId;
                 $scope.activity.updateField = $scope.attachments && $scope.attachments.length ? 'attachment' : 'comment';
@@ -48,6 +48,7 @@ angular.module('mean.icu.ui.tabs')
                     context = {
                         room: isRoomProject ? $scope.entity.room : $scope.entity.project.room,
                         action: 'added',
+                        description: $scope.activity.description,
                         updateField: $scope.activity.updateField,
                         issue: $scope.activity.entityType,
                         issueName: $scope.entity.title,
@@ -55,44 +56,59 @@ angular.module('mean.icu.ui.tabs')
                         location: location.href
                     }
                 }
+                if(!_.isEmpty($scope.attachments)){
 
-                ActivitiesService.create({
-                    data: {
-                        creator: $scope.me,
-                        date: new Date(),
-                        entity: $scope.entity._id,
-                        entityType: $scope.entityName,
+                    ActivitiesService.create({
+                        data: {
+                            creator: $scope.me,
+                            date: new Date(),
+                            entity: $scope.entity._id,
+                            entityType: $scope.entityName,
+                            updateField: 'attachment',
+                            current: $scope.activity,
+                        },
+                        context: {}
+                    }).then(function(result) {
+                        if (!_.isEmpty($scope.attachments)) {
+                            var file = $scope.attachments;
+                            var data = {
+                                issueId: result._id,
+                                issue: 'update',
+                                entity: $scope.entityName,
+                                entityId: $stateParams.id || $stateParams.entityId
+                            };
 
-                        updateField: 'attachment',
-                        current: $scope.activity,
-                    },
-                    context: {}
-                }).then(function(result) {
-                    if (!_.isEmpty($scope.attachments)) {
-                        var file = $scope.attachments;
-                        var data = {
-                            issueId: result._id,
-                            issue: 'update',
-                            entity: $scope.entityName,
-                            entityId: $stateParams.id || $stateParams.entityId
-                        };
+                            for (var index = 0; index < file.length; index++) {
 
-                        for (var index = 0; index < file.length; index++) {
+                                DocumentsService.saveAttachments(data, file[index])
+                                    .then(function(attachment) {
+                                        console.log('[attachment]', [attachment]);
 
-                            DocumentsService.saveAttachments(data, file[index])
-                                .then(function(attachment) {
-                                    console.log('[attachment]', [attachment]);
-
-                                    AttachmentsService.getAttachmentUser(attachment.creator._id)
-                                        .then(user => {
-                                            attachment.attUser = user.name ;
-                                            $scope.documents.push(attachment);
-                                        })
-                                });
+                                        AttachmentsService.getAttachmentUser(attachment.creator._id)
+                                            .then(user => {
+                                                attachment.attUser = user.name ;
+                                                $scope.documents.push(attachment);
+                                            })
+                                    });
+                            }
                         }
-                    }
-                    clearForm();
-                });
+                        clearForm();
+                    });
+                } else {
+                    ActivitiesService.create({
+                        data: {
+                            creator: $scope.me,
+                            date: new Date(),
+                            entity: $scope.entity._id,
+                            entityType: $scope.entityName,
+                            updateField: 'comment',
+                            current: $scope.activity.description,
+                        },
+                        context: {}
+                    }).then( result => {
+                        clearForm();
+                    })
+                }
             };
 
         $scope.trigger = function (document) {
