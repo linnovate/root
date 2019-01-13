@@ -497,7 +497,9 @@ exports.updatePermsArray = function(user, oldDoc, newDoc) {
 
   if(watcherRemoved.length > 0) {
     let index = exports.searchIdIndex(watcherRemoved[0], newDoc.permissions) ;// remove from permissions array
-    newPerms.splice(index,1);
+    if(index !== null) {
+      newPerms.splice(index,1);
+    }
   }
 
   // console.log("updated perms array:");
