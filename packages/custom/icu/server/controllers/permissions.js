@@ -186,7 +186,7 @@ exports.createContent = function(user, oldDoc, newDoc) {
     return deffered.promise;
   }
 
-  if (newDoc.type === 'comment' || newDoc.type === 'document') {
+  if (newDoc.updateField === 'comment' || newDoc.updateField === 'attachment') {
     let Model = entityNameMap[newDoc.entityType].mainModel;
 
     Model.findOne({'_id': newDoc.entity},function(err,doc){
