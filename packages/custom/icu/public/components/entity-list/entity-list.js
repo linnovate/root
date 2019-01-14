@@ -192,16 +192,23 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             return;
         }
 
-        var nameFocused = angular.element($event.target).hasClass('name');
+        let nameFocused = angular.element($event.target).hasClass('name');
+        let state = $scope.detailsState + '.' + window.config.defaultTab;
+        let layoutStatus = LayoutService.getStateValue();
+        LayoutService.clicked();
 
-        $state.go($scope.detailsState + '.' + window.config.defaultTab, {
+        if (state.indexOf('activities') !== -1
+            && LayoutService.show()
+            && layoutStatus !== 3 && layoutStatus !== 4
+        )state += '.modal';
+
+        $state.go(state, {
             id: item._id,
             entity: context.entityName,
             entityId: context.entityId,
             nameFocused: nameFocused
         });
 
-        LayoutService.clicked();
     };
 
     $scope.onCreate = function() {

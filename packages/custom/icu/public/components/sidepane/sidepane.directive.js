@@ -558,8 +558,7 @@ directive('icuSidepane', function() {
         }
     });
 
-    $rootScope.$emit('Login');
-
+    // $rootScope.$emit('Login');
 }
 
 return {

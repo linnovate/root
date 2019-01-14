@@ -14,15 +14,6 @@ angular.module('mean.icu.ui.middlepane', [])
 
 function SearchController($scope, $state, $stateParams, context, NotifyingService, TasksService, $timeout, SearchService, $document, $location) {
     $scope.$on('$stateChangeSuccess', function ($event, toState) {
-        // if ($location.path().split("/").pop() == "recycled") {
-        //     $scope.term = "recycled" ;
-        // }
-        // else {
-        //     if($scope.term == "recycled") {
-        //         $scope.term = $location.path().split("/").pop() ;
-        //     }
-        // }
-
         if (toState.name.indexOf('main.search') !== 0) {
             if ($stateParams.query && $stateParams.query.length) {
                 $scope.term = $stateParams.query;
@@ -32,29 +23,10 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
         }
     });
 
-// function onDocumentClick() {
-//         // check for flag
-//         if(angular.element('#build-in-search').css('display') == 'block')
-//         {
-//             angular.element('#build-in-search').css('display', 'none');
-//         }
-//         else{
-//             angular.element('#build-in-search').css('display', 'block');
-//         }
-//     }
-
-//     $document.on("click", onDocumentClick);
-
     $scope.clearSearch = function () {
         $scope.term = '';
         search();
     };
-
-    // $scope.focusSearch = function () {
-    //     $scope.term = '';
-    //     $scope.search();
-    // };
-
 
     function search(term) {
         SearchService.builtInSearchArray = false;
@@ -66,7 +38,7 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
     }
 
     $scope.builtInSearch = function(funcName) {
-        $document.on("click", onDocumentClick);
+      $document.on("click", onDocumentClick);
     	TasksService[funcName]().then(function(res){
     		SearchService.builtInSearchArray = res;
     		$state.go('main.search', {query: ''}, {reload: true});
@@ -82,12 +54,6 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
         activeSearchNav();
         refreshQuery(term);
     };
-
-    // $scope.blur = function(){
-    // 	$timeout(function() {
-    // 		$scope.click = false;
-    // 	}, 1000);
-    // }
 }
 
 angular.module('mean.icu.ui.search', [])
