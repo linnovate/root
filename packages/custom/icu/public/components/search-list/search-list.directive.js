@@ -25,9 +25,8 @@ angular.module('mean.icu.ui.searchlist', [])
         };
 
 
-        for(var i = 0;i<$scope.results.length;i++){
-            $scope.results[i].id = $scope.results[i].id ? $scope.results[i].id:$scope.results[i]._id;
-            $scope.results[i]._id = $scope.results[i].id;
+        for(var i = 0; i < $scope.results.length; i++){
+            $scope.results[i]._id = $scope.results[i].id = $scope.results[i].id || $scope.results[i]._id;
         }
 
         //********Multiple Select Search*******//
@@ -96,6 +95,12 @@ angular.module('mean.icu.ui.searchlist', [])
             }
             multipleSelectRefreshState();
         }
+
+        NotifyingService.subscribe('refreshAfterOperation', () => {
+            setTimeout(()=>{
+                $state.go($state.current.name)
+            }, 1000)
+        }, $scope);
 
         function filterResults(itemsArray){
             let newArray = $filter('searchResultsFilter')(itemsArray);
