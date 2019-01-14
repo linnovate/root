@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, people, projects, $timeout, context, $state, ProjectsService, ActivitiesService, TasksService, PermissionsService, EntityService, $stateParams, me, $window, $uibModal, DetailsPaneService) {
+function ProjectDetailsController($scope, $rootScope, entity, tags, people, projects, $timeout, context, $state, ProjectsService, ActivitiesService, TasksService, PermissionsService, EntityService, $stateParams, me, $window, $uibModal, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
 
@@ -41,7 +41,7 @@ function ProjectDetailsController($scope, $rootScope, entity, people, projects, 
   $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'done', 'archived'];
 
   $scope.me = me;
-  $scope.tags = $scope.item.tags;
+  $scope.tags = tags || [];
 
   let currentState = $state.current.name;
 
