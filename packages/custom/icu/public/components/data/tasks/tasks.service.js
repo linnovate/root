@@ -261,26 +261,23 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function createActivity(updateField){
-        return function(entity, me, prev, remove){
-            return ActivitiesService.create({
-                data: {
-                    creator: me,
-                    date: new Date(),
-                    entity: entity.id,
-                    entityType: 'task',
+        return function(entity, me, prev){
+          prev = prev ? prev[updateField] : '';
 
-                    updateField: updateField,
-                    current: entity[updateField],
-                    prev: prev ? prev[updateField] : ''
-                },
-                context: {}
-            }).then(function(result) {
-                if (updateField === 'assign' && entity.assign) {
-                    var message = {};
-                    message.content = entity.title || '-';
-                }
-                return result;
+            return ActivitiesService.create({
+              data: {
+                creator: me,
+                date: new Date(),
+                entity: entity.id,
+                entityType: 'task',
+
+                updateField: updateField,
+                current: entity[updateField],
+                prev: prev
+              },
+              context: {}
             });
+
         }
     }
 

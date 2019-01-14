@@ -298,13 +298,6 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
           ActivitiesService.data.push(result);
         });
         break;
-
-      case 'color':
-        FoldersService.updateColor(folder, me, backupEntity).then(function(result) {
-          ActivitiesService.data = ActivitiesService.data || [];
-          ActivitiesService.data.push(result);
-        });
-        break;
       case 'title':
           FoldersService.updateTitle(folder, me, backupEntity).then(function(result) {
               backupEntity = JSON.parse(JSON.stringify($scope.item));

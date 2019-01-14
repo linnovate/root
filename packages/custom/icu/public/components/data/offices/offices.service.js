@@ -141,12 +141,6 @@ angular.module('mean.icu.data.officesservice', [])
                     prev: prev ? prev[updateField] : ''
                 },
                 context: {}
-            }).then(function(result) {
-                if (updateField === 'assign' && entity.assign) {
-                    var message = {};
-                    message.content = entity.title || '-';
-                }
-                return result;
             });
         }
     }
@@ -167,7 +161,6 @@ angular.module('mean.icu.data.officesservice', [])
         selected: selected,
         WantToCreateRoom: WantToCreateRoom,
         updateStar: createActivity('star'),
-        updateColor: createActivity('color'),
         updateTitle: createActivity('title'),
         updateStatus: createActivity('status'),
         updateWatcher: createActivity('watchers'),

@@ -115,12 +115,6 @@ angular.module('mean.icu.data.projectsservice', [])
             prev: prev ? prev[updateField] : ''
           },
           context: {}
-        }).then(function(result) {
-          if (updateField === 'assign' && entity.assign) {
-            var message = {};
-            message.content = entity.title || '-';
-          }
-          return result;
         });
       }
     }
@@ -295,7 +289,6 @@ angular.module('mean.icu.data.projectsservice', [])
       updateStar: createActivity('star'),
       updateTitle: createActivity('title'),
       updateDescription: createActivity('description'),
-      updateColor: createActivity('color'),
       updateStatus: createActivity('status'),
       updateTags: createActivity('tags'),
       updateWatcher: createActivity('watchers'),
