@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.searchlist', [])
 .directive('icuSearchList', function (LayoutService) {
-    function controller($rootScope, $scope, $state, SearchService, MultipleSelectService, NotifyingService) {
+    function controller($rootScope, $scope, $state, $filter, SearchService, MultipleSelectService, NotifyingService) {
 
         SearchService.builtInSearchArray = false;
 
@@ -45,9 +45,11 @@ angular.module('mean.icu.ui.searchlist', [])
         };
 
         function multipleSelectRefreshState(){
+            let filteredResults = filterResults($scope.results);
+
             $scope.selectedItems = MultipleSelectService.getSelected();
             refreshActiveItemsInList();
-            $scope.cornerState = MultipleSelectService.refreshCornerState($scope.results.length);
+            $scope.cornerState = MultipleSelectService.refreshCornerState(filteredResults.length);
 
             if ($scope.selectedItems.length) {
                 $scope.multipleSelectMode = true;
@@ -61,8 +63,10 @@ angular.module('mean.icu.ui.searchlist', [])
         }
 
         function refreshActiveItemsInList(){
+            let filteredResults = filterResults($scope.results);
+
             for(let selected of $scope.selectedItems){
-                let entity = $scope.results.find( result => result._id === selected._id );
+                let entity = filteredResults.find( result => result._id === selected._id );
                 selected.selected = !!entity;
             }
         }
@@ -70,25 +74,34 @@ angular.module('mean.icu.ui.searchlist', [])
         function multipleDisablingCheck(){
             if(!$scope.selectedItems.length && !$scope.mouseOnMultiple){
                 $scope.multipleSelectMode = false;
+                $scope.changeMultipleMode();
             }
         }
         $scope.changeMultipleMode = () => $scope.$broadcast('checkMultipleMode');
         $scope.$on('changeCornerState', (event, cornerState) => multipleSelectSetAllSelected(cornerState === 'all'));
 
         function multipleSelectSetAllSelected(status){
-            for(let i = 0; i < $scope.results.length; i++){
-                let rowSelectStatus = $scope.results[i];
+            let filteredResults = filterResults($scope.results);
+            for(let i = 0; i < filteredResults.length; i++){
+                let rowSelectStatus = filteredResults[i];
 
-                if(!rowSelectStatus.selected)MultipleSelectService.refreshSelectedList($scope.results[i]);
+                if(!rowSelectStatus.selected)MultipleSelectService.refreshSelectedList(filteredResults[i]);
                 rowSelectStatus.selected = status;
             }
             if(status){
-                let copy = _.map($scope.results, _.clone);
+                let copy = _.map(filteredResults, _.clone);
                 MultipleSelectService.setSelectedList(copy);
             } else {
                 MultipleSelectService.refreshSelectedList();
             }
             multipleSelectRefreshState();
+        }
+
+        function filterResults(itemsArray){
+            let newArray = $filter('searchResultsFilter')(itemsArray);
+            newArray = $filter('filteringByUpdated')(newArray);
+
+            return newArray;
         }
     }
 
