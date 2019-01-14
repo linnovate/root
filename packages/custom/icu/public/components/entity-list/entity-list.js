@@ -436,9 +436,9 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     $scope.refreshVisibleItems();
     $scope.checkForInactiveEntity();
 
-    function filterResults(itemsArray){
+    function filterResults(itemsArray, myTasksPage){
         let newArray = $filter('filterRecycled')(itemsArray);
-        newArray = $filter('filterByOptions')(newArray);
+        newArray = $filter('filterByOptions')(newArray, myTasksPage);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
         // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
