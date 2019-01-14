@@ -1,24 +1,16 @@
 'use strict';
 
 angular.module('mean.icu.ui.searchlistfilter', [])
-.filter('filteringByUpdated', function (SearchService,$location) {    
-    return function(results) {  
-        var arr = [];
-        if($location.search() && $location.search().recycled) {
-          for(var i = 0;i<SearchService.filteringResults.length;i++){
-            if(SearchService.filteringResults[i].recycled)
-                arr.push(SearchService.filteringResults[i])
-          }
-        }
-        else {
-            for(var i = 0;i<SearchService.filteringResults.length;i++){
-            if(!SearchService.filteringResults[i].recycled)
-                arr.push(SearchService.filteringResults[i])
-            }
+.filter('filteringByUpdated', function (SearchService,$location) {
+    return function(results) {
+        let recycled = false;
+        if($location.search() && $location.search().recycled)recycled = true;
 
-        }
-        SearchService.filteringResults = arr;
-        var filteringResults = SearchService.filteringResults.map(function(e) {
+        SearchService.filteringResults = SearchService.filteringResults.filter(entity => {
+            return recycled ? entity.recycled : !entity.recycled
+        });
+
+        let filteringResults = SearchService.filteringResults.map(function(e) {
             let filterDate = new Date(SearchService.filteringByUpdated) ;
             let filterDueDate = new Date(SearchService.filteringByDueDate);
             let entityDate = new Date(e.updated);
@@ -26,8 +18,8 @@ angular.module('mean.icu.ui.searchlistfilter', [])
             if (SearchService.filteringByDueDate && e.due) {
                 entityDueDate = new Date(e.due)
             }
-            let res = false;           
-            if (e._type == 'officeDocument')
+            let res = false;
+            if (e._type === 'officeDocument')
               e.due = e.created;
             if (SearchService.filteringByDueDate  && e.due){
                 if (entityDueDate > filterDueDate && entityDate > filterDate) {
@@ -45,44 +37,27 @@ angular.module('mean.icu.ui.searchlistfilter', [])
                   }
                   else res = false;
             }
-              
+
             else if (entityDate > filterDate)
                res = true;
             return res ? e.id : -1 ;
         });
 
-        var out = [];
-        for (var i=0; i< results.length; i++) {
-            if (filteringResults.indexOf(results[i].id) > -1) {
-                   out.push(results[i])
-            }
-        }
-        return out;
-    }
-    return out = filteringResults ;
+        return results.filter( entity => filteringResults.indexOf(entity.id) > -1);
+    };
 })
 .filter('searchResultsFilter', function (SearchService,$location) {
 	return function(results) {
-        if ($location.path().split("/").pop() == "recycled") {
-            SearchService.filteringResults = results ;     
-        }
+        if ($location.path().split("/").pop() === "recycled")
+            SearchService.filteringResults = results;
 
-		var filteringResults = SearchService.filteringResults.map(function(e) {
-            return e.id
-        });
-
-        var out = [];
-        for (var i=0; i< results.length; i++) {
-            if (filteringResults.indexOf(results[i].id) > -1) {
-                out.push(results[i])
-            }
-        }
-        return out;
+		let filteringResults = SearchService.filteringResults.map(e => e.id);
+        return results.filter( entity => filteringResults.indexOf(entity.id) > -1);
 	}
 })
 .filter('searchResultsLength', function (SearchService) {
-    return function(length) {
+    return function() {
         return  SearchService.filteringResults.length;
     }
-    
+
 });
