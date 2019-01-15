@@ -69,9 +69,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                       'tags', 'recycled']);
                     Object.assign(selectedArray[i], entity);
                 }
-                if(changedBulkObject.update.delete){
-                    refreshState();
-                }
                 if(!searchList)
                   MultipleSelectService.setSelectedList(selectedArray);
                 NotifyingService.notify('refreshAfterOperation');
