@@ -97,6 +97,10 @@ angular.module('mean.icu.ui.searchlist', [])
             multipleSelectRefreshState();
         }
 
+        NotifyingService.subscribe('refreshAfterOperation', () => {
+            multipleSelectRefreshState();
+        }, $scope);
+
         function filterResults(itemsArray){
             let newArray = $filter('searchResultsFilter')(itemsArray);
             newArray = $filter('filteringByUpdated')(newArray);
