@@ -146,8 +146,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         title: 'created',
         value: 'created'
     }, {
-      title: 'bolded',
-      value: 'bolded.bolded'
+        title: 'bolded',
+        value: 'bolded'
     }];
 
     if (context.entityName != "all") {
