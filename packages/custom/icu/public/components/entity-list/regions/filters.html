@@ -53,7 +53,7 @@
             <button class="button-left-part" ng-click="changeOrder()" ng-class="{'rotate' : sorting.isReverse}"></button>
             <ui-select class="inline-block"
                        ng-model="sorting.field"
-                       on-select="changeOrder();loadMore()"
+                       on-select="loadMore()"
                        search-enabled="false">
                 <ui-select-match>
                     <button class="button-right-part tasks">{{$select.selected.title | i18next}}</button>
