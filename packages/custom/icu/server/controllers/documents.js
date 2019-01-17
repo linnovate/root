@@ -2189,8 +2189,11 @@ exports.create = function(req, res, next) {
             req.locals.result = result;
             req.locals.data = {};
             req.locals.data.entityName = "officeDocuments";
-            return taskId ? addToParent('Task', taskId, result._id) : null;
-          }).then(()=>next())
+            if(taskId){
+                return addToParent('Task', taskId, result).then(() => next());
+            }
+            return next();
+          })
       }
     });
   } else {
@@ -2253,10 +2256,12 @@ exports.create = function(req, res, next) {
             );
             User.findOne({ _id: result.creator }).exec(function(err, creator) {
               result.creator = creator;
-              // res.send(result);
               req.locals.result = result;
-              return taskId ? addToParent('Task', taskId, result._id) : null;
-            }).then(()=>next())
+              if(taskId){
+                addToParent('Task', taskId, result._id).then(() => next())
+              }
+              return next();
+            })
           }
         });
       }
@@ -2264,17 +2269,26 @@ exports.create = function(req, res, next) {
   }
 };
 
-function addToParent(parentType, parentId, childId){
-    let Model = mongoose.model(parentType);
-    return Model.findOne({_id: parentId})
-        .then( doc => {
-            if(!_.includes(doc.officeDocuments, childId)) {
-                return Model.update(
-                  { _id: parentId },
-                  { $push: { officeDocuments: childId } }
-                );
-            }
-        })
+function addToParent(parentType, parentId, child){
+  let Model = mongoose.model(parentType);
+  return Model.findOne({_id: parentId})
+    .then( doc => {
+      if(parentType === 'Task'){
+        child.watchers = doc.watchers;
+        let conditions = { _id: child._id },
+          update = { watchers: doc.watchers };
+
+        Document.update(conditions, update, {}, err => {
+          if(err)throw new Error(err);
+        });
+      }
+      if(!_.includes(doc.officeDocuments, child._id)) {
+        return Model.update(
+          { _id: parentId },
+          { $push: { officeDocuments: child._id } }
+        );
+      }
+    })
 }
 
 /**
