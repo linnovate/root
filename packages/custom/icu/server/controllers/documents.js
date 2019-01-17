@@ -2155,7 +2155,7 @@ exports.create = function(req, res, next) {
       updater: new ObjectId(req.user._id),
       sender: new ObjectId(req.user._id),
       sendingAs: new ObjectId(),
-      assign: new ObjectId(req.user._id),
+      assign: undefined,
       classification: "", //important
       size: 0,
       circles: [],
@@ -2215,7 +2215,7 @@ exports.create = function(req, res, next) {
           updater: new ObjectId(req.user._id),
           sender: new ObjectId(req.user._id),
           sendingAs: new ObjectId(),
-          assign: new ObjectId(req.user._id),
+          assign: undefined,
           classification: "", //important
           size: 0,
           circles: [],
