@@ -2280,13 +2280,13 @@ function addToParent(parentType, parentId, child){
 
         return Document.update(conditions, update, {}, err => {
           if(err)throw new Error(err);
-            if(!_.includes(doc.officeDocuments, child._id)) {
-                return Model.update(
-                    { _id: parentId },
-                    { $push: { officeDocuments: child._id } }
-                );
-            }
-            return;
+          if(!_.includes(doc.officeDocuments, child._id)) {
+              return Model.update(
+                  { _id: parentId },
+                  { $push: { officeDocuments: child._id } }
+              );
+          }
+          return null;
         });
       }
     })
