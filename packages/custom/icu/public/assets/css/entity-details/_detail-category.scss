@@ -9,7 +9,6 @@ detail-category {
 
     .detail-category-value {
         @include tag(14px);
-        @include disable-text-styles;
         transition: 0.3s;
         width: initial;
         padding: 3px 13px;
@@ -31,8 +30,12 @@ detail-category {
         width: 100%;
     }
 
-    .detail-category-row-title {
+    .detail-category-row, detail-category-value{
+      @include disable-text-styles;
 
+      b{
+        font-weight: normal;
+      }
     }
 
     .detail-category-create-btn {
