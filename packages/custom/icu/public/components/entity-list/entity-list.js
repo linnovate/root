@@ -117,7 +117,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.changeOrder = function() {
-        if ($scope.sorting.field != "custom") {
+        if ($scope.sorting.field.title != "custom") {
             $scope.sorting.isReverse = !$scope.sorting.isReverse;
         }
 
@@ -125,15 +125,10 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
         /*Made By OHAD - Needed for reversing sort*/
         $state.go($state.current.name, {
-            sort: $scope.sorting.field
+            sort: $scope.sorting.field.title
         });
 
         $scope.refreshVisibleItems();
-    };
-
-    $scope.sorting = {
-        field: $stateParams.sort || 'created',
-        isReverse: false
     };
 
     $scope.sortingList = [{
@@ -146,9 +141,18 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         title: 'created',
         value: 'created'
     }, {
-      title: 'bolded',
-      value: 'bolded.bolded'
+        title: 'bolded',
+        value: function(item) {
+            return item.bolded.find(b => {
+                return b.bolded && $scope.me._id === b.id;
+            })
+        }
     }];
+
+    $scope.sorting = {
+        field: $scope.sortingList.find(f => f.title == ($stateParams.sort || 'created')),
+        isReverse: false
+    };
 
     if (context.entityName != "all") {
         $scope.sortingList.push({
@@ -442,7 +446,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
         // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
-        newArray = $filter('orderBy')(newArray, $scope.sorting.field, $scope.sorting.isReverse);
+        newArray = $filter('orderBy')(newArray, $scope.sorting.field.value, $scope.sorting.isReverse);
 
         return newArray;
     }
