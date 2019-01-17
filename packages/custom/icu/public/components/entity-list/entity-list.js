@@ -117,16 +117,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     };
 
     $scope.changeOrder = function() {
-        if ($scope.sorting.field.title != "custom") {
-            $scope.sorting.isReverse = !$scope.sorting.isReverse;
-        }
-
-        $scope.refreshVisibleItems();
-
-        /*Made By OHAD - Needed for reversing sort*/
-        $state.go($state.current.name, {
-            sort: $scope.sorting.field.title
-        });
+        if ($scope.sorting.field.title !== "custom")
+          $scope.sorting.isReverse = !$scope.sorting.isReverse;
 
         $scope.refreshVisibleItems();
     };
