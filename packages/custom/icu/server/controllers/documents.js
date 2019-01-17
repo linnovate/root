@@ -2278,15 +2278,16 @@ function addToParent(parentType, parentId, child){
         let conditions = { _id: child._id },
           update = { watchers: doc.watchers };
 
-        Document.update(conditions, update, {}, err => {
+        return Document.update(conditions, update, {}, err => {
           if(err)throw new Error(err);
+            if(!_.includes(doc.officeDocuments, child._id)) {
+                return Model.update(
+                    { _id: parentId },
+                    { $push: { officeDocuments: child._id } }
+                );
+            }
+            return;
         });
-      }
-      if(!_.includes(doc.officeDocuments, child._id)) {
-        return Model.update(
-          { _id: parentId },
-          { $push: { officeDocuments: child._id } }
-        );
       }
     })
 }
