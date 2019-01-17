@@ -53,12 +53,12 @@
             <button class="button-left-part" ng-click="changeOrder()" ng-class="{'rotate' : sorting.isReverse}"></button>
             <ui-select class="inline-block"
                        ng-model="sorting.field"
-                       on-select="changeOrder();loadMore()"
+                       on-select="loadMore()"
                        search-enabled="false">
                 <ui-select-match>
                     <button class="button-right-part tasks">{{$select.selected.title | i18next}}</button>
                 </ui-select-match>
-                <ui-select-choices class="sorting" repeat="field.value as field in sortingList | filter: $select.search">
+                <ui-select-choices class="sorting" repeat="field in sortingList">
                     {{field.title | i18next}}
                 </ui-select-choices>
             </ui-select>
