@@ -205,28 +205,16 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
     FoldersService.update($scope.item).then(function(result) {
         backupEntity = JSON.parse(JSON.stringify($scope.item));
-      //if (context.entityName === 'office') {
-      var officeId = result.office ? result.office._id : undefined;
-      if (!officeId) {
-        $state.go('main.folders.all.details', {
-          entity: 'folder',
-          id: $scope.item._id
-        }, {
-          reload: true
-        });
-      } else {
-        if (officeId !== context.entityId || type === 'office') {
-          $state.go('main.folders.byentity.details', {
-            entity: context.entityName,
-            entityId: officeId,
-            id: $scope.item._id
-          }, {
-            reload: true
-          });
-        }
-      }
+      let officeId = result.office ? result.office._id : undefined;
+      $state.go('main.folders.byentity.details', {
+        entity: context.entityName,
+        entityId: officeId,
+        id: $scope.item._id
+      }, {
+        reload: true
+      });
     });
-  }
+  };
 
   $scope.newCategory = function(value) {
     var office = {
