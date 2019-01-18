@@ -21,7 +21,6 @@ function OfficeDocumentListController($scope, $state, BoldedService, NotifyingSe
             newItem[parent.type] = parent.id;
         }
         return OfficeDocumentsService.createDocument(newItem).then(function(result) {
-            result.created = new Date(result.created);
             $scope.items.push(result);
             return result;
         });
