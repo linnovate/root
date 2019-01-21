@@ -2137,145 +2137,90 @@ exports.uploadFileToDocument = function(req, res, next) {
 
 exports.create = function(req, res, next) {
   console.log("exports.create");
-  let folderId = req.body.folder; //contains folder Id
-  let taskId = req.body.task;
+  let entityTypes = ['task', 'folder'];
+  let parentId = req.body.task || req.body.folder;
+  if(parentId){
+    var parentType = _.intersection(entityTypes, Object.keys(req.body))[0];
+    var Model = mongoose.model(parentType.charAt(0).toUpperCase() + parentType.slice(1));
+  }
 
-  if (!folderId) {
-    var doc = {
+
+  let promise = Model ?
+    Model.findOne({ _id: parentId })
+      .populate('office')
+      .exec((err, folderObj) => {
+      if(err) {
+        logger.log("error", "%s create, %s", req.user.name, " Folder.findOne", {error: err.message});
+        res.send(err);
+      }
+      return folderObj
+    }) :
+    Promise.resolve();
+
+  promise.then( parentObj => {
+    let doc = {
       created: new Date(),
       updated: new Date(),
       title: "",
       status: "new",
       path: undefined,
-      spPath: undefined,
-      description: "", //important
+      description: "",
       serial: "",
-      folder: undefined,
       creator: new ObjectId(req.user._id),
       updater: new ObjectId(req.user._id),
       sender: new ObjectId(req.user._id),
       sendingAs: new ObjectId(),
       assign: new ObjectId(req.user._id),
-      classification: "", //important
+      classification: "",
       size: 0,
       circles: [],
-      relatedDocuments: [], //important
-      watchers: [req.user._id], //important
-      permissions: [{ id: req.user._id, level: "editor" }],
-      doneBy: [],
-      forNotice: [],
+      relatedDocuments: [],
+      watchers: parentObj ? parentObj.watchers : [{ id: req.user._id, level: "editor" }],
       documentType: ""
     };
-    var obj = new Document(doc);
-    obj.save(function(error, result) {
+    doc.permissions = parentObj ?
+      parentObj.permissions.map( watcher => {
+        return ({
+          id: new ObjectId(watcher.id),
+          level: watcher.level
+        })
+      }) :
+      [{ id: req.user._id, level: "editor" }];
+
+    let obj = new Document(doc);
+    if(parentType)
+      obj[parentType]= parentObj;
+
+    return obj.save(function(error, result) {
       if (error) {
-        logger.log("error", "%s create, %s", req.user.name, " obj.save()", {
+        logger.log("error", "%s create, %s", req.user.name, " obj.save", {
           error: error.message
         });
 
         res.send(error);
       } else {
-        logger.log(
-          "info",
-          "%s create, %s",
-          req.user.name,
-          "success without folder"
-        );
-        User.findOne({ _id: result.creator })
-          .populate("task")
-          .exec(function(err, creator) {
-            result.creator = creator;
-            // res.send(result);
-            req.locals.result = result;
-            req.locals.data = {};
-            req.locals.data.entityName = "officeDocuments";
-            return taskId ? addToParent('Task', taskId, result._id) : null;
-          }).then(()=>next())
-      }
-    });
-  } else {
-    Folder.findOne({ _id: folderId }).populate('office').exec(function(err, folderObj) {
-      if (err) {
-        logger.log("error", "%s create, %s", req.user.name, " Folder.findOne", {
-          error: err.message
-        });
-
-        res.send(err);
-      } else {
-        var doc = {
-          created: new Date(),
-          updated: new Date(),
-          title: "",
-          status: "new",
-          path: undefined,
-          description: "", //important
-          serial: "",
-          folder: new ObjectId(folderId),
-          creator: new ObjectId(req.user._id),
-          updater: new ObjectId(req.user._id),
-          sender: new ObjectId(req.user._id),
-          sendingAs: new ObjectId(),
-          assign: new ObjectId(req.user._id),
-          classification: "", //important
-          size: 0,
-          circles: [],
-          relatedDocuments: [], //important
-          watchers: folderObj.watchers, //important
-          //permissions: [{id: req.user._id, level: 'editor'}],
-          documentType: ""
-        };
-
-        doc.permissions = [];
-
-        //Add all permissions from the parent folder to the officedocument
-        for (var index = 0; index < folderObj.watchers.length; index++) {
-          doc.permissions[index] = {
-            id: new ObjectId(folderObj.watchers[index].id),
-            level: folderObj.permissions[index].level
-          };
-        }
-
-        var obj = new Document(doc);
-        obj.folder = folderObj;
-        obj.save(function(error, result) {
-          if (error) {
-            logger.log("error", "%s create, %s", req.user.name, " obj.save", {
-              error: error.message
-            });
-
-            res.send(error);
-          } else {
-            logger.log(
-              "info",
-              "%s create, %s",
-              req.user.name,
-              "success with folder"
-            );
-            User.findOne({ _id: result.creator }).exec(function(err, creator) {
-              result.creator = creator;
-              // res.send(result);
-              req.locals.result = result;
-              return taskId ? addToParent('Task', taskId, result._id) : null;
-            }).then(()=>next())
-          }
-        });
-      }
-    });
-  }
-};
-
-function addToParent(parentType, parentId, childId){
-    let Model = mongoose.model(parentType);
-    return Model.findOne({_id: parentId})
-        .then( doc => {
-            if(!_.includes(doc.officeDocuments, childId)) {
-                return Model.update(
-                  { _id: parentId },
-                  { $push: { officeDocuments: childId } }
-                );
-            }
+        logger.log("info", "%s create, %s", req.user.name, "success with folder");
+        User.findOne({ _id: result.creator }).exec(function(err, creator) {
+          result.creator = creator;
+          req.locals.result = result;
+          return result;
         })
-}
+      }
+    }).then(newDocument => {
+      if(parentId)
+        parentObj.officeDocuments = newDocument._id;
+
+      parentObj.save(error => {
+        if (error) {
+          logger.log("error", "%s create, %s", req.user.name, " obj.save", { error: error.message });
+
+          res.send(error);
+        }
+        return next();
+      });
+    })
+  });
+};
 
 /**
  *

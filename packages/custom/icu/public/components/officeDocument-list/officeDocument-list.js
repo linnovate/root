@@ -16,12 +16,11 @@ function OfficeDocumentListController($scope, $state, BoldedService, NotifyingSe
     };
 
     $scope.create = function(parent) {
-        var newItem = {};
+        let newItem = {};
         if(parent){
             newItem[parent.type] = parent.id;
         }
         return OfficeDocumentsService.createDocument(newItem).then(function(result) {
-            result.created = new Date(result.created);
             $scope.items.push(result);
             return result;
         });
