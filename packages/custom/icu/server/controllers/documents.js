@@ -2182,7 +2182,7 @@ exports.create = function(req, res, next) {
       size: 0,
       circles: [],
       relatedDocuments: [],
-      watchers: parentObj ? parentObj.watchers : [{ id: req.user._id, level: "editor" }],
+      watchers: parentObj ? parentObj.watchers : [req.user._id],
       documentType: ""
     };
     doc.permissions = parentObj ?
@@ -2198,33 +2198,38 @@ exports.create = function(req, res, next) {
     if(parentType)
       obj[parentType]= parentObj;
 
-    return obj.save(function(error, result) {
-      if (error) {
-        logger.log("error", "%s create, %s", req.user.name, " obj.save", {
-          error: error.message
-        });
-
-        res.send(error);
-      } else {
-        logger.log("info", "%s create, %s", req.user.name, "success with folder");
-        User.findOne({ _id: result.creator }).exec(function(err, creator) {
-          result.creator = creator;
-          req.locals.result = result;
-          return result;
-        })
-      }
-    }).then(newDocument => {
-      if(parentId)
-        parentObj.officeDocuments = newDocument._id;
-
-      parentObj.save(error => {
+    return new Promise((resolve, reject) => {
+      obj.save(function(error, result) {
         if (error) {
-          logger.log("error", "%s create, %s", req.user.name, " obj.save", { error: error.message });
+          logger.log("error", "%s create, %s", req.user.name, " obj.save", {
+            error: error.message
+          });
 
           res.send(error);
+          return reject(error);
+        } else {
+          logger.log("info", "%s create, %s", req.user.name, "success with folder");
+          return User.findOne({ _id: result.creator }).exec(function(err, creator) {
+            result.creator = creator;
+            req.locals.result = result;
+            return resolve(result);
+          })
         }
-        return next();
-      });
+      })
+    }).then(newDocument => {
+      if(parentId && parentObj){
+        parentObj.officeDocuments = newDocument._id;
+        parentObj.save(error => {
+          if (error) {
+            logger.log("error", "%s create, %s", req.user.name, " obj.save", { error: error.message });
+
+            res.send(error);
+          }
+          return next();
+        });
+      } else {
+        next();
+      }
     })
   });
 };
