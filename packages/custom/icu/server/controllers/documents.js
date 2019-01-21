@@ -310,9 +310,16 @@ function documentsQueryToExcelServiceFormat(docs, indexMapper) {
     index++;
     return row;
   });
-  return excel.json2workbook({
+  let createdArray = _.map(filteredDocs, doc => {
+  return [
+    doc.created
+  ];
+  });
+  return excel.json2workbookWithDates({
     rows: docArray,
+    dates:createdArray,
     columns: ["אינדקס", "תקייה", "כותרת מסמך", "סימוכין"],
+    datesColumns:["תאריך יצירה"],
     columnsBold: true
   });
 }
