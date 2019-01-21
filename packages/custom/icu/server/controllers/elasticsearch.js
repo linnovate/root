@@ -18,14 +18,10 @@ exports.save = function(doc, docType) {
       id: doc._id.toString(),
       body: newDoc
     }, function(error, response) {
-
       if(error) {
         system.sendMessage({service: 'elasticsearch', message: response});
-        logger.log('error', 'error saving to elastic', {error: error});
-        return error;
+        console.log('elastic.save:', error);
       }
-
-      return doc;
     });
   }
   catch (err) {

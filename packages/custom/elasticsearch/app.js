@@ -46,7 +46,7 @@ Elasticsearch.register(function(app, auth, database) {
       hello: 'elasticsearch!'
     }, function(error) {
       if (error) {
-        callback(true, 'cluster down');
+        callback(error);
       } else {
         callback(null, 'OK');
       }
@@ -56,7 +56,7 @@ Elasticsearch.register(function(app, auth, database) {
     Elasticsearch.index = function(options, callback) {
         Elasticsearch.client.index(options, function(error, response) {
             if (error) {
-                callback(true, error);
+                callback(error);
             } else {
                 callback(null, response);
             }
@@ -67,7 +67,7 @@ Elasticsearch.register(function(app, auth, database) {
   Elasticsearch.create = function(options, callback) {
     Elasticsearch.client.create(options, function(error, response) {
       if (error) {
-        callback(true, error);
+        callback(error);
       } else {
         callback(null, response);
       }
@@ -77,7 +77,7 @@ Elasticsearch.register(function(app, auth, database) {
    Elasticsearch.bulk = function(options, callback) {
     Elasticsearch.client.bulk(options, function(error, response) {
       if (error) {
-        callback(true, error);
+        callback(error);
       } else {
         callback(null, response);
       }
@@ -87,7 +87,7 @@ Elasticsearch.register(function(app, auth, database) {
     Elasticsearch.delete = function(options, callback) {
         Elasticsearch.client.delete(options, function(error, response) {
             if (error) {
-                callback(true, error);
+                callback(error);
             } else {
                 callback(null, response);
             }
@@ -98,7 +98,7 @@ Elasticsearch.register(function(app, auth, database) {
     Elasticsearch.client.search(options, function(error, response) {
 
       if (error) {
-        callback(true, error);
+        callback(error);
       } else {
         callback(null, response);
       }
