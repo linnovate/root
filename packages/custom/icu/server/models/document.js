@@ -168,6 +168,8 @@ var DocumentSchema = new Schema({
   folderIndex: {
     type: Number
   }
+}, {
+  usePushEach: true
 });
 
 var starVirtual = DocumentSchema.virtual('star');

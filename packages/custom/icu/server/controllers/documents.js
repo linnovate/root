@@ -2783,6 +2783,10 @@ exports.update = function(req, res, next) {
       docToUpdate["" + req.body.name] = req.body.newVal;
       docToUpdate["id"] = docToUpdate._id;
 
+      if (req.body.name === 'assign') {
+        addAssignToWatchers(docToUpdate, req.body.newVal);
+      }
+
       if (req.body.watchers) {
         docToUpdate["watchers"] = req.body.watchers;
       }
@@ -2843,6 +2847,19 @@ exports.update = function(req, res, next) {
     res.send("OK");
   }
 };
+
+function addAssignToWatchers(doc, assignId){
+  let watcherExists = doc.watchers.find(watcher => watcher._id === assignId);
+
+  if (!watcherExists){
+    doc.watchers.push(doc.assign);
+    doc.permissions.push(
+      {
+        id: doc.assign,
+        level: 'commenter'
+      })
+  }
+}
 
 /**
  * req.body.watchers
