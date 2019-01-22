@@ -2842,9 +2842,9 @@ exports.update = function(req, res, next) {
 };
 
 function addAssignToWatchers(doc, assignId){
-  let filtered = doc.watchers.filter(watcher => watcher._id === assignId);
+  let watcherExists = doc.watchers.find(watcher => watcher._id === assignId);
 
-  if (filtered.length === 0){
+  if (watcherExists){
     doc.watchers.push(doc.assign);
     doc.permissions.push(
       {
