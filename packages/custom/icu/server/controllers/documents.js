@@ -2844,7 +2844,7 @@ exports.update = function(req, res, next) {
 function addAssignToWatchers(doc, assignId){
   let watcherExists = doc.watchers.find(watcher => watcher._id === assignId);
 
-  if (watcherExists){
+  if (!watcherExists){
     doc.watchers.push(doc.assign);
     doc.permissions.push(
       {
