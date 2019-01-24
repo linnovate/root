@@ -308,6 +308,20 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             }
         }
 
+        function updateWatcherPerms(entity, me, prev){
+          let promises = [],
+            newValue = {
+            'name': 'permissions',
+            'newVal': entity.permissions,
+          };
+
+          promises.push(updateDocument(entity._id, newValue));
+          promises.push(createActivity(entity._id, entity));
+          Promise.all(promises).then(data => {
+            return data[1];
+          });
+        }
+
         function sendDocument(sendingForm, officeDocument) {
             var data = {
                 'sendingForm':sendingForm,
@@ -397,7 +411,7 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             updateStatus: createActivity('status'),
             updateAssign: createActivity('assign'),
             updateWatcher: createActivity('watchers'),
-            updateWatcherPerms: createActivity('permissions'),
+            updateWatcherPerms: updateWatcherPerms,
             uploadEmpty:uploadEmpty,
             deleteDocumentFile:deleteDocumentFile,
             signOnDocx:signOnDocx,
