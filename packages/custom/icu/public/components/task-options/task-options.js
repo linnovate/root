@@ -53,8 +53,9 @@ angular.module('mean.icu.ui.taskoptions', [])
 	$scope.filterTasks = function (filterValue) {
 		TasksService.filterValue = filterValue;
 		if (filterValue === 'watched') {
-			TasksService.getWatchedTasks().then(function (result) {
+			return TasksService.getWatchedTasks().then(function (result) {
 				TasksService.watchedTasksArray = filterRecycled(result);
+                NotifyingService.notify('filterMyTasks');
 			});
 		}
         NotifyingService.notify('filterMyTasks');
