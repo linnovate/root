@@ -2844,7 +2844,7 @@ exports.update = function(req, res, next) {
       });
     });
   } else {
-    res.send("OK");
+    res.status(400).send("No parameter sent to update");
   }
 };
 
