@@ -13,7 +13,7 @@ const UpdateSchema = new Schema({
     type: String,
     enum: [
       'task', 'project', 'discussion', 'officeDocument',
-      'folder', 'office', 'templateDocument'
+      'folder', 'office', 'templateDoc'
     ]
   },
   creator: {
