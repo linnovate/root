@@ -28,6 +28,8 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     $scope.bulkUpdateEvery = (type, value) => {
+        let promises = [];
+
         for(let i = 0; i < $scope.selectedTypes.length; i++){
             let entityName = $scope.selectedTypes[i];
             let entityArray = $scope.selectedArrays[entityName];
@@ -42,8 +44,13 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                 continue;
             }
 
-            $scope.bulkUpdate(type, value, entityArray, entityName + 's', true);
+            promises.push(
+                $scope.bulkUpdate(type, value, entityArray, entityName + 's', true)
+            )
         }
+        Promise.all(promises).then(() => {
+            NotifyingService.notify('refreshAfterAllOperations');
+        })
     };
 
     $scope.bulkUpdate = function (type, value, selectedArray = $scope.selectedItems, entityName = $scope.entityName, searchList) {
@@ -56,7 +63,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         };
         changedBulkObject.update[type] = value;
 
-        MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
+        return MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
             .then(result => {
                 for(let i = 0; i < selectedArray.length; i++){
                     let entity = result.find(entity => entity._id === selectedArray[i]._id);
@@ -75,7 +82,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                 if(!searchList)
                   MultipleSelectService.setSelectedList(selectedArray);
                 NotifyingService.notify('refreshAfterOperation');
-                $uibModalInstance.dismiss('cancel');
+                return $uibModalInstance.dismiss('cancel');
             });
     };
 

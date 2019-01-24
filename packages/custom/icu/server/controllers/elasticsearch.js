@@ -6,7 +6,7 @@ const system = require('./system');
 const logger = require('../services/logger');
 
 exports.save = function(doc, docType) {
-  try {
+  return new Promise((resolve, reject) => {
     let newDoc = JSON.parse(JSON.stringify(doc));
     let creator =  doc.creator._id || doc.creator;
     delete newDoc._id;
@@ -20,13 +20,14 @@ exports.save = function(doc, docType) {
     }, function(error, response) {
       if(error) {
         system.sendMessage({service: 'elasticsearch', message: response});
+        logger.log('error', 'error saving to elastic', {error: error});
         console.log('elastic.save:', error);
+        return reject(error);
       }
+      resolve(response);
     });
-  }
-  catch (err) {
-    logger.log('error', 'error saving to elastic', {error: err.message});
-  }
+  });
+
 };
 
 exports.delete = function(doc, docType, next) {
