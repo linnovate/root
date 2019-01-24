@@ -1,0 +1,1268 @@
+{
+  "officedocument" : {
+    "mappings" : {
+      "officedocument" : {
+        "properties" : {
+          "FileId" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "Shotef" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "__v" : {
+            "type" : "long"
+          },
+          "assign" : {
+            "type" : "text"
+          },
+          "bolded" : {
+            "properties" : {
+              "bolded" : {
+                "type" : "boolean"
+              },
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "lastViewed" : {
+                "type" : "date"
+              }
+            }
+          },
+          "classification" : {
+            "type" : "text"
+          },
+          "created" : {
+            "type" : "date"
+          },
+          "creator" : {
+            "type" : "text"
+          },
+          "description" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "documentType" : {
+            "type" : "text"
+          },
+          "doneBy" : {
+            "type" : "text"
+          },
+          "due" : {
+            "type" : "date"
+          },
+          "folder" : {
+            "type" : "text"
+          },
+          "folderIndex" : {
+            "type" : "long"
+          },
+          "forNotice" : {
+            "type" : "text"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "mmhpath" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "officemmah" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "path" : {
+            "type" : "text"
+          },
+          "permissions" : {
+            "properties" : {
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "level" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              }
+            }
+          },
+          "recycled" : {
+            "type" : "date"
+          },
+          "ref" : {
+            "type" : "text"
+          },
+          "sender" : {
+            "type" : "text"
+          },
+          "sendingAs" : {
+            "type" : "text"
+          },
+          "sentTo" : {
+            "properties" : {
+              "_id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "date" : {
+                "type" : "date"
+              },
+              "user" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              }
+            }
+          },
+          "serial" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "signBy" : {
+            "type" : "text"
+          },
+          "size" : {
+            "type" : "long"
+          },
+          "spPath" : {
+            "type" : "text"
+          },
+          "status" : {
+            "type" : "text"
+          },
+          "tags" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "title" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "updated" : {
+            "type" : "date"
+          },
+          "updater" : {
+            "type" : "text"
+          },
+          "viewed" : {
+            "type" : "boolean"
+          },
+          "watchers" : {
+            "type" : "text"
+          }
+        }
+      }
+    }
+  },
+  "office" : {
+    "mappings" : {
+      "office" : {
+        "properties" : {
+          "WantRoom" : {
+            "type" : "boolean"
+          },
+          "__v" : {
+            "type" : "long"
+          },
+          "bolded" : {
+            "properties" : {
+              "bolded" : {
+                "type" : "boolean"
+              },
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "lastViewed" : {
+                "type" : "date"
+              }
+            }
+          },
+          "color" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "created" : {
+            "type" : "date"
+          },
+          "creator" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "description" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "hasRoom" : {
+            "type" : "boolean"
+          },
+          "id" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "internalTel" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "permissions" : {
+            "properties" : {
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "level" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              }
+            }
+          },
+          "recycled" : {
+            "type" : "date"
+          },
+          "room" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "roomName" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "star" : {
+            "type" : "boolean"
+          },
+          "status" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "tel" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "title" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "unit" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "updated" : {
+            "type" : "date"
+          },
+          "watchers" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "project" : {
+    "mappings" : {
+      "project" : {
+        "properties" : {
+          "WantRoom" : {
+            "type" : "boolean"
+          },
+          "__v" : {
+            "type" : "long"
+          },
+          "assign" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "bolded" : {
+            "properties" : {
+              "bolded" : {
+                "type" : "boolean"
+              },
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "lastViewed" : {
+                "type" : "date"
+              }
+            }
+          },
+          "color" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "created" : {
+            "type" : "date"
+          },
+          "creator" : {
+            "type" : "text"
+          },
+          "description" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "discussion" : {
+            "type" : "text"
+          },
+          "due" : {
+            "type" : "date"
+          },
+          "hasRoom" : {
+            "type" : "boolean"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "parent" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "permissions" : {
+            "properties" : {
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "level" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              }
+            }
+          },
+          "recycled" : {
+            "type" : "date"
+          },
+          "room" : {
+            "type" : "text"
+          },
+          "roomName" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "star" : {
+            "type" : "boolean"
+          },
+          "status" : {
+            "type" : "text"
+          },
+          "subProjects" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "tags" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "title" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "updated" : {
+            "type" : "date"
+          },
+          "watchers" : {
+            "type" : "text"
+          }
+        }
+      }
+    }
+  },
+  "folder" : {
+    "mappings" : {
+      "folder" : {
+        "properties" : {
+          "WantRoom" : {
+            "type" : "boolean"
+          },
+          "__v" : {
+            "type" : "long"
+          },
+          "bolded" : {
+            "properties" : {
+              "bolded" : {
+                "type" : "boolean"
+              },
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "lastViewed" : {
+                "type" : "date"
+              }
+            }
+          },
+          "color" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "created" : {
+            "type" : "date"
+          },
+          "creator" : {
+            "type" : "text"
+          },
+          "description" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "hasRoom" : {
+            "type" : "boolean"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "office" : {
+            "type" : "text"
+          },
+          "permissions" : {
+            "properties" : {
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "level" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              }
+            }
+          },
+          "recycled" : {
+            "type" : "date"
+          },
+          "room" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "roomName" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "star" : {
+            "type" : "boolean"
+          },
+          "status" : {
+            "type" : "text"
+          },
+          "tags" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "title" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "updated" : {
+            "type" : "date"
+          },
+          "watchers" : {
+            "type" : "text"
+          }
+        }
+      }
+    }
+  },
+  ".kibana" : {
+    "mappings" : {
+      "doc" : {
+        "dynamic" : "strict",
+        "properties" : {
+          "config" : {
+            "dynamic" : "true",
+            "properties" : {
+              "buildNum" : {
+                "type" : "keyword"
+              },
+              "defaultIndex" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              }
+            }
+          },
+          "dashboard" : {
+            "properties" : {
+              "description" : {
+                "type" : "text"
+              },
+              "hits" : {
+                "type" : "integer"
+              },
+              "kibanaSavedObjectMeta" : {
+                "properties" : {
+                  "searchSourceJSON" : {
+                    "type" : "text"
+                  }
+                }
+              },
+              "optionsJSON" : {
+                "type" : "text"
+              },
+              "panelsJSON" : {
+                "type" : "text"
+              },
+              "refreshInterval" : {
+                "properties" : {
+                  "display" : {
+                    "type" : "keyword"
+                  },
+                  "pause" : {
+                    "type" : "boolean"
+                  },
+                  "section" : {
+                    "type" : "integer"
+                  },
+                  "value" : {
+                    "type" : "integer"
+                  }
+                }
+              },
+              "timeFrom" : {
+                "type" : "keyword"
+              },
+              "timeRestore" : {
+                "type" : "boolean"
+              },
+              "timeTo" : {
+                "type" : "keyword"
+              },
+              "title" : {
+                "type" : "text"
+              },
+              "uiStateJSON" : {
+                "type" : "text"
+              },
+              "version" : {
+                "type" : "integer"
+              }
+            }
+          },
+          "index-pattern" : {
+            "properties" : {
+              "fieldFormatMap" : {
+                "type" : "text"
+              },
+              "fields" : {
+                "type" : "text"
+              },
+              "intervalName" : {
+                "type" : "keyword"
+              },
+              "notExpandable" : {
+                "type" : "boolean"
+              },
+              "sourceFilters" : {
+                "type" : "text"
+              },
+              "timeFieldName" : {
+                "type" : "keyword"
+              },
+              "title" : {
+                "type" : "text"
+              }
+            }
+          },
+          "search" : {
+            "properties" : {
+              "columns" : {
+                "type" : "keyword"
+              },
+              "description" : {
+                "type" : "text"
+              },
+              "hits" : {
+                "type" : "integer"
+              },
+              "kibanaSavedObjectMeta" : {
+                "properties" : {
+                  "searchSourceJSON" : {
+                    "type" : "text"
+                  }
+                }
+              },
+              "sort" : {
+                "type" : "keyword"
+              },
+              "title" : {
+                "type" : "text"
+              },
+              "version" : {
+                "type" : "integer"
+              }
+            }
+          },
+          "server" : {
+            "properties" : {
+              "uuid" : {
+                "type" : "keyword"
+              }
+            }
+          },
+          "timelion-sheet" : {
+            "properties" : {
+              "description" : {
+                "type" : "text"
+              },
+              "hits" : {
+                "type" : "integer"
+              },
+              "kibanaSavedObjectMeta" : {
+                "properties" : {
+                  "searchSourceJSON" : {
+                    "type" : "text"
+                  }
+                }
+              },
+              "timelion_chart_height" : {
+                "type" : "integer"
+              },
+              "timelion_columns" : {
+                "type" : "integer"
+              },
+              "timelion_interval" : {
+                "type" : "keyword"
+              },
+              "timelion_other_interval" : {
+                "type" : "keyword"
+              },
+              "timelion_rows" : {
+                "type" : "integer"
+              },
+              "timelion_sheet" : {
+                "type" : "text"
+              },
+              "title" : {
+                "type" : "text"
+              },
+              "version" : {
+                "type" : "integer"
+              }
+            }
+          },
+          "type" : {
+            "type" : "keyword"
+          },
+          "url" : {
+            "properties" : {
+              "accessCount" : {
+                "type" : "long"
+              },
+              "accessDate" : {
+                "type" : "date"
+              },
+              "createDate" : {
+                "type" : "date"
+              },
+              "url" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 2048
+                  }
+                }
+              }
+            }
+          },
+          "visualization" : {
+            "properties" : {
+              "description" : {
+                "type" : "text"
+              },
+              "kibanaSavedObjectMeta" : {
+                "properties" : {
+                  "searchSourceJSON" : {
+                    "type" : "text"
+                  }
+                }
+              },
+              "savedSearchId" : {
+                "type" : "keyword"
+              },
+              "title" : {
+                "type" : "text"
+              },
+              "uiStateJSON" : {
+                "type" : "text"
+              },
+              "version" : {
+                "type" : "integer"
+              },
+              "visState" : {
+                "type" : "text"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "attachment" : {
+    "mappings" : {
+      "attachment" : {
+        "properties" : {
+          "__v" : {
+            "type" : "long"
+          },
+          "attachmentType" : {
+            "type" : "text"
+          },
+          "created" : {
+            "type" : "date"
+          },
+          "creator" : {
+            "type" : "text"
+          },
+          "entity" : {
+            "type" : "text"
+          },
+          "entityId" : {
+            "type" : "text"
+          },
+          "issue" : {
+            "type" : "text"
+          },
+          "issueId" : {
+            "type" : "text"
+          },
+          "name" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "path" : {
+            "type" : "text"
+          },
+          "size" : {
+            "type" : "double"
+          },
+          "updated" : {
+            "type" : "date"
+          },
+          "watchers" : {
+            "type" : "text"
+          }
+        }
+      }
+    }
+  },
+  "task" : {
+    "mappings" : {
+      "task" : {
+        "properties" : {
+          "__v" : {
+            "type" : "long"
+          },
+          "assign" : {
+            "type" : "text"
+          },
+          "bolded" : {
+            "properties" : {
+              "bolded" : {
+                "type" : "boolean"
+              },
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "lastViewed" : {
+                "type" : "date"
+              }
+            }
+          },
+          "created" : {
+            "type" : "date"
+          },
+          "creator" : {
+            "type" : "text"
+          },
+          "description" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "discussion" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "discussions" : {
+            "type" : "text"
+          },
+          "due" : {
+            "type" : "date"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "parent" : {
+            "type" : "text"
+          },
+          "permissions" : {
+            "properties" : {
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "level" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              }
+            }
+          },
+          "project" : {
+            "type" : "text"
+          },
+          "recycled" : {
+            "type" : "date"
+          },
+          "star" : {
+            "type" : "boolean"
+          },
+          "status" : {
+            "type" : "text"
+          },
+          "subTasks" : {
+            "type" : "text"
+          },
+          "tType" : {
+            "type" : "text"
+          },
+          "tags" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "templateId" : {
+            "type" : "text"
+          },
+          "title" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "updated" : {
+            "type" : "date"
+          },
+          "watchers" : {
+            "type" : "text"
+          }
+        }
+      }
+    }
+  },
+  "update" : {
+    "mappings" : {
+      "update" : {
+        "properties" : {
+          "TaskDue" : {
+            "type" : "date"
+          },
+          "__v" : {
+            "type" : "long"
+          },
+          "created" : {
+            "type" : "date"
+          },
+          "creator" : {
+            "type" : "text"
+          },
+          "description" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "entity" : {
+            "type" : "text"
+          },
+          "entityType" : {
+            "type" : "text"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "issue" : {
+            "type" : "text"
+          },
+          "issueId" : {
+            "type" : "text"
+          },
+          "prev" : {
+            "type" : "text"
+          },
+          "status" : {
+            "type" : "text"
+          },
+          "type" : {
+            "type" : "text"
+          },
+          "updated" : {
+            "type" : "date"
+          },
+          "userObj" : {
+            "type" : "text"
+          }
+        }
+      }
+    }
+  },
+  "discussion" : {
+    "mappings" : {
+      "discussion" : {
+        "properties" : {
+          "WantRoom" : {
+            "type" : "boolean"
+          },
+          "__v" : {
+            "type" : "long"
+          },
+          "allDay" : {
+            "type" : "boolean"
+          },
+          "assign" : {
+            "type" : "text"
+          },
+          "bolded" : {
+            "properties" : {
+              "bolded" : {
+                "type" : "boolean"
+              },
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "lastViewed" : {
+                "type" : "date"
+              }
+            }
+          },
+          "created" : {
+            "type" : "date"
+          },
+          "creator" : {
+            "type" : "text"
+          },
+          "description" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "due" : {
+            "type" : "date"
+          },
+          "endDate" : {
+            "type" : "date"
+          },
+          "endTime" : {
+            "type" : "date"
+          },
+          "hasRoom" : {
+            "type" : "boolean"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "location" : {
+            "type" : "text"
+          },
+          "permissions" : {
+            "properties" : {
+              "id" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              },
+              "level" : {
+                "type" : "text",
+                "fields" : {
+                  "keyword" : {
+                    "type" : "keyword",
+                    "ignore_above" : 256
+                  }
+                }
+              }
+            }
+          },
+          "project" : {
+            "type" : "text"
+          },
+          "recycled" : {
+            "type" : "date"
+          },
+          "room" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "roomName" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "star" : {
+            "type" : "boolean"
+          },
+          "startDate" : {
+            "type" : "date"
+          },
+          "startTime" : {
+            "type" : "date"
+          },
+          "status" : {
+            "type" : "text"
+          },
+          "tags" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "title" : {
+            "type" : "text",
+            "analyzer" : "autocomplete",
+            "search_analyzer" : "standard"
+          },
+          "updated" : {
+            "type" : "date"
+          },
+          "watchers" : {
+            "type" : "text"
+          }
+        }
+      }
+    }
+  }
+}
