@@ -295,9 +295,6 @@ function OfficeDetailsController(
 
   $scope.update = function(office, context) {
     let me = $scope.me;
-    if (context.name === "color") {
-      office.color = context.newVal;
-    }
     OfficesService.update(office, context).then(function(res) {
       if (OfficesService.selected && res._id === OfficesService.selected._id) {
         if (context.name === "title") {
@@ -305,14 +302,6 @@ function OfficeDetailsController(
         }
       }
       switch (context.name) {
-        case "color":
-          OfficesService.updateColor(office, me, backupEntity).then(function(
-            result
-          ) {
-            ActivitiesService.data = ActivitiesService.data || [];
-            ActivitiesService.data.push(result);
-          });
-          break;
         case "title":
           OfficesService.updateTitle(office, me, backupEntity).then(function(
             result
