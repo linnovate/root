@@ -48,7 +48,7 @@ angular.module('mean.icu.data.inboxservice', [])
             let prevUser = activity.prev ? getUser(activity.prev._id || activity.prev) : null;
 
             if(currentUser && prevUser)
-              return `${creator} ${$i18next('assigned')} ${ currentUser.username} ${$i18next('and')} ${$i18next('unassign')} ${ prevUser.username}`;
+              return `${creator} ${$i18next('assignedUser')} ${ currentUser.username} ${$i18next('and')} ${$i18next('unassign')} ${ prevUser.username}`;
             else if(currentUser)
               return `${creator} ${$i18next('assignedUser')} ${ currentUser.username}`;
             else if(prevUser)
