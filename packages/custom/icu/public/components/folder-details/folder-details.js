@@ -260,9 +260,6 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
   // ==================================================== Update ==================================================== //
 
   $scope.update = function(folder, context) {
-      if (context.name === 'color') {
-          folder.color = context.newVal;
-      }
     FoldersService.update(folder, context).then(function(res) {
       if (FoldersService.selected && res._id === FoldersService.selected._id) {
         if (context.name === 'title') {
@@ -282,13 +279,6 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
       case 'star':
         FoldersService.updateStar(folder, me, backupEntity).then(function(result) {
           backupEntity = JSON.parse(JSON.stringify($scope.item));
-          ActivitiesService.data = ActivitiesService.data || [];
-          ActivitiesService.data.push(result);
-        });
-        break;
-
-      case 'color':
-        FoldersService.updateColor(folder, me, backupEntity).then(function(result) {
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
