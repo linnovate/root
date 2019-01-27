@@ -2775,7 +2775,7 @@ exports.update = function(req, res, next) {
 
           res.send(err);
         } else {
-          result.populate("watchers", function(err, result) {
+          result.populate("watchers folder", function(err, result) {
             if (err) {
               logger.log(
                 "error",
@@ -2795,7 +2795,8 @@ exports.update = function(req, res, next) {
               );
 
               if (req.body.name == "due") {
-                Document.findOne({ _id: req.params.id }, function(err, doc) {
+                Document.findOne({ _id: req.params.id }).populate('folder').exec(function(err, doc) {
+                  console.log(err, doc)
                   if (err)
                     logger.log(
                       "error",
