@@ -52,7 +52,7 @@ angular.module('mean.icu.data.inboxservice', [])
             else if(currentUser)
               return `${creator} ${$i18next('assignedUser')} ${ currentUser.username}`;
             else if(prevUser)
-              return `${$i18next('unassign')} ${ prevUser.username}`;
+              return `${creator} ${$i18next('unassign')} ${ prevUser.username}`;
             else return $i18next('unassign');
             break;
           case 'location' :
