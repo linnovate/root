@@ -14,6 +14,7 @@ exports.save = function(doc, docType) {
     newDoc.creator = JSON.parse(JSON.stringify(creator));
     mean.elasticsearch.index({
       index: docType,
+      refresh: 'wait_for',
       type: docType,
       id: doc._id.toString(),
       body: newDoc
