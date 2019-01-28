@@ -163,6 +163,7 @@ exports.search = function(req, res, next) {
           query: req.query.term.replace(',', '* '),
           type: 'cross_fields',
           fields: ['title^3', 'color', 'name', 'tags', 'description', 'file.filename', 'serial', 'folderIndex'],
+          lenient: true, // Required to search acroos text/numeric fields
           operator: 'or'
         }
       },
