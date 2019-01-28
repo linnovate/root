@@ -2529,29 +2529,9 @@ exports.update = function(req, res, next) {
             if (folderObj) {
               req.body.permissions = [];
 
-              //Add all watchers & permissions from the parent folder to the officedocument
-              for (var index = 0; index < folderObj.watchers.length; index++) {
-                // Check if watcher from parent folder in already in the array
-                if (
-                  watchers.indexOf(
-                    new ObjectId(folderObj.watchers[index].id)
-                  ) == -1
-                ) {
-                  watchers.push(new ObjectId(folderObj.watchers[index].id));
-                }
-                // Check if watcher from parent folder in already in the array
-                if (
-                  doc.watchers.indexOf(
-                    new ObjectId(folderObj.watchers[index].id)
-                  ) == -1
-                ) {
-                  doc.watchers.push(new ObjectId(folderObj.watchers[index].id));
-                  doc.permissions.push({
-                    id: new ObjectId(folderObj.watchers[index].id),
-                    level: folderObj.permissions[index].level
-                  });
-                }
-              }
+              // Inherit watchers & permissions from the parent folder
+              doc.watchers = watchers = folderObj.watchers;
+              doc.permissions = folderObj.permissions;
 
               // Save the document with the new watchers & permissions
               doc.save(function(err, result) {
@@ -2795,7 +2775,7 @@ exports.update = function(req, res, next) {
 
           res.send(err);
         } else {
-          result.populate("watchers", function(err, result) {
+          result.populate("watchers folder", function(err, result) {
             if (err) {
               logger.log(
                 "error",
@@ -2815,7 +2795,8 @@ exports.update = function(req, res, next) {
               );
 
               if (req.body.name == "due") {
-                Document.findOne({ _id: req.params.id }, function(err, doc) {
+                Document.findOne({ _id: req.params.id }).populate('folder').exec(function(err, doc) {
+                  console.log(err, doc)
                   if (err)
                     logger.log(
                       "error",
