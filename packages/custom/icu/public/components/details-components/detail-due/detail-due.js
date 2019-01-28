@@ -23,6 +23,13 @@ function detailDue() {
 
     if($scope.value)$scope.value = new Date($scope.value);
 
+    // Cast to Date() whenever value is changed
+    $scope.$watch('value', function (v) {
+      if(!($scope.value instanceof Date)) {
+        $scope.value = new Date($scope.value);
+      }
+    });
+
     //due start
     if ($scope.firstValue)
       $scope.firstValue = new Date($scope.firstValue);

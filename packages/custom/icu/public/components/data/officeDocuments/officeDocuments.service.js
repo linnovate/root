@@ -223,7 +223,11 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         return $http.post(ApiUri + EntityPrefix + "/" + id, data).then(function (result) {
             WarningsService.setWarning(result.headers().warning);
             return result.data;
-        }).then(entity => BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'));
+        }).then(entity => {
+            let bolded = _.pick(BoldedService.boldedUpdate(entity, 'officeDocuments', 'update'), 'bolded');
+            Object.assign(entity, bolded);
+            return entity;
+        });
     }
 
         function createDocument(data) {
