@@ -134,12 +134,17 @@ function recycle(req, res, next) {
   })
   .then(docs => {
     if(!docs.length) throw new httpError(404);
+
+    let promises = [];
     docs.forEach(element => {
         console.log("saving elastic");
         element.watchers = [];
-        elasticsearch.save(element, entity);
-    })
-    return docs;
+        promises.push(elasticsearch.save(element, entity));
+    });
+
+    return Promise.all(promises).then(() => {
+      return docs;
+    });
   })
   .then(updatedItems=>{
       res.json(updatedItems)
