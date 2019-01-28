@@ -133,7 +133,11 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, tasks, results, TasksService) {
                         if($state.current.name.indexOf('search') !== -1){
-                            return _( results ).find(t => ((t._id || t.id) === $stateParams.id));
+                            let task = _( results ).find(t => ((t._id || t.id) === $stateParams.id));
+                            return TasksService.getById($stateParams.id).then( fullTask => {
+                              Object.assign(task, _.pick(fullTask, 'project', 'discussion', 'tags', 'subTasks', 'due'));
+                              return task;
+                            });
                         }
                         let task = _(tasks.data || tasks).find(t => t._id === $stateParams.id);
                         return task ? task : TasksService.getById($stateParams.id);
