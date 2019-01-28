@@ -96,10 +96,8 @@ angular.module('mean.icu.ui.searchlist', [])
             multipleSelectRefreshState();
         }
 
-        NotifyingService.subscribe('refreshAfterOperation', () => {
-            setTimeout(()=>{
-                $state.go($state.current.name)
-            }, 1000)
+        NotifyingService.subscribe('refreshAfterAllOperations', () => {
+            $state.go($state.current.name)
         }, $scope);
 
         function filterResults(itemsArray){
