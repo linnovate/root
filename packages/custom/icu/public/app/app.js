@@ -133,11 +133,7 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, tasks, results, TasksService) {
                         if($state.current.name.indexOf('search') !== -1){
-                            let task = _( results ).find(t => ((t._id || t.id) === $stateParams.id));
-                            return TasksService.getById($stateParams.id).then( fullTask => {
-                              Object.assign(task, _.pick(fullTask, 'project', 'discussion', 'tags', 'subTasks', 'due'));
-                              return task;
-                            });
+                            return _( results ).find(t => ((t._id || t.id) === $stateParams.id));
                         }
                         let task = _(tasks.data || tasks).find(t => t._id === $stateParams.id);
                         return task ? task : TasksService.getById($stateParams.id);
@@ -174,11 +170,7 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, projects, results, ProjectsService) {
                         if($state.current.name.indexOf('search') !== -1){
-                            let project = _( results ).find(t => ((t._id || t.id) === $stateParams.id));
-                            return ProjectsService.getById($stateParams.id).then( fullTask => {
-                                Object.assign(project, _.pick(fullTask, 'tags', 'subProjects', 'due'));
-                                return project;
-                            });
+                            return _( results ).find(p => (p._id || p._id) === $stateParams.id);
                         }
                         let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
                         return project ? project : ProjectsService.getById($stateParams.id)
@@ -379,11 +371,7 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, discussions, results, DiscussionsService) {
                         if($state.current.name.indexOf('search') !== -1){
-                            let discussion = _( results ).find(t => ((t._id || t.id) === $stateParams.id));
-                            return DiscussionsService.getById($stateParams.id).then( fullTask => {
-                              Object.assign(discussion, _.pick(fullTask, 'tags', 'location', 'due'));
-                              return discussion;
-                          });
+                            return _( results ).find(d => (d._id || d.id) === $stateParams.id);
                         }
                         let discussion = _(discussions.data || discussions).find(t => t._id === $stateParams.id);
                         return discussion ? discussion : DiscussionsService.getById($stateParams.id)

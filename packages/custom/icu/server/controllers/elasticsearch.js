@@ -1,9 +1,29 @@
 'use strict';
 
 const mean = require('meanio');
+const mongoose = require('mongoose');
 const utils = require('./utils');
 const system = require('./system');
 const logger = require('../services/logger');
+
+const modelMap = {
+  task: 'Task',
+  project: 'Project',
+  discussion: 'Discussion',
+  officedocument: 'Document',
+  folder: 'Folder',
+  office: 'Office',
+  templatedocument: 'TemplateDoc',
+};
+const populateMap = {
+  Task: 'assign project discussion subTasks',
+  Project: 'assign subProjects',
+  Discussion: 'assign location',
+  Document: 'assign folder',
+  Folder: 'office',
+  Office: '',
+  TemplateDoc: 'office',
+};
 
 exports.save = function(doc, docType) {
   return new Promise((resolve, reject) => {
@@ -208,16 +228,41 @@ exports.search = function(req, res, next) {
     }
     utils.checkAndHandleError(err, 'Failed to find entities', next);
 
+    let type = "simple";
+    let hits = result.hits.hits;
+
     if(req.query.term) {
       if(!result.aggregations) {
         console.log('result.aggregations=' + result.aggregations);
         return next(new Error('Can\'t find ' + req.query.term));
       }
-      res.send(buildSearchResponse('aggs', result.aggregations.group_by_index.buckets, userId));
+      type = "aggs";
+      hits = result.aggregations.group_by_index.buckets;
     }
-    else {
-      res.send(buildSearchResponse('simple', result.hits.hits, userId));
+    let response = buildSearchResponse(type, hits, userId);
+    let promises = [];
+    for(let prop in response){
+      let ids = response[prop].map( entity => entity.id || entity._id);
+      let modelName = modelMap[prop];
+      promises.push(
+        mongoose.model(modelName)
+          .find({ _id: { $in: ids } })
+          .populate(populateMap[modelName])
+          .then((docs) => {
+            if(err)throw new Error(err);
+
+            let populatedEntities = {};
+            populatedEntities[prop] = docs;
+
+            return populatedEntities;
+          })
+      )
     }
+    Promise.all(promises).then((...rest) => {
+      let updatedEntities = {};
+      rest[0].forEach(obj => Object.assign(updatedEntities, obj));
+      res.send(updatedEntities);
+    })
   });
 };
 
