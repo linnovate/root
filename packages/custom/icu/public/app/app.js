@@ -170,7 +170,7 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, projects, results, ProjectsService) {
                         if($state.current.name.indexOf('search') !== -1){
-                            return _( results ).find(d => d._id === $stateParams.id);
+                            return _( results ).find(d => (d._id || d.id) === $stateParams.id);
                         }
                         let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
                         return project ? project : ProjectsService.getById($stateParams.id)
@@ -371,7 +371,7 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, discussions, results, DiscussionsService) {
                         if($state.current.name.indexOf('search') !== -1){
-                            return _( results).find(d => d._id === $stateParams.id);
+                            return _( results).find(d => (d._id || d.id) === $stateParams.id);
                         }
                         let discussion = _(discussions.data || discussions).find(t => t._id === $stateParams.id);
                         return discussion ? discussion : DiscussionsService.getById($stateParams.id)
