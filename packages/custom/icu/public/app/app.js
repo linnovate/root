@@ -1487,6 +1487,7 @@ angular.module('mean.icu').config([
             .state('main.search.task.activities', getDetailsTabState('task', 'activities'))
             .state('main.search.task.activities.modal', getDetailspaneModal())
             .state('main.search.task.documents', getDetailsTabState('task', 'documents'))
+            .state('main.search.task.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
 
             .state('main.search.project', getProjectDetailsState('/project'))
             .state('main.search.project.activities', getDetailsTabState('project', 'activities'))
