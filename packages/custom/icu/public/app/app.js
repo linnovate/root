@@ -174,7 +174,11 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, projects, results, ProjectsService) {
                         if($state.current.name.indexOf('search') !== -1){
-                            return _( results ).find(d => d._id === $stateParams.id);
+                            let task = _( results ).find(t => ((t._id || t.id) === $stateParams.id));
+                            return TasksService.getById($stateParams.id).then( fullTask => {
+                                Object.assign(task, _.pick(fullTask, 'tags', 'subProjects', 'due'));
+                                return task;
+                            });
                         }
                         let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
                         return project ? project : ProjectsService.getById($stateParams.id)
