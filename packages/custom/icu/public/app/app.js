@@ -174,10 +174,10 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, projects, results, ProjectsService) {
                         if($state.current.name.indexOf('search') !== -1){
-                            let task = _( results ).find(t => ((t._id || t.id) === $stateParams.id));
-                            return TasksService.getById($stateParams.id).then( fullTask => {
-                                Object.assign(task, _.pick(fullTask, 'tags', 'subProjects', 'due'));
-                                return task;
+                            let project = _( results ).find(t => ((t._id || t.id) === $stateParams.id));
+                            return ProjectsService.getById($stateParams.id).then( fullTask => {
+                                Object.assign(project, _.pick(fullTask, 'tags', 'subProjects', 'due'));
+                                return project;
                             });
                         }
                         let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
@@ -379,7 +379,11 @@ angular.module('mean.icu').config([
                 resolve: {
                     entity: function ($state, $stateParams, discussions, results, DiscussionsService) {
                         if($state.current.name.indexOf('search') !== -1){
-                            return _( results).find(d => d._id === $stateParams.id);
+                            let discussion = _( results ).find(t => ((t._id || t.id) === $stateParams.id));
+                            return DiscussionsService.getById($stateParams.id).then( fullTask => {
+                              Object.assign(discussion, _.pick(fullTask, 'tags', 'location', 'due'));
+                              return discussion;
+                          });
                         }
                         let discussion = _(discussions.data || discussions).find(t => t._id === $stateParams.id);
                         return discussion ? discussion : DiscussionsService.getById($stateParams.id)
