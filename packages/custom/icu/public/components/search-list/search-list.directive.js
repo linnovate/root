@@ -79,10 +79,6 @@ angular.module('mean.icu.ui.searchlist', [])
         $scope.changeMultipleMode = () => $scope.$broadcast('checkMultipleMode');
         $scope.$on('changeCornerState', (event, cornerState) => multipleSelectSetAllSelected(cornerState === 'all'));
 
-        NotifyingService.subscribe('refreshAfterOperation', () => {
-            multipleSelectRefreshState();
-        }, $scope);
-
         function multipleSelectSetAllSelected(status){
             let filteredResults = filterResults($scope.results);
             for(let i = 0; i < filteredResults.length; i++){
