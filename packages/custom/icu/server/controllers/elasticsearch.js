@@ -87,7 +87,7 @@ let buildSearchResponse = exports.buildSearchResponse = function(type, obj, user
         let obj = groups[types[j]][i];
 
         // If the user has permission for the obj insert it to results.
-        if(obj.creator == userId || obj.assign == userId || obj.watchers.includes(userId))
+        if(obj.creator == userId || obj.assign == userId || obj.watchers && obj.watchers.includes(userId))
           res.push(obj);
       }
       groups[types[j]] = res;
