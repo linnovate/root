@@ -7,7 +7,9 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         if($location.search() && $location.search().recycled)recycled = true;
 
         SearchService.filteringResults = SearchService.filteringResults.filter(entity => {
-            return recycled ? entity.recycled : !entity.recycled
+            let id = entity.id || entity._id;
+
+            return id && id !== -1;
         });
 
         let filteringResults = SearchService.filteringResults.map(function(e) {
