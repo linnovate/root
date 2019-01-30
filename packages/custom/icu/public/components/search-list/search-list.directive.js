@@ -97,7 +97,8 @@ angular.module('mean.icu.ui.searchlist', [])
         }
 
         NotifyingService.subscribe('refreshAfterAllOperations', () => {
-            $state.go($state.current.name)
+            $scope.$broadcast('refreshBulkButtonsAccess');
+            NotifyingService.notify('multipleDisableDetailsPaneCheck');
         }, $scope);
 
         function filterResults(itemsArray){
