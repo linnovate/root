@@ -12,6 +12,8 @@ exports.save = function(doc, docType) {
     delete newDoc._id;
 
     newDoc.creator = JSON.parse(JSON.stringify(creator));
+    docType = docType.toLowerCase();
+
     mean.elasticsearch.index({
       index: docType,
       refresh: 'wait_for',
