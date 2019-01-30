@@ -80,6 +80,9 @@ angular.module('mean.icu.ui.searchlist', [])
         $scope.$on('changeCornerState', (event, cornerState) => multipleSelectSetAllSelected(cornerState === 'all'));
 
         NotifyingService.subscribe('refreshAfterOperation', () => {
+            refreshActiveItemsInList();
+            MultipleSelectService.refreshSelectedList();
+            MultipleSelectService.refreshCornerState(0);
             multipleSelectRefreshState();
         }, $scope);
 

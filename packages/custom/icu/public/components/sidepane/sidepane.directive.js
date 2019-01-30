@@ -547,10 +547,7 @@ directive('icuSidepane', function() {
         };
         $scope.filteringData.selectedWatchers = {};
 
-        MultipleSelectService.refreshSelectedList();
-        MultipleSelectService.refreshCornerState(0);
         NotifyingService.notify('refreshAfterOperation');
-        NotifyingService.notify('multipleDisableDetailsPaneCheck');
     };
 
     $scope.closeSearch = function(){
