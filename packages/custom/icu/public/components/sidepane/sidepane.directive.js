@@ -334,8 +334,8 @@ directive('icuSidepane', function() {
         }
         if ($scope.filteringData.issue === 'all') {
             if ($scope.flag)
-             $location.search('recycled','true');
-            else $location.search('');
+                $location.search('type', $scope.filteringData.issue,'recycled','true');
+        else $location.search('');
         } else {
             if ($scope.flag)
               $location.search('type', $scope.filteringData.issue,'recycled','true');
@@ -380,10 +380,11 @@ directive('icuSidepane', function() {
                 else filteredByType.push(results[i]);
             }
             index = issuesOrder.indexOf(results[i]._type);
-            if($stateParams.query == ''){
+            if($stateParams.query === ''){
               $scope.issues[index].length = 0;
             } else {
-              identifyRecycled(results[i], $scope.issues[index]);
+              if($scope.issues[index])
+                  identifyRecycled(results[i], $scope.issues[index]);
             }
         }
         SearchService.setFilteringResults(filteredByType);
