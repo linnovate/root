@@ -3,7 +3,7 @@
 angular.module('mean.icu.ui.sidepane', []).
 directive('icuSidepane', function() {
     function controller($scope, $state, $stateParams,SettingServices, $filter, $location, $rootScope,
-        context, SearchService, EntityService, OfficesService, OfficeDocumentsService,
+        context, SearchService, EntityService, OfficesService, OfficeDocumentsService, MultipleSelectService,
         NotifyingService, TasksService
     ){
         $scope.context = context;
@@ -546,6 +546,11 @@ directive('icuSidepane', function() {
             offices: {}
         };
         $scope.filteringData.selectedWatchers = {};
+
+        MultipleSelectService.refreshSelectedList();
+        MultipleSelectService.refreshCornerState(0);
+        NotifyingService.notify('refreshAfterOperation');
+        NotifyingService.notify('multipleDisableDetailsPaneCheck');
     };
 
     $scope.closeSearch = function(){
