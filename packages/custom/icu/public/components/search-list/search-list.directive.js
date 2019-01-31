@@ -63,10 +63,11 @@ angular.module('mean.icu.ui.searchlist', [])
 
         function refreshActiveItemsInList(){
             let filteredResults = filterResults($scope.results);
+            $scope.selectedItems = MultipleSelectService.getSelected();
 
-            for(let selected of $scope.selectedItems){
-                let entity = filteredResults.find( result => result._id === selected._id );
-                selected.selected = !!entity;
+            for(let filteredResult of filteredResults){
+                let entity = $scope.selectedItems.find( selected => selected._id === filteredResult._id );
+                filteredResult.selected = !!entity;
             }
         }
 
@@ -80,9 +81,9 @@ angular.module('mean.icu.ui.searchlist', [])
         $scope.$on('changeCornerState', (event, cornerState) => multipleSelectSetAllSelected(cornerState === 'all'));
 
         NotifyingService.subscribe('refreshAfterOperation', () => {
-            refreshActiveItemsInList();
             MultipleSelectService.refreshSelectedList();
             MultipleSelectService.refreshCornerState(0);
+            refreshActiveItemsInList();
             multipleSelectRefreshState();
         }, $scope);
 
