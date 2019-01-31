@@ -45,7 +45,13 @@ angular.module('mean.icu.ui.searchlistfilter', [])
             return res ? e.id : -1 ;
         });
 
-        return results.filter( entity => filteringResults.indexOf(entity.id) > -1);
+        let filteredResults = results.filter( entity => filteringResults.indexOf(entity.id) > -1);
+        for(let i=0; i < filteredResults.length; i++){
+            filteredResults[i].index = filteredResults.findIndex( res => {
+                return (res.id || res._id) === (filteredResults[i].id || filteredResults[i]._id)
+            })
+        }
+        return filteredResults;
     };
 })
 .filter('searchResultsFilter', function (SearchService,$location) {
