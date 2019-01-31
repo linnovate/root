@@ -9,7 +9,7 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         SearchService.filteringResults = SearchService.filteringResults
           .filter(entity => {
             let id = entity.id || entity._id;
-            return (id && id !== -1) && !!recycled === !!entity.recycled;
+            return !!id && id !== -1 && !!recycled === !!entity.recycled;
           });
 
         let filteringResults = SearchService.filteringResults.map(function(e) {
