@@ -333,9 +333,10 @@ directive('icuSidepane', function() {
             $scope.flag = true;
         }
         if ($scope.filteringData.issue === 'all') {
-            if ($scope.flag)
-                $location.search('type', $scope.filteringData.issue,'recycled','true');
-        else $location.search('');
+            if ($scope.flag){
+              $location.search('recycled', 'true');
+              $location.search('type', $scope.filteringData.issue === 'all' ? null : $scope.filteringData.issue);
+            } else $location.search('');
         } else {
             if ($scope.flag)
               $location.search('type', $scope.filteringData.issue,'recycled','true');

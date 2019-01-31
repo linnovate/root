@@ -6,11 +6,11 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         let recycled = false;
         if($location.search() && $location.search().recycled)recycled = true;
 
-        SearchService.filteringResults = SearchService.filteringResults.filter(entity => {
+        SearchService.filteringResults = SearchService.filteringResults
+          .filter(entity => {
             let id = entity.id || entity._id;
-
-            return id && id !== -1;
-        });
+            return !!id && id !== -1 && !!recycled === !!entity.recycled;
+          });
 
         let filteringResults = SearchService.filteringResults.map(function(e) {
             let filterDate = new Date(SearchService.filteringByUpdated) ;
