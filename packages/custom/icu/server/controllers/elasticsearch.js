@@ -62,7 +62,7 @@ let buildSearchResponse = exports.buildSearchResponse = function(type, obj, user
       if(i.key != 'update')
         groups[i.key] =
           i.top.hits.hits.map(function(j) {
-            return Object.assign(j._source, j.highlight);
+            return Object.assign(j._source, j.highlight, { _id: j._id});
           });
     });
   }
