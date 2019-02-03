@@ -135,6 +135,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
 
         function haveBulkPerms(type) {
             let havePermissions = selectedItems.every((entity) => {
+                if(!entity || !entity.permissions)return true;
                 let userPermissions = entity.permissions.find( permission =>  permission.id === me._id);
                 return userPermissions ? _.includes(bulkPermissionsMap[type], userPermissions.level) : false;
             });

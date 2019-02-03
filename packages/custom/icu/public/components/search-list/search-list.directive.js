@@ -95,6 +95,8 @@ angular.module('mean.icu.ui.searchlist', [])
                 if(!rowSelectStatus.selected)MultipleSelectService.refreshSelectedList(filteredResults[i]);
                 rowSelectStatus.selected = status;
             }
+            filteredResults = MultipleSelectService.getSelected();
+
             if(status){
                 let copy = _.map(filteredResults, _.clone);
                 MultipleSelectService.setSelectedList(copy);
