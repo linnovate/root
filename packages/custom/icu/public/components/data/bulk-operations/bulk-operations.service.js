@@ -99,6 +99,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
             let entitySelectedIndex = selectedItems.findIndex((entity) => {
                 return entity._id === editedEntity._id;
             });
+            if(!selectedEntityArrays[entityType])return selectedItems;
 
             if (entitySelectedIndex === -1) {
                 selectedItems.push(editedEntity);
@@ -134,6 +135,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
 
         function haveBulkPerms(type) {
             let havePermissions = selectedItems.every((entity) => {
+                if(!entity || !entity.permissions)return true;
                 let userPermissions = entity.permissions.find( permission =>  permission.id === me._id);
                 return userPermissions ? _.includes(bulkPermissionsMap[type], userPermissions.level) : false;
             });
