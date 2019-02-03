@@ -99,6 +99,7 @@ angular.module('mean.icu.data.multipleselectservice', [])
             let entitySelectedIndex = selectedItems.findIndex((entity) => {
                 return entity._id === editedEntity._id;
             });
+            if(!selectedEntityArrays[entityType])return selectedItems;
 
             if (entitySelectedIndex === -1) {
                 selectedItems.push(editedEntity);
