@@ -840,7 +840,7 @@ angular.module('mean.icu').config([
             .state('main.tasks.byentity.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byentity.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.documents', getDetailsTabState('task', 'documents'))
-            .state('main.tasks.byentity.officedocuments', getDetailsTabState('task', 'officeDocuments'))
+            .state('main.tasks.byentity.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
             .state('main.tasks.byentity.tasks', getDetailsTabState('task', 'tasks'))
             // .state('main.tasks.byentity.subtasks', getDetailsSubTasksState())
 
@@ -848,7 +848,7 @@ angular.module('mean.icu').config([
             .state('main.tasks.byentity.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.details.documents', getDetailsTabState('task', 'documents'))
-            .state('main.tasks.byentity.details.officedocuments', getDetailsTabState('task', 'officeDocuments'))
+            .state('main.tasks.byentity.details.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
             // .state('main.tasks.byentity.details.subtasks', getDetailsSubTasksState())
 
             .state('main.tasks.byassign', {
@@ -891,7 +891,7 @@ angular.module('mean.icu').config([
             .state('main.tasks.byassign.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byassign.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byassign.details.documents', getDetailsTabState('task', 'documents'))
-            .state('main.tasks.byassign.details.officedocuments', getDetailsTabState('task', 'officeDocuments'))
+            .state('main.tasks.byassign.details.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
 
 
             .state('main.tasks.byparent', {
@@ -1514,7 +1514,7 @@ angular.module('mean.icu').config([
             .state('main.search.folder.activities.modal', getDetailspaneModal())
             .state('main.search.folder.documents', getDetailsTabState('folder', 'documents'))
             .state('main.search.folder.tasks', getDetailsTabState('folder', 'tasks'))
-            .state('main.search.folder.officedocuments', getDetailsTabState('folder', 'officeDocuments'))
+            .state('main.search.folder.officeDocuments', getDetailsTabState('folder', 'officeDocuments'))
 
 
             .state('main.search.officeDocument', getOfficeDocumentDetailsState('/officeDocument'))
