@@ -9,16 +9,16 @@ detail-category {
 
     .detail-category-value {
         @include tag(14px);
+        @include disable-text-styles;
         transition: 0.3s;
         width: initial;
         padding: 3px 13px;
         color: white;
         position: relative;
         margin: 10px 0 0;
-        max-width: 100%;
+        max-width: 170px;
         overflow: hidden;
         white-space: nowrap;
-        display: inline-table;
         float: left;
         left: auto;
     }
