@@ -368,6 +368,9 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   }
 
   $scope.update = function(item, type) {
+    if(type.name === 'color') {
+      item.color = type.newVal;
+    }
     ProjectsService.update(item, context).then(function(res) {
       if(ProjectsService.selected && res._id === ProjectsService.selected._id) {
         if(type === 'title') {
