@@ -9,6 +9,7 @@ detail-category {
 
     .detail-category-value {
         @include tag(14px);
+        @include disable-text-styles;
         transition: 0.3s;
         width: initial;
         padding: 3px 13px;
