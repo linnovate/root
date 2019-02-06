@@ -78,9 +78,17 @@ em {
 }
 
 .search-list {
-  overflow-y: auto;
   height: 100%;
-  @include scroll;
+
+  .icu-search-list-container {
+    @include scroll;
+    overflow-y: auto;
+    height: 100%;
+
+    &.bar-padding{
+      height: calc(100% - #{$multiple-select-bar-height});
+    }
+  }
 
   .list-table{
     .search {
