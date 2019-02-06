@@ -84,6 +84,10 @@ em {
     @include scroll;
     overflow-y: auto;
     height: 100%;
+
+    &.bar-padding{
+      height: calc(100% - #{$multiple-select-bar-height});
+    }
   }
 
   .list-table{
