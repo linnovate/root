@@ -3,8 +3,9 @@ multiple-select {
     .multiple-container {
 
         width: 100%;
-        height: 44px;
+        height: $multiple-select-bar-height;
         background-color: white;
+        border-bottom: 1px solid #e1e1e1;
 
         display: flex;
         flex-direction: row;
