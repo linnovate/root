@@ -449,16 +449,15 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   var nText, oText;
   $scope.$watch('item.description', function(nVal, oVal) {
+    if (nVal == oVal)return;
     nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
     oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if (nText != oText) {
-      var newContext = {
-        name: 'description',
-        oldVal: oVal,
-        newVal: nVal,
-      };
-      $scope.delayedUpdate($scope.item, newContext);
-    }
+    var newContext = {
+      name: 'description',
+      oldVal: oVal,
+      newVal: nVal,
+    };
+    $scope.delayedUpdate($scope.item, newContext);
   });
 
   // ==================================================== Update ==================================================== //
