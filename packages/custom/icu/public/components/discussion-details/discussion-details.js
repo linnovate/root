@@ -307,6 +307,11 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     }
   });
 
+  $scope.$watchGroup(['item.startDate', 'item.startTime', 'item.endDate', 'item.endTime'], (nVal, oVal) => {
+    if (_.isEqual(nVal, oVal))return;
+    $scope.$broadcast('updateDiscussionDue');
+  }, true);
+
   // ==================================================== update ==================================================== //
 
   $scope.update = function(discussion, type) {
