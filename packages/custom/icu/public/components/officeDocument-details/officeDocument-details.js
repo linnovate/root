@@ -20,6 +20,10 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     UsersService.getById($scope.item.creator)
       .then( creator => $scope.item.creator = creator)
   }
+  if(!$scope.item.color || !$scope.item.folder)
+    OfficeDocumentsService.getById($scope.item.id || $scope.item._id).then(doc => {
+      Object.assign($scope.item, doc);
+    });
 
   if (!$scope.item) {
     $state.go('main.officeDocuments.byentity', {
