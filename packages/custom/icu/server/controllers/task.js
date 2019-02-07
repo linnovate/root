@@ -1,10 +1,11 @@
 'use strict';
 
-var _ = require('lodash');
-// var q = require('q');
-var async = require('async');
-var config = require('meanio').loadConfig();
-var ObjectId = require('mongoose').Types.ObjectId;
+let _ = require('lodash'),
+async = require('async'),
+config = require('meanio').loadConfig(),
+ObjectId = require('mongoose').Types.ObjectId,
+Document = require('../models/document');
+
 
 /**
  * includes = space seperated entities to populate in middleware .all
@@ -685,6 +686,30 @@ exports.updateParent = function(req, res, next) {
     }
     next();
   });
+
+};
+
+exports.takeParentWatchers = function(req, res, next) {
+  if(req.locals.error) {
+    return next();
+  }
+  let parentId = req.body.officeDocument;
+  if(parentId){
+    Document.findOne({id: parentId})
+      .exec((err, doc) => {
+        if(err){
+          req.locals.error = err;
+          next();
+        }
+        req.locals.result.watchers = doc.watchers;
+        Task.findOneAndUpdate({id: req.locals.result._id},
+          {$set: {watchers: doc.watchers}},
+          err => {
+            if(err)console.log(err);
+            next();
+          });
+    })
+  }
 
 };
 
