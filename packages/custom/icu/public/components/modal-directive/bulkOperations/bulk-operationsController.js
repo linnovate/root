@@ -263,16 +263,11 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
           if(!$scope.entityDateCheck()){
             $scope.duePlaceholder = $scope.dueDateErrorMessage;
             $scope.selectedDue.date = '';
-            return;
           } else {
-            if($scope.enableUpdateButton){
-              $scope.bulkUpdate('due', $scope.selectedDue.date, entityArray, entityName);
-            }
+            $scope.bulkUpdate('due', $scope.selectedDue.date, entityArray, entityName);
           }
         } else {
-          if($scope.enableUpdateButton()){
             $scope.bulkUpdate('due', $scope.selectedDiscussionDue, entityArray, entityName);
-          }
         }
     };
 
@@ -297,11 +292,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         })
     };
     $scope.showDiscussionsDueInput = () => !!$scope.selectedArrays['discussion'].length;
-
-    function checkPastDue(){
-      let nowTime = new Date();
-      return $scope.selectedDue.date < nowTime;
-    }
 
   //------------------------------------------------//
   //----------------------TAGS----------------------//
