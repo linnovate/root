@@ -9,7 +9,10 @@ angular.module('mean.icu.ui.bulkoperations')
             $scope.notifyChangingState = () => $rootScope.$broadcast('changeCornerState', MultipleSelectService.changeCornerState());
 
             $scope.$on('refreshBulkButtonsAccess', () => $scope.changeCornerState());
-            $scope.changeCornerState = () => $scope.cornerState = MultipleSelectService.getCornerState();
+            $scope.changeCornerState = () => {
+              $scope.cornerState = MultipleSelectService.getCornerState();
+              $scope.selectedItems = MultipleSelectService.getSelected();
+            }
         }
 
         return {
