@@ -21,37 +21,49 @@ function DiscussionDue() {
 
   function link($scope, element, attrs) {
 
-    $scope.fade = false;
-    if ($scope.item.startDate) {
-      $scope.item.startDate = new Date($scope.item.startDate);
-    }
-    if ($scope.item.endDate) {
-      $scope.item.endDate = new Date($scope.item.endDate);
-    }
-    if ($scope.item.startTime) {
-      $scope.item.startTime = new Date($scope.item.startTime);
-    }
-    if ($scope.item.endTime) {
-      $scope.item.endTime = new Date($scope.item.endTime);
-    }
+    atStart();
 
-    $(document).ready(function() {
-      $scope.updateDatesString();
-      $('uib-timepicker').datepicker();
-      if ($scope.item.allDay) {
-        document.getElementById('dueDiv').style.height = '96px';
-      } else {
-        document.getElementById('dueDiv').style.height = '370px';
-      }
+    $scope.$on('updateDiscussionDue', () => {
+      atStart();
     });
 
-    $(document).click(function(event) {
-      if ((!$(event.target).closest('.dueDiv').length) && (!$(event.target).closest('.detail-due').length)) {
-        if ($scope.fade) {
-          $scope.dueClicked();
+    function atStart(){
+      $scope.fade = false;
+      if ($scope.item.startDate) {
+        $scope.item.startDate = new Date($scope.item.startDate);
+      }
+      if ($scope.item.endDate) {
+        $scope.item.endDate = new Date($scope.item.endDate);
+      }
+      if ($scope.item.startTime) {
+        $scope.item.startTime = new Date($scope.item.startTime);
+      }
+      if ($scope.item.endTime) {
+        $scope.item.endTime = new Date($scope.item.endTime);
+      }
+
+      $(document).ready(function() {
+        let dueDiv = document.getElementById('dueDiv');
+        if(!dueDiv)return;
+
+        $scope.updateDatesString();
+        $('uib-timepicker').datepicker();
+
+        if ($scope.item.allDay) {
+          dueDiv.style.height = '96px';
+        } else {
+          dueDiv.style.height = '370px';
         }
-      }
-    });
+      });
+
+      $(document).click(function(event) {
+        if ((!$(event.target).closest('.dueDiv').length) && (!$(event.target).closest('.detail-due').length)) {
+          if ($scope.fade) {
+            $scope.dueClicked();
+          }
+        }
+      });
+    }
 
     $scope.dueClicked = function() {
       $scope.showDue = true;
@@ -214,6 +226,5 @@ function DiscussionDue() {
         return true;
       }
     }
-
   }
 }
