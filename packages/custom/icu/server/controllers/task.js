@@ -702,10 +702,20 @@ exports.takeParentWatchers = function(req, res, next) {
           next();
         }
         req.locals.result.watchers = doc.watchers;
-        Task.findOneAndUpdate({id: req.locals.result._id},
-          {$set: {watchers: doc.watchers}},
-          err => {
-            if(err)console.log(err);
+        req.locals.result.permissions = doc.permissions;
+        Task.findOneAndUpdate(
+          {_id: req.locals.result._id},
+          {
+            $set: {
+              watchers: doc.watchers,
+              permissions: doc.permissions,
+            }
+          },
+          (err, success) => {
+            if(err){
+              req.locals.error = err;
+              next();
+            }
             next();
           });
     })
