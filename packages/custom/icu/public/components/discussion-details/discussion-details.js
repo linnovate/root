@@ -200,6 +200,11 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
       fa: 'fa-times-circle',
       display: $scope.item.hasOwnProperty('recycled'),
       action: $scope.recycleRestore,
+  },{
+    label: 'Say Hi!',
+    icon: 'chat',
+    display: true,
+    action: $scope.onWantToCreateRoom
   }];
 
   // ==================================================== Buttons ==================================================== //
