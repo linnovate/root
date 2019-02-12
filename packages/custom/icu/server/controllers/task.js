@@ -690,10 +690,11 @@ exports.updateParent = function(req, res, next) {
 };
 
 exports.takeParentWatchers = function(req, res, next) {
-  if(req.locals.error) {
+  let parentId = req.body.officeDocument;
+  if(req.locals.error || !parentId) {
     return next();
   }
-  let parentId = req.body.officeDocument;
+
   if(parentId){
     Document.findOne({id: parentId})
       .exec((err, doc) => {
