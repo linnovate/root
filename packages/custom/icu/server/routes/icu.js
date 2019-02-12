@@ -188,7 +188,7 @@ module.exports = function(Icu, app) {
 
   app.route('/api/tasks*').all(entity('tasks'));
   app.route('/api/tasks')
-    .post(task.create, task.updateParent, notification.sendNotification, updates.created, boldedService.syncBoldUsers)
+    .post(task.create, task.updateParent, task.takeParentWatchers, notification.sendNotification, updates.created, boldedService.syncBoldUsers)
     .get(pagination.parseParams, task.all, task.populateSubTasks, star.isStarred, pagination.formResponse);
   app.route('/api/tasks/tags')
     .get(task.tagsList);
