@@ -192,17 +192,19 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
     });
     json.watchers = $scope.item.watchers;
     OfficeDocumentsService.updateDocument($scope.item._id, json).then(function (res) {
-        if (id == undefined) {
+      OfficeDocumentsService.getById($scope.item._id).then( doc => {
+        if (!id) {
           delete $scope.item.folder;
           $scope.signatures = undefined;
         } else {
           $scope.getSignatures();
         }
         //Update the scope with the response from server
-        $scope.item.watchers = res.watchers;
-        $scope.item.permissions = res.permissions;
+        $scope.item.watchers = doc.watchers;
+        $scope.item.permissions = doc.permissions;
 
         backupEntity = JSON.parse(JSON.stringify($scope.item));
+      })
     });
   };
 
