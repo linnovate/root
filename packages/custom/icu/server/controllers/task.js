@@ -701,24 +701,27 @@ exports.takeParentWatchers = function(req, res, next) {
         if(err){
           req.locals.error = err;
           next();
-        }
-        req.locals.result.watchers = doc.watchers;
-        req.locals.result.permissions = doc.permissions;
-        Task.findOneAndUpdate(
-          {_id: req.locals.result._id},
-          {
-            $set: {
-              watchers: doc.watchers,
-              permissions: doc.permissions,
-            }
-          },
-          (err, success) => {
-            if(err){
-              req.locals.error = err;
+        } else if(doc) {
+          req.locals.result.watchers = doc.watchers;
+          req.locals.result.permissions = doc.permissions;
+          Task.findOneAndUpdate(
+            {_id: req.locals.result._id},
+            {
+              $set: {
+                watchers: doc.watchers,
+                permissions: doc.permissions,
+              }
+            },
+            (err, success) => {
+              if(err){
+                req.locals.error = err;
+                next();
+              }
               next();
-            }
-            next();
-          });
+            });
+        } else {
+          next()
+        }
     })
   }
 
