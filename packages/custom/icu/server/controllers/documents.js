@@ -2530,8 +2530,8 @@ exports.update = function(req, res, next) {
               req.body.permissions = [];
 
               // Inherit watchers & permissions from the parent folder
-              doc.watchers = watchers = folderObj.watchers;
-              doc.permissions = folderObj.permissions;
+              addWatcherOrPermissionIfNotExist(doc.watchers, folderObj.watchers);
+              addWatcherOrPermissionIfNotExist(doc.permissions, folderObj.permissions);
 
               // Save the document with the new watchers & permissions
               doc.save(function(err, result) {
@@ -2821,6 +2821,18 @@ exports.update = function(req, res, next) {
     res.status(400).send("No parameter sent to update");
   }
 };
+
+function addWatcherOrPermissionIfNotExist(arrayOfExisting, arrayOfAdding){
+  for(let i=0; arrayOfAdding.length; i++){
+    let folderWatcher = arrayOfAdding[i];
+    if(!folderWatcher)break;
+
+    let folderId = typeof folderWatcher === 'string' ? folderWatcher : folderWatcher.id,
+      watcher = arrayOfExisting.find( user => user.id.toString() === folderId.toString());
+    if(!watcher)
+      arrayOfExisting.push(folderWatcher)
+  }
+}
 
 function addAssignToWatchers(doc, assignId){
   let watcherExists = doc.watchers.find(watcher => watcher._id === assignId);
