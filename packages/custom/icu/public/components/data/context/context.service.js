@@ -28,13 +28,13 @@ angular.module('mean.icu').service('context', function ($injector, $q) {
                 var reverseMainMap = _(mainMap).invert();
                 var main = 'task';
 
-                if (parts[1] !== 'search') {
-                    main = reverseMainMap[parts[1]];
+                if (parts[1] !== 'search' && parts[1]) {
+                    main = reverseMainMap[parts[1]] || parts[1];
                 }
 
                 // When in context of search, the entity you selected is in parts[2]
-                if (parts[1] == 'search') {
-                    main = reverseMainMap[parts[2]];
+                if (parts[1] == 'search' && parts[2]) {
+                    main = reverseMainMap[parts[2]] || parts[2];
                 }
 
                 var params = state.params;
