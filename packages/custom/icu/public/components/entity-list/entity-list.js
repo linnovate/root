@@ -114,13 +114,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         }
 
         $scope.refreshVisibleItems();
-
-        /*Made By OHAD - Needed for reversing sort*/
-        $state.go($state.current.name, {
-            sort: $scope.sorting.field.title
-        });
-
-        $scope.refreshVisibleItems();
     };
 
     $scope.sortingList = [{
@@ -134,11 +127,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         value: 'created'
     }, {
         title: 'bolded',
-        value: function(item) {
-            return item.bolded.find(b => {
-                return b.bolded && $scope.me._id === b.id;
-            })
-        }
+        value: 'bolded'
     }];
 
     $scope.sorting = {
@@ -441,8 +430,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
-        // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
-        newArray = $filter('orderBy')(newArray, $scope.sorting.field.value, $scope.sorting.isReverse);
+        newArray = $filter('sortByTitle')(newArray, $scope.sorting.field.value, $scope.sorting.isReverse);
 
         return newArray;
     }
@@ -453,13 +441,6 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
 
     function filterByDefiniteStatus(array, value){
       return array.filter( entity => entity.status === value);
-    }
-
-    function filterByParent(array, value) {
-      return array.filter(entity => {
-        let parent = entity[$stateParams.entity];
-        return parent && (value === parent || value === parent._id);
-      });
     }
 
     NotifyingService.subscribe('filterMyTasks', () => $scope.refreshVisibleItems(), $scope);
