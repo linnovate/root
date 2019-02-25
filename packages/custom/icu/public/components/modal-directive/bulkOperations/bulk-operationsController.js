@@ -39,9 +39,9 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                 $scope.tagUpdate(entityArray, entityName + 's');
                 continue;
             }
-            if( type === 'due' && entityName === 'discussion' ){
-                $scope.dateCheck(entityArray, entityName + 's');
-                continue;
+            if( type === 'due'){
+                if($scope.dateCheck(entityArray, entityName + 's'))continue;
+                break;
             }
 
             promises.push(
@@ -257,24 +257,33 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     };
 
     $scope.dateCheck = function(entityArray, entityName){
-        if(entityName !== 'discussions'){
-          if(!$scope.entityDateCheck()){
-            $scope.duePlaceholder = $scope.dueDateErrorMessage;
-            $scope.selectedDue.date = '';
-          } else {
-            $scope.bulkUpdate('due', $scope.selectedDue.date, entityArray, entityName);
-          }
-        } else {
-            $scope.bulkUpdate('due', $scope.selectedDiscussionDue, entityArray, entityName);
+        let dueDateError = false;
+
+        //just for complex discussions due
+        if(entityName === 'discussions' && $scope.enableSetDueDate){
+          $scope.bulkUpdate('due', $scope.selectedDiscussionDue, entityArray, entityName);
         }
+
+        // for all other entities due dates
+        else if(entityName !== 'discussions' && $scope.entityDateCheck()){
+          $scope.bulkUpdate('due', $scope.selectedDue.date, entityArray, entityName);
+        }
+        else dueDateError = true;
+
+        if(dueDateError){
+          $scope.duePlaceholder = $scope.dueDateErrorMessage;
+          $scope.selectedDue.date = '';
+        }
+        return !dueDateError;
     };
 
     $scope.setDiscussionDue = function(){
       let selectedDue = $scope.selectedDiscussionDue,
         startEndTime = selectedDue.startDate && selectedDue.endDate && selectedDue.startTime && selectedDue.endTime,
-        startAllDay = selectedDue.startDate && selectedDue.allDay;
+        startAllDay = selectedDue.startDate && selectedDue.allDay,
+        pastDate = selectedDue.endDate < new Date();
 
-      return $scope.enableSetDueDate = !!startEndTime || !!startAllDay;
+      return $scope.enableSetDueDate = (!!startEndTime || !!startAllDay) && !pastDate;
     };
 
     $scope.entityDateCheck = function(){
