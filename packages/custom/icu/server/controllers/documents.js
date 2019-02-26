@@ -2205,7 +2205,7 @@ exports.create = function(req, res, next) {
             error: error.message
           });
 
-          res.send(error);
+          req.locals.error = error;
           return reject(error);
         } else {
           logger.log("info", "%s create, %s", req.user.name, "success with folder");
@@ -2218,12 +2218,14 @@ exports.create = function(req, res, next) {
       })
     }).then(newDocument => {
       if(parentId && parentObj){
-        parentObj.officeDocuments = newDocument._id;
+        // solution for mongo issue adding data to array,
+        // because of $pushAll that is deprecated since v2.4
+        parentObj.officeDocuments = parentObj.officeDocuments.concat([newDocument]);
+
         parentObj.save(error => {
           if (error) {
             logger.log("error", "%s create, %s", req.user.name, " obj.save", { error: error.message });
-
-            res.send(error);
+            req.locals.error = error;
           }
           return next();
         });
