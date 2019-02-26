@@ -79,3 +79,9 @@ files/
 packages/core/users/public/assets/img/avatar/*
 dump.rdb
 data.json
+
+# --------------------
+# .vscode Files
+# --------------------
+
+.vscode
