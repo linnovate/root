@@ -172,7 +172,7 @@ angular.module('mean.icu.ui.notificationsheader', [])
 
                 if ($stateParams.currentEntity === 'task' && id) {
                     newDocument.task = id;
-                    state = 'main.tasks.officeDocument.details.activities';
+                    state = 'main.officeDocuments.byentity.activities';
                     params.entity = 'task';
                     params.entityId = id;
                 } else {
