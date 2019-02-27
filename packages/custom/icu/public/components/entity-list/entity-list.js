@@ -69,15 +69,12 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         $state.current.name.indexOf(`main.${$scope.$parent.entityName}.all.details`) === 0
       ) && $state.params.id === id;
       if (isActive && !isScrolled) {
+        $timeout(() => scrollToElement(), 0);
         isScrolled = true;
       }
 
       return $scope.seenSelectedItem = isActive;
     };
-
-    $scope.$watch('seenSelectedItem', newValue => {
-      if(newValue)$timeout(() => scrollToElement(), 0);
-    });
 
     function scrollToElement(){
         let list = document.getElementsByClassName('list-table scroll')[0],
