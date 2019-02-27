@@ -595,6 +595,7 @@ exports.update2 = function(req, res, next) {
               });
             });
             json['watchers'] = result.watchers;
+            json['permissions'] = result.permissions;            
             TemplateDoc.update({_id: req.params.id}, json).then(function(result) {
               if(spPath) {
                 getUsers(watchersReq).then(function(result) {
