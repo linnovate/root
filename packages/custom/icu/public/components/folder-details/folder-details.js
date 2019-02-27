@@ -187,18 +187,23 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
   // ==================================================== Category ==================================================== //
 
-  function removeDuplicates(objArr, prop) {
-    return objArr.filter((obj, pos, arr) => {
-      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-    });
+  function unionById(arr1, arr2){
+    let existing = arr1.map(e => (e.id || e._id).toString());
+    arr2.forEach(e => {
+      let id = (e.id || e._id).toString();
+      if(!existing.includes(id)) {
+        arr1.push(e);
+      }
+    })
+    return arr1;
   }
 
   $scope.onCategory = function(value) {
 
     if (value) {
       $scope.item.office = value;
-      $scope.item.watchers = $scope.item.watchers.concat($scope.item.office.watchers);
-      $scope.item.watchers = removeDuplicates($scope.item.watchers, '_id')
+      $scope.item.watchers = unionById($scope.item.watchers, $scope.item.office.watchers);
+      $scope.item.permissions = unionById($scope.item.permissions, $scope.item.office.permissions);
     } else {
       $scope.item.office = {}
     }
