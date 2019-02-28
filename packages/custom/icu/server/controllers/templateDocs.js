@@ -595,12 +595,8 @@ exports.update2 = function(req, res, next) {
               });
             });
             json['watchers'] = result.watchers;
-            TemplateDoc.update({_id: req.params.id}, json).then(function(err, result) {
-              if(err) {
-                logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  TemplateDoc.update', {error: err.message});
-                res.status(500).send({error: err.message});
-                return;
-              }
+            json['permissions'] = result.permissions;            
+            TemplateDoc.update({_id: req.params.id}, json).then(function(result) {
               if(spPath) {
                 getUsers(watchersReq).then(function(result) {
                   getUsers(zeroReq).then(function(result) {
@@ -627,7 +623,6 @@ exports.update2 = function(req, res, next) {
                       if(error) {
                         logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  request', {error: error.message});
                         res.status(500).send({error: error.message});
-
                       }
                       else {
                         res.send('ok');
@@ -648,6 +643,11 @@ exports.update2 = function(req, res, next) {
                 res.send('ok');
               }
 
+            })
+            .catch(function(err){
+                logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  TemplateDoc.update', {error: err.message});
+                res.status(500).send({error: err.message});
+                return;
             });
 
           }
@@ -660,10 +660,7 @@ exports.update2 = function(req, res, next) {
             logger.log('error', '%s templateDocx.update2, %s', req.user.name, '   Office.findOne', {error: 'Entity not found'});
             res.status(500).send({error: 'Entity Not Found'});
           }
-
         });
-
-
       });
     }
   }
