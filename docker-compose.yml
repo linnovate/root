@@ -2,7 +2,7 @@ version: '2'
 
 services:
   app:
-    image: node:8-alpine
+    image: node:8
     working_dir: /usr/src/app
     volumes:
       - ./:/usr/src/app
@@ -15,7 +15,7 @@ services:
       FTP_USER_PASS: admin
     ports:
       - 3000:3000
-    command: node server
+    command: npm start
     depends_on:
       - mongo
       - elasticsearch
