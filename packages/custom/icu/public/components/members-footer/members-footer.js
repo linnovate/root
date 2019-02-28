@@ -323,7 +323,10 @@ angular.module('mean.icu.ui.membersfooter', [])
                     });
                 } else {
                     $scope.entity.watchers = _.reject($scope.entity.watchers, function(mem) {
-                        return _.isEqual(member, mem);
+                        return member._id === mem._id;
+                    });
+                    $scope.entity.permissions = _.reject($scope.entity.permissions, function(mem) {
+                        return member._id === mem.id;
                     });
                 }
 

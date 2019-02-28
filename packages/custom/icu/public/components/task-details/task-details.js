@@ -393,6 +393,17 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
     });
   };
 
+  function unionById(arr1, arr2){
+    let existing = arr1.map(e => (e.id || e._id).toString());
+    arr2.forEach(e => {
+      let id = (e.id || e._id).toString();
+      if(!existing.includes(id)) {
+        arr1.push(e);
+      }
+    })
+    return arr1;
+  }
+
   $scope.update = function(item, type, proj) {
     if (proj && proj !== '') {
       $scope.createProject(proj, function(result) {
@@ -419,8 +430,12 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
       item.discussion = context.entityId;
     }
     if (type === 'project' && item.project) {
-      item.watchers = item.project.watchers;
-      item.permissions = item.project.permissions;
+      item.watchers = unionById(item.watchers, item.project.watchers);
+      item.permissions = unionById(item.permissions, item.project.permissions);
+    }
+    if (type === 'discussion' && item.discussion) {
+      item.watchers = unionById(item.watchers, item.discussion.watchers);
+      item.permissions = unionById(item.permissions, item.discussion.permissions);
     }
 
     TasksService.update(item).then(function(result) {
