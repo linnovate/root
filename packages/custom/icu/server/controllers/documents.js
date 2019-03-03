@@ -345,7 +345,12 @@ exports.getByTaskId = function(req, res, next) {
   let officeDocumentId = req.params.id;
 
     Document.findOne({ _id: officeDocumentId })
-      .populate("tasks")
+      .populate({
+        path: 'tasks',
+        populate: {
+          path: 'subTasks'
+        }
+      })
       .exec(function(err, doc) {
         req.locals.data.pagination.count = doc.tasks.length || 0;
         req.locals.result = doc.tasks || [];
