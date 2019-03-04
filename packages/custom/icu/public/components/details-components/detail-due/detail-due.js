@@ -25,20 +25,10 @@ function detailDue() {
 
     // Cast to Date() whenever value is changed
     $scope.$watch('value', function (newVal, oldVal) {
-      if(datesCompare(newVal, oldVal))return;
-
-      $scope.value = dueValueConvert(newVal);
+      if(newVal && !(newVal instanceof Date)) {
+        $scope.value = new Date(newVal);
+      }
     });
-
-    function datesCompare(date1, date2){
-      if(!date1 || !date2)return true;
-      return dueValueConvert(date1).getTime() === dueValueConvert(date2).getTime()
-    }
-
-    function dueValueConvert(date){
-      if( date && !(date instanceof Date))return new Date(date);
-      return date;
-    }
 
     //due start
     if ($scope.firstValue)
