@@ -2804,7 +2804,7 @@ exports.update = function(req, res, next) {
               );
 
               if (req.body.name == "due") {
-                Document.findOne({ _id: req.params.id }).populate('folder').exec(function(err, doc) {
+                Document.findOne({ _id: req.params.id }).populate('watchers folder').exec(function(err, doc) {
                   console.log(err, doc)
                   if (err)
                     logger.log(
