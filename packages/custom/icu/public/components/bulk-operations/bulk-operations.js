@@ -10,7 +10,8 @@ angular.module('mean.icu.ui.bulkoperations', [])
 
             $scope.entityType = context.main;
 
-            $scope.showForCurrentEntity = function(operation){
+            $scope.showForCurrentEntity = function(operation) {
+                if($state.params.recycled && operation === 'delete') return false;
                 return MultipleSelectService.showButton(operation, $scope.entityType);
             };
         }
