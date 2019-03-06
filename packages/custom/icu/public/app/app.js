@@ -185,6 +185,9 @@ angular.module('mean.icu').config([
                         return ProjectsService.getTags().then(function (tags) {
                             return tags;
                         });
+                    },
+                    projects: function (ProjectsService, $stateParams) {
+                        return ProjectsService.getSubProjects($stateParams.id)
                     }
                 }
             }

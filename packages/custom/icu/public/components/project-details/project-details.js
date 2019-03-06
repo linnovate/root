@@ -32,7 +32,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
     }
   }
 
-  $scope.items = projects.data || projects;
+  $scope.item.subProjects = projects.data || projects;
 
   $scope.editorOptions = {
     theme: 'bootstrap',
