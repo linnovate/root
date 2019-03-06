@@ -94,7 +94,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getByEntityId(entity) {
-        return function(id, start, limit, sort, starred) {
+        return function(id, start, limit, sort, status, starred) {
             var qs = querystring.encode({
                 start: start,
                 limit: limit,

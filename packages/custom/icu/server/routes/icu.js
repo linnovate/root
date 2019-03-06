@@ -377,8 +377,8 @@ module.exports = function(Icu, app) {
     .post(documents.update)
     .put(documents.update, star.isStarred, attachments.sign)
     .delete(documents.deleteDocument);
-  app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})/tasks')
-    .get(pagination.parseParams, documents.getByTaskId, pagination.formResponse);
+  app.route('/api/officeDocuments/:id([0-9a-fA-F]{24})/tasks/:starred*?')
+    .get(pagination.parseParams, documents.getByTaskId, star.filterByStarred, pagination.formResponse);
   app.route('/api/officeDocuments/create')
     .post(documents.create, updates.created, boldedService.syncBoldUsers);
   app.route('/api/officeDocuments/addSerialTitle')
