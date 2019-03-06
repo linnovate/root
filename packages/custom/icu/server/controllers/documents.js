@@ -2689,8 +2689,8 @@ exports.update = function(req, res, next) {
           );
         }
         var spPath = doc.spPath;
-        if (spPath) {
-          var oldAssign = doc.assign;
+        var oldAssign = doc.assign;
+        if (spPath && String(oldAssign) !== String(req.body.newVal)) {
           var assignReq = [
             {
               UserId: req.body.newVal
@@ -2849,7 +2849,9 @@ function addWatcherOrPermissionIfNotExist(arrayOfExisting, arrayOfAdding){
 }
 
 function addAssignToWatchers(doc, assignId){
-  let watcherExists = doc.watchers.find(watcher => watcher._id === assignId);
+  let watcherExists = doc.watchers.find(watcher => {
+    return String(watcher._id || watcher) === assignId;
+  });
 
   if (!watcherExists){
     doc.watchers.push(doc.assign);
