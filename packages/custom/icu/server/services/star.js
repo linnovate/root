@@ -106,10 +106,9 @@ module.exports = function(entityName, options) {
     });
   }
 
-
   function getStarred() {
-    if(entityName.assing) {
-      var assign = entityName.assing;
+    if(entityName.assign) {
+      var assign = entityName.assign;
       entityName = entityName.name;
     }
     var Model = entityNameMap[entityName].model;
