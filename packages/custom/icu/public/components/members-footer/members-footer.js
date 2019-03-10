@@ -259,7 +259,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     }
                 }
 
-                let backupEntity = JSON.parse(JSON.stringify($scope.entity));
+                let backupEntity = _.clone($scope.entity);
                 update($scope.entity, member, 'added')
                   .then(updatedEntity => {
                     let { watchers, permissions } = updatedEntity;
@@ -330,7 +330,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     });
                 }
 
-                const backupEntity = JSON.parse(JSON.stringify($scope.entity));
+                const backupEntity = _.clone($scope.entity);
                 update($scope.entity, member, 'removed');
 
                 var task = $scope.entity ;
