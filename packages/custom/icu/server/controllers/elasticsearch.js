@@ -207,8 +207,8 @@ exports.search = function(req, res, next) {
     console.log('****************************************************');
     if(err) {
       system.sendMessage({service: 'elasticsearch', message: result});
+      return next(err)
     }
-    utils.checkAndHandleError(err, 'Failed to find entities', next);
 
     if(req.query.term) {
       if(!result.aggregations) {

@@ -45,8 +45,8 @@ exports.getMyEvents = function(req, res, next) {
         service: 'event-drops',
         message: result
       });
+      return next(err)
     }
-    utils.checkAndHandleError(err, 'Failed to find entities', next);
     res.send(elasticCtrl.buildSearchResponse('aggs', result.aggregations.group_by_index.buckets));
 
   });

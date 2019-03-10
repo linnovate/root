@@ -41,7 +41,7 @@ exports.updateMember = function(req, res, next) {
   profile = _.extend(profile, {frequentUsers: frequent});
   var id = req.user._id;
   User.update({_id: id}, {$set: {profile: profile}}, function(err) {
-    utils.checkAndHandleError(err, 'Cannot update the profile', next);
+    if(err) next(err);
   });
 };
 
@@ -57,7 +57,7 @@ exports.update = function(req, res, next) {
   var id = user._id;
   delete user._id;
   User.update({_id: id}, user, function(err) {
-    utils.checkAndHandleError(err, 'Cannot update the profile', next);
+    if(err) return next(err);
     res.json(user.profile);
   });
 };
@@ -82,7 +82,7 @@ exports.uploadAvatar = function(req, res, next) {
     if(req.file)
       next();
     else
-      utils.checkAndHandleError('Didn\'t find any avatar to upload', 'Didn\'t find any avatar to upload', next);
+      next(new Error('Didn\'t find any avatar to upload'));
   });
   return req.pipe(busboy);
 };
