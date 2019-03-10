@@ -152,7 +152,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             }
             let typeOfService = $stateParams.id ? context.main : context.entityName ;
             let serviceName = serviceMap[typeOfService];
-            let clonedEntity = JSON.parse(JSON.stringify(entity));
+            let clonedEntity = _.clone(entity);
             console.log("changeUsersPermissions", serviceName, clonedEntity)
             console.log(typeOfService) ;
 
@@ -170,7 +170,7 @@ angular.module('mean.icu.data.permissionsservice', [])
 
         function updateEntity(entity, context) {
             let entityService = (context.main === 'tasks' ?  TasksService :  ProjectsService);
-            let backupEntity = JSON.parse(JSON.stringify(entity));
+            let backupEntity = _.clone(entity);
 
             if (context.main !== 'discussions') {
                 entityService.update(entity).then(function (result) {
@@ -207,7 +207,7 @@ angular.module('mean.icu.data.permissionsservice', [])
                 }
 
                 DiscussionsService.updateAssign(entity, backupEntity).then(function (result) {
-                    backupEntity = JSON.parse(JSON.stringify(entity));
+                    backupEntity = _.clone(entity);
                     ActivitiesService.data = ActivitiesService.data || [];
                     ActivitiesService.data.push(result);
                 });
