@@ -35,7 +35,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
   $scope.offices = offices.data || offices;
 
   // backup for previous changes - for updates
-  var backupEntity = _.clone($scope.item);
+  var backupEntity = angular.copy($scope.item);
 
   $scope.people = people.data || people;
 
@@ -117,7 +117,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
     $scope.recycle = function() {
         EntityService.recycle('folders', $scope.item._id).then(function() {
-            let clonedEntity = _.clone($scope.item);
+            let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "Recycled"
             // just for activity status
             FoldersService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -145,7 +145,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
     $scope.recycleRestore = function() {
         EntityService.recycleRestore('folders', $scope.item._id).then(function() {
-            let clonedEntity = _.clone($scope.item);
+            let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "un-deleted";
             // just for activity status
             FoldersService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -209,7 +209,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
     }
 
     FoldersService.update($scope.item).then(function(result) {
-        backupEntity = _.clone($scope.item);
+        backupEntity = angular.copy($scope.item);
       let officeId = result.office ? result.office._id : undefined;
       $state.go('main.folders.byentity.details', {
         entity: context.entityName,
@@ -277,7 +277,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
       switch (context.name) {
       case 'status':
         FoldersService.updateStatus(folder, me, backupEntity).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
           refreshList();
@@ -286,21 +286,21 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
       case 'star':
         FoldersService.updateStar(folder, me, backupEntity).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
         break;
       case 'title':
           FoldersService.updateTitle(folder, me, backupEntity).then(function(result) {
-              backupEntity = _.clone($scope.item);
+              backupEntity = angular.copy($scope.item);
               ActivitiesService.data = ActivitiesService.data || [];
               ActivitiesService.data.push(result);
           });
           break;
       case 'description':
         FoldersService.updateDescription(folder, me, backupEntity).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });

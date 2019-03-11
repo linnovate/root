@@ -76,7 +76,7 @@ function OfficeDetailsController(
   $scope.items = offices.data || offices;
 
   // backup for previous changes - for updates
-  var backupEntity = _.clone($scope.item);
+  var backupEntity = angular.copy($scope.item);
 
   $scope.people = people.data || people;
 
@@ -143,7 +143,7 @@ function OfficeDetailsController(
 
   $scope.recycle = function() {
     EntityService.recycle("offices", $scope.item._id).then(function() {
-      let clonedEntity = _.clone($scope.item);
+      let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "Recycled";
       OfficesService.updateStatus(clonedEntity, $scope.item).then(function(
         result
@@ -180,7 +180,7 @@ function OfficeDetailsController(
 
   $scope.recycleRestore = function() {
     EntityService.recycleRestore("offices", $scope.item._id).then(function() {
-      let clonedEntity = _.clone($scope.item);
+      let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "un-deleted";
 
       refreshList();
@@ -309,7 +309,7 @@ function OfficeDetailsController(
           OfficesService.updateTitle(office, me, backupEntity).then(function(
             result
           ) {
-            backupEntity = _.clone($scope.item);
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
           });
@@ -318,7 +318,7 @@ function OfficeDetailsController(
           OfficesService.updateStar(office, me, backupEntity).then(function(
             result
           ) {
-            backupEntity = _.clone($scope.item);
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
           });
@@ -326,7 +326,7 @@ function OfficeDetailsController(
         case "description":
           OfficesService.updateDescription(office, me, backupEntity).then(
             function(result) {
-              backupEntity = _.clone($scope.item);
+              backupEntity = angular.copy($scope.item);
               ActivitiesService.data = ActivitiesService.data || [];
               ActivitiesService.data.push(result);
             }
@@ -337,7 +337,7 @@ function OfficeDetailsController(
           OfficesService.updateTitle(office, me, backupEntity).then(function(
             result
           ) {
-            backupEntity = _.clone($scope.item);
+            backupEntity = angular.copy($scope.item);
           });
           break;
       }

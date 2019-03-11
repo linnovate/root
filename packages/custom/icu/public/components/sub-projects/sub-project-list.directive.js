@@ -36,7 +36,7 @@ angular.module('mean.icu.ui.subprojectslistdirective', []).directive('icuSubProj
     $scope.createOrUpdate = function(project, field) {
       var data;
       project.color = '0097A7';
-      var backupEntity = _.clone(project);
+      var backupEntity = angular.copy(project);
 
       if (field === 'assign') {
         data = {

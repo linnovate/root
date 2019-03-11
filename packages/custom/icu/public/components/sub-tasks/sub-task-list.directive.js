@@ -35,7 +35,7 @@ angular.module('mean.icu.ui.subtaskslistdirective', []).directive('icuSubTaskLis
 
     $scope.createOrUpdate = function(task, field) {
       var data;
-      var backupEntity = _.clone(task);
+      var backupEntity = angular.copy(task);
       if (field === 'assign') {
         data = {
           frequentUser: task.assign

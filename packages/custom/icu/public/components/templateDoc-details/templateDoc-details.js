@@ -60,7 +60,7 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
   // ==================================================== Menu events ==================================================== //
     $scope.recycle = function() {
         EntityService.recycle('templateDocs', $scope.item._id).then(function() {
-            let clonedEntity = _.clone($scope.item);
+            let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "Recycled";
 
             refreshList();
@@ -84,7 +84,7 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
 
     $scope.recycleRestore = function() {
         EntityService.recycleRestore('templateDocs', $scope.item._id).then(function() {
-            let clonedEntity = _.clone($scope.item);
+            let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "un-deleted"
 
             refreshList();
