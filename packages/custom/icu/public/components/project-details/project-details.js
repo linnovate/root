@@ -46,7 +46,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   let currentState = $state.current.name;
 
   // backup for previous changes - for updates
-  var backupEntity = _.clone($scope.item);
+  var backupEntity = angular.copy($scope.item);
 
   $scope.people = people.data || people;
   if($scope.people.length && $scope.people[$scope.people.length - 1].name !== 'no select') {
@@ -106,7 +106,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
     }
 
     ProjectsService.updateDue($scope.item, $scope.me, backupEntity).then(function (result) {
-      backupEntity = _.clone($scope.item);
+      backupEntity = angular.copy($scope.item);
       ActivitiesService.data.push(result);
     });
 
@@ -162,7 +162,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   $scope.recycle = function() {
     ProjectsService.removeFromParent($scope.item).then(()=>{
       EntityService.recycle('projects', $scope.item._id).then(function() {
-        let clonedEntity = _.clone($scope.item);
+        let clonedEntity = angular.copy($scope.item);
         clonedEntity.status = 'Recycled';
         // just for activity status
         ProjectsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -194,7 +194,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   $scope.recycleRestore = function() {
     ProjectsService.addToParent($scope.item).then(()=>{
       EntityService.recycleRestore('projects', $scope.item._id).then(function() {
-        let clonedEntity = _.clone($scope.item);
+        let clonedEntity = angular.copy($scope.item);
         clonedEntity.status = 'un-deleted';
         // just for activity status
         ProjectsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -356,7 +356,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
       }
 
       ProjectsService.assign(project, me, backupEntity).then(function(res) {
-        backupEntity = _.clone(result);
+        backupEntity = angular.copy(result);
         ActivitiesService.data.push(res);
       });
     });
@@ -384,7 +384,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
         }
 
         ProjectsService.updateStatus(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
           refreshList();
@@ -392,21 +392,21 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
         break;
       case 'star':
         ProjectsService.updateStar(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
         break;
       case 'tags':
         ProjectsService.updateTags(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
         break;
       case 'title':
         ProjectsService.updateTitle(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
           refreshList();
@@ -414,7 +414,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
         break;
       case 'description':
         ProjectsService.updateDescription(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
           refreshList();

@@ -36,7 +36,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
   var currentState = $state.current.name;
 
   // backup for previous changes - for updates
-  var backupEntity = _.clone($scope.item);
+  var backupEntity = angular.copy($scope.item);
 
   $scope.people = people.data || people;
   if ($scope.people.length && $scope.people[$scope.people.length - 1].name !== 'no select') {
@@ -77,7 +77,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
   $scope.onStar = function(value) {
 
     TasksService.updateStar($scope.item, me, backupEntity).then(function(result) {
-        backupEntity = _.clone($scope.item);
+        backupEntity = angular.copy($scope.item);
         ActivitiesService.data.push(result);
     });
 
@@ -102,7 +102,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
     }
 
     TasksService.updateDue($scope.item, me, backupEntity).then(function(result) {
-      backupEntity = _.clone($scope.item);
+      backupEntity = angular.copy($scope.item);
       ActivitiesService.data.push(result);
     });
 
@@ -129,7 +129,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
     }
 
     TasksService.updateStatus($scope.item, me, backupEntity).then(function(result) {
-      backupEntity = _.clone($scope.item);
+      backupEntity = angular.copy($scope.item);
       ActivitiesService.data.push(result);
     });
 
@@ -143,7 +143,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
     $scope.update($scope.item);
 
     TasksService.updateTags($scope.item, me, backupEntity).then(function(result) {
-      backupEntity = _.clone($scope.item);
+      backupEntity = angular.copy($scope.item);
       ActivitiesService.data.push(result);
     });
   }
@@ -153,7 +153,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
   $scope.recycle = function() {
     TasksService.removeFromParent($scope.item).then(()=>{
       EntityService.recycle('tasks', $scope.item._id).then(function() {
-        let clonedEntity = _.clone($scope.item);
+        let clonedEntity = angular.copy($scope.item);
         clonedEntity.status = "deleted";
         // just for activity status
         TasksService.updateStatus(clonedEntity, me, $scope.item).then(function(result) {
@@ -186,7 +186,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
     let entity = $scope.item;
     TasksService.addToParent(entity).then(()=>{
       EntityService.recycleRestore('tasks', entity._id).then(function() {
-        let clonedEntity = _.clone(entity);
+        let clonedEntity = angular.copy(entity);
         clonedEntity.status = "un-deleted";
         // just for activity status
         TasksService.updateStatus(clonedEntity, me, entity).then(function(result) {
@@ -387,7 +387,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
       }
 
       TasksService.assign(item, me, backupEntity).then(function(res) {
-        backupEntity = _.clone(result);
+        backupEntity = angular.copy(result);
         ActivitiesService.data.push(res);
       });
     });
@@ -409,7 +409,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
       $scope.createProject(proj, function(result) {
         item.project = result;
         TasksService.update(item).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
 
           if (context.entityName === 'project') {
             var projId = result.project ? result.project._id : undefined;
@@ -440,7 +440,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
 
     TasksService.update(item).then(function(result) {
       if (type === 'project') {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
       }
       var isSearchState = currentState.indexOf('search') != -1;
       if (context.entityName === 'project' && !isSearchState) {
@@ -467,7 +467,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, $state, $r
       if (type === 'title' || type === 'description') {
         let func = type === 'title' ? 'updateTitle' : 'updateDescription';
         TasksService[func](item, me, backupEntity).then(function(result) {
-          backupEntity = _.clone($scope.item);
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
           refreshList();
