@@ -58,10 +58,19 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
         let idsArray = selectedArray.map(entity => entity._id);
         let changedBulkObject = {
-            update: {},
-            ids: idsArray
+            ids: idsArray,
+            update: {
+                [type]: value
+            }
         };
-        changedBulkObject.update[type] = value;
+
+        if(type === 'assign') {
+            changedBulkObject.update.watchers = [value];
+            changedBulkObject.update.permissions = [{
+                id: value,
+                level: 'commenter'
+            }];
+        }
 
         return MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
             .then(result => {
@@ -71,7 +80,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
                     if(typeof entity.due === 'string')entity.due = new Date(entity.due);
                     entity = _.pick(entity, [
-                      'status', 'watchers', 'assign',
+                      'status', 'watchers', 'permissions', 'assign',
                       'due', 'startDate', 'endDate', 'startTime', 'endTime', 'allDay',
                       'tags', 'recycled']);
                     Object.assign(selectedArray[i], entity);
