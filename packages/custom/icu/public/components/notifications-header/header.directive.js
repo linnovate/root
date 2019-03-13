@@ -18,7 +18,9 @@ angular.module('mean.icu.ui.notificationsheader', [])
                 // Handle the socket globally, in order to avoid duplicated connection in case
                 // angular destroys and re-initializes the module
                 if(window.socket) return;
-                window.socket = io();
+                window.socket = io({
+                    transports: ['websocket']
+                });
 
                 window.socket.on('connect', () => {
                     console.log('socket.id:', window.socket.id);
