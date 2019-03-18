@@ -455,15 +455,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
       return array.filter( entity => entity.status === value);
     }
 
-    function filterByParent(array, value) {
-      return array.filter(entity => {
-        let parent = entity[$stateParams.entity];
-        return parent && (value === parent || value === parent._id);
-      });
-    }
-
-    NotifyingService.subscribe('filterMyTasks', () => $scope.refreshVisibleItems(), $scope);
-    $scope.$on('refreshList', () => $scope.refreshVisibleItems());
+    NotifyingService.subscribe('filterMyTasks', () => $scope.refreshVisibleItems($scope.items), $scope);
+    $scope.$on('refreshList', () => $scope.refreshVisibleItems($scope.items));
 
     // ============================================================= //
     // ======================== Permissions ======================== //
