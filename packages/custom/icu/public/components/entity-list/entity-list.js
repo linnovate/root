@@ -7,6 +7,8 @@
 
 function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService, PermissionsService, MultipleSelectService, NotifyingService) {
 
+    document.me = $scope.me.id;
+    
     // ============================================================= //
     // ========================= navigate ========================== //
     // ============================================================= //
