@@ -284,7 +284,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
       }
       activeTitleTimeout = setTimeout(function() {
         $scope.update($scope.item, 'title')
-      }, 1000);
+      }, 2000);
     }
   });
 
