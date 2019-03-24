@@ -142,6 +142,9 @@ angular.module('mean.icu').config([
                         return TasksService.getTags().then(function (tags) {
                             return tags;
                         });
+                    },
+                    subtasks: function(TasksService, $stateParams) {
+                        return TasksService.getSubTasks($stateParams.id)
                     }
                 }
             };
@@ -186,7 +189,7 @@ angular.module('mean.icu').config([
                             return tags;
                         });
                     },
-                    projects: function (ProjectsService, $stateParams) {
+                    subprojects: function (ProjectsService, $stateParams) {
                         return ProjectsService.getSubProjects($stateParams.id)
                     }
                 }
