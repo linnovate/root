@@ -1,14 +1,18 @@
+const path = require('path');
 const mongodb = require('mongodb');
 const ProgressBar = require('progress');
 
-const URL = 'mongodb://localhost';
-const database = 'icu-dev';
+const URL = process.env.MONGODB_URI || process.argv[2];
+if(!URL) {
+  console.log(`Usage: node ${path.basename(__filename)} mongodb://<host>:<port>/<db>`)
+  process.exit(1)
+}
 const collection = 'updates';
 
 const limit = undefined;
 
 mongodb.connect(URL).then(client => {
-  let db = client.db(database);
+  let db = client.db();
   let coll = db.collection(collection);
 
   coll.count({}, { limit }, (err, count) => {
