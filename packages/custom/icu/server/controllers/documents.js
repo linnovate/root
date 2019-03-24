@@ -2225,7 +2225,7 @@ exports.create = function(req, res, next) {
       if(parentId && parentObj){
         // solution for mongo issue adding data to array,
         // because of $pushAll that is deprecated since v2.4
-        parentObj.officeDocuments = parentObj.officeDocuments.concat([newDocument]);
+        parentObj.officeDocuments = (parentObj.officeDocuments || []).concat([newDocument]);
 
         parentObj.save(error => {
           if (error) {
