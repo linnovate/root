@@ -31,7 +31,7 @@ function getUpdateEntities(req, res, next) {
             continue;
         }
         Promises.push(
-            new Promise( resolve => {
+            new Promise((resolve, reject) => {
                 if(_.includes(allEntitiesIds, activity.entity)){
                     activity.entityObj = allEntities.find( entity => entity._id === activity.entity );
                     return resolve();
@@ -44,7 +44,7 @@ function getUpdateEntities(req, res, next) {
                     .populate('folder')
                     .populate('office')
                     .then(doc => {
-                        if(!doc) throw new HttpError(404);
+                        if(!doc) return reject(new HttpError(404));
 
                         activity.entityObj = doc;
                         allEntities.push(doc);
@@ -61,6 +61,9 @@ function getUpdateEntities(req, res, next) {
         })
         .then( userObjects => {
             res.status(200).send({activities: activities, entities: allEntities, users: userObjects});
+        })
+        .catch(err => {
+            next(err)
         });
 }
 
