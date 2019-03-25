@@ -7,10 +7,13 @@
 
 function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService, PermissionsService, MultipleSelectService, NotifyingService) {
 
+    document.me = $scope.me.id;
+    
     // ============================================================= //
     // ========================= navigate ========================== //
     // ============================================================= //
     $scope.unifiedRowTpl = '/icu/components/entity-list/regions/row.html';
+    getParentName();
 
     $scope.isCurrentEntityState = function(id) {
         return $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity`) === 0 && $state.current.name.indexOf('details') === -1;
@@ -86,7 +89,18 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         // if(elementBottom > listBottom)list.scrollTop = elem.offsetTop;
         if(elementBottom > listBottom)
             elem.scrollIntoView({ behavior: 'smooth' });
+    }
 
+    function getParentName(){
+        if(!$scope.currentContext.entityId) return;
+        let parentEntity = $scope.currentContext.entity;
+        $scope.parentName = parentEntity && (parentEntity.title || parentEntity.name);
+
+        if(!$scope.parentName){
+            EntityService.getByEntityId(context.entityName + 's', context.entityId).then(entity => {
+                $scope.parentName = entity.title;
+            });
+        }
     }
 
     // ============================================================= //
@@ -455,8 +469,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
       return array.filter( entity => entity.status === value);
     }
 
-    NotifyingService.subscribe('filterMyTasks', () => $scope.refreshVisibleItems($scope.items), $scope);
-    $scope.$on('refreshList', () => $scope.refreshVisibleItems($scope.items));
+    NotifyingService.subscribe('filterMyTasks', () => $scope.refreshVisibleItems(), $scope);
+    $scope.$on('refreshList', () => $scope.refreshVisibleItems());
 
     // ============================================================= //
     // ======================== Permissions ======================== //

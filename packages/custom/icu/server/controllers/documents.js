@@ -310,9 +310,16 @@ function documentsQueryToExcelServiceFormat(docs, indexMapper) {
     index++;
     return row;
   });
-  return excel.json2workbook({
+  let createdArray = _.map(filteredDocs, doc => {
+  return [
+    doc.created
+  ];
+  });
+  return excel.json2workbookWithDates({
     rows: docArray,
+    dates:createdArray,
     columns: ["אינדקס", "תקייה", "כותרת מסמך", "סימוכין"],
+    datesColumns:["תאריך יצירה"],
     columnsBold: true
   });
 }
@@ -2218,7 +2225,7 @@ exports.create = function(req, res, next) {
       if(parentId && parentObj){
         // solution for mongo issue adding data to array,
         // because of $pushAll that is deprecated since v2.4
-        parentObj.officeDocuments = parentObj.officeDocuments.concat([newDocument]);
+        parentObj.officeDocuments = (parentObj.officeDocuments || []).concat([newDocument]);
 
         parentObj.save(error => {
           if (error) {

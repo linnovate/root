@@ -126,8 +126,15 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     $scope.update($scope.item, 'status');
   }
 
-  $scope.onDateDue = function(value) {
-    $scope.update($scope.item, 'deadline');
+  $scope.onDateDue = function(value, field) {
+    switch(field) {
+      case 'startDue':
+        $scope.update($scope.item, 'startDate');
+        break;
+      case 'endDue':
+        $scope.update($scope.item, 'endDate');
+        break;
+    }
   }
 
   $scope.onTags = function(value) {
@@ -312,8 +319,16 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   $scope.update = function(discussion, type) {
     DiscussionsService.update(discussion);
     switch (type) {
-    case 'deadline':
-      DiscussionsService.updateDeadline(discussion, $scope.me, backupEntity).then(function(result) {
+    case 'startDate':
+      DiscussionsService.updateStartDate(discussion, $scope.me, backupEntity).then(function(result) {
+        backupEntity = angular.copy($scope.item);
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+      });
+      break;
+
+    case 'endDate':
+      DiscussionsService.updateEndDate(discussion, $scope.me, backupEntity).then(function(result) {
         backupEntity = angular.copy($scope.item);
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
