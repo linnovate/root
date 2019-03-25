@@ -454,8 +454,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
 
         if($scope.sorting.field.value === 'created')
-          newArray = newArray.forEach(entity => entity.created = new Date(entity.created));
-
+            newArray.forEach(entity => entity.created = new Date(entity.created));
         newArray = $filter('orderBy')(newArray, $scope.sorting.field.value, $scope.sorting.isReverse);
 
         return newArray;
