@@ -90,15 +90,14 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }
 
     function getParentName(){
-      if(!$scope.currentContext.entityId)return '';
-      let parentEntity = $scope.currentContext.entity,
-        parentName = parentEntity && (parentEntity.title ? parentEntity.title : parentEntity.name);
+        if(!$scope.currentContext.entityId) return;
+        let parentEntity = $scope.currentContext.entity;
+        $scope.parentName = parentEntity && (parentEntity.title || parentEntity.name);
 
-        if(!parentName){
-          EntityService.getByEntityId(context.entityName + 's', context.entityId).then(entity => {
-            parentEntity = entity;
-            $scope.parentName = entity.title;
-          });
+        if(!$scope.parentName){
+            EntityService.getByEntityId(context.entityName + 's', context.entityId).then(entity => {
+                $scope.parentName = entity.title;
+            });
         }
     }
 
