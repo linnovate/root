@@ -117,31 +117,21 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
     $scope.recycle = function() {
         EntityService.recycle('folders', $scope.item._id).then(function() {
+            $scope.item.recycled = new Date();
             let clonedEntity = angular.copy($scope.item);
-            clonedEntity.status = "Recycled"
+            clonedEntity.status = "Recycled";
             // just for activity status
             FoldersService.updateStatus(clonedEntity, $scope.item).then(function(result) {
                 ActivitiesService.data.push(result);
             });
 
             refreshList();
-            if (currentState.indexOf('search') != -1) {
-                $state.go(currentState, {
-                    entity: context.entityName,
-                    entityId: context.entityId
-                }, {
-                    reload: true,
-                    query: $stateParams.query
-                });
-            } else {
-                $state.go('main.folders.all', {
-                    entity: 'all'
-                }, {
-                    reload: true
-                });
-            }
+            $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+            $scope.permsToSee();
+            $scope.havePermissions();
+            $scope.haveEditiorsPermissions();
         });
-    }
+    };
 
     $scope.recycleRestore = function() {
         EntityService.recycleRestore('folders', $scope.item._id).then(function() {

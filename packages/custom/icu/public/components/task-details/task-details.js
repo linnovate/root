@@ -153,6 +153,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
   $scope.recycle = function() {
     TasksService.removeFromParent($scope.item).then(()=>{
       EntityService.recycle('tasks', $scope.item._id).then(function() {
+        $scope.item.recycled = new Date();
         let clonedEntity = angular.copy($scope.item);
         clonedEntity.status = "deleted";
         // just for activity status
@@ -161,23 +162,10 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
         });
 
         refreshList();
-        if (currentState.indexOf('search') != -1) {
-          $state.go(currentState, {
-            entity: context.entityName,
-            entityId: context.entityId
-          }, {
-            reload: true,
-            query: $stateParams.query
-          });
-        } else {
-          var state = context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-          $state.go(state, {
-            entity: context.entityName,
-            entityId: context.entityId
-          }, {
-            reload: true
-          });
-        }
+        $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+        $scope.permsToSee();
+        $scope.havePermissions();
+        $scope.haveEditiorsPermissions();
       });
     })
   }
