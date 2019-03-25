@@ -9,6 +9,8 @@
         pointer-events: none;
         position: absolute;
         color: $light-grey-placeholder;
+        top: 50%;
+        transform: translateY(-50%);
     }
 
     input {

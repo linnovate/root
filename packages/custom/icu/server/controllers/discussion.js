@@ -185,7 +185,6 @@ exports.summary = function(req, res, next) {
 
   var allowedStatuses = ['scheduled'];
   if(allowedStatuses.indexOf(discussion.status) === -1) {
-    utils.checkAndHandleError(true, 'Cannot send summary for this status', next);
     req.locals.error = {
       message: 'Cannot send summary for this status'
     };
@@ -280,7 +279,6 @@ exports.cancele = function(req, res, next) {
 
   var allowedStatuses = ['canceled'];
   if(allowedStatuses.indexOf(discussion.status) === -1) {
-    utils.checkAndHandleError(true, 'Cannot send cancele for this status', next);
     req.locals.error = {
       message: 'Cannot send cancele for this status'
     };

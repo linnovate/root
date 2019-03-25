@@ -310,9 +310,16 @@ function documentsQueryToExcelServiceFormat(docs, indexMapper) {
     index++;
     return row;
   });
-  return excel.json2workbook({
+  let createdArray = _.map(filteredDocs, doc => {
+  return [
+    doc.created
+  ];
+  });
+  return excel.json2workbookWithDates({
     rows: docArray,
+    dates:createdArray,
     columns: ["אינדקס", "תקייה", "כותרת מסמך", "סימוכין"],
+    datesColumns:["תאריך יצירה"],
     columnsBold: true
   });
 }
@@ -345,7 +352,12 @@ exports.getByTaskId = function(req, res, next) {
   let officeDocumentId = req.params.id;
 
     Document.findOne({ _id: officeDocumentId })
-      .populate("tasks")
+      .populate({
+        path: 'tasks',
+        populate: {
+          path: 'subTasks'
+        }
+      })
       .exec(function(err, doc) {
         req.locals.data.pagination.count = doc.tasks.length || 0;
         req.locals.result = doc.tasks || [];
@@ -2198,7 +2210,7 @@ exports.create = function(req, res, next) {
             error: error.message
           });
 
-          res.send(error);
+          req.locals.error = error;
           return reject(error);
         } else {
           logger.log("info", "%s create, %s", req.user.name, "success with folder");
@@ -2211,12 +2223,14 @@ exports.create = function(req, res, next) {
       })
     }).then(newDocument => {
       if(parentId && parentObj){
-        parentObj.officeDocuments = newDocument._id;
+        // solution for mongo issue adding data to array,
+        // because of $pushAll that is deprecated since v2.4
+        parentObj.officeDocuments = (parentObj.officeDocuments || []).concat([newDocument]);
+
         parentObj.save(error => {
           if (error) {
             logger.log("error", "%s create, %s", req.user.name, " obj.save", { error: error.message });
-
-            res.send(error);
+            req.locals.error = error;
           }
           return next();
         });
@@ -2675,8 +2689,8 @@ exports.update = function(req, res, next) {
           );
         }
         var spPath = doc.spPath;
-        if (spPath) {
-          var oldAssign = doc.assign;
+        var oldAssign = doc.assign;
+        if (spPath && String(oldAssign) !== String(req.body.newVal)) {
           var assignReq = [
             {
               UserId: req.body.newVal
@@ -2795,7 +2809,7 @@ exports.update = function(req, res, next) {
               );
 
               if (req.body.name == "due") {
-                Document.findOne({ _id: req.params.id }).populate('folder').exec(function(err, doc) {
+                Document.findOne({ _id: req.params.id }).populate('watchers folder').exec(function(err, doc) {
                   console.log(err, doc)
                   if (err)
                     logger.log(
@@ -2835,7 +2849,9 @@ function addWatcherOrPermissionIfNotExist(arrayOfExisting, arrayOfAdding){
 }
 
 function addAssignToWatchers(doc, assignId){
-  let watcherExists = doc.watchers.find(watcher => watcher._id === assignId);
+  let watcherExists = doc.watchers.find(watcher => {
+    return String(watcher._id || watcher) === assignId;
+  });
 
   if (!watcherExists){
     doc.watchers.push(doc.assign);

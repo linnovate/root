@@ -35,7 +35,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
   $scope.offices = offices.data || offices;
 
   // backup for previous changes - for updates
-  var backupEntity = JSON.parse(JSON.stringify($scope.item));
+  var backupEntity = angular.copy($scope.item);
 
   $scope.people = people.data || people;
 
@@ -117,7 +117,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
     $scope.recycle = function() {
         EntityService.recycle('folders', $scope.item._id).then(function() {
-            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "Recycled"
             // just for activity status
             FoldersService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -145,7 +145,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
     $scope.recycleRestore = function() {
         EntityService.recycleRestore('folders', $scope.item._id).then(function() {
-            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "un-deleted";
             // just for activity status
             FoldersService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -187,24 +187,29 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
   // ==================================================== Category ==================================================== //
 
-  function removeDuplicates(objArr, prop) {
-    return objArr.filter((obj, pos, arr) => {
-      return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-    });
+  function unionById(arr1, arr2){
+    let existing = arr1.map(e => (e.id || e._id).toString());
+    arr2.forEach(e => {
+      let id = (e.id || e._id).toString();
+      if(!existing.includes(id)) {
+        arr1.push(e);
+      }
+    })
+    return arr1;
   }
 
   $scope.onCategory = function(value) {
 
     if (value) {
       $scope.item.office = value;
-      $scope.item.watchers = $scope.item.watchers.concat($scope.item.office.watchers);
-      $scope.item.watchers = removeDuplicates($scope.item.watchers, '_id')
+      $scope.item.watchers = unionById($scope.item.watchers, $scope.item.office.watchers);
+      $scope.item.permissions = unionById($scope.item.permissions, $scope.item.office.permissions);
     } else {
       $scope.item.office = {}
     }
 
     FoldersService.update($scope.item).then(function(result) {
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        backupEntity = angular.copy($scope.item);
       let officeId = result.office ? result.office._id : undefined;
       $state.go('main.folders.byentity.details', {
         entity: context.entityName,
@@ -272,7 +277,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
       switch (context.name) {
       case 'status':
         FoldersService.updateStatus(folder, me, backupEntity).then(function(result) {
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
           refreshList();
@@ -281,21 +286,21 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
       case 'star':
         FoldersService.updateStar(folder, me, backupEntity).then(function(result) {
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
         break;
       case 'title':
           FoldersService.updateTitle(folder, me, backupEntity).then(function(result) {
-              backupEntity = JSON.parse(JSON.stringify($scope.item));
+              backupEntity = angular.copy($scope.item);
               ActivitiesService.data = ActivitiesService.data || [];
               ActivitiesService.data.push(result);
           });
           break;
       case 'description':
         FoldersService.updateDescription(folder, me, backupEntity).then(function(result) {
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });

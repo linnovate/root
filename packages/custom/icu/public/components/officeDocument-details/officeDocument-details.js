@@ -48,7 +48,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
   var currentState = $state.current.name;
 
   // backup for previous changes - for updates
-  var backupEntity = JSON.parse(JSON.stringify($scope.item));
+  var backupEntity = angular.copy($scope.item);
 
   $scope.people = people.data || people;
   if ($scope.people.length && $scope.people[$scope.people.length - 1].name !== 'no select') {
@@ -203,7 +203,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
         $scope.item.watchers = doc.watchers;
         $scope.item.permissions = doc.permissions;
 
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        backupEntity = angular.copy($scope.item);
       })
     });
   };
@@ -219,7 +219,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.recycle = function() {
     EntityService.recycle('officeDocuments', $scope.item._id).then(function() {
-      let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+      let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "Recycled";
       // just for activity status
       OfficeDocumentsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -247,7 +247,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
 
   $scope.recycleRestore = function() {
     EntityService.recycleRestore('officeDocuments', $scope.item._id).then(function() {
-      let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+      let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "un-deleted"
       // just for activity status
       OfficeDocumentsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -472,35 +472,35 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
       switch (context.name) {
         case 'due':
           OfficeDocumentsService.updateDue(officeDocument, me, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
           });
           break;
         case 'star':
           OfficeDocumentsService.updateStar(officeDocument, me, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
           });
           break;
         case 'tags':
           OfficeDocumentsService.updateTags(officeDocument, me, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
           });
           break;
         case 'assign':
           OfficeDocumentsService.updateAssign(officeDocument, me, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
           });
           break;
         case 'status':
           OfficeDocumentsService.updateStatus(officeDocument, me, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
             refreshList();
@@ -508,7 +508,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
           break;
         case 'title':
           OfficeDocumentsService.updateTitle(officeDocument, me, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
             refreshList();
@@ -516,7 +516,7 @@ function OfficeDocumentDetailsController($scope, $rootScope, entity, tasks, peop
           break;
         case 'description':
           OfficeDocumentsService.updateDescription(officeDocument, me, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
             refreshList();

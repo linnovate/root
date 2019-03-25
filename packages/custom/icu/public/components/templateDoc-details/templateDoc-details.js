@@ -41,13 +41,26 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
       'name': 'office',
       'newVal': value && value._id,
     };
-    TemplateDocsService.updateTemplateDoc($scope.item._id, json);
+    TemplateDocsService.updateTemplateDoc($scope.item._id, json)
+    .then(result =>renavigateToDetails(result));
+  };
+
+  function renavigateToDetails(templateDoc) {
+    $scope.detailsState = context.entityName === "all" ? "main.templateDocs.all.details" : "main.templateDocs.byentity.details";
+    $state.go($scope.detailsState, {
+      id: templateDoc._id,
+      entity: context.entityName,
+      entityId: context.entityId,
+      starred: $stateParams.starred
+    }, {
+      reload: true
+    });
   }
 
   // ==================================================== Menu events ==================================================== //
     $scope.recycle = function() {
         EntityService.recycle('templateDocs', $scope.item._id).then(function() {
-            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "Recycled";
 
             refreshList();
@@ -71,7 +84,7 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
 
     $scope.recycleRestore = function() {
         EntityService.recycleRestore('templateDocs', $scope.item._id).then(function() {
-            let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+            let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "un-deleted"
 
             refreshList();

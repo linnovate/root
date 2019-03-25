@@ -110,11 +110,29 @@ angular.module('mean.icu.data.templatedocsservice', [])
             });
         }
 
+        function update(entity, context, watcherAction, watcherId){
+            let json;
+            if(watcherAction != null && (watcherAction === 'removed' || watcherAction === 'added')){
+              json = {
+                name: 'watchers',
+                newVal: entity.watchers
+              };
+            }
+            else json = {
+                name: 'permissions',
+                newVal: entity.permissions
+            }
+    
+            return updateTemplateDoc(entity._id, json);
+        }
+
         function updateTemplateDoc(id, data) {
             return $http.post(ApiUri + EntityPrefix +'/'+ id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
                 getById(id).then(entitiesArray=>BoldedService.boldedUpdate(entitiesArray[0], 'templateDocs', 'update'));
-                return result.data;
+                return {
+                    _id: id
+                };
             });
         }
         function create(templateDoc) {
@@ -132,6 +150,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
                 file: file
             });
         }
+
         return {
             delete:deleteTemplate,
             getById: getById,
@@ -141,6 +160,7 @@ angular.module('mean.icu.data.templatedocsservice', [])
             getByDiscussionId: getByDiscussionId,
             getByUserId: getByUserId,
             saveTemplateDoc: saveTemplateDoc,
+            update: update,
             updateTemplateDoc: updateTemplateDoc,
             getByOfficeId: getByOfficeId,
             getByFolderId: getByFolderId,

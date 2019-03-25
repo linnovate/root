@@ -2,7 +2,7 @@
 
 angular.module('mean.icu.ui.projectdetails', []).controller('ProjectDetailsController', ProjectDetailsController);
 
-function ProjectDetailsController($scope, $rootScope, entity, tags, people, projects, $timeout, context, $state, ProjectsService, ActivitiesService, TasksService, PermissionsService, EntityService, $stateParams, me, $window, $uibModal, DetailsPaneService) {
+function ProjectDetailsController($scope, $rootScope, entity, tags, people, projects, subprojects, $timeout, context, $state, ProjectsService, ActivitiesService, TasksService, PermissionsService, EntityService, $stateParams, me, $window, $uibModal, DetailsPaneService) {
 
   // ==================================================== init ==================================================== //
 
@@ -33,11 +33,13 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   }
 
   $scope.items = projects.data || projects;
+  $scope.item.subProjects = subprojects.data || subprojects;
 
   $scope.editorOptions = {
     theme: 'bootstrap',
     buttons: ['bold', 'italic', 'underline', 'anchor', 'quote', 'orderedlist', 'unorderedlist']
   };
+
   $scope.statuses = ['new', 'assigned', 'in-progress', 'canceled', 'done', 'archived'];
 
   $scope.me = me;
@@ -46,7 +48,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   let currentState = $state.current.name;
 
   // backup for previous changes - for updates
-  var backupEntity = JSON.parse(JSON.stringify($scope.item));
+  var backupEntity = angular.copy($scope.item);
 
   $scope.people = people.data || people;
   if($scope.people.length && $scope.people[$scope.people.length - 1].name !== 'no select') {
@@ -106,7 +108,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
     }
 
     ProjectsService.updateDue($scope.item, $scope.me, backupEntity).then(function (result) {
-      backupEntity = JSON.parse(JSON.stringify($scope.item));
+      backupEntity = angular.copy($scope.item);
       ActivitiesService.data.push(result);
     });
 
@@ -162,7 +164,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   $scope.recycle = function() {
     ProjectsService.removeFromParent($scope.item).then(()=>{
       EntityService.recycle('projects', $scope.item._id).then(function() {
-        let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+        let clonedEntity = angular.copy($scope.item);
         clonedEntity.status = 'Recycled';
         // just for activity status
         ProjectsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -194,7 +196,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   $scope.recycleRestore = function() {
     ProjectsService.addToParent($scope.item).then(()=>{
       EntityService.recycleRestore('projects', $scope.item._id).then(function() {
-        let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+        let clonedEntity = angular.copy($scope.item);
         clonedEntity.status = 'un-deleted';
         // just for activity status
         ProjectsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -356,7 +358,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
       }
 
       ProjectsService.assign(project, me, backupEntity).then(function(res) {
-        backupEntity = JSON.parse(JSON.stringify(result));
+        backupEntity = angular.copy(result);
         ActivitiesService.data.push(res);
       });
     });
@@ -384,7 +386,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
         }
 
         ProjectsService.updateStatus(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
           refreshList();
@@ -392,21 +394,21 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
         break;
       case 'star':
         ProjectsService.updateStar(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
         break;
       case 'tags':
         ProjectsService.updateTags(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
         });
         break;
       case 'title':
         ProjectsService.updateTitle(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
           refreshList();
@@ -414,7 +416,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
         break;
       case 'description':
         ProjectsService.updateDescription(item, $scope.me, backupEntity).then(function(result) {
-          backupEntity = JSON.parse(JSON.stringify($scope.item));
+          backupEntity = angular.copy($scope.item);
           ActivitiesService.data = ActivitiesService.data || [];
           ActivitiesService.data.push(result);
           refreshList();

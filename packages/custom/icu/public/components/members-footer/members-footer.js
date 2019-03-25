@@ -44,6 +44,18 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
             });
 
+            function renavigateToDetails(entity) {
+                $scope.detailsState = context.entityName === "all" ? `main.${context.main}.all.details` : `main.${context.main}.byentity.details`;
+                $state.go($scope.detailsState, {
+                  id: entity._id,
+                  entity: context.entityName,
+                  entityId: context.entityId,
+                  starred: $stateParams.starred
+                }, {
+                  reload: true
+                });
+              }
+
             function changePerms(member, newPerms){
                 $scope.entity = PermissionsService.changeUsersPermissions($scope.entity, member, newPerms, context);
             }
@@ -159,7 +171,8 @@ angular.module('mean.icu.ui.membersfooter', [])
                     return service.update(entity,json, action, member._id);
                 }
                 else{
-                    return service.update(entity, data, action, member._id);
+                    return service.update(entity, data, action, member._id)
+                        .then(entity => renavigateToDetails(entity));
                 }
 
 
@@ -246,7 +259,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     }
                 }
 
-                let backupEntity = JSON.parse(JSON.stringify($scope.entity));
+                let backupEntity = angular.copy($scope.entity);
                 update($scope.entity, member, 'added')
                   .then(updatedEntity => {
                     let { watchers, permissions } = updatedEntity;
@@ -310,11 +323,14 @@ angular.module('mean.icu.ui.membersfooter', [])
                     });
                 } else {
                     $scope.entity.watchers = _.reject($scope.entity.watchers, function(mem) {
-                        return _.isEqual(member, mem);
+                        return member._id === mem._id;
+                    });
+                    $scope.entity.permissions = _.reject($scope.entity.permissions, function(mem) {
+                        return member._id === mem.id;
                     });
                 }
 
-                const backupEntity = JSON.parse(JSON.stringify($scope.entity));
+                const backupEntity = angular.copy($scope.entity);
                 update($scope.entity, member, 'removed');
 
                 var task = $scope.entity ;

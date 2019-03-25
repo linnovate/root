@@ -12,7 +12,7 @@ var passiveDataSrtuctureDecorator = function($delegate) {
         for (var i = 0; i < keys.length; i+=1) {
             var property = data[keys[i]];
 
-            if (keys[i] === 'title') {
+            if (keys[i] === 'title' && typeof property === 'string') {
                 data[keys[i]] = property.trim();
             }
 

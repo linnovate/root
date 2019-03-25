@@ -42,7 +42,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   var currentState = $state.current.name;
 
   // backup for previous changes - for updates
-  var backupEntity = JSON.parse(JSON.stringify($scope.item));
+  var backupEntity = angular.copy($scope.item);
 
   if ($scope.people.length && $scope.people[$scope.people.length - 1].name !== 'no select') {
     var newPeople = {
@@ -126,8 +126,15 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     $scope.update($scope.item, 'status');
   }
 
-  $scope.onDateDue = function(value) {
-    $scope.update($scope.item, 'deadline');
+  $scope.onDateDue = function(value, field) {
+    switch(field) {
+      case 'startDue':
+        $scope.update($scope.item, 'startDate');
+        break;
+      case 'endDue':
+        $scope.update($scope.item, 'endDate');
+        break;
+    }
   }
 
   $scope.onTags = function(value) {
@@ -139,7 +146,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
   $scope.recycle = function() {
     EntityService.recycle('discussions', $scope.item._id).then(function() {
-      let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+      let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "Recycled"
       // just for activity status
       DiscussionsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -167,7 +174,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
   $scope.recycleRestore = function() {
     EntityService.recycleRestore('discussions', $scope.item._id).then(function() {
-      let clonedEntity = JSON.parse(JSON.stringify($scope.item));
+      let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "un-deleted"
       // just for activity status
       DiscussionsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
@@ -322,9 +329,17 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
   $scope.update = function(discussion, type) {
     DiscussionsService.update(discussion);
     switch (type) {
-    case 'deadline':
-      DiscussionsService.updateDeadline(discussion, $scope.me, backupEntity).then(function(result) {
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
+    case 'startDate':
+      DiscussionsService.updateStartDate(discussion, $scope.me, backupEntity).then(function(result) {
+        backupEntity = angular.copy($scope.item);
+        ActivitiesService.data = ActivitiesService.data || [];
+        ActivitiesService.data.push(result);
+      });
+      break;
+
+    case 'endDate':
+      DiscussionsService.updateEndDate(discussion, $scope.me, backupEntity).then(function(result) {
+        backupEntity = angular.copy($scope.item);
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
       });
@@ -332,7 +347,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
     case 'star':
       DiscussionsService.updateStar(discussion, $scope.me, backupEntity).then(function(result) {
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        backupEntity = angular.copy($scope.item);
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
         refreshList();
@@ -341,7 +356,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
     case 'tags':
       DiscussionsService.updateTags(discussion, $scope.me, backupEntity).then(function(result) {
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        backupEntity = angular.copy($scope.item);
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
         refreshList();
@@ -350,7 +365,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
     case 'status':
       DiscussionsService.updateStatus(discussion, $scope.me, backupEntity).then(function(result) {
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        backupEntity = angular.copy($scope.item);
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
         refreshList();
@@ -359,7 +374,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
     case 'location':
       DiscussionsService.updateLocation(discussion, $scope.me, backupEntity).then(function(result) {
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        backupEntity = angular.copy($scope.item);
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
       });
@@ -380,14 +395,14 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
       }
 
       DiscussionsService.updateAssign(discussion, $scope.me, backupEntity).then(function(result) {
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        backupEntity = angular.copy($scope.item);
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
       });
       break;
     case 'description':
         DiscussionsService.updateDescription(discussion, $scope.me, backupEntity).then(function(result) {
-            backupEntity = JSON.parse(JSON.stringify($scope.item));
+            backupEntity = angular.copy($scope.item);
             ActivitiesService.data = ActivitiesService.data || [];
             ActivitiesService.data.push(result);
             refreshList();
@@ -395,7 +410,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
         break;
     case 'title':
       DiscussionsService.updateTitle(discussion, $scope.me, backupEntity).then(function(result) {
-        backupEntity = JSON.parse(JSON.stringify($scope.item));
+        backupEntity = angular.copy($scope.item);
         ActivitiesService.data = ActivitiesService.data || [];
         ActivitiesService.data.push(result);
         refreshList();
@@ -441,7 +456,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
             }
 
             DiscussionsService.updateAssign(item, $scope.me, backupEntity).then(function(res) {
-                backupEntity = JSON.parse(JSON.stringify(result));
+                backupEntity = angular.copy(result);
                 ActivitiesService.data.push(res);
             });
         });
