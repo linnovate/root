@@ -28,73 +28,40 @@ mongodb.connect(URL).then(client => {
       let updated = switchMigrate(doc);
 
       if(!updated) {
+
+        // Remove activity as we don't need it anymore
         coll.remove({ _id: doc._id }, (err) => {
           if(err) throw err;
+          tick(bar, client);
         })
       } else if(!updated.updateField) {
         console.log('Coulndn\'t migrate', doc, updated)
       } else {
-        coll.update({ _id: doc._id }, updated, (err, res) => {
+
+        // Check if entity refered by the activity exists
+        db.collection(updated.entityType + 's').count({ _id: updated.entity}, (err, count) => {
           if(err) throw err;
-          // console.log(doc._id, res.result);
+          if(!count) {
+            coll.remove({ _id: doc._id }, (err) => {
+              if(err) throw err;
+              tick(bar, client);
+            })
+          } else {
+            coll.update({ _id: doc._id }, updated, (err, res) => {
+              if(err) throw err;
+              tick(bar, client);
+            })
+          }
         })
       }
-      bar.tick();
-    }, client.close.bind(client))
+    })
   })
-
 })
 
-let updateFieldMap = {
-  assign: 'assign',
-  assignNew: 'assign',
-  comment: 'comment',
-  create: 'create',
-  document: 'attachment',
-  documentDelete: 'attachment',
-  removeWatcher: 'watcher',
-  unassign: 'assign',
-  update: '',
-  updateColor: 'color',
-  updateCreated: '',
-  updateDescription: 'description',
-  updateDue: 'due',
-  updateEntity: '',
-  updateLocation: 'location',
-  updateNewDescription: 'description',
-  updateNewEntity: '',
-  updateNewLocation: 'location',
-  updateNewTitle: 'title',
-  updateStatus: 'status',
-  updateTitle: 'title',
-  updateWatcher: 'watcher',
-  updateWatcherPerms: 'watcher'
-};
-
-function migrate(doc) {
-  let {
-    creator,
-    issueId,
-    issue,
-    type,
-    created,
-    status,
-    prev,
-    entity,
-    entityType,
-    updateField,
-    date,
-    current
-  } = doc;
-
-  return {
-    creator: creator,
-    entity: issueId || entity,
-    entityType: issue || entityType,
-    updateField: updateFieldMap[type] || updateField,
-    date: created || date,
-    current: status || current,
-    prev: prev
+function tick(bar, client) {
+  bar.tick();
+  if(bar.curr === bar.total) {
+    client.close();
   }
 }
 
