@@ -26,7 +26,7 @@ const UpdateSchema = new Schema({
           'create',
           'star', 'due', 'status', 'assign', 'location',
           'title', 'description', 'tags', 'comment', 'attachment',
-          'watchers', 'deadline'
+          'watchers', 'startDate', 'endDate'
       ]
   },
   date: {

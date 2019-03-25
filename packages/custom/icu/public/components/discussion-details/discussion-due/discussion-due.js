@@ -21,14 +21,13 @@ function DiscussionDue() {
 
   function link($scope, element, attrs) {
 
-    atStart();
+    castToDate();
 
     $scope.$on('updateDiscussionDue', () => {
-      atStart();
+      castToDate();
     });
 
-    function atStart(){
-      $scope.fade = false;
+    function castToDate(){
       if ($scope.item.startDate) {
         $scope.item.startDate = new Date($scope.item.startDate);
       }
@@ -41,36 +40,30 @@ function DiscussionDue() {
       if ($scope.item.endTime) {
         $scope.item.endTime = new Date($scope.item.endTime);
       }
+    }
 
-      $(document).ready(function() {
-        let dueDiv = document.getElementById('dueDiv');
-        if(!dueDiv)return;
+    $scope.fade = false;
+    $(document).ready(function() {
+      let dueDiv = document.getElementById('dueDiv');
+      if(!dueDiv)return;
 
-        $scope.updateDatesString();
-        $('uib-timepicker').datepicker();
+      $scope.updateDatesString();
+      $('uib-timepicker').datepicker();
 
-        if ($scope.item.allDay) {
-          dueDiv.style.height = '96px';
-        } else {
-          dueDiv.style.height = '370px';
+      if ($scope.item.allDay) {
+        dueDiv.style.height = '96px';
+      } else {
+        dueDiv.style.height = '370px';
+      }
+    });
+
+    $(document).click(function(event) {
+      if ((!$(event.target).closest('.dueDiv').length) && (!$(event.target).closest('.detail-due').length)) {
+        if ($scope.fade) {
+          $scope.dueClicked();
         }
-      });
-
-      $(document).click(function(event) {
-        if ((!$(event.target).closest('.dueDiv').length) && (!$(event.target).closest('.detail-due').length)) {
-          if ($scope.fade) {
-            $scope.dueClicked();
-          }
-        }
-      });
-    }
-
-    $scope.dueClicked = function() {
-      $scope.showDue = true;
-    }
-    $scope.dueBlur = function() {
-      $scope.showDue = false;
-    }
+      }
+    });
 
     $scope.startDueOptions = {
       onSelect: function() {
