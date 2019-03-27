@@ -19,7 +19,7 @@ angular.module('mean.icu.data.inboxservice', [])
         }
 
       function getActivityDescription (activity) {
-        let creator = activity.creator.name;
+        let creator = getUser(activity.creator._id || activity.creator)
         switch (activity.updateField){
           case 'create' :
             let entityName = ( activity.entityObj && activity.entityObj.title) ? activity.entityObj.title || activity.entityObj : $i18next('this');
@@ -51,11 +51,11 @@ angular.module('mean.icu.data.inboxservice', [])
             let prevUser = activity.prev ? getUser(activity.prev._id || activity.prev) : null;
 
             if(currentUser && prevUser)
-              return `${creator} ${$i18next('assignedUser')} ${ currentUser.username} ${$i18next('and')} ${$i18next('unassign')} ${ prevUser.username}`;
+              return `${creator} ${$i18next('assignedUser')} ${currentUser} ${$i18next('and')} ${$i18next('unassign')} ${prevUser}`;
             else if(currentUser)
-              return `${creator} ${$i18next('assignedUser')} ${ currentUser.username}`;
+              return `${creator} ${$i18next('assignedUser')} ${currentUser}`;
             else if(prevUser)
-              return `${creator} ${$i18next('unassign')} ${ prevUser.username}`;
+              return `${creator} ${$i18next('unassign')} ${prevUser}`;
             else return $i18next('unassign');
             break;
           case 'location' :
@@ -80,7 +80,10 @@ angular.module('mean.icu.data.inboxservice', [])
       }
 
       function getUser(userId){
-        return users.find( user => user._id === userId)
+        let user = users.find(user => user._id === userId);
+        if(!user) return null;
+        let { name, lastname } = user;
+        return lastname ? `${name} ${lastname}` : name;
       }
 
         return {
