@@ -10,6 +10,7 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.userFilterList = SettingServices.getUserFilter();
         $scope.tasksList = [];
         $scope.projectsList = [];
+        $scope.discussionsList = [];
         $scope.officeDocumentsList = [];
 
         $rootScope.$on('changeStatus',function(){
@@ -161,39 +162,26 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.typeClicked = false;
 
         NotifyingService.subscribe('editionData', function () {
-            TasksService.getAll(0,25,'created').then(function (data) {
+            TasksService.getAll(0, 25, '-created').then(function (data) {
                 $scope.tasks = data.data || data;
-                $scope.tasksList = [];
-                $scope.tasks.forEach( t => {if(t.title)$scope.tasksList.push(t)});
+                $scope.tasksList = $scope.tasks.filter(t => t.title);
             });
 
-            ProjectsService.getAll(0,25,'created').then(function (data) {
+            ProjectsService.getAll(0, 25, '-created').then(function (data) {
                 $scope.projects = data.data || data;
-                $scope.projectsList = [];
-                $scope.projects.forEach( p => {if(p.title)$scope.projectsList.push(p)});
+                $scope.projectsList = $scope.projects.filter(p => p.title);
             });
 
-            DiscussionsService.getAll(0,25,'created').then(function (data) {
+            DiscussionsService.getAll(0, 25, '-created').then(function (data) {
                 $scope.discussions = data.data || data;
-                $scope.discussionsList = [];
-                $scope.officeDocuments.forEach( doc => {if(doc.title) $scope.officeDocumentsList.push(doc)});
+                $scope.discussionsList = $scope.discussions.filter(d => d.title);
             });
 
-            OfficeDocumentsService.getAll(0,25,'created').then(function (data) {
-                $scope.documents = data.data || data;
+            OfficeDocumentsService.getAll(0, 25, '-created').then(function (data) {
+                $scope.officeDocuments = data.data || data;
+                $scope.officeDocumentsList = $scope.officeDocuments.filter(d => d.title);
             });
 
-            OfficesService.getAll(0,25,'created').then(function (data) {
-                $scope.offices = data.data || data;
-            });
-
-            TemplateDocsService.getAll(0,25,'created').then(function (data) {
-                $scope.templateDocs = data.data || data;
-            });
-
-            UsersService.getAll(0,25,'created').then(function (data) {
-                $scope.people = data.data || data;
-            });
             $scope.createLists();
         }, $scope);
 
@@ -280,20 +268,6 @@ angular.module('mean.icu.ui.displayby', [])
             offices: $scope.offices,
             folders: $scope.folders
         };
-
-        // Reverse list in sideline
-        $scope.tasksList = $scope.tasksList.slice();
-        $scope.tasksList.reverse();
-        $scope.projectsList = $scope.projectsList.slice();
-        $scope.projectsList.reverse();
-        $scope.allItems.projects = $scope.allItems.projects.slice();
-        $scope.allItems.projects.reverse();
-        $scope.allItems.discussions = $scope.allItems.discussions.slice();
-        $scope.allItems.discussions.reverse();
-        $scope.discussions = $scope.discussions.slice();
-        $scope.discussions.reverse();
-        $scope.officeDocumentsList = $scope.officeDocumentsList.slice();
-        $scope.officeDocumentsList.reverse();
 
         $scope.context = context;
 

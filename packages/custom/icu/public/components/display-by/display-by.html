@@ -212,7 +212,7 @@
     </div>
     <!-- list discussions in: tasks and projects -->
     <div class="list discussions"
-         ng-if="discussions
+         ng-if="discussionsList
          && activeTab.display.indexOf('discussions') != -1
          && activeTab.name !== 'search'">
         <p ng-click="visible.discussion = !visible.discussion"
@@ -220,18 +220,18 @@
             {{ activeTab.name =='projects'
             ? 'projectsFromDiscussion'
             : 'tasksFromMeeting' | i18next }}</p>
-        <ul ng-if="visible.discussion && discussions.length !== 0">
-            <li data-ng-repeat="discussion in discussions | filterRecycled | limitTo:displayLimit['discussions']"
+        <ul ng-if="visible.discussion && discussionsList.length !== 0">
+            <li data-ng-repeat="discussion in discussionsList | filterRecycled | limitTo:displayLimit['discussions']"
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
                 <a href class="Names-In-List-On-Side" ng-bind-html="discussion.title || discussion.name">
                 </a>
             </li>
-            <li ng-if="discussions.length > displayLimit['discussions']"
-                ng-click="showMore(discussions.length, 'discussions')"
+            <li ng-if="discussionsList.length > displayLimit['discussions']"
+                ng-click="showMore(discussionsList.length, 'discussions')"
                 class="more">{{ 'more' | i18next }}
             </li>
-            <li ng-if="discussions.length == displayLimit['discussions'] && displayLimit['discussions'] > 3"
+            <li ng-if="discussionsList.length == displayLimit['discussions'] && displayLimit['discussions'] > 3"
                 ng-click="collapse('discussions')"
                 class="more">{{ 'less' | i18next }}
             </li>
