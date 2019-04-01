@@ -11,6 +11,16 @@ const collection = 'updates';
 
 const limit = undefined;
 
+const collMap = {
+  task: 'tasks',
+  project: 'projects',
+  discussion: 'discussions',
+  office: 'offices',
+  folder: 'folders',
+  officeDocument: 'documents',
+  templateDoc: 'template_docs'
+}
+
 mongodb.connect(URL).then(client => {
   let db = client.db();
   let coll = db.collection(collection);
@@ -23,7 +33,10 @@ mongodb.connect(URL).then(client => {
     cursor.forEach(doc => {
 
       // Skip if already migrated
-      if(doc.updateField) return;
+      if(doc.updateField) {
+        tick(bar, client);
+        return;
+      };
 
       let updated = switchMigrate(doc);
 
@@ -39,7 +52,7 @@ mongodb.connect(URL).then(client => {
       } else {
 
         // Check if entity refered by the activity exists
-        db.collection(updated.entityType + 's').count({ _id: updated.entity}, (err, count) => {
+        db.collection(collMap[updated.entityType]).count({ _id: updated.entity}, (err, count) => {
           if(err) throw err;
           if(!count) {
             coll.remove({ _id: doc._id }, (err) => {
@@ -66,6 +79,10 @@ function tick(bar, client) {
 }
 
 function switchMigrate(doc) {
+
+  if(doc.issue === 'officeDocuments') {
+    doc.issue = 'officeDocument';
+  }
 
   let result = {
     creator: doc.creator,
