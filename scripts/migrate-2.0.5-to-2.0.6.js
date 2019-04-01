@@ -41,12 +41,8 @@ mongodb.connect(URL).then(client => {
       let updated = switchMigrate(doc);
 
       if(!updated) {
-
-        // Remove activity as we don't need it anymore
-        coll.remove({ _id: doc._id }, (err) => {
-          if(err) throw err;
-          tick(bar, client);
-        })
+        // Don't touch the activity for now...
+        tick(bar, client);
       } else if(!updated.updateField) {
         console.log('Coulndn\'t migrate', doc, updated)
       } else {
@@ -165,13 +161,7 @@ function switchMigrate(doc) {
         result.current = doc.description;
       }
       break;
-    case 'updateEntity':
-    case 'updateNewEntity':
-    case 'updateWatcherPerms':
-      // In case of `updateWatcherPerms`, check the following field
-      //doc.permissions;
     default:
-      // Delete this item by returning false
       return false;
   }
 
