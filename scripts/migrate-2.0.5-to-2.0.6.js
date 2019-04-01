@@ -160,6 +160,11 @@ function switchMigrate(doc) {
       break;
     case 'document':
     case 'documentDelete':
+      result.updateField = 'attachment';
+      if(doc.description) {
+        result.current = doc.description;
+      }
+      break;
     case 'updateEntity':
     case 'updateNewEntity':
     case 'updateWatcherPerms':
