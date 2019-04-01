@@ -71,7 +71,11 @@ angular.module('mean.icu.data.inboxservice', [])
             return `${creator} ${$i18next('addComment')} ${activity.current}`;
             break;
           case 'attachment' :
-            return `${creator} ${$i18next('addedAttachment')}`;
+            if('current' in activity) {
+              return `${creator} ${$i18next('addedAttachment')} <strong>${activity.current}</strong>`;
+            } else {
+              return `${creator} ${$i18next('removedAttachment')}`;
+            }
             break;
           case 'watchers' :
             return `${creator} ${$i18next('changedWatchers')}`;
