@@ -1,18 +1,25 @@
-'use strict';
+"use strict";
 
-let _ = require('lodash'),
-async = require('async'),
-config = require('meanio').loadConfig(),
-ObjectId = require('mongoose').Types.ObjectId,
-Document = require('../models/document');
+let _ = require("lodash"),
+  async = require("async"),
+  config = require("meanio").loadConfig(),
+  ObjectId = require("mongoose").Types.ObjectId,
+  Document = require("../models/document");
 
-
+const taskStatusMapper = {
+  new: "חדש",
+  assigned: "נבחר אחראי",
+  "in-progress": "בתהליך",
+  review: "בבדיקה",
+  rejected: "נדחה",
+  done: "בוצע"
+};
 /**
  * includes = space seperated entities to populate in middleware .all
  *
  */
 var options = {
-  includes: 'assign watchers project discussion subTasks discussions creator',
+  includes: "assign watchers project discussion subTasks discussions creator",
   defaults: {
     project: undefined,
     assign: undefined,
@@ -22,12 +29,13 @@ var options = {
   },
   conditions: {
     tType: {
-      $ne: 'template'
+      $ne: "template"
     },
     $or: [
       {
         parent: null
-      }, {
+      },
+      {
         parent: {
           $exists: false
         }
@@ -38,34 +46,42 @@ var options = {
 
 exports.defaultOptions = options;
 
-let crud = require('../controllers/crud.js');
-let task = crud('tasks', options);
-let Project = require('../controllers/project');
-let mailService = require('../services/mail');
-let excelService = require('../services/excel');
+let crud = require("../controllers/crud.js");
+let task = crud("tasks", options);
+let Project = require("../controllers/project");
+let mailService = require("../services/mail");
+let excelService = require("../services/excel");
 
-var Task = require('../models/task'),
-  Discussion = require('../models/discussion'),
-  mean = require('meanio');
+var Task = require("../models/task"),
+  Discussion = require("../models/discussion"),
+  mean = require("meanio");
 
-var Order = require('../models/order');
+var Order = require("../models/order");
 
 Object.keys(task).forEach(function(methodName) {
-  if(methodName !== 'create' && methodName !== 'update') {
+  if (methodName !== "create" && methodName !== "update") {
     exports[methodName] = task[methodName];
   }
 });
 
-Date.prototype.getThisDay = function () {
+Date.prototype.getThisDay = function() {
   var date = new Date();
   // return [date.setHours(0,0,0,0), date.setHours(23,59,59,999)];
   return [
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0),
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59, 999)
+    Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      23,
+      59,
+      59,
+      999
+    )
   ];
 };
 
-Date.prototype.getWeek = function () {
+Date.prototype.getWeek = function() {
   var today = new Date(this.setHours(0, 0, 0, 0));
   var date = today.getDate() - today.getDay();
 
@@ -74,65 +90,83 @@ Date.prototype.getWeek = function () {
   // EndDate.setHours(23,59,59,999);
   // return [StartDate, EndDate];
   return [
-    Date.UTC(StartDate.getFullYear(), StartDate.getMonth(), StartDate.getDate(), 0, 0, 0, 0),
-    Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate(), 23, 59, 59, 999)
+    Date.UTC(
+      StartDate.getFullYear(),
+      StartDate.getMonth(),
+      StartDate.getDate(),
+      0,
+      0,
+      0,
+      0
+    ),
+    Date.UTC(
+      EndDate.getFullYear(),
+      EndDate.getMonth(),
+      EndDate.getDate(),
+      23,
+      59,
+      59,
+      999
+    )
   ];
 };
 
 exports.relateEntity = function(req, res, next) {
-  let { taskId, entityType, entityId} = req.body;
+  let { taskId, entityType, entityId } = req.body;
 
-  Task.findOne({_id: taskId})
-    .populate('watchers')
-    .then( doc => {
-      if(!doc[entityType])
-        doc[entityType] = [];
+  Task.findOne({ _id: taskId })
+    .populate("watchers")
+    .then(doc => {
+      if (!doc[entityType]) doc[entityType] = [];
       doc[entityType].push(new ObjectId(entityId));
       return doc;
     })
     .then(doc => {
       res.json(doc);
     })
-    .catch(function (err) {
-      next(err)
-    })
+    .catch(function(err) {
+      next(err);
+    });
 };
 
 exports.create = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
   req.body.discussions = [];
-  if(req.body.discussion) {
+  if (req.body.discussion) {
     req.body.discussions = [req.body.discussion];
     req.body.tags = [];
     Discussion.findById(req.body.discussion, function(err, discussion) {
-      if(discussion && discussion.project) {
+      if (discussion && discussion.project) {
         req.body.project = discussion.project;
       }
       task.create(req, res, next);
     });
-  }
-  else task.create(req, res, next);
+  } else task.create(req, res, next);
 };
 
 exports.update = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  req.locals.action = 'update';
-  if(req.body.discussion) {
+  req.locals.action = "update";
+  if (req.body.discussion) {
     var alreadyAdded = _(req.locals.result.discussions).any(function(d) {
       return d.toString() === req.body.discussion;
     });
 
-    if(!alreadyAdded) {
+    if (!alreadyAdded) {
       req.body.discussions = req.locals.result.discussions;
       req.body.discussions.push(req.body.discussion);
     }
   }
 
-  if(req.body.subTasks && req.body.subTasks.length && !req.body.subTasks[req.body.subTasks.length - 1]._id) {
+  if (
+    req.body.subTasks &&
+    req.body.subTasks.length &&
+    !req.body.subTasks[req.body.subTasks.length - 1]._id
+  ) {
     req.body.subTasks.pop();
   }
 
@@ -140,17 +174,16 @@ exports.update = function(req, res, next) {
 };
 
 exports.tagsList = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  var query = req.acl.mongoQuery('Task');
-  query.distinct('tags', function(error, tags) {
-    if(error) {
+  var query = req.acl.mongoQuery("Task");
+  query.distinct("tags", function(error, tags) {
+    if (error) {
       req.locals.error = {
-        message: 'Can\'t get tags'
+        message: "Can't get tags"
       };
-    }
-    else {
+    } else {
       req.locals.result = tags || [];
     }
 
@@ -189,57 +222,61 @@ exports.tagsList = function(req, res, next) {
   // });
 };
 
-exports.getByEntity = function (req, res, next) {
-  if(req.locals.error) {
+exports.getByEntity = function(req, res, next) {
+  if (req.locals.error) {
     return next();
   }
 
   var entities = {
-      tasks: 'task',
-      projects: 'project',
-      users: 'assign',
-      discussions: 'discussions',
-      officeDocuments: 'officeDocument',
-      tags: 'tags'
+      tasks: "task",
+      projects: "project",
+      users: "assign",
+      discussions: "discussions",
+      officeDocuments: "officeDocument",
+      tags: "tags"
     },
     entityQuery = {
       tType: {
-        $ne: 'template'
+        $ne: "template"
       },
       $or: [
         {
           parent: null
-        }, {
+        },
+        {
           parent: {
             $exists: false
           }
         }
       ]
     };
-  entityQuery[entities[req.params.entity]] = req.params.id instanceof Array ? {
-    $in: req.params.id
-  } : req.params.id;
+  entityQuery[entities[req.params.entity]] =
+    req.params.id instanceof Array
+      ? {
+          $in: req.params.id
+        }
+      : req.params.id;
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if(ids && ids.length) {
+  if (ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
     starredOnly = true;
   }
-  var query = req.acl.mongoQuery('Task');
+  var query = req.acl.mongoQuery("Task");
 
   query.find(entityQuery);
   query.populate(options.includes);
 
-  Task.find(entityQuery).count({}, function (err, c) {
+  Task.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;
 
-
     var pagination = req.locals.data.pagination;
-    if(pagination && pagination.type && pagination.type === 'page') {
-      query.sort(pagination.sort)
+    if (pagination && pagination.type && pagination.type === "page") {
+      query
+        .sort(pagination.sort)
         .skip(pagination.start)
         .limit(pagination.limit);
     }
@@ -266,58 +303,59 @@ exports.getByEntity = function (req, res, next) {
     //     })
     //}
     query.exec(function(err, tasks) {
-      if(err) {
+      if (err) {
         req.locals.error = {
-          message: 'Can\'t get tags'
+          message: "Can't get tags"
         };
-      }
-      else if(starredOnly) {
+      } else if (starredOnly) {
         tasks.forEach(function(task) {
           task.star = true;
         });
       }
-      if(pagination.sort == 'custom') {
+      if (pagination.sort == "custom") {
         var temp = new Array(tasks.length);
         var tasksTemp = tasks;
-        Order.find({name: 'Task', project: tasks[0].project}, function(err, data) {
+        Order.find({ name: "Task", project: tasks[0].project }, function(
+          err,
+          data
+        ) {
           data.forEach(function(element) {
-            for(var index = 0; index < tasksTemp.length; index++) {
-              if(JSON.stringify(tasksTemp[index]._id) === JSON.stringify(element.ref)) {
+            for (var index = 0; index < tasksTemp.length; index++) {
+              if (
+                JSON.stringify(tasksTemp[index]._id) ===
+                JSON.stringify(element.ref)
+              ) {
                 temp[element.order - 1] = tasks[index];
               }
-
             }
           });
           tasks = temp;
           req.locals.result = tasks;
           next();
         });
-      }
-      else {
+      } else {
         req.locals.result = tasks;
 
         next();
       }
     });
   });
-
-
 };
 
-exports.getByOfficeDocumentId = function(req, res, next){
-    let taskId = req.params.id;
+exports.getByOfficeDocumentId = function(req, res, next) {
+  let taskId = req.params.id;
 
-    Task.findOne({ _id: taskId })
-        .populate("officeDocuments")
-        .then( doc => {
-            req.locals.data.pagination.count = doc.officeDocuments.length || 0;
-            req.locals.result = doc.officeDocuments || [];
-            next();
-        })
+  Task.findOne({ _id: taskId })
+    .populate("officeDocuments")
+    .then(doc => {
+      req.locals.data.pagination.count = doc.officeDocuments.length || 0;
+      req.locals.result = doc.officeDocuments || [];
+      next();
+    });
 };
 
 exports.getZombieTasks = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
@@ -329,17 +367,16 @@ exports.getZombieTasks = function(req, res, next) {
       $size: 0
     },
     currentUser: req.user,
-    tType: { $ne: 'template' }
+    tType: { $ne: "template" }
   });
   Query.populate(options.includes);
 
   Query.exec(function(err, tasks) {
-    if(err) {
+    if (err) {
       req.locals.error = {
-        message: 'Can\'t get zombie tasks'
+        message: "Can't get zombie tasks"
       };
-    }
-    else {
+    } else {
       req.locals.result = tasks;
     }
 
@@ -348,31 +385,30 @@ exports.getZombieTasks = function(req, res, next) {
 };
 
 var byAssign = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
-  var query = req.acl.mongoQuery('Task');
-  query.find({
-    assign: req.user._id,
-    status: {$nin: ['rejected', 'done']},
-    tType: {$ne: 'template'}
-  })
+  var query = req.acl.mongoQuery("Task");
+  query
+    .find({
+      assign: req.user._id,
+      status: { $nin: ["rejected", "done"] },
+      tType: { $ne: "template" }
+    })
     .populate(options.includes)
     .exec(function(err, tasks) {
-      if(err) {
+      if (err) {
         req.locals.error = {
-          message: 'Can\'t get my tasks'
+          message: "Can't get my tasks"
         };
-      }
-      else {
+      } else {
         req.locals.result = tasks;
       }
 
       next();
     });
 };
-
 
 function getTasksDueTodayQuery(req, callback) {
   var dates = new Date().getThisDay();
@@ -387,7 +423,8 @@ function getTasksDueTodayQuery(req, callback) {
                 lte: dates[1] //Date.parse(end)
               }
             }
-          }, {
+          },
+          {
             term: {
               assign: req.user._id
             }
@@ -396,21 +433,19 @@ function getTasksDueTodayQuery(req, callback) {
         must_not: [
           {
             terms: {
-              status: ['rejected', 'done'],
+              status: ["rejected", "done"]
               //"execution" : "and"
             }
           },
           {
-            term: {tType: 'template'}
+            term: { tType: "template" }
           }
         ]
       }
     }
   };
-  tasksFromElastic(query, 'TasksDueToday', callback);
+  tasksFromElastic(query, "TasksDueToday", callback);
 }
-
-
 
 function getTasksDueWeekQuery(req, callback) {
   var dates = new Date().getWeek();
@@ -425,7 +460,8 @@ function getTasksDueWeekQuery(req, callback) {
                 lte: dates[1]
               }
             }
-          }, {
+          },
+          {
             term: {
               assign: req.user._id
             }
@@ -434,20 +470,19 @@ function getTasksDueWeekQuery(req, callback) {
         must_not: [
           {
             terms: {
-              status: ['rejected', 'done'] //,
-            // "execution" : "and"
+              status: ["rejected", "done"] //,
+              // "execution" : "and"
             }
           },
           {
-            term: {tType: 'template'}
+            term: { tType: "template" }
           }
         ]
       }
     }
   };
-  tasksFromElastic(query, 'TasksDueWeek', callback);
+  tasksFromElastic(query, "TasksDueWeek", callback);
 }
-
 
 function getOverDueTasksQuery(req, callback) {
   var dates = new Date().getThisDay();
@@ -460,8 +495,9 @@ function getOverDueTasksQuery(req, callback) {
               due: {
                 lt: dates[0]
               }
-            },
-          }, {
+            }
+          },
+          {
             term: {
               assign: req.user._id
             }
@@ -470,18 +506,18 @@ function getOverDueTasksQuery(req, callback) {
         must_not: [
           {
             terms: {
-              status: ['rejected', 'done'] //,
-            //"execution" : "and"
+              status: ["rejected", "done"] //,
+              //"execution" : "and"
             }
           },
           {
-            term: {tType: 'template'}
+            term: { tType: "template" }
           }
         ]
       }
     }
   };
-  tasksFromElastic(query, 'OverDueTasks', callback);
+  tasksFromElastic(query, "OverDueTasks", callback);
 }
 
 function getWatchedTasksQuery(req, callback) {
@@ -498,120 +534,126 @@ function getWatchedTasksQuery(req, callback) {
             term: {
               assign: req.user._id
             }
-          }, {
+          },
+          {
             terms: {
-              status: ['rejected', 'done'] //,
-            //"execution" : "and"
+              status: ["rejected", "done"] //,
+              //"execution" : "and"
             }
           },
           {
-            term: {tType: 'template'}
+            term: { tType: "template" }
           }
         ]
       }
     }
   };
-  tasksFromElastic(query, 'WatchedTasks', callback);
+  tasksFromElastic(query, "WatchedTasks", callback);
 }
 
 function tasksFromElastic(query, name, callback) {
-  mean.elasticsearch.search({
-    index: 'task',
-    body: query,
-  }, function(err, response) {
-    if(err) {
-      callback(err);
+  mean.elasticsearch.search(
+    {
+      index: "task",
+      body: query
+    },
+    function(err, response) {
+      if (err) {
+        callback(err);
+      } else {
+        //   req.locals.result = response.hits.hits.map(function (item) {
+        //     return item._source;
+        // })
+        callback(null, {
+          key: name,
+          value: response.hits.total
+        });
+      }
     }
-    else {
-      //   req.locals.result = response.hits.hits.map(function (item) {
-      //     return item._source;
-      // })
-      callback(null, {
-        key: name,
-        value: response.hits.total
-      });
-    }
-  });
+  );
 }
 
-
 function myTasksStatistics(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  async.parallel([
-
-    function (callback) {
-      getTasksDueTodayQuery(req, callback);
-    },
-    function (callback) {
-      getTasksDueWeekQuery(req, callback);
-    },
-    function (callback) {
-      getOverDueTasksQuery(req, callback);
-    },
-    function (callback) {
-      getWatchedTasksQuery(req, callback);
+  async.parallel(
+    [
+      function(callback) {
+        getTasksDueTodayQuery(req, callback);
+      },
+      function(callback) {
+        getTasksDueWeekQuery(req, callback);
+      },
+      function(callback) {
+        getOverDueTasksQuery(req, callback);
+      },
+      function(callback) {
+        getWatchedTasksQuery(req, callback);
+      }
+    ],
+    function(err, result) {
+      req.locals.result = result;
+      req.locals.error = err;
+      next();
     }
-  ], function (err, result) {
-    req.locals.result = result;
-    req.locals.error = err;
-    next();
-  });
+  );
 }
 
 exports.getWatchedTasks = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  Task.find({
-    watchers: req.user._id,
-    assign: {
-      $ne: req.user._id
+  Task.find(
+    {
+      watchers: req.user._id,
+      assign: {
+        $ne: req.user._id
+      },
+      status: {
+        $nin: ["rejected", "done"]
+      },
+      tType: { $ne: "template" }
     },
-    status: {
-      $nin: ['rejected', 'done']
-    },
-    tType: {$ne: 'template'}
-  }, function(err, response) {
-    var length = Object.keys(response).length;
-    if(err) {
-      req.locals.error = err;
+    function(err, response) {
+      var length = Object.keys(response).length;
+      if (err) {
+        req.locals.error = err;
+      } else {
+        res.send(length.toString());
+        req.locals.result = response;
+      }
+      next();
     }
-    else {
-      res.send(length.toString());
-      req.locals.result = response;
-    }
-    next();
-  });
+  );
 };
 
-
-exports.getWatchedTasksList = function (req, res, next) {
+exports.getWatchedTasksList = function(req, res, next) {
   //if (req.locals.error) {
   //  return next();
   //}
-  Task.find({
-    watchers: req.user._id,
-    assign: {
-      $ne: req.user._id
+  Task.find(
+    {
+      watchers: req.user._id,
+      assign: {
+        $ne: req.user._id
+      },
+      status: {
+        $nin: ["rejected", "done"]
+      },
+      tType: { $ne: "template" }
     },
-    status: {
-      $nin: ['rejected', 'done']
-    },
-    tType: {$ne: 'template'}
-  }, function(err, response) {
-    if(err) {
-      req.locals.error = err;
+    function(err, response) {
+      if (err) {
+        req.locals.error = err;
+      } else {
+        res.send(response);
+        req.locals.result = response;
+      }
+      //next();
     }
-    else {
-      res.send(response);
-      req.locals.result = response;
-    }
-    //next();
-  });
+  );
 };
-
 
 exports.getOverdueWatchedTasks = function(req, res, next) {
   // if (req.locals.error) {
@@ -619,49 +661,54 @@ exports.getOverdueWatchedTasks = function(req, res, next) {
   // }
 
   var dates = new Date().getThisDay();
-  Task.find({
-    watchers: req.user._id,
-    assign: {
-      $ne: req.user._id
+  Task.find(
+    {
+      watchers: req.user._id,
+      assign: {
+        $ne: req.user._id
+      },
+      status: {
+        $nin: ["rejected", "done"]
+      },
+      due: {
+        $lt: dates[0]
+      },
+      tType: { $ne: "template" }
     },
-    status: {
-      $nin: ['rejected', 'done']
-    },
-    due: {
-      $lt: dates[0]
-    },
-    tType: {$ne: 'template'}
-  }, function(err, response) {
-    if(err) {
-      req.locals.error = err;
+    function(err, response) {
+      if (err) {
+        req.locals.error = err;
+      } else {
+        req.locals.result = response;
+        res.send(response);
+      }
+      //  next();
     }
-    else {
-      req.locals.result = response;
-      res.send(response);
-    }
-  //  next();
-  });
+  );
 };
 
 exports.getSubTasks = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
-  var query = req.acl.mongoQuery('Task');
-  query.findOne({
-    _id: req.params.id,
-    tType: {$ne: 'template'}
-  }, {
-      subTasks: 1
-    })
-    .populate('subTasks')
-    .deepPopulate('subTasks.subTasks subTasks.watchers')
-    .exec(function(err, task) {
-      if(err) {
-        req.locals.error = err;
+  var query = req.acl.mongoQuery("Task");
+  query
+    .findOne(
+      {
+        _id: req.params.id,
+        tType: { $ne: "template" }
+      },
+      {
+        subTasks: 1
       }
-      else if(task) {
+    )
+    .populate("subTasks")
+    .deepPopulate("subTasks.subTasks subTasks.watchers")
+    .exec(function(err, task) {
+      if (err) {
+        req.locals.error = err;
+      } else if (task) {
         req.locals.result = task.subTasks;
       }
       next();
@@ -669,7 +716,7 @@ exports.getSubTasks = function(req, res, next) {
 };
 
 exports.updateParent = function(req, res, next) {
-  if(req.locals.error || !req.body.parent) {
+  if (req.locals.error || !req.body.parent) {
     return next();
   }
   var data = {
@@ -677,129 +724,133 @@ exports.updateParent = function(req, res, next) {
       subTasks: req.locals.result._id
     }
   };
-  Task.findOneAndUpdate({
-    _id: req.body.parent,
-    tType: {$ne: 'template'}
-  }, data, function(err, task) {
-    if(err) {
-      req.locals.error = err;
+  Task.findOneAndUpdate(
+    {
+      _id: req.body.parent,
+      tType: { $ne: "template" }
+    },
+    data,
+    function(err, task) {
+      if (err) {
+        req.locals.error = err;
+      }
+      next();
     }
-    next();
-  });
-
+  );
 };
 
 exports.takeParentWatchers = function(req, res, next) {
   let parentId = req.body.officeDocument;
-  if(req.locals.error || !parentId) {
+  if (req.locals.error || !parentId) {
     return next();
   }
 
-  if(parentId){
-    Document.findOne({id: parentId})
-      .exec((err, doc) => {
-        if(err){
-          req.locals.error = err;
-          next();
-        } else if(doc) {
-          req.locals.result.watchers = doc.watchers;
-          req.locals.result.permissions = doc.permissions;
-          Task.findOneAndUpdate(
-            {_id: req.locals.result._id},
-            {
-              $set: {
-                watchers: doc.watchers,
-                permissions: doc.permissions,
-              }
-            },
-            (err, success) => {
-              if(err){
-                req.locals.error = err;
-                next();
-              }
+  if (parentId) {
+    Document.findOne({ id: parentId }).exec((err, doc) => {
+      if (err) {
+        req.locals.error = err;
+        next();
+      } else if (doc) {
+        req.locals.result.watchers = doc.watchers;
+        req.locals.result.permissions = doc.permissions;
+        Task.findOneAndUpdate(
+          { _id: req.locals.result._id },
+          {
+            $set: {
+              watchers: doc.watchers,
+              permissions: doc.permissions
+            }
+          },
+          (err, success) => {
+            if (err) {
+              req.locals.error = err;
               next();
-            });
-        } else {
-          next()
-        }
-    })
+            }
+            next();
+          }
+        );
+      } else {
+        next();
+      }
+    });
   }
-
 };
 
 exports.removeSubTask = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  Task.findOne({
-    _id: req.params.id,
-    tType: {$ne: 'template'}
-  }, function(err, subTask) {
-    if(err) {
-      req.locals.error = err;
+  Task.findOne(
+    {
+      _id: req.params.id,
+      tType: { $ne: "template" }
+    },
+    function(err, subTask) {
+      if (err) {
+        req.locals.error = err;
+      } else {
+        Task.update(
+          {
+            _id: subTask.parent,
+            tType: { $ne: "template" }
+          },
+          {
+            $pull: {
+              subTasks: subTask._id
+            }
+          },
+          function(err, task) {
+            if (err) {
+              req.locals.error = err;
+            }
+            next();
+          }
+        );
+      }
     }
-    else {
-      Task.update({
-        _id: subTask.parent,
-        tType: {$ne: 'template'}
-      }, {
-        $pull: {
-          subTasks: subTask._id
-        }
-      }, function(err, task) {
-        if(err) {
-          req.locals.error = err;
-        }
-        next();
-      });
-    }
-  });
+  );
 };
 
-exports.populateSubTasks = function (req, res, next) {
-  Task.populate(req.locals.result, {
-    path: 'subTasks.watchers',
-    model: 'User'
-  }, function(err, tasks) {
-    if(err) {
-      req.locals.error = err;
+exports.populateSubTasks = function(req, res, next) {
+  Task.populate(
+    req.locals.result,
+    {
+      path: "subTasks.watchers",
+      model: "User"
+    },
+    function(err, tasks) {
+      if (err) {
+        req.locals.error = err;
+      } else req.locals.result = tasks;
+      next();
     }
-    else req.locals.result = tasks;
-    next();
-  });
+  );
 };
 
-
-exports.GetUsersWantGetMyTodayTasksMail = function () {
-
-  var UserModel = require('../models/user.js');
+exports.GetUsersWantGetMyTodayTasksMail = function() {
+  var UserModel = require("../models/user.js");
 
   var query = UserModel.find({
-    GetMailEveryDayAboutMyTasks: 'yes'
+    GetMailEveryDayAboutMyTasks: "yes"
   })
     .populate(options.includes)
     .exec(function(err, users) {
-      if(err) {
-        console.log('Can\'t get users');
-      }
-      else {
-
+      if (err) {
+        console.log("Can't get users");
+      } else {
         users.forEach(function(user) {
           MyTasksOfTodaySummary(user._doc);
         });
-
       }
       //next();
     });
-
 };
 
 //If we ever need to use as button in the UI == *AsButton*
 exports.MyTasksOfTodaySummary = function(req, res, next) {};
 
 function MyTasksOfTodaySummary(user) {
-
-  var TaskModel = require('../models/task.js');
+  var TaskModel = require("../models/task.js");
 
   //*AsButton*
   //var query = req.acl.mongoQuery('Task');
@@ -807,19 +858,18 @@ function MyTasksOfTodaySummary(user) {
   var query = TaskModel.find({
     //*AsButton* assign: req.user._id,
     assign: user._id,
-    status: { $nin: ['rejected', 'done'] },
-    tType: { $ne: 'template' }
+    status: { $nin: ["rejected", "done"] },
+    tType: { $ne: "template" }
   })
     .populate(options.includes)
     .exec(function(err, tasks) {
-      if(err) {
-      //*AsButton* req.locals.error = {
-      //   message: 'Can\'t get my tasks'
-      // };
-        console.log('Can\'t get my tasks');
-      }
-      else {
-      //*AsButton* req.locals.result = tasks;
+      if (err) {
+        //*AsButton* req.locals.error = {
+        //   message: 'Can\'t get my tasks'
+        // };
+        console.log("Can't get my tasks");
+      } else {
+        //*AsButton* req.locals.result = tasks;
 
         var curr = new Date();
         curr.setHours(0, 0, 0, 0);
@@ -830,56 +880,50 @@ function MyTasksOfTodaySummary(user) {
         tasks.forEach(function(task) {
           var due = new Date(task.due);
           //if (due >= date[0] && due <= date[1]) {
-          if(due.getDay() == firstday.getDay()) {
+          if (due.getDay() == firstday.getDay()) {
             task.due.setDate(task.due.getDate() + 1);
             TodayTasks.push(task);
           }
         });
 
-        mailService.sendMyTasksOfTodaySummary('MyTasksOfTodaySummary', {
-          TodayTasks: TodayTasks,
-          //*AsButton* user: req.user
-          user: user
-        }).then(function() {
-        //next();
-        });
+        mailService
+          .sendMyTasksOfTodaySummary("MyTasksOfTodaySummary", {
+            TodayTasks: TodayTasks,
+            //*AsButton* user: req.user
+            user: user
+          })
+          .then(function() {
+            //next();
+          });
       }
       //next();
     });
-
 }
 
-
-exports.GetUsersWantGetMyWeeklyTasksMail = function () {
-
-  var UserModel = require('../models/user.js');
+exports.GetUsersWantGetMyWeeklyTasksMail = function() {
+  var UserModel = require("../models/user.js");
 
   var query = UserModel.find({
-    GetMailEveryWeekAboutMyTasks: 'yes'
+    GetMailEveryWeekAboutMyTasks: "yes"
   })
     .populate(options.includes)
     .exec(function(err, users) {
-      if(err) {
-        console.log('Can\'t get users');
-      }
-      else {
-
+      if (err) {
+        console.log("Can't get users");
+      } else {
         users.forEach(function(user) {
           MyTasksOfNextWeekSummary(user._doc);
         });
-
       }
       //next();
     });
-
 };
 
 //If we ever need to use as button in the UI == *AsButton*
 exports.MyTasksOfNextWeekSummary = function(req, res, next) {};
 
 function MyTasksOfNextWeekSummary(user) {
-
-  var TaskModel = require('../models/task.js');
+  var TaskModel = require("../models/task.js");
 
   //*AsButton*
   //var query = req.acl.mongoQuery('Task');
@@ -887,24 +931,25 @@ function MyTasksOfNextWeekSummary(user) {
   var query = TaskModel.find({
     //*AsButton* assign: req.user._id,
     assign: user._id,
-    status: { $nin: ['rejected', 'done'] },
-    tType: { $ne: 'template' }
+    status: { $nin: ["rejected", "done"] },
+    tType: { $ne: "template" }
   })
     .populate(options.includes)
     .exec(function(err, tasks) {
-      if(err) {
-      //*AsButton* req.locals.error = {
-      //   message: 'Can\'t get my tasks'
-      // };
-        console.log('Can\'t get my tasks');
-      }
-      else {
-      //*AsButton* req.locals.result = tasks;
+      if (err) {
+        //*AsButton* req.locals.error = {
+        //   message: 'Can\'t get my tasks'
+        // };
+        console.log("Can't get my tasks");
+      } else {
+        //*AsButton* req.locals.result = tasks;
 
         var curr = new Date();
         curr.setHours(0, 0, 0, 0);
         var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-        var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
+        var lastday = new Date(
+          curr.setDate(curr.getDate() - curr.getDay() + 6)
+        );
         lastday = new Date(lastday.setHours(23, 59, 59, 0));
         var date = [firstday, lastday];
 
@@ -912,101 +957,97 @@ function MyTasksOfNextWeekSummary(user) {
 
         tasks.forEach(function(task) {
           var due = new Date(task.due);
-          if(due >= date[0] && due <= date[1]) {
+          if (due >= date[0] && due <= date[1]) {
             task.due.setDate(task.due.getDate() + 1);
             WeekTasks.push(task);
           }
         });
 
-        mailService.sendMyTasksOfNextWeekSummary('MyTasksOfNextWeekSummary', {
-          WeekTasks: WeekTasks,
-          //*AsButton* user: req.user
-          user: user
-        }).then(function() {
-        //next();
-        });
+        mailService
+          .sendMyTasksOfNextWeekSummary("MyTasksOfNextWeekSummary", {
+            WeekTasks: WeekTasks,
+            //*AsButton* user: req.user
+            user: user
+          })
+          .then(function() {
+            //next();
+          });
       }
       //next();
     });
-
 }
 
-
-exports.GetUsersWantGetGivenWeeklyTasksMail = function () {
-
-  var UserModel = require('../models/user.js');
+exports.GetUsersWantGetGivenWeeklyTasksMail = function() {
+  var UserModel = require("../models/user.js");
 
   var query = UserModel.find({
-    GetMailEveryWeekAboutGivenTasks: 'yes'
+    GetMailEveryWeekAboutGivenTasks: "yes"
   })
     .populate(options.includes)
     .exec(function(err, users) {
-      if(err) {
-        console.log('Can\'t get users');
-      }
-      else {
-
+      if (err) {
+        console.log("Can't get users");
+      } else {
         users.forEach(function(user) {
           GivenTasksOfNextWeekSummary(user._doc);
         });
       }
       //next();
     });
-
 };
 
 //If we ever need to use as button in the UI == *AsButton*
 exports.GivenTasksOfNextWeekSummary = function(req, res, next) {};
 
 function GivenTasksOfNextWeekSummary(user) {
-
   //*AsButton* var query = req.acl.mongoQuery('Task');
 
-  var TaskModel = require('../models/task.js');
+  var TaskModel = require("../models/task.js");
 
   var query = TaskModel.find({
     //*AsButton* query.find({
     //creator: req.user._id,
     creator: user._id,
-    tType: {$ne: 'template'}
+    tType: { $ne: "template" }
   })
     .populate(options.includes)
     .exec(function(err, tasks) {
-      if(err) {
+      if (err) {
         // req undefined here
         //   req.locals.error = {
         //   message: 'Can\'t get my tasks'
         // };
-      }
-      else {
-
+      } else {
         var curr = new Date();
         curr.setHours(0, 0, 0, 0);
         var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-        var lastday = new Date(curr.setDate(curr.getDate() - curr.getDay() + 6));
+        var lastday = new Date(
+          curr.setDate(curr.getDate() - curr.getDay() + 6)
+        );
         lastday = new Date(lastday.setHours(23, 59, 59, 0));
         var date = [firstday, lastday];
 
         var WeekTasks = [];
 
-        tasks.forEach(function (task) {
+        tasks.forEach(function(task) {
           var due = new Date(task.due);
-          if(due >= date[0] && due <= date[1]) {
+          if (due >= date[0] && due <= date[1]) {
             task.due.setDate(task.due.getDate() + 1);
             WeekTasks.push(task);
           }
         });
 
-        mailService.sendGivenTasksOfNextWeekSummary('GivenTasksOfNextWeekSummary', {
-          WeekTasks: WeekTasks,
-          user: user
-        }).then(function() {
-          //next();
-        });
+        mailService
+          .sendGivenTasksOfNextWeekSummary("GivenTasksOfNextWeekSummary", {
+            WeekTasks: WeekTasks,
+            user: user
+          })
+          .then(function() {
+            //next();
+          });
       }
       //next();
     });
-
 }
 
 /**
@@ -1016,95 +1057,123 @@ function GivenTasksOfNextWeekSummary(user) {
  * @param {*} columns what columns to display in the excel
  * @returns a promise that returns workbook
  */
-async function tasksToExcelServiceFormat(tasks,columns,datesColumns){
-  let UpdateModel = require('../models/update');
-   tasks = _.map(tasks,task=>task._doc);
-   let filteredTasks = _.filter(tasks,task=>task.title);
-   let taskArray = await Promise.all(_.map(filteredTasks,async (task)=>{
-     let {
-       _id,
-       title,
-       watchers,
-       discussions,
-       description,
-       due,
-       status,
-       assign,
-       tags,
-       project,
-       creator,} = task;
-       console.log("%^$^%$^%$^");
-       console.log(task);
-      let updates = await UpdateModel
-           .find({
-             issueId: _id,
-             type: "comment"
-           })
-           .populate('creator', null, 'User');
-       let row = [
-             title,
-             //due&&due.toLocaleString().substr(0, due.toLocaleString().indexOf(' ')), // * gives the date as "year-month-day time" and removes time
-             status,
-             assign&&assign.name,
-             _.map(watchers,watcher=>watcher.name).join("\n"),
-            description,
-            creator&&creator.name,
-            discussions&&discussions[0]&&discussions[0].title,
-            project&&project.title,
-            _.map(updates,(update=>`:${update.updated&&update.updated.toLocaleString().substr(0, update.updated.toLocaleString().indexOf(' '))} - ${update.creator.name}`+"\n"+`${update.description}`) ).join("\n"),
-            tags.join("\n"),
-         ];
+async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
+  let UpdateModel = require("../models/update");
+  tasks = _.map(tasks, task => task._doc);
+  let filteredTasks = _.filter(tasks, task => task.title);
+  let taskArray = await Promise.all(
+    _.map(filteredTasks, async task => {
+      let {
+        _id,
+        title,
+        watchers,
+        discussions,
+        description,
+        due,
+        status,
+        assign,
+        tags,
+        project,
+        creator
+      } = task;
+      console.log("%^$^%$^%$^");
+      console.log(task);
+      let updates = await UpdateModel.find({
+        entity: new ObjectId(_id),
+        updateField: "comment"
+        // type: "comment"
+      }).populate("creator", null, "User");
+      console.log("////////////////updates///////////////////");
+      console.log(updates);
+      let row = [
+        title,
+        //due&&due.toLocaleString().substr(0, due.toLocaleString().indexOf(' ')), // * gives the date as "year-month-day time" and removes time
+        taskStatusMapper[status],
+        assign && assign.name,
+        _.map(watchers, watcher => watcher.name).join("\n"),
+        description,
+        creator && creator.name,
+        discussions && discussions[0] && discussions[0].title,
+        project && project.title,
+        _.map(
+          updates,
+          update =>
+            `:${update.date &&
+              update.date
+                .toLocaleString()
+                .substr(0, update.date.toLocaleString().indexOf(" "))} - ${
+              update.creator.name
+            }` +
+            "\n" +
+            `${update.current}`
+        ).join("\n"),
+        tags.join("\n")
+      ];
 
-
-     return row;
-   }));
-   let taskDatesArray = await Promise.all(_.map(filteredTasks,async (task)=>{
-    let {
-      _id,
-      due,
-    } = task;
+      return row;
+    })
+  );
+  let taskDatesArray = await Promise.all(
+    _.map(filteredTasks, async task => {
+      let { _id, due } = task;
       //console.log("%^$^%$^%$^");
       //console.log(task);
-     let updates = await UpdateModel
-          .find({
-            issueId: _id,
-            type: "comment"
-          })
-          .populate('creator', null, 'User');
+      let updates = await UpdateModel.find({
+        entity: new ObjectId(_id),
+        // _id: new ObjectId(_id),
+        updateField: "comment"
+      }).populate("creator", null, "User");
+      console.log("////////////////updates///////////////////");
+      console.log(updates);
       let lastUpdate = _.last(updates);
-      let lastUpdateDate = lastUpdate&&lastUpdate.updated
+      let lastUpdateDate = lastUpdate && lastUpdate.date;
 
       let row = [
-            due,//&&due.toLocaleString().substr(0, due.toLocaleString().indexOf(' ')), // * gives the date as "year-month-day time" and removes time
-          lastUpdateDate// _.map(updates,(update=>`:${update.updated&&update.updated.toLocaleString().substr(0, update.updated.toLocaleString().indexOf(' '))} - ${update.creator.name}`+"\n"+`${update.description}`) ).join("\n"),
-        ];
+        due, //&&due.toLocaleString().substr(0, due.toLocaleString().indexOf(' ')), // * gives the date as "year-month-day time" and removes time
+        lastUpdateDate // _.map(updates,(update=>`:${update.updated&&update.updated.toLocaleString().substr(0, update.updated.toLocaleString().indexOf(' '))} - ${update.creator.name}`+"\n"+`${update.description}`) ).join("\n"),
+      ];
 
+      return row;
+    })
+  );
+  return excelService.json2workbookWithDates({
+    rows: taskArray,
+    dates: taskDatesArray,
+    columns,
+    datesColumns,
+    columnsBold: true
+  });
+}
 
-    return row;
-  }));
- return excelService.json2workbookWithDates({"rows":taskArray,dates:taskDatesArray,columns,datesColumns,"columnsBold":true});
- }
+exports.excel = function(req, res, next) {
+  //return res.json(req.locals.result);
 
-
- exports.excel = function (req, res, next) {
-
-   //return res.json(req.locals.result);
-
-   //setting mime type as excel
-   res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-   //setting the name of the file to be downloaded
-   res.attachment("Summary.xlsx");
+  //setting mime type as excel
+  res.setHeader(
+    "Content-Type",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  );
+  //setting the name of the file to be downloaded
+  res.attachment("Summary.xlsx");
   //  let columns = ["כותרת","תג"+"\""+"ב","סטטוס","אחראי","משתתפים","תיאור","יוצר המשימה","שם דיון","שם פרוייקט","עדכונים","תגיות"]
-   let columns = ["כותרת","סטטוס","אחראי","משתתפים","תיאור","יוצר המשימה","שם דיון","שם פרוייקט","עדכונים","תגיות"]
-   let datesColumns = ["תג"+"\""+"ב","תאריך תגובה אחרון"]
-   let tasks = req.locals.result;
-   tasksToExcelServiceFormat(tasks,columns,datesColumns).then(summary=>{
-     res.send(summary);
-   });
- };
-
-
-
+  let columns = [
+    "כותרת",
+    "סטטוס",
+    "אחראי",
+    "משתתפים",
+    "תיאור",
+    "יוצר המשימה",
+    "שם דיון",
+    "שם פרוייקט",
+    "עדכונים",
+    "תגיות"
+  ];
+  let datesColumns = ["תג" + '"' + "ב", "תאריך תגובה אחרון"];
+  let tasks = req.locals.result;
+  tasksToExcelServiceFormat(tasks, columns, datesColumns).then(summary => {
+    res.send(summary);
+  });
+};
 
 exports.byAssign = byAssign;
 exports.myTasksStatistics = myTasksStatistics;
