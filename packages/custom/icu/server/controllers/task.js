@@ -1076,15 +1076,11 @@ async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
         project,
         creator
       } = task;
-      console.log("%^$^%$^%$^");
-      console.log(task);
       let updates = await UpdateModel.find({
         entity: new ObjectId(_id),
         updateField: "comment"
         // type: "comment"
       }).populate("creator", null, "User");
-      console.log("////////////////updates///////////////////");
-      console.log(updates);
       let row = [
         title,
         //due&&due.toLocaleString().substr(0, due.toLocaleString().indexOf(' ')), // * gives the date as "year-month-day time" and removes time
@@ -1116,15 +1112,11 @@ async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
   let taskDatesArray = await Promise.all(
     _.map(filteredTasks, async task => {
       let { _id, due } = task;
-      //console.log("%^$^%$^%$^");
-      //console.log(task);
       let updates = await UpdateModel.find({
         entity: new ObjectId(_id),
         // _id: new ObjectId(_id),
         updateField: "comment"
       }).populate("creator", null, "User");
-      console.log("////////////////updates///////////////////");
-      console.log(updates);
       let lastUpdate = _.last(updates);
       let lastUpdateDate = lastUpdate && lastUpdate.date;
 
