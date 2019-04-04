@@ -1,4 +1,4 @@
-<tr ng-repeat="activity in activities | orderBy: 'date': false"
+<tr ng-repeat="activity in activities | orderBy: '-date': false"
     ng-click="initiate($event, activity.entityObj, activity.entityType)"
     ng-if="activity.updateField"
 >
@@ -16,7 +16,7 @@
             <div class="update-content">
                 <div class="update-info">
                     <div class="update-action">{{getActivityDescription(activity)}}</div>
-                    <div class="update-date">{{formatDate(activity.created)}}</div>
+                    <div class="update-date">{{formatDate(activity.date)}}</div>
                 </div>
                 <div class="update-data">{{activity.status}}</div>
             </div>

@@ -97,14 +97,15 @@ exports.getByEntity = function(req, res, next) {
 };
 
 exports.getByUser = function(req, res, next) {
-    let pagination = req.locals.data.pagination;
-    let start = pagination.start, limit = pagination.limit;
+    let { start, limit, sort } = req.locals.data.pagination;
     let id = req.params.id;
 
     Update.find({
         creator: id
     })
-    .skip(start).limit(limit)
+    .sort(sort)
+    .skip(start)
+    .limit(limit)
     .populate('creator', 'name lastname profile')
     .then(function(updates) {
         res.status(200).send(updates);
