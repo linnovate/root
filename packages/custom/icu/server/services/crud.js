@@ -159,22 +159,39 @@ module.exports = function(entityName, options) {
 
           deffered.resolve(mergedPromise);
         } else {
+          let entitiesListCount = 25;
 
-          // finding all elements from "start" to "ID" of element
-          queryFn().find({ _id: { $lte: pagination.limit }})
-            .sort(pagination.sort)
-            .count({}, (err, count) => {
-              let entitiesListCount = 25;
-              count = count < entitiesListCount ? entitiesListCount : count;
+          queryFn().count({ _id: pagination.limit }).then(count => {
+            if (count) {
 
+              // finding all elements from "start" to "ID" of element
+              queryFn().find({ _id: { $lte: pagination.limit }})
+                .sort(pagination.sort)
+                .count({}, (err, count) => {
+                  count = count < entitiesListCount ? entitiesListCount : count;
+
+                  let query = queryFn().find(options.conditions)
+                    .sort(pagination.sort)
+                    .skip(pagination.start)
+                    .limit(count)
+                    .populate(options.includes);
+
+                  pagination.limit = count;
+                  pagination.start = pagination.limit - entitiesListCount;
+
+                  mergedPromise = q.all([query, countQuery]).then(function(results) {
+                    pagination.count = results[1];
+                    return results[0];
+                  });
+
+                  deffered.resolve(mergedPromise);
+                })
+            } else {
               let query = queryFn().find(options.conditions)
                 .sort(pagination.sort)
                 .skip(pagination.start)
-                .limit(count)
+                .limit(entitiesListCount)
                 .populate(options.includes);
-
-              pagination.limit = count;
-              pagination.start = pagination.limit - entitiesListCount;
 
               mergedPromise = q.all([query, countQuery]).then(function(results) {
                 pagination.count = results[1];
@@ -182,7 +199,7 @@ module.exports = function(entityName, options) {
               });
 
               deffered.resolve(mergedPromise);
-            })
+            }
         }
       }
     } else {
