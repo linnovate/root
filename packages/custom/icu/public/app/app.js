@@ -1553,7 +1553,7 @@ angular.module('mean.icu').config([
                 params: {
                     start: 0,
                     limit: LIMIT,
-                    sort: SORT
+                    sort: '-date'
                 },
                 views: {
                     'middlepane@main': {
