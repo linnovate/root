@@ -260,6 +260,7 @@ directive('icuSidepane', function() {
     };
 
     $scope.displayLimit = {
+        tasks : 4,
         projects : 4,
         discussions : 4,
         offices: 4,
@@ -267,6 +268,7 @@ directive('icuSidepane', function() {
         watchers: 2,
         people: 2,
         default : {
+            tasks: 4,
             projects: 4,
             discussions: 4,
             offices: 4,
