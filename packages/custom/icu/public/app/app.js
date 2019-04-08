@@ -132,11 +132,8 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($state, $stateParams, tasks, results, TasksService) {
-                        if($state.current.name.indexOf('search') !== -1){
-                            return _( results ).find(t => ((t._id || t.id) === $stateParams.id));
-                        }
                         let task = _(tasks.data || tasks).find(t => t._id === $stateParams.id);
-                        return task ? task : TasksService.getById($stateParams.id);
+                        return (task && typeof task === 'object') ? task : TasksService.getById($stateParams.id);
                     },
                     tags: function (TasksService) {
                         return TasksService.getTags().then(function (tags) {
@@ -172,11 +169,8 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($state, $stateParams, projects, results, ProjectsService) {
-                        if($state.current.name.indexOf('search') !== -1){
-                            return _( results ).find(d => (d._id || d.id) === $stateParams.id);
-                        }
                         let project = _(projects.data || projects).find(t => t._id === $stateParams.id);
-                        return project ? project : ProjectsService.getById($stateParams.id)
+                        return (project && typeof project === 'object') ? project : ProjectsService.getById($stateParams.id)
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByProjectId($stateParams.id);
@@ -214,12 +208,8 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($state, $stateParams, officeDocuments, results, OfficeDocumentsService) {
-                        if($state.current.name.indexOf('search') !== -1){
-                            return _( results ).find(d => d._id === $stateParams.id);
-                        } else {
-                            let officeDocument = (officeDocuments.data || officeDocuments).find(t => t._id === $stateParams.id);
-                            return officeDocument ? officeDocument : OfficeDocumentsService.getById($stateParams.id)
-                        }
+                        let officeDocument = (officeDocuments.data || officeDocuments).find(t => t._id === $stateParams.id);
+                        return (officeDocument && typeof officeDocument === 'object') ? officeDocument : OfficeDocumentsService.getById($stateParams.id)
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
@@ -246,12 +236,8 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($state, $stateParams, offices, results, OfficesService) {
-                        if($state.current.name.indexOf('search') !== -1){
-                            return _( results ).find(d => d._id === $stateParams.id);
-                        } else {
-                            let office = _(offices.data || offices).find(t => t._id === $stateParams.id);
-                            return office ? office : OfficesService.getById($stateParams.id)
-                        }
+                        let office = _(offices.data || offices).find(t => t._id === $stateParams.id);
+                        return (office && typeof office === 'object') ? office : OfficesService.getById($stateParams.id)
                     },
                     folders: function (FoldersService, $stateParams) {
                         return FoldersService.getByOfficeId($stateParams.id);
@@ -281,12 +267,8 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($state, $stateParams, templateDocs, results, TemplateDocsService) {
-                        if($state.current.name.indexOf('search') !== -1){
-                            return _( results ).find(d => d._id === $stateParams.id);
-                        } else {
-                            let templateDoc = _(templateDocs.data || templateDocs).find(t => t._id === $stateParams.id);
-                            return templateDoc ? templateDoc : TemplateDocsService.getById($stateParams.id)
-                        }
+                        let templateDoc = _(templateDocs.data || templateDocs).find(t => t._id === $stateParams.id);
+                        return (templateDoc && typeof templateDoc === 'object') ? templateDoc : TemplateDocsService.getById($stateParams.id)
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
@@ -313,12 +295,8 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($state, $stateParams, folders, results, FoldersService) {
-                        if($state.current.name.indexOf('search') !== -1){
-                            return _( results ).find(d => d._id === $stateParams.id);
-                        } else {
-                            let folder = _(folders.data || folders).find(t => t._id === $stateParams.id);
-                            return folder ? folder : FoldersService.getById($stateParams.id)
-                        }
+                        let folder = _(folders.data || folders).find(t => t._id === $stateParams.id);
+                        return (folder && typeof folder === 'object') ? folder : FoldersService.getById($stateParams.id)
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByFolderId($stateParams.id);
@@ -376,11 +354,8 @@ angular.module('mean.icu').config([
                 },
                 resolve: {
                     entity: function ($state, $stateParams, discussions, results, DiscussionsService) {
-                        if($state.current.name.indexOf('search') !== -1){
-                            return _( results).find(d => (d._id || d.id) === $stateParams.id);
-                        }
                         let discussion = _(discussions.data || discussions).find(t => t._id === $stateParams.id);
-                        return discussion ? discussion : DiscussionsService.getById($stateParams.id)
+                        return (discussion && typeof discussion === 'object') ? discussion : DiscussionsService.getById($stateParams.id)
                     },
                     tasks: function (TasksService, $stateParams) {
                         return TasksService.getByDiscussionId($stateParams.id);
