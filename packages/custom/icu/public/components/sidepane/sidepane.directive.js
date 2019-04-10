@@ -328,7 +328,6 @@ directive('icuSidepane', function() {
     $scope.filterSearchByType = function(flag) {
         $scope.flag = false;
         if  ($stateParams.recycled == true){
-            $stateParams.recycled = null;
             $scope.flag = true;
         }
         if ($location.search() && $location.search().recycled && $scope.filteringData.issue == 'all'){
@@ -498,28 +497,20 @@ directive('icuSidepane', function() {
         var query = SearchService.getQuery();
         console.log("toggleRecycle...") ;
 
-        if($location.search().recycled) {
-            $scope.recycled =  false;
-            $stateParams.recycled = false;
-        }
-        else {
-            $scope.recycled = true;
-            $stateParams.recycled = true;
-        }
+        $scope.recycled = $scope.isRecycled = $stateParams.recycled = !$stateParams.recycled;
+        $location.search('recycled', $scope.recycled)
 
         if($scope.recycled === false) {
-            $scope.isRecycled = false;
-            $state.go('main.search', {reload: true,  query: query});
+            $state.go('main.search', {recycled: false, reload: true, query: query});
         }
         else {
-            $scope.isRecycled = true;
             let usedQuery;
             if(query === ''){
               usedQuery = '___';
             } else {
               usedQuery = query;
             }
-            $state.go('main.search', {recycled: true, 'query': usedQuery});
+            $state.go('main.search', {recycled: true, reload: true, query: usedQuery});
         }
     };
 
