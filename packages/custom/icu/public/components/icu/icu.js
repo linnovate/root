@@ -88,68 +88,20 @@ angular.module('mean.icu').controller('IcuController',
             var restoredContext = context.getContextFromState(state);
             if (restoredContext.entityName !== 'all' && restoredContext.entityName !== 'my') {
                 context.setMain(restoredContext.main);
-                if (restoredContext.entityName === 'task') {
+                var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
+                    return e._id === restoredContext.entityId;
+                });
+
+                restoredContext.entity = currentEntity;
+
+                if (restoredContext.entityName) {
                     context.entityName = restoredContext.entityName;
+                    context.entity = restoredContext.entity;
                     context.entityId = restoredContext.entityId;
-                    TasksService.getById(restoredContext.entityId).then(function(data){
-                        context.entity = data;
-                    });
                 } else {
-                    var currentEntity = _($scope[entityMap[restoredContext.entityName]]).find(function(e) {
-                        return e._id === restoredContext.entityId;
-                    });
-
-                    restoredContext.entity = currentEntity;
-
-                    if (restoredContext.entityName) {
-                        context.entityName = restoredContext.entityName;
-                        context.entity = restoredContext.entity;
-                        context.entityId = restoredContext.entityId;
-                    } else if ($scope.projects[0] && restoredContext.main !== 'project') {
-                        context.entityName = 'project';
-                        context.entity = $scope.projects[0];
-                        context.entityId = $scope.projects[0]._id;
-                    } else if ($scope.discussions[0] && restoredContext.main === 'project') {
-                        context.entityName = 'discussion';
-                        context.entity = $scope.discussions[0];
-                        context.entityId = $scope.discussions[0]._id;
-                    } else if ($scope.offices[0] && restoredContext.main !== 'office') {
-                        context.entityName = 'office';
-                        context.entity = $scope.offices[0];
-                        context.entityId = $scope.offices[0]._id;
-                    } else if ($scope.discussions[0] && restoredContext.main === 'office') {
-                        context.entityName = 'discussion';
-                        context.entity = $scope.discussions[0];
-                        context.entityId = $scope.discussions[0]._id;
-                    } else if ($scope.templateDocs[0] && restoredContext.main !== 'templateDoc') {
-                        context.entityName = 'templateDoc';
-                        context.entity = $scope.templateDocs[0];
-                        context.entityId = $scope.templateDocs[0]._id;
-                    } else if ($scope.discussions[0] && restoredContext.main === 'templateDoc') {
-                        context.entityName = 'discussion';
-                        context.entity = $scope.discussions[0];
-                        context.entityId = $scope.discussions[0]._id;
-                    } else if ($scope.folders[0] && restoredContext.main !== 'folder') {
-                        context.entityName = 'folder';
-                        context.entity = $scope.folders[0];
-                        context.entityId = $scope.folders[0]._id;
-                    } else if ($scope.discussions[0] && restoredContext.main === 'folder') {
-                        context.entityName = 'discussion';
-                        context.entity = $scope.discussions[0];
-                        context.entityId = $scope.discussions[0]._id;
-                    // } else if ($scope.officeDocuments[0] && restoredContext.main !== 'officeDocument') {
-                    //     context.entityName = 'officeDocument';
-                    //     context.entity = $scope.officeDocuments[0];
-                    //     context.entityId = $scope.officeDocuments[0]._id;
-                    // } else if ($scope.discussions[0] && restoredContext.main === 'officeDocument') {
-                    //     context.entityName = 'discussion';
-                    //     context.entity = $scope.discussions[0];
-                    //     context.entityId = $scope.discussions[0]._id;
-                    } else {
-                        context.entityName = 'all';
-                        context.entity = undefined;
-                        context.entityId = undefined;
-                    }
+                    context.entityName = 'all';
+                    context.entity = undefined;
+                    context.entityId = undefined;
                 }
             } else {
                 context.setMain(restoredContext.main);
