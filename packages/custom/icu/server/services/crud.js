@@ -162,30 +162,47 @@ module.exports = function(entityName, options) {
 
           deffered.resolve(mergedPromise);
         } else {
+          let entitiesListCount = 25;
+          Model.count({ _id: pagination.limit }).then(count => {
+            if (count) {
 
-          // finding all elements from "start" to "ID" of element
-          queryById.find({ _id: { $lte: pagination.limit }})
-            .sort(pagination.sort)
-            .count({}, (err, count) => {
-              let entitiesListCount = 25;
-              count = count < entitiesListCount ? entitiesListCount : count;
+              // finding all elements from "start" to "ID" of element
+              queryById.find({ _id: { $lte: pagination.limit }})
+                .sort(pagination.sort)
+                .count({}, (err, count) => {
 
+                  count = count < entitiesListCount ? entitiesListCount : count;
+
+                  query.find(options.conditions)
+                    .sort(pagination.sort)
+                    .skip(pagination.start)
+                    .limit(count);
+
+                  pagination.limit = count;
+                  pagination.start = pagination.limit - entitiesListCount;
+
+                  query.populate(options.includes);
+                  mergedPromise = q.all([query, countQuery]).then(function(results) {
+                    pagination.count = results[1];
+                    return results[0];
+                  });
+                  deffered.resolve(mergedPromise)
+                })
+            } else {
               query.find(options.conditions)
                 .sort(pagination.sort)
                 .skip(pagination.start)
-                .limit(count);
-
-              pagination.limit = count;
-              pagination.start = pagination.limit - entitiesListCount;
+                .limit(entitiesListCount);
 
               query.populate(options.includes);
               mergedPromise = q.all([query, countQuery]).then(function(results) {
                 pagination.count = results[1];
                 return results[0];
-              });
-
+              });   
+                   
               deffered.resolve(mergedPromise);
-            })
+            }
+          })
         }
       }
     } else {

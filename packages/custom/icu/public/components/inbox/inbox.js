@@ -36,13 +36,10 @@ angular.module('mean.icu.ui.inbox', [])
 
         function loadMore(){
             let START = $scope.activities.length;
-            let LIMIT = 25;
+            let LIMIT = $stateParams.limit;
+            let SORT = $stateParams.sort;
 
-            loadData(START, LIMIT)
-        }
-
-        function loadData (START, LIMIT) {
-            return $scope.loadNext(me._id, START, LIMIT, 'created')
+            return $scope.loadNext(me._id, START, LIMIT, SORT)
                 .then( items => {
                     if(!items)return;
                     return InboxService.getUpdateEntities(items)

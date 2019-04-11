@@ -64,14 +64,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
             }
         };
 
-        if(type === 'assign') {
-            changedBulkObject.update.watchers = [value];
-            changedBulkObject.update.permissions = [{
-                id: value,
-                level: 'commenter'
-            }];
-        }
-
         return MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
             .then(result => {
                 for(let i = 0; i < selectedArray.length; i++){

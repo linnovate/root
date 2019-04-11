@@ -11,6 +11,16 @@ const collection = 'updates';
 
 const limit = undefined;
 
+const collMap = {
+  task: 'tasks',
+  project: 'projects',
+  discussion: 'discussions',
+  office: 'offices',
+  folder: 'folders',
+  officeDocument: 'documents',
+  templateDoc: 'template_docs'
+}
+
 mongodb.connect(URL).then(client => {
   let db = client.db();
   let coll = db.collection(collection);
@@ -23,23 +33,22 @@ mongodb.connect(URL).then(client => {
     cursor.forEach(doc => {
 
       // Skip if already migrated
-      if(doc.updateField) return;
+      if(doc.updateField) {
+        tick(bar, client);
+        return;
+      };
 
       let updated = switchMigrate(doc);
 
       if(!updated) {
-
-        // Remove activity as we don't need it anymore
-        coll.remove({ _id: doc._id }, (err) => {
-          if(err) throw err;
-          tick(bar, client);
-        })
+        // Don't touch the activity for now...
+        tick(bar, client);
       } else if(!updated.updateField) {
         console.log('Coulndn\'t migrate', doc, updated)
       } else {
 
         // Check if entity refered by the activity exists
-        db.collection(updated.entityType + 's').count({ _id: updated.entity}, (err, count) => {
+        db.collection(collMap[updated.entityType]).count({ _id: updated.entity}, (err, count) => {
           if(err) throw err;
           if(!count) {
             coll.remove({ _id: doc._id }, (err) => {
@@ -66,6 +75,10 @@ function tick(bar, client) {
 }
 
 function switchMigrate(doc) {
+
+  if(doc.issue === 'officeDocuments') {
+    doc.issue = 'officeDocument';
+  }
 
   let result = {
     creator: doc.creator,
@@ -143,13 +156,12 @@ function switchMigrate(doc) {
       break;
     case 'document':
     case 'documentDelete':
-    case 'updateEntity':
-    case 'updateNewEntity':
-    case 'updateWatcherPerms':
-      // In case of `updateWatcherPerms`, check the following field
-      //doc.permissions;
+      result.updateField = 'attachment';
+      if(doc.description) {
+        result.current = doc.description;
+      }
+      break;
     default:
-      // Delete this item by returning false
       return false;
   }
 

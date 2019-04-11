@@ -58,7 +58,18 @@ function update(req, res, next) {
             doc.due = due;
           }
         }
-        if(assign) doc.assign = assign;
+        if(assign) {
+          doc.assign = assign;
+
+          // Give commenter permissions for assignee
+          if(assign !== doc.creator.toString()) {
+            watchers = [assign];
+            permissions = [{
+              id: assign,
+              level: 'commenter'
+            }]
+          }
+        }
 
         if(watchers && watchers.length) {
           doc.watchers = _.union(doc.watchers.map(v => v.toString()), watchers);

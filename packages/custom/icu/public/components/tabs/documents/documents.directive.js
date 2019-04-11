@@ -65,7 +65,7 @@ angular.module('mean.icu.ui.tabs')
                             entity: $scope.entity._id,
                             entityType: $scope.entityName,
                             updateField: 'attachment',
-                            current: $scope.activity,
+                            current: $scope.activity.description,
                         },
                         context: {}
                     }).then(function(result) {

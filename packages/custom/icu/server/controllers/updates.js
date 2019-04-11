@@ -97,18 +97,46 @@ exports.getByEntity = function(req, res, next) {
 };
 
 exports.getByUser = function(req, res, next) {
-    let pagination = req.locals.data.pagination;
-    let start = pagination.start, limit = pagination.limit;
-    let id = req.params.id;
+  let { start, limit, sort } = req.locals.data.pagination;
+  let id = req.params.id;
+
+  let models = {
+    Task: 'task',
+    Project: 'project',
+    Discussion: 'discussion',
+    Office: 'office',
+    Folder: 'folder',
+    Document: 'officeDocument',
+    TemplateDoc: 'templateDoc'
+  };
+
+  let promises = Object.keys(models).map(model => {
+    return mongoose.model(model).find({
+      watchers: id
+    }).select('_id')
+  });
+
+  Promise.all(promises).then(results => {
+    let query = results.map((result, i) => {
+      return {
+        entityType: Object.values(models)[i],
+        entity: {
+          $in: result.map(v => v._id)
+        }
+      }
+    });
 
     Update.find({
-        creator: id
+      $or: query
     })
-    .skip(start).limit(limit)
+    .sort(sort)
+    .skip(start)
+    .limit(limit)
     .populate('creator', 'name lastname profile')
     .then(function(updates) {
         res.status(200).send(updates);
     });
+  })
 };
 
 exports.created = function(req, res, next) {
