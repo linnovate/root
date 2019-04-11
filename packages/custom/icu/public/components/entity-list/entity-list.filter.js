@@ -20,10 +20,7 @@ angular.module('mean.icu.ui.entityListFilters', [])
 	return function(entities) {
 		if($state.current.name === "main.search.recycled") return entities ;
 		if (!entities || !(entities instanceof Array)) return entities;
-		var out = []
-		out = entities.filter(function(entity) {
-					return !("recycled" in entity)
-				});
+		let out = entities.filter(entity => !entity.recycled);
 		return out;
 	}
 })

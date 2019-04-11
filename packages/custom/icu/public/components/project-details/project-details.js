@@ -164,6 +164,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   $scope.recycle = function() {
     ProjectsService.removeFromParent($scope.item).then(()=>{
       EntityService.recycle('projects', $scope.item._id).then(function() {
+        $scope.item.recycled = new Date();
         let clonedEntity = angular.copy($scope.item);
         clonedEntity.status = 'Recycled';
         // just for activity status
@@ -172,22 +173,10 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
         });
 
         refreshList();
-        if(currentState.indexOf('search') !== -1) {
-          $state.go(currentState, {
-            entity: context.entityName,
-            entityId: context.entityId
-          }, {
-            reload: true,
-            query: $stateParams.query
-          });
-        }
-        else {
-          $state.go('main.projects.all', {
-            entity: 'all',
-          }, {
-            reload: true
-          });
-        }
+        $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+        $scope.permsToSee();
+        $scope.havePermissions();
+        $scope.haveEditiorsPermissions();
       });
     }
     );

@@ -286,7 +286,8 @@ function OfficeDocumentDetailsController(
   // ==================================================== Menu events ==================================================== //
 
   $scope.recycle = function() {
-    EntityService.recycle("officeDocuments", $scope.item._id).then(function() {
+    EntityService.recycle('officeDocuments', $scope.item._id).then(function() {
+      $scope.item.recycled = new Date();
       let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "Recycled";
       // just for activity status
@@ -297,29 +298,10 @@ function OfficeDocumentDetailsController(
       );
 
       refreshList();
-      if (currentState.indexOf("search") != -1) {
-        $state.go(
-          currentState,
-          {
-            entity: context.entityName,
-            entityId: context.entityId
-          },
-          {
-            reload: true,
-            query: $stateParams.query
-          }
-        );
-      } else {
-        $state.go(
-          "main.officeDocuments.all",
-          {
-            entity: "all"
-          },
-          {
-            reload: true
-          }
-        );
-      }
+      $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+      $scope.permsToSee();
+      $scope.havePermissions();
+      $scope.haveEditiorsPermissions();
     });
   };
 
