@@ -37,6 +37,7 @@ function FolderListController($scope, $state, folders, NotifyingService, BoldedS
         }
         return FoldersService.create(newItem).then(function(result) {
             $scope.items.push(result);
+            $scope.folders.push(result);
             FoldersService.data.push(result);
             return result;
         }).then( item => {
