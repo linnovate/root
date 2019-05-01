@@ -2,9 +2,9 @@ $fa-font-path: '../lib/font-awesome/fonts';
 $open-sans-path: '../lib/open-sans/fonts';
 
 body {
-    overflow: hidden;
-    direction: ltr;
-    font-family: 'openSansHebrew';
+  overflow: hidden;
+  direction: ltr;
+  font-family: 'openSansHebrew';
 }
 
 @import '../lib/font-awesome/scss/font-awesome.scss';
@@ -64,10 +64,10 @@ body {
 
 
 table {
-    :focus {
-        outline: -webkit-focus-ring-color auto 0px;
-        box-shadow:inset 0px 0px 0px 2px gray;
-    }
+  :focus {
+    outline: -webkit-focus-ring-color auto 0px;
+    box-shadow:inset 0px 0px 0px 2px gray;
+  }
 }
 .icu-data {
   display: flex;
@@ -75,45 +75,47 @@ table {
   overflow: hidden;
 }
 .panes-wrapper {
-    width: calc(100% - #{$sidepane-width});
-    display: flex;
-    justify-content: flex-start;
+  width: calc(100% - #{$sidepane-width});
+  display: flex;
+  justify-content: flex-start;
 
-    @media screen and (max-width: $small-resolution) {
-        width: calc(100% - #{$min-sidepane-width});
-    }
+  @media screen and (max-width: $small-resolution) {
+    width: calc(100% - #{$min-sidepane-width});
+  }
 
-    &.wide {
-        margin-left: 0;
-        width: 100%;
-    }
+  &.wide {
+    margin-left: 0;
+    width: 100%;
+  }
 
-    [contenteditable][colspan]:empty:not(:focus):before {
-        content:attr(placeholder);
-        color: $light-grey-placeholder;
-        padding-left: 20px;
-    }
+  [contenteditable][colspan]:empty:not(:focus):before {
+    content:attr(placeholder);
+    color: $light-grey-placeholder;
+    padding-left: 20px;
+  }
 
-    [contenteditable][colspan]:empty:focus {
-        padding-left: 40px;
-    }
+  [contenteditable][colspan]:empty:focus {
+    padding-left: 40px;
+  }
 }
 .icon-projects {
-    width: 25px;
-    height: 25px;
+  width: 25px;
+  height: 25px;
 }
 
 .disabled {
   cursor: not-allowed;
-}
-
-.disabled * {
-  pointer-events: none;
+  * {
+    pointer-events: none;
+  }
 }
 
 .enabled {
+  pointer-events: all;
+  z-index: 3;
+  * {
     pointer-events: all;
-    z-index: 3;
+  }
 }
 //
 // A stylesheet for use with Bootstrap 3.x
@@ -706,9 +708,9 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
 }
 
 .scroll {
-    overflow-y: auto;
+  overflow-y: auto;
 
-    @include scroll;
+  @include scroll;
 }
 
 @media (min-width: 730px) {
@@ -732,4 +734,3 @@ $daterangepicker-ranges-active-border-radius: $daterangepicker-border-radius !de
     }
   }
 }
-
