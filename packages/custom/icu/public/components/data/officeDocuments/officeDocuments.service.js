@@ -7,15 +7,17 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         var data = [];
 
     function getAll(start, limit, sort, type, order) {
-        let qs = {
+        if(limit !== 0 && !findInExistingOfficeDocuments($stateParams.id)) {
+            limit = $stateParams.id;
+        }
+
+        let qs = querystring.encode({
             start: start,
             sort: sort,
-            order:order,
-            status:type
-        };
-        let paramsId = $stateParams.id;
-        qs.limit = findInExistingOfficeDocuments(paramsId) ? limit : paramsId;
-        qs = querystring.encode(qs);
+            order: order,
+            status: type,
+            limit: limit
+        });
 
         if (qs.length) {
             qs = '?' + qs;

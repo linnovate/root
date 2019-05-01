@@ -7,13 +7,15 @@ angular.module('mean.icu.data.discussionsservice', [])
     var data = [];
 
     function getAll(start, limit, sort) {
-        var qs = {
-            start: start,
-            sort: sort
-        };
-        let paramsId = $stateParams.id;
-        qs.limit = findInExistingDiscussions(paramsId) ? limit : paramsId;
-        qs = querystring.encode(qs);
+        if(limit !== 0 && !findInExistingDiscussions($stateParams.id)) {
+          limit = $stateParams.id;
+        }
+
+        let qs = querystring.encode({
+          start: start,
+          sort: sort,
+          limit: limit
+        });
 
         if (qs.length) {
             qs = '?' + qs;

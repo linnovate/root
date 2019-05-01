@@ -9,13 +9,15 @@ angular.module('mean.icu.data.tasksservice', [])
     var data = [], tabData, IsNew;
 
     function getAll(start, limit, sort) {
-        var qs = {
+        if(limit !== 0 && !findInExistingTasks($stateParams.id)) {
+            limit = $stateParams.id;
+        }
+
+        let qs = querystring.encode({
             start: start,
-            sort: sort
-        };
-        let paramsId = $stateParams.id;
-        qs.limit = findInExistingTasks(paramsId) ? limit : paramsId;
-        qs = querystring.encode(qs);
+            sort: sort,
+            limit: limit
+        });
 
         if (qs.length) {
             qs = '?' + qs;

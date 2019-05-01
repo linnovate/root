@@ -7,13 +7,15 @@ angular.module('mean.icu.data.projectsservice', [])
     var data = [], selected;
 
     function getAll(start, limit, sort) {
-        var qs = {
-            start: start,
-            sort: sort
-        };
-        let paramsId = $stateParams.id;
-        qs.limit = findInExistingProjects(paramsId) ? limit : paramsId;
-        qs = querystring.encode(qs);
+        if(limit !== 0 && !findInExistingProjects($stateParams.id)) {
+          limit = $stateParams.id;
+        }
+
+        let qs = querystring.encode({
+          start: start,
+          sort: sort,
+          limit: limit
+        });
 
         if (qs.length) {
             qs = '?' + qs;
