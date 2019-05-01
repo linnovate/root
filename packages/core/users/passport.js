@@ -109,7 +109,8 @@ module.exports = function(passport) {
 			id 	 : profile[config.saml.strategy.claims.username] +
 				    config.saml.strategy.claims.emailSuffix,
 			provider : config.saml.strategy.claims.provider,
-			roles 	 : config.saml.strategy.claims.roles
+			//roles 	 : config.saml.strategy.claims.roles
+		        roles: ['authenticated']
 	  });
 
           user.save(function(err){
