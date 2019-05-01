@@ -8,7 +8,7 @@
 
     <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
 
-    <detail-menu items="menuItems"></detail-menu>
+    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
 
 </div>
 
