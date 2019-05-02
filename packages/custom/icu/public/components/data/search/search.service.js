@@ -25,6 +25,7 @@ angular.module('mean.icu.data.searchservice', [])
             // TODO: the following map should be refactored + removed.
             _this.results.map(function(d) {
                 d._type == "officedocument" ? d._type="officeDocument" : d._type ;
+                d._type == "templatedoc" ? d._type="templateDoc" : d._type ;
                 d.title = Array.isArray(d.title) ? d.title : [d.title]; // this resolves bug https://github.com/linnovate/root/issues/625
                 return d ;
             });
@@ -68,6 +69,3 @@ angular.module('mean.icu.data.searchservice', [])
         refreshQuery: refreshQuery,
     };
 });
-
-
-

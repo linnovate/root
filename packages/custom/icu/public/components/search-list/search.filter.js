@@ -15,7 +15,7 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         let filteringResults = SearchService.filteringResults.map(function(e) {
             let filterDate = new Date(SearchService.filteringByUpdated) ;
             let filterDueDate = new Date(SearchService.filteringByDueDate);
-            let entityDate = new Date(e.updated);
+            let entityDate = new Date(e.updated || e.created);
             let entityDueDate = new Date();
             if (SearchService.filteringByDueDate && e.due) {
                 entityDueDate = new Date(e.due)

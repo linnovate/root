@@ -196,7 +196,7 @@ exports.getAll = function(req, res, next) {
 * req.params.id will consist mongoDB _id of the document
 */
 exports.getById = function(req, res, next) {
-  TemplateDoc.find({
+  TemplateDoc.findOne({
     _id: req.params.id
   }, function(err, data) {
     if(err) {
