@@ -101,7 +101,7 @@ module.exports = {
     img:"" 
   }],
   defaultTab: 'activities', // one of 'activities', 'documents'
-  ScheduledMailSendWeekly: '59 1 * * 0',
+  ScheduledMailSendWeekly: '59 3 * * 0',
   ScheduledMailSendDaly: '59 1 * * 0-5',
   activeStatus: require('../activeStatusSettings'),
   ftp: {
