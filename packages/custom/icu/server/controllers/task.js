@@ -827,10 +827,30 @@ exports.populateSubTasks = function(req, res, next) {
   );
 };
 
-exports.GetUsersWantGetMyTodayTasksMail = function() {
+// Function to Separate Array With Timeout
+// Gets array of users & name of function to pass the separate users
+// It's with the Timeout because the mail server has limit per minute for SMTP mails by client
+async function SeparateArrayWithTimeout(users, functionName){
+  
+  if(users.length != 0)
+  {
+    setTimeout(function(){
+      functionName(users.pop()._doc);
+      
+      // Lop until the array is empty
+      if(users.length != 0)
+      {
+        SeparateArrayWithTimeout(users, functionName);
+      }
+    }, 20000);
+  }
+};
+
+
+exports.GetUsersWantGetMyTodayTasksMail = async function() {
   var UserModel = require("../models/user.js");
 
-  var query = UserModel.find({
+  var query = await UserModel.find({
     GetMailEveryDayAboutMyTasks: "yes"
   })
     .populate(options.includes)
@@ -838,9 +858,7 @@ exports.GetUsersWantGetMyTodayTasksMail = function() {
       if (err) {
         console.log("Can't get users");
       } else {
-        users.forEach(function(user) {
-          MyTasksOfTodaySummary(user._doc);
-        });
+        SeparateArrayWithTimeout(users, MyTasksOfTodaySummary);
       }
       //next();
     });
@@ -852,6 +870,9 @@ exports.MyTasksOfTodaySummary = function(req, res, next) {};
 function MyTasksOfTodaySummary(user) {
   var TaskModel = require("../models/task.js");
 
+  var CheckRealDue = new Date();
+  CheckRealDue.setHours(0, 0, 0, 0);
+  
   //*AsButton*
   //var query = req.acl.mongoQuery('Task');
   //query.find({
@@ -859,6 +880,7 @@ function MyTasksOfTodaySummary(user) {
     //*AsButton* assign: req.user._id,
     assign: user._id,
     status: { $nin: ["rejected", "done"] },
+    due: CheckRealDue,
     tType: { $ne: "template" }
   })
     .populate(options.includes)
@@ -871,19 +893,11 @@ function MyTasksOfTodaySummary(user) {
       } else {
         //*AsButton* req.locals.result = tasks;
 
-        var curr = new Date();
-        curr.setHours(0, 0, 0, 0);
-        var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-
         var TodayTasks = [];
 
         tasks.forEach(function(task) {
-          var due = new Date(task.due);
-          //if (due >= date[0] && due <= date[1]) {
-          if (due.getDay() == firstday.getDay()) {
             task.due.setDate(task.due.getDate() + 1);
             TodayTasks.push(task);
-          }
         });
 
         mailService
@@ -911,9 +925,7 @@ exports.GetUsersWantGetMyWeeklyTasksMail = function() {
       if (err) {
         console.log("Can't get users");
       } else {
-        users.forEach(function(user) {
-          MyTasksOfNextWeekSummary(user._doc);
-        });
+        SeparateArrayWithTimeout(users, MyTasksOfNextWeekSummary);
       }
       //next();
     });
@@ -924,6 +936,12 @@ exports.MyTasksOfNextWeekSummary = function(req, res, next) {};
 
 function MyTasksOfNextWeekSummary(user) {
   var TaskModel = require("../models/task.js");
+  
+  var CheckRealDue = new Date();
+  CheckRealDue.setHours(0, 0, 0, 0);
+  var CheckRealDueInWeek = new Date();
+  CheckRealDueInWeek.setHours(CheckRealDueInWeek.getDate() + 7);
+  CheckRealDueInWeek.setHours(0, 0, 0, 0);
 
   //*AsButton*
   //var query = req.acl.mongoQuery('Task');
@@ -932,6 +950,7 @@ function MyTasksOfNextWeekSummary(user) {
     //*AsButton* assign: req.user._id,
     assign: user._id,
     status: { $nin: ["rejected", "done"] },
+    due: {$gte: CheckRealDue, $lt: CheckRealDueInWeek},
     tType: { $ne: "template" }
   })
     .populate(options.includes)
@@ -944,23 +963,11 @@ function MyTasksOfNextWeekSummary(user) {
       } else {
         //*AsButton* req.locals.result = tasks;
 
-        var curr = new Date();
-        curr.setHours(0, 0, 0, 0);
-        var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-        var lastday = new Date(
-          curr.setDate(curr.getDate() - curr.getDay() + 6)
-        );
-        lastday = new Date(lastday.setHours(23, 59, 59, 0));
-        var date = [firstday, lastday];
-
         var WeekTasks = [];
 
         tasks.forEach(function(task) {
-          var due = new Date(task.due);
-          if (due >= date[0] && due <= date[1]) {
             task.due.setDate(task.due.getDate() + 1);
             WeekTasks.push(task);
-          }
         });
 
         mailService
@@ -988,9 +995,7 @@ exports.GetUsersWantGetGivenWeeklyTasksMail = function() {
       if (err) {
         console.log("Can't get users");
       } else {
-        users.forEach(function(user) {
-          GivenTasksOfNextWeekSummary(user._doc);
-        });
+        SeparateArrayWithTimeout(users, GivenTasksOfNextWeekSummary);
       }
       //next();
     });
@@ -1003,11 +1008,18 @@ function GivenTasksOfNextWeekSummary(user) {
   //*AsButton* var query = req.acl.mongoQuery('Task');
 
   var TaskModel = require("../models/task.js");
+  
+  var CheckRealDue = new Date();
+  CheckRealDue.setHours(0, 0, 0, 0);
+  var CheckRealDueInWeek = new Date();
+  CheckRealDueInWeek.setHours(CheckRealDueInWeek.getDate() + 7);
+  CheckRealDueInWeek.setHours(0, 0, 0, 0);
 
   var query = TaskModel.find({
     //*AsButton* query.find({
     //creator: req.user._id,
     creator: user._id,
+    due: {$gte: CheckRealDue, $lt: CheckRealDueInWeek},
     tType: { $ne: "template" }
   })
     .populate(options.includes)
@@ -1018,23 +1030,12 @@ function GivenTasksOfNextWeekSummary(user) {
         //   message: 'Can\'t get my tasks'
         // };
       } else {
-        var curr = new Date();
-        curr.setHours(0, 0, 0, 0);
-        var firstday = new Date(curr.setDate(curr.getDate() - curr.getDay()));
-        var lastday = new Date(
-          curr.setDate(curr.getDate() - curr.getDay() + 6)
-        );
-        lastday = new Date(lastday.setHours(23, 59, 59, 0));
-        var date = [firstday, lastday];
 
         var WeekTasks = [];
 
         tasks.forEach(function(task) {
-          var due = new Date(task.due);
-          if (due >= date[0] && due <= date[1]) {
             task.due.setDate(task.due.getDate() + 1);
             WeekTasks.push(task);
-          }
         });
 
         mailService
