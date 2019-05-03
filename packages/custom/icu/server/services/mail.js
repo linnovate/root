@@ -718,7 +718,7 @@ exports.sendMyTasksOfTodaySummary = function(type, data) {
 
       return Q.all(promises);
     }).catch(function(err) {
-      logger.log('error', 'sendMyTasksOfTodaySummary, %s', ' render', {error: 'Unknown Error'});
+      logger.log('error', 'sendMyTasksOfTodaySummary, %s', ' render', {error: err});
 
     });
   });
