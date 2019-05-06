@@ -1520,11 +1520,9 @@ $tab-content-height: calc(
             }
         }
         .watchersContainer {
-            transform: translate(calc(-100% + 4px), calc(-60% + 6px));
-            top: 0;
+            bottom: -19px;
+            left: -461px;
             width: 465px;
-            max-height: 195px;
-            height: 130px;
 
             .otherWatchers {
                 display: flex;
