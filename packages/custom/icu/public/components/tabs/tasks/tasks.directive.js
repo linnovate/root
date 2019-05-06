@@ -5,7 +5,7 @@ angular.module('mean.icu.ui.tabs')
         function controller($scope) {
             $scope.sorting = {
                 field: 'created',
-                isReverse: false
+                isReverse: true
             };
 
             $scope.loadNext = $scope.tasks.next;

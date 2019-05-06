@@ -153,8 +153,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     }];
 
     $scope.sorting = {
-        field: $scope.sortingList.find(f => f.title == ($stateParams.sort || 'created')),
-        isReverse: false
+        field: $scope.sortingList.find(f => f.title == $stateParams.sort.replace(/^-/, '')),
+        isReverse: $stateParams.sort[0] === '-'
     };
 
     if (context.entityName != "all") {
@@ -221,26 +221,18 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             parent.type = $state.current.params.entity || 'parent';
             parent.id = $state.current.params.entityId;
         }
-        $scope.$parent.create(parent).then((result)=>{
+        $scope.$parent.create(parent).then((result) => {
             $scope.refreshVisibleItems();
-            $timeout(()=> {
-              let lastElementIndex = $element.find('td.name').length - 1;
-              let currentElement = $element.find('td.name').get(lastElementIndex - 1);
-              let nextElement = $element.find('td.name').get(lastElementIndex);
-
-              let focusedElement = currentElement && nextElement;
-              focusedElement.focus();
-            },100);
+            $timeout(() => {
+              $element.find('td.name').get(0).focus();
+            }, 100);
             $state.go($scope.detailsState + '.' + window.config.defaultTab, {
                 id: result._id,
                 entity: context.entityName,
                 entityId: context.entityId,
                 nameFocused: true
             });
-            //             }
-
-        }
-        );
+        });
     };
 
     // ============================================================= //
@@ -402,7 +394,8 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
             if (!$scope.isLoading) {
                 if (loadedVisibleCount < 25 && !listEnd) {
                     var start = $scope.items.length;
-                    var sort = 'created';
+                    var sort = $scope.sorting.field;
+                    if($scope.sorting.isReverse) sort = '-' + sort;
                     //$scope.order.field;
                     $scope.$parent.loadMore(start, LIMIT, sort).then(result => {
                         if (result.length === 0) listEnd = true;

@@ -3,9 +3,9 @@
 angular.module('mean.icu.ui.entity', []).service('EntityService', function (ApiUri, $http, $stateParams, PaginationService, WarningsService, ActivitiesService, SettingServices) {
     var activeStatusFilterValue = "default";
     var SortFilterValue = {
-                             field:"created",
-                             order: 1
-                          };
+        field:"created",
+        order: -1
+    };
     var entityFolderValue = {}
     if($stateParams.entity == "folder"){
         entityFolderValue.id = $stateParams.entityId;

@@ -3,14 +3,6 @@
     <div ng-show="isLoading" class="loader"></div>
     <table class="projects" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody class='containerVertical'>
-            <tr data-ng-repeat="item in visibleItems"
-                data-ng-class="{ 'active': isCurrentState(item._id), 'multipleSelected': item.selected }"
-                ng-click="onClickRow($event, item)"
-                ng-include="unifiedRowTpl"
-                ng-mouseover="showTick(item)"
-                ng-mouseleave="hideTick(item)"
-            >
-            </tr>
             <tr ng-if="!multipleSelectMode">
                 <td
                     class="create-new-item"
@@ -19,6 +11,14 @@
                     tabindex="0"
                     ng-model="newItem"
                 >{{'Create New Item' | i18next}}</td>
+            </tr>
+            <tr data-ng-repeat="item in visibleItems"
+                data-ng-class="{ 'active': isCurrentState(item._id), 'multipleSelected': item.selected }"
+                ng-click="onClickRow($event, item)"
+                ng-include="unifiedRowTpl"
+                ng-mouseover="showTick(item)"
+                ng-mouseleave="hideTick(item)"
+            >
             </tr>
         </tbody>
     </table>
