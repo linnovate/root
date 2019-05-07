@@ -65,25 +65,12 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
   // ==================================================== onChanges ==================================================== //
 
-  function navigateToDetails(discussion) {
-    $scope.detailsState = context.entityName === 'all' ? 'main.discussions.all.details' : 'main.discussions.byentity.details';
-
-    $state.go($scope.detailsState, {
-      id: discussion._id,
-      entity: context.entityName,
-      entityId: context.entityId,
-      starred: $stateParams.starred
-    }, {
-      reload: true
-    });
-  }
-
   $scope.onStar = function(value) {
 
     $scope.update($scope.item, 'star');
 
     DiscussionsService.star($scope.item).then(function () {
-      navigateToDetails($scope.item);
+      $state.reload();
       // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
   }
@@ -94,7 +81,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     $scope.update($scope.item, context);
 
     DiscussionsService.WantToCreateRoom($scope.item).then(function(data) {
-      navigateToDetails($scope.item);
+      $state.reload();
       if(data.roomName) {
         $window.open(window.config.rocketChat.uri + '/group/' + data.roomName);
         return true;
@@ -436,12 +423,7 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
             if (context.entityName === 'project') {
                 var projId = result.project ? result.project._id : undefined;
                 if (projId !== context.entityId) {
-                    $state.go('main.discussions.byentity', {
-                        entity: context.entityName,
-                        entityId: context.entityId
-                    }, {
-                        reload: true
-                    });
+                  $state.reload();
                 }
             }
 

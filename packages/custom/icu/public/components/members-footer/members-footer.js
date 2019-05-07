@@ -172,7 +172,10 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
                 else{
                     return service.update(entity, data, action, member._id)
-                        .then(entity => renavigateToDetails(entity));
+                        .then(entity => {
+                            $state.reload();
+                            return entity;
+                        });
                 }
 
 

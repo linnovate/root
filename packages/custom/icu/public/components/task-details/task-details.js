@@ -69,11 +69,6 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
 
     // ==================================================== onChanges ==================================================== //
 
-  function navigateToDetails() {
-    $scope.detailsState = context.entityName === 'all' ? 'main.tasks.all.details' : 'main.tasks.byentity.details';
-    $state.reload('main.tasks');
-  }
-
   $scope.onStar = function(value) {
 
     TasksService.updateStar($scope.item, me, backupEntity).then(function(result) {
@@ -82,11 +77,8 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
     });
 
     TasksService.star($scope.item).then(function() {
-      // navigateToDetails($scope.item);
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
+        $state.reload();
     });
-
-
 
   }
 
@@ -110,9 +102,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
       if (context.entityName === 'project') {
         var projId = result.project ? result.project._id : undefined;
         if (projId !== context.entityId) {
-          $state.go($state.current, { }, {
-            reload: true
-          });
+          $state.reload();
         }
       }
     });
@@ -363,12 +353,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
       if (context.entityName === 'project') {
         var projId = result.project ? result.project._id : undefined;
         if (projId !== context.entityId) {
-          $state.go('main.tasks.byentity', {
-            entity: context.entityName,
-            entityId: context.entityId
-          }, {
-            reload: true
-          });
+          $state.reload();
         }
       }
 
