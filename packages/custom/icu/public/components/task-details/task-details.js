@@ -110,10 +110,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
       if (context.entityName === 'project') {
         var projId = result.project ? result.project._id : undefined;
         if (projId !== context.entityId) {
-          $state.go('main.tasks.byentity', {
-            entity: context.entityName,
-            entityId: context.entityId
-          }, {
+          $state.go($state.current, { }, {
             reload: true
           });
         }
