@@ -176,6 +176,7 @@
                 border: 1px solid #C8C8C8;
                 margin: 10px 0;
                 max-height: 250px;
+		flex-wrap: wrap;
 
                 .watcher {
                   div[icu-avatar] {
