@@ -5,10 +5,17 @@
  * @example <div acme-order-calendar-range></div>
  */
 
-function EntityListController($scope, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService, PermissionsService, MultipleSelectService, NotifyingService) {
+function EntityListController($scope, $injector, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService, PermissionsService, MultipleSelectService, NotifyingService) {
 
     document.me = $scope.me.id;
-    
+
+    let service = $injector.get(context.main[0].toUpperCase() + context.main.slice(1) + 'Service');
+    let creatingStatuses = {
+        NotCreated: 0,
+        Creating: 1,
+        Created: 2
+    };
+
     // ============================================================= //
     // ========================= navigate ========================== //
     // ============================================================= //
@@ -182,7 +189,7 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
     // ============================================================= //
 
     $scope.context = context;
-    $scope.isLoading = true;
+    $scope.isLoading = false;
 
 
     let inCurrentEntity = (entity)=> $state.current.name.indexOf(entity) !== -1;
@@ -371,42 +378,54 @@ function EntityListController($scope, $window, $state, context, $filter, $stateP
         usingFunction($event.target);
     };
 
-    //     $scope.onBlur = function(item) {
-    //         item.__autocomplete = false;
-    //         $scope.searchResults.length = 0;
-    //         $scope.selectedSuggestion = 0;
-    //     }
-
-    // infinite scroll
-    //     $timeout(function() {
     $scope.displayLimit = Math.ceil($element.height() / 50);
-    $scope.isLoading = false;
-    //     }, 0);
 
     $scope.loadMore = function() {
-        var LIMIT = 25;
         let loadedVisibleCount = 0;
         let listEnd = false;
 
         loadWithVisibleCheck(listEnd, loadedVisibleCount);
 
         function loadWithVisibleCheck(listEnd, loadedVisibleCount) {
-            if (!$scope.isLoading) {
-                if (loadedVisibleCount < 25 && !listEnd) {
-                    var start = $scope.items.length;
-                    var sort = $scope.sorting.field;
-                    if($scope.sorting.isReverse) sort = '-' + sort;
-                    //$scope.order.field;
-                    $scope.$parent.loadMore(start, LIMIT, sort).then(result => {
-                        if (result.length === 0) listEnd = true;
-                        loadedVisibleCount += filterResults(result).length;
-                        $scope.refreshVisibleItems();
-                        loadWithVisibleCheck(listEnd, loadedVisibleCount);
-                    })
+            if (!$scope.isLoading && loadedVisibleCount < 25 && !listEnd) {
+
+                let load;
+                if(!isAlreadyLoaded($stateParams.id)) {
+                    let { start, id: limit, sort } = $state.params;
+                    load = service.getAll($scope.items.length, limit, sort);
+                } else if($scope.loadNext) {
+                    load = $scope.loadNext();
+                } else {
+                    return;
                 }
+
+                $scope.isLoading = true;
+
+                load.then(function (items) {
+                    if (!items.data.length) listEnd = true;
+                    items.data.forEach(item => {
+                        item.__state = creatingStatuses.Created;
+                    });
+
+                    $scope.items = $scope.items.concat(items.data);
+
+                    $scope.loadNext = items.next;
+                    $scope.loadPrev = items.prev;
+
+                    loadedVisibleCount += filterResults(items.data).length;
+                    $scope.refreshVisibleItems();
+                    $scope.isLoading = false;
+                    loadWithVisibleCheck(listEnd, loadedVisibleCount);
+                });
             }
         }
     };
+
+    function isAlreadyLoaded(id) {
+        if(!id) return true;
+        return $scope.items.find(item => item._id === id);
+    }
+
 
     $scope.refreshVisibleItems = function() {
         $scope.visibleItems = removeDuplicates(filterResults($scope.items))

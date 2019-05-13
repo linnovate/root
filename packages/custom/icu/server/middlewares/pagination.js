@@ -22,20 +22,39 @@ function parseParams(req, res, next) {
 
   req.locals.data.pagination = {
     type: type,
-    sort: req.query.sort ? req.query.sort : 'created',
-    start: req.query.start ? +req.query.start : undefined,
-    limit: isNaN(+req.query.limit) ? req.query.limit || undefined : +req.query.limit
+    sort: req.query.sort || 'created',
+    start: req.query.start ? Number(req.query.start) : undefined
   };
-if (req.query.status){
-  req.locals.data.pagination.status = req.query.status;
-}
-  next();
+  if (req.query.status){
+    req.locals.data.pagination.status = req.query.status;
+  }
+
+  if(req.query.limit && isNaN(Number(req.query.limit))) {
+    let { entityName } = req.locals.data;
+    let extra = 25;
+    entityName = entityName[0].toUpperCase() + entityName.slice(1,-1);
+    req.acl.mongoQuery(entityName).find({}).sort(req.query.sort || 'created').then(docs => {
+      let count = docs.findIndex(doc => doc._id.toString() === req.query.limit)
+      if(req.query.start < count) {
+        count -= req.query.start;
+        count += extra;
+      }
+      req.locals.data.pagination.limit = count;
+      next()
+    })
+  } else {
+    req.locals.data.pagination.limit = Number(req.query.limit)
+    next();
+  }
+
 }
 
 function formResponse(req, res, next) {
   if(req.locals.error) {
     return next();
   }
+
+  let defaultLimit = 25;
 
   var pagination = req.locals.data.pagination;
   if(pagination && pagination.type) {
@@ -46,37 +65,32 @@ function formResponse(req, res, next) {
 
     var baseUrl = req.originalUrl.split('?')[0];
 
-    var prevParams, nextParams;
-    var prevUrl, nextUrl;
-
     if(pagination.type === 'page') {
-      var hasPrev = pagination.start - pagination.limit > -pagination.count;
-      var prevLimit = 0;
 
-      if(hasPrev) {
-        var prevStart = pagination.start - pagination.limit;
-        if(prevStart < 0) {
-          prevLimit = prevStart;
-          prevStart = 0;
+      // Compute prev URL
+      if(pagination.start > 0) {
+        let prevLimit;
+        if(pagination.start < defaultLimit) {
+          prevLimit = pagination.start;
+        } else {
+          prevLimit = defaultLimit;
         }
 
-        prevParams = _(pagination).omit('type', 'count').value();
-        prevParams.start = prevStart;
-        prevParams.limit = pagination.limit + prevLimit;
-        prevUrl = baseUrl + '?' + querystring.stringify(prevParams);
+        page.prev = baseUrl + '?' + querystring.stringify({
+          sort: pagination.sort,
+          start: pagination.start - prevLimit,
+          limit: prevLimit
+        });
 
-        page.prev = prevUrl;
       }
 
-      var hasNext = pagination.start + pagination.limit < pagination.count;
-      if(hasNext) {
-        var nextStart = pagination.start + pagination.limit;
-
-        nextParams = _(pagination).omit('type', 'count').value();
-        nextParams.start = nextStart;
-        nextUrl = baseUrl + '?' + querystring.stringify(nextParams);
-
-        page.next = nextUrl;
+      // Compute next URL
+      if(pagination.start + page.content.length < pagination.count) {
+        page.next = baseUrl + '?' + querystring.stringify({
+          sort: pagination.sort,
+          limit: defaultLimit,
+          start: pagination.start + page.content.length
+        });
       }
     }
 

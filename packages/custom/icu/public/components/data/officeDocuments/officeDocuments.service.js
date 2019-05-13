@@ -7,10 +7,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
         var data = [];
 
     function getAll(start, limit, sort, type, order) {
-        if(limit !== 0 && !findInExistingOfficeDocuments($stateParams.id)) {
-            limit = $stateParams.id;
-        }
-
         let qs = querystring.encode({
             start: start,
             sort: sort,
@@ -37,11 +33,6 @@ angular.module('mean.icu.data.officedocumentsservice', [])
             return PaginationService.processResponse(data);
         });
     }
-
-        function findInExistingOfficeDocuments(id){
-            if(!id)return true;
-            return !!data.find( taskInList => taskInList._id === id );
-        }
 
          function deleteDocument(id) {
              return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function (result) {
