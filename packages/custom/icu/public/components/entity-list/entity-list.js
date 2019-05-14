@@ -26,38 +26,7 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
         return $state.current.name.indexOf(`main.${$scope.$parent.entityName}.byentity`) === 0 && $state.current.name.indexOf('details') === -1;
     }
 
-    let possibleNavigate = $scope.$parent.items.filter( t => t.recycled == null );
-
-    if (possibleNavigate.length) {
-        function navigateToDetails(item) {
-            if (!item)
-                return;
-
-            $scope.detailsState = context.entityName === 'all' ? `main.${$scope.$parent.entityName}.all.details` : `main.${$scope.$parent.entityName}.byentity.details`;
-
-            $state.go($scope.detailsState, {
-                id: item._id,
-                entity: context.entityName,
-                entityId: context.entityId,
-            });
-        }
-        if ($state.current.name === `main.${$scope.$parent.entityName}.all` || $state.current.name === `main.${$scope.$parent.entityName}.byentity` || $state.current.name === `main.${$scope.$parent.entityName}.all.details.${window.config.defaultTab}` || $state.current.name === `main.${$scope.$parent.entityName}.byentity.details.${window.config.defaultTab}`) {
-            var date = new Date();
-            var lastIndex = possibleNavigate.length - 1;
-            var diff = date.getTime() - new Date(possibleNavigate[lastIndex].created).getTime();
-            if (possibleNavigate[lastIndex].title == "" && diff <= 2500) {
-                navigateToDetails(possibleNavigate[lastIndex]);
-            } else {
-                navigateToDetails(possibleNavigate[0]);
-            }
-        }
-    } else {
-        if ($state.current.name == `main.${$scope.$parent.entityName}.all.details.${window.config.defaultTab}`) {
-            $state.go(`main.${$scope.$parent.entityName}.all`);
-        }
-    }
-
-   if (context.entityName === 'all') {
+    if (context.entityName === 'all') {
         $scope.detailsState = `main.${$scope.$parent.entityName}.all.details`;
     } else if (context.entityName === 'my') {
         $scope.detailsState = `main.${$scope.$parent.entityName}.byassign.details`;
@@ -390,9 +359,10 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
             if (!$scope.isLoading && loadedVisibleCount < 25 && !listEnd) {
 
                 let load;
-                if(!isAlreadyLoaded($stateParams.id)) {
-                    let { start, id: limit, sort } = $state.params;
-                    load = service.getAll($scope.items.length, limit, sort);
+                let alreadyLoaded = Boolean($scope.items.find(item => item._id === $stateParams.id));
+                if($stateParams.id && !alreadyLoaded) {
+                    let { id, limit, sort } = $state.params;
+                    load = service.getAll($scope.items.length, id || limit, sort);
                 } else if($scope.loadNext) {
                     load = $scope.loadNext();
                 } else {
@@ -417,33 +387,20 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
                     $scope.isLoading = false;
                     loadWithVisibleCheck(listEnd, loadedVisibleCount);
                 });
+            } else {
+                let isActive = Boolean($scope.visibleItems.find(item => item._id === $stateParams.id));
+                if($stateParams.id && !isActive) {
+                    $state.go($state.current, {
+                        id: $scope.visibleItems[0]._id,
+                        nameFocused: true
+                    })
+                }
             }
         }
     };
 
-    function isAlreadyLoaded(id) {
-        if(!id) return true;
-        return $scope.items.find(item => item._id === id);
-    }
-
-
     $scope.refreshVisibleItems = function() {
         $scope.visibleItems = removeDuplicates(filterResults($scope.items))
-    };
-
-    $scope.checkForInactiveEntity = () => {
-        if($scope.visibleItems.length && $stateParams.id) {
-            let entityIndex = $scope.visibleItems.findIndex( item => item._id === $stateParams.id );
-            entityIndex = entityIndex === -1 ? 0 : entityIndex;
-
-            $state.go($scope.detailsState || $state.current.name,
-                {
-                    id: $scope.visibleItems[entityIndex]._id,
-                    entity: context.entityName,
-                    entityId: context.entityId,
-                    nameFocused: true
-                })
-        }
     };
 
     function setStatusFilterValue(value){
@@ -457,7 +414,6 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
 
     setStatusFilterValue($stateParams.status);
     $scope.refreshVisibleItems();
-    $scope.checkForInactiveEntity();
 
     function filterResults(itemsArray){
         let newArray = $filter('filterRecycled')(itemsArray);
