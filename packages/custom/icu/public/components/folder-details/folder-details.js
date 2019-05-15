@@ -201,13 +201,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
     FoldersService.update($scope.item).then(function(result) {
         backupEntity = angular.copy($scope.item);
       let officeId = result.office ? result.office._id : undefined;
-      $state.go('main.folders.byentity.details', {
-        entity: context.entityName,
-        entityId: officeId,
-        id: $scope.item._id
-      }, {
-        reload: true
-      });
+      $state.reload();
     });
   };
 
