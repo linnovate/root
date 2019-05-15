@@ -4,7 +4,7 @@ angular.module('mean.icu').config([
     '$meanStateProvider',
     function ($meanStateProvider) {
         var LIMIT = 25;
-        var SORT = 'created';
+        var SORT = '-created';
         var BIGLIMIT = 2500;
 
         var capitalize = function (str) {

@@ -34,52 +34,6 @@ function TemplateDocListController($scope, $state, templateDocs, NotifyingServic
             return result;
         });
     }
-
-    //     $scope.search = function(item) {
-    //         return TemplateDocsService.search(term).then(function(searchResults) {
-    //             _(searchResults).each(function(sr) {
-    //                 var alreadyAdded = _($scope.items).any(function(p) {
-    //                     return p._id === sr._id;
-    //                 });
-
-    //                 if (!alreadyAdded) {
-    //                     return $scope.searchResults.push(sr);
-    //                 }
-    //             });
-    //             $scope.selectedSuggestion = 0;
-    //         });
-    //     }
-
-    $scope.loadMore = function (start, LIMIT, sort) {
-        return new Promise((resolve) => {
-            if (!$scope.isLoading && $scope.loadNext) {
-                $scope.isLoading = true;
-
-                return $scope.loadNext()
-                    .then(function (items) {
-                        _(items.data).each(function (p) {
-                            p.__state = creatingStatuses.Created;
-                        });
-
-                        var offset = $scope.displayOnly ? 0 : 1;
-
-                        if (items.data.length) {
-                            var index = $scope.items.length - offset;
-                            var args = [index, 0].concat(items.data);
-
-                            [].splice.apply($scope.items, args);
-                        }
-
-                        $scope.loadNext = items.next;
-                        $scope.loadPrev = items.prev;
-                        $scope.isLoading = false;
-
-                        return resolve(items.data);
-                    });
-            }
-            return resolve([]);
-        })
-    };
 }
 
 angular.module('mean.icu.ui.templateDoclist', []).controller('TemplateDocListController', TemplateDocListController);

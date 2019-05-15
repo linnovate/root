@@ -7,10 +7,6 @@ angular.module('mean.icu.data.discussionsservice', [])
     var data = [];
 
     function getAll(start, limit, sort) {
-        if(limit !== 0 && !findInExistingDiscussions($stateParams.id)) {
-          limit = $stateParams.id;
-        }
-
         let qs = querystring.encode({
           start: start,
           sort: sort,
@@ -32,11 +28,6 @@ angular.module('mean.icu.data.discussionsservice', [])
             return PaginationService.processResponse(data);
         });
     }
-
-      function findInExistingDiscussions(id){
-          if(!id)return true;
-          return !!data.find( taskInList => taskInList._id === id );
-      }
 
     function getById(id) {
       return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {

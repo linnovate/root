@@ -9,10 +9,6 @@ angular.module('mean.icu.data.tasksservice', [])
     var data = [], tabData, IsNew;
 
     function getAll(start, limit, sort) {
-        if(limit !== 0 && !findInExistingTasks($stateParams.id)) {
-            limit = $stateParams.id;
-        }
-
         let qs = querystring.encode({
             start: start,
             sort: sort,
@@ -34,11 +30,6 @@ angular.module('mean.icu.data.tasksservice', [])
             var data = some.content ? some : [];
             return PaginationService.processResponse(data);
         });
-    }
-
-    function findInExistingTasks(taskId){
-        if(!taskId)return true;
-        return !!data.find( taskInList => taskInList._id === taskId );
     }
 
     function getTags() {
