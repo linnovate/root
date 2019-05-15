@@ -13,57 +13,12 @@ angular.module('mean.icu.ui.middlepane', [])
 });
 
 function SearchController($scope, $state, $stateParams, context, NotifyingService, TasksService, $timeout, SearchService, $document, $location) {
-    $scope.$on('$stateChangeSuccess', function ($event, toState) {
-        // if ($location.path().split("/").pop() == "recycled") {
-        //     $scope.term = "recycled" ;
-        // }
-        // else {
-        //     if($scope.term == "recycled") {
-        //         $scope.term = $location.path().split("/").pop() ;
-        //     }
-        // }
-
-        if (toState.name.indexOf('main.search') !== 0) {
-            if ($stateParams.query && $stateParams.query.length) {
-                $scope.term = $stateParams.query;
-            } else {
-                $scope.term = '';
-            }
-        }
-    });
-
-// function onDocumentClick() {
-//         // check for flag
-//         if(angular.element('#build-in-search').css('display') == 'block')
-//         {
-//             angular.element('#build-in-search').css('display', 'none');
-//         }
-//         else{
-//             angular.element('#build-in-search').css('display', 'block');
-//         }
-//     }
-
-//     $document.on("click", onDocumentClick);
+    $scope.term = $stateParams.query;
 
     $scope.clearSearch = function () {
         $scope.term = '';
-        search();
+        $scope.search();
     };
-
-    // $scope.focusSearch = function () {
-    //     $scope.term = '';
-    //     $scope.search();
-    // };
-
-
-    function search(term) {
-        SearchService.builtInSearchArray = false;
-        $state.go('main.search', {query: term});
-    }
-
-    function refreshQuery(term){
-        SearchService.refreshQuery(term);
-    }
 
     $scope.builtInSearch = function(funcName) {
         $document.on("click", onDocumentClick);
@@ -73,21 +28,17 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
     	});
     };
 
-    function activeSearchNav(){
-        NotifyingService.notify('activeSearch');
-    }
-
-    $scope.startSearch = function(term){
-        search(term);
-        activeSearchNav();
-        refreshQuery(term);
+    $scope.search = function() {
+        SearchService.builtInSearchArray = false;
+        $state.go('main.search', {
+            query: $scope.term
+        }, {
+            reload: true
+        }).then(() => {
+            NotifyingService.notify('activeSearch');
+            SearchService.refreshQuery($scope.term);
+        });
     };
-
-    // $scope.blur = function(){
-    // 	$timeout(function() {
-    // 		$scope.click = false;
-    // 	}, 1000);
-    // }
 }
 
 angular.module('mean.icu.ui.search', [])

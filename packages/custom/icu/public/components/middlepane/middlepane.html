@@ -15,7 +15,7 @@
         <input type="text"
             placeholder="{{ 'search' | i18next }}"
             ng-model="term"
-            ng-change="startSearch(term)"
+            ng-change="search()"
             ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}"
             ng-keyup="click=false"
             ng-click="click=!click; onDocumentClick()">

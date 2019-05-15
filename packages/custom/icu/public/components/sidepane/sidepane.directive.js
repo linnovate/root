@@ -326,26 +326,12 @@ directive('icuSidepane', function() {
     });
 
     $scope.filterSearchByType = function(flag) {
-        $scope.flag = false;
-        if  ($stateParams.recycled == true){
-            $scope.flag = true;
-        }
-        if ($location.search() && $location.search().recycled && $scope.filteringData.issue == 'all'){
-            $scope.flag = true;
-        }
-        if ($scope.filteringData.issue === 'all') {
-            if ($scope.flag){
-              $location.search('recycled', 'true');
-              $location.search('type', $scope.filteringData.issue === 'all' ? null : $scope.filteringData.issue);
-            } else $location.search('');
-        } else {
-            if ($scope.flag)
-              $location.search('type', $scope.filteringData.issue,'recycled','true');
-            else
-              $location.search('type', $scope.filteringData.issue);
-        }
-        if ($scope.isRecycled)
-          $location.search('recycled','true');
+        $state.go($state.current, {
+            type: $scope.filteringData.issue === 'all' ? null : $scope.filteringData.issue
+        }, {
+            notify: false
+        })
+
         let results = SearchService.results;
 
         for (let i = 0; i < $scope.issues.length; i++) {
@@ -498,19 +484,27 @@ directive('icuSidepane', function() {
         console.log("toggleRecycle...") ;
 
         $scope.recycled = $scope.isRecycled = $stateParams.recycled = !$stateParams.recycled;
-        $location.search('recycled', $scope.recycled)
 
         if($scope.recycled === false) {
-            $state.go('main.search', {recycled: false, reload: true, query: query});
-        }
-        else {
+            $state.go('main.search', {
+                recycled: null,
+                query: query
+            }, {
+                reload: true
+            });
+        } else {
             let usedQuery;
             if(query === ''){
               usedQuery = '___';
             } else {
               usedQuery = query;
             }
-            $state.go('main.search', {recycled: true, reload: true, query: usedQuery});
+            $state.go('main.search', {
+                recycled: true,
+                query: usedQuery
+            }, {
+                reload: true
+            });
         }
     };
 

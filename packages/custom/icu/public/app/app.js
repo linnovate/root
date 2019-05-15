@@ -1413,7 +1413,7 @@ angular.module('mean.icu').config([
             })
 
             .state('main.search', {
-                url: '/search/:query',
+                url: '/search/:query?type&recycled',
                 params: {
                     dateUpdated: 'active',
                     recycled:  null
@@ -1429,13 +1429,9 @@ angular.module('mean.icu').config([
                     }
                 },
                 resolve: {
-                    results: function (EntityService,SearchService, $stateParams, $location) {
+                    results: function (SearchService, $stateParams) {
                         let query = $stateParams.query;
-                        $stateParams.recycled = $location.search().recycled;
 
-                        if ($stateParams.recycled == true)  {
-                            $location.search('recycled', 'true');
-                        }
                         if (query && query.length) {
                             if(query !== '___'){
                               SearchService.refreshQuery(query);

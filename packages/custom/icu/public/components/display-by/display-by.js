@@ -205,12 +205,6 @@ angular.module('mean.icu.ui.displayby', [])
 
         };
 
-        $scope.clearSearchType = function(){
-
-            $location.search('type', null);
-            $window.location.reload();
-        }
-
         $scope.getLinkUrl = function(){
             return $state.href('main.' + $scope.activeTab.state ,{'officeDocuments':undefined});
         };
