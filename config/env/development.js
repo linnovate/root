@@ -53,10 +53,7 @@ module.exports = {
     },
 
   elasticsearch: {
-    hosts: [
-      (process.env.ELASTICSEARCH_IP || 'localhost') + ':9200',
-    ],
-    port: 9200,
+    hosts: process.env.ELASTICSEARCH_IP ? process.env.ELASTICSEARCH_IP.split(/\s+/) || ['localhost:9200'] : ['localhost:9200'],
     log: 'error',
     keepAlive: false,
     sniffOnConnectionFault:true,

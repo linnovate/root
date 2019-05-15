@@ -27,7 +27,11 @@ function detailTemplater($timeout) {
   function link($scope, element, attrs) {
     $scope.newTemplate = {
         'name': '',
-        'watcher': $scope.me
+        'watcher': $scope.me,
+        'permission': {
+          id: $scope.me,
+          level: 'editor'
+        }
     };
     $scope.saveTemplate = function() {
       $scope.isopen = false;

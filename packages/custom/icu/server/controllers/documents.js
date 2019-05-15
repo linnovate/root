@@ -3388,7 +3388,7 @@ var copyFile = function(file, dir2) {
   //gets file name and adds it to dir2
   // var f = path.basename(file);
   // var source = fs.createReadStream(file);
-  // var dest = fs.createWriteStream(path.resolve("http://localhost:3002/files/2018/01/22/", f));
+  // var dest = fs.createWriteStream(path.resolve("http://localhost:3000/files/2018/01/22/", f));
 
   // source.pipe(dest);
   // source.on('end', function() { console.log('Succesfully copied'); });
