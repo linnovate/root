@@ -131,15 +131,11 @@ module.exports = function(entityName, options) {
     var mergedPromise;
 
     var query;
-    var queryById;
-    if(pagination && pagination.status){
+    if(pagination && pagination.status) {
       options.conditions = {status : pagination.status};
-    }else{
-      //options.conditions = {};
     }
     if (currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
-      queryById = acl.mongoQuery(entityNameMap[entityName].name);
       countQuery = acl.mongoQuery(entityNameMap[entityName].name).count(options.conditions);
     } else {
       query = Model.find(options.conditions);
