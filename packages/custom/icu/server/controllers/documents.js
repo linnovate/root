@@ -267,7 +267,8 @@ function getDocumentsByOfficeIdAndDateRange(office, from, to) {
     created: {
       $gte: from,
       $lte: to
-    }
+    },
+   recycled:{"$exists":false}
   })
     .populate({
       path: "folder",
