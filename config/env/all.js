@@ -100,7 +100,7 @@ module.exports = {
     header:'hjghjghj', 
     img:"" 
   }],
-  defaultTab: 'activities', // one of 'activities', 'documents'
+  defaultTab: process.env.DEFAULT_TAB || 'activities', // Possible values: `activities`, `documents`
   ScheduledMailSendWeekly: '59 3 * * 0',
   ScheduledMailSendDaly: '59 1 * * 0-5',
   activeStatus: require('../activeStatusSettings'),
