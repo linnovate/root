@@ -181,16 +181,12 @@
       <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" ng-style="{width:progressPercentage+'%'}">{{progressPercentage}}%</div>
     </div>
 
-    <div style="overflow:inherit" class="tab-content">
-      <div class="documents">
-        <div ng-if="item.path || item.spPath || item.mmhpath " class="document">
-          <a ng-click="view(item)" target="window">
-            <div class="icon {{item.documentType}}"></div>
-            <div id="documentTitle">{{item.title}}</div>
-          </a>
-          <button ng-click="deleteDocumentFile(item)">X</button>
-        </div>
-      </div>
+    <div ng-if="item.path || item.spPath || item.mmhpath" class="document2">
+      <span class="glyphicon glyphicon-remove" ng-click="deleteDocumentFile(item)"></span>
+      <a class="link" ng-click="view(item)" target="window">
+        <div class="icon {{item.documentType}}"></div>
+        <div>{{item.title}}</div>
+      </a>
     </div>
   </div>
 
