@@ -1056,6 +1056,7 @@ angular.module('mean.icu').config([
             .state('main.projects.byparent.details.activities', getDetailsTabState('project', 'activities'))
             .state('main.projects.byparent.details.activities.modal', getDetailspaneModal())
             .state('main.projects.byparent.details.documents', getDetailsTabState('project', 'documents'))
+            .state('main.projects.byparent.details.tasks', getDetailsTabState('project', 'tasks'))
 
 
             .state('main.officeDocuments', {
