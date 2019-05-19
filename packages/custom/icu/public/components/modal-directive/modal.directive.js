@@ -419,6 +419,16 @@ function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,
             ],
             model: $filter('i18next')($scope.currentUser.GetMailEveryDayAboutMyTasks),
             name: 'GetMailEveryDayAboutMyTasks',
+        },
+        {
+            title: 'IWantToGetMailEveryDayAboutGivenTasks',
+            hint: 'updates on tasks assigned to me',
+            options: [
+                $filter('i18next')('yes'),
+                $filter('i18next')('no'),
+            ],
+            model: $filter('i18next')($scope.currentUser.GetMailEveryDayAboutGivenTasks),
+            name: 'GetMailEveryDayAboutGivenTasks',
         }
     ];
 
