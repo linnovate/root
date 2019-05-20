@@ -1,6 +1,6 @@
 <div class="detail-due">
   <div class="placeholder" ng-if="!value">{{ 'dueDate' | i18next }}</div>
-  <input ng-click="open()" ui-date="dueOptions" ng-model="value" ng-class='{"oldDate":checkDate()}' />
+  <input readonly ng-click="open()" ui-date="dueOptions" ng-model="value" ng-class='{"oldDate":checkDate()}' />
 
   <div id="past">
     {{'This Deadline is in the past!' | i18next }}
