@@ -28,7 +28,7 @@
     </button>
   </div>
 
-  <detail-category placeholder="'selectProject' | i18next" value="item.project" items="projects" on-create="newCategory" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent" ></detail-category>
+  <detail-category placeholder="'selectProject' | i18next" value="item.project" items="projects" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent" ></detail-category>
 
   <detail-category
     placeholder="'selectDiscussion' | i18next"

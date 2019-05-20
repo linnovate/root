@@ -205,18 +205,6 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
     });
   };
 
-  $scope.newCategory = function(value) {
-    var office = {
-      color: '0097A7',
-      title: value,
-      watchers: [],
-   };
-    return OfficesService.create(office).then(function(result) {
-      $scope.offices.push(result);
-      return result;
-    });
-  }
-
   // ==================================================== $watch: title / desc ==================================================== //
 
   $scope.$watch('item.title', function(nVal, oVal) {

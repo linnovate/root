@@ -250,19 +250,6 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
     $scope.update($scope.item, 'project');
   }
 
-  $scope.newCategory = function(value) {
-    var project = {
-      color: '0097A7',
-      title: value,
-      watchers: []
-    };
-    return ProjectsService.create(project).then(function(result) {
-      $scope.projects.push(result);
-      return result;
-    });
-
-  }
-
   // ==================================================== Template ==================================================== //
 
   $scope.saveTemplate = function(newTemplate) {

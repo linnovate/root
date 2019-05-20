@@ -3,7 +3,6 @@
   ng-model="value"
   on-select="onSelectChange($item)"
   on-remove="onSelectChange($item)"
-  ng-keyup="setSelectText($select.selected.title)"
   ng-click="updateEntityList()"
 >
   <ui-select-match allow-clear placeholder="{{$select.selected.title || placeholder | htmlToPlaintext}}">
