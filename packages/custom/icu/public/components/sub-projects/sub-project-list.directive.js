@@ -178,8 +178,6 @@ angular.module('mean.icu.ui.subprojectslistdirective', []).directive('icuSubProj
     $scope.open = function(project) {
       if ($scope.checkDate(project)) {
         document.getElementById('past' + project._id).style.display = document.getElementById('ui-datepicker-div').style.display;
-        document.getElementById('past' + project._id).style.left = document.getElementById('ui-datepicker-div').style.left;
-        document.getElementById('past' + project._id).style.top = (parseInt(document.getElementById('ui-datepicker-div').style.top) + 249) + 'px';
       } else {
         document.getElementById('past' + project._id).style.display = 'none';
       }

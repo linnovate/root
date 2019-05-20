@@ -176,8 +176,6 @@ angular.module('mean.icu.ui.subtaskslistdirective', []).directive('icuSubTaskLis
     $scope.open = function(task) {
       if ($scope.checkDate(task)) {
         document.getElementById('past' + task._id).style.display = document.getElementById('ui-datepicker-div').style.display;
-        document.getElementById('past' + task._id).style.left = document.getElementById('ui-datepicker-div').style.left;
-        document.getElementById('past' + task._id).style.top = (parseInt(document.getElementById('ui-datepicker-div').style.top) + 249) + 'px';
       } else {
         document.getElementById('past' + task._id).style.display = 'none';
       }
