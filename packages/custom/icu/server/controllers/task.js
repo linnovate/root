@@ -1061,7 +1061,8 @@ function GivenTasksOfNextWeekSummary(user) {
 async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
   let UpdateModel = require("../models/update");
   tasks = _.map(tasks, task => task._doc);
-  let filteredTasks = _.filter(tasks, task => task.title);
+  let taskNotRecycled = task => !task.hasOwnProperty('recycled');
+  let filteredTasks = _.filter(tasks, task => task.title && taskNotRecycled(task));
   let taskArray = await Promise.all(
     _.map(filteredTasks, async task => {
       let {
