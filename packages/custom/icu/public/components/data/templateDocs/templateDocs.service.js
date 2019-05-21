@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.data.templatedocsservice', [])
-    .service('TemplateDocsService', function ($http, BoldedService, ApiUri, NotifyingService, Upload, WarningsService, PaginationService, $rootScope) {
+    .service('TemplateDocsService', function ($http, BoldedService, ApiUri, NotifyingService, Upload, WarningsService, PaginationService, $rootScope, ActivitiesService, UsersService) {
         var EntityPrefix = '/officeTemplates';
         var data = [], selected;
 
@@ -129,10 +129,11 @@ angular.module('mean.icu.data.templatedocsservice', [])
         function updateTemplateDoc(id, data) {
             return $http.post(ApiUri + EntityPrefix +'/'+ id, data).then(function (result) {
                 WarningsService.setWarning(result.headers().warning);
-                getById(id).then(entitiesArray=>BoldedService.boldedUpdate(entitiesArray[0], 'templateDocs', 'update'));
-                return {
-                    _id: id
-                };
+                return getById(id).then(entity => {
+                    let bolded = _.pick(BoldedService.boldedUpdate(entity, 'templateDocs', 'update'), 'bolded');
+                    Object.assign(entity, bolded);
+                    return entity;
+                });
             });
         }
         function create(templateDoc) {
@@ -151,10 +152,21 @@ angular.module('mean.icu.data.templatedocsservice', [])
             });
         }
 
+        function createActivity(data) {
+            Object.assign(data, {
+                date: new Date(),
+                entityType: 'templateDoc',
+            })
+            return ActivitiesService.create({
+                data: data,
+                context: {}
+            });
+        }
+
         return {
-            delete:deleteTemplate,
+            delete: deleteTemplate,
             getById: getById,
-            getByTemplateDocId:getByTemplateDocId,
+            getByTemplateDocId: getByTemplateDocId,
             getByTaskId: getByTaskId,
             getByProjectId: getByProjectId,
             getByDiscussionId: getByDiscussionId,
@@ -164,11 +176,12 @@ angular.module('mean.icu.data.templatedocsservice', [])
             updateTemplateDoc: updateTemplateDoc,
             getByOfficeId: getByOfficeId,
             getByFolderId: getByFolderId,
-            getTemplatesByFolder:getTemplatesByFolder,
+            getTemplatesByFolder: getTemplatesByFolder,
             getAll: getAll,
             data: data,
             selected : selected,
-            create:create,
-            uploadTemplate:uploadTemplate
+            create: create,
+            uploadTemplate: uploadTemplate,
+            createActivity: createActivity
         };
     });

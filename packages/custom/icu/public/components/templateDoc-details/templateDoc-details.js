@@ -36,10 +36,12 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
 
   // ==================================================== onChanges ==================================================== //
 
+  var backupEntity = angular.copy($scope.item);
+
   $scope.onCategory = function(value) {
     var json = {
-      'name': 'office',
-      'newVal': value && value._id,
+      name: 'office',
+      newVal: value && value._id,
     };
     TemplateDocsService.updateTemplateDoc($scope.item._id, json)
     .then(result =>renavigateToDetails(result));
@@ -132,11 +134,33 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
 
 
   $scope.updateTitle = function(item, newContext) {
-    TemplateDocsService.updateTemplateDoc(item._id, newContext);
+    TemplateDocsService.updateTemplateDoc(item._id, newContext).then(() => {
+      TemplateDocsService.createActivity({
+        creator: $scope.me,
+        entity: item._id,
+        updateField: 'title',
+        current: item.title,
+        prev: backupEntity.title
+      }).then(() => {
+        backupEntity = angular.copy($scope.item);
+        $state.reload();
+      })
+    });
   }
 
   $scope.updateDescription = function(item, newContext) {
-    TemplateDocsService.updateTemplateDoc(item._id, newContext);
+    TemplateDocsService.updateTemplateDoc(item._id, newContext).then(() => {
+      TemplateDocsService.createActivity({
+        creator: $scope.me,
+        entity: item._id,
+        updateField: 'description',
+        current: item.description,
+        prev: backupEntity.description
+      }).then(() => {
+        backupEntity = angular.copy($scope.item);
+        $state.reload();
+      })
+    });
   }
 
   $scope.delayedUpdateTitle = _.debounce($scope.updateTitle, 500);
