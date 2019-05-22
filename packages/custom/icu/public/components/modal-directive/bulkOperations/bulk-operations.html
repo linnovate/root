@@ -168,8 +168,8 @@
                 >
                     <ui-select-match
                       id="addTag"
-                      placeholder="{{ !selected.length ? 'noTags' : 'selectTags' | i18next }}">
-                        {{ !selected.length ? 'noTags' : 'selectTags' | i18next }}
+                      placeholder="{{ 'selectTags' | i18next }}">
+                        {{ 'selectTags' | i18next }}
                     </ui-select-match>
                     <ui-select-choices
                       repeat="tag in tags | filter: $select.search"
