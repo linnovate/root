@@ -112,6 +112,7 @@ mean.serve({ }, function (app) {
         console.log('running a task every day');
 
         taskController.GetUsersWantGetMyTodayTasksMail();
+        taskController.GetUsersWantGetGivenTodayTasksMail();
     });
     
     //END OHAD
