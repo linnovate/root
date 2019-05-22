@@ -914,6 +914,77 @@ function MyTasksOfTodaySummary(user) {
     });
 }
 
+
+
+exports.GetUsersWantGetGivenTodayTasksMail = async function() {
+  var UserModel = require("../models/user.js");
+
+  var query = await UserModel.find({
+    GetMailEveryDayAboutGivenTasks: "yes"
+  })
+    .populate(options.includes)
+    .exec(function(err, users) {
+      if (err) {
+        console.log("Can't get users");
+      } else {
+        SeparateArrayWithTimeout(users, GivenTasksOfTodaySummary);
+      }
+      //next();
+    });
+};
+
+//If we ever need to use as button in the UI == *AsButton*
+exports.GivenTasksOfTodaySummary = function(req, res, next) {};
+
+function GivenTasksOfTodaySummary(user) {
+  var TaskModel = require("../models/task.js");
+
+  var CheckRealDue = new Date();
+  CheckRealDue.setHours(0, 0, 0, 0);
+  
+  //*AsButton*
+  //var query = req.acl.mongoQuery('Task');
+  //query.find({
+  var query = TaskModel.find({
+    //*AsButton* assign: req.user._id,
+    creator: user._id,
+    status: { $nin: ["rejected", "done"] },
+    due: CheckRealDue,
+    tType: { $ne: "template" }
+  })
+    .populate(options.includes)
+    .exec(function(err, tasks) {
+      if (err) {
+        //*AsButton* req.locals.error = {
+        //   message: 'Can\'t get my tasks'
+        // };
+        console.log("Can't get my tasks");
+      } else {
+        //*AsButton* req.locals.result = tasks;
+
+        var TodayTasks = [];
+
+        tasks.forEach(function(task) {
+            task.due.setDate(task.due.getDate() + 1);
+            TodayTasks.push(task);
+        });
+
+        mailService
+          .sendMyTasksOfTodaySummary("GivenTasksOfTodaySummary", {
+            TodayTasks: TodayTasks,
+            //*AsButton* user: req.user
+            user: user
+          })
+          .then(function() {
+            //next();
+          });
+      }
+      //next();
+    });
+}
+
+
+
 exports.GetUsersWantGetMyWeeklyTasksMail = function() {
   var UserModel = require("../models/user.js");
 
