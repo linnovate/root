@@ -1,33 +1,18 @@
 <div class="detail-tags">
-
-  <ul class="detail-tags-items">
-
-    <li class="detail-tags-item" ng-repeat="tag in value">
-      <span>{{tag}}</span>
-      <button class="detail-tags-item-remove" ng-click="removeTag(tag)">
-        <i class="fa fa-times"></i>
-      </button>
-    </li>
-
-    <li class="detail-tags-input" ng-if="!value.length || tagInputVisible">
+  <ul class="detail-tags-items" style="width: 100%;">
+    <li class="detail-tags-input">
       <ui-select
-        ng-model="newTag"
+        style="min-width: 100px;"
+        multiple
         tagging
         tagging-label="false"
-        on-select="addTag(newTag)"
+        ng-model="tags"
+        on-select="addTag($item)"
+        on-remove="removeTag($item)"
       >
-        <ui-select-match id="addTag" placeholder="{{ !value.length ? 'noLabels' : 'selectTags' | i18next }}">{{$item}}</ui-select-match>
-        <ui-select-choices repeat="tag in getUnusedTags() | filter: $select.search">{{tag}}</ui-select-choices>
+        <ui-select-match id="addTag" placeholder="{{ 'selectTags' | i18next }}">{{$item}}</ui-select-match>
+        <ui-select-choices repeat="tag in list | filter: $select.search">{{tag}}</ui-select-choices>
       </ui-select>
     </li>
-
   </ul>
-
-  <button class="detail-tags-add-btn" ng-click="addTagClicked()" ng-show="!tagInputVisible">
-    <div tooltips tooltip-template="add tag" tooltip-side="left">
-      <i class="fa fa-plus"></i>
-    </div>
-  </button>
-
-</div>
 </div>

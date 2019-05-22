@@ -21,39 +21,19 @@ function detailTags($timeout) {
 
   function link($scope, element, attrs) {
 
-    $scope.value = $scope.value || [];
-
-    $scope.getUnusedTags = function() {
-      return ($scope.list || []).filter(x => $scope.value.indexOf(x) < 0)
-    }
-
-    $scope.addTagClicked = function() {
-      $scope.tagInputVisible = true;
-      $timeout(function() {
-        var element = angular.element('#addTag .ui-select-toggle')[0];
-        element.click();
-      }, 0);
-    }
+    $scope.tags = $scope.value || [];
+    $scope.list = $scope.list || [];
 
     $scope.addTag = function(tag) {
-      if(!$scope.value.includes(tag)){
-        $scope.value.push(tag);
-        $scope.onChange($scope.value);
+      if(!$scope.tags.includes(tag)) {
+        $scope.tags.push(tag);
+        $scope.onChange($scope.tags);
       }
-//       $scope.newTag = null;
-      $scope.tagInputVisible = false;
     }
 
     $scope.removeTag = function(tag) {
-      $scope.value = _($scope.value).without(tag);
-//       $scope.newTag = null;
-      $scope.onChange($scope.value);
+      $scope.tags = _($scope.tags).without(tag);
+      $scope.onChange($scope.tags);
     }
-
-    $scope.onOpenClose = function(isOpen) {
-      $scope.tagInputVisible = !isOpen;
-    }
-
-
   }
 }
