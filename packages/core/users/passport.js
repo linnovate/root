@@ -54,7 +54,7 @@ module.exports = function(passport) {
     }
   ));
 
-  function updateUser(user, profile){
+  function updateUser(user, profile,done){
     User.update({_id: user._id},
                 {$set: {
                     lastname : profile[config.saml.strategy.claims.lastname],
@@ -90,11 +90,11 @@ module.exports = function(passport) {
 
             if(!user.job || !user.lastname || ext[1] != config.specialUrl){
 
-              updateUser(user, profile);
+              updateUser(user, profile,done);
             }
 
             if(user.job!=profile[config.saml.strategy.claims.job]){
-              updateUser(user,profile);
+              updateUser(user,profile,done);
             }
 
             return done(null, user);
