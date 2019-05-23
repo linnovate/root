@@ -13,7 +13,18 @@ angular.module('mean.icu.data.usersservice', [])
 
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function(result) {
-            people = result.data;
+            let people = result.data;
+
+            // Add "no choice" option for ui-select
+            people.unshift({
+                name: 'no select',
+                job: 'no select'
+            })
+
+            people.forEach(person => {
+                person.job = person.job || person.name;
+            })
+
             return result.data;
         });
     }
