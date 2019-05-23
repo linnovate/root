@@ -7,6 +7,33 @@ body {
   font-family: 'openSansHebrew';
 }
 
+.ui-select-container {
+  .ui-select-match {
+    outline: none;
+    box-shadow: none;
+    background-color: transparent;
+    .ui-select-toggle {
+      background-color: transparent;
+      box-shadow: none;
+      border: none;
+      .ui-select-match-text {
+        padding: 0;
+      }
+      i.caret {
+        display: none;
+      }
+    }
+  }
+  .ui-select-choices-row {
+    .ui-select-choices-row-inner {
+      outline: none;
+    }
+  }
+  .ui-select-search-hidden {
+    display: none;
+  }
+}
+
 @import '../lib/font-awesome/scss/font-awesome.scss';
 @import '../lib/open-sans/scss/open-sans.scss';
 @import 'variables';

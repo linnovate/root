@@ -9,7 +9,10 @@
                            on-select="filterActive();loadMore()"
                            search-enabled="false">
                     <ui-select-match>
-                        <button class="tasks active-status"><span class="bold">{{'status' | i18next}}: </span>{{$select.selected.title | i18next }}</button>
+                        <button class="tasks active-status">
+                            <strong>{{'status' | i18next}}: </strong>
+                            {{$select.selected.title | i18next }}
+                        </button>
                     </ui-select-match>
                     <ui-select-choices class="sorting" repeat="field.value as field in activeToggleList">
                         {{field.title | i18next}}

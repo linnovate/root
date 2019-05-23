@@ -15,61 +15,11 @@ detail-tags {
     justify-content: space-between;
     margin: 0px 20px 10px 20px;
     clear: both;
+    padding-left: 20px;
 
     .detail-tags-placeholder {
         color: $light-grey-placeholder;
         padding-left: 10px;
-    }
-
-    .detail-tags-items {
-        padding-left: 20px;
-        margin: 0;
-        list-style: none;
-    }
-
-    .detail-tags-item {
-        list-style: none;
-        display: inline-block;
-        vertical-align: middle;
-        cursor: pointer;
-        margin-left: 10px;
-        margin-top: 3px;
-        font-size: 12px;
-        padding: 0 5px;
-        background-color: white;
-        border: 1px solid $light-grey1;
-
-        .detail-tags-item-remove {
-
-            background-color: inherit;
-            @include button;
-            display: none;
-            color: $light-grey1;
-            line-height: 12px;
-
-            i {
-                background-color: $dark-grey;
-                line-height: 12px;
-                border-radius: 6px;
-                width: 13px;
-                height: 12px;
-            }
-        }
-
-        &:hover {
-            background-color: $light-grey1;
-            border: 1px solid;
-            .detail-tags-item-remove {
-                display: inline-block;
-            }
-        }
-    }
-
-    .detail-tags-input {
-      display: inline-block;
-      margin-left: 10px;
-      margin-top: 3px;
-      vertical-align: middle;
     }
 
     .detail-tags-add-btn {
@@ -138,6 +88,7 @@ detail-tags {
         .ui-select-search {
             box-shadow: none;
             border-color: $light-grey1;
+            line-height: 18px;
         }
 
          .ui-select-choices {

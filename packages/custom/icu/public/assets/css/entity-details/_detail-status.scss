@@ -1,53 +1,3 @@
-@mixin ui-select {
-    .ui-select-container {
-        padding-top: 15px;
-        background-color: transparent;
-
-        .ui-select-match {
-            box-shadow: none;
-            background-color: transparent;
-            outline: none;
-
-            .ui-select-match-text {
-                float: left !important;
-                color: #00AEEF;
-                display: flex;
-                align-items: center;
-                margin-top: 0;
-            }
-
-            .ui-select-toggle {
-                background-color: transparent;
-                border: none;
-                box-shadow: none;
-                padding: 0;
-
-                i.caret {
-                    display: none;
-                }
-            }
-        }
-
-        .ui-select-search {
-            box-shadow: none;
-            border-color: $light-grey1;
-            min-width: 95px;
-        }
-
-        .ui-select-choices-row.active {
-            .ui-select-choices-row-inner {
-                background-color: #f5f5f5;
-                color: $dark-grey;
-            }
-        }
-        .ui-select-choices-row {
-            .ui-select-choices-row-inner {
-               display: flex;
-               align-items: center;
-           }
-       }
-   }
-}
 detail-status {
     @include golden-hover;
 
@@ -60,24 +10,22 @@ detail-status {
         align-items: center;
         height: 100%;
         //min-width: 133px;
-        @include ui-select;
 
         .ui-select-container.ui-select-bootstrap {
-          padding-top: 0;
-            .ui-select-match .ui-select-toggle {
-                i.caret {
-                    display: none;
-                }
-                height: auto;
+
+            .ui-select-choices-row-inner {
+                display: flex !important;
             }
+
             i {
                 -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
                 mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-                width: 15px;
-                height: 17px;
+                width: 20px;
+                height: 20px;
                 display: inline-block;
-                margin-right: 13px;
+                margin-right: 5px;
             }
+
             i.new {background-color: #ff4081; }
             i.assigned{background-color: #2979ff;}
             i.in-progress{background-color: #f69679;}
@@ -105,6 +53,7 @@ detail-status {
             .scheduled{color: #0054a6;}
             .received{color: #37afef;}
             .sent{color: #359123;}
+
         }
     }
 }

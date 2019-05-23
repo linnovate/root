@@ -1,14 +1,14 @@
 <div ng-if="user.type !== 'personal' && user.type !== 'corporate' && user._id"
-     class="avatar {{getUserClass(entity, user)}}"
-     title="{{user.name}} {{user.lastname}}">
+    class="avatar {{getUserClass(entity, user)}}"
+    title="{{user.name}} {{user.lastname}}">
     <span ng-if="!user.profile.avatar">
         {{user.name.charAt(0) | uppercase}}{{user.lastname.charAt(0) | uppercase}}
     </span>
     <img ng-if="user.profile.avatar"
-         class="image"
-         ng-src="{{user.profile.avatar + imgUrl}}"
-         alt="{{user.name}}"/>
+        class="image"
+        ng-src="{{user.profile.avatar + imgUrl}}"
+        alt="{{user.name}}"/>
 </div>
 <div ng-if="(user.type === 'personal' || user.type === 'corporate') && user._id"
-     class="avatar avatar-group" title="{{user.name}}">
+    class="avatar avatar-group" title="{{user.name}}">
 </div>
