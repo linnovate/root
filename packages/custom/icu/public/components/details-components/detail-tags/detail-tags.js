@@ -21,19 +21,22 @@ function detailTags($timeout) {
 
   function link($scope, element, attrs) {
 
-    $scope.tags = $scope.value || [];
-    $scope.list = $scope.list || [];
-
-    $scope.addTag = function(tag) {
-      if(!$scope.tags.includes(tag)) {
-        $scope.tags.push(tag);
-        $scope.onChange($scope.tags);
-      }
+    function showPlaceholder() {
+      $timeout(() => {
+        let placeholder = element[0].querySelector('.ui-select-match').getAttribute('placeholder');
+        let input = element[0].querySelector('input');
+        input.placeholder = placeholder;
+      })
     }
 
-    $scope.removeTag = function(tag) {
-      $scope.tags = _($scope.tags).without(tag);
-      $scope.onChange($scope.tags);
+    showPlaceholder()
+
+    $scope.update = function() {
+      $timeout(() => {
+        $scope.onChange($scope.value);
+      })
+      showPlaceholder();
     }
+
   }
 }

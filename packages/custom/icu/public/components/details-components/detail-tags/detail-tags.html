@@ -4,9 +4,9 @@
     multiple
     tagging
     tagging-label="(new)"
-    ng-model="tags"
-    on-select="addTag($item)"
-    on-remove="removeTag($item)"
+    ng-model="$parent.value"
+    on-select="update()"
+    on-remove="update()"
   >
     <ui-select-match id="addTag" placeholder="{{ 'selectTags' | i18next }}">{{$item}}</ui-select-match>
     <ui-select-choices repeat="tag in list | filter: $select.search">{{tag}}</ui-select-choices>

@@ -23,8 +23,16 @@ function detailAssign() {
 
   function link($scope, element, attrs) {
 
+    $scope.list = angular.copy($scope.list);
+
+    if($scope.list[0].name !== 'no select') {
+      $scope.list.unshift({
+        name: 'no select',
+        job: 'no select'
+      })
+    }
+
     $scope.onSelect = function(value) {
-      $scope.value = value;
       $scope.onChange(value);
     }
 
