@@ -23,7 +23,6 @@ function detailStatus() {
   function link($scope, element, attrs) {
     
     $scope.onSelect = function(value) {
-      $scope.value = value;
       $scope.onChange(value);
     }
 
