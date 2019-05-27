@@ -26,6 +26,10 @@ detail-status {
                 margin-right: 5px;
             }
 
+            span {
+                text-align: start;
+            }
+
             i.new {background-color: #ff4081; }
             i.assigned{background-color: #2979ff;}
             i.in-progress{background-color: #f69679;}

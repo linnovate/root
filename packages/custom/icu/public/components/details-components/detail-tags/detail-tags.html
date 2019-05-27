@@ -1,14 +1,12 @@
-<div class="detail-tags">
-  <ui-select
-    style="min-width: 100px;"
-    multiple
-    tagging
-    tagging-label="(new)"
-    ng-model="$parent.value"
-    on-select="update()"
-    on-remove="update()"
-  >
-    <ui-select-match id="addTag" placeholder="{{ 'selectTags' | i18next }}">{{$item}}</ui-select-match>
-    <ui-select-choices repeat="tag in list | filter: $select.search">{{tag}}</ui-select-choices>
-  </ui-select>
-</div>
+<ui-select
+  style="min-width: 100px;"
+  multiple
+  tagging
+  tagging-label="({{'new' | i18next}})"
+  ng-model="$parent.value"
+  on-select="update()"
+  on-remove="update()"
+>
+  <ui-select-match id="addTag" placeholder="{{ 'selectTags' | i18next }}">{{$item}}</ui-select-match>
+  <ui-select-choices repeat="tag in list | filter: $select.search">{{tag}}</ui-select-choices>
+</ui-select>

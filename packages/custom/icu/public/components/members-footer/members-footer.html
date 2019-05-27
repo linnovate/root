@@ -47,7 +47,7 @@
                      user="user"
                      entity="entity"
                      ng-mouseover="getGroupDetails(user)"></div>
-                <span ng-mouseover="getGroupDetails(user)">{{user.job}}</span>
+                <span class="summary-content" ng-mouseover="getGroupDetails(user)">{{user.job}}</span>
                 <span ng-if="user.numberOfPeople">({{user.numberOfPeople}})</span>
             </ui-select-choices>
         </ui-select>

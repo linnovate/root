@@ -84,14 +84,6 @@
             }
 
             .ui-select-container.ui-select-bootstrap {
-                i {
-                    -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-                    mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-                    width: 18px;
-                    height: 18px;
-                    display: inline-block;
-                    margin-right: 13px;
-                }
                 .avatar {
                     margin: 5px;
                     line-height: 30px;
@@ -326,8 +318,11 @@
               }
             }
             .tag {
+                font-weight: normal;
+                .btn {
+                    float: none;
+                }
                 .items {
-                    padding: 12px;
                     width: 100%;
                     min-height: 53px;
                     list-style: none;
@@ -336,7 +331,7 @@
                     display: inline-flex;
                     flex-wrap: wrap;
 
-                    .tags-item, .form-control, .tags-input {
+                    .tags-item, .tags-input {
                         width: 80px;
                         height: 28px;
                         padding: 0 5px;
@@ -360,11 +355,6 @@
                         border: none;
                         background-color: transparent;
                         transform: translateY(-1px);
-                    }
-                    .form-control {
-                        margin: 0 -5px 10px;
-                        line-height: 25px;
-                        font-weight: normal;
                     }
                 }
                 .ui-select-match {

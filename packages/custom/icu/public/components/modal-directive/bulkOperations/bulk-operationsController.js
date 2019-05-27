@@ -307,7 +307,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   //----------------------TAGS----------------------//
 
   $scope.usedTags = [];
-  $scope.usedTagsFiltered;
+  $scope.usedTagsFiltered = [];
   $scope.removedTags = [];
   $scope.tags = [];
 
@@ -335,7 +335,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   }
 
   function filterUsedTags(){
-    $scope.usedTagsFiltered = $scope.usedTags.filter( tag => !tag.remove);
+    $scope.usedTagsFiltered = $scope.usedTags.filter( tag => !tag.remove).map(tag => tag.tag);
   }
 
   function tagsToBulkObjects(tag, remove, primary){

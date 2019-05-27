@@ -2,12 +2,8 @@
 detail-tags {
     display: block;
     position: relative;
-}
-
-.detail-tags {
-    border-bottom: 1px solid #e1e1e1;
-    border-top: 1px solid #e1e1e1;
-    background: 0 center url(/icu/assets/img/tags.png) no-repeat;
+    background: url(/icu/assets/img/tags.png) no-repeat;
+    background-position: left center;
     display: flex;
     align-items: center;
     min-height: 35px;
@@ -15,7 +11,17 @@ detail-tags {
     justify-content: space-between;
     margin: 0px 20px 10px 20px;
     clear: both;
-    padding-left: 20px;
+
+    &:not(.bulk) {
+        padding-left: 20px;
+        border-bottom: 1px solid #e1e1e1;
+        border-top: 1px solid #e1e1e1;
+    }
+
+    &.bulk {
+        padding-left: 30px;
+        background-position: left 10px center;
+    }
 
     .detail-tags-placeholder {
         color: $light-grey-placeholder;
@@ -52,24 +58,13 @@ detail-tags {
     .ui-select-container {
         background-color: transparent;
         appearance: none;
-        background-color: $cream;
         border: none;
         box-shadow: none;
         .ui-select-match {
-            box-shadow: none;
-            background-color: transparent;
-            outline: none;
             display: inline-block;
 
-            .ui-select-toggle {
-                background-color: transparent;
-                border: none;
-                box-shadow: none;
-                padding-left: 0;
-
-                i.caret {
-                    display: none;
-                }
+            .ui-select-match-item {
+                margin: 0 3px 3px 0;
             }
             .btn {
                 border-radius: 0;
