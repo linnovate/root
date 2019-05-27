@@ -1,6 +1,6 @@
 <div class="detail-status">
     <div tooltips tooltip-template="{{'status' | i18next}}">
-        <ui-select ng-model="$parent.value" on-select="onSelect(value)">
+        <ui-select class="transparent" ng-model="$parent.value" on-select="onSelect(value)">
             <ui-select-match>
                 <i class='{{$select.selected}}'></i>
                 <span class='{{$select.selected}}'>{{$select.selected | i18next }}</span>
