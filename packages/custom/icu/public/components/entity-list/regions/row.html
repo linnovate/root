@@ -12,7 +12,6 @@
     tabindex="0"
     ng-model="item.title"
     ng-change="onChange(item)"
-    ng-keydown="onKeydown($event, $index)"
     ng-blur="bluring(item, $event)"
     ng-focus="focusing(item)"
     ng-class="[getBoldedClass(item), {'noFocus': !item.focus}]"
