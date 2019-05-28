@@ -16,12 +16,12 @@
     <div class="no-assignee" ng-if="!data.task.assign">
         <div class="avatar-placeholder"></div>
     </div>
-    <ui-select append-to-body="true" ng-model="data.task.assign" on-select="data.updateCb(data.task, 'assign')" >
+    <ui-select class="transparent" append-to-body="true" ng-model="data.task.assign" on-select="data.updateCb(data.task, 'assign')" >
         <ui-select-match>
             <div icu-avatar user="$select.selected"></div>
             <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}}</span>
         </ui-select-match>
-        <ui-select-choices ng-init="str=user.job?'job':'name'" repeat="user._id as user in data.people | filter: { {{str}} : $select.search } | filterByFrequentUsers: me">
+        <ui-select-choices repeat="user._id as user in data.people | filter: { job : $select.search } | filterByFrequentUsers: me">
             <div icu-avatar user="user"></div>
             <span class="summary-content">{{user.job?user.job:user.name}}</span>
         </ui-select-choices>

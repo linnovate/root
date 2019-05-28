@@ -26,6 +26,9 @@ function detailCategory(context, TasksService, ProjectsService, OfficesService, 
     if (!$scope.items)
       $scope.items = [];
 
+    // Remove untitled items
+    $scope.items = $scope.items.filter(item => item.title);
+
     $scope.items.push({
       'status': 'default',
       'title': '',
@@ -53,6 +56,9 @@ function detailCategory(context, TasksService, ProjectsService, OfficesService, 
       service.getAll(0, 0, 'created')
         .then(function (data) {
           $scope.items = data.data || data;
+
+          // Remove untitled items
+          $scope.items = $scope.items.filter(item => item.title);
         })
     }
 

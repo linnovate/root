@@ -13,7 +13,12 @@ angular.module('mean.icu.data.usersservice', [])
 
     function getAll() {
         return $http.get(ApiUri + EntityPrefix).then(function(result) {
-            people = result.data;
+            let people = result.data;
+
+            people.forEach(person => {
+                person.job = person.job || person.name;
+            })
+
             return result.data;
         });
     }

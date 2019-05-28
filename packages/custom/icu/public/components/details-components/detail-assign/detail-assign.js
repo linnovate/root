@@ -7,7 +7,7 @@
 angular.module('mean.icu.ui.detailsComponents')
   .directive('detailAssign', detailAssign);
 
-function detailAssign() {
+function detailAssign($i18next) {
 
   return {
     scope: {
@@ -23,8 +23,16 @@ function detailAssign() {
 
   function link($scope, element, attrs) {
 
+    $scope.list = angular.copy($scope.list);
+
+    if($scope.list[0].name !== 'no select') {
+      $scope.list.unshift({
+        name: $i18next('noSelect'),
+        job: $i18next('noSelect')
+      })
+    }
+
     $scope.onSelect = function(value) {
-      $scope.value = value;
       $scope.onChange(value);
     }
 

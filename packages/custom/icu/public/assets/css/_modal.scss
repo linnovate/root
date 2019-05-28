@@ -84,14 +84,6 @@
             }
 
             .ui-select-container.ui-select-bootstrap {
-                i {
-                    -webkit-mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-                    mask: url('/icu/assets/img/icon-flag.svg') no-repeat;
-                    width: 18px;
-                    height: 18px;
-                    display: inline-block;
-                    margin-right: 13px;
-                }
                 .avatar {
                     margin: 5px;
                     line-height: 30px;
@@ -326,8 +318,11 @@
               }
             }
             .tag {
+                font-weight: normal;
+                .btn {
+                    float: none;
+                }
                 .items {
-                    padding: 12px;
                     width: 100%;
                     min-height: 53px;
                     list-style: none;
@@ -336,7 +331,7 @@
                     display: inline-flex;
                     flex-wrap: wrap;
 
-                    .tags-item, .form-control, .tags-input {
+                    .tags-item, .tags-input {
                         width: 80px;
                         height: 28px;
                         padding: 0 5px;
@@ -360,11 +355,6 @@
                         border: none;
                         background-color: transparent;
                         transform: translateY(-1px);
-                    }
-                    .form-control {
-                        margin: 0 -5px 10px;
-                        line-height: 25px;
-                        font-weight: normal;
                     }
                 }
                 .ui-select-match {
@@ -985,73 +975,6 @@
 
 .close {
     float: right;
-}
-
-@mixin ui-select {
-    .ui-select-container {
-        //padding-top: 13px;
-        //background-color: transparent;
-
-        .ui-select-match {
-            box-shadow: none;
-            background-color: transparent;
-			outline: none;
-
-            .ui-select-match-text {
-                float: left !important;
-                color: #00AEEF;
-                display: flex;
-                align-items: center;
-                height: 60%;
-                margin-top: 6px;
-
-            }
-
-            .ui-select-toggle {
-                background-color: transparent;
-                //border: none;
-                //box-shadow: none;
-                padding: 0;
-
-                i.caret {
-                    display: none;
-                }
-            }
-        }
-
-        .ui-select-search {
-            box-shadow: none;
-            border-color: $light-grey1;
-        }
-
-        .ui-select-choices-row.active {
-            .ui-select-choices-row-inner {
-                background-color: #f5f5f5;
-                color: $dark-grey;
-
-            }
-        }
-        .ui-select-choices-row {
-            .ui-select-choices-row-inner {
-                display: flex;
-                align-items: center;
-            }
-        }
-    }
-}
-
-.user {
-
-    @include ui-select;
-}
-
-.doneBy {
-
-    @include ui-select;
-}
-
-.notice {
-    @include ui-select;
 }
 
 .verticalUser {

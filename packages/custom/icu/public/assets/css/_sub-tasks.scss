@@ -288,6 +288,7 @@
     .ui-select-container {
       .ui-select-match {
         .ui-select-match-text {
+          display: inline-flex;
           height: auto;
           margin: 0;
           width: 100%;
@@ -305,7 +306,6 @@
       background-color: $green;
       border-radius: 15px;
       display: inline-block;
-      margin: 0 20px 0 0;
       float: left;
       font-size: 20px;
       line-height: 25px;
@@ -316,6 +316,7 @@
     .summary-content {
       display: inline-block;
       line-height: 30px;
+      margin-left: 5px;
     }
   }
   .status {

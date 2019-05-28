@@ -50,18 +50,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   // backup for previous changes - for updates
   var backupEntity = angular.copy($scope.item);
 
-  $scope.people = people.data || people;
-  if($scope.people.length && $scope.people[$scope.people.length - 1].name !== 'no select') {
-    var newPeople = {
-      name: 'no select'
-    };
-    $scope.people.push(_(newPeople).clone());
-  }
-  for(var i = 0; i < $scope.people.length; i++) {
-    if($scope.people[i] && ($scope.people[i].job == undefined || $scope.people[i].job == null)) {
-      $scope.people[i].job = $scope.people[i].name;
-    }
-  }
+  $scope.people = people;
 
   ProjectsService.getStarred().then(function(starred) {
     $scope.item.star = _(starred).any(function(s) {

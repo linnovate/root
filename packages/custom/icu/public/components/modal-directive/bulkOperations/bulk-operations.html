@@ -151,43 +151,14 @@
       <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
         {{ selectedArrays[entity].length }} {{ entity | i18next }}
       </span>
-        <ul class="items detail-tags-items">
-
-            <li class="tags-item" ng-repeat="tag in usedTagsFiltered track by $index">
-                <span>{{tag.tag}}</span>
-                <button class="tags-item-remove" ng-click="removeTag(tag)">
-                    <i class="fa fa-times"></i>
-                </button>
-            </li>
-            <li class="tags-input" ng-if="!value.length || tagInputVisible">
-                <ui-select
-                    ng-model="newTag"
-                    tagging
-                    tagging-label="false"
-                    on-select="addTag(newTag)"
-                >
-                    <ui-select-match
-                      id="addTag"
-                      placeholder="{{ 'selectTags' | i18next }}">
-                        {{ 'selectTags' | i18next }}
-                    </ui-select-match>
-                    <ui-select-choices
-                      repeat="tag in tags | filter: $select.search"
-                      refresh="getlastInputText($select.search)"
-                      refresh-delay="500">
-                      {{tag}}
-                    </ui-select-choices>
-                </ui-select>
-            </li>
-        </ul>
-
-
-        <button class="action-button"
-                ng-class="{ 'disabled' : !selected}"
-                ng-click="bulkUpdateEvery('tag', null)">
-            {{ 'update' | i18next}}
-        </button>
-        <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
+      <detail-tags class="items bulk" value="usedTagsFiltered" on-change="addTag"></detail-tags>
+      <button class="action-button"
+        ng-class="{ 'disabled' : !selected}"
+        ng-click="bulkUpdateEvery('tag', null)"
+      >
+        {{ 'update' | i18next}}
+      </button>
+      <button class="cancel" ng-click="cancel()">{{ 'Cancel' | i18next}}</button>
     </section>
 
 

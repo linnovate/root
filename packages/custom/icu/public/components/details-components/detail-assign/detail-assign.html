@@ -1,9 +1,9 @@
 <div class="detail-assign">
   <div class="no-assignee" ng-if="!value">
-    <div class="avatar-placeholder">{{ 'selectAssignee' | i18next }}</div>
+    {{ 'selectAssignee' | i18next }}
   </div>
   <div tooltips tooltip-template="{{'assignee' | i18next}}">
-    <ui-select ng-model="value" on-select="onSelect(value)">
+    <ui-select class="transparent" ng-model="value" on-select="onSelect(value)">
       <ui-select-match>
         <div icu-avatar user="$select.selected"></div>
         <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}

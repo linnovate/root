@@ -21,39 +21,22 @@ function detailTags($timeout) {
 
   function link($scope, element, attrs) {
 
-    $scope.value = $scope.value || [];
-
-    $scope.getUnusedTags = function() {
-      return ($scope.list || []).filter(x => $scope.value.indexOf(x) < 0)
+    function showPlaceholder() {
+      $timeout(() => {
+        let placeholder = element[0].querySelector('.ui-select-match').getAttribute('placeholder');
+        let input = element[0].querySelector('input');
+        input.placeholder = placeholder;
+      })
     }
 
-    $scope.addTagClicked = function() {
-      $scope.tagInputVisible = true;
-      $timeout(function() {
-        var element = angular.element('#addTag .ui-select-toggle')[0];
-        element.click();
-      }, 0);
-    }
+    showPlaceholder()
 
-    $scope.addTag = function(tag) {
-      if(!$scope.value.includes(tag)){
-        $scope.value.push(tag);
+    $scope.update = function() {
+      $timeout(() => {
         $scope.onChange($scope.value);
-      }
-//       $scope.newTag = null;
-      $scope.tagInputVisible = false;
+      })
+      showPlaceholder();
     }
-
-    $scope.removeTag = function(tag) {
-      $scope.value = _($scope.value).without(tag);
-//       $scope.newTag = null;
-      $scope.onChange($scope.value);
-    }
-
-    $scope.onOpenClose = function(isOpen) {
-      $scope.tagInputVisible = !isOpen;
-    }
-
 
   }
 }
