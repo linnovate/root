@@ -103,7 +103,7 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
         $scope.refreshVisibleItems();
 
         /*Made By OHAD - Needed for reversing sort*/
-        $state.go($state.current.name, {
+        $state.go($state.current, {
             sort: $scope.sorting.field.title
         });
 
@@ -141,14 +141,14 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
     }
 
     $scope.toggleStarred = function() {
-        $state.go($state.current.name, {
+        $state.go($state.current, {
             starred: !$stateParams.starred
         });
     };
 
     $scope.filterActive = function() {
         EntityService.activeStatusFilterValue = $scope.activeToggle.field;
-        $state.go($state.current.name, {
+        $state.go($state.current, {
             activeToggle: $scope.activeToggle.field
         });
     };
