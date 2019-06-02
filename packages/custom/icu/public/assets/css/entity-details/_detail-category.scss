@@ -8,19 +8,18 @@ detail-category {
   margin: 5px 16px;
 
     .detail-category-value {
-        @include tag(14px);
         @include disable-text-styles;
         transition: 0.3s;
         width: initial;
         padding: 3px 13px;
         color: white;
         position: relative;
-        margin: 10px 0 0;
         max-width: 170px;
         overflow: hidden;
         white-space: nowrap;
         float: left;
         left: auto;
+        border-radius: 20px;
     }
 
     .detail-category-row {
@@ -75,6 +74,7 @@ detail-category {
                 }
             }
             .btn {
+                position: initial;
                 border-radius: 0;
                 font-size: 12px;
                 .ui-select-placeholder {
