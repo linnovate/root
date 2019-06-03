@@ -21,7 +21,7 @@
             </div>
         </div>
 
-        <div class="sortByStar">
+        <div class="sortByStar" ng-if="context.main !== 'templateDocs'">
             <button ng-click="toggleStarred()" ng-class="{ 'orange': starred }" class="favorites">
                 <i class="fa fa-star"  tooltips tooltip-template="{{'sort by star' | i18next}}"></i>
             </button>
