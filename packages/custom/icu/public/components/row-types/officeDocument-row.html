@@ -1,38 +1,24 @@
 <td class="id">
-    {{ data.officeDocument._id ? data.index + 1 : ''}}
+  {{ data.officeDocument._id ? data.index + 1 : ''}}
 </td>
-
 <td class="name"
-    ng-click="!data.officeDocument._id && data.create()"
-    placeholder="{{!data.officeDocument._id && ('createNewofficeDocument' | i18next)}}"
-    ng-attr-colspan="{{data.officeDocument._id ? undefined : 2}}"
-    title="{{data.officeDocument.title}}"
-    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.officeDocument)) && !recycled(data.officeDocument)}}"
-    strip-br="true"
-    ng-change="data.searchCb(data.officeDocument) || data.updateCb(data.officeDocument)"
-    ng-keydown="data.focusAutoCompleteCb($event, data.officeDocument) || data.onEnterCb($event, data.index)"
-    ng-model="data.officeDocument.PartTitle"
-    ng-blur="bluring(data.officeDocument, $event); data.hideAutoCompleteCb(data.officeDocument)"
-    ng-focus="focusing(data.officeDocument)"
-    ng-class="{'noFocus':isBlurred(data.officeDocument)}"
+  ng-click="!data.officeDocument._id && data.create()"
+  placeholder="{{!data.officeDocument._id && ('createNewofficeDocument' | i18next)}}"
+  ng-attr-colspan="{{data.officeDocument._id ? undefined : 2}}"
+  title="{{data.officeDocument.title}}"
+  ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.officeDocument)) && !recycled(data.officeDocument)}}"
+  strip-br="true"
+  ng-change="data.searchCb(data.officeDocument) || data.updateCb(data.officeDocument)"
+  ng-keydown="data.focusAutoCompleteCb($event, data.officeDocument) || data.onEnterCb($event, data.index)"
+  ng-model="data.officeDocument.PartTitle"
+  ng-blur="bluring(data.officeDocument, $event); data.hideAutoCompleteCb(data.officeDocument)"
+  ng-focus="focusing(data.officeDocument)"
+  ng-class="{'noFocus':isBlurred(data.officeDocument)}"
 >
 </td>
-
-<td class="folder">
-    <span class="tag folder"
-          title="{{data.officeDocument.folder.title}}"
-          ng-style="{'background-color': '#' + data.officeDocument.folder.color, 'color': 'white'}"
-          ng-bind-html="data.officeDocument.folder.title">
-    </span>
-</td>
-
 <td class="status col-sm-2" ng-class="data.officeDocument.status">
-    {{ (data.officeDocument._id ? data.task.status  : '') | i18next }}
+  {{ (data.officeDocument._id ? data.task.status  : '') | i18next }}
 </td>
 <td class="arrow">
-    <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+  <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>
-
-<!-- ngf-select
-ngf-change="data.u($files)"
-ngf-multiple="true" -->
