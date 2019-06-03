@@ -979,6 +979,7 @@ angular.module('mean.icu').config([
             .state('main.projects.all', {
                 url: '/all',
                 params: {
+                    activeToggle: 'active',
                     starred: false,
                     start: 0,
                     limit: LIMIT,
@@ -1083,6 +1084,7 @@ angular.module('mean.icu').config([
             .state('main.officeDocuments.all', {
                 url: '/all',
                 params: {
+                    activeToggle: 'active',
                     starred: false,
                     start: 0,
                     limit: LIMIT,
@@ -1167,6 +1169,7 @@ angular.module('mean.icu').config([
             .state('main.discussions.all', {
                 url: '/all',
                 params: {
+                    activeToggle: 'active',
                     starred: false,
                     start: 0,
                     limit: LIMIT,
@@ -1232,6 +1235,7 @@ angular.module('mean.icu').config([
             .state('main.offices.all', {
                 url: '/all',
                 params: {
+                    activeToggle: 'active',
                     starred: false,
                     start: 0,
                     limit: LIMIT,
@@ -1298,6 +1302,7 @@ angular.module('mean.icu').config([
             .state('main.templateDocs.all', {
                 url: '/all',
                 params: {
+                    activeToggle: 'active',
                     starred: false,
                     start: 0,
                     limit: LIMIT,
@@ -1361,6 +1366,7 @@ angular.module('mean.icu').config([
             .state('main.folders.all', {
                 url: '/all',
                 params: {
+                    activeToggle: 'active',
                     starred: false,
                     start: 0,
                     limit: LIMIT,
@@ -1585,46 +1591,6 @@ angular.module('mean.icu').config([
 
             .state('main.inbox.officeDocument', getOfficeDocumentDetailsState('/officeDocument'))
             .state('main.inbox.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
-
-        // .state('main.documents', {
-        //     url: '/docuoments',
-        //     views: {
-        //         middlepane: {
-        //             //hack around the fact that state current name is initialized in controller only
-        //             template: '',
-        //             controller: function($state, projects, context) {
-        //                 if ($state.current.name === 'main.docuoments') {
-        //                     if (projects.data.length) {
-        //                         $state.go('.byentity', {
-        //                             entity: context.entityName,
-        //                             entityId: context.entityId
-        //                         });
-        //                     } else {
-        //                         $state.go('.all');
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // })
-        //     .state('main.documents.all', {
-        //         url: '/all',
-        //         params: {
-        //             starred: false,
-        //             start: 0,
-        //             limit: LIMIT,
-        //             sort: SORT
-        //         },
-        //         views: getListView('document'),
-        //         resolve: {
-        //             documents: function() {
-
-        //                     return {
-        //                         title:"txt"
-        //                     }
-        //                 }
-        //         }
-        //     });
     }
 ]);
 
