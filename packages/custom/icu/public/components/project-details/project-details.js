@@ -270,30 +270,25 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
   // ==================================================== $watch: title / desc ==================================================== //
 
   $scope.$watch('item.title', function(nVal, oVal) {
-    if(nVal !== oVal) {
-      var newContext = {
+    if (nVal !== oVal) {
+      delayedUpdateTitle($scope.item, {
         name: 'title',
         oldVal: oVal,
         newVal: nVal,
         action: 'renamed'
-      };
-      $scope.delayedUpdate($scope.item, newContext);
+      });
       ProjectsService.currentProjectName = $scope.item.title;
     }
   });
 
-  var nText, oText;
   $scope.$watch('item.description', function(nVal, oVal) {
-    nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if(nText != oText) {
-      var newContext = {
+    if (nVal !== oVal) {
+      delayedUpdateDesc($scope.item, {
         name: 'description',
         oldVal: oVal,
         newVal: nVal,
         action: 'renamed'
-      };
-      $scope.delayedUpdate($scope.item, newContext);
+      });
     }
   });
 
@@ -404,7 +399,8 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
     });
   };
 
-  $scope.delayedUpdate = _.debounce($scope.update, 2000);
+  var delayedUpdateTitle = _.debounce($scope.update, 2000);
+  var delayedUpdateDesc = _.debounce($scope.update, 2000);
 
   // ==================================================== Buttons ==================================================== //
 

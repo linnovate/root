@@ -211,65 +211,58 @@ function OfficeDetailsController(
 
   // ==================================================== $watch: title / desc ==================================================== //
 
-  $scope.$watch("item.title", function(nVal, oVal) {
+  $scope.$watch('item.title', function(nVal, oVal) {
     if (nVal !== oVal) {
-      var newContext = {
-        name: "title",
+      delayedUpdateTitle($scope.item, {
+        name: 'title',
         oldVal: oVal,
         newVal: nVal,
-        action: "renamed"
-      };
-      $scope.delayedUpdate($scope.item, newContext);
+        action: 'renamed'
+      });
     }
   });
 
-  var nText, oText;
-  $scope.$watch("item.description", function(nVal, oVal) {
-    nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, "") : "";
-    oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, "") : "";
-    if (nText != oText) {
-      var newContext = {
-        name: "description",
+  $scope.$watch('item.description', function(nVal, oVal) {
+    if (nVal !== oVal) {
+      delayedUpdateDesc($scope.item, {
+        name: 'description',
         oldVal: oVal,
-        newVal: nVal
-      };
-      $scope.delayedUpdate($scope.item, newContext);
+        newVal: nVal,
+        action: 'renamed'
+      });
     }
   });
 
-  $scope.$watch("item.tel", function(nVal, oVal) {
+  $scope.$watch('item.tel', function(nVal, oVal) {
     if (nVal !== oVal) {
-      var context = {
-        name: "tel",
+      delayedUpdateTel($scope.item, {
+        name: 'tel',
         oldVal: oVal,
         newVal: nVal,
-        action: "changed"
-      };
-      $scope.delayedUpdate($scope.item, context);
+        action: 'changed'
+      });
     }
   });
 
-  $scope.$watch("item.internalTel", function(nVal, oVal) {
+  $scope.$watch('item.internalTel', function(nVal, oVal) {
     if (nVal !== oVal) {
-      var context = {
-        name: "internalTel",
+      delayedUpdateInternalTel($scope.item, {
+        name: 'internalTel',
         oldVal: oVal,
         newVal: nVal,
-        action: "changed"
-      };
-      $scope.delayedUpdate($scope.item, context);
+        action: 'changed'
+      });
     }
   });
 
-  $scope.$watch("item.unit", function(nVal, oVal) {
+  $scope.$watch('item.unit', function(nVal, oVal) {
     if (nVal !== oVal) {
-      var context = {
-        name: "unit",
+      delayedUpdateUnit($scope.item, {
+        name: 'unit',
         oldVal: oVal,
         newVal: nVal,
-        action: "changed"
-      };
-      $scope.delayedUpdate($scope.item, context);
+        action: 'changed'
+      });
     }
   });
 
@@ -330,7 +323,11 @@ function OfficeDetailsController(
     OfficesService.currentOfficeName = $scope.item.title;
   };
 
-  $scope.delayedUpdate = _.debounce($scope.update, 2000);
+  var delayedUpdateTitle = _.debounce($scope.update, 2000);
+  var delayedUpdateDesc = _.debounce($scope.update, 2000);
+  var delayedUpdateTel = _.debounce($scope.update, 2000);
+  var delayedUpdateInternalTel = _.debounce($scope.update, 2000);
+  var delayedUpdateUnit = _.debounce($scope.update, 2000);
 
   // ==================================================== havePermissions ==================================================== //
 

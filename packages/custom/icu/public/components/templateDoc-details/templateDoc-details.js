@@ -109,29 +109,27 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
 
   // ==================================================== $watch: title / desc ==================================================== //
 
-  $scope.$watchGroup(['item.description', 'item.title'], function(nVal, oVal, scope) {
-    if (nVal !== oVal && oVal) {
-      var newContext;
-      if (nVal[1] !== oVal[1]) {
-        newContext = {
-          name: 'title',
-          oldVal: oVal[1],
-          newVal: nVal[1],
-          action: 'renamed'
-        };
-        $scope.delayedUpdateTitle($scope.item, newContext);
-      } else {
-        newContext = {
-          name: 'description',
-          oldVal: oVal[0],
-          newVal: nVal[0]
-        };
-
-        $scope.delayedUpdateDesc($scope.item, newContext);
-      }
+  $scope.$watch('item.title', function(nVal, oVal) {
+    if (nVal !== oVal) {
+      delayedUpdateTitle($scope.item, {
+        name: 'title',
+        oldVal: oVal,
+        newVal: nVal,
+        action: 'renamed'
+      });
     }
   });
 
+  $scope.$watch('item.description', function(nVal, oVal) {
+    if (nVal !== oVal) {
+      delayedUpdateDesc($scope.item, {
+        name: 'description',
+        oldVal: oVal,
+        newVal: nVal,
+        action: 'renamed'
+      });
+    }
+  });
 
   $scope.updateTitle = function(item, newContext) {
     TemplateDocsService.updateTemplateDoc(item._id, newContext).then(() => {
@@ -163,8 +161,8 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
     });
   }
 
-  $scope.delayedUpdateTitle = _.debounce($scope.updateTitle, 500);
-  $scope.delayedUpdateDesc= _.debounce($scope.updateDescription, 500);
+  var delayedUpdateTitle = _.debounce($scope.updateTitle, 2000);
+  var delayedUpdateDesc = _.debounce($scope.updateDescription, 2000);
 
   // ==================================================== Update ==================================================== //
 

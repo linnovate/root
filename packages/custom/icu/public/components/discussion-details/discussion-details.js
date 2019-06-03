@@ -257,30 +257,12 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
   // ==================================================== $watch: title / desc ==================================================== //
 
-  var activeTitleTimeout;
   $scope.$watch('item.title', function(nVal, oVal) {
-    if (nVal !== oVal) {
-      if (activeTitleTimeout) {
-        clearTimeout(activeTitleTimeout)
-      }
-      activeTitleTimeout = setTimeout(function() {
-        $scope.update($scope.item, 'title')
-      }, 2000);
-    }
+    if (nVal !== oVal) delayedUpdateTitle($scope.item, 'title');
   });
 
-  var activeDescriptionTimeout, nText, oText;
   $scope.$watch('item.description', function(nVal, oVal) {
-    nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if (nText != oText) {
-      if (activeDescriptionTimeout) {
-        clearTimeout(activeDescriptionTimeout)
-      }
-      activeDescriptionTimeout = setTimeout(function() {
-        $scope.update($scope.item, 'description')
-      }, 2000);
-    }
+    if (nVal !== oVal) delayedUpdateDesc($scope.item, 'description');
   });
 
   $scope.$watchGroup(['item.startDate', 'item.startTime', 'item.endDate', 'item.endTime'], (nVal, oVal) => {
@@ -426,7 +408,8 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     DiscussionsService.currentDiscussionName = $scope.item.title;
   }
 
-  $scope.delayedUpdate = _.debounce($scope.update, 500);
+  var delayedUpdateTitle = _.debounce($scope.update, 2000);
+  var delayedUpdateDesc = _.debounce($scope.update, 2000);
 
   // ==================================================== havePermissions ==================================================== //
 

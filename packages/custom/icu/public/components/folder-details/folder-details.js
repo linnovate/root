@@ -209,28 +209,24 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
   $scope.$watch('item.title', function(nVal, oVal) {
     if (nVal !== oVal) {
-      var context = {
+      delayedUpdateTitle($scope.item, {
         name: 'title',
         oldVal: oVal,
         newVal: nVal,
         action: 'renamed'
-      };
-      $scope.delayedUpdate($scope.item, context);
+      });
       FoldersService.currentFolderName = $scope.item.title;
     }
   });
 
-  var nText, oText;
   $scope.$watch('item.description', function(nVal, oVal) {
-    nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if (nText != oText) {
-      var context = {
+    if (nVal !== oVal) {
+      delayedUpdateDesc($scope.item, {
         name: 'description',
         oldVal: oVal,
         newVal: nVal,
-      };
-      $scope.delayedUpdate($scope.item, context);
+        action: 'renamed'
+      });
     }
   });
 
@@ -281,7 +277,8 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
     });
   }
 
-  $scope.delayedUpdate = _.debounce($scope.update, 2000);
+  var delayedUpdateTitle = _.debounce($scope.update, 2000);
+  var delayedUpdateDesc = _.debounce($scope.update, 2000);
 
   // ==================================================== havePermissions ==================================================== //
 

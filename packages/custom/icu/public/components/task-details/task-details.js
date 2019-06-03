@@ -270,18 +270,11 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
   // ==================================================== $watch: title / desc ==================================================== //
 
   $scope.$watch('item.title', function(nVal, oVal) {
-    if (nVal !== oVal) {
-      $scope.delayedUpdate($scope.item, 'title');
-    }
+    if (nVal !== oVal) delayedUpdateTitle($scope.item, 'title');
   });
 
-  var nText, oText;
   $scope.$watch('item.description', function(nVal, oVal) {
-    nText = nVal ? nVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    oText = oVal ? oVal.replace(/<(?:.|\n)*?>/gm, '') : '';
-    if (nText != oText) {
-      $scope.delayedUpdate($scope.item, 'description');
-    }
+    if (nVal !== oVal) delayedUpdateDesc($scope.item, 'description');
   });
 
   function refreshList() {
@@ -423,7 +416,8 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
     });
   }
 
-  $scope.delayedUpdate = _.debounce($scope.update, 2000);
+  var delayedUpdateTitle = _.debounce($scope.update, 2000);
+  var delayedUpdateDesc = _.debounce($scope.update, 2000);
 
   // ==================================================== havePermissions ==================================================== //
 
