@@ -41,6 +41,7 @@ angular
     $scope.currentState = $state.current.name;
 
     $scope.splashScreen = true;
+    $scope.showSvg = config.showSvg;
     $scope.svgUrl = config.svgUrl;
 
     var entityMap = {

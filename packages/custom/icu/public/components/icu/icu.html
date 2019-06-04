@@ -1,4 +1,4 @@
-<div class="icu-data" ng-if="!splashScreen">
+<div class="icu-data" ng-if="(!splashScreen) || (!showSvg)">
 <div icu-sidepane
      tasks="tasks"
      projects="projects"
@@ -40,4 +40,4 @@
         <div icu-mainpane class="mainpane"></div>
     </div>
 </div>
-<iframe style="border:0;width:90vw;height:90vh;overflow:hidden" ng-src="{{getSvgUrl(svgUrl)}}" ng-if="slpashScreen"></iframe>
+<iframe style="border:0;width:90vw;height:90vh;overflow:hidden" ng-src="{{getSvgUrl(svgUrl)}}" ng-if="slpashScreen && showSvg"></iframe>
