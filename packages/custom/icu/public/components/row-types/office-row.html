@@ -1,18 +1,18 @@
 <td class="id">{{ data.office._id ? data.index + 1 : ''}}</td>
 <td class="name"
-    ng-attr-colspan="{{data.office._id ? undefined : 2}}"
-    title="{{data.office.title}}"
-    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.office)) && !recycled(data.office)}}"
-    placeholder="{{'createNewOffice' | i18next}}"
-    strip-br="true"
-    ng-change="data.searchCb(data.office.title) || data.updateCb(data.office)"
-    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-model="data.office.PartTitle"
-    ng-blur="bluring(data.office, $event); data.hideAutoCompleteCb(data.office)"
-    ng-focus="focusing(data.office)"
-    ng-class="{'noFocus':isBlurred(data.office)}"
+  ng-attr-colspan="{{data.office._id ? undefined : 2}}"
+  title="{{data.office.title}}"
+  ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.office)) && !recycled(data.office)}}"
+  placeholder="{{'createNewOffice' | i18next}}"
+  strip-br="true"
+  ng-change="data.searchCb(data.office.title) || data.updateCb(data.office)"
+  ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+  ng-model="data.office.PartTitle"
+  ng-blur="bluring(data.office, $event); data.hideAutoCompleteCb(data.office)"
+  ng-focus="focusing(data.office)"
+  ng-class="{'noFocus':isBlurred(data.office)}"
 >
 </td>
 <td class="arrow">
-    <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+  <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

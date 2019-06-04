@@ -1,22 +1,22 @@
 <td class="id">{{ data.project._id ? data.index + 1 : ''}}</td>
 <td class="name"
-    title="{{data.project.title}}"
-    ng-attr-colspan="{{data.project._id ? undefined : 2}}"
-    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.project)) && !recycled(data.project)}}"
-    placeholder="{{'createNewProject' | i18next}}"
-    strip-br="true"
-    ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
-    ng-change="data.searchCb(data.project) || data.updateCb(data.project)"
-    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-model="data.project.PartTitle"
-    ng-blur="bluring(data.project, $event); data.hideAutoCompleteCb(data.project)"
-    ng-focus="focusing(data.project)"
-    ng-class="{'noFocus':isBlurred(data.project)}"
+  title="{{data.project.title}}"
+  ng-attr-colspan="{{data.project._id ? undefined : 2}}"
+  ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.project)) && !recycled(data.project)}}"
+  placeholder="{{'createNewProject' | i18next}}"
+  strip-br="true"
+  ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
+  ng-change="data.searchCb(data.project) || data.updateCb(data.project)"
+  ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+  ng-model="data.project.PartTitle"
+  ng-blur="bluring(data.project, $event); data.hideAutoCompleteCb(data.project)"
+  ng-focus="focusing(data.project)"
+  ng-class="{'noFocus':isBlurred(data.project)}"
 >
 </td>
 <td class="status col-sm-2" ng-class="data.project.status">
-    {{ (data.project._id ? data.project.status  : '') | i18next }}
+  {{ (data.project._id ? data.project.status  : '') | i18next }}
 </td>
 <td class="arrow">
-    <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+  <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

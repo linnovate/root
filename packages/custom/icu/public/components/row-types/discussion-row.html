@@ -1,25 +1,25 @@
 <td class="id">{{ data.discussion._id ? data.index + 1 : ''}}</td>
 <td class="name"
-    ng-attr-colspan="{{data.discussion._id ? undefined : 2}}"
-    title="{{data.discussion.title}}"
-    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.discussion)) && !recycled(data.discussion)}}"
-    placeholder="{{'createNewDiscussion' | i18next}}"
-    strip-br="true"
-    ng-attr-tabindex="{{ data.discussion._id ? undefined : '3'}}"
-    ng-change="data.searchCb(data.discussion) || data.updateCb(data.discussion)"
-    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-model="data.discussion.PartTitle"
-    ng-blur="bluring(data.discussion, $event); data.hideAutoCompleteCb(data.discussion)"
-    ng-focus="focusing(data.discussion)"
-    ng-class="{'noFocus':isBlurred(data.discussion)}"
+  ng-attr-colspan="{{data.discussion._id ? undefined : 2}}"
+  title="{{data.discussion.title}}"
+  ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.discussion)) && !recycled(data.discussion)}}"
+  placeholder="{{'createNewDiscussion' | i18next}}"
+  strip-br="true"
+  ng-attr-tabindex="{{ data.discussion._id ? undefined : '3'}}"
+  ng-change="data.searchCb(data.discussion) || data.updateCb(data.discussion)"
+  ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+  ng-model="data.discussion.PartTitle"
+  ng-blur="bluring(data.discussion, $event); data.hideAutoCompleteCb(data.discussion)"
+  ng-focus="focusing(data.discussion)"
+  ng-class="{'noFocus':isBlurred(data.discussion)}"
 >
 </td>
 <td class="status col-sm-2" ng-class="data.discussion.status">
-    {{ (data.discussion._id ? data.discussion.status  : '') | i18next }}
+  {{ (data.discussion._id ? data.discussion.status  : '') | i18next }}
 </td>
 <td class="due">
-    {{ (data.discussion._id ? data.discussion.startDate  : '') | date: 'dd/MM/yyyy' }}
+  {{ (data.discussion._id ? data.discussion.startDate  : '') | date: 'dd/MM/yyyy' }}
 </td>
 <td class="arrow">
-    <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+  <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

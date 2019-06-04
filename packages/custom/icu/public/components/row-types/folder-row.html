@@ -1,32 +1,25 @@
 <td class="id">{{ data.folder._id ? data.index + 1 : ''}}</td>
 <td class="name"
-    ng-attr-colspan="{{data.folder._id ? undefined : 5}}"
-    title="{{data.folder.title}}"
-    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.folder)) && !recycled(data.folder)}}"
-    placeholder="{{'createNewFolder' | i18next}}"
-    strip-br="true"
-    ng-attr-tabindex="{{ data.folder._id ? undefined : '3'}}"
-    ng-change="data.searchCb(data.folder) || data.updateCb(data.folder)"
-    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-model="data.folder.PartTitle"
-    ng-blur="bluring(data.folder, $event); data.hideAutoCompleteCb(data.folder)"
-    ng-focus="focusing(data.folder)"
-    ng-class="{'noFocus':isBlurred(data.folder)}"
+  ng-attr-colspan="{{data.folder._id ? undefined : 5}}"
+  title="{{data.folder.title}}"
+  ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.folder)) && !recycled(data.folder)}}"
+  placeholder="{{'createNewFolder' | i18next}}"
+  strip-br="true"
+  ng-attr-tabindex="{{ data.folder._id ? undefined : '3'}}"
+  ng-change="data.searchCb(data.folder) || data.updateCb(data.folder)"
+  ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+  ng-model="data.folder.PartTitle"
+  ng-blur="bluring(data.folder, $event); data.hideAutoCompleteCb(data.folder)"
+  ng-focus="focusing(data.folder)"
+  ng-class="{'noFocus':isBlurred(data.folder)}"
 >
 </td>
-<td class="office">
-    <span class="tag office"
-          title="{{data.folder.office.title}}"
-          ng-style="{'background-color': '#' + data.folder.office.color, 'color': 'white'}"
-          ng-bind-html="data.folder.office.title">
-    </span>
-</td>
 <td ng-if="data.folder._id" class="status col-sm-2"  ng-class="data.folder.status">
-    {{ (data.folder._id ? data.task.status  : '') | i18next }}
+  {{ (data.folder._id ? data.task.status  : '') | i18next }}
 </td>
 <td ng-if="data.folder._id" class="due">
-    {{ (data.folder._id ? data.folder.due  : '') | date: 'dd/MM/yyyy' }}
+  {{ (data.folder._id ? data.folder.due  : '') | date: 'dd/MM/yyyy' }}
 </td>
 <td class="arrow" ng-if="data.folder._id">
-   <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+  <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>

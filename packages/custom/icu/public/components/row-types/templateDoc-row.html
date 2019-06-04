@@ -1,19 +1,19 @@
 <td class="id" ng-if="data.templateDoc._id">{{data.index + 1}}</td>
 <td class="name"
-    title="{{data.templateDoc.title}}"
-    ng-attr-colspan="{{data.templateDoc._id ? undefined : 2}}"
-    ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
-    ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.templateDoc)) && !recycled(data.templateDoc)}}"
-    placeholder="{{'createNewTemplateDoc' | i18next}}"
-    strip-br="true"
-    ng-change="data.searchCb(data.templateDoc) || data.updateCb(data.templateDoc)"
-    ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
-    ng-model="data.templateDoc.PartTitle"
-    ng-blur="bluring(data.templateDoc, $event); data.hideAutoCompleteCb(data.templateDoc)"
-    ng-focus="focusing(data.templateDoc)"
-    ng-class="{'noFocus':isBlurred(data.templateDoc)}"
+  title="{{data.templateDoc.title}}"
+  ng-attr-colspan="{{data.templateDoc._id ? undefined : 2}}"
+  ng-attr-tabindex="{{ data.task._id ? undefined : '3'}}"
+  ng-attr-contenteditable="{{(!data.displayOnly && haveEditiorsPermissions(data.templateDoc)) && !recycled(data.templateDoc)}}"
+  placeholder="{{'createNewTemplateDoc' | i18next}}"
+  strip-br="true"
+  ng-change="data.searchCb(data.templateDoc) || data.updateCb(data.templateDoc)"
+  ng-keydown="data.focusAutoCompleteCb($event) || data.onEnterCb($event, data.index)"
+  ng-model="data.templateDoc.PartTitle"
+  ng-blur="bluring(data.templateDoc, $event); data.hideAutoCompleteCb(data.templateDoc)"
+  ng-focus="focusing(data.templateDoc)"
+  ng-class="{'noFocus':isBlurred(data.templateDoc)}"
 >
 </td>
 <td class="arrow">
-    <i ng-if="data.drawArrow" class="fa chevron-right"></i>
+  <i ng-if="data.drawArrow" class="fa chevron-right"></i>
 </td>
