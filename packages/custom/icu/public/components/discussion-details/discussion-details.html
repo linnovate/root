@@ -31,8 +31,13 @@
     <button class="detail-button approval" ng-click="updateStatusForApproval()" ng-if="item.status!='waiting-approval' && item.assign && item.assign._id == me._id && !isRecycled">
       {{'updateStatusForApproval' | i18next }}
     </button>
-    <button class="detail-button" ng-click="statusesActionsMap[item.status].method(item)" ng-disabled="disableButton()" ng-if="statusesActionsMap[item.status]">
-      {{statusesActionsMap[item.status].label | i18next}}
+    <button
+      class="detail-button"
+      ng-click="statusesActionsMap[item.status].method(item)"
+      ng-disabled="disableButton()"
+      ng-if="statusesActionsMap[item.status]"
+      ng-bind-html="statusesActionsMap[item.status].label | i18next"
+    >
     </button>
   </div>
 
