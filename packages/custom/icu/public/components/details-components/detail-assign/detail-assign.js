@@ -24,16 +24,21 @@ function detailAssign($i18next) {
   function link($scope, element, attrs) {
 
     $scope.list = angular.copy($scope.list);
+    $scope.oldValue = angular.copy($scope.value);
 
-    if($scope.list[0].name !== 'no select') {
+    if($scope.list[0].id !== 'no-select') {
       $scope.list.unshift({
         name: $i18next('noSelect'),
-        job: $i18next('noSelect')
+        job: $i18next('noSelect'),
+        id: 'no-select'
       })
     }
 
     $scope.onSelect = function(value) {
-      $scope.onChange(value);
+      if(value !== $scope.oldValue) {
+        $scope.oldValue = angular.copy(value);
+        $scope.onChange(value);
+      }
     }
 
   }
