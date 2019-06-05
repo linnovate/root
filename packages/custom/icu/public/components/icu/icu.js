@@ -40,7 +40,6 @@ angular
     $scope.people = people.data || people;
     $scope.currentState = $state.current.name;
 
-    $scope.splashScreen = true;
     $scope.showSvg = config.showSvg;
     $scope.svgUrl = config.svgUrl;
 
@@ -55,7 +54,7 @@ angular
     };
 
     setTimeout(function() {
-      $scope.splashScreen = !$scope.splashScreen;
+      $scope.showSvg = !$scope.showSvg;
       $scope.$apply();
     }, 5000);
 
