@@ -44,18 +44,6 @@ angular.module('mean.icu.ui.membersfooter', [])
                 }
             });
 
-            function renavigateToDetails(entity) {
-                $scope.detailsState = context.entityName === "all" ? `main.${context.main}.all.details` : `main.${context.main}.byentity.details`;
-                $state.go($scope.detailsState, {
-                  id: entity._id,
-                  entity: context.entityName,
-                  entityId: context.entityId,
-                  starred: $stateParams.starred
-                }, {
-                  reload: true
-                });
-              }
-
             function changePerms(member, newPerms){
                 $scope.entity = PermissionsService.changeUsersPermissions($scope.entity, member, newPerms, context);
             }

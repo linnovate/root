@@ -58,7 +58,6 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
     DiscussionsService.star($scope.item).then(function () {
       $state.reload();
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
     });
   }
 

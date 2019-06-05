@@ -44,20 +44,10 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
       newVal: value && value._id,
     };
     TemplateDocsService.updateTemplateDoc($scope.item._id, json)
-    .then(result =>renavigateToDetails(result));
-  };
-
-  function renavigateToDetails(templateDoc) {
-    $scope.detailsState = context.entityName === "all" ? "main.templateDocs.all.details" : "main.templateDocs.byentity.details";
-    $state.go($scope.detailsState, {
-      id: templateDoc._id,
-      entity: context.entityName,
-      entityId: context.entityId,
-      starred: $stateParams.starred
-    }, {
-      reload: true
+    .then(result => {
+      $state.reload();
     });
-  }
+  };
 
   // ==================================================== Menu events ==================================================== //
     $scope.recycle = function() {

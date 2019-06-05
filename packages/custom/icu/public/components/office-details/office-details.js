@@ -88,34 +88,13 @@ function OfficeDetailsController(
 
   // ==================================================== onChanges ==================================================== //
 
-  function navigateToDetails(office) {
-    $scope.detailsState =
-      context.entityName === "all"
-        ? "main.offices.all.details"
-        : "main.offices.byentity.details";
-
-    $state.go(
-      $scope.detailsState,
-      {
-        id: office._id,
-        entity: context.entityName,
-        entityId: context.entityId,
-        starred: $stateParams.starred
-      },
-      {
-        reload: true
-      }
-    );
-  }
-
   $scope.onStar = function(value) {
     $scope.update($scope.item, {
       name: "star"
     });
 
     OfficesService.star($scope.item).then(function() {
-      navigateToDetails($scope.item);
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
+      $state.reload();
     });
   };
 
@@ -129,7 +108,7 @@ function OfficeDetailsController(
     $scope.update($scope.item, context);
 
     OfficesService.WantToCreateRoom($scope.item).then(function(data) {
-      navigateToDetails($scope.item);
+      $state.reload();
       if (data.roomName) {
         $window.open(window.config.rocketChat.uri + "/group/" + data.roomName);
         return true;

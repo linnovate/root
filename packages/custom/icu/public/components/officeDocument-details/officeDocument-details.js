@@ -131,34 +131,13 @@ function OfficeDocumentDetailsController(
 
   // ==================================================== onChanges ==================================================== //
 
-  function navigateToDetails(officeDocument) {
-    $scope.detailsState =
-      context.entityName === "all"
-        ? "main.officeDocuments.all.details"
-        : "main.officeDocuments.byentity.details";
-
-    $state.go(
-      $scope.detailsState,
-      {
-        id: officeDocument._id,
-        entity: context.entityName,
-        entityId: context.entityId,
-        starred: $stateParams.starred
-      },
-      {
-        reload: true
-      }
-    );
-  }
-
   $scope.onStar = function(value) {
     $scope.update($scope.item, {
       name: "star"
     });
 
     OfficeDocumentsService.star($scope.item).then(function() {
-      navigateToDetails($scope.item);
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
+      $state.reload();
     });
   };
 

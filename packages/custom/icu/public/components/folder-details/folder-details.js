@@ -55,19 +55,6 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
   // ==================================================== onChanges ==================================================== //
 
-  function navigateToDetails(folder) {
-    $scope.detailsState = context.entityName === 'all' ? 'main.folders.all.details' : 'main.folders.byentity.details';
-
-    $state.go($scope.detailsState, {
-      id: folder._id,
-      entity: context.entityName,
-      entityId: context.entityId,
-      starred: $stateParams.starred
-    }, {
-      reload: true
-    });
-  }
-
   $scope.onStar = function(value) {
 
     $scope.update($scope.item, {
@@ -75,8 +62,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
     });
 
     FoldersService.star($scope.item).then(function () {
-      navigateToDetails($scope.item);
-      // "$scope.item.star" will be change in 'ProjectsService.star' function
+      $state.reload();
     });
   }
 
@@ -97,7 +83,7 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
     $scope.update($scope.item, context);
 
     FoldersService.WantToCreateRoom($scope.item).then(function(data) {
-      navigateToDetails($scope.item);
+      $state.reload();
       if(data.roomName) {
         $window.open(window.config.rocketChat.uri + '/group/' + data.roomName);
         return true;
