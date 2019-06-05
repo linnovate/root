@@ -40,9 +40,6 @@ angular
     $scope.people = people.data || people;
     $scope.currentState = $state.current.name;
 
-    $scope.showSvg = config.showSvg;
-    $scope.svgUrl = config.svgUrl;
-
     var entityMap = {
       project: "projects",
       discussion: "discussions",
@@ -53,14 +50,6 @@ angular
       templateDoc: "templateDocs"
     };
 
-    setTimeout(function() {
-      $scope.showSvg = !$scope.showSvg;
-      $scope.$apply();
-    }, 5000);
-
-    $scope.getSvgUrl = function(url) {
-      return $sce.trustAsResourceUrl(url);
-    };
     $scope.getLayoutIcon = function() {
       return LayoutService.getLayoutIcon();
     };

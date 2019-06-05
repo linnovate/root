@@ -6,4 +6,12 @@
     window.modules = null;
     window.config = {{config|json|safe}}
   </script>
+  {% if config.splashScreen %}
+    <iframe id="splash" src="{{config.splashScreen}}"></iframe>
+    <script>
+      setTimeout(function() {
+        document.querySelector('#splash').style.display = 'none';
+      }, 5000)
+    </script>
+  {% endif %}
 {% endblock %}

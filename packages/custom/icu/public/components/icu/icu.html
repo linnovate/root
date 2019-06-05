@@ -1,19 +1,19 @@
-<div class="icu-data" ng-if="!showSvg">
-<div icu-sidepane
-     tasks="tasks"
-     projects="projects"
-     discussions="discussions"
-     people="people"
-     offices="offices"
-     folders="folders"
-     office-documents="officeDocuments"
-     templateDocs="templateDocs"
-     current-state="{{currentState}}"
-     class="sidepane animate-hide"
-     change-layout="changeLayout"
-     get-side-menu-icon="getSideMenuIcon"
-
-     ng-hide="menu.isHidden"></div>
+<div class="icu-data">
+     <div icu-sidepane
+          tasks="tasks"
+          projects="projects"
+          discussions="discussions"
+          people="people"
+          offices="offices"
+          folders="folders"
+          office-documents="officeDocuments"
+          templateDocs="templateDocs"
+          current-state="{{currentState}}"
+          class="sidepane animate-hide"
+          change-layout="changeLayout"
+          get-side-menu-icon="getSideMenuIcon"
+          ng-hide="menu.isHidden">
+     </div>
     <div class="panes-wrapper"
          ng-class="{ wide: menu.isHidden }"
          ng-if="state.current.name.indexOf('adminSettings') < 0">
@@ -40,4 +40,3 @@
         <div icu-mainpane class="mainpane"></div>
     </div>
 </div>
-<iframe style="border:0;width:90vw;height:90vh;overflow:hidden" ng-src="{{getSvgUrl(svgUrl)}}" ng-if="showSvg"></iframe>

@@ -77,8 +77,7 @@ exports.render = function(req, res) {
       activeStatus: config.activeStatus,
       isPortNeeded: config.isPortNeeded,
       rocketChat: config.rocketChat,
-      svgUrl: config.svgUrl,
-      showSvg: config.showSvg
+      splashScreen: config.splashScreen
     }
   });
 };

@@ -115,6 +115,5 @@ module.exports = {
     user: process.env.FTP_USER_NAME,
     password: process.env.FTP_USER_PASS
   },
-  svgUrl: "this.is.a.url",
-  showSvg: false
+  splashScreen: null // Custom URL of splash screen
 };
