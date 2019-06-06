@@ -4,8 +4,6 @@ angular.module('mean.icu.ui.searchlist', [])
 .directive('icuSearchList', function (LayoutService) {
     function controller($rootScope, $scope, $state, $filter, SearchService, MultipleSelectService, NotifyingService) {
 
-        SearchService.builtInSearchArray = false;
-
         if ($scope.results.length && $state.current.name === 'main.search') {
             var active  = $scope.results[0];
 

@@ -20,20 +20,9 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
         $scope.search();
     };
 
-    $scope.builtInSearch = function(funcName) {
-        $document.on("click", onDocumentClick);
-    	TasksService[funcName]().then(function(res){
-    		SearchService.builtInSearchArray = res;
-    		$state.go('main.search', {query: ''}, {reload: true});
-    	});
-    };
-
     $scope.search = function() {
-        SearchService.builtInSearchArray = false;
         $state.go('main.search', {
             query: $scope.term
-        }, {
-            reload: true
         }).then(() => {
             NotifyingService.notify('activeSearch');
             SearchService.refreshQuery($scope.term);

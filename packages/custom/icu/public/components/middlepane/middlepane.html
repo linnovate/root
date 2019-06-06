@@ -17,15 +17,8 @@
             ng-model="term"
             ng-change="search()"
             ng-model-options="{updateOn: 'default blur', debounce: { 'default': 300, 'blur': 0 }}"
-            ng-keyup="click=false"
-            ng-click="click=!click; onDocumentClick()">
-        </input>
+        />
         <img src="/icu/assets/img/icon-search.png"></img>
-    	<!--<div id="build-in-search" class="build-in-search" ng-if="click">
-    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getMyTasks')">{{'tasksAssignedToMe' | i18next}}</div>
-    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getOverdueWatchedTasks')">{{'overdueWatchedTasks' | i18next}} </div>
-    		<div class="build-in-search-item" ng-click="click = false; builtInSearch('getWatchedTasks')">{{'tasksImWatching' | i18next}}</div>
-    	</div>-->
     </div>
 </header>
 <div data-ng-controller="MiddlepaneController" class="middlepane-container">

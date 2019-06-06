@@ -1445,16 +1445,8 @@ angular.module('mean.icu').config([
                             }
                             return SearchService.find(query);
                         } else {
-                            if (SearchService.builtInSearchArray) {
-                                var data = SearchService.builtInSearchArray.map(function (d) {
-                                    d._type = 'task';
-                                    return d;
-                                });
-                                return data;
-                            } else {
-                                SearchService.results = SearchService.filteringResults = [];
-                                return [];
-                            }
+                            SearchService.results = SearchService.filteringResults = [];
+                            return [];
                         }
                      },
                     term: function ($stateParams) {

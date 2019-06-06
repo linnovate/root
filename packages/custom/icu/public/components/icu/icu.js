@@ -163,14 +163,6 @@ angular
               context.entityName = "discussion";
               context.entity = $scope.discussions[0];
               context.entityId = $scope.discussions[0]._id;
-              // } else if ($scope.officeDocuments[0] && restoredContext.main !== 'officeDocument') {
-              //     context.entityName = 'officeDocument';
-              //     context.entity = $scope.officeDocuments[0];
-              //     context.entityId = $scope.officeDocuments[0]._id;
-              // } else if ($scope.discussions[0] && restoredContext.main === 'officeDocument') {
-              //     context.entityName = 'discussion';
-              //     context.entity = $scope.discussions[0];
-              //     context.entityId = $scope.discussions[0]._id;
             } else {
               context.entityName = "all";
               context.entity = undefined;
