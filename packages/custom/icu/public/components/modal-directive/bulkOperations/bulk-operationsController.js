@@ -306,99 +306,23 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   //------------------------------------------------//
   //----------------------TAGS----------------------//
 
-  $scope.usedTags = [];
-  $scope.usedTagsFiltered = [];
-  $scope.removedTags = [];
-  $scope.tags = [];
+  $scope.availablTags = _.uniq(_.flatten($scope.selectedItems.map(item => item.tags)));
 
-  getUsedTags();
-  filterUsedTags();
+  var initialTags = $scope.selectedItems.map(item => item.tags).reduce((acc, i) => {
+    return _.intersection(acc, i);
+  });
+  $scope.tagsModel = angular.copy(initialTags);
 
-  $scope.getlastInputText = function(val){
-    $scope.lastTagInput = val;
-  };
+  $scope.tagUpdate = function(entityArray, entityName) {
 
-  $scope.addLastInputTextToTag = function(query){
-    if(query.length && !$scope.usedTags.find( tagObj => tagObj.tag === query)){
-        $scope.addTag(query);
-    }
-  };
+    let tagsToAdd = _.difference($scope.tagsModel, initialTags);
+    let tagsToRemove = _.difference(initialTags, $scope.tagsModel);
 
-  function getUsedTags(){
-    let usedTags = $scope.selectedItems[0].tags;
-
-    for(let selectedItem of $scope.selectedItems){
-      usedTags = _.intersection(selectedItem.tags, usedTags)
-    }
-
-    $scope.usedTags = usedTags.map( tag => tagsToBulkObjects(tag, false, true))
-  }
-
-  function filterUsedTags(){
-    $scope.usedTagsFiltered = $scope.usedTags.filter( tag => !tag.remove).map(tag => tag.tag);
-  }
-
-  function tagsToBulkObjects(tag, remove, primary){
-    return {
-      'tag': tag,
-      'primary': primary,
-      'remove': remove
-    }
-  }
-
-  $scope.addTagClicked = function () {
-    $scope.tagInputVisible = true;
-    $timeout(function () {
-        let element = angular.element('#addTag .ui-select-toggle')[0];
-        element.click();
-    }, 0);
-  };
-
-  $scope.addTag = function (tag) {
-    $scope.usedTags.push(tagsToBulkObjects(tag, false, false));
-
-    $scope.tagInputVisible = false;
-    filterUsedTags();
-  };
-
-  $scope.removeTag = function (tagObj) {
-    let bulkTag = $scope.usedTags.find( obj => obj.tag === tagObj.tag);
-
-    if(bulkTag.primary){
-      bulkTag.remove = true;
-    } else {
-      $scope.usedTags = _.reject($scope.usedTags,  {'tag': tagObj.tag});
-    }
-    filterUsedTags();
-  };
-
-  $scope.tagUpdate = function(entityArray, entityName){
-
-    // add last input text to tags array;
-    if($scope.lastTagInput.length){
-        $scope.addTag($scope.lastTagInput);
-    }
-
-    let updateObject = $scope.usedTags.filter( bulkObject => !bulkObject.remove);
-
-    let updatedTags = updateObject.map( bulkObject => bulkObject.tag);
-
-    let removeObject = $scope.usedTags.filter( bulkObject => bulkObject.remove);
-    let removedIds = removeObject.map( bulkObject => bulkObject.tag);
-
-    let idsArray = entityArray.map(entity => entity._id);
     let changedBulkObject = {
-      ids: idsArray
+      ids: entityArray.map(entity => entity._id),
+      update: { tags: tagsToAdd },
+      remove: { tags: tagsToRemove }
     };
-
-    if(updatedTags.length){
-      changedBulkObject.update = {};
-      changedBulkObject.update.tags = updatedTags;
-    }
-    if(removeObject.length){
-      changedBulkObject.remove = {};
-      changedBulkObject.remove.tags = removedIds;
-    }
 
     MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
       .then(result => {

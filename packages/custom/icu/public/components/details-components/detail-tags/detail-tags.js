@@ -32,10 +32,13 @@ function detailTags($timeout) {
     showPlaceholder()
 
     $scope.update = function() {
+      showPlaceholder();
+
+      if(typeof $scope.onChange !== 'function') return;
+
       $timeout(() => {
         $scope.onChange($scope.value);
       })
-      showPlaceholder();
     }
 
   }
