@@ -1,23 +1,18 @@
+<div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
+  <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
+  <detail-assign value="item.assign" me="me" list="people" on-change="onAssign"></detail-assign>
+  <detail-due value="item.due" on-change="onDateDue"></detail-due>
+  <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
+  <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
+</div>
+
 <details-view item="item" entity-type="'officeDocuments'"></details-view>
 
-<div class="entity-details officeDocument-details" ng-if="item._id">
+<div class="entity-details-content officeDocument-details" ng-if="item._id">
   <div class="permission" ng-if="item && !item._id">
     <div class="perIcon"></div>
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
-  </div>
-  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
-
-    <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
-
-    <detail-assign value="item.assign" me="me" list="people" on-change="onAssign"></detail-assign>
-
-    <detail-due value="item.due" on-change="onDateDue"></detail-due>
-
-    <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
-
-    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
-
   </div>
 
   <div class="detail-buttons" ng-if="haveEditiorsPermissions('detail-buttons')">

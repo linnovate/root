@@ -17,8 +17,12 @@
 /* -------------------------------- entity-details  -------------------------------- */
 
 .entity-details {
-    overflow-y: hidden;
-    padding-bottom: $footer-height;
+    height: calc(100% - 55px);
+    .entity-details-content {
+        overflow-y: auto;
+        @include scroll;
+        height: calc(100% - 108px);
+    }
 }
 
 /* -------------------------------- header-bar  -------------------------------- */

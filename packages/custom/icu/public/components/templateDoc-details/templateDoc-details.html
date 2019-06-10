@@ -1,17 +1,15 @@
+<div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
+  <detail-menu on-click-item="menuEventHandler" items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
+</div>
+
 <details-view item="item" entity-type="'templateDocs'"></details-view>
 
-<div class="entity-details templateDoc-details">
+<div class="entity-details-content templateDoc-details">
 
   <div class="permission" ng-if="item && !item._id && !permsToSee">
     <div class="perIcon"></div>
     <div class="perTitle">{{ 'perTitle' | i18next }}</div>
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
-  </div>
-
-  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
-
-    <detail-menu on-click-item="menuEventHandler" items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
-
   </div>
 
   <detail-category placeholder="'selectOffice' | i18next" value="item.office" items="offices" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent" ></detail-category>

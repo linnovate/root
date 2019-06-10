@@ -1,6 +1,14 @@
+<div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
+  <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
+  <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
+  <detail-color value="item.color" on-change="onColor"></detail-color>
+  <detail-hi value="item" on-click="onWantToCreateRoom()"></detail-hi>
+  <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
+</div>
+
 <details-view item="item" entity-type="'folders'"></details-view>
 
-<div class="entity-details folder-details" ng-if="item._id">
+<div class="entity-details-content folder-details" ng-if="item._id">
 
   <div class="permission" ng-if="item && !item._id && !permsToSee">
     <div class="perIcon"></div>
@@ -8,19 +16,6 @@
     <div class="perMsg">{{ 'perMsg' | i18next }}</div>
   </div>
 
-  <div class="entity-details-header-bar" ng-class="{ 'disabled' : !havePermissions('summary')}">
-
-    <detail-favorite value="item.star" on-change="onStar"></detail-favorite>
-
-    <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
-
-    <detail-color value="item.color" on-change="onColor"></detail-color>
-
-    <detail-hi value="item" on-click="onWantToCreateRoom()"></detail-hi>
-
-    <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
-
-  </div>
 
   <detail-category placeholder="'selectOffice' | i18next" value="item.office" items="offices" on-change="onCategory" ng-if="!item.parent" ></detail-category>
 

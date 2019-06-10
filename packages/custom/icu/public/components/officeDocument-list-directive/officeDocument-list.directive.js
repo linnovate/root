@@ -82,25 +82,19 @@ angular.module('mean.icu.ui.officedocumentlistdirective', ['dragularModule'])
 
             $scope.loadMore = function () {
                 if (!$scope.isLoading && $scope.loadNext) {
-                    $scope.loadNext().then(function (officeDocument) {
+                    $scope.loadNext().then(function (response) {
 
-                        _(officeDocument.data).each(function(t) {
-                            t.__state = creatingStatuses.Created;
-                            t.PartTitle = t.title;
+                        let { data, prev, next } = response;
+
+                        data.forEach(doc => {
+                            doc.__state = creatingStatuses.Created;
+                            doc.PartTitle = doc.title;
                         });
 
-                        var offset = $scope.displayOnly ? 0 : 1;
+                        $scope.officedocuments = $scope.officedocuments.concat(data);
 
-                        if (officeDocument.data.length) {
-                            var index = $scope.officeDocument.length - offset;
-                            $scope.officeDocument.pop();
-                            var args = [index, 0].concat(officeDocument.data);
-                            [].splice.apply($scope.officeDocument, args);
-                            $scope.officeDocument.push(_(newOfficeDocument).clone());
-                        }
-
-                        $scope.loadNext = officeDocument.next;
-                        $scope.loadPrev = officeDocument.prev;
+                        $scope.loadNext = next;
+                        $scope.loadPrev = prev;
                     });
                 }
             };
