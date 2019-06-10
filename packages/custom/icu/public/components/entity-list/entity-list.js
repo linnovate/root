@@ -101,13 +101,6 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
         }
 
         $scope.refreshVisibleItems();
-
-        /*Made By OHAD - Needed for reversing sort*/
-        $state.go($state.current.name, {
-            sort: $scope.sorting.field.title
-        });
-
-        $scope.refreshVisibleItems();
     };
 
     $scope.sortingList = [{
@@ -121,11 +114,7 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
         value: 'created'
     }, {
         title: 'bolded',
-        value: function(item) {
-            return item.bolded.find(b => {
-                return b.bolded && $scope.me._id === b.id;
-            })
-        }
+        value: 'bolded'
     }];
 
     $scope.sorting = {
@@ -419,12 +408,12 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
         let newArray = $filter('filterRecycled')(itemsArray);
         newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
-        if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
-        // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
-
+        newArray = $filter('sortByTitle')(newArray, $scope.sorting.field.value, $scope.sorting.isReverse);
+      
+        if($stateParams.filterStatus)
+          newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
         if($scope.sorting.field.value === 'created')
             newArray.forEach(entity => entity.created = new Date(entity.created));
-        newArray = $filter('orderBy')(newArray, $scope.sorting.field.value, $scope.sorting.isReverse);
 
         return newArray;
     }

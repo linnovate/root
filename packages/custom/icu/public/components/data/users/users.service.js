@@ -18,6 +18,10 @@ angular.module('mean.icu.data.usersservice', [])
         });
     }
 
+    function getCurrentUser(){
+        return me;
+    }
+
     function getMe() {
         var deferred = $q.defer();
 
@@ -175,6 +179,7 @@ angular.module('mean.icu.data.usersservice', [])
     return {
         getAll: getAll,
         getMe: getMe,
+        getCurrentUser: getCurrentUser,
         getById: getById,
         getByProjectId: getByProjectId,
         getByDiscussionId: getByDiscussionId,

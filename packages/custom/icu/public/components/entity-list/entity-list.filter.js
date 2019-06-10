@@ -102,8 +102,33 @@ angular.module('mean.icu.ui.entityListFilters', [])
 		}
 		return out;
 	}
+})
+.filter('sortByTitle', function (UsersService) {
+	return function(entities, sorting, reverse) {
+		if (!entities || !(entities instanceof Array)) return entities;
+		let me = UsersService.getCurrentUser(),
+		  allFilters = attributeFilters(me),
+		  filters = allFilters[sorting] ? allFilters[sorting] : allFilters.default;
+
+		return entities.sort((a, b) => {
+			let filterValue = obj => filters(obj[sorting]),
+			  first = filterValue(a), second = filterValue(b),
+			  result = first > second ? -1 : first < second ? 1 : 0;
+
+			return reverse ? result * -1 : result;
+		});
+	};
 });
 
+const attributeFilters = me => ({
+	title: titleWithHTMLTags => titleWithHTMLTags.replace(/<(?:.|\n)*?>/gm, ''),
+  	created: dateString => new Date(dateString),
+  	bolded: boldedArray => {
+		let bolded = boldedArray.find(b => b.bolded && me._id === b.id);
+      	return bolded ? new Date(bolded.lastViewed) : new Date(1000, 1, 1);
+    },
+  	default: value => value
+});
 
 
 
