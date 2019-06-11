@@ -222,7 +222,11 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
     $scope.cornerState = MultipleSelectService.getCornerState();
     NotifyingService.notify('multipleDisableDetailsPaneCheck');
 
-    $scope.multipleSelectRefreshSelected = function (entity) {
+    $scope.multipleSelectRefreshSelected = function (event, entity) {
+
+        event.stopPropagation(); // Prevent $scope.onClickRow from navigating to entity details
+        $state.go(`main.${context.main}.all`);
+
         MultipleSelectService.refreshSelectedList(entity);
         multipleSelectRefreshState();
     };
