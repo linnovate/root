@@ -91,6 +91,11 @@ var UserSchema = new Schema({
     type: String,
     default: 'local'
   },
+  upn: {
+    type: String,
+    unique: false,
+    required: false
+  },
   GetMailEveryWeekAboutMyTasks: {
     type: String,
     default: 'no'
