@@ -109,6 +109,7 @@ module.exports = function(passport) {
 			id 	 : profile[config.saml.strategy.claims.username] +
 				    config.saml.strategy.claims.emailSuffix,
 			provider : config.saml.strategy.claims.provider,
+		  	upn : profile[config.saml.strategy.claims.upn],
 			//roles 	 : config.saml.strategy.claims.roles
 		        roles: ['authenticated']
 	  });
