@@ -15,7 +15,7 @@ angular.module('mean.icu.data.settingsservice', [])
     let statusList = {
         task: ['new', 'assigned', 'in-progress', 'waiting-approval', 'review', 'rejected', 'done'],
         project: ['new', 'assigned','in-progress', 'canceled', 'waiting-approval', 'done', 'archived'],
-        discussion: ['new', 'scheduled', 'done', 'canceled', 'waiting-approval', 'archived'],
+        discussion: ['new', 'scheduled', 'done', 'canceled', 'archived'],
         officeDocument: ['new', 'in-progress', 'received', 'done', 'waiting-approval','sent'],
         folder: ['new', 'in-progress', 'canceled', 'done', 'archived'],
         office: ['new', 'in-progress', 'canceled', 'done', 'archived'],
