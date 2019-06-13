@@ -11,6 +11,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var TemplateDoc = require('../models/templateDoc');
 var Office = require('../models/office');
 var logger = require('../services/logger');
+var elasticsearch = require('./elasticsearch');
 
 
 
@@ -552,130 +553,93 @@ exports.deleteTemplate = function(req, res) {
 };
 
 exports.update2 = function(req, res, next) {
-  var json = {};
-  json['' + req.body.name] = req.body.newVal;
+  var json = {
+    [req.body.name]: req.body.newVal
+  };
 
-
-  if(req.body.name == 'office') {
-    if(!req.body.newVal) {
-      TemplateDoc.update({_id: req.params.id}, {$unset: {office: 1}}).then(function(err, result) {
-        if(err) {
-          logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  TemplateDoc.update', {error: err.message});
-          res.status(500).send({error: err.message});
-          return;
-        }
-        res.send('ok');
+  if(req.body.name == 'office' && req.body.newVal) {
+    TemplateDoc.findOne({_id: req.params.id}).populate('office').then(result => {
+      var oldWatchersList;
+      if(result.office) {
+        oldWatchersList = result.office.watchers;
+      }
+      else {
+        oldWatchersList = result.watchers;
+      }
+      var zeroReq = [];
+      var spPath = result.spPath;
+      oldWatchersList.forEach(watcher => {
+        zeroReq.push({UserId: watcher});
       });
-    }
-    else {
-      TemplateDoc.findOne({_id: req.params.id}).populate('office').exec(function(err, result) {
-        if(err) {
-          logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  TemplateDoc.findOne', {error: err.message});
-          res.status(500).send({error: err.message});
-          return;
-        }
-        var oldWatchersList;
-        if(result.office) {
-          oldWatchersList = result.office.watchers;
-        }
-        else {
-          oldWatchersList = result.watchers;
-        }
-        var zeroReq = [];
-        var spPath = result.spPath;
-        oldWatchersList.forEach(function(watcher) {
-          zeroReq.push({UserId: watcher});
-        });
-        Office.findOne({_id: req.body.newVal}, function(err, result) {
-          if(result) {
-            var watchersReq = [];
-            result.watchers.forEach(function(watcher) {
-              watchersReq.push({
-                UserId: watcher
-              });
+      return Office.findOne({_id: req.body.newVal}).then(result => {
+        if(result) {
+          var watchersReq = [];
+          result.watchers.forEach(watcher => {
+            watchersReq.push({
+              UserId: watcher
             });
-            json['watchers'] = result.watchers;
-            json['permissions'] = result.permissions;            
-            TemplateDoc.update({_id: req.params.id}, json).then(function(result) {
-              if(spPath) {
-                getUsers(watchersReq).then(function(result) {
-                  getUsers(zeroReq).then(function(result) {
-                    var watch = [], zero = [];
-                    watchersReq.forEach(function(watcher) {
-                      watch.push(watcher.UserId);
-                    });
-                    zeroReq.forEach(function(watcher) {
-                      zero.push(watcher.UserId);
-                    });
-                    var paths = [spPath];
-                    var jsonReq = {
-                      siteUrl: config.SPHelper.SPSiteUrl,
-                      paths: paths,
-                      users: watch,
-                      creators: [],
-                      zero: zero
-                    };
+          });
+          json['watchers'] = result.watchers;
+          json['permissions'] = result.permissions;
+          return TemplateDoc.findOneAndUpdate({_id: req.params.id}, json).then(result => {
+            if (!result) {
+              throw new Error(`object with id: ${req.params.id} not found`);
+            }
+            elasticsearch.save(result, 'templateDoc')
+            if(spPath) {
+              return getUsers(watchersReq).then(result => {
+                return getUsers(zeroReq).then(result => {
+                  var watch = [], zero = [];
+                  watchersReq.forEach(watcher => {
+                    watch.push(watcher.UserId);
+                  });
+                  zeroReq.forEach(watcher => {
+                    zero.push(watcher.UserId);
+                  });
+                  var paths = [spPath];
+                  var jsonReq = {
+                    siteUrl: config.SPHelper.SPSiteUrl,
+                    paths: paths,
+                    users: watch,
+                    creators: [],
+                    zero: zero
+                  };
+                  return new Promise((resolve, reject) => {
                     request({
                       url: config.SPHelper.uri + '/api/share',
                       method: 'POST',
                       json: json
-                    }, function(error, resp, body) {
-                      if(error) {
-                        logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  request', {error: error.message});
-                        res.status(500).send({error: error.message});
-                      }
-                      else {
-                        res.send('ok');
+                    }, err => {
+                      if(err) {
+                        return reject(err)
+                      } else {
+                        resolve();
                       }
                     });
-                  }).catch(function(err) {
-                    logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  getUsers', {error: err.message});
-                    res.status(500).send({error: err.message});
-                    return;
-                  });
-                }).catch(function(err) {
-                  logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  getUsers', {error: err.message});
-                  res.status(500).send({error: err.message});
-                  return;
+                  })
                 });
-              }
-              else {
-                res.send('ok');
-              }
-
-            })
-            .catch(function(err){
-                logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  TemplateDoc.update', {error: err.message});
-                res.status(500).send({error: err.message});
-                return;
-            });
-
-          }
-          else if(err) {
-            logger.log('error', '%s templateDocx.update2, %s', req.user.name, '   Office.findOne', {error: err.message});
-            res.status(500).send({error: err.message});
-
-          }
-          else {
-            logger.log('error', '%s templateDocx.update2, %s', req.user.name, '   Office.findOne', {error: 'Entity not found'});
-            res.status(500).send({error: 'Entity Not Found'});
-          }
-        });
-      });
-    }
-  }
-  else {
-    TemplateDoc.update({ _id: req.params.id }, json).then(function (result) {
-      if (result.nModified === 0) {
-        var message = `object with id: ${req.params.id} not found`;
-        logger.log(message);
-        res.status(404).send({ error: message });
+              });
+            }
+          });
+        } else {
+          throw new Error('Entity Not Found');
+        }
+      })
+    }).then(() => {
+      res.send('ok');
+    }).catch(err => {
+      return next(err)
+    });
+  } else {
+    TemplateDoc.findOneAndUpdate({ _id: req.params.id }, json).then(result => {
+      if (!result) {
+        throw new Error(`object with id: ${req.params.id} not found`);
       }
-      else {
-        res.send('ok');
-      }
-    }).catch(err=>{
-        logger.log('error', '%s templateDocx.update2, %s', req.user.name, '  TemplateDoc.update', { error: err.message });
+      elasticsearch.save(result, 'templateDoc')
+    }).then(() => {
+      res.send('ok');
+    }).catch(err => {
+      next(err)
     });
   }
 };
