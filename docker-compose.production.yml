@@ -17,9 +17,12 @@ services:
   mongo:
     image: mongo:3.6
     volumes:
-      - ./data/mongo:/data/db
+      - mongodata:/data/db
 
   elasticsearch:
     image: elasticsearch:5.6
     volumes:
       - ./data/elasticsearch:/usr/share/elasticsearch/data
+
+volumes:
+  mongodata:
