@@ -3,8 +3,8 @@
   <detail-assign value="item.assign" me="me" list="people" on-change="onAssign"></detail-assign>
   <discussion-due item="item" on-change="onDateDue"></discussion-due>
   <div class="location">
-      <div class="placeholder" ng-if="!item.location">{{ 'location' | i18next }}</div>
-      <input type="text"  ng-model="item.location" ng-change="updateLocation(item)">
+      <div class="placeholder" ng-if="!item.location" onclick="this.nextElementSibling.focus()">{{ 'location' | i18next }}</div>
+      <input type="text" ng-model="item.location" ng-change="updateLocation(item)">
   </div>
   <detail-status value="item.status" list="statuses" on-change="onStatus"></detail-status>
   <detail-menu items="menuItems" ng-class="{ 'enabled' : haveEditiorsPermissions()}"></detail-menu>
