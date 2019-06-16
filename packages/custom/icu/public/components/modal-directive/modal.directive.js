@@ -293,18 +293,11 @@ function userCtrl($scope, $state, $i18next,$timeout, $uibModalInstance, $filter,
     $scope.people = people;
     $scope.currentUser = UsersService.getMe().$$state.value;
 
-    $scope.tabs = [
-        {
-            title: 'general',
-        }
-    ];
-    if($scope.activeProvider === 'local') {
-        $scope.tabs.push(
-            {
-                title: 'notifications',
-            }
-        );
-    }
+    $scope.tabs = [{
+        title: 'general',
+    }, {
+        title: 'notifications'
+    }];
 
     $scope.activeTab = $scope.tabs[0];
     $scope.setActiveTab = function(tab){
