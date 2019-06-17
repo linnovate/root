@@ -91,7 +91,8 @@ angular
         var restoredContext = context.getContextFromState(state);
         if (
           restoredContext.entityName !== "all" &&
-          restoredContext.entityName !== "my"
+          restoredContext.entityName !== "my" &&
+          restoredContext.main !== 'inbox'
         ) {
           context.setMain(restoredContext.main);
           if (restoredContext.entityName === "task") {
