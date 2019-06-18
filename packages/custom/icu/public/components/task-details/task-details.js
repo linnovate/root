@@ -253,17 +253,17 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
     return TasksService.template2subTasks(id, {
       'taskId': $stateParams.id
     }).then(function(result) {
-      for (var i = result.length - 1; i >= 0; i--) {
-        result[i].isNew = true;
-      }
-      $timeout(function() {
-        for (var i = result.length - 1; i >= 0; i--) {
-          result[i].isNew = false;
-        }
-      }, 5000);
-      var tmp = $scope.item.subTasks.pop()
-      $scope.item.subTasks = $scope.item.subTasks.concat(result);
-      $scope.item.subTasks.push(tmp);
+      result.forEach(subTask => {
+        delete subTask._id;
+        delete subTask.id;
+        TasksService.create(subTask).then(result => {
+          result.isNew = true;
+          $scope.item.subTasks.splice($scope.item.subTasks.length-1, 0, result);
+          $timeout(function() {
+            result.isNew = false;
+          }, 5000);
+        });
+      });
     });
   }
 
