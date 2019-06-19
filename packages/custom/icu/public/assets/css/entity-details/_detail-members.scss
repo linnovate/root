@@ -128,9 +128,32 @@ icu-members-footer {
             width: 23%;
             margin-left: 10px;
 
-            .ui-select-bootstrap .ui-select-choices-row > a {
-                line-height: 35px;
-                padding: 2px 7px;
+            .ui-select-bootstrap .ui-select-choices-row {
+                > a {
+                    line-height: 35px;
+                    padding: 2px 7px;
+                }
+
+                .ui-select-choices-row-inner {
+                    display: flex !important;
+                }
+
+                [icu-avatar] {
+                    display: inline-block;
+                    .avatar {
+                        height: 27px;
+                        width: 27px;
+                        margin: 0;
+                        font-size: 20px;
+                        display: inline-block;
+                    }
+                }
+                .summary-content {
+                    line-height: 26px;
+                    margin-left: 5px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
             }
 
             .avatar {
