@@ -61,7 +61,7 @@
                        ng-class='{"updatedAt":checkDate()}'>
             </div>
             <div class="filterDueDate" ng-if="filteringData.issue == 'officeDocument'">
-                <div class="subtitle">{{'creation' | i18next}}</div>
+                <div class="subtitle">{{'createdAt' | i18next}}</div>
                 <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
                 <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
                        ng-class='{"updatedAt":checkDate()}'>

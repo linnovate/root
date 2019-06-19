@@ -117,7 +117,7 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
         title: 'status',
         value: 'status'
     }, {
-        title: 'created',
+        title: 'creation',
         value: 'created'
     }, {
         title: 'bolded',
@@ -129,7 +129,7 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
     }];
 
     $scope.sorting = {
-        field: $scope.sortingList.find(f => f.title == $stateParams.sort.replace(/^-/, '')),
+        field: $scope.sortingList.find(f => f.value == $stateParams.sort.replace(/^-/, '')),
         isReverse: $stateParams.sort[0] === '-'
     };
 
