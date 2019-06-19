@@ -213,6 +213,11 @@ angular.module('mean.icu').config([
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
+                    },
+                    tags: function (OfficeDocumentsService) {
+                        return OfficeDocumentsService.getTags().then(function (tags) {
+                            return tags;
+                        });
                     }
                 }
             };

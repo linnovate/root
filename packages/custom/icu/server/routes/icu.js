@@ -370,10 +370,10 @@ module.exports = function(Icu, app) {
 
   app.route('/api/officeDocuments*').all(entity('officeDocuments'));
   app.route('/api/officeDocuments')
-  //.post(documents.upload, documents.signNew)
     .post(documents.upload)
-    //.get(documents.getAll);
     .get(pagination.parseParams, documents.all, star.isStarred, pagination.formResponse);
+  app.route('/api/officeDocuments/tags')
+    .get(documents.tagsList);
 
   //used for excel summary
   app.route('/api/officeDocuments/summary')

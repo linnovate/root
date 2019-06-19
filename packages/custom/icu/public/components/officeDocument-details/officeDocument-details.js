@@ -28,7 +28,8 @@ function OfficeDocumentDetailsController(
   UsersService,
   DetailsPaneService,
   $timeout,
-  $http
+  $http,
+  tags
 ) {
   // ==================================================== init ==================================================== //
 
@@ -90,7 +91,7 @@ function OfficeDocumentDetailsController(
   $scope.statuses = ["new", "in-progress", "received", "sent", "done"];
 
   $scope.entity = entity || context.entity;
-  $scope.tags = ["tag"];
+  $scope.tags = tags;
   $scope.tasks = tasks.data || tasks;
   $scope.items = officeDocuments.data || officeDocuments;
 

@@ -3450,3 +3450,22 @@ exports.indexInFolder = function(req, res, next) {
       next(err);
     });
 };
+
+exports.tagsList = function(req, res, next) {
+  if (req.locals.error) {
+    return next();
+  }
+  var query = req.acl.mongoQuery("Document");
+  query.distinct("tags", function(error, tags) {
+    if (error) {
+      req.locals.error = {
+        message: "Can't get tags"
+      };
+    } else {
+      req.locals.result = tags || [];
+    }
+
+    next();
+  });
+};
+
