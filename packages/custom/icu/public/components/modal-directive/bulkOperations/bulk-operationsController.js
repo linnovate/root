@@ -1,4 +1,4 @@
-function bulkOperationsController($scope, context, $stateParams, $state, $i18next, $uibModalInstance, $timeout, activityType, entityName,
+function bulkOperationsController($scope, context, $stateParams, $state, $i18next, $uibModalInstance, $injector, activityType, entityName,
                                   MultipleSelectService, UsersService, SettingServices, PermissionsService, NotifyingService) {
 
     $scope.selectedItems = MultipleSelectService.getSelected();
@@ -187,7 +187,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         }
     }
 
-     $scope.getBulkWatchersClass = function(member){
+    $scope.getBulkWatchersClass = function(member){
         let bulkObject = $scope.selectedWatchers.find( watcher => watcher._id === member._id);
         return bulkObject.permissions
     };
@@ -306,7 +306,17 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
   //------------------------------------------------//
   //----------------------TAGS----------------------//
 
-  $scope.availablTags = _.uniq(_.flatten($scope.selectedItems.map(item => item.tags)));
+  if($state.$current.includes['main.search']) {
+    // For search results, suggest tags that exist in some of selected items
+    $scope.availableTags = _.uniq(_.flatten($scope.selectedItems.map(item => item.tags)));
+  } else {
+    // For specific entity, suggest tags that exist in other entities
+    let serviceName = entityName[0].toUpperCase() + entityName.slice(1) + 'Service';
+    let service = $injector.get(serviceName);
+    service.getTags().then(tags => {
+        $scope.availableTags = tags;
+    })
+}
 
   var initialTags = $scope.selectedItems.map(item => item.tags).reduce((acc, i) => {
     return _.intersection(acc, i);

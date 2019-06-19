@@ -151,7 +151,7 @@
       <span class="selected" ng-repeat="entity in selectedTypes" ng-if="selectedArrays[entity].length">
         {{ selectedArrays[entity].length }} {{ entity | i18next }}
       </span>
-      <detail-tags class="items bulk" value="$parent.tagsModel" list="availablTags"></detail-tags>
+      <detail-tags class="items bulk" value="$parent.tagsModel" list="availableTags"></detail-tags>
       <button class="action-button"
         ng-class="{ 'disabled' : !selected}"
         ng-click="bulkUpdateEvery('tag', null)"
