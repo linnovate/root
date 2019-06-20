@@ -34,7 +34,7 @@ exports.update = function(req, res, next) {
       return console.error('Error: ', err);
     }
 
-    user.set(_.pick(req.body, ['name', 'email', 'GetMailEveryDayAboutMyTasks', 'GetMailEveryWeekAboutGivenTasks', 'GetMailEveryWeekAboutMyTasks', 'GetMailEveryDayAboutGivenTasks']));
+    user.set(_.pick(req.body, ['name', 'email', 'profile', 'GetMailEveryDayAboutMyTasks', 'GetMailEveryWeekAboutGivenTasks', 'GetMailEveryWeekAboutMyTasks', 'GetMailEveryDayAboutGivenTasks']));
     user.save(function (err, updatedUser) {
       if (err){
         return console.error('Error: ', err);
