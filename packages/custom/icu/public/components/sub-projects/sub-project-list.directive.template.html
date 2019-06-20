@@ -1,9 +1,9 @@
 
-<div class="sub-projects-title" ng-show="addSubProjects || project.subProjects[0]._id">
+<div class="sub-entity-title" ng-show="addSubProjects || project.subProjects[0]._id">
     {{ 'subProjects' | i18next }}
 </div>
 <div ng-show="!addSubProjects && !project.subProjects[0]._id"
-     class="add-sub-projects sub-projects-title"
+     class="add-sub-entity sub-entity-title"
      ng-click="addSubProjects = !addSubProjects">
     {{ 'addSubProject' | i18next }}
 </div>

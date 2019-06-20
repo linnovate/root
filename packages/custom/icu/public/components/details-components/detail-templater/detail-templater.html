@@ -17,18 +17,14 @@
         <!-- ng-if="temp.subTasks.length" -->
         <span ng-click="implementTemplate(temp._id)" ng-class="{'last': $last}">
           {{temp.title}} ({{temp.subTasks.length }})
-                        <span class="delete" ng-if="!data.task._id" ng-click="deleteTemplate(temp._id, $index)">
-          <!-- <img src="/icu/assets/img/X.png"> -->
-          </span>
+          <span class="delete" ng-if="!data.task._id" ng-click="deleteTemplate(temp._id, $index)"></span>
         </span>
       </li>
       <li class='new-template'>
-        <div>
-          <span>
-            <b>{{'saveTemplate' | i18next }}</b>
-          </span>
-          <input type="text" name="newTemplate" placeholder="{{ 'templateName' | i18next }}" ng-model="newTemplate.name">
-        </div>
+        <span>
+          <b>{{'saveTemplate' | i18next }}</b>
+        </span>
+        <input type="text" name="newTemplate" placeholder="{{ 'templateName' | i18next }}" ng-model="newTemplate.name">
       </li>
       <li class="avatar">
         <span>{{'visibleTo' | i18next }}</span>
@@ -44,7 +40,7 @@
         </ui-select>
       </li>
       <li class='save'>
-        <div ng-click='saveTemplate()' class='save-template' ng-class="{'empty': !item.subTasks[0]._id }">{{'save' | i18next }}</div>
+        <div ng-click='saveTemplate()' ng-class="{'empty': !item.subTasks[0]._id }">{{'save' | i18next }}</div>
       </li>
     </ul>
   </div>
