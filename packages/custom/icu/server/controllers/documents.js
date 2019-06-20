@@ -2773,6 +2773,8 @@ exports.update = function(req, res, next) {
 
       if (req.body.name === 'assign') {
         addAssignToWatchers(docToUpdate, req.body.newVal);
+      } else if(req.body.name === 'folder') {
+        docToUpdate.folderIndex = undefined;
       }
 
       if (req.body.watchers) {

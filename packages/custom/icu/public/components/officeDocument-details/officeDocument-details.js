@@ -218,22 +218,20 @@ function OfficeDocumentDetailsController(
       }
     );
     json.watchers = $scope.item.watchers;
-    OfficeDocumentsService.updateDocument($scope.item._id, json).then(function(
-      res
-    ) {
-      OfficeDocumentsService.getById($scope.item._id).then(doc => {
-        if (!id) {
-          delete $scope.item.folder;
-          $scope.signatures = undefined;
-        } else {
-          $scope.getSignatures();
-        }
-        //Update the scope with the response from server
-        $scope.item.watchers = doc.watchers;
-        $scope.item.permissions = doc.permissions;
+    OfficeDocumentsService.updateDocument($scope.item._id, json).then(doc => {
+      if (!id) {
+        delete $scope.item.folder;
+        $scope.signatures = undefined;
+      } else {
+        $scope.getSignatures();
+      }
 
-        backupEntity = angular.copy($scope.item);
-      });
+      //Update the scope with the response from server
+      $scope.item.watchers = doc.watchers;
+      $scope.item.permissions = doc.permissions;
+      $scope.item.folderIndex = doc.folderIndex;
+
+      backupEntity = angular.copy($scope.item);
     });
   };
 

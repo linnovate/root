@@ -70,7 +70,7 @@
         {{'updateStatusForApproval' | i18next }}
     </button>
     <button class="detail-button setFolderIndex"
-            ng-if="!item.folderIndex"
+            ng-if="item.folder && !item.folderIndex"
             ng-click="setFolderIndex(item)">
         {{'File' | i18next }}
     </button>
