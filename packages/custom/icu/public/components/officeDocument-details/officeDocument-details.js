@@ -519,13 +519,9 @@ function OfficeDocumentDetailsController(
   };
 
   $scope.deleteDocumentFile = function(officeDocument) {
-    OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(
-      function() {
-        officeDocument.path = undefined;
-        officeDocument.spPath = undefined;
-        $scope.signatures = undefined;
-      }
-    );
+    OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function() {
+      $state.reload();
+    });
   };
 
   $scope.updateStatusForApproval = function(entity) {

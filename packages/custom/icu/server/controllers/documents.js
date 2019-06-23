@@ -950,7 +950,7 @@ exports.deleteDocumentFile = function(req, res, next) {
   var id = req.params.id;
   Document.update(
     { _id: id },
-    { $unset: { path: 1, spPath: 1, serial: 1, signBy: 1 } },
+    { $unset: { path: 1, spPath: 1, serial: 1, signBy: 1, title: 1 } },
     function(error, result) {
       if (error) {
         logger.log(
