@@ -313,9 +313,11 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
     // For specific entity, suggest tags that exist in other entities
     let serviceName = entityName[0].toUpperCase() + entityName.slice(1) + 'Service';
     let service = $injector.get(serviceName);
-    service.getTags().then(tags => {
-        $scope.availableTags = tags;
-    })
+    if(typeof service.getTags === 'function') {
+        service.getTags().then(tags => {
+            $scope.availableTags = tags;
+        })
+    }
 }
 
   var initialTags = $scope.selectedItems.map(item => item.tags).reduce((acc, i) => {
