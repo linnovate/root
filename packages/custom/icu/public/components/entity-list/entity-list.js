@@ -225,7 +225,8 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
     $scope.multipleSelectRefreshSelected = function (event, entity) {
 
         event.stopPropagation(); // Prevent $scope.onClickRow from navigating to entity details
-        $state.go(`main.${context.main}.all`);
+        let noDetails = $state.current.name.replace(/.details.+/, '');
+        $state.go(noDetails);
 
         MultipleSelectService.refreshSelectedList(entity);
         multipleSelectRefreshState();

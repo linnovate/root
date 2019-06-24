@@ -45,7 +45,7 @@ angular.module('mean.icu.ui.tabs')
             }
 
             $scope.manageFolders = function () {
-                $state.go('main.folders.byentity.activities', {
+                $state.go('main.folders.byentity', {
                     entity: $scope.entityName,
                     id: $scope.entity._id,
                     entityId: $scope.entity._id

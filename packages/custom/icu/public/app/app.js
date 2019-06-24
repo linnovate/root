@@ -51,6 +51,18 @@ angular.module('mean.icu').config([
                     return context.entity;
                 }
             ];
+
+            resolve.tags = ['$injector', function($injector) {
+                let service = $injector.get(main[0].toUpperCase() + main.slice(1) + 'sService');
+                if(typeof service.getTags === 'function') {
+                    return service.getTags().then(function (tags) {
+                        return tags;
+                    });
+                } else {
+                    return [];
+                }
+            }];
+
             if (main !== 'task' && main !== 'officeDocument') {
                 resolve.tasks = function (TasksService, $stateParams) {
                     console.log(main);
@@ -76,15 +88,8 @@ angular.module('mean.icu').config([
                         controller: capitalizedMain + 'ListController'
                     },
                     'detailspane@main': {
-                        templateUrl: function ($stateParams) {
-                            if (!$stateParams.entity) return '';
-                            else return '/icu/components/' + $stateParams.entity + '-details/' +
-                                $stateParams.entity + '-details.html';
-                        },
-                        controllerProvider: function ($stateParams) {
-                            if (!$stateParams.entity) return '';
-                            else return capitalize($stateParams.entity) + 'DetailsController';
-                        }
+                        templateUrl: '/icu/components/all/all.html',
+                        controller: 'AllController'
                     }
                 },
                 resolve: resolve
@@ -691,7 +696,6 @@ angular.module('mean.icu').config([
                 url: '/projects',
                 views: {
                     tab: {
-//                         templateUrl: '/icu/components/user-details/tabs/projects/projects.html',
                         controller: 'UserProjectsController',
                         resolve: {
                             userProjects: function (ProjectsService, $stateParams) {
@@ -701,25 +705,10 @@ angular.module('mean.icu').config([
                     }
                 }
             })
-            // .state('main.people.byentity.details.officeDocuments', {
-            //     url: '/officeDocuments',
-            //     views: {
-            //         tab: {
-            //             templateUrl: '/icu/components/user-details/tabs/officeDocuments/officeDocuments.html',
-            //             controller: 'UserOfficeDocumentsController',
-            //             resolve: {
-            //                 userOfficeDocuments: function(OfficeDocumentsService, $stateParams) {
-            //                     return OfficeDocumentsService.getByUserId($stateParams.id);
-            //                 }
-            //             }
-            //         }
-            //     }
-            // })
             .state('main.people.byentity.details.offices', {
                 url: '/offices',
                 views: {
                     tab: {
-//                         templateUrl: '/icu/components/user-details/tabs/offices/offices.html',
                         controller: 'UserOfficesController',
                         resolve: {
                             userOffices: function (OfficesService, $stateParams) {
@@ -745,9 +734,7 @@ angular.module('mean.icu').config([
             })
             .state('main.people.byentity.details.tasks', {
                 url: '/tasks',
-                views: {                    // tasks: function(TasksService, $stateParams) {
-                    //     return TasksService.getByOfficeDocumentId($stateParams.id);
-                    // },
+                views: {
                     tab: {
                         templateUrl: '/icu/components/user-details/tabs/tasks/tasks.html',
                         controller: 'UserTasksController',
@@ -825,23 +812,14 @@ angular.module('mean.icu').config([
             .state('main.tasks.all.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.all.details.documents', getDetailsTabState('task', 'documents'))
             .state('main.tasks.all.details.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
-            // .state('main.tasks.all.details.subtasks', getDetailsSubTasksState())
-
 
             .state('main.tasks.byentity', generateStateByEntity('task'))
-            .state('main.tasks.byentity.activities', getDetailsTabState('task', 'activities'))
-            .state('main.tasks.byentity.activities.modal', getDetailspaneModal())
-            .state('main.tasks.byentity.documents', getDetailsTabState('task', 'documents'))
-            .state('main.tasks.byentity.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
-            .state('main.tasks.byentity.tasks', getDetailsTabState('task', 'tasks'))
-            // .state('main.tasks.byentity.subtasks', getDetailsSubTasksState())
-
             .state('main.tasks.byentity.details', getTaskDetailsState())
             .state('main.tasks.byentity.details.activities', getDetailsTabState('task', 'activities'))
             .state('main.tasks.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.tasks.byentity.details.documents', getDetailsTabState('task', 'documents'))
             .state('main.tasks.byentity.details.officeDocuments', getDetailsTabState('task', 'officeDocuments'))
-            // .state('main.tasks.byentity.details.subtasks', getDetailsSubTasksState())
+            .state('main.tasks.byentity.details.tasks', getDetailsTabState('task', 'tasks'))
 
             .state('main.tasks.byassign', {
                 url: '/my',
@@ -1014,11 +992,6 @@ angular.module('mean.icu').config([
             .state('main.projects.all.details.tasks', getDetailsTabState('project', 'tasks'))
 
             .state('main.projects.byentity', generateStateByEntity('project'))
-            .state('main.projects.byentity.activities', getDetailsTabState('project', 'activities'))
-            .state('main.projects.byentity.activities.modal', getDetailspaneModal())
-            .state('main.projects.byentity.documents', getDetailsTabState('project', 'documents'))
-            .state('main.projects.byentity.tasks', getDetailsTabState('project', 'tasks'))
-
             .state('main.projects.byentity.details', getProjectDetailsState())
             .state('main.projects.byentity.details.activities', getDetailsTabState('project', 'activities'))
             .state('main.projects.byentity.details.activities.modal', getDetailspaneModal())
@@ -1139,11 +1112,6 @@ angular.module('mean.icu').config([
             .state('main.officeDocuments.all.details.tasks', getDetailsTabState('officeDocument', 'tasks'))
 
             .state('main.officeDocuments.byentity', generateStateByEntity('officeDocument'))
-            .state('main.officeDocuments.byentity.activities', getDetailsTabState('officeDocument', 'activities'))
-            .state('main.officeDocuments.byentity.activities.modal', getDetailspaneModal())
-            .state('main.officeDocuments.byentity.documents', getDetailsTabState('officeDocument', 'documents'))
-            .state('main.officeDocuments.byentity.tasks', getDetailsTabState('officeDocument', 'tasks'))
-
             .state('main.officeDocuments.byentity.details', getOfficeDocumentDetailsState())
             .state('main.officeDocuments.byentity.details.activities', getDetailsTabState('officeDocument', 'activities'))
             .state('main.officeDocuments.byentity.details.activities.modal', getDetailspaneModal())
@@ -1204,17 +1172,11 @@ angular.module('mean.icu').config([
             .state('main.discussions.all.details.tasks', getDetailsTabState('discussion', 'tasks'))
 
             .state('main.discussions.byentity', generateStateByEntity('discussion'))
-            .state('main.discussions.byentity.activities', getDetailsTabState('discussion', 'activities'))
-            .state('main.discussions.byentity.activities.modal', getDetailspaneModal())
-            .state('main.discussions.byentity.documents', getDetailsTabState('discussion', 'documents'))
-            .state('main.discussions.byentity.tasks', getDetailsTabState('discussion', 'tasks'))
-
             .state('main.discussions.byentity.details', getDiscussionDetailsState())
             .state('main.discussions.byentity.details.activities', getDetailsTabState('discussion', 'activities'))
             .state('main.discussions.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.discussions.byentity.details.documents', getDetailsTabState('discussion', 'documents'))
             .state('main.discussions.byentity.details.tasks', getDetailsTabState('discussion', 'tasks'))
-
 
             .state('main.offices', {
                 url: '/offices',
@@ -1270,12 +1232,6 @@ angular.module('mean.icu').config([
             .state('main.offices.all.details.signatures', getDetailsTabState('office', 'signatures'))
 
             .state('main.offices.byentity', generateStateByEntity('office'))
-            .state('main.offices.byentity.activities', getDetailsTabState('office', 'activities'))
-            .state('main.offices.byentity.activities.modal', getDetailspaneModal())
-            .state('main.offices.byentity.documents', getDetailsTabState('office', 'documents'))
-            .state('main.offices.byentity.folders', getDetailsTabState('office', 'folders'))
-            .state('main.offices.byentity.signatures', getDetailsTabState('office', 'signatures'))
-
             .state('main.offices.byentity.details', getOfficeDetailsState())
             .state('main.offices.byentity.details.activities', getDetailsTabState('office', 'activities'))
             .state('main.offices.byentity.details.activities.modal', getDetailspaneModal())
@@ -1336,11 +1292,6 @@ angular.module('mean.icu').config([
             .state('main.templateDocs.all.details.folders', getDetailsTabState('templateDoc', 'folders'))
 
             .state('main.templateDocs.byentity', generateStateByEntity('templateDoc'))
-            .state('main.templateDocs.byentity.activities', getDetailsTabState('templateDoc', 'activities'))
-            .state('main.templateDocs.byentity.activities.modal', getDetailspaneModal())
-            .state('main.templateDocs.byentity.documents', getDetailsTabState('templateDoc', 'documents'))
-            .state('main.templateDocs.byentity.folders', getDetailsTabState('templateDoc', 'folders'))
-
             .state('main.templateDocs.byentity.details', getTemplateDocDetailsState())
             .state('main.templateDocs.byentity.details.activities', getDetailsTabState('templateDoc', 'activities'))
             .state('main.templateDocs.byentity.details.activities.modal', getDetailspaneModal())
@@ -1401,16 +1352,11 @@ angular.module('mean.icu').config([
             .state('main.folders.all.details.officeDocuments', getDetailsTabState('folder', 'officeDocuments'))
 
             .state('main.folders.byentity', generateStateByEntity('folder'))
-            .state('main.folders.byentity.activities', getDetailsTabState('folder', 'activities'))
-            .state('main.folders.byentity.activities.modal', getDetailspaneModal())
-            .state('main.folders.byentity.documents', getDetailsTabState('folder', 'documents'))
-            .state('main.folders.byentity.folders', getDetailsTabState('folder', 'folders'))
-            .state('main.folders.byentity.officeDocuments', getDetailsTabState('folder', 'officeDocuments'))
-
             .state('main.folders.byentity.details', getFolderDetailsState())
             .state('main.folders.byentity.details.activities', getDetailsTabState('folder', 'activities'))
             .state('main.folders.byentity.details.activities.modal', getDetailspaneModal())
             .state('main.folders.byentity.details.documents', getDetailsTabState('folder', 'documents'))
+            .state('main.folders.byentity.details.folders', getDetailsTabState('folder', 'folders'))
             .state('main.folders.byentity.details.tasks', getDetailsTabState('folder', 'tasks'))
             .state('main.folders.byentity.details.officeDocuments', getDetailsTabState('folder', 'officeDocuments'))
 
@@ -1504,17 +1450,10 @@ angular.module('mean.icu').config([
             .state('main.search.folder.tasks', getDetailsTabState('folder', 'tasks'))
             .state('main.search.folder.officeDocuments', getDetailsTabState('folder', 'officeDocuments'))
 
-
             .state('main.search.officeDocument', getOfficeDocumentDetailsState('/officeDocument'))
             .state('main.search.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
             .state('main.search.officeDocument.activities.modal', getDetailspaneModal())
             .state('main.search.officeDocument.documents', getDetailsTabState('officeDocument', 'documents'))
-
-            // .state('main.officeDocuments.byentity.details', getOfficeDocumentDetailsState())
-            // .state('main.officeDocuments.byentity.details.activities', getDetailsTabState('officeDocument', 'activities'))
-            // .state('main.officeDocuments.byentity.details.activities.modal', getDetailspaneModal())
-            // .state('main.officeDocuments.byentity.details.documents', getDetailsTabState('officeDocument', 'documents'))
-            // .state('main.officeDocuments.byentity.details.tasks', getDetailsTabState('officeDocument', 'tasks'))
 
             .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
             .state('main.search.attachment.versions', getAttachmentDetailsTabState())
