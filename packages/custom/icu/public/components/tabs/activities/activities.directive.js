@@ -89,60 +89,42 @@ angular.module('mean.icu.ui.tabs')
                     }
                 }
 
-            if(!_.isEmpty($scope.attachments)){
-
-                ActivitiesService.create({
-                    data: {
-                            creator: $scope.me,
-                            date: new Date(),
-                            entity: $scope.entity._id,
-                            entityType: $scope.entityName,
-
-                            updateField: 'attachment',
-                            current: $scope.activity.description || '',
-                        },
-                        context: {}
-                    }).then(function(result) {
-                        let file = $scope.attachments;
-                        let data = {
-                            issueId: result._id,
-                            issue: 'update',
-                            entity: $scope.entityName,
-                            entityId: $stateParams.id || $stateParams.entityId
-                        };
-
-                        result.attachments = [];
-
-                        for(let index = 0; index < file.length; index++) {
-
-                            DocumentsService.saveAttachments(data, file[index])
-                                .then(function(attachment) {
-                                    result.attachments[result.attachments.length] = attachment;
-                                })
-                        }
-                        $scope.activities.push(result);
-                        clearForm();
-                    }).then(() => {
-                        BoldedService.boldedUpdate($scope.entity, $scope.entityName + 's', 'update');
-                    });
-            } else {
-                ActivitiesService.create({
-                    data: {
-                        creator: $scope.me,
-                        date: new Date(),
-                        entity: $scope.entity._id,
-                        entityType: $scope.entityName,
-
-                        updateField: 'comment',
-                        current: $scope.activity.description,
-                    },
-                    context: {}
-                })
-                  .then( result => {
-                    $scope.activities.push(result);
-                    clearForm();
-                  })
-            }
+            ActivitiesService.create({
+                data: {
+                    creator: $scope.me,
+                    date: new Date(),
+                    entity: $scope.entity._id,
+                    entityType: $scope.entityName,
+                    updateField: _.isEmpty($scope.attachments) ? 'comment' : 'attachment',
+                    current: $scope.activity.description || '',
+                },
+                context: {}
+            }).then(function(result) {
+                if(!_.isEmpty($scope.attachments)) {
+                    let data = {
+                        issueId: result._id,
+                        issue: 'update',
+                        entity: $scope.entityName,
+                        entityId: $stateParams.id || $stateParams.entityId
+                    };
+                    result.attachments = [];
+                    return $scope.attachments.reduce((promise, file) => {
+                        return promise.then(() => {
+                            return DocumentsService.saveAttachments(data, file)
+                            .then(function(attachment) {
+                                result.attachments[result.attachments.length] = attachment;
+                                return result;
+                            })
+                        })
+                    }, Promise.resolve())
+                } else {
+                    return result;
+                }
+            }).then(result => {
+                $scope.activities.push(result);
+                clearForm();
+                BoldedService.boldedUpdate($scope.entity, $scope.entityName + 's', 'update');
+            });
         };
 
             $timeout(function() {
