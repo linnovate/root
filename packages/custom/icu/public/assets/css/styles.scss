@@ -128,14 +128,15 @@ table {
   height: 100%;
   overflow: hidden;
 }
-.panes-wrapper {
+.content-wrapper {
   width: calc(100% - #{$sidepane-width});
-  display: flex;
-  justify-content: flex-start;
-
   @media screen and (max-width: $small-resolution) {
     width: calc(100% - #{$min-sidepane-width});
   }
+}
+.panes-wrapper {
+  display: flex;
+  justify-content: flex-start;
 
   &.wide {
     margin-left: 0;
