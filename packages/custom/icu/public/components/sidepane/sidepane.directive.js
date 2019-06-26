@@ -6,6 +6,7 @@ directive('icuSidepane', function() {
         context, SearchService, EntityService, OfficesService, OfficeDocumentsService, MultipleSelectService,
         NotifyingService, TasksService
     ){
+        $scope.version = window.config.version;
         $scope.context = context;
         $scope.recycled = $stateParams.recycled;
 

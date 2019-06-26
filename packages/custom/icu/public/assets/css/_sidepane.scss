@@ -378,8 +378,13 @@
                         background-color: #141D20;
                     }
                 }
-                &:hover{
+                &:hover:not(.version) {
                     background-color: #37464B;
+                }
+
+                &.version {
+                    text-align: center;
+                    cursor: initial;
                 }
 
                 .menu-item {

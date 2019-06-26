@@ -47,10 +47,9 @@ function controllerwhatsNew($scope, $uibModalInstance, $filter,$location) {
         }
     });
 
-    $scope.ok = function (sendingForm) {
+    $scope.ok = function () {
         localStorage.setItem("icuVersion", window.config.version);
         $uibModalInstance.dismiss('cancel');
-        location.reload();
     };
     
     $scope.cancel = function () {
