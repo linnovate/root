@@ -1,22 +1,4 @@
-<header>
-    <div class="header-button">
-        <button class="hide-butt"
-                ng-style="{'background-image': 'url(' + getSideMenuIcon() + ')'}"
-                ng-click="changeLayout()">
-        </button>
-    </div>
-    <div class="header-title">
-        <span class="sidepane-title"
-                data-ng-class="{ 'selected': context.entityName === 'all'}"
-                href="/tasks/all"
-                ui-sref-active="active"
-                ng-click="GoToMyTasks();activeTab = items[1]">
-            {{ 'icu' | i18next }}
-        </span>
-    </div>
-</header>
 <icu-open-modal/>
-
 <nav>
     <ul ng-init="getActiveTab()">
         <li data-ng-repeat="item in items">

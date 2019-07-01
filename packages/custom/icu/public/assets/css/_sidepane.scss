@@ -256,51 +256,6 @@
         text-align: center;
         line-height: 28px;
         border-bottom: 1px solid $border;
-        .header-title
-        {
-            padding-top: 16px;
-            line-height: 27px;
-            font-size: 20px;
-        }
-        .header-button
-        {
-            width:85px;
-            height: 54px;
-            float:left;
-
-            @media screen and (max-width: $small-resolution) {
-                width:40px;
-            }
-
-            .hide-butt
-            {
-                height: 54px;
-                width: 55px;
-                border:none;
-                background: #141D20 no-repeat center center;
-
-                @media screen and (max-width: $small-resolution) {
-                    width:40px;
-                }
-            }
-        }
-        .sidepane-title
-        {
-            cursor: pointer;
-            font-weight: 600;
-            margin-left: -10px;
-        }
-        .hide-button
-        {
-            float: left;
-            height: 56px;
-            width: 56px;
-            background-color: white;
-            border: 1px solid #e1e1e1;
-            background-repeat: no-repeat;
-            background-position: center center;
-            margin-left: 6px;
-        }
     }
     .sideMenu {
         height: 100%;
@@ -477,15 +432,15 @@
         }
     }
     .submenu {
-        width:234px;
+        width: 234px;
+        max-height: 100%;
         background-color: $grey;
         overflow-x: auto;
 
         position: absolute;
-        top: 55px;
+        top: 0;
         left: 85px;
         right: 0;
-        bottom: 0;
 
         &::-webkit-scrollbar {
             display: none;

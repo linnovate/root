@@ -190,8 +190,8 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     });
 
                 });
+            }
         }
-    }
 
         function link($scope, $element) {
             // var list = $element.find('.last-notification');

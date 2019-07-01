@@ -1,3 +1,4 @@
+<div icu-notifications-header discussions="discussions" projects="projects" me="me" offices="offices" folders="folders" office-documents='officeDocuments' templateDocs='templateDocs'></div>
 <div class="icu-data">
      <div icu-sidepane
           tasks="tasks"
@@ -14,10 +15,9 @@
           get-side-menu-icon="getSideMenuIcon"
           ng-hide="menu.isHidden">
      </div>
-     <div class="content-wrapper">
-          <div icu-notifications-header discussions="discussions" projects="projects" me="me" offices="offices" folders="folders" office-documents='officeDocuments' templateDocs='templateDocs'></div>
+     <div class="content-wrapper"
+          ng-class="{ wide: menu.isHidden }">
           <div class="panes-wrapper"
-               ng-class="{ wide: menu.isHidden }"
                ng-if="state.current.name.indexOf('adminSettings') < 0">
                <div icu-middlepane
                     class="middlepane"

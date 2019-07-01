@@ -115,6 +115,7 @@ body {
 @import 'templateDoc-details';
 @import 'attachment-details';
 @import 'admin-settings';
+@import 'header';
 
 
 table {
@@ -125,11 +126,15 @@ table {
 }
 .icu-data {
   display: flex;
-  height: 100%;
+  height: calc(100vh - #{$header-height});
   overflow: hidden;
 }
 .content-wrapper {
   width: calc(100% - #{$sidepane-width});
+  &.wide {
+    margin-left: 0;
+    width: 100%;
+  }
   @media screen and (max-width: $small-resolution) {
     width: calc(100% - #{$min-sidepane-width});
   }
@@ -137,11 +142,6 @@ table {
 .panes-wrapper {
   display: flex;
   justify-content: flex-start;
-
-  &.wide {
-    margin-left: 0;
-    width: 100%;
-  }
 
   [contenteditable][colspan]:empty:not(:focus):before {
     content:attr(placeholder);
