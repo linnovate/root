@@ -18,6 +18,7 @@
 
 .entity-details {
     height: calc(100% - 55px);
+    position: relative;
     .entity-details-content {
         overflow-y: auto;
         @include scroll;

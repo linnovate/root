@@ -123,8 +123,7 @@
     <div class="all"
          ng-if="context.main != 'folders' && context.main != 'offices' && context.main != 'templateDocs' && activeTab.name !== 'search'">
         <p class="title all"
-           ng-click="reset(context.main);changeState('main.' + activeTab.state);
-           removeFilterValue();"
+           ng-click="reset(context.main);removeFilterValue();"
            ui-sref-active="active"
            data-ng-class="{ 'selected': context.entityName === 'all'}"
            ng-href="{{getLinkUrl()}}"
