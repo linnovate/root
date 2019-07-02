@@ -3,10 +3,22 @@
   height: $header-height;
 
   .search, .add-menu, .user-menu {
-      border-bottom: 1px solid $light-grey1;
+    border-bottom: 1px solid $light-grey1;
   }
 
-  .header-button {
+  .sideheader {
+    flex-shrink: 0;
+    display: flex !important;
+    &:not(.ng-hide) {
+      min-width: $sidepane-width;
+      width: $sidepane-width;
+      @media screen and (max-width: $small-resolution) {
+        width: $min-sidepane-width;
+        max-width: $min-sidepane-width;
+        min-width: $min-sidepane-width;
+      }
+    }
+    .header-button {
       height: 55px;
       width: 85px;
       flex-shrink: 0;
@@ -16,10 +28,10 @@
       background: $dark-grey no-repeat center center;
 
       @media screen and (max-width: $small-resolution) {
-          width:40px;
+        width: 40px;
       }
-  }
-  .header-title {
+    }
+    .header-title {
       width: 234px;
       flex-shrink: 0;
       padding-top: 16px;
@@ -30,148 +42,151 @@
       color: white;
       border-bottom: 1px solid $border;
       .sidepane-title {
-          cursor: pointer;
-          font-weight: 600;
-          margin-left: -10px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-left: -10px;
       }
+    }
   }
   .hide-menu {
-      flex-shrink: 0;
-      width: 61px;
-      background-color: white;
-      border: 1px solid $light-grey1;
-      background-repeat: no-repeat;
-      background-position: center center;
+    z-index: 1;
+    flex-shrink: 0;
+    width: 61px;
+    background-color: white;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border: 1px solid $light-grey1;
+    border-top: none;
+    border-left: none;
+    outline: none;
   }
 
   .search {
-      position: relative;
-      float: left;
-      margin-top: 1px;
+    position: relative;
+    float: left;
+    width: 100%;
+
+    .close-icon {
+      position: absolute;
+      right: 25px;
+      top: 50%;
+      transform: translate(0, -50%);
+      color: $grey1;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    input {
+      border: none;
+      background-color: white;
+      padding-left: 57px;
       width: 100%;
-
-      .close-icon {
-          position: absolute;
-          right: 25px;
-          top: 50%;
-          transform: translate(0, -50%);
-          color: $grey1;
-          cursor: pointer;
-          font-size: 16px;
+      font-size: 13px;
+      line-height: 18px;
+      height: 100%;
+      font-style: italic;
+      padding-top: 4px;
+      &:focus {
+        outline: none;
       }
+    }
 
-      input {
-          border: none;
-          background-color: white;
-          padding-left: 57px;
-          width: 100%;
-          font-size: 13px;
-          line-height: 18px;
-          height: $header-height - 2;
-          font-style: italic;
-          padding-top: 4px;
-          &:focus {
-              outline: none;
-          }
-      }
+    img {
+      position: absolute;
+      left: 25px;
+      top: 18px;
+    }
+    .build-in-search {
+      position: absolute;
+      width: 100%;
+      z-index: 9;
 
-      img {
-          position: absolute;
-          left: 25px;
-          top: 18px;
+      .build-in-search-item {
+        line-height: 4;
+        width: 100%;
+        border: 1px solid #e1e1e1;
+        border-top: 0;
+        background-color: white;
+        padding: 0 20px;
+        cursor: pointer;
       }
-      .build-in-search {
-          position: absolute;
-          width: 100%;
-          z-index: 9;
-
-          .build-in-search-item {
-              line-height: 4;
-              width: 100%;
-              border: 1px solid #e1e1e1;
-              border-top: 0;
-              background-color: white;
-              padding: 0 20px;
-              cursor: pointer;
-          }
-      }
+    }
   }
   .add-menu {
-      button {
-          @include button;
-          color: white;
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100%;
-          background-color: $orange;
-          i:before {
-              display: none;
-          }
-          i {
-              width: 53px;
-              display: block;
-              height: 49px;
-              background: url("/icu/assets/img/new_task.png") no-repeat center;
-              transition: 0.9s;
-          }
+    button {
+      @include button;
+      color: white;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      background-color: $orange;
+      i:before {
+        display: none;
+      }
+      i {
+        width: 53px;
+        display: block;
+        height: 49px;
+        background: url("/icu/assets/img/new_task.png") no-repeat center;
+        transition: 0.9s;
+      }
 
+      &:hover {
+        background-color: #FFB435;
+        i {
+          transform: rotate(90deg);
+        }
+      }
+    }
+
+    .menu-items {
+      li {
+        position: relative;
+        a {
+          span {
+            position: absolute;
+            left: 60px;
+            top: 50%;
+            transform: translate(0, -50%);
+          }
           &:hover {
-              background-color: #FFB435;
-              i {
-                  transform: rotate(90deg);
-              }
+            background-color: #FFB435;
+            color: white;
           }
+        }
       }
-
-      .menu-items {
-          li {
-              position: relative;
-
-              a {
-                  span {
-                      position: absolute;
-                      left: 60px;
-                      top: 50%;
-                      transform: translate(0, -50%);
-                  }
-                  &:hover {
-                      background-color: #FFB435;
-                      color: white;
-                  }
-              }
-          }
-      }
+    }
   }
 
   .user-menu {
-      .avatar {
-          @include button;
-          @include circle($header-height / 2);
+    .avatar {
+      @include button;
+      @include circle($header-height / 2);
 
-          background-color: $green;
-          width: 35px;
-          height: 35px;
-          margin: 10px auto;
-          font-size: 28px;
-          line-height: 35px;
-          cursor: pointer;
-      }
+      background-color: $green;
+      width: 35px;
+      height: 35px;
+      margin: 10px auto;
+      font-size: 28px;
+      line-height: 35px;
+      cursor: pointer;
+    }
   }
 
   .add-menu, .user-menu {
-      flex-shrink: 0;
-      width: 55px;
-      height: $header-height;
+    flex-shrink: 0;
+    width: 55px;
+    height: $header-height;
 
-      .menu-items {
-          &.dropdown-menu {
-              border-radius: 0;
-              left: -105px;
-              box-shadow: none;
-              text-align: left;
-          }
+    .menu-items {
+      &.dropdown-menu {
+        border-radius: 0;
+        left: -105px;
+        box-shadow: none;
+        text-align: left;
       }
+    }
   }
 }

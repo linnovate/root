@@ -129,7 +129,9 @@ table {
   height: calc(100vh - #{$header-height});
   overflow: hidden;
 }
-.content-wrapper {
+.panes-wrapper {
+  display: flex;
+  justify-content: flex-start;
   width: calc(100% - #{$sidepane-width});
   &.wide {
     margin-left: 0;
@@ -138,10 +140,6 @@ table {
   @media screen and (max-width: $small-resolution) {
     width: calc(100% - #{$min-sidepane-width});
   }
-}
-.panes-wrapper {
-  display: flex;
-  justify-content: flex-start;
 
   [contenteditable][colspan]:empty:not(:focus):before {
     content:attr(placeholder);

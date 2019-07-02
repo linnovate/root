@@ -18,11 +18,10 @@
         color: $orange;
         font-weight: bold;
     }
-    min-width: $min-sidepane-width;
 
     @media screen and (max-width: $small-resolution) {
-        max-width:274px;
-        width: 100%;
+        width: $min-sidepane-width;
+        max-width: $min-sidepane-width;
         min-width: $min-sidepane-width;
     }
 
@@ -441,6 +440,7 @@
         top: 0;
         left: 85px;
         right: 0;
+        bottom: 0;
 
         &::-webkit-scrollbar {
             display: none;
