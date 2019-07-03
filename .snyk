@@ -1,0 +1,101 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - meanio > morgan > debug:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > undefsafe > debug:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > snapdragon > debug:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > braces > snapdragon > debug:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > extglob > snapdragon > debug:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > nanomatch > snapdragon > debug:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > debug:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > braces > snapdragon > debug:
+        patched: '2019-07-03T07:53:43.369Z'
+  'npm:extend:20180424':
+    - meanio > request > extend:
+        patched: '2019-07-03T07:53:43.369Z'
+    - root-notifications > request > extend:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > request > extend:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > node-gyp > request > extend:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > npm-registry-client > request > extend:
+        patched: '2019-07-03T07:53:43.369Z'
+    - request > extend:
+        patched: '2019-07-03T07:53:43.369Z'
+  'npm:hoek:20180212':
+    - npm > npm-registry-client > request > hawk > hoek:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > node-gyp > request > hawk > hoek:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > node-gyp > request > hawk > sntp > hoek:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > npm-registry-client > request > hawk > sntp > hoek:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > node-gyp > request > hawk > boom > hoek:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > npm-registry-client > request > hawk > boom > hoek:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > npm-registry-client > request > hawk > cryptiles > boom > hoek:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2019-07-03T07:53:43.369Z'
+  'npm:lodash:20180130':
+    - officegen > xmlbuilder > lodash:
+        patched: '2019-07-03T07:53:43.369Z'
+  'npm:ms:20170412':
+    - nodemon > chokidar > braces > snapdragon > debug > ms:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > snapdragon > debug > ms:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > braces > snapdragon > debug > ms:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > extglob > snapdragon > debug > ms:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > nanomatch > snapdragon > debug > ms:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > chokidar > anymatch > micromatch > extglob > expand-brackets > snapdragon > debug > ms:
+        patched: '2019-07-03T07:53:43.369Z'
+    - nodemon > undefsafe > debug > ms:
+        patched: '2019-07-03T07:53:43.369Z'
+  'npm:qs:20170213':
+    - npm > request > qs:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > node-gyp > request > qs:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > npm-registry-client > request > qs:
+        patched: '2019-07-03T07:53:43.369Z'
+  'npm:stringstream:20180511':
+    - npm > request > stringstream:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > node-gyp > request > stringstream:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > npm-registry-client > request > stringstream:
+        patched: '2019-07-03T07:53:43.369Z'
+  'npm:tough-cookie:20170905':
+    - npm > request > tough-cookie:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > node-gyp > request > tough-cookie:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > npm-registry-client > request > tough-cookie:
+        patched: '2019-07-03T07:53:43.369Z'
+  'npm:tunnel-agent:20170305':
+    - npm > node-gyp > request > tunnel-agent:
+        patched: '2019-07-03T07:53:43.369Z'
+    - npm > npm-registry-client > request > tunnel-agent:
+        patched: '2019-07-03T07:53:43.369Z'
+  'npm:uglify-js:20151024':
+    - swig > uglify-js:
+        patched: '2019-07-03T07:53:43.369Z'
+    - meanio > swig > uglify-js:
+        patched: '2019-07-03T07:53:43.369Z'
