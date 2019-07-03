@@ -91,28 +91,6 @@
     }
 }
 
-.detailspane-modal {
-    .modal-header {
-        button {
-            float: right;
-        }
-    }
-    .modal-body {
-        padding: 0 !important
-    }
-    .panes-wrapper {
-        margin-left: 0;
-        width: 100%;
-
-    }
-    .sidepane, .middlepane, .header {
-        display: none !important;
-    }
-    .detailspane {
-        width: 100%;
-    }
-}
-
 @media print {
   html {
     height: auto;

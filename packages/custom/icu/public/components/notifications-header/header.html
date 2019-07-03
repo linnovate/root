@@ -17,7 +17,7 @@
         </div>
     </div>
     <button class="hide-menu"
-        ng-show="$parent.hiddenButton"
+        ng-show="$parent.menu.isHidden"
         ng-style="{'background-image': 'url(' + $parent.getLayoutIcon() + ')'}"
         ng-click="$parent.changeLayout()">
     </button>

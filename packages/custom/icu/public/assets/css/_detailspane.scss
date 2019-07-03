@@ -8,6 +8,29 @@ $tab-content-height: calc(
 );
 
 .detailspane {
+    &.hide {
+        display: none;
+    }
+    &.popup {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        background-color: rgba(0, 0, 0, .5);
+        z-index: 10;
+        .entity-details {
+            margin: 30px auto;
+            position: fixed;
+            width: 900px;
+            height: calc(100vh - 60px);
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fcfbf6;
+        }
+    }
+
     width: $detailspane-width;
     min-width: $min-detailspane-width;
     border-left: 1px solid #C8C8C6;

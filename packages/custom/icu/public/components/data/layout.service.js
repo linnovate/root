@@ -2,7 +2,8 @@
 
 angular.module('mean.icu.data.layoutservice', [])
 .service('LayoutService', function () {
-	var show = false, state = 4;
+    var show = false;
+    var state = Number(localStorage.getItem('layout')) || 4;
 
     function getShow() {
         return show;
@@ -16,8 +17,8 @@ angular.module('mean.icu.data.layoutservice', [])
         show = false;
     }
     function changeLayout() {
-        if (state > 1) state --;
-        else state = 4;
+        state = state > 1 ? state-1 : 4;
+        localStorage.setItem('layout', state)
         return state;
     }
 
@@ -37,7 +38,9 @@ angular.module('mean.icu.data.layoutservice', [])
         }
         else if (state === 1)
             return '/icu/assets/img/sections7.svg';
-
+    }
+    function getLayoutState() {
+        return state;
     }
 
     return {
@@ -46,6 +49,7 @@ angular.module('mean.icu.data.layoutservice', [])
         unClick: unClick,
         changeLayout: changeLayout,
         getLayoutIcon: getLayoutIcon,
-        getSideMenuIcon: getSideMenuIcon
+        getSideMenuIcon: getSideMenuIcon,
+        getLayoutState: getLayoutState
     };
 });

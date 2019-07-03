@@ -21,12 +21,15 @@ angular
     LayoutService,
     TasksService
   ) {
+
+    let layoutState = LayoutService.getLayoutState()
     $scope.menu = {
-      isHidden: false
+      isHidden: layoutState === 3 || layoutState === 2
     };
 
     $scope.detailsPane = {
-      isHidden: false
+      isHidden: layoutState < 3,
+      isActive: $state.current.name.includes('details')
     };
 
     $scope.me = me;
@@ -73,18 +76,7 @@ angular
         $scope.detailsPane.isHidden = true;
         $scope.menu.isHidden = false;
       }
-      if (state !== 4 && state !== 1) {
-        $scope.hiddenButton = true;
-      } else {
-        $scope.hiddenButton = false;
-      }
     };
-
-    $scope.hiddenButton = false;
-
-    //Made By OHAD
-    //$state.go('socket');
-    //END Made By OHAD
 
     function initializeContext(state) {
       if (state.name.indexOf("main") === 0) {
@@ -195,13 +187,15 @@ angular
     });
 
     $rootScope.$on("$stateChangeSuccess", function(event, toState) {
-      $scope.currentState = toState.name;
-      if (toState.url !== "/modal") {
-        if (LayoutService.show() && $scope.detailsPane.isHidden) {
-          $state.go(toState.name + ".modal");
-        }
-      }
+      $scope.detailsPane.isActive = toState.name.includes('details');
     });
+
+    $scope.closePopup = function(event) {
+      let detailspaneElement = document.querySelector('[icu-detailspane]');
+      if(event.target === detailspaneElement) {
+        $state.go($state.current.name.replace(/\.details.+/, ''))
+      }
+    }
   });
 
 angular.module("mean.icu").run(function($rootScope, $location, $state) {

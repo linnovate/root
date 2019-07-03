@@ -24,7 +24,11 @@
           </div>
           <div icu-detailspane
                class="detailspane animate-hide"
-               ng-hide="detailsPane.isHidden"
+               ng-class="{
+                    popup: detailsPane.isHidden,
+                    hide: !detailsPane.isActive && detailsPane.isHidden
+               }"
+               ng-click="closePopup($event)"
                me="me"
                projects="projects"
                discussions="discussions"
