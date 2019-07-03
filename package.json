@@ -15,7 +15,9 @@
     "build": "gulp build",
     "production": "gulp production",
     "test": "run_gulp() { export ROOT_URL=$1; gulp test; }; run_gulp",
-    "postinstall": "node scripts/postinstall.js && gulp sass"
+    "postinstall": "node scripts/postinstall.js && gulp sass",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "assetmanager": "1.2.3",
@@ -30,10 +32,10 @@
     "cookie": "0.3.1",
     "cookie-parser": "1.3.4",
     "cpx": "^1.5.0",
-    "errorhandler": "1.3.5",
-    "excel4node": "1.4.0",
+    "errorhandler": "1.4.3",
+    "excel4node": "1.5.1",
     "express": "4.16.0",
-    "express-validator": "^5.2.0",
+    "express-validator": "^6.0.0",
     "file-saver": "^1.3.8",
     "ftp": "0.3.10",
     "gridfs-stream": "1.1.1",
@@ -41,25 +43,25 @@
     "http-errors": "^1.7.1",
     "ical-toolkit": "1.0.9",
     "jsonfile": "4.0.0",
-    "jsonwebtoken": "^5.0.0",
-    "lodash": "3.8.0",
-    "meanio": "0.8.85",
+    "jsonwebtoken": "^7.4.1",
+    "lodash": "4.17.11",
+    "meanio": "0.9.2",
     "moment": "2.22.2",
     "mongodb": "^3.0.7",
-    "mongoose": "^4.13.11",
+    "mongoose": "^4.13.17",
     "mongoose-deep-populate": "3.0.0",
     "morgan": "^1.9.1",
     "node-cron": "^1.2.1",
     "nodemailer": "1.3.4",
     "nodemon": "^1.11.0",
-    "npm": "^2.9.1",
+    "npm": "^6.6.0",
     "officegen": "0.4.5",
     "passport-facebook": "2.0.0",
     "passport-github": "0.1.5",
     "passport-google-oauth": "0.2.0",
     "passport-linkedin": "0.1.3",
     "passport-local": "1.0.0",
-    "passport-saml": "^0.31.0",
+    "passport-saml": "^1.0.0",
     "passport-twitter": "1.0.3",
     "pdfjs-dist": "^1.10.97",
     "request": "2.82.0",
@@ -70,7 +72,8 @@
     "swig": "1.4.2",
     "uuid": "^3.1.0",
     "view-helpers": "0.1.5",
-    "xlsx-populate": "^1.17.0"
+    "xlsx-populate": "^1.17.0",
+    "snyk": "^1.188.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -104,5 +107,6 @@
     "protractor": "5.3.2",
     "require-dir": "1.0.0",
     "run-sequence": "^2.2.1"
-  }
+  },
+  "snyk": true
 }
