@@ -41,7 +41,6 @@ angular
     $scope.templateDocs = templateDocs.data || templateDocs;
     $scope.discussions = discussions.data || discussions;
     $scope.people = people.data || people;
-    $scope.currentState = $state.current.name;
 
     var entityMap = {
       project: "projects",

@@ -19,20 +19,9 @@ directive('icuSidepane', function() {
         $scope.officeDocuments = $scope.officeDocuments.data || $scope.officeDocuments;
         //$scope.templateDocs = $scope.templateDocs.data || $scope.templateDocs;
         $scope.people = $scope.people.data || $scope.people;
-        $scope.toggleVisibility = function(toggledItem) {
-            let prev = toggledItem.open;
-
-            $scope.items.forEach(function(i) {
-                i.open = false;
-            });
-
-            toggledItem.open = !prev;
-        };
-
         $scope.removeFilterValue = function() {
             TasksService.filterValue = false;
         };
-
 
         // updatedDate
         var now = new Date();
@@ -72,37 +61,13 @@ directive('icuSidepane', function() {
             field: !EntityService.isActiveStatusAvailable() ? 'all' : $stateParams.activeToggle || 'all',
             disabled: !EntityService.isActiveStatusAvailable()
         };
-        /*---*/
-        $scope.isCurrentState = function(item) {
-
-            if ((context.main === 'templateDocs') && (item.display !== undefined) && (item.display[1] === 'templateDocs'))
-            {
-                return true;
-            }
-            else if ((context.main === 'offices') && (item.display !== undefined) && (item.display[0] === 'offices'))
-            {
-                return true;
-            }
-
-            if (item.state.includes("."))
-            {
-                return item.state.split(".")[0] === context.main;
-            }
-            else
-            {
-                return item.state === context.main;
-            }
-        };
 
         $scope.GoToMyTasks = function() {
             $state.go('main.tasks.byassign');
         };
 
         $scope.initMenuItem = function(item){
-          $scope.setActive(item);
           $scope.removeFilterValue();
-          $scope.setCurrentState(item.state);
-
           if(item.func)item.func();
         };
 
@@ -134,102 +99,36 @@ directive('icuSidepane', function() {
             icon: '/icu/assets/img/search-nav.svg',
             state: 'search',
             display: ['projects', 'discussions', 'people'],
-            open: $scope.isCurrentState({state: 'tasks'}),
             func: $scope.checkForSearchState,
         }, {
             name: 'tasks',
             icon: '/icu/assets/img/task.png',
             state: 'tasks.all',
-            display: ['projects', 'discussions', 'people'],
-            open: $scope.isCurrentState({state: 'tasks'})
+            display: ['projects', 'discussions', 'people']
         }, {
             name: 'projects',
             icon: '/icu/assets/img/project.png',
             state: 'projects.all',
-            display: ['discussions', 'people'],
-            open: $scope.isCurrentState({state: 'projects'})
+            display: ['discussions', 'people']
         }, {
             name: 'meetings',
             icon: '/icu/assets/img/meeting.png',
             state: 'discussions.all',
-            display: ['projects', 'people'],
-            open: $scope.isCurrentState({state: 'discussions'})
-        },
-        {
+            display: ['projects', 'people']
+        }, {
             name: 'officeDocuments',
             icon: '/icu/assets/img/icon-document.svg',
             state: 'officeDocuments.all',
-            display: ['folders'],//['new', 'received', 'inProgress'],
-            open: $scope.isCurrentState({state: 'officeDocuments'}),
-            //func: $scope.createLists,
-        },
-        {
+            display: ['folders']
+        }, {
             name: 'settings',
             icon: '/icu/assets/img/settings.png',
             state: 'folders.all',
-            display: ['offices', 'templateDocs'],
-            open: $scope.isCurrentState({state: 'folders'})
+            display: ['offices', 'templateDocs']
         }
-        // , {
-        //     name: 'people',
-        //     icon: '/icu/assets/img/people.png',
-        //     state: 'people',
-        //     display: ['projects', 'discussions'],
-        //     open: false
-        // }
     ];
 
-    $scope.setActive = function(item){
-        NotifyingService.notify('editionData');
-        return $scope.activeTab = item;
-    };
-
-    $scope.getActiveTab = function () {
-        var items = $scope.items;
-        items.forEach(function (item) {
-            if ($scope.currentState.indexOf(item.state.split('.')[0]) !== -1) {
-                return $scope.setActive(item);
-            }
-        });
-        if(!$scope.activeTab){
-            items.forEach(function(item){
-                if(_.intersection(item.display, $scope.currentState.split('.')) !== 0){
-                    return $scope.setActive(item);
-                }
-            })
-        }
-    };
-
-    $scope.setCurrentState = function(state){
-        $scope.currentState = state;
-    };
-
-    $scope.savedTab = $stateParams.activeTab;
-
-    NotifyingService.subscribe('activeSearch', function () {
-        $scope.activeTab = $scope.items[0];
-    }, $scope);
-
-    $scope.menuColorStyles = [
-        'pinkTab',
-        'blueTab',
-        'greenTab',
-        'purpleTab',
-        'yellowTab',
-        'darkBlueTab',
-        'redTab',
-    ];
-
-    $scope.getNavColor = function(item, index){
-        if(!$scope.activeTab){
-            $scope.getActiveTab();
-        }
-        for(let i = 0; i < $scope.items.length ; i++){
-            if($scope.activeTab === item){
-                return $scope.menuColorStyles[index];
-            }
-        }
-    };
+    setActiveTab($state.current)
 
     /********************************** search **********************************/
 
@@ -547,9 +446,19 @@ directive('icuSidepane', function() {
         if (toState.name.indexOf('search') > -1) {
             $scope.filterSearch();
         }
+        setActiveTab(toState);
     });
 
     $rootScope.$emit('Login');
+
+    function setActiveTab(state) {
+        let active = state.name.split('.')[1];
+        if(['folders', 'offices', 'templateDocs'].includes(active)) {
+            active = 'settings';
+        }
+        if(active === 'discussions') active = 'meetings';
+        $scope.activeTab = $scope.items.find(item => item.name === active);
+    }
 
 }
 
@@ -567,7 +476,6 @@ return {
         people: '=',
         officeDocuments: '=',
         templateDocs: '=',
-        currentState: '@',
         changeLayout: '=',
         getSideMenuIcon: '=',
         filterSearchByType: '=',

@@ -278,26 +278,15 @@
 
         @include scroll;
 
-        .pinkTab {
-            background-color:#C248AE;
-        }
-        .blueTab {
-            background-color:#00AEEF;
-        }
-        .yellowTab {
-            background-color:#FFA000;
-        }
-        .greenTab {
-            background-color:#2AB541;
-        }
-        .purpleTab {
-            background-color:#662D91;
-        }
-        .darkBlueTab {
-            background-color:#2E3192;
-        }
-        .redTab {
-            background-color:#D43D3D;
+        .active {
+            color: white;
+            &.search { background-color:#C248AE; }
+            &.tasks { background-color:#00AEEF; }
+            &.projects { background-color:#FFA000; }
+            &.meetings { background-color:#2AB541; }
+            &.officeDocuments { background-color:#662D91; }
+            &.settings { background-color:#2E3192; }
+            &.people { background-color:#D43D3D; }
         }
 
         & > ul {

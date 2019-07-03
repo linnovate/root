@@ -24,7 +24,6 @@ function SearchController($scope, $state, $stateParams, context, NotifyingServic
         $state.go('main.search', {
             query: $scope.term
         }).then(() => {
-            NotifyingService.notify('activeSearch');
             SearchService.refreshQuery($scope.term);
         });
     };

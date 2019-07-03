@@ -1,10 +1,11 @@
 <icu-open-modal/>
 <nav>
-    <ul ng-init="getActiveTab()">
+    <ul>
         <li data-ng-repeat="item in items">
-            <div class="menu-item nav-item {{getNavColor(item, $index)}}"
-                 data-ui-sref="{{'main.' + item.state}}"
-                 ng-click="toggleVisibility(item);initMenuItem(item)">
+            <div class="menu-item nav-item {{item.name}}"
+                ng-class="{ active: activeTab === item }"
+                data-ui-sref="{{'main.' + item.state}}"
+                ng-click="initMenuItem(item)">
                 <div class="icon">
                     <img ng-src="{{item.icon}}"/>
                 </div>
