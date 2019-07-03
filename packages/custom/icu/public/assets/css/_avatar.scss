@@ -3,7 +3,7 @@ $avatar-margin: 12px;
 div[icu-avatar] .avatar {
     @include circle(17px);
     @include button;
-    margin: ($avatar-margin + 2) ($avatar-margin - 7);
+    margin: ($avatar-margin - 2) ($avatar-margin - 7);
 
     color: white;
     font-size: 22px;

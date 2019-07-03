@@ -14,7 +14,7 @@ $tab-content-height: calc(
     background-color: $cream;
 
     overflow-x: visible;
-    height: 100vh;
+    height: calc(100vh - #{$header-height});
 
     border-left: 1px solid #C8C8C6;
     top: 0;
