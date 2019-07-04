@@ -79,13 +79,12 @@
     input {
       border: none;
       background-color: white;
-      padding-left: 57px;
       width: 100%;
       font-size: 13px;
-      line-height: 18px;
+      line-height: 34px;
       height: 100%;
       font-style: italic;
-      padding-top: 4px;
+      padding: 10px 57px;
       &:focus {
         outline: none;
       }
