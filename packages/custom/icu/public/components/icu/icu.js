@@ -195,6 +195,12 @@ angular
         $state.go($state.current.name.replace(/\.details.+/, ''))
       }
     }
+
+    document.addEventListener('keydown', event => {
+      if(event.which === 27 && $scope.detailsPane.isActive && $scope.detailsPane.isHidden) {
+        $state.go($state.current.name.replace(/\.details.+/, ''))
+      }
+    })
   });
 
 angular.module("mean.icu").run(function($rootScope, $location, $state) {
