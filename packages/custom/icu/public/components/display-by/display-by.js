@@ -186,7 +186,6 @@ angular.module('mean.icu.ui.displayby', [])
         }, $scope);
 
         NotifyingService.notify('editionData');
-        $scope.createLists();
 
         $scope.focus = false;
         $scope.changeFocus = function(){
