@@ -2,9 +2,6 @@
     <div id="searchNav" class="searchPane sidefilters"
          ng-if="activeTab.name === 'search'"
          ng-init="filterSearchByType();resetFilter();">
-        <!--<div class="search">{{'search' | i18next}}-->
-            <!--<span class="close-search" ng-click="closeSearch()">x</span>-->
-        <!--</div>-->
         <div class="subtitle typeList" ng-click="filteringData.issue='all';resetFilter();filterSearchByType();">
             {{'showResultsOf' | i18next}}:
         </div>
@@ -19,13 +16,6 @@
             </li>
         </ul>
 
-        <!-- <div class="filterBy">
-            {{'filterResultsBy' | i18next }}:
-            <button ng-click="resetFilter()">{{'reset' | i18next}}</button>
-        </div> -->
-
-
-
         <div class="filterActive">
             <div class="subtitle">{{'filterByActiveStatus' | i18next}}</div>
             <div class="clear" ng-click="showM('empty');filterActive('All');$root.status = null;filterSearchByType(true);">{{'clear' | i18next}}</div>
@@ -39,116 +29,93 @@
                     {{'more' | i18next}}
                 </div>
                 <ul ng-show="AllStatus.length">
-                        <li ng-repeat="field in AllStatus track by $index | orderBy:field">
-                            <!-- <span class="all-status" ng-class="{'bold':isActive(field,$root.status)}" ng-click="$root.status = field;filterSearchByType(true)">{{field | i18next}}</span> -->
-                          <span class="all-status"
-                                ng-class="{'active':isActive(field,$root.status)}"
-                                ng-click="statusListChange(field);filterSearchByType(true)">
-                              {{field | i18next}}
-                          </span>
-                        </li>
-                    </ul>
-                    <div class="show-more" ng-show="AllStatus.length && currentType == 'All'" ng-click="showM('empty');$root.status = null;">
-                        {{'less' | i18next}}
-                    </div>
-                 </div>
-            </div>
-
-            <div class="filterDueDate" ng-if="filteringData.issue == 'task' || filteringData.issue == 'project'">
-                <div class="subtitle">{{'dueDate' | i18next}}</div>
-                <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
-                <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
-                       ng-class='{"updatedAt":checkDate()}'>
-            </div>
-            <div class="filterDueDate" ng-if="filteringData.issue == 'officeDocument'">
-                <div class="subtitle">{{'createdAt' | i18next}}</div>
-                <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
-                <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
-                       ng-class='{"updatedAt":checkDate()}'>
-            </div>
-            <div class="filterDueDate" ng-if="filteringData.issue == 'discussion'">
-                <div class="subtitle">{{'executionDate' | i18next}}</div>
-                <div class="clear" ng-click="clearDateRange()">{{'clear' | i18next}}</div>
-               <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date"
-                 options="dateoptions" />
-            </div>
-            <div class="filterUpdated">
-                <div class="subtitle">{{'updatedAfter' | i18next}}</div>
-                <div class="clear" ng-click="clearUpdatedDate()">{{'clear' | i18next}}</div>
-               <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate"
-                       ng-class='{"updatedAt":checkDate()}'>
-            </div>
-
-            <div class="filterUpdated">
-                <div class="subtitle">{{'deletedItems' | i18next}}</div>
-                <div class="clear" ng-click="turnOffRecycle()">{{'clear' | i18next}}</div>
-                <div class="recycle" ng-class="{active: recycled}" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>
-            </div>
-
-            <div class="watchers-wrapper" ng-hide="true">
-                <div class="subtitle">{{'watchersInThe' | i18next}}</div>
-                <ul>
-                    <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
-                        <!--<input type="checkbox" ng-model="filteringData.selectedWatchers[w._id]" ng-change="filterSearch()"/>
-                        {{w.name}}-->
-                        <div class="filteringElement watcher"
-                             ng-class="{active: filteringData.selectedWatchers[w._id]}"
-                             ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
-                            <div icu-avatar user="w"></div>
-                            <span>{{w.name}}</span>
-                        </div>
-                    </li>
-                    <li ng-if="filteringData.watchers.length > displayLimit['watchers']"
-                        ng-click="showMore(filteringData.watchers.length, 'watchers')"
-                        class="more">{{ 'more' | i18next }}
-                    </li>
-                    <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3"
-                        ng-click="collapse('watchers')"
-                        class="more">{{ 'less' | i18next }}
+                    <li ng-repeat="field in AllStatus track by $index | orderBy:field">
+                        <!-- <span class="all-status" ng-class="{'bold':isActive(field,$root.status)}" ng-click="$root.status = field;filterSearchByType(true)">{{field | i18next}}</span> -->
+                        <span class="all-status"
+                            ng-class="{'active':isActive(field,$root.status)}"
+                            ng-click="statusListChange(field);filterSearchByType(true)">
+                            {{field | i18next}}
+                        </span>
                     </li>
                 </ul>
-            </div>
+                <div class="show-more" ng-show="AllStatus.length && currentType == 'All'" ng-click="showM('empty');$root.status = null;">
+                    {{'less' | i18next}}
+                </div>
+                </div>
+        </div>
 
+        <div class="filterDueDate" ng-if="filteringData.issue == 'task' || filteringData.issue == 'project'">
+            <div class="subtitle">{{'dueDate' | i18next}}</div>
+            <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
+            <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
+                    ng-class='{"updatedAt":checkDate()}'>
+        </div>
+        <div class="filterDueDate" ng-if="filteringData.issue == 'officeDocument'">
+            <div class="subtitle">{{'createdAt' | i18next}}</div>
+            <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
+            <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
+                    ng-class='{"updatedAt":checkDate()}'>
+        </div>
+        <div class="filterDueDate" ng-if="filteringData.issue == 'discussion'">
+            <div class="subtitle">{{'executionDate' | i18next}}</div>
+            <div class="clear" ng-click="clearDateRange()">{{'clear' | i18next}}</div>
+            <input date-range-picker class="form-control date-picker" type="text" ng-model="datePicker.date"
+                options="dateoptions" />
+        </div>
+        <div class="filterUpdated">
+            <div class="subtitle">{{'updatedAfter' | i18next}}</div>
+            <div class="clear" ng-click="clearUpdatedDate()">{{'clear' | i18next}}</div>
+            <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate"
+                    ng-class='{"updatedAt":checkDate()}'>
+        </div>
+
+        <div class="filterUpdated">
+            <div class="subtitle">{{'deletedItems' | i18next}}</div>
+            <div class="clear" ng-click="turnOffRecycle()">{{'clear' | i18next}}</div>
+            <div class="recycle" ng-class="{active: recycled}" ng-click="toggleRecycle()">{{'showDeletedItems' | i18next}}</div>
+        </div>
+
+        <div class="watchers-wrapper" ng-hide="true">
+            <div class="subtitle">{{'watchersInThe' | i18next}}</div>
+            <ul>
+                <li ng-repeat="w in filteringData.watchers | limitTo: displayLimit['watchers']">
+                    <div class="filteringElement watcher"
+                            ng-class="{active: filteringData.selectedWatchers[w._id]}"
+                            ng-click="simulateCheckbox(filteringData.selectedWatchers, w._id);filterSearch()">
+                        <div icu-avatar user="w"></div>
+                        <span>{{w.name}}</span>
+                    </div>
+                </li>
+                <li ng-if="filteringData.watchers.length > displayLimit['watchers']"
+                    ng-click="showMore(filteringData.watchers.length, 'watchers')"
+                    class="more">{{ 'more' | i18next }}
+                </li>
+                <li ng-if="filteringData.watchers.length == displayLimit['watchers'] && displayLimit['watchers'] > 3"
+                    ng-click="collapse('watchers')"
+                    class="more">{{ 'less' | i18next }}
+                </li>
+            </ul>
+        </div>
     </div>
-    </div>
-    <div class="all" ng-if="context.main != 'folders' && activeTab.name !== 'search'">
-        <p class="title my" ng-if="context.main === 'tasks'"
-           ui-sref="main.{{context.main}}.byassign"
-           ui-sref-active="active"
-           data-ng-class="{ 'selected': context.entityName === 'my' }">
+
+    <div class="all" ng-if="context.main === 'tasks'">
+        <p class="title"
+            ui-sref="main.{{context.main}}.byassign"
+            ui-sref-active="active"
+            data-ng-class="{ 'selected': context.entityName === 'my' }">
             {{ 'MYTASKS' | i18next }}
         </p>
     </div>
 
     <div class="all"
-         ng-if="context.main != 'folders' && context.main != 'offices' && context.main != 'templateDocs' && activeTab.name !== 'search'">
+        ng-if="context.main != 'folders' && context.main != 'offices' && context.main != 'templateDocs' && activeTab.name !== 'search'">
         <p class="title all"
            ng-click="reset(context.main);removeFilterValue();"
            ui-sref-active="active"
            data-ng-class="{ 'selected': context.entityName === 'all'}"
-           ng-href="{{getLinkUrl()}}"
-        >
+           ng-href="{{getLinkUrl()}}">
             {{ 'all' | i18next }}
-            <!--<div class="list {{context.main}}">-->
-            <!--<ul>-->
-            <!--<li data-ng-repeat="item in allItems[context.main] | limitTo:displayLimit[context.main]"-->
-            <!--data-ng-class="{'selected': context.entityName === singularItemName[context.main] && item._id === context.entityId }"-->
-            <!--data-ng-click="switchToAll(singularItemName[context.main], item._id)">-->
-            <!--<a href class="Names-In-List-On-Side">-->
-            <!--{{item.title || item.name}}-->
-            <!--</a>-->
-            <!--</li>-->
-            <!--<li ng-if="allItems[context.main].length > displayLimit[context.main]"-->
-            <!--ng-click="showMore(allItems[context.main].length, context.main)"-->
-            <!--class="more">{{ 'more' | i18next }}</li>-->
-            <!--<li ng-if="allItems[context.main].length == displayLimit[context.main] && displayLimit[context.main] > 3"-->
-            <!--ng-click="collapse(context.main)"-->
-            <!--class="more">{{ 'less' | i18next }}</li>-->
-            <!--</ul>-->
-            <!--</div>-->
         </p>
-
-        <!--<p class="intro">{{'display'+context.main+'By' | i18next}}:</p>-->
     </div>
 
     <div class="list tasks"
@@ -162,9 +129,8 @@
             data-ng-class="{'selected': context.entityName === 'task' && task._id === context.entityId }"
             data-ng-click="switchTo('task', task._id)"
             ng-if="task._id && task.title">
-          <a href class="Names-In-List-On-Side" ng-bind-html="task.title">
-          </a>
-          <div class="tag-color" ng-style="{'background-color': '#' + task.color}"></div>
+            {{ task.title | htmlToPlaintext }}
+            <div class="tag-color" ng-style="{'background-color': '#' + task.color}"></div>
         </li>
         <li ng-if="tasksList.length > displayLimit['tasks']"
             ng-click="showMore(tasksList.length, 'tasks')"
@@ -195,8 +161,7 @@
                 data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
                 data-ng-click="switchTo('project', project._id)"
                 ng-if="project._id && project.title">
-                <a href class="Names-In-List-On-Side" ng-bind-html="project.title">
-                </a>
+                {{ project.title | htmlToPlaintext }}
                 <div class="tag-color" ng-style="{'background-color': '#' + project.color}"></div>
             </li>
             <li ng-if="projectsList.length > displayLimit['projects']"
@@ -209,7 +174,7 @@
             </li>
         </ul>
     </div>
-    <!-- list discussions in: tasks and projects -->
+
     <div class="list discussions"
          ng-if="discussionsList
          && activeTab.display.indexOf('discussions') != -1
@@ -223,8 +188,7 @@
             <li data-ng-repeat="discussion in discussionsList | filterRecycled | limitTo:displayLimit['discussions']"
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
-                <a href class="Names-In-List-On-Side" ng-bind-html="discussion.title || discussion.name">
-                </a>
+                {{ discussion.title || discussion.name | htmlToPlaintext}}
             </li>
             <li ng-if="discussionsList.length > displayLimit['discussions']"
                 ng-click="showMore(discussionsList.length, 'discussions')"
@@ -236,6 +200,7 @@
             </li>
         </ul>
     </div>
+
     <div class="list officeDocuments"
          ng-if="officeDocumentsList.length && activeTab.name == 'tasks'">
         <p ng-click="visible.officeDocument = !visible.officeDocument "
@@ -247,8 +212,7 @@
                 data-ng-class="{'selected': context.entityName === 'officeDocument' && officeDocument._id === context.entityId }"
                 data-ng-click="switchTo('officeDocument', officeDocument._id)"
                 ng-if="officeDocument._id && officeDocument.title">
-                <a href class="Names-In-List-On-Side" ng-bind-html="officeDocument.title">
-                </a>
+                {{ officeDocument.title | htmlToPlaintext }}
                 <div class="tag-color" ng-style="{'background-color': '#' + officeDocument.color}"></div>
             </li>
             <li ng-if="officeDocumentsList.length > displayLimit['officeDocuments']"
@@ -272,8 +236,8 @@
         <ul ng-if="visible.user">
             <li ng-if="user.name !== 'no select'"
                 data-ng-repeat="user in people | limitTo: displayLimit['people']"
-                data-ng-click="switchTo('user', user._id)"
-                data-ng-class="{'selected': context.entityName === 'user' && context.entityId === user._id}">
+                data-ng-class="{'selected': context.entityName === 'user' && user._id === context.entityId }"
+                data-ng-click="switchTo('user', user._id)">
                 <a href data-ng-link="main.users.details({id: user._id})">
                     <div icu-avatar user="user"></div>
                     <span class="name">{{user.name}}</span>
@@ -291,82 +255,48 @@
     </div>
 
     <div class="list officeDocuments" ng-if="context.main == 'officeDocuments' && activeTab.name !== 'search'">
-        <!-- <p ng-click="visible.officeDocument = !visible.officeDocument" class="title">{{ 'officeDocuments' | i18next }}</p>
-        <ul ng-if="visible.officeDocument">
-            <li data-ng-repeat="officeDocument in officeDocuments | limitTo:displayLimit['officeDocuments']"
-                data-ng-class="{'selected': context.entityName === 'officeDocument' && officeDocument._id === context.entityId }"
-                data-ng-click="switchTo('officeDocument', officeDocument._id)">
-                <a href class="Names-In-List-On-Side">
-                    {{officeDocument.title || officeDocument.name}}
-                </a>
-            </li>
-            <li ng-if="officeDocuments.length > displayLimit['officeDocuments']" ng-click="showMore(officeDocuments.length, 'officeDocuments')" class="more">{{ 'more' | i18next }}</li>
-            <li ng-if="officeDocuments.length == displayLimit['officeDocuments'] && displayLimit['officeDocuments'] > 3" ng-click="collapse('officeDocuments')" class="more">{{ 'less' | i18next }}</li>
-        </ul> -->
         <p class="title type"> {{ 'type' | i18next }} </p>
         <ul>
             <li data-ng-repeat="type in typesList | filterRecycled"
                 data-ng-class="{'selected': typeSelected == type.name}"
                 data-ng-click="switchToType(type)">
-                <a href class="Names-In-List-On-Side">
-                    {{type.name | i18next}}
-                </a>
+                {{type.name | i18next}}
                 <div class="tag-color" ng-style="{'background-color': '#' + type.color}"></div>
             </li>
         </ul>
 
     </div>
 
-    <div class="list offices"
-
-         ng-if="officesList
-         && activeTab.display.indexOf('offices') !== -1
-         && activeTab.display.indexOf('templateDocs') !== -1
-                && activeTab.name !== 'search'">
-        <!--<p ng-click="visible.office = !visible.office && folders.length !== 0" class="title">{{ 'folders' | i18next }}</p>-->
-        <ul>
-            <li class="go-to-Offices all"
-                ui-sref="main.folders.all"
-                ui-sref-active="selected">
-                <a href class="Names-In-List-On-Side">
-                    <p class="title all">
-                        {{ 'folders' | i18next }}
-                    </p>
-                </a>
-            </li>
-            <li class="go-to-Offices all"
-                ui-sref="main.offices.all"
-                ui-sref-active="selected">
-                <a href class="Names-In-List-On-Side">
-                    <p id="offices" class="title all">
-                        {{ 'offices' | i18next }}
-                    </p>
-                </a>
-            </li>
-            <li class="go-to-Offices all"
-                ui-sref="main.templateDocs.all"
-                ui-sref-active="selected">
-                <a href class="Names-In-List-On-Side">
-                    <p id="offices" class="title all" id="offices">
-                        {{ 'templateDoc' | i18next }}
-                    </p>
-                </a>
-            </li>
-            <li class="go-to-Offices all"
-                ng-if="me.roles.indexOf('admin')>=-1"
-                ui-sref="main.adminSettings"
-                ui-sref-active="selected">
-                <a href class="Names-In-List-On-Side">
-                    <p id="offices" class="title all">
-                        {{ 'adminSettings' | i18next }}
-                    </p>
-                </a>
-            </li>
-        </ul>
-
+    <div class="all" ng-if="activeTab.name === 'settings'">
+        <p class="title"
+            ui-sref="main.folders.all"
+            ui-sref-active="selected">
+            {{ 'folders' | i18next }}
+        </p>
+    </div>
+    <div class="all" ng-if="activeTab.name === 'settings'">
+        <p class="title"
+            ui-sref="main.offices.all"
+            ui-sref-active="selected">
+            {{ 'offices' | i18next }}
+        </p>
+    </div>
+    <div class="all" ng-if="activeTab.name === 'settings'">
+        <p class="title"
+            ui-sref="main.templateDocs.all"
+            ui-sref-active="selected">
+            {{ 'templateDoc' | i18next }}
+        </p>
+    </div>
+    <div class="all" ng-if="activeTab.name === 'settings' && me.roles.includes('admin')">
+        <p class="title"
+            ui-sref="main.adminSettings"
+            ui-sref-active="selected">
+            {{ 'adminSettings' | i18next }}
+        </p>
     </div>
 
-    <div class="listFolder officeDocuments" ng-if="context.main == 'officeDocuments' && activeTab.name !== 'search'">
+    <div class="list officeDocuments" ng-if="context.main == 'officeDocuments' && activeTab.name !== 'search'">
         <p class="title type"> {{ 'folders' | i18next }} </p>
         <ui-select class="select" ng-model="officesList.office" on-select="changeOrder();goToParentState()" theme="bootstrap">
             <ui-select-match class="select-match" placeholder="{{'selectOffice' | i18next}}">
@@ -381,67 +311,12 @@
                 data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
                 data-ng-click="switchTo('folder', folder._id)"
                 ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)">
-                <a href class="Names-In-List-On-Side"
-                    ng-bind-html="folder.title"
-                >
-                </a>
+                {{ folder.title | htmlToPlaintext }}
                 <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
             </li>
         </ul>
     </div>
 
-    <!-- <div class="folders"
-         ng-if="foldersList
-                && activeTab.display.indexOf('folders') !== -1">
-        <p ng-click="visible.folder = !visible.folder" class="title">{{ 'folders' | i18next }}
-        <div ng-if="folders.length !== 0" tooltips tooltip-template="{{'selectOffice' | i18next}}">
-
-            <ui-select ng-model="officesList.office" on-select="changeOrder();goToParentState()" theme="bootstrap">
-                <ui-select-match placeholder="{{'selectOffice' | i18next}}">
-                    {{removeTags($select.selected.title)}}
-                </ui-select-match>
-                <ui-select-choices repeat="office in officesList | filter: $select.search">
-                    <div ng-bind-html="office.title | i18next | uppercase"></div>
-                </ui-select-choices>
-            </ui-select>
-
-            <div ng-if="foldersList.length !== 0">
-                <ul class="foldersList scroll">
-                    <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100"
-                        data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
-                        data-ng-click="switchTo('folder', folder._id)"
-                        ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)"
-                    >
-                        <a href class="Names-In-List-On-Side"
-                           ng-bind-html="folder.title">
-                        </a>
-                        <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        </p>
-        <ul ng-if="!visible.folder && foldersList.length !== 0">
-            <li ng-repeat="folder in foldersList | filterRecycled | limitTo: 100 | filter: myFilter"
-                data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
-                data-ng-click="switchTo('folder', folder._id)"
-                ng-if="folder._id && folder.title && folder.office.title">
-                <a href class="Names-In-List-On-Side">
-                    {{folder.title}}
-                </a>
-                <div class="tag-color" ng-style="{'background-color': '#' + folder.color}"></div>
-            </li>
-            <li ng-if="foldersList.length > displayLimit['folders']" ng-click="showMore(foldersList.length, 'folders')"
-                class="more">{{ 'more' | i18next }}
-            </li>
-            <li ng-if="foldersList.length == displayLimit['folders'] && displayLimit['folders'] > 3"
-                ng-click="collapse('folders')" class="more">{{ 'less' | i18next }}
-            </li>
-        </ul>
-    </div> -->
-    <div class="sidefilters" ng-if="activeTab.name == 'search'">
-        <!--<hr/>-->
-    </div>
-    </div>
+    <div class="sidefilters" ng-if="activeTab.name == 'search'"></div>
 
 </section>

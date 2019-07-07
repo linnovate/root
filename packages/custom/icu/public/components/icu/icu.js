@@ -222,3 +222,11 @@ angular.module("mean.icu").run(function($rootScope, $location, $state) {
     }
   });
 });
+
+angular.module('mean.icu').filter('htmlToPlaintext', function() {
+  return function(html) {
+      let tmp = document.createElement("DIV");
+      tmp.innerHTML = html;
+      return tmp.textContent || tmp.innerText || "";
+  };
+})
