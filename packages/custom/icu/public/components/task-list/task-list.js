@@ -189,10 +189,7 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
                 return ProjectsService.currentProjectName;
             } else {
                 var tasks = $scope.tasks;
-                if (tasks.length == 1) {
-                    $state.go('401');
-                    return "you dont have permission";
-                } else if (tasks.length) {
+                if (tasks.length) {
                     var task = tasks[0];
                     var result;
                     if (task.project != undefined) {
