@@ -29,7 +29,7 @@ angular
 
     $scope.detailsPane = {
       isHidden: layoutState < 3,
-      isActive: $state.current.name.includes('details')
+      isActive: Boolean($state.params.id)
     };
 
     $scope.me = me;
@@ -186,19 +186,19 @@ angular
     });
 
     $rootScope.$on("$stateChangeSuccess", function(event, toState) {
-      $scope.detailsPane.isActive = toState.name.includes('details');
+      $scope.detailsPane.isActive = Boolean(toState.params.id);
     });
 
     $scope.closePopup = function(event) {
       let detailspaneElement = document.querySelector('[icu-detailspane]');
       if(event.target === detailspaneElement) {
-        $state.go($state.current.name.replace(/\.details.+/, ''))
+        $state.go('^.^');
       }
     }
 
     document.addEventListener('keydown', event => {
       if(event.which === 27 && $scope.detailsPane.isActive && $scope.detailsPane.isHidden) {
-        $state.go($state.current.name.replace(/\.details.+/, ''))
+        $state.go('^.^');
       }
     })
   });
