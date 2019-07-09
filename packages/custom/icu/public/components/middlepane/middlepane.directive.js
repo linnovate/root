@@ -12,8 +12,13 @@ angular.module('mean.icu.ui.middlepane', [])
     };
 });
 
-function SearchController($scope, $state, $stateParams, context, NotifyingService, TasksService, $timeout, SearchService, $document, $location) {
-    $scope.term = $stateParams.query;
+function SearchController($scope, $state, SearchService) {
+
+    $scope.$watch(function() {
+        return $state.params.query;
+    }, function() {
+        $scope.term = $state.params.query;
+    });
 
     $scope.clearSearch = function () {
         $scope.term = '';
