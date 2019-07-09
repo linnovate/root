@@ -98,7 +98,7 @@
         </div>
     </div>
 
-    <div class="all" ng-if="context.main === 'tasks'">
+    <div class="all" ng-if="context.main === 'tasks' && activeTab.name !== 'search'">
         <p class="title"
             ui-sref="main.{{context.main}}.byassign"
             ui-sref-active="active"
