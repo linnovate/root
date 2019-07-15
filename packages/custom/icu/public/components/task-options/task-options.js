@@ -5,12 +5,6 @@ angular.module('mean.icu.ui.taskoptions', [])
 
 	$scope.tabs = DetailsPaneService.orderTabs(['activities', 'documents']);
 
-    function filterRecycled(data) {
-        return data.filter(entity => {
-            return !entity.hasOwnProperty('recycled');
-        });
-    }
-
 	$scope.countTasksForTodayOrWeek = function (forToday) {
 		if (forToday) {
 			var date = new Date().getThisDay();
@@ -18,8 +12,7 @@ angular.module('mean.icu.ui.taskoptions', [])
 			var date = new Date().getWeek();
 		}
 		var count = 0;
-		var data = filterRecycled(tasks) ;
-		data.forEach(function(task) {
+		tasks.forEach(function(task) {
 			var due = new Date(task.due);
 			if (due >= date[0] && due <= date[1]) {
 				count++;
@@ -31,8 +24,7 @@ angular.module('mean.icu.ui.taskoptions', [])
 	$scope.countOverDueTasks = function () {
 		var date = new Date().getThisDay();
 		var count = 0;
-		var data = filterRecycled(tasks) ;
-        data.forEach(function(task) {
+		tasks.forEach(function(task) {
 			var due = new Date(task.due);
 			if (due < date[0]) {
 				count++;
@@ -46,20 +38,19 @@ angular.module('mean.icu.ui.taskoptions', [])
 	$scope.statistics.tasksDueWeek = $scope.countTasksForTodayOrWeek(false);
 	$scope.statistics.overDueTasks = $scope.countOverDueTasks();
 	TasksService.getWatchedTasks().then(function (data) {
-	    data = filterRecycled(data) ;
-        $scope.statistics.WatchedTasks = data.length ;
+		$scope.statistics.WatchedTasks = data.length ;
 	});
 
 	$scope.filterTasks = function (filterValue) {
 		TasksService.filterValue = filterValue;
 		if (filterValue === 'watched') {
 			TasksService.getWatchedTasks().then(function (result) {
-				TasksService.watchedTasksArray = filterRecycled(result);
-              	NotifyingService.notify('filterMyTasks');
-            });
+				TasksService.watchedTasksArray = result;
+				NotifyingService.notify('filterMyTasks');
+			});
 		} else {
-          	NotifyingService.notify('filterMyTasks');
-        }
+			NotifyingService.notify('filterMyTasks');
+		}
   };
 
 	if ($state.current.name === 'main.tasks.byassign') {

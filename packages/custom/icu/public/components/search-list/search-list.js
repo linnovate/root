@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('mean.icu.ui.searchlist')
-.controller('SearchListController', function ($rootScope, $scope, $stateParams, $location, $timeout, results, term, SearchService, UsersService) {
+.controller('SearchListController', function ($scope, $state, results, term, SearchService, UsersService) {
 	
 	document.me = $scope.me.id;
 	
@@ -22,6 +22,13 @@ angular.module('mean.icu.ui.searchlist')
             $scope.results = res;
             filterFinalRes();
         });
+    });
+
+    // On recycleRestore, remove entity from list
+    $scope.$on('recycleRestore', (event, id) => {
+        let index = $scope.results.findIndex(item => item._id === id);
+        $scope.results.splice(index, 1);
+        $state.go('^.^');
     });
 
     function filterFinalRes(){

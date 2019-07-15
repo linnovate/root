@@ -52,32 +52,13 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
   // ==================================================== Menu events ==================================================== //
     $scope.recycle = function() {
         EntityService.recycle('templateDocs', $scope.item._id).then(function() {
-            $scope.item.recycled = new Date();
-            let clonedEntity = angular.copy($scope.item);
-            clonedEntity.status = "Recycled";
-
-            refreshList();
-            $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
-            $scope.permsToSee();
-            $scope.havePermissions();
-            $scope.haveEditiorsPermissions();
+            $rootScope.$broadcast('recycle', $scope.item._id);
         });
     };
 
     $scope.recycleRestore = function() {
         EntityService.recycleRestore('templateDocs', $scope.item._id).then(function() {
-            let clonedEntity = angular.copy($scope.item);
-            clonedEntity.status = "un-deleted"
-
-            refreshList();
-
-            var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.templateDocs.all';
-            $state.go(state, {
-                entity: context.entityName,
-                entityId: context.entityId
-            }, {
-                reload: true
-            });
+            $rootScope.$broadcast('recycleRestore', $scope.item._id);
         });
     }
 

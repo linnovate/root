@@ -257,54 +257,23 @@ function OfficeDocumentDetailsController(
         }
       );
 
-      refreshList();
-      $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
-      $scope.permsToSee();
-      $scope.havePermissions();
-      $scope.haveEditiorsPermissions();
+      $rootScope.$broadcast('recycle', $scope.item._id);
     });
   };
 
   $scope.recycleRestore = function() {
-    EntityService.recycleRestore("officeDocuments", $scope.item._id).then(
-      function() {
-        let clonedEntity = angular.copy($scope.item);
-        clonedEntity.status = "un-deleted";
-        // just for activity status
-        OfficeDocumentsService.updateStatus(clonedEntity, $scope.item).then(
-          function(result) {
-            ActivitiesService.data.push(result);
-          }
-        );
-
-        refreshList();
-        if (currentState.indexOf("search") != -1) {
-          $state.go(
-            currentState,
-            {
-              entity: context.entityName,
-              entityId: context.entityId
-            },
-            {
-              reload: true,
-              query: $stateParams.query
-            }
-          );
-        } else {
-          var state = "main.officeDocuments.all";
-          $state.go(
-            state,
-            {
-              entity: context.entityName,
-              entityId: context.entityId
-            },
-            {
-              reload: true
-            }
-          );
+    EntityService.recycleRestore("officeDocuments", $scope.item._id).then(function() {
+      let clonedEntity = angular.copy($scope.item);
+      clonedEntity.status = "un-deleted";
+      // just for activity status
+      OfficeDocumentsService.updateStatus(clonedEntity, $scope.item).then(
+        function(result) {
+          ActivitiesService.data.push(result);
         }
-      }
-    );
+      );
+
+      $rootScope.$broadcast('recycleRestore', $scope.item._id);
+    });
   };
 
   function refreshList() {

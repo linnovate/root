@@ -243,15 +243,6 @@ angular.module('mean.icu.data.permissionsservice', [])
             var member = user || me;
             haveAnyPerms(entity, member);
 
-            var qs = querystring.encode({
-                user: me,
-                type: type,
-            });
-
-            if (qs.length) {
-                qs = '?' + qs;
-            }
-
             // until permissions backend route isn't complete
             var havePerm = false;
 
@@ -269,11 +260,6 @@ angular.module('mean.icu.data.permissionsservice', [])
                 }
             }
             return havePerm;
-            // return $http.get(ApiUri + EntityPrefix + qs).then(function (result) {
-            //     WarningsService.setWarning(result.headers().warning);
-            //     return result.data;
-            // }, function(err) {return err})
-            //     .then(function (perms) {return perms});
         }
 
       function getUnifiedPerms(member, selectedItems){

@@ -137,11 +137,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
           ActivitiesService.data.push(result);
         });
 
-        refreshList();
-        $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
-        $scope.permsToSee();
-        $scope.havePermissions();
-        $scope.haveEditiorsPermissions();
+        $rootScope.$broadcast('recycle', $scope.item._id);
       });
     })
   }
@@ -157,18 +153,9 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
           ActivitiesService.data.push(result);
         });
 
-        refreshList();
-
-        var state = currentState.indexOf('search') !== -1 ? $state.current.name : context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-        $state.go(state, {
-          entity: context.entityName,
-          entityId: context.entityId
-        }, {
-          reload: true
-        });
+        $rootScope.$broadcast('recycleRestore', $scope.item._id);
       });
-    }
-    )
+    })
   }
 
   $scope.items = tasks.data || tasks;

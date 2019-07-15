@@ -125,7 +125,7 @@
         {{ "OfficeDocumentsFromTask" | i18next | uppercase}}
       </p>
       <ul ng-if="visible.task && tasksList.length !== 0">
-        <li data-ng-repeat="task in tasksList | filterRecycled | limitTo: displayLimit['tasks']"
+        <li data-ng-repeat="task in tasksList | limitTo: displayLimit['tasks']"
             data-ng-class="{'selected': context.entityName === 'task' && task._id === context.entityId }"
             data-ng-click="switchTo('task', task._id)"
             ng-if="task._id && task.title">
@@ -157,7 +157,7 @@
             'projectsFromDiscussion') | i18next | uppercase}}
         </p>
         <ul ng-if="visible.project && projectsList.length !== 0">
-            <li data-ng-repeat="project in projectsList | filterRecycled | limitTo: displayLimit['projects']"
+            <li data-ng-repeat="project in projectsList | limitTo: displayLimit['projects']"
                 data-ng-class="{'selected': context.entityName === 'project' && project._id === context.entityId }"
                 data-ng-click="switchTo('project', project._id)"
                 ng-if="project._id && project.title">
@@ -185,7 +185,7 @@
             ? 'projectsFromDiscussion'
             : 'tasksFromMeeting' | i18next }}</p>
         <ul ng-if="visible.discussion && discussionsList.length !== 0">
-            <li data-ng-repeat="discussion in discussionsList | filterRecycled | limitTo:displayLimit['discussions']"
+            <li data-ng-repeat="discussion in discussionsList | limitTo:displayLimit['discussions']"
                 data-ng-class="{'selected': context.entityName === 'discussion' && discussion._id === context.entityId }"
                 data-ng-click="switchTo('discussion', discussion._id)">
                 {{ discussion.title || discussion.name | htmlToPlaintext}}
@@ -208,7 +208,7 @@
             {{ 'tasksFromOfficeDocument' | i18next | uppercase}}
         </p>
         <ul ng-if="visible.officeDocument && officeDocumentsList.length !== 0">
-            <li data-ng-repeat="officeDocument in officeDocumentsList | filterRecycled | limitTo: displayLimit['officeDocuments']"
+            <li data-ng-repeat="officeDocument in officeDocumentsList | limitTo: displayLimit['officeDocuments']"
                 data-ng-class="{'selected': context.entityName === 'officeDocument' && officeDocument._id === context.entityId }"
                 data-ng-click="switchTo('officeDocument', officeDocument._id)"
                 ng-if="officeDocument._id && officeDocument.title">
@@ -257,7 +257,7 @@
     <div class="list officeDocuments" ng-if="context.main == 'officeDocuments' && activeTab.name !== 'search'">
         <p class="title type"> {{ 'type' | i18next }} </p>
         <ul>
-            <li data-ng-repeat="type in typesList | filterRecycled"
+            <li data-ng-repeat="type in typesList"
                 data-ng-class="{'selected': typeSelected == type.name}"
                 data-ng-click="switchToType(type)">
                 {{type.name | i18next}}
@@ -307,7 +307,7 @@
             </ui-select-choices>
         </ui-select>
         <ul>
-            <li ng-repeat="folder in foldersList | filterRecycled | filterByActiveStatus:'active' | limitTo: 100"
+            <li ng-repeat="folder in foldersList | filterByActiveStatus:'active' | limitTo: 100"
                 data-ng-class="{'selected': context.entityName === 'folder' && folder._id === context.entityId }"
                 data-ng-click="switchTo('folder', folder._id)"
                 ng-if="folder._id && folder.title && (officesList.office._id == folder.office._id)">

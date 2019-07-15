@@ -9,7 +9,7 @@
     <div class="detail-category-value" ng-bind-html="$select.selected.title" ng-style="{'background-color': '#' + ($select.selected.color || '747474')}"></div>
   </ui-select-match>
 
-  <ui-select-choices repeat="item in items | filter:$select.search | filterRecycled | filterByActiveStatus:'active' ">
+  <ui-select-choices repeat="item in items | filter:$select.search | filterByActiveStatus:'active' ">
     <div class="detail-category-row" ng-show="item.title" ng-class="{ 'create new': item.class}">
       <div ng-bind-html="item.title | searchfilter:$select.search" class="detail-category-row-title"></div>
       <div ng-click="create()" ng-show="item.class && create" class="detail-category-create-btn">{{ 'createNew' | i18next }}</div>

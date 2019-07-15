@@ -40,41 +40,6 @@
             // }
         }
 
-        .filterRecycled {
-            @include button;
-            margin-left: 23px;
-            height: 40px;
-
-            .recycled {
-                color: red;
-                box-shadow: 0px 0px 0px 2px #FFB435;
-                transition: 0.8s;
-            }
-
-
-            button {
-                color: wheat ;
-                appearance: none;
-                float: left;
-                cursor: pointer;
-                background-position: left center;
-
-                background-color: transparent;
-                width: auto;
-                height: auto;
-
-                border-radius: 13px;
-                outline: none;
-                margin: 0 8px;
-                border: 1px solid #c3bfbf;
-
-                &:hover{
-                     box-shadow: 0px 0px 0px 2px #FFB435;
-                     transition: 0.8s;
-                }
-
-            }
-        }
         .filterUpdated, .filterDueDate  {
             padding-bottom: 20px;
             border-bottom: 1px solid #444F53;

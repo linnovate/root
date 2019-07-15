@@ -125,17 +125,11 @@ function OfficeDetailsController(
       $scope.item.recycled = new Date();
       let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "Recycled";
-      OfficesService.updateStatus(clonedEntity, $scope.item).then(function(
-        result
-      ) {
+      OfficesService.updateStatus(clonedEntity, $scope.item).then(result => {
         ActivitiesService.data.push(result);
       });
 
-      refreshList();
-      $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
-      $scope.permsToSee();
-      $scope.havePermissions();
-      $scope.haveEditiorsPermissions();
+      $rootScope.$broadcast('recycle', $scope.item._id);
     });
   };
 
@@ -143,23 +137,11 @@ function OfficeDetailsController(
     EntityService.recycleRestore("offices", $scope.item._id).then(function() {
       let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "un-deleted";
+      OfficesService.updateStatus(clonedEntity, $scope.item).then(result => {
+        ActivitiesService.data.push(result);
+      });
 
-      refreshList();
-
-      var state =
-        currentState.indexOf("search") !== -1
-          ? $state.current.name
-          : "main.offices.all";
-      $state.go(
-        state,
-        {
-          entity: context.entityName,
-          entityId: context.entityId
-        },
-        {
-          reload: true
-        }
-      );
+      $rootScope.$broadcast('recycleRestore', $scope.item._id);
     });
   };
 

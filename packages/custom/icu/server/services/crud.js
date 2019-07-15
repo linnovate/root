@@ -123,6 +123,9 @@ module.exports = function(entityName, options) {
   }
 
   options = _.defaults(options, defaults);
+  options.conditions.recycled = {
+    $exists: false
+  };
 
   function all(pagination, user, acl) {
     var deffered = q.defer();
@@ -132,7 +135,7 @@ module.exports = function(entityName, options) {
 
     var query;
     if(pagination && pagination.status) {
-      options.conditions = {status : pagination.status};
+      options.conditions.status = pagination.status;
     }
     if (currentUser) {
       query = acl.mongoQuery(entityNameMap[entityName].name);
