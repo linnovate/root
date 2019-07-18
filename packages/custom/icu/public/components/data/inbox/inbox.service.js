@@ -22,8 +22,7 @@ angular.module('mean.icu.data.inboxservice', [])
         let creator = getUser(activity.creator._id || activity.creator)
         switch (activity.updateField){
           case 'create' :
-            let entityName = ( activity.entityObj && activity.entityObj.title) ? activity.entityObj.title || activity.entityObj : $i18next('this');
-            return `${creator} ${$i18next('created')} ${entityName}`;
+            return `${$i18next('createdBy')} ${creator}`;
             break;
           case 'star' :
             return `${creator} ${$i18next('updatedStar')}`;

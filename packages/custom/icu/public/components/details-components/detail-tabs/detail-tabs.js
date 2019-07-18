@@ -47,31 +47,29 @@ function detailTabs($state) {
   }
 }
 
-angular.module('mean.icu.ui.detailsComponents').controller('TaskActivitiesController', function($scope, entity, context, activities, tasks, ActivitiesService, InboxService) {
-  InboxService.getUpdateEntities(activities).then( updatedEntities => {
-    $scope.activities = updatedEntities.activities;
-    ActivitiesService.data = $scope.activities;
-    let tasksNames = _.object(_.pluck(tasks, '_id'), _.pluck(tasks, 'title'));
-    $scope.activities.forEach(function(a) {
-      a.taskName = tasksNames[a.issueId];
-    })
-  });
+angular.module('mean.icu.ui.detailsComponents').controller('TaskActivitiesController', function($scope, entity, context, activities, tasks, ActivitiesService) {
+  $scope.activities = activities;
+  ActivitiesService.data = $scope.activities;
+  var tasksNames = _.object(_.pluck(tasks, '_id'), _.pluck(tasks, 'title'));
+  $scope.activities.forEach(function(a) {
+    a.taskName = tasksNames[a.issueId];
+  })
 });
 angular.module('mean.icu.ui.detailsComponents').controller('TaskDocumentsController', function($scope, entity, context, documents, tasks, AttachmentsService) {
   $scope.documents = documents;
-  $scope.documents.map(doc=>AttachmentsService.getAttachmentUser(doc.creator).then(user=>doc.attUser = user.name));
-  let tasksNames = _.object(_.pluck(tasks, '_id'), _.pluck(tasks, 'title'));
-  $scope.documents.forEach((doc) => doc.taskName = tasksNames[doc.issueId])
+  var tasksNames = _.object(_.pluck(tasks, '_id'), _.pluck(tasks, 'title'));
+  $scope.documents.map(doc=>AttachmentsService.getAttachmentUser(doc.creator).then(user=>doc.attUser = user.name))
+  $scope.documents.forEach(function(a) {
+    a.taskName = tasksNames[a.issueId];
+  })
 });
 angular.module('mean.icu.ui.detailsComponents').controller('TaskOfficeDocumentsController', function($scope, officeDocuments) {
   $scope.officeDocuments = officeDocuments.data;
 });
 
-angular.module('mean.icu.ui.detailsComponents').controller('ProjectActivitiesController', function($scope, entity, context, activities, ActivitiesService, InboxService) {
-  InboxService.getUpdateEntities(activities).then( updatedEntities => {
-    $scope.activities = updatedEntities.activities;
-    ActivitiesService.data = $scope.activities;
-  });
+angular.module('mean.icu.ui.detailsComponents').controller('ProjectActivitiesController', function($scope, entity, context, activities, ActivitiesService) {
+  $scope.activities = activities;
+  ActivitiesService.data = $scope.activities;
 });
 angular.module('mean.icu.ui.detailsComponents').controller('ProjectDocumentsController', function($scope, entity, context, documents, AttachmentsService) {
   $scope.documents = documents;
@@ -82,11 +80,9 @@ angular.module('mean.icu.ui.detailsComponents').controller('ProjectTasksControll
   $scope.tasks = tasks;
 });
 
-angular.module('mean.icu.ui.detailsComponents').controller('DiscussionActivitiesController', function($scope, entity, context, activities, ActivitiesService, InboxService) {
-  InboxService.getUpdateEntities(activities).then( updatedEntities => {
-    $scope.activities = updatedEntities.activities;
-    ActivitiesService.data = $scope.activities;
-  });
+angular.module('mean.icu.ui.detailsComponents').controller('DiscussionActivitiesController', function($scope, entity, context, activities, ActivitiesService) {
+  $scope.activities = activities;
+  ActivitiesService.data = $scope.activities;
 });
 angular.module('mean.icu.ui.detailsComponents').controller('DiscussionDocumentsController', function($scope, entity, context, documents, AttachmentsService) {
   $scope.documents = documents;
@@ -96,11 +92,9 @@ angular.module('mean.icu.ui.detailsComponents').controller('DiscussionTasksContr
   $scope.tasks = tasks;
 });
 
-angular.module('mean.icu.ui.detailsComponents').controller('FolderActivitiesController', function($scope, entity, context, activities, ActivitiesService, InboxService) {
-  InboxService.getUpdateEntities(activities).then( updatedEntities => {
-    $scope.activities = updatedEntities.activities;
-    ActivitiesService.data = $scope.activities;
-  });
+angular.module('mean.icu.ui.detailsComponents').controller('FolderActivitiesController', function($scope, entity, context, activities, ActivitiesService) {
+  $scope.activities = activities;
+  ActivitiesService.data = $scope.activities;
 });
 angular.module('mean.icu.ui.detailsComponents').controller('FolderDocumentsController', function($scope, entity, context, documents, AttachmentsService) {
   $scope.documents = documents;
@@ -112,11 +106,9 @@ angular.module('mean.icu.ui.detailsComponents').controller('FolderOfficeDocument
   $scope.officeDocuments = officeDocuments;
 });
 
-angular.module('mean.icu.ui.detailsComponents').controller('OfficeActivitiesController', function($scope, entity, context, activities, ActivitiesService, InboxService) {
-  InboxService.getUpdateEntities(activities).then( updatedEntities => {
-    $scope.activities = updatedEntities.activities;
-    ActivitiesService.data = $scope.activities;
-  });
+angular.module('mean.icu.ui.detailsComponents').controller('OfficeActivitiesController', function($scope, entity, context, activities, ActivitiesService) {
+  $scope.activities = activities;
+  ActivitiesService.data = $scope.activities;
 });
 angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentsController', function($scope, entity, context, documents, AttachmentsService) {
   $scope.documents = documents;
@@ -131,25 +123,24 @@ angular.module('mean.icu.ui.detailsComponents').controller('OfficeSignaturesCont
   $scope.signatures = signatures;
 });
 
-angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentActivitiesController', function($scope, entity, context, activities, ActivitiesService, InboxService) {
-  InboxService.getUpdateEntities(activities).then( updatedEntities => {
-    $scope.activities = updatedEntities.activities;
-    ActivitiesService.data = $scope.activities;
-  });
+angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentActivitiesController', function($scope, entity, context, activities, ActivitiesService) {
+  $scope.activities = activities;
+  ActivitiesService.data = $scope.activities;
 });
 angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentDocumentsController', function($scope, entity, context, documents, AttachmentsService) {
   $scope.documents = documents;
-  $scope.documents.map(doc => AttachmentsService.getAttachmentUser(doc.creator).then(user => doc.attUser = user.name ))
+  $scope.documents.map(doc => AttachmentsService.getAttachmentUser(doc.creator)
+      .then(user =>
+          doc.attUser = user.name
+  ))
 });
 angular.module('mean.icu.ui.detailsComponents').controller('OfficeDocumentTasksController', function($scope, entity, context, tasks, $state) {
     $scope.tasks = tasks;
 });
 
 
-angular.module('mean.icu.ui.detailsComponents').controller('TemplateDocActivitiesController', function($scope, entity, context, activities, InboxService) {
-  InboxService.getUpdateEntities(activities).then( updatedEntities => {
-    $scope.activities = updatedEntities.activities;
-  });
+angular.module('mean.icu.ui.detailsComponents').controller('TemplateDocActivitiesController', function($scope, entity, context, activities, ActivitiesService) {
+  $scope.activities = activities;
 });
 angular.module('mean.icu.ui.detailsComponents').controller('TemplateDocDocumentsController', function($scope, entity, context, documents) {
   $scope.documents = documents;
