@@ -2,7 +2,7 @@
     <div ng-init="entityType = {entity: 'officeDocument'}" />
     <table class="officeDocuments" infinite-scroll='loadMore()' infinite-scroll-container="'.list-table'" infinite-scroll-parent>
         <tbody class='containerVertical'>
-            <tr data-ng-repeat="officeDocument in officedocuments | filterByActiveStatus:entityType | orderBy:order.field:order.isReverse""
+            <tr data-ng-repeat="officeDocument in officedocuments | filterRecycled | filterByActiveStatus:entityType | orderBy:order.field:order.isReverse""
                 data-ng-class="{ 'active': isCurrentState(officeDocument._id), 'empty' :  !officeDocument._id, 'roww' : officeDocument._id }"
                 ng-class="officeDocument._id ? '': 'empty'"
                 ng-click="initialize($event, officeDocument)"

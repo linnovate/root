@@ -111,7 +111,11 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
                 ActivitiesService.data.push(result);
             });
 
-            $rootScope.$broadcast('recycle', $scope.item._id);
+            refreshList();
+            $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+            $scope.permsToSee();
+            $scope.havePermissions();
+            $scope.haveEditiorsPermissions();
         });
     };
 
@@ -124,7 +128,15 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
                 ActivitiesService.data.push(result);
             });
 
-            $rootScope.$broadcast('recycleRestore', $scope.item._id);
+            refreshList();
+
+            var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.folders.all';
+            $state.go(state, {
+                entity: context.entityName,
+                entityId: context.entityId
+            }, {
+                reload: true
+            });
         });
     }
 

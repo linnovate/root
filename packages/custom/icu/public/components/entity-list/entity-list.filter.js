@@ -16,6 +16,14 @@ Date.prototype.getWeek = function()
 }
 
 angular.module('mean.icu.ui.entityListFilters', [])
+.filter('filterRecycled', function (EntityService,$state) {
+	return function(entities) {
+		if($state.current.name === "main.search.recycled") return entities ;
+		if (!entities || !(entities instanceof Array)) return entities;
+		let out = entities.filter(entity => !entity.recycled);
+		return out;
+	}
+})
 .filter('filterByActiveStatus', function (EntityService) {
 	return function(entities,type) {
 		if (!entities || !(entities instanceof Array) || !EntityService.isActiveStatusAvailable()) return entities;

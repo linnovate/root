@@ -147,7 +147,11 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
           ActivitiesService.data.push(result);
         });
 
-        $rootScope.$broadcast('recycle', $scope.item._id);
+        refreshList();
+        $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+        $scope.permsToSee();
+        $scope.havePermissions();
+        $scope.haveEditiorsPermissions();
       });
     }
     );
@@ -162,10 +166,18 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
         ProjectsService.updateStatus(clonedEntity, $scope.item).then(function(result) {
           ActivitiesService.data.push(result);
         });
+        refreshList();
 
-        $rootScope.$broadcast('recycleRestore', $scope.item._id);
+        var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.projects.all';
+        $state.go(state, {
+          entity: context.entityName,
+          entityId: context.entityId
+        }, {
+          reload: true
+        });
       });
-    });
+    }
+    );
   };
 
   $scope.createWebhook = function() {

@@ -422,9 +422,11 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
     $scope.refreshVisibleItems();
 
     function filterResults(itemsArray){
-        let newArray = $filter('filterByOptions')(itemsArray);
+        let newArray = $filter('filterRecycled')(itemsArray);
+        newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
+        // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
 
         if($scope.sorting.field.value === 'created')
             newArray.forEach(entity => entity.created = new Date(entity.created));
@@ -443,13 +445,6 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
 
     NotifyingService.subscribe('filterMyTasks', () => $scope.refreshVisibleItems(), $scope);
     $scope.$on('refreshList', () => $scope.refreshVisibleItems());
-
-    // On recycle, remove entity from list
-    $scope.$on('recycle', (event, id) => {
-        let index = $scope.visibleItems.findIndex(item => item._id === id);
-        $scope.visibleItems.splice(index, 1);
-        $state.go('^.^');
-    });
 
     // ============================================================= //
     // ======================== Permissions ======================== //
