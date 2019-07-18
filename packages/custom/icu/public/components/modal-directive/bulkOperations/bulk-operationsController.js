@@ -78,7 +78,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                     Object.assign(selectedArray[i], entity);
                 }
                 if(changedBulkObject.update.delete){
-                    refreshState();
+                    $state.reload();
                 }
                 if(!searchList)
                   MultipleSelectService.setSelectedList(selectedArray);
@@ -132,7 +132,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
                         Object.assign($scope.selectedItems[i], entity);
                     }
                     if(changedBulkObject.update.delete){
-                        refreshState();
+                        $state.reload();
                     }
                     MultipleSelectService.setSelectedList($scope.selectedItems);
                     NotifyingService.notify('refreshAfterOperation');
@@ -141,14 +141,6 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         }
     };
 
-    function refreshState(){
-        let currentState = $state.current.name;
-        $state.go(currentState, {
-            entity: 'all',
-        }, {
-            reload: true
-        });
-    }
 
     //--------------------------------------------------//
     //----------------------watchers----------------------//
@@ -347,7 +339,7 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
           Object.assign($scope.selectedItems[i], entity);
         }
         if(changedBulkObject.update && changedBulkObject.update.delete){
-          refreshState();
+          $state.reload();
         }
         MultipleSelectService.setSelectedList($scope.selectedItems);
         NotifyingService.notify('refreshAfterOperation');
