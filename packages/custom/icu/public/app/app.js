@@ -1401,6 +1401,7 @@ angular.module('mean.icu').config([
             .state('main.search.officeDocument', getOfficeDocumentDetailsState('/officeDocument'))
             .state('main.search.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
             .state('main.search.officeDocument.documents', getDetailsTabState('officeDocument', 'documents'))
+            .state('main.search.officeDocument.tasks', getDetailsTabState('officeDocument', 'tasks'))
 
             .state('main.search.attachment', getAttachmentDetailsState('/attachment'))
             .state('main.search.attachment.versions', getAttachmentDetailsTabState())
