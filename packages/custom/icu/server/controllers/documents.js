@@ -1,8 +1,8 @@
 var httpError = require("http-errors");
 var crud = require("../controllers/crud.js");
 var Task = require("../models/task"),
-    Attachment = require("../models/attachment"),
-    Document = require("../models/document");
+  Attachment = require("../models/attachment"),
+  Document = require("../models/document");
 var mean = require("meanio"),
   path = require("path"),
   fs = require("fs"),
@@ -268,7 +268,7 @@ function getDocumentsByOfficeIdAndDateRange(office, from, to) {
       $gte: from,
       $lte: to
     },
-   recycled:{"$exists":false}
+    recycled: { $exists: false }
   })
     .populate({
       path: "folder",
@@ -312,15 +312,13 @@ function documentsQueryToExcelServiceFormat(docs, indexMapper) {
     return row;
   });
   let createdArray = _.map(filteredDocs, doc => {
-  return [
-    doc.created
-  ];
+    return [doc.created];
   });
   return excel.json2workbookWithDates({
     rows: docArray,
-    dates:createdArray,
+    dates: createdArray,
     columns: ["אינדקס", "תקייה", "כותרת מסמך", "סימוכין"],
-    datesColumns:["תאריך יצירה"],
+    datesColumns: ["תאריך יצירה"],
     columnsBold: true
   });
 }
@@ -352,18 +350,18 @@ exports.getExcelSummary = function(req, res, next) {
 exports.getByTaskId = function(req, res, next) {
   let officeDocumentId = req.params.id;
 
-    Document.findOne({ _id: officeDocumentId })
-      .populate({
-        path: 'tasks',
-        populate: {
-          path: 'subTasks'
-        }
-      })
-      .exec(function(err, doc) {
-        req.locals.data.pagination.count = doc.tasks.length || 0;
-        req.locals.result = doc.tasks || [];
-        next();
-      });
+  Document.findOne({ _id: officeDocumentId })
+    .populate({
+      path: "tasks",
+      populate: {
+        path: "subTasks"
+      }
+    })
+    .exec(function(err, doc) {
+      req.locals.data.pagination.count = doc.tasks.length || 0;
+      req.locals.result = doc.tasks || [];
+      next();
+    });
 };
 
 exports.signOnDocx = function(req, res, next) {
@@ -1536,7 +1534,9 @@ exports.getByFolder = function(req, res, next) {
   if (req.locals.data.pagination.status) {
     entityQuery.status = req.locals.data.pagination.status;
   }
-  var query = req.acl.mongoQuery("Document");
+  var query = require("mongoose")
+    .model("Document")
+    .where();
 
   query.find(entityQuery);
   query.populate(options.includes);
@@ -1837,7 +1837,7 @@ exports.getByPath = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-  //var query = req.acl.mongoQuery('Document');
+  //var query = require('mongoose').model('Document');
   var path = decodeURI(req.url).replace(/pdf$/, "");
   var conditions = {
     path: new RegExp(path)
@@ -2150,27 +2150,34 @@ exports.uploadFileToDocument = function(req, res, next) {
 
 exports.create = function(req, res, next) {
   console.log("exports.create");
-  let entityTypes = ['task', 'folder'];
+  let entityTypes = ["task", "folder"];
   let parentId = req.body.task || req.body.folder;
-  if(parentId){
+  if (parentId) {
     var parentType = _.intersection(entityTypes, Object.keys(req.body))[0];
-    var Model = mongoose.model(parentType.charAt(0).toUpperCase() + parentType.slice(1));
+    var Model = mongoose.model(
+      parentType.charAt(0).toUpperCase() + parentType.slice(1)
+    );
   }
 
+  let promise = Model
+    ? Model.findOne({ _id: parentId })
+        .populate("office")
+        .exec((err, folderObj) => {
+          if (err) {
+            logger.log(
+              "error",
+              "%s create, %s",
+              req.user.name,
+              " Folder.findOne",
+              { error: err.message }
+            );
+            res.send(err);
+          }
+          return folderObj;
+        })
+    : Promise.resolve();
 
-  let promise = Model ?
-    Model.findOne({ _id: parentId })
-      .populate('office')
-      .exec((err, folderObj) => {
-      if(err) {
-        logger.log("error", "%s create, %s", req.user.name, " Folder.findOne", {error: err.message});
-        res.send(err);
-      }
-      return folderObj
-    }) :
-    Promise.resolve();
-
-  promise.then( parentObj => {
+  promise.then(parentObj => {
     let doc = {
       created: new Date(),
       updated: new Date(),
@@ -2191,18 +2198,17 @@ exports.create = function(req, res, next) {
       watchers: parentObj ? parentObj.watchers : [req.user._id],
       documentType: ""
     };
-    doc.permissions = parentObj ?
-      parentObj.permissions.map( watcher => {
-        return ({
-          id: new ObjectId(watcher.id),
-          level: watcher.level
+    doc.permissions = parentObj
+      ? parentObj.permissions.map(watcher => {
+          return {
+            id: new ObjectId(watcher.id),
+            level: watcher.level
+          };
         })
-      }) :
-      [{ id: req.user._id, level: "editor" }];
+      : [{ id: req.user._id, level: "editor" }];
 
     let obj = new Document(doc);
-    if(parentType)
-      obj[parentType]= parentObj;
+    if (parentType) obj[parentType] = parentObj;
 
     return new Promise((resolve, reject) => {
       obj.save(function(error, result) {
@@ -2214,23 +2220,35 @@ exports.create = function(req, res, next) {
           req.locals.error = error;
           return reject(error);
         } else {
-          logger.log("info", "%s create, %s", req.user.name, "success with folder");
-          return User.findOne({ _id: result.creator }).exec(function(err, creator) {
+          logger.log(
+            "info",
+            "%s create, %s",
+            req.user.name,
+            "success with folder"
+          );
+          return User.findOne({ _id: result.creator }).exec(function(
+            err,
+            creator
+          ) {
             result.creator = creator;
             req.locals.result = result;
             return resolve(result);
-          })
+          });
         }
-      })
+      });
     }).then(newDocument => {
-      if(parentId && parentObj){
+      if (parentId && parentObj) {
         // solution for mongo issue adding data to array,
         // because of $pushAll that is deprecated since v2.4
-        parentObj.officeDocuments = (parentObj.officeDocuments || []).concat([newDocument]);
+        parentObj.officeDocuments = (parentObj.officeDocuments || []).concat([
+          newDocument
+        ]);
 
         parentObj.save(error => {
           if (error) {
-            logger.log("error", "%s create, %s", req.user.name, " obj.save", { error: error.message });
+            logger.log("error", "%s create, %s", req.user.name, " obj.save", {
+              error: error.message
+            });
             req.locals.error = error;
           }
           return next();
@@ -2238,7 +2256,7 @@ exports.create = function(req, res, next) {
       } else {
         next();
       }
-    })
+    });
   });
 };
 
@@ -2545,8 +2563,14 @@ exports.update = function(req, res, next) {
               req.body.permissions = [];
 
               // Inherit watchers & permissions from the parent folder
-              addWatcherOrPermissionIfNotExist(doc.watchers, folderObj.watchers);
-              addWatcherOrPermissionIfNotExist(doc.permissions, folderObj.permissions);
+              addWatcherOrPermissionIfNotExist(
+                doc.watchers,
+                folderObj.watchers
+              );
+              addWatcherOrPermissionIfNotExist(
+                doc.permissions,
+                folderObj.permissions
+              );
 
               // Save the document with the new watchers & permissions
               doc.save(function(err, result) {
@@ -2771,9 +2795,9 @@ exports.update = function(req, res, next) {
       docToUpdate["" + req.body.name] = req.body.newVal;
       docToUpdate["id"] = docToUpdate._id;
 
-      if (req.body.name === 'assign') {
+      if (req.body.name === "assign") {
         addAssignToWatchers(docToUpdate, req.body.newVal);
-      } else if(req.body.name === 'folder') {
+      } else if (req.body.name === "folder") {
         docToUpdate.folderIndex = undefined;
       }
 
@@ -2812,20 +2836,22 @@ exports.update = function(req, res, next) {
               );
 
               if (req.body.name == "due") {
-                Document.findOne({ _id: req.params.id }).populate('watchers folder').exec(function(err, doc) {
-                  console.log(err, doc)
-                  if (err)
-                    logger.log(
-                      "error",
-                      "%s update, %s",
-                      req.user.name,
-                      " Document.findOne",
-                      { error: err.message }
-                    );
-                  doc.due = req.body.value;
-                  doc.save();
-                  res.send(doc);
-                });
+                Document.findOne({ _id: req.params.id })
+                  .populate("watchers folder")
+                  .exec(function(err, doc) {
+                    console.log(err, doc);
+                    if (err)
+                      logger.log(
+                        "error",
+                        "%s update, %s",
+                        req.user.name,
+                        " Document.findOne",
+                        { error: err.message }
+                      );
+                    doc.due = req.body.value;
+                    doc.save();
+                    res.send(doc);
+                  });
               } else {
                 res.send(result);
               }
@@ -2839,30 +2865,31 @@ exports.update = function(req, res, next) {
   }
 };
 
-function addWatcherOrPermissionIfNotExist(arrayOfExisting, arrayOfAdding){
-  for(let i=0; arrayOfAdding.length; i++){
+function addWatcherOrPermissionIfNotExist(arrayOfExisting, arrayOfAdding) {
+  for (let i = 0; arrayOfAdding.length; i++) {
     let folderWatcher = arrayOfAdding[i];
-    if(!folderWatcher)break;
+    if (!folderWatcher) break;
 
-    let folderId = typeof folderWatcher === 'string' ? folderWatcher : folderWatcher.id,
-      watcher = arrayOfExisting.find( user => user.id.toString() === folderId.toString());
-    if(!watcher)
-      arrayOfExisting.push(folderWatcher)
+    let folderId =
+        typeof folderWatcher === "string" ? folderWatcher : folderWatcher.id,
+      watcher = arrayOfExisting.find(
+        user => user.id.toString() === folderId.toString()
+      );
+    if (!watcher) arrayOfExisting.push(folderWatcher);
   }
 }
 
-function addAssignToWatchers(doc, assignId){
+function addAssignToWatchers(doc, assignId) {
   let watcherExists = doc.watchers.find(watcher => {
     return String(watcher._id || watcher) === assignId;
   });
 
-  if (!watcherExists){
+  if (!watcherExists) {
     doc.watchers.push(doc.assign);
-    doc.permissions.push(
-      {
-        id: doc.assign,
-        level: 'commenter'
-      })
+    doc.permissions.push({
+      id: doc.assign,
+      level: "commenter"
+    });
   }
 }
 
@@ -2975,7 +3002,9 @@ exports.signNew = function(req, res, next) {
     office: "Office",
     folder: "Folder"
   };
-  var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+  var query = require("mongoose")
+    .model(entities[req.locals.data.body.entity])
+    .where();
   query
     .findOne({
       _id: req.locals.data.body.entityId
@@ -3011,7 +3040,9 @@ exports.signNew = function(req, res, next) {
     office: "Office",
     folder: "Folder"
   };
-  var query = req.acl.mongoQuery(entities[req.locals.data.body.entity]);
+  var query = require("mongoose")
+    .model(entities[req.locals.data.body.entity])
+    .where();
   query
     .findOne({
       _id: req.locals.data.body.entityId
@@ -3457,7 +3488,9 @@ exports.tagsList = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-  var query = req.acl.mongoQuery("Document");
+  var query = require("mongoose")
+    .model("Document")
+    .where();
   query.distinct("tags", function(error, tags) {
     if (error) {
       req.locals.error = {
@@ -3470,4 +3503,3 @@ exports.tagsList = function(req, res, next) {
     next();
   });
 };
-

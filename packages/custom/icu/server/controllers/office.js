@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-require('../models/office');
+require("../models/office");
 
 var options = {
-  includes: 'assign watchers',
+  includes: "assign watchers",
   defaults: {
     watchers: []
   }
@@ -11,30 +11,30 @@ var options = {
 
 exports.defaultOptions = options;
 
-var crud = require('../controllers/crud.js');
-var officeController = crud('offices', options);
-var config = require('meanio').loadConfig();
+var crud = require("../controllers/crud.js");
+var officeController = crud("offices", options);
+var config = require("meanio").loadConfig();
 
-var mongoose = require('mongoose'),
-  Office = mongoose.model('Office'),
-  TemplateDoc = mongoose.model('TemplateDoc'),
-  Task = mongoose.model('Task'),
-  User = mongoose.model('User'),
-  Folder = mongoose.model('Folder'),
-  _ = require('lodash'),
-  elasticsearch = require('./elasticsearch.js');
+var mongoose = require("mongoose"),
+  Office = mongoose.model("Office"),
+  TemplateDoc = mongoose.model("TemplateDoc"),
+  Task = mongoose.model("Task"),
+  User = mongoose.model("User"),
+  Folder = mongoose.model("Folder"),
+  _ = require("lodash"),
+  elasticsearch = require("./elasticsearch.js");
 
-var Order = require('../models/order');
-var logger = require('../services/logger');
+var Order = require("../models/order");
+var logger = require("../services/logger");
 
 Object.keys(officeController).forEach(function(methodName) {
-  if(methodName !== 'destroy') {
+  if (methodName !== "destroy") {
     exports[methodName] = officeController[methodName];
   }
 });
 
 exports.destroy = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
@@ -44,19 +44,22 @@ exports.destroy = function(req, res, next) {
   }).then(function(tasks) {
     //FIXME: do it with mongo aggregate
     var groupedTasks = _.groupBy(tasks, function(task) {
-      return task.discussions.length > 0 ? 'release' : 'remove';
+      return task.discussions.length > 0 ? "release" : "remove";
     });
 
     groupedTasks.remove = groupedTasks.remove || [];
     groupedTasks.release = groupedTasks.release || [];
 
-    Task.update({
-      _id: {
-        $in: groupedTasks.release
+    Task.update(
+      {
+        _id: {
+          $in: groupedTasks.release
+        }
+      },
+      {
+        office: null
       }
-    }, {
-      office: null
-    }).exec();
+    ).exec();
 
     Task.remove({
       _id: {
@@ -65,31 +68,33 @@ exports.destroy = function(req, res, next) {
     }).then(function() {
       //FIXME: needs to be optimized to one query
       groupedTasks.remove.forEach(function(task) {
-        elasticsearch.delete(task, 'task', null, next);
+        elasticsearch.delete(task, "task", null, next);
       });
 
       var removeTaskIds = _(groupedTasks.remove)
-        .pluck('_id')
+        .pluck("_id")
         .map(function(i) {
           return i.toString();
         })
         .value();
 
-      User.update({
-        'profile.starredTasks': {
-          $in: removeTaskIds
-        }
-      }, {
-        $pull: {
-          'profile.starredTasks': {
+      User.update(
+        {
+          "profile.starredTasks": {
             $in: removeTaskIds
           }
+        },
+        {
+          $pull: {
+            "profile.starredTasks": {
+              $in: removeTaskIds
+            }
+          }
         }
-      }).exec();
+      ).exec();
     });
 
     officeController.destroy(req, res, next);
-
   });
 };
 
@@ -97,63 +102,60 @@ function getUsers(users) {
   var request = [];
   return new Promise(function(fulfill, reject) {
     users.forEach(function(u) {
-      if(u.isCreator == undefined) {
-        request.push(new Promise(function(resolve, error) {
-          User.findOne({_id: u.UserId}).exec(function(err, user) {
-            if(!err) {
-              u.UserId = user.username;
-              resolve(user);
-            }
-            else {
-              error('error');
-            }
-          });
-        }));
-      }
-      else {
+      if (u.isCreator == undefined) {
+        request.push(
+          new Promise(function(resolve, error) {
+            User.findOne({ _id: u.UserId }).exec(function(err, user) {
+              if (!err) {
+                u.UserId = user.username;
+                resolve(user);
+              } else {
+                error("error");
+              }
+            });
+          })
+        );
+      } else {
         delete u.isCreator;
       }
     });
-    Promise.all(request).then(function(dataAll) {
-      fulfill('success');
-    }).catch(function(reason) {
-      reject('reject');
-    });
+    Promise.all(request)
+      .then(function(dataAll) {
+        fulfill("success");
+      })
+      .catch(function(reason) {
+        reject("reject");
+      });
   });
 }
 
-
-
 function updateAllTemplates(officeId, watcher, action) {
   return new Promise(function(fullfil, reject) {
-    Office.find({_id: officeId}, function(err1, office) {
-      TemplateDoc.find({office: officeId}, function(err2, templates) {
+    Office.find({ _id: officeId }, function(err1, office) {
+      TemplateDoc.find({ office: officeId }, function(err2, templates) {
         var paths = [];
         var officeWatchers = office[0]._doc.watchers;
         templates.forEach(function(template) {
-          if(template.spPath) {
+          if (template.spPath) {
             paths.push(template.spPath);
           }
         });
         var zeroReq = [];
         var usersReq = [];
-        if(action == 'added') {
+        if (action == "added") {
           zeroReq = [];
           officeWatchers.forEach(function(w) {
-            usersReq.push({UserId: w});
+            usersReq.push({ UserId: w });
           });
-        }
-        else {
-          zeroReq = [{UserId: watcher}];
+        } else {
+          zeroReq = [{ UserId: watcher }];
           officeWatchers.forEach(function(w) {
-            if(w.toString() != watcher.toString()) {
-              usersReq.push({UserId: w});
+            if (w.toString() != watcher.toString()) {
+              usersReq.push({ UserId: w });
             }
-
           });
         }
         var creators = [];
-
 
         getUsers(zeroReq).then(function(zeroResult) {
           getUsers(usersReq).then(function(result) {
@@ -172,92 +174,115 @@ function updateAllTemplates(officeId, watcher, action) {
               creators: creators,
               zero: zero
             };
-            request({
-              url: config.SPHelper.uri + '/api/share',
-              method: 'POST',
-              json: json
-            }, function(error, resp, body) {
-              if(error) {
-                logger.log('error', '%s updateAllTemplates, %s', req.user.name, ' request', {error: error.stack});
-                reject(error);
+            request(
+              {
+                url: config.SPHelper.uri + "/api/share",
+                method: "POST",
+                json: json
+              },
+              function(error, resp, body) {
+                if (error) {
+                  logger.log(
+                    "error",
+                    "%s updateAllTemplates, %s",
+                    req.user.name,
+                    " request",
+                    { error: error.stack }
+                  );
+                  reject(error);
+                } else {
+                  fullfil("ok");
+                }
               }
-              else {
-                fullfil('ok');
-              }
-            });
+            );
           });
         });
       });
-
     });
   });
 }
 
 exports.update = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  if(req.body.watcherAction) {
-    if(req.body.watcherAction == 'added') {
+  if (req.body.watcherAction) {
+    if (req.body.watcherAction == "added") {
       Folder.update(
         {
           office: req.body._id
-        }, {
-          $push: {watchers: req.body.watcherId}
-        }, {multi: true}).exec();
+        },
+        {
+          $push: { watchers: req.body.watcherId }
+        },
+        { multi: true }
+      ).exec();
       TemplateDoc.update(
         {
           office: req.body._id
-        }, {
-          $push: {watchers: req.body.watcherId}
-        }, {multi: true}).exec(function() {
-        if(config.SPHelper.isWorking) {
-          updateAllTemplates(req.body._id, req.body.watcherId, req.body.watcherAction).then(function(result) {
-
-          });
+        },
+        {
+          $push: { watchers: req.body.watcherId }
+        },
+        { multi: true }
+      ).exec(function() {
+        if (config.SPHelper.isWorking) {
+          updateAllTemplates(
+            req.body._id,
+            req.body.watcherId,
+            req.body.watcherAction
+          ).then(function(result) {});
         }
-
       });
-
-    }
-    else {
+    } else {
       Folder.update(
         {
           office: req.body._id
-        }, {
-          $pull: {watchers: req.body.watcherId}
-        }, {multi: true}).exec();
+        },
+        {
+          $pull: { watchers: req.body.watcherId }
+        },
+        { multi: true }
+      ).exec();
       TemplateDoc.update(
         {
           office: req.body._id
-        }, {
-          $pull: {watchers: req.body.watcherId}
-        }, {multi: true}).exec(function() {
-        if(config.SPHelper.isWorking) {
-
-          updateAllTemplates(req.body._id, req.body.watcherId, req.body.watcherAction).then(function(result) {
-
-          });
+        },
+        {
+          $pull: { watchers: req.body.watcherId }
+        },
+        { multi: true }
+      ).exec(function() {
+        if (config.SPHelper.isWorking) {
+          updateAllTemplates(
+            req.body._id,
+            req.body.watcherId,
+            req.body.watcherAction
+          ).then(function(result) {});
         }
       });
     }
-
-
   }
 
   officeController.update(req, res, next);
 };
 
 exports.getByEntity = function(req, res, next) {
-  if(req.locals.error) {
-    logger.log('error', '%s getByEntity, %s', req.user.name, ' req.locals.error', {error: req.locals.error});
+  if (req.locals.error) {
+    logger.log(
+      "error",
+      "%s getByEntity, %s",
+      req.user.name,
+      " req.locals.error",
+      { error: req.locals.error }
+    );
     return next();
   }
 
   var entities = {
-      users: 'creator',
-      _id: '_id',
-      discussions: 'discussion'
+      users: "creator",
+      _id: "_id",
+      discussions: "discussion"
     },
     entityQuery = {};
 
@@ -265,13 +290,15 @@ exports.getByEntity = function(req, res, next) {
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if(ids && ids.length) {
+  if (ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
     starredOnly = true;
   }
-  var query = req.acl.mongoQuery('Office');
+  var query = require("mongoose")
+    .model("Office")
+    .where();
 
   query.find(entityQuery);
 
@@ -281,61 +308,67 @@ exports.getByEntity = function(req, res, next) {
     req.locals.data.pagination.count = c;
 
     var pagination = req.locals.data.pagination;
-    if(pagination && pagination.type && pagination.type === 'page') {
-      query.sort(pagination.sort)
+    if (pagination && pagination.type && pagination.type === "page") {
+      query
+        .sort(pagination.sort)
         .skip(pagination.start)
         .limit(pagination.limit);
     }
 
     query.exec(function(err, offices) {
-      if(err) {
-        logger.log('error', '%s getByEntity, %s', req.user.name, ' query.exec()', {error: err.message});
+      if (err) {
+        logger.log(
+          "error",
+          "%s getByEntity, %s",
+          req.user.name,
+          " query.exec()",
+          { error: err.message }
+        );
         req.locals.error = {
-          message: 'Can\'t get offices'
+          message: "Can't get offices"
         };
-      }
-      else {
-        if(starredOnly) {
+      } else {
+        if (starredOnly) {
           offices.forEach(function(office) {
             office.star = true;
           });
         }
-        if(pagination.sort == 'custom') {
+        if (pagination.sort == "custom") {
           var temp = new Array(offices.length);
           var officeTemp = offices;
-          Order.find({name: 'Office', discussion: offices[0].discussion}, function(err, data) {
-            data.forEach(function(element) {
-              for(var index = 0; index < officeTemp.length; index++) {
-                if(JSON.stringify(officeTemp[index]._id) === JSON.stringify(element.ref)) {
-                  temp[element.order - 1] = offices[index];
+          Order.find(
+            { name: "Office", discussion: offices[0].discussion },
+            function(err, data) {
+              data.forEach(function(element) {
+                for (var index = 0; index < officeTemp.length; index++) {
+                  if (
+                    JSON.stringify(officeTemp[index]._id) ===
+                    JSON.stringify(element.ref)
+                  ) {
+                    temp[element.order - 1] = offices[index];
+                  }
                 }
-
-              }
-            });
-            offices = temp;
-            req.locals.result = offices;
-            next();
-          });
-        }
-        else {
-
+              });
+              offices = temp;
+              req.locals.result = offices;
+              next();
+            }
+          );
+        } else {
           req.locals.result = offices;
           next();
         }
       }
     });
-
   });
-
-
 };
 
 exports.getByDiscussion = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
-  if(req.params.entity !== 'discussions') return next();
+  if (req.params.entity !== "discussions") return next();
 
   var entityQuery = {
     discussions: req.params.id,
@@ -347,7 +380,7 @@ exports.getByDiscussion = function(req, res, next) {
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if(ids && ids.length) {
+  if (ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
@@ -357,22 +390,27 @@ exports.getByDiscussion = function(req, res, next) {
     office: 1,
     _id: 0
   });
-  Query.populate('office');
+  Query.populate("office");
 
   Query.exec(function(err, offices) {
-    if(err) {
-      logger.log('error', '%s getByDiscussion, %s', req.user.name, ' query.exec()', {error: err.message});
+    if (err) {
+      logger.log(
+        "error",
+        "%s getByDiscussion, %s",
+        req.user.name,
+        " query.exec()",
+        { error: err.message }
+      );
       req.locals.error = {
-        message: 'Can\'t get offices'
+        message: "Can't get offices"
       };
-    }
-    else {
-      offices = _.uniq(offices, 'office._id');
+    } else {
+      offices = _.uniq(offices, "office._id");
       offices = _.map(offices, function(item) {
         return item.office;
       });
 
-      if(starredOnly) {
+      if (starredOnly) {
         offices.forEach(function(office) {
           office.star = true;
         });

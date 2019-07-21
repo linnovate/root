@@ -1,50 +1,52 @@
 exports.find = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
-  var query = req.acl.mongoQuery('Task');
+  var query = require("mongoose")
+    .model("Task")
+    .where();
   var queryString = {};
   Object.keys(req.query).forEach(function(key) {
     switch (key) {
-    case 'uid':
-      break;
-    case 'type':
-      queryString['custom.type'] = req.query.type;
-      break;
-    default:
-      queryString[`custom.data.${key}`] = req.query[key];
-      break;
+      case "uid":
+        break;
+      case "type":
+        queryString["custom.type"] = req.query.type;
+        break;
+      default:
+        queryString[`custom.data.${key}`] = req.query[key];
+        break;
     }
   });
-  query.find(queryString)
-    .exec(function(err, tasks) {
-      if(err) {
-        req.locals.error = {
-          message: 'Can\'t get my tasks'
-        };
-      } else {
-        req.locals.result = tasks;
-      }
-      next();
-    });
+  query.find(queryString).exec(function(err, tasks) {
+    if (err) {
+      req.locals.error = {
+        message: "Can't get my tasks"
+      };
+    } else {
+      req.locals.result = tasks;
+    }
+    next();
+  });
 };
 
 exports.findByCustomId = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  var query = req.acl.mongoQuery('Task');
+  var query = require("mongoose")
+    .model("Task")
+    .where();
 
-  query.findOne({'custom.id': req.params.id})
-    .exec(function(err, task) {
-      if(err || !task) {
-        req.locals.error = {
-          message: 'Can\'t get the task'
-        };
-      } else {
-        req.locals.result = task;
-      }
-      next();
-    });
+  query.findOne({ "custom.id": req.params.id }).exec(function(err, task) {
+    if (err || !task) {
+      req.locals.error = {
+        message: "Can't get the task"
+      };
+    } else {
+      req.locals.result = task;
+    }
+    next();
+  });
 };

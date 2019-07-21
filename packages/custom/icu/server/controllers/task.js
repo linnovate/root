@@ -177,7 +177,9 @@ exports.tagsList = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-  var query = req.acl.mongoQuery("Task");
+  var query = require("mongoose")
+    .model("Task")
+    .where();
   query.distinct("tags", function(error, tags) {
     if (error) {
       req.locals.error = {
@@ -234,7 +236,7 @@ exports.getByEntity = function(req, res, next) {
     };
     starredOnly = true;
   }
-  var query = req.acl.mongoQuery("Task");
+  var query = require("mongoose").model("Task");
 
   query.find(entityQuery);
   query.populate(options.includes);
@@ -358,7 +360,7 @@ var byAssign = function(req, res, next) {
     return next();
   }
 
-  var query = req.acl.mongoQuery("Task");
+  var query = require("mongoose").model("Task");
   query
     .find({
       assign: req.user._id,
@@ -661,7 +663,7 @@ exports.getSubTasks = function(req, res, next) {
     return next();
   }
 
-  var query = req.acl.mongoQuery("Task");
+  var query = require("mongoose").model("Task");
   query
     .findOne(
       {
@@ -799,22 +801,18 @@ exports.populateSubTasks = function(req, res, next) {
 // Function to Separate Array With Timeout
 // Gets array of users & name of function to pass the separate users
 // It's with the Timeout because the mail server has limit per minute for SMTP mails by client
-async function SeparateArrayWithTimeout(users, functionName){
-  
-  if(users.length != 0)
-  {
-    setTimeout(function(){
+async function SeparateArrayWithTimeout(users, functionName) {
+  if (users.length != 0) {
+    setTimeout(function() {
       functionName(users.pop()._doc);
-      
+
       // Lop until the array is empty
-      if(users.length != 0)
-      {
+      if (users.length != 0) {
         SeparateArrayWithTimeout(users, functionName);
       }
     }, 20000);
   }
-};
-
+}
 
 exports.GetUsersWantGetMyTodayTasksMail = async function() {
   var UserModel = require("../models/user.js");
@@ -841,9 +839,9 @@ function MyTasksOfTodaySummary(user) {
 
   var CheckRealDue = new Date();
   CheckRealDue.setHours(0, 0, 0, 0);
-  
+
   //*AsButton*
-  //var query = req.acl.mongoQuery('Task');
+  //var query = require('mongoose').model('Task');
   //query.find({
   var query = TaskModel.find({
     //*AsButton* assign: req.user._id,
@@ -865,8 +863,8 @@ function MyTasksOfTodaySummary(user) {
         var TodayTasks = [];
 
         tasks.forEach(function(task) {
-            task.due.setDate(task.due.getDate() + 1);
-            TodayTasks.push(task);
+          task.due.setDate(task.due.getDate() + 1);
+          TodayTasks.push(task);
         });
 
         mailService
@@ -882,8 +880,6 @@ function MyTasksOfTodaySummary(user) {
       //next();
     });
 }
-
-
 
 exports.GetUsersWantGetGivenTodayTasksMail = async function() {
   var UserModel = require("../models/user.js");
@@ -910,9 +906,9 @@ function GivenTasksOfTodaySummary(user) {
 
   var CheckRealDue = new Date();
   CheckRealDue.setHours(0, 0, 0, 0);
-  
+
   //*AsButton*
-  //var query = req.acl.mongoQuery('Task');
+  //var query = require('mongoose').model('Task');
   //query.find({
   var query = TaskModel.find({
     //*AsButton* assign: req.user._id,
@@ -934,8 +930,8 @@ function GivenTasksOfTodaySummary(user) {
         var TodayTasks = [];
 
         tasks.forEach(function(task) {
-            task.due.setDate(task.due.getDate() + 1);
-            TodayTasks.push(task);
+          task.due.setDate(task.due.getDate() + 1);
+          TodayTasks.push(task);
         });
 
         mailService
@@ -951,8 +947,6 @@ function GivenTasksOfTodaySummary(user) {
       //next();
     });
 }
-
-
 
 exports.GetUsersWantGetMyWeeklyTasksMail = function() {
   var UserModel = require("../models/user.js");
@@ -976,7 +970,7 @@ exports.MyTasksOfNextWeekSummary = function(req, res, next) {};
 
 function MyTasksOfNextWeekSummary(user) {
   var TaskModel = require("../models/task.js");
-  
+
   var CheckRealDue = new Date();
   CheckRealDue.setHours(0, 0, 0, 0);
   var CheckRealDueInWeek = new Date();
@@ -984,13 +978,13 @@ function MyTasksOfNextWeekSummary(user) {
   CheckRealDueInWeek.setHours(0, 0, 0, 0);
 
   //*AsButton*
-  //var query = req.acl.mongoQuery('Task');
+  //var query = require('mongoose').model('Task');
   //query.find({
   var query = TaskModel.find({
     //*AsButton* assign: req.user._id,
     assign: user._id,
     status: { $nin: ["rejected", "done"] },
-    due: {$gte: CheckRealDue, $lt: CheckRealDueInWeek},
+    due: { $gte: CheckRealDue, $lt: CheckRealDueInWeek },
     tType: { $ne: "template" }
   })
     .populate(options.includes)
@@ -1006,8 +1000,8 @@ function MyTasksOfNextWeekSummary(user) {
         var WeekTasks = [];
 
         tasks.forEach(function(task) {
-            task.due.setDate(task.due.getDate() + 1);
-            WeekTasks.push(task);
+          task.due.setDate(task.due.getDate() + 1);
+          WeekTasks.push(task);
         });
 
         mailService
@@ -1045,10 +1039,10 @@ exports.GetUsersWantGetGivenWeeklyTasksMail = function() {
 exports.GivenTasksOfNextWeekSummary = function(req, res, next) {};
 
 function GivenTasksOfNextWeekSummary(user) {
-  //*AsButton* var query = req.acl.mongoQuery('Task');
+  //*AsButton* var query = require('mongoose').model('Task');
 
   var TaskModel = require("../models/task.js");
-  
+
   var CheckRealDue = new Date();
   CheckRealDue.setHours(0, 0, 0, 0);
   var CheckRealDueInWeek = new Date();
@@ -1059,7 +1053,7 @@ function GivenTasksOfNextWeekSummary(user) {
     //*AsButton* query.find({
     //creator: req.user._id,
     creator: user._id,
-    due: {$gte: CheckRealDue, $lt: CheckRealDueInWeek},
+    due: { $gte: CheckRealDue, $lt: CheckRealDueInWeek },
     tType: { $ne: "template" }
   })
     .populate(options.includes)
@@ -1070,12 +1064,11 @@ function GivenTasksOfNextWeekSummary(user) {
         //   message: 'Can\'t get my tasks'
         // };
       } else {
-
         var WeekTasks = [];
 
         tasks.forEach(function(task) {
-            task.due.setDate(task.due.getDate() + 1);
-            WeekTasks.push(task);
+          task.due.setDate(task.due.getDate() + 1);
+          WeekTasks.push(task);
         });
 
         mailService
@@ -1101,8 +1094,11 @@ function GivenTasksOfNextWeekSummary(user) {
 async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
   let UpdateModel = require("../models/update");
   tasks = _.map(tasks, task => task._doc);
-  let taskNotRecycled = task => !task.hasOwnProperty('recycled');
-  let filteredTasks = _.filter(tasks, task => task.title && taskNotRecycled(task));
+  let taskNotRecycled = task => !task.hasOwnProperty("recycled");
+  let filteredTasks = _.filter(
+    tasks,
+    task => task.title && taskNotRecycled(task)
+  );
   let taskArray = await Promise.all(
     _.map(filteredTasks, async task => {
       let {

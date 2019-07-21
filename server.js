@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /*
 var cl = console.log;
@@ -9,9 +9,20 @@ console.log = function(){
 */
 
 // Requires meanio .
-var mean = require('meanio');
-var cluster = require('cluster');
-var shell = require('shelljs');
+var mean = require("meanio");
+var cluster = require("cluster");
+var shell = require("shelljs");
+const mongoose = require("mongoose");
+mongoose.set("debug", true);
+
+// let apm = require("elastic-apm-node");
+
+// apm = apm.start({
+//   serviceName: "ICQ_EXCEL",
+//   serverUrl: "http://localhost:8200",
+//   captureBody: "all",
+//   active: true
+// });
 
 // Code to run if we're in the master process or if we are not in debug mode/ running tests
 
@@ -47,19 +58,19 @@ var shell = require('shelljs');
 //     {
 //         workerId = cluster.worker.id;
 //     }
-    
-//     //OHAD 
+
+//     //OHAD
 //     var configlate;
-//     var portlate;  
+//     var portlate;
 //     //END OHAD
 // // Creates and serves mean application
 //     mean.serve({ workerid: workerId /* more options placeholder*/ }, function (app) {
 //       var config = app.config.clean;
 //         var port = config.https && config.https.port ? config.https.port : config.http.port;
 //         console.log('Mean app started on port ' + port + ' (' + process.env.NODE_ENV + ') cluster.worker.id:', workerId);
-        
-//         //OHAD      
-        
+
+//         //OHAD
+
 //         var cron = require('node-cron');
 //         var taskController = require(__dirname + '/packages/custom/icu/server/controllers/task.js');
 
@@ -77,43 +88,47 @@ var shell = require('shelljs');
 
 //             taskController.GetUsersWantGetMyTodayTasksMail();
 //         });
-        
+
 //         //END OHAD
 //     });
 
 // }
 
-//OHAD 
+//OHAD
 var configlate;
-var portlate;  
+var portlate;
 //END OHAD
 // Creates and serves mean application
-mean.serve({ }, function (app) {
-    shell.exec('./startup_script.sh');
-    var config = app.config.clean;
-    var port = config.https && config.https.port ? config.https.port : config.http.port;
-    console.log('Mean app started on port ' + port + ' (' + process.env.NODE_ENV + ')');
-    
-    //OHAD      
-    
-    var cron = require('node-cron');
-    var taskController = require(__dirname + '/packages/custom/icu/server/controllers/task.js');
+mean.serve({}, function(app) {
+  shell.exec("./startup_script.sh");
+  var config = app.config.clean;
+  var port =
+    config.https && config.https.port ? config.https.port : config.http.port;
+  console.log(
+    "Mean app started on port " + port + " (" + process.env.NODE_ENV + ")"
+  );
 
-    // Need to write date to send mail
-    //cron.schedule('26 * * * *', function(){
-    cron.schedule(config.ScheduledMailSendWeekly, function(){
-        console.log('running a task every week');
+  //OHAD
 
-        taskController.GetUsersWantGetMyWeeklyTasksMail();
-        taskController.GetUsersWantGetGivenWeeklyTasksMail();
-    });
+  var cron = require("node-cron");
+  var taskController = require(__dirname +
+    "/packages/custom/icu/server/controllers/task.js");
 
-    cron.schedule(config.ScheduledMailSendDaly, function(){
-        console.log('running a task every day');
+  // Need to write date to send mail
+  //cron.schedule('26 * * * *', function(){
+  cron.schedule(config.ScheduledMailSendWeekly, function() {
+    console.log("running a task every week");
 
-        taskController.GetUsersWantGetMyTodayTasksMail();
-        taskController.GetUsersWantGetGivenTodayTasksMail();
-    });
-    
-    //END OHAD
+    taskController.GetUsersWantGetMyWeeklyTasksMail();
+    taskController.GetUsersWantGetGivenWeeklyTasksMail();
+  });
+
+  cron.schedule(config.ScheduledMailSendDaly, function() {
+    console.log("running a task every day");
+
+    taskController.GetUsersWantGetMyTodayTasksMail();
+    taskController.GetUsersWantGetGivenTodayTasksMail();
+  });
+
+  //END OHAD
 });

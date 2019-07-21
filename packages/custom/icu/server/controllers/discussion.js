@@ -39,7 +39,9 @@ exports.destroy = function(req, res, next) {
 
   var discussion = req.locals.result;
 
-  var query = req.acl.mongoQuery("Task");
+  var query = require("mongoose")
+    .model("Task")
+    .where();
   query
     .find({
       discussions: req.params.id
@@ -149,7 +151,9 @@ exports.schedule = function(req, res, next) {
     return next();
   }
 
-  var query = req.acl.mongoQuery("Task");
+  var query = require("mongoose")
+    .model("Task")
+    .where();
   query
     .find({
       discussions: discussion._id
@@ -214,7 +218,9 @@ exports.summary = function(req, res, next) {
     return next();
   }
 
-  var query = req.acl.mongoQuery("Task");
+  var query = require("mongoose")
+    .model("Task")
+    .where();
   query
     .find({
       discussions: discussion._id,
@@ -331,7 +337,9 @@ exports.cancele = function(req, res, next) {
     return next();
   }
 
-  var query = req.acl.mongoQuery("Task");
+  var query = require("mongoose")
+    .model("Task")
+    .where();
   query
     .find({
       discussions: discussion._id
@@ -434,7 +442,9 @@ exports.tagsList = function(req, res, next) {
   if (req.locals.error) {
     return next();
   }
-  var query = req.acl.mongoQuery("Discussion");
+  var query = require("mongoose")
+    .model("Discussion")
+    .where();
   query.distinct("tags", function(error, tags) {
     if (error) {
       req.locals.error = {
@@ -469,7 +479,9 @@ exports.getByEntity = function(req, res, next) {
     };
     starredOnly = true;
   }
-  var query = req.acl.mongoQuery("Discussion");
+  var query = require("mongoose")
+    .model("Discussion")
+    .where();
 
   query.find(entityQuery);
 

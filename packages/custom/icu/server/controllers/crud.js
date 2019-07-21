@@ -1,17 +1,21 @@
-'use strict';
+"use strict";
 
-var _ = require('lodash');
-var crudService = require('../services/crud.js');
+var _ = require("lodash");
+var crudService = require("../services/crud.js");
 
 module.exports = function(entityName, options) {
   var entityService = crudService(entityName, options);
 
   var success = function(req, next) {
     return function(data) {
-      if(_.isEmpty(data)) {
+      if (entityName === "tasks") {
+        // console.log(data);
+        // console.log(`in success ${entityName}////////////////////`);
+      }
+      if (_.isEmpty(data)) {
         req.locals.error = {
           status: 204,
-          message: 'No Content'
+          message: "No Content"
         };
       }
 
@@ -22,15 +26,14 @@ module.exports = function(entityName, options) {
 
   var error = function(req, next) {
     return function(err) {
-
-      req.locals.error = {message: err.toString()};
+      req.locals.error = { message: err.toString() };
 
       return next();
     };
   };
 
   function all(req, res, next) {
-    if(req.locals.error) {
+    if (req.locals.error) {
       return next();
     }
 
@@ -40,7 +43,7 @@ module.exports = function(entityName, options) {
   }
 
   function read(req, res, next) {
-    if(req.locals.error) {
+    if (req.locals.error) {
       return next();
     }
     entityService
@@ -49,35 +52,35 @@ module.exports = function(entityName, options) {
   }
 
   function create(req, res, next) {
-    if(req.locals.error) {
+    if (req.locals.error) {
       return next();
     }
 
     var entity = req.locals.data.body || req.body.data || req.body;
 
     entityService
-      .create(entity, {user: req.user}, req.acl)
+      .create(entity, { user: req.user }, req.acl)
       .then(success(req, next), error(req, next));
   }
 
   function update(req, res, next) {
-    if(req.locals.error) {
+    if (req.locals.error) {
       return next();
     }
 
-    if(req.locals.result.description !== req.body.desciption) {
+    if (req.locals.result.description !== req.body.desciption) {
       req.locals.data.shouldCreateUpdate = true;
     }
 
     // Made By OHAD
-    if(req.body.room !== undefined) {
+    if (req.body.room !== undefined) {
       req.locals.data.shouldCreateUpdate = true;
 
       req.locals.result.room = req.body.room;
     }
     // END Made By OHAD
 
-    if(req.locals.result.assign !== req.body.assign) {
+    if (req.locals.result.assign !== req.body.assign) {
       req.locals.data.shouldCreateUpdate = false;
     }
 
@@ -86,22 +89,22 @@ module.exports = function(entityName, options) {
     req.locals.old = JSON.parse(JSON.stringify(req.locals.result));
 
     entityService
-      .update(req.locals.result, entity, {user: req.user}, req.acl)
+      .update(req.locals.result, entity, { user: req.user }, req.acl)
       .then(success(req, next), error(req, next));
   }
 
   function destroy(req, res, next) {
-    if(req.locals.error) {
+    if (req.locals.error) {
       return next();
     }
 
     entityService
-      .destroy(req.locals.result, {user: req.user})
+      .destroy(req.locals.result, { user: req.user })
       .then(success(req, next), error(req, next));
   }
 
   function readHistory(req, res, next) {
-    if(req.locals.error) {
+    if (req.locals.error) {
       return next();
     }
 

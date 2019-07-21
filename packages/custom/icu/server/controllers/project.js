@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-require('../models/project');
+require("../models/project");
 
 var options = {
-  includes: 'assign watchers subProjects',
+  includes: "assign watchers subProjects",
   defaults: {
     assign: undefined,
     watchers: []
@@ -12,63 +12,66 @@ var options = {
 
 exports.defaultOptions = options;
 
-var crud = require('../controllers/crud.js');
-var task = crud('tasks', options);
-var project = crud('projects', options);
+var crud = require("../controllers/crud.js");
+var task = crud("tasks", options);
+var project = crud("projects", options);
 
-var mongoose = require('mongoose'),
-  Project = mongoose.model('Project'),
-  projectModel = require('../models/project'),
-  Task = mongoose.model('Task'),
-  User = mongoose.model('User'),
-  _ = require('lodash'),
-  Discussion = require('./discussion.js'),
-  discussion = require('../models/discussion'),
-  elasticsearch = require('./elasticsearch.js');
+var mongoose = require("mongoose"),
+  Project = mongoose.model("Project"),
+  projectModel = require("../models/project"),
+  Task = mongoose.model("Task"),
+  User = mongoose.model("User"),
+  _ = require("lodash"),
+  Discussion = require("./discussion.js"),
+  discussion = require("../models/discussion"),
+  elasticsearch = require("./elasticsearch.js");
 
-var Order = require('../models/order');
+var Order = require("../models/order");
 
 Object.keys(project).forEach(function(methodName) {
-  if(methodName !== 'destroy') {
+  if (methodName !== "destroy") {
     exports[methodName] = project[methodName];
   }
 });
 
 exports.create = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  req.locals.action = 'create';
+  req.locals.action = "create";
   req.body.discussions = [];
-  if(req.body.discussion) {
+  if (req.body.discussion) {
     req.body.discussions = [req.body.discussion];
     req.body.tags = [];
     discussion.findById(req.body.discussion, function(err, discussion) {
-      if(discussion && discussion.project) {
+      if (discussion && discussion.project) {
         req.body.project = discussion.project;
       }
       project.create(req, res, next);
     });
-  }
-  else project.create(req, res, next);
+  } else project.create(req, res, next);
 };
 
 exports.update = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  if(req.body.discussion) {
+  if (req.body.discussion) {
     var alreadyAdded = _(req.locals.result.discussions).any(function(d) {
       return d.toString() === req.body.discussion;
     });
 
-    if(!alreadyAdded) {
+    if (!alreadyAdded) {
       req.body.discussions = req.locals.result.discussions;
       req.body.discussions.push(req.body.discussion);
     }
   }
 
-  if(req.body.subProjects && req.body.subProjects.length && !req.body.subProjects[req.body.subProjects.length - 1]._id) {
+  if (
+    req.body.subProjects &&
+    req.body.subProjects.length &&
+    !req.body.subProjects[req.body.subProjects.length - 1]._id
+  ) {
     req.body.subProjects.pop();
   }
 
@@ -76,7 +79,7 @@ exports.update = function(req, res, next) {
 };
 
 exports.destroy = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
@@ -86,19 +89,22 @@ exports.destroy = function(req, res, next) {
   }).then(function(tasks) {
     //FIXME: do it with mongo aggregate
     var groupedTasks = _.groupBy(tasks, function(task) {
-      return task.discussions.length > 0 ? 'release' : 'remove';
+      return task.discussions.length > 0 ? "release" : "remove";
     });
 
     groupedTasks.remove = groupedTasks.remove || [];
     groupedTasks.release = groupedTasks.release || [];
 
-    Task.update({
-      _id: {
-        $in: groupedTasks.release
+    Task.update(
+      {
+        _id: {
+          $in: groupedTasks.release
+        }
+      },
+      {
+        project: null
       }
-    }, {
-      project: null
-    }).exec();
+    ).exec();
 
     Task.remove({
       _id: {
@@ -107,46 +113,49 @@ exports.destroy = function(req, res, next) {
     }).then(function() {
       //FIXME: needs to be optimized to one query
       groupedTasks.remove.forEach(function(task) {
-        elasticsearch.delete(task, 'task', null, next);
+        elasticsearch.delete(task, "task", null, next);
       });
 
       var removeTaskIds = _(groupedTasks.remove)
-        .pluck('_id')
+        .pluck("_id")
         .map(function(i) {
           return i.toString();
         })
         .value();
 
-      User.update({
-        'profile.starredTasks': {
-          $in: removeTaskIds
-        }
-      }, {
-        $pull: {
-          'profile.starredTasks': {
+      User.update(
+        {
+          "profile.starredTasks": {
             $in: removeTaskIds
           }
+        },
+        {
+          $pull: {
+            "profile.starredTasks": {
+              $in: removeTaskIds
+            }
+          }
         }
-      }).exec();
+      ).exec();
     });
 
     project.destroy(req, res, next);
-
   });
 };
 
 exports.tagsList = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  var query = req.acl.mongoQuery('Project');
-  query.distinct('tags', function(error, tags) {
-    if(error) {
+  var query = require("mongoose")
+    .model("Project")
+    .where();
+  query.distinct("tags", function(error, tags) {
+    if (error) {
       req.locals.error = {
-        message: 'Can\'t get tags'
+        message: "Can't get tags"
       };
-    }
-    else {
+    } else {
       req.locals.result = tags || [];
     }
 
@@ -155,14 +164,14 @@ exports.tagsList = function(req, res, next) {
 };
 
 exports.getByEntity = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
   var entities = {
-      users: 'creator',
-      _id: '_id',
-      discussions: 'discussion'
+      users: "creator",
+      _id: "_id",
+      discussions: "discussion"
     },
     entityQuery = {};
 
@@ -170,13 +179,15 @@ exports.getByEntity = function(req, res, next) {
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if(ids && ids.length) {
+  if (ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
     starredOnly = true;
   }
-  var query = req.acl.mongoQuery('Project');
+  var query = require("mongoose")
+    .model("Project")
+    .where();
 
   query.find(entityQuery);
 
@@ -186,43 +197,46 @@ exports.getByEntity = function(req, res, next) {
     req.locals.data.pagination.count = c;
 
     var pagination = req.locals.data.pagination;
-    if(pagination && pagination.type && pagination.type === 'page') {
-      query.sort(pagination.sort)
+    if (pagination && pagination.type && pagination.type === "page") {
+      query
+        .sort(pagination.sort)
         .skip(pagination.start)
         .limit(pagination.limit);
     }
 
     query.exec(function(err, projects) {
-      if(err) {
+      if (err) {
         req.locals.error = {
-          message: 'Can\'t get projects'
+          message: "Can't get projects"
         };
-      }
-      else {
-        if(starredOnly) {
+      } else {
+        if (starredOnly) {
           projects.forEach(function(project) {
             project.star = true;
           });
         }
-        if(pagination.sort == 'custom') {
+        if (pagination.sort == "custom") {
           var temp = new Array(projects.length);
           var projectTemp = projects;
-          Order.find({name: 'Project', discussion: projects[0].discussion}, function(err, data) {
-            data.forEach(function(element) {
-              for(var index = 0; index < projectTemp.length; index++) {
-                if(JSON.stringify(projectTemp[index]._id) === JSON.stringify(element.ref)) {
-                  temp[element.order - 1] = projects[index];
+          Order.find(
+            { name: "Project", discussion: projects[0].discussion },
+            function(err, data) {
+              data.forEach(function(element) {
+                for (var index = 0; index < projectTemp.length; index++) {
+                  if (
+                    JSON.stringify(projectTemp[index]._id) ===
+                    JSON.stringify(element.ref)
+                  ) {
+                    temp[element.order - 1] = projects[index];
+                  }
                 }
-
-              }
-            });
-            projects = temp;
-            req.locals.result = projects;
-            next();
-          });
-        }
-        else {
-
+              });
+              projects = temp;
+              req.locals.result = projects;
+              next();
+            }
+          );
+        } else {
           req.locals.result = projects;
           next();
         }
@@ -232,24 +246,29 @@ exports.getByEntity = function(req, res, next) {
 };
 
 exports.getSubProjects = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
-  var query = req.acl.mongoQuery('Project');
-  query.findOne({
-    _id: req.params.id,
-    tType: {$ne: 'template'}
-  }, {
-    subProjects: 1
-  })
-    .populate('subProjects')
-    .deepPopulate('subProjects.subProjects subProjects.watchers')
-    .exec(function(err, project) {
-      if(err) {
-        req.locals.error = err;
+  var query = require("mongoose")
+    .model("Project")
+    .where();
+  query
+    .findOne(
+      {
+        _id: req.params.id,
+        tType: { $ne: "template" }
+      },
+      {
+        subProjects: 1
       }
-      else if(project) {
+    )
+    .populate("subProjects")
+    .deepPopulate("subProjects.subProjects subProjects.watchers")
+    .exec(function(err, project) {
+      if (err) {
+        req.locals.error = err;
+      } else if (project) {
         req.locals.result = project.subProjects;
       }
       next();
@@ -257,7 +276,7 @@ exports.getSubProjects = function(req, res, next) {
 };
 
 exports.updateParent = function(req, res, next) {
-  if(req.locals.error || !req.body.parent) {
+  if (req.locals.error || !req.body.parent) {
     return next();
   }
   var data = {
@@ -265,65 +284,77 @@ exports.updateParent = function(req, res, next) {
       subProjects: req.locals.result._id
     }
   };
-  projectModel.findOneAndUpdate({
-    _id: req.body.parent
-  }, data, function(err, project) {
-    if(err) {
-      req.locals.error = err;
+  projectModel.findOneAndUpdate(
+    {
+      _id: req.body.parent
+    },
+    data,
+    function(err, project) {
+      if (err) {
+        req.locals.error = err;
+      }
+      next();
     }
-    next();
-  });
-
+  );
 };
 
 exports.removeSubProject = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  projectModel.findOne({
-    _id: req.params.id,
-    tType: {$ne: 'template'}
-  }, function(err, subProject) {
-    if(err) {
-      req.locals.error = err;
+  projectModel.findOne(
+    {
+      _id: req.params.id,
+      tType: { $ne: "template" }
+    },
+    function(err, subProject) {
+      if (err) {
+        req.locals.error = err;
+      } else {
+        projectModel.update(
+          {
+            _id: subProject.parent,
+            tType: { $ne: "template" }
+          },
+          {
+            $pull: {
+              subProjects: subProject._id
+            }
+          },
+          function(err, project) {
+            if (err) {
+              req.locals.error = err;
+            }
+            next();
+          }
+        );
+      }
     }
-    else {
-      projectModel.update({
-        _id: subProject.parent,
-        tType: {$ne: 'template'}
-      }, {
-        $pull: {
-          subProjects: subProject._id
-        }
-      }, function(err, project) {
-        if(err) {
-          req.locals.error = err;
-        }
-        next();
-      });
-    }
-  });
+  );
 };
 
 exports.populateSubProjects = function(req, res, next) {
- projectModel.populate(req.locals.result, {
-    path: 'subProjects.watchers',
-    model: 'User'
-  }, function(err, projects) {
-    if(err) {
-      req.locals.error = err;
+  projectModel.populate(
+    req.locals.result,
+    {
+      path: "subProjects.watchers",
+      model: "User"
+    },
+    function(err, projects) {
+      if (err) {
+        req.locals.error = err;
+      } else req.locals.result = projects;
+      next();
     }
-    else req.locals.result = projects;
-    next();
-  });
+  );
 };
 
 exports.getByDiscussion = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
-  if(req.params.entity !== 'discussions') return next();
+  if (req.params.entity !== "discussions") return next();
 
   var entityQuery = {
     discussions: req.params.id,
@@ -335,7 +366,7 @@ exports.getByDiscussion = function(req, res, next) {
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if(ids && ids.length) {
+  if (ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
@@ -345,21 +376,20 @@ exports.getByDiscussion = function(req, res, next) {
     project: 1,
     _id: 0
   });
-  Query.populate('project');
+  Query.populate("project");
 
   Query.exec(function(err, projects) {
-    if(err) {
+    if (err) {
       req.locals.error = {
-        message: 'Can\'t get projects'
+        message: "Can't get projects"
       };
-    }
-    else {
-      projects = _.uniq(projects, 'project._id');
+    } else {
+      projects = _.uniq(projects, "project._id");
       projects = _.map(projects, function(item) {
         return item.project;
       });
 
-      if(starredOnly) {
+      if (starredOnly) {
         projects.forEach(function(project) {
           project.star = true;
         });

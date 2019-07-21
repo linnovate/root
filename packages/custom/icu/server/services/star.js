@@ -1,22 +1,23 @@
-'use strict';
+"use strict";
 
-var _ = require('lodash');
+var _ = require("lodash");
 
-var UserModel = require('../models/user.js');
-var TaskModel = require('../models/task.js');
-var ProjectModel = require('../models/project.js');
-var DiscussionModel = require('../models/discussion.js');
-var UpdateModel = require('../models/update.js');
-var OfficeModel = require('../models/office.js');
-var FolderModel = require('../models/folder.js');
-var OfficeDocumentsModel = require('../models/document.js');
+var UserModel = require("../models/user.js");
+var TaskModel = require("../models/task.js");
+var ProjectModel = require("../models/project.js");
+var DiscussionModel = require("../models/discussion.js");
+var UpdateModel = require("../models/update.js");
+var OfficeModel = require("../models/office.js");
+var FolderModel = require("../models/folder.js");
+var OfficeDocumentsModel = require("../models/document.js");
 
-var taskOptions = require('../controllers/task.js').defaultOptions;
-var discussionOptions = require('../controllers/discussion.js').defaultOptions;
-var projectOptions = require('../controllers/project.js').defaultOptions;
-var officeOptions = require('../controllers/office.js').defaultOptions;
-var folderOptions = require('../controllers/folder.js').defaultOptions;
-var officeDocumentOptions = require('../controllers/documents.js').defaultOptions;
+var taskOptions = require("../controllers/task.js").defaultOptions;
+var discussionOptions = require("../controllers/discussion.js").defaultOptions;
+var projectOptions = require("../controllers/project.js").defaultOptions;
+var officeOptions = require("../controllers/office.js").defaultOptions;
+var folderOptions = require("../controllers/folder.js").defaultOptions;
+var officeDocumentOptions = require("../controllers/documents.js")
+  .defaultOptions;
 
 var entityNameMap = {
   tasks: {
@@ -53,37 +54,34 @@ var entityNameMap = {
 
 module.exports = function(entityName, options) {
   function starEntity(id, value) {
-    var starredEntities = 'starred' + _.capitalize(entityName);
+    var starredEntities = "starred" + _.capitalize(entityName);
 
     var starred = false;
     return UserModel.findById(options.user._id).then(function(user) {
       var query;
 
-      var profileProperty = 'profile.' + starredEntities;
+      var profileProperty = "profile." + starredEntities;
       var hasNoProfile = !user.profile || !user.profile[starredEntities];
 
-      if(hasNoProfile && (value === 'toggle' || value === 'star')) {
+      if (hasNoProfile && (value === "toggle" || value === "star")) {
         query = {};
         query[profileProperty] = [id];
-      }
-      else if(!hasNoProfile) {
+      } else if (!hasNoProfile) {
         var starFound = user.profile[starredEntities].indexOf(id) > -1;
-        if(starFound && (value === 'toggle' || value === 'unstar')) {
-          query = {$pull: {}};
+        if (starFound && (value === "toggle" || value === "unstar")) {
+          query = { $pull: {} };
           query.$pull[profileProperty] = id;
-        }
-        else if(!starFound && (value === 'toggle' || value === 'star')) {
-          query = {$push: {}};
+        } else if (!starFound && (value === "toggle" || value === "star")) {
+          query = { $push: {} };
           query.$push[profileProperty] = id;
 
           starred = true;
         }
       }
 
-      if(!query) {
+      if (!query) {
         return starred;
-      }
-      else {
+      } else {
         return user.update(query).then(function() {
           return starred;
         });
@@ -96,18 +94,21 @@ module.exports = function(entityName, options) {
       _id: options.user._id
     });
     return query.then(function(user) {
-      var starredEntities = 'starred' + _.capitalize(entityName);
-      if(!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
+      var starredEntities = "starred" + _.capitalize(entityName);
+      if (
+        !user.profile ||
+        !user.profile[starredEntities] ||
+        user.profile[starredEntities].length === 0
+      ) {
         return [];
-      }
-      else {
+      } else {
         return user.profile[starredEntities];
       }
     });
   }
 
   function getStarred() {
-    if(entityName.assign) {
+    if (entityName.assign) {
       var assign = entityName.assign;
       entityName = entityName.name;
     }
@@ -118,49 +119,57 @@ module.exports = function(entityName, options) {
       _id: options.user._id
     });
     return query.then(function(user) {
-      if(!user) return [];
+      if (!user) return [];
 
-      var starredEntities = 'starred' + _.capitalize(entityName);
+      var starredEntities = "starred" + _.capitalize(entityName);
 
-      if(!user.profile || !user.profile[starredEntities] || user.profile[starredEntities].length === 0) {
+      if (
+        !user.profile ||
+        !user.profile[starredEntities] ||
+        user.profile[starredEntities].length === 0
+      ) {
         return [];
-      }
-      else {
+      } else {
         var tmp = {
           _id: {
             $in: user.profile[starredEntities]
-          },
+          }
         };
 
-        if(assign) {
-          tmp['assign'] = user._id;
-          tmp['status'] = {$nin: ['rejected', 'done']};
+        if (assign) {
+          tmp["assign"] = user._id;
+          tmp["status"] = { $nin: ["rejected", "done"] };
         }
         return Model.find(
           tmp
-        // {
-        //   '_id': {
-        //     $in: user.profile[starredEntities]
-        //   },
-        //   'assign':user._id
-        // }
-        ).populate(modelOptions.includes);
+          // {
+          //   '_id': {
+          //     $in: user.profile[starredEntities]
+          //   },
+          //   'assign':user._id
+          // }
+        ).populate(modelOptions.includes || "");
       }
     });
   }
 
   function isStarred(data) {
     return getStarred().then(function(starred) {
-      if(!_.isArray(data)) {
+      if (!_.isArray(data)) {
         data = [data];
       }
 
-      var ids = _(data).reduce(function(memo, item) {
-        var id = item._id.toString();
-        memo.push(id);
+      var ids = _.reduce(
+        data,
+        function(memo, item) {
+          // console.log(item);
+          var id = item._id && item._id.toString();
+          if (id) memo.push(id);
 
-        return memo;
-      }, []);
+          return memo;
+        },
+        []
+      );
 
       starred = _(starred).reduce(function(memo, item) {
         var id = item._id.toString();
@@ -170,7 +179,6 @@ module.exports = function(entityName, options) {
       }, []);
 
       var matches = _.intersection(starred, ids);
-
 
       data.forEach(function(d) {
         d.star = _(matches).any(function(m) {
