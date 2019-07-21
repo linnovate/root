@@ -1380,15 +1380,8 @@ $tab-content-height: calc(
 }
 }
 
-.left-notification {
-    float: left;
-}
-
 .right-notification {
     float: right;
-}
-
-.left-notification, .right-notification {
     color: $light-grey-placeholder;
     margin-top: $header-height/3;
 }
