@@ -138,7 +138,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                     frequentUser: member._id
                 }
 
-                if(entity.serial != undefined){
+                if(entity.serial != undefined) {
                     let serviceName = "OfficeDocumentsService",
                       service = $injector.get(serviceName);
                     let a = [];
@@ -157,20 +157,19 @@ angular.module('mean.icu.ui.membersfooter', [])
                     }
                     entity.watchers = a;
                     return service.update(entity,json, action, member._id);
-                }
-                else{
+                } else {
                     return service.update(entity, data, action, member._id)
                         .then(entity => {
                             $state.reload();
                             return entity;
                         });
                 }
-
-
-                getWatchersGroups();
             };
 
             $scope.showSelect = false;
+            $scope.hiddenWatchers = 0;
+            $scope.expanded = false;
+
             var groups = [], allowed;
 
             circlesService.getmine().then(function(data) {
@@ -187,50 +186,26 @@ angular.module('mean.icu.ui.membersfooter', [])
 
             $scope.triggerSelect = function() {
                 $scope.showSelect = !$scope.showSelect;
-                if ($scope.showSelect) {
-                    $scope.animate = false;
-                }
+                $scope.expanded = false;
             };
 
-            $scope.otherWatchers = [];
-
-            function idArrayToObjects(array){
-                for(let i = 0; i < array.length; i++){
-                    if(typeof array[i] === 'string'){
-                        UsersService.getById(array[i]).then(user=>{
-                            array[i] = user;
-                        });
+            function setHiddenWatchers() {
+                $timeout(() => {
+                    let listWidth = $(".watchersList").width();
+                    let watcherWidth = 51;
+                    let oneLine = Math.floor(listWidth / watcherWidth);
+                    let watchers = $scope.entity.watchers.length;
+                    if(watchers > oneLine) {
+                        $scope.hiddenWatchers = watchers - oneLine;
+                    } else {
+                        $scope.hiddenWatchers = 0;
                     }
-                }
+                }, 0)
             }
-
-            $scope.showMoreWatchers = function() {
-                let listWidth = $(".watchersList").width(),
-                    watcherWidth = 45,
-                    watchers = _.compact($scope.entity.watchers.concat($scope.watchersGroups)),
-                    lastIndex = 0;
-
-                for (let i = 0; i < watchers.length; i++) {
-                    let elementPosition = (i + 1) * watcherWidth;
-                    let isVisible = listWidth > elementPosition;
-                    let isLast = i === watchers.length - 1;
-
-                    if(isVisible){
-                        lastIndex = i;
-                        $scope.showMore = false;
-                        $scope.otherWatchers = [];
-                    }
-
-                    if(isLast){
-                        $scope.otherWatchers = watchers.slice(lastIndex, watchers.length - 1);
-                        $scope.showMore = $scope.otherWatchers.length > 1;
-                        idArrayToObjects($scope.otherWatchers);
-                    }
-                }
-            };
+            setHiddenWatchers()
 
             $scope.addMember = function(member) {
-                $scope.showSelect = false;
+                $scope.triggerSelect();
                 if (member.type) {
 
                     if (!$scope.entity.circles) $scope.entity.circles = {};
@@ -255,7 +230,6 @@ angular.module('mean.icu.ui.membersfooter', [])
                   .then(updatedEntity => {
                     let { watchers, permissions } = updatedEntity;
                     Object.assign($scope.entity, watchers, permissions);
-                    $scope.animate = true;
 
                     var task = $scope.entity;
                     var me = $scope.me ;
@@ -298,13 +272,8 @@ angular.module('mean.icu.ui.membersfooter', [])
                         });
                         break;
                     }
-                  });
-            };
-
-          $scope.isDropdownwatchersOpen = false;
-
-            $scope.toggled = function() {
-                $scope.isDropdownwatchersOpen = !$scope.isDropdownwatchersOpen;
+                    setHiddenWatchers()
+                });
             };
 
             $scope.deleteMember = function(member) {
@@ -368,7 +337,7 @@ angular.module('mean.icu.ui.membersfooter', [])
                         });
                         break ;
                 }
-                $scope.showMoreWatchers();
+                setHiddenWatchers()
             };
         }
 

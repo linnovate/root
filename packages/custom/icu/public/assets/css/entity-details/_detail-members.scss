@@ -8,72 +8,79 @@ icu-members-footer {
     .footer {
         display: flex;
         flex-direction: row;
-        height: $footer-height;
         padding: 0 10px;
+        overflow: hidden;
+
+        &:not(.expanded) {
+            height: 54px;
+        }
 
         $avatar-margin: 12px;
 
         @include scroll;
 
         .watchersList {
-            width: calc(100% - 50px);
-            height: 100%;
+            width: calc(100% - 90px);
         }
 
-        .showMore {
-            width: 45px;
-            height: 100%;
-            cursor: pointer;
+        .controls {
             position: absolute;
-            right: 64px;
-
-            .counter {
-                position: relative;
+            right: 0;
+            bottom: 0;
+            button {
+                margin: 10px 5px;
+                border: none;
+                padding: 0;
                 width: 34px;
                 height: 34px;
-                background-color: #00AEEF;
                 border-radius: 50%;
+                &:focus {
+                    outline: none;
+                }
+            }
+            .expand {
+                background-color: #00AEEF;
                 color: white;
                 font-weight: bold;
                 line-height: 34px;
-                margin: 12px 5px;
-                padding: 0;
-            }
-            .closeDropdown {
-                &:after {
-                    background: #414141 url("/icu/assets/img/icon-x.png") no-repeat center;
-                    content: ' ';
-                    width: 100%;
-                    height: 100%;
-                    display: block;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    padding: 0;
-                    border-radius: 50%;
+                &.collapse {
+                    display: initial;
+                    background-color: #C2C2C2;
                 }
             }
-            .watchersContainer {
-                bottom: -19px;
-                left: -461px;
-                width: 465px;
+            .add-member {
+                vertical-align: middle;
+                transition: 3s;
 
-                .otherWatchers {
-                    display: flex;
-                    flex-wrap: wrap-reverse;
-                    flex-direction: row;
-                    padding: 5px;
+                background-color: $orange;
+                position: relative;
+
+                tip {
+                    font-size: 18px;
+                }
+
+                i:before {
+                    display: none;
+                }
+                i {
+                    width: 34px;
+                    display: block;
+                    height: 34px;
+                    background: url("/icu/assets/img/new_lable.png") no-repeat center;
+                    transition: 0.9s;
+                }
+
+                &:hover {
+                    background-color: #ffb435;
+                    i {
+                        transform: rotate(90deg);
+                    }
                 }
             }
         }
 
         .delete-wrapper {
-            position: relative;
-            width: 45px;
-            height: 45px;
             float: left;
-            padding-left: 5px;
-            margin-bottom: 15px;
 
             &:hover {
                 .delete {
@@ -96,6 +103,8 @@ icu-members-footer {
             }
             .btn {
                 padding: 0;
+                border: none;
+                margin: 0 3.5px;
             }
             .dropdown-item {
                 display: block;
@@ -212,57 +221,6 @@ icu-members-footer {
                 margin-left: 0;
                 input:first-child {
                     display: none;
-                }
-            }
-        }
-
-        .add-member-container {
-            width: 40px;
-            right: 0;
-            transform: translateX(-50%);
-            position: absolute;
-
-            max-height: 45px;
-            flex-grow: 0.3;
-            -webkit-transition: 3s;
-            -moz-transition: 3s;
-            -ms-transition: 3s;
-            -o-transition: 3s;
-            transition: 3s;
-
-            tip {
-                font-size: 18px;
-            }
-
-            .add {
-                @include circle(17px);
-                @include button;
-
-                padding: 0;
-                margin: $avatar-margin - 1 $avatar-margin;
-                color: white;
-                position: relative;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: $orange;
-
-                i:before {
-                    display: none;
-                }
-                i {
-                    width: 34px;
-                    display: block;
-                    height: 34px;
-                    background: url("/icu/assets/img/new_lable.png") no-repeat center;
-                    transition: 0.9s;
-                }
-
-                &:hover {
-                    background-color: #ffb435;
-                    i {
-                        transform: rotate(90deg);
-                    }
                 }
             }
         }
