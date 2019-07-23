@@ -202,9 +202,6 @@ exports.search = function(req, res, next) {
   };
 
   mean.elasticsearch.search(options, function(err, result) {
-    console.log('****************************************************result');
-    if(result && result.hits) console.dir(result.hits.hits);
-    console.log('****************************************************');
     if(err) {
       system.sendMessage({service: 'elasticsearch', message: result});
       return next(err)
