@@ -144,13 +144,9 @@ angular.module('mean.icu.ui.displayby', [])
               });
             });
           }).then(() => {
-            $scope.foldersList = [];
             return FoldersService.getAll(0, 0, 'created').then(folders => {
               $scope.folders = folders.data || folders;
-              $scope.folders.forEach(function (folder) {
-                if (folder.title)
-                  $scope.foldersList.push(folder);
-              });
+              $scope.foldersList = $scope.folders.filter(filterEntities);
             });
           }).then(() => {
             if ($scope.officesList.length > 0) {
@@ -161,25 +157,29 @@ angular.module('mean.icu.ui.displayby', [])
 
         $scope.typeClicked = false;
 
+        function filterEntities(item) {
+            return item.title && item._id && !item.recycled;
+        }
+
         NotifyingService.subscribe('editionData', function () {
             TasksService.getAll(0, 25, '-created').then(function (data) {
                 $scope.tasks = data.data || data;
-                $scope.tasksList = $scope.tasks.filter(t => t.title);
+                $scope.tasksList = $scope.tasks.filter(filterEntities);
             });
 
             ProjectsService.getAll(0, 25, '-created').then(function (data) {
                 $scope.projects = data.data || data;
-                $scope.projectsList = $scope.projects.filter(p => p.title);
+                $scope.projectsList = $scope.projects.filter(filterEntities);
             });
 
             DiscussionsService.getAll(0, 25, '-created').then(function (data) {
                 $scope.discussions = data.data || data;
-                $scope.discussionsList = $scope.discussions.filter(d => d.title);
+                $scope.discussionsList = $scope.discussions.filter(filterEntities);
             });
 
             OfficeDocumentsService.getAll(0, 25, '-created').then(function (data) {
                 $scope.officeDocuments = data.data || data;
-                $scope.officeDocumentsList = $scope.officeDocuments.filter(d => d.title);
+                $scope.officeDocumentsList = $scope.officeDocuments.filter(filterEntities);
             });
 
             $scope.createLists();
