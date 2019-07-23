@@ -5,7 +5,7 @@
  * @example <div acme-order-calendar-range></div>
  */
 
-function EntityListController($scope, $injector, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService, PermissionsService, MultipleSelectService, NotifyingService) {
+function EntityListController($rootScope, $scope, $injector, $window, $state, context, $filter, $stateParams, EntityService, dragularService, $element, $interval, $uiViewScroll, $timeout, LayoutService, UsersService, TasksService, PermissionsService, MultipleSelectService, NotifyingService) {
 
     document.me = $scope.me.id;
 
@@ -423,7 +423,6 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
 
     function filterResults(itemsArray){
         let newArray = $filter('filterRecycled')(itemsArray);
-        newArray = $filter('filterByOptions')(newArray);
         newArray = $filter('filterByActiveStatus')(newArray, $scope.activeToggle.field);
         if($stateParams.filterStatus)newArray = filterByDefiniteStatus(newArray, $stateParams.filterStatus);
         // if($stateParams.entity)newArray = filterByParent(newArray, $stateParams.entityId);
@@ -443,7 +442,11 @@ function EntityListController($scope, $injector, $window, $state, context, $filt
       return array.filter( entity => entity.status === value);
     }
 
-    NotifyingService.subscribe('filterMyTasks', () => $scope.refreshVisibleItems(), $scope);
+    $rootScope.$on('filterMyTasks', (event, data) => {
+        $scope.items = data;
+        $scope.refreshVisibleItems();
+    }, $scope);
+
     $scope.$on('refreshList', () => $scope.refreshVisibleItems());
 
     // ============================================================= //
