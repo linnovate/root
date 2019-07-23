@@ -6,6 +6,8 @@ let _ = require("lodash"),
   ObjectId = require("mongoose").Types.ObjectId,
   Document = require("../models/document");
 
+let UpdateModel = require("../models/update");
+
 const taskStatusMapper = {
   new: "חדש",
   assigned: "נבחר אחראי",
@@ -1091,6 +1093,14 @@ function GivenTasksOfNextWeekSummary(user) {
     });
 }
 
+async function getUpdatesMap(taskIds){
+  let updates = await UpdateModel.find({
+    entity: {$in: _.map(taskIds,id=>new ObjectId(id))},//new ObjectId(_id),
+    updateField: "comment"
+  }).populate("creator", null, "User");
+  return _.groupBy(updates,"entity");
+}
+
 /**
  *
  *
@@ -1099,12 +1109,15 @@ function GivenTasksOfNextWeekSummary(user) {
  * @returns a promise that returns workbook
  */
 async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
-  let UpdateModel = require("../models/update");
   tasks = _.map(tasks, task => task._doc);
-  let taskNotRecycled = task => !task.hasOwnProperty('recycled');
-  let filteredTasks = _.filter(tasks, task => task.title && taskNotRecycled(task));
-  let taskArray = await Promise.all(
-    _.map(filteredTasks, async task => {
+  let taskNotRecycled = task => !task.hasOwnProperty("recycled");
+  let filteredTasks = _.filter(
+    tasks,
+    task => task.title && taskNotRecycled(task)
+  );
+  let tasksIDS = _.map(filteredTasks,t=>t._id);
+  const updatesMap = await getUpdatesMap(tasksIDS);
+  let taskArray =  _.map(filteredTasks, task => {
       let {
         _id,
         title,
@@ -1118,14 +1131,12 @@ async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
         project,
         creator
       } = task;
-      let updates = await UpdateModel.find({
-        entity: new ObjectId(_id),
-        updateField: "comment"
-        // type: "comment"
-      }).populate("creator", null, "User");
+      // let updates = await UpdateModel.find({
+      //   entity: new ObjectId(_id),
+      //   updateField: "comment"
+      // }).populate("creator", null, "User");
       let row = [
         title,
-        //due&&due.toLocaleString().substr(0, due.toLocaleString().indexOf(' ')), // * gives the date as "year-month-day time" and removes time
         taskStatusMapper[status],
         assign && assign.name,
         _.map(watchers, watcher => watcher.name).join("\n"),
@@ -1134,7 +1145,7 @@ async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
         discussions && discussions[0] && discussions[0].title,
         project && project.title,
         _.map(
-          updates,
+          updatesMap[_id],
           update =>
             `:${update.date &&
               update.date
@@ -1147,18 +1158,17 @@ async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
         ).join("\n"),
         tags.join("\n")
       ];
-
       return row;
     })
-  );
   let taskDatesArray = await Promise.all(
     _.map(filteredTasks, async task => {
       let { _id, due } = task;
-      let updates = await UpdateModel.find({
-        entity: new ObjectId(_id),
-        // _id: new ObjectId(_id),
-        updateField: "comment"
-      }).populate("creator", null, "User");
+      // let updates = await UpdateModel.find({
+      //   entity: new ObjectId(_id),
+      //   // _id: new ObjectId(_id),
+      //   updateField: "comment"
+      // }).populate("creator", null, "User");
+      let updates = updatesMap[_id];
       let lastUpdate = _.last(updates);
       let lastUpdateDate = lastUpdate && lastUpdate.date;
 
