@@ -93,7 +93,7 @@ module.exports = {
 
   circleSettings: require("../circleSettings") || {},
 
-  version: require('../../package').version,
+  version: require("../../package").version,
   whatsNew: [
     {
       content: "fix document...bla bla",

@@ -1,46 +1,50 @@
-'use strict';
+"use strict";
 
-angular.module('mean.icu.data.boldedservice', [])
-  .service('BoldedService', function (ApiUri, $http, UsersService) {
-    let EntityPrefix = '/bolded';
+angular
+  .module("mean.icu.data.boldedservice", [])
+  .service("BoldedService", function(ApiUri, $http, UsersService) {
+    let EntityPrefix = "/bolded";
     let me;
     UsersService.getMe().then(function(result) {
-        me = result;
+      me = result;
     });
 
-    function boldedUpdate(entity, entityType, action){
-      if(!entity._id){
-        return Promise.reject('No entity ID');
+    function boldedUpdate(entity, entityType, action) {
+      if (!entity._id) {
+        return Promise.reject("No entity ID");
       }
       let boldedObject = {
         entity_id: entity._id,
         user_id: me._id,
         entity_type: entityType,
-        action: action,
+        action: action
       };
-      return $http.post(ApiUri + EntityPrefix, boldedObject)
-        .then(function (result) {
+      return $http
+        .post(ApiUri + EntityPrefix, boldedObject)
+        .then(function(result) {
           return result.data;
         });
     }
 
-    function getBoldedClass(entity, entityType){
-      if(!entity)return;
-      if(!entity.bolded){
+    function getBoldedClass(entity, entityType) {
+      if (!entity) return;
+      if (!entity.bolded) {
         entity.bolded = [];
-        boldedUpdate(entity, entityType, 'updated')
+        boldedUpdate(entity, entityType, "updated");
       }
-      let bolded = entity.bolded.find((item)=>{return item.id === me._id});
+      let bolded = entity.bolded.find(item => {
+        return item.id === me._id;
+      });
 
-      if(bolded && bolded.bolded){
-        return 'bolded';
+      if (bolded && bolded.bolded) {
+        return "bolded";
       } else {
-        return 'bold-disabled';
+        return "bold-disabled";
       }
     }
 
     return {
       boldedUpdate: boldedUpdate,
-      getBoldedClass: getBoldedClass,
+      getBoldedClass: getBoldedClass
     };
   });

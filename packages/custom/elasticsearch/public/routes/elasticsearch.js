@@ -1,10 +1,11 @@
-'use strict';
+"use strict";
 
-angular.module('mean.elasticsearch').config(['$stateProvider',
+angular.module("mean.elasticsearch").config([
+  "$stateProvider",
   function($stateProvider) {
-    $stateProvider.state('elasticsearch status', {
-      url: '/elasticsearch/status',
-      templateUrl: 'elasticsearch/views/status.html'
+    $stateProvider.state("elasticsearch status", {
+      url: "/elasticsearch/status",
+      templateUrl: "elasticsearch/views/status.html"
     });
   }
 ]);

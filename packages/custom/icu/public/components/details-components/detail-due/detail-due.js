@@ -1,13 +1,14 @@
-'use strict';
+"use strict";
 
 /**
  * @desc order directive that is specific to the order module at a company named Acme
  * @example <detail-due></detail-due>
  */
-angular.module('mean.icu.ui.detailsComponents').directive('detailDue', detailDue);
+angular
+  .module("mean.icu.ui.detailsComponents")
+  .directive("detailDue", detailDue);
 
 function detailDue() {
-
   return {
     scope: {
       value: "=",
@@ -15,42 +16,40 @@ function detailDue() {
       onChange: "="
     },
     link: link,
-    templateUrl: '/icu/components/details-components/detail-due/detail-due.html',
-    restrict: 'E'
+    templateUrl:
+      "/icu/components/details-components/detail-due/detail-due.html",
+    restrict: "E"
   };
 
   function link($scope, element, attrs) {
-
-    if($scope.value)$scope.value = new Date($scope.value);
+    if ($scope.value) $scope.value = new Date($scope.value);
 
     // Cast to Date() whenever value is changed
-    $scope.$watch('value', function (newVal, oldVal) {
-      if(newVal && !(newVal instanceof Date)) {
+    $scope.$watch("value", function(newVal, oldVal) {
+      if (newVal && !(newVal instanceof Date)) {
         $scope.value = new Date(newVal);
       }
     });
 
     //due start
-    if ($scope.firstValue)
-      $scope.firstValue = new Date($scope.firstValue);
-
+    if ($scope.firstValue) $scope.firstValue = new Date($scope.firstValue);
 
     $scope.dueOptions = {
-      dayNamesMin: ['S','M','T','W','T','F','S'],
+      dayNamesMin: ["S", "M", "T", "W", "T", "F", "S"],
       showOtherMonths: true,
       onSelect: function() {
         $scope.onChange($scope.value);
       },
       onClose: function() {
         if ($scope.checkDate()) {
-          document.getElementById('ui-datepicker-div').style.display = 'block';
+          document.getElementById("ui-datepicker-div").style.display = "block";
           $scope.open();
         } else {
-          document.getElementById('ui-datepicker-div').style.display = 'none';
+          document.getElementById("ui-datepicker-div").style.display = "none";
           $scope.open();
         }
       },
-      dateFormat: 'dd/mm/yy'
+      dateFormat: "dd/mm/yy"
     };
 
     $scope.checkDate = function() {
@@ -60,19 +59,20 @@ function detailDue() {
         return true;
       }
       return false;
-    }
+    };
 
     $scope.open = function() {
       if ($scope.checkDate()) {
-        document.getElementById('past').style.display = document.getElementById('ui-datepicker-div').style.display;
+        document.getElementById("past").style.display = document.getElementById(
+          "ui-datepicker-div"
+        ).style.display;
       } else {
-        document.getElementById('past').style.display = 'none';
+        document.getElementById("past").style.display = "none";
       }
-    }
+    };
 
-    $scope.closeOldDateNotification = function () {
-      document.getElementById('past').style.display = 'none';
-    }
-
+    $scope.closeOldDateNotification = function() {
+      document.getElementById("past").style.display = "none";
+    };
   }
 }

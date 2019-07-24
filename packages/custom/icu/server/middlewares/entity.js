@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = function(entityName) {
   return function(req, res, next) {

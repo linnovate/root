@@ -1,3 +1,3 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 
-module.exports = mongoose.model('User');
+module.exports = mongoose.model("User");

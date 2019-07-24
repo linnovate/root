@@ -1,5 +1,5 @@
-'use strict';
+"use strict";
 
 module.exports = {
-    nonActiveStatus: ['archived', 'canceled','deleted','rejected', 'done'] ,    
+  nonActiveStatus: ["archived", "canceled", "deleted", "rejected", "done"]
 };

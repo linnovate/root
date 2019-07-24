@@ -1,93 +1,110 @@
-'use strict';
+"use strict";
 
-const mean = require('meanio');
-const utils = require('./utils');
-const system = require('./system');
-const logger = require('../services/logger');
+const mean = require("meanio");
+const utils = require("./utils");
+const system = require("./system");
+const logger = require("../services/logger");
 
 exports.save = function(doc, docType) {
   return new Promise((resolve, reject) => {
     let newDoc = JSON.parse(JSON.stringify(doc));
-    let creator =  doc.creator._id || doc.creator;
+    let creator = doc.creator._id || doc.creator;
     delete newDoc._id;
 
     newDoc.creator = JSON.parse(JSON.stringify(creator));
     docType = docType.toLowerCase();
 
-    mean.elasticsearch.index({
-      index: docType,
-      refresh: 'wait_for',
-      type: docType,
-      id: doc._id.toString(),
-      body: newDoc
-    }, function(error, response) {
-      if(error) {
-        system.sendMessage({service: 'elasticsearch', message: response});
-        logger.log('error', 'error saving to elastic', {error: error});
-        console.log('elastic.save:', error);
-        return reject(error);
+    mean.elasticsearch.index(
+      {
+        index: docType,
+        refresh: "wait_for",
+        type: docType,
+        id: doc._id.toString(),
+        body: newDoc
+      },
+      function(error, response) {
+        if (error) {
+          system.sendMessage({ service: "elasticsearch", message: response });
+          logger.log("error", "error saving to elastic", { error: error });
+          console.log("elastic.save:", error);
+          return reject(error);
+        }
+        resolve(response);
       }
-      resolve(response);
-    });
+    );
   });
-
 };
 
 exports.delete = function(doc, docType, next) {
   try {
-    mean.elasticsearch.delete({
-      index: docType,
-      type: docType,
-      id: doc._id.toString()
-    }, function(error, response) {
-      if(error) {
-        system.sendMessage({service: 'elasticsearch', message: response});
-        logger.log('error', 'error deleting from elastic', {error: error});
-        return error;
-      }
+    mean.elasticsearch.delete(
+      {
+        index: docType,
+        type: docType,
+        id: doc._id.toString()
+      },
+      function(error, response) {
+        if (error) {
+          system.sendMessage({ service: "elasticsearch", message: response });
+          logger.log("error", "error deleting from elastic", { error: error });
+          return error;
+        }
 
-      return next();
-    });
-  }
-  catch (err) {
-    logger.log('error', 'error deleting from elastic', {error: err.message});
+        return next();
+      }
+    );
+  } catch (err) {
+    logger.log("error", "error deleting from elastic", { error: err.message });
   }
 };
 
-let buildSearchResponse = exports.buildSearchResponse = function(type, obj, userId) {
-  let types = ['task', 'project', 'discussion', 'office', 'folder', 'officedocument', 'attachment', 'update'];
+let buildSearchResponse = (exports.buildSearchResponse = function(
+  type,
+  obj,
+  userId
+) {
+  let types = [
+    "task",
+    "project",
+    "discussion",
+    "office",
+    "folder",
+    "officedocument",
+    "attachment",
+    "update"
+  ];
   let groups = {};
-  if(type === 'aggs') {
+  if (type === "aggs") {
     obj.forEach(function(i) {
-      if(i.key != 'update')
-        groups[i.key] =
-          i.top.hits.hits.map(function(j) {
-            return Object.assign(j._source, j.highlight, { _id: j._id});
-          });
+      if (i.key != "update")
+        groups[i.key] = i.top.hits.hits.map(function(j) {
+          return Object.assign(j._source, j.highlight, { _id: j._id });
+        });
     });
-  }
-  else {
+  } else {
     obj.map(function(i) {
-      if(!groups.hasOwnProperty(i._index))
-        groups[i._index] = [];
+      if (!groups.hasOwnProperty(i._index)) groups[i._index] = [];
       groups[i._index].push(i._source);
     });
   }
 
   // Go through all types.
-  for(let j = 0; j < types.length; j++) {
-
+  for (let j = 0; j < types.length; j++) {
     // If the type exists in the groups array.
-    if(groups[types[j]]) {
+    if (groups[types[j]]) {
       let res = [];
 
       // go through all objects of this type.
-      for(let i = 0; i < groups[types[j]].length; i++) {
+      for (let i = 0; i < groups[types[j]].length; i++) {
         // Current object.
         let obj = groups[types[j]][i];
 
         // If the user has permission for the obj insert it to results.
-        if(obj.creator == userId || obj.assign == userId || obj.watchers && obj.watchers.includes(userId))
+        if (
+          obj.creator == userId ||
+          obj.assign == userId ||
+          (obj.watchers && obj.watchers.includes(userId))
+        )
           res.push(obj);
       }
       groups[types[j]] = res;
@@ -95,15 +112,15 @@ let buildSearchResponse = exports.buildSearchResponse = function(type, obj, user
   }
 
   return groups;
-};
+});
 
 exports.search = function(req, res, next) {
   var userId = req.user._id;
-  if(!req.query.term) {
+  if (!req.query.term) {
     return;
   }
   var query;
-  if(req.query.term === '___') {
+  if (req.query.term === "___") {
     var queryInQuery = {
       query: {
         match_all: {}
@@ -111,15 +128,15 @@ exports.search = function(req, res, next) {
     };
     var query = {
       highlight: {
-        pre_tags: ['<bold>'],
-        post_tags: ['</bold>'],
+        pre_tags: ["<bold>"],
+        post_tags: ["</bold>"],
         fields: {
           title: {},
           color: {},
           name: {},
           tags: {},
           description: {},
-          'file.filename': {},
+          "file.filename": {},
           serial: {}
         }
       },
@@ -127,7 +144,7 @@ exports.search = function(req, res, next) {
       aggs: {
         group_by_index: {
           terms: {
-            field: '_index'
+            field: "_index"
           },
           aggs: {
             top: {
@@ -137,42 +154,50 @@ exports.search = function(req, res, next) {
                     title: {}
                   }
                 },
-                size: 100,
+                size: 100
               }
             }
           }
         }
       }
     };
-  }
-  else {
+  } else {
     var query = {
       highlight: {
-        pre_tags: ['<bold>'],
-        post_tags: ['</bold>'],
+        pre_tags: ["<bold>"],
+        post_tags: ["</bold>"],
         fields: {
           title: {},
           color: {},
           name: {},
           tags: {},
           description: {},
-          'file.filename': {},
+          "file.filename": {},
           serial: {}
         }
       },
       query: {
         multi_match: {
-          query: req.query.term.replace(',', '* '),
-          type: 'cross_fields',
-          fields: ['title^3', 'color', 'name', 'tags', 'description', 'file.filename', 'serial', 'folderIndex'],
+          query: req.query.term.replace(",", "* "),
+          type: "cross_fields",
+          fields: [
+            "title^3",
+            "color",
+            "name",
+            "tags",
+            "description",
+            "file.filename",
+            "serial",
+            "folderIndex"
+          ],
           lenient: true, // Required to search acroos text/numeric fields
-          operator: 'or'
+          operator: "or"
         }
       },
       aggs: {
         group_by_index: {
           terms: {
-            field: '_index'
+            field: "_index"
           },
           aggs: {
             top: {
@@ -182,7 +207,7 @@ exports.search = function(req, res, next) {
                     title: {}
                   }
                 },
-                size: 100,
+                size: 100
               }
             }
           }
@@ -190,8 +215,6 @@ exports.search = function(req, res, next) {
       }
     };
   }
-
-
 
   var options = {
     //index: req.query.index ? req.query.index.split(',') : ['project', 'task', 'discussion', 'user', 'attachment'],
@@ -202,20 +225,25 @@ exports.search = function(req, res, next) {
   };
 
   mean.elasticsearch.search(options, function(err, result) {
-    if(err) {
-      system.sendMessage({service: 'elasticsearch', message: result});
-      return next(err)
+    if (err) {
+      system.sendMessage({ service: "elasticsearch", message: result });
+      return next(err);
     }
 
-    if(req.query.term) {
-      if(!result.aggregations) {
-        console.log('result.aggregations=' + result.aggregations);
-        return next(new Error('Can\'t find ' + req.query.term));
+    if (req.query.term) {
+      if (!result.aggregations) {
+        console.log("result.aggregations=" + result.aggregations);
+        return next(new Error("Can't find " + req.query.term));
       }
-      res.send(buildSearchResponse('aggs', result.aggregations.group_by_index.buckets, userId));
-    }
-    else {
-      res.send(buildSearchResponse('simple', result.hits.hits, userId));
+      res.send(
+        buildSearchResponse(
+          "aggs",
+          result.aggregations.group_by_index.buckets,
+          userId
+        )
+      );
+    } else {
+      res.send(buildSearchResponse("simple", result.hits.hits, userId));
     }
   });
 };
@@ -223,10 +251,10 @@ exports.search = function(req, res, next) {
 exports.advancedSearch = function(query) {
   var queries = [],
     jsonQuery;
-  for(var i in query) {
-    var isArray = query[i].indexOf(',') > -1;
-    if(isArray) {
-      var terms = query[i].split(',');
+  for (var i in query) {
+    var isArray = query[i].indexOf(",") > -1;
+    if (isArray) {
+      var terms = query[i].split(",");
       jsonQuery = {
         terms: {
           minimum_should_match: terms.length
@@ -234,8 +262,7 @@ exports.advancedSearch = function(query) {
       };
       jsonQuery.terms[i] = terms;
       queries.push(jsonQuery);
-    }
-    else {
+    } else {
       jsonQuery = {
         term: {}
       };

@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-angular.module('mean.actions').factory('Actions', [
-  function () {
+angular.module("mean.actions").factory("Actions", [
+  function() {
     return {
-      name: 'actions'
+      name: "actions"
     };
   }
 ]);

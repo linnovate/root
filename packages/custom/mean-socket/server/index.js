@@ -1,6 +1,6 @@
-const io = require('socket.io')();
-const mongoAdapter = require('socket.io-adapter-mongo');
-const config = require('meanio').loadConfig();
+const io = require("socket.io")();
+const mongoAdapter = require("socket.io-adapter-mongo");
+const config = require("meanio").loadConfig();
 
 /**
  * Here we are using `userId` for `socket.io` room name in order to broadcast
@@ -11,15 +11,15 @@ const config = require('meanio').loadConfig();
 function socketServer(server) {
   io.attach(server);
   io.adapter(mongoAdapter(config.db));
-  io.on('connection', (socket) => {
-    socket.once('register', (userId) => {
+  io.on("connection", socket => {
+    socket.once("register", userId => {
       socket.join(userId);
-    })
-  })
+    });
+  });
 }
 
 function notify(userId, msg) {
-  io.to(userId).emit('update', msg)
+  io.to(userId).emit("update", msg);
 }
 
 module.exports = {

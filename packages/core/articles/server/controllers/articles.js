@@ -1,12 +1,11 @@
-'use strict';
+"use strict";
 
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-  Article = mongoose.model('Article'),
-  _ = require('lodash');
-
+var mongoose = require("mongoose"),
+  Article = mongoose.model("Article"),
+  _ = require("lodash");
 
 /**
  * Find article by id
@@ -14,7 +13,7 @@ var mongoose = require('mongoose'),
 exports.article = function(req, res, next, id) {
   Article.load(id, function(err, article) {
     if (err) return next(err);
-    if (!article) return next(new Error('Failed to load article ' + id));
+    if (!article) return next(new Error("Failed to load article " + id));
     req.article = article;
     next();
   });
@@ -30,11 +29,10 @@ exports.create = function(req, res) {
   article.save(function(err) {
     if (err) {
       return res.status(500).json({
-        error: 'Cannot save the article'
+        error: "Cannot save the article"
       });
     }
     res.json(article);
-
   });
 };
 
@@ -49,11 +47,10 @@ exports.update = function(req, res) {
   article.save(function(err) {
     if (err) {
       return res.status(500).json({
-        error: 'Cannot update the article'
+        error: "Cannot update the article"
       });
     }
     res.json(article);
-
   });
 };
 
@@ -66,11 +63,10 @@ exports.destroy = function(req, res) {
   article.remove(function(err) {
     if (err) {
       return res.status(500).json({
-        error: 'Cannot delete the article'
+        error: "Cannot delete the article"
       });
     }
     res.json(article);
-
   });
 };
 
@@ -85,13 +81,15 @@ exports.show = function(req, res) {
  * List of Articles
  */
 exports.all = function(req, res) {
-  Article.find().sort('-created').populate('user', 'name username').exec(function(err, articles) {
-    if (err) {
-      return res.status(500).json({
-        error: 'Cannot list the articles'
-      });
-    }
-    res.json(articles);
-
-  });
+  Article.find()
+    .sort("-created")
+    .populate("user", "name username")
+    .exec(function(err, articles) {
+      if (err) {
+        return res.status(500).json({
+          error: "Cannot list the articles"
+        });
+      }
+      res.json(articles);
+    });
 };

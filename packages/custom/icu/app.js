@@ -1,176 +1,194 @@
-'use strict';
+"use strict";
 
 /*
  * Defining the Package
  */
 
-var Module = require('meanio').Module;
+var Module = require("meanio").Module;
 
-var ICU = new Module('icu');
+var ICU = new Module("icu");
 
 /*
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
-ICU.register(function (app, auth, database, swagger) {
+ICU.register(function(app, auth, database, swagger) {
+  swagger.add(__dirname);
+  //We enable routing. By default the Package Object is passed to the routes
+  ICU.routes(app, auth, database);
 
-    swagger.add(__dirname);
-    //We enable routing. By default the Package Object is passed to the routes
-    ICU.routes(app, auth, database);
+  app.set("views", __dirname + "/server/views");
 
-    app.set('views', __dirname + '/server/views');
+  //We are adding a link to the main menu for all authenticated users
+  ICU.menus.add({
+    title: "ICU example page",
+    link: "ICU example page",
+    menu: "main"
+  });
 
+  ICU.aggregateAsset("css", "styles.css");
+  ICU.aggregateAsset("css", "../lib/angular-ui-select/dist/select.css");
+  ICU.aggregateAsset(
+    "css",
+    "../lib/jquery-ui/themes/pepper-grinder/jquery-ui.min.css"
+  );
+  ICU.aggregateAsset(
+    "css",
+    "../lib/angularjs-color-picker/angularjs-color-picker.css"
+  );
+  ICU.aggregateAsset("css", "../fonts/open-sans-hebrew/style.css");
+  // ICU.aggregateAsset('css', 'eventDrops.css');
 
+  ICU.aggregateAsset("js", "../lib/underscore/underscore.js");
+  ICU.aggregateAsset("js", "../lib/angular-ui-select/dist/select.js");
+  ICU.aggregateAsset("js", "../lib/jquery-ui/jquery-ui.js");
+  ICU.aggregateAsset("js", "../lib/angular-ui-date/src/date.js");
+  ICU.aggregateAsset("js", "../lib/moment/moment.js");
 
-    //We are adding a link to the main menu for all authenticated users
-    ICU.menus.add({
-        title: 'ICU example page',
-        link: 'ICU example page',
-        menu: 'main'
-    });
+  ICU.aggregateAsset("js", "../lib/ng-file-upload/ng-file-upload.min.js");
+  ICU.aggregateAsset(
+    "js",
+    "../lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js"
+  );
+  ICU.aggregateAsset("js", "../lib/querystring/querystring.min.js");
 
-    ICU.aggregateAsset('css', 'styles.css');
-    ICU.aggregateAsset('css', '../lib/angular-ui-select/dist/select.css');
-    ICU.aggregateAsset('css', '../lib/jquery-ui/themes/pepper-grinder/jquery-ui.min.css');
-    ICU.aggregateAsset('css', '../lib/angularjs-color-picker/angularjs-color-picker.css');
-    ICU.aggregateAsset('css', '../fonts/open-sans-hebrew/style.css');
-    // ICU.aggregateAsset('css', 'eventDrops.css');
+  ICU.aggregateAsset("js", "../lib/tinycolor/tinycolor.js", { weight: 0 });
+  ICU.aggregateAsset(
+    "js",
+    "../lib/angularjs-color-picker/angularjs-color-picker.js",
+    { weight: 1 }
+  );
+  ICU.aggregateAsset(
+    "js",
+    "../lib/angular-timeago/dist/angular-timeago.min.js"
+  );
 
-    ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
-    ICU.aggregateAsset('js', '../lib/angular-ui-select/dist/select.js');
-    ICU.aggregateAsset('js', '../lib/jquery-ui/jquery-ui.js');
-    ICU.aggregateAsset('js', '../lib/angular-ui-date/src/date.js');
-    ICU.aggregateAsset('js', '../lib/moment/moment.js');
+  ICU.aggregateAsset("js", "../lib/angular-sanitize/angular-sanitize.js", {
+    weight: 0
+  });
+  ICU.aggregateAsset("js", "../lib/i18next/i18next.min.js", { weight: 1 });
+  ICU.aggregateAsset("js", "../lib/ng-i18next/dist/ng-i18next.js", {
+    weight: 2
+  });
 
-    ICU.aggregateAsset('js', '../lib/ng-file-upload/ng-file-upload.min.js');
-    ICU.aggregateAsset('js', '../lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js');
-    ICU.aggregateAsset('js', '../lib/querystring/querystring.min.js');
+  ICU.aggregateAsset(
+    "js",
+    "../lib/angular-tooltips/dist/angular-tooltips.min.js"
+  );
 
-    ICU.aggregateAsset('js', '../lib/tinycolor/tinycolor.js', {weight: 0});
-    ICU.aggregateAsset('js', '../lib/angularjs-color-picker/angularjs-color-picker.js', {weight: 1});
-    ICU.aggregateAsset('js', '../lib/angular-timeago/dist/angular-timeago.min.js');
+  ICU.aggregateAsset("js", "./file-saver/FileSaver.min.js/FileSaver.min.js");
 
-    ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', {weight: 0});
-    ICU.aggregateAsset('js', '../lib/i18next/i18next.min.js', {weight: 1});
-    ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', {weight: 2});
+  ICU.aggregateAsset("js", "../lib/d3/d3.min.js", { weight: 0 });
+  ICU.aggregateAsset("js", "./eventDrops.js", { weight: 1 });
+  ICU.aggregateAsset("js", "./daterangepicker.js", { weight: 3 });
+  ICU.aggregateAsset("js", "./angular-daterangepicker.js", { weight: 4 });
 
-    ICU.aggregateAsset('js', '../lib/angular-tooltips/dist/angular-tooltips.min.js');
+  ICU.angularDependencies([
+    "ngAlertify",
+    "jm.i18next",
+    "mean.medium-editor",
+    "ui.select",
+    "ui.date",
+    "ngFileUpload",
+    "color.picker",
+    "yaru22.angular-timeago",
+    "mean.system",
+    "mean.users",
+    "mean.icu.ui.all",
+    "mean.icu.ui.entity",
+    "mean.icu.ui.errors",
+    "mean.icu.ui.autofocus",
+    "mean.icu.ui.ctrlenter",
+    "mean.icu.ui.login",
+    "mean.icu.ui.saml",
+    "mean.icu.ui.register",
+    "mean.icu.ui.auth",
+    "mean.icu.ui.profile",
+    "mean.icu.ui.webhook",
+    "mean.icu.ui.displayby",
+    "mean.icu.ui.sidepane",
+    "mean.icu.ui.middlepane",
+    "mean.icu.ui.detailspane",
+    "mean.icu.ui.mainpane",
+    "mean.icu.ui.admin",
+    "mean.icu.ui.userlist",
+    "mean.icu.ui.userdetails",
+    "mean.icu.ui.detailsComponents",
+    "mean.icu.ui.tasklist",
+    "mean.icu.ui.tasklistdirective",
+    "mean.icu.ui.usersFilter",
+    "mean.icu.ui.taskdetails",
+    "mean.icu.ui.entityList",
+    "mean.icu.ui.inbox",
+    "mean.icu.data.inboxservice",
+    "mean.icu.ui.bulkoperations",
+    "mean.icu.ui.entityListFilters",
+    "mean.icu.ui.projectlist",
+    "mean.icu.ui.officedocumentlist",
+    "mean.icu.ui.officedocumentlistdirective",
+    "mean.icu.ui.officeDocumentdetails",
+    "mean.icu.ui.projectdetails",
+    "mean.icu.ui.officelist",
+    "mean.icu.ui.officedetails",
+    "mean.icu.ui.templateDoclist",
+    "mean.icu.ui.templateDocdetails",
+    "mean.icu.ui.folderlist",
+    "mean.icu.ui.folderlistdirective",
+    "mean.icu.ui.folderdetails",
+    "mean.icu.ui.discussionlist",
+    "mean.icu.ui.discussiondetails",
+    "mean.icu.ui.attachmentdetails",
+    "mean.icu.ui.attachmentfilter",
+    "mean.icu.ui.notificationsheader",
+    "mean.icu.ui.membersfooter",
+    "mean.icu.ui.tabs",
+    "mean.icu.ui.rows",
+    "mean.icu.data.boldedservice",
+    "mean.icu.ui.changecontent",
+    "mean.icu.ui.avatar",
+    "mean.icu.ui.colorpicker",
+    "mean.icu.ui.search",
+    "mean.icu.ui.searchlist",
+    "mean.icu.ui.searchlistfilter",
+    "mean.icu.data.activitiesservice",
+    "mean.icu.data.multipleselectservice",
+    "mean.icu.data.documentsservice",
+    "mean.icu.data.attachmentsservice",
+    "mean.icu.data.filesservice",
+    "mean.icu.data.usersservice",
+    "mean.icu.data.notificationsservice",
+    "mean.icu.data.projectsservice",
+    "mean.icu.data.permissionsservice",
+    "mean.icu.data.multipleselectservice",
+    "mean.icu.data.officedocumentsservice",
+    "mean.icu.data.templatedocsservice",
+    "mean.icu.data.officesservice",
+    "mean.icu.data.signaturesservice",
+    "mean.icu.data.foldersservice",
+    "mean.icu.data.orderservice",
+    "mean.icu.data.discussionsservice",
+    "mean.icu.data.tasksservice",
+    "mean.icu.data.settingsservice",
+    "mean.icu.data.searchservice",
+    "mean.icu.data.paginationservice",
+    "mean.icu.data.constants",
+    "mean.icu.data.circlesservice",
+    "mean.icu.data.warningsservice",
+    "mean.icu.data.eventdropsservice",
+    "mean.icu.data.layoutservice",
+    "mean.icu.data.detailspaneservice",
+    "mean.icu.decorators.pdsDecorator",
+    "infinite-scroll",
+    "mean.icu.ui.modaldeletetasksbyentity",
+    "mean.icu.ui.modalcompartmentalization",
+    "mean.icu.ui.taskoptions",
+    "mean.icu.ui.subtaskslistdirective",
+    "mean.icu.ui.subprojectslistdirective",
+    "720kb.tooltips",
+    "mean.icu.ui.draggabletoggle",
+    "mean.icu.ui.notify",
+    "daterangepicker"
+  ]);
 
-
-    ICU.aggregateAsset('js', './file-saver/FileSaver.min.js/FileSaver.min.js');
-
-    ICU.aggregateAsset('js', '../lib/d3/d3.min.js', {weight: 0});
-    ICU.aggregateAsset('js', './eventDrops.js', {weight: 1});
-    ICU.aggregateAsset('js', './daterangepicker.js', {weight: 3});
-    ICU.aggregateAsset('js', './angular-daterangepicker.js', {weight: 4});
-
-
-    ICU.angularDependencies([
-        'ngAlertify',
-        'jm.i18next',
-        'mean.medium-editor',
-        'ui.select',
-        'ui.date',
-        'ngFileUpload',
-        'color.picker',
-        'yaru22.angular-timeago',
-        'mean.system',
-        'mean.users',
-        'mean.icu.ui.all',
-        'mean.icu.ui.entity',
-        'mean.icu.ui.errors',
-        'mean.icu.ui.autofocus',
-        'mean.icu.ui.ctrlenter',
-        'mean.icu.ui.login',
-        'mean.icu.ui.saml',
-        'mean.icu.ui.register',
-        'mean.icu.ui.auth',
-        'mean.icu.ui.profile',
-        'mean.icu.ui.webhook',
-        'mean.icu.ui.displayby',
-        'mean.icu.ui.sidepane',
-        'mean.icu.ui.middlepane',
-        'mean.icu.ui.detailspane',
-        'mean.icu.ui.mainpane',
-        'mean.icu.ui.admin',
-        'mean.icu.ui.userlist',
-        'mean.icu.ui.userdetails',
-        'mean.icu.ui.detailsComponents',
-        'mean.icu.ui.tasklist',
-        'mean.icu.ui.tasklistdirective',
-        'mean.icu.ui.usersFilter',
-        'mean.icu.ui.taskdetails',
-        'mean.icu.ui.entityList',
-        'mean.icu.ui.inbox',
-        'mean.icu.data.inboxservice',
-        'mean.icu.ui.bulkoperations',
-        'mean.icu.ui.entityListFilters',
-        'mean.icu.ui.projectlist',
-        'mean.icu.ui.officedocumentlist',
-        'mean.icu.ui.officedocumentlistdirective',
-        'mean.icu.ui.officeDocumentdetails',
-        'mean.icu.ui.projectdetails',
-        'mean.icu.ui.officelist',
-        'mean.icu.ui.officedetails',
-        'mean.icu.ui.templateDoclist',
-        'mean.icu.ui.templateDocdetails',
-        'mean.icu.ui.folderlist',
-        'mean.icu.ui.folderlistdirective',
-        'mean.icu.ui.folderdetails',
-        'mean.icu.ui.discussionlist',
-        'mean.icu.ui.discussiondetails',
-        'mean.icu.ui.attachmentdetails',
-        'mean.icu.ui.attachmentfilter',
-        'mean.icu.ui.notificationsheader',
-        'mean.icu.ui.membersfooter',
-        'mean.icu.ui.tabs',
-        'mean.icu.ui.rows',
-        'mean.icu.data.boldedservice',
-        'mean.icu.ui.changecontent',
-        'mean.icu.ui.avatar',
-        'mean.icu.ui.colorpicker',
-        'mean.icu.ui.search',
-        'mean.icu.ui.searchlist',
-        'mean.icu.ui.searchlistfilter',
-        'mean.icu.data.activitiesservice',
-        'mean.icu.data.multipleselectservice',
-        'mean.icu.data.documentsservice',
-        'mean.icu.data.attachmentsservice',
-        'mean.icu.data.filesservice',
-        'mean.icu.data.usersservice',
-        'mean.icu.data.notificationsservice',
-        'mean.icu.data.projectsservice',
-        'mean.icu.data.permissionsservice',
-        'mean.icu.data.multipleselectservice',
-        'mean.icu.data.officedocumentsservice',
-        'mean.icu.data.templatedocsservice',
-        'mean.icu.data.officesservice',
-        'mean.icu.data.signaturesservice',
-        'mean.icu.data.foldersservice',
-        'mean.icu.data.orderservice',
-        'mean.icu.data.discussionsservice',
-        'mean.icu.data.tasksservice',
-        'mean.icu.data.settingsservice',
-        'mean.icu.data.searchservice',
-        'mean.icu.data.paginationservice',
-        'mean.icu.data.constants',
-        'mean.icu.data.circlesservice',
-        'mean.icu.data.warningsservice',
-        'mean.icu.data.eventdropsservice',
-        'mean.icu.data.layoutservice',
-        'mean.icu.data.detailspaneservice',
-        'mean.icu.decorators.pdsDecorator',
-        'infinite-scroll',
-        'mean.icu.ui.modaldeletetasksbyentity',
-        'mean.icu.ui.modalcompartmentalization',
-        'mean.icu.ui.taskoptions',
-        'mean.icu.ui.subtaskslistdirective',
-        'mean.icu.ui.subprojectslistdirective',
-        '720kb.tooltips',
-        'mean.icu.ui.draggabletoggle',
-        'mean.icu.ui.notify',
-        'daterangepicker'
-    ]);
-
-    return ICU;
+  return ICU;
 });

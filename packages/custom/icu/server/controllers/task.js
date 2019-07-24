@@ -801,22 +801,18 @@ exports.populateSubTasks = function(req, res, next) {
 // Function to Separate Array With Timeout
 // Gets array of users & name of function to pass the separate users
 // It's with the Timeout because the mail server has limit per minute for SMTP mails by client
-async function SeparateArrayWithTimeout(users, functionName){
-  
-  if(users.length != 0)
-  {
-    setTimeout(function(){
+async function SeparateArrayWithTimeout(users, functionName) {
+  if (users.length != 0) {
+    setTimeout(function() {
       functionName(users.pop()._doc);
-      
+
       // Lop until the array is empty
-      if(users.length != 0)
-      {
+      if (users.length != 0) {
         SeparateArrayWithTimeout(users, functionName);
       }
     }, 20000);
   }
-};
-
+}
 
 exports.GetUsersWantGetMyTodayTasksMail = async function() {
   var UserModel = require("../models/user.js");
@@ -843,7 +839,7 @@ function MyTasksOfTodaySummary(user) {
 
   var CheckRealDue = new Date();
   CheckRealDue.setHours(0, 0, 0, 0);
-  
+
   //*AsButton*
   //var query = req.acl.mongoQuery('Task');
   //query.find({
@@ -867,8 +863,8 @@ function MyTasksOfTodaySummary(user) {
         var TodayTasks = [];
 
         tasks.forEach(function(task) {
-            task.due.setDate(task.due.getDate() + 1);
-            TodayTasks.push(task);
+          task.due.setDate(task.due.getDate() + 1);
+          TodayTasks.push(task);
         });
 
         mailService
@@ -884,8 +880,6 @@ function MyTasksOfTodaySummary(user) {
       //next();
     });
 }
-
-
 
 exports.GetUsersWantGetGivenTodayTasksMail = async function() {
   var UserModel = require("../models/user.js");
@@ -912,7 +906,7 @@ function GivenTasksOfTodaySummary(user) {
 
   var CheckRealDue = new Date();
   CheckRealDue.setHours(0, 0, 0, 0);
-  
+
   //*AsButton*
   //var query = req.acl.mongoQuery('Task');
   //query.find({
@@ -936,8 +930,8 @@ function GivenTasksOfTodaySummary(user) {
         var TodayTasks = [];
 
         tasks.forEach(function(task) {
-            task.due.setDate(task.due.getDate() + 1);
-            TodayTasks.push(task);
+          task.due.setDate(task.due.getDate() + 1);
+          TodayTasks.push(task);
         });
 
         mailService
@@ -953,8 +947,6 @@ function GivenTasksOfTodaySummary(user) {
       //next();
     });
 }
-
-
 
 exports.GetUsersWantGetMyWeeklyTasksMail = function() {
   var UserModel = require("../models/user.js");
@@ -978,7 +970,7 @@ exports.MyTasksOfNextWeekSummary = function(req, res, next) {};
 
 function MyTasksOfNextWeekSummary(user) {
   var TaskModel = require("../models/task.js");
-  
+
   var CheckRealDue = new Date();
   CheckRealDue.setHours(0, 0, 0, 0);
   var CheckRealDueInWeek = new Date();
@@ -992,7 +984,7 @@ function MyTasksOfNextWeekSummary(user) {
     //*AsButton* assign: req.user._id,
     assign: user._id,
     status: { $nin: ["rejected", "done"] },
-    due: {$gte: CheckRealDue, $lt: CheckRealDueInWeek},
+    due: { $gte: CheckRealDue, $lt: CheckRealDueInWeek },
     tType: { $ne: "template" }
   })
     .populate(options.includes)
@@ -1008,8 +1000,8 @@ function MyTasksOfNextWeekSummary(user) {
         var WeekTasks = [];
 
         tasks.forEach(function(task) {
-            task.due.setDate(task.due.getDate() + 1);
-            WeekTasks.push(task);
+          task.due.setDate(task.due.getDate() + 1);
+          WeekTasks.push(task);
         });
 
         mailService
@@ -1050,7 +1042,7 @@ function GivenTasksOfNextWeekSummary(user) {
   //*AsButton* var query = req.acl.mongoQuery('Task');
 
   var TaskModel = require("../models/task.js");
-  
+
   var CheckRealDue = new Date();
   CheckRealDue.setHours(0, 0, 0, 0);
   var CheckRealDueInWeek = new Date();
@@ -1061,7 +1053,7 @@ function GivenTasksOfNextWeekSummary(user) {
     //*AsButton* query.find({
     //creator: req.user._id,
     creator: user._id,
-    due: {$gte: CheckRealDue, $lt: CheckRealDueInWeek},
+    due: { $gte: CheckRealDue, $lt: CheckRealDueInWeek },
     tType: { $ne: "template" }
   })
     .populate(options.includes)
@@ -1072,12 +1064,11 @@ function GivenTasksOfNextWeekSummary(user) {
         //   message: 'Can\'t get my tasks'
         // };
       } else {
-
         var WeekTasks = [];
 
         tasks.forEach(function(task) {
-            task.due.setDate(task.due.getDate() + 1);
-            WeekTasks.push(task);
+          task.due.setDate(task.due.getDate() + 1);
+          WeekTasks.push(task);
         });
 
         mailService
@@ -1093,12 +1084,12 @@ function GivenTasksOfNextWeekSummary(user) {
     });
 }
 
-async function getUpdatesMap(taskIds){
+async function getUpdatesMap(taskIds) {
   let updates = await UpdateModel.find({
-    entity: {$in: _.map(taskIds,id=>new ObjectId(id))},//new ObjectId(_id),
+    entity: { $in: _.map(taskIds, id => new ObjectId(id)) }, //new ObjectId(_id),
     updateField: "comment"
   }).populate("creator", null, "User");
-  return _.groupBy(updates,"entity");
+  return _.groupBy(updates, "entity");
 }
 
 /**
@@ -1115,51 +1106,51 @@ async function tasksToExcelServiceFormat(tasks, columns, datesColumns) {
     tasks,
     task => task.title && taskNotRecycled(task)
   );
-  let tasksIDS = _.map(filteredTasks,t=>t._id);
+  let tasksIDS = _.map(filteredTasks, t => t._id);
   const updatesMap = await getUpdatesMap(tasksIDS);
-  let taskArray =  _.map(filteredTasks, task => {
-      let {
-        _id,
-        title,
-        watchers,
-        discussions,
-        description,
-        due,
-        status,
-        assign,
-        tags,
-        project,
-        creator
-      } = task;
-      // let updates = await UpdateModel.find({
-      //   entity: new ObjectId(_id),
-      //   updateField: "comment"
-      // }).populate("creator", null, "User");
-      let row = [
-        title,
-        taskStatusMapper[status],
-        assign && assign.name,
-        _.map(watchers, watcher => watcher.name).join("\n"),
-        description,
-        creator && creator.name,
-        discussions && discussions[0] && discussions[0].title,
-        project && project.title,
-        _.map(
-          updatesMap[_id],
-          update =>
-            `:${update.date &&
-              update.date
-                .toLocaleString()
-                .substr(0, update.date.toLocaleString().indexOf(" "))} - ${
-              update.creator.name
-            }` +
-            "\n" +
-            `${update.current}`
-        ).join("\n"),
-        tags.join("\n")
-      ];
-      return row;
-    })
+  let taskArray = _.map(filteredTasks, task => {
+    let {
+      _id,
+      title,
+      watchers,
+      discussions,
+      description,
+      due,
+      status,
+      assign,
+      tags,
+      project,
+      creator
+    } = task;
+    // let updates = await UpdateModel.find({
+    //   entity: new ObjectId(_id),
+    //   updateField: "comment"
+    // }).populate("creator", null, "User");
+    let row = [
+      title,
+      taskStatusMapper[status],
+      assign && assign.name,
+      _.map(watchers, watcher => watcher.name).join("\n"),
+      description,
+      creator && creator.name,
+      discussions && discussions[0] && discussions[0].title,
+      project && project.title,
+      _.map(
+        updatesMap[_id],
+        update =>
+          `:${update.date &&
+            update.date
+              .toLocaleString()
+              .substr(0, update.date.toLocaleString().indexOf(" "))} - ${
+            update.creator.name
+          }` +
+          "\n" +
+          `${update.current}`
+      ).join("\n"),
+      tags.join("\n")
+    ];
+    return row;
+  });
   let taskDatesArray = await Promise.all(
     _.map(filteredTasks, async task => {
       let { _id, due } = task;

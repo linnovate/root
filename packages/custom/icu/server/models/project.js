@@ -1,11 +1,10 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose'),
+var mongoose = require("mongoose"),
   Schema = mongoose.Schema,
-  archive = require('./archive.js'),
-  modelUtils = require('./modelUtils'),
-  config = require('meanio').loadConfig();
-
+  archive = require("./archive.js"),
+  modelUtils = require("./modelUtils"),
+  config = require("meanio").loadConfig();
 
 var ProjectSchema = new Schema({
   created: {
@@ -16,32 +15,32 @@ var ProjectSchema = new Schema({
     type: Date
   },
   recycled: {
-    type: Date,
+    type: Date
   },
   title: {
     type: String
   },
   parent: {
     type: Schema.ObjectId,
-    ref: 'Project'
+    ref: "Project"
   },
   discussion: {
     type: Schema.ObjectId,
-    ref: 'Discussion'
+    ref: "Discussion"
   },
   discussions: [
     {
       type: Schema.ObjectId,
-      ref: 'Discussion'
+      ref: "Discussion"
     }
   ],
   creator: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   manager: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   signature: {
     circles: {},
@@ -53,8 +52,16 @@ var ProjectSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'assigned', 'in-progress', 'canceled', 'waiting-approval', 'done', 'archived'],
-    default: 'new'
+    enum: [
+      "new",
+      "assigned",
+      "in-progress",
+      "canceled",
+      "waiting-approval",
+      "done",
+      "archived"
+    ],
+    default: "new"
   },
   due: {
     type: Date
@@ -67,13 +74,13 @@ var ProjectSchema = new Schema({
   watchers: [
     {
       type: Schema.ObjectId,
-      ref: 'User'
+      ref: "User"
     }
   ],
   bolded: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       bolded: Boolean,
       lastViewed: Date
     }
@@ -81,17 +88,17 @@ var ProjectSchema = new Schema({
   permissions: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       level: {
         type: String,
-        enum: ['viewer', 'commenter', 'editor'],
-        default: 'viewer'
+        enum: ["viewer", "commenter", "editor"],
+        default: "viewer"
       }
     }
   ],
   assign: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   room: {
     type: String
@@ -107,7 +114,7 @@ var ProjectSchema = new Schema({
   subProjects: [
     {
       type: Schema.ObjectId,
-      ref: 'Project'
+      ref: "Project"
     }
   ],
   tType: {
@@ -115,12 +122,14 @@ var ProjectSchema = new Schema({
   },
   templateId: {
     type: Schema.ObjectId,
-    ref: 'Project'
+    ref: "Project"
   },
-  templates: [{
-    type: Schema.ObjectId,
-    ref: 'Task'
-  }],
+  templates: [
+    {
+      type: Schema.ObjectId,
+      ref: "Task"
+    }
+  ],
   customData: {},
   WantRoom: {
     type: Boolean,
@@ -131,26 +140,26 @@ var ProjectSchema = new Schema({
   }
 });
 
-var starVirtual = ProjectSchema.virtual('star');
+var starVirtual = ProjectSchema.virtual("star");
 starVirtual.get(function() {
   return this._star;
 });
 starVirtual.set(function(value) {
   this._star = value;
 });
-ProjectSchema.set('toJSON', {
+ProjectSchema.set("toJSON", {
   virtuals: true
 });
-ProjectSchema.set('toObject', {
+ProjectSchema.set("toObject", {
   virtuals: true
 });
 
 /**
  * Validations
  */
-ProjectSchema.path('color').validate(function(color) {
+ProjectSchema.path("color").validate(function(color) {
   return /^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/i.test(color);
-}, 'Invalid HEX color.');
+}, "Invalid HEX color.");
 
 /**
  * Statics
@@ -158,34 +167,35 @@ ProjectSchema.path('color').validate(function(color) {
 ProjectSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
-  }).populate('creator', 'name username').exec(cb);
+  })
+    .populate("creator", "name username")
+    .exec(cb);
 };
 
 /**
  * middleware
  */
-var elasticsearch = require('../controllers/elasticsearch');
+var elasticsearch = require("../controllers/elasticsearch");
 
 // Will not execute until the first middleware calls `next()`
-ProjectSchema.pre('save', function(next) {
-  let entity = this ;
-  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+ProjectSchema.pre("save", function(next) {
+  let entity = this;
+  config.superSeeAll ? modelUtils.superSeeAll(entity, next) : next();
 });
 
-ProjectSchema.post('save', function(req, next) {
-  elasticsearch.save(this, 'project');
+ProjectSchema.post("save", function(req, next) {
+  elasticsearch.save(this, "project");
   next();
 });
 
-
-ProjectSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'project', next);
+ProjectSchema.pre("remove", function(next) {
+  elasticsearch.delete(this, "project", next);
   next();
 });
 
-ProjectSchema.plugin(archive, 'project');
+ProjectSchema.plugin(archive, "project");
 
-var deepPopulate = require('mongoose-deep-populate')(mongoose);
+var deepPopulate = require("mongoose-deep-populate")(mongoose);
 ProjectSchema.plugin(deepPopulate, {});
 
-module.exports = mongoose.model('Project', ProjectSchema);
+module.exports = mongoose.model("Project", ProjectSchema);

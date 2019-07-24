@@ -21,8 +21,7 @@ angular
     LayoutService,
     TasksService
   ) {
-
-    let layoutState = LayoutService.getLayoutState()
+    let layoutState = LayoutService.getLayoutState();
     $scope.menu = {
       isHidden: layoutState === 3 || layoutState === 2
     };
@@ -83,7 +82,7 @@ angular
         if (
           restoredContext.entityName !== "all" &&
           restoredContext.entityName !== "my" &&
-          restoredContext.main !== 'inbox'
+          restoredContext.main !== "inbox"
         ) {
           context.setMain(restoredContext.main);
           if (restoredContext.entityName === "task") {
@@ -190,17 +189,21 @@ angular
     });
 
     $scope.closePopup = function(event) {
-      let detailspaneElement = document.querySelector('[icu-detailspane]');
-      if(event.target === detailspaneElement) {
-        $state.go('^.^');
+      let detailspaneElement = document.querySelector("[icu-detailspane]");
+      if (event.target === detailspaneElement) {
+        $state.go("^.^");
       }
-    }
+    };
 
-    document.addEventListener('keydown', event => {
-      if(event.which === 27 && $scope.detailsPane.isActive && $scope.detailsPane.isHidden) {
-        $state.go('^.^');
+    document.addEventListener("keydown", event => {
+      if (
+        event.which === 27 &&
+        $scope.detailsPane.isActive &&
+        $scope.detailsPane.isHidden
+      ) {
+        $state.go("^.^");
       }
-    })
+    });
   });
 
 angular.module("mean.icu").run(function($rootScope, $location, $state) {
@@ -223,10 +226,10 @@ angular.module("mean.icu").run(function($rootScope, $location, $state) {
   });
 });
 
-angular.module('mean.icu').filter('htmlToPlaintext', function() {
+angular.module("mean.icu").filter("htmlToPlaintext", function() {
   return function(html) {
-      let tmp = document.createElement("DIV");
-      tmp.innerHTML = html;
-      return tmp.textContent || tmp.innerText || "";
+    let tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
   };
-})
+});

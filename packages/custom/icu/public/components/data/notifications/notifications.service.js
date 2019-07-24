@@ -1,110 +1,118 @@
-'use strict';
+"use strict";
 
-angular.module('mean.icu.data.notificationsservice', [])
-    .service('NotificationsService', function($http, ApiUri, WarningsService, $state) {
+angular
+  .module("mean.icu.data.notificationsservice", [])
+  .service("NotificationsService", function(
+    $http,
+    ApiUri,
+    WarningsService,
+    $state
+  ) {
+    let audio = window.notificationAudio;
 
-        let audio = window.notificationAudio;
+    if (!window.notificationAudio) {
+      audio = window.notificationAudio = document.createElement("audio");
+      audio.type = "audio/ogg";
 
-        if(!window.notificationAudio) {
-            audio = window.notificationAudio = document.createElement('audio');
-            audio.type = 'audio/ogg';
+      // Taken from: https://notificationsounds.com/sound-effects/just-like-magic-506
+      audio.src = "/dist/icu/assets/audio/just-like-magic.mp3";
+    }
 
-            // Taken from: https://notificationsounds.com/sound-effects/just-like-magic-506
-            audio.src = '/dist/icu/assets/audio/just-like-magic.mp3';
-        }
+    if (Notification.permission !== "denied") {
+      Notification.requestPermission(permission => {});
+    }
 
+    function notify(data) {
+      if (Notification.permission === "denied") {
+        console.log("Notification aborted - permission denied");
+        return;
+      }
 
-        if (Notification.permission !== "denied") {
-            Notification.requestPermission(permission => { });
-        }
+      let { title, body, icon } = parseNotification(data);
 
-        function notify(data) {
+      let notification = new Notification(title, {
+        body,
+        icon: `/icu/assets/img/notification/${icon}.png`
+      });
 
-            if(Notification.permission === 'denied') {
-                console.log('Notification aborted - permission denied');
-                return;
-            }
+      notification.onclick = function(event) {
+        this.close();
+        window.focus();
+        $state.go(
+          `main.${data.entityType}s.all.details.${window.config.defaultTab}`,
+          {
+            entity: "all",
+            id: data.entity._id,
+            nameFocused: true
+          },
+          {
+            reload: true
+          }
+        );
+      };
 
-            let { title, body, icon } = parseNotification(data);
+      // Start from beginning in case of consecutive when previous audio didn't yet finished
+      audio.currentTime = 0;
 
-            let notification = new Notification(title, {
-                body,
-                icon: `/icu/assets/img/notification/${icon}.png`
-            });
+      audio.play();
 
-            notification.onclick = function(event) {
-                this.close();
-                window.focus();
-                $state.go(`main.${data.entityType}s.all.details.${window.config.defaultTab}`, {
-                    entity: 'all',
-                    id: data.entity._id,
-                    nameFocused: true
-                }, {
-                    reload: true
-                });
-            }
+      // Hide after 4s
+      setTimeout(notification.close.bind(notification), 4000);
+    }
 
-            // Start from beginning in case of consecutive when previous audio didn't yet finished
-            audio.currentTime = 0;
+    function parseNotification(data) {
+      let { entity, entityType, creator, updateField, current, prev } = data;
 
-            audio.play();
+      // Strip html tags
+      let entityTitle = entity.title.replace(/<(?:.|\n)*?>/gm, "");
+      let creatorName = creator.name;
 
-            // Hide after 4s
-            setTimeout(notification.close.bind(notification), 4000);
-        }
+      let title, body, icon;
 
-        function parseNotification(data) {
-            let { entity, entityType, creator, updateField, current, prev } = data;
+      switch (updateField) {
+        case "assign":
+          title = `${entityTitle} assigned to you`;
+          body = `${entityTitle} has been assigned to you by ${creatorName}`;
+          break;
+        case "due":
+          current = formatDate(current);
+          prev = formatDate(prev);
+          title = `${entityTitle} due » ${current}`;
+          body = `${creatorName} has change the due date of ${entityTitle} from "${prev}" to "${current}"`;
+          break;
+        case "status":
+          current = toCapitalCase(current);
+          prev = toCapitalCase(prev);
+          title = `${entityTitle} status » ${current}`;
+          body = `${creatorName} has change the status of ${entityTitle} from "${prev}" to "${current}"`;
+          break;
+        case "comment":
+          title = `${entityTitle} comment`;
+          body = `${creatorName} commented: "${current}"`;
+          break;
+      }
 
-            // Strip html tags
-            let entityTitle = entity.title.replace(/<(?:.|\n)*?>/gm, '');
-            let creatorName = creator.name;
+      // Set different icons for every entity, default to `task` icon
+      if (
+        ["officeDocument", "task", "project", "discussion"].includes(entityType)
+      ) {
+        icon = entityType;
+      } else {
+        icon = "task";
+      }
 
-            let title, body, icon;
+      return { title, body, icon };
+    }
 
-            switch(updateField) {
-                case 'assign':
-                    title = `${entityTitle} assigned to you`
-                    body = `${entityTitle} has been assigned to you by ${creatorName}`;
-                    break;
-                case 'due':
-                    current = formatDate(current);
-                    prev = formatDate(prev);
-                    title = `${entityTitle} due » ${current}`;
-                    body = `${creatorName} has change the due date of ${entityTitle} from "${prev}" to "${current}"`;
-                    break;
-                case 'status':
-                    current = toCapitalCase(current);
-                    prev = toCapitalCase(prev);
-                    title = `${entityTitle} status » ${current}`;
-                    body = `${creatorName} has change the status of ${entityTitle} from "${prev}" to "${current}"`;
-                    break;
-                case 'comment':
-                    title = `${entityTitle} comment`;
-                    body = `${creatorName} commented: "${current}"`;
-                    break;
-            }
+    function formatDate(date) {
+      return moment(date).format("DD/MM/YYYY");
+    }
 
-            // Set different icons for every entity, default to `task` icon
-            if(['officeDocument', 'task', 'project', 'discussion'].includes(entityType)) {
-                icon = entityType;
-            } else {
-                icon = 'task';
-            }
+    function toCapitalCase(txt) {
+      return txt[0].toUpperCase() + txt.slice(1);
+    }
 
-            return { title, body, icon };
-        }
-
-
-        function formatDate(date) {
-            return moment(date).format('DD/MM/YYYY');
-        }
-
-        function toCapitalCase(txt) {
-            return txt[0].toUpperCase() + txt.slice(1);
-        }
-
-        return {
-            notify
-        };
-    });
+    return {
+      notify
+    };
+  });

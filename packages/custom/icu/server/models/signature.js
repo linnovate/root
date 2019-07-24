@@ -1,33 +1,33 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose'),
+var mongoose = require("mongoose"),
   Schema = mongoose.Schema;
 
 var SignatureSchema = new Schema({
   fullName: {
     type: String,
-    default: 'noFullName'
+    default: "noFullName"
   },
   message: {
     type: String,
-    default: 'noMessage'
+    default: "noMessage"
   },
   unit: {
     type: String,
-    default: 'noUnit'
+    default: "noUnit"
   },
   role: {
     type: String,
-    default: 'noRole'
+    default: "noRole"
   },
   rank: {
     type: String,
-    default: 'noRank'
+    default: "noRank"
   },
   office: {
     type: Schema.ObjectId,
-    ref: 'Office'
+    ref: "Office"
   }
 });
 
-module.exports = mongoose.model('Signature', SignatureSchema);
+module.exports = mongoose.model("Signature", SignatureSchema);

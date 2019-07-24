@@ -1,1 +1,1 @@
-angular.module('mean.icu.ui.tabs', []);
+angular.module("mean.icu.ui.tabs", []);

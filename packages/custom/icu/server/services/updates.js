@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 
-var UpdateModel = require('../models/update.js');
+var UpdateModel = require("../models/update.js");
 
 var entityIssueMap = {
-  tasks: 'task',
-  projects: 'project',
-  discussions: 'discussion',
-  offices: 'office',
-  folders: 'folder',
-  officeDocuments: 'officeDocument'
+  tasks: "task",
+  projects: "project",
+  discussions: "discussion",
+  offices: "office",
+  folders: "folder",
+  officeDocuments: "officeDocument"
 };
 
 module.exports = function(entityName, options) {
@@ -20,8 +20,7 @@ module.exports = function(entityName, options) {
       date: new Date(),
       entity: id,
       entityType: type,
-      updateField: 'create'
-
+      updateField: "create"
     }).save({
       user: options.user
     });

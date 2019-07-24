@@ -132,7 +132,7 @@ function OfficeDetailsController(
       });
 
       refreshList();
-      $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+      $scope.isRecycled = $scope.item.hasOwnProperty("recycled");
       $scope.permsToSee();
       $scope.havePermissions();
       $scope.haveEditiorsPermissions();
@@ -190,57 +190,57 @@ function OfficeDetailsController(
 
   // ==================================================== $watch: title / desc ==================================================== //
 
-  $scope.$watch('item.title', function(nVal, oVal) {
+  $scope.$watch("item.title", function(nVal, oVal) {
     if (nVal !== oVal) {
       delayedUpdateTitle($scope.item, {
-        name: 'title',
+        name: "title",
         oldVal: oVal,
         newVal: nVal,
-        action: 'renamed'
+        action: "renamed"
       });
     }
   });
 
-  $scope.$watch('item.description', function(nVal, oVal) {
+  $scope.$watch("item.description", function(nVal, oVal) {
     if (nVal !== oVal) {
       delayedUpdateDesc($scope.item, {
-        name: 'description',
+        name: "description",
         oldVal: oVal,
         newVal: nVal,
-        action: 'renamed'
+        action: "renamed"
       });
     }
   });
 
-  $scope.$watch('item.tel', function(nVal, oVal) {
+  $scope.$watch("item.tel", function(nVal, oVal) {
     if (nVal !== oVal) {
       delayedUpdateTel($scope.item, {
-        name: 'tel',
+        name: "tel",
         oldVal: oVal,
         newVal: nVal,
-        action: 'changed'
+        action: "changed"
       });
     }
   });
 
-  $scope.$watch('item.internalTel', function(nVal, oVal) {
+  $scope.$watch("item.internalTel", function(nVal, oVal) {
     if (nVal !== oVal) {
       delayedUpdateInternalTel($scope.item, {
-        name: 'internalTel',
+        name: "internalTel",
         oldVal: oVal,
         newVal: nVal,
-        action: 'changed'
+        action: "changed"
       });
     }
   });
 
-  $scope.$watch('item.unit', function(nVal, oVal) {
+  $scope.$watch("item.unit", function(nVal, oVal) {
     if (nVal !== oVal) {
       delayedUpdateUnit($scope.item, {
-        name: 'unit',
+        name: "unit",
         oldVal: oVal,
         newVal: nVal,
-        action: 'changed'
+        action: "changed"
       });
     }
   });

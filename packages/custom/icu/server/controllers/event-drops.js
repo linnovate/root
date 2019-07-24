@@ -1,13 +1,12 @@
-'use strict';
+"use strict";
 
-var mean = require('meanio'),
-  elasticCtrl = require('./elasticsearch'),
-  utils = require('./utils'),
-  system = require('./system');
+var mean = require("meanio"),
+  elasticCtrl = require("./elasticsearch"),
+  utils = require("./utils"),
+  system = require("./system");
 
 exports.getMyEvents = function(req, res, next) {
-
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
@@ -20,7 +19,7 @@ exports.getMyEvents = function(req, res, next) {
     aggs: {
       group_by_index: {
         terms: {
-          field: '_index'
+          field: "_index"
         },
         aggs: {
           top: {
@@ -40,14 +39,18 @@ exports.getMyEvents = function(req, res, next) {
   };
 
   mean.elasticsearch.search(options, function(err, result) {
-    if(err) {
+    if (err) {
       system.sendMessage({
-        service: 'event-drops',
+        service: "event-drops",
         message: result
       });
-      return next(err)
+      return next(err);
     }
-    res.send(elasticCtrl.buildSearchResponse('aggs', result.aggregations.group_by_index.buckets));
-
+    res.send(
+      elasticCtrl.buildSearchResponse(
+        "aggs",
+        result.aggregations.group_by_index.buckets
+      )
+    );
   });
 };

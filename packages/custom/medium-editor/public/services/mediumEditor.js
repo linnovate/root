@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-angular.module('mean.medium-editor').factory('MediumEditor', [
+angular.module("mean.medium-editor").factory("MediumEditor", [
   function() {
     return {
-      name: 'medium-editor'
+      name: "medium-editor"
     };
   }
 ]);

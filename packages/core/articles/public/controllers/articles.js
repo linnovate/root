@@ -1,6 +1,12 @@
-'use strict';
+"use strict";
 
-angular.module('mean.articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Global', 'Articles', 'MeanUser',
+angular.module("mean.articles").controller("ArticlesController", [
+  "$scope",
+  "$stateParams",
+  "$location",
+  "Global",
+  "Articles",
+  "MeanUser",
   function($scope, $stateParams, $location, Global, Articles, MeanUser) {
     $scope.global = Global;
     $scope.hasAuthorization = function(article) {
@@ -15,11 +21,11 @@ angular.module('mean.articles').controller('ArticlesController', ['$scope', '$st
           content: this.content
         });
         article.$save(function(response) {
-          $location.path('articles/' + response._id);
+          $location.path("articles/" + response._id);
         });
 
-        this.title = '';
-        this.content = '';
+        this.title = "";
+        this.content = "";
       } else {
         $scope.submitted = true;
       }
@@ -30,14 +36,14 @@ angular.module('mean.articles').controller('ArticlesController', ['$scope', '$st
         article.$remove(function(response) {
           for (var i in $scope.articles) {
             if ($scope.articles[i] === article) {
-	      $scope.articles.splice(i,1);
+              $scope.articles.splice(i, 1);
             }
           }
-          $location.path('articles');
+          $location.path("articles");
         });
       } else {
         $scope.article.$remove(function(response) {
-          $location.path('articles');
+          $location.path("articles");
         });
       }
     };
@@ -45,13 +51,13 @@ angular.module('mean.articles').controller('ArticlesController', ['$scope', '$st
     $scope.update = function(isValid) {
       if (isValid) {
         var article = $scope.article;
-        if(!article.updated) {
+        if (!article.updated) {
           article.updated = [];
-	}
+        }
         article.updated.push(new Date().getTime());
 
         article.$update(function() {
-          $location.path('articles/' + article._id);
+          $location.path("articles/" + article._id);
         });
       } else {
         $scope.submitted = true;
@@ -65,11 +71,14 @@ angular.module('mean.articles').controller('ArticlesController', ['$scope', '$st
     };
 
     $scope.findOne = function() {
-      Articles.get({
-        articleId: $stateParams.articleId
-      }, function(article) {
-        $scope.article = article;
-      });
+      Articles.get(
+        {
+          articleId: $stateParams.articleId
+        },
+        function(article) {
+          $scope.article = article;
+        }
+      );
     };
   }
 ]);

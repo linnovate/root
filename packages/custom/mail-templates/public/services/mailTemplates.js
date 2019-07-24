@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-angular.module('mean.mail-templates').factory('MailTemplates', [
+angular.module("mean.mail-templates").factory("MailTemplates", [
   function() {
     return {
-      name: 'mail-templates'
+      name: "mail-templates"
     };
   }
 ]);

@@ -1,7 +1,7 @@
-'use strict';
-console.log("************ PRODUCTION MODE *****************")
+"use strict";
+console.log("************ PRODUCTION MODE *****************");
 module.exports = {
-  db: process.env.MONGODB_URI || 'mongodb://localhost/icu',
+  db: process.env.MONGODB_URI || "mongodb://localhost/icu",
   /**
    * Database options that will be passed directly to mongoose.connect
    * Below are some examples.
@@ -27,19 +27,18 @@ module.exports = {
     */
   },
   app: {
-    name: 'MEAN - A Modern Stack - Production'
+    name: "MEAN - A Modern Stack - Production"
   },
   logging: {
-    format: 'combined'
+    format: "combined"
   },
-  emailFrom: 'SENDER EMAIL ADDRESS', // sender address like ABC <abc@example.com>
+  emailFrom: "SENDER EMAIL ADDRESS", // sender address like ABC <abc@example.com>
   mailer: {
-    service: 'SERVICE_PROVIDER',
+    service: "SERVICE_PROVIDER",
     auth: {
-      user: 'EMAIL_ID',
-      pass: 'PASSWORD'
+      user: "EMAIL_ID",
+      pass: "PASSWORD"
     }
   },
-  secret: 'SOME_TOKEN_SECRET'
+  secret: "SOME_TOKEN_SECRET"
 };
-

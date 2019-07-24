@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose'),
+var mongoose = require("mongoose"),
   Schema = mongoose.Schema,
-  archive = require('./archive.js'),
-  modelUtils = require('./modelUtils'),
-  config = require('meanio').loadConfig() ;
+  archive = require("./archive.js"),
+  modelUtils = require("./modelUtils"),
+  config = require("meanio").loadConfig();
 
 var DiscussionSchema = new Schema({
   created: {
@@ -14,7 +14,7 @@ var DiscussionSchema = new Schema({
     type: Date
   },
   recycled: {
-    type: Date,
+    type: Date
   },
   title: {
     type: String
@@ -25,12 +25,12 @@ var DiscussionSchema = new Schema({
   },
   creator: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   //manager
   assign: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   startDate: {
     type: Date
@@ -55,8 +55,15 @@ var DiscussionSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'scheduled', 'waiting-approval',  'done', 'canceled', 'archived'],
-    default: 'new'
+    enum: [
+      "new",
+      "scheduled",
+      "waiting-approval",
+      "done",
+      "canceled",
+      "archived"
+    ],
+    default: "new"
   },
   tags: [String],
   location: {
@@ -73,20 +80,20 @@ var DiscussionSchema = new Schema({
   members: [
     {
       type: Schema.ObjectId,
-      ref: 'User'
+      ref: "User"
     }
   ],
   //should we maybe have finer grain control on this
   watchers: [
     {
       type: Schema.ObjectId,
-      ref: 'User'
+      ref: "User"
     }
   ],
   bolded: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       bolded: Boolean,
       lastViewed: Date
     }
@@ -94,22 +101,22 @@ var DiscussionSchema = new Schema({
   permissions: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       level: {
         type: String,
-        enum: ['viewer', 'commenter', 'editor'],
-        default: 'viewer'
+        enum: ["viewer", "commenter", "editor"],
+        default: "viewer"
       }
     }
   ],
   project: {
     type: Schema.ObjectId,
-    ref: 'Project'
+    ref: "Project"
   },
   projects: [
     {
       type: Schema.ObjectId,
-      ref: 'Project'
+      ref: "Project"
     }
   ],
   sources: [String],
@@ -132,15 +139,15 @@ var DiscussionSchema = new Schema({
   }
 });
 
-var starVirtual = DiscussionSchema.virtual('star');
+var starVirtual = DiscussionSchema.virtual("star");
 starVirtual.get(function() {
   return this._star;
 });
 starVirtual.set(function(value) {
   this._star = value;
 });
-DiscussionSchema.set('toJSON', {virtuals: true});
-DiscussionSchema.set('toObject', {virtuals: true});
+DiscussionSchema.set("toJSON", { virtuals: true });
+DiscussionSchema.set("toObject", { virtuals: true });
 
 /**
  * Statics
@@ -148,27 +155,29 @@ DiscussionSchema.set('toObject', {virtuals: true});
 DiscussionSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
-  }).populate('creator', 'name username').exec(cb);
+  })
+    .populate("creator", "name username")
+    .exec(cb);
 };
 /**
  * middleware
  */
-var elasticsearch = require('../controllers/elasticsearch');
+var elasticsearch = require("../controllers/elasticsearch");
 
 // Will not execute until the first middleware calls `next()`
-DiscussionSchema.pre('save', function(next) {
-  let entity = this ;
-  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+DiscussionSchema.pre("save", function(next) {
+  let entity = this;
+  config.superSeeAll ? modelUtils.superSeeAll(entity, next) : next();
 });
 
-DiscussionSchema.post('save', function() {
-  elasticsearch.save(this, 'discussion');
+DiscussionSchema.post("save", function() {
+  elasticsearch.save(this, "discussion");
 });
-DiscussionSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'discussion', next);
+DiscussionSchema.pre("remove", function(next) {
+  elasticsearch.delete(this, "discussion", next);
   next();
 });
 
-DiscussionSchema.plugin(archive, 'discussion');
+DiscussionSchema.plugin(archive, "discussion");
 
-module.exports = mongoose.model('Discussion', DiscussionSchema);
+module.exports = mongoose.model("Discussion", DiscussionSchema);

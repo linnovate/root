@@ -1,25 +1,23 @@
-'use strict';
+"use strict";
 
 /**
  * Module dependencies.
  */
-var jsonfile = require('jsonfile');
-var file = 'url/data.json';
+var jsonfile = require("jsonfile");
+var file = "url/data.json";
 
-
-var mongoose = require('mongoose'),
-  User = mongoose.model('User'),
-  async = require('async'),
-  config = require('meanio').loadConfig(),
-  crypto = require('crypto'),
-  nodemailer = require('nodemailer'),
-  templates = require('../template'),
-  jwt = require('jsonwebtoken'), //https://npmjs.org/package/node-jsonwebtoken
-  config = require('meanio').loadConfig(),
-  circleSettings = require(process.cwd() + '/config/circleSettings') || {},
-  circles = require('circles-npm')(null, config.circles.uri, circleSettings),
-  uuidv1 = require('uuid/v1');
-
+var mongoose = require("mongoose"),
+  User = mongoose.model("User"),
+  async = require("async"),
+  config = require("meanio").loadConfig(),
+  crypto = require("crypto"),
+  nodemailer = require("nodemailer"),
+  templates = require("../template"),
+  jwt = require("jsonwebtoken"), //https://npmjs.org/package/node-jsonwebtoken
+  config = require("meanio").loadConfig(),
+  circleSettings = require(process.cwd() + "/config/circleSettings") || {},
+  circles = require("circles-npm")(null, config.circles.uri, circleSettings),
+  uuidv1 = require("uuid/v1");
 
 exports.authCallbackSaml = function(req, res) {
   var ip = req.ip;
@@ -27,19 +25,17 @@ exports.authCallbackSaml = function(req, res) {
   var escaped = JSON.stringify(payload);
   escaped = encodeURI(escaped);
   // We are sending the payload inside the token
-  var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
-  res.cookie('token', token);
-    jsonfile.readFile(file , function(err , obj){
-      if(obj != undefined && obj[ip]!=undefined && obj[ip]!='X'){
-        var url = obj[ip].url;
-        res.redirect(url);
-      }
-      else{
-        res.redirect('/');
-      }
-    });
+  var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60 * 5 });
+  res.cookie("token", token);
+  jsonfile.readFile(file, function(err, obj) {
+    if (obj != undefined && obj[ip] != undefined && obj[ip] != "X") {
+      var url = obj[ip].url;
+      res.redirect(url);
+    } else {
+      res.redirect("/");
+    }
+  });
 };
-
 
 /**
  * Auth callback
@@ -49,9 +45,9 @@ exports.authCallback = function(req, res) {
   var escaped = JSON.stringify(payload);
   escaped = encodeURI(escaped);
   // We are sending the payload inside the token
-  var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
-  res.cookie('token', token);
-  res.redirect('/');
+  var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60 * 5 });
+  res.cookie("token", token);
+  res.redirect("/");
 };
 
 /**
@@ -59,9 +55,9 @@ exports.authCallback = function(req, res) {
  */
 exports.signin = function(req, res) {
   if (req.isAuthenticated()) {
-    return res.redirect('/');
+    return res.redirect("/");
   }
-  res.redirect('/auth');
+  res.redirect("/auth");
 };
 
 /**
@@ -69,14 +65,14 @@ exports.signin = function(req, res) {
  */
 exports.signout = function(req, res) {
   req.logout();
-  res.redirect('/');
+  res.redirect("/");
 };
 
 /**
  * Session
  */
 exports.session = function(req, res) {
-  res.redirect('/');
+  res.redirect("/");
 };
 
 /**
@@ -85,14 +81,20 @@ exports.session = function(req, res) {
 exports.create = function(req, res, next) {
   var user = new User(req.body);
 
-  user.provider = 'local';
+  user.provider = "local";
 
   // because we set our user.provider to local our models/user.js validation will always be true
-  req.assert('name', 'You must enter a name').notEmpty();
-  req.assert('email', 'You must enter a valid email address').isEmail();
-  req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
-  req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
-  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+  req.assert("name", "You must enter a name").notEmpty();
+  req.assert("email", "You must enter a valid email address").isEmail();
+  req
+    .assert("password", "Password must be between 8-20 characters long")
+    .len(8, 20);
+  req
+    .assert("username", "Username cannot be more than 20 characters")
+    .len(1, 20);
+  req
+    .assert("confirmPassword", "Passwords do not match")
+    .equals(req.body.password);
 
   var errors = req.validationErrors();
   if (errors) {
@@ -100,7 +102,7 @@ exports.create = function(req, res, next) {
   }
 
   // Hard coded for now. Will address this with the user permissions system in v0.3.5
-  user.roles = ['authenticated'];
+  user.roles = ["authenticated"];
   user.id = user.email;
   user.uid = uuidv1();
   user.save(function(err) {
@@ -108,16 +110,17 @@ exports.create = function(req, res, next) {
       switch (err.code) {
         case 11000:
         case 11001:
-          res.status(400).json([{
-            msg: 'Username already taken',
-            param: 'username'
-          }]);
+          res.status(400).json([
+            {
+              msg: "Username already taken",
+              param: "username"
+            }
+          ]);
           break;
         default:
           var modelErrors = [];
 
           if (err.errors) {
-
             for (var x in err.errors) {
               modelErrors.push({
                 param: x,
@@ -150,10 +153,9 @@ exports.getJwt = function(req, res) {
   // We are sending the payload inside the token
   ///var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
   var token = jwt.sign(escaped, config.secret, {
-
     // expiresInMinutes: 60 * 5
   });
-  res.cookie('root-jwt', token);
+  res.cookie("root-jwt", token);
   res.json({
     token: token
   });
@@ -171,57 +173,66 @@ exports.me = function(req, res) {
  * Find user by id
  */
 exports.user = function(req, res, next, id) {
-  User
-    .findOne({
-      _id: id
-    })
-    .exec(function(err, user) {
-      if (err) return next(err);
-      if (!user) return next(new Error('Failed to load User ' + id));
-      req.profile = user;
-      next();
-    });
+  User.findOne({
+    _id: id
+  }).exec(function(err, user) {
+    if (err) return next(err);
+    if (!user) return next(new Error("Failed to load User " + id));
+    req.profile = user;
+    next();
+  });
 };
 
 /**
  * Resets the password
  */
 
-exports.resetpassword = function (req, res, next) {
-    User.findOne({
-        id: req.body.id,
-    }, function (err, user) {
-        if (user == null) {
+exports.resetpassword = function(req, res, next) {
+  User.findOne(
+    {
+      id: req.body.id
+    },
+    function(err, user) {
+      if (user == null) {
+        return res.status(400).json({
+          msg: "Token invalid or expired"
+        });
+      } else {
+        if (user.authenticate(req.body.password)) {
+          // if entered password is valid
+          if (err) {
             return res.status(400).json({
-                msg: 'Token invalid or expired'
+              msg: err
             });
-        } else {
-            if (user.authenticate(req.body.password)) {   // if entered password is valid
-                if (err) {
-                    return res.status(400).json({
-                        msg: err
-                    });
-                }
-                req.assert('password', 'Passwords do not match').equals(req.body.password);
-                req.assert('newpassword', 'Password must be between 8-20 characters long').len(8, 20);
-                var errors = req.validationErrors();
-                if (errors) {
-                    return res.status(400).send(errors);
-                }
-                user.password = req.body.newpassword;
-                user.resetPasswordToken = undefined;
-                user.resetPasswordExpires = undefined;
-                user.save(function (err) {
-                    req.logIn(user, function (err) {
-                        if (err) return next(err);
-                        return res.send({
-                            user: user
-                        });
-                    });
-                });
-            }
+          }
+          req
+            .assert("password", "Passwords do not match")
+            .equals(req.body.password);
+          req
+            .assert(
+              "newpassword",
+              "Password must be between 8-20 characters long"
+            )
+            .len(8, 20);
+          var errors = req.validationErrors();
+          if (errors) {
+            return res.status(400).send(errors);
+          }
+          user.password = req.body.newpassword;
+          user.resetPasswordToken = undefined;
+          user.resetPasswordExpires = undefined;
+          user.save(function(err) {
+            req.logIn(user, function(err) {
+              if (err) return next(err);
+              return res.send({
+                user: user
+              });
+            });
+          });
         }
-    });
+      }
+    }
+  );
 };
 
 /**
@@ -239,25 +250,31 @@ function sendMail(mailOptions) {
  * Callback for forgot password link
  */
 exports.forgotpassword = function(req, res, next) {
-  async.waterfall([
-
+  async.waterfall(
+    [
       function(done) {
         crypto.randomBytes(20, function(err, buf) {
-          var token = buf.toString('hex');
+          var token = buf.toString("hex");
           done(err, token);
         });
       },
       function(token, done) {
-        User.findOne({
-          $or: [{
-            email: req.body.text
-          }, {
-            username: req.body.text
-          }]
-        }, function(err, user) {
-          if (err || !user) return done(true);
-          done(err, user, token);
-        });
+        User.findOne(
+          {
+            $or: [
+              {
+                email: req.body.text
+              },
+              {
+                username: req.body.text
+              }
+            ]
+          },
+          function(err, user) {
+            if (err || !user) return done(true);
+            done(err, user, token);
+          }
+        );
       },
       function(user, token, done) {
         user.resetPasswordToken = token;
@@ -271,19 +288,24 @@ exports.forgotpassword = function(req, res, next) {
           to: user.email,
           from: config.emailFrom
         };
-        mailOptions = templates.forgot_password_email(user, req, token, mailOptions);
+        mailOptions = templates.forgot_password_email(
+          user,
+          req,
+          token,
+          mailOptions
+        );
         sendMail(mailOptions);
         done(null, true);
       }
     ],
     function(err, status) {
       var response = {
-        message: 'Mail successfully sent',
-        status: 'success'
+        message: "Mail successfully sent",
+        status: "success"
       };
       if (err) {
-        response.message = 'User does not exist';
-        response.status = 'danger';
+        response.message = "User does not exist";
+        response.status = "danger";
       }
       res.json(response);
     }
@@ -292,6 +314,6 @@ exports.forgotpassword = function(req, res, next) {
 
 exports.updateCircles = function(req, res, next) {
   // circles.upsertUser(req.user.id, function() {
-    next();
+  next();
   // });
 };

@@ -246,7 +246,7 @@ function OfficeDocumentDetailsController(
   // ==================================================== Menu events ==================================================== //
 
   $scope.recycle = function() {
-    EntityService.recycle('officeDocuments', $scope.item._id).then(function() {
+    EntityService.recycle("officeDocuments", $scope.item._id).then(function() {
       $scope.item.recycled = new Date();
       let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "Recycled";
@@ -258,7 +258,7 @@ function OfficeDocumentDetailsController(
       );
 
       refreshList();
-      $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
+      $scope.isRecycled = $scope.item.hasOwnProperty("recycled");
       $scope.permsToSee();
       $scope.havePermissions();
       $scope.haveEditiorsPermissions();
@@ -519,9 +519,11 @@ function OfficeDocumentDetailsController(
   };
 
   $scope.deleteDocumentFile = function(officeDocument) {
-    OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(function() {
-      $state.reload();
-    });
+    OfficeDocumentsService.deleteDocumentFile(officeDocument._id).then(
+      function() {
+        $state.reload();
+      }
+    );
   };
 
   $scope.updateStatusForApproval = function(entity) {
@@ -536,24 +538,24 @@ function OfficeDocumentDetailsController(
 
   // ==================================================== $watch: title / desc ==================================================== //
 
-  $scope.$watch('item.title', function(nVal, oVal) {
+  $scope.$watch("item.title", function(nVal, oVal) {
     if (nVal !== oVal) {
       delayedUpdateTitle($scope.item, {
-        name: 'title',
+        name: "title",
         oldVal: oVal,
         newVal: nVal,
-        action: 'renamed'
+        action: "renamed"
       });
     }
   });
 
-  $scope.$watch('item.description', function(nVal, oVal) {
+  $scope.$watch("item.description", function(nVal, oVal) {
     if (nVal !== oVal) {
       delayedUpdateDesc($scope.item, {
-        name: 'description',
+        name: "description",
         oldVal: oVal,
         newVal: nVal,
-        action: 'renamed'
+        action: "renamed"
       });
     }
   });

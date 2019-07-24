@@ -1,22 +1,21 @@
-'use strict';
+"use strict";
 
 /*
  * Defining the Package
  */
-var Module = require('meanio').Module;
+var Module = require("meanio").Module;
 
-var MailTemplates = new Module('mail-templates');
+var MailTemplates = new Module("mail-templates");
 
 /*
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
 MailTemplates.register(function(app, auth, database) {
-
   //We enable routing. By default the Package Object is passed to the routes
   MailTemplates.routes(app, auth, database);
 
-  MailTemplates.aggregateAsset('css', 'mailTemplates.css');
+  MailTemplates.aggregateAsset("css", "mailTemplates.css");
 
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above

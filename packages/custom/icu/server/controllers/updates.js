@@ -1,37 +1,36 @@
-'use strict';
+"use strict";
 
-var utils = require('./utils');
+var utils = require("./utils");
 
-var mongoose = require('mongoose'),
-  ObjectId = require('mongoose').Types.ObjectId;
-
+var mongoose = require("mongoose"),
+  ObjectId = require("mongoose").Types.ObjectId;
 
 var options = {
-  includes: 'creator',
+  includes: "creator"
 };
 
 exports.defaultOptions = options;
 
-var updateService = require('../services/updates.js'),
-  crud = require('../controllers/crud.js'),
-  update = crud('updates', options),
-  Update = require('../models/update'),
-  Task = require('../models/task'),
-  Attachement = require('../models/attachment'),
-  UpdateArchive = mongoose.model('update_archive'),
-  elasticsearch = require('./elasticsearch'),
-  mean = require('meanio'),
-  _ = require('lodash'),
-  q = require('q');
+var updateService = require("../services/updates.js"),
+  crud = require("../controllers/crud.js"),
+  update = crud("updates", options),
+  Update = require("../models/update"),
+  Task = require("../models/task"),
+  Attachement = require("../models/attachment"),
+  UpdateArchive = mongoose.model("update_archive"),
+  elasticsearch = require("./elasticsearch"),
+  mean = require("meanio"),
+  _ = require("lodash"),
+  q = require("q");
 
 var entityIssueMap = {
-  tasks: 'task',
-  projects: 'project',
-  discussions: 'discussion',
-  offices: 'office',
-  folders: 'folder',
-  officeDocuments: 'Document',
-  templateDocs: 'TemplateDoc'
+  tasks: "task",
+  projects: "project",
+  discussions: "discussion",
+  offices: "office",
+  folders: "folder",
+  officeDocuments: "Document",
+  templateDocs: "TemplateDoc"
 };
 
 Object.keys(update).forEach(function(methodName) {
@@ -39,7 +38,7 @@ Object.keys(update).forEach(function(methodName) {
 });
 
 exports.getAttachmentsForUpdate = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
@@ -47,8 +46,10 @@ exports.getAttachmentsForUpdate = function(req, res, next) {
     entity: req.locals.result._id
   };
 
-  if(_.isArray(req.locals.result)) {
-    var ids = _(req.locals.result).pluck('_id').value();
+  if (_.isArray(req.locals.result)) {
+    var ids = _(req.locals.result)
+      .pluck("_id")
+      .value();
     query = {
       entity: {
         $in: ids
@@ -57,7 +58,7 @@ exports.getAttachmentsForUpdate = function(req, res, next) {
   }
 
   Attachement.find(query).then(function(attachments) {
-    if(_.isArray(req.locals.result)) {
+    if (_.isArray(req.locals.result)) {
       _.each(req.locals.result, function(i) {
         i.attachments = _.filter(attachments, function(a) {
           return a.entity.toString() === i._id.toString();
@@ -65,8 +66,7 @@ exports.getAttachmentsForUpdate = function(req, res, next) {
       });
 
       next();
-    }
-    else {
+    } else {
       req.locals.result.attachments = attachments;
       next();
     }
@@ -74,26 +74,26 @@ exports.getAttachmentsForUpdate = function(req, res, next) {
 };
 
 exports.getByEntity = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
   var type = entityIssueMap[req.params.entity];
-  if(type == 'Document') {
-    type = 'officeDocument';
+  if (type == "Document") {
+    type = "officeDocument";
   }
-  if(type == 'TemplateDoc') {
-    type = 'templateDoc';
+  if (type == "TemplateDoc") {
+    type = "templateDoc";
   }
   Update.find({
     entityType: type,
     entity: req.params.id
   })
-  .populate('creator')
-  .then(function(updates) {
-    req.locals.result = updates;
-    next();
-  });
+    .populate("creator")
+    .then(function(updates) {
+      req.locals.result = updates;
+      next();
+    });
 };
 
 exports.getByUser = function(req, res, next) {
@@ -101,19 +101,22 @@ exports.getByUser = function(req, res, next) {
   let id = req.params.id;
 
   let models = {
-    Task: 'task',
-    Project: 'project',
-    Discussion: 'discussion',
-    Office: 'office',
-    Folder: 'folder',
-    Document: 'officeDocument',
-    TemplateDoc: 'templateDoc'
+    Task: "task",
+    Project: "project",
+    Discussion: "discussion",
+    Office: "office",
+    Folder: "folder",
+    Document: "officeDocument",
+    TemplateDoc: "templateDoc"
   };
 
   let promises = Object.keys(models).map(model => {
-    return mongoose.model(model).find({
-      watchers: id
-    }).select('_id')
+    return mongoose
+      .model(model)
+      .find({
+        watchers: id
+      })
+      .select("_id");
   });
 
   Promise.all(promises).then(results => {
@@ -123,24 +126,24 @@ exports.getByUser = function(req, res, next) {
         entity: {
           $in: result.map(v => v._id)
         }
-      }
+      };
     });
 
     Update.find({
       $or: query
     })
-    .sort(sort)
-    .skip(start)
-    .limit(limit)
-    .populate('creator', 'name lastname profile')
-    .then(function(updates) {
+      .sort(sort)
+      .skip(start)
+      .limit(limit)
+      .populate("creator", "name lastname profile")
+      .then(function(updates) {
         res.status(200).send(updates);
-    });
-  })
+      });
+  });
 };
 
 exports.created = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
@@ -155,7 +158,7 @@ exports.created = function(req, res, next) {
 };
 
 exports.updated = function(req, res, next) {
-  if(req.locals.error || !req.locals.data.shouldCreateUpdate) {
+  if (req.locals.error || !req.locals.data.shouldCreateUpdate) {
     return next();
   }
 
@@ -172,76 +175,79 @@ exports.updated = function(req, res, next) {
 function MyTasks(req) {
   var deffered = q.defer();
 
-  Task.find({
-    assign: req.user._id
-  }, function(err, tasks) {
-    if(err) {
-      deffered.reject(err);
+  Task.find(
+    {
+      assign: req.user._id
+    },
+    function(err, tasks) {
+      if (err) {
+        deffered.reject(err);
+      } else {
+        deffered.resolve(
+          tasks.map(function(t) {
+            return t._id;
+          })
+        );
+      }
     }
-    else {
-      deffered.resolve(tasks.map(function(t) {
-        return t._id;
-      }));
-    }
-  });
+  );
   return deffered.promise;
-
 }
 
 exports.getMyTasks = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  MyTasks(req).then(function(data) {
-
-    Update.find({
-      entityType: 'task',
-      entity: {
-        $in: data
-      }
-    })
-      .populate({path: 'entity', model: Task, select: 'title'})
-      .populate('creator', 'name lastname')
-      .exec(function(err, data) {
-        if(err) {
-          req.locals.error = err;
+  MyTasks(req).then(
+    function(data) {
+      Update.find({
+        entityType: "task",
+        entity: {
+          $in: data
         }
-        else {
-          req.locals.result = data;
-        }
-        next();
-      });
-  }, function(err) {
-    req.locals.error = err;
-    next();
-  });
-
+      })
+        .populate({ path: "entity", model: Task, select: "title" })
+        .populate("creator", "name lastname")
+        .exec(function(err, data) {
+          if (err) {
+            req.locals.error = err;
+          } else {
+            req.locals.result = data;
+          }
+          next();
+        });
+    },
+    function(err) {
+      req.locals.error = err;
+      next();
+    }
+  );
 };
 
 exports.signNew = function(req, res, next) {
   var entities = {
-      project: 'Project',
-      task: 'Task',
-      discussion: 'Discussion',
-      office: 'Office',
-      folder: 'Folder',
-      officeDocument: 'Document',
-      officeDocuments: 'Document',
-      templateDoc: 'TemplateDoc'
+    project: "Project",
+    task: "Task",
+    discussion: "Discussion",
+    office: "Office",
+    folder: "Folder",
+    officeDocument: "Document",
+    officeDocuments: "Document",
+    templateDoc: "TemplateDoc"
   };
 
   var query = req.acl.mongoQuery(entities[req.body.data.entityType]);
-  query.findOne({_id: req.body.data.entity}).exec(function(err, entity) {
-    if(err) {
+  query.findOne({ _id: req.body.data.entity }).exec(function(err, entity) {
+    if (err) {
       req.locals.error = err;
     }
-    if(!entity) {
+    if (!entity) {
       req.locals.error = {
         status: 404,
-        message: 'Entity not found'
+        message: "Entity not found"
       };
     }
-    if(entity) {
+    if (entity) {
       req.locals.data.watchers = entity.watchers;
       req.locals.data.circles = entity.circles;
     }

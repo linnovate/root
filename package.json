@@ -15,7 +15,8 @@
     "build": "gulp build",
     "production": "gulp production",
     "test": "run_gulp() { export ROOT_URL=$1; gulp test; }; run_gulp",
-    "postinstall": "node scripts/postinstall.js && gulp sass"
+    "postinstall": "node scripts/postinstall.js && gulp sass",
+    "format":"prettier --write \"**/*.js\""
   },
   "dependencies": {
     "assetmanager": "1.2.3",
@@ -101,6 +102,7 @@
     "mocha": "5.2.0",
     "mongo-express": "^0.46.1",
     "node-sass": "^4.9.2",
+    "prettier": "^1.18.2",
     "protractor": "5.3.2",
     "require-dir": "1.0.0",
     "run-sequence": "^2.2.1"

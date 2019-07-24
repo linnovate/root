@@ -1,10 +1,10 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose'),
+var mongoose = require("mongoose"),
   Schema = mongoose.Schema,
-  archive = require('./archive.js'),
-  modelUtils = require('./modelUtils'),
-  config = require('meanio').loadConfig() ;
+  archive = require("./archive.js"),
+  modelUtils = require("./modelUtils"),
+  config = require("meanio").loadConfig();
 
 var FolderSchema = new Schema({
   created: {
@@ -15,26 +15,26 @@ var FolderSchema = new Schema({
     type: Date
   },
   recycled: {
-    type: Date,
+    type: Date
   },
   title: {
     type: String
   },
   office: {
     type: Schema.ObjectId,
-    ref: 'Office'
+    ref: "Office"
   },
   discussion: {
     type: Schema.ObjectId,
-    ref: 'Discussion'
+    ref: "Discussion"
   },
   creator: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   manager: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   signature: {
     circles: {},
@@ -46,8 +46,8 @@ var FolderSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ['new', 'in-progress', 'canceled', 'done', 'archived'],
-    default: 'new'
+    enum: ["new", "in-progress", "canceled", "done", "archived"],
+    default: "new"
   },
   tags: [String],
   description: {
@@ -57,13 +57,13 @@ var FolderSchema = new Schema({
   watchers: [
     {
       type: Schema.ObjectId,
-      ref: 'User'
+      ref: "User"
     }
   ],
   bolded: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       bolded: Boolean,
       lastViewed: Date
     }
@@ -71,17 +71,17 @@ var FolderSchema = new Schema({
   permissions: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       level: {
         type: String,
-        enum: ['viewer', 'commenter', 'editor'],
-        default: 'viewer'
+        enum: ["viewer", "commenter", "editor"],
+        default: "viewer"
       }
     }
   ],
   parent: {
     type: Schema.ObjectId,
-    ref: 'Folder'
+    ref: "Folder"
   },
   room: {
     type: String
@@ -103,26 +103,26 @@ var FolderSchema = new Schema({
   }
 });
 
-var starVirtual = FolderSchema.virtual('star');
+var starVirtual = FolderSchema.virtual("star");
 starVirtual.get(function() {
   return this._star;
 });
 starVirtual.set(function(value) {
   this._star = value;
 });
-FolderSchema.set('toJSON', {
+FolderSchema.set("toJSON", {
   virtuals: true
 });
-FolderSchema.set('toObject', {
+FolderSchema.set("toObject", {
   virtuals: true
 });
 
 /**
  * Validations
  */
-FolderSchema.path('color').validate(function(color) {
+FolderSchema.path("color").validate(function(color) {
   return /^([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/i.test(color);
-}, 'Invalid HEX color.');
+}, "Invalid HEX color.");
 
 /**
  * Statics
@@ -130,11 +130,13 @@ FolderSchema.path('color').validate(function(color) {
 FolderSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
-  }).populate('creator', 'name username').exec(cb);
+  })
+    .populate("creator", "name username")
+    .exec(cb);
 };
 FolderSchema.statics.office = function(id, cb) {
-  require('./office');
-  var Office = mongoose.model('Office');
+  require("./office");
+  var Office = mongoose.model("Office");
   Office.findById(id, function(err, office) {
     cb(err, office || {});
   });
@@ -142,28 +144,27 @@ FolderSchema.statics.office = function(id, cb) {
 /**
  * Post middleware
  */
-var elasticsearch = require('../controllers/elasticsearch');
+var elasticsearch = require("../controllers/elasticsearch");
 
-FolderSchema.post('save', function(req, next) {
+FolderSchema.post("save", function(req, next) {
   var task = this;
   FolderSchema.statics.office(this.office, function(err, office) {
-    if(err) {
+    if (err) {
       return err;
     }
 
-
-    elasticsearch.save(task, 'folder');
+    elasticsearch.save(task, "folder");
   });
   next();
 });
 
-FolderSchema.pre('remove', function(next) {
+FolderSchema.pre("remove", function(next) {
   var task = this;
   FolderSchema.statics.office(this.office, function(err, office) {
-    if(err) {
+    if (err) {
       return err;
     }
-    elasticsearch.delete(task, 'task', next);
+    elasticsearch.delete(task, "task", next);
   });
   next();
 });
@@ -172,23 +173,22 @@ FolderSchema.pre('remove', function(next) {
  * middleware
  */
 
- // Will not execute until the first middleware calls `next()`
- FolderSchema.pre('save', function(next) {
-  let entity = this ;
-  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+// Will not execute until the first middleware calls `next()`
+FolderSchema.pre("save", function(next) {
+  let entity = this;
+  config.superSeeAll ? modelUtils.superSeeAll(entity, next) : next();
 });
 
-
-FolderSchema.post('save', function(req, next) {
-  elasticsearch.save(this, 'folder');
+FolderSchema.post("save", function(req, next) {
+  elasticsearch.save(this, "folder");
   next();
 });
 
-FolderSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'folder', next);
+FolderSchema.pre("remove", function(next) {
+  elasticsearch.delete(this, "folder", next);
   next();
 });
 
-FolderSchema.plugin(archive, 'folder');
+FolderSchema.plugin(archive, "folder");
 
-module.exports = mongoose.model('Folder', FolderSchema);
+module.exports = mongoose.model("Folder", FolderSchema);

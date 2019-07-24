@@ -1,71 +1,73 @@
-'use strict';
+"use strict";
 
-var request = require('request');
+var request = require("request");
 
 exports.save = function(req, res, gfs) {
+  gfs.files.findOne(
+    {
+      filename: "theme.css"
+    },
+    function(err, file) {
+      if (err) return res.send(500, "Error updating theme");
 
+      // Id of the current theme file
+      var _id = file ? file._id : null;
 
-    gfs.files.findOne({
-        filename: 'theme.css'
-    }, function(err, file) {
+      // Creating write stream
+      var writestream = gfs.createWriteStream({
+        filename: "theme.css"
+      });
 
-        if (err) return res.send(500, 'Error updating theme');
+      //Retrieving theme from source
 
-        // Id of the current theme file
-        var _id = (file ? file._id : null);
+      request(req.query.theme).pipe(writestream);
 
-        // Creating write stream
-        var writestream = gfs.createWriteStream({
-            filename: 'theme.css'
-        });
+      // Remove old theme file
 
-        //Retrieving theme from source
+      writestream.on("close", function(file) {
+        res.send("saved");
 
-        request(req.query.theme).pipe(writestream);
-
-        // Remove old theme file
-
-        writestream.on('close', function(file) {
-
-            res.send('saved');
-
-            if (_id && file.filename === 'theme.css') {
-                gfs.files.remove({
-                    _id: _id
-                }, function(err) {
-                    console.log(err);
-                });
+        if (_id && file.filename === "theme.css") {
+          gfs.files.remove(
+            {
+              _id: _id
+            },
+            function(err) {
+              console.log(err);
             }
-        });
+          );
+        }
+      });
 
-        writestream.on('error', function(file) {
-
-            res.send(500, 'error updating theme');
-
-        });
-
-    });
-
+      writestream.on("error", function(file) {
+        res.send(500, "error updating theme");
+      });
+    }
+  );
 };
 
 exports.defaultTheme = function(req, res, gfs) {
+  gfs.files.findOne(
+    {
+      filename: "theme.css"
+    },
+    function(err, file) {
+      if (err) return res.send(500, "Error updating theme");
 
-    gfs.files.findOne({
-        filename: 'theme.css'
-    }, function(err, file) {
+      // Id of the current theme file
+      var _id = file ? file._id : null;
 
-        if (err) return res.send(500, 'Error updating theme');
-
-        // Id of the current theme file
-        var _id = (file ? file._id : null);
-
-        if (_id && file.filename === 'theme.css') {
-            gfs.files.remove({
-                _id: _id
-            }, function(err) {
-                res.send('saved');
-                console.log(err);
-            });
-        }
-    });
+      if (_id && file.filename === "theme.css") {
+        gfs.files.remove(
+          {
+            _id: _id
+          },
+          function(err) {
+            res.send("saved");
+            console.log(err);
+          }
+        );
+      }
+    }
+  );
 };

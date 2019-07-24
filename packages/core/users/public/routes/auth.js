@@ -1,15 +1,16 @@
-'use strict';
+"use strict";
 
 //Setting up route
-angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwtInterceptorProvider',
-  function($meanStateProvider, $httpProvider, jwtInterceptorProvider) {    
-        
+angular.module("mean.users").config([
+  "$meanStateProvider",
+  "$httpProvider",
+  "jwtInterceptorProvider",
+  function($meanStateProvider, $httpProvider, jwtInterceptorProvider) {
     jwtInterceptorProvider.tokenGetter = function() {
-        
-      return localStorage.getItem('JWT');
+      return localStorage.getItem("JWT");
     };
 
-    $httpProvider.interceptors.push('jwtInterceptor');
+    $httpProvider.interceptors.push("jwtInterceptor");
 
     // Check if the user is not connected
     var checkLoggedOut = function($q, $timeout, $http, $location) {
@@ -17,11 +18,11 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
       var deferred = $q.defer();
 
       // Make an AJAX call to check if the user is logged in
-      $http.get('/api/loggedin').success(function(user) {
+      $http.get("/api/loggedin").success(function(user) {
         // Authenticated
-        if (user !== '0') {
+        if (user !== "0") {
           $timeout(deferred.reject);
-          $location.url('/login');
+          $location.url("/login");
         }
 
         // Not Authenticated
@@ -30,7 +31,6 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
 
       return deferred.promise;
     };
-
 
     // states for my app
     $meanStateProvider
@@ -52,16 +52,16 @@ angular.module('mean.users').config(['$meanStateProvider', '$httpProvider', 'jwt
       //     loggedin: checkLoggedOut
       //   }
       // })
-      .state('forgot-password', {
-        url: '/forgot-password',
-        templateUrl: 'users/views/forgot-password.html',
+      .state("forgot-password", {
+        url: "/forgot-password",
+        templateUrl: "users/views/forgot-password.html",
         resolve: {
           loggedin: checkLoggedOut
         }
       })
-      .state('reset-password', {
-        url: '/reset/:tokenId',
-        templateUrl: 'users/views/reset-password.html',
+      .state("reset-password", {
+        url: "/reset/:tokenId",
+        templateUrl: "users/views/reset-password.html",
         resolve: {
           loggedin: checkLoggedOut
         }

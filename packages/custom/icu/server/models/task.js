@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose'),
+var mongoose = require("mongoose"),
   Schema = mongoose.Schema,
-  archive = require('./archive.js'),
-  request = require('request'),
-  userSchema = require('./user'),
-  modelUtils = require('./modelUtils'),
-  config = require('meanio').loadConfig() ;
+  archive = require("./archive.js"),
+  request = require("request"),
+  userSchema = require("./user"),
+  modelUtils = require("./modelUtils"),
+  config = require("meanio").loadConfig();
 
 var TaskSchema = new Schema({
   created: {
@@ -17,28 +17,36 @@ var TaskSchema = new Schema({
     type: Date
   },
   recycled: {
-    type: Date,
+    type: Date
   },
   title: {
     type: String
   },
   project: {
     type: Schema.ObjectId,
-    ref: 'Project'
+    ref: "Project"
   },
   creator: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   manager: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   tags: [String],
   status: {
     type: String,
-    enum: ['new', 'assigned', 'in-progress', 'waiting-approval', 'review', 'rejected', 'done'],
-    default: 'new'
+    enum: [
+      "new",
+      "assigned",
+      "in-progress",
+      "waiting-approval",
+      "review",
+      "rejected",
+      "done"
+    ],
+    default: "new"
   },
   due: {
     type: Date
@@ -47,19 +55,19 @@ var TaskSchema = new Schema({
   watchers: [
     {
       type: Schema.ObjectId,
-      ref: 'User'
+      ref: "User"
     }
   ],
   officeDocuments: [
     {
       type: Schema.ObjectId,
-      ref: 'Document'
+      ref: "Document"
     }
   ],
   bolded: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       bolded: Boolean,
       lastViewed: Date
     }
@@ -67,30 +75,30 @@ var TaskSchema = new Schema({
   permissions: [
     {
       _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
+      id: { type: Schema.ObjectId, ref: "User" },
       level: {
         type: String,
-        enum: ['viewer', 'commenter', 'editor'],
-        default: 'viewer'
+        enum: ["viewer", "commenter", "editor"],
+        default: "viewer"
       }
     }
   ],
 
   assign: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   description: {
     type: String
   },
   discussion: {
     type: Schema.ObjectId,
-    ref: 'Discussion'
+    ref: "Discussion"
   },
   discussions: [
     {
       type: Schema.ObjectId,
-      ref: 'Discussion'
+      ref: "Discussion"
     }
   ],
   sources: [String],
@@ -100,19 +108,19 @@ var TaskSchema = new Schema({
   subTasks: [
     {
       type: Schema.ObjectId,
-      ref: 'Task'
+      ref: "Task"
     }
   ],
   parent: {
     type: Schema.ObjectId,
-    ref: 'Task'
+    ref: "Task"
   },
   tType: {
     type: String
   },
   templateId: {
     type: Schema.ObjectId,
-    ref: 'Task'
+    ref: "Task"
   },
   custom: {
     id: {
@@ -120,23 +128,23 @@ var TaskSchema = new Schema({
       index: true
     },
     type: {
-      type: String,
+      type: String
     },
     data: {}
   }
 });
 
-var starVirtual = TaskSchema.virtual('star');
+var starVirtual = TaskSchema.virtual("star");
 starVirtual.get(function() {
   return this._star;
 });
 starVirtual.set(function(value) {
   this._star = value;
 });
-TaskSchema.set('toJSON', {
+TaskSchema.set("toJSON", {
   virtuals: true
 });
-TaskSchema.set('toObject', {
+TaskSchema.set("toObject", {
   virtuals: true
 });
 
@@ -146,12 +154,14 @@ TaskSchema.set('toObject', {
 TaskSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
-  }).populate('creator', 'name username')
-    .populate('assign', 'name username').exec(cb);
+  })
+    .populate("creator", "name username")
+    .populate("assign", "name username")
+    .exec(cb);
 };
 TaskSchema.statics.project = function(id, cb) {
-  require('./project');
-  var Project = mongoose.model('Project');
+  require("./project");
+  var Project = mongoose.model("Project");
   Project.findById(id, function(err, project) {
     cb(err, project || {});
   });
@@ -159,7 +169,7 @@ TaskSchema.statics.project = function(id, cb) {
 /**
  * Post middleware
  */
-var elasticsearch = require('../controllers/elasticsearch');
+var elasticsearch = require("../controllers/elasticsearch");
 
 // TaskSchema.methods.updatePerms = function updatePerms (cb) {
 //   var creator = {id: '5aa506a9e38f521c17e7fbea' , level: "editor"}   ;
@@ -169,43 +179,39 @@ var elasticsearch = require('../controllers/elasticsearch');
 //  )
 // };
 
-
-TaskSchema.post('save', function(req, next) {
+TaskSchema.post("save", function(req, next) {
   var task = this;
 
   TaskSchema.statics.project(this.project, function(err, project) {
-    if(err) {
+    if (err) {
       return err;
     }
 
-    elasticsearch.save(task, 'task');
+    elasticsearch.save(task, "task");
   });
   next();
 });
-
 
 // Will not execute until the first middleware calls `next()`
-TaskSchema.pre('save', function(next) {
-  let entity = this ;
-  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+TaskSchema.pre("save", function(next) {
+  let entity = this;
+  config.superSeeAll ? modelUtils.superSeeAll(entity, next) : next();
 });
 
-
-TaskSchema.pre('remove', function(next) {
+TaskSchema.pre("remove", function(next) {
   var task = this;
   TaskSchema.statics.project(this.project, function(err, project) {
-    if(err) {
+    if (err) {
       return err;
     }
-    elasticsearch.delete(task, 'task', next);
+    elasticsearch.delete(task, "task", next);
   });
   next();
 });
 
+TaskSchema.plugin(archive, "task");
 
-TaskSchema.plugin(archive, 'task');
-
-var deepPopulate = require('mongoose-deep-populate')(mongoose);
+var deepPopulate = require("mongoose-deep-populate")(mongoose);
 TaskSchema.plugin(deepPopulate, {});
 
-module.exports = mongoose.model('Task', TaskSchema);
+module.exports = mongoose.model("Task", TaskSchema);

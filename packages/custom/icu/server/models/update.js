@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose'),
+var mongoose = require("mongoose"),
   Schema = mongoose.Schema,
-  archive = require('./archive.js'),
-  socket = require('../../../mean-socket/server');
+  archive = require("./archive.js"),
+  socket = require("../../../mean-socket/server");
 
 const UpdateSchema = new Schema({
   entity: {
@@ -12,22 +12,37 @@ const UpdateSchema = new Schema({
   entityType: {
     type: String,
     enum: [
-      'task', 'project', 'discussion', 'officeDocument',
-      'folder', 'office', 'templateDoc'
+      "task",
+      "project",
+      "discussion",
+      "officeDocument",
+      "folder",
+      "office",
+      "templateDoc"
     ]
   },
   creator: {
     type: Schema.ObjectId,
-    ref: 'User'
+    ref: "User"
   },
   updateField: {
-      type: String,
-      enum: [
-          'create',
-          'star', 'due', 'status', 'assign', 'location',
-          'title', 'description', 'tags', 'comment', 'attachment',
-          'watchers', 'startDate', 'endDate'
-      ]
+    type: String,
+    enum: [
+      "create",
+      "star",
+      "due",
+      "status",
+      "assign",
+      "location",
+      "title",
+      "description",
+      "tags",
+      "comment",
+      "attachment",
+      "watchers",
+      "startDate",
+      "endDate"
+    ]
   },
   date: {
     type: Date
@@ -40,26 +55,26 @@ const UpdateSchema = new Schema({
   }
 });
 
-var attachmentsVirtual = UpdateSchema.virtual('attachments');
+var attachmentsVirtual = UpdateSchema.virtual("attachments");
 attachmentsVirtual.get(function() {
   return this._attachments;
 });
 attachmentsVirtual.set(function(value) {
   this._attachments = value;
 });
-UpdateSchema.set('toJSON', {virtuals: true});
-UpdateSchema.set('toObject', {virtuals: true});
+UpdateSchema.set("toJSON", { virtuals: true });
+UpdateSchema.set("toObject", { virtuals: true });
 
 /**
  * Validations
  */
-UpdateSchema.path('entity').validate(function(entity) {
+UpdateSchema.path("entity").validate(function(entity) {
   return !!entity;
-}, 'Entity cannot be blank');
+}, "Entity cannot be blank");
 
-UpdateSchema.path('entityType').validate(function(entityType) {
+UpdateSchema.path("entityType").validate(function(entityType) {
   return !!entityType;
-}, 'Entity type id cannot be blank');
+}, "Entity type id cannot be blank");
 
 /**
  * Statics
@@ -67,59 +82,65 @@ UpdateSchema.path('entityType').validate(function(entityType) {
 UpdateSchema.statics.load = function(id, cb) {
   this.findOne({
     _id: id
-  }).populate('creator', 'name username').exec(cb);
+  })
+    .populate("creator", "name username")
+    .exec(cb);
 };
 
 UpdateSchema.statics.task = function(id, cb) {
-  require('./task');
-  var Task = mongoose.model('Task');
-  Task.findById(id).populate('project').exec(function(err, task) {
-    cb(err, {room: task.project ? task.project.room : null, title: task.title});
-  });
+  require("./task");
+  var Task = mongoose.model("Task");
+  Task.findById(id)
+    .populate("project")
+    .exec(function(err, task) {
+      cb(err, {
+        room: task.project ? task.project.room : null,
+        title: task.title
+      });
+    });
 };
 
 UpdateSchema.statics.project = function(id, cb) {
-  require('./project');
-  var Project = mongoose.model('Project');
+  require("./project");
+  var Project = mongoose.model("Project");
   Project.findById(id, function(err, project) {
-    cb(err, {room: project.room, title: project.title});
+    cb(err, { room: project.room, title: project.title });
   });
 };
 
 UpdateSchema.statics.office = function(id, cb) {
-  require('./office');
-  var Office = mongoose.model('Office');
+  require("./office");
+  var Office = mongoose.model("Office");
   Office.findById(id, function(err, office) {
-    cb(err, {room: office.room, title: office.title});
+    cb(err, { room: office.room, title: office.title });
   });
 };
 
 UpdateSchema.statics.folder = function(id, cb) {
-  require('./folder');
-  var Folder = mongoose.model('Folder');
+  require("./folder");
+  var Folder = mongoose.model("Folder");
   Folder.findById(id, function(err, folder) {
-    cb(err, {room: folder.room, title: folder.title});
+    cb(err, { room: folder.room, title: folder.title });
   });
 };
 
 /**
  * Post middleware
  */
-var elasticsearch = require('../controllers/elasticsearch');
+var elasticsearch = require("../controllers/elasticsearch");
 
-UpdateSchema.post('save', function(req, next) {
+UpdateSchema.post("save", function(req, next) {
   var update = this;
 
-  if(UpdateSchema.statics[update.issue]) {
+  if (UpdateSchema.statics[update.issue]) {
     UpdateSchema.statics[update.issue](update.issueId, function(err, result) {
-      if(err) {
+      if (err) {
         return err;
       }
-      elasticsearch.save(update, 'update');
+      elasticsearch.save(update, "update");
     });
-  }
-  else {
-    elasticsearch.save(update, 'update');
+  } else {
+    elasticsearch.save(update, "update");
   }
 
   checkAndNotify(update);
@@ -128,49 +149,49 @@ UpdateSchema.post('save', function(req, next) {
 });
 
 function checkAndNotify(update) {
-
   let { entityType } = update;
 
   // Check if update is important
-  if(![
-    'comment',
-    'assign',
-    'due',
-    'status'
-  ].includes(update.updateField)) return;
+  if (!["comment", "assign", "due", "status"].includes(update.updateField))
+    return;
 
   let modelName = entityType[0].toUpperCase() + entityType.slice(1);
-  if(entityType === 'officeDocument') {
-    modelName = 'Document';
+  if (entityType === "officeDocument") {
+    modelName = "Document";
   }
 
-  mongoose.model('Update')
-  .populate(update, [{
-    path: 'creator',
-    select: 'name username'
-  }, {
-    path: 'entity',
-    model: modelName
-  }], (err, doc) => {
+  mongoose.model("Update").populate(
+    update,
+    [
+      {
+        path: "creator",
+        select: "name username"
+      },
+      {
+        path: "entity",
+        model: modelName
+      }
+    ],
+    (err, doc) => {
+      if (err) return;
 
-    if(err) return;
+      let { entity, creator } = update;
 
-    let { entity, creator } = update;
+      // Check if there is assignee
+      if (!entity || !entity.assign) return;
 
-    // Check if there is assignee
-    if(!entity || !entity.assign) return;
-
-    // Skip if assignee by himself created the update
-    if(creator._id.equals(entity.assign)) return;
-    socket.notify(entity.assign.toString(), update);
-  })
+      // Skip if assignee by himself created the update
+      if (creator._id.equals(entity.assign)) return;
+      socket.notify(entity.assign.toString(), update);
+    }
+  );
 }
 
-UpdateSchema.pre('remove', function(next) {
-  elasticsearch.delete(this, 'update', next);
+UpdateSchema.pre("remove", function(next) {
+  elasticsearch.delete(this, "update", next);
   next();
 });
 
-UpdateSchema.plugin(archive, 'update');
+UpdateSchema.plugin(archive, "update");
 
-module.exports = mongoose.model('Update', UpdateSchema);
+module.exports = mongoose.model("Update", UpdateSchema);

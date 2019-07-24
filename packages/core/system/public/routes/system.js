@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 // $viewPathProvider, to allow overriding system default views
-angular.module('mean.system').provider('$viewPath', function() {
+angular.module("mean.system").provider("$viewPath", function() {
   function ViewPathProvider() {
     var overrides = {};
 
@@ -13,7 +13,7 @@ angular.module('mean.system').provider('$viewPath', function() {
 
     this.override = function(defaultPath, newPath) {
       if (overrides[defaultPath]) {
-        throw new Error('View already has an override: ' + defaultPath);
+        throw new Error("View already has an override: " + defaultPath);
       }
       overrides[defaultPath] = newPath;
       return this;
@@ -28,7 +28,9 @@ angular.module('mean.system').provider('$viewPath', function() {
 });
 
 // $meanStateProvider, provider to wire up $viewPathProvider to $stateProvider
-angular.module('mean.system').provider('$meanState', ['$stateProvider', '$viewPathProvider',
+angular.module("mean.system").provider("$meanState", [
+  "$stateProvider",
+  "$viewPathProvider",
   function($stateProvider, $viewPathProvider) {
     function MeanStateProvider() {
       this.state = function(stateName, data) {
@@ -49,39 +51,45 @@ angular.module('mean.system').provider('$meanState', ['$stateProvider', '$viewPa
 ]);
 
 //Setting up route
-angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider',
-  function($meanStateProvider, $urlRouterProvider) {
-    // For unmatched routes:
-    $urlRouterProvider.otherwise('/404');
+angular
+  .module("mean.system")
+  .config([
+    "$meanStateProvider",
+    "$urlRouterProvider",
+    function($meanStateProvider, $urlRouterProvider) {
+      // For unmatched routes:
+      $urlRouterProvider.otherwise("/404");
 
-    // states for my app
-    $meanStateProvider
-      .state('home', {
+      // states for my app
+      $meanStateProvider.state("home", {
         /*Made By OHAD - route to auth insteed of the MEAN.io template*/
         //url: '/',
         //templateUrl: 'system/views/index.html'
-        url: '/',
+        url: "/",
         resolve: {
-          checkLogin: ['$state', '$timeout', 'UsersService',
+          checkLogin: [
+            "$state",
+            "$timeout",
+            "UsersService",
             function($state, $timeout, UsersService) {
               return UsersService.getMe().then(function(result) {
                 if (result._id) {
                   return $timeout(function() {
-                    $state.go('main.tasks.byassign')
-                  })
+                    $state.go("main.tasks.byassign");
+                  });
                 } else {
-                  if (config.activeProvider === 'local') {
+                  if (config.activeProvider === "local") {
                     return $timeout(function() {
-                      $state.go('login')
-                    })
-                  } else if (config.activeProvider === 'saml') {
+                      $state.go("login");
+                    });
+                  } else if (config.activeProvider === "saml") {
                     return $timeout(function() {
-                      $state.go('saml')
-                    })
+                      $state.go("saml");
+                    });
                   } else {
                     return $timeout(function() {
-                      $state.go('auth')
-                    })
+                      $state.go("auth");
+                    });
                   }
                 }
               });
@@ -90,18 +98,19 @@ angular.module('mean.system').config(['$meanStateProvider', '$urlRouterProvider'
         }
       });
 
-    $meanStateProvider
-      .state('Log Out', {
+      $meanStateProvider.state("Log Out", {
         controller: function() {
-          window.location = '/logout';
+          window.location = "/logout";
         }
       });
-  }
-]).config(['$locationProvider',
-  function($locationProvider) {
-    $locationProvider.html5Mode({
-      enabled: true,
-      requireBase: false
-    });
-  }
-]);
+    }
+  ])
+  .config([
+    "$locationProvider",
+    function($locationProvider) {
+      $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false
+      });
+    }
+  ]);

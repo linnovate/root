@@ -1,36 +1,51 @@
-'use strict';
+"use strict";
 
-angular.module('mean.icu.data.discussionsservice', [])
-  .service('DiscussionsService', function (ApiUri, $http, $stateParams,
-                                           BoldedService, NotifyingService, PaginationService, WarningsService, ActivitiesService) {
-    var EntityPrefix = '/discussions';
+angular
+  .module("mean.icu.data.discussionsservice", [])
+  .service("DiscussionsService", function(
+    ApiUri,
+    $http,
+    $stateParams,
+    BoldedService,
+    NotifyingService,
+    PaginationService,
+    WarningsService,
+    ActivitiesService
+  ) {
+    var EntityPrefix = "/discussions";
     var data = [];
 
     function getAll(start, limit, sort) {
-        let qs = querystring.encode({
-          start: start,
-          sort: sort,
-          limit: limit
-        });
+      let qs = querystring.encode({
+        start: start,
+        sort: sort,
+        limit: limit
+      });
 
-        if (qs.length) {
-            qs = '?' + qs;
-        }
+      if (qs.length) {
+        qs = "?" + qs;
+      }
 
-        return $http.get(ApiUri + EntityPrefix + qs).then(function(result) {
+      return $http
+        .get(ApiUri + EntityPrefix + qs)
+        .then(
+          function(result) {
             WarningsService.setWarning(result.headers().warning);
             data = result.data.content || result.data;
             return result.data;
-        }, function(err) {
+          },
+          function(err) {
             return err;
-        }).then(function(some) {
-            var data = some.content ? some : [];
-            return PaginationService.processResponse(data);
+          }
+        )
+        .then(function(some) {
+          var data = some.content ? some : [];
+          return PaginationService.processResponse(data);
         });
     }
 
     function getById(id) {
-      return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
+      return $http.get(ApiUri + EntityPrefix + "/" + id).then(function(result) {
         WarningsService.setWarning(result.headers().warning);
         return result.data;
       });
@@ -44,13 +59,13 @@ angular.module('mean.icu.data.discussionsservice', [])
           sort: sort
         });
 
-        if(qs.length) {
-          qs = '?' + qs;
+        if (qs.length) {
+          qs = "?" + qs;
         }
 
-        var url = ApiUri + '/' + entity + '/' + id + EntityPrefix;
-        if(starred) {
-          url += '/starred';
+        var url = ApiUri + "/" + entity + "/" + id + EntityPrefix;
+        if (starred) {
+          url += "/starred";
         }
 
         return $http.get(url + qs).then(function(result) {
@@ -61,100 +76,132 @@ angular.module('mean.icu.data.discussionsservice', [])
     }
 
     function create(discussion) {
-      return $http.post(ApiUri + EntityPrefix, discussion).then(function(result) {
-        WarningsService.setWarning(result.headers().warning);
-        NotifyingService.notify('editionData');
-        return result.data;
-      });
+      return $http
+        .post(ApiUri + EntityPrefix, discussion)
+        .then(function(result) {
+          WarningsService.setWarning(result.headers().warning);
+          NotifyingService.notify("editionData");
+          return result.data;
+        });
     }
 
     function update(discussion) {
-      return $http.put(ApiUri + EntityPrefix + '/' + discussion._id, discussion)
+      return $http
+        .put(ApiUri + EntityPrefix + "/" + discussion._id, discussion)
         .then(result => {
-          NotifyingService.notify('editionData');
+          NotifyingService.notify("editionData");
           WarningsService.setWarning(result.headers().warning);
           return result.data;
-        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
+        })
+        .then(entity =>
+          BoldedService.boldedUpdate(entity, "discussions", "update")
+        );
     }
 
     function remove(id) {
-      return $http.delete(ApiUri + EntityPrefix + '/' + id).then(function(result) {
-        NotifyingService.notify('editionData');
-        WarningsService.setWarning(result.headers().warning);
-        return result.data;
-      });
+      return $http
+        .delete(ApiUri + EntityPrefix + "/" + id)
+        .then(function(result) {
+          NotifyingService.notify("editionData");
+          WarningsService.setWarning(result.headers().warning);
+          return result.data;
+        });
     }
 
     function star(discussion) {
-      return $http.patch(ApiUri + EntityPrefix + '/' + discussion._id + '/star', {star: !discussion.star})
+      return $http
+        .patch(ApiUri + EntityPrefix + "/" + discussion._id + "/star", {
+          star: !discussion.star
+        })
         .then(result => {
           WarningsService.setWarning(result.headers().warning);
           discussion.star = !discussion.star;
           return result.data;
-        }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
+        })
+        .then(entity =>
+          BoldedService.boldedUpdate(entity, "discussions", "update")
+        );
     }
 
     function getStarred() {
-      return $http.get(ApiUri + EntityPrefix + '/starred').then(function(result) {
-        WarningsService.setWarning(result.headers().warning);
-        return result.data;
-      });
+      return $http
+        .get(ApiUri + EntityPrefix + "/starred")
+        .then(function(result) {
+          WarningsService.setWarning(result.headers().warning);
+          return result.data;
+        });
     }
 
     function getTags() {
-      return $http.get(ApiUri + EntityPrefix + '/tags').then(function(result) {
+      return $http.get(ApiUri + EntityPrefix + "/tags").then(function(result) {
         WarningsService.setWarning(result.headers().warning);
         return result.data;
       });
     }
 
     function summary(discussion) {
-      return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/summary').then(function(result) {
-        WarningsService.setWarning(result.headers().warning);
-        return result.data;
-      });
+      return $http
+        .post(ApiUri + EntityPrefix + "/" + discussion._id + "/summary")
+        .then(function(result) {
+          WarningsService.setWarning(result.headers().warning);
+          return result.data;
+        });
     }
 
     function schedule(discussion) {
-      return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/schedule').then(function(result) {
-        WarningsService.setWarning(result.headers().warning);
-        return result.data;
-      }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
+      return $http
+        .post(ApiUri + EntityPrefix + "/" + discussion._id + "/schedule")
+        .then(function(result) {
+          WarningsService.setWarning(result.headers().warning);
+          return result.data;
+        })
+        .then(entity =>
+          BoldedService.boldedUpdate(entity, "discussions", "update")
+        );
     }
 
     function cancele(discussion) {
-      return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/cancele').then(function(result) {
-        WarningsService.setWarning(result.headers().warning);
-        return result.data;
-      }).then(entity => BoldedService.boldedUpdate(entity, 'discussions', 'update'));
+      return $http
+        .post(ApiUri + EntityPrefix + "/" + discussion._id + "/cancele")
+        .then(function(result) {
+          WarningsService.setWarning(result.headers().warning);
+          return result.data;
+        })
+        .then(entity =>
+          BoldedService.boldedUpdate(entity, "discussions", "update")
+        );
     }
 
-    function createActivity(updateField){
-      return function(entity, me, prev, remove){
+    function createActivity(updateField) {
+      return function(entity, me, prev, remove) {
         return ActivitiesService.create({
           data: {
             creator: me,
             date: new Date(),
             entity: entity.id,
-            entityType: 'discussion',
+            entityType: "discussion",
 
             updateField: updateField,
             current: entity[updateField],
-            prev: prev ? prev[updateField] : ''
+            prev: prev ? prev[updateField] : ""
           },
           context: {}
         }).then(function(result) {
-          if (updateField === 'assign' && entity.assign) {
+          if (updateField === "assign" && entity.assign) {
             var message = {};
-            message.content = entity.title || '-';
+            message.content = entity.title || "-";
           }
           return result.data;
         });
-      }
+      };
     }
 
     function WantToCreateRoom(discussion) {
-      return $http.post(ApiUri + EntityPrefix + '/' + discussion._id + '/WantToCreateRoom', discussion)
+      return $http
+        .post(
+          ApiUri + EntityPrefix + "/" + discussion._id + "/WantToCreateRoom",
+          discussion
+        )
         .then(function(result) {
           WarningsService.setWarning(result.headers().warning);
           discussion.WantToCreateRoom = !discussion.WantToCreateRoom;
@@ -165,8 +212,8 @@ angular.module('mean.icu.data.discussionsservice', [])
     return {
       getAll: getAll,
       getById: getById,
-      getByTaskId: getByEntityId('tasks'),
-      getByProjectId: getByEntityId('projects'),
+      getByTaskId: getByEntityId("tasks"),
+      getByProjectId: getByEntityId("projects"),
       getTags: getTags,
       create: create,
       update: update,
@@ -177,16 +224,16 @@ angular.module('mean.icu.data.discussionsservice', [])
       summary: summary,
       data: data,
       cancele: cancele,
-      updateStartDate: createActivity('startDate'),
-      updateEndDate: createActivity('endDate'),
-      updateStar: createActivity('star'),
-      updateTitle: createActivity('title'),
-      updateDescription: createActivity('description'),
-      updateStatus: createActivity('status'),
-      updateAssign: createActivity('assign'),
-      updateTags: createActivity('tags'),
-      updateWatcher: createActivity('watchers'),
-      updateLocation: createActivity('location'),
-      WantToCreateRoom: WantToCreateRoom,
+      updateStartDate: createActivity("startDate"),
+      updateEndDate: createActivity("endDate"),
+      updateStar: createActivity("star"),
+      updateTitle: createActivity("title"),
+      updateDescription: createActivity("description"),
+      updateStatus: createActivity("status"),
+      updateAssign: createActivity("assign"),
+      updateTags: createActivity("tags"),
+      updateWatcher: createActivity("watchers"),
+      updateLocation: createActivity("location"),
+      WantToCreateRoom: WantToCreateRoom
     };
   });

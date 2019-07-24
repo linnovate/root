@@ -1,2 +1,1 @@
-angular.module('mean.icu.data.constants', [])
-.constant('ApiUri', '/api');
+angular.module("mean.icu.data.constants", []).constant("ApiUri", "/api");

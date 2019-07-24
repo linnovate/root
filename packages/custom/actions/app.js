@@ -1,32 +1,31 @@
-'use strict';
+"use strict";
 
 /*
  * Defining the Package
  */
-var Module = require('meanio').Module;
+var Module = require("meanio").Module;
 
-var Actions = new Module('actions');
+var Actions = new Module("actions");
 
 /*
  * All MEAN packages require registration
  * Dependency injection is used to define required modules
  */
 Actions.register(function(app, auth, database) {
-
   //We enable routing. By default the Package Object is passed to the routes
   Actions.routes(app, auth, database);
 
   //We are adding a link to the main menu for all authenticated users
   Actions.menus.add({
-    title: 'actions example page',
-    link: 'actions example page',
-    roles: ['authenticated'],
-    menu: 'main'
+    title: "actions example page",
+    link: "actions example page",
+    roles: ["authenticated"],
+    menu: "main"
   });
 
-    Actions.aggregateAsset('css', 'actions.css');
+  Actions.aggregateAsset("css", "actions.css");
 
-	//require('./server/providers/actions')(Actions, app, auth, database);
+  //require('./server/providers/actions')(Actions, app, auth, database);
 
   /**
     //Uncomment to use. Requires meanio@0.3.7 or above

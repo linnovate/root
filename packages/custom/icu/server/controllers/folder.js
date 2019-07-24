@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-require('../models/folder');
+require("../models/folder");
 
 var options = {
-  includes: 'assign watchers office folder',
+  includes: "assign watchers office folder",
   defaults: {
     watchers: [],
     office: undefined
@@ -12,27 +12,27 @@ var options = {
 
 exports.defaultOptions = options;
 
-var crud = require('../controllers/crud.js');
-var folderController = crud('folders', options);
+var crud = require("../controllers/crud.js");
+var folderController = crud("folders", options);
 
-var mongoose = require('mongoose'),
-  Folder = mongoose.model('Folder'),
-  Task = mongoose.model('Task'),
-  User = mongoose.model('User'),
-  Document = mongoose.model('Document'),
-  _ = require('lodash'),
-  elasticsearch = require('./elasticsearch.js');
+var mongoose = require("mongoose"),
+  Folder = mongoose.model("Folder"),
+  Task = mongoose.model("Task"),
+  User = mongoose.model("User"),
+  Document = mongoose.model("Document"),
+  _ = require("lodash"),
+  elasticsearch = require("./elasticsearch.js");
 
-var Order = require('../models/order');
+var Order = require("../models/order");
 
 Object.keys(folderController).forEach(function(methodName) {
-  if(methodName !== 'destroy') {
+  if (methodName !== "destroy") {
     exports[methodName] = folderController[methodName];
   }
 });
 
 exports.destroy = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
@@ -42,19 +42,22 @@ exports.destroy = function(req, res, next) {
   }).then(function(tasks) {
     //FIXME: do it with mongo aggregate
     var groupedTasks = _.groupBy(tasks, function(task) {
-      return task.discussions.length > 0 ? 'release' : 'remove';
+      return task.discussions.length > 0 ? "release" : "remove";
     });
 
     groupedTasks.remove = groupedTasks.remove || [];
     groupedTasks.release = groupedTasks.release || [];
 
-    Task.update({
-      _id: {
-        $in: groupedTasks.release
+    Task.update(
+      {
+        _id: {
+          $in: groupedTasks.release
+        }
+      },
+      {
+        folder: null
       }
-    }, {
-      folder: null
-    }).exec();
+    ).exec();
 
     Task.remove({
       _id: {
@@ -63,54 +66,61 @@ exports.destroy = function(req, res, next) {
     }).then(function() {
       //FIXME: needs to be optimized to one query
       groupedTasks.remove.forEach(function(task) {
-        elasticsearch.delete(task, 'task', null, next);
+        elasticsearch.delete(task, "task", null, next);
       });
 
       var removeTaskIds = _(groupedTasks.remove)
-        .pluck('_id')
+        .pluck("_id")
         .map(function(i) {
           return i.toString();
         })
         .value();
 
-      User.update({
-        'profile.starredTasks': {
-          $in: removeTaskIds
-        }
-      }, {
-        $pull: {
-          'profile.starredTasks': {
+      User.update(
+        {
+          "profile.starredTasks": {
             $in: removeTaskIds
           }
+        },
+        {
+          $pull: {
+            "profile.starredTasks": {
+              $in: removeTaskIds
+            }
+          }
         }
-      }).exec();
+      ).exec();
     });
 
     folderController.destroy(req, res, next);
-
   });
 };
 
 exports.update = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  if(req.body.watcherAction) {
-    if(req.body.watcherAction == 'added') {
+  if (req.body.watcherAction) {
+    if (req.body.watcherAction == "added") {
       Document.update(
         {
           folder: req.body._id
-        }, {
-          $push: {watchers: req.body.watcherId}
-        }, {multi: true}).exec();
-    }
-    else {
+        },
+        {
+          $push: { watchers: req.body.watcherId }
+        },
+        { multi: true }
+      ).exec();
+    } else {
       Document.update(
         {
           folder: req.body._id
-        }, {
-          $pull: {watchers: req.body.watcherId}
-        }, {multi: true}).exec();
+        },
+        {
+          $pull: { watchers: req.body.watcherId }
+        },
+        { multi: true }
+      ).exec();
     }
   }
 
@@ -118,44 +128,47 @@ exports.update = function(req, res, next) {
 };
 
 exports.getByEntity = function(req, res, next) {
-
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
   var entities = {
-      offices: 'office',
-      users: 'assign',
-      discussions: 'discussions',
-      tags: 'tags'
+      offices: "office",
+      users: "assign",
+      discussions: "discussions",
+      tags: "tags"
     },
     entityQuery = {
       tType: {
-        $ne: 'template'
+        $ne: "template"
       },
       $or: [
         {
           parent: null
-        }, {
+        },
+        {
           parent: {
             $exists: false
           }
         }
       ]
     };
-  entityQuery[entities[req.params.entity]] = req.params.id instanceof Array ? {
-    $in: req.params.id
-  } : req.params.id;
+  entityQuery[entities[req.params.entity]] =
+    req.params.id instanceof Array
+      ? {
+          $in: req.params.id
+        }
+      : req.params.id;
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if(ids && ids.length) {
+  if (ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
     starredOnly = true;
   }
-  var query = req.acl.mongoQuery('Folder');
+  var query = req.acl.mongoQuery("Folder");
 
   query.find(entityQuery);
   query.populate(options.includes);
@@ -163,10 +176,10 @@ exports.getByEntity = function(req, res, next) {
   Folder.find(entityQuery).count({}, function(err, c) {
     req.locals.data.pagination.count = c;
 
-
     var pagination = req.locals.data.pagination;
-    if(pagination && pagination.type && pagination.type === 'page') {
-      query.sort(pagination.sort)
+    if (pagination && pagination.type && pagination.type === "page") {
+      query
+        .sort(pagination.sort)
         .skip(pagination.start)
         .limit(pagination.limit);
     }
@@ -192,42 +205,43 @@ exports.getByEntity = function(req, res, next) {
     //     })
     //}
     query.exec(function(err, folders) {
-      if(err) {
+      if (err) {
         req.locals.error = {
-          message: 'Can\'t get tags'
+          message: "Can't get tags"
         };
-      }
-      else if(starredOnly) {
+      } else if (starredOnly) {
         folders.forEach(function(folder) {
           folder.star = true;
         });
       }
-      if(pagination.sort == 'custom') {
+      if (pagination.sort == "custom") {
         var temp = new Array(tasks.length);
         var tasksTemp = tasks;
-        Order.find({name: 'Task', project: tasks[0].project}, function(err, data) {
+        Order.find({ name: "Task", project: tasks[0].project }, function(
+          err,
+          data
+        ) {
           data.forEach(function(element) {
-            for(var index = 0; index < tasksTemp.length; index++) {
-              if(JSON.stringify(tasksTemp[index]._id) === JSON.stringify(element.ref)) {
+            for (var index = 0; index < tasksTemp.length; index++) {
+              if (
+                JSON.stringify(tasksTemp[index]._id) ===
+                JSON.stringify(element.ref)
+              ) {
                 temp[element.order - 1] = tasks[index];
               }
-
             }
           });
           tasks = temp;
           req.locals.result = tasks;
           next();
         });
-      }
-      else {
+      } else {
         req.locals.result = folders;
 
         next();
       }
     });
   });
-
-
 };
 
 // exports.getByEntity = function(req, res, next) {
@@ -306,21 +320,19 @@ exports.getByEntity = function(req, res, next) {
 
 //   });
 
-
 // };
 
 exports.tagsList = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
-  var query = req.acl.mongoQuery('Folder');
-  query.distinct('tags', function(error, tags) {
-    if(error) {
+  var query = req.acl.mongoQuery("Folder");
+  query.distinct("tags", function(error, tags) {
+    if (error) {
       req.locals.error = {
-        message: 'Can\'t get tags'
+        message: "Can't get tags"
       };
-    }
-    else {
+    } else {
       req.locals.result = tags || [];
     }
 
@@ -329,11 +341,11 @@ exports.tagsList = function(req, res, next) {
 };
 
 exports.getByDiscussion = function(req, res, next) {
-  if(req.locals.error) {
+  if (req.locals.error) {
     return next();
   }
 
-  if(req.params.entity !== 'discussions') return next();
+  if (req.params.entity !== "discussions") return next();
 
   var entityQuery = {
     discussions: req.params.id,
@@ -345,7 +357,7 @@ exports.getByDiscussion = function(req, res, next) {
 
   var starredOnly = false;
   var ids = req.locals.data.ids;
-  if(ids && ids.length) {
+  if (ids && ids.length) {
     entityQuery._id = {
       $in: ids
     };
@@ -355,21 +367,20 @@ exports.getByDiscussion = function(req, res, next) {
     folder: 1,
     _id: 0
   });
-  Query.populate('folder');
+  Query.populate("folder");
 
   Query.exec(function(err, folders) {
-    if(err) {
+    if (err) {
       req.locals.error = {
-        message: 'Can\'t get folders'
+        message: "Can't get folders"
       };
-    }
-    else {
-      folders = _.uniq(folders, 'folder._id');
+    } else {
+      folders = _.uniq(folders, "folder._id");
       folders = _.map(folders, function(item) {
         return item.folder;
       });
 
-      if(starredOnly) {
+      if (starredOnly) {
         folders.forEach(function(folder) {
           folder.star = true;
         });

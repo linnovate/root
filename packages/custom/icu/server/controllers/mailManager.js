@@ -1,30 +1,31 @@
-'use strict';
+"use strict";
 
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-  User = mongoose.model('User'),
-  _ = require('lodash'),
-  config = require('meanio').loadConfig(),
-  templates = require('../template'),
-  nodemailer = require('nodemailer'),
-  smtpTransport = require('nodemailer-smtp-transport'),
-  EmailTemplate = require('../../../mail-templates/node_modules/email-templates').EmailTemplate,
-  path = require('path');
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+var mongoose = require("mongoose"),
+  User = mongoose.model("User"),
+  _ = require("lodash"),
+  config = require("meanio").loadConfig(),
+  templates = require("../template"),
+  nodemailer = require("nodemailer"),
+  smtpTransport = require("nodemailer-smtp-transport"),
+  EmailTemplate = require("../../../mail-templates/node_modules/email-templates")
+    .EmailTemplate,
+  path = require("path");
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 function sendMail(mailOptions) {
   var options = config.mailer;
 
-  if(config.mailer.service === 'SMTP') {
+  if (config.mailer.service === "SMTP") {
     options = smtpTransport(options);
   }
 
   var transport = nodemailer.createTransport(options);
 
   transport.sendMail(mailOptions, function(err, response) {
-    if(err) return err;
+    if (err) return err;
     return response;
   });
 }
@@ -33,7 +34,7 @@ function sendMail(mailOptions) {
 //send should be deleted latter and use this function
 //as sole interface to main manager
 exports.sendEx = function(type, data) {
-  if(type === 'comment_email') {
+  if (type === "comment_email") {
     //template format does not compatible yet
     //use send function
     return;
@@ -41,11 +42,13 @@ exports.sendEx = function(type, data) {
 
   data.uriRoot = config.icu.uri;
   data.date = new Date();
-  data.attendees = _(data.discussion.watchers).map(function(w) {
-    return w.name;
-  }).join(', ');
+  data.attendees = _(data.discussion.watchers)
+    .map(function(w) {
+      return w.name;
+    })
+    .join(", ");
 
-  var templateDir = path.join(__dirname, '..', 'templates', type);
+  var templateDir = path.join(__dirname, "..", "templates", type);
   var template = new EmailTemplate(templateDir);
 
   template.render(data, function(err, results) {
@@ -80,14 +83,20 @@ exports.send = function(doc, task) {
         $in: arr
       }
     }).exec(function(err, users) {
-
-      for(var i = 0; i < users.length; i += 1) {
+      for (var i = 0; i < users.length; i += 1) {
         var user = users[i];
         var mailOptions = {
           to: user.email,
           from: config.emailFrom
         };
-        mailOptions = templates.comment_email(user, doc.text, from, task, config.icu.uri, mailOptions);
+        mailOptions = templates.comment_email(
+          user,
+          doc.text,
+          from,
+          task,
+          config.icu.uri,
+          mailOptions
+        );
         sendMail(mailOptions);
       }
     });

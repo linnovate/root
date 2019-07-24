@@ -1,199 +1,229 @@
-'use strict';
+"use strict";
 
-angular.module('mean.icu.data.usersservice', [])
-    .service('UsersService', function($http, $q, ApiUri, Upload, $rootScope, $state, $cookies, $window, NotifyingService, WarningsService) {
-    var EntityPrefix = '/users';
+angular
+  .module("mean.icu.data.usersservice", [])
+  .service("UsersService", function(
+    $http,
+    $q,
+    ApiUri,
+    Upload,
+    $rootScope,
+    $state,
+    $cookies,
+    $window,
+    NotifyingService,
+    WarningsService
+  ) {
+    var EntityPrefix = "/users";
     var me = null;
     var people = null;
 
-
     function getPeople() {
-        return people;
+      return people;
     }
 
     function getAll() {
-        return $http.get(ApiUri + EntityPrefix).then(function(result) {
-            let people = result.data;
+      return $http.get(ApiUri + EntityPrefix).then(function(result) {
+        let people = result.data;
 
-            people.forEach(person => {
-                person.job = person.job || person.name;
-            })
-
-            return result.data;
+        people.forEach(person => {
+          person.job = person.job || person.name;
         });
+
+        return result.data;
+      });
     }
 
     function getMe() {
-        var deferred = $q.defer();
+      var deferred = $q.defer();
 
-        if (me) {
-            deferred.resolve(me);
-        } else {
-            $http.get('/api/users/me').then(function(result) {
-            	WarningsService.setWarning(result.headers().warning);
-                if (!result.data) {
-                    deferred.reject(null);
-                } else {
-                    getById(result.data._id).then(function(user) {
-                        me = user;
-                        deferred.resolve(me);
-                    });
-                }
+      if (me) {
+        deferred.resolve(me);
+      } else {
+        $http.get("/api/users/me").then(
+          function(result) {
+            WarningsService.setWarning(result.headers().warning);
+            if (!result.data) {
+              deferred.reject(null);
+            } else {
+              getById(result.data._id).then(function(user) {
+                me = user;
+                deferred.resolve(me);
+              });
+            }
+          },
+          function() {
+            deferred.reject(null);
+          }
+        );
+      }
 
-            }, function() {
-                deferred.reject(null);
-            });
-        }
-
-        return deferred.promise;
+      return deferred.promise;
     }
 
     function getByProjectId(id) {
-        return $http.get(ApiUri + '/projects/' + id + '/users').then(function(usersResult) {
-        	WarningsService.setWarning(usersResult.headers().warning);
-            return usersResult.data;
+      return $http
+        .get(ApiUri + "/projects/" + id + "/users")
+        .then(function(usersResult) {
+          WarningsService.setWarning(usersResult.headers().warning);
+          return usersResult.data;
         });
     }
 
     function getByOfficeId(id) {
-        return $http.get(ApiUri + '/offices/' + id + '/users').then(function(usersResult) {
-        	WarningsService.setWarning(usersResult.headers().warning);
-            return usersResult.data;
+      return $http
+        .get(ApiUri + "/offices/" + id + "/users")
+        .then(function(usersResult) {
+          WarningsService.setWarning(usersResult.headers().warning);
+          return usersResult.data;
         });
     }
 
     function getByFolderId(id) {
-        return $http.get(ApiUri + '/folders/' + id + '/users').then(function(usersResult) {
-        	WarningsService.setWarning(usersResult.headers().warning);
-            return usersResult.data;
+      return $http
+        .get(ApiUri + "/folders/" + id + "/users")
+        .then(function(usersResult) {
+          WarningsService.setWarning(usersResult.headers().warning);
+          return usersResult.data;
         });
     }
 
     function getByDiscussionId(id) {
-        return $http.get(ApiUri + '/discussions/' + id + '/users').then(function(usersResult) {
-        	WarningsService.setWarning(usersResult.headers().warning);
-            return usersResult.data;
+      return $http
+        .get(ApiUri + "/discussions/" + id + "/users")
+        .then(function(usersResult) {
+          WarningsService.setWarning(usersResult.headers().warning);
+          return usersResult.data;
         });
     }
 
     function getById(id) {
-        return $http.get(ApiUri + EntityPrefix + '/' + id).then(function(result) {
-        	WarningsService.setWarning(result.headers().warning);
-            return result.data;
-        });
+      return $http.get(ApiUri + EntityPrefix + "/" + id).then(function(result) {
+        WarningsService.setWarning(result.headers().warning);
+        return result.data;
+      });
     }
 
     function update(user) {
-        return $http.put('/api/users/' + user._id, user).then(function(result) {
-        	WarningsService.setWarning(result.headers().warning);
-            me = result.data;
-            getAll();
-            return result.data;
-        });
+      return $http.put("/api/users/" + user._id, user).then(function(result) {
+        WarningsService.setWarning(result.headers().warning);
+        me = result.data;
+        getAll();
+        return result.data;
+      });
     }
-
 
     function login(credentials) {
-        return $http.post('/api/login', credentials).then(function(result) {
-        	WarningsService.setWarning(result.headers().warning);
-            localStorage.setItem('JWT', result.data.token);
-            return result;
-        }, function(err) {
-        	return err;
-        });
+      return $http.post("/api/login", credentials).then(
+        function(result) {
+          WarningsService.setWarning(result.headers().warning);
+          localStorage.setItem("JWT", result.data.token);
+          return result;
+        },
+        function(err) {
+          return err;
+        }
+      );
     }
 
-    function saml(){
-        if(!$cookies.get('token')) {
-            $window.open('/api/auth/saml', '_self');
-        }else{
-            localStorage.setItem('JWT', $cookies.get('token'));
-            $http.get('/api/index').then(
-                function(result){
-                    var url = result.data.toString();
-                    $window.open(url,"_self");
-                }
-                ,
-                function(err){
-                    window.alert("Error:"+err.status+"  "+err.statusText);
-                });
-        }
+    function saml() {
+      if (!$cookies.get("token")) {
+        $window.open("/api/auth/saml", "_self");
+      } else {
+        localStorage.setItem("JWT", $cookies.get("token"));
+        $http.get("/api/index").then(
+          function(result) {
+            var url = result.data.toString();
+            $window.open(url, "_self");
+          },
+          function(err) {
+            window.alert("Error:" + err.status + "  " + err.statusText);
+          }
+        );
+      }
     }
 
     function logout() {
-        return $http.get('/api/logout').then(function() {
-            localStorage.removeItem('JWT');
-            $cookies.remove('root-jwt');
-            me = null;
-        });
+      return $http.get("/api/logout").then(function() {
+        localStorage.removeItem("JWT");
+        $cookies.remove("root-jwt");
+        me = null;
+      });
     }
 
     function register(credentials) {
-        return $http.post('/api/register', credentials).then(function(result) {
-        	WarningsService.setWarning(result.headers().warning);
-            NotifyingService.notify('editionData');
-            localStorage.setItem('JWT', result.data.token);
-            return result;
-        }, function(err) {
-        	return err;
-        });
+      return $http.post("/api/register", credentials).then(
+        function(result) {
+          WarningsService.setWarning(result.headers().warning);
+          NotifyingService.notify("editionData");
+          localStorage.setItem("JWT", result.data.token);
+          return result;
+        },
+        function(err) {
+          return err;
+        }
+      );
     }
 
     function updateAvatar(file) {
-        return Upload.upload({
-            url: '/api/avatar',
-            file: file
-        }).success(function(data) {
-            if(!me.profile){
-                me.profile = {};
-                me.profile.avatar = null;
-            }
-            me.profile.avatar = data.avatar;
-            NotifyingService.notify('editionData');
-            update(me);
-            getAll();
-        });
+      return Upload.upload({
+        url: "/api/avatar",
+        file: file
+      }).success(function(data) {
+        if (!me.profile) {
+          me.profile = {};
+          me.profile.avatar = null;
+        }
+        me.profile.avatar = data.avatar;
+        NotifyingService.notify("editionData");
+        update(me);
+        getAll();
+      });
     }
 
-    function resetAvatar(){
-        return delete me.profile.avatar;
+    function resetAvatar() {
+      return delete me.profile.avatar;
     }
 
     function onIdentity(response) {
-        localStorage.setItem('JWT', response.token);
-        $rootScope.$emit('loggedin');
-        $state.go('main.tasks');
-
+      localStorage.setItem("JWT", response.token);
+      $rootScope.$emit("loggedin");
+      $state.go("main.tasks");
     }
 
     function loginToHi(username, password) {
-        return $http.post('/api/hi/login', {
-            user: username,
-            password: password
-        }).then(function(result) {
-            return (result.data);
-        }, function(err) {
+      return $http
+        .post("/api/hi/login", {
+          user: username,
+          password: password
+        })
+        .then(
+          function(result) {
+            return result.data;
+          },
+          function(err) {
             return err;
-        });
+          }
+        );
     }
 
     return {
-        getAll: getAll,
-        getMe: getMe,
-        getById: getById,
-        getByProjectId: getByProjectId,
-        getByDiscussionId: getByDiscussionId,
-        login: login,
-        saml: saml,
-        logout: logout,
-        register: register,
-        resetAvatar: resetAvatar,
-        update: update,
-        getPeople: getPeople,
-        updateAvatar: updateAvatar,
-        onIdentity: onIdentity,
-        loginToHi: loginToHi,
-        getByOfficeId: getByOfficeId,
-        getByFolderId: getByFolderId
+      getAll: getAll,
+      getMe: getMe,
+      getById: getById,
+      getByProjectId: getByProjectId,
+      getByDiscussionId: getByDiscussionId,
+      login: login,
+      saml: saml,
+      logout: logout,
+      register: register,
+      resetAvatar: resetAvatar,
+      update: update,
+      getPeople: getPeople,
+      updateAvatar: updateAvatar,
+      onIdentity: onIdentity,
+      loginToHi: loginToHi,
+      getByOfficeId: getByOfficeId,
+      getByFolderId: getByFolderId
     };
-});
+  });

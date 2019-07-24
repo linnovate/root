@@ -1,79 +1,81 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose'),
+var mongoose = require("mongoose"),
   Schema = mongoose.Schema,
-  archive = require('./archive.js'),
-  modelUtils = require('./modelUtils'),
-  config = require('meanio').loadConfig() ;
+  archive = require("./archive.js"),
+  modelUtils = require("./modelUtils"),
+  config = require("meanio").loadConfig();
 
-var TemplateDocSchema = new Schema({
-  created: {
-    type: Date
-  },
-  creator: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  },
-  title: {
-    type: String
-  },
-  recycled: {
-    type: Date,
-  },
-  path: {
-    type: String
-  },
-  spPath: {
-    type: String
-  },
-  description: {
-    type: String
-  },
-  templateType: { //docx,pptx,xlsx
-    type: String
-  },
-  office: {
-    type: Schema.Types.ObjectId,
-    ref: 'Office'
-  },
-  assign: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  },
-  size: {
-    type: Number
-  },
-  circles: {
-    type: Schema.Types.Mixed
-  },
-  watchers: [
-    {
+var TemplateDocSchema = new Schema(
+  {
+    created: {
+      type: Date
+    },
+    creator: {
       type: Schema.ObjectId,
-      ref: 'User'
-    }
-  ],
-  bolded: [
-    {
-      _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
-      bolded: Boolean,
-      lastViewed: Date
-    }
-  ],
-  permissions: [
-    {
-      _id: false,
-      id: {type: Schema.ObjectId, ref: 'User'},
-      level: {
-        type: String,
-        enum: ['viewer', 'commenter', 'editor'],
-        default: 'viewer'
+      ref: "User"
+    },
+    title: {
+      type: String
+    },
+    recycled: {
+      type: Date
+    },
+    path: {
+      type: String
+    },
+    spPath: {
+      type: String
+    },
+    description: {
+      type: String
+    },
+    templateType: {
+      //docx,pptx,xlsx
+      type: String
+    },
+    office: {
+      type: Schema.Types.ObjectId,
+      ref: "Office"
+    },
+    assign: {
+      type: Schema.ObjectId,
+      ref: "User"
+    },
+    size: {
+      type: Number
+    },
+    circles: {
+      type: Schema.Types.Mixed
+    },
+    watchers: [
+      {
+        type: Schema.ObjectId,
+        ref: "User"
       }
-    }
-  ]
-}, {collection: 'template_docs'});
-
-
+    ],
+    bolded: [
+      {
+        _id: false,
+        id: { type: Schema.ObjectId, ref: "User" },
+        bolded: Boolean,
+        lastViewed: Date
+      }
+    ],
+    permissions: [
+      {
+        _id: false,
+        id: { type: Schema.ObjectId, ref: "User" },
+        level: {
+          type: String,
+          enum: ["viewer", "commenter", "editor"],
+          default: "viewer"
+        }
+      }
+    ]
+  },
+  { collection: "template_docs" }
+);
 
 /**
 TemplateDocSchema.statics.load = function (id, cb) {
@@ -167,12 +169,11 @@ TemplateDocSchema.pre('remove', function (next) {
  */
 
 // Will not execute until the first middleware calls `next()`
-TemplateDocSchema.pre('save', function(next) {
-  let entity = this ;
-  config.superSeeAll ? modelUtils.superSeeAll(entity,next) : next() ;
+TemplateDocSchema.pre("save", function(next) {
+  let entity = this;
+  config.superSeeAll ? modelUtils.superSeeAll(entity, next) : next();
 });
 
+TemplateDocSchema.plugin(archive, "templateDoc");
 
-TemplateDocSchema.plugin(archive, 'templateDoc');
-
-module.exports = mongoose.model('TemplateDoc', TemplateDocSchema);
+module.exports = mongoose.model("TemplateDoc", TemplateDocSchema);

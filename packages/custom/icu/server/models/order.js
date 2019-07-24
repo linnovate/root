@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose'),
+var mongoose = require("mongoose"),
   Schema = mongoose.Schema,
-  archive = require('./archive.js');
+  archive = require("./archive.js");
 
 var OrderTaskSchema = new Schema({
   name: {
@@ -31,7 +31,6 @@ var OrderTaskSchema = new Schema({
 //   }).populate('creator', 'name username').exec(cb);
 // };
 
-
 //OrderSchema.plugin(archive, 'order');
 
-module.exports = mongoose.model('OrderTask', OrderTaskSchema);
+module.exports = mongoose.model("OrderTask", OrderTaskSchema);

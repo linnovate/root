@@ -1,28 +1,32 @@
-var crud = require('../controllers/crud.js');
-var Task = require('../models/task'), Attachment = require('../models/attachment');
-var Document = require('../models/document');
-var mean = require('meanio'), path = require('path'), fs = require('fs'),
-  mkdirp = require('mkdirp'), config = require('meanio').loadConfig(), Busboy = require('busboy'),
-  q = require('q'), request = require('request');
-var mongoose = require('mongoose');
-var User = mongoose.model('User');
-var Update = require('../models/update');
-var ObjectId = require('mongoose').Types.ObjectId;
-var TemplateDoc = require('../models/templateDoc');
-var Office = require('../models/office');
-var logger = require('../services/logger');
-var elasticsearch = require('./elasticsearch');
-
-
+var crud = require("../controllers/crud.js");
+var Task = require("../models/task"),
+  Attachment = require("../models/attachment");
+var Document = require("../models/document");
+var mean = require("meanio"),
+  path = require("path"),
+  fs = require("fs"),
+  mkdirp = require("mkdirp"),
+  config = require("meanio").loadConfig(),
+  Busboy = require("busboy"),
+  q = require("q"),
+  request = require("request");
+var mongoose = require("mongoose");
+var User = mongoose.model("User");
+var Update = require("../models/update");
+var ObjectId = require("mongoose").Types.ObjectId;
+var TemplateDoc = require("../models/templateDoc");
+var Office = require("../models/office");
+var logger = require("../services/logger");
+var elasticsearch = require("./elasticsearch");
 
 var options = {
-  includes: 'creator office watchers',
-  defaults: {watchers: []}
+  includes: "creator office watchers",
+  defaults: { watchers: [] }
 };
-var templateDocs = crud('templateDocs', options);
+var templateDocs = crud("templateDocs", options);
 
 Object.keys(templateDocs).forEach(function(methodName) {
-  if(methodName !== 'create' && methodName !== 'update') {
+  if (methodName !== "create" && methodName !== "update") {
     exports[methodName] = templateDocs[methodName];
   }
 });
@@ -30,263 +34,332 @@ Object.keys(templateDocs).forEach(function(methodName) {
 function getTemplates(entity, id) {
   var result = [];
   return new Promise(function(fulfill, reject) {
-    TemplateDoc.find({
-      entity: entity,
-      entityId: id
-    }, function(err, docs) {
-      if(err) {
-        reject('error');
-      }
-      else {
-        for(var i = 0; i < docs.length; i++) {
-          result.push(docs[i]._doc.path);
+    TemplateDoc.find(
+      {
+        entity: entity,
+        entityId: id
+      },
+      function(err, docs) {
+        if (err) {
+          reject("error");
+        } else {
+          for (var i = 0; i < docs.length; i++) {
+            result.push(docs[i]._doc.path);
+          }
+          fulfill(result);
         }
-        fulfill(result);
       }
-    });
+    );
   });
 }
-
-
 
 exports.createNew = function(req, res, next) {
   var template = {
     created: new Date(),
     creator: req.user._id,
-    title: '',
+    title: "",
     path: undefined,
     spPath: undefined,
-    description: '', //important
-    templateType: '',
+    description: "", //important
+    templateType: "",
     office: undefined,
     assign: req.user._id,
     size: 0,
     circles: undefined,
     watchers: [req.user._id],
-    permissions: [{id: req.user._id, level: 'editor'}]
+    permissions: [{ id: req.user._id, level: "editor" }]
   };
   var obj = new TemplateDoc(template);
   obj.save(function(error, result) {
-    if(error) {
-      logger.log('error', '%s templateDocx.createNew, %s', req.user.name, ' obj.save', {error: error.stack});
+    if (error) {
+      logger.log(
+        "error",
+        "%s templateDocx.createNew, %s",
+        req.user.name,
+        " obj.save",
+        { error: error.stack }
+      );
       res.send(error);
-    }
-    else {
+    } else {
       res.send(result);
     }
   });
 };
 /**
-*	req.params contains entity,id (mongoDB _id of entity)
-*
-*
-*
-*/
+ *	req.params contains entity,id (mongoDB _id of entity)
+ *
+ *
+ *
+ */
 exports.sendTemplateList = function(req, res, next) {
   var entity = req.params.entity;
   var entityId = req.params.id;
   var userId = req.user._id;
   var entities = {
-    project: 'Project',
-    task: 'Task',
-    discussion: 'Discussion'
+    project: "Project",
+    task: "Task",
+    discussion: "Discussion"
   };
   var query = mongoose.model(entities[entity]);
-  query.findOne({
-    _id: entityId
-  }).exec(function(err, entity) {
-    if(err) {
-      logger.log('error', '%s templateDocx.sendTemplateList, %s', req.user.name, ' query.findOne', {error: err.message});
-      req.locals.error = err;
-    }
-    if(!entity) {
-      logger.log('error', '%s templateDocx.sendTemplateList, %s', req.user.name, ' query.findOne', {error: 'Entity not found'});
-      req.locals.error = {
-        status: 404,
-        message: 'Entity not found'
-      };
-    }
-    var flag = false;
-    if(entity) {
-      if(entity.assign) {
-        if(entity.assign == userId) {
-          flag = true;
-        }
+  query
+    .findOne({
+      _id: entityId
+    })
+    .exec(function(err, entity) {
+      if (err) {
+        logger.log(
+          "error",
+          "%s templateDocx.sendTemplateList, %s",
+          req.user.name,
+          " query.findOne",
+          { error: err.message }
+        );
+        req.locals.error = err;
       }
-      entity.watchers.forEach(function(watcher) {
-        if(watcher == userId) {
-          flag = true;
-        }
-      });
-      if(flag) {
-        var json = {
-          siteUrl: config.SPHelper.SPSiteUrl,
-          libraryName: config.SPHelper.libraryName,
-          folderName: req.params.entity + '/' + entityId
+      if (!entity) {
+        logger.log(
+          "error",
+          "%s templateDocx.sendTemplateList, %s",
+          req.user.name,
+          " query.findOne",
+          { error: "Entity not found" }
+        );
+        req.locals.error = {
+          status: 404,
+          message: "Entity not found"
         };
-        request({
-          url: config.SPHelper + '/api/filesList',
-          method: 'GET',
-          json: json
-        }, function(error, resp, body) {
-          if(error) {
-            logger.log('error', '%s templateDocx.sendTemplateList, %s', req.user.name, ' request', {error: error.message});
-            res.status(500).send({error: error.message});
-          }
-          else {
-            res.send(body);
-          }
-
-        });
       }
-    }
-  });
+      var flag = false;
+      if (entity) {
+        if (entity.assign) {
+          if (entity.assign == userId) {
+            flag = true;
+          }
+        }
+        entity.watchers.forEach(function(watcher) {
+          if (watcher == userId) {
+            flag = true;
+          }
+        });
+        if (flag) {
+          var json = {
+            siteUrl: config.SPHelper.SPSiteUrl,
+            libraryName: config.SPHelper.libraryName,
+            folderName: req.params.entity + "/" + entityId
+          };
+          request(
+            {
+              url: config.SPHelper + "/api/filesList",
+              method: "GET",
+              json: json
+            },
+            function(error, resp, body) {
+              if (error) {
+                logger.log(
+                  "error",
+                  "%s templateDocx.sendTemplateList, %s",
+                  req.user.name,
+                  " request",
+                  { error: error.message }
+                );
+                res.status(500).send({ error: error.message });
+              } else {
+                res.send(body);
+              }
+            }
+          );
+        }
+      }
+    });
 };
 
 function getUsers(users) {
   var request = [];
   return new Promise(function(fulfill, reject) {
     users.forEach(function(u) {
-      if(u.isCreator == undefined) {
-        request.push(new Promise(function(resolve, error) {
-          User.findOne({_id: u.UserId}).exec(function(err, user) {
-            if(!err) {
-              u.UserId = user.username;
-              resolve(user);
-            }
-            else {
-              error('error');
-            }
-          });
-        }));
-      }
-      else {
+      if (u.isCreator == undefined) {
+        request.push(
+          new Promise(function(resolve, error) {
+            User.findOne({ _id: u.UserId }).exec(function(err, user) {
+              if (!err) {
+                u.UserId = user.username;
+                resolve(user);
+              } else {
+                error("error");
+              }
+            });
+          })
+        );
+      } else {
         delete u.isCreator;
       }
     });
-    Promise.all(request).then(function(dataAll) {
-      fulfill('success');
-    }).catch(function(reason) {
-      reject('reject');
-    });
+    Promise.all(request)
+      .then(function(dataAll) {
+        fulfill("success");
+      })
+      .catch(function(reason) {
+        reject("reject");
+      });
   });
 }
 
 /**
-* req.params.id will consist mongoDB _id of the user
-*/
+ * req.params.id will consist mongoDB _id of the user
+ */
 exports.getAll = function(req, res, next) {
-  TemplateDoc.find({
-    $or: [{watchers: {$elemMatch: {$eq: req.user._id}}}, {creator: req.user._id}]
-  }, function(err, data) {
-    if(err) {
-      logger.log('error', '%s templateDocx.getAll, %s', req.user.name, ' TemplateDoc.find', {error: err.message});
+  TemplateDoc.find(
+    {
+      $or: [
+        { watchers: { $elemMatch: { $eq: req.user._id } } },
+        { creator: req.user._id }
+      ]
+    },
+    function(err, data) {
+      if (err) {
+        logger.log(
+          "error",
+          "%s templateDocx.getAll, %s",
+          req.user.name,
+          " TemplateDoc.find",
+          { error: err.message }
+        );
 
-      req.locals.error = err;
-      req.status(400);
+        req.locals.error = err;
+        req.status(400);
+      } else {
+        req.locals.result = data;
+        res.send(data);
+      }
     }
-    else {
-      req.locals.result = data;
-      res.send(data);
-    }
-  });
+  );
 };
 
-
 /**
-* req.params.id will consist mongoDB _id of the document
-*/
+ * req.params.id will consist mongoDB _id of the document
+ */
 exports.getById = function(req, res, next) {
-  TemplateDoc.findOne({
-    _id: req.params.id
-  }, function(err, data) {
-    if(err) {
-      logger.log('error', '%s templateDocx.getById, %s', req.user.name, ' TemplateDoc.find', {error: err.message});
+  TemplateDoc.findOne(
+    {
+      _id: req.params.id
+    },
+    function(err, data) {
+      if (err) {
+        logger.log(
+          "error",
+          "%s templateDocx.getById, %s",
+          req.user.name,
+          " TemplateDoc.find",
+          { error: err.message }
+        );
 
-      req.locals.error = err;
-      res.status(400);
+        req.locals.error = err;
+        res.status(400);
+      } else {
+        req.locals.result = data;
+        res.send(data);
+      }
     }
-    else {
-      req.locals.result = data;
-      res.send(data);
-    }
-  });
+  );
 };
 
 /**
-* req.params.id will consist mongoDB _id of the user
-*/
+ * req.params.id will consist mongoDB _id of the user
+ */
 exports.getByUserId = function(req, res, next) {
-  TemplateDoc.find({
-    $or: [{watchers: {$elemMatch: {$eq: req.params.id}}}, {creator: req.params.id}]
-  }, function(err, data) {
-    if(err) {
-      logger.log('error', '%s templateDocx.getByUserId, %s', req.user.name, ' TemplateDoc.find', {error: err.message});
+  TemplateDoc.find(
+    {
+      $or: [
+        { watchers: { $elemMatch: { $eq: req.params.id } } },
+        { creator: req.params.id }
+      ]
+    },
+    function(err, data) {
+      if (err) {
+        logger.log(
+          "error",
+          "%s templateDocx.getByUserId, %s",
+          req.user.name,
+          " TemplateDoc.find",
+          { error: err.message }
+        );
 
-      req.locals.error = err;
-      req.status(400);
+        req.locals.error = err;
+        req.status(400);
+      } else {
+        req.locals.result = data;
+        res.send(data);
+      }
     }
-    else {
-      req.locals.result = data;
-      res.send(data);
-    }
-  });
+  );
 };
-
 
 //req.body.folder.office contains id of office
 exports.getByOfficeId = function(req, res, next) {
-  TemplateDoc.find({
-    office: req.body.folder.office,
-    recycled: {$exists: false}
-  }, function(err, data) {
-    if(err) {
-      logger.log('error', '%s templateDocx.getByOfficeId, %s', req.user.name, ' TemplateDoc.find', {error: err.message});
+  TemplateDoc.find(
+    {
+      office: req.body.folder.office,
+      recycled: { $exists: false }
+    },
+    function(err, data) {
+      if (err) {
+        logger.log(
+          "error",
+          "%s templateDocx.getByOfficeId, %s",
+          req.user.name,
+          " TemplateDoc.find",
+          { error: err.message }
+        );
 
-      req.locals.error = err;
-      req.status(400);
+        req.locals.error = err;
+        req.status(400);
+      } else {
+        req.locals.result = data;
+        res.send(data);
+      }
     }
-    else {
-      req.locals.result = data;
-      res.send(data);
-    }
-  });
+  );
 };
 
 /*
-*
-*req.params.entity contains the entity {project,discussion,office,}
-*req.params.id contains the entity mongoDB id
-*/
+ *
+ *req.params.entity contains the entity {project,discussion,office,}
+ *req.params.id contains the entity mongoDB id
+ */
 exports.getByEntity = function(req, res, next) {
   var entities = {
-      projects: 'project',
-      tasks: 'task',
-      discussions: 'discussion',
-      updates: 'update',
-      offices: 'office',
-      folders: 'folder'
+      projects: "project",
+      tasks: "task",
+      discussions: "discussion",
+      updates: "update",
+      offices: "office",
+      folders: "folder"
     },
     entity = entities[req.params.entity];
-  TemplateDoc.find({
-    entity: entity,
-    entityId: req.params.id
-  },
-  function(err, data) {
-    if(err) {
-      logger.log('error', '%s templateDocx.getByEntity, %s', req.user.name, ' TemplateDoc.find', {error: err.message});
+  TemplateDoc.find(
+    {
+      entity: entity,
+      entityId: req.params.id
+    },
+    function(err, data) {
+      if (err) {
+        logger.log(
+          "error",
+          "%s templateDocx.getByEntity, %s",
+          req.user.name,
+          " TemplateDoc.find",
+          { error: err.message }
+        );
 
-      req.locals.error = err;
+        req.locals.error = err;
+      } else {
+        req.locals.result = data;
+      }
+      res.send(data);
+      //next();
     }
-    else {
-      req.locals.result = data;
-    }
-    res.send(data);
-    //next();
-  });
+  );
 };
-
-
 
 exports.uploadTemplate = function(req, res, next) {
   req.locals.data = {};
@@ -296,24 +369,38 @@ exports.uploadTemplate = function(req, res, next) {
     headers: req.headers
   });
   var hasFile = false;
-  busboy.on('file', function(fieldname, file, filename) {
-    var port = config.https && config.https.port ? config.https.port : config.http.port;
-    var saveTo = path.join(config.attachmentDir, d, new Date().getTime() + '-' + path.basename(filename));
+  busboy.on("file", function(fieldname, file, filename) {
+    var port =
+      config.https && config.https.port ? config.https.port : config.http.port;
+    var saveTo = path.join(
+      config.attachmentDir,
+      d,
+      new Date().getTime() + "-" + path.basename(filename)
+    );
     req.locals.data.body.saveTo = saveTo;
-    var hostFileLocation = config.host + ':' + port + saveTo.substring(saveTo.indexOf('/files'));
-    var fileType = path.extname(filename).substr(1).toLowerCase();
+    var hostFileLocation =
+      config.host + ":" + port + saveTo.substring(saveTo.indexOf("/files"));
+    var fileType = path
+      .extname(filename)
+      .substr(1)
+      .toLowerCase();
     mkdirp(path.join(config.attachmentDir, d), function() {
-      file.pipe(fs.createWriteStream(saveTo)).on('close', function(err) {
-        if(err) {
-          logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, ' file.pipe(fs.createWriteStream(saveTo)).on', {error: err.message});
-          res.status(500).send({error: err.message});
+      file.pipe(fs.createWriteStream(saveTo)).on("close", function(err) {
+        if (err) {
+          logger.log(
+            "error",
+            "%s templateDocx.uploadTemplate, %s",
+            req.user.name,
+            " file.pipe(fs.createWriteStream(saveTo)).on",
+            { error: err.message }
+          );
+          res.status(500).send({ error: err.message });
           return;
-
         }
-        var arr = hostFileLocation.split('/files');
-        var pathFor = './files' + arr[1];
+        var arr = hostFileLocation.split("/files");
+        var pathFor = "./files" + arr[1];
         var stats = fs.statSync(pathFor);
-        var fileSizeInBytes = stats['size'];
+        var fileSizeInBytes = stats["size"];
         req.locals.data.body.size = fileSizeInBytes;
       });
       req.locals.data.body.name = filename;
@@ -325,20 +412,36 @@ exports.uploadTemplate = function(req, res, next) {
     });
   });
 
-  busboy.on('field', function(fieldname, val) {
+  busboy.on("field", function(fieldname, val) {
     req.locals.data.body[fieldname] = val;
   });
 
-  busboy.on('finish', function() {
-    var user = req.user.email.substring(0, req.user.email.indexOf('@'));
-    var path = req.locals.data.body.path.substring(req.locals.data.body.path.indexOf('/files'), req.locals.data.body.path.length);
-    var fileName = path.substring(path.lastIndexOf('/') + 1, path.length);
-    req.locals.data.body.path = config.SPHelper.SPSiteUrl + '/' + config.SPHelper.libraryName + '/' + user + '/' + req.locals.data.body.name;
+  busboy.on("finish", function() {
+    var user = req.user.email.substring(0, req.user.email.indexOf("@"));
+    var path = req.locals.data.body.path.substring(
+      req.locals.data.body.path.indexOf("/files"),
+      req.locals.data.body.path.length
+    );
+    var fileName = path.substring(path.lastIndexOf("/") + 1, path.length);
+    req.locals.data.body.path =
+      config.SPHelper.SPSiteUrl +
+      "/" +
+      config.SPHelper.libraryName +
+      "/" +
+      user +
+      "/" +
+      req.locals.data.body.name;
     var username = req.user.username;
-    var result = fs.readFile('.' + path, function(err, result) {
-      if(err) {
-        logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, ' busboy.on(finish)', {error: err.message});
-        res.status(500).send({error: err.message});
+    var result = fs.readFile("." + path, function(err, result) {
+      if (err) {
+        logger.log(
+          "error",
+          "%s templateDocx.uploadTemplate, %s",
+          req.user.name,
+          " busboy.on(finish)",
+          { error: err.message }
+        );
+        res.status(500).send({ error: err.message });
         return;
       }
       result = JSON.parse(JSON.stringify(result));
@@ -349,160 +452,241 @@ exports.uploadTemplate = function(req, res, next) {
         username: config.SPHelper.username,
         password: config.SPHelper.password
       };
-      var folder = config.SPHelper.libraryName + '/' + user;
+      var folder = config.SPHelper.libraryName + "/" + user;
       var fileOptions = {
         folder: folder,
-        fileName: 'Template_' + fileName,
+        fileName: "Template_" + fileName,
         fileContent: result
       };
-      var documentId = req.locals.data.body['id'];
+      var documentId = req.locals.data.body["id"];
       TemplateDoc.findOne({
         _id: documentId
-      }).populate('office').exec(function(err, result) {
-        if(err) {
-          logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, '  TemplateDoc.findOne', {error: err.message});
+      })
+        .populate("office")
+        .exec(function(err, result) {
+          if (err) {
+            logger.log(
+              "error",
+              "%s templateDocx.uploadTemplate, %s",
+              req.user.name,
+              "  TemplateDoc.findOne",
+              { error: err.message }
+            );
 
-          req.locals.error = err;
-        }
-        if(!result) {
-          logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, '  TemplateDoc.findOne', {error: 'Entity not found'});
-          req.locals.error = {
-            status: 404,
-            message: 'Entity not found'
-          };
-        }
-        if(result) {
-          var office = result.office;
-          var officeWatchers = [];
-          if(office) {
-            officeWatchers = office.watchers;
+            req.locals.error = err;
           }
-          else {
-            officeWatchers = [];
+          if (!result) {
+            logger.log(
+              "error",
+              "%s templateDocx.uploadTemplate, %s",
+              req.user.name,
+              "  TemplateDoc.findOne",
+              { error: "Entity not found" }
+            );
+            req.locals.error = {
+              status: 404,
+              message: "Entity not found"
+            };
           }
-          var users = [];
-          users.push({
-            __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
-            Role: 3,
-            UserId: username,
-            isCreator: true
-          });
-          result.watchers.forEach(function(watcher) {
-            if(watcher != req.user._id) {
-              users.push({
-                __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
-                Role: 2,
-                UserId: watcher
-              });
+          if (result) {
+            var office = result.office;
+            var officeWatchers = [];
+            if (office) {
+              officeWatchers = office.watchers;
+            } else {
+              officeWatchers = [];
             }
-          });
-          if(office && officeWatchers) {
-            officeWatchers.forEach(function(watcher) {
-              if(watcher != req.user._id) {
+            var users = [];
+            users.push({
+              __metadata: { type: "SP.Sharing.UserRoleAssignment" },
+              Role: 3,
+              UserId: username,
+              isCreator: true
+            });
+            result.watchers.forEach(function(watcher) {
+              if (watcher != req.user._id) {
                 users.push({
-                  __metadata: {type: 'SP.Sharing.UserRoleAssignment'},
+                  __metadata: { type: "SP.Sharing.UserRoleAssignment" },
                   Role: 2,
                   UserId: watcher
                 });
               }
             });
-          }
-          getUsers(users).then(function(result) {
-            if(result == 'success') {
-              var json = {
-                coreOptions: coreOptions,
-                creds: creds,
-                fileOptions: fileOptions,
-                permissions: users,
-                isTemplate: false,
-                entity: 'folder',
-                entityId: office ? office._id ? office._id.toString() : undefined : undefined
-              };
-              request({
-                url: config.SPHelper.uri + '/api/upload',
-                method: 'POST',
-                json: json
-              }, function(error, resp, body) {
-                var path = req.locals.data.body.originalPath;
-                var fileType = path.substring(path.lastIndexOf('.') + 1, path.length);
-                if(error) {
-                  logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, '  request', {error: error.message});
-
-                  var set = {path: req.locals.data.body.originalPath, title: req.locals.data.body.name, templateType: fileType};
-                  TemplateDoc.update({_id: documentId}, {$set: set}, function(error, result) {
-                    if(error) {
-                      logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, '  TemplateDoc.update', {error: error.message});
-
-                      res.status(500).send(error);
-                    }
-                    else {
-                      res.send(set);
-                    }
-                  });
-                }
-                else {
-                  var spPath = body.path;
-                  var set = {path: req.locals.data.body.originalPath, spPath: spPath, title: req.locals.data.body.name, templateType: fileType};
-                  TemplateDoc.update({_id: documentId}, {$set: set}, function(error, result) {
-                    if(error) {
-                      logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, '  TemplateDoc.update', {error: error.message});
-
-                      res.send(error);
-                    }
-                    else {
-                      res.send(set);
-                    }
+            if (office && officeWatchers) {
+              officeWatchers.forEach(function(watcher) {
+                if (watcher != req.user._id) {
+                  users.push({
+                    __metadata: { type: "SP.Sharing.UserRoleAssignment" },
+                    Role: 2,
+                    UserId: watcher
                   });
                 }
               });
             }
-            else {
-              logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, '  getUsers', {error: 'getUsers unknown error'});
+            getUsers(users)
+              .then(function(result) {
+                if (result == "success") {
+                  var json = {
+                    coreOptions: coreOptions,
+                    creds: creds,
+                    fileOptions: fileOptions,
+                    permissions: users,
+                    isTemplate: false,
+                    entity: "folder",
+                    entityId: office
+                      ? office._id
+                        ? office._id.toString()
+                        : undefined
+                      : undefined
+                  };
+                  request(
+                    {
+                      url: config.SPHelper.uri + "/api/upload",
+                      method: "POST",
+                      json: json
+                    },
+                    function(error, resp, body) {
+                      var path = req.locals.data.body.originalPath;
+                      var fileType = path.substring(
+                        path.lastIndexOf(".") + 1,
+                        path.length
+                      );
+                      if (error) {
+                        logger.log(
+                          "error",
+                          "%s templateDocx.uploadTemplate, %s",
+                          req.user.name,
+                          "  request",
+                          { error: error.message }
+                        );
 
-              res.status(500).send('error');
-            }
-          }).catch(function(err) {
-            logger.log('error', '%s templateDocx.uploadTemplate, %s', req.user.name, '  getUsers', {error: err.message});
-            res.status(500).send({error: err.message});
-            return;
-          });
-        }
-      });
+                        var set = {
+                          path: req.locals.data.body.originalPath,
+                          title: req.locals.data.body.name,
+                          templateType: fileType
+                        };
+                        TemplateDoc.update(
+                          { _id: documentId },
+                          { $set: set },
+                          function(error, result) {
+                            if (error) {
+                              logger.log(
+                                "error",
+                                "%s templateDocx.uploadTemplate, %s",
+                                req.user.name,
+                                "  TemplateDoc.update",
+                                { error: error.message }
+                              );
+
+                              res.status(500).send(error);
+                            } else {
+                              res.send(set);
+                            }
+                          }
+                        );
+                      } else {
+                        var spPath = body.path;
+                        var set = {
+                          path: req.locals.data.body.originalPath,
+                          spPath: spPath,
+                          title: req.locals.data.body.name,
+                          templateType: fileType
+                        };
+                        TemplateDoc.update(
+                          { _id: documentId },
+                          { $set: set },
+                          function(error, result) {
+                            if (error) {
+                              logger.log(
+                                "error",
+                                "%s templateDocx.uploadTemplate, %s",
+                                req.user.name,
+                                "  TemplateDoc.update",
+                                { error: error.message }
+                              );
+
+                              res.send(error);
+                            } else {
+                              res.send(set);
+                            }
+                          }
+                        );
+                      }
+                    }
+                  );
+                } else {
+                  logger.log(
+                    "error",
+                    "%s templateDocx.uploadTemplate, %s",
+                    req.user.name,
+                    "  getUsers",
+                    { error: "getUsers unknown error" }
+                  );
+
+                  res.status(500).send("error");
+                }
+              })
+              .catch(function(err) {
+                logger.log(
+                  "error",
+                  "%s templateDocx.uploadTemplate, %s",
+                  req.user.name,
+                  "  getUsers",
+                  { error: err.message }
+                );
+                res.status(500).send({ error: err.message });
+                return;
+              });
+          }
+        });
     });
   });
   return req.pipe(busboy);
 };
 
-
-
 var formatDate = function(date) {
   var yyyy = date.getFullYear().toString();
   var mm = (date.getMonth() + 1).toString();
   var dd = date.getDate().toString();
-  return yyyy + '/' + (mm[1] ? mm : '0' + mm[0]) + '/' + (dd[1] ? dd : '0' + dd[0]);
+  return (
+    yyyy + "/" + (mm[1] ? mm : "0" + mm[0]) + "/" + (dd[1] ? dd : "0" + dd[0])
+  );
 };
 
 /**
-*
-* req.params.id contains templateDoc mongo id to delete
-*
-*/
+ *
+ * req.params.id contains templateDoc mongo id to delete
+ *
+ */
 exports.deleteTemplate = function(req, res) {
-  TemplateDoc.find({_id: req.params.id}, function(err, file) {
-
-    if(err) {
-      logger.log('error', '%s templateDocx.deleteTemplate, %s', req.user.name, '  TemplateDoc.find', {error: err.message});
-      res.status(500).send({error: err.message});
-    }
-    else {
+  TemplateDoc.find({ _id: req.params.id }, function(err, file) {
+    if (err) {
+      logger.log(
+        "error",
+        "%s templateDocx.deleteTemplate, %s",
+        req.user.name,
+        "  TemplateDoc.find",
+        { error: err.message }
+      );
+      res.status(500).send({ error: err.message });
+    } else {
       var spPath = file[0]._doc.spPath;
-      if(spPath) {
-        var fileName = spPath.substring(spPath.lastIndexOf('/') + 1, spPath.length);
-        var spPath2 = spPath.substring(0, spPath.lastIndexOf('/'));
-        var folderName = spPath.substring(spPath2.lastIndexOf('/') + 1, spPath2.length);
-        spPath2 = spPath2.substring(0, spPath2.lastIndexOf('/'));
-        var libraryName = spPath2.substring(spPath2.lastIndexOf('/') + 1, spPath2.length);
-        var user = req.user.email.substring(0, req.user.email.indexOf('@'));
+      if (spPath) {
+        var fileName = spPath.substring(
+          spPath.lastIndexOf("/") + 1,
+          spPath.length
+        );
+        var spPath2 = spPath.substring(0, spPath.lastIndexOf("/"));
+        var folderName = spPath.substring(
+          spPath2.lastIndexOf("/") + 1,
+          spPath2.length
+        );
+        spPath2 = spPath2.substring(0, spPath2.lastIndexOf("/"));
+        var libraryName = spPath2.substring(
+          spPath2.lastIndexOf("/") + 1,
+          spPath2.length
+        );
+        var user = req.user.email.substring(0, req.user.email.indexOf("@"));
         var context = {
           siteUrl: config.SPHelper.SPSiteUrl,
           creds: {
@@ -512,40 +696,51 @@ exports.deleteTemplate = function(req, res) {
           }
         };
         var options = {
-          folder: '/' + libraryName + '/' + folderName,
-          filePath: '/' + fileName
+          folder: "/" + libraryName + "/" + folderName,
+          filePath: "/" + fileName
         };
 
         var json = {
           context: context,
           options: options
         };
-        request({
-          url: config.SPHelper.uri + '/api/delete',
-          method: 'POST',
-          json: json
-        }, function(error, resp, body) {
-          if(error) {
-            logger.log('error', '%s templateDocx.deleteTemplate, %s', req.user.name, '  request', {error: error.message});
-
+        request(
+          {
+            url: config.SPHelper.uri + "/api/delete",
+            method: "POST",
+            json: json
+          },
+          function(error, resp, body) {
+            if (error) {
+              logger.log(
+                "error",
+                "%s templateDocx.deleteTemplate, %s",
+                req.user.name,
+                "  request",
+                { error: error.message }
+              );
+            }
+            //   var creator = folderName;
+            //   if (creator == user) {
+            //  }
           }
-          //   var creator = folderName;
-          //   if (creator == user) {
-          //  }
-        });
-
-
+        );
       }
     }
 
-    TemplateDoc.remove({_id: req.params.id}, function(err) {
-      if(err) {
-        logger.log('error', '%s templateDocx.deleteTemplate, %s', req.user.name, '  TemplateDoc.remove', {error: err.message});
-        res.status(500).send({error: err.message});
+    TemplateDoc.remove({ _id: req.params.id }, function(err) {
+      if (err) {
+        logger.log(
+          "error",
+          "%s templateDocx.deleteTemplate, %s",
+          req.user.name,
+          "  TemplateDoc.remove",
+          { error: err.message }
+        );
+        res.status(500).send({ error: err.message });
 
         console.log(err);
-      }
-      else {
+      } else {
         res.sendStatus(200);
       }
     });
@@ -557,176 +752,222 @@ exports.update2 = function(req, res, next) {
     [req.body.name]: req.body.newVal
   };
 
-  if(req.body.name == 'office' && req.body.newVal) {
-    TemplateDoc.findOne({_id: req.params.id}).populate('office').then(result => {
-      var oldWatchersList;
-      if(result.office) {
-        oldWatchersList = result.office.watchers;
-      }
-      else {
-        oldWatchersList = result.watchers;
-      }
-      var zeroReq = [];
-      var spPath = result.spPath;
-      oldWatchersList.forEach(watcher => {
-        zeroReq.push({UserId: watcher});
-      });
-      return Office.findOne({_id: req.body.newVal}).then(result => {
-        if(result) {
-          var watchersReq = [];
-          result.watchers.forEach(watcher => {
-            watchersReq.push({
-              UserId: watcher
-            });
-          });
-          json['watchers'] = result.watchers;
-          json['permissions'] = result.permissions;
-          return TemplateDoc.findOneAndUpdate({_id: req.params.id}, json).then(result => {
-            if (!result) {
-              throw new Error(`object with id: ${req.params.id} not found`);
-            }
-            elasticsearch.save(result, 'templateDoc')
-            if(spPath) {
-              return getUsers(watchersReq).then(result => {
-                return getUsers(zeroReq).then(result => {
-                  var watch = [], zero = [];
-                  watchersReq.forEach(watcher => {
-                    watch.push(watcher.UserId);
-                  });
-                  zeroReq.forEach(watcher => {
-                    zero.push(watcher.UserId);
-                  });
-                  var paths = [spPath];
-                  var jsonReq = {
-                    siteUrl: config.SPHelper.SPSiteUrl,
-                    paths: paths,
-                    users: watch,
-                    creators: [],
-                    zero: zero
-                  };
-                  return new Promise((resolve, reject) => {
-                    request({
-                      url: config.SPHelper.uri + '/api/share',
-                      method: 'POST',
-                      json: json
-                    }, err => {
-                      if(err) {
-                        return reject(err)
-                      } else {
-                        resolve();
-                      }
-                    });
-                  })
-                });
-              });
-            }
-          });
+  if (req.body.name == "office" && req.body.newVal) {
+    TemplateDoc.findOne({ _id: req.params.id })
+      .populate("office")
+      .then(result => {
+        var oldWatchersList;
+        if (result.office) {
+          oldWatchersList = result.office.watchers;
         } else {
-          throw new Error('Entity Not Found');
+          oldWatchersList = result.watchers;
         }
+        var zeroReq = [];
+        var spPath = result.spPath;
+        oldWatchersList.forEach(watcher => {
+          zeroReq.push({ UserId: watcher });
+        });
+        return Office.findOne({ _id: req.body.newVal }).then(result => {
+          if (result) {
+            var watchersReq = [];
+            result.watchers.forEach(watcher => {
+              watchersReq.push({
+                UserId: watcher
+              });
+            });
+            json["watchers"] = result.watchers;
+            json["permissions"] = result.permissions;
+            return TemplateDoc.findOneAndUpdate(
+              { _id: req.params.id },
+              json
+            ).then(result => {
+              if (!result) {
+                throw new Error(`object with id: ${req.params.id} not found`);
+              }
+              elasticsearch.save(result, "templateDoc");
+              if (spPath) {
+                return getUsers(watchersReq).then(result => {
+                  return getUsers(zeroReq).then(result => {
+                    var watch = [],
+                      zero = [];
+                    watchersReq.forEach(watcher => {
+                      watch.push(watcher.UserId);
+                    });
+                    zeroReq.forEach(watcher => {
+                      zero.push(watcher.UserId);
+                    });
+                    var paths = [spPath];
+                    var jsonReq = {
+                      siteUrl: config.SPHelper.SPSiteUrl,
+                      paths: paths,
+                      users: watch,
+                      creators: [],
+                      zero: zero
+                    };
+                    return new Promise((resolve, reject) => {
+                      request(
+                        {
+                          url: config.SPHelper.uri + "/api/share",
+                          method: "POST",
+                          json: json
+                        },
+                        err => {
+                          if (err) {
+                            return reject(err);
+                          } else {
+                            resolve();
+                          }
+                        }
+                      );
+                    });
+                  });
+                });
+              }
+            });
+          } else {
+            throw new Error("Entity Not Found");
+          }
+        });
       })
-    }).then(() => {
-      res.send('ok');
-    }).catch(err => {
-      return next(err)
-    });
+      .then(() => {
+        res.send("ok");
+      })
+      .catch(err => {
+        return next(err);
+      });
   } else {
-    TemplateDoc.findOneAndUpdate({ _id: req.params.id }, json).then(result => {
-      if (!result) {
-        throw new Error(`object with id: ${req.params.id} not found`);
-      }
-      elasticsearch.save(result, 'templateDoc')
-    }).then(() => {
-      res.send('ok');
-    }).catch(err => {
-      next(err)
-    });
+    TemplateDoc.findOneAndUpdate({ _id: req.params.id }, json)
+      .then(result => {
+        if (!result) {
+          throw new Error(`object with id: ${req.params.id} not found`);
+        }
+        elasticsearch.save(result, "templateDoc");
+      })
+      .then(() => {
+        res.send("ok");
+      })
+      .catch(err => {
+        next(err);
+      });
   }
 };
 
 /**
-* req.body.zero contains ids of watchers before change
-* req.body.newTemplate contains : name,description,classification,watchers
-*	req.params.id contains templateDoc id to update
-*
-*
-*/
+ * req.body.zero contains ids of watchers before change
+ * req.body.newTemplate contains : name,description,classification,watchers
+ *	req.params.id contains templateDoc id to update
+ *
+ *
+ */
 exports.update = function(req, res, next) {
-  TemplateDoc.findOne({_id: req.params.id}, function(err, template) {
+  TemplateDoc.findOne({ _id: req.params.id }, function(err, template) {
     var creator = template.creator;
     var zero = template.watchers;
     var zeroReq = [];
-    for(var i = 0; i < zero; i++) {
-      zeroReq.push({UserId: req.body.zero[i]});
+    for (var i = 0; i < zero; i++) {
+      zeroReq.push({ UserId: req.body.zero[i] });
     }
-    TemplateDoc.update({
-      _id: req.params.id
-    }, {
-      description: req.body.updated.description,
-      watchers: req.body.updated.watchers,
-      name: req.body.updated.name,
-      classification: req.body.updated.classification
-    }, function(err, numAffected) {
-      var watchReq = [];
-      for(var i = 0; i < req.body.updated.watchers.length; i++) {
-        if(req.body.updated.watchers[i] != undefined) {
-          var str = req.body.updated.watchers[i].toString();
-          watchReq.push({UserId: str});
+    TemplateDoc.update(
+      {
+        _id: req.params.id
+      },
+      {
+        description: req.body.updated.description,
+        watchers: req.body.updated.watchers,
+        name: req.body.updated.name,
+        classification: req.body.updated.classification
+      },
+      function(err, numAffected) {
+        var watchReq = [];
+        for (var i = 0; i < req.body.updated.watchers.length; i++) {
+          if (req.body.updated.watchers[i] != undefined) {
+            var str = req.body.updated.watchers[i].toString();
+            watchReq.push({ UserId: str });
+          }
         }
-      }
-      var creatorReq = [];
-      creatorReq.push({UserId: creator});
-      getUsers(zeroReq).then(function(res) {
-        getUsers(watchReq).then(function(res) {
-          getUsers(creatorReq).then(function(res) {
-            var zero = [];
-            var watch = [];
-            var creator = [];
-            zeroReq.forEach(function(x) {
-              zero.push(x.UserId);
-            });
-            watchReq.forEach(function(x) {
-              watch.push(x.UserId);
-            });
-            creatorReq.forEach(function(x) {
-              creator.push(x.UserId);
-            });
-            var paths = [template.path];
-            var json = {
-              siteUrl: config.SPHelper.SPSiteUrl,
-              paths: paths,
-              users: watchReq,
-              creators: creator,
-              zero: zero
-            };
-            request({
-              url: config.SPHelper.uri + '/api/share',
-              method: 'POST',
-              json: json
-            }, function(error, resp, body) {
-              if(error) {
-                logger.log('error', '%s templateDocx.update, %s', req.user.name, '  TemplateDoc.update', {error: error.message});
-                res.status(500).send({error: error.message});
-              }
-              else {
-                res.send('ok');
-
-              }
-            });
-          }).catch(function(err) {
-            logger.log('error', '%s templateDocx.update, %s', req.user.name, '  getUsers', {error: err.message});
-            res.status(500).send({error: err.message});
+        var creatorReq = [];
+        creatorReq.push({ UserId: creator });
+        getUsers(zeroReq)
+          .then(function(res) {
+            getUsers(watchReq)
+              .then(function(res) {
+                getUsers(creatorReq)
+                  .then(function(res) {
+                    var zero = [];
+                    var watch = [];
+                    var creator = [];
+                    zeroReq.forEach(function(x) {
+                      zero.push(x.UserId);
+                    });
+                    watchReq.forEach(function(x) {
+                      watch.push(x.UserId);
+                    });
+                    creatorReq.forEach(function(x) {
+                      creator.push(x.UserId);
+                    });
+                    var paths = [template.path];
+                    var json = {
+                      siteUrl: config.SPHelper.SPSiteUrl,
+                      paths: paths,
+                      users: watchReq,
+                      creators: creator,
+                      zero: zero
+                    };
+                    request(
+                      {
+                        url: config.SPHelper.uri + "/api/share",
+                        method: "POST",
+                        json: json
+                      },
+                      function(error, resp, body) {
+                        if (error) {
+                          logger.log(
+                            "error",
+                            "%s templateDocx.update, %s",
+                            req.user.name,
+                            "  TemplateDoc.update",
+                            { error: error.message }
+                          );
+                          res.status(500).send({ error: error.message });
+                        } else {
+                          res.send("ok");
+                        }
+                      }
+                    );
+                  })
+                  .catch(function(err) {
+                    logger.log(
+                      "error",
+                      "%s templateDocx.update, %s",
+                      req.user.name,
+                      "  getUsers",
+                      { error: err.message }
+                    );
+                    res.status(500).send({ error: err.message });
+                  });
+              })
+              .catch(function(err) {
+                logger.log(
+                  "error",
+                  "%s templateDocx.update, %s",
+                  req.user.name,
+                  "  getUsers",
+                  { error: err.message }
+                );
+                res.status(500).send({ error: err.message });
+              });
+          })
+          .catch(function(err) {
+            logger.log(
+              "error",
+              "%s templateDocx.update, %s",
+              req.user.name,
+              "  getUsers",
+              { error: err.message }
+            );
+            res.status(500).send({ error: err.message });
           });
-        }).catch(function(err) {
-          logger.log('error', '%s templateDocx.update, %s', req.user.name, '  getUsers', {error: err.message});
-          res.status(500).send({error: err.message});
-        });
-      }).catch(function(err) {
-        logger.log('error', '%s templateDocx.update, %s', req.user.name, '  getUsers', {error: err.message});
-        res.status(500).send({error: err.message});
-      });
-
-    });
+      }
+    );
   });
 };
-
