@@ -18,10 +18,12 @@ angular.module('mean.icu.ui.searchlist')
 	};
 
     $scope.$on('refreshList', function (ev) {
-        SearchService.find(term).then(function(res){
-            $scope.results = res;
-            filterFinalRes();
-        });
+        $timeout(() => {
+            SearchService.find(term).then(function(res){
+                $scope.results = res;
+                filterFinalRes();
+            });
+        }, 1500)
     });
 
     function filterFinalRes(){
