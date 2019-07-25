@@ -130,8 +130,8 @@ function OfficeDetailsController(
       ) {
         ActivitiesService.data.push(result);
       });
-
       refreshList();
+      $state.go('^.^');
       $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
       $scope.permsToSee();
       $scope.havePermissions();
@@ -143,23 +143,8 @@ function OfficeDetailsController(
     EntityService.recycleRestore("offices", $scope.item._id).then(function() {
       let clonedEntity = angular.copy($scope.item);
       clonedEntity.status = "un-deleted";
-
       refreshList();
-
-      var state =
-        currentState.indexOf("search") !== -1
-          ? $state.current.name
-          : "main.offices.all";
-      $state.go(
-        state,
-        {
-          entity: context.entityName,
-          entityId: context.entityId
-        },
-        {
-          reload: true
-        }
-      );
+      $state.go('^.^');
     });
   };
 

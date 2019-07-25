@@ -55,8 +55,8 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
             $scope.item.recycled = new Date();
             let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "Recycled";
-
             refreshList();
+            $state.go('^.^');
             $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
             $scope.permsToSee();
             $scope.havePermissions();
@@ -68,17 +68,9 @@ function TemplateDocDetailsController($rootScope, $scope, $http, entity, tasks, 
         EntityService.recycleRestore('templateDocs', $scope.item._id).then(function() {
             let clonedEntity = angular.copy($scope.item);
             clonedEntity.status = "un-deleted"
-
             refreshList();
-
-            var state = currentState.indexOf('search') !== -1 ? $state.current.name : 'main.templateDocs.all';
-            $state.go(state, {
-                entity: context.entityName,
-                entityId: context.entityId
-            }, {
-                reload: true
-            });
-        });
+            $state.go('^.^');
+          });
     }
 
     function refreshList() {

@@ -136,8 +136,8 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
         TasksService.updateStatus(clonedEntity, me, $scope.item).then(function(result) {
           ActivitiesService.data.push(result);
         });
-
         refreshList();
+        $state.go('^.^');
         $scope.isRecycled = $scope.item.hasOwnProperty('recycled');
         $scope.permsToSee();
         $scope.havePermissions();
@@ -156,16 +156,8 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
         TasksService.updateStatus(clonedEntity, me, entity).then(function(result) {
           ActivitiesService.data.push(result);
         });
-
         refreshList();
-
-        var state = currentState.indexOf('search') !== -1 ? $state.current.name : context.entityName === 'all' ? 'main.tasks.all' : context.entityName === 'my' ? 'main.tasks.byassign' : 'main.tasks.byentity';
-        $state.go(state, {
-          entity: context.entityName,
-          entityId: context.entityId
-        }, {
-          reload: true
-        });
+        $state.go('^.^');
       });
     }
     )
