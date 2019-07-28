@@ -263,7 +263,6 @@
             .ui-select-match {
                 .ui-select-match-text {
                     align-items: center;
-                    display: inline-flex;
                     height: auto;
                     margin: 0;
                     width: 100%;
@@ -283,7 +282,6 @@
                     display: none;
                 }
                 .ui-select-match-text {
-                    display: flex;
                     align-items: center;
                     i {
                         margin-right: 9px;
