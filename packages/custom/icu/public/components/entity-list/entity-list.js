@@ -175,7 +175,7 @@ function EntityListController($rootScope, $scope, $injector, $window, $state, co
     };
 
     $scope.onClickRow = function($event, item) {
-        if ($scope.displayOnly) {
+        if ($scope.displayOnly || $scope.multipleSelectMode) {
             return;
         }
 
