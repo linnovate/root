@@ -197,19 +197,14 @@ exports.getAll = function(req, res, next) {
 * req.params.id will consist mongoDB _id of the document
 */
 exports.getById = function(req, res, next) {
-  TemplateDoc.findOne({
-    _id: req.params.id
-  }, function(err, data) {
-    if(err) {
-      logger.log('error', '%s templateDocx.getById, %s', req.user.name, ' TemplateDoc.find', {error: err.message});
-
-      req.locals.error = err;
-      res.status(400);
-    }
-    else {
-      req.locals.result = data;
-      res.send(data);
-    }
+  TemplateDoc.findById(req.params.id)
+  .populate(options.includes)
+  .then(data => {
+    req.locals.result = data;
+    res.send(data);
+  })
+  .catch(err => {
+    next(err)
   });
 };
 
