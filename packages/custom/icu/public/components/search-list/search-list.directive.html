@@ -15,7 +15,7 @@
                 }"
                 multiple-select-mode="multipleSelectMode"
 
-                ng-click="rowClicked();initialize($event, result)"
+                ng-click="rowClicked(result)"
                 type="search-{{result._type}}"
                 ng-mouseover="showTick(result)"
                 ng-mouseleave="hideTick(result)"

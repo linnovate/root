@@ -9,17 +9,11 @@ angular.module('mean.icu.ui.searchlist', [])
 
            // $state.go('.' + active._type, { id: active._id } );
         }
-        $scope.rowClicked = function() {
+        $scope.rowClicked = function(result) {
             LayoutService.clicked();
-        };
-
-        $scope.initialize = function ($event, result) {
             if($scope.multipleSelectMode) return;
-
             $state.go(`main.search.${result.type || result._type}.${window.config.defaultTab}`, {
                 id: result.entityId ? result.entityId : result.id
-            }, {
-                reload: true
             })
         };
 
