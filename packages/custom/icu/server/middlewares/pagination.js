@@ -33,6 +33,7 @@ function parseParams(req, res, next) {
     let { entityName } = req.locals.data;
     let extra = 25;
     entityName = entityName[0].toUpperCase() + entityName.slice(1,-1);
+    if(entityName === 'OfficeDocument') entityName = 'Document';
     req.acl.mongoQuery(entityName).find({}).sort(req.query.sort || 'created').then(docs => {
       let count = docs.findIndex(doc => doc._id.toString() === req.query.limit)
       if(req.query.start < count) {
