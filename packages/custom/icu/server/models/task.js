@@ -178,6 +178,7 @@ TaskSchema.post('save', function(req, next) {
       return err;
     }
 
+    task.depopulate('watchers');
     elasticsearch.save(task, 'task');
   });
   next();
