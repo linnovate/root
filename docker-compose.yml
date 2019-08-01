@@ -2,38 +2,51 @@ version: '2'
 
 services:
   app:
-    image: node:8
+    image: node:10
     working_dir: /usr/src/app
     volumes:
       - ./:/usr/src/app
     environment:
       PORT: 3000
-      MONGODB_URI: mongodb://mongo/icu-dev
+      MONGODB_URI: mongodb://root:password123@mongo/icu-dev?authSource=admin
       ELASTICSEARCH_IP: elasticsearch
+      ROOT_LANG: en
       FTP_IP: ftp
       FTP_USER_NAME: admin
       FTP_USER_PASS: admin
+      ROOT_ADMINS: a@linnovate.net
     ports:
       - 3000:3000
+      - 9229:9229
     command: npm start
+    user: node
     depends_on:
       - mongo
       - elasticsearch
       - ftp
 
   mongo:
-    image: mongo:3.6
+    image: bitnami/mongodb:4.0
+    environment:
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_ADVERTISED_HOSTNAME: mongo
+      MONGODB_ROOT_PASSWORD: password123
+      MONGODB_REPLICA_SET_KEY: replicasetkey123
+    volumes:
+      - mongodata:/bitnami
     ports:
       - 27017:27017
-    volumes:
-      - ./data/mongo:/data/db
 
   elasticsearch:
-    image: elasticsearch:5.6
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+    environment:
+      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      cluster.routing.allocation.disk.watermark.flood_stage: 99%
+      cluster.routing.allocation.disk.watermark.high: 99%
     ports:
       - 9200:9200
     volumes:
-      - ./data/elasticsearch:/usr/share/elasticsearch/data
+      - esdata:/usr/share/elasticsearch/data
     mem_limit: 512m
 
   ftp:
@@ -41,11 +54,17 @@ services:
     ports:
       - 21:21
       - 30000-30009:30000-30009
-    volumes: # remember to replace /folder_on_disk/ with the path to where you want to store the files on the host machine
-      - ./data/ftp:/home/admin
+    volumes:
+      - ftpdata:/home/admin
     environment:
       PUBLICHOST: ftp
       FTP_USER_NAME: admin
       FTP_USER_PASS: admin
       FTP_USER_HOME: /home/admin
     restart: always
+
+volumes:
+  mongodata:
+  esdata:
+    driver: local
+  ftpdata:

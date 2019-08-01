@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
   app:
@@ -6,24 +6,51 @@ services:
     image: root
     environment:
       PORT: 3000
-      MONGODB_URI: mongodb://mongo/icu
+      MONGODB_URI: mongodb://root:password123@mongo/icu?authSource=admin
       ELASTICSEARCH_IP: elasticsearch
+      ROOT_LANG: en
+      FTP_IP: ftp
+      FTP_USER_NAME: admin
+      FTP_USER_PASS: admin
+      ROOT_ADMINS: a@linnovate.net
     ports:
       - 3000:3000
     depends_on:
       - mongo
       - elasticsearch
+      - ftp
 
   mongo:
-    image: mongo:3.6
+    image: bitnami/mongodb:4.0
+    environment:
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_ADVERTISED_HOSTNAME: mongo
+      MONGODB_ROOT_PASSWORD: password123
+      MONGODB_REPLICA_SET_KEY: replicasetkey123
     volumes:
-      - mongodata:/data/db
+      - mongodata:/bitnami
 
   elasticsearch:
-    image: elasticsearch:5.6
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
     volumes:
       - esdata:/usr/share/elasticsearch/data
+    mem_limit: 512m
+
+  ftp:
+    image: stilliard/pure-ftpd
+    ports:
+      - 21:21
+      - 30000-30009:30000-30009
+    volumes:
+      - ftpdata:/home/admin
+    environment:
+      PUBLICHOST: ftp
+      FTP_USER_NAME: admin
+      FTP_USER_PASS: admin
+      FTP_USER_HOME: /home/admin
+    restart: always
 
 volumes:
   mongodata:
   esdata:
+  ftpdata:
