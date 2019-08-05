@@ -163,7 +163,6 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
     )
   }
 
-  $scope.items = tasks.data || tasks;
   $scope.item.subTasks = subtasks.data || subtasks;
 
   var creatingStatuses = {
@@ -191,8 +190,7 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
     Object.assign(newItem, duplicate);
     TasksService.create(newItem)
       .then( result => {
-        $scope.items.push(result);
-        refreshList();
+        $state.go('^.^', {}, { reload: true });
       })
   };
 
