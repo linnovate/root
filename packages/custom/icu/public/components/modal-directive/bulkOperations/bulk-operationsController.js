@@ -59,10 +59,9 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         let idsArray = selectedArray.map(entity => entity._id);
         let changedBulkObject = {
             ids: idsArray,
-            update: {
-                [type]: value
-            }
+            update: { }
         };
+        changedBulkObject.update[type] = value
 
         return MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
             .then(result => {
