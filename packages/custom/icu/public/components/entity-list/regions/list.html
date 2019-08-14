@@ -1,10 +1,10 @@
 
 <div
-class="create-new-item"
-ng-if="!multipleSelectMode"
-ng-click="onCreate()"
-tabindex="0"
-ng-model="newItem"
+    class="create-new-item"
+    ng-if="!multipleSelectMode"
+    ng-click="onCreate()"
+    tabindex="0"
+    ng-model="newItem"
 >{{'Create New Item' | i18next}}</div>
 <div class="list-table scroll">
     <div ng-show="isLoading" class="loader"></div>
@@ -21,7 +21,7 @@ ng-model="newItem"
         </tbody>
     </table>
 </div>
-<div class="bottomBar" style="height: 10px;"></div>
+<div class="bottomBar"></div>
 <div class="list-table-print">
     <div class="header">
         <div>{{'name' | i18next}}</div>

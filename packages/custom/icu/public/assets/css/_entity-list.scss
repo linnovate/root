@@ -5,10 +5,9 @@
     flex-direction: column;
     .entity-list-container {
         height: calc(100% - 44px);
+        display: flex;
+        flex-direction: column;
         overflow-y: hidden;
-        .list-table {
-            max-height: calc(100% - 51px);
-        }
         .create-new-item {
             background: white;
             height: 51px;
@@ -19,6 +18,7 @@
             cursor: pointer;
             border-bottom: 1px solid #e1e1e1;
             font-size: 14px;
+            flex: 0;
         }
 
     }
@@ -326,4 +326,9 @@
   a, b, p, i, u, blockquote, li, h1, h2, h3 {
     font-weight: normal !important;
   }
+}
+
+.bottomBar {
+    height: 10px;
+    flex: 0 0 auto;
 }
