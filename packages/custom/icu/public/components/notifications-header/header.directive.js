@@ -63,31 +63,20 @@ angular.module('mean.icu.ui.notificationsheader', [])
                     entity: 'task'
                 };
 
-                if (context.entityName === 'all' || context.entityName === 'my') {
-                    if (context.main === 'tasks' || context.main === 'officeDocuments') {
-                        // tasks.all
-                        state = 'main.tasks.all.details';
-                        params.entity = 'task';
-                    } else {
-                        // discussions.all, projects.all
-                        state = 'main.tasks.byentity.details';
-                        params.entityId = $stateParams.id;
-                        params.entity = entities[context.main];
-                        task[params.entity] = $stateParams.id;
-                    }
+                if(['projects', 'discussions'].includes(context.main) && $stateParams.id) {
+                    state = 'main.tasks.byentity.details';
+                    params.entity = entities[context.main];
+                    params.entityId = $stateParams.id;
+                    task[params.entity] = $stateParams.id;
+                } else if(context.main === 'tasks'
+                    && ['projects', 'discussions'].includes(context.entityName)) {
+                    state = 'main.tasks.byentity.details';
+                    params.entity = $stateParams.entity;
+                    params.entityId = $stateParams.entityId;
+                    task[params.entity] = $stateParams.entityId;
                 } else {
-                    if (context.entityName === 'task') {
-                        state = 'main.tasks.byparent.details';
-                        params.entity = $stateParams.entity;
-                        params.entityId = $stateParams.entityId;
-                        task.parent = $stateParams.entityId;
-                    } else {
-                        // tasks.projects, tasks.discussions, discussions.projects, projects.discussions
-                        state = 'main.tasks.byentity.details';
-                        params.entity = $stateParams.entity;
-                        params.entityId = $stateParams.entityId;
-                        task[$stateParams.entity] = $stateParams.entityId;
-                    }
+                    state = 'main.tasks.all.details';
+                    params.entity = 'task';
                 }
 
                 TasksService.create(task).then((result) => {
