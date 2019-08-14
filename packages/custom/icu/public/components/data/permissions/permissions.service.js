@@ -154,7 +154,7 @@ angular.module('mean.icu.data.permissionsservice', [])
             console.log(typeOfService) ;
 
 
-            if(clonedEntity.serial != undefined) {
+            if(typeOfService === 'officeDocuments') {
                 var serviceName = OfficeDocumentsService;
                 serviceName.updateWatcherPerms(clonedEntity, user, clonedEntity.permissions) ;
             }
