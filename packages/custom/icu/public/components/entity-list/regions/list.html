@@ -13,7 +13,7 @@ ng-model="newItem"
             <tr data-ng-repeat="item in visibleItems"
                 data-ng-class="{ 'active': isCurrentState(item._id), 'multipleSelected': item.selected }"
                 ng-click="onClickRow($event, item)"
-                ng-include="unifiedRowTpl"
+                ng-include="'/icu/components/entity-list/regions/row.html'"
                 ng-mouseover="showTick(item)"
                 ng-mouseleave="hideTick(item)"
             >
