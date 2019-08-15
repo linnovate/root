@@ -229,7 +229,7 @@ directive('icuSidepane', function() {
         $state.go($state.current, {
             type: $scope.filteringData.issue === 'all' ? null : $scope.filteringData.issue
         }, {
-            notify: false
+            reload: false
         })
 
         let results = SearchService.results;
