@@ -4,22 +4,24 @@ const mean = require('meanio');
 const utils = require('./utils');
 const system = require('./system');
 const logger = require('../services/logger');
+const mongoose = require('mongoose');
 
 exports.save = function(doc, docType) {
   return new Promise((resolve, reject) => {
-    let newDoc = JSON.parse(JSON.stringify(doc));
-    let creator =  doc.creator._id || doc.creator;
-    delete newDoc._id;
-
-    newDoc.creator = JSON.parse(JSON.stringify(creator));
     docType = docType.toLowerCase();
+
+    if(doc instanceof mongoose.Model)
+      doc = doc.toObject({ depopulate: true })
+
+    let docId = doc._id.toString();
+    delete doc._id;
 
     mean.elasticsearch.index({
       index: docType,
       refresh: 'wait_for',
       type: docType,
-      id: doc._id.toString(),
-      body: newDoc
+      id: docId,
+      body: doc
     }, function(error, response) {
       if(error) {
         system.sendMessage({service: 'elasticsearch', message: response});
