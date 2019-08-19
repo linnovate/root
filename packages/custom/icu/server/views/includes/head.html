@@ -3,7 +3,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <!--Made By OHAD - <title>{{appName}} - {{title}}</title>-->
   <title>{{appName}}</title>
   <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
   <meta name="keywords" content="node.js, express, mongoose, mongodb, angularjs, swig">
@@ -19,7 +18,7 @@
   <meta property="fb:admins" content="APP_ADMIN">
 
   <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
-  <!--<link rel="stylesheet" href="/icu/assets/lib/dralular/dist/dragular.css">-->
+  <link rel="stylesheet" href="/dist/icu/assets/css/styles.css">
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/dist/polyfill.min.js"></script>
@@ -35,9 +34,5 @@
   {% for file in aggregatedassets.header.js %}
     <script type="text/javascript" src="/dist{{file}}"></script>
   {% endfor %}
-
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
 </head>

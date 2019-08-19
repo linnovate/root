@@ -1,8 +1,5 @@
 const gulp = require('gulp');
-const gulpLoadPlugins = require('gulp-load-plugins');
-const runSequence = require('run-sequence');
 const child_process = require('child_process');
-const plugins = gulpLoadPlugins();
 
 var server;
 
@@ -34,14 +31,4 @@ gulp.task('e2e', function(done) {
   }).once('close', done);
 })
 
-gulp.task('test', function(done) {
-  runSequence(
-    'webdriver-update',
-    'test-server',
-    'e2e',
-    function() {
-      server && server.kill()
-      done()
-    }
-  );
-});
+gulp.task('test', gulp.series('webdriver-update', 'test-server', 'e2e', () => {server && server.kill()}))

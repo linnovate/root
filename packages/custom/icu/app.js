@@ -29,36 +29,26 @@ ICU.register(function (app, auth, database, swagger) {
         menu: 'main'
     });
 
-    ICU.aggregateAsset('css', 'styles.css');
     ICU.aggregateAsset('css', '../lib/angular-ui-select/dist/select.css');
     ICU.aggregateAsset('css', '../lib/jquery-ui/themes/pepper-grinder/jquery-ui.min.css');
     ICU.aggregateAsset('css', '../lib/angularjs-color-picker/angularjs-color-picker.css');
     ICU.aggregateAsset('css', '../fonts/open-sans-hebrew/style.css');
-    // ICU.aggregateAsset('css', 'eventDrops.css');
 
     ICU.aggregateAsset('js', '../lib/underscore/underscore.js');
     ICU.aggregateAsset('js', '../lib/angular-ui-select/dist/select.js');
     ICU.aggregateAsset('js', '../lib/jquery-ui/jquery-ui.js');
     ICU.aggregateAsset('js', '../lib/angular-ui-date/src/date.js');
     ICU.aggregateAsset('js', '../lib/moment/moment.js');
-
     ICU.aggregateAsset('js', '../lib/ng-file-upload/ng-file-upload.min.js');
     ICU.aggregateAsset('js', '../lib/ngInfiniteScroll/build/ng-infinite-scroll.min.js');
     ICU.aggregateAsset('js', '../lib/querystring/querystring.min.js');
-
     ICU.aggregateAsset('js', '../lib/tinycolor/tinycolor.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/angularjs-color-picker/angularjs-color-picker.js', {weight: 1});
     ICU.aggregateAsset('js', '../lib/angular-timeago/dist/angular-timeago.min.js');
-
     ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/i18next/i18next.min.js', {weight: 1});
     ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', {weight: 2});
-
     ICU.aggregateAsset('js', '../lib/angular-tooltips/dist/angular-tooltips.min.js');
-
-
-    ICU.aggregateAsset('js', './file-saver/FileSaver.min.js/FileSaver.min.js');
-
     ICU.aggregateAsset('js', '../lib/d3/d3.min.js', {weight: 0});
     ICU.aggregateAsset('js', './eventDrops.js', {weight: 1});
     ICU.aggregateAsset('js', './daterangepicker.js', {weight: 3});

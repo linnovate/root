@@ -2,7 +2,7 @@
 
 const gulp = require('gulp');
 const plugins = require('gulp-load-plugins')();
-const runSequence = require('run-sequence');
+const del = require('del');
 
 const { languages, currentLanguage } = require('../config/env/all.js');
 const language = languages.find(function(language) {
@@ -15,7 +15,7 @@ const paths = {
     'node_modules/babel-polyfill/dist/polyfill.min.js'
   ],
   bower: 'bower_components/**/*.*',
-  babel: 'packages/custom/*/public/!(assets)/**/!(socket.io).js',
+  babel: 'packages/custom/*/public/{app,components}/**/*.js',
   html: [
     'packages/*/*/public/**/*.html',
     'packages/*/*/server/views/**'
@@ -25,12 +25,16 @@ const paths = {
 };
 
 function distPath() {
-  return plugins.rename(function (path) {
+  return plugins.rename(path => {
     path.dirname = path.dirname.replace(/(core|custom)\//, '').replace('/public', '');
   });
 }
 
 
+
+gulp.task('clean', function() {
+  return del('dist')
+});
 
 gulp.task('sass', function() {
   return gulp.src(paths.sass, { base: 'packages/' })
@@ -38,7 +42,9 @@ gulp.task('sass', function() {
     .pipe(language.direction === 'rtl' ? plugins.rtlcss({
       clean: false
     }) : plugins.util.noop())
-    .pipe(gulp.dest('packages/'));
+    .pipe(process.env.NODE_ENV === 'production' ? plugins.cssmin(): plugins.util.noop())
+    .pipe(distPath())
+    .pipe(gulp.dest('dist/'));
 });
 
 gulp.task('dist:public', function() {
@@ -59,7 +65,7 @@ gulp.task('dist:bower', function() {
     .pipe(gulp.dest('dist/bower_components/'));
 });
 
-gulp.task('babel', function () {
+gulp.task('babel', function() {
   return gulp.src(paths.babel)
     .pipe(plugins.babel({
       presets: [['env', {
@@ -72,30 +78,23 @@ gulp.task('babel', function () {
     .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('devServe', function () {
+gulp.task('devServe', function() {
   return plugins.nodemon({
     script: 'server.js',
     ext: 'html js',
-    env: { 'NODE_ENV': 'development' } ,
     ignore: ['node_modules/', 'packages/custom/**/public/', 'dist/'],
     nodeArgs: ['--inspect=0.0.0.0']
   });
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function(cb) {
   gulp.watch(paths.html).on('change', plugins.livereload.changed);
-  gulp.watch(paths.babel, ['babel']).on('change', plugins.livereload.changed);
-  gulp.watch(paths.sass, ['sass']).on('change', plugins.livereload.changed);
-  gulp.watch(paths.css, ['dist:css']).on('change', plugins.livereload.changed);
+  gulp.watch(paths.babel, gulp.series('babel')).on('change', plugins.livereload.changed);
+  gulp.watch(paths.sass, gulp.series('sass')).on('change', plugins.livereload.changed);
   plugins.livereload.listen({interval: 500});
+  cb()
 });
 
-gulp.task('build', function(callback) {
-  runSequence(
-    'clean',
-    'sass',
-    ['dist:css', 'dist:public', 'dist:bower'],
-    'babel',
-    callback
-  );
-});
+gulp.task('dist', gulp.parallel('dist:css', 'dist:public', 'dist:bower'))
+
+gulp.task('build', gulp.series('clean', 'sass', 'dist', 'babel'));

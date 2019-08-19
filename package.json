@@ -13,7 +13,7 @@
   "scripts": {
     "start": "gulp development",
     "build": "gulp build",
-    "production": "gulp production",
+    "production": "export NODE_ENV=production && gulp build",
     "test": "run_gulp() { export ROOT_URL=$1; gulp test; }; run_gulp",
     "postinstall": "node scripts/postinstall.js && gulp sass"
   },
@@ -80,11 +80,11 @@
     "bower": "1.8.4",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "del": "3.0.0",
+    "del": "5.0.0",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
     "expect.js": "0.3.1",
-    "gulp": "3.9.1",
+    "gulp": "4.0.2",
     "gulp-babel": "^7.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-csslint": "^1.0.0",
@@ -102,7 +102,6 @@
     "mongo-express": "^0.46.1",
     "node-sass": "^4.9.2",
     "protractor": "5.3.2",
-    "require-dir": "1.0.0",
-    "run-sequence": "^2.2.1"
+    "require-dir": "1.0.0"
   }
 }
