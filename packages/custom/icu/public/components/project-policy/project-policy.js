@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.icu.ui.projectdetails').controller('ProjectPolicyController', ProjectPolicyController);
+angular.module('mean.icu.ui.projectpolicy', []).controller('ProjectPolicyController', ProjectPolicyController);
 
 function ProjectPolicyController($scope, $uibModalInstance, item, template, me, people) {
 

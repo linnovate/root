@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.icu.ui.searchlist', [])
+angular.module('mean.icu.ui.searchlistdirective', [])
 .directive('icuSearchList', function (LayoutService) {
     function controller($rootScope, $scope, $state, $filter, SearchService, MultipleSelectService, NotifyingService) {
 
