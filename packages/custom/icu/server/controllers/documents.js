@@ -356,7 +356,7 @@ exports.getByTaskId = function(req, res, next) {
       .populate({
         path: 'tasks',
         populate: {
-          path: 'subTasks'
+          path: 'subTasks project'
         }
       })
       .exec(function(err, doc) {
