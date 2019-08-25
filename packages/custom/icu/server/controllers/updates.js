@@ -44,13 +44,14 @@ exports.getAttachmentsForUpdate = function(req, res, next) {
   }
 
   var query = {
-    entity: req.locals.result._id
+    issueId: req.locals.result._id
   };
 
   if(_.isArray(req.locals.result)) {
     var ids = _(req.locals.result).pluck('_id').value();
+    console.log(JSON.stringify(ids))
     query = {
-      entity: {
+      issueId: {
         $in: ids
       }
     };
@@ -60,7 +61,7 @@ exports.getAttachmentsForUpdate = function(req, res, next) {
     if(_.isArray(req.locals.result)) {
       _.each(req.locals.result, function(i) {
         i.attachments = _.filter(attachments, function(a) {
-          return a.entity.toString() === i._id.toString();
+          return a.issueId.toString() === i._id.toString();
         });
       });
 
