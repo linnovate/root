@@ -187,7 +187,6 @@ function OfficeDocumentDetailsController(
     var context = {
       name: "status",
       newVal: $scope.item.status
-      //"oldVal": officeDoc.status
     };
     $scope.update($scope.item, context);
   };
@@ -497,14 +496,8 @@ function OfficeDocumentDetailsController(
     });
   };
 
-  $scope.updateStatusForApproval = function(entity) {
-    let context = {
-      action: "updated",
-      name: "status",
-      type: "project"
-    };
-    entity.status = "waiting-approval";
-    $scope.update(entity, context);
+  $scope.updateStatusForApproval = function() {
+    return $scope.onStatus('waiting-approval');
   };
 
   // ==================================================== $watch: title / desc ==================================================== //
