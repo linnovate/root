@@ -152,14 +152,7 @@ angular.module('mean.icu.ui.tabs')
             };
 
             $scope.remove = function (file, index) {
-                // if(!$scope.checkAttachmentCreator(file))return;
-                let currentEntity = $state.current.name.split('.')[1];
-                let parent = currentEntity.slice(0, currentEntity.length-1);
-
-                if(parent === 'folder') parent = 'folders';
-                if(parent === 'office') parent = 'offices';
-
-                DocumentsService.delete(file._id, {parent: parent, id: $scope.entity._id})
+                DocumentsService.delete(file._id, {parent: file.entity, id: $scope.entity._id})
                   .then(function (status) {
                     if (status === 200) {
                         ActivitiesService.create({
