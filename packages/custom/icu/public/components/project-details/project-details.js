@@ -300,12 +300,7 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
       if(context.entityName === 'project') {
         var projId = result.project ? result.project._id : undefined;
         if(projId !== context.entityId) {
-          $state.go('main.projects.byentity', {
-            entity: context.entityName,
-            entityId: context.entityId
-          }, {
-            reload: true
-          });
+          $state.reload();
         }
       }
 
