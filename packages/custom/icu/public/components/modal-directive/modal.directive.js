@@ -16,10 +16,6 @@ angular.module('mean.icu.ui.modaldeletetasksbyentity', [])
 
         function link(scope, elem, attrs) {
             elem.bind('click', function() {
-
-                if($state.current.name.indexOf('main.tasks.byentity') != -1 && scope.entityName != 'Document')
-                   scope.showModal --;
-
                 if(scope.showModal) {
                     buildModal();
                 } else {
