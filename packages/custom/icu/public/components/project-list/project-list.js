@@ -1,6 +1,6 @@
 'use strict';
 
-function ProjectListController($scope, $state, $timeout, projects, NotifyingService, BoldedService, MultipleSelectService, ProjectsService, UsersService, context, $stateParams, EntityService) {
+function ProjectListController($scope, projects, BoldedService, ProjectsService, UsersService, context, DiscussionsService) {
 
     let me;
     UsersService.getMe().then(function(result) {
@@ -54,6 +54,17 @@ function ProjectListController($scope, $state, $timeout, projects, NotifyingServ
             $scope.items.push(result);
             ProjectsService.data.push(result);
             return result;
+        }).then(item => {
+            if(parent && parent.type === 'discussion') {
+                return DiscussionsService.getById(context.entityId)
+                    .then(parentEntity => {
+                        let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
+                        Object.assign(item, parentParams);
+                        return ProjectsService.update(item);
+                    });
+            } else {
+                return item;
+            }
         });
     };
 }
