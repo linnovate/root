@@ -371,6 +371,7 @@ function EntityListController($rootScope, $scope, $injector, $window, $state, co
                 } else if($scope.loadNext) {
                     load = $scope.loadNext();
                 } else {
+                    $scope.refreshVisibleItems();
                     return;
                 }
 
