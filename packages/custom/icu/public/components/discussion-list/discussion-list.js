@@ -1,6 +1,6 @@
 'use strict';
 
-function DiscussionListController($scope, $state, discussions, NotifyingService, DiscussionsService, context, BoldedService, MultipleSelectService, $stateParams, EntityService) {
+function DiscussionListController($scope, $state, discussions, DiscussionsService, context, BoldedService, ProjectsService) {
 
     $scope.items = discussions.data || discussions;
     $scope.loadNext = discussions.next;
@@ -34,6 +34,17 @@ function DiscussionListController($scope, $state, discussions, NotifyingService,
             $scope.items.push(result);
             DiscussionsService.data.push(result);
             return result;
+        }).then(item => {
+            if(parent && parent.type === 'project') {
+                return ProjectsService.getById(context.entityId)
+                    .then(parentEntity => {
+                        let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
+                        Object.assign(item, parentParams);
+                        return DiscussionsService.update(item);
+                    });
+            } else {
+                return item;
+            }
         });
     };
 
