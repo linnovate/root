@@ -96,7 +96,9 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
 
   $scope.onTags = function(value) {
     $scope.item.tags = value;
-    $scope.update($scope.item,context);
+    $scope.update($scope.item, {
+      name: 'tags'
+    });
   }
 
   // ==================================================== Menu events ==================================================== //
@@ -221,36 +223,46 @@ function FolderDetailsController($rootScope, $scope, entity, me, tasks, people, 
         }
       }
       switch (context.name) {
-      case 'status':
-        FoldersService.updateStatus(folder, me, backupEntity).then(function(result) {
-          backupEntity = angular.copy($scope.item);
-          ActivitiesService.data = ActivitiesService.data || [];
-          ActivitiesService.data.push(result);
-          refreshList();
-        });
-        break;
-
-      case 'star':
-        FoldersService.updateStar(folder, me, backupEntity).then(function(result) {
-          backupEntity = angular.copy($scope.item);
-          ActivitiesService.data = ActivitiesService.data || [];
-          ActivitiesService.data.push(result);
-        });
-        break;
-      case 'title':
-          FoldersService.updateTitle(folder, me, backupEntity).then(function(result) {
-              backupEntity = angular.copy($scope.item);
-              ActivitiesService.data = ActivitiesService.data || [];
-              ActivitiesService.data.push(result);
+        case 'status':
+          FoldersService.updateStatus(folder, me, backupEntity).then(function(result) {
+            backupEntity = angular.copy($scope.item);
+            ActivitiesService.data = ActivitiesService.data || [];
+            ActivitiesService.data.push(result);
+            refreshList();
           });
           break;
-      case 'description':
-        FoldersService.updateDescription(folder, me, backupEntity).then(function(result) {
-          backupEntity = angular.copy($scope.item);
-          ActivitiesService.data = ActivitiesService.data || [];
-          ActivitiesService.data.push(result);
-        });
-        break;
+
+        case 'star':
+          FoldersService.updateStar(folder, me, backupEntity).then(function(result) {
+            backupEntity = angular.copy($scope.item);
+            ActivitiesService.data = ActivitiesService.data || [];
+            ActivitiesService.data.push(result);
+          });
+          break;
+
+        case 'title':
+          FoldersService.updateTitle(folder, me, backupEntity).then(function(result) {
+            backupEntity = angular.copy($scope.item);
+            ActivitiesService.data = ActivitiesService.data || [];
+            ActivitiesService.data.push(result);
+          });
+          break;
+
+        case 'description':
+          FoldersService.updateDescription(folder, me, backupEntity).then(function(result) {
+            backupEntity = angular.copy($scope.item);
+            ActivitiesService.data = ActivitiesService.data || [];
+            ActivitiesService.data.push(result);
+          });
+          break;
+
+        case 'tags':
+          FoldersService.updateTags(folder, me, backupEntity).then(function(result) {
+            backupEntity = angular.copy($scope.item);
+            ActivitiesService.data = ActivitiesService.data || [];
+            ActivitiesService.data.push(result);
+          });
+          break;
       }
     });
   }

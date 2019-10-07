@@ -173,6 +173,7 @@ angular.module('mean.icu.data.foldersservice', [])
         updateStar: createActivity('star'),
         updateDescription: createActivity('description'),
         updateStatus: createActivity('status'),
+        updateTags: createActivity("tags"),
         updateWatcher: createActivity('watchers'),
     };
 });
