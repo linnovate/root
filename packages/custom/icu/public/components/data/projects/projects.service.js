@@ -191,7 +191,7 @@ angular.module('mean.icu.data.projectsservice', [])
         NotifyingService.notify('editionData');
         WarningsService.setWarning(result.headers().warning);
         return result.data;
-      }).then(entity => BoldedService.boldedUpdate(entity, 'projects', 'update'));
+      });
     }
 
     function star(project) {
