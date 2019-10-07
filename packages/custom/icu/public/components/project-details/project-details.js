@@ -87,18 +87,8 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
       ActivitiesService.data.push(result);
     });
 
-    ProjectsService.update($scope.item).then(function(result) {
-      if(context.entityName === 'project') {
-        var projId = result.project ? result.project._id : undefined;
-        if(projId !== context.entityId) {
-          $state.go('main.projects.byentity', {
-            entity: context.entityName,
-            entityId: context.entityId
-          }, {
-            reload: true
-          });
-        }
-      }
+    ProjectsService.update($scope.item).then(function() {
+      $state.reload();
     });
   };
 
