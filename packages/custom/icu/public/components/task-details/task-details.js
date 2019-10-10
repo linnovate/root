@@ -188,6 +188,12 @@ function TaskDetailsController($scope, entity, tags, projects, tasks, subtasks, 
       ]);
 
     Object.assign(newItem, duplicate);
+
+    if($state.includes('main.tasks.byassign')) {
+      newItem.assign = me._id;
+      newItem.status = 'assigned';
+    }
+
     TasksService.create(newItem)
       .then( result => {
         $state.go('^.^', {}, { reload: true });
