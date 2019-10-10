@@ -57,6 +57,10 @@ function TaskListController($scope, $timeout, $state, tasks, NotifyingService, B
         if(parent){
             newItem[parent.type] = parent.id;
         }
+        if($state.includes('main.tasks.byassign')) {
+            newItem.assign = me._id;
+            newItem.status = 'assigned';
+        }
         return TasksService.create(newItem).then(function(result) {
             $scope.items.push(result);
             TasksService.data.push(result);
