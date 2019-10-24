@@ -15,6 +15,7 @@
     ng-blur="bluring(item, $event)"
     ng-focus="focusing(item)"
     ng-class="[getBoldedClass(item), {'noFocus': !item.focus}]"
+    ng-paste="onpaste($event, $index)"
 ></td>
 <td ng-include="$parent.entityRowTpl"> </td>
 

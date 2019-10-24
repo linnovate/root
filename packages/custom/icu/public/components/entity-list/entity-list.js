@@ -449,6 +449,28 @@ function EntityListController($rootScope, $scope, $injector, $window, $state, co
 
     $scope.$on('refreshList', () => $scope.refreshVisibleItems());
 
+    $scope.onpaste = function(event, idx) {
+
+        // Stop native event
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Set plain text, without HTML tags
+        var pastedData = event.originalEvent.clipboardData.getData('text');
+        $scope.visibleItems[idx].title = pastedData;
+
+        // Move cursor to the end of element
+        $timeout(() => {
+            var range = document.createRange();
+            var sel = window.getSelection();
+            range.setStart(event.currentTarget, event.currentTarget.childNodes.length);
+            range.collapse();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }, 0)
+
+    }
+
     // ============================================================= //
     // ======================== Permissions ======================== //
     // ============================================================= //
