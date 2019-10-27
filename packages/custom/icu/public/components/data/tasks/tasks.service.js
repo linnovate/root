@@ -173,6 +173,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getMyTasks() {
+      return Promise.resolve([]);
     	return $http.get(ApiUri + EntityPrefix + '/byAssign').then(function (result) {
     		    WarningsService.setWarning(result.headers().warning);
             return result.data;
@@ -194,6 +195,7 @@ angular.module('mean.icu.data.tasksservice', [])
     }
 
     function getWatchedTasks() {
+      return Promise.resolve([]);
     	return $http.get(ApiUri + '/watchedTasks').then(function (result) {
     		    WarningsService.setWarning(result.headers().warning);
             return result.data;
