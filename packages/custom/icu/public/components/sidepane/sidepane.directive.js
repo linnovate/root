@@ -136,10 +136,10 @@ directive('icuSidepane', function() {
         {label:'tasks', value: false, name: 'task', length: 0},
         {label:'projects', value: false, name: 'project', length: 0},
         {label:'discussions', value: false, name: 'discussion', length: 0},
-        {label:'offices', value: false, name: 'office', length: 0},
+        {label:'officeDocuments', value: false, name: 'officeDocument', length: 0},
         {label:'folders', value: false, name: 'folder', length: 0},
-        {label:'Attachments', value: false, name: 'attachment', length: 0},
-        {label:'officeDocuments', value: false, name: 'officeDocument', length: 0}
+        {label:'offices', value: false, name: 'office', length: 0},
+        {label:'Attachments', value: false, name: 'attachment', length: 0}
     ];
 
     $scope.filteringData = {
