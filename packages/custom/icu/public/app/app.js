@@ -178,7 +178,7 @@ angular.module('mean.icu').config([
                         return (project && typeof project === 'object') ? project : ProjectsService.getById($stateParams.id)
                     },
                     tasks: function (TasksService, $stateParams) {
-                        return TasksService.getByProjectId($stateParams.id);
+                        return [];
                     },
                     people: function (UsersService) {
                         return UsersService.getAll();
@@ -407,6 +407,7 @@ angular.module('mean.icu').config([
             var resolve = {};
             resolve[tab] = [capitalizedTab + 'Service', '$stateParams',
             function (service, $stateParams) {
+                if(main === 'project' && tab === 'tasks') return [];
                 var entityName = $stateParams.id ? main : $stateParams.entity;
                 var getFn = 'getBy' + capitalize(entityName) + 'Id';
 
