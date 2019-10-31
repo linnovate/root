@@ -221,12 +221,11 @@ angular
     }
 
     function getMyTasks() {
-      return $http
-        .get(ApiUri + EntityPrefix + "/byAssign")
-        .then(function(result) {
-          WarningsService.setWarning(result.headers().warning);
-          return result.data;
-        });
+      return Promise.resolve([]);
+    	return $http.get(ApiUri + EntityPrefix + '/byAssign').then(function (result) {
+        WarningsService.setWarning(result.headers().warning);
+        return result.data;
+      });
     }
 
     function getMyTasksStatistics() {
@@ -244,7 +243,8 @@ angular
     }
 
     function getWatchedTasks() {
-      return $http.get(ApiUri + "/watchedTasks").then(function(result) {
+      return Promise.resolve([]);
+    	return $http.get(ApiUri + '/watchedTasks').then(function (result) {
         WarningsService.setWarning(result.headers().warning);
         return result.data;
       });
