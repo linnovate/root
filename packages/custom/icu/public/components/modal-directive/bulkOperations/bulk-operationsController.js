@@ -169,7 +169,8 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
         $scope.selectedWatchers = array.map( object =>  createBulkWatcher(object._id, $scope.userPermissionStatus(object), false, true));
     };
 
-    function createBulkWatcher(id, perms, remove, primary){
+    function createBulkWatcher(id, perms, remove, primary) {
+        if(perms === 'Different permissions') perms = 'viewer'
         return {
             '_id': id,
             'permissions': perms,

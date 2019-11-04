@@ -99,8 +99,8 @@ function update(req, res, next) {
           })
         }
       }
-      doc.save();
-      return doc;
+
+      return doc.save();
     });
 
     return Promise.all(docs)
