@@ -9,7 +9,7 @@ services:
     environment:
       PORT: 3000
       MONGODB_URI: mongodb://root:password123@mongo/icu-dev?authSource=admin
-      ELASTICSEARCH_IP: elasticsearch
+      ELASTICSEARCH_IP: elasticsearch:9200
       ROOT_LANG: en
       FTP_IP: ftp
       FTP_USER_NAME: admin
@@ -43,6 +43,7 @@ services:
       ES_JAVA_OPTS: -Xms512m -Xmx512m
       cluster.routing.allocation.disk.watermark.flood_stage: 99%
       cluster.routing.allocation.disk.watermark.high: 99%
+      cluster.routing.allocation.disk.watermark.low: 95%
     ports:
       - 9200:9200
     volumes:
