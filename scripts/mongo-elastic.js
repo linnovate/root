@@ -5,8 +5,8 @@ const ProgressBar = require('progress');
 
 
 // Following envs can be customized
-const MONGO_URL = process.env.MONGO_URL || 'mongodb://localhost:27017/icu-dev?authSource=admin';
-const ELASTICSEARCH_URLS = process.env.ELASTICSEARCH_URLS.split(/\s+/) || ['http://localhost:9200'];
+const MONGO_URL = process.env.MONGODB_URI || 'mongodb://root:password123@localhost:27017/icu-dev?authSource=admin';
+const ELASTICSEARCH_URLS = process.env.ELASTICSEARCH_IP && process.env.ELASTICSEARCH_IP.split(/\s+/) || ['http://localhost:9200'];
 
 // limit number of docs per collection which will be imported
 const limit = process.env.LIMIT || undefined;
