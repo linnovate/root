@@ -99,14 +99,15 @@ function EntityListController($rootScope, $scope, $injector, $window, $state, co
             $scope.sorting.isReverse = !$scope.sorting.isReverse;
         }
 
-        $scope.refreshVisibleItems();
+        let sortParam = $scope.sorting.isReverse ? '-' : '';
+        sortParam += $scope.sorting.field.title;
 
-        /*Made By OHAD - Needed for reversing sort*/
+        // Add CSS transition for the arrow rotation
+        $scope.changeOrderTransition = true;
+
         $state.go($state.current, {
-            sort: $scope.sorting.field.title
+            sort: sortParam
         });
-
-        $scope.refreshVisibleItems();
     };
 
     $scope.sortingList = [{

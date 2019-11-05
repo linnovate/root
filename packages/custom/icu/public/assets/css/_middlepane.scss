@@ -47,13 +47,6 @@
         width: 100%;
     }
 
-    .rotate {
-        &:after {
-            transition: .5s;
-            transform: rotate(180deg);
-        }
-    }
-
     .bold {
         font-weight: bold;
     }
@@ -290,12 +283,19 @@
             outline: none;
             background-color: white;
 
+            &.transition:after {
+                transition: .5s;
+            }
+
             &:after {
                 content: "";
-                transition: .5s;
                 height: 100%;
                 display: block;
                 background: url(/icu/assets/img/icon-arrow-up.png) no-repeat center;
+            }
+
+            &.rotate:after {
+                transform: rotate(180deg);
             }
 
             &:hover {
