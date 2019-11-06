@@ -9,7 +9,7 @@ services:
     environment:
       PORT: 3000
       MONGODB_URI: mongodb://root:password123@mongo/icu-dev?authSource=admin
-      ELASTICSEARCH_IP: elasticsearch:9200
+      ELASTICSEARCH_IP: elasticsearch
       ROOT_LANG: en
       FTP_IP: ftp
       FTP_USER_NAME: admin
