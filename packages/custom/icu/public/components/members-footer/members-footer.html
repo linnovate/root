@@ -29,7 +29,7 @@
             <ui-select-match placeholder="{{notAssigned.length ? 'selectMembers' : 'allUsersWatching' | i18next}}" autofocus>
                 {{$select.selected.name}}
             </ui-select-match>
-            <ui-select-choices class="scroll" repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me">
+            <ui-select-choices class="scroll" repeat="user in notAssigned | filter: {job: $select.search} | filterByFrequentUsers: me | limitTo: 5">
                 <div icu-avatar
                      user="user"
                      entity="entity"

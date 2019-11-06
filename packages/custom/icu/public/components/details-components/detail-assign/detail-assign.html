@@ -9,7 +9,7 @@
         <span ng-if="$select.selected._id" class="summary-content">{{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}
         </span>
       </ui-select-match>
-      <ui-select-choices repeat="user._id as user in list | filter: { job: $select.search } | filterByFrequentUsers: me">
+      <ui-select-choices repeat="user._id as user in list | filter: { job: $select.search } | filterByFrequentUsers: me | limitTo: 5">
         <div icu-avatar user="user"></div>
         <span class="summary-content">{{user.job}}</span>
       </ui-select-choices>

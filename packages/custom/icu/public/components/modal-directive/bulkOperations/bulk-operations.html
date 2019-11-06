@@ -77,8 +77,7 @@
             autofocus>
             {{$select.selected.name}}
           </ui-select-match>
-          <ui-select-choices class="scroll" repeat="user in unusedWatchers | filter: $select.search">
-
+          <ui-select-choices class="scroll" repeat="user in unusedWatchers | filter: $select.search | limitTo: 5">
             <div icu-avatar
                  user="user"
                  entity="entity">
@@ -106,7 +105,7 @@
                         {{$select.selected.name}} {{$select.selected.lastname?$select.selected.lastname:""}}
                     </span>
                 </ui-select-match>
-                <ui-select-choices repeat="user in people | filter: $select.search">
+                <ui-select-choices repeat="user in people | filter: $select.search | limitTo: 5">
                     <div icu-avatar user="user"></div>
                     <span class="summary-content">{{user.job?user.job:user.name}}</span>
                 </ui-select-choices>
