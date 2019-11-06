@@ -1,6 +1,6 @@
 'use strict';
 
-function TaskListController($scope, $injector, $state, tasks, NotifyingService, BoldedService,
+function TaskListController($scope, $timeout, $state, tasks, NotifyingService, BoldedService,
                             MultipleSelectService, DiscussionsService, TasksService, ProjectsService, context,
                             UsersService, OfficeDocumentsService) {
 
@@ -65,33 +65,33 @@ function TaskListController($scope, $injector, $state, tasks, NotifyingService, 
             $scope.items.push(result);
             TasksService.data.push(result);
             return result;
-        }).then(item => {
-            if(!parent || !parent.typ) return item;
-            if(['project', 'discussion'].includes(parent.type)) {
-                let parentService = $injector.get(parent.type[0].toUpperCase() + parent.type.slice(1) + 'sService');
-                return parentService.getById(context.entityId)
-                .then((parentEntity) => {
-                    let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
-                    Object.assign(item, parentParams);
-                    return item;
-                }).then(item => {
-                    TasksService.update(item);
-                    return item;
-                });
-            } else if(parent.type === 'officeDocument') {
+        }).then( item => {
+            let updated = false;
+            if(parent && parent.type === 'project') {
+                return ProjectsService.getById(context.entityId)
+                    .then((parentEntity) => {
+                      let parentParams = _.pick(parentEntity, ['watchers', 'permissions']);
+                      Object.assign(item, parentParams);
+                      updated = !updated;
+                      return {item, updated};
+                    }).then( res => {
+                  if(res.updated)TasksService.update(res.item);
+                    return res.item;
+                } );
+            } else if(parent && parent.type === 'officeDocument'){
                 OfficeDocumentsService.getById(context.entityId)
-                .then(parentEntity => {
-                    parentEntity.tasks = parentEntity.tasks ||  [];
-                    parentEntity.tasks.push(item._id);
+                    .then(parentEntity => {
+                        parentEntity.tasks = parentEntity.tasks ||  [];
+                        parentEntity.tasks.push(item._id);
 
-                    let context = {
-                        name: "tasks",
-                        newVal: parentEntity.tasks
-                    };
-                    OfficeDocumentsService.updateDocument(parentEntity._id, context);
-                })
-                return item;
+                        let context = {
+                            name: "tasks",
+                            newVal: parentEntity.tasks
+                        };
+                        OfficeDocumentsService.updateDocument(parentEntity._id, context);
+                    })
             }
+            return item;
         })
     };
 
