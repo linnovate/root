@@ -8,5 +8,5 @@
   on-remove="update()"
 >
   <ui-select-match id="addTag" placeholder="{{ 'selectTags' | i18next }}">{{$item}}</ui-select-match>
-  <ui-select-choices repeat="tag in list | filter: $select.search">{{tag}}</ui-select-choices>
+  <ui-select-choices repeat="tag in list | filter: $select.search | orderBy">{{tag}}</ui-select-choices>
 </ui-select>
