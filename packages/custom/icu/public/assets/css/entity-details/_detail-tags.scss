@@ -122,3 +122,8 @@ detail-tags {
        }
    }
 }
+
+// Causes `rtlcss` to switch to right and to override default bootstrap
+.dropdown-menu {
+    left: 0px;
+}
