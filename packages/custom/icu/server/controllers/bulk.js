@@ -110,11 +110,6 @@ function update(req, res, next) {
   })
   .then(docs => {
     res.json(docs);
-    docs.forEach(doc => {
-      console.log("saving elastic");
-      doc.watchers = [];
-      elasticsearch.save(doc, entity);
-    });
   })
   .catch(function(err) {
     next(err)
