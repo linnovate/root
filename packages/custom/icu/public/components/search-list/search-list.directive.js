@@ -32,6 +32,10 @@ angular.module('mean.icu.ui.searchlistdirective', [])
         $scope.hideTick = function(item){ item.visible = false };
 
         $scope.multipleSelectRefreshSelected = function (entity) {
+
+            event.stopPropagation(); // Prevent $scope.onClickRow from navigating to entity details
+            $state.go('main.search');
+
             MultipleSelectService.refreshSelectedList(entity);
             multipleSelectRefreshState();
         };
