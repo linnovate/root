@@ -61,7 +61,13 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
             ids: idsArray,
             update: { }
         };
-        changedBulkObject.update[type] = value
+
+        changedBulkObject.update[type] = value;
+
+        // Change status to 'Assigned' along with assignee
+        if(type === 'assign' && ['projects', 'tasks'].includes(entityName)) {
+            changedBulkObject.update.status = 'assigned';
+        }
 
         return MultipleSelectService.bulkUpdate(changedBulkObject, entityName)
             .then(result => {
