@@ -359,22 +359,22 @@ function bulkOperationsController($scope, context, $stateParams, $state, $i18nex
 
   switch (activityType) {
       case 'status':
-          $scope.title = `${$i18next('setStatus')}`;
+          $scope.title = `${$i18next.t('setStatus')}`;
           break;
       case 'watchers':
-          $scope.title = `${$i18next('setWatchers')}`;
+          $scope.title = `${$i18next.t('setWatchers')}`;
           break;
       case 'assign':
-          $scope.title = `${$i18next('assign')}`;
+          $scope.title = `${$i18next.t('assign')}`;
           break;
       case 'due':
-          $scope.title = `${$i18next('setDueDate')}`;
+          $scope.title = `${$i18next.t('setDueDate')}`;
           break;
       case 'tag':
-          $scope.title = `${$i18next('addTags')}`;
+          $scope.title = `${$i18next.t('addTags')}`;
           break;
       case 'delete':
-          $scope.title = `${$i18next('delete')}`;
+          $scope.title = `${$i18next.t('delete')}`;
           break;
   }
 }

@@ -1478,15 +1478,3 @@ angular.module('mean.icu').config([
             .state('main.inbox.officeDocument.activities', getDetailsTabState('officeDocument', 'activities'))
     }
 ]);
-
-angular.module('mean.icu').config(function ($i18nextProvider) {
-
-    $i18nextProvider.options = {
-        lng: window.config.lng,
-        useCookie: false,
-        useLocalStorage: false,
-        fallbackLng: 'he',
-        resGetPath: '/icu/assets/locales/__lng__/__ns__.json',
-        defaultLoadingValue: ''
-    };
-});

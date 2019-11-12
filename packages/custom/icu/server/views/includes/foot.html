@@ -6,6 +6,45 @@
 <script type="text/javascript" src="/icu/assets/lib/alertifyjs/dist/js/alertify.js"></script>
 <script type="text/javascript" src="/icu/assets/lib/alertifyjs/dist/js/ngAlertify.js"></script>
 <script type="text/javascript" src="/icu/assets/lib/file-saver/FileSaver.min.js/FileSaver.min.js"></script>
+
+<link id="style" rel="stylesheet">
+
+<script type="text/javascript">
+  window.user = {{user|json|safe}};
+  window.modules = null;
+  window.config = {{config|json|safe}}
+
+  // Set stylesheet direction
+  var dir = window.config.direction || 'rtl';
+  var styleElement = document.querySelector('#style');
+  styleElement.href = '/dist/icu/assets/css/styles-' + dir + '.css';
+
+  // Initialize i18next
+  i18next.use(i18nextXHRBackend)
+  i18next.init({
+    lng: window.config.lng,
+    fallbackLng: 'he',
+    backend: {
+      loadPath: {% raw %}'/icu/assets/locales/{{lng}}/{{ns}}.json'{% endraw %}
+    }
+  })
+
+  // Easily switch view - for debuging purposes only
+  function changeLocale(lng, dir) {
+    i18next.changeLanguage(lng);
+    styleElement.href = '/dist/icu/assets/css/styles-' + dir + '.css';
+  }
+</script>
+
+{% if config.splashScreen %}
+  <iframe id="splash" src="{{config.splashScreen}}"></iframe>
+  <script>
+    setTimeout(function() {
+      document.querySelector('#splash').style.display = 'none';
+    }, 5000)
+  </script>
+{% endif %}
+
 {% if (process.env.NODE_ENV == 'development') %}
   <!-- Livereload script rendered -->
   <!-- Disabling livereload due to - https://github.com/linnovate/mean/issues/929

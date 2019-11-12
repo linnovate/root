@@ -47,6 +47,7 @@ ICU.register(function (app, auth, database, swagger) {
     ICU.aggregateAsset('js', '../lib/angular-timeago/dist/angular-timeago.min.js');
     ICU.aggregateAsset('js', '../lib/angular-sanitize/angular-sanitize.js', {weight: 0});
     ICU.aggregateAsset('js', '../lib/i18next/i18next.min.js', {weight: 1});
+    ICU.aggregateAsset('js', '../lib/i18next-xhr-backend/i18nextXHRBackend.min.js', {weight: 1});
     ICU.aggregateAsset('js', '../lib/ng-i18next/dist/ng-i18next.js', {weight: 2});
     ICU.aggregateAsset('js', '../lib/angular-tooltips/dist/angular-tooltips.min.js');
     ICU.aggregateAsset('js', '../lib/d3/d3.min.js', {weight: 0});

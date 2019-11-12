@@ -1,17 +1,5 @@
 {% extends 'layouts/default.html' %}
+
 {% block content %}
   <section data-ui-view ></section>
-  <script type="text/javascript">
-    window.user = {{user|json|safe}};
-    window.modules = null;
-    window.config = {{config|json|safe}}
-  </script>
-  {% if config.splashScreen %}
-    <iframe id="splash" src="{{config.splashScreen}}"></iframe>
-    <script>
-      setTimeout(function() {
-        document.querySelector('#splash').style.display = 'none';
-      }, 5000)
-    </script>
-  {% endif %}
 {% endblock %}

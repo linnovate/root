@@ -28,8 +28,8 @@ function detailAssign($i18next) {
 
     if($scope.list[0].id !== 'no-select') {
       $scope.list.unshift({
-        name: $i18next('noSelect'),
-        job: $i18next('noSelect'),
+        name: $i18next.t('noSelect'),
+        job: $i18next.t('noSelect'),
         id: 'no-select'
       })
     }

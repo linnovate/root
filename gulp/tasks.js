@@ -39,11 +39,12 @@ gulp.task('clean', function() {
 gulp.task('sass', function() {
   return gulp.src(paths.sass, { base: 'packages/' })
     .pipe(plugins.sass())
-    .pipe(language.direction === 'rtl' ? plugins.rtlcss({
-      clean: false
-    }) : plugins.util.noop())
     .pipe(process.env.NODE_ENV === 'production' ? plugins.cssmin(): plugins.util.noop())
     .pipe(distPath())
+    .pipe(plugins.rename({ basename: 'styles-ltr' }))
+    .pipe(gulp.dest('dist/'))
+    .pipe(plugins.rtlcss({ clean: false }))
+    .pipe(plugins.rename({ basename: 'styles-rtl' }))
     .pipe(gulp.dest('dist/'));
 });
 
