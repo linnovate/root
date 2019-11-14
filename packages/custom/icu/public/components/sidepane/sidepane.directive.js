@@ -23,29 +23,7 @@ directive('icuSidepane', function() {
             TasksService.filterValue = false;
         };
 
-        // updatedDate
-        var now = new Date();
-        var lastMonth = null;
-        var nextMonth = null;
-
-        if (now.getMonth() == 0) {
-            lastMonth = new Date(now.getFullYear() - 1, 11, now.getDay());
-            nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-        } else if (now.getMonth() == 11){
-            lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDay()) ;
-            nextMonth = new Date(now.getFullYear() + 1, 0, 1);
-        } else {
-            lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDay()) ;
-            nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-        }
-
-        $scope.updatedDate = lastMonth;
-        $scope.dueDate = lastMonth;
-        SearchService.filteringByUpdated = $scope.updatedDate;
-        SearchService.filteringByDueDate = $scope.dueDate;
         $scope.datePicker = {};
-        $scope.datePicker.date = {startDate: lastMonth, endDate: nextMonth};
-        SearchService.filterDateOption = $scope.datePicker.date;
 
         $scope.dateoptions = {
             eventHandlers: {
@@ -334,46 +312,25 @@ directive('icuSidepane', function() {
 
     $scope.updatedOptions = {
         onClose: (value/*, picker, $element*/) => {
-            //                        console.log("on close", value, picker, $element) ;
-            let splut = value.split('.');
-            let valueChanged = new Date(splut[2],splut[1] -1 ,splut[0]) ;
-            $scope.updatedDate = new Date(value) ;
+            let date = new Date(value.split('/').reverse().join('-'));
+            SearchService.filteringByUpdated = $scope.updatedDate = date;
             document.getElementById('ui-datepicker-div').style.display = 'block';
-            SearchService.filteringByUpdated = valueChanged;
-            //                        console.log("SearchService.filteringByUpdated", SearchService.filteringByUpdated)
-            $state.go('main.search', { dateUpdated: value }) ;
+            $scope.$apply();
         },
         dateFormat: 'dd/mm/yy'
     };
 
     $scope.updateDueDate = {
         onClose: (value/*, picker, $element*/) => {
-            //                        console.log("on close", value, picker, $element) ;
-            let splut = value.split('.');
-            let valueChanged = new Date(splut[2],splut[1] -1 ,splut[0]) ;
-            $scope.dueDate = new Date(value) ;
+            let date = new Date(value.split('/').reverse().join('-'));
+            SearchService.filteringByDueDate = $scope.dueDate = date;
             document.getElementById('ui-datepicker-div').style.display = 'block';
-            SearchService.filteringByDueDate = valueChanged;
-            SearchService.filteringByUpdated = SearchService.filteringByUpdated;
-            $state.go('main.search', { dateUpdated: value }) ;
+            $scope.$apply();
         },
         dateFormat: 'dd/mm/yy'
     };
 
-    function arrayUnique(array) {
-        var a = array.concat();
-        for(var i=0; i<a.length; ++i) {
-            for(var j=i+1; j<a.length; ++j) {
-                if(a[i] === a[j])
-                    a.splice(j--, 1);
-            }
-        }
-
-        return a;
-    }
-
-     $scope.filterActive = function(type) {
-         console.log('ttttttt',type)
+    $scope.filterActive = function(type) {
          $scope.activeToggle.field = type;
          EntityService.activeStatusFilterValue = $scope.activeToggle.field ;
          $state.go($state.current.name, { activeToggle: $scope.activeToggle.field });
@@ -485,9 +442,7 @@ return {
         filteringData: '=',
         resetFilter: '=',
         getEntitiesAndWatchers: '=',
-        updatedDate: '=',
         datePicker: '=',
-        dueDate: '=',
         tmpStatus: '=',
         statusList: '=',
         activeList: '=',

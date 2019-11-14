@@ -39,14 +39,12 @@ angular.module('mean.icu.ui.displayby', [])
             return text ? String(text).replace(/<[^>]+>/gm, '') : '';
         };
 
-        $scope.clearDueDate = function(){
-          $scope.dueDate = null;
-          SearchService.filteringByDueDate = null;
+        $scope.clearDueDate = function() {
+            SearchService.filteringByDueDate = $scope.dueDate = null;
         };
 
-        $scope.clearUpdatedDate = function(){
-            $scope.updatedDate = null;
-            SearchService.filteringByUpdated = null;
+        $scope.clearUpdatedDate = function() {
+            SearchService.filteringByUpdated = $scope.updatedDate = null;
         };
 
         //clearing default date filter

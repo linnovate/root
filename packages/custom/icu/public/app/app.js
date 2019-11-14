@@ -1334,7 +1334,6 @@ angular.module('mean.icu').config([
                 url: '/search/:query?type&recycled',
                 reloadOnSearch: false,
                 params: {
-                    dateUpdated: 'active',
                     recycled:  null
                 },
                 views: {

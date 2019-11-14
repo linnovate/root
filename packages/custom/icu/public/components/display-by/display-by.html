@@ -47,13 +47,13 @@
         <div class="filterDueDate" ng-if="filteringData.issue == 'task' || filteringData.issue == 'project'">
             <div class="subtitle">{{'dueDate' | i18next}}</div>
             <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
-            <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
+            <input ng-name="updateDueDate" ui-date="updateDueDate" ng-model="$parent.$parent.dueDate"
                     ng-class='{"updatedAt":checkDate()}'>
         </div>
         <div class="filterDueDate" ng-if="filteringData.issue == 'officeDocument'">
             <div class="subtitle">{{'createdAt' | i18next}}</div>
             <div class="clear" ng-click="clearDueDate()">{{'clear' | i18next}}</div>
-            <input ng-if="filteringData.issue !== 'discussion'" ng-name="updateDueDate" ui-date="updateDueDate" ng-model="dueDate"
+            <input ng-name="updateDueDate" ui-date="updateDueDate" ng-model="$parent.$parent.dueDate"
                     ng-class='{"updatedAt":checkDate()}'>
         </div>
         <div class="filterDueDate" ng-if="filteringData.issue == 'discussion'">
@@ -65,7 +65,7 @@
         <div class="filterUpdated">
             <div class="subtitle">{{'updatedAfter' | i18next}}</div>
             <div class="clear" ng-click="clearUpdatedDate()">{{'clear' | i18next}}</div>
-            <input name="updatedOptions" ui-date="updatedOptions" ng-model="updatedDate"
+            <input name="updatedOptions" ui-date="updatedOptions" ng-model="$parent.updatedDate"
                     ng-class='{"updatedAt":checkDate()}'>
         </div>
 
