@@ -52,13 +52,6 @@ angular.module('mean.icu.ui.displayby', [])
         $scope.clearDueDate();
         $scope.clearUpdatedDate();
 
-        $scope.turnOffRecycle = function () {
-            var query = SearchService.getQuery();
-            $scope.recycled = false;
-            $scope.isRecycled = false;
-            $state.go('main.search', {reload: true, query: query});
-        };
-
         $scope.tmpStatus = [];
 
           $scope.statusListChange = function(type){

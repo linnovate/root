@@ -107,10 +107,7 @@ angular.module('mean.icu.ui.searchlistdirective', [])
         }, $scope);
 
         function filterResults(itemsArray){
-            let newArray = $filter('searchResultsFilter')(itemsArray);
-            newArray = $filter('filteringByUpdated')(newArray);
-
-            return newArray;
+            return $filter('filteringByUpdated')(itemsArray);
         }
     }
 

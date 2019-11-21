@@ -1331,10 +1331,10 @@ angular.module('mean.icu').config([
             })
 
             .state('main.search', {
-                url: '/search/:query?type&recycled',
+                url: '/search/:query?type&{recycled:bool}',
                 reloadOnSearch: false,
                 params: {
-                    recycled:  null
+                    recycled:  false
                 },
                 views: {
                     'middlepane@main': {

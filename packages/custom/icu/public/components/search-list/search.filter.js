@@ -3,14 +3,6 @@
 angular.module('mean.icu.ui.searchlistfilter', [])
 .filter('filteringByUpdated', function (SearchService,$location) {
     return function(results) {
-        let recycled = false;
-        if($location.search() && $location.search().recycled)recycled = true;
-
-        SearchService.filteringResults = SearchService.filteringResults
-          .filter(entity => {
-            let id = entity.id || entity._id;
-            return !!id && id !== -1 && !!recycled === !!entity.recycled;
-          });
 
         let filteringResults = SearchService.filteringResults.map(function(e) {
             let filterDate = new Date(SearchService.filteringByUpdated) ;
@@ -54,18 +46,8 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         return filteredResults;
     };
 })
-.filter('searchResultsFilter', function (SearchService,$location) {
-	return function(results) {
-        if ($location.path().split("/").pop() === "recycled")
-            SearchService.filteringResults = results;
-
-		let filteringResults = SearchService.filteringResults.map(e => e.id);
-        return results.filter( entity => filteringResults.indexOf(entity.id) > -1);
-	}
-})
 .filter('searchResultsLength', function (SearchService) {
     return function() {
         return  SearchService.filteringResults.length;
     }
-
 });

@@ -199,10 +199,6 @@ directive('icuSidepane', function() {
 
     $state.current.reloadOnSearch = false;
 
-    let issuesOrder = $scope.issues.map(function(i) {
-        return i.name;
-    });
-
     $scope.filterSearchByType = function(flag) {
         $state.go($state.current, {
             type: $scope.filteringData.issue === 'all' ? null : $scope.filteringData.issue
@@ -210,63 +206,41 @@ directive('icuSidepane', function() {
             reload: false
         })
 
-        let results = SearchService.results;
-
         for (let i = 0; i < $scope.issues.length; i++) {
-          $scope.issues[i].length = 0;
+            $scope.issues[i].length = 0;
         }
 
-        if (!results || !results.length) return ;
-        let filteredByType = [], index;
+        SearchService.filteringResults = SearchService.results.filter(item => {
 
-        for (let i=0; i< results.length; i++) {
-            if (results[i]._type === $scope.filteringData.issue || $scope.filteringData.issue === 'all') {
-                if ($rootScope.status) {
-                    if ($rootScope.status == 'all' ){
-                        if ($scope.userFilterList.indexOf(results[i].status) > -1) {
-                            filteredByType.push(results[i]);
-                        }
-                    }
-                    else if ($rootScope.status == 'active' ){
-                        let activeList = $scope.activeList;
-                        if(activeList.indexOf(results[i].status)>-1){
-                            filteredByType.push(results[i]);
-                          }
-                    }
-                    else if ($rootScope.status == 'nonactive' ){
-                        let archiveList = $scope.archiveList;
-                        if(archiveList.indexOf(results[i].status)>-1){
-                            filteredByType.push(results[i]);
-                          }
-                    }
-                    else if(results[i].status == $rootScope.status){
-                        filteredByType.push(results[i]);
-                    }
-                }
-                else filteredByType.push(results[i]);
-            }
-            index = issuesOrder.indexOf(results[i]._type);
-            if($stateParams.query === ''){
-              $scope.issues[index].length = 0;
-            } else if($scope.issues[index]){
-                identifyRecycled(results[i], $scope.issues[index]);
-            }
-        }
-        SearchService.setFilteringResults(filteredByType);
-        SearchService.filteringResults = filteredByType;
+            // Filter recycled
+            if(Boolean(item.recycled) !== $stateParams.recycled) return false;
 
-        getEntitiesAndWatchers(filteredByType);
-        if (!flag && $rootScope.status )
-          $rootScope.$emit('changeStatus');
+            // Filter items without ID
+            let id = item.id || item._id;
+            if(!id || id === -1) return false;
+
+            // Increment issue length
+            let issue = $scope.issues.find(issue => issue.name === item._type);
+            if(issue) issue.length++;
+
+            // Filter by type
+            if($scope.filteringData.issue !== 'all' && item._type !== $scope.filteringData.issue) return false;
+
+            // Filter by status
+            if($rootScope.status === 'active') {
+                if(!$scope.activeList.includes(item.status)) return false;
+            } else if($rootScope.status === 'nonactive') {
+                if(!$scope.archiveList.includes(item.status)) return false;
+            } else {
+                if($rootScope.status && $rootScope.status !== item.status) return false;
+            }
+
+            return true;
+        })
+
+        getEntitiesAndWatchers(SearchService.filteringResults);
+        if (!flag && $rootScope.status) $rootScope.$emit('changeStatus');
     };
-
-    function identifyRecycled(item, issue){
-      if($scope.recycled && item.recycled){
-        issue.length++
-      } else if(!$scope.recycled && !item.recycled){
-        issue.length++
-      }
-    }
 
     let getTruth = function(obj) { // return truth value in a single object
         let arr = [];
@@ -337,32 +311,38 @@ directive('icuSidepane', function() {
     };
 
     $scope.toggleRecycle = function () {
-        var query = SearchService.getQuery();
-        console.log("toggleRecycle...") ;
+        let query = SearchService.getQuery();
+        let reload = false;
 
         $scope.recycled = $scope.isRecycled = $stateParams.recycled = !$stateParams.recycled;
 
-        if($scope.recycled === false) {
-            $state.go('main.search', {
-                recycled: null,
-                query: query
-            }, {
-                reload: true
-            });
-        } else {
-            let usedQuery;
-            if(query === ''){
-              usedQuery = '___';
-            } else {
-              usedQuery = query;
-            }
-            $state.go('main.search', {
-                recycled: true,
-                query: usedQuery
-            }, {
-                reload: true
-            });
+        // Turning on the "recycled" option with no query, will send a special query "___" wich
+        // will retrieve all entities
+        if($scope.recycled && query === '') {
+            query = '___';
+            reload = true;
         }
+
+        $state.go($state.current, {
+            recycled: $scope.recycled,
+            query: query
+        }, {
+            reload: reload
+        })
+
+        if(!reload) $scope.filterSearchByType();
+    };
+
+    $scope.turnOffRecycle = function () {
+        $scope.recycled = false;
+
+        $state.go($state.current, {
+            recycled: false,
+        }, {
+            reload: false
+        })
+
+        $scope.filterSearchByType();
     };
 
     $scope.clearResults = function(){
