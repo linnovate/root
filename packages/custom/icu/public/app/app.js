@@ -1334,7 +1334,7 @@ angular.module('mean.icu').config([
                 url: '/search/:query?type&{recycled:bool}',
                 reloadOnSearch: false,
                 params: {
-                    recycled:  false
+                    recycled: false
                 },
                 views: {
                     'middlepane@main': {
@@ -1351,17 +1351,10 @@ angular.module('mean.icu').config([
                         let query = $stateParams.query;
 
                         if (query && query.length) {
-                            if(query !== '___'){
-                              SearchService.refreshQuery(query);
-                            }
                             return SearchService.find(query);
                         } else {
-                            SearchService.results = SearchService.filteringResults = [];
-                            return [];
+                            return SearchService.results = SearchService.filteringResults = [];
                         }
-                     },
-                    term: function ($stateParams) {
-                        return $stateParams.query;
                     }
                 }
             })

@@ -28,8 +28,6 @@ function SearchController($scope, $state, SearchService) {
     $scope.search = function() {
         $state.go('main.search', {
             query: $scope.term
-        }).then(() => {
-            SearchService.refreshQuery($scope.term);
         });
     };
 }

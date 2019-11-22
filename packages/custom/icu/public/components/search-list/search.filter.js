@@ -41,8 +41,3 @@ angular.module('mean.icu.ui.searchlistfilter', [])
         return filteredResults;
     };
 })
-.filter('searchResultsLength', function (SearchService) {
-    return function() {
-        return  SearchService.filteringResults.length;
-    }
-});

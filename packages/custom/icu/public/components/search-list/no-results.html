@@ -1,3 +1,1 @@
-<div class="discussion-details">
-   <h1>{{ resultsLength | searchResultsLength | i18next }} {{ 'results' | i18next }} {{ 'found' | i18next }}</h1>
-</div>
+<h1>{{ (results | filteringByUpdated).length }} {{ 'results' | i18next }} {{ 'found' | i18next }}</h1>

@@ -65,19 +65,11 @@ directive('icuSidepane', function() {
             $scope.turnOffRecycle();
         };
 
-        $scope.checkForSearchState = function(){
-          if($state.current.name.indexOf('search') === -1){
-            $scope.clearAllFilters();
-            $scope.clearResults();
-          }
-        };
-
         $scope.items = [{
             name: 'search',
             icon: '/icu/assets/img/search-nav.svg',
             state: 'search',
-            display: ['projects', 'discussions', 'people'],
-            func: $scope.checkForSearchState,
+            display: ['projects', 'discussions', 'people']
         }, {
             name: 'tasks',
             icon: '/icu/assets/img/task.png',
@@ -311,7 +303,7 @@ directive('icuSidepane', function() {
     };
 
     $scope.toggleRecycle = function () {
-        let query = SearchService.getQuery();
+        let query = $stateParams.query;
         let reload = false;
 
         $scope.recycled = $scope.isRecycled = $stateParams.recycled = !$stateParams.recycled;
@@ -343,17 +335,6 @@ directive('icuSidepane', function() {
         })
 
         $scope.filterSearchByType();
-    };
-
-    $scope.clearResults = function(){
-      SearchService.refreshQuery('');
-      SearchService.clearResults();
-
-      $scope.issues = $scope.issues.map(function(issue){
-        issue.length = 0;
-        return issue;
-      });
-      return $scope.issues;
     };
 
     $scope.filterSearch = function() {
