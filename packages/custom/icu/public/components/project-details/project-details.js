@@ -103,6 +103,11 @@ function ProjectDetailsController($scope, $rootScope, entity, tags, people, proj
     $scope.update($scope.item, value);
   };
 
+  $scope.onCategory = function(value) {
+    $scope.item.discussion = value;
+    $scope.update($scope.item, 'discussion');
+  }
+
   $scope.onWantToCreateRoom = function() {
     $scope.item.WantRoom = true;
     $scope.update($scope.item, context);

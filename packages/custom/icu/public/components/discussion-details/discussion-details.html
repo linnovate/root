@@ -34,6 +34,16 @@
     </button>
   </div>
 
+  <detail-category
+    placeholder="'selectProject' | i18next"
+    value="item.project"
+    items="projects"
+    type="'project'"
+    on-change="onCategory"
+    ng-class="{ 'disabled' : !havePermissions('tags')}"
+    ng-if="!item.parent">
+  </detail-category>
+
   <div ng-if="!disabled && havePermissions('description')">
     <div class="detail-title">
       <div class="item-title"

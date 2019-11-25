@@ -24,6 +24,16 @@
     </button>
   </div>
 
+  <detail-category
+    placeholder="'selectDiscussion' | i18next"
+    value="item.discussion"
+    items="discussions"
+    type="'discussion'"
+    on-change="onCategory"
+    ng-class="{ 'disabled' : !havePermissions('tags')}"
+    ng-if="!item.parent">
+  </detail-category>
+
   <div ng-if="!disabled && havePermissions('description')">
     <div class="detail-title">
       <div class="item-title"

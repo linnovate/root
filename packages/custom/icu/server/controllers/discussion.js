@@ -1,10 +1,11 @@
 "use strict";
 
 var options = {
-  includes: "watchers assign creator",
+  includes: "watchers assign project creator",
   defaults: {
     watchers: [],
-    assign: undefined
+    assign: undefined,
+    project: undefined
   }
 };
 

@@ -3,10 +3,11 @@
 require('../models/project');
 
 var options = {
-  includes: 'assign watchers subProjects',
+  includes: 'assign watchers discussion subProjects',
   defaults: {
     assign: undefined,
-    watchers: []
+    watchers: [],
+    discussion: undefined
   }
 };
 

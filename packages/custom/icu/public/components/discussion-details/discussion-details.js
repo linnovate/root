@@ -83,6 +83,11 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
     $scope.updateAndNotify($scope.item);
   }
 
+  $scope.onCategory = function(value) {
+    $scope.item.project = value;
+    $scope.update($scope.item, 'project');
+  }
+
   var activeLocationTimeout;
 
   $scope.updateLocation = function(discussion) {
@@ -263,8 +268,24 @@ function DiscussionDetailsController($scope, $rootScope, entity, tasks, context,
 
   // ==================================================== update ==================================================== //
 
+  function unionById(arr1, arr2){
+    let existing = arr1.map(e => (e.id || e._id).toString());
+    arr2.forEach(e => {
+      let id = (e.id || e._id).toString();
+      if(!existing.includes(id)) {
+        arr1.push(e);
+      }
+    })
+    return arr1;
+  }
+
   $scope.update = function(discussion, type) {
+    if (type === 'project' && discussion.project) {
+      discussion.watchers = unionById(discussion.watchers, discussion.project.watchers);
+      discussion.permissions = unionById(discussion.permissions, discussion.project.permissions);
+    }
     DiscussionsService.update(discussion);
+
     switch (type) {
     case 'startDate':
       DiscussionsService.updateStartDate(discussion, $scope.me, backupEntity).then(function(result) {
