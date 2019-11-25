@@ -21,7 +21,7 @@ const taskStatusMapper = {
  *
  */
 var options = {
-  includes: "assign watchers project discussion subTasks discussions creator",
+  includes: "assign watchers project discussion subTasks creator",
   defaults: {
     project: undefined,
     assign: undefined,

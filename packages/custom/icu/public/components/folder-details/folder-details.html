@@ -17,7 +17,14 @@
   </div>
 
 
-  <detail-category placeholder="'selectOffice' | i18next" value="item.office" items="offices" on-change="onCategory" ng-if="!item.parent" ></detail-category>
+  <detail-category
+    placeholder="'selectOffice' | i18next"
+    value="item.office"
+    items="offices"
+    type="'office'"
+    on-change="onCategory"
+    ng-if="!item.parent">
+  </detail-category>
 
   <div class="parent" ng-if="item.parent" ng-bind-html="currentContext.entity.title"></div>
 

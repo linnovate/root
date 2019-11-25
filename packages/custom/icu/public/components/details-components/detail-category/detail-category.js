@@ -42,11 +42,9 @@ function detailCategory(context, TasksService, ProjectsService, OfficesService, 
     }
 
     let serviceMap = {
-      tasks: ProjectsService,
-      officeDocuments: FoldersService,
-      folders: OfficesService,
-      templateDocs: OfficesService,
-
+      office: OfficesService,
+      folder: FoldersService,
+      project: ProjectsService,
       task: TasksService,
       discussion: DiscussionsService
     };

@@ -85,7 +85,15 @@
     <p ng-if="item.serial">{{'simochin' | i18next }}: {{item.serial}} </p>
   </div>
 
-  <detail-category placeholder="'selectFolder' | i18next" value="item.folder" items="folders" on-change="onCategory" ng-class="{ 'disabled' : !havePermissions('tags')}" ng-if="!item.parent"> </detail-category>
+  <detail-category
+    placeholder="'selectFolder' | i18next"
+    value="item.folder"
+    items="folders"
+    type="'folder'"
+    on-change="onCategory"
+    ng-class="{ 'disabled' : !havePermissions('tags')}"
+    ng-if="!item.parent">
+  </detail-category>
 
   <div class="parent" ng-if="item.parent">{{currentContext.entity.title}}</div>
 
