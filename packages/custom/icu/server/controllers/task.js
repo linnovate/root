@@ -2,7 +2,6 @@
 
 let _ = require("lodash"),
   async = require("async"),
-  config = require("meanio").loadConfig(),
   ObjectId = require("mongoose").Types.ObjectId,
   Document = require("../models/document");
 
@@ -50,12 +49,10 @@ exports.defaultOptions = options;
 
 let crud = require("../controllers/crud.js");
 let task = crud("tasks", options);
-let Project = require("../controllers/project");
 let mailService = require("../services/mail");
 let excelService = require("../services/excel");
 
 var Task = require("../models/task"),
-  Discussion = require("../models/discussion"),
   mean = require("meanio");
 
 var Order = require("../models/order");
@@ -139,13 +136,8 @@ exports.create = function(req, res, next) {
   if (req.body.discussion) {
     req.body.discussions = [req.body.discussion];
     req.body.tags = [];
-    Discussion.findById(req.body.discussion, function(err, discussion) {
-      if (discussion && discussion.project) {
-        req.body.project = discussion.project;
-      }
-      task.create(req, res, next);
-    });
-  } else task.create(req, res, next);
+  }
+  task.create(req, res, next);
 };
 
 exports.update = function(req, res, next) {
