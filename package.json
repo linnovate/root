@@ -99,7 +99,7 @@
     "gulp-sass": "3.1.0",
     "gulp-util": "3.0.8",
     "mocha": "5.2.0",
-    "mongo-express": "^0.46.1",
+    "mongo-express": "^0.54.0",
     "node-sass": "^4.9.2",
     "protractor": "5.3.2",
     "require-dir": "1.0.0"
