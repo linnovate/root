@@ -1,0 +1,42 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - excel4node > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - assetmanager > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - circles-npm > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - express-validator > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - officegen > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - xlsx-populate > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - excel4node > sloth-logger > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - mongoose > async > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - officegen > async > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - officegen > archiver > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - assetmanager > grunt > grunt-legacy-log > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - assetmanager > grunt > grunt-legacy-util > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - officegen > archiver > archiver-utils > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - officegen > archiver > async > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - passport-saml > xml-encryption > async > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - officegen > archiver > zip-stream > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - assetmanager > grunt > grunt-legacy-log > grunt-legacy-log-utils > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
+    - officegen > archiver > zip-stream > archiver-utils > lodash:
+        patched: '2020-05-04T05:47:00.495Z'
