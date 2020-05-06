@@ -15,7 +15,9 @@
     "build": "gulp build",
     "production": "export NODE_ENV=production && gulp build",
     "test": "run_gulp() { export ROOT_URL=$1; gulp test; }; run_gulp",
-    "postinstall": "node scripts/postinstall.js && gulp sass"
+    "postinstall": "node scripts/postinstall.js && gulp sass",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "assetmanager": "1.2.3",
@@ -70,7 +72,8 @@
     "swig": "1.4.2",
     "uuid": "^3.1.0",
     "view-helpers": "0.1.5",
-    "xlsx-populate": "^1.17.0"
+    "xlsx-populate": "^1.17.0",
+    "snyk": "^1.319.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -103,5 +106,6 @@
     "node-sass": "^4.9.2",
     "protractor": "5.3.2",
     "require-dir": "1.0.0"
-  }
+  },
+  "snyk": true
 }
