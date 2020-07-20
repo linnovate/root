@@ -62,7 +62,7 @@
     "passport-saml": "^0.31.0",
     "passport-twitter": "1.0.3",
     "pdfjs-dist": "^1.10.97",
-    "request": "2.82.0",
+    "request": "2.88.0",
     "root-notifications": "^1.0.2",
     "serve-favicon": "2.4.5",
     "shelljs": "0.4.0",
