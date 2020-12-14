@@ -46,7 +46,7 @@
     "meanio": "0.8.85",
     "moment": "2.22.2",
     "mongodb": "^3.0.7",
-    "mongoose": "^4.13.11",
+    "mongoose": "^5.11.7",
     "mongoose-deep-populate": "3.0.0",
     "morgan": "^1.9.1",
     "node-cron": "^1.2.1",
