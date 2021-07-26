@@ -14,7 +14,7 @@ services:
       FTP_IP: ftp
       FTP_USER_NAME: admin
       FTP_USER_PASS: admin
-      ROOT_ADMINS: a@linnovate.net
+      ROOT_ADMINS: lior@linnovate.net
     ports:
       - 3000:3000
       - 9229:9229
