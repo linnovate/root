@@ -6,7 +6,7 @@ services:
     image: root
     environment:
       PORT: 3000
-      MONGODB_URI: mongodb://root:password123@mongo/icu?authSource=admin
+      MONGODB_URI: mongodb://<already created mongo db user>:<already created mongo db password>@mongo/icu?authSource=admin
       ELASTICSEARCH_IP: elasticsearch
       ROOT_LANG: en
       FTP_IP: ftp
@@ -25,16 +25,18 @@ services:
     environment:
       MONGODB_REPLICA_SET_MODE: primary
       MONGODB_ADVERTISED_HOSTNAME: mongo
-      MONGODB_ROOT_PASSWORD: password123
       MONGODB_REPLICA_SET_KEY: replicasetkey123
     volumes:
       - mongodata:/bitnami
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.4
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-    mem_limit: 512m
+      image: docker.elastic.co/elasticsearch/elasticsearch:6.8.4
+      volumes:
+        - esdata:/usr/share/elasticsearch/data
+      environment:
+        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        - "discovery.type=single-node"
+        - "xpack.security.enabled=false"
 
   ftp:
     image: stilliard/pure-ftpd

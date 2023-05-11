@@ -1,8 +1,6 @@
-# Root
+# Root App
 
-## Install
-
-#### Setup
+## Setup
 
 Development
 ```bash
@@ -11,21 +9,44 @@ npm run build
 docker-compose up -d
 ```
 
-#### Test
+## Test
 ```bash
 npm test [url]
 ```
 If `url` is not specified, then a local instance will be started.
 
 
-#### Deploy
+## Deploy
 
 ```bash
 docker-compose -f docker-compose.production.yml up -d
 ```
 
+Or use helm-based deployment:
+1. Git clone https://github.com/linnovate/reopen repo
+2. Switch to aks2-prod kube context
+3. Install root-app helm chart
+```bash
+helm upgrade -i root-app charts/root/ -f charts/root/values.yaml -n argos-prod --atomic 
+```
+4. In *argos-prod* namespace, inside *root-db* pod:
+```bash
+mongo
+>  use admin
+>  db.createUser(
+   {
+     user: "admin",
+     pwd: "<password for admin db user>",
+     roles: [ 
+       { role: "userAdminAnyDatabase", db: "admin" },
+       { role: "readWriteAnyDatabase", db: "admin" } 
+     ]
+   }
+ )
 
-#### Environments
+5. Restart *root-app* deployment to reconnect to the db
+
+## Environments
 Name                 | Type    | Description            | Default
 ---                  | ---     | ---                    | ---
 PORT                 | Number  | Port of the server     | `3000`
@@ -37,3 +58,5 @@ AUTH_PROVIDER        | String  | `local` \| `google`    | `local`
 GOOGLE_CLIENT_ID     | String  | Google client ID       | `APP_ID`
 GOOGLE_CLIENT_SECRET | String  | Google client secret   | `APP_SECRET`
 MONGODB_URI          | String  | URI of MongoDB         | `mongodb://localhost/icu-dev`
+
+
