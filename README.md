@@ -29,14 +29,14 @@ Or use helm-based deployment:
 ```bash
 helm upgrade -i root-app charts/root/ -f charts/root/values.yaml -n argos-prod --atomic 
 ```
-4. In *argos-prod* namespace, inside *root-db* pod:
+4. In *argos-prod* namespace, inside *mongodb* pod:
 ```bash
 mongo
 >  use admin
 >  db.createUser(
    {
      user: "admin",
-     pwd: "<password for admin db user>",
+     pwd: "<password>",
      roles: [ 
        { role: "userAdminAnyDatabase", db: "admin" },
        { role: "readWriteAnyDatabase", db: "admin" } 
