@@ -4,6 +4,7 @@
 
 Development
 ```bash
+sudo sysctl -w vm.max_map_count=262144
 npm i
 npm run build
 docker-compose up -d
